@@ -50,6 +50,7 @@ var Permissions = function Permissions(options) {
     this._fieldDBtype = "Permissions";
   }
   this.debug("Constructing Permissions ", options);
+  this.cacheTimeLength = 1000;
   Collection.apply(this, arguments);
 };
 
@@ -115,12 +116,99 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
   },
 
   owners: {
-    value: this.adminOnlys
+    value: this.admins
   },
 
 
 
   /*** Gropued permissions (useful to show permissions in an app) ***/
+
+  giveMeUsersWithTheseRolesAndNotTheseRoles: {
+    value: function(wantTheseRoles, dontWantTheseRoles) {
+      if (!wantTheseRoles || !dontWantTheseRoles) {
+        this.bug("Invalid request for users, you must supply the roles you want, and the roles you dont want.");
+        return new Users();
+      }
+      if (Object.prototype.toString.call(wantTheseRoles) !== "[object Array]" || Object.prototype.toString.call(dontWantTheseRoles) !== "[object Array]") {
+        this.bug("Invalid request for users, you must supply an array of the roles you want, and the roles you dont want.");
+        return new Users();
+      }
+      this.debugMode = true;
+
+      var empty = new Users(),
+        permissionType,
+        permissionTypeIndex,
+        self = this,
+        groupLabel = wantTheseRoles.join(" ") + " onlys",
+        usersWhoAreOnlyInThisPermissionType = [];
+
+      /* accept requests for the plural or singular of the permission type */
+
+      wantTheseRoles = wantTheseRoles.map(function(role) {
+        return (role + "s").replace(/ss$/, "s");
+      });
+
+      dontWantTheseRoles = dontWantTheseRoles.map(function(role) {
+        return (role + "s").replace(/ss+$/, "s");
+      });
+
+      // Add users who have the wanted roles
+      permissionType = wantTheseRoles.pop();
+      if (this[permissionType]) {
+        usersWhoAreOnlyInThisPermissionType = new Users(this[permissionType].users.toJSON());
+      } else {
+        usersWhoAreOnlyInThisPermissionType = new Users();
+      }
+
+
+      var howToRemoveSomeoneWhoIsntInAllRoles = function(user) {
+        if (self[permissionType].users.indexOf(user.username) === -1) {
+          self.debug("removing " + user.username + " from " + groupLabel + " because they are not in " + permissionType);
+          usersWhoAreOnlyInThisPermissionType.remove(user.username);
+        }
+      };
+
+      for (permissionTypeIndex = wantTheseRoles.length - 1; permissionTypeIndex >= 0; permissionTypeIndex--) {
+        permissionType = wantTheseRoles[permissionTypeIndex];
+        if (!self[permissionType]) {
+          continue;
+        }
+
+        if (!self[permissionType]) {
+          this.warn("This team doesn't have a " + permissionType + " so this means the " + groupLabel + " is empty.");
+          return empty;
+        }
+        // If the user isn't in this permisisonType also, remove it
+        usersWhoAreOnlyInThisPermissionType.map(howToRemoveSomeoneWhoIsntInAllRoles);
+      }
+
+      this.debug("There are " + usersWhoAreOnlyInThisPermissionType.length + " users who have all the roles requested: " + groupLabel.replace("onlys", ""));
+      if (!usersWhoAreOnlyInThisPermissionType || usersWhoAreOnlyInThisPermissionType.length === 0) {
+        return empty;
+      }
+
+      var howToRemoveSomeoneWhoIsInTheUnWantedPermissions = function(user) {
+        if (usersWhoAreOnlyInThisPermissionType[user.username]) {
+          self.debug(user.username + " is also in " + permissionType + " so removing them from the " + groupLabel + ", there are " + usersWhoAreOnlyInThisPermissionType.length + " left");
+          usersWhoAreOnlyInThisPermissionType.remove(user.username);
+        }
+      };
+
+      for (permissionTypeIndex = dontWantTheseRoles.length - 1; permissionTypeIndex >= 0; permissionTypeIndex--) {
+        permissionType = dontWantTheseRoles[permissionTypeIndex];
+        if (!self[permissionType]) {
+          continue;
+        }
+        // remove users who are in the permission type we dont want
+        self[permissionType].users.map(howToRemoveSomeoneWhoIsInTheUnWantedPermissions);
+
+        if (usersWhoAreOnlyInThisPermissionType.length === 0) {
+          return empty;
+        }
+      }
+      return usersWhoAreOnlyInThisPermissionType;
+    }
+  },
 
   /**
    * Syntactic sugar for apps who want to show users in one category, not in each low level permissions.
@@ -136,10 +224,16 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    */
   adminOnlys: {
     get: function() {
-      return this.adminOnly || [];
+      if (this._adminOnlys && this._adminOnlys.timestamp && (Date.now() - this._adminOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of adminOnlys, its fresh enough. " + new Date(this._adminOnlys.timestamp));
+      } else {
+        this._adminOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["admin"], ["writer", "reader"]);
+        this._adminOnlys.timestamp = Date.now();
+      }
+      return this._adminOnlys;
     },
-    set: function(value) {
-      this.adminOnly = value;
+    set: function() {
+      this.warn("adminOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -162,12 +256,18 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    *
    * @type {Permission}
    */
-  writerOnlys: {
+  writeOnlys: {
     get: function() {
-      return this.writeOnly || [];
+      if (this._writeOnlys && this._writeOnlys.timestamp && (Date.now() - this._writeOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of writeOnlys, its fresh enough. " + new Date(this._writeOnlys.timestamp));
+      } else {
+        this._writeOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["writer"], ["admin", "reader"]);
+        this._writeOnlys.timestamp = Date.now();
+      }
+      return this._writeOnlys;
     },
-    set: function(value) {
-      this.writeOnly = value;
+    set: function() {
+      this.warn("writeOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -183,12 +283,18 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    *
    * @type {Permission}
    */
-  readerOnlys: {
+  readOnlys: {
     get: function() {
-      return this.readOnly || [];
+      if (this._readOnlys && this._readOnlys.timestamp && (Date.now() - this._readOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of readOnlys, its fresh enough. " + new Date(this._readOnlys.timestamp));
+      } else {
+        this._readOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader"], ["admin", "writer"]);
+        this._readOnlys.timestamp = Date.now();
+      }
+      return this._readOnlys;
     },
-    set: function(value) {
-      this.readOnly = value;
+    set: function() {
+      this.warn("readOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -202,12 +308,18 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    *
    * @type {Permission}
    */
-  commenterOnlys: {
+  commentOnlys: {
     get: function() {
-      return this.commenter || [];
+      if (this._commentOnlys && this._commentOnlys.timestamp && (Date.now() - this._commentOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of commentOnlys, its fresh enough. " + new Date(this._commentOnlys.timestamp));
+      } else {
+        this._commentOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["commenter"], ["admin", "writer", "reader"]);
+        this._commentOnlys.timestamp = Date.now();
+      }
+      return this._commentOnlys;
     },
-    set: function(value) {
-      this.commenter = value;
+    set: function() {
+      this.warn("commentOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -223,72 +335,16 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    */
   readerCommenterOnlys: {
     get: function() {
-      var empty = new Users();
-      var usersWhoAreCommentersAndReadersButNotAdminsNorWriters = [];
-      // this.debugMode = true;
-
-      // Start with the commenters
-      if (this.commenters && this.commenters.length > 0) {
-        usersWhoAreCommentersAndReadersButNotAdminsNorWriters = new Users(this.commenters.users.toJSON());
+      if (this._readerCommenterOnlys && this._readerCommenterOnlys.timestamp && (Date.now() - this._readerCommenterOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of readerCommenterOnlys, its fresh enough. " + new Date(this._readerCommenterOnlys.timestamp));
+      } else {
+        this._readerCommenterOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "commenter"], ["admin", "writer"]);
+        this._readerCommenterOnlys.timestamp = Date.now();
       }
-
-      if (!usersWhoAreCommentersAndReadersButNotAdminsNorWriters || usersWhoAreCommentersAndReadersButNotAdminsNorWriters.length === 0) {
-        this.warn("There are no commenters on this team, thus usersWhoAreCommentersAndReadersButNotAdminsNorWriters is empty");
-        return empty;
-      }
-
-      var self = this;
-
-      if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters.length === 0) {
-        return empty;
-      }
-
-      if (!self.readers || self.readers.length === 0) {
-        self.warn("There are no readers on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      // If the user isnt in the readers also, remove it
-      usersWhoAreCommentersAndReadersButNotAdminsNorWriters.map(function(reader) {
-        if (self.readers.users.indexOf(reader.username) === -1) {
-          self.debug("removing " + user.username);
-          usersWhoAreCommentersAndReadersButNotAdminsNorWriters.remove(reader.username);
-        }
-      });
-
-      if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters.length === 0) {
-        return empty;
-      }
-
-      // remove users who are also admins
-      self.admins.users.map(function(admin) {
-        if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters[admin.username]) {
-          self.debug(admin.username + " is also an admin so removing them from the usersWhoAreCommentersAndReadersButNotAdminsNorWriters ");
-          usersWhoAreCommentersAndReadersButNotAdminsNorWriters.remove(admin.username);
-        }
-      });
-
-      if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters.length === 0) {
-        return empty;
-      }
-
-      // remove users who are also writers
-      self.writers.users.map(function(writer) {
-        if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters[writer.username]) {
-          self.debug(writer.username + " is also an writer so removing them from the usersWhoAreCommentersAndReadersButNotAdminsNorWriters ");
-          usersWhoAreCommentersAndReadersButNotAdminsNorWriters.remove(writer.username);
-        }
-      });
-
-      if (usersWhoAreCommentersAndReadersButNotAdminsNorWriters.length === 0) {
-        return empty;
-      }
-
-
-      return usersWhoAreCommentersAndReadersButNotAdminsNorWriters;
+      return this._readerCommenterOnlys;
     },
-    set: function(value) {
-      this.readerCommenter = value;
+    set: function() {
+      this.warn("readerCommenterOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -307,8 +363,8 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     get: function() {
       return this.readerWriter || [];
     },
-    set: function(value) {
-      this.readerWriter = value;
+    set: function() {
+      this.warn("readerWriters cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -323,76 +379,16 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    */
   readerCommenterWriters: {
     get: function() {
-      var empty = new Users();
-      var usersWhoAreReadersCommentersAndWritersButAreNotAdmins = [];
-      // this.debugMode = true;
-
-      // Start with the writers
-      if (this.writers && this.writers.length > 0) {
-        usersWhoAreReadersCommentersAndWritersButAreNotAdmins = new Users(this.writers.users.toJSON());
+      if (this._readerCommenterWriterOnlys && this._readerCommenterWriterOnlys.timestamp && (Date.now() - this._readerCommenterWriterOnlys.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of readerCommenterWriterOnlys, its fresh enough. " + new Date(this._readerCommenterWriterOnlys.timestamp));
+      } else {
+        this._readerCommenterWriterOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer"], ["admin"]);
+        this._readerCommenterWriterOnlys.timestamp = Date.now();
       }
-
-      if (!usersWhoAreReadersCommentersAndWritersButAreNotAdmins || usersWhoAreReadersCommentersAndWritersButAreNotAdmins.length === 0) {
-        this.warn("There are no writers on this team, thus usersWhoAreReadersCommentersAndWritersButAreNotAdmins is empty");
-        return empty;
-      }
-
-      var self = this;
-
-      if (usersWhoAreReadersCommentersAndWritersButAreNotAdmins.length === 0) {
-        return empty;
-      }
-
-      if (!self.commenters || self.commenters.length === 0) {
-        self.warn("There are no commenters on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      // If the user isnt in the commenters also, remove it
-      usersWhoAreReadersCommentersAndWritersButAreNotAdmins.map(function(commenter) {
-        if (self.commenters.users.indexOf(commenter.username) === -1) {
-          self.debug("removing " + user.username);
-          usersWhoAreReadersCommentersAndWritersButAreNotAdmins.remove(commenter.username);
-        }
-      });
-
-      if (usersWhoAreReadersCommentersAndWritersButAreNotAdmins.length === 0) {
-        return empty;
-      }
-
-      if (!self.readers || self.readers.length === 0) {
-        self.warn("There are no readers on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      // If the user isnt in the readers also, remove it
-      usersWhoAreReadersCommentersAndWritersButAreNotAdmins.map(function(reader) {
-        if (self.readers.users.indexOf(reader.username) === -1) {
-          self.debug("removing " + user.username);
-          usersWhoAreReadersCommentersAndWritersButAreNotAdmins.remove(reader.username);
-        }
-      });
-
-      if (usersWhoAreReadersCommentersAndWritersButAreNotAdmins.length === 0) {
-        return empty;
-      }
-
-      // remove users who are also admins
-      self.admins.users.map(function(admin) {
-        if (usersWhoAreReadersCommentersAndWritersButAreNotAdmins[admin.username]) {
-          self.debug(admin.username + " is also an admin so removing them from the usersWhoAreReadersCommentersAndWritersButAreNotAdmins ");
-          usersWhoAreReadersCommentersAndWritersButAreNotAdmins.remove(admin.username);
-        }
-      });
-
-      if (usersWhoAreReadersCommentersAndWritersButAreNotAdmins.length === 0) {
-        return empty;
-      }
-
-      return usersWhoAreReadersCommentersAndWritersButAreNotAdmins;
+      return this._readerCommenterWriterOnlys;
     },
-    set: function(value) {
-      this.readerCommenterWriter = value;
+    set: function() {
+      this.warn("readerCommenterWriters cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -406,73 +402,15 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    */
   readerCommenterWriterAdmins: {
     get: function() {
-      var empty = new Users();
-      var usersWhoAreAdminWriterCommenterAndReaders = [];
-      // this.debugMode = true;
-      // Start with the admins
-      if (this.admins && this.admins.length > 0) {
-        usersWhoAreAdminWriterCommenterAndReaders = new Users(this.admins.users.toJSON());
+      if (this._readerCommenterWriterAdminAlso && this._readerCommenterWriterAdminAlso.timestamp && (Date.now() - this._readerCommenterWriterAdminAlso.timestamp < this.cacheTimeLength)) {
+        this.debug("Not regenerating the list of readerCommenterWriterAdminAlso, its fresh enough. " + new Date(this._readerCommenterWriterAdminAlso.timestamp));
+      } else {
+        this._readerCommenterWriterAdminAlso = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer", "admin"], []);
+        this._readerCommenterWriterAdminAlso.timestamp = Date.now();
       }
-
-      if (!usersWhoAreAdminWriterCommenterAndReaders || usersWhoAreAdminWriterCommenterAndReaders.length === 0) {
-        this.warn("There are no admins on this team, in general, this is not a good thing... and there arent any readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      if (!this.writers || this.writers.length === 0) {
-        this.warn("There are no writers on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      var self = this;
-      // If the user isn't in the writers also, remove it
-      usersWhoAreAdminWriterCommenterAndReaders.map(function(user) {
-        if (self.writers.users.indexOf(user.username) === -1) {
-          self.debug("removing " + user.username + " from readerCommenterWriterAdmins because they are not a writer");
-          usersWhoAreAdminWriterCommenterAndReaders.remove(user.username);
-        }
-      });
-
-      if (usersWhoAreAdminWriterCommenterAndReaders.length === 0) {
-        return empty;
-      }
-
-      if (!self.commenters || self.commenters.length === 0) {
-        self.warn("There are no commenters on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      // If the user isnt in the commenters also, remove it
-      usersWhoAreAdminWriterCommenterAndReaders.map(function(commenter) {
-        if (self.commenters.users.indexOf(commenter.username) === -1) {
-          self.debug("removing " + user.username);
-          usersWhoAreAdminWriterCommenterAndReaders.remove(commenter.username);
-        }
-      });
-
-      if (usersWhoAreAdminWriterCommenterAndReaders.length === 0) {
-        return empty;
-      }
-
-      if (!self.readers || self.readers.length === 0) {
-        self.warn("There are no readers on this team, thus there are no readerCommenterWriterAdmins either");
-        return empty;
-      }
-
-      // If the user isnt in the readers also, remove it
-      usersWhoAreAdminWriterCommenterAndReaders.map(function(reader) {
-        if (self.readers.users.indexOf(reader.username) === -1) {
-          self.debug("removing " + user.username);
-          usersWhoAreAdminWriterCommenterAndReaders.remove(reader.username);
-        }
-      });
-
-      if (usersWhoAreAdminWriterCommenterAndReaders.length === 0) {
-        return empty;
-      }
-      return usersWhoAreAdminWriterCommenterAndReaders;
+      return this._readerCommenterWriterAdminAlso;
     },
-    set: function(value) {
+    set: function() {
       this.warn("readerCommenterWriterAdmins cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
@@ -493,8 +431,8 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     get: function() {
       return this.readOwnDataWriteOwnDataOnly || [];
     },
-    set: function(value) {
-      this.readOwnDataWriteOwnDataOnly = value;
+    set: function() {
+      this.warn("readOwnDataWriteOwnDataOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -518,8 +456,8 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     get: function() {
       return this.readCommentAllWriteOwnDataOnly || [];
     },
-    set: function(value) {
-      this.readCommentAllWriteOwnDataOnly = value;
+    set: function() {
+      this.warn("readCommentAllWriteOwnDataOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -544,8 +482,8 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     get: function() {
       return this.readAllWriteOwnDataOnly || [];
     },
-    set: function(value) {
-      this.readAllWriteOwnDataOnly = value;
+    set: function() {
+      this.warn("readAllWriteOwnDataOnlys cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
     }
   },
 
@@ -579,12 +517,12 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         readOnlys: this.readOnlys,
         readerCommenterOnlys: this.readerCommenterOnlys,
         readerWriters: this.readerCommenterWriters,
-        admins: this.readerCommenterWriterAdmins
-          // commenterOnlys: this.commenterOnlys,
-          // readerCommenterWriters: readerCommenterWriters,
-          //writerCommenterOnlys
-          //writerAdminOnlys
-          //writerCommenterAdminOnlys
+        admins: this.readerCommenterWriterAdmins,
+        commentOnlys: this.commentOnlys,
+        // readerCommenterWriters: readerCommenterWriters,
+        //writerCommenterOnlys
+        //writerAdminOnlys
+        //writerCommenterAdminOnlys
       };
     }
   },
@@ -684,6 +622,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
           // this[permissionType].users.debugMode = true;
           if (this[permissionType].users[user.username]) {
             var userWasInThisPermission = this[permissionType].users.remove(user);
+            this.debug("removed ", userWasInThisPermission);
           } else {
             this.warn("The user " + user.username + " was not in the " + permissionType + " anyway.");
           }
@@ -757,17 +696,14 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       delete users.allusers;
       delete users.notonteam;
 
-      var permissionType,
-        verb,
-        label,
-        help;
+      var permissionType;
       for (permissionType in users) {
         if (users.hasOwnProperty(permissionType) && permissionType) {
           /* if the permission is just an array of users, construct basic permission meta data around it */
           if (Object.prototype.toString.call(users[permissionType]) === "[object Array]") {
             var usersArray = users[permissionType];
             users[permissionType] = this.buildPermissionFromAPermissionType(permissionType);
-            users[permissionType].users = usersArray
+            users[permissionType].users = usersArray;
           }
           this.debug("adding " + permissionType, users[permissionType]);
           this.add(new Permission(users[permissionType]));
