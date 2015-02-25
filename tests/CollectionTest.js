@@ -667,7 +667,7 @@ describe("lib/Collection", function() {
       var sameCollectionButDifferent = new Collection(collectionOfBirds.toJSON());
       expect(collectionOfBirds.equals(sameCollectionButDifferent)).toBeTruthy();
 
-      sameCollectionButDifferent.penguin.wings = "black white"
+      sameCollectionButDifferent.penguin.wings = "black white";
       expect(collectionOfBirds._collection[0].wings).not.toEqual(sameCollectionButDifferent._collection[0].wings);
 
       expect(collectionOfBirds.equals(sameCollectionButDifferent)).toBeFalsy();
