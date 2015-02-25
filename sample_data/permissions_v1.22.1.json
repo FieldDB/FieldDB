@@ -182,7 +182,7 @@
       "gravatar": "446b903027c34e84f97161p7f3db1ae"
     }, {
       "username": "irakli",
-      "gravatar": "269983d4e304d115cc66abafd04ba993"
+      "gravatar": "262083d4e304d115cc66abafd04ba993"
     }, {
       "username": "tariattgeladze",
       "gravatar": "e971979a40c47235ef430f5d9a5b5858"
@@ -197,9 +197,6 @@
       "username": "linus",
       "gravatar": "446b903027c34e84f97161p7f3db1ae"
     }, {
-      "username": "irakli",
-      "gravatar": "269983d4e304d115cc66abafd04ba993"
-    }, {
       "username": "tariattgeladze",
       "gravatar": "e971979a40c47235ef430f5d9a5b5858"
     }, {
@@ -211,8 +208,23 @@
       "gravatar": "446b903027c34e84f97161p7f3db1ae"
     }],
     "commenters": [{
+      "username": "estita",
+      "gravatar": "fc8b44935b6ea120f0c65cf995cfe9e3"
+    }, {
       "username": "linus",
       "gravatar": "446b903027c34e84f97161p7f3db1ae"
+    }, {
+      "username": "qaxa",
+      "gravatar": "269983d4e304d115cc66abafd04ba993"
+    }, {
+      "username": "irakli",
+      "gravatar": "262083d4e304d115cc66abafd04ba993"
+    }, {
+      "username": "tariattgeladze",
+      "gravatar": "e971979a40c47235ef430f5d9a5b5858"
+    }, {
+      "username": "tatiik",
+      "gravatar": "7a99d4788fde0ae4e9d74802b25ea26c"
     }]
   },
   "info": ["Look up successful."]

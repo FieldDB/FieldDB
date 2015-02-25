@@ -54,6 +54,18 @@ Permission.prototype = Object.create(FieldDBObject.prototype, /** @lends Permiss
       }
       return 0;
     }
+  },
+  map: {
+    get: function() {
+      if (this.users && typeof this.users.map === "function") {
+        var self = this;
+        return function(callback) {
+          return this.users.map.apply(self.users, [callback]);
+        };
+      } else {
+        return undefined;
+      }
+    }
   }
 });
 exports.Permission = Permission;
