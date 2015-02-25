@@ -92,7 +92,12 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    * @type {Permission}
    */
   contributors: {
-    value: this.readerCommenterWriters
+    get: function() {
+      return this.readerCommenterWriters;
+    },
+    set: function() {
+      this.warn("contributors cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
+    }
   },
 
   /**
@@ -112,13 +117,33 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    * @type {Permission}
    */
   collaborators: {
-    value: this.readerCommenterOnlys
+    get: function() {
+      return this.readerCommenterOnlys;
+    },
+    set: function() {
+      this.warn("collaborators cannot be set. it is only syntactic sugar. If you want to modify roles, see the addUser and removeUser functions");
+    }
   },
 
+  /**
+   * Syntactic sugar for users who have reader+writer+admin permissions.
+   *
+   * This is a common permission used by most data base management systems meaning the user can do anything.
+   *
+   * Email collaboration analog: The person who initiates the email thread
+   *
+   * Dropbox analog: The person who creates the folder in dropbox and adds others to it.
+   *
+   * @type {Permission}
+   */
   owners: {
-    value: this.admins
+    get: function() {
+      return this.admins;
+    },
+    set: function(value) {
+      this.admins = value
+    }
   },
-
 
 
   /*** Gropued permissions (useful to show permissions in an app) ***/
@@ -387,17 +412,17 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
    * This is syntactic sugar which is often refered to as "writers" in traditional databases permissions.
    * It means the user can write data, read data and comment on data
    *
-   * @return {Permission} A permission group with an array of Users who fall into this category
+   * @return {Permission} A permissions group with an array of Users who fall into this category
    */
   readerCommenterWriters: {
     get: function() {
       if (this._readerCommenterWriterOnlys && this._readerCommenterWriterOnlys.timestamp && (Date.now() - this._readerCommenterWriterOnlys.timestamp < this.cacheTimeLength)) {
         this.debug("Not regenerating the list of readerCommenterWriterOnlys, its fresh enough. " + new Date(this._readerCommenterWriterOnlys.timestamp));
       } else {
-        // this.debugMode = true;
+        this.debugMode = true;
         this._readerCommenterWriterOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer", "commenter"], ["admin"]);
         this._readerCommenterWriterOnlys.timestamp = Date.now();
-        // this.debugMode = false;
+        this.debugMode = false;
       }
 
       return this._readerCommenterWriterOnlys;

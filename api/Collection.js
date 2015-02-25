@@ -650,9 +650,17 @@ Collection.prototype = Object.create(Object.prototype, {
 
   equals: {
     value: function(anotherCollection) {
+      if (!anotherCollection) {
+        return false;
+      }
       if (!this._collection && !anotherCollection._collection) {
         return true;
       }
+
+      if (!this._collection || !anotherCollection._collection) {
+        return false;
+      }
+
       if (this._collection.length !== anotherCollection._collection.length) {
         return false;
       }
