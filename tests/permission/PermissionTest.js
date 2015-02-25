@@ -291,7 +291,7 @@ describe("Permission Tests", function() {
 
   describe("ways to view permissions sytems", function() {
 
-    it("should present a view that is implicational like PHPMyAdmin", function() {
+    xit("should present a view that is implicational like PHPMyAdmin", function() {
       var permissions = new Permissions();
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
@@ -322,7 +322,7 @@ describe("Permission Tests", function() {
 
 
 
-    describe("syntactic sugar for groups", function() {
+    xdescribe("syntactic sugar for groups", function() {
 
       it("should be able to build custom groups ", function() {
         var permissions = new Permissions();
@@ -434,15 +434,32 @@ describe("Permission Tests", function() {
 
     });
 
-    xit("should present a view that is like github like", function() {
+    it("should present a view that is like github like", function() {
       var permissions = new Permissions({
-        debugMode: true
+        // debugMode: true
       });
       permissions.populate(JSON.parse(JSON.stringify(SAMPLE_v1_PERMISSIONS_SYSTEMS[0].users)));
 
       expect(permissions.viewAsEmailingTeamPermissionSystem.contributors).toBeDefined();
+      expect(permissions.viewAsEmailingTeamPermissionSystem.contributors.map(function(user) {
+        return user.username;
+      })).toEqual(["kloelaryke", "kristauro", "fstepann", "gabrail", "aivgeniia", "jateste", "jeretaifectiir", "jeenaiclertont", "jeennaitaller", "khany", "tarailyp", "noetai972", "patrice", "rakelibaba", "soranygazhonn"]);
+      expect(permissions.viewAsEmailingTeamPermissionSystem.contributors.equals(permissions.readerWriters)).toBeTruthy();
+
       expect(permissions.viewAsEmailingTeamPermissionSystem.collaborators).toBeDefined();
+      expect(permissions.viewAsEmailingTeamPermissionSystem.collaborators.length).toEqual(0);
+
+
+      expect(permissions.admins.map(function(user) {
+        return user.username;
+      })).toEqual(["linus", "rplyrde"]);
       expect(permissions.viewAsEmailingTeamPermissionSystem.owners).toBeDefined();
+      expect(permissions.viewAsEmailingTeamPermissionSystem.owners.length).toEqual(1);
+      expect(permissions.viewAsEmailingTeamPermissionSystem.owners.map(function(user) {
+        return user.username;
+      })).toEqual(["rplyrde"]);
+      expect(permissions.viewAsEmailingTeamPermissionSystem.owners.equals(permissions.viewAsGroupedPermissionSystem.admins)).toBeTruthy();
+
     });
 
   });
