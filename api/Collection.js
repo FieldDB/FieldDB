@@ -142,6 +142,11 @@ Collection.prototype = Object.create(Object.prototype, {
       return FieldDBObject.prototype.todo.apply(this, arguments);
     }
   },
+  render: {
+    value: function() {
+      return FieldDBObject.prototype.render.apply(this, arguments);
+    }
+  },
 
   collection: {
     get: function() {
@@ -382,7 +387,7 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
 
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && ! (value instanceof this.INTERNAL_MODELS.item)) {
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
         // console.log("adding a internamodel ", value);
         if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
           this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
@@ -645,6 +650,38 @@ Collection.prototype = Object.create(Object.prototype, {
         }
       }
       return value;
+    }
+  },
+
+  equals: {
+    value: function(anotherCollection) {
+      if (!anotherCollection) {
+        return false;
+      }
+      if (!this._collection && !anotherCollection._collection) {
+        return true;
+      }
+
+      if (!this._collection || !anotherCollection._collection) {
+        return false;
+      }
+
+      if (this._collection.length !== anotherCollection._collection.length) {
+        return false;
+      }
+      // this.debugMode = true;
+      for (var itemIndex = this._collection.length - 1; itemIndex >= 0; itemIndex--) {
+        var itemInThisCollection = this._collection[itemIndex];
+        var itemInAnotherCollection = anotherCollection.find(itemInThisCollection[anotherCollection.primaryKey])[0];
+        this.debug("Are these equal ", itemInThisCollection, itemInAnotherCollection);
+        // itemInThisCollection.debugMode = true;
+        if (!itemInThisCollection.equals(itemInAnotherCollection)) {
+          return false;
+        }
+      }
+      // this.debugMode = false;
+
+      return true;
     }
   },
 
