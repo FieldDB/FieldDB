@@ -14,6 +14,10 @@ Remove extra user info in markAsNeedsToBeSaved
 Make sure team is in the corpus doc?
  */
 
+ /*
+ Make writers can also comment on corpora (spreadsheet permissions were set up so that users never added comment permisions to eachother)
+  */
+
 
 /*
 Merge sessions into another

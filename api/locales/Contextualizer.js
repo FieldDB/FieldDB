@@ -265,17 +265,17 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         if (typeof message === "object" && message.default) {
           if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][message.default] && this.data[optionalLocaleForThisCall][message.default].message !== undefined && this.data[optionalLocaleForThisCall][message.default].message) {
             result = this.data[optionalLocaleForThisCall][message.default].message;
-            this.warn("Resolving localization using default contextualization: ", message.default);
+            this.debug("Resolving localization using default contextualization: ", message.default);
             keepTrying = false;
           } else if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][message.default] && this.data[this.defaultLocale.iso][message.default].message !== undefined && this.data[this.defaultLocale.iso][message.default].message) {
             result = this.data[this.defaultLocale.iso][message.default].message;
-            this.warn("Resolving localization using default contextualization and default locale: ", message.default);
+            this.debug("Resolving localization using default contextualization and default locale: ", message.default);
             keepTrying = false;
           }
         }
         if (keepTrying && this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][result] && this.data[this.defaultLocale.iso][result].message !== undefined && this.data[this.defaultLocale.iso][result].message) {
           result = this.data[this.defaultLocale.iso][result].message;
-          this.warn("Resolving localization using default: ", result);
+          this.debug("Resolving localization using default: ", result);
         }
       }
 
