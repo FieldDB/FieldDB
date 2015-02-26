@@ -895,13 +895,14 @@ var MAINTAINENCE = {
     }
 
     var throttleReplications = 10000;
+    var self = this;
     /*
     Replicate all databases
      */
     $.couch.urlPrefix = source;
-    var replicationCount = 0;
-    var dbsToBeReplicatedAndMightBeMissingSecurityDocs = "";
+    self.replicationCount = 0;
 
+    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = "";
     var replicatePermissions = function(dbname) {
       $.couch.urlPrefix = source;
       var sourcedatabase = $.couch.db(dbname);
@@ -915,6 +916,8 @@ var MAINTAINENCE = {
             },
             error: function(serverResults) {
               console.log("There was a problem saving the doc." + dbname + " " + JSON.stringify(securitydoc), serverResults);
+              self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+
             }
           });
 
@@ -947,6 +950,7 @@ var MAINTAINENCE = {
           },
           error: function(error) {
             console.log("Error replicating to db" + dbnameToReplicate, error);
+            self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
 
             console.log("waiting " + throttleReplications);
             window.setTimeout(function() {
@@ -959,10 +963,14 @@ var MAINTAINENCE = {
     };
 
     var turnOnReplicationAndLoop = function(dbnames) {
+      if (!dbnames || dbnames.length === 0) {
+        console.log("finished replicating", dbnames);
+        return;
+      }
       var dbname = dbnames.pop();
 
 
-      if (dbname.indexOf("-") === -1) {
+      if (!dbname || dbname.indexOf("-") === -1) {
         console.log(dbname + "  is not a corpus or activity feed ");
         turnOnReplicationAndLoop(dbnames);
         return;
@@ -983,8 +991,8 @@ var MAINTAINENCE = {
         return; //turn on continuous replication for only beta testers and/or phophlo users
       }
 
-      if (replicationCount > 0 && replicationCount % 10 === 0) {
-        var keepGoing = confirm(" Do you want to continue " + replicationCount);
+      if (self.replicationCount > 0 && self.replicationCount % 30 === 0) {
+        var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount);
         if (!keepGoing) {
           turnOnReplicationAndLoop(dbnames);
           return;
@@ -1003,8 +1011,7 @@ var MAINTAINENCE = {
       }
       console.log(dbname + " is a " + sourceDB);
 
-      replicationCount += 1;
-      dbsToBeReplicatedAndMightBeMissingSecurityDocs = dbsToBeReplicatedAndMightBeMissingSecurityDocs + " " + dbname;
+      self.replicationCount += 1;
 
       FieldDB.CORS.makeCORSRequest({
         method: "PUT",
@@ -1019,6 +1026,8 @@ var MAINTAINENCE = {
         } else {
           console.log("Error creating " + dbname, reason);
           turnOnContinuousReplication(dbname, dbnames);
+          self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+
         }
       });
 
