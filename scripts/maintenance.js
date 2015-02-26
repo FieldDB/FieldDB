@@ -894,7 +894,7 @@ var MAINTAINENCE = {
     /*
     Replicate all databases
      */
-    $.couch.urlPrefix = "https://corpus.example.org";
+    $.couch.urlPrefix = source;
     if ($.couch.urlPrefix.indexOf("exa") > -1) {
       throw "You have to put the real server's url";
     }
@@ -903,17 +903,18 @@ var MAINTAINENCE = {
 
     var turnOnContinuousReplication = function(dbnameToReplicate) {
       var replicationOptions = {
-        create_target: true,
+        // create_target: true,
         continuous: true
       };
 
       console.log(" would replicate " + dbnameToReplicate);
 
-      return;
+      // return;
+      $.couch.urlPrefix = source;
       $.couch.replicate(dbnameToReplicate,
         target + "/" + dbnameToReplicate, {
           success: function(result) {
-            console.log(dbnameToReplicate, result);
+            console.log("Successfully started replication for " + dbnameToReplicate, result);
           },
           error: function(error) {
             console.log("Error replicating to db" + dbnameToReplicate, error);
@@ -968,10 +969,10 @@ var MAINTAINENCE = {
               withCredentials: true
             }).then(function(result) {
               console.log("db " + dbname + " created", result);
-              // turnOnContinuousReplication(dbname);
+              turnOnContinuousReplication(dbname);
             }, function(reason) {
               if (reason && reason.error && reason.error === "file_exists") {
-                // turnOnContinuousReplication(dbname);
+                turnOnContinuousReplication(dbname);
               } else {
                 console.log("Error creating " + dbname, reason);
               }
