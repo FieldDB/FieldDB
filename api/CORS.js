@@ -108,7 +108,7 @@ CORS.makeCORSRequest = function(options) {
   //  }
   var onProgress = function(e) {
     if (e.lengthComputable) {
-      var percentComplete = (e.loaded/e.total)*100;
+      var percentComplete = (e.loaded / e.total) * 100;
       console.log("percentComplete", percentComplete);
     }
   };
@@ -119,6 +119,11 @@ CORS.makeCORSRequest = function(options) {
     self.debug("Response from CORS request to " + options.url + ": " + response);
     if (xhr.status >= 400) {
       self.warn("The request to " + options.url + " was unsuccesful " + xhr.statusText);
+      try {
+        response = JSON.parse(response);
+      } catch (e) {
+        self.debug("response was json", e);
+      }
       deferred.reject(response);
       return;
     }
