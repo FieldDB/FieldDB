@@ -55,6 +55,7 @@ require.config({
 
     "xml2json": "libs/xml2json",
 
+    "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
     "OPrime": "libs/webservicesconfig_devserver"
   },
@@ -111,7 +112,7 @@ require.config({
 });
 
 // Initialization
-require(["user/UserApp", "OPrime"], function(App) {
+require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
   try {
     var pieces = window.location.pathname.replace(/^\//, "").split("/");
     var pouchName = pieces[0];

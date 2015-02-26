@@ -7,6 +7,7 @@ require.config({
 
     "pouch" : "libs/pouch.alpha",
 
+    "FieldDB" : "bower_components/fielddb/fielddb",
     "oprime" : "libs/OPrime",
     "webservicesconfig" : "libs/webservicesconfig_devserver"
   },
@@ -33,7 +34,7 @@ require.config({
 
 // Initialization
 require(
-    [ "pouch", "oprime" ],
+    [ "pouch", "oprime", "FieldDB" ],
     function(forcingpouchtoloadearly, OPrime) {
 
       var goToPrototypeApp = function(){
@@ -206,16 +207,15 @@ require(
 
       window.setTimeout(window.waitForPouchesList, 1000);
 
-      OPrime.makeCORSRequest({
-        type : 'POST',
-        url : "https://corpusdev.lingsync.org/_session",
-        data : corpusloginparams,
-        success : function(serverResults) {
-          console.log("success",serverResults);
-        },
-        error : function(serverResults) {
-          console.log("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
-        }
+      FieldDB.CORS.makeCORSRequest({
+        type: 'POST',
+        withCredentials: true,
+        url: "https://corpusdev.lingsync.org/_session",
+        data: corpusloginparams
+      }).then(function(serverResults) {
+        console.log("success", serverResults);
+      }, function(serverResults) {
+        console.log("There was a problem contacting the server to automatically back up your databases so you can use version 1.38 and greater. Please contact us at opensource@lingsync.org, someone will help you back up your data manually.");
       });
 
     });
