@@ -446,6 +446,12 @@
         "message": "Contact Us",
         "description": "bottom of the main page, opens Contact Us/Bug Report form"
     },
+    "locale_forgot_password": {
+        "message": "Forgot Password"
+    },
+    "locale_email": {
+        "message": "Email"
+    },
     "locale_reset_password_button_1": {
         "message": "Change Password...",
         "description": "button opens password change page"
@@ -608,6 +614,14 @@
     },
     "locale_create_account_answer": {
         "message": "From the main startup screen, click the 'Register' button in the top right corner and fill out the form. If you are unsure as to which server you should select, you most likely want to choose 'LingSync'.",
+        "description": " "
+    },
+    "locale_forgot_password_question": {
+        "message": "I forgot my password, how do I reset my it?",
+        "description": " "
+    },
+    "locale_forgot_password_answer": {
+        "message": "If you provided an email when you registered, you can click on the \"Forgot Password\" button on the main page, and enter your email which you used to register for your account. You can only reset your password if you have failed to login with your correct username at least once. Another way to reset your password is to attempt to login with an invalid password 5 times, the system will then send you a temporary password to your registration email.  You can then use this new password to login and change your password. If you didn't provide an email when you registered, you will need to <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> for help.",
         "description": " "
     },
     "locale_create_corpus_question": {

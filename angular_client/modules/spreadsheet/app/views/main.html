@@ -173,11 +173,26 @@
         <i class="fa whiteicon fa-envelope-o">
         </i> {{contextualize('locale_contact_us_button')}}
       </button>
+      <button class="btn btn-info" ng-show="authenticated==false" ng-click="showForgotPassword=!showForgotPassword">{{contextualize('locale_forgot_password')}}
+      </button>
       <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">{{contextualize('locale_reset_password_button_1')}}
       </button>
     </div>
     <br />
-    <div class="mainPageDiv" ng-show="showResetPassword==true"> {{contextualize('locale_password_reset')}}
+    <div class="mainPageDiv" ng-show="showForgotPassword==true">
+      <p>{{contextualize('locale_forgot_password')}}</p>
+      <br />
+      <form ng-submit='forgotPasswordSubmit()'>
+        <input placeholder="{{contextualize('locale_email')}}" type="email" ng-model="forgotPasswordInfo.email"/>
+        <br/>
+        <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_forgot_password')}}
+        </button>&nbsp;
+        <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      </form>
+    </div>
+    <br />
+    <div class="mainPageDiv" ng-show="showResetPassword==true">
+      <p>{{contextualize('locale_password_reset')}}</p>
       <br />
       <form ng-submit='changePasswordSubmit()'>
         <label>{{contextualize('locale_old_password')}}

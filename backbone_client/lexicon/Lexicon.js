@@ -45,60 +45,58 @@ define([
           }
           return;
         }
-        OPrime.makeCORSRequest({
+        FieldDB.CORS.makeCORSRequest({
           type: 'GET',
-          url: couchurl + "/_design/pages/_view/lexicon_create_tuples?group=true",
-          success: function(results) {
-            if (localStorage.getItem(pouchname + "lexiconResults")) {
-              if (typeof callback == "function") {
-                callback();
-              }
-              return;
-            }
-            var lexicon = results.rows;
-            var sortedLexicon = {};
-            for (var i in lexicon) {
-              if(lexicon[i].key.gloss){
-                if (sortedLexicon[lexicon[i].key.morpheme]) {
-                  sortedLexicon[lexicon[i].key.morpheme].push({
-                    gloss: lexicon[i].key.gloss,
-                    value: lexicon[i].value
-                  });
-                } else {
-                  sortedLexicon[lexicon[i].key.morpheme] = [{
-                    gloss: lexicon[i].key.gloss,
-                    value: lexicon[i].value
-                  }];
-                }
-              }
-            }
-            var sorter = function(a, b) {
-              return b.value - a.value;
-            };
-            // Sort each morpheme array by descending value
-            for (var key in sortedLexicon) {
-              sortedLexicon[key].sort(sorter);
-            }
-            localStorage.setItem(pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
-
-            // if (! self.get("lexiconNodes")){
-            //   self.set("lexiconNodes", new LexiconNodes());
-            // }
-            // localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
-            // var lexiconTriples = results.rows;
-            // for (triple in lexiconTriples) {
-            //   self.get("lexiconNodes").add(new LexiconNode({
-            //     morpheme : lexiconTriples[triple].key.morpheme,
-            //     allomorphs : [ lexiconTriples[triple].key.morpheme ],
-            //     gloss : lexiconTriples[triple].key.gloss,
-            //     value : lexiconTriples[triple].value
-            //   }));
-            // }
+          url: couchurl + "/_design/pages/_view/lexicon_create_tuples?group=true"
+        }).then(function(results) {
+          if (localStorage.getItem(pouchname + "lexiconResults")) {
             if (typeof callback == "function") {
               callback();
             }
-          }, // end successful response
-          dataType: ""
+            return;
+          }
+          var lexicon = results.rows;
+          var sortedLexicon = {};
+          for (var i in lexicon) {
+            if (lexicon[i].key.gloss) {
+              if (sortedLexicon[lexicon[i].key.morpheme]) {
+                sortedLexicon[lexicon[i].key.morpheme].push({
+                  gloss: lexicon[i].key.gloss,
+                  value: lexicon[i].value
+                });
+              } else {
+                sortedLexicon[lexicon[i].key.morpheme] = [{
+                  gloss: lexicon[i].key.gloss,
+                  value: lexicon[i].value
+                }];
+              }
+            }
+          }
+          var sorter = function(a, b) {
+            return b.value - a.value;
+          };
+          // Sort each morpheme array by descending value
+          for (var key in sortedLexicon) {
+            sortedLexicon[key].sort(sorter);
+          }
+          localStorage.setItem(pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+
+          // if (! self.get("lexiconNodes")){
+          //   self.set("lexiconNodes", new LexiconNodes());
+          // }
+          // localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          // var lexiconTriples = results.rows;
+          // for (triple in lexiconTriples) {
+          //   self.get("lexiconNodes").add(new LexiconNode({
+          //     morpheme : lexiconTriples[triple].key.morpheme,
+          //     allomorphs : [ lexiconTriples[triple].key.morpheme ],
+          //     gloss : lexiconTriples[triple].key.gloss,
+          //     value : lexiconTriples[triple].value
+          //   }));
+          // }
+          if (typeof callback == "function") {
+            callback();
+          }
         });
       },
       /**
