@@ -652,6 +652,51 @@ describe("lib/Collection", function() {
     });
   });
 
+  describe("equals", function() {
+    it("should be able to calculate if two collections are equal", function() {
+      var collectionOfBirds = new Collection([{
+        id: "penguin",
+        wings: "black"
+      }, {
+        id: "duck",
+        wings: "brown"
+      }, {
+        id: "robin",
+        wings: "beige"
+      }]);
+      var sameCollectionButDifferent = new Collection(collectionOfBirds.toJSON());
+      expect(collectionOfBirds.equals(sameCollectionButDifferent)).toBeTruthy();
+
+      sameCollectionButDifferent.penguin.wings = "black white";
+      expect(collectionOfBirds._collection[0].wings).not.toEqual(sameCollectionButDifferent._collection[0].wings);
+
+      expect(collectionOfBirds.equals(sameCollectionButDifferent)).toBeFalsy();
+    });
+
+    it("should consider empty collections as equal", function() {
+      expect(new Collection().equals(new Collection())).toBeTruthy();
+      expect(new Collection([{
+        id: "hie"
+      }]).equals(new Collection())).toBeFalsy();
+    });
+
+
+    it("should consider not collections with different lengths as equal", function() {
+      var aCollectionWithOneItem = new Collection([{
+        id: "one"
+      }]);
+
+      var aCheatedCollectionWithTwoItems = new Collection(aCollectionWithOneItem.toJSON());
+      expect(aCollectionWithOneItem.equals(aCheatedCollectionWithTwoItems)).toBeTruthy();
+
+      // now a cheated collection will have 2 ites, but it is identical to the first collection, normally this is impossible because the collection is uniqued
+      // this is just to prove it will exit early.
+      aCheatedCollectionWithTwoItems._collection.push(aCollectionWithOneItem._collection[0]);
+      expect(aCollectionWithOneItem.equals(aCheatedCollectionWithTwoItems)).toBeFalsy();
+
+    });
+  });
+
   describe("merging", function() {
     var aBaseCollection;
     var atriviallyDifferentCollection;

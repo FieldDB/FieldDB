@@ -667,7 +667,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
         if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
-            this.debug("  " + aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            this.debug("  " + aproperty + ": ", this[aproperty], " not equalivalent to ", anotherObject[aproperty]);
             return false;
           }
         } /* then try normal equality */
@@ -678,8 +678,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         else if (JSON.stringify(this[aproperty]) === JSON.stringify(anotherObject[aproperty])) {
           this.debug(aproperty + ": " + this[aproperty] + " equals " + anotherObject[aproperty]);
           // return true;
-        } else if (anotherObject[aproperty] === undefined) {
-          this.debug(aproperty + ": " + this[aproperty] + " not equal " + anotherObject[aproperty]);
+        } else if (anotherObject[aproperty] === undefined && (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode")) {
+          this.debug(aproperty + " is missing " + this[aproperty] + " on anotherObject " + anotherObject[aproperty]);
           return false;
         } else {
           if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
