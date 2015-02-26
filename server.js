@@ -9,8 +9,6 @@ var https = require('https'),
   couch_keys = require("./lib/couchkeys_devserver");
 
 //read in the specified filenames as the security key and certificate
-node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
-node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
 
 var connect = node_config.usersDbConnection.protocol + couch_keys.username + ':' +
   couch_keys.password + '@' + node_config.usersDbConnection.domain +
@@ -395,6 +393,19 @@ function getRequestedCorpus(corporaArray, titleAsUrl, corpusowner) {
 
 }
 
-https.createServer(node_config.httpsOptions, app).listen(node_config.port);
+console.log("process.env.NODE_DEPLOY_TARGET "+ process.env.NODE_DEPLOY_TARGET );
 
-console.log(new Date() + 'Node+Express server listening on port %d', node_config.port);
+if (true || process.env.NODE_DEPLOY_TARGET === "production") {
+  app.listen(node_config.port);
+  console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
+} else {
+  // config.httpsOptions.key = FileSystem.readFileSync(config.httpsOptions.key);
+  // config.httpsOptions.cert = FileSystem.readFileSync(config.httpsOptions.cert);
+  node_config.httpsOptions.key = fs.readFileSync(node_config.httpsOptions.key);
+  node_config.httpsOptions.cert = fs.readFileSync(node_config.httpsOptions.cert);
+
+  https.createServer(node_config.httpsOptions, app).listen(node_config.port);
+  // https.createServer(config.httpsOptions, AuthWebService).listen(node_config.port, function() {
+    console.log("Listening on https port %d", node_config.port);
+  // });
+}
