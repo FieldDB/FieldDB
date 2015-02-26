@@ -1,4 +1,4 @@
-/* globals $ */
+/* globals $, window */
 
 
 var MAINTAINENCE = {
@@ -890,97 +890,144 @@ var MAINTAINENCE = {
   },
 
   replicateAllDbs: function(source, target) {
+    if (!source || !target) {
+      throw "You have to tell me the source and target";
+    }
 
+    var throttleReplications = 10000;
     /*
     Replicate all databases
      */
     $.couch.urlPrefix = source;
-    if ($.couch.urlPrefix.indexOf("exa") > -1) {
-      throw "You have to put the real server's url";
-    }
     var replicationCount = 0;
     var dbsToBeReplicatedAndMightBeMissingSecurityDocs = "";
 
-    var turnOnContinuousReplication = function(dbnameToReplicate) {
+    var replicatePermissions = function(dbname) {
+      $.couch.urlPrefix = source;
+      var sourcedatabase = $.couch.db(dbname);
+      sourcedatabase.openDoc("_security", {
+        success: function(securitydoc) {
+          $.couch.urlPrefix = target;
+          targetdatabase = $.couch.db(dbname);
+          targetdatabase.saveDoc(securitydoc, {
+            success: function(serverResults) {
+              console.log("replicated _security for " + dbname, serverResults);
+            },
+            error: function(serverResults) {
+              console.log("There was a problem saving the doc." + dbname + " " + JSON.stringify(securitydoc), serverResults);
+            }
+          });
+
+        },
+        error: function(error) {
+          console.log(" there was a problem opening the permissions of " + dbname, error);
+        }
+      });
+    };
+
+    var turnOnContinuousReplication = function(dbnameToReplicate, dbnames) {
       var replicationOptions = {
         // create_target: true,
         continuous: true
       };
 
-      console.log(" would replicate " + dbnameToReplicate);
+      replicatePermissions(dbnameToReplicate);
 
-      // return;
       $.couch.urlPrefix = source;
       $.couch.replicate(dbnameToReplicate,
         target + "/" + dbnameToReplicate, {
           success: function(result) {
             console.log("Successfully started replication for " + dbnameToReplicate, result);
+
+            console.log("waiting " + throttleReplications);
+            window.setTimeout(function() {
+              turnOnReplicationAndLoop(dbnames);
+            }, throttleReplications);
+
           },
           error: function(error) {
             console.log("Error replicating to db" + dbnameToReplicate, error);
+
+            console.log("waiting " + throttleReplications);
+            window.setTimeout(function() {
+              turnOnReplicationAndLoop(dbnames);
+            }, throttleReplications);
+
           }
         },
         replicationOptions);
     };
 
+    var turnOnReplicationAndLoop = function(dbnames) {
+      var dbname = dbnames.pop();
+
+
+      if (dbname.indexOf("-") === -1) {
+        console.log(dbname + "  is not a corpus or activity feed ");
+        turnOnReplicationAndLoop(dbnames);
+        return;
+      }
+      if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+        turnOnReplicationAndLoop(dbnames);
+        return;
+        console.log("turning on continuous replication for a phophlo user");
+      } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
+        turnOnReplicationAndLoop(dbnames);
+        return; // dont bother to replicate any anonymous speech recognition or learn x users
+        console.log("turning on continuous replication for a learn x user");
+      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+        console.log("turning on continuous replication for a beta tester");
+        // return;
+      } else {
+        turnOnReplicationAndLoop(dbnames);
+        return; //turn on continuous replication for only beta testers and/or phophlo users
+      }
+
+      if (replicationCount > 0 && replicationCount % 10 === 0) {
+        var keepGoing = confirm(" Do you want to continue " + replicationCount);
+        if (!keepGoing) {
+          turnOnReplicationAndLoop(dbnames);
+          return;
+        }
+      }
+
+      var sourceDB = "";
+      if (dbname.indexOf("activity_feed") > -1) {
+        if (dbname.split("-").length >= 3) {
+          sourceDB = "new_corpus_activity_feed";
+        } else {
+          sourceDB = "new_user_activity_feed";
+        }
+      } else {
+        sourceDB = "new_corpus";
+      }
+      console.log(dbname + " is a " + sourceDB);
+
+      replicationCount += 1;
+      dbsToBeReplicatedAndMightBeMissingSecurityDocs = dbsToBeReplicatedAndMightBeMissingSecurityDocs + " " + dbname;
+
+      FieldDB.CORS.makeCORSRequest({
+        method: "PUT",
+        url: target + "/" + dbname,
+        withCredentials: true
+      }).then(function(result) {
+        console.log("db " + dbname + " created", result);
+        turnOnContinuousReplication(dbname, dbnames);
+      }, function(reason) {
+        if (reason && reason.error && reason.error === "file_exists") {
+          turnOnContinuousReplication(dbname, dbnames);
+        } else {
+          console.log("Error creating " + dbname, reason);
+          turnOnContinuousReplication(dbname, dbnames);
+        }
+      });
+
+    };
+
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
-        for (var db in results) {
-          if (replicationCount > 5) {
-            return;
-          }
-
-          (function(dbname) {
-            if (dbname.indexOf("-") === -1) {
-              console.log(dbname + "  is not a corpus or activity feed ");
-              return;
-            }
-            if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              return;
-              console.log("turning on continuous replication for a phophlo user");
-            } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
-              return; // dont bother to replicate any anonymous speech recognition or learn x users
-              console.log("turning on continuous replication for a learn x user");
-            } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-              console.log("turning on continuous replication for a beta tester");
-              // return;
-            } else {
-              return; //turn on continuous replication for only beta testers and/or phophlo users
-            }
-            var sourceDB = "";
-            if (dbname.indexOf("activity_feed") > -1) {
-              if (dbname.split("-").length >= 3) {
-                sourceDB = "new_corpus_activity_feed";
-              } else {
-                sourceDB = "new_user_activity_feed";
-              }
-            } else {
-              sourceDB = "new_corpus";
-            }
-            console.log(dbname + " is a " + sourceDB);
-
-            replicationCount += 1;
-            dbsToBeReplicatedAndMightBeMissingSecurityDocs = dbsToBeReplicatedAndMightBeMissingSecurityDocs + " " + dbname;
-
-            FieldDB.CORS.makeCORSRequest({
-              method: "PUT",
-              url: target + "/" + dbname,
-              withCredentials: true
-            }).then(function(result) {
-              console.log("db " + dbname + " created", result);
-              turnOnContinuousReplication(dbname);
-            }, function(reason) {
-              if (reason && reason.error && reason.error === "file_exists") {
-                turnOnContinuousReplication(dbname);
-              } else {
-                console.log("Error creating " + dbname, reason);
-              }
-            });
-
-
-          })(results[db]);
-        }
+        turnOnReplicationAndLoop(results);
       },
       error: function(error) {
         console.log("Error getting db list", error);
