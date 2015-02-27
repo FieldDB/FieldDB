@@ -895,6 +895,7 @@ var MAINTAINENCE = {
     }
 
     var throttleReplications = 10000;
+    var confirmContinueEveryXDbs = 30;
     var self = this;
     /*
     Replicate all databases
@@ -1005,7 +1006,7 @@ var MAINTAINENCE = {
         }
       }
 
-      if (self.replicationCount > 0 && self.replicationCount % 30 === 0) {
+      if (self.replicationCount > 0 && self.replicationCount % confirmContinueEveryXDbs === 0) {
         var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: "+dbnames.length);
         if (!keepGoing) {
           window.dbnames = dbnames
