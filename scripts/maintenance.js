@@ -908,6 +908,8 @@ var MAINTAINENCE = {
       var sourcedatabase = $.couch.db(dbname);
       sourcedatabase.openDoc("_security", {
         success: function(securitydoc) {
+          securitydoc._id = "_security";
+
           $.couch.urlPrefix = target;
           targetdatabase = $.couch.db(dbname);
           targetdatabase.saveDoc(securitydoc, {
@@ -917,6 +919,7 @@ var MAINTAINENCE = {
             error: function(serverResults) {
               console.log("There was a problem saving the _security doc for " + dbname + " " + JSON.stringify(securitydoc), serverResults);
               self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+              alert("There was a problem writing to the new data base. pausing...");
 
             }
           });
@@ -924,6 +927,8 @@ var MAINTAINENCE = {
         },
         error: function(error) {
           console.log(" there was a problem opening the permissions of " + dbname, error);
+          alert("There was a problem opening the securty doc on the old corps. pausing...");
+
         }
       });
     };
@@ -931,7 +936,7 @@ var MAINTAINENCE = {
     var turnOnContinuousReplication = function(dbnameToReplicate, dbnames) {
       var replicationOptions = {
         // create_target: true,
-        continuous: true
+        // continuous: true
       };
 
       replicatePermissions(dbnameToReplicate);
@@ -951,6 +956,7 @@ var MAINTAINENCE = {
           error: function(error) {
             console.log("Error replicating to db" + dbnameToReplicate, error);
             self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
+            alert("There was a problem turing on replication to the new data base. pausing...");
 
             console.log("waiting " + throttleReplications);
             window.setTimeout(function() {
@@ -994,15 +1000,17 @@ var MAINTAINENCE = {
           return;
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
-          turnOnReplicationAndLoop(dbnames);
-          return; //turn on continuous replication for only beta testers and/or phophlo users
+          // turnOnReplicationAndLoop(dbnames);
+          // return; //turn on continuous replication for only beta testers and/or phophlo users
         }
       }
 
       if (self.replicationCount > 0 && self.replicationCount % 30 === 0) {
         var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount);
         if (!keepGoing) {
-          turnOnReplicationAndLoop(dbnames);
+          window.dbnames = dbnames
+          console.log("left ".dbnames);
+          // turnOnReplicationAndLoop(dbnames);
           return;
         }
       }
@@ -1022,6 +1030,8 @@ var MAINTAINENCE = {
           turnOnContinuousReplication(dbname, dbnames);
         } else {
           console.log("Error creating " + dbname, reason);
+          alert("There was a problem creating the new data base. pausing...");
+
           turnOnContinuousReplication(dbname, dbnames);
           self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
 
@@ -1288,6 +1298,7 @@ var MAINTAINENCE = {
                   },
                   error: function(serverResults) {
                     console.log("There was a problem saving the doc." + dbname, +JSON.stringify(securitydoc));
+                    alert("There was a problem writing to the new data base. pausing...");
                   }
                 });
 
