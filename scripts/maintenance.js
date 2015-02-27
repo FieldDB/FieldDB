@@ -1006,10 +1006,10 @@ var MAINTAINENCE = {
       }
 
       if (self.replicationCount > 0 && self.replicationCount % 30 === 0) {
-        var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount);
+        var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: "+dbnames.length);
         if (!keepGoing) {
           window.dbnames = dbnames
-          console.log("left ".dbnames);
+          console.log("left " + dbnames.length);
           // turnOnReplicationAndLoop(dbnames);
           return;
         }
