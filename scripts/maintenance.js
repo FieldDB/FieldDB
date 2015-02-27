@@ -915,7 +915,7 @@ var MAINTAINENCE = {
               console.log("replicated _security for " + dbname, serverResults);
             },
             error: function(serverResults) {
-              console.log("There was a problem saving the doc." + dbname + " " + JSON.stringify(securitydoc), serverResults);
+              console.log("There was a problem saving the _security doc for " + dbname + " " + JSON.stringify(securitydoc), serverResults);
               self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
 
             }
@@ -969,12 +969,12 @@ var MAINTAINENCE = {
       }
       var dbname = dbnames.pop();
 
-
-      if (!dbname || dbname.indexOf("-") === -1) {
-        console.log(dbname + "  is not a corpus or activity feed ");
+      if (!dbname || dbname === "_replicator") {
+        console.log(dbname + "  is couchdb internal db ");
         turnOnReplicationAndLoop(dbnames);
         return;
       }
+
       if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
         turnOnReplicationAndLoop(dbnames);
         return;
@@ -984,11 +984,19 @@ var MAINTAINENCE = {
         return; // dont bother to replicate any anonymous speech recognition or learn x users
         console.log("turning on continuous replication for a learn x user");
       } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-        console.log("turning on continuous replication for a beta tester");
-        // return;
-      } else {
         turnOnReplicationAndLoop(dbnames);
-        return; //turn on continuous replication for only beta testers and/or phophlo users
+        return;
+        console.log("turning on continuous replication for a beta tester");
+      } else {
+
+        if (dbname.indexOf("-") === -1) {
+          turnOnReplicationAndLoop(dbnames);
+          return;
+          console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
+        } else {
+          turnOnReplicationAndLoop(dbnames);
+          return; //turn on continuous replication for only beta testers and/or phophlo users
+        }
       }
 
       if (self.replicationCount > 0 && self.replicationCount % 30 === 0) {
@@ -999,17 +1007,6 @@ var MAINTAINENCE = {
         }
       }
 
-      var sourceDB = "";
-      if (dbname.indexOf("activity_feed") > -1) {
-        if (dbname.split("-").length >= 3) {
-          sourceDB = "new_corpus_activity_feed";
-        } else {
-          sourceDB = "new_user_activity_feed";
-        }
-      } else {
-        sourceDB = "new_corpus";
-      }
-      console.log(dbname + " is a " + sourceDB);
 
       self.replicationCount += 1;
 
