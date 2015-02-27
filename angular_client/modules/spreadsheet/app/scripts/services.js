@@ -355,7 +355,7 @@ angular.module('spreadsheetApp')
                 $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
                 $rootScope.openNotification();
               } else {
-                $rootScope.notificationMessage = JSON.stringify(response.data.info[0]) + "\nYou may now select this corpus.";
+                $rootScope.notificationMessage = response.data.info.join(" ") + "\nYou may now select this corpus.";
                 $rootScope.openNotification();
               }
               return response.data;
@@ -407,7 +407,7 @@ angular.module('spreadsheetApp')
                   $rootScope.openNotification();
                 }
               } else {
-                $rootScope.notificationMessage = JSON.stringify(response.data.info[0]);
+                $rootScope.notificationMessage = response.data.info.join(" ");
                 $rootScope.openNotification();
               }
               return response;
