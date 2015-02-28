@@ -89,7 +89,7 @@
 			<div ng-repeat="user in users.admins" class="user_thumbnails">
 				<img
 					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username, ['admin'])">ⓧ</a>
 				{{user.username}}
 			</div>
 		</div>
@@ -98,7 +98,7 @@
       <div ng-repeat="user in users.writers" class="user_thumbnails">
         <img
           ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username, ['writer'])">ⓧ</a>
         {{user.username}}
       </div>
     </div>
@@ -107,7 +107,7 @@
 			<div ng-repeat="user in users.readers" class="user_thumbnails">
 				<img
 					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-				<a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+				<a class="delete_button" ng-click="removeUserFromCorpus(user.username, ['reader'])">ⓧ</a>
 				{{user.username}}
 			</div>
 		</div>
@@ -116,7 +116,7 @@
       <div ng-repeat="user in users.commenters" class="user_thumbnails">
         <img
           ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
-        <a class="delete_button" ng-click="removeUserFromCorpus(user.username)">ⓧ</a>
+        <a class="delete_button" ng-click="removeUserFromCorpus(user.username, ['commenter'])">ⓧ</a>
         {{user.username}}
       </div>
     </div>
