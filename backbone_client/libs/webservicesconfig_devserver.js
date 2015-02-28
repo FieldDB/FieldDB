@@ -116,6 +116,7 @@ OPrime.defaultCouchConnection = function() {
   return connection;
 };
 OPrime.getAuthUrl = function(userFriendlyServerName) {
+  return "https://auth.lingsync.org";
   var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
   var authUrl = userFriendlyServerName;
   if (authUrl.indexOf("LingSync.org") >= 0) {
