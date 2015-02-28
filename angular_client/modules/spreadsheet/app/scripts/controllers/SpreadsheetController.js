@@ -1025,7 +1025,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         // } catch (e) {
         //   console.log("must have been an object...", e, selectedCorpus);
         // }
-        if ( ($rootScope.corpus && $rootScope.corpus.datumFields && $rootScope.corpus.datumFields.length > 0) && ($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) ) {
+        if (($rootScope.corpus && $rootScope.corpus.datumFields && $rootScope.corpus.datumFields.length > 0) && ($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && $rootScope.availableFieldsInCurrentCorpus === $rootScope.corpus.datumFields){
           console.log("requested load of a corpus which was already loaded.");
           return;
         }
@@ -1477,10 +1477,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(fieldData, datum, $event) {
     if (FieldDB && FieldDB.FieldDBObject) {
-      var previous = new FieldDB.FieldDBObject(datum.fossil);
-      var current = new FieldDB.FieldDBObject(datum);
+      var previous = new FieldDB.Datum(datum.fossil);
+      var current = new FieldDB.Datum(datum);
       delete current.fossil;
       delete current.$$hashKey;
+      delete current.modifiedByUser;
+      delete previous.modifiedByUser;
+
+      delete current._dateModified;
+      delete previous._dateModified;
+
       if (previous.equals(current)) {
         console.log("The datum didnt actually change. Not marking as editied");
         return;
@@ -2282,16 +2288,25 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
   };
 
-  $scope.removeUserFromCorpus = function(userid) {
-    // Prevent an admin from removing him/herself from a corpus; This
+  $scope.removeUserFromCorpus = function(userid, roles) {
+    if (!roles || roles.length === 0) {
+      console.warn("no roles were requested to be removed. cant do anything");
+      alert("There was a problem performing this operation. Please report this.");
+    }
+    // Prevent an admin from removing him/herself from a corpus if there are no other admins; This
     // helps to avoid a situation in which there is no admin for a
     // corpus
-    if (userid === $rootScope.user.username) {
-      window.alert("You cannot remove yourself from a corpus.\nOnly another Admin can remove you.");
-      return;
+    if ($scope.users.admins.length < 2) {
+      if ($scope.users.admins.indexOf(userid) > -1) {
+        window.alert("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
+        return;
+      }
     }
-
-    var r = confirm("Are you sure you want to remove " + userid + " from this corpus?\nNOTE: This will remove ALL user roles for " + userid + ". However, you may add this user again with new permissions.");
+    var referingNoun = userid;
+    if (referingNoun === $rootScope.user.username) {
+      referingNoun = "yourself";
+    }
+    var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + userid + " from this corpus?");
     if (r === true) {
 
       var dataToPost = {};
@@ -2299,18 +2314,20 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       dataToPost.password = $rootScope.loginInfo.password.trim();
       dataToPost.serverCode = $rootScope.serverCode;
       dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+      dataToPost.pouchname = $rootScope.corpus.pouchname;
 
       dataToPost.userRoleInfo = {};
       dataToPost.userRoleInfo.usernameToModify = userid;
       dataToPost.userRoleInfo.pouchname = $rootScope.corpus.pouchname;
       dataToPost.userRoleInfo.removeUser = true;
 
+
       Data.updateroles(dataToPost)
         .then(function(response) {
           if (debugging) {
             console.log(response);
           }
-          var indirectObjectString = "from <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+          var indirectObjectString = roles.join(" ") + "access from <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "removed",
             verbicon: "icon-remove-sign",
