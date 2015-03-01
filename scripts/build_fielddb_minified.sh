@@ -13,6 +13,12 @@
 rm backbone_client/bower_components/fielddb/fielddb.js
 ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
+
+sed 's/\/\/# sourceMappingURL=jquery.min.map//' backbone_client/bower_components/jquery/dist/jquery.min.js  > output
+mv output backbone_client/bower_components/jquery/dist/jquery.min.js
+
+
+
 #welcome is just a redirect to either user or corpus
 rm -rf couchapp_minified/_attachments
 
