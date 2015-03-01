@@ -15,16 +15,19 @@
 </head>
 <body>
 	<div id="user-welcome-modal" data-backdrop="static" class="modal hide"></div>
-  
+
   <div id="dashboard_loading_spinner"></div>
   <div id="app_view"></div>
-  
+
   <div id="terminal-modal" class="modal hide terminalbody ">
     <div id="terminal"></div>
   </div>
-  
-	<script src="libs/require.js"></script>
-	<script type="text/javascript" src="welcome_online_dashboard.js"></script>
+
+
+  <script src="libs/require.js" data-main="welcome_online_dashboard.js"></script>
+
+  <script type="text/javascript" src="libs/ga.js"></script>
+  <script type="text/javascript" src="libs/analytics.js"></script>
 
 </body>
 </html>

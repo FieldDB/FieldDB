@@ -1,7 +1,7 @@
 /**
    * Moved analytics out of in-line code to respect new Content Security Policy of extension manifest  version 2
    */
-  var _AnalyticsCode = "UA-32705284-1";
+  var _AnalyticsCode = "UA-35422317-1";
 
   /**
    * Below is a modified version of the Google Analytics asynchronous tracking
@@ -9,7 +9,7 @@
    * instead of the default HTTP version.  It is recommended that you use this
    * snippet instead of the standard tracking snippet provided when setting up
    * a Google Analytics account.
-   * 
+   *
    * http://code.google.com/chrome/extensions/samples.html#analytics
    */
   var _gaq = _gaq || [];
@@ -24,7 +24,7 @@
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
   })();
-  
+
   /**
    * Track a click on a button using the asynchronous tracking API.
    *
@@ -34,7 +34,7 @@
 //  function trackButtonClick(e) {
 //    _gaq.push(['_trackEvent', e.target.id, 'clicked']);
 //  }
-  
+
   /**
    * Now set up your event handlers for the popup's `button` elements once the
    * popup's DOM has loaded.
@@ -45,15 +45,15 @@
 //      buttons[i].addEventListener('click', trackButtonClick);
 //    }
 //  });
-  
+
   /**
    * Use search analytics example
    */
 //  var pageTracker = _gat._getTracker(_AnalyticsCode);
-//  pageTracker._initData(); 
-//  pageTracker._trackPageview('/search_results.php?q=searchterm'); 
-  
-  
+//  pageTracker._initData();
+//  pageTracker._trackPageview('/search_results.php?q=searchterm');
+
+
 //  var gaJsHost =  "https://ssl." ;
 //  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 //  console.log("Attempting to load "+ gaJsHost + "google-analytics.com/ga.js");
