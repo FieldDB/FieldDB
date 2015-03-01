@@ -40,7 +40,7 @@ require.config({
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "_": "bower_components/underscore/underscore",
-    "underscore": "bower_components/underscore/underscore",
+    // "underscore": "bower_components/underscore/underscore",
     "backbone": "bower_components/backbone/backbone",
     "jquerycouch": "libs/backbone_couchdb/jquery.couch",
 
