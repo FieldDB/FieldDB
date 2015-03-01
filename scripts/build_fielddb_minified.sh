@@ -62,6 +62,7 @@ cp backbone_client/libs/bootstrap/css/*.css couchapp_minified/_attachments/libs/
 cp backbone_client/libs/d3.v2.js couchapp_minified/_attachments/libs/d3.v2.js
 cp -R backbone_client/libs/font_awesome couchapp_minified/_attachments/libs/font_awesome
 cp backbone_client/libs/require.js couchapp_minified/_attachments/libs/require.js
+cp backbone_client/libs/analytics.js couchapp_minified/_attachments/libs/analytics.js
 cp -R backbone_client/libs/terminal couchapp_minified/_attachments/libs/terminal/
 
 cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
