@@ -440,8 +440,8 @@ define([
       } else {
         // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
         originalModel.couchConnection = OPrime.defaultCouchConnection();
-        originalModel.couchConnection.corpusid = tmp.corpusid;
-        originalModel.couchConnection.pouchname = tmp.pouchname;
+        originalModel.couchConnection.corpusid = originalModel._id;
+        originalModel.couchConnection.pouchname = originalModel.pouchname;
       }
 
       // some versions of the FieldBD common js in the spreadsheet removed the confidential?
