@@ -437,7 +437,26 @@ define([
         originalModel.couchConnection.title = tmp.title;
         originalModel.couchConnection.description = tmp.description;
         originalModel.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      } else {
+        // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
+        originalModel.couchConnection = OPrime.defaultCouchConnection();
+        originalModel.couchConnection.corpusid = tmp.corpusid;
+        originalModel.couchConnection.pouchname = tmp.pouchname;
       }
+
+      // some versions of the FieldBD common js in the spreadsheet removed the confidential?
+      if(!originalModel.confidential){
+        originalModel.confidential = {
+          secretkey : new Confidential().secretKeyGenerator(),
+          repairedTimestamp : Date.now()
+        };
+      }
+      // if (!originalModel.team) {
+      //   originalModel.team = {
+      //     _id: "team",
+      //     username: originalModel.pouchname.split("-")[0];
+      //   };
+      // }
       /* Update the corpus to show all fields which are defaults on corpora,
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
