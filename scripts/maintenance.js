@@ -773,16 +773,18 @@ var MAINTAINENCE = {
               return;
             }
             if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+              // return;
               console.log("deploying to a beta tester");
-              // return;
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              console.log("deploying to a phophlo user");
               // return;
+              console.log("deploying to a phophlo user");
             } else {
               if (dbname.indexOf("anonymous") > -1) {
-                return;
+              // return;
+               console.log("deploying to anonymous users");
               } else {}
               return; //deploy to only beta testers and/or phophlo users
+              // console.log("deploying to normal users");
             }
             var sourceDB = "";
             if (dbname.indexOf("activity_feed") > -1) {
@@ -794,6 +796,7 @@ var MAINTAINENCE = {
             } else {
               sourceDB = "new_corpus";
             }
+
             console.log(dbname + " is a " + sourceDB);
             $.couch.replicate(sourceDB, dbname, {
               success: function(result) {
