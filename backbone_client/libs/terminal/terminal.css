@@ -52,44 +52,44 @@
   100% { opacity: 0.7; }
 }
 
-::selection {
+.power-user-terminal ::selection {
   background: #0080FF;
   text-shadow: none !important;
 }
 
-.terminalbody {
+.power-user-terminal .terminalbody {
   font-family: Inconsolata, monospace;
   color: white;
   background: -webkit-radial-gradient(center center, contain, rgba(0,150,0,1), black) center center no-repeat, black; /*center center for the gradient scrolls with the page :(*/
   /*background: -webkit-radial-gradient(center 75%, contain, rgba(0,75,0,0.8), black) center center no-repeat, black;*/
   -webkit-background-size: 110% 100%;
 }
-.offscreen {
+.power-user-terminal .offscreen {
   background: -webkit-linear-gradient(top, #000, #333);
 }
-.offscreen #container {
+.power-user-terminal .offscreen #container {
   background: rgba(0,0,0,0.7);
   height: 100%;
   position: fixed;
   text-shadow: none;
   box-shadow: 0 0 15px black;
 }
-.offscreen #container output {
+.power-user-terminal .offscreen #container output {
   overflow-x: hidden;
   display: inline-block;
   height: 100px;
 }
-.offscreen .interlace {
+.power-user-terminal .offscreen .interlace {
   display: none;
 }
-#terminal {
+.power-user-terminal #terminal {
   -webkit-transition: -webkit-transform 1.5s ease-in-out;
   width: 100%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-.dropping {
+.power-user-terminal .dropping {
   /*background: -webkit-linear-gradient(
     bottom,
     rgb(209,144,23) 13%,
@@ -100,7 +100,7 @@
   -webkit-background-size: 125% 125%;
 }
 /*
-.crt {
+.power-user-terminal .crt {
   z-index: 50;
   width: 100%;
   height: 50px;
@@ -110,40 +110,40 @@
   border-bottom-right-radius: 10px;
   background: -webkit-gradient(radial, 50% 10057%, 4999, 50% 10055%, 5000, from(transparent), to(black) ) transparent no-repeat 10% 100%;
 }
-.crt.top {
+.power-user-terminal .crt.top {
   top: -20px;
 }
-.crt.bottom {
+.power-user-terminal .crt.bottom {
   -webkit-transform: rotate(180deg);
   bottom: -20px;
 }*/
-.crt {
+.power-user-terminal .crt {
   z-index: 50;
   width: 100%;
   height: 50px;
   position: fixed;
   background: black;
 }
-.crt.top {
+.power-user-terminal .crt.top {
   top: 0;
 }
-.crt.bottom {
+.power-user-terminal .crt.bottom {
   bottom: 0;
   -webkit-transform: rotate(180deg);
 }
-.hz {
+.power-user-terminal .hz {
   -webkit-animation-name: hz;
   -webkit-animation-duration: 30s;
   -webkit-animation-iteration-count: infinite;
 }
 
-.flicker {
+.power-user-terminal .flicker {
   -webkit-animation-name: flicker;
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: ease-in-out;
 }
-.interlace {
+.power-user-terminal .interlace {
   position: absolute;
   left: 0;
   top: 0;
@@ -158,22 +158,22 @@
   border-bottom-left-radius: 150px 50px;
   border-bottom-right-radius: 150px 50px;*/
 }
-.hidden {
+.power-user-terminal .hidden {
   display: none !important;
 }
-.dim > * {
+.power-user-terminal .dim > * {
   opacity: 0.4;
 }
-.dim .help {
+.power-user-terminal .dim .help {
   opacity: 1;
 }
-iframe#fsn {
+.power-user-terminal  iframe#fsn {
   position: absolute;
   height: 100%;
   width: 100%;
   border: none;
 }
-#terminal {
+.power-user-terminal #terminal {
   padding: 1em 1.5em 1em 1em;
   text-shadow: 0 0 5px #C8C8C8;
   /*overflow: hidden;
@@ -184,17 +184,17 @@ iframe#fsn {
   border-radius: 50px;
   background: rgba(255, 255, 255, 0.1);*/
 }
-#terminal output {
+.power-user-terminal #terminal output {
   clear: both;
   width: 100%;
 }
-#terminal output h3 {
+.power-user-terminal #terminal output h3 {
   margin: 0;
 }
-#terminal output pre {
+.power-user-terminal #terminal output pre {
   margin: 0;
 }
-#terminal output textarea {
+.power-user-terminal #terminal output textarea {
   width: 100%;
   height: 200px;
   background-color: rgba(255,255,255,0.1);
@@ -205,19 +205,19 @@ iframe#fsn {
   border-radius: 10px;
   padding: 5px;
 }
-#terminal output textarea::selection {
+.power-user-terminal #terminal output textarea::selection {
   background: red;
 }
-#terminal output textarea::-webkit-scrollbar {
+.power-user-terminal #terminal output textarea::-webkit-scrollbar {
   width: 1ex;
 }
-#terminal output textarea::-webkit-scrollbar-thumb {
+.power-user-terminal #terminal output textarea::-webkit-scrollbar-thumb {
   border-top: 1px solid #fff;
   background: #ccc -webkit-linear-gradient(rgb(240, 240, 240), rgb(210, 210, 210));
   border-radius: 1ex;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
-.input-line {
+.power-user-terminal .input-line {
   display: -webkit-box;
   -webkit-box-orient: horizontal;
   -webkit-box-align: stretch;
@@ -226,11 +226,11 @@ iframe#fsn {
   box-align: stretch;
   clear: both;
 }
-.input-line > div:nth-child(2) {
+.power-user-terminal .input-line > div:nth-child(2) {
   -webkit-box-flex: 1;
   box-flex: 1;
 }
-.prompt {
+.power-user-terminal .prompt {
   white-space: nowrap;
   color: #ffcc00; /*green;*/
   margin-right: 7px;
@@ -243,7 +243,7 @@ iframe#fsn {
   -webkit-user-select: none;
   user-select: none;
 }
-.cmdline {
+.power-user-terminal .cmdline {
   outline: none;
   background-color: transparent;
   margin: 0;
@@ -252,22 +252,22 @@ iframe#fsn {
   border: none;
   color: inherit;
 }
-.folder {
+.power-user-terminal .folder {
   color: #ffcc00;
 }
-.ls-files {
+.power-user-terminal .ls-files {
   /*height: 45px;*/
   /* Default, but changed by js depending on length of filename */
   -webkit-column-width: 100px;
   column-width: 100px;
 }
-.ls-files span {
+.power-user-terminal .ls-files span {
   cursor: pointer;
 }
-.ls-files span:hover {
+.power-user-terminal .ls-files span:hover {
   text-decoration: underline;
 }
-.terminalbutton {
+.power-user-terminal .terminalbutton {
   background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#F9F9F9), to(#E3E3E3));
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -280,16 +280,16 @@ iframe#fsn {
   user-select: none;
   cursor: pointer;
 }
-.terminalbutton([disabled]):hover {
+.power-user-terminal .terminalbutton([disabled]):hover {
   border-color: #ffcc00;
 }
-.terminalbutton:not([disabled]):active {
+.power-user-terminal .terminalbutton:not([disabled]):active {
   background: -webkit-gradient(linear, 0% 40%, 0% 70%, from(#E3E3E3), to(#F9F9F9));
 }
-.terminalbutton[disabled] {
+.power-user-terminal .terminalbutton[disabled] {
   color: #ccc;
 }
-.help {
+.power-user-terminal .help {
   font-family: 'Droid Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   position: fixed;
@@ -306,11 +306,11 @@ iframe#fsn {
   user-select: none;
   font-size: 10pt;
 }
-.help,
-.help > section {
+.power-user-terminal .help,
+.power-user-terminal .help > section {
   border-radius: 10px;
 }
-.help > section {
+.power-user-terminal .help > section {
   padding: 10px;
   background: rgba(255, 255, 255, 0.3);
   -webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.6);
@@ -319,31 +319,31 @@ iframe#fsn {
   position: relative;
   width: 610px;
 }
-.help section > div:first-child {
+.power-user-terminal .help section > div:first-child {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.help section > div:last-child {
+.power-user-terminal .help section > div:last-child {
   padding-top: 0;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.help > section > div {
+.power-user-terminal .help > section > div {
   background: rgba(0, 0, 0, 1);
   padding: 20px;
 }
-.help h2 {
+.power-user-terminal .help h2 {
   padding-bottom: 8px;
   margin-top: 0;
   margin-bottom: 25px;
   border-bottom: 1px solid #fff;
   color: #ffcc00;
 }
-.help p strong {
+.power-user-terminal .help p strong {
   width: 60px;
   display: inline-block;
 }
-.help #close {
+.power-user-terminal .help #close {
   border-radius: 20px;
   padding: 2px 6px 2px 7px;
   border: 2px solid #fff;
@@ -355,27 +355,27 @@ iframe#fsn {
   font-weight: bold;
   line-height: 17px;
 }
-.help #close:active {
+.power-user-terminal .help #close:active {
   right: 19px;
   top: 21px;
 }
-.help .shortcuts {
+.power-user-terminal .help .shortcuts {
   -webkit-columns: 2;
   columns: 2;
 }
 
 
 /* Themes */
-.cream {
+.power-user-terminal .cream {
   color: black;
   background: #fffff3;
 }
-.cream .interlace {
+.power-user-terminal .cream .interlace {
   opacity: 0.1;
 }
-.cream .prompt {
+.power-user-terminal .cream .prompt {
   color: purple;
 }
-.cream .cmdline {
+.power-user-terminal .cream .cmdline {
   color: black;
 }

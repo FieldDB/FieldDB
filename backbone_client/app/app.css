@@ -4,6 +4,9 @@
 
 @import url("../libs/font_awesome/font-awesome.css");
 
+@import url("../libs/terminal/terminal.css");
+
+
 body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
 	background-color: #000;
 	background-repeat: no-repeat;
@@ -48,7 +51,7 @@ a
 }
 .myaamiaImage{
 	height:10em;
-	
+
 }
 .search {
 	padding: 10px
@@ -110,23 +113,23 @@ h4 {
 }
 
 .activity_direct_object,.activity_direct_object
- 
+
 a { /* color: #055; */
 	/* font-size: .85em; */
-	
+
 }
 
 .activity_verb,.activity_verb
- 
+
 a { /* color: #055; */
 	font-weight: bold !important;
 }
 
 .activity_indirect_object,.activity_indirect_object
- 
+
 a { /* color: #550; */
 	/* font-size: .85em; */
-	
+
 }
 
 #toast-user-area {
@@ -134,7 +137,7 @@ a { /* color: #550; */
 }
 
 .brand { /* font-size: .85em !important; */
-	
+
 }
 
 .thisIsEditable {
@@ -142,7 +145,7 @@ a { /* color: #550; */
 }
 
 .timestamp,.timestamp
- 
+
 a {
 	opacity: 0.75;
 	font-size: .85em;
@@ -158,11 +161,11 @@ a {
 }
 
 #login_form { /* margin-left: 5px; */
-	
+
 }
 
 .datalist_hover_datum_views_so_they_look_clickable
- 
+
 li {
 	cursor: hand;
 	cursor: pointer;
@@ -180,11 +183,11 @@ li {
 
 #corpus-quickview { /* min-height: 10em;
 	overflow: auto;  */
-	
+
 }
 
 #corpus-quickview
- 
+
 p {
 	font-size: .8em;
 	line-height: 1.5em;
@@ -192,7 +195,7 @@ p {
 }
 
 #session-quickview
- 
+
 p {
 	font-size: .8em;
 	line-height: 1.5em;
@@ -222,18 +225,18 @@ p {
 
 .corpus-description { /* float: left;
 	width: 100%; */
-	
+
 }
 
 .corpusMenu { /* float: left;
 	margin: 0em;  */
-	
+
 }
 
 .corpusMenu
- 
+
 button { /* margin: 5px 0px 5px 0px;  */
-	
+
 }
 
 .fullscreen {
@@ -256,7 +259,7 @@ button { /* margin: 5px 0px 5px 0px;  */
 .icons { /* font-size: 1.5em;
 	line-height: 1em !important;
 	padding-left: .25em; */
-	
+
 }
 
 .icon-white {
@@ -345,25 +348,25 @@ textarea {
 */}
 
 .zebra
- 
+
 li
 :nth-child(odd) {
 	background: #fff;
 }
 
 .zebra
- 
+
 li
 :nth-child(even) {
 	background: #fff;
 }
 
 .datum-checkboxes { /* position:absolute;  */
-	
+
 }
 
 .latex-judgement { /* position: absolute; */
-	
+
 }
 
 .datum_field_label {
@@ -415,7 +418,7 @@ li
 }
 
 .dropdown-menu
- 
+
 .not-a {
 	display: block;
 	padding: 3px 15px;
@@ -475,7 +478,7 @@ progress {
 	width: 100%;
 }
 /*
- * Gradient Shadow HTML5 progress bars 
+ * Gradient Shadow HTML5 progress bars
  http://www.useragentman.com/blog/2012/01/03/cross-browser-html5-progress-bars-in-depth/
  */
 
@@ -490,19 +493,19 @@ spacer {
 }
 
 .like-form-inline
- 
+
 input,.like-form-inline
- 
+
 textarea,.like-form-inline
- 
+
 select,.like-form-inline
- 
+
 .help-inline,.like-form-inline
- 
+
 .uneditable-input,.like-form-inline
- 
+
 .input-prepend,.like-form-inline
- 
+
 .input-append {
 	display: inline-block;
 	*display: inline;
@@ -780,7 +783,7 @@ h4 {
 
 .activity_direct_object,.activity_direct_object a { /* color: #055; */
 	/* font-size: .85em; */
-	
+
 }
 
 .activity_verb,.activity_verb a { /* color: #055; */
@@ -790,7 +793,7 @@ h4 {
 .activity_indirect_object,.activity_indirect_object a {
 	/* color: #550; */
 	/* font-size: .85em; */
-	
+
 }
 
 #toast-user-area {
@@ -798,7 +801,7 @@ h4 {
 }
 
 .brand { /* font-size: .85em !important; */
-	
+
 }
 
 .timestamp,.timestamp a {
@@ -816,7 +819,7 @@ h4 {
 }
 
 #login_form { /* margin-left: 5px; */
-	
+
 }
 
 .datalist_hover_datum_views_so_they_look_clickable li {
@@ -833,7 +836,7 @@ h4 {
 
 #corpus-quickview { /* min-height: 10em;
 	overflow: auto;  */
-	
+
 }
 
 #corpus-quickview p {
@@ -863,7 +866,7 @@ h4 {
 .mywell{
 	padding: .01em !important;
 	margin-bottom: .01em !important;
-	
+
 }
 
 .alert {
@@ -875,16 +878,16 @@ h4 {
 
 .corpus-description { /* float: left;
 	width: 100%; */
-	
+
 }
 
 .corpusMenu { /* float: left;
 	margin: 0em;  */
-	
+
 }
 
 .corpusMenu button { /* margin: 5px 0px 5px 0px;  */
-	
+
 }
 
 .fullscreen {
@@ -907,7 +910,7 @@ h4 {
 .icons { /* font-size: 1.5em;
 	line-height: 1em !important;
 	padding-left: .25em; */
-	
+
 }
 
 .icon-white {
@@ -948,11 +951,11 @@ h4 {
 }
 
 .datum-checkboxes { /* position:absolute;  */
-	
+
 }
 
 .latex-judgement { /* position: absolute; */
-	
+
 }
 
 .datum_field_label {
@@ -1068,7 +1071,7 @@ progress {
 	width: 100%;
 }
 /*
- * Gradient Shadow HTML5 progress bars 
+ * Gradient Shadow HTML5 progress bars
  http://www.useragentman.com/blog/2012/01/03/cross-browser-html5-progress-bars-in-depth/
  */
 
@@ -1244,7 +1247,7 @@ line.link {
 
 @media ( max-width : 980px) {
 	.dropdown
- 
+
 ul
 .dropdown-menu {
 		display: block;
@@ -1255,7 +1258,6 @@ ul
 	background-color: yellow;
 }
 
-@import url("../libs/terminal/terminal.css");
 
 .language-learning-lesson .morphemes{
 	display: none !important;
