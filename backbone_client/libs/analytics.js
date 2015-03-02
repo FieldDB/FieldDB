@@ -57,14 +57,16 @@ this is the current code from google
   m.parentNode.insertBefore(a, m)
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-// ga('create', 'UA-35422317-1', 'auto');
+// ga('create', 'UA-35422317-1', 'auto'
+// );
 
 // https://productforums.google.com/forum/#!topic/analytics/KNz8TimivXo
 ga('create', 'UA-35422317-1', {
   'cookieDomain': 'none'
 });
 ga('set', 'checkProtocolTask', function() { /* nothing */ });
-ga('set', 'page', 'chrome-protoype' + window.location.pathname);
+ga('set', 'page', 'chrome-protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+// ga('set', 'page', 'chrome-protoype');
 ga('send', 'pageview');
 
 
