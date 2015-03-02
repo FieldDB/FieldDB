@@ -16,6 +16,14 @@ var connect = node_config.usersDbConnection.protocol + couch_keys.username + ':'
   node_config.usersDbConnection.path;
 var nano = require('nano')(connect);
 
+
+// var errorHandler = require('express-error-handler'),
+//   handler = errorHandler({
+//     static: {
+//       '404': '404.html'
+//     }
+//   });
+
 // configure Express
 app.configure(function() {
   app.set('views', __dirname + '/views');
@@ -29,6 +37,7 @@ app.configure(function() {
   app.use(express.session({
     secret: 'CtlFYUMLlrwr1VdIr35'
   }));
+  // app.use(errorHandler.httpError(404) );
   app.use(app.router);
 });
 
@@ -94,8 +103,12 @@ app.get('/db/:pouchname', function(req, res) {
       res.render('corpus', data);
   })
     .fail(function(error) {
-    console.log(error);
-    res.redirect('/public');
+    console.log(new Date() + " there was a problem getCorpusFromPouchname in route /db/:pouchname" + error);
+    if (pouchname.indexOf("public") > -1) {
+      res.redirect("404.html");
+    } else {
+      res.redirect('/public');
+    }
   })
     .done();
 
@@ -144,8 +157,12 @@ app.get('/:user/:corpus/:pouchname', function(req, res) {
       res.render('corpus', data);
   })
     .fail(function(error) {
-    console.log(error);
-    res.redirect('/public');
+    console.log(new Date() + " there was a problem getCorpusFromPouchname in route /:user/:corpus/:pouchname " + error);
+    if (pouchname.indexOf("public") > -1) {
+      res.redirect("404.html");
+    } else {
+      res.redirect('/public');
+    }
   })
     .done();
 
@@ -192,12 +209,14 @@ function getData(res, user, corpus) {
 
   user = sanitizeAgainstInjection(user);
   if(user === false){
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
   corpus = sanitizeAgainstInjection(corpus);
   if(corpus === false){ 
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
 
@@ -220,12 +239,21 @@ function getData(res, user, corpus) {
     res.render(template, data);
   })
     .fail(function(error) {
-    console.log(error);
-    var redirect = '/public';
-    if (corpus) {
-      redirect = '/' + user;
+    console.log(new Date() + " couldnt get the user "+ error.message);
+    if(error && error.message && (error.message.indexOf("ror happened in your connect") > -1 || error.message.indexOf("ame or password is incorre") > -1)){
+      res.status(500);
+      res.send("<script> window.setTimeout(function(){\nalert('The server is currently unable to serve your request: code 71921. Please notify us of this erorr code, or check again later. Taking you to the contact us form...');\n window.location.href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform'; },100);</script>  ");
+      return;
     }
-    res.redirect(redirect);
+    if (error && error.message === "missing" && user !== "public") {
+      res.redirect("/public)")
+      return;
+    }
+
+    console.log(new Date() + " There was an error on this server, we are unable to take the user to the public user. ");
+    res.status(404);
+   res.redirect("404.html")
+    return;
   })
     .done();
 
@@ -233,8 +261,9 @@ function getData(res, user, corpus) {
 
 function getCorpusFromPouchname(pouchname) {
   pouchname = sanitizeAgainstInjection(pouchname);
-  if(!pouchname){ 
-    res.status(404).send('Not found');
+  if (!pouchname) {
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
 
@@ -284,7 +313,8 @@ function getCorpusFromPouchname(pouchname) {
 function getUser(userId) {
   userId = sanitizeAgainstInjection(userId);
   if(!userId){ 
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
 
@@ -317,17 +347,20 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
 
   pouchId = sanitizeAgainstInjection(pouchId);
   if(!pouchId){ 
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
   titleAsUrl = sanitizeAgainstInjection(titleAsUrl);
   if(titleAsUrl  === false){ 
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
   corpusid = sanitizeAgainstInjection(corpusid);
   if(corpusid === false){ 
-    res.status(404).send('Not found');
+    res.status(404);
+   res.redirect("404.html")
     return;
   }
 
@@ -340,7 +373,7 @@ function getCorpus(pouchId, titleAsUrl, corpusid) {
   }
   corpusdb.get(doc, function(error, result) {
     if (error) {
-      console.log(error);
+      console.log(new Date() + " there was a problem getting corpusdb" + error);
       df.reject(new Error(error));
     } else {
       if (!result) {
