@@ -237,8 +237,23 @@ define([
 
         OPrime.debug("Edit this function to update datum to the latest schema.");
 
+        var x;
+        /* make sure the fields have a label */
+        for (x in originalModel.datumFields) {
+          originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
+        }
+        for (x in originalModel.session.datumFields) {
+          originalModel.session.datumFields[x].label = originalModel.session.datumFields[x].label ||originalModel.session.datumFields[x].id;
+        }
+
         /* Add any new corpus fields to this datum so they can be edited */
-        var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+        var originalFieldLabels;
+        if (originalModel.datumFields.id) {
+          originalFieldLabels = _.pluck(originalModel.datumFields, "id");
+        } else {
+          originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+        }
+
         window.corpusfieldsforDatumParse = window.corpusfieldsforDatumParse || window.app.get("corpus").get("datumFields").toJSON()
         var corpusFields = window.corpusfieldsforDatumParse;
         if (corpusFields.length > originalFieldLabels.length) {

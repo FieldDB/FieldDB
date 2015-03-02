@@ -28,8 +28,8 @@
   <div id="dashboard_loading_spinner"></div>
 	<div id="app_view"></div>
 
-	<div id="terminal-modal" class="modal hide terminalbody ">
-		<div id="terminal"></div>
+	<div id="terminal-modal" class="modal hide power-user-terminal">
+		<div id="terminal" class="terminalbody"></div>
 	</div>
 
 
@@ -43,7 +43,7 @@
       <h3>Paragraphs </h3>
 
       <p>
-      Text starting at the beginning of a line becomes a paragraph.  A new paragraph is created whenever 
+      Text starting at the beginning of a line becomes a paragraph.  A new paragraph is created whenever
       there is a blank line between two blocks of text.
       </p>
       <p>
@@ -93,12 +93,12 @@
       <h3>Headings </h3>
 
       <p>
-      To add a heading put the text of the heading on a line by itself started with between 
-      1 and 6 equals ('='), a space then the heading text and finally the same number of 
-      equals ('='). The number of equals before the heading name sets the heading level - H1 to H6. 
+      To add a heading put the text of the heading on a line by itself started with between
+      1 and 6 equals ('='), a space then the heading text and finally the same number of
+      equals ('='). The number of equals before the heading name sets the heading level - H1 to H6.
       </p>
       <p>
-      Example: 
+      Example:
       </p>
       <pre>= Heading 1 =
       == Heading 2 ==
@@ -129,7 +129,7 @@
       <h6>Heading 6 </h6>
 
       <p>
-      <em>Note: currently it doesn't check if the number of equals ('=') is the same before and after the 
+      <em>Note: currently it doesn't check if the number of equals ('=') is the same before and after the
       heading text - although it must be 6 or less.  A future version might check.</em>
       </p>
 
@@ -142,7 +142,7 @@
       Example:
       </p>
       <pre>The next paragraph is a block quote - blank lines are not needed here:
-       Once upon a time 
+       Once upon a time
        there were three little pigs...
       You may recognise it.
       </pre>
@@ -162,22 +162,22 @@
       <h3>Preformatted Text </h3>
 
       <p>
-      Preformatted text such as code examples can be entered between '{{{' and '}}}' lines each 
+      Preformatted text such as code examples can be entered between '{{{' and '}}}' lines each
       on a separate line.
       </p>
       <p>
       Example:
       </p>
       <pre>{{{
-      This is preformatted text - 
+      This is preformatted text -
         with ''italic'' and '''bold''' and other inline formatting ignored.
       == Even Headings ==
-      }}} 
+      }}}
       </pre>
       <p>
       Becomes:
       </p>
-      <pre>This is preformatted text - 
+      <pre>This is preformatted text -
         with ''italic'' and '''bold''' and other inline formatting ignored.
       == Even Headings ==
       </pre>
@@ -205,7 +205,7 @@
       # and this is not recognised as a list item.
       </pre>
       <p>
-      <em>Becomes: 
+      <em>Becomes:
       </em></p>
       <ul>
       <li><em>this is a bulleted list</em></li>
@@ -230,7 +230,7 @@
       <em>A line consisting of only 4 or more dashes is converted to a horizontal rule.
       </em></p>
       <p>
-      <em>Example: 
+      <em>Example:
       </em></p>
       <pre>----
       </pre>
@@ -239,7 +239,7 @@
       </em></p>
       <hr>
       <p>
-      <em></em>Note: If there are less than four dashes, or there is any space or text 
+      <em></em>Note: If there are less than four dashes, or there is any space or text
       before or after the dashes, they will not be recognised as a horizontal rule.<em>
       </em></p>
 
@@ -274,7 +274,7 @@
       <li><em>and <sub>Subscript</sub></em></li>
       </ul>
       <p>
-      <em></em>Notes: 
+      <em></em>Notes:
       </p>
       <ol>
       <li>Inside monospace, any other inline formatting is ignored.</li>
@@ -287,8 +287,8 @@
       <h3><em>Links </em></h3>
 
       <p>
-      <em>FTP, HTTP(S) and email links are recognised inside the marked up text (except inside monospace 
-      or preformatted text) and converted to hyperlinks. 
+      <em>FTP, HTTP(S) and email links are recognised inside the marked up text (except inside monospace
+      or preformatted text) and converted to hyperlinks.
       </em></p>
       <p>
       <em>Example:
@@ -296,7 +296,7 @@
       <pre> * HTTP links: http://www.example.com/
        * Secure HTTP links: https://secure.example.com
        * FTP links: ftp://ftp.example.com/
-       * Email addresses: mailto:simon@example.com or 
+       * Email addresses: mailto:simon@example.com or
          simply simon@example.com.
        * Also, HTTP Parameters: http://www.example.com/some-script.php?param1=value&amp;param2=something
        * And URL escapes: https://example.com/A%20URL%20With%20Spaces
@@ -308,7 +308,7 @@
       <li><em>HTTP links: <a href="http://www.example.com/">http://www.example.com/</a></em></li>
       <li><em>Secure HTTP links: <a href="https://secure.example.com">https://secure.example.com</a></em></li>
       <li><em>FTP links: <a href="ftp://ftp.example.com/">ftp://ftp.example.com/</a></em></li>
-      <li><em>Email addresses: <a href="mailto:simon@example.com">simon@example.com</a> or 
+      <li><em>Email addresses: <a href="mailto:simon@example.com">simon@example.com</a> or
       simply <a href="mailto:simon@example.com">simon@example.com</a>.</em></li>
       <li><em>Also, HTTP Parameters: <a href="http://www.example.com/some-script.php?param1=value&amp;param2=something">http://www.example.com/some-script.php?param1=value&amp;param2=something</a></em></li>
       <li><em>And URL escapes: <a href="https://example.com/A%20URL%20With%20Spaces">https://example.com/A URL With Spaces</a></em></li>
@@ -317,24 +317,24 @@
       <h3><em>Named Links </em></h3>
 
       <p>
-      <em>Named links provide a way to add HTTP(S), FTP and email links to a page which display a more friendly 
+      <em>Named links provide a way to add HTTP(S), FTP and email links to a page which display a more friendly
       text for the user.  It also enables relative links to be included.
       </em></p>
       <p>
-      <em>To create a named link, enclose the link in square brackets.  If the link URL itself is followed 
-      by spaces and some text, the text is displayed instead of the URL for the link. 
+      <em>To create a named link, enclose the link in square brackets.  If the link URL itself is followed
+      by spaces and some text, the text is displayed instead of the URL for the link.
       </em></p>
       <p>
       <em>Example:
       </em></p>
       <pre> * A basic named link - the same as those above:
          [http://www.example.com].
-       * The same link but with a name: 
+       * The same link but with a name:
          [http://www.example.com Example].
-       * A link relative to the current page: 
+       * A link relative to the current page:
          [index.html Wiki Text Home]
        * Email address are supported also:
-         [mailto:simon@example.com Simon with mailto:] and 
+         [mailto:simon@example.com Simon with mailto:] and
          [simon@example.com Simon without]
        * Finally, notice that inline formatting is not supported:
          [http://www.example.com ''Example''].
@@ -345,26 +345,26 @@
       <ul>
       <li><em>A basic named link - the same as those above:
       <a href="http://www.example.com">http://www.example.com</a>.</em></li>
-      <li><em>The same link but with a name: 
+      <li><em>The same link but with a name:
       <a href="http://www.example.com">Example</a>.</em></li>
-      <li><em>A link relative to the current page: 
+      <li><em>A link relative to the current page:
       <a href="index.html">Wiki Text Home</a></em></li>
       <li><em>Email address are supported also:
-      <a href="mailto:simon@example.com">Simon with mailto:</a> and 
+      <a href="mailto:simon@example.com">Simon with mailto:</a> and
       <a href="mailto:simon@example.com">Simon without</a></em></li>
       <li><em>Finally, notice that inline formatting is not supported:
       <a href="http://www.example.com">''Example''</a>.</em></li>
       </ul>
       <p>
-      <em></em>Note: although this plugin supports Wiki markup, it is not itself a Wiki and so does not support 
+      <em></em>Note: although this plugin supports Wiki markup, it is not itself a Wiki and so does not support
       automatic Wiki style CamelCase links.
       </p>
 
       <h3>Escape Syntax </h3>
 
       <p>
-      Any of the inline markup (except inside monospace or preformatted text) can be escaped 
-      using a '!' before it. Double up the '!' to include it immediately before markup - 
+      Any of the inline markup (except inside monospace or preformatted text) can be escaped
+      using a '!' before it. Double up the '!' to include it immediately before markup -
       e.g. when ending an italicised comment.
       </p>
       <p>
@@ -373,12 +373,12 @@
       <p>
       Example:
       </p>
-      <pre>This text is '''bold''' but this !'''is not!'''.  
+      <pre>This text is '''bold''' but this !'''is not!'''.
       You can include '&lt;html&gt; &amp; &lt;/html&gt;' in the text without a problem.
 
       Escaping also works with named links:
-      ![http://www.example.com ''Example''] - 
-      the brackets are treated as ordinary text, the URL is recognised as an inline link and 
+      ![http://www.example.com ''Example''] -
+      the brackets are treated as ordinary text, the URL is recognised as an inline link and
       the rest of the line is treated as normal - including inline
       formatting.
       </pre>
@@ -386,13 +386,13 @@
       Becomes:
       </p>
       <p>
-      This text is <strong>bold</strong> but this '''is not'''.  
+      This text is <strong>bold</strong> but this '''is not'''.
       You can include '&lt;html&gt; &amp; &lt;/html&gt;' in the text without a problem.
       </p>
       <p>
       Escaping also works with named links:
-      [<a href="http://www.example.com">http://www.example.com</a> <em>Example</em>] - 
-      the brackets are treated as ordinary text, the URL is recognised as an inline link and 
+      [<a href="http://www.example.com">http://www.example.com</a> <em>Example</em>] -
+      the brackets are treated as ordinary text, the URL is recognised as an inline link and
       the rest of the line is treated as normal - including inline
       formatting.
       </p>
@@ -420,12 +420,10 @@
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 
-	<script type="text/javascript" src="./libs/require.js"></script>
-	<script type="text/javascript" src="./corpus_online_dashboard.js"></script>
-     <script type="text/javascript" src="./libs/d3.v2.js"></script>
+	<script type="text/javascript" src="libs/require.js" data-main="corpus_online_dashboard.js"></script>
+  <script type="text/javascript" src="libs/d3.v2.js"></script>
 
-	<!-- <script type="text/javascript" src="./libs/ga.js"></script>
-  <script type="text/javascript" src="./libs/analytics.js"></script> -->
+  <script type="text/javascript" src="libs/analytics.js" ></script>
 
 	<!-- Javascript -->
 

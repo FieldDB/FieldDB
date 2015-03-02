@@ -428,6 +428,29 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
+      var x;
+      /* clean the datum fields for search */
+      for (x in originalModel.datumFields) {
+        originalModel.datumFields[x].mask = "";
+        originalModel.datumFields[x].value = "";
+        originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
+
+        if (originalModel.datumFields[x].users) {
+          originalModel.datumFields[x].users = [];
+        }
+        if (originalModel.datumFields[x].user) {
+          originalModel.datumFields[x].user = {};
+        }
+        if (originalModel.datumFields[x].json) {
+          originalModel.datumFields[x].json = {};
+        }
+      }
+      for (x in originalModel.sessionFields) {
+        originalModel.sessionFields[x].mask = "";
+        originalModel.sessionFields[x].value = "";
+        originalModel.sessionFields[x].label = originalModel.sessionFields[x].label ||originalModel.sessionFields[x].id;
+      }
+
       /* Use the couch connection defined by this app. */
       if (originalModel.couchConnection) {
         tmp = originalModel.couchConnection;
@@ -437,7 +460,26 @@ define([
         originalModel.couchConnection.title = tmp.title;
         originalModel.couchConnection.description = tmp.description;
         originalModel.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      } else {
+        // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
+        originalModel.couchConnection = OPrime.defaultCouchConnection();
+        originalModel.couchConnection.corpusid = originalModel._id;
+        originalModel.couchConnection.pouchname = originalModel.pouchname;
       }
+
+      // some versions of the FieldBD common js in the spreadsheet removed the confidential?
+      if(!originalModel.confidential){
+        originalModel.confidential = {
+          secretkey : new Confidential().secretKeyGenerator(),
+          repairedTimestamp : Date.now()
+        };
+      }
+      // if (!originalModel.team) {
+      //   originalModel.team = {
+      //     _id: "team",
+      //     username: originalModel.pouchname.split("-")[0];
+      //   };
+      // }
       /* Update the corpus to show all fields which are defaults on corpora,
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
@@ -494,25 +536,7 @@ define([
         delete originalModel.terms;
       }
 
-      var x;
-      /* clean the datum fields for search */
-      for (x in originalModel.datumFields) {
-        originalModel.datumFields[x].mask = "";
-        originalModel.datumFields[x].value = "";
-        if (originalModel.datumFields[x].users) {
-          originalModel.datumFields[x].users = [];
-        }
-        if (originalModel.datumFields[x].user) {
-          originalModel.datumFields[x].user = {};
-        }
-        if (originalModel.datumFields[x].json) {
-          originalModel.datumFields[x].json = {};
-        }
-      }
-      for (x in originalModel.sessionFields) {
-        originalModel.sessionFields[x].mask = "";
-        originalModel.sessionFields[x].value = "";
-      }
+
 
       return this.originalParse(originalModel);
     },
