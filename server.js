@@ -246,6 +246,7 @@ function getData(res, user, corpus) {
       return;
     }
     if (error && error.message === "missing" && user !== "public") {
+      console.log(" user "+ user+ "was missing, redirecting to the public user");
       res.redirect("/public)")
       return;
     }
