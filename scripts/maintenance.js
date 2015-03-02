@@ -780,11 +780,12 @@ var MAINTAINENCE = {
               console.log("deploying to a phophlo user");
             } else {
               if (dbname.indexOf("anonymous") > -1) {
-              // return;
-               console.log("deploying to anonymous users");
-              } else {}
-              return; //deploy to only beta testers and/or phophlo users
-              // console.log("deploying to normal users");
+                // return;
+                console.log("deploying to anonymous users");
+              } else {
+                // return; //deploy to only beta testers and/or phophlo users
+                // console.log("deploying to normal users");
+              }
             }
             var sourceDB = "";
             if (dbname.indexOf("activity_feed") > -1) {
@@ -1056,9 +1057,9 @@ var MAINTAINENCE = {
             alert("There was a problem turing on replication to the new data base. pausing...");
 
             console.log("waiting " + throttleReplications);
-      window.setTimeout(function() {
-        turnOnReplicationAndLoop(dbnames);
-      }, throttleReplications);
+            window.setTimeout(function() {
+              turnOnReplicationAndLoop(dbnames);
+            }, throttleReplications);
 
           }
         },
@@ -1129,7 +1130,7 @@ var MAINTAINENCE = {
           console.log("Error creating " + dbname, reason);
           alert("There was a problem creating the new data base. pausing...");
 
-      turnOnContinuousReplication(dbname, dbnames);
+          turnOnContinuousReplication(dbname, dbnames);
           self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
 
         }
