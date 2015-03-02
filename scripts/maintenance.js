@@ -773,16 +773,19 @@ var MAINTAINENCE = {
               return;
             }
             if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+              // return;
               console.log("deploying to a beta tester");
-              // return;
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              console.log("deploying to a phophlo user");
               // return;
+              console.log("deploying to a phophlo user");
             } else {
               if (dbname.indexOf("anonymous") > -1) {
-                return;
-              } else {}
-              return; //deploy to only beta testers and/or phophlo users
+                // return;
+                console.log("deploying to anonymous users");
+              } else {
+                // return; //deploy to only beta testers and/or phophlo users
+                // console.log("deploying to normal users");
+              }
             }
             var sourceDB = "";
             if (dbname.indexOf("activity_feed") > -1) {
@@ -794,6 +797,7 @@ var MAINTAINENCE = {
             } else {
               sourceDB = "new_corpus";
             }
+
             console.log(dbname + " is a " + sourceDB);
             $.couch.replicate(sourceDB, dbname, {
               success: function(result) {
@@ -823,67 +827,160 @@ var MAINTAINENCE = {
      */
     window.corporaCount = 0;
     window.nonPracticeCorpora = [];
-    window.databaseStats = [];
+    window.databasesByType = {
+      // corpora: [],
+      practiceCorpora: [],
+      nonPracticeCorpora: [],
+      activity_feeds: [],
+      nonfielddb: [],
+      learnx: [],
+      wordcloud: [],
+      speechrecognition: [],
+      psycholing: [],
+      devteam: [],
+      errored: []
+    };
+
+
+    // databasesByType.devteam.map(function(database) {
+    //   allDatabases[database.db_name] = database.doc_count;
+    // });
+    //
+    // var equal = [];
+    // var notOkay = [];
+    // var moreInNew = [];
+    // var missingInNew = [];
+    // var dbname;
+    // for (dbname in old) {
+    //   if (old.hasOwnProperty(dbname)) {
+    //     if (!newdbs[dbname]) {
+    //       if (dbname.indexOf("anonymous1") !== 0 && dbname.indexOf("anonymouskartuli") !== 0) {
+    //         notOkay.push({
+    //           dbname: dbname,
+    //           oldcount: old[dbname],
+    //           newcount: 0
+    //         });
+    //       }
+    //     } else if (old[dbname] === newdbs[dbname]) {
+    //       equal.push(dbname)
+    //     } else if (newdbs[dbname] > old[dbname]) {
+    //       moreInNew.push({
+    //         dbname: dbname,
+    //         oldcount: old[dbname],
+    //         newcount: newdbs[dbname]
+    //       });
+    //     } else {
+    //       missingInNew.push({
+    //         dbname: dbname,
+    //         oldcount: old[dbname],
+    //         newcount: newdbs[dbname]
+    //       });
+    //     }
+    //   }
+    // }
+
+    var throttleReplications = 100;
+    var self = this;
+
+    var getStatsAndLoop = function(dbnames) {
+      if (dbnames.length === 0) {
+        console.log("counting corpora is complete ");
+        return;
+      }
+      var dbname = dbnames.pop();
+      var databasecategory = "errored";
+
+      if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+        databasecategory = "psycholing";
+
+      } else if (dbname.indexOf("anonymouskartuli") > -1) {
+        databasecategory = "speechrecognition";
+
+      } else if (dbname.indexOf("anonymous1") > -1) {
+        databasecategory = "learnx";
+
+      } else if (dbname.indexOf("anonymousword") > -1) {
+        databasecategory = "wordcloud";
+
+      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+        databasecategory = "devteam";
+      } else {
+
+        if (dbname.indexOf("-") === -1) {
+          databasecategory = "nonfielddb";
+
+        } else {
+
+          var sourceDB = "";
+          if (dbname.indexOf("activity_feed") > -1) {
+            databasecategory = "activity_feeds";
+            if (dbname.split("-").length >= 3) {
+              sourceDB = "new_corpus_activity_feed";
+            } else {
+              sourceDB = "new_user_activity_feed";
+            }
+
+          } else {
+            sourceDB = "new_corpus";
+            // databasecategory = "corpora";
+            if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("practice") === -1 && dbname.indexOf("tutorial") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
+              databasecategory = "nonPracticeCorpora";
+            } else {
+              databasecategory = "practiceCorpora";
+            }
+
+          }
+
+        }
+      }
+
+
+      // console.log(dbname + " is a " + sourceDB);
+      $.ajax({
+        "method": "GET",
+        "url": window.location.origin + "/" + dbname,
+        success: function(dbstats) {
+          dbstats = JSON.parse(dbstats);
+          // dbstats.type = sourceDB.replace("new_", "");
+          dbstats.category = databasecategory;
+          console.log(dbname, dbstats);
+          window.databasesByType[databasecategory].push(dbstats);
+
+          window.setTimeout(function() {
+            getStatsAndLoop(dbnames);
+          }, throttleReplications);
+
+        },
+
+        error: function(error) {
+          console.log("Error geting stats for " + dbname, error);
+          window.databasesByType.errored.push(dbname);
+
+          window.setTimeout(function() {
+            getStatsAndLoop(dbnames);
+          }, throttleReplications);
+
+        }
+      });
+
+
+
+    };
+
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
-        for (var db in results) {
-
-          (function(dbname) {
-            if (dbname.indexOf("-") === -1) {
-              console.log(dbname + "  is not a corpus or activity feed ");
-              return;
-            }
-            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("anonymous") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0) {
-              console.log("ignoring a beta tester");
-              return;
-            } else {}
-            var sourceDB = "";
-            if (dbname.indexOf("activity_feed") > -1) {
-              if (dbname.split("-").length >= 3) {
-                sourceDB = "new_corpus_activity_feed";
-              } else {
-                sourceDB = "new_user_activity_feed";
-              }
-            } else {
-              sourceDB = "new_corpus";
-              corporaCount++;
-              if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("tutorial") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
-                nonPracticeCorpora.push(dbname);
-              }
-            }
-            // console.log(dbname + " is a " + sourceDB);
-            $.ajax({
-              "method": "GET",
-              "url": window.location.origin + "/" + dbname,
-              success: function(result) {
-                result = JSON.parse(result);
-                result.type = sourceDB.replace("new_", "");
-                result.realOrNot = "practice";
-                if (dbname.indexOf("firstcorpus") === -1 && dbname.indexOf("test") === -1 && dbname.indexOf("tutorial") === -1 && dbname.indexOf("devgina") === -1 && dbname.indexOf("nemo") === -1) {
-                  result.realOrNot = "real";
-                }
-                console.log(dbname, result);
-                databaseStats.push(result);
-              },
-              error: function(error) {
-                console.log("Error geting stats for " + dbname, error);
-              }
-            });
-
-          })(results[db]);
-
-        }
+        getStatsAndLoop(results);
       },
       error: function(error) {
         console.log("Error getting db list", error);
       }
     });
 
-    databaseStats.map(function(databaseDetails) {
-      console.log(databaseDetails.realOrNot + "," + databaseDetails.type + "," + databaseDetails.db_name + "," + databaseDetails.doc_count + "," + databaseDetails.disk_size + "," + databaseDetails.data_size + "," + databaseDetails.committed_update_seq);
-      return databaseDetails;
-    })
+    // self.databaseStats = databaseStats.map(function(databaseDetails) {
+    //   console.log(databaseDetails.realOrNot + "," + databaseDetails.type + "," + databaseDetails.db_name + "," + databaseDetails.doc_count + "," + databaseDetails.disk_size + "," + databaseDetails.data_size + "," + databaseDetails.committed_update_seq);
+    //   return databaseDetails;
+    // })
 
 
 
@@ -920,7 +1017,7 @@ var MAINTAINENCE = {
             error: function(serverResults) {
               console.log("There was a problem saving the _security doc for " + dbname + " " + JSON.stringify(securitydoc), serverResults);
               self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
-              alert("There was a problem writing to the new data base. pausing...");
+              // alert("There was a problem writing to the new data base. pausing...");
 
             }
           });
@@ -928,7 +1025,7 @@ var MAINTAINENCE = {
         },
         error: function(error) {
           console.log(" there was a problem opening the permissions of " + dbname, error);
-          alert("There was a problem opening the securty doc on the old corps. pausing...");
+          // alert("There was a problem opening the securty doc on the old corps. pausing...");
 
         }
       });
@@ -1001,13 +1098,13 @@ var MAINTAINENCE = {
           return;
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
-          // turnOnReplicationAndLoop(dbnames);
-          // return; //turn on continuous replication for only beta testers and/or phophlo users
+          turnOnReplicationAndLoop(dbnames);
+          return; //turn on continuous replication for only beta testers and/or phophlo users
         }
       }
 
       if (self.replicationCount > 0 && self.replicationCount % confirmContinueEveryXDbs === 0) {
-        var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: "+dbnames.length);
+        var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: " + dbnames.length);
         if (!keepGoing) {
           window.dbnames = dbnames
           console.log("left " + dbnames.length);

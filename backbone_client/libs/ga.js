@@ -1,60 +1,1385 @@
-(function(){var g=void 0,h=!0,i=null,k=!1,aa=encodeURIComponent,ba=Infinity,ca=setTimeout,fa=decodeURIComponent,l=Math;function ga(a,b){return a.name=b}
-var n="push",ha="test",ia="slice",o="replace",ja="load",ka="floor",la="charAt",ma="value",p="indexOf",na="match",oa="port",pa="createElement",qa="path",q="name",t="host",u="toString",v="length",w="prototype",ra="clientWidth",x="split",sa="stopPropagation",ta="scope",y="location",ua="search",z="protocol",va="clientHeight",wa="href",A="substring",xa="apply",ya="navigator",B="join",C="toLowerCase",D;function za(a,b){switch(b){case 0:return""+a;case 1:return 1*a;case 2:return!!a;case 3:return 1E3*a}return a}function Aa(a){return"function"==typeof a}function Ba(a){return a!=g&&-1<(a.constructor+"")[p]("String")}function E(a,b){return g==a||"-"==a&&!b||""==a}function Ca(a){if(!a||""==a)return"";for(;a&&-1<" \n\r\t"[p](a[la](0));)a=a[A](1);for(;a&&-1<" \n\r\t"[p](a[la](a[v]-1));)a=a[A](0,a[v]-1);return a}
-function F(a){var b=1,c=0,d;if(!E(a)){b=0;for(d=a[v]-1;0<=d;d--)c=a.charCodeAt(d),b=(b<<6&268435455)+c+(c<<14),c=b&266338304,b=0!=c?b^c>>21:b}return b}function Da(){return l.round(2147483647*l.random())}function Ea(){}function G(a,b){if(aa instanceof Function)return b?encodeURI(a):aa(a);H(68);return escape(a)}function I(a){a=a[x]("+")[B](" ");if(fa instanceof Function)try{return fa(a)}catch(b){H(17)}else H(68);return unescape(a)}
-var Fa=function(a,b,c,d){a.addEventListener?a.addEventListener(b,c,!!d):a.attachEvent&&a.attachEvent("on"+b,c)},Ha=function(a,b,c,d){a.removeEventListener?a.removeEventListener(b,c,!!d):a.detachEvent&&a.detachEvent("on"+b,c)};function Ia(a,b){if(a){var c=J[pa]("script");c.type="text/javascript";c.async=h;c.src=a;c.id=b;var d=J.getElementsByTagName("script")[0];d.parentNode.insertBefore(c,d);return c}}function K(a){return a&&0<a[v]?a[0]:""}function L(a){var b=a?a[v]:0;return 0<b?a[b-1]:""}
-var Ja=function(){this.prefix="ga.";this.S={}};Ja[w].set=function(a,b){this.S[this.prefix+a]=b};Ja[w].get=function(a){return this.S[this.prefix+a]};Ja[w].contains=function(a){return this.get(a)!==g};function Ka(a){0==a[p]("www.")&&(a=a[A](4));return a[C]()}function La(a,b){var c,d={url:a,protocol:"http",host:"",path:"",d:new Ja,anchor:""};if(!a)return d;c=a[p]("://");0<=c&&(d.protocol=a[A](0,c),a=a[A](c+3));c=a[ua]("/|\\?|#");if(0<=c)d.host=a[A](0,c)[C](),a=a[A](c);else return d.host=a[C](),d;c=a[p]("#");0<=c&&(d.anchor=a[A](c+1),a=a[A](0,c));c=a[p]("?");0<=c&&(Ma(d.d,a[A](c+1)),a=a[A](0,c));d.anchor&&b&&Ma(d.d,d.anchor);a&&"/"==a[la](0)&&(a=a[A](1));d.path=a;return d}
-function Na(a,b){function c(a){var b=(a.hostname||"")[x](":")[0][C](),c=(a[z]||"")[C](),c=1*a[oa]||("https:"==c?80:"https:"==c?443:""),a=a.pathname||"";0==a[p]("/")||(a="/"+a);return[b,""+c,a]}var d=b||J[pa]("a");d.href=J[y][wa];var e=(d[z]||"")[C](),f=c(d),j=d[ua]||"",m=e+"//"+f[0]+(f[1]?":"+f[1]:"");0==a[p]("//")?a=e+a:0==a[p]("/")?a=m+a:!a||0==a[p]("?")?a=m+f[2]+(a||j):0>a[x]("/")[0][p](":")&&(a=m+f[2][A](0,f[2].lastIndexOf("/"))+"/"+a);d.href=a;e=c(d);return{protocol:(d[z]||"")[C](),host:e[0],
-port:e[1],path:e[2],Pa:d[ua]||"",url:a||""}}function Ma(a,b){function c(b,c){a.contains(b)||a.set(b,[]);a.get(b)[n](c)}for(var d=Ca(b)[x]("&"),e=0;e<d[v];e++)if(d[e]){var f=d[e][p]("=");0>f?c(d[e],"1"):c(d[e][A](0,f),d[e][A](f+1))}}function Oa(a,b){if(E(a)||"["==a[la](0)&&"]"==a[la](a[v]-1))return"-";var c=J.domain;return a[p](c+(b&&"/"!=b?b:""))==(0==a[p]("https://")?7:0==a[p]("https://")?8:0)?"0":a};var Pa=0;function Qa(a,b,c){!(1<=Pa)&&!(1<=100*l.random())&&(a=["utmt=error","utmerr="+a,"utmwv=5.3.5","utmn="+Da(),"utmsp=1"],b&&a[n]("api="+b),c&&a[n]("msg="+G(c[A](0,100))),M.w&&a[n]("aip=1"),Ra(a[B]("&")),Pa++)};var Sa=0,Ua={};function N(a){return Va("x"+Sa++,a)}function Va(a,b){Ua[a]=!!b;return a}
-var O=N(),Wa=N(),Xa=N(),Ya=N(),Za=N(),P=N(),Q=N(),$a=N(),ab=N(),bb=N(),cb=N(),db=N(),eb=N(),gb=N(),hb=N(),ib=N(),jb=N(),kb=N(),lb=N(),mb=N(),nb=N(),ob=N(),pb=N(),qb=N(),rb=N(),sb=N(),tb=N(),ub=N(),vb=N(),wb=N(),xb=N(),yb=N(),zb=N(),Ab=N(),Bb=N(),Cb=N(h),Db=Va("currencyCode"),Eb=Va("page"),Fb=Va("title"),Gb=N(),Hb=N(),Ib=N(),Jb=N(),Kb=N(),Lb=N(),Mb=N(),Nb=N(),Ob=N(),R=N(h),Pb=N(h),Qb=N(h),Rb=N(h),Sb=N(h),Ub=N(h),Vb=N(h),Wb=N(h),Xb=N(h),Yb=N(h),Zb=N(h),S=N(h),$b=N(h),ac=N(h),bc=N(h),cc=N(h),dc=N(h),
-ec=N(h),fc=N(h),gc=N(h),hc=N(h),ic=N(h),jc=N(h),kc=N(h),lc=N(h),mc=N(h),nc=N(h),oc=Va("campaignParams"),pc=N(),qc=Va("hitCallback"),rc=N();N();var sc=N(),tc=N(),uc=N(),vc=N(),wc=N(),xc=N(),yc=N(),zc=N(),Ac=N(),Bc=N(),Cc=N(),Dc=N();N();var Hc=N(),Ic=N(),Jc=N(),Kc=N();function Lc(a){var b=this.plugins_;if(b)return b.get(a)}var T=function(a,b,c,d){a[b]=function(){try{return d!=g&&H(d),c[xa](this,arguments)}catch(a){throw Qa("exc",b,a&&a[q]),a;}}},Mc=function(a,b,c,d){U[w][a]=function(){try{return H(c),za(this.a.get(b),d)}catch(e){throw Qa("exc",a,e&&e[q]),e;}}},V=function(a,b,c,d,e){U[w][a]=function(f){try{H(c),e==g?this.a.set(b,za(f,d)):this.a.set(b,e)}catch(j){throw Qa("exc",a,j&&j[q]),j;}}};var Nc=RegExp(/(^|\.)doubleclick\.net$/i),Oc=function(a,b){return Nc[ha](J[y].hostname)?h:"/"!==b?k:(0==a[p]("www.google.")||0==a[p](".google.")||0==a[p]("google."))&&!(-1<a[p]("google.org"))?h:k},Pc=function(a){var b=a.get(Za),c=a.c(Q,"/");Oc(b,c)&&a[sa]()};var Uc=function(){var a={},b={},c=new Qc;this.i=function(a,b){c.add(a,b)};var d=new Qc;this.e=function(a,b){d.add(a,b)};var e=k,f=k,j=h;this.U=function(){e=h};this.j=function(a){this[ja]();this.set(pc,a,h);a=new Rc(this);e=k;d.execute(this);e=h;b={};this.n();a.Ka()};this.load=function(){e&&(e=k,this.La(),Sc(this),f||(f=h,c.execute(this),Tc(this),Sc(this)),e=h)};this.n=function(){if(e)if(f)e=k,Tc(this),e=h;else this[ja]()};this.get=function(c){Ua[c]&&this[ja]();return b[c]!==g?b[c]:a[c]};this.set=
-function(c,d,e){Ua[c]&&this[ja]();e?b[c]=d:a[c]=d;Ua[c]&&this.n()};this.z=function(b){a[b]=this.b(b,0)+1};this.b=function(a,b){var c=this.get(a);return c==g||""===c?b:1*c};this.c=function(a,b){var c=this.get(a);return c==g?b:c+""};this.La=function(){if(j){var b=this.c(Za,""),c=this.c(Q,"/");Oc(b,c)||(a[P]=a[eb]&&""!=b?F(b):1,j=k)}}};Uc[w].stopPropagation=function(){throw"aborted";};
-var Rc=function(a){var b=this;this.q=0;var c=a.get(qc);this.Va=function(){0<b.q&&c&&(b.q--,b.q||c())};this.Ka=function(){!b.q&&c&&ca(c,10)};a.set(rc,b,h)};function Vc(a,b){for(var b=b||[],c=0;c<b[v];c++){var d=b[c];if(""+a==d||0==d[p](a+"."))return d}return"-"}
-var Xc=function(a,b,c){c=c?"":a.c(P,"1");b=b[x](".");if(6!==b[v]||Wc(b[0],c))return k;var c=1*b[1],d=1*b[2],e=1*b[3],f=1*b[4],b=1*b[5];if(!(0<=c&&0<d&&0<e&&0<f&&0<=b))return H(110),k;a.set(R,c);a.set(Sb,d);a.set(Ub,e);a.set(Vb,f);a.set(Wb,b);return h},Yc=function(a){var b=a.get(R),c=a.get(Sb),d=a.get(Ub),e=a.get(Vb),f=a.b(Wb,1);b==g?H(113):NaN==b&&H(114);0<=b&&0<c&&0<d&&0<e&&0<=f||H(115);return[a.b(P,1),b!=g?b:"-",c||"-",d||"-",e||"-",f][B](".")},Zc=function(a){return[a.b(P,1),a.b(Zb,0),a.b(S,1),
-a.b($b,0)][B](".")},$c=function(a,b,c){var c=c?"":a.c(P,"1"),d=b[x](".");if(4!==d[v]||Wc(d[0],c))d=i;a.set(Zb,d?1*d[1]:0);a.set(S,d?1*d[2]:10);a.set($b,d?1*d[3]:a.get(Ya));return d!=i||!Wc(b,c)},ad=function(a,b){var c=G(a.c(Qb,"")),d=[],e=a.get(Cb);if(!b&&e){for(var f=0;f<e[v];f++){var j=e[f];j&&1==j[ta]&&d[n](f+"="+G(j[q])+"="+G(j[ma])+"=1")}0<d[v]&&(c+="|"+d[B]("^"))}return c?a.b(P,1)+"."+c:i},bd=function(a,b,c){c=c?"":a.c(P,"1");b=b[x](".");if(2>b[v]||Wc(b[0],c))return k;b=b[ia](1)[B](".")[x]("|");
-0<b[v]&&a.set(Qb,I(b[0]));if(1>=b[v])return h;b=b[1][x](-1==b[1][p](",")?"^":",");for(c=0;c<b[v];c++){var d=b[c][x]("=");if(4==d[v]){var e={};ga(e,I(d[1]));e.value=I(d[2]);e.scope=1;a.get(Cb)[d[0]]=e}}return h},cd=function(a){var b;b=function(b,e){if(!E(a.get(b))){var f=a.c(b,""),f=f[x](" ")[B]("%20"),f=f[x]("+")[B]("%20");c[n](e+"="+f)}};var c=[];b(ec,"utmcid");b(kc,"utmcsr");b(gc,"utmgclid");b(ic,"utmdclid");b(fc,"utmccn");b(lc,"utmcmd");b(mc,"utmctr");b(nc,"utmcct");return(b=c[B]("|"))?[a.b(P,
-1),a.b(ac,0),a.b(bc,1),a.b(cc,1),b][B]("."):""},dd=function(a,b,c){c=c?"":a.c(P,"1");b=b[x](".");if(5>b[v]||Wc(b[0],c))return a.set(ac,g),a.set(bc,g),a.set(cc,g),a.set(ec,g),a.set(fc,g),a.set(kc,g),a.set(lc,g),a.set(mc,g),a.set(nc,g),a.set(gc,g),a.set(hc,g),a.set(ic,g),a.set(jc,g),k;a.set(ac,1*b[1]);a.set(bc,1*b[2]);a.set(cc,1*b[3]);var d=b[ia](4)[B]("."),b=function(a){return(a=d[na](a+"=(.*?)(?:\\|utm|$)"))&&2==a[v]?a[1]:g},c=function(b,c){c&&(c=e?I(c):c[x]("%20")[B](" "),a.set(b,c))};-1==d[p]("=")&&
-(d=I(d));var e="2"==b("utmcvr");c(ec,b("utmcid"));c(fc,b("utmccn"));c(kc,b("utmcsr"));c(lc,b("utmcmd"));c(mc,b("utmctr"));c(nc,b("utmcct"));c(gc,b("utmgclid"));c(ic,b("utmdclid"));return h},Wc=function(a,b){return b?a!=b:!/^\d+$/[ha](a)};var Qc=function(){this.B=[]};Qc[w].add=function(a,b){this.B[n]({name:a,s:b})};Qc[w].execute=function(a){try{for(var b=0;b<this.B[v];b++)this.B[b].s.call(W,a)}catch(c){}};function ed(a){100!=a.get(sb)&&a.get(R)%1E4>=100*a.get(sb)&&a[sa]()}function fd(a){gd(a.get(O))&&a[sa]()}function hd(a){"file:"==J[y][z]&&a[sa]()}function id(a){a.get(Fb)||a.set(Fb,J.title,h);a.get(Eb)||a.set(Eb,J[y].pathname+J[y][ua],h)};var jd=new function(){var a=[];this.set=function(b){a[b]=h};this.Ya=function(){for(var b=[],c=0;c<a[v];c++)a[c]&&(b[l[ka](c/6)]=b[l[ka](c/6)]^1<<c%6);for(c=0;c<b[v];c++)b[c]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"[la](b[c]||0);return b[B]("")+"~"}};function H(a){jd.set(a)};var W=window,J=document,gd=function(a){var b=W._gaUserPrefs;return b&&b.ioo&&b.ioo()||!!a&&W["ga-disable-"+a]===h},kd=function(a){for(var b=[],c=J.cookie[x](";"),a=RegExp("^\\s*"+a+"=\\s*(.*?)\\s*$"),d=0;d<c[v];d++){var e=c[d][na](a);e&&b[n](e[1])}return b},X=function(a,b,c,d,e,f){e=gd(e)?k:Oc(d,c)?k:h;if(e){if(b&&0<=W[ya].userAgent[p]("Firefox"))for(var b=b[o](/\n|\r/g," "),e=0,j=b[v];e<j;++e){var m=b.charCodeAt(e)&255;if(10==m||13==m)b=b[A](0,e)+"?"+b[A](e+1)}b&&2E3<b[v]&&(b=b[A](0,2E3),H(69));
-a=a+"="+b+"; path="+c+"; ";f&&(a+="expires="+(new Date((new Date).getTime()+f)).toGMTString()+"; ");d&&(a+="domain="+d+";");J.cookie=a}};var ld,md,nd=function(){if(!ld){var a={},b=W[ya],c=W.screen;a.R=c?c.width+"x"+c.height:"-";a.Q=c?c.colorDepth+"-bit":"-";a.language=(b&&(b.language||b.browserLanguage)||"-")[C]();a.javaEnabled=b&&b.javaEnabled()?1:0;a.characterSet=J.characterSet||J.charset||"-";try{var d=J.documentElement,e=J.body,f=e&&e[ra]&&e[va],b=[];d&&(d[ra]&&d[va])&&("CSS1Compat"===J.compatMode||!f)?b=[d[ra],d[va]]:f&&(b=[e[ra],e[va]]);a.Xa=b[B]("x")}catch(j){H(135)}ld=a}},od=function(){nd();for(var a=ld,b=W[ya],a=b.appName+
-b.version+a.language+b.platform+b.userAgent+a.javaEnabled+a.R+a.Q+(J.cookie?J.cookie:"")+(J.referrer?J.referrer:""),b=a[v],c=W.history[v];0<c;)a+=c--^b++;return F(a)},pd=function(a){nd();var b=ld;a.set(Ib,b.R);a.set(Jb,b.Q);a.set(Mb,b.language);a.set(Nb,b.characterSet);a.set(Kb,b.javaEnabled);a.set(Ob,b.Xa);if(a.get(gb)&&a.get(hb)){if(!(b=md)){var c,d,e;d="ShockwaveFlash";if((b=(b=W[ya])?b.plugins:g)&&0<b[v])for(c=0;c<b[v]&&!e;c++)d=b[c],-1<d[q][p]("Shockwave Flash")&&(e=d.description[x]("Shockwave Flash ")[1]);
-else{d=d+"."+d;try{c=new ActiveXObject(d+".7"),e=c.GetVariable("$version")}catch(f){}if(!e)try{c=new ActiveXObject(d+".6"),e="WIN 6,0,21,0",c.AllowScriptAccess="always",e=c.GetVariable("$version")}catch(j){}if(!e)try{c=new ActiveXObject(d),e=c.GetVariable("$version")}catch(m){}e&&(e=e[x](" ")[1][x](","),e=e[0]+"."+e[1]+" r"+e[2])}b=e?e:"-"}md=b;a.set(Lb,md)}else a.set(Lb,"-")};var qd=function(a){if(Aa(a))this.s=a;else{var b=a[0],c=b.lastIndexOf(":"),d=b.lastIndexOf(".");this.g=this.h=this.l="";-1==c&&-1==d?this.g=b:-1==c&&-1!=d?(this.h=b[A](0,d),this.g=b[A](d+1)):-1!=c&&-1==d?(this.l=b[A](0,c),this.g=b[A](c+1)):c>d?(this.h=b[A](0,d),this.l=b[A](d+1,c),this.g=b[A](c+1)):(this.h=b[A](0,d),this.g=b[A](d+1));this.k=a[ia](1);this.Na=!this.l&&"_require"==this.g;this.K=!this.h&&!this.l&&"_provide"==this.g}},Y=function(){T(Y[w],"push",Y[w][n],5);T(Y[w],"_getPlugin",Lc,121);T(Y[w],
-"_createAsyncTracker",Y[w].Ta,33);T(Y[w],"_getAsyncTracker",Y[w].Ua,34);this.J=new Ja;this.p=[]};D=Y[w];D.Oa=function(a,b,c){var d=this.J.get(a);if(!Aa(d))return k;b.plugins_=b.plugins_||new Ja;b.plugins_.set(a,new d(b,c||{}));return h};D.push=function(a){var b=Z.Wa[xa](this,arguments),b=Z.p.concat(b);for(Z.p=[];0<b[v]&&!Z.P(b[0])&&!(b.shift(),0<Z.p[v]););Z.p=Z.p.concat(b);return 0};D.Wa=function(a){for(var b=[],c=0;c<arguments[v];c++)try{var d=new qd(arguments[c]);d.K?this.P(d):b[n](d)}catch(e){}return b};
-D.P=function(a){try{if(a.s)a.s[xa](W);else if(a.K)this.J.set(a.k[0],a.k[1]);else{var b="_gat"==a.h?M:"_gaq"==a.h?Z:M.u(a.h);if(a.Na){if(!this.Oa(a.k[0],b,a.k[2])){if(!a.Qa){var c=Na(""+a.k[1]);var d=c[z],e=J[y][z];var f;if(f="https:"==d||d==e?h:"https:"!=d?k:"https:"==e){var j;a:{var m=Na(J[y][wa]);if(!(c.Pa||0<=c.url[p]("?")||0<=c[qa][p]("://")||c[t]==m[t]&&c[oa]==m[oa]))for(var r="https:"==c[z]?80:443,s=M.T,b=0;b<s[v];b++)if(c[t]==s[b][0]&&(c[oa]||r)==(s[b][1]||r)&&0==c[qa][p](s[b][2])){j=h;break a}j=
-k}f=j&&!gd()}f&&(a.Qa=Ia(c.url))}return h}}else a.l&&(b=b.plugins_.get(a.l)),b[a.g][xa](b,a.k)}}catch(Ta){}};D.Ta=function(a,b){return M.r(a,b||"")};D.Ua=function(a){return M.u(a)};var td=function(){function a(a,b,c,d){g==f[a]&&(f[a]={});g==f[a][b]&&(f[a][b]=[]);f[a][b][c]=d}function b(a,b,c){if(g!=f[a]&&g!=f[a][b])return f[a][b][c]}function c(a,b){if(g!=f[a]&&g!=f[a][b]){f[a][b]=g;var c=h,d;for(d=0;d<j[v];d++)if(g!=f[a][j[d]]){c=k;break}c&&(f[a]=g)}}function d(a){var b="",c=k,d,e;for(d=0;d<j[v];d++)if(e=a[j[d]],g!=e){c&&(b+=j[d]);for(var c=[],f=g,ea=g,ea=0;ea<e[v];ea++)if(g!=e[ea]){f="";ea!=fb&&g==e[ea-1]&&(f+=ea[u]()+Ta);for(var yd=e[ea],Ec="",Tb=g,Fc=g,Gc=g,Tb=0;Tb<yd[v];Tb++)Fc=
-yd[la](Tb),Gc=Ga[Fc],Ec+=g!=Gc?Gc:Fc;f+=Ec;c[n](f)}b+=m+c[B](s)+r;c=k}else c=h;return b}var e=this,f=[],j=["k","v"],m="(",r=")",s="*",Ta="!",Ga={"'":"'0"};Ga[r]="'1";Ga[s]="'2";Ga[Ta]="'3";var fb=1;e.Sa=function(a){return g!=f[a]};e.A=function(){for(var a="",b=0;b<f[v];b++)g!=f[b]&&(a+=b[u]()+d(f[b]));return a};e.Ra=function(a){if(a==g)return e.A();for(var b=a.A(),c=0;c<f[v];c++)g!=f[c]&&!a.Sa(c)&&(b+=c[u]()+d(f[c]));return b};e.f=function(b,c,d){if(!rd(d))return k;a(b,"k",c,d);return h};e.o=function(b,
-c,d){if(!sd(d))return k;a(b,"v",c,d[u]());return h};e.getKey=function(a,c){return b(a,"k",c)};e.O=function(a,c){return b(a,"v",c)};e.M=function(a){c(a,"k")};e.N=function(a){c(a,"v")};T(e,"_setKey",e.f,89);T(e,"_setValue",e.o,90);T(e,"_getKey",e.getKey,87);T(e,"_getValue",e.O,88);T(e,"_clearKey",e.M,85);T(e,"_clearValue",e.N,86)};function rd(a){return"string"==typeof a}function sd(a){return"number"!=typeof a&&(g==Number||!(a instanceof Number))||l.round(a)!=a||NaN==a||a==ba?k:h};var ud=function(a){var b=W.gaGlobal;a&&!b&&(W.gaGlobal=b={});return b},vd=function(){var a=ud(h).hid;a==i&&(a=Da(),ud(h).hid=a);return a},zd=function(a){a.set(Hb,vd());var b=ud();if(b&&b.dh==a.get(P)){var c=b.sid;c&&("0"==c&&H(112),a.set(Vb,c),a.get(Pb)&&a.set(Ub,c));b=b.vid;a.get(Pb)&&b&&(b=b[x]("."),1*b[1]||H(112),a.set(R,1*b[0]),a.set(Sb,1*b[1]))}};var Ad,Bd=function(a,b,c){var d=a.c(Za,""),e=a.c(Q,"/"),f=a.b($a,0),a=a.c(O,"");X(b,c,e,d,a,f)},Tc=function(a){var b=a.c(Za,"");a.b(P,1);var c=a.c(Q,"/"),d=a.c(O,"");X("__utma",Yc(a),c,b,d,a.get($a));X("__utmb",Zc(a),c,b,d,a.get(ab));X("__utmc",""+a.b(P,1),c,b,d);var e=cd(a,h);e?X("__utmz",e,c,b,d,a.get(bb)):X("__utmz","",c,b,"",-1);(e=ad(a,k))?X("__utmv",e,c,b,d,a.get($a)):X("__utmv","",c,b,"",-1)},Sc=function(a){var b=a.b(P,1);if(!Xc(a,Vc(b,kd("__utma"))))return a.set(Rb,h),k;var c=!$c(a,Vc(b,kd("__utmb")));
-a.set(Yb,c);dd(a,Vc(b,kd("__utmz")));bd(a,Vc(b,kd("__utmv")));Ad=!c;return h},Cd=function(a){!Ad&&!(0<kd("__utmb")[v])&&(X("__utmd","1",a.c(Q,"/"),a.c(Za,""),a.c(O,""),1E4),0==kd("__utmd")[v]&&a[sa]())};var Fd=function(a){a.get(R)==g?Dd(a):a.get(Rb)&&!a.get(Hc)?Dd(a):a.get(Yb)&&Ed(a)},Gd=function(a){a.get(dc)&&!a.get(Xb)&&(Ed(a),a.set(bc,a.get(Wb)))},Dd=function(a){var b=a.get(Ya);a.set(Pb,h);a.set(R,Da()^od(a)&2147483647);a.set(Qb,"");a.set(Sb,b);a.set(Ub,b);a.set(Vb,b);a.set(Wb,1);a.set(Xb,h);a.set(Zb,0);a.set(S,10);a.set($b,b);a.set(Cb,[]);a.set(Rb,k);a.set(Yb,k)},Ed=function(a){a.set(Ub,a.get(Vb));a.set(Vb,a.get(Ya));a.z(Wb);a.set(Xb,h);a.set(Zb,0);a.set(S,10);a.set($b,a.get(Ya));a.set(Yb,k)};var Hd="daum:q eniro:search_word naver:query pchome:q images.google:q google:q yahoo:p yahoo:q msn:q bing:q aol:query aol:q lycos:q lycos:query ask:q netscape:query cnn:query about:terms mamma:q voila:rdata virgilio:qs live:q baidu:wd alice:qs yandex:text najdi:q seznam:q rakuten:qt biglobe:q goo.ne:MT wp:szukaj onet:qt yam:k kvasir:q ozu:q terra:query rambler:query conduit:q babylon:q search-results:q avg:q comcast:q incredimail:q startsiden:q go.mail.ru:q search.centrum.cz:q".split(" "),Od=function(a){if(a.get(ib)&&
-!a.get(Hc)){for(var b=!E(a.get(ec))||!E(a.get(kc))||!E(a.get(gc))||!E(a.get(ic)),c={},d=0;d<Id[v];d++){var e=Id[d];c[e]=a.get(e)}(d=a.get(oc))?(H(149),e=new Ja,Ma(e,d),d=e):d=La(J[y][wa],a.get(db)).d;if(!("1"==L(d.get(a.get(rb)))&&b)){var f=d,j=function(b,c){var c=c||"-",d=L(f.get(a.get(b)));return d&&d!="-"?I(d):c},d=L(f.get(a.get(kb)))||"-",e=L(f.get(a.get(nb)))||"-",m=L(f.get(a.get(mb)))||"-",r=L(f.get("gclsrc"))||"-",s=L(f.get("dclid"))||"-",Ta=j(lb,"(not set)"),Ga=j(ob,"(not set)"),fb=j(pb),
-j=j(qb);if(E(d)&&E(m)&&E(s)&&E(e))d=k;else{var wd=!E(s)&&E(e),xd=E(fb);if(wd||xd){var da=Jd(a),da=La(da,h);if((da=Kd(a,da))&&!E(da[1]&&!da[2]))wd&&(e=da[0]),xd&&(fb=da[1])}Ld(a,d,e,m,r,s,Ta,Ga,fb,j);d=h}d=d||Md(a);!d&&(!b&&a.get(Xb))&&(Ld(a,g,"(direct)",g,g,g,"(direct)","(none)",g,g),d=h);if(d&&(a.set(dc,Nd(a,c)),b="(direct)"==a.get(kc)&&"(direct)"==a.get(fc)&&"(none)"==a.get(lc),a.get(dc)||a.get(Xb)&&!b))a.set(ac,a.get(Ya)),a.set(bc,a.get(Wb)),a.z(cc)}}},Md=function(a){var b=Jd(a),c=La(b,h);if(!(b!=
-g&&b!=i&&""!=b&&"0"!=b&&"-"!=b&&0<=b[p]("://"))||c&&-1<c[t][p]("google")&&c.d.contains("q")&&"cse"==c[qa])return k;if((b=Kd(a,c))&&!b[2])return Ld(a,g,b[0],g,g,g,"(organic)","organic",b[1],g),h;if(b||!a.get(Xb))return k;a:{for(var b=a.get(yb),d=Ka(c[t]),e=0;e<b[v];++e)if(-1<d[p](b[e])){a=k;break a}Ld(a,g,d,g,g,g,"(referral)","referral",g,"/"+c[qa]);a=h}return a},Kd=function(a,b){for(var c=a.get(wb),d=0;d<c[v];++d){var e=c[d][x](":");if(-1<b[t][p](e[0][C]())){var f=b.d.get(e[1]);if(f&&(f=K(f),!f&&
--1<b[t][p]("google.")&&(f="(not provided)"),!e[3]||-1<b.url[p](e[3]))){a:{for(var c=f,d=a.get(xb),c=I(c)[C](),j=0;j<d[v];++j)if(c==d[j]){c=h;break a}c=k}return[e[2]||e[0],f,c]}}}return i},Ld=function(a,b,c,d,e,f,j,m,r,s){a.set(ec,b);a.set(kc,c);a.set(gc,d);a.set(hc,e);a.set(ic,f);a.set(fc,j);a.set(lc,m);a.set(mc,r);a.set(nc,s)},Id=[fc,ec,gc,ic,kc,lc,mc,nc],Nd=function(a,b){function c(a){a=(""+a)[x]("+")[B]("%20");return a=a[x](" ")[B]("%20")}function d(c){var d=""+(a.get(c)||""),c=""+(b[c]||"");return 0<
-d[v]&&d==c}if(d(gc)||d(ic))return H(131),k;for(var e=0;e<Id[v];e++){var f=Id[e],j=b[f]||"-",f=a.get(f)||"-";if(c(j)!=c(f))return h}return k},Pd=RegExp(/^https:\/\/(www\.)?google(\.com?)?(\.[a-z]{2}t?)?\/?$/i),Jd=function(a){a=Oa(a.get(Gb),a.get(Q));try{if(Pd[ha](a))return H(136),a+"?q="}catch(b){H(145)}return a};var Rd=function(a){Qd(a,J[y][wa])?(a.set(Hc,h),H(12)):a.set(Hc,k)},Qd=function(a,b){if(!a.get(cb))return k;var c=La(b,a.get(db)),d=K(c.d.get("__utma")),e=K(c.d.get("__utmb")),f=K(c.d.get("__utmc")),j=K(c.d.get("__utmx")),m=K(c.d.get("__utmz")),r=K(c.d.get("__utmv")),c=K(c.d.get("__utmk"));if(F(""+d+e+f+j+m+r)!=c){d=I(d);e=I(e);f=I(f);j=I(j);f=Sd(d+e+f+j,m,r,c);if(!f)return k;m=f[0];r=f[1]}if(!Xc(a,d,h))return k;$c(a,e,h);dd(a,m,h);bd(a,r,h);Td(a,j,h);return h},Vd=function(a,b,c){var d;d=Yc(a)||"-";
-var e=Zc(a)||"-",f=""+a.b(P,1)||"-",j=Ud(a)||"-",m=cd(a,k)||"-",a=ad(a,k)||"-",r=F(""+d+e+f+j+m+a),s=[];s[n]("__utma="+d);s[n]("__utmb="+e);s[n]("__utmc="+f);s[n]("__utmx="+j);s[n]("__utmz="+m);s[n]("__utmv="+a);s[n]("__utmk="+r);d=s[B]("&");if(!d)return b;e=b[p]("#");if(c)return 0>e?b+"#"+d:b+"&"+d;c="";f=b[p]("?");0<e&&(c=b[A](e),b=b[A](0,e));return 0>f?b+"?"+d+c:b+"&"+d+c},Sd=function(a,b,c,d){for(var e=0;3>e;e++){for(var f=0;3>f;f++){if(d==F(a+b+c))return H(127),[b,c];var j=b[o](/ /g,"%20"),m=
-c[o](/ /g,"%20");if(d==F(a+j+m))return H(128),[j,m];j=j[o](/\+/g,"%20");m=m[o](/\+/g,"%20");if(d==F(a+j+m))return H(129),[j,m];try{var r=b[na]("utmctr=(.*?)(?:\\|utm|$)");if(r&&2==r[v]&&(j=b[o](r[1],G(I(r[1]))),d==F(a+j+c)))return H(139),[j,c]}catch(s){}b=I(b)}c=I(c)}};var Wd="|",Yd=function(a,b,c,d,e,f,j,m,r){var s=Xd(a,b);s||(s={},a.get(zb)[n](s));s.id_=b;s.affiliation_=c;s.total_=d;s.tax_=e;s.shipping_=f;s.city_=j;s.state_=m;s.country_=r;s.items_=s.items_||[];return s},Zd=function(a,b,c,d,e,f,j){var a=Xd(a,b)||Yd(a,b,"",0,0,0,"","",""),m;a:{if(a&&a.items_){m=a.items_;for(var r=0;r<m[v];r++)if(m[r].sku_==c){m=m[r];break a}}m=i}r=m||{};r.transId_=b;r.sku_=c;r.name_=d;r.category_=e;r.price_=f;r.quantity_=j;m||a.items_[n](r);return r},Xd=function(a,b){for(var c=
-a.get(zb),d=0;d<c[v];d++)if(c[d].id_==b)return c[d];return i};var $d,ae=function(a){if(!$d){var b;b=J[y].hash;var c=W[q],d=/^#?gaso=([^&]*)/;if(c=(b=(b=b&&b[na](d)||c&&c[na](d))?b[1]:K(kd("GASO")))&&b[na](/^(?:[|!]([-0-9a-z.]{1,40})[|!])?([-.\w]{10,1200})$/i))Bd(a,"GASO",""+b),M._gasoDomain=a.get(Za),M._gasoCPath=a.get(Q),a=c[1],Ia("https://www.google.com/analytics/web/inpage/pub/inpage.js?"+(a?"prefix="+a+"&":"")+Da(),"_gasojs");$d=h}};var Td=function(a,b,c){c&&(b=I(b));c=a.b(P,1);b=b[x](".");!(2>b[v])&&/^\d+$/[ha](b[0])&&(b[0]=""+c,Bd(a,"__utmx",b[B](".")))},Ud=function(a,b){var c=Vc(a.get(P),kd("__utmx"));"-"==c&&(c="");return b?G(c):c};var ce=function(a,b){var c=l.min(a.b(Ac,0),100);if(a.b(R,0)%100>=c)return k;a:{if(c=(c=W.performance||W.webkitPerformance)&&c.timing){var d=c.navigationStart;if(0==d)H(133);else{c=[c.loadEventStart-d,c.domainLookupEnd-c.domainLookupStart,c.connectEnd-c.connectStart,c.responseStart-c.requestStart,c.responseEnd-c.responseStart,c.fetchStart-d];break a}}c=g}c||(W.top!=W?c=g:(d=(c=W.external)&&c.onloadT,c&&!c.isValidLoadTime&&(d=g),2147483648<d&&(d=g),0<d&&c.setPageReadyTime(),c=d==g?g:[d]));if(c==g)return k;
-d=c[0];if(d==g||d==ba||isNaN(d))return k;if(0<d){a:{for(d=1;d<c[v];d++)if(isNaN(c[d])||c[d]==ba||0>c[d]){d=k;break a}d=h}d?b(be(c)):b(be(c[ia](0,1)))}else Fa(W,"load",function(){ce(a,b)},k);return h},ee=function(a,b,c,d){var e=new td;e.f(14,90,b[A](0,64));e.f(14,91,a[A](0,64));e.f(14,92,""+de(c));d!=g&&e.f(14,93,d[A](0,64));e.o(14,90,c);return e},de=function(a){return isNaN(a)||0>a?0:5E3>a?10*l[ka](a/10):5E4>a?100*l[ka](a/100):41E5>a?1E3*l[ka](a/1E3):41E5},be=function(a){for(var b=new td,c=0;c<a[v];c++)b.f(14,
-c+1,""+de(a[c])),b.o(14,c+1,a[c]);return b};var U=function(a,b,c){function d(a){return function(b){if((b=b.get(Ic)[a])&&b[v])for(var c={type:a,target:e,stopPropagation:function(){throw"aborted";}},d=0;d<b[v];d++)b[d].call(e,c)}}var e=this;this.a=new Uc;this.get=function(a){return this.a.get(a)};this.set=function(a,b,c){this.a.set(a,b,c)};this.set(O,b||"UA-XXXXX-X");this.set(Xa,a||"");this.set(Wa,c||"");this.set(Ya,l.round((new Date).getTime()/1E3));this.set(Q,"/");this.set($a,63072E6);this.set(bb,15768E6);this.set(ab,18E5);this.set(cb,k);this.set(vb,
-50);this.set(db,k);this.set(eb,h);this.set(gb,h);this.set(hb,h);this.set(ib,h);this.set(jb,h);this.set(lb,"utm_campaign");this.set(kb,"utm_id");this.set(mb,"gclid");this.set(nb,"utm_source");this.set(ob,"utm_medium");this.set(pb,"utm_term");this.set(qb,"utm_content");this.set(rb,"utm_nooverride");this.set(sb,100);this.set(Ac,1);this.set(Bc,k);this.set(tb,"/__utm.gif");this.set(ub,1);this.set(zb,[]);this.set(Cb,[]);this.set(wb,Hd[ia](0));this.set(xb,[]);this.set(yb,[]);this.C("auto");this.set(Gb,J.referrer);
-a=this.a;try{var f=La(J[y][wa],k),j=fa(L(f.d.get("utm_referrer")))||"";j&&a.set(Gb,j);var m=fa(K(f.d.get("utm_expid")));m&&a.set(Kc,m)}catch(r){H(146)}this.set(Ic,{hit:[],load:[]});this.a.i("0",Rd);this.a.i("2",Fd);this.a.i("3",Od);this.a.i("5",Gd);this.a.i("6",d("load"));this.a.i("7",ae);this.a.e("A",fd);this.a.e("B",hd);this.a.e("C",Fd);this.a.e("D",ed);this.a.e("E",Pc);this.a.e("F",fe);this.a.e("G",Cd);this.a.e("H",id);this.a.e("I",pd);this.a.e("J",zd);this.a.e("K",d("hit"));this.a.e("L",ge);this.a.e("M",
-he);0===this.get(Ya)&&H(111);this.a.U();this.I=g};D=U[w];D.m=function(){var a=this.get(Ab);a||(a=new td,this.set(Ab,a));return a};D.Ma=function(a){for(var b in a){var c=a[b];a.hasOwnProperty(b)&&this.set(b,c,h)}};D.L=function(a){if(this.get(Bc))return k;var b=this,c=ce(this.a,function(c){b.set(Eb,a,h);b.t(c)});this.set(Bc,c);return c};
-D.Ga=function(a){a&&Ba(a)?(H(13),this.set(Eb,a,h)):"object"===typeof a&&a!==i&&this.Ma(a);this.I=a=this.get(Eb);if(1>=1E3*l.random())try{var b=J[y];this.a.set(Jc,b.hash[v]);-1!=b.hash[ua](/utm_/)&&H(137)}catch(c){H(134)}this.a.j("page");this.L(a)};D.G=function(a,b,c,d,e){if(""==a||(!rd(a)||""==b||!rd(b))||c!=g&&!rd(c)||d!=g&&!sd(d))return k;this.set(tc,a,h);this.set(uc,b,h);this.set(vc,c,h);this.set(wc,d,h);this.set(sc,!!e,h);this.a.j("event");return h};
-D.Ia=function(a,b,c,d,e){var f=this.a.b(Ac,0);1*e===e&&(f=e);if(this.a.b(R,0)%100>=f)return k;c=1*(""+c);if(""==a||(!rd(a)||""==b||!rd(b)||!sd(c)||isNaN(c)||0>c||0>f||100<f)||d!=g&&(""==d||!rd(d)))return k;this.t(ee(a,b,c,d));return h};D.Ha=function(a,b,c,d){if(!a||!b)return k;this.set(xc,a,h);this.set(yc,b,h);this.set(zc,c||J[y][wa],h);d&&this.set(Eb,d,h);this.a.j("social");return h};D.Fa=function(){this.set(Ac,10);this.L(this.I)};D.Ja=function(){this.a.j("trans")};
-D.t=function(a){this.set(Bb,a,h);this.a.j("event")};D.ja=function(a){this.v();var b=this;return{_trackEvent:function(c,d,e){H(91);b.G(a,c,d,e)}}};D.na=function(a){return this.get(a)};D.ya=function(a,b){if(a)if(Ba(a))this.set(a,b);else if("object"==typeof a)for(var c in a)a.hasOwnProperty(c)&&this.set(c,a[c])};D.addEventListener=function(a,b){var c=this.get(Ic)[a];c&&c[n](b)};D.removeEventListener=function(a,b){for(var c=this.get(Ic)[a],d=0;c&&d<c[v];d++)if(c[d]==b){c.splice(d,1);break}};D.ra=function(){return"5.3.5"};
-D.C=function(a){this.get(eb);a="auto"==a?Ka(J.domain):!a||"-"==a||"none"==a?"":a[C]();this.set(Za,a)};D.wa=function(a){this.set(eb,!!a)};D.oa=function(a,b){return Vd(this.a,a,b)};D.link=function(a,b){if(this.a.get(cb)&&a){var c=Vd(this.a,a,b);J[y].href=c}};D.va=function(a,b){this.a.get(cb)&&(a&&a.action)&&(a.action=Vd(this.a,a.action,b))};
-D.Aa=function(){this.v();var a=this.a,b=J.getElementById?J.getElementById("utmtrans"):J.utmform&&J.utmform.utmtrans?J.utmform.utmtrans:i;if(b&&b[ma]){a.set(zb,[]);for(var b=b[ma][x]("UTM:"),c=0;c<b[v];c++){b[c]=Ca(b[c]);for(var d=b[c][x](Wd),e=0;e<d[v];e++)d[e]=Ca(d[e]);"T"==d[0]?Yd(a,d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8]):"I"==d[0]&&Zd(a,d[1],d[2],d[3],d[4],d[5],d[6])}}};D.aa=function(a,b,c,d,e,f,j,m){return Yd(this.a,a,b,c,d,e,f,j,m)};D.Z=function(a,b,c,d,e,f){return Zd(this.a,a,b,c,d,e,f)};
-D.Ba=function(a){Wd=a||"|"};D.fa=function(){this.set(zb,[])};D.xa=function(a,b,c,d){var e=this.a;if(0>=a||a>e.get(vb))a=k;else if(!b||!c||128<b[v]+c[v])a=k;else{1!=d&&2!=d&&(d=3);var f={};ga(f,b);f.value=c;f.scope=d;e.get(Cb)[a]=f;a=h}a&&this.a.n();return a};D.la=function(a){this.a.get(Cb)[a]=g;this.a.n()};D.sa=function(a){return(a=this.a.get(Cb)[a])&&1==a[ta]?a[ma]:g};D.Da=function(a,b,c){this.m().f(a,b,c)};D.Ea=function(a,b,c){this.m().o(a,b,c)};D.ta=function(a,b){return this.m().getKey(a,b)};
-D.ua=function(a,b){return this.m().O(a,b)};D.ga=function(a){this.m().M(a)};D.ha=function(a){this.m().N(a)};D.ka=function(){return new td};D.X=function(a){a&&this.get(xb)[n](a[C]())};D.ca=function(){this.set(xb,[])};D.Y=function(a){a&&this.get(yb)[n](a[C]())};D.da=function(){this.set(yb,[])};D.$=function(a,b,c,d,e){if(a&&b){a=[a,b[C]()][B](":");if(d||e)a=[a,d,e][B](":");d=this.get(wb);d.splice(c?0:d[v],0,a)}};D.ea=function(){this.set(wb,[])};
-D.ia=function(a){this.a[ja]();var b=this.get(Q),c=Ud(this.a);this.set(Q,a);this.a.n();Td(this.a,c);this.set(Q,b)};D.za=function(a,b){if(0<a&&5>=a&&Ba(b)&&""!=b){var c=this.get(Cc)||[];c[a]=b;this.set(Cc,c)}};D.W=function(a){a=""+a;if(a[na](/^[A-Za-z0-9]{1,5}$/)){var b=this.get(Dc)||[];b[n](a);this.set(Dc,b)}};D.v=function(){this.a[ja]()};D.Ca=function(a){a&&""!=a&&(this.set(Qb,a),this.a.j("var"))};var fe=function(a){"trans"!==a.get(pc)&&500<=a.b(Zb,0)&&a[sa]();if("event"===a.get(pc)){var b=(new Date).getTime(),c=a.b($b,0),d=a.b(Vb,0),c=l[ka](1*((b-(c!=d?c:1E3*c))/1E3));0<c&&(a.set($b,b),a.set(S,l.min(10,a.b(S,0)+c)));0>=a.b(S,0)&&a[sa]()}},he=function(a){"event"===a.get(pc)&&a.set(S,l.max(0,a.b(S,10)-1))};var ie=function(){var a=[];this.add=function(b,c,d){d&&(c=G(""+c));a[n](b+"="+c)};this.toString=function(){return a[B]("&")}},je=function(a,b){(b||2!=a.get(ub))&&a.z(Zb)},ke=function(a,b){b.add("utmwv","5.3.5");b.add("utms",a.get(Zb));b.add("utmn",Da());var c=J[y].hostname;E(c)||b.add("utmhn",c,h);c=a.get(sb);100!=c&&b.add("utmsp",c,h)},le=function(a,b){b.add("utmac",Ca(a.get(O)));a.get(Kc)&&b.add("utmxkey",a.get(Kc),h);a.get(sc)&&b.add("utmni",1);var c=a.get(Dc);c&&0<c[v]&&b.add("utmdid",c[B]("."));
-var c=function(a,b){b&&d[n](a+"="+b+";")},d=[];c("__utma",Yc(a));c("__utmz",cd(a,k));c("__utmv",ad(a,h));c("__utmx",Ud(a));b.add("utmcc",d[B]("+"),h);M.w&&b.add("aip",1);b.add("utmu",jd.Ya());a.get(Jc)!=g&&b.add("utmhlen",a.get(Jc),h)},me=function(a,b){for(var c=a.get(Cc)||[],d=[],e=1;e<c[v];e++)c[e]&&d[n](e+":"+G(c[e][o](/%/g,"%25")[o](/:/g,"%3A")[o](/,/g,"%2C")));d[v]&&b.add("utmpg",d[B](","))},ne=function(a,b){a.get(gb)&&(b.add("utmcs",a.get(Nb),h),b.add("utmsr",a.get(Ib)),a.get(Ob)&&b.add("utmvp",
-a.get(Ob)),b.add("utmsc",a.get(Jb)),b.add("utmul",a.get(Mb)),b.add("utmje",a.get(Kb)),b.add("utmfl",a.get(Lb),h))},oe=function(a,b){a.get(jb)&&a.get(Fb)&&b.add("utmdt",a.get(Fb),h);b.add("utmhid",a.get(Hb));b.add("utmr",Oa(a.get(Gb),a.get(Q)),h);b.add("utmp",G(a.get(Eb),h),h)},pe=function(a,b){for(var c=a.get(Ab),d=a.get(Bb),e=a.get(Cb)||[],f=0;f<e[v];f++){var j=e[f];j&&(c||(c=new td),c.f(8,f,j[q]),c.f(9,f,j[ma]),3!=j[ta]&&c.f(11,f,""+j[ta]))}!E(a.get(tc))&&!E(a.get(uc),h)&&(c||(c=new td),c.f(5,1,
-a.get(tc)),c.f(5,2,a.get(uc)),e=a.get(vc),e!=g&&c.f(5,3,e),e=a.get(wc),e!=g&&c.o(5,1,e));c?b.add("utme",c.Ra(d),h):d&&b.add("utme",d.A(),h)},qe=function(a,b,c){var d=new ie;je(a,c);ke(a,d);d.add("utmt","tran");d.add("utmtid",b.id_,h);d.add("utmtst",b.affiliation_,h);d.add("utmtto",b.total_,h);d.add("utmttx",b.tax_,h);d.add("utmtsp",b.shipping_,h);d.add("utmtci",b.city_,h);d.add("utmtrg",b.state_,h);d.add("utmtco",b.country_,h);pe(a,d);ne(a,d);oe(a,d);(b=a.get(Db))&&d.add("utmcu",b,h);c||(me(a,d),
-le(a,d));return d[u]()},re=function(a,b,c){var d=new ie;je(a,c);ke(a,d);d.add("utmt","item");d.add("utmtid",b.transId_,h);d.add("utmipc",b.sku_,h);d.add("utmipn",b.name_,h);d.add("utmiva",b.category_,h);d.add("utmipr",b.price_,h);d.add("utmiqt",b.quantity_,h);pe(a,d);ne(a,d);oe(a,d);(b=a.get(Db))&&d.add("utmcu",b,h);c||(me(a,d),le(a,d));return d[u]()},se=function(a,b){var c=a.get(pc);if("page"==c)c=new ie,je(a,b),ke(a,c),pe(a,c),ne(a,c),oe(a,c),b||(me(a,c),le(a,c)),c=[c[u]()];else if("event"==c)c=
-new ie,je(a,b),ke(a,c),c.add("utmt","event"),pe(a,c),ne(a,c),oe(a,c),b||(me(a,c),le(a,c)),c=[c[u]()];else if("var"==c)c=new ie,je(a,b),ke(a,c),c.add("utmt","var"),!b&&le(a,c),c=[c[u]()];else if("trans"==c)for(var c=[],d=a.get(zb),e=0;e<d[v];++e){c[n](qe(a,d[e],b));for(var f=d[e].items_,j=0;j<f[v];++j)c[n](re(a,f[j],b))}else"social"==c?b?c=[]:(c=new ie,je(a,b),ke(a,c),c.add("utmt","social"),c.add("utmsn",a.get(xc),h),c.add("utmsa",a.get(yc),h),c.add("utmsid",a.get(zc),h),pe(a,c),ne(a,c),oe(a,c),me(a,
-c),le(a,c),c=[c[u]()]):c=[];return c},ge=function(a){var b,c=a.get(ub),d=a.get(rc),e=d&&d.Va,f=0;if(0==c||2==c){var j=a.get(tb)+"?";b=se(a,h);for(var m=0,r=b[v];m<r;m++)Ra(b[m],e,j,h),f++}if(1==c||2==c){b=se(a);m=0;for(r=b[v];m<r;m++)try{Ra(b[m],e),f++}catch(s){s&&Qa(s[q],g,s.message)}}d&&(d.q=f)};var te=function(){return"https:"==J[y][z]||M.H?"https://ssl.google-analytics.com":"https://ssl.google-analytics.com"},ue=function(a){ga(this,"len");this.message=a+"-8192"},ve=function(a){ga(this,"ff2post");this.message=a+"-2036"},Ra=function(a,b,c,d){b=b||Ea;if(d||2036>=a[v]){var e=b,b=c||te()+"/__utm.gif?",f=new Image(1,1);f.src=b+a;f.onload=function(){f.onload=i;f.onerror=i;e()};f.onerror=function(){f.onload=i;f.onerror=i;e()}}else if(8192>=a[v]){var j=b;if(0<=W[ya].userAgent[p]("Firefox")&&![].reduce)throw new ve(a[v]);
-var m,b=te()+"/p/__utm.gif";if(c=W.XDomainRequest)m=new c,m.open("POST",b);else if(c=W.XMLHttpRequest)c=new c,"withCredentials"in c&&(m=c,m.open("POST",b,h),m.setRequestHeader("Content-Type","text/plain"));m?(m.onreadystatechange=function(){4==m.readyState&&(j(),m=i)},m.send(a),b=h):b=g;b||we(a,j)}else throw new ue(a[v]);},we=function(a,b){if(J.body){a=aa(a);try{var c=J[pa]('<iframe name="'+a+'"></iframe>')}catch(d){c=J[pa]("iframe"),ga(c,a)}c.height="0";c.width="0";c.style.display="none";c.style.visibility=
-"hidden";var e=J[y],e=te()+"/u/post_iframe.html#"+aa(e[z]+"//"+e[t]+"/favicon.ico"),f=function(){c.src="";c.parentNode&&c.parentNode.removeChild(c)};Fa(W,"beforeunload",f);var j=k,m=0,r=function(){if(!j){try{if(9<m||c.contentWindow[y][t]==J[y][t]){j=h;f();Ha(W,"beforeunload",f);b();return}}catch(a){}m++;ca(r,200)}};Fa(c,"load",r);J.body.appendChild(c);c.src=e}else ca(function(){we(a,b)},100)};var $=function(){this.H=this.w=k;this.D={};this.F=[];this.V=0;this.T=[["www.google-analytics.com","","/plugins/"]];this._gasoCPath=this._gasoDomain=g;var a=function(a,c,d){T($[w],a,c,d)};a("_createTracker",$[w].r,55);a("_getTracker",$[w].pa,0);a("_getTrackerByName",$[w].u,51);a("_getTrackers",$[w].qa,130);a("_anonymizeIp",$[w].ba,16);a("_forceSSL",$[w].ma,125);a("_getPlugin",Lc,120);a=function(a,c,d){T(U[w],a,c,d)};Mc("_getName",Xa,58);Mc("_getAccount",O,64);Mc("_visitCode",R,54);Mc("_getClientInfo",
-gb,53,1);Mc("_getDetectTitle",jb,56,1);Mc("_getDetectFlash",hb,65,1);Mc("_getLocalGifPath",tb,57);Mc("_getServiceMode",ub,59);V("_setClientInfo",gb,66,2);V("_setAccount",O,3);V("_setNamespace",Wa,48);V("_setAllowLinker",cb,11,2);V("_setDetectFlash",hb,61,2);V("_setDetectTitle",jb,62,2);V("_setLocalGifPath",tb,46,0);V("_setLocalServerMode",ub,92,g,0);V("_setRemoteServerMode",ub,63,g,1);V("_setLocalRemoteServerMode",ub,47,g,2);V("_setSampleRate",sb,45,1);V("_setCampaignTrack",ib,36,2);V("_setAllowAnchor",
-db,7,2);V("_setCampNameKey",lb,41);V("_setCampContentKey",qb,38);V("_setCampIdKey",kb,39);V("_setCampMediumKey",ob,40);V("_setCampNOKey",rb,42);V("_setCampSourceKey",nb,43);V("_setCampTermKey",pb,44);V("_setCampCIdKey",mb,37);V("_setCookiePath",Q,9,0);V("_setMaxCustomVariables",vb,0,1);V("_setVisitorCookieTimeout",$a,28,1);V("_setSessionCookieTimeout",ab,26,1);V("_setCampaignCookieTimeout",bb,29,1);V("_setReferrerOverride",Gb,49);V("_setSiteSpeedSampleRate",Ac,132);a("_trackPageview",U[w].Ga,1);a("_trackEvent",
-U[w].G,4);a("_trackPageLoadTime",U[w].Fa,100);a("_trackSocial",U[w].Ha,104);a("_trackTrans",U[w].Ja,18);a("_sendXEvent",U[w].t,78);a("_createEventTracker",U[w].ja,74);a("_getVersion",U[w].ra,60);a("_setDomainName",U[w].C,6);a("_setAllowHash",U[w].wa,8);a("_getLinkerUrl",U[w].oa,52);a("_link",U[w].link,101);a("_linkByPost",U[w].va,102);a("_setTrans",U[w].Aa,20);a("_addTrans",U[w].aa,21);a("_addItem",U[w].Z,19);a("_clearTrans",U[w].fa,105);a("_setTransactionDelim",U[w].Ba,82);a("_setCustomVar",U[w].xa,
-10);a("_deleteCustomVar",U[w].la,35);a("_getVisitorCustomVar",U[w].sa,50);a("_setXKey",U[w].Da,83);a("_setXValue",U[w].Ea,84);a("_getXKey",U[w].ta,76);a("_getXValue",U[w].ua,77);a("_clearXKey",U[w].ga,72);a("_clearXValue",U[w].ha,73);a("_createXObj",U[w].ka,75);a("_addIgnoredOrganic",U[w].X,15);a("_clearIgnoredOrganic",U[w].ca,97);a("_addIgnoredRef",U[w].Y,31);a("_clearIgnoredRef",U[w].da,32);a("_addOrganic",U[w].$,14);a("_clearOrganic",U[w].ea,70);a("_cookiePathCopy",U[w].ia,30);a("_get",U[w].na,
-106);a("_set",U[w].ya,107);a("_addEventListener",U[w].addEventListener,108);a("_removeEventListener",U[w].removeEventListener,109);a("_addDevId",U[w].W);a("_getPlugin",Lc,122);a("_setPageGroup",U[w].za,126);a("_trackTiming",U[w].Ia,124);a("_initData",U[w].v,2);a("_setVar",U[w].Ca,22);V("_setSessionTimeout",ab,27,3);V("_setCookieTimeout",bb,25,3);V("_setCookiePersistence",$a,24,1);a("_setAutoTrackOutbound",Ea,79);a("_setTrackOutboundSubdomains",Ea,81);a("_setHrefExamineLimit",Ea,80)};D=$[w];
-D.pa=function(a,b){return this.r(a,g,b)};D.r=function(a,b,c){b&&H(23);c&&H(67);b==g&&(b="~"+M.V++);a=new U(b,a,c);M.D[b]=a;M.F[n](a);return a};D.u=function(a){a=a||"";return M.D[a]||M.r(g,a)};D.qa=function(){return M.F[ia](0)};D.ba=function(){this.w=h};D.ma=function(){this.H=h};var xe=function(a){if("prerender"==J.webkitVisibilityState)return k;a();return h};var M=new $;var ye=W._gat;ye&&Aa(ye._getTracker)?M=ye:W._gat=M;var Z=new Y;var ze=function(){var a=W._gaq,b=k;if(a&&Aa(a[n])&&(b="[object Array]"==Object[w][u].call(Object(a)),!b)){Z=a;return}W._gaq=Z;b&&Z[n][xa](Z,a)};if(!xe(ze)){H(123);var Ae=k,Be=function(){!Ae&&xe(ze)&&(Ae=h,Ha(J,"webkitvisibilitychange",Be))};Fa(J,"webkitvisibilitychange",Be)};})();
+(function() {
+  var aa = encodeURIComponent,
+    f = window,
+    n = Math;
+
+  function Pc(a, b) {
+    return a.href = b
+  }
+  var Qc = "replace",
+    q = "data",
+    m = "match",
+    xc = "send",
+    ja = "port",
+    u = "createElement",
+    id = "setAttribute",
+    da = "getTime",
+    A = "split",
+    B = "location",
+    ra = "hasOwnProperty",
+    ma = "hostname",
+    ga = "search",
+    E = "protocol",
+    Ab = "href",
+    kd = "action",
+    G = "apply",
+    p = "push",
+    h = "hash",
+    pa = "test",
+    ha = "slice",
+    r = "cookie",
+    t = "indexOf",
+    ia = "defaultValue",
+    v = "name",
+    y = "length",
+    Ga = "sendBeacon",
+    z = "prototype",
+    la = "clientWidth",
+    jd = "target",
+    C = "call",
+    na = "clientHeight",
+    F = "substring",
+    oa = "navigator",
+    H = "join",
+    I = "toLowerCase";
+  var $c = function(a) {
+    this.w = a || []
+  };
+  $c[z].set = function(a) {
+    this.w[a] = !0
+  };
+  $c[z].encode = function() {
+    for (var a = [], b = 0; b < this.w[y]; b++) this.w[b] && (a[n.floor(b / 6)] = a[n.floor(b / 6)] ^ 1 << b % 6);
+    for (b = 0; b < a[y]; b++) a[b] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".charAt(a[b] || 0);
+    return a[H]("") + "~"
+  };
+  var vd = new $c;
+
+  function J(a) {
+    vd.set(a)
+  }
+  var Nd = function(a, b) {
+      var c = new $c(Dd(a));
+      c.set(b);
+      a.set(Gd, c.w)
+    },
+    Td = function(a) {
+      a = Dd(a);
+      a = new $c(a);
+      for (var b = vd.w[ha](), c = 0; c < a.w[y]; c++) b[c] = b[c] || a.w[c];
+      return (new $c(b)).encode()
+    },
+    Dd = function(a) {
+      a = a.get(Gd);
+      ka(a) || (a = []);
+      return a
+    };
+  var ea = function(a) {
+      return "function" == typeof a
+    },
+    ka = function(a) {
+      return "[object Array]" == Object[z].toString[C](Object(a))
+    },
+    qa = function(a) {
+      return void 0 != a && -1 < (a.constructor + "")[t]("String")
+    },
+    D = function(a, b) {
+      return 0 == a[t](b)
+    },
+    sa = function(a) {
+      return a ? a[Qc](/^[\s\xa0]+|[\s\xa0]+$/g, "") : ""
+    },
+    ta = function(a) {
+      var b = M[u]("img");
+      b.width = 1;
+      b.height = 1;
+      b.src = a;
+      return b
+    },
+    ua = function() {},
+    K = function(a) {
+      if (aa instanceof Function) return aa(a);
+      J(28);
+      return a
+    },
+    L = function(a, b, c, d) {
+      try {
+        a.addEventListener ? a.addEventListener(b,
+          c, !!d) : a.attachEvent && a.attachEvent("on" + b, c)
+      } catch (e) {
+        J(27)
+      }
+    },
+    wa = function(a, b) {
+      if (a) {
+        var c = M[u]("script");
+        c.type = "text/javascript";
+        c.async = !0;
+        c.src = a;
+        b && (c.id = b);
+        var d = M.getElementsByTagName("script")[0];
+        d.parentNode.insertBefore(c, d)
+      }
+    },
+    Ud = function() {
+      return "https:" == M[B][E]
+    },
+    xa = function() {
+      var a = "" + M[B][ma];
+      return 0 == a[t]("www.") ? a[F](4) : a
+    },
+    ya = function(a) {
+      var b = M.referrer;
+      if (/^https?:\/\//i [pa](b)) {
+        if (a) return b;
+        a = "//" + M[B][ma];
+        var c = b[t](a);
+        if (5 == c || 6 == c)
+          if (a = b.charAt(c + a[y]), "/" == a || "?" == a || "" ==
+            a || ":" == a) return;
+        return b
+      }
+    },
+    za = function(a, b) {
+      if (1 == b[y] && null != b[0] && "object" === typeof b[0]) return b[0];
+      for (var c = {}, d = n.min(a[y] + 1, b[y]), e = 0; e < d; e++)
+        if ("object" === typeof b[e]) {
+          for (var g in b[e]) b[e][ra](g) && (c[g] = b[e][g]);
+          break
+        } else e < a[y] && (c[a[e]] = b[e]);
+      return c
+    };
+  var ee = function() {
+    this.keys = [];
+    this.values = {};
+    this.m = {}
+  };
+  ee[z].set = function(a, b, c) {
+    this.keys[p](a);
+    c ? this.m[":" + a] = b : this.values[":" + a] = b
+  };
+  ee[z].get = function(a) {
+    return this.m[ra](":" + a) ? this.m[":" + a] : this.values[":" + a]
+  };
+  ee[z].map = function(a) {
+    for (var b = 0; b < this.keys[y]; b++) {
+      var c = this.keys[b],
+        d = this.get(c);
+      d && a(c, d)
+    }
+  };
+  var O = f,
+    M = document,
+    Mc = function() {
+      for (var a = O[oa].userAgent + (M[r] ? M[r] : "") + (M.referrer ? M.referrer : ""), b = a[y], c = O.history[y]; 0 < c;) a += c-- ^ b++;
+      return La(a)
+    };
+  var Aa = function(a) {
+    var b = O._gaUserPrefs;
+    if (b && b.ioo && b.ioo() || a && !0 === O["ga-disable-" + a]) return !0;
+    try {
+      var c = O.external;
+      if (c && c._gaUserPrefs && "oo" == c._gaUserPrefs) return !0
+    } catch (d) {}
+    return !1
+  };
+  var Ca = function(a) {
+      var b = [],
+        c = M[r][A](";");
+      a = new RegExp("^\\s*" + a + "=\\s*(.*?)\\s*$");
+      for (var d = 0; d < c[y]; d++) {
+        var e = c[d][m](a);
+        e && b[p](e[1])
+      }
+      return b
+    },
+    zc = function(a, b, c, d, e, g) {
+      e = Aa(e) ? !1 : eb[pa](M[B][ma]) || "/" == c && vc[pa](d) ? !1 : !0;
+      if (!e) return !1;
+      b && 1200 < b[y] && (b = b[F](0, 1200), J(24));
+      c = a + "=" + b + "; path=" + c + "; ";
+      g && (c += "expires=" + (new Date((new Date)[da]() + g)).toGMTString() + "; ");
+      d && "none" != d && (c += "domain=" + d + ";");
+      d = M[r];
+      M.cookie = c;
+      if (!(d = d != M[r])) t: {
+        a = Ca(a);
+        for (d = 0; d < a[y]; d++)
+          if (b == a[d]) {
+            d = !0;
+            break t
+          }
+        d = !1
+      }
+      return d
+    },
+    Cc = function(a) {
+      return K(a)[Qc](/\(/g, "%28")[Qc](/\)/g, "%29")
+    },
+    vc = /^(www\.)?google(\.com?)?(\.[a-z]{2})?$/,
+    eb = /(^|\.)doubleclick\.net$/i;
+  var oc = function() {
+      return (Ba || Ud() ? "https:" : "http:") + "//www.google-analytics.com"
+    },
+    Da = function(a) {
+      this.name = "len";
+      this.message = a + "-8192"
+    },
+    wc = function(a, b, c) {
+      var d = ta(a + "?" + b);
+      d.onload = d.onerror = function() {
+        d.onload = null;
+        d.onerror = null;
+        c()
+      }
+    },
+    xd = function(a, b, c) {
+      var d;
+      d = O.XDomainRequest;
+      if (!d) return !1;
+      d = new d;
+      d.open("POST", a);
+      d.onerror = function() {
+        c()
+      };
+      d.onload = c;
+      d[xc](b);
+      return !0
+    },
+    wd = function(a, b, c) {
+      var d = O.XMLHttpRequest;
+      if (!d) return !1;
+      var e = new d;
+      if (!("withCredentials" in e)) return !1;
+      e.open("POST", a, !0);
+      e.withCredentials = !0;
+      e.setRequestHeader("Content-Type", "text/plain");
+      e.onreadystatechange = function() {
+        4 == e.readyState && (c(), e = null)
+      };
+      e[xc](b);
+      return !0
+    },
+    ge = function(a, b, c) {
+      1 <= 100 * n.random() || Aa("?") || (a = ["t=error", "_e=" + a, "_v=j33", "sr=1"], b && a[p]("_f=" + b), c && a[p]("_m=" + K(c[F](0, 100))), a[p]("aip=1"), a[p]("z=" + fe()), wc(oc() + "/collect", a[H]("&"), ua))
+    };
+  var Ha = function() {
+    this.t = []
+  };
+  Ha[z].add = function(a) {
+    this.t[p](a)
+  };
+  Ha[z].D = function(a) {
+    try {
+      for (var b = 0; b < this.t[y]; b++) {
+        var c = a.get(this.t[b]);
+        c && ea(c) && c[C](O, a)
+      }
+    } catch (d) {}
+    b = a.get(Ia);
+    b != ua && ea(b) && (a.set(Ia, ua, !0), setTimeout(b, 10))
+  };
+
+  function Ja(a) {
+    if (100 != a.get(Ka) && La(P(a, Q)) % 1E4 >= 100 * R(a, Ka)) throw "abort";
+  }
+
+  function Ma(a) {
+    if (Aa(P(a, Na))) throw "abort";
+  }
+
+  function Oa() {
+    var a = M[B][E];
+    if ("http:" != a && "https:" != a) throw "abort";
+  }
+
+  function Pa(a) {
+    try {
+      O.XMLHttpRequest && "withCredentials" in new O.XMLHttpRequest ? J(40) : O.XDomainRequest && J(41), O[oa][Ga] && J(42)
+    } catch (b) {}
+    a.set(ld, Td(a), !0);
+    a.set(Ac, R(a, Ac) + 1);
+    var c = [];
+    Qa.map(function(b, e) {
+      if (e.p) {
+        var g = a.get(b);
+        void 0 != g && g != e[ia] && ("boolean" == typeof g && (g *= 1), c[p](e.p + "=" + K("" + g)))
+      }
+    });
+    c[p]("z=" + Bd());
+    a.set(Ra, c[H]("&"), !0)
+  }
+
+  function Sa(a) {
+    var b = P(a, gd) || oc() + "/collect",
+      c = P(a, Ra),
+      d = a.get(Ia),
+      e = a.get(Vd),
+      d = d || ua;
+    e && (e = d, O[oa][Ga] ? O[oa][Ga](b, c) ? (e(), e = !0) : e = !1 : e = !1);
+    if (!e)
+      if (2036 >= c[y]) wc(b, c, d);
+      else if (8192 >= c[y]) wd(b, c, d) || xd(b, c, d) || wc(b, c, d);
+    else throw ge("len", c[y]), new Da(c[y]);
+    a.set(Ia, ua, !0)
+  }
+
+  function Hc(a) {
+    var b = O.gaData;
+    b && (b.expId && a.set(Nc, b.expId), b.expVar && a.set(Oc, b.expVar))
+  }
+
+  function cd() {
+    if (O[oa] && "preview" == O[oa].loadPurpose) throw "abort";
+  }
+
+  function yd(a) {
+    var b = O.gaDevIds;
+    ka(b) && 0 != b[y] && a.set("&did", b[H](","), !0)
+  }
+
+  function vb(a) {
+    if (!a.get(Na)) throw "abort";
+  };
+  var hd = function() {
+      return n.round(2147483647 * n.random())
+    },
+    Bd = function() {
+      try {
+        var a = new Uint32Array(1);
+        O.crypto.getRandomValues(a);
+        return a[0] & 2147483647
+      } catch (b) {
+        return hd()
+      }
+    },
+    fe = hd;
+
+  function Ta(a) {
+    var b = R(a, Ua);
+    500 <= b && J(15);
+    var c = P(a, Va);
+    if ("transaction" != c && "item" != c) {
+      var c = R(a, Wa),
+        d = (new Date)[da](),
+        e = R(a, Xa);
+      0 == e && a.set(Xa, d);
+      e = n.round(2 * (d - e) / 1E3);
+      0 < e && (c = n.min(c + e, 20), a.set(Xa, d));
+      if (0 >= c) throw "abort";
+      a.set(Wa, --c)
+    }
+    a.set(Ua, ++b)
+  };
+  var Ya = function() {
+      this.data = new ee
+    },
+    Qa = new ee,
+    Za = [];
+  Ya[z].get = function(a) {
+    var b = $a(a),
+      c = this[q].get(a);
+    b && void 0 == c && (c = ea(b[ia]) ? b[ia]() : b[ia]);
+    return b && b.n ? b.n(this, a, c) : c
+  };
+  var P = function(a, b) {
+      var c = a.get(b);
+      return void 0 == c ? "" : "" + c
+    },
+    R = function(a, b) {
+      var c = a.get(b);
+      return void 0 == c || "" === c ? 0 : 1 * c
+    };
+  Ya[z].set = function(a, b, c) {
+    if (a)
+      if ("object" == typeof a)
+        for (var d in a) a[ra](d) && ab(this, d, a[d], c);
+      else ab(this, a, b, c)
+  };
+  var ab = function(a, b, c, d) {
+      if (void 0 != c) switch (b) {
+        case Na:
+          wb[pa](c)
+      }
+      var e = $a(b);
+      e && e.o ? e.o(a, b, c, d) : a[q].set(b, c, d)
+    },
+    bb = function(a, b, c, d, e) {
+      this.name = a;
+      this.p = b;
+      this.n = d;
+      this.o = e;
+      this.defaultValue = c
+    },
+    $a = function(a) {
+      var b = Qa.get(a);
+      if (!b)
+        for (var c = 0; c < Za[y]; c++) {
+          var d = Za[c],
+            e = d[0].exec(a);
+          if (e) {
+            b = d[1](e);
+            Qa.set(b[v], b);
+            break
+          }
+        }
+      return b
+    },
+    yc = function(a) {
+      var b;
+      Qa.map(function(c, d) {
+        d.p == a && (b = d)
+      });
+      return b && b[v]
+    },
+    S = function(a, b, c, d, e) {
+      a = new bb(a, b, c, d, e);
+      Qa.set(a[v], a);
+      return a[v]
+    },
+    cb = function(a, b) {
+      Za[p]([new RegExp("^" +
+        a + "$"), b])
+    },
+    T = function(a, b, c) {
+      return S(a, b, c, void 0, db)
+    },
+    db = function() {};
+  var gb = qa(f.GoogleAnalyticsObject) && sa(f.GoogleAnalyticsObject) || "ga",
+    Ba = !1,
+    he = S("_br"),
+    hb = T("apiVersion", "v"),
+    ib = T("clientVersion", "_v");
+  S("anonymizeIp", "aip");
+  var jb = S("adSenseId", "a"),
+    Va = S("hitType", "t"),
+    Ia = S("hitCallback"),
+    Ra = S("hitPayload");
+  S("nonInteraction", "ni");
+  S("currencyCode", "cu");
+  var Vd = S("useBeacon", void 0, !1);
+  S("dataSource", "ds");
+  S("sessionControl", "sc", "");
+  S("sessionGroup", "sg");
+  S("queueTime", "qt");
+  var Ac = S("_s", "_s");
+  S("screenName", "cd");
+  var kb = S("location", "dl", ""),
+    lb = S("referrer", "dr"),
+    mb = S("page", "dp", "");
+  S("hostname", "dh");
+  var nb = S("language", "ul"),
+    ob = S("encoding", "de");
+  S("title", "dt", function() {
+    return M.title || void 0
+  });
+  cb("contentGroup([0-9]+)", function(a) {
+    return new bb(a[0], "cg" + a[1])
+  });
+  var pb = S("screenColors", "sd"),
+    qb = S("screenResolution", "sr"),
+    rb = S("viewportSize", "vp"),
+    sb = S("javaEnabled", "je"),
+    tb = S("flashVersion", "fl");
+  S("campaignId", "ci");
+  S("campaignName", "cn");
+  S("campaignSource", "cs");
+  S("campaignMedium", "cm");
+  S("campaignKeyword", "ck");
+  S("campaignContent", "cc");
+  var ub = S("eventCategory", "ec"),
+    xb = S("eventAction", "ea"),
+    yb = S("eventLabel", "el"),
+    zb = S("eventValue", "ev"),
+    Bb = S("socialNetwork", "sn"),
+    Cb = S("socialAction", "sa"),
+    Db = S("socialTarget", "st"),
+    Eb = S("l1", "plt"),
+    Fb = S("l2", "pdt"),
+    Gb = S("l3", "dns"),
+    Hb = S("l4", "rrt"),
+    Ib = S("l5", "srt"),
+    Jb = S("l6", "tcp"),
+    Kb = S("l7", "dit"),
+    Lb = S("l8", "clt"),
+    Mb = S("timingCategory", "utc"),
+    Nb = S("timingVar", "utv"),
+    Ob = S("timingLabel", "utl"),
+    Pb = S("timingValue", "utt");
+  S("appName", "an");
+  S("appVersion", "av", "");
+  S("appId", "aid", "");
+  S("appInstallerId", "aiid", "");
+  S("exDescription", "exd");
+  S("exFatal", "exf");
+  var Nc = S("expId", "xid"),
+    Oc = S("expVar", "xvar"),
+    Rc = S("_utma", "_utma"),
+    Sc = S("_utmz", "_utmz"),
+    Tc = S("_utmht", "_utmht"),
+    Ua = S("_hc", void 0, 0),
+    Xa = S("_ti", void 0, 0),
+    Wa = S("_to", void 0, 20);
+  cb("dimension([0-9]+)", function(a) {
+    return new bb(a[0], "cd" + a[1])
+  });
+  cb("metric([0-9]+)", function(a) {
+    return new bb(a[0], "cm" + a[1])
+  });
+  S("linkerParam", void 0, void 0, Bc, db);
+  var ld = S("usage", "_u"),
+    Gd = S("_um");
+  S("forceSSL", void 0, void 0, function() {
+    return Ba
+  }, function(a, b, c) {
+    J(34);
+    Ba = !!c
+  });
+  var ed = S("_j1", "jid"),
+    Hd = S("_j2", "gjid");
+  cb("\\&(.*)", function(a) {
+    var b = new bb(a[0], a[1]),
+      c = yc(a[0][F](1));
+    c && (b.n = function(a) {
+      return a.get(c)
+    }, b.o = function(a, b, g, ca) {
+      a.set(c, g, ca)
+    }, b.p = void 0);
+    return b
+  });
+  var Qb = T("_oot"),
+    dd = S("previewTask"),
+    Rb = S("checkProtocolTask"),
+    md = S("validationTask"),
+    Sb = S("checkStorageTask"),
+    Uc = S("historyImportTask"),
+    Tb = S("samplerTask"),
+    Vb = T("_rlt"),
+    Wb = S("buildHitTask"),
+    Xb = S("sendHitTask"),
+    Vc = S("ceTask"),
+    zd = S("devIdTask"),
+    Cd = S("timingTask"),
+    Ld = S("displayFeaturesTask"),
+    V = T("name"),
+    Q = T("clientId", "cid"),
+    Ad = S("userId", "uid"),
+    Na = T("trackingId", "tid"),
+    U = T("cookieName", void 0, "_ga"),
+    W = T("cookieDomain"),
+    Yb = T("cookiePath", void 0, "/"),
+    Zb = T("cookieExpires", void 0, 63072E3),
+    $b = T("legacyCookieDomain"),
+    Wc = T("legacyHistoryImport", void 0, !0),
+    ac = T("storage", void 0, "cookie"),
+    bc = T("allowLinker", void 0, !1),
+    cc = T("allowAnchor", void 0, !0),
+    Ka = T("sampleRate", "sf", 100),
+    dc = T("siteSpeedSampleRate", void 0, 1),
+    ec = T("alwaysSendReferrer", void 0, !1),
+    gd = S("transportUrl"),
+    Md = S("_r", "_r");
+
+  function X(a, b, c, d) {
+    b[a] = function() {
+      try {
+        return d && J(d), c[G](this, arguments)
+      } catch (b) {
+        throw ge("exc", a, b && b[v]), b;
+      }
+    }
+  };
+  var Od = function(a, b, c) {
+      this.V = 1E4;
+      this.fa = a;
+      this.$ = !1;
+      this.B = b;
+      this.ea = c || 1
+    },
+    Ed = function(a, b) {
+      var c;
+      if (a.fa && a.$) return 0;
+      a.$ = !0;
+      if (b) {
+        if (a.B && R(b, a.B)) return R(b, a.B);
+        if (0 == b.get(dc)) return 0
+      }
+      if (0 == a.V) return 0;
+      void 0 === c && (c = Bd());
+      return 0 == c % a.V ? n.floor(c / a.V) % a.ea + 1 : 0
+    };
+  var ie = new Od(!0, he, 5),
+    je = function(a) {
+      if (!Ud() && !Ba) {
+        var b = Ed(ie, a);
+        if (b && (O[oa][Ga] || !(4 <= b))) {
+          var c = (new Date).getHours(),
+            d = [Bd(), Bd(), Bd()][H](".");
+          a = (3 == b || 5 == b ? "https:" : "http:") + "//www.google-analytics.com/collect?z=br.";
+          a += [b, "A", c, d][H](".");
+          var e = 1 != b && 4 != b ? "https:" : "http:",
+            e = e + "//www.google-analytics.com/collect?z=br.",
+            e = e + [b, "B", c, d][H]("."),
+            c = function() {
+              4 <= b ? O[oa][Ga](e, "") : ta(e)
+            };
+          Bd() % 2 ? (ta(a), c()) : (c(), ta(a))
+        }
+      }
+    };
+
+  function fc() {
+    var a, b, c;
+    if ((c = (c = O[oa]) ? c.plugins : null) && c[y])
+      for (var d = 0; d < c[y] && !b; d++) {
+        var e = c[d]; - 1 < e[v][t]("Shockwave Flash") && (b = e.description)
+      }
+    if (!b) try {
+      a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7"), b = a.GetVariable("$version")
+    } catch (g) {}
+    if (!b) try {
+      a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6"), b = "WIN 6,0,21,0", a.AllowScriptAccess = "always", b = a.GetVariable("$version")
+    } catch (ca) {}
+    if (!b) try {
+      a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash"), b = a.GetVariable("$version")
+    } catch (l) {}
+    b &&
+      (a = b[m](/[\d]+/g)) && 3 <= a[y] && (b = a[0] + "." + a[1] + " r" + a[2]);
+    return b || void 0
+  };
+  var gc = function(a, b) {
+      var c = n.min(R(a, dc), 100);
+      if (!(La(P(a, Q)) % 100 >= c) && (c = {}, Ec(c) || Fc(c))) {
+        var d = c[Eb];
+        void 0 == d || Infinity == d || isNaN(d) || (0 < d ? (Y(c, Gb), Y(c, Jb), Y(c, Ib), Y(c, Fb), Y(c, Hb), Y(c, Kb), Y(c, Lb), b(c)) : L(O, "load", function() {
+          gc(a, b)
+        }, !1))
+      }
+    },
+    Ec = function(a) {
+      var b = O.performance || O.webkitPerformance,
+        b = b && b.timing;
+      if (!b) return !1;
+      var c = b.navigationStart;
+      if (0 == c) return !1;
+      a[Eb] = b.loadEventStart - c;
+      a[Gb] = b.domainLookupEnd - b.domainLookupStart;
+      a[Jb] = b.connectEnd - b.connectStart;
+      a[Ib] = b.responseStart - b.requestStart;
+      a[Fb] = b.responseEnd - b.responseStart;
+      a[Hb] = b.fetchStart - c;
+      a[Kb] = b.domInteractive - c;
+      a[Lb] = b.domContentLoadedEventStart - c;
+      return !0
+    },
+    Fc = function(a) {
+      if (O.top != O) return !1;
+      var b = O.external,
+        c = b && b.onloadT;
+      b && !b.isValidLoadTime && (c = void 0);
+      2147483648 < c && (c = void 0);
+      0 < c && b.setPageReadyTime();
+      if (void 0 == c) return !1;
+      a[Eb] = c;
+      return !0
+    },
+    Y = function(a, b) {
+      var c = a[b];
+      if (isNaN(c) || Infinity == c || 0 > c) a[b] = void 0
+    },
+    Fd = function(a) {
+      return function(b) {
+        "pageview" != b.get(Va) || a.I || (a.I = !0, gc(b, function(b) {
+          a[xc]("timing", b)
+        }))
+      }
+    };
+  var hc = !1,
+    mc = function(a) {
+      if ("cookie" == P(a, ac)) {
+        var b = P(a, U),
+          c = nd(a),
+          d = kc(P(a, Yb)),
+          e = lc(P(a, W)),
+          g = 1E3 * R(a, Zb),
+          ca = P(a, Na);
+        if ("auto" != e) zc(b, c, d, e, ca, g) && (hc = !0);
+        else {
+          J(32);
+          var l;
+          t: {
+            c = [];
+            e = xa()[A](".");
+            if (4 == e[y] && (l = e[e[y] - 1], parseInt(l, 10) == l)) {
+              l = ["none"];
+              break t
+            }
+            for (l = e[y] - 2; 0 <= l; l--) c[p](e[ha](l)[H]("."));
+            c[p]("none");
+            l = c
+          }
+          for (var k = 0; k < l[y]; k++)
+            if (e = l[k], a[q].set(W, e), c = nd(a), zc(b, c, d, e, ca, g)) {
+              hc = !0;
+              return
+            }
+          a[q].set(W, "auto")
+        }
+      }
+    },
+    nc = function(a) {
+      if ("cookie" == P(a, ac) && !hc && (mc(a), !hc)) throw "abort";
+    },
+    Yc = function(a) {
+      if (a.get(Wc)) {
+        var b = P(a, W),
+          c = P(a, $b) || xa(),
+          d = Xc("__utma", c, b);
+        d && (J(19), a.set(Tc, (new Date)[da](), !0), a.set(Rc, d.R), (b = Xc("__utmz", c, b)) && d[h] == b[h] && a.set(Sc, b.R))
+      }
+    },
+    nd = function(a) {
+      var b = Cc(P(a, Q)),
+        c = ic(P(a, W));
+      a = jc(P(a, Yb));
+      1 < a && (c += "-" + a);
+      return ["GA1", c, b][H](".")
+    },
+    Gc = function(a, b, c) {
+      for (var d = [], e = [], g, ca = 0; ca < a[y]; ca++) {
+        var l = a[ca];
+        if (l.r[c] == b) d[p](l);
+        else void 0 == g || l.r[c] < g ? (e = [l], g = l.r[c]) : l.r[c] == g && e[p](l)
+      }
+      return 0 < d[y] ? d : e
+    },
+    lc = function(a) {
+      return 0 == a[t](".") ? a.substr(1) :
+        a
+    },
+    ic = function(a) {
+      return lc(a)[A](".")[y]
+    },
+    kc = function(a) {
+      if (!a) return "/";
+      1 < a[y] && a.lastIndexOf("/") == a[y] - 1 && (a = a.substr(0, a[y] - 1));
+      0 != a[t]("/") && (a = "/" + a);
+      return a
+    },
+    jc = function(a) {
+      a = kc(a);
+      return "/" == a ? 1 : a[A]("/")[y]
+    };
+
+  function Xc(a, b, c) {
+    "none" == b && (b = "");
+    var d = [],
+      e = Ca(a);
+    a = "__utma" == a ? 6 : 2;
+    for (var g = 0; g < e[y]; g++) {
+      var ca = ("" + e[g])[A](".");
+      ca[y] >= a && d[p]({
+        hash: ca[0],
+        R: e[g],
+        O: ca
+      })
+    }
+    return 0 == d[y] ? void 0 : 1 == d[y] ? d[0] : Zc(b, d) || Zc(c, d) || Zc(null, d) || d[0]
+  }
+
+  function Zc(a, b) {
+    var c, d;
+    null == a ? c = d = 1 : (c = La(a), d = La(D(a, ".") ? a[F](1) : "." + a));
+    for (var e = 0; e < b[y]; e++)
+      if (b[e][h] == c || b[e][h] == d) return b[e]
+  };
+  var od = new RegExp(/^https?:\/\/([^\/:]+)/),
+    pd = /(.*)([?&#])(?:_ga=[^&#]*)(?:&?)(.*)/;
+
+  function Bc(a) {
+    a = a.get(Q);
+    var b = Ic(a, 0);
+    return "_ga=1." + K(b + "." + a)
+  }
+
+  function Ic(a, b) {
+    for (var c = new Date, d = O[oa], e = d.plugins || [], c = [a, d.userAgent, c.getTimezoneOffset(), c.getYear(), c.getDate(), c.getHours(), c.getMinutes() + b], d = 0; d < e[y]; ++d) c[p](e[d].description);
+    return La(c[H]("."))
+  }
+  var Dc = function(a) {
+    J(48);
+    this.target = a;
+    this.T = !1
+  };
+  Dc[z].Q = function(a, b) {
+    if (a.tagName) {
+      if ("a" == a.tagName[I]()) {
+        a[Ab] && Pc(a, qd(this, a[Ab], b));
+        return
+      }
+      if ("form" == a.tagName[I]()) return rd(this, a)
+    }
+    if ("string" == typeof a) return qd(this, a, b)
+  };
+  var qd = function(a, b, c) {
+      var d = pd.exec(b);
+      d && 3 <= d[y] && (b = d[1] + (d[3] ? d[2] + d[3] : ""));
+      a = a[jd].get("linkerParam");
+      var e = b[t]("?"),
+        d = b[t]("#");
+      c ? b += (-1 == d ? "#" : "&") + a : (c = -1 == e ? "?" : "&", b = -1 == d ? b + (c + a) : b[F](0, d) + c + a + b[F](d));
+      return b
+    },
+    rd = function(a, b) {
+      if (b && b[kd]) {
+        var c = a[jd].get("linkerParam")[A]("=")[1];
+        if ("get" == b.method[I]()) {
+          for (var d = b.childNodes || [], e = 0; e < d[y]; e++)
+            if ("_ga" == d[e][v]) {
+              d[e][id]("value", c);
+              return
+            }
+          d = M[u]("input");
+          d[id]("type", "hidden");
+          d[id]("name", "_ga");
+          d[id]("value", c);
+          b.appendChild(d)
+        } else "post" ==
+          b.method[I]() && (b.action = qd(a, b[kd]))
+      }
+    };
+  Dc[z].S = function(a, b, c) {
+    function d(c) {
+      try {
+        c = c || O.event;
+        var d;
+        t: {
+          var g = c[jd] || c.srcElement;
+          for (c = 100; g && 0 < c;) {
+            if (g[Ab] && g.nodeName[m](/^a(?:rea)?$/i)) {
+              d = g;
+              break t
+            }
+            g = g.parentNode;
+            c--
+          }
+          d = {}
+        }("http:" == d[E] || "https:" == d[E]) && sd(a, d[ma] || "") && d[Ab] && Pc(d, qd(e, d[Ab], b))
+      } catch (w) {
+        J(26)
+      }
+    }
+    var e = this;
+    this.T || (this.T = !0, L(M, "mousedown", d, !1), L(M, "touchstart", d, !1), L(M, "keyup", d, !1));
+    if (c) {
+      c = function(b) {
+        b = b || O.event;
+        if ((b = b[jd] || b.srcElement) && b[kd]) {
+          var c = b[kd][m](od);
+          c && sd(a, c[1]) && rd(e, b)
+        }
+      };
+      for (var g = 0; g < M.forms[y]; g++) L(M.forms[g],
+        "submit", c)
+    }
+  };
+
+  function sd(a, b) {
+    if (b == M[B][ma]) return !1;
+    for (var c = 0; c < a[y]; c++)
+      if (a[c] instanceof RegExp) {
+        if (a[c][pa](b)) return !0
+      } else if (0 <= b[t](a[c])) return !0;
+    return !1
+  };
+  var Jd = function(a, b, c, d) {
+      this.U = b;
+      this.aa = c;
+      (b = d) || (b = (b = P(a, V)) && "t0" != b ? Wd[pa](b) ? "_gat_" + Cc(P(a, Na)) : "_gat_" + Cc(b) : "_gat");
+      this.Y = b
+    },
+    Rd = function(a, b) {
+      var c = b.get(Wb);
+      b.set(Wb, function(b) {
+        Pd(a, b);
+        var d = c(b);
+        Qd(a, b);
+        return d
+      });
+      var d = b.get(Xb);
+      b.set(Xb, function(b) {
+        var c = d(b);
+        Id(a, b);
+        return c
+      })
+    },
+    Pd = function(a, b) {
+      b.get(a.U) || ("1" == Ca(a.Y)[0] ? b.set(a.U, "", !0) : b.set(a.U, "" + fe(), !0))
+    },
+    Qd = function(a, b) {
+      b.get(a.U) && zc(a.Y, "1", b.get(Yb), b.get(W), b.get(Na), 6E5)
+    },
+    Id = function(a, b) {
+      if (b.get(a.U)) {
+        var c = new ee,
+          d = function(a) {
+            c.set($a(a).p, b.get(a))
+          };
+        d(hb);
+        d(ib);
+        d(Na);
+        d(Q);
+        d(a.U);
+        c.set($a(ld).p, Td(b));
+        var e = a.aa;
+        c.map(function(a, b) {
+          e += K(a) + "=";
+          e += K("" + b) + "&"
+        });
+        e += "z=" + fe();
+        ta(e);
+        b.set(a.U, "", !0)
+      }
+    },
+    Wd = /^gtm\d+$/;
+  var fd = function(a, b) {
+    var c = a.b;
+    if (!c.get("dcLoaded")) {
+      Nd(c, 29);
+      b = b || {};
+      var d;
+      b[U] && (d = Cc(b[U]));
+      d = new Jd(c, ed, "https://stats.g.doubleclick.net/collect?t=dc&aip=1&", d);
+      Rd(d, c);
+      c.set("dcLoaded", !0)
+    }
+  };
+  var Sd = function(a) {
+    var b;
+    b = a.get("dcLoaded") ? !1 : "cookie" != a.get(ac) ? !1 : !0;
+    b && (Nd(a, 51), b = new Jd(a, ed), Pd(b, a), Qd(b, a), a.get(b.U) && (a.set(Md, 1, !0), a.set(gd, oc() + "/r/collect", !0)))
+  };
+  var Kd = function(a, b) {
+    var c = a.b;
+    if (!c.get("_rlsaLoaded")) {
+      Nd(c, 38);
+      b = b || {};
+      if (b[U]) var d = Cc(b[U]);
+      d = new Jd(c, Hd, "https://www.google.com/ads/ga-audiences?t=sr&aip=1&", d);
+      Rd(d, c);
+      c.set("_rlsaLoaded", !0);
+      tc("displayfeatures", a, b)
+    }
+  };
+  var Lc = function() {
+    var a = O.gaGlobal = O.gaGlobal || {};
+    return a.hid = a.hid || fe()
+  };
+  var ad, bd = function(a, b, c) {
+    if (!ad) {
+      var d;
+      d = M[B][h];
+      var e = O[v],
+        g = /^#?gaso=([^&]*)/;
+      if (e = (d = (d = d && d[m](g) || e && e[m](g)) ? d[1] : Ca("GASO")[0] || "") && d[m](/^(?:!([-0-9a-z.]{1,40})!)?([-.\w]{10,1200})$/i)) zc("GASO", "" + d, c, b, a, 0), f._udo || (f._udo = b), f._utcp || (f._utcp = c), a = e[1], wa("https://www.google.com/analytics/web/inpage/pub/inpage.js?" + (a ? "prefix=" + a + "&" : "") + fe(), "_gasojs");
+      ad = !0
+    }
+  };
+  var wb = /^(UA|YT|MO|GP)-(\d+)-(\d+)$/,
+    pc = function(a) {
+      function b(a, b) {
+        d.b[q].set(a, b)
+      }
+
+      function c(a, c) {
+        b(a, c);
+        d.filters.add(a)
+      }
+      var d = this;
+      this.b = new Ya;
+      this.filters = new Ha;
+      b(V, a[V]);
+      b(Na, sa(a[Na]));
+      b(U, a[U]);
+      b(W, a[W] || xa());
+      b(Yb, a[Yb]);
+      b(Zb, a[Zb]);
+      b($b, a[$b]);
+      b(Wc, a[Wc]);
+      b(bc, a[bc]);
+      b(cc, a[cc]);
+      b(Ka, a[Ka]);
+      b(dc, a[dc]);
+      b(ec, a[ec]);
+      b(ac, a[ac]);
+      b(Ad, a[Ad]);
+      b(hb, 1);
+      b(ib, "j33");
+      c(Qb, Ma);
+      c(dd, cd);
+      c(Rb, Oa);
+      c(md, vb);
+      c(Sb, nc);
+      c(Uc, Yc);
+      c(Tb, Ja);
+      c(Vb, Ta);
+      c(Vc, Hc);
+      c(zd, yd);
+      c(Ld, Sd);
+      c(Wb, Pa);
+      c(Xb, Sa);
+      c(Cd, Fd(this));
+      Jc(this.b, a[Q]);
+      Kc(this.b);
+      this.b.set(jb, Lc());
+      bd(this.b.get(Na), this.b.get(W), this.b.get(Yb))
+    },
+    Jc = function(a, b) {
+      if ("cookie" == P(a, ac)) {
+        hc = !1;
+        var c;
+        i: {
+          var d = Ca(P(a, U));
+          if (d && !(1 > d[y])) {
+            c = [];
+            for (var e = 0; e < d[y]; e++) {
+              var g;
+              g = d[e][A](".");
+              var ca = g.shift();
+              ("GA1" == ca || "1" == ca) && 1 < g[y] ? (ca = g.shift()[A]("-"), 1 == ca[y] && (ca[1] = "1"), ca[0] *= 1, ca[1] *= 1, g = {
+                r: ca,
+                s: g[H](".")
+              }) : g = void 0;
+              g && c[p](g)
+            }
+            if (1 == c[y]) {
+              J(13);
+              c = c[0].s;
+              break i
+            }
+            if (0 == c[y]) J(12);
+            else {
+              J(14);
+              d = ic(P(a, W));
+              c = Gc(c, d, 0);
+              if (1 == c[y]) {
+                c = c[0].s;
+                break i
+              }
+              d =
+                jc(P(a, Yb));
+              c = Gc(c, d, 1);
+              c = c[0] && c[0].s;
+              break i
+            }
+          }
+          c = void 0
+        }
+        c || (c = P(a, W), d = P(a, $b) || xa(), c = Xc("__utma", d, c), void 0 != c ? (J(10), c = c.O[1] + "." + c.O[2]) : c = void 0);
+        c && (a[q].set(Q, c), hc = !0)
+      }
+      c = a.get(cc);
+      if (e = (c = M[B][c ? "href" : "search"][m]("(?:&|#|\\?)" + K("_ga")[Qc](/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1") + "=([^&#]*)")) && 2 == c[y] ? c[1] : "") a.get(bc) ? (c = e[t]("."), -1 == c ? J(22) : (d = e[F](c + 1), "1" != e[F](0, c) ? J(22) : (c = d[t]("."), -1 == c ? J(22) : (e = d[F](0, c), c = d[F](c + 1), e != Ic(c, 0) && e != Ic(c, -1) && e != Ic(c, -2) ? J(23) : (J(11), a[q].set(Q,
+        c)))))) : J(21);
+      b && (J(9), a[q].set(Q, K(b)));
+      a.get(Q) || ((c = (c = O.gaGlobal && O.gaGlobal.vid) && -1 != c[ga](/^(?:utma\.)?\d+\.\d+$/) ? c : void 0) ? (J(17), a[q].set(Q, c)) : (J(8), a[q].set(Q, [fe() ^ Mc() & 2147483647, n.round((new Date)[da]() / 1E3)][H]("."))));
+      mc(a)
+    },
+    Kc = function(a) {
+      var b = O[oa],
+        c = O.screen,
+        d = M[B];
+      a.set(lb, ya(a.get(ec)));
+      if (d) {
+        var e = d.pathname || "";
+        "/" != e.charAt(0) && (J(31), e = "/" + e);
+        a.set(kb, d[E] + "//" + d[ma] + e + d[ga])
+      }
+      c && a.set(qb, c.width + "x" + c.height);
+      c && a.set(pb, c.colorDepth + "-bit");
+      var c = M.documentElement,
+        g = (e =
+          M.body) && e[la] && e[na],
+        ca = [];
+      c && c[la] && c[na] && ("CSS1Compat" === M.compatMode || !g) ? ca = [c[la], c[na]] : g && (ca = [e[la], e[na]]);
+      c = 0 >= ca[0] || 0 >= ca[1] ? "" : ca[H]("x");
+      a.set(rb, c);
+      a.set(tb, fc());
+      a.set(ob, M.characterSet || M.charset);
+      a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
+      a.set(nb, (b && (b.language || b.browserLanguage) || "")[I]());
+      if (d && a.get(cc) && (b = M[B][h])) {
+        b = b[A](/[?&#]+/);
+        d = [];
+        for (c = 0; c < b[y]; ++c)(D(b[c], "utm_id") || D(b[c], "utm_campaign") || D(b[c], "utm_source") || D(b[c], "utm_medium") || D(b[c],
+          "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") || D(b[c], "dclid") || D(b[c], "gclsrc")) && d[p](b[c]);
+        0 < d[y] && (b = "#" + d[H]("&"), a.set(kb, a.get(kb) + b))
+      }
+    };
+  pc[z].get = function(a) {
+    return this.b.get(a)
+  };
+  pc[z].set = function(a, b) {
+    this.b.set(a, b)
+  };
+  var qc = {
+    pageview: [mb],
+    event: [ub, xb, yb, zb],
+    social: [Bb, Cb, Db],
+    timing: [Mb, Nb, Pb, Ob]
+  };
+  pc[z].send = function(a) {
+    if (!(1 > arguments[y])) {
+      var b, c;
+      "string" === typeof arguments[0] ? (b = arguments[0], c = [][ha][C](arguments, 1)) : (b = arguments[0] && arguments[0][Va], c = arguments);
+      b && (c = za(qc[b] || [], c), c[Va] = b, this.b.set(c, void 0, !0), this.filters.D(this.b), this.b[q].m = {}, je(this.b))
+    }
+  };
+  var rc = function(a) {
+    if ("prerender" == M.visibilityState) return !1;
+    a();
+    return !0
+  };
+  var td = /^(?:(\w+)\.)?(?:(\w+):)?(\w+)$/,
+    sc = function(a) {
+      if (ea(a[0])) this.u = a[0];
+      else {
+        var b = td.exec(a[0]);
+        null != b && 4 == b[y] && (this.c = b[1] || "t0", this.e = b[2] || "", this.d = b[3], this.a = [][ha][C](a, 1), this.e || (this.A = "create" == this.d, this.i = "require" == this.d, this.g = "provide" == this.d, this.ba = "remove" == this.d), this.i && (3 <= this.a[y] ? (this.X = this.a[1], this.W = this.a[2]) : this.a[1] && (qa(this.a[1]) ? this.X = this.a[1] : this.W = this.a[1])));
+        b = a[1];
+        a = a[2];
+        if (!this.d) throw "abort";
+        if (this.i && (!qa(b) || "" == b)) throw "abort";
+        if (this.g &&
+          (!qa(b) || "" == b || !ea(a))) throw "abort";
+        if (ud(this.c) || ud(this.e)) throw "abort";
+        if (this.g && "t0" != this.c) throw "abort";
+      }
+    };
+
+  function ud(a) {
+    return 0 <= a[t](".") || 0 <= a[t](":")
+  };
+  var Yd, Zd, $d;
+  Yd = new ee;
+  $d = new ee;
+  Zd = {
+    ec: 45,
+    ecommerce: 46,
+    linkid: 47
+  };
+  var tc = function(a, b, c) {
+      b == N || b.get(V);
+      var d = Yd.get(a);
+      if (!ea(d)) return !1;
+      b.plugins_ = b.plugins_ || new ee;
+      if (b.plugins_.get(a)) return !0;
+      b.plugins_.set(a, new d(b, c || {}));
+      return !0
+    },
+    ae = function(a) {
+      function b(a) {
+        var b = (a[ma] || "")[A](":")[0][I](),
+          c = (a[E] || "")[I](),
+          c = 1 * a[ja] || ("http:" == c ? 80 : "https:" == c ? 443 : "");
+        a = a.pathname || "";
+        D(a, "/") || (a = "/" + a);
+        return [b, "" + c, a]
+      }
+      var c = M[u]("a");
+      Pc(c, M[B][Ab]);
+      var d = (c[E] || "")[I](),
+        e = b(c),
+        g = c[ga] || "",
+        ca = d + "//" + e[0] + (e[1] ? ":" + e[1] : "");
+      D(a, "//") ? a = d + a : D(a, "/") ? a = ca + a : !a || D(a,
+        "?") ? a = ca + e[2] + (a || g) : 0 > a[A]("/")[0][t](":") && (a = ca + e[2][F](0, e[2].lastIndexOf("/")) + "/" + a);
+      Pc(c, a);
+      d = b(c);
+      return {
+        protocol: (c[E] || "")[I](),
+        host: d[0],
+        port: d[1],
+        path: d[2],
+        G: c[ga] || "",
+        url: a || ""
+      }
+    };
+  var Z = {
+    ga: function() {
+      Z.f = []
+    }
+  };
+  Z.ga();
+  Z.D = function(a) {
+    var b = Z.J[G](Z, arguments),
+      b = Z.f.concat(b);
+    for (Z.f = []; 0 < b[y] && !Z.v(b[0]) && !(b.shift(), 0 < Z.f[y]););
+    Z.f = Z.f.concat(b)
+  };
+  Z.J = function(a) {
+    for (var b = [], c = 0; c < arguments[y]; c++) try {
+      var d = new sc(arguments[c]);
+      if (d.g) Yd.set(d.a[0], d.a[1]);
+      else {
+        if (d.i) {
+          var e = d,
+            g = e.a[0];
+          if (!ea(Yd.get(g)) && !$d.get(g)) {
+            Zd[ra](g) && J(Zd[g]);
+            var ca = e.X;
+            !ca && Zd[ra](g) ? (J(39), ca = g + ".js") : J(43);
+            if (ca) {
+              ca && 0 <= ca[t]("/") || (ca = (Ba || Ud() ? "https:" : "http:") + "//www.google-analytics.com/plugins/ua/" + ca);
+              var l = ae(ca),
+                e = void 0;
+              var k = l[E],
+                w = M[B][E],
+                e = "https:" == k || k == w ? !0 : "http:" != k ? !1 : "http:" == w;
+              var Xd;
+              if (Xd = e) {
+                var e = l,
+                  be = ae(M[B][Ab]);
+                if (e.G || 0 <= e.url[t]("?") ||
+                  0 <= e.path[t]("://")) Xd = !1;
+                else if (e.host == be.host && e[ja] == be[ja]) Xd = !0;
+                else {
+                  var ce = "http:" == e[E] ? 80 : 443;
+                  Xd = "www.google-analytics.com" == e.host && (e[ja] || ce) == ce && D(e.path, "/plugins/") ? !0 : !1
+                }
+              }
+              Xd && (wa(l.url), $d.set(g, !0))
+            }
+          }
+        }
+        b[p](d)
+      }
+    } catch (de) {}
+    return b
+  };
+  Z.v = function(a) {
+    try {
+      if (a.u) a.u[C](O, N.j("t0"));
+      else {
+        var b = a.c == gb ? N : N.j(a.c);
+        if (a.A) "t0" == a.c && N.create[G](N, a.a);
+        else if (a.ba) N.remove(a.c);
+        else if (b)
+          if (a.i) {
+            if (!tc(a.a[0], b, a.W)) return !0
+          } else if (a.e) {
+          var c = a.d,
+            d = a.a,
+            e = b.plugins_.get(a.e);
+          e[c][G](e, d)
+        } else b[a.d][G](b, a.a)
+      }
+    } catch (g) {}
+  };
+  var N = function(a) {
+    J(1);
+    Z.D[G](Z, [arguments])
+  };
+  N.h = {};
+  N.P = [];
+  N.L = 0;
+  N.answer = 42;
+  var uc = [Na, W, V];
+  N.create = function(a) {
+    var b = za(uc, [][ha][C](arguments));
+    b[V] || (b[V] = "t0");
+    var c = "" + b[V];
+    if (N.h[c]) return N.h[c];
+    b = new pc(b);
+    N.h[c] = b;
+    N.P[p](b);
+    return b
+  };
+  N.remove = function(a) {
+    for (var b = 0; b < N.P[y]; b++)
+      if (N.P[b].get(V) == a) {
+        N.P.splice(b, 1);
+        N.h[a] = null;
+        break
+      }
+  };
+  N.j = function(a) {
+    return N.h[a]
+  };
+  N.K = function() {
+    return N.P[ha](0)
+  };
+  N.N = function() {
+    "ga" != gb && J(49);
+    var a = O[gb];
+    if (!a || 42 != a.answer) {
+      N.L = a && a.l;
+      N.loaded = !0;
+      var b = O[gb] = N;
+      X("create", b, b.create);
+      X("remove", b, b.remove);
+      X("getByName", b, b.j, 5);
+      X("getAll", b, b.K, 6);
+      b = pc[z];
+      X("get", b, b.get, 7);
+      X("set", b, b.set, 4);
+      X("send", b, b[xc]);
+      b = Ya[z];
+      X("get", b, b.get);
+      X("set", b, b.set);
+      if (!Ud() && !Ba) {
+        t: {
+          for (var b = M.getElementsByTagName("script"), c = 0; c < b[y] && 100 > c; c++) {
+            var d = b[c].src;
+            if (d && 0 == d[t]("https://www.google-analytics.com/analytics")) {
+              J(33);
+              b = !0;
+              break t
+            }
+          }
+          b = !1
+        }
+        b && (Ba = !0)
+      }
+      Ud() || Ba ||
+        !Ed(new Od) || (J(36), Ba = !0);
+      (O.gaplugins = O.gaplugins || {}).Linker = Dc;
+      b = Dc[z];
+      Yd.set("linker", Dc);
+      X("decorate", b, b.Q, 20);
+      X("autoLink", b, b.S, 25);
+      Yd.set("displayfeatures", fd);
+      Yd.set("adfeatures", Kd);
+      a = a && a.q;
+      ka(a) ? Z.D[G](N, a) : J(50)
+    }
+  };
+  N.k = function() {
+    for (var a = N.K(), b = 0; b < a[y]; b++) a[b].get(V)
+  };
+  (function() {
+    var a = N.N;
+    if (!rc(a)) {
+      J(16);
+      var b = !1,
+        c = function() {
+          if (!b && rc(a)) {
+            b = !0;
+            var d = c,
+              e = M;
+            e.removeEventListener ? e.removeEventListener("visibilitychange", d, !1) : e.detachEvent && e.detachEvent("onvisibilitychange", d)
+          }
+        };
+      L(M, "visibilitychange", c)
+    }
+  })();
+
+  function La(a) {
+    var b = 1,
+      c = 0,
+      d;
+    if (a)
+      for (b = 0, d = a[y] - 1; 0 <= d; d--) c = a.charCodeAt(d), b = (b << 6 & 268435455) + c + (c << 14), c = b & 266338304, b = 0 != c ? b ^ c >> 21 : b;
+    return b
+  };
+})(window);

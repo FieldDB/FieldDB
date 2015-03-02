@@ -13,6 +13,12 @@
 rm backbone_client/bower_components/fielddb/fielddb.js
 ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
+
+sed 's/\/\/# sourceMappingURL=jquery.min.map//' backbone_client/bower_components/jquery/dist/jquery.min.js  > output
+mv output backbone_client/bower_components/jquery/dist/jquery.min.js
+
+
+
 #welcome is just a redirect to either user or corpus
 rm -rf couchapp_minified/_attachments
 
@@ -56,6 +62,7 @@ cp backbone_client/libs/bootstrap/css/*.css couchapp_minified/_attachments/libs/
 cp backbone_client/libs/d3.v2.js couchapp_minified/_attachments/libs/d3.v2.js
 cp -R backbone_client/libs/font_awesome couchapp_minified/_attachments/libs/font_awesome
 cp backbone_client/libs/require.js couchapp_minified/_attachments/libs/require.js
+cp backbone_client/libs/analytics.js couchapp_minified/_attachments/libs/analytics.js
 cp -R backbone_client/libs/terminal couchapp_minified/_attachments/libs/terminal/
 
 cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
@@ -73,3 +80,22 @@ rm -rf couchapp_minified/views
 cp -R couchapp_dev/views couchapp_minified/views
 
 rm -rf release
+
+
+echo " If you cant build because core.js is missing, comment out atob and crypto in api/Confidential.js "
+echo '   /* globals window */'
+echo '   var AES = {}; //require("crypto-js/aes");'
+echo '   var CryptoEncoding = {};// require("crypto-js/enc-utf8");'
+echo '   var FieldDBObject = require("./../FieldDBObject").FieldDBObject;'
+echo '   '
+echo '   try {'
+echo '     if (!window.atob) {'
+echo '       console.log("ATOB is not defined, loading from npm");'
+echo '     }'
+echo '   } catch (e) {'
+echo '     console.log(e);'
+echo '     /*jshint -W020 */'
+echo '     window = {};'
+echo '     // window.atob = require("atob");'
+echo '     // window.btoa = require("btoa");'
+echo '   }'

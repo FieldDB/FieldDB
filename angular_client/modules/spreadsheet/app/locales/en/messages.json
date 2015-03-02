@@ -72,7 +72,7 @@
         "description": "submenu button under Session"
     },
     "locale_goal_textbox": {
-        "message": "Goal:",
+        "message": "Goal",
         "description": "title for session info textbox. Goal of the session, e.g. 'verify tenses in embedded clauses'"
     },
     "locale_consultants_textbox": {
@@ -80,11 +80,11 @@
         "description": "title for session info textbox. Consultant(s)' code(s) or name(s)"
     },
     "locale_user_textbox": {
-        "message": "User:",
+        "message": "User",
         "description": "title for session info textbox. Enter the name(s) of those who did the elicitation. If unspecified, the name of the user who enter the data will appear as default."
     },
     "locale_language_textbox": {
-        "message": "Language:",
+        "message": "Language",
         "description": "title for session info textbox. The object language, e.g. Mi'gmaq"
     },
     "locale_dialect_textbox": {
