@@ -65,7 +65,7 @@ ga('create', 'UA-35422317-1', {
   'cookieDomain': 'none'
 });
 ga('set', 'checkProtocolTask', function() { /* nothing */ });
-ga('set', 'page', 'chrome-protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+ga('set', 'page', 'protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
 // ga('set', 'page', 'chrome-protoype');
 ga('send', 'pageview');
 
