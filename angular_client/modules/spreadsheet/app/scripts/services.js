@@ -308,10 +308,10 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = "Welcome! Your usenamme is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
             $rootScope.openNotification();
 
-            login(response.data.user.username, newLoginInfo.password).then(function(){
+            login(response.data.user.username, newLoginInfo.password).then(function() {
 
               // Update saved state in Preferences and reload the page to the corpora list.
-             var  preferences = window.defaultPreferences;
+              var preferences = window.defaultPreferences;
               preferences.savedState.server = $rootScope.serverCode;
               preferences.savedState.username = $rootScope.user.username;
               preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
@@ -453,6 +453,48 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
+    var removeroles = function(newRoleInfo) {
+      if (!$rootScope.serverCode) {
+        console.log("Sever code is undefined");
+        window.location.assign("#/corpora_list");
+        return;
+      }
+      var config = {
+        method: "POST",
+        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/updateroles",
+        data: newRoleInfo,
+        withCredentials: true
+      };
+
+      var promise = $http(config)
+        .then(
+          function(response) {
+            console.log("Removed user roles.", response);
+            $rootScope.notificationMessage = response.data.info.join(" ");
+            $rootScope.openNotification();
+            return response;
+          },
+          function(err) {
+            console.warn(err);
+            var message = "";
+            if (err.status === 0) {
+              message = "are you offline?";
+              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              }
+            }
+            if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+              message = err.data.userFriendlyErrors.join(" ");
+            } else {
+              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+            }
+
+            $rootScope.notificationMessage = message;
+            $rootScope.openNotification();
+            $rootScope.loading = false;
+          });
+      return promise;
+    };
 
     var saveSpreadsheetDatum = function(spreadsheetDatumToBeSaved) {
       var deferred = Q.defer();
@@ -604,6 +646,7 @@ angular.module('spreadsheetApp')
       register: register,
       createcorpus: createcorpus,
       updateroles: updateroles,
+      removeroles: removeroles,
       saveCouchDoc: saveCouchDoc,
       saveSpreadsheetDatum: saveSpreadsheetDatum,
       blankDatumTemplate: blankDatumTemplate,
