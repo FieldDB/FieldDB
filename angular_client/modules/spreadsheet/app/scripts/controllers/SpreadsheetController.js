@@ -2299,7 +2299,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
   };
 
-  $scope.removeUserFromCorpus = function(userid, roles) {
+  $scope.removeAccessFromUser = function(userid, roles) {
     if (!roles || roles.length === 0) {
       console.warn("no roles were requested to be removed. cant do anything");
       alert("There was a problem performing this operation. Please report this.");
@@ -2308,7 +2308,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // helps to avoid a situation in which there is no admin for a
     // corpus
     if ($scope.users.admins.length < 2) {
-      if ($scope.users.admins.indexOf(userid) > -1) {
+      if ($scope.users.admins[0].username.indexOf(userid) > -1) {
         window.alert("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
         return;
       }
@@ -2317,7 +2317,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (referingNoun === $rootScope.user.username) {
       referingNoun = "yourself";
     }
-    var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + userid + " from this corpus?");
+
+    var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + referingNoun + " on " +$rootScope.corpus.title);
     if (r === true) {
 
       var dataToPost = {};
@@ -2327,13 +2328,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
       dataToPost.pouchname = $rootScope.corpus.pouchname;
 
-      dataToPost.userRoleInfo = {};
-      dataToPost.userRoleInfo.usernameToModify = userid;
-      dataToPost.userRoleInfo.pouchname = $rootScope.corpus.pouchname;
-      dataToPost.userRoleInfo.removeUser = true;
+      dataToPost.users = [{
+        username: userid,
+        remove: roles,
+        add: []
+      }];
 
-
-      Data.updateroles(dataToPost)
+      Data.removeroles(dataToPost)
         .then(function(response) {
           if (debugging) {
             console.log(response);
@@ -2343,14 +2344,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             verb: "removed",
             verbicon: "icon-remove-sign",
             directobjecticon: "icon-user",
-            directobject: dataToPost.userRoleInfo.usernameToModify,
+            directobject: userid,
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
             verb: "removed",
             verbicon: "icon-remove-sign",
             directobjecticon: "icon-user",
-            directobject: dataToPost.userRoleInfo.usernameToModify,
+            directobject: userid,
             indirectobject: indirectObjectString,
             teamOrPersonal: "team"
           }], "uploadnow");
