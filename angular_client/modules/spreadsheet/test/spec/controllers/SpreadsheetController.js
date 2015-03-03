@@ -396,7 +396,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
       expect(typeof scope.createNewCorpus).toBe('function');
       expect(typeof scope.loadUsersAndRoles).toBe('function');
       expect(typeof scope.updateUserRoles).toBe('function');
-      expect(typeof scope.removeUserFromCorpus).toBe('function');
+      expect(typeof scope.removeAccessFromUser).toBe('function');
     });
 
 
