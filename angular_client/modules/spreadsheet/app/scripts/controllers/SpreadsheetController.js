@@ -53,7 +53,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.44.22.12.35ss";
+  $rootScope.appVersion = "2.45.03.15.23ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -1025,7 +1025,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         // } catch (e) {
         //   console.log("must have been an object...", e, selectedCorpus);
         // }
-        if (($rootScope.corpus && $rootScope.corpus.datumFields && $rootScope.corpus.datumFields.length > 0) && ($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && $rootScope.availableFieldsInCurrentCorpus === $rootScope.corpus.datumFields){
+        if (($rootScope.corpus && $rootScope.corpus.datumFields && $rootScope.corpus.datumFields.length > 0) && ($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && $rootScope.availableFieldsInCurrentCorpus === $rootScope.corpus.datumFields) {
           console.log("requested load of a corpus which was already loaded.");
           return;
         }
@@ -2041,6 +2041,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
       return;
     }
+    if (!newLoginInfo.password || !newLoginInfo.confirmPassword) {
+      $rootScope.notificationMessage = "Please enter a password.";
+      $rootScope.openNotification();
+      return;
+    }
+    if (!newLoginInfo.username) {
+      $rootScope.notificationMessage = "Please enter a username.";
+      $rootScope.openNotification();
+      return;
+    }
+
     $rootScope.loading = true;
 
     // Clean username and tell user about it
