@@ -23,6 +23,84 @@ var MAINTAINENCE = {
   Make writers can also comment on corpora (spreadsheet permissions were set up so that users never added comment permisions to eachother)
    */
 
+  /*
+  make sure old users have their gravatar set rather than the user/user_gravatar.png
+   */
+  cleanGravatars: function() {
+    var database = $.couch.db("usersdb");
+    var count = 0;
+    var waiting = true;
+    database.allDocs({
+      success: function(result) {
+        //console.log(result);
+        var data = result.rows;
+        for (var couchdoc in data) {
+          var docid = data[couchdoc].id;
+          window.docid = docid;
+          if (docid.indexOf("m") === 0) {
+            waiting = false;
+          }
+          if (waiting) {
+            continue;
+          }
+          count++;
+          if (count > 8000) {
+            return;
+          }
+          database.openDoc(docid, {
+            success: function(originalDoc) {
+              if (!originalDoc.username) {
+                return;
+              }
+              var needssave = false;
+              if (originalDoc.email && originalDoc.email === "bounce@lingsync.org") {
+                originalDoc.email = "";
+                needssave = true;
+              }
+
+              if (!originalDoc.gravatar || originalDoc.gravatar.indexOf("user_gravatar.png") > -1) {
+                if (originalDoc.email) {
+                  originalDoc.gravatar = FieldDB.MD5(originalDoc.email);
+                } else {
+                  originalDoc.gravatar = "0df69960706112e38332395a4f2e7542";
+                }
+                needssave = true;
+              }
+              if (!needssave) {
+                if (originalDoc.username.indexOf("anonym") === -1) {
+                  console.log("Skipping, looks okay " + originalDoc._id + " " + originalDoc.email + " " + originalDoc.gravatar);
+                }
+                return;
+              }
+
+              // console.log("would save ", originalDoc);
+              // return;
+              database.saveDoc(originalDoc, {
+                success: function(serverResults) {
+                  console.log("Updated email and gravatar of " + originalDoc._id + " " + originalDoc.email + " " + originalDoc.gravatar);
+                },
+                error: function(serverResults) {
+                  console.log("There was a problem saving the doc." + originalDoc._id, +JSON.stringify(originalDoc));
+                }
+              });
+
+            },
+            error: function(error) {
+              console.log("Error opening your docs ", error);
+            }
+          });
+
+
+        }
+      },
+      error: function(error) {
+        console.log("Error opening the database ", error);
+      }
+    });
+
+
+  },
+
 
   /*
   Merge sessions into another
@@ -776,6 +854,7 @@ var MAINTAINENCE = {
               // return;
               console.log("deploying to a beta tester");
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+              beta
               // return;
               console.log("deploying to a phophlo user");
             } else {
