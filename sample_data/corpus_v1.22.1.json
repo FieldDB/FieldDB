@@ -198,7 +198,7 @@
     "selected": "selected",
     "state": "Checked",
     "consultant": {
-      "gravatar": "./../user/user_gravatar.png"
+      "gravatar": "0df69960706112e38332395a4f2e7542"
     }
   }, {
     "color": "warning",
@@ -206,7 +206,7 @@
     "selected": "",
     "state": "To be checked",
     "consultant": {
-      "gravatar": "./../user/user_gravatar.png"
+      "gravatar": "0df69960706112e38332395a4f2e7542"
     }
   }, {
     "color": "important",
@@ -214,7 +214,7 @@
     "selected": "",
     "state": "Deleted",
     "consultant": {
-      "gravatar": "./../user/user_gravatar.png"
+      "gravatar": "0df69960706112e38332395a4f2e7542"
     }
   }],
   "datumFields": [{
