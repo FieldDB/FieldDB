@@ -316,10 +316,11 @@ angular.module('spreadsheetApp')
               preferences.savedState.username = $rootScope.user.username;
               preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
               localStorage.setItem('SpreadsheetPreferences', JSON.stringify(preferences));
-
-              if (window.location.hash.indexOf("register") > -1) {
-                window.location.assign("#/corpora_list");
-              }
+              window.setTimeout(function() {
+                if (window.location.hash.indexOf("register") > -1) {
+                  window.location.assign("#/corpora_list");
+                }
+              }, 500);
             });
           }
           return response;
