@@ -854,7 +854,6 @@ var MAINTAINENCE = {
               // return;
               console.log("deploying to a beta tester");
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              beta
               // return;
               console.log("deploying to a phophlo user");
             } else {
