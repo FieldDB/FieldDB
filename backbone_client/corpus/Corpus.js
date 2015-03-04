@@ -474,12 +474,12 @@ define([
           repairedTimestamp : Date.now()
         };
       }
-      // if (!originalModel.team) {
-      //   originalModel.team = {
-      //     _id: "team",
-      //     username: originalModel.pouchname.split("-")[0];
-      //   };
-      // }
+      if (!originalModel.team) {
+        originalModel.team = {
+          _id: "team",
+          username: originalModel.pouchname.split("-")[0]
+        };
+      }
       /* Update the corpus to show all fields which are defaults on corpora,
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
