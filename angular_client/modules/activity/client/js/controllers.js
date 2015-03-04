@@ -8,7 +8,7 @@ define(
        * TODO We probably dont need two controllers one for users one for teams,
        * but rather maybe two controllers, once simple feed, one
        * searchable/filtered?
-       * 
+       *
        * @param $scope
        * @param $resource
        * @param MostRecentActivities
@@ -24,7 +24,7 @@ define(
          */
         $scope.corpus = {
           description : "",//"Data gathered during the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
-          gravatar : "user/user_gravatar.png",
+          gravatar : "0df69960706112e38332395a4f2e7542",
           title : "Activity Feed",
           team : {
             username : $routeParams.username

@@ -29,7 +29,7 @@ var MAINTAINENCE = {
   cleanGravatars: function() {
     var database = $.couch.db("usersdb");
     var count = 0;
-    var waiting = true;
+    var waiting = false;
     database.allDocs({
       success: function(result) {
         //console.log(result);
@@ -37,12 +37,12 @@ var MAINTAINENCE = {
         for (var couchdoc in data) {
           var docid = data[couchdoc].id;
           window.docid = docid;
-          if (docid.indexOf("m") === 0) {
-            waiting = false;
-          }
-          if (waiting) {
-            continue;
-          }
+          // if (docid.indexOf("m") === 0) {
+          //   waiting = false;
+          // }
+          // if (waiting) {
+          //   continue;
+          // }
           count++;
           if (count > 8000) {
             return;

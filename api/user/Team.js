@@ -43,7 +43,7 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
       username: "",
       password: "",
       email: "",
-      gravatar: "user/user_gravatar.png",
+      gravatar: "",
       researchInterest: "",
       affiliation: "",
       description: "",

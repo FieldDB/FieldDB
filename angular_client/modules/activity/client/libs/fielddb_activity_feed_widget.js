@@ -1,4 +1,3 @@
-
 /**
  * @license AngularJS v1.0.2
  * (c) 2010-2012 Google, Inc. http://angularjs.org
@@ -15212,7 +15211,7 @@ define(
        * TODO We probably dont need two controllers one for users one for teams,
        * but rather maybe two controllers, once simple feed, one
        * searchable/filtered?
-       * 
+       *
        * @param $scope
        * @param $resource
        * @param MostRecentActivities
@@ -15228,7 +15227,7 @@ define(
          */
         $scope.corpus = {
           description : "",//"Data gathered during the Field methods class at COLING 2012 when we were working with a Cherokee speaker.",
-          gravatar : "user/user_gravatar.png",
+          gravatar : "0df69960706112e38332395a4f2e7542",
           title : "Activity Feed",
           team : {
             username : $routeParams.username
@@ -15325,7 +15324,7 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
       } ]).filter('gravatar', function(){
         return function(gravatar, scope) {
           if(!gravatar){
-            return "user_gravatar.png";
+            return "0df69960706112e38332395a4f2e7542";
           }
           return gravatar.replace("https://secure.gravatar.com/avatar/","").replace("?s","").replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
         };
@@ -15335,6 +15334,7 @@ define('js/filters',[ "angular", "OPrime" ], function(angular, OPrime) {
 
   return ActivityFeedFilters;
 });
+
 
 define(
     'js/services',[ "angular", "OPrime", "libs/oprime/services/CouchDB" ],
@@ -16015,3 +16015,4 @@ require([ "js/app", "js/controllers", "js/filters", "js/services",
 });
 
 define("js/main", function(){});
+
