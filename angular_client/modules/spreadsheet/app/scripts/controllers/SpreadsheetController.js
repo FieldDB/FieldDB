@@ -1491,6 +1491,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("The datum didnt actually change. Not marking as editied");
         return;
       } else {
+        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        console.warn("@hisakonog turning on debugmode for equality look below here.");
+        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        current.debugMode = true;
+        current.debugMode = true;
+        previous.equals(current);
+        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        console.warn("@hisakonog look in the above text for what attribute is not equal on the unchanged datum, we can add it to the list of attributes to ignore.");
+        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
         // datum.saved = "no";
       }
     }
@@ -2318,7 +2327,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       referingNoun = "yourself";
     }
 
-    var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + referingNoun + " on " +$rootScope.corpus.title);
+    var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + referingNoun + " on " + $rootScope.corpus.title);
     if (r === true) {
 
       var dataToPost = {};
