@@ -6,7 +6,16 @@
 
 	<!-- Stylesheets -->
 	<link rel="stylesheet" type="text/css" href="dev/bootstrap.min.css">
-	<script type="text/javascript" src="dev/libs/analytics.js"></script>
+	 <script>
+	   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	   ga('create','UA-35422317-1','auto');
+	   ga('set', 'page', 'www' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+	   ga('send', 'pageview');
+	</script>
 </head>
 <body>
 <div class="well container">
@@ -47,12 +56,322 @@
 	</div>
 </div>
 	<hr />
-	<!-- 
+	<!--
 	<div class="well">
-		<h1>April 26 2014 - Week 2.0104 &amp; 2.1</h1>
+
+		<h1>Nov 22 2014 - Week 2.47 &amp; 2.48</h1>
+
+	</div>
+-->
+	<div class="well">
+
+		<h1>Feb 21 2014 - Week 2.45 &amp; 2.46</h1>
+
+		<p>
+			This week we moved all users over to our new server, hosted in Atlanta Georgia. It has 4 gigs of RAM and 1 terabyte of space! 4 times larger than the last server :)
+		</p>
+
+		<p>
+			This week @jrwdunham also presented at the 
+   			 ICLDC 4. <a target="_blank" href="http://icldc4.weebly.com/uploads/2/4/9/6/24963413/icldc4_papers_12_11_14.pdf">abstract</a>
+		</p>
+
+		<p>
+			We also started helping @richardlitt out with <a href="https://github.com/RichardLitt/endangered-languages" target="_blank">his list</a> or open source codebases which can help when working with endangered or low resource langauges, which led us to documenting all the modules in FieldDB that have been developed since the project began in 2012. Here are some of the GUIS we have as of today:
+
+			<ul>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/backbone_client">Prototype</a><br>
+			<a href="https://cloud.githubusercontent.com/assets/196199/6283103/08d15ce0-b912-11e4-852c-b4c1d9adb243.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6283103/08d15ce0-b912-11e4-852c-b4c1d9adb243.png" height="200" style="max-width:50%;"></a>
+			<a href="https://cloud.githubusercontent.com/assets/196199/6283117/301332ce-b912-11e4-8b7d-99ea1fc83ddf.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6283117/301332ce-b912-11e4-8b7d-99ea1fc83ddf.png" height="200" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/spreadsheet">Spreadsheet</a>
+			<a href="https://cloud.githubusercontent.com/assets/196199/6282997/7a9048fc-b910-11e4-90f6-709bfa068f1f.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6282997/7a9048fc-b910-11e4-90f6-709bfa068f1f.png" alt="screen shot 2015-01-16 at 08 56 53 pm" style="max-width:50%;"></a>
+			</li>
+			<li>
+			<a href="https://github.com/jrwdunham/dative">Dative</a>
+			<a href="https://raw.githubusercontent.com/jrwdunham/dative/master/dative-screenshot.png" target="_blank"><img src="https://raw.githubusercontent.com/jrwdunham/dative/master/dative-screenshot.png" alt="dative_screenshot" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame">Psycholinguistics Dashboard</a>
+			<a href="https://cloud.githubusercontent.com/assets/196199/4587030/b0326662-5023-11e4-91fe-596a4a1aa8d0.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/4587030/b0326662-5023-11e4-91fe-596a4a1aa8d0.png" alt="screen shot 2014-10-09 at 10 17 51 pm" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/ProjetDeRechercheSurLecriture/oprime-montage">Psycholinguistics MontageJS library</a>
+			<a href="https://cloud.githubusercontent.com/assets/196199/4506891/8bad9030-4b07-11e4-9643-7a3e1748e633.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/4506891/8bad9030-4b07-11e4-9643-7a3e1748e633.png" alt="screen shot 2014-10-03 at 10 13 41 am" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/activity">Activity Feed widget</a><br>
+			<a href="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png" height="200" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/opensourcefieldlinguistics/AndroidLanguageLearningClientForFielddb">Learn X app</a>
+			<a href="https://camo.githubusercontent.com/6150d14667b07bccacbccc29148c76ae11ee4ace/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f3139363139392f323438333236312f36633465363434322d623066652d313165332d393364662d6537343330393130303537312e706e67" target="_blank"><img src="https://camo.githubusercontent.com/6150d14667b07bccacbccc29148c76ae11ee4ace/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f3139363139392f323438333236312f36633465363434322d623066652d313165332d393364662d6537343330393130303537312e706e67" alt="learn_x_tablet" data-canonical-src="https://f.cloud.github.com/assets/196199/2483261/6c4e6442-b0fe-11e3-93df-e74309100571.png" style="max-width:50%;"></a>
+			</li>
+			<li>The Android <a href="https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder">Elicitation Session Recorder</a>
+			</li>
+			<li>The Android <a href="https://github.com/batumi/AndroidSpeechRecognitionTrainer">Speech Recognition Trainer App</a><br>
+			<a href="https://cloud.githubusercontent.com/assets/196199/3277961/25a67bb0-f39d-11e3-8ff2-917b06069261.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/3277961/25a67bb0-f39d-11e3-8ff2-917b06069261.png" height="200" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/DictionaryChromeExtension">My Dictionary</a> Chrome extension
+			<a href="https://cloud.githubusercontent.com/assets/196199/6282739/1cb609a0-b90c-11e4-99c1-03a5c4c519e7.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6282739/1cb609a0-b90c-11e4-99c1-03a5c4c519e7.png" alt="screen shot 2014-07-08 at 3 56 40 pm" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/FieldDBLexicon">Lexicon Browser</a>
+			<a href="https://camo.githubusercontent.com/af1d58b8f391df763a3369fda5f895d1c7b675f5/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f3139363139392f323336363136342f38353535636237302d613666332d313165332d393365632d3134306663616164323239342e706e67" target="_blank"><img src="https://camo.githubusercontent.com/af1d58b8f391df763a3369fda5f895d1c7b675f5/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f3139363139392f323336363136342f38353535636237302d613666332d313165332d393365632d3134306663616164323239342e706e67" alt="lexicon_browser_dashboard" data-canonical-src="https://f.cloud.github.com/assets/196199/2366164/8555cb70-a6f3-11e3-93ec-140fcaad2294.png" style="max-width:50%;"></a>
+			</li>
+			<li>The <a href="https://github.com/OpenSourceFieldlinguistics/FieldDBWordCloudChromeApp">Word Cloud Visualizer</a>
+			<a href="https://cloud.githubusercontent.com/assets/196199/6282934/6bc5fb10-b90f-11e4-8e4c-8fb9bbf0799f.png" target="_blank"><img src="https://cloud.githubusercontent.com/assets/196199/6282934/6bc5fb10-b90f-11e4-8e4c-8fb9bbf0799f.png" alt="lexicon_browser2" style="max-width:50%;"></a>
+			</li>
+			<li>You can <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/edit/master/README.md">add others</a> if there any missing in this list...</li>
+			</ul>
+		</p>
+	</div>
+	<div class="well">
+
+		<h1>Feb 7 2014 - Week 2.43 &amp; 2.44</h1>
+
+		This week we finally merged the refactor branch the authentication api so it would return standard HTTP response codes (to facilitate the new Dative development). We put out a new release of of the spreadhseet and prototype to make sure they could handle the new responses.
+
+	</div>
+	<div class="well">
+
+		<h1>Jan 31 2014 - Week 2.41 &amp; 2.42</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Jan 17 2014 - Week 2.38 &amp; 2.40</h1>
+
+		This week Alan, Jessica and @jrwdunham held a workshop at the LSA 2015. <a target="_blank" href="http://www.linguisticsociety.org/system/files/abstracts/Lingsync.pdf">abstract</a>, <a target="_blank" href="http://jrwdunham.com/files/lsa-lingsync-tutorial-1-what-why.pdf">slides1</a>, <a target="_blank" href="http://jrwdunham.com/files/lsa-lingsync-tutorial-2-how.pdf">slides2</a>, <a target="_blank" href="http://jrwdunham.com/files/lsa-lingsync-tutorial-3-hands-on.pdf">slides3</a>, <a target="_blank" href="http://jrwdunham.com/files/lsa-lingsync-tutorial-4-in-development.pdf">slides4</a>, <a target="_blank" href="https://www.youtube.com/watch?v=eYThTB9gB0o">video1</a>, <a target="_blank" href="https://www.youtube.com/watch?v=eYThTB9gB0o">video2</a>, <a target="_blank" href="https://www.youtube.com/watch?v=R8VmRx6UcCU">video3</a>, <a target="_blank" href="https://www.youtube.com/watch?v=gKAHmomPAQc">video4</a>, <a target="_blank" href="https://www.youtube.com/watch?v=85XZS_feHBE">video5</a>
+
+	</div>
+	<div class="well">
+
+		<h1>Jan 3 2014 - Week 2.37 &amp; 2.38</h1>
+
+	</div><div class="well">
+	<div class="well">
+
+		<h1>Dec 20 2014 - Week 2.35 &amp; 2.36</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Dec 6 2014 - Week 2.33 &amp; 2.34</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Nov 22 2014 - Week 2.31 &amp; 2.32</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Nov 8 2014 - Week 2.29 &amp; 2.30</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Oct 25 2014 - Week 2.27 &amp; 2.28</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Oct 11 2014 - Week 2.25 &amp; 2.26</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Sept 27 2014 - Week 2.23 &amp; 2.24</h1>
+
+	</div>
+	<div class="well">
+
+		<h1>Sept 13 2014 - Week 2.21 &amp; 2.22</h1>
+
+		<h2>Injection vunerability found and patched</h2>
+		<p>
+			This week we did some triage and found 14 bugs we want to fix for the next spreadsheet release. We also did some prep work for field methods user studies this semester and found a injection vunerabilty in the webserver <a href="https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer/pull/28" target="_blank">#28</a> which patched and deployed so some of the services had downtime <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1619" target="_blank">#1619</a>.	
+
+		</p>
+
+		<h2>Video: How to export as PDF</h2>
+		<p>
+			We also made a new video showing how to export entire corpora as PDFs
+
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/e1RzexNSie4?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
+
+		<h2>Workshop at UBC</h2>
+
+		<p>
+			This week @jrwdunham and @kedersha gave workshop to the UBC field methods class (which former intern @kedersha is a member)
+		</p>
+	</div>
+	<div class="well">
+
+		<h1>Aug 30 2014 - Week 2.19 &amp; 2.20</h1>
+
+		<h2>Demo speech recogntion trainer codebase</h2>
+		<p>
+			This week @cesine <a href="http://cesine.blogspot.ca/2014/08/recognizing-speech-on-android.html">presented the speech recognition trainer android codebase at Android Montreal</a> 
+
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/XNIS0hTzGIA?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
+	</div>
+	<div class="well">
+
+		<h1>Aug 16 2014 - Week 2.17 &amp; 2.18</h1>
+
+	</div>
+	<div class="well">
+		<h1>Aug 2 2014 - Week 2.15 &amp; 2.16</h1>
+
+		<h2>Language Learning Dashboard demo</h2>
+		<p>
+			This week @hisakonog created a custom datum template for language learning lessongs and demoed how to use it.
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/ae6cM__PwnY?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
+	</div>
+	<div class="well">
+		<h1>July 19 2014 - Week 2.13 &amp; 2.14</h1>
+
+		<p>
+			This week @jrwdunham begins work on a new field linguist friendly GUI for research teams, called <a href="https://github.com/jrwdunham/dative" target="_blank">dative</a>.
+		
+			<img src="https://github.com/jrwdunham/dative/raw/master/dative-screenshot.png" width="300"/>
+		</p>
+
+	</div>
+	<div class="well">
+		<h1>July 5 2014 - Week 2.11 &amp; 2.12</h1>
+
+		<p>
+			@jrdunham  @cesine presentation at ComputEl, and updated the Glossy Chrome extension to use wikitionary for low resource languages (many talks needed something like this to test and collect user stats for their dictionaries.), tested using Kartuli wikitionary.
+
+			<br/>
+			<iframe width="420" height="315" src="//www.youtube.com/embed/EpnAYnfPT_Y" frameborder="0" allowfullscreen></iframe>
+
+			<br/>
+			@jrdunham starts postdoc and work on new UIs for field linguists.
+			<br/>
+
+			@ggaudreault joins as an interun on the COULD project.
+			<br/> 
+
+			We made a new video showing how devs can use the install scripts to set up their computer with the fielddb repositories.
+			<br/>
+			<iframe width="420" height="315" src="//www.youtube.com/embed/S3YHvW7R3Gw" frameborder="0" allowfullscreen></iframe>
+		</p>
+
+	</div>
+	<div class="well">
+		<h1>June 21 2014 - Week 2.9 &amp; 2.10</h1>
+
+		Found that kartuli speech recognition users were  actually using the app as designed, and figured out how to train their voices etc. Found out that someone had updated the pocket sphinx demo  which hadnt been active since 2011, began work to use that instead of the default recognition engine. 
+
+		Also working on computel slides.
+
+		<h2>LingSync "ენათა კავშირი" - დეველოპერბისთვის </h2>
+		<p>
+			This week @cesine and @tamiik also gave a joint workshop at the Batumi Shota Rutsaveli State University to the Computer Science and Phillology departments
+
+			<iframe width="420" height="315" src="//www.youtube.com/embed/4PkO9XUg9d4" frameborder="0" allowfullscreen></iframe>
+		</p>
+	</div>
+	<div class="well">
+		<h1>June 7 2014 - Week 2.7 &amp; 2.8</h1>
+
+		Working on batch import and converting API from backbone to commonjs.
+	</div>
+	<div class="well">
+		<h1>May 24 2014 - Week 2.5 &amp; 2.6</h1>
+		Worked on word cloud visualizaiton so that informants could use it to clean a document rather than having to edit gloss and morpheme lines :)
+
+		<h2>In the field: A terminology isn't very useful if hosted on a unindexed domain name</h2>
+		<p>
+			This week Khatuna showed us her bilingual corpus of political texts which she had built with her students. Part of the process of building the corpus required hours, days and sometimes weeks of work just to create an equivalent Kartuli translation for some technical words in English. This week we will show her developer some resources he can use to build an API for this terminology they have built so they can prove to funding agencies the reach of their corpus using a graph of the API requests over time.
+		</p>
+	</div>
+	<div class="well">
+		<h1>May 10 2014 - Week 2.2 &amp; 2.4</h1>
+		Got word cloud visualizatino running with improved stop word detection.
+
+		<h2>In the field: How much of a Kartuli speaker's virtual life is actually provided in their native language?</h2>
+		<p>
+			This week we documented our findings about what popular apps and operating systems are available in Kartuli, and to what extent. The result was pretty good, but we identified two ways we could help, by showing Kartuli speakers how they can contribute to Chrome and Android localization. We <a href="https://github.com/batumi/batumi.github.io" target="_blank">created a github organization</a> to broadcast our findings to other kartuli speaking developers.
+			<br/>
+			We found out that because of how Google localizes Android, contributing translations for minority languages is extremely time consuming for the Android team, which means they wont be able to accept our help, not for Kartuli, not for Migmaq. 
+			<br/>
+			On the other hand, Chromium translations are managed using Launchpad and it is entirely possible to help out. Esma began contributing reviews and novel translations, we are waiting news to find out if she was successful!
+		</p>
+
+		<h2>In the field: Searching for court cases in Kartuli can be very frustrating!</h2>
+		<p>
+			Since Kartuli is an agglutinative language with very rich verb morphology searching for appropriate results is very difficult. Over the past few weeks of observing it seems like most Kartuli speakers prefer to search using Russian search engines, using Russian vocabulary. Mari (who is a lawyer) and Gina decided to create a corpus of law cases in Kartuli, and see if the fielddb glosser can help build a stemmer that might be used for searching in Georgian.
+			<br/>
+			While Mari was teaching Gina and Esma how to use the Georgian court websites, in the middle she showed them how she modifies her search terms to get some results in supreme court cases, unlike the constitutional court search page which lets you search for an empty string and see all results... This was an illuminating experience of searching as a minority language speaker, so we decided to share it as an unlisted YouTube video despite the poor image quality.
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/YSd3g4Gy85M" frameborder="0" allowfullscreen></iframe>
+
+			<pre>
+http://prg.supremecourt.ge/
+* Requires search to find documents
+* Need to use very general search terms to get any results, and results you get are not always relevant to your case you are working on
+* Documents are .html which is excellent for machines but Mari didn't seem to excited about it, we will ask her more later
+
+vs
+
+http://constcourt.ge/index.php?lang_id=GEO&sec_id=22
+* Requires no search to find documents
+* Documents are in .doc format which users are used to
+* Easy to download documents so you can read them offline when you are in the village, or put on a usb key if you are using someone else's computer for the internet.
+</pre>
+		</p>
+	</div>
+	<div class="well">
+		<h1>April 26 2014 - Week 2.0 &amp; 2.1</h1>
+		<h2>Long Audio Import</h2>
+		<p>
+			Since fielddb began we have dreamed of being able to import long video/audio elicitation sessions and semi-automatically creating datum which correspond roughly to utterances. After a few weeks of coding and testing, long audio import is ready for users to try. 
+
+			This week we released the long audio import in the old import dashboard. It will be ported to the new dashboard once @jrdunham joins full time. 
+
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/IcsdPyYEMFc?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
+
+		<h2>In the field: Viewing the web through Kartuli Glasses</h2>
+		<p>
+			After making friends with some local software developers we found that 
+			<ul>
+				<li>
+				Many technical words are simply transliterations of English into Kartuli, and 
+				</li>
+				<li>
+				Many iPhone users don't have a Georgian keyboard, as a consequence roughly 5% of comments on Facebook are in romanized Kartuli. 
+				</li>
+				<li>
+				The most popular browser in Georgia (in Batumi, and the villages which are who we are able to ask) is actually Chrome!
+				</li>
+				<li>
+				Georgians go to school 100% in Kartuli, even during the USSR times. They have a very very high fluency in their native alphabet and reading in general. 
+				<li>
+			</ul>
+			This meant if we built a Chrome Extension (<a href="https://chrome.google.com/webstore/detail/kartuli-glasses/ccmledaklimnhjchkcgideafpglhejja" target="_blank">installer</a>)which can transform all English letters into their Kartuli equivalent, then Georgians who aren't entirely fluent with the English alphabet can read more content on the web. So far it seems to work great for Facebook, and for Google plus, but it can also be used on any web page! 
+		</p>
 	</div>
 	<div class="well">
 		<h1>April 12 2014 - Week 102 &amp; 103</h1>
+
+		<h2> In the field: week 1-3 Taking Learn X from clickable prototype to field testing</h2>
+		<p>
+			After talking with members of the TLG volunteers (Teach Learn Georgia) when they come down from the mountains for the weekend, it looks like older volunteers (August 2013) could share what they have learned in the field with newer volunteers (March 2014) using our opensource code base called "Learn X" which makes it possible to create an Android App that one or many users can use to create their own language learning lessons together using their Androids (<a href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian" target="_blank">installer</a>) to take video, picture or record audio, backed by the fielddb infrastructure for offline sync. Like heritage learners, TLG volunteers spend their time surrounded with the language and can understand more than they can speak, and what they speak about is highly dependent on their families and what their family speaks about most. 
+		</p>
+		<p>
+			This week @esmita and @cesine created a video showing language learners how they can use field methods elicitaiton techniques to learn their heritage language through elicitation sessions
+
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/nULRWUMUc-I?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
 	</div>
 	<div class="well">
 		<h1>March 29 2014 - Week 100 &amp; 101</h1>
@@ -60,11 +379,32 @@
 	<div class="well">
 		<h1>March 15 2014 - Week 98 &amp; 99</h1>
 
-		Lexicon dashboard, and templates for mcgill
+
+		<h2>D3 and FRB talk at JS montreal</h2>
+
+		<p>
+			This week @cesine gave a talk at js montreal showing how to use D3 and FRBs to make content editable lexicon nodes.
+
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/ocAG4TYYexE?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
+
+		<h2>Field testing Winter Semester begins</h2>
+		<p>
+			This week one of the core commiters moves to Batumi, Georgia for the winter semester to test the app in the field. 
+		</p>
+
+		<p>
+			We also added a custom template for the  mcgill group which we put into testing. 
+		</p>
 	</div>
 	<div class="well">
 		<h1>March 1 2014 - Week 96 &amp; 97</h1>
-		working on api calls for CCURL submission
+		<p>
+			Working on api calls  <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1045" target="_blank">#1045</a> for CCURL submission
+
+			<img width="300" src="https://cloud.githubusercontent.com/assets/196199/4278590/824cb666-3d19-11e4-8d1b-da865772ce88.png"/>
+		</p>
 	</div>
 	<div class="well">
 		<h1>Feb 15 2014 - Week 94 &amp; 95</h1>
@@ -75,10 +415,26 @@
 		In the prototype fixed the export order, by fixing the data list order, and by making search chronological... 
 
 		added a new tempate for claires field methods group, refactored the spreadsheet app to have one file that converted the datum in to a spreadsheet datum but the session got lost in some context, had to deploy anyway since claires group needed it. found bugs, reverted, made a seperate for yale and then babysit the server logs  to make sure they were okay. found out htey are using at least 2 ipads in class which means we should start testing on ipads... 
+
+		<h2>Export in any format using map reduces</h2>
+		<p>
+			This week we got some good requests from field methods instructors (to make word lists, and to find the most recently commented datum) so we made a video showing how power users can infact do anything with the export or queries of their database using Futon.
+
+			<iframe width="420" height="315" src="//www.youtube.com/embed/t7l_2GRumLs" frameborder="0" allowfullscreen></iframe>
+		</p>
 	</div>
 	<div class="well">
 		<h1>Jan 18 2014 - Week 90 &amp; 91</h1>
 	lots of tweeks for word lists and other useful exports
+
+	<h2>How to collaborate using comments</h2>
+	<p>
+		This week @louisa-bielig demoed how field methods teams can talk to eachother using comments (rather than editing eachoters data and stepping on eachother's toes or avoiding editing data at all.)
+
+		<br/>
+		<iframe width="560" height="315" src="//www.youtube.com/embed/U6fvGxm7LoU?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+
+	</p>
 	</div>
 	<div class="well">
 		<h1>Jan 4 2014 - Week 88 &amp; 89</h1>
@@ -103,16 +459,22 @@
 	</div>
 	<div class="well">
 		<h1>Sept 28 2013 - Week 74 &amp; 75</h1>
+
+		<p>	
+				This week @louisa-bielig made a video searching for word final morphemes (and other regular expresssions) in her inuktitut corpus for her <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/SupplementingFieldWorkWithCorpora.tex" target="_blank">independant study.</a>
+			<br/>
+			<iframe width="560" height="315" src="//www.youtube.com/embed/yRvaK2S7Vhw?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT" frameborder="0" allowfullscreen></iframe>
+		</p>
 	</div>
 	<div class="well">
 		<h1>Sept 14 2013 - Week 72 &amp; 73</h1>
-	</div> -->
+	</div> 
 	<div class="well">
 		<h1>Aug 31 2013 - Week 70 &amp; 71</h1>
 
 		<h2>Automatically generate LaTeX trees</h2>
 		<p>
-			Back in May @louisa-belig was working on a recursive function that could generate bracketing for bare structure trees (you can add the nodes labeles to your taste) using QTree. This week we got together and put it into the app! Now when you leave the morphemes field, if you dont already have a syntactic tree it will generate a left, right and mixed branching tree for you! You can edit the trees, if they are already there they wont be overwritten. If you want fresh trees, just empty the syntactic tree field and it will be regenerated the next time you leave the morphemes line. To export your data in LaTex, as always, you can click on the LaTeX button on datalists or on individual datum. Eventually we might add a server side process to generate your LaTeX pdf for you so you can see the result immediately (this will be helpful if you are crafting your own trees). You can put any valid LaTeX code in fields which contain the keyword "latex" (or LaTeX or Latex etc). This means you can add your own custom fields that are LaTeX source code if you want. <a href="http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=560798_BetylxsMdl0i" target="_blank">You can use Halle-Wittenberg University's online LaTeX compiler if you dont have one</a> setup on your computer. 
+			Back in May @louisa-bielig was working on a recursive function that could generate bracketing for bare structure trees (you can add the nodes labeles to your taste) using QTree. This week we got together and put it into the app! Now when you leave the morphemes field, if you dont already have a syntactic tree it will generate a left, right and mixed branching tree for you! You can edit the trees, if they are already there they wont be overwritten. If you want fresh trees, just empty the syntactic tree field and it will be regenerated the next time you leave the morphemes line. To export your data in LaTex, as always, you can click on the LaTeX button on datalists or on individual datum. Eventually we might add a server side process to generate your LaTeX pdf for you so you can see the result immediately (this will be helpful if you are crafting your own trees). You can put any valid LaTeX code in fields which contain the keyword "latex" (or LaTeX or Latex etc). This means you can add your own custom fields that are LaTeX source code if you want. <a href="http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=560798_BetylxsMdl0i" target="_blank">You can use Halle-Wittenberg University's online LaTeX compiler if you dont have one</a> setup on your computer. 
 		</p>
 
 
@@ -157,7 +519,7 @@
 
 		<h2>Search your corpus serverside</h2>
 		<p>
-			For the past few weeks @jdhorner has been integrating ElasticSearch as a backend for our Lexicon webservices. This will make it possible to index and search huge corpora. ElasticSearch is designed to run on many machines, in many data centers. It is possible to "shard" your data so that the load of searching your corpus is distributed. None of the corpora have gotten this big yet, but for her internship in the fall @louisa-belig will be working on importing websites into her database which means the data will be too big to search client side. 
+			For the past few weeks @jdhorner has been integrating ElasticSearch as a backend for our Lexicon webservices. This will make it possible to index and search huge corpora. ElasticSearch is designed to run on many machines, in many data centers. It is possible to "shard" your data so that the load of searching your corpus is distributed. None of the corpora have gotten this big yet, but for her internship in the fall @louisa-bielig will be working on importing websites into her database which means the data will be too big to search client side. 
 		</p>
 
 		<p>
