@@ -76,7 +76,9 @@ CORS.makeCORSRequest = function(options) {
   if (!xhr) {
     this.bug("CORS not supported, your browser is unable to contact the database.");
     Q.nextTick(function() {
-      deferred.reject("CORS not supported, your browser is unable to contact the database.");
+      deferred.reject({
+        userFriendlyErrors: ["CORS not supported, your browser is unable to contact the database."]
+      });
     });
     return deferred.promise;
   }
@@ -124,6 +126,7 @@ CORS.makeCORSRequest = function(options) {
       } catch (e) {
         self.debug("response was json", e);
       }
+      response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
       deferred.reject(response);
       return;
     }
@@ -137,6 +140,8 @@ CORS.makeCORSRequest = function(options) {
     } else {
       self.bug("There was no content in the server's response text. Please report this.");
       self.warn(e, f, g);
+      e.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
+
       deferred.reject(e);
     }
     // self.debugMode = false;
@@ -164,7 +169,7 @@ CORS.makeCORSRequest = function(options) {
     }
     deferred.reject(returnObject);
   };
-  try {
+  try {s
     if (options.data) {
       self.debug("sending ", options.data);
       xhr.send(options.data);
