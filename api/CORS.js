@@ -145,7 +145,24 @@ CORS.makeCORSRequest = function(options) {
   xhr.onerror = function(e, f, g) {
     self.debug(e, f, g);
     self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
-    deferred.reject(e);
+    var returnObject = {
+      userFriendlyErrors: "There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.",
+      status: null,
+      error: e
+    };
+    if (e && e.userFriendlyErrors) {
+      returnObject.userFriendlyErrors = e.userFriendlyErrors;
+    }
+    if (e && e.status) {
+      returnObject.status = e.status;
+    }
+    if (e && e.srcElement && e.srcElement.status !== undefined) {
+      returnObject.status = e.srcElement.status;
+    }
+    if (returnObject.status === 0) {
+      returnObject.userFriendlyErrors = ["Unable to contact the server, are you sure you're not offline?"];
+    }
+    deferred.reject(returnObject);
   };
   try {
     if (options.data) {
