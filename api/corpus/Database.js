@@ -14,7 +14,7 @@ var Database = function Database(options) {
 };
 
 var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";
-var DEFAULT_BASE_AUTH_URL = "https://localhost:3181";
+var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {

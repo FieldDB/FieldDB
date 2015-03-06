@@ -42,11 +42,11 @@ var app = angular.module("fielddbAngularApp", [
       },
       contextualizer: new FieldDB.Contextualizer().loadDefaults(),
       online: true,
-      apiURL: "https://localhost:3181/v2/",
+      apiURL: "https://localhost:3183",
       offlineCouchURL: "https://localhost:6984",
       brand: "LingSync",
-      website: "http://lingsync.org",
-      basePathname: "/",
+      website: "http://example.org",
+      basePathname: window.location.origin+ "/#/",
     });
     if (window.location.pathname.indexOf("android_asset") > -1) {
       fieldDBApp.basePathname = window.location.pathname;
