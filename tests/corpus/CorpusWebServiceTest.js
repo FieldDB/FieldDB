@@ -30,7 +30,7 @@ var runCORSTests = function(whichServer) {
         },
         centralAPI: {
           connected: false,
-          url: "http://localhost:3181/v2",
+          url: "http://localhost:3183",
           fieldDBUser: null
         }
       };

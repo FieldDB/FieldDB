@@ -16,7 +16,7 @@ FieldDBConnection.connection = {
   },
   centralAPI: {
     connected: false,
-    url: "https://localhost:3181/v2",
+    url: "https://localhost:3183",
     fieldDBUser: null
   }
 };

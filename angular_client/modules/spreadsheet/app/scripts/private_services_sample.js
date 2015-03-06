@@ -47,7 +47,7 @@ angular.module('spreadsheetApp')
         if (FieldDB && FieldDB.Database) {
           if ("localhost" === label) {
             FieldDB.Database.prototype.BASE_DB_URL = "https://localhost:6984";
-            FieldDB.Database.prototype.BASE_AUTH_URL = "https://localhost:3181";
+            FieldDB.Database.prototype.BASE_AUTH_URL = "https://localhost:3183";
             FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://localhost:3184";
           } else {
             FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
