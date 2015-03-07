@@ -1,4 +1,6 @@
+/* globals localStorage */
 var User = require("../../api/user/User").User;
+var USERTEMPLATE = require("./../../sample_data/user_v1.22.1.json");
 
 describe("User ", function() {
 
@@ -68,7 +70,7 @@ describe("User ", function() {
     u.lastname = "Smith";
 
     var result = u.toJSON("complete");
-    expect(result).toEqual( {
+    expect(result).toEqual({
       fieldDBtype: "User",
       username: "",
       dateCreated: u.dateCreated,
@@ -91,6 +93,45 @@ describe("User ", function() {
       email: "invalidemail@hi"
     });
     expect(u.email).toEqual("");
+  });
+
+
+  describe("Client side user preferences", function() {
+
+    it("should be able to save the user's prefs for the next app load", function() {
+      var user = new User(JSON.parse(JSON.stringify(USERTEMPLATE)));
+      expect(user).toBeDefined();
+      user.save();
+
+      var sapirKey,
+        sapirFromStorage;
+      try {
+        sapirKey = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir";
+        sapirFromStorage = localStorage.getItem(sapirKey);
+      } catch (e) {
+        expect(user.temp).toBeDefined();
+        var thereIsAKeyForSapir = false;
+        for (var key in user.temp) {
+          if (user.temp.hasOwnProperty(key) && key.indexOf("sapir") > -1) {
+            thereIsAKeyForSapir = true;
+          }
+        }
+        expect(thereIsAKeyForSapir).toBeTruthy();
+        sapirKey = user.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir";
+        sapirFromStorage = user.temp[key];
+      }
+      expect(sapirKey).toBeDefined();
+      expect(sapirFromStorage).toBeDefined();
+      expect(sapirFromStorage.indexOf("confidential")).toEqual(0);
+
+      var userTheNextAppLoad = new User({
+        username: "sapir"
+      });
+      userTheNextAppLoad.fetch();
+      expect(user.researchInterest).toEqual("Phonemes");
+
+    });
+
   });
 
 });
