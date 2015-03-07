@@ -1,4 +1,6 @@
+/* globals localStorage */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var MD5 = require("MD5");
 
 /**
@@ -56,7 +58,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       gravatar: "",
       researchInterests: "",
       affiliation: "",
-      description: ""
+      description: "",
+      corpuses: ""
     }
   },
 
@@ -75,6 +78,15 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         value = "";
       }
       this._username = value.trim();
+    }
+  },
+
+  corpora: {
+    get: function() {
+      return this.corpuses;
+    },
+    set: function(value) {
+      this.corpuses = value;
     }
   },
 
@@ -276,7 +288,95 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
       return validation;
     }
+  },
+
+
+  save: {
+    value: function(options) {
+      this.debug("Customizing save ", options);
+      var key,
+        userKey,
+        encryptedUserPreferences;
+
+      try {
+        // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
+        key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
+        if (!key) {
+          key = Confidential.secretKeyGenerator();
+          localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
+        }
+      } catch (e) {
+        this.temp = this.temp || {};
+        key = this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+        if (!key) {
+          key = Confidential.secretKeyGenerator();
+          this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
+        }
+        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+      }
+      userKey = key + this.username;
+      encryptedUserPreferences = new Confidential({
+        secretkey: userKey
+      }).encrypt(this.toJSON());
+
+      try {
+        localStorage.setItem(userKey, encryptedUserPreferences);
+      } catch (e) {
+        this.temp = this.temp || {};
+        this.temp[userKey] = encryptedUserPreferences;
+        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+      }
+      // return FieldDBObject.prototype.save.apply(this, arguments);
+    }
+  },
+
+  fetch: {
+    value: function(options) {
+      this.debug("Customizing fetch ", options);
+      var key,
+        userKey,
+        encryptedUserPreferences,
+        decryptedUser = {};
+      try {
+        // fetch the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
+        key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
+      } catch (e) {
+        this.temp = this.temp || {};
+        key = this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+      }
+      if (!key) {
+        console.log("cannot fetch user locally");
+        return;
+      }
+      userKey = key + this.username;
+      try {
+        encryptedUserPreferences = localStorage.getItem(userKey);
+
+      } catch (e) {
+        if (!this.temp) {
+          console.log("no local users have been saved");
+          return;
+        }
+        encryptedUserPreferences = this.temp[userKey];
+      }
+      decryptedUser = {};
+      if (encryptedUserPreferences) {
+        this.debug("This user hasnt used this device before, need to request their prefs when they login.");
+        return;
+      }
+      decryptedUser = new Confidential({
+        secretkey: userKey
+      }).decrypt(encryptedUserPreferences);
+
+      this.debug(" Opening user prefs from previous session", decryptedUser);
+      this.debug(" Opening current permissions from current corpus server", this);
+      this.merge(decryptedUser);
+      // FieldDBObject.prototype.fetch.apply(this, arguments);
+
+    }
   }
+
 });
 
 exports.UserMask = UserMask;
