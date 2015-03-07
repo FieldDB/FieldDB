@@ -320,6 +320,11 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         userKey,
         encryptedUserPreferences;
 
+      if (!this._rev) {
+        this.warn("Refusing to save a user doc which is incomplete, and doesn't have a rev");
+        return;
+      }
+
       try {
         // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
         key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
@@ -328,11 +333,11 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
           localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
         }
       } catch (e) {
-        this.temp = this.temp || {};
-        key = this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+        key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
         if (!key) {
           key = Confidential.secretKeyGenerator();
-          this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
+          this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
         }
         this.warn("unable to use local storage, this app wont be very usable offline ", e);
       }
@@ -344,8 +349,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       try {
         localStorage.setItem(userKey, encryptedUserPreferences);
       } catch (e) {
-        this.temp = this.temp || {};
-        this.temp[userKey] = encryptedUserPreferences;
+        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+        this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
         this.warn("unable to use local storage, this app wont be very usable offline ", e);
       }
       // return FieldDBObject.prototype.save.apply(this, arguments);
@@ -363,8 +368,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         // fetch the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
         key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
       } catch (e) {
-        this.temp = this.temp || {};
-        key = this.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+        key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
         this.warn("unable to use local storage, this app wont be very usable offline ", e);
       }
       if (!key) {
@@ -376,11 +381,11 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         encryptedUserPreferences = localStorage.getItem(userKey);
 
       } catch (e) {
-        if (!this.temp) {
+        if (!this.constructor.prototype.temp) {
           console.log("no local users have been saved");
           return;
         }
-        encryptedUserPreferences = this.temp[userKey];
+        encryptedUserPreferences = this.constructor.prototype.temp[userKey];
       }
       decryptedUser = {};
       if (encryptedUserPreferences) {

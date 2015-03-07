@@ -150,16 +150,16 @@ describe("User ", function() {
         sapirKey = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir";
         sapirFromStorage = localStorage.getItem(sapirKey);
       } catch (e) {
-        expect(user.temp).toBeDefined();
+        expect(user.constructor.prototype.temp).toBeDefined();
         var thereIsAKeyForSapir = false;
-        for (var key in user.temp) {
-          if (user.temp.hasOwnProperty(key) && key.indexOf("sapir") > -1) {
+        for (var key in user.constructor.prototype.temp) {
+          if (user.constructor.prototype.temp.hasOwnProperty(key) && key.indexOf("sapir") > -1) {
             thereIsAKeyForSapir = true;
           }
         }
         expect(thereIsAKeyForSapir).toBeTruthy();
         sapirKey = user.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir";
-        sapirFromStorage = user.temp[key];
+        sapirFromStorage = user.constructor.prototype.temp[key];
       }
       expect(sapirKey).toBeDefined();
       expect(sapirFromStorage).toBeDefined();
