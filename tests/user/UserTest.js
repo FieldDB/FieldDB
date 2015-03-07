@@ -1,6 +1,6 @@
 /* globals localStorage */
 var User = require("../../api/user/User").User;
-var SAMPLE_USER = require("./../../sample_data/user_v1.22.1.json");
+var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 
 describe("User ", function() {
 
@@ -99,9 +99,9 @@ describe("User ", function() {
 
 
     it("should update old servers", function() {
-      expect(SAMPLE_USER.appVersionWhenCreated).toEqual("1.22.1");
-      expect(SAMPLE_USER.authUrl).toEqual("https://authdev.fieldlinguist.com:3183");
-      expect(SAMPLE_USER.corpuses).toEqual([{
+      expect(SAMPLE_USERS[0].appVersionWhenCreated).toEqual("1.22.1");
+      expect(SAMPLE_USERS[0].authUrl).toEqual("https://authdev.fieldlinguist.com:3183");
+      expect(SAMPLE_USERS[0].corpuses).toEqual([{
         protocol: "https://",
         domain: "ifielddevs.iriscouch.com",
         port: "443",
@@ -115,7 +115,7 @@ describe("User ", function() {
         corpusid: "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1"
       }]);
 
-      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USER)));
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
       expect(user.authUrl).toEqual("https://authdev.lingsync.org");
       expect(user.corpora).toEqual([{
         protocol: "https://",
@@ -140,7 +140,7 @@ describe("User ", function() {
   describe("Client side user preferences", function() {
 
     it("should be able to save the user's prefs for the next app load", function() {
-      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USER)));
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
       expect(user).toBeDefined();
       user.save();
 
