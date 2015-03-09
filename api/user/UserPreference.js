@@ -139,6 +139,27 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       }
       this._unicodes = value;
     }
+  },
+
+  numVisibleDatum: {
+    get: function() {
+      return this._numVisibleDatum || 10;
+    },
+    set: function(value) {
+      if (value === this._numVisibleDatum) {
+        return;
+      }
+      if (!value) {
+        delete this._numVisibleDatum;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      value = parseInt(value, 10);
+      this._numVisibleDatum = value;
+    }
   }
 
 });
