@@ -170,7 +170,7 @@ CORS.makeCORSRequest = function(options) {
     }
     deferred.reject(returnObject);
   };
-  try {s
+  try {
     if (options.data) {
       self.debug("sending ", options.data);
       xhr.send(options.data);

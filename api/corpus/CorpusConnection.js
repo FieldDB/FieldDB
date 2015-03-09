@@ -131,7 +131,7 @@ var CorpusConnection = function(appVersion, defaultCorpusConnection, Diacritics)
       throw new Error(dbnameValidationResults.changes.join("\n "));
     }
     var pieces = optionalRequestedCorpusConnection.dbname.split("-");
-    if (pieces.length != 2) {
+    if (pieces.length !== 2) {
       throw new Error("Database names should be composed of a username-datbaseidentifier" + optionalRequestedCorpusConnection.dbname);
     }
     var username = pieces[0];

@@ -838,7 +838,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
         this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
 
-
+        /* jshint eqeqeq:false */
         if (anObject[aproperty] == anotherObject[aproperty]) {
           this.debug(aproperty + " were equal or had no conflict.");
           if (resultObject[aproperty] != anObject[aproperty]) {
@@ -882,6 +882,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           resultObject[aproperty] = anObject[aproperty].concat([]);
 
           // only add the ones that were missing (dont remove any. merge wont remove stuff, only add.)
+          /* jshint loopfunc:true */
           anotherObject[aproperty].map(function(item) {
             if (resultObject[aproperty].indexOf(item) === -1) {
               resultObject[aproperty].push(item);
