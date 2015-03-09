@@ -467,7 +467,6 @@ define([
       var activityConnection = OPrime.defaultCouchConnection();
       activityConnection.pouchname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
-      // dataToPost.gravatar = "user/user_gravatar.png";
       var u = new UserMask();
       dataToPost.gravatar = u.getGravatar(dataToPost.email);
       if (dataToPost.username != ""

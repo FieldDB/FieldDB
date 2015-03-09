@@ -116,7 +116,7 @@ define([
       username : "",
       password : "",
       email : "",
-      gravatar : "user/user_gravatar.png",
+      gravatar : "0df69960706112e38332395a4f2e7542",
       researchInterest : "",
       affiliation : "",
       description : "",
