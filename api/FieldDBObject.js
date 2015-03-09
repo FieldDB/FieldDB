@@ -139,7 +139,8 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "contextualizer",
   "perObjectDebugMode",
   "perObjectAlwaysConfirmOkay",
-  "useIdNotUnderscore"
+  "useIdNotUnderscore",
+  "parent"
 ];
 
 FieldDBObject.software = {};
@@ -1184,7 +1185,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
+        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
           underscorelessProperty = aproperty.replace(/^_/, "");
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;
