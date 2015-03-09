@@ -1,4 +1,5 @@
 var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
+var CorpusConnections = require("../../api/corpus/CorpusConnections").CorpusConnections;
 
 describe("CorpusMask ", function() {
 
@@ -10,8 +11,8 @@ describe("CorpusMask ", function() {
     var corpus = new CorpusMask();
     corpus.title = "Private corpus";
     expect(corpus.titleAsUrl).toEqual("private_corpus");
-    corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
-    expect(corpus.titleAsUrl).toEqual("internationalization");
+    corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ Of Quechua";
+    expect(corpus.titleAsUrl).toEqual("internationalization_of_quechua");
 
   });
 
@@ -36,8 +37,29 @@ describe("CorpusMask ", function() {
       termsOfUse: {},
       license: {},
       copyright: "",
-      replicatedCorpusUrls: [],
-      olacExportConnections: [],
+      corpusConnection: {
+        fieldDBtype: "CorpusConnection",
+        dateCreated: corpusJson.corpusConnection.dateCreated,
+        version: currentVersion,
+        corpusid: "",
+        titleAsUrl: "",
+        dbname: "",
+        pouchname: "",
+        protocol: "",
+        domain: "",
+        port: "",
+        path: "",
+        userFriendlyServerName: "",
+        authUrls: [],
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        title: '',
+        corpusUrl: ''
+      },
       publicCorpus: "",
       validationStati: [],
       tags: [],
@@ -52,9 +74,9 @@ describe("CorpusMask ", function() {
     });
   });
 
-
   it("should be able to have defaults", function() {
     var corpus = new CorpusMask(CorpusMask.prototype.defaults);
+    corpus.dbname = "jenkins-anothercorpus";
     expect(corpus.title).toEqual("Private Corpus");
     expect(corpus.titleAsUrl).toEqual("private_corpus");
     expect(corpus.description).toEqual("The details of this corpus are not public.");
@@ -63,8 +85,11 @@ describe("CorpusMask ", function() {
       longitude: 0,
       accuracy: 0
     });
-    expect(corpus.replicatedCorpusUrls).toEqual([]);
-    expect(corpus.olacExportConnections).toEqual([]);
+
+    expect(corpus.corpusConnection.dbname).toEqual("jenkins-anothercorpus");
+    expect(corpus.corpusConnection.titleAsUrl).toEqual("private_corpus");
+    expect(corpus.corpusConnection.owner).toEqual("jenkins");
+
     expect(corpus.termsOfUse).toEqual({
       "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
     });
@@ -96,5 +121,55 @@ describe("CorpusMask ", function() {
     expect(corpus.speakerFields.anonymouscode.labelNonLinguists).toEqual("Anonymous Code");
 
   });
+
+  describe("corpus collections", function() {
+
+    it("should be able to extract a connection from a mask", function() {
+      expect(CorpusConnections).toBeDefined();
+      var corpora = new CorpusConnections();
+      expect(corpora).toBeDefined();
+
+      var corpus = new CorpusMask(CorpusMask.prototype.defaults);
+      corpus.title = "Group Data Entry tutorial";
+      corpus.corpusConnection = {
+        "protocol": "https://",
+        "domain": "corpus.example.org",
+        "port": "443",
+        "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
+        "path": "",
+        "authUrl": "https://auth.example.org",
+        "userFriendlyServerName": "Example.org",
+        "corpusid": "",
+        "title": "computatio..._entry_tutoria",
+        "description": "The details of this corpus are not public.",
+        "titleAsUrl": "computatio____entry_tutoria"
+      };
+      var connection = corpus.corpusConnection;
+
+      expect(connection.toJSON().title).toEqual(corpus.title);
+      expect(connection.toJSON().pouchname).toEqual(corpus.pouchname);
+      expect(connection.toJSON().dbname).toEqual(corpus.pouchname);
+
+      expect(connection.toJSON()).toEqual({
+        fieldDBtype: 'CorpusConnection',
+        protocol: 'https://',
+        domain: 'corpus.example.org',
+        port: '443',
+        dbname: '',
+        path: '',
+        authUrl: 'https://auth.example.org',
+        userFriendlyServerName: 'Example.org',
+        corpusid: '',
+        title: 'Group Data Entry tutorial',
+        description: 'The details of this corpus are not public.',
+        titleAsUrl: 'group_data_entry_tutorial',
+        version: 'v2.42.11',
+        pouchname: '',
+        corpusUrl: ''
+      });
+      // connections.push(connection.toJSON("complete"));
+
+    });
+  })
 
 });

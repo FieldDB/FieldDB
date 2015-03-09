@@ -82,7 +82,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       researchInterests: "",
       affiliation: "",
       description: "",
-      corpuses: ""
+      corpuses: []
     }
   },
 
