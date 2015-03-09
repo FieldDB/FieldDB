@@ -451,18 +451,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
-  dbname: {
-    get: function() {
-      if (this._dbname) {
-        this._dbname.parent = this;
-      }
-      return this._dbname;
-    },
-    set: function(value) {
-      this._dbname = value;
-    }
-  },
-
   pouchname: {
     get: function() {
       return this.dbname;
