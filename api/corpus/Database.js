@@ -3,6 +3,7 @@
 var Q = require("q");
 var CORS = require("../CORS").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
+// var User = require("../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
 var Database = function Database(options) {
@@ -237,7 +238,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
         self.connectionInfo = sessionInfo;
-        deferred.resolve(sessionInfo);
+
+        // var user = new User({
+        //   username: sessionInfo.userCtx.name
+        // }).fetch();
+
+        deferred.resolve({
+          username: sessionInfo.userCtx.name,
+          roles: sessionInfo.userCtx.roles
+        });
       }, function(reason) {
         deferred.reject(reason);
       });
@@ -410,7 +419,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url,
-        authUrl = this.authUrl;
+        authUrl = loginDetails.authUrl || this.authUrl;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
@@ -548,25 +557,14 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: authUrl + "/register",
         data: registerDetails
       }).then(function(result) {
-          if (result.user) {
-            CORS.makeCORSRequest({
-              type: "POST",
-              dataType: "json",
-              url: baseUrl + "/_session",
-              data: {
-                name: result.user.username,
-                password: registerDetails.password
-              }
-            }).then(function(session) {
-              self.debug(session);
-              deferred.resolve(result.user);
-            }, function() {
-              self.debug("Failed to login ");
-              deferred.reject();
-            });
-          } else {
-            deferred.reject();
-          }
+          self.debug("registration results", result);
+          self.login(registerDetails).then(function(result) {
+            deferred.resolve(result);
+          }, function(error) {
+            self.debug("Failed to login ");
+            deferred.reject(error);
+          });
+
         },
         function(reason) {
           self.debug(reason);
@@ -576,6 +574,73 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         deferred.reject(reason);
       });
       return deferred.promise;
+    }
+  },
+
+
+
+  addCorpusRoleToUser: {
+    value: function(role, userToAddToCorpus, successcallback, failcallback) {
+      this.debug("deprecated ", role, userToAddToCorpus, successcallback, failcallback);
+      // var self = this;
+      // $("#quick-authenticate-modal").modal("show");
+      // if (this.user.username === "lingllama") {
+      //   $("#quick-authenticate-password").val("phoneme");
+      // }
+      // window.hub.subscribe("quickAuthenticationClose", function() {
+
+      //   //prepare data and send it
+      //   var dataToPost = {};
+      //   var authUrl = "";
+      //   if (this.user !== undefined) {
+      //     //Send username to limit the requests so only valid users can get a user list
+      //     dataToPost.username = this.user.username;
+      //     dataToPost.password = $("#quick-authenticate-password").val();
+      //     dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
+      //     if (!dataToPost.couchConnection.path) {
+      //       dataToPost.couchConnection.path = "";
+      //       window.app.get("corpus").get("couchConnection").path = "";
+      //     }
+      //     dataToPost.roles = [role];
+      //     dataToPost.userToAddToRole = userToAddToCorpus.username;
+
+      //     authUrl = this.user.authUrl;
+      //   } else {
+      //     return;
+      //   }
+      //   CORS.makeCORSRequest({
+      //     type: "POST",
+      //     url: authUrl + "/addroletouser",
+      //     data: dataToPost,
+      //     success: function(serverResults) {
+      //       if (serverResults.userFriendlyErrors !== null) {
+      //         self.debug("User " + userToAddToCorpus.username + " not added to the corpus as " + role);
+      //         if (typeof failcallback === "function") {
+      //           failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+      //         }
+      //       } else if (serverResults.roleadded !== null) {
+      //         self.debug("User " + userToAddToCorpus.username + " added to the corpus as " + role);
+      //         if (typeof successcallback === "function") {
+      //           successcallback(userToAddToCorpus);
+      //         }
+      //       }
+      //     }, //end successful fetch
+      //     error: function(e) {
+      //       self.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+
+      //       if (typeof failcallback === "function") {
+      //         failcallback("There was an error in contacting the authentication server to add " + userToAddToCorpus.username + " on your corpus team. Maybe you're offline?");
+      //       }
+      //     },
+      //     dataType: ""
+      //   });
+      //   //end send call
+
+      //   //Close the modal
+      //   $("#quick-authenticate-modal").modal("hide");
+      //   $("#quick-authenticate-password").val("");
+      //   window.hub.unsubscribe("quickAuthenticationClose", null, this);
+      // }, self);
     }
   }
 });
