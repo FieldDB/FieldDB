@@ -1,5 +1,3 @@
-/* globals localStorage, FieldDB*/
-
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
 // var UserMask = require("./../user/UserMask").UserMask;
@@ -26,30 +24,7 @@ var Authentication = function Authentication(options) {
   }
   this.debug("Constructing a Authentication " + options);
 
-  var key,
-    self = this;
-
-  try {
-    // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
-    key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
-    if (!key) {
-      key = Confidential.secretKeyGenerator();
-      localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
-    }
-  } catch (e) {
-    key = this.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-    if (!key) {
-      key = Confidential.secretKeyGenerator();
-      this.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
-    }
-    self.warn("unable to use local storage, this app wont be very usable offline ", e);
-  }
-  options = options || {};
-  if (!options.confidential || !options.confidential.secretkey) {
-    options.confidential = new Confidential({
-      secretkey: key
-    });
-  }
+  var self = this;
 
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
     self.debug(user);
@@ -173,7 +148,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
   logout: {
     value: function(options) {
-      return FieldDB.Database.prototype.logout(options);
+      return Database.prototype.logout(options);
     }
   },
 
