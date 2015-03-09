@@ -213,7 +213,10 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         this.debug("Setting the user");
         this._user = new User(value);
       }
-      this._user.save();
+      var self = this;
+      this._user.save().then(function() {
+        self.debug("Saved user ");
+      });
       this._user.render();
 
     }
