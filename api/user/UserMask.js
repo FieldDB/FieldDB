@@ -379,7 +379,6 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       userKey = key + this.username;
       try {
         encryptedUserPreferences = localStorage.getItem(userKey);
-
       } catch (e) {
         if (!this.constructor.prototype.temp) {
           this.warn("no local users have been saved");
@@ -388,8 +387,10 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         encryptedUserPreferences = this.constructor.prototype.temp[userKey];
       }
       decryptedUser = {};
-      if (encryptedUserPreferences) {
-        this.warn("This user hasnt used this device before, need to request their prefs when they login.");
+      if (!encryptedUserPreferences) {
+        this.warn("This user " + this.username + " hasnt used this device before, need to request their prefs when they login.");
+        this.debug("userKey is " + userKey);
+        this.debug("user encrypted is " + this.constructor.prototype.temp[userKey]);
         return;
       }
       decryptedUser = new Confidential({
@@ -397,7 +398,10 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }).decrypt(encryptedUserPreferences);
 
       this.debug(" Opening user prefs from previous session on this device", decryptedUser);
-      this.merge(decryptedUser);
+      if (!this._rev) {
+        overwriteOrNot = "overwrite";
+      }
+      this.merge("self", decryptedUser, overwriteOrNot);
       // FieldDBObject.prototype.fetch.apply(this, arguments);
       return this;
     }
