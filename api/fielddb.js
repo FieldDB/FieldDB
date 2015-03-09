@@ -42,6 +42,7 @@
   var Participant = require("./user/Participant").Participant;
   var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
+  var CorpusConnection = require("./corpus/CorpusConnection").CorpusConnection;
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
@@ -81,6 +82,7 @@
   FieldDB.Contextualizer = Contextualizer;
   FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
+  FieldDB.CorpusConnection = CorpusConnection;
   FieldDB.Import = Import;
   FieldDB.Search = Search;
   FieldDB.Q = Q;

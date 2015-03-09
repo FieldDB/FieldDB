@@ -1,5 +1,6 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Database = require("./Database").Database;
+var CorpusConnection = require("./CorpusConnection").CorpusConnection;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var DatumStates = require("./../datum/DatumStates").DatumStates;
 var DatumTags = require("./../datum/DatumTags").DatumTags;
@@ -43,10 +44,8 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *           of roughly where the data is from.
  * @property {String} remote The url of the remote eg:
  *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
- * @property {Array} couchConnections The url of couch remote(s) where the
- *           corpus is replicated or backed up.
- * @property {Array} olacConnections The url of OLAC remote(s) where the corpus
- *           is archived or published.
+ * @property {Array} corpusConnections The url of remote server(s) where the
+ *           corpus is replicated or backed up as well as other connections it is connected to.
  *
  * @property {Array} members Collection of public browsable/search engine
  *           discoverable members associated to the corpus
@@ -187,8 +186,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       termsOfUse: FieldDBObject.DEFAULT_OBJECT,
       license: FieldDBObject.DEFAULT_OBJECT,
       copyright: FieldDBObject.DEFAULT_STRING,
-      replicatedCorpusUrls: FieldDBObject.DEFAULT_ARRAY,
-      olacExportConnections: FieldDBObject.DEFAULT_ARRAY,
+      corpusConnection: CorpusConnection,
+      // olacExportConnections: FieldDBObject.DEFAULT_ARRAY,
       publicCorpus: FieldDBObject.DEFAULT_STRING,
       confidential: Confidential,
 
@@ -425,7 +424,55 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       this.warn("preferredTemplate is deprecated, please use preferredDatumTemplate instead.");
       this.preferredDatumTemplate = value;
     }
+  },
+
+  corpusConnection: {
+    get: function() {
+      if (this._corpusConnection) {
+        this._corpusConnection.parent = this;
+      }
+      return this._corpusConnection;
+    },
+    set: function(value) {
+      if (Object.prototype.toString.call(value) === "[object Object]") {
+        value = new this.INTERNAL_MODELS["corpusConnection"](value);
+      }
+      this._corpusConnection = value;
+      this._corpusConnection.parent = this;
+    }
+  },
+
+  couchConnection: {
+    get: function() {
+      return this.corpusConnection;
+    },
+    set: function(value) {
+      this.corpusConnection = value;
+    }
+  },
+
+  dbname: {
+    get: function() {
+      if (this._dbname) {
+        this._dbname.parent = this;
+      }
+      return this._dbname;
+    },
+    set: function(value) {
+      this._dbname = value;
+    }
+  },
+
+  pouchname: {
+    get: function() {
+      return this.dbname;
+    },
+    set: function(value) {
+      this.dbname = value;
+    }
   }
+
+
 
 });
 exports.CorpusMask = CorpusMask;
