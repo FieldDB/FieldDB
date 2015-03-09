@@ -25,7 +25,7 @@ describe("Database", function() {
       db.get("D093j2ae-akmoi3m-2a3wkjen").then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -39,7 +39,7 @@ describe("Database", function() {
         expect(false).toBeTruthy();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -69,7 +69,7 @@ describe("Database", function() {
       db.resumeAuthenticationSession().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -117,7 +117,7 @@ describe("Database", function() {
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -134,10 +134,10 @@ describe("Database", function() {
         db.logout().then(function() {
           expect(db.session).toBeUndefined();
         }, function(error) {
-          expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
         });
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
   });
@@ -152,7 +152,7 @@ describe("Database", function() {
         expect(false).toBeTruthy();
 
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
   });
