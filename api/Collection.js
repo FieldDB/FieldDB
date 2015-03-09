@@ -788,41 +788,44 @@ Collection.prototype = Object.create(Object.prototype, {
           }
         }
       });
-      anotherCollection._collection.map(function(anotherItem) {
-        var idToMatch = anotherItem[aCollection.primaryKey];
-        var anItem = aCollection[idToMatch];
-        // var resultItem = resultCollection[idToMatch];
+      if (anotherCollection._collection && typeof anotherCollection._collection.map === "function") {
 
-        if (anotherItem !== anotherCollection[idToMatch]) {
-          self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
-        }
+        anotherCollection._collection.map(function(anotherItem) {
+          var idToMatch = anotherItem[aCollection.primaryKey];
+          var anItem = aCollection[idToMatch];
+          // var resultItem = resultCollection[idToMatch];
 
-        if (anItem === undefined) {
-          self.debug(idToMatch + " was missing in target, adding it");
-          var existingInCollection = resultCollection.find(anotherItem);
-          if (existingInCollection.length === 0) {
-            resultCollection.add(anotherItem);
-          } else {
-            anotherItem = existingInCollection[0];
-            self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+          if (anotherItem !== anotherCollection[idToMatch]) {
+            self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
           }
 
-        } else if (anotherItem === undefined) {
-          // no op, the new one isn't set
-          self.debug(idToMatch + " was oddly undefined");
-          resultCollection[idToMatch] = anItem;
-        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
-          // no op, they are equal enough
-          // self.debug(idToMatch + " were equal.", anItem, anotherItem);
-          resultCollection[idToMatch] = anItem;
-        } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
-          self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty anItem.");
-          resultCollection[idToMatch] = anotherItem;
-        } else {
-          // both exist and are not equal, and so have already been merged above.
-          self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
-        }
-      });
+          if (anItem === undefined) {
+            self.debug(idToMatch + " was missing in target, adding it");
+            var existingInCollection = resultCollection.find(anotherItem);
+            if (existingInCollection.length === 0) {
+              resultCollection.add(anotherItem);
+            } else {
+              anotherItem = existingInCollection[0];
+              self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+            }
+
+          } else if (anotherItem === undefined) {
+            // no op, the new one isn't set
+            self.debug(idToMatch + " was oddly undefined");
+            resultCollection[idToMatch] = anItem;
+          } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
+            // no op, they are equal enough
+            // self.debug(idToMatch + " were equal.", anItem, anotherItem);
+            resultCollection[idToMatch] = anItem;
+          } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
+            self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty anItem.");
+            resultCollection[idToMatch] = anotherItem;
+          } else {
+            // both exist and are not equal, and so have already been merged above.
+            self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
+          }
+        });
+      }
 
       return resultCollection;
     }
