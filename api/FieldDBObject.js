@@ -729,7 +729,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         targetPropertyIsEmpty,
         overwrite,
         localCallOnSelf,
-        propertyList = {};
+        propertyList = {},
+        json;
 
       // this.debugMode = true;
 
@@ -816,7 +817,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
           if (anObject[aproperty] !== undefined && anObject[aproperty] !== null) {
             if (typeof anObject[aproperty].constructor === "function") {
-              var json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
+              json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
               resultObject[aproperty] = new anObject[aproperty].constructor(json);
               this.debug(" " + aproperty + " resultObject will have anObject's Cloned contents because it was empty");
             } else {
@@ -825,7 +826,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
             if (typeof anotherObject[aproperty].constructor === "function") {
-              var json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
+              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
               resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
               this.debug(" " + aproperty + " resultObject will have anotherObject's Cloned contents because it was empty");
             } else {
