@@ -57,8 +57,8 @@ describe("CorpusMask ", function() {
         searchUrls: [],
         audioUrls: [],
         activityUrls: [],
-        title: '',
-        corpusUrl: ''
+        title: "",
+        corpusUrl: ""
       },
       publicCorpus: "",
       validationStati: [],
@@ -151,25 +151,25 @@ describe("CorpusMask ", function() {
       expect(connection.toJSON().dbname).toEqual(corpus.pouchname);
 
       expect(connection.toJSON()).toEqual({
-        fieldDBtype: 'CorpusConnection',
-        protocol: 'https://',
-        domain: 'corpus.example.org',
-        port: '443',
-        dbname: '',
-        path: '',
-        authUrl: 'https://auth.example.org',
-        userFriendlyServerName: 'Example.org',
-        corpusid: '',
-        title: 'Group Data Entry tutorial',
-        description: 'The details of this corpus are not public.',
-        titleAsUrl: 'group_data_entry_tutorial',
-        version: 'v2.42.11',
-        pouchname: '',
-        corpusUrl: ''
+        fieldDBtype: "CorpusConnection",
+        protocol: "https://",
+        domain: "corpus.example.org",
+        port: "443",
+        dbname: "",
+        path: "",
+        authUrl: "https://auth.example.org",
+        userFriendlyServerName: "Example.org",
+        corpusid: "",
+        title: "Group Data Entry tutorial",
+        description: "The details of this corpus are not public.",
+        titleAsUrl: "group_data_entry_tutorial",
+        version: "v2.42.11",
+        pouchname: "",
+        corpusUrl: ""
       });
       // connections.push(connection.toJSON("complete"));
 
     });
-  })
+  });
 
 });
