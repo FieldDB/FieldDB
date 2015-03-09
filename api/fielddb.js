@@ -12,6 +12,7 @@
 (function(exports) {
   "use strict";
   var App = require("./app/App").App;
+  var Authentication = require("./authentication/Authentication").Authentication;
   var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
@@ -51,6 +52,7 @@
 
   FieldDB.App = App;
   FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;
+  FieldDB.Authentication = Authentication;
   FieldDB.Export = Export;
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB.Collection = Collection;
