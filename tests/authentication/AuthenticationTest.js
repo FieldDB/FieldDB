@@ -91,13 +91,13 @@ describe("Authentication ", function() {
           auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
         ]);
       // user has default prefs for now
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual('10');
+      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(10);
 
       anotherAuthLoad.user.fetch();
       expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
       // user has their own prefs now
       expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual('2');
+      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
 
     });
 
