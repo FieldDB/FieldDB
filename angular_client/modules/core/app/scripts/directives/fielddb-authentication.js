@@ -20,12 +20,9 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
     } else {
       console.warn("Somethign is wrong, there is no app defined. ");
     }
-    var processUserDetails = function(user) {
-      user.authenticated = true;
-    };
 
     $scope.register = function(loginDetails) {
-      console.warn("TODO use $scope.corpus.register", registerDetails);
+      console.warn("TODO use $scope.corpus.register", loginDetails);
       $scope.application.authentication.register(loginDetails).then(function(user) {
         console.log("User has been downloaded. ", user);
         user = new FieldDB.User(user);
