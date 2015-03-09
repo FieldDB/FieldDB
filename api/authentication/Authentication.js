@@ -29,7 +29,7 @@ var Authentication = function Authentication(options) {
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
     self.debug(user);
     self.user = user;
-    // self.user.fetch();
+    self.user.fetch();
     self.user.openMostRecentDashboard();
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
@@ -106,25 +106,25 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.status = "";
       this.loading = true;
 
-      Database.prototype.login(dataToPost).then(function(serverResults) {
+      Database.prototype.login(dataToPost).then(function(userDetails) {
           self.loading = false;
 
-          if (!serverResults || !serverResults.user) {
+          if (!userDetails) {
             deferred.reject({
-              error: serverResults,
+              error: userDetails,
               status: 500,
-              userFriendlyErrors: "Unknown error. Please report this 2391."
+              userFriendlyErrors: ["Unknown error. Please report this 2391."]
             });
             return;
           }
-          self.user = serverResults;
+          self.user = userDetails;
           self.user.openMostRecentDashboard();
 
           deferred.resolve(self.user);
         }, //end successful login
         function(error) {
           if (!error || !error.userFriendlyErrors) {
-            error.userFriendlyErrors = "Unknown error.";
+            error.userFriendlyErrors = ["Unknown error."];
           }
           self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
           self.error = error.userFriendlyErrors.join(" ");
@@ -188,6 +188,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         this.debug("Setting the user");
         this._user = new User(value);
       }
+
       var self = this;
       this._user.save().then(function() {
         self.debug("Saved user ");
