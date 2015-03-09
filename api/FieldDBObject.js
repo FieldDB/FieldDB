@@ -123,6 +123,24 @@ var FieldDBObject = function FieldDBObject(json) {
   }
 
 };
+FieldDBObject.internalAttributesToNotJSONify = [
+  "temp",
+  "saving",
+  "fetching",
+  "loaded",
+  "loading",
+  "useIdNotUnderscore",
+  "decryptedMode",
+  "bugMessage",
+  "warnMessage",
+  "perObjectDebugMode",
+  "perObjectAlwaysConfirmOkay",
+  "application",
+  "contextualizer",
+  "perObjectDebugMode",
+  "perObjectAlwaysConfirmOkay",
+  "useIdNotUnderscore"
+];
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -788,7 +806,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       for (aproperty in propertyList) {
 
-        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || aproperty === "dateCreated" || aproperty === "_fieldDBtype" || aproperty === "perObjectDebugMode" || aproperty === "perObjectAlwaysConfirmOkay") {
+        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || aproperty === "dateCreated" || aproperty === "_fieldDBtype" || FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) > -1) {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
@@ -860,10 +878,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         //  if two arrays: concat
         if (Object.prototype.toString.call(anObject[aproperty]) === "[object Array]" && Object.prototype.toString.call(anotherObject[aproperty]) === "[object Array]") {
           this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
-          resultObject[aproperty] = anObject[aproperty].concat(anotherObject[aproperty]);
+          resultObject[aproperty] = anObject[aproperty].concat([]);
 
-          //TODO unique it?
-          this.debug("  concatinated arrays", resultObject[aproperty]);
+          // only add the ones that were missing (dont remove any. merge wont remove stuff, only add.)
+          anotherObject[aproperty].map(function(item) {
+            if (resultObject[aproperty].indexOf(item) === -1) {
+              resultObject[aproperty].push(item);
+            }
+          });
+          this.debug("  added members of anotherObject " + aproperty + " to anObject ", resultObject[aproperty]);
           continue;
         }
 
@@ -1199,18 +1222,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
       }
 
-      delete json.temp;
-      delete json.saving;
-      delete json.fetching;
-      delete json.loaded;
-      delete json.useIdNotUnderscore;
-      delete json.decryptedMode;
-      delete json.bugMessage;
-      delete json.warnMessage;
-      delete json.perObjectDebugMode;
-      delete json.perObjectAlwaysConfirmOkay;
-      delete json.application;
-      delete json.contextualizer;
+      for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
+        if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
+          delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+        }
+      }
+
       if (this.collection !== "private_corpuses") {
         delete json.confidential;
         delete json.confidentialEncrypter;

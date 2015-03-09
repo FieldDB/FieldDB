@@ -557,7 +557,7 @@ describe("FieldDBObject", function() {
       aBaseObject = new FieldDBObject({
         externalString: "easy model",
         externalEqualString: "merging",
-        externalArray: ["four"],
+        externalArray: ["four", "two"],
         externalObject: new FieldDBObject({
           internalString: "internal",
           internalTrue: true,
@@ -596,7 +596,7 @@ describe("FieldDBObject", function() {
       expect(resultObject).toBe(aBaseObject);
       expect(aBaseObject.externalString).toEqual("trivial model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(["four", "one", "two", "three"]);
+      expect(aBaseObject.externalArray).toEqual(["four", "two", "one", "three"]);
       expect(aBaseObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
@@ -635,7 +635,7 @@ describe("FieldDBObject", function() {
       expect(aThirdObject).not.toBe(aBaseObject);
       expect(aThirdObject.externalString).toEqual("trivial model");
       expect(aThirdObject.externalEqualString).toEqual("merging");
-      expect(aThirdObject.externalArray).toEqual(["four", "one", "two", "three"]);
+      expect(aThirdObject.externalArray).toEqual(["four", "two", "one", "three"]);
       expect(aThirdObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aThirdObject.externalObject.internalString).toEqual("internal overwrite");
@@ -650,7 +650,7 @@ describe("FieldDBObject", function() {
       // Make sure aBaseObject is as it was
       expect(aBaseObject.externalString).toEqual("easy model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(["four"]);
+      expect(aBaseObject.externalArray).toEqual(["four", "two"]);
       expect(aBaseObject.warnMessage).toBeUndefined();
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal");
