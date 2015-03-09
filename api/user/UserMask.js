@@ -34,9 +34,14 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/", "");
         this._gravatar = existingGravatar;
       } else if (existingGravatar.indexOf("user_gravatar.png") > -1) {
-        this._gravatar = "968b8e7fb72b5ffe2915256c28a9414c";
-      } else if (email) {
-        this._gravatar = MD5(email);
+        existingGravatar = "";
+      }
+      if (!existingGravatar) {
+        if (email) {
+          this._gravatar = MD5(email);
+        } else {
+          this._gravatar = "0df69960706112e38332395a4f2e7542";
+        }
       }
       return this._gravatar;
     }

@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone", "CryptoJS"
 ], function(
     Backbone
@@ -10,26 +10,26 @@ define([
      * @class A mask of a user which can be saved along with the corpus. It is
      *        generally just a username and gravatar but could be more depending
      *        on what the user allows to be public.
-     * 
-     * 
+     *
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("UserMask init");
-      
+
     },
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/users",
-    
+
     defaults : {
-      gravatar :  "user/user_gravatar.png"
+      gravatar :  "0df69960706112e38332395a4f2e7542"
     },
 
      getGravatar : function(email){
@@ -49,18 +49,18 @@ define([
       }
       return existingGravatar;
     },
-   
+
     /**
      * this function makes it possible to save the UserMask with a
      * hardcoded id, it uses pouch's API directly for the first save, and then backbone/pouch save for the rest
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
       var self = this;
-        
+
         if(OPrime.isBackboneCouchDBApp()){
           if(self.get("pouchname")){
             self.unset("pouchname");
@@ -84,7 +84,7 @@ define([
                   self._rev = model.get("_rev");
                   self.set("_rev", model.get("_rev"));
                   self.save();
-                  
+
                   if(typeof successcallback == "function"){
                     successcallback();
                   }
@@ -94,7 +94,7 @@ define([
           });
           return;
         }
-        
+
         self.pouch(function(err,db){
 //          self.set("id", this.id); //TODO might not be necessary
           var modelwithhardcodedid = self.toJSON();
@@ -112,7 +112,7 @@ define([
               modelwithhardcodedid._id = window.app.get("authentication").get("userPrivate").id;
             }
           }
-          
+
           db.put(modelwithhardcodedid, function(err, response) {
             if(err){
               if (OPrime.debugMode) OPrime.debug("UserMask put error", err);
@@ -121,11 +121,11 @@ define([
                   self.fetch({
                     success : function(model, response) {
                       if (OPrime.debugMode) OPrime.debug("UserMask fetch revision number success, after getting a Document update conflict", response);
-                      
+
                       modelwithhardcodedid._rev = self.get("_rev");
                       if (OPrime.debugMode) OPrime.debug("Usermask old version", self.toJSON());
                       if (OPrime.debugMode) OPrime.debug("Usermask replaced with new version", modelwithhardcodedid );
-                      
+
                       db.put(modelwithhardcodedid, function(err, response) {
                         if(err){
                           if (OPrime.debugMode) OPrime.debug("UserMask put error, even after fetching the version number",err);
@@ -140,7 +140,7 @@ define([
                           }
                         }
                       });
-                      
+
                     },
                     //fetch error
                     error : function(e) {

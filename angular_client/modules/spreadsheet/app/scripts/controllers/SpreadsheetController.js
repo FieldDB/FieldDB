@@ -1587,7 +1587,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     comment.text = newComment;
     comment.username = $rootScope.user.username;
     comment.timestamp = Date.now();
-    comment.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
+    comment.gravatar = $rootScope.user.gravatar || "0df69960706112e38332395a4f2e7542";
     comment.timestampModified = Date.now();
     if (!datum.comments) {
       datum.comments = [];
@@ -1992,7 +1992,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           newActivityObject.indirectobject = bareActivityObject.indirectobject;
           newActivityObject.teamOrPersonal = bareActivityObject.teamOrPersonal;
           newActivityObject.user.username = $rootScope.user.username;
-          newActivityObject.user.gravatar = $rootScope.user.gravatar || "./../user/user_gravatar.png";
+          newActivityObject.user.gravatar = $rootScope.user.gravatar || "0df69960706112e38332395a4f2e7542";
           newActivityObject.user.id = $rootScope.user.username;
           newActivityObject.user._id = $rootScope.user.username; //TODO remove this too eventually...
           newActivityObject.dateModified = JSON.parse(JSON.stringify(new Date())); //TODO #1109 eventually remove date modified?
