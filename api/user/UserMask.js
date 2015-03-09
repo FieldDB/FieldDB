@@ -2,6 +2,7 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var MD5 = require("MD5");
+var Q = require("q");
 
 /**
  * @class A mask of a user which can be saved along with the corpus. It is
@@ -18,23 +19,23 @@ var UserMask = function UserMask(options) {
   }
   /* Switch user to the new dev servers if they have the old ones prior to v1.38+ */
   if (options && options.appVersionWhenCreated) {
-    var year = options.appVersionWhenCreated.split(".")[0];
-    var week = options.appVersionWhenCreated.split(".")[1];
-    // if (year === 1 && week <= 38) {
-    if (options.authUrl) {
-      options.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
-    }
-    if (options.corpuses) {
-      options.corpuses.map(function(couchConnection) {
-        if (couchConnection.authUrl) {
-          couchConnection.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
-        } else {
-          couchConnection.authUrl = options.authUrl;
-        }
-        couchConnection.domain = couchConnection.domain.replace(/ifielddevs.iriscouch.com/g, "corpusdev.lingsync.org");
-        return couchConnection;
-      });
-      // }
+    var year = parseInt(options.appVersionWhenCreated.split(".")[0], 10);
+    var week = parseInt(options.appVersionWhenCreated.split(".")[1], 10);
+    if (year === 1 && week <= 38) {
+      if (options.authUrl) {
+        options.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
+      }
+      if (options.corpuses) {
+        options.corpuses.map(function(couchConnection) {
+          if (couchConnection.authUrl) {
+            couchConnection.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
+          } else {
+            couchConnection.authUrl = options.authUrl;
+          }
+          couchConnection.domain = couchConnection.domain.replace(/ifielddevs.iriscouch.com/g, "corpusdev.lingsync.org");
+          return couchConnection;
+        });
+      }
     }
   }
 
@@ -318,42 +319,53 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       this.debug("Customizing save ", options);
       var key,
         userKey,
-        encryptedUserPreferences;
+        encryptedUserPreferences,
+        deferred = Q.defer();
 
-      if (!this._rev) {
-        this.warn("Refusing to save a user doc which is incomplete, and doesn't have a rev");
-        return;
-      }
+      if (this._fieldDBtype === "User") {
 
-      try {
-        // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
-        key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
-        if (!key) {
-          key = Confidential.secretKeyGenerator();
-          localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
+        Q.nextTick(function() {
+          deferred.resolve(this);
+        });
+
+        if (!this._rev) {
+          this.warn("Refusing to save a user doc which is incomplete, and doesn't have a rev");
+          return deferred.promise;
         }
-      } catch (e) {
-        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
-        key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-        if (!key) {
-          key = Confidential.secretKeyGenerator();
-          this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
-        }
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
-      }
-      userKey = key + this.username;
-      encryptedUserPreferences = new Confidential({
-        secretkey: userKey
-      }).encrypt(this.toJSON());
 
-      try {
-        localStorage.setItem(userKey, encryptedUserPreferences);
-      } catch (e) {
-        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
-        this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        try {
+          // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
+          key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
+          if (!key) {
+            key = Confidential.secretKeyGenerator();
+            localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
+          }
+        } catch (e) {
+          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+          key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+          if (!key) {
+            key = Confidential.secretKeyGenerator();
+            this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
+          }
+          this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        }
+        userKey = key + this.username;
+        encryptedUserPreferences = new Confidential({
+          secretkey: userKey
+        }).encrypt(this.toJSON());
+
+        try {
+          localStorage.setItem(userKey, encryptedUserPreferences);
+        } catch (e) {
+          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+          this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
+          this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        }
+
+        return deferred.promise;
+      } else {
+        return FieldDBObject.prototype.save.apply(this, arguments);
       }
-      // return FieldDBObject.prototype.save.apply(this, arguments);
     }
   },
 
@@ -363,7 +375,9 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       var key,
         userKey,
         encryptedUserPreferences,
-        decryptedUser = {};
+        decryptedUser = {},
+        overwriteOrNot;
+
       try {
         // fetch the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
         key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
@@ -373,8 +387,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         this.warn("unable to use local storage, this app wont be very usable offline ", e);
       }
       if (!key) {
-        this.warn("cannot fetch user locally");
-        return;
+        this.warn("cannot fetch user info locally");
+        return FieldDBObject.prototype.fetch.apply(this, arguments);
       }
       userKey = key + this.username;
       try {
@@ -382,16 +396,16 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       } catch (e) {
         if (!this.constructor.prototype.temp) {
           this.warn("no local users have been saved");
-          return;
+          return FieldDBObject.prototype.fetch.apply(this, arguments);
         }
         encryptedUserPreferences = this.constructor.prototype.temp[userKey];
       }
       decryptedUser = {};
       if (!encryptedUserPreferences) {
-        this.warn("This user " + this.username + " hasnt used this device before, need to request their prefs when they login.");
+        this.warn("This user " + this.username + " hasnt been used this device before, need to request their prefs when they login.");
         this.debug("userKey is " + userKey);
         this.debug("user encrypted is " + this.constructor.prototype.temp[userKey]);
-        return;
+        return FieldDBObject.prototype.fetch.apply(this, arguments);
       }
       decryptedUser = new Confidential({
         secretkey: userKey
@@ -401,9 +415,9 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       if (!this._rev) {
         overwriteOrNot = "overwrite";
       }
+
       this.merge("self", decryptedUser, overwriteOrNot);
-      // FieldDBObject.prototype.fetch.apply(this, arguments);
-      return this;
+      return FieldDBObject.prototype.fetch.apply(this, arguments);
     }
   }
 
