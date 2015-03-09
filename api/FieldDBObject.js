@@ -816,7 +816,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         // if the result is missing the property, clone it from anObject or anotherObject
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
           if (anObject[aproperty] !== undefined && anObject[aproperty] !== null) {
-            if (typeof anObject[aproperty].constructor === "function") {
+            if (typeof anObject[aproperty] !== "string" && typeof anObject[aproperty].constructor === "function") {
               json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
               resultObject[aproperty] = new anObject[aproperty].constructor(json);
               this.debug(" " + aproperty + " resultObject will have anObject's Cloned contents because it was empty");
@@ -825,7 +825,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
-            if (typeof anotherObject[aproperty].constructor === "function") {
+            if (typeof anotherObject[aproperty] !== "string" && typeof anotherObject[aproperty].constructor === "function") {
               json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
               resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
               this.debug(" " + aproperty + " resultObject will have anotherObject's Cloned contents because it was empty");
@@ -938,6 +938,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       id = this.id;
       if (!id) {
         Q.nextTick(function() {
+          self.fetching = false;
           deferred.reject({
             error: "Cannot fetch if there is no id"
           });
@@ -1168,7 +1169,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         underscorelessProperty;
 
       if (this.fetching) {
-        throw "Cannot get json while object is fetching itself";
+        this.warn("Cannot get json while object is fetching itself", this);
+        // return;
+        // throw "Cannot get json while object is fetching itself";
       }
       /* this object has been updated to this version */
       this.version = this.version;
