@@ -373,7 +373,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         this.warn("unable to use local storage, this app wont be very usable offline ", e);
       }
       if (!key) {
-        console.log("cannot fetch user locally");
+        this.warn("cannot fetch user locally");
         return;
       }
       userKey = key + this.username;
@@ -382,25 +382,24 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
       } catch (e) {
         if (!this.constructor.prototype.temp) {
-          console.log("no local users have been saved");
+          this.warn("no local users have been saved");
           return;
         }
         encryptedUserPreferences = this.constructor.prototype.temp[userKey];
       }
       decryptedUser = {};
       if (encryptedUserPreferences) {
-        this.debug("This user hasnt used this device before, need to request their prefs when they login.");
+        this.warn("This user hasnt used this device before, need to request their prefs when they login.");
         return;
       }
       decryptedUser = new Confidential({
         secretkey: userKey
       }).decrypt(encryptedUserPreferences);
 
-      this.debug(" Opening user prefs from previous session", decryptedUser);
-      this.debug(" Opening current permissions from current corpus server", this);
+      this.debug(" Opening user prefs from previous session on this device", decryptedUser);
       this.merge(decryptedUser);
       // FieldDBObject.prototype.fetch.apply(this, arguments);
-
+      return this;
     }
   }
 
