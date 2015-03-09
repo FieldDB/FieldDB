@@ -36,13 +36,11 @@ describe("Authentication ", function() {
     it("should use a different random encryption key for each device", function() {
       var auth = new Authentication();
       expect(auth).toBeDefined();
-      expect(auth.X09qKvcQn8DnANzGdrZFqCRUutIi2C).toBeDefined();
     });
 
     it("should look up the user locally if the app is offline", function(done) {
       var auth = new Authentication();
       expect(auth).toBeDefined();
-      expect(auth.X09qKvcQn8DnANzGdrZFqCRUutIi2C).toBeDefined();
 
       expect(auth.resumingSessionPromise).toBeDefined();
       auth.resumingSessionPromise.then(function(result) {
