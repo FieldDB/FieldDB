@@ -2,7 +2,7 @@
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
-var UserMask = require("./../user/UserMask").UserMask;
+// var UserMask = require("./../user/UserMask").UserMask;
 var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
@@ -189,9 +189,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       if (!value) {
         return;
       }
+      var overwriteOrNot;
+
       this.debug("setting user");
-
-
       // if (!(value instanceof User)) {
       //   value = new User(value);
       // }
