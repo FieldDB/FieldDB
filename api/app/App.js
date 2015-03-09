@@ -1,7 +1,7 @@
 /* globals window, localStorage, Android, navigator */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Activity = require("./../activity/Activity").Activity;
-var Authentication = require("./../FieldDBObject").FieldDBObject;
+var Authentication = require("./../authentication/Authentication").Authentication;
 var Corpus = require("./../corpus/Corpus").Corpus;
 var DataList = require("./../data_list/DataList").DataList;
 var Import = require("./../import/Import").Import;
