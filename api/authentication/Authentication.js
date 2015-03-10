@@ -49,7 +49,7 @@ var Authentication = function Authentication(options) {
     // }
     return self.user;
   }, function(error) {
-    console.log("Unable to resume login ", error.userFriendlyErrors.join(" "));
+    self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
     if (error.status === 0) {
       error.userFriendlyErrors = "Unable to resume session, are you sure you're not offline?";
     }
@@ -78,9 +78,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
   dispatchEvent: {
     value: function(eventChannelName) {
-      var event = document.createEvent("Event");
-      event.initEvent(eventChannelName, true, true);
       try {
+        var event = document.createEvent("Event");
+        event.initEvent(eventChannelName, true, true);
         document.dispatchEvent(event);
       } catch (e) {
         this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.", e);
