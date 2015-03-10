@@ -1,8 +1,8 @@
 "use strict";
 /* globals FieldDB */
 
-angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "$routeParams", "$rootScope",
-  function($scope, $routeParams, $rootScope) {
+angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "$routeParams", "$rootScope", "$location",
+  function($scope, $routeParams, $rootScope, $location) {
 
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       $scope.application = FieldDB.FieldDBObject.application;
@@ -17,11 +17,19 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
       };
 
 
-      // Listen for the event.
       document.addEventListener("logout", function (e) {
         console.log(e);
         $scope.application.bug("user has logged out, reload the page to clear state and take them to the welcome page.");
-        // e.target matches document from above
+      }, false);
+
+      document.addEventListener("notauthenticated", function (e) {
+        console.log(e);
+        $scope.application.bug("user isn't able to see anything, show them the welcome page");
+        $scope.$apply(function() {
+          console.log("  Redirecting the user to the welcome page");
+          //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
+          $location.path(FieldDB.FieldDBObject.application.basePathname + "/welcome", false);
+        });
       }, false);
 
     } else {
