@@ -127,7 +127,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   fetchCollection: {
     value: function(collectionType, start, end, limit, reduce, key) {
-      this.todo("Provide pagination ", start, end, limit, reduce);
+      // this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url;
@@ -163,6 +163,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         //   });
         // });
       };
+
 
       // CORS.makeCORSRequest({
       //   type: "POST",
@@ -283,7 +284,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
         connectionInfo = undefined;
       }
-      this.todo(" Use CorpusConnection ");
+      // this.todo(" Use CorpusConnection ");
       return connectionInfo;
     },
     set: function(value) {
@@ -306,7 +307,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete this._connectionInfo;
         }
       }
-      this.todo(" Use CorpusConnection ");
+      // this.todo(" Use CorpusConnection ");
 
     }
   },
@@ -471,13 +472,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         data: registerDetails
       }).then(function(result) {
           self.debug("registration results", result);
-          self.login(registerDetails).then(function(result) {
-            deferred.resolve(result);
-          }, function(error) {
-            self.debug("Failed to login ");
-            deferred.reject(error);
-          });
-
+          deferred.resolve(result);
+          // self.login(registerDetails).then(function(result) {
+          // deferred.resolve(result);
+          // }, function(error) {
+          //   self.debug("Failed to login ");
+          //   deferred.reject(error);
+          // });
         },
         function(reason) {
           self.debug(reason);
