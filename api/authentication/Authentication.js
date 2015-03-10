@@ -1,3 +1,5 @@
+/* globals window, document, alert */
+
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
 // var UserMask = require("./../user/UserMask").UserMask;
@@ -161,8 +163,14 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     value: function(options) {
       var self = this;
 
+      if (this.application && this.application.brand) {
+        options = options || {};
+        options.appbrand = options.serverCode = this.application.brand.toLowerCase();
+      }
+
       var registrationPromise = Database.prototype.register(options);
       registrationPromise.then(function(result) {
+        self.debug("registration succeeeded proceeding to login ", result);
         return self.login(options);
       });
       return registrationPromise;
