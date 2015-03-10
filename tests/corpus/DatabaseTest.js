@@ -142,7 +142,7 @@ describe("Database", function() {
         "description": "The details of this corpus are not public.",
         "titleAsUrl": "lingllama-communitycorpus"
       };
-      expect(db.getCouchUrl(connection, "_session")).toEqual("https://corpus.example.org/_session");
+      expect(db.getCouchUrl(connection, "/_session")).toEqual("https://corpus.example.org/_session");
     });
 
   });

@@ -322,7 +322,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(couchConnection, couchdbcommand) {
       var couchurl = new CorpusConnection(couchConnection).corpusUrl;
       if (couchdbcommand) {
-        couchurl = couchurl.replace(couchConnection.pouchname, couchdbcommand);
+        couchurl = couchurl.replace("/" + couchConnection.pouchname, couchdbcommand);
       }
       return couchurl;
     }
