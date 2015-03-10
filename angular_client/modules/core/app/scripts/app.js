@@ -46,7 +46,7 @@ var app = angular.module("fielddbAngularApp", [
       offlineCouchURL: "https://localhost:6984",
       brand: "LingSync",
       website: "http://example.org",
-      basePathname: window.location.origin + "/#/",
+      basePathname: window.location.origin + "/#",
     });
     if (window.location.pathname.indexOf("android_asset") > -1) {
       fieldDBApp.basePathname = window.location.pathname;
