@@ -420,10 +420,10 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       if (this._readerCommenterWriterOnlys && this._readerCommenterWriterOnlys.timestamp && (Date.now() - this._readerCommenterWriterOnlys.timestamp < this.cacheTimeLength)) {
         this.debug("Not regenerating the list of readerCommenterWriterOnlys, its fresh enough. " + new Date(this._readerCommenterWriterOnlys.timestamp));
       } else {
-        this.debugMode = true;
+        // this.debugMode = true;
         this._readerCommenterWriterOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer", "commenter"], ["admin"]);
         this._readerCommenterWriterOnlys.timestamp = Date.now();
-        this.debugMode = false;
+        // this.debugMode = false;
       }
 
       return this._readerCommenterWriterOnlys;
@@ -720,7 +720,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     value: function(users) {
       if (!users || users === "defaults") {
         users = {};
-        this.warn("Using default permission types");
+        this.debug("Using default permission types");
       }
       users.admins = users.admins || [];
       users.writers = users.writers || [];

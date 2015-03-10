@@ -352,12 +352,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               //            }
 
               var headerLabel = self.extractedHeaderObjects[index].id;
-              console.log("finding the matching label in the csv ", headerLabel);
+              self.debug("finding the matching label in the csv ", headerLabel);
               self.debug("finding the matching label in the csv ", self.importFields.find(headerLabel, null, "match as close as possible"));
               if (self.importType === "participants") {
                 docToSave.fields[headerLabel].value = item.trim();
               } else if (self.importType === "audioVideo") {
-                console.log("this is an audioVideo but we arent doing anything with the self.importFields");
+                self.debug("this is an audioVideo but we arent doing anything with the self.importFields");
                 // docToSave.datumFields[self.importFields.find(self.extractedHeader[index])[0].id].value = item.trim();
               } else {
                 docToSave.datumFields[headerLabel].value = item.trim();
