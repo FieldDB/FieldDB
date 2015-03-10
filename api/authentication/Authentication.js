@@ -52,7 +52,9 @@ var Authentication = function Authentication(options) {
       error.userFriendlyErrors = "Unable to resume session, are you sure you're not offline?";
     }
     self.error = error.userFriendlyErrors.join(" ");
+    self.dispatchEvent("notauthenticated");
     self.render();
+
     return error;
   });
 
@@ -158,6 +160,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   register: {
     value: function(options) {
       var self = this;
+
       var registrationPromise = Database.prototype.register(options);
       registrationPromise.then(function(result) {
         return self.login(options);
@@ -168,6 +171,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
   logout: {
     value: function(options) {
+      var self = this;
+
       return Database.prototype.logout(options).then(function() {
         self.dispatchEvent("logout");
         alert("Reloading the page");
