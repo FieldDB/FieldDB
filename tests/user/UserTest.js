@@ -167,8 +167,8 @@ describe("User ", function() {
         corpusUrl: "https://corpusdev.lingsync.org/sapir-cherokee",
         version: user.version,
         pouchname: "sapir-cherokee",
-        title: "sapir-cherokee",
-        titleAsUrl: "sapir"
+        title: "cherokee",
+        titleAsUrl: "cherokee"
       }, {
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
@@ -181,8 +181,8 @@ describe("User ", function() {
         corpusUrl: "https://corpusdev.lingsync.org/sapir-firstcorpus",
         version: user.version,
         pouchname: "sapir-firstcorpus",
-        title: "sapir-firstcorpus",
-        titleAsUrl: "sapir"
+        title: "firstcorpus",
+        titleAsUrl: "firstcorpus"
       }]);
     });
 
