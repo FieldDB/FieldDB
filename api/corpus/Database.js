@@ -1,4 +1,4 @@
-/* globals localStorage, window */
+/* globals localStorage */
 
 var Q = require("q");
 var CORS = require("../CORS").CORS;

@@ -194,21 +194,21 @@ describe("CorpusMask ", function() {
       expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
       expect(connection.toJSON()).toEqual({
-        fieldDBtype: 'CorpusConnection',
-        protocol: 'https://',
-        domain: 'corpus.example.org',
-        port: '443',
-        dbname: 'computationalfieldworkshop-group_data_entry_tutorial_copy',
-        path: '',
-        authUrl: 'https://auth.example.org',
-        userFriendlyServerName: 'Example.org',
-        corpusid: '',
-        title: 'Group Data Entry tutorial',
-        description: 'The details of this corpus are not public.',
-        titleAsUrl: 'group_data_entry_tutorial',
-        version: 'v2.42.11',
-        corpusUrl: 'https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial',
-        pouchname: 'computationalfieldworkshop-group_data_entry_tutorial_copy'
+        fieldDBtype: "CorpusConnection",
+        protocol: "https://",
+        domain: "corpus.example.org",
+        port: "443",
+        dbname: "computationalfieldworkshop-group_data_entry_tutorial_copy",
+        path: "",
+        authUrl: "https://auth.example.org",
+        userFriendlyServerName: "Example.org",
+        corpusid: "",
+        title: "Group Data Entry tutorial",
+        description: "The details of this corpus are not public.",
+        titleAsUrl: "group_data_entry_tutorial",
+        version: "v2.42.11",
+        corpusUrl: "https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial",
+        pouchname: "computationalfieldworkshop-group_data_entry_tutorial_copy"
       });
       // connections.push(connection.toJSON("complete"));
 
