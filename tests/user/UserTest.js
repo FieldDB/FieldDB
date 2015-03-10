@@ -80,50 +80,52 @@ describe("User ", function() {
 
       var result = u.toJSON("complete");
       expect(result).toEqual({
-          fieldDBtype: "User",
-          username: "",
-          dateCreated: u.dateCreated,
-          firstname: "Bill",
-          lastname: "Smith",
-          email: "",
+        fieldDBtype: "User",
+        username: "",
+        dateCreated: u.dateCreated,
+        firstname: "Bill",
+        lastname: "Smith",
+        email: "",
+        version: u.version,
+        gravatar: "",
+        researchInterest: "",
+        affiliation: "",
+        description: "",
+        appbrand: "",
+        fields: [],
+        prefs: {
+          fieldDBtype: "UserPreference",
+          dateCreated: result.prefs.dateCreated,
           version: u.version,
-          gravatar: "",
-          researchInterest: "",
-          affiliation: "",
-          description: "",
-          fields: [],
-          prefs: {
-            fieldDBtype: "UserPreference",
-            dateCreated: result.prefs.dateCreated,
-            version: u.version,
-            hotkeys: [],
-            unicodes: []
-          },
-          mostRecentIds: {
-            fieldDBtype: "CorpusConnection",
-            version: u.version,
-            corpusid: "",
-            titleAsUrl: "",
-            dbname: "",
-            pouchname: "",
-            protocol: "",
-            domain: "",
-            port: "",
-            path: "",
-            userFriendlyServerName: "",
-            authUrls: [],
-            clientUrls: [],
-            corpusUrls: [],
-            lexiconUrls: [],
-            searchUrls: [],
-            audioUrls: [],
-            activityUrls: [],
-            title: "",
-            corpusUrl: ""
-          },
-          corpora: [],
-          api: "users"
-        });
+          hotkeys: [],
+          unicodes: []
+        },
+        mostRecentIds: {},
+        activityCouchConnection: {
+          fieldDBtype: "CorpusConnection",
+          version: u.version,
+          corpusid: "",
+          titleAsUrl: "",
+          dbname: "",
+          pouchname: "",
+          protocol: "",
+          domain: "",
+          port: "",
+          path: "",
+          userFriendlyServerName: "",
+          authUrls: [],
+          clientUrls: [],
+          corpusUrls: [],
+          lexiconUrls: [],
+          searchUrls: [],
+          audioUrls: [],
+          activityUrls: [],
+          title: "",
+          corpusUrl: ""
+        },
+        corpora: [],
+        api: "users"
+      });
     });
 
     it("should have an empty or valid email address", function() {
