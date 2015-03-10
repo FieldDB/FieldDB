@@ -53,9 +53,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       researchInterest: FieldDBObject.DEFAULT_STRING,
       affiliation: FieldDBObject.DEFAULT_STRING,
       description: FieldDBObject.DEFAULT_STRING,
+      appbrand: FieldDBObject.DEFAULT_STRING,
       fields: DatumFields,
       prefs: UserPreference,
-      mostRecentIds: CorpusConnection,
+      mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
+      activityCouchConnection: CorpusConnection,
       corpora: CorpusConnections
     }
   },
@@ -82,7 +84,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
-
   mostRecentIds: {
     configurable: true,
     get: function() {
@@ -92,18 +93,17 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       if (value === this._mostRecentIds) {
         return;
       }
-      if (!value) {
-        delete this._mostRecentIds;
-        return;
-      } else {
-        if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
-          value = new this.INTERNAL_MODELS["mostRecentIds"](value);
-        }
-      }
+      // if (!value) {
+      //   delete this._mostRecentIds;
+      //   return;
+      // } else {
+      //   if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
+      //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
+      //   }
+      // }
       this._mostRecentIds = value;
     }
   },
-
 
   prefs: {
     get: function() {
@@ -190,51 +190,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
         }
       }
-    }
-  },
-
-  openMostRecentDashboard: {
-    value: function() {
-      this.render();
-      // user.accessibleDBS = user.accessibleDBS || [];
-      // user.mostrecentdb = "/";
-      // user.roles.map(function(role) {
-      //   var dbname = role.substring(0, role.lastIndexOf("_"));
-      //   if (role.indexOf("-") > -1 && role.indexOf("_reader") > -1 && user.accessibleDBS.indexOf(dbname) === -1 && dbname.indexOf("lingllama-communitycorpus") === -1 && dbname.indexOf("public-firstcorpus") === -1) {
-      //     dbname = dbname.replace("-", "/");
-      //     if (dbname.indexOf("public") === -1 && dbname.indexOf("lingllama") === -1) {
-      //       user.accessibleDBS.push(dbname);
-      //       user.mostrecentdb = dbname;
-      //     }
-      //   }
-      //   return role;
-      // });
-      // // try {
-      // //   // $scope.application.authentication.user = new FieldDB.User(user);
-      // // } catch (e) {
-      // //   console.log("problem parsing user", e, user);
-      // // }
-
-      // // $scope.team = user;
-      // // $rootScope.authenticated = true;
-      // // console.log($scope);
-
-      // if ($scope.application.authentication.user.accessibleDBS.indexOf("sails/fr-ca") > -1) {
-      //   console.log("Redirecting the user to the manage sails dashboard" + "/sails/fr-ca/datalists");
-      //   $scope.$apply(function() {
-      //     $location.path($scope.application.basePathname + "/#/sails/fr-ca/datalists", false);
-      //   });
-      // } else if ($location.path().indexOf("welcome") > -1 || $location.path().indexOf("bienvenu") > -1 || window.location.pathname.indexOf("welcome") > -1 || window.location.pathname.indexOf("bienvenu") > -1 || (window.location.pathname === $scope.application.basePathname + "/" && $scope.application.authentication.user.accessibleDBS.length === 1)) {
-      //   $scope.$apply(function() {
-      //     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
-      //     $location.path($scope.application.basePathname + "/#/" + $scope.application.authentication.user.mostrecentdb, false);
-      //   });
-      // }
-      // $timeout(function() {
-      //   if (!$scope.$$phase) {
-      //     $scope.$digest(); //$digest or $apply
-      //   }
-      // }, 500);
     }
   }
 

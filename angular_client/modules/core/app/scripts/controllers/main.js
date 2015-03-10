@@ -15,6 +15,15 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
           console.warn("Rendering generated an erorr", e);
         }
       };
+
+
+      // Listen for the event.
+      document.addEventListener("logout", function (e) {
+        console.log(e);
+        $scope.application.bug("user has logged out, reload the page to clear state and take them to the welcome page.");
+        // e.target matches document from above
+      }, false);
+
     } else {
       console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
       window.alert("The app cannot load, please report this. ");
