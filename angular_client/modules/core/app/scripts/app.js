@@ -29,7 +29,7 @@ var app = angular.module("fielddbAngularApp", [
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
-    "https://*.lingsync.org/**",
+    "https://*.example.org/**",
     "https://localhost:3184/**",
     "https://localhost/**"
   ]);
@@ -44,8 +44,9 @@ var app = angular.module("fielddbAngularApp", [
       online: true,
       apiURL: "https://localhost:3183",
       offlineCouchURL: "https://localhost:6984",
-      brand: "LingSync",
+      brand: "Example",
       website: "http://example.org",
+      faq: "http://app.example.org/#/faq",
       basePathname: window.location.origin + "/#",
     });
     if (window.location.pathname.indexOf("android_asset") > -1) {
