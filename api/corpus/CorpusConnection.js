@@ -1,3 +1,5 @@
+/* globals window */
+
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Diacritics = require("diacritic");
 /**
@@ -128,14 +130,14 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       return this.dbname;
     },
     set: function(value) {
-      this.todo("pouchname is deprecated, use dbname instead");
+      this.todo("pouchname is deprecated, use dbname instead ", value);
       this.dbname = value;
     }
   },
 
   dbname: {
     get: function() {
-      if (this.parent) {
+      if (this.parent &&  this.parent.dbname) {
         return this.parent.dbname;
       }
       return this._dbname;
@@ -154,7 +156,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
             var dbnameValidationResults = CorpusConnection.validateDbnameFormat(value);
             value = dbnameValidationResults.dbname;
             if (dbnameValidationResults.changes.length > 0) {
-              console.log(dbnameValidationResults.changes.join("\n "));
+              this.warn(" Invalid dbname " , dbnameValidationResults.changes.join("\n "));
               throw new Error(dbnameValidationResults.changes.join("\n "));
             }
             var pieces = value.split("-");
@@ -165,6 +167,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         }
       }
       this._dbname = value;
+
     }
   },
 
@@ -216,7 +219,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
           this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
         } else if (this.dbname) {
           var pieces = this.dbname.split("-");
-          if (pieces.length !== 2) {
+          if (this.dbname !== "default" && pieces.length !== 2) {
             throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
           }
           var corpusidentifier = pieces[0];
@@ -241,13 +244,114 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     }
   },
 
+  /*
+   * This function is the same in all webservicesconfig, now any couchapp can
+   * login to any server, and register on the corpus server which matches its
+   * origin.
+   */
+  defaultCouchConnection: {
+    value: function() {
+      var localhost = {
+        protocol: "https://",
+        domain: "localhost",
+        port: "6984",
+        pouchname: "default",
+        path: "",
+        authUrl: "https://localhost:3183",
+        userFriendlyServerName: "Localhost"
+      };
+      var testing = {
+        protocol: "https://",
+        domain: "corpusdev.lingsync.org",
+        port: "443",
+        pouchname: "default",
+        path: "",
+        authUrl: "https://authdev.lingsync.org",
+        userFriendlyServerName: "LingSync Beta"
+      };
+      var production = {
+        protocol: "https://",
+        domain: "corpus.lingsync.org",
+        port: "443",
+        pouchname: "default",
+        path: "",
+        authUrl: "https://auth.lingsync.org",
+        userFriendlyServerName: "LingSync.org"
+      };
+      //v1.90 all users are on production
+      testing = production;
+
+      var mcgill = {
+        protocol: "https://",
+        domain: "corpus.lingsync.org",
+        port: "443",
+        pouchname: "default",
+        path: "",
+        authUrl: "https://auth.lingsync.org",
+        userFriendlyServerName: "McGill ProsodyLab"
+      };
+
+      /*
+       * If its a couch app, it can only contact databases on its same origin, so
+       * modify the domain to be that origin. the chrome extension can contact any
+       * authorized server that is authorized in the chrome app's manifest
+       */
+      var connection = production;
+
+      if (!window || !window.location) {
+        connection = localhost;
+      } else if (window.location.origin.indexOf("_design/pages") > -1) {
+        if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+          connection = testing;
+        } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
+          connection = production;
+        } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+          connection = mcgill;
+        } else if (window.location.origin.indexOf("localhost") >= 0) {
+          connection = localhost;
+        }
+      } else {
+        if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+          connection = mcgill;
+        } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+          connection = testing;
+        } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+          connection = production;
+        }
+      }
+      connection = new CorpusConnection(connection).toJSON();
+      return connection;
+    }
+  },
+
   corpusUrl: {
     get: function() {
-      if (!this._corpusUrl && this.domain) {
-
+      if (this._corpusUrl) {
+        return this._corpusUrl;
       }
-      return this._corpusUrl || FieldDBObject.DEFAULT_STRING;
+      if (!this.domain) {
+        return "";
+      }
+
+      var couchurl = this.protocol + this.domain;
+      if (this.port && this.port !== "443" && this.port !== "80") {
+        couchurl = couchurl + ":" + this.port;
+      }
+      if (!this.path) {
+        this.path = "";
+      }
+      couchurl = couchurl + this.path;
+      couchurl = couchurl + "/" + this.pouchname;
+
+      /*
+       * For debugging cors #838: Switch to use the corsproxy corpus service instead
+       * of couchdb directly
+       */
+      // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
+      this._corpusUrl = couchurl;
+      return couchurl;
     },
+
     set: function(value) {
       if (value === this._corpusUrl) {
         return;
@@ -276,9 +380,9 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.pouchname = json.dbname = this.dbname || "";
-      json.title = this.title || "";
-      json.titleAsUrl = this.titleAsUrl || "";
-      json.corpusUrl = this.corpusUrl  || "";
+      json.title = this.title || json.dbname;
+      json.titleAsUrl = this.titleAsUrl || json.dbname;
+      json.corpusUrl = this.corpusUrl || "";
 
       json.fieldDBtype = this.fieldDBtype;
       delete json._type;
@@ -287,7 +391,6 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       return json;
     }
   }
-
 
 });
 
