@@ -344,34 +344,6 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
     }
   },
 
-  fields: {
-    configurable: true,
-    get: function() {
-      if (this._fields) {
-        // this.debug("setting speaker fields confidential in the Speaker.fields get function.");
-
-        // this._fields.encrypted = true;
-        // this._fields.decryptedMode = true;
-        this._fields.confidential = this.confidential;
-      }
-      return this._fields;
-    },
-    set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      this._fields = value;
-    }
-  },
-
   user: {
     get: function() {
       if (!this.userMask) {

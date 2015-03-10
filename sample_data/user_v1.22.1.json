@@ -711,29 +711,29 @@
    "newCorpusConnections": [
        {
            "protocol": "https://",
-           "domain": "corpus.lingsync.org",
+           "domain": "corpus.example.org",
            "port": "443",
            "pouchname": "anotheruser-scottish_gaelic",
            "path": "",
-           "authUrl": "https://auth.lingsync.org",
+           "authUrl": "https://auth.example.org",
            "userFriendlyServerName": "Example.org"
        },
        {
            "protocol": "https://",
-           "domain": "corpus.lingsync.org",
+           "domain": "corpus.example.org",
            "port": "443",
            "pouchname": "anotheruser-scottish_gaelic",
            "path": "",
-           "authUrl": "https://auth.lingsync.org",
+           "authUrl": "https://auth.example.org",
            "userFriendlyServerName": "Example.org"
        },
        {
            "protocol": "https://",
-           "domain": "corpus.lingsync.org",
+           "domain": "corpus.example.org",
            "port": "443",
            "pouchname": "anotheruser-scottish_gaelic",
            "path": "",
-           "authUrl": "https://auth.lingsync.org",
+           "authUrl": "https://auth.example.org",
            "userFriendlyServerName": "Example.org"
        }
    ]
