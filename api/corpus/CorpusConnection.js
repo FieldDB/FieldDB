@@ -137,7 +137,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
 
   dbname: {
     get: function() {
-      if (this.parent &&  this.parent.dbname) {
+      if (this.parent && this.parent.dbname) {
         return this.parent.dbname;
       }
       return this._dbname;
@@ -156,7 +156,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
             var dbnameValidationResults = CorpusConnection.validateDbnameFormat(value);
             value = dbnameValidationResults.dbname;
             if (dbnameValidationResults.changes.length > 0) {
-              this.warn(" Invalid dbname " , dbnameValidationResults.changes.join("\n "));
+              this.warn(" Invalid dbname ", dbnameValidationResults.changes.join("\n "));
               throw new Error(dbnameValidationResults.changes.join("\n "));
             }
             var pieces = value.split("-");
@@ -190,6 +190,16 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       if (this.parent) {
         this._title = this.parent.title;
       }
+
+      if (!this._title && this.dbname) {
+        var pieces = this.dbname.split("-");
+        if (this.dbname !== "default" && pieces.length !== 2) {
+          throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
+        }
+        pieces.shift();
+        var corpusidentifier = pieces.join("-");
+        this._title = corpusidentifier;
+      }
       return this._title;
     },
     set: function(value) {
@@ -210,20 +220,13 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
 
   titleAsUrl: {
     get: function() {
-      if (this.parent) {
+      if (this.parent && this.parent.titleAsUrl) {
         this._titleAsUrl = this.parent.titleAsUrl;
       }
 
       if (!this._titleAsUrl) {
         if (this.title) {
-          this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
-        } else if (this.dbname) {
-          var pieces = this.dbname.split("-");
-          if (this.dbname !== "default" && pieces.length !== 2) {
-            throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-          }
-          var corpusidentifier = pieces[0];
-          this._titleAsUrl = corpusidentifier;
+          this._titleAsUrl = this.sanitizeStringForFileSystem(this.title, "_").toLowerCase();
         }
       }
       return this._titleAsUrl;
@@ -341,7 +344,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         this.path = "";
       }
       couchurl = couchurl + this.path;
-      couchurl = couchurl + "/" + this.pouchname;
+      couchurl = couchurl + "/" + this.dbname;
 
       /*
        * For debugging cors #838: Switch to use the corsproxy corpus service instead
