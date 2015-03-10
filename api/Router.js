@@ -2,6 +2,13 @@ var Router = Router || {};
 
 Router.routes = Router.routes || [];
 Router.routes.push({
+  path: "/faq",
+  angularRoute: {
+    templateUrl: "views/faq.html",
+    controller: "OverrideYourControllerHere"
+  }
+});
+Router.routes.push({
   path: "/:team/:corpusidentifier/import/:importType",
   angularRoute: {
     templateUrl: "views/import-page.html",
