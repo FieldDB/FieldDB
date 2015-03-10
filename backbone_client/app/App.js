@@ -117,8 +117,8 @@ define([
       if(!this.get("loadTheAppForTheFirstTime")){
         window.app = this;
         var appself = this;
-        if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
-        $(".spinner-status").html("Loading encrypted user...");
+        if (OPrime.debugMode) OPrime.debug("Loading user");
+        $(".spinner-status").html("Loading user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
 
