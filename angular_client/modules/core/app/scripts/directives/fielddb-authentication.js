@@ -1,5 +1,4 @@
 "use strict";
-/* globals FieldDB */
 
 
 /**
@@ -24,23 +23,19 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
     $scope.register = function(loginDetails) {
       console.warn("TODO use $scope.corpus.register", loginDetails);
       $scope.application.authentication.register(loginDetails).then(function(user) {
-        console.log("User has been downloaded. ", user);
-        user = new FieldDB.User(user);
-        $scope.application.authentication.user.merge("self", user, "overwrite");
-        $scope.application.authentication.saveServerResponseToUser($scope.application.authentication.user);
+        console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
+        $scope.application.authentication.render();
       });
     };
 
     $scope.login = function(loginDetails) {
       $scope.application.authentication.login(loginDetails).then(function(user) {
-        console.log("User has been downloaded. ", user);
-        user = new FieldDB.User(user);
-        $scope.application.authentication.user.merge("self", user, "overwrite");
-        $scope.application.authentication.saveServerResponseToUser($scope.application.authentication.user);
+        console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
+        $scope.application.authentication.render();
       });
     };
 

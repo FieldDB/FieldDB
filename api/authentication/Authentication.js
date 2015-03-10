@@ -30,7 +30,8 @@ var Authentication = function Authentication(options) {
     self.debug(user);
     self.user = user;
     self.user.fetch();
-    self.user.openMostRecentDashboard();
+    self.user.authenticated = true;
+    self.dispatchEvent("authenticated");
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
     //   selfauthentication.user.username = sessionInfo.userCtx.name;
@@ -71,6 +72,18 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     }
   },
 
+  dispatchEvent: {
+    value: function(eventChannelName) {
+      var event = document.createEvent("Event");
+      event.initEvent(eventChannelName, true, true);
+      try {
+        document.dispatchEvent(event);
+      } catch (e) {
+        this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.", e);
+      }
+    }
+  },
+
   /**
    * Contacts local or remote server to verify the username and password
    * provided in the user object. Upon success, calls the callback with the
@@ -89,11 +102,12 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       dataToPost.password = user.password;
       dataToPost.authUrl = user.authUrl;
 
-      if (this.user !== undefined) {
+      if (this.user && this.user.username && this.user._rev && !this.user.fetching && !this.user.loading) {
         //if the same user is re-authenticating, include their details to sync to the server.
         if (user.username === this.user.username && user.username !== "public") {
           dataToPost.syncDetails = "true";
-          dataToPost.syncUserDetails = JSON.parse(JSON.stringify(this.user.toJSON()));
+          dataToPost.syncUserDetails = this.user.toJSON();
+          this.warn("Backing up user details", dataToPost.syncUserDetails);
           delete dataToPost.syncUserDetails._rev;
         }
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server,
@@ -118,7 +132,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             return;
           }
           self.user = userDetails;
-          self.user.openMostRecentDashboard();
+          self.user.authenticated = true;
+          self.dispatchEvent("authenticated");
 
           deferred.resolve(self.user);
         }, //end successful login
@@ -142,13 +157,22 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
   register: {
     value: function(options) {
-      return Database.prototype.register(options);
+      var self = this;
+      var registrationPromise = Database.prototype.register(options);
+      registrationPromise.then(function(result) {
+        return self.login(options);
+      });
+      return registrationPromise;
     }
   },
 
   logout: {
     value: function(options) {
-      return Database.prototype.logout(options);
+      return Database.prototype.logout(options).then(function() {
+        self.dispatchEvent("logout");
+        alert("Reloading the page");
+        window.location.reload();
+      });
     }
   },
 
