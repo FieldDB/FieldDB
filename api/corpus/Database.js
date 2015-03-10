@@ -5,6 +5,7 @@ var CORS = require("../CORS").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 // var User = require("../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var CorpusConnection = require("./CorpusConnection").CorpusConnection;
 
 var Database = function Database(options) {
   if (!this._fieldDBtype) {
@@ -238,15 +239,21 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
         self.connectionInfo = sessionInfo;
-
-        // var user = new User({
-        //   username: sessionInfo.userCtx.name
-        // }).fetch();
-
-        deferred.resolve({
-          username: sessionInfo.userCtx.name,
-          roles: sessionInfo.userCtx.roles
-        });
+        if (sessionInfo.userCtx.name) {
+          // var user = new User({
+          //   username: sessionInfo.userCtx.name
+          // }).fetch();
+          deferred.resolve({
+            username: sessionInfo.userCtx.name,
+            roles: sessionInfo.userCtx.roles
+          });
+        } else {
+          deferred.reject({
+            error: sessionInfo,
+            userFriendlyErrors: ["Please log in"],
+            status: 409
+          });
+        }
       }, function(reason) {
         deferred.reject(reason);
       });
@@ -276,6 +283,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
         connectionInfo = undefined;
       }
+      this.todo(" Use CorpusConnection ");
       return connectionInfo;
     },
     set: function(value) {
@@ -298,118 +306,23 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete this._connectionInfo;
         }
       }
+      this.todo(" Use CorpusConnection ");
+
     }
   },
 
-  /*
-   * This function is the same in all webservicesconfig, now any couchapp can
-   * login to any server, and register on the corpus server which matches its
-   * origin.
-   */
   defaultCouchConnection: {
-    value: function() {
-      var localhost = {
-        protocol: "https://",
-        domain: "localhost",
-        port: "6984",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://localhost:3183",
-        userFriendlyServerName: "Localhost"
-      };
-      var testing = {
-        protocol: "https://",
-        domain: "corpusdev.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://authdev.lingsync.org",
-        userFriendlyServerName: "LingSync Beta"
-      };
-      var production = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "LingSync.org"
-      };
-      //v1.90 all users are on production
-      testing = production;
-
-      var mcgill = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "McGill ProsodyLab"
-      };
-
-      /*
-       * If its a couch app, it can only contact databases on its same origin, so
-       * modify the domain to be that origin. the chrome extension can contact any
-       * authorized server that is authorized in the chrome app's manifest
-       */
-      var connection = production;
-
-      if (window.location.origin.indexOf("_design/pages") > -1) {
-        if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-          connection = testing;
-        } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
-          connection = production;
-        } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-          connection = mcgill;
-        } else if (window.location.origin.indexOf("localhost") >= 0) {
-          connection = localhost;
-        }
-      } else {
-        if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-          connection = mcgill;
-        } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-          connection = testing;
-        } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
-          connection = production;
-        }
-      }
-      return connection;
+    value: function(options) {
+      return new CorpusConnection().defaultCouchConnection(options);
     }
   },
 
   getCouchUrl: {
     value: function(couchConnection, couchdbcommand) {
-      if (!couchConnection) {
-        couchConnection = this.defaultCouchConnection();
-        this.debug("Using the apps couchConnection", couchConnection);
+      var couchurl = new CorpusConnection(couchConnection).corpusUrl;
+      if (couchdbcommand) {
+        couchurl = couchurl.replace(couchConnection.pouchname, couchdbcommand);
       }
-
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port && couchConnection.port !== "443" && couchConnection.port !== "80") {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      if (!couchConnection.path) {
-        couchConnection.path = "";
-      }
-      couchurl = couchurl + couchConnection.path;
-      if (couchdbcommand === null || couchdbcommand === undefined) {
-        couchurl = couchurl + "/" + couchConnection.pouchname;
-      } else {
-        couchurl = couchurl + couchdbcommand;
-      }
-
-
-      /* Switch user to the new dev servers if they have the old ones */
-      couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
-      couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
-
-      /*
-       * For debugging cors #838: Switch to use the corsproxy corpus service instead
-       * of couchdb directly
-       */
-      // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-
       return couchurl;
     }
   },

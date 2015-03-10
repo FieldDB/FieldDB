@@ -106,6 +106,45 @@ describe("Database", function() {
       }
       expect(db.connectionInfo.userCtx.name).toEqual("lingllama");
     });
+
+    it("should be able to get a default connection", function() {
+      var db = new Database();
+      var connection = db.defaultCouchConnection();
+      expect(connection).toEqual({
+        fieldDBtype: "CorpusConnection",
+        protocol: "https://",
+        domain: "localhost",
+        port: "6984",
+        dbname: "default",
+        path: "",
+        authUrl: "https://localhost:3183",
+        userFriendlyServerName: "Localhost",
+        version: "v2.42.11",
+        pouchname: "default",
+        title: "default",
+        titleAsUrl: "default",
+        corpusUrl: "https://localhost:6984/default"
+      });
+    });
+
+    it("should be able to get a couch url from a deprecated connection", function() {
+      var db = new Database();
+      var connection = {
+        "protocol": "https://",
+        "domain": "corpus.example.org",
+        "port": "443",
+        "pouchname": "lingllama-communitycorpus",
+        "path": "",
+        "authUrl": "https://auth.example.org",
+        "userFriendlyServerName": "Example.org",
+        "corpusid": "",
+        "title": "lingllama-communitycorpus",
+        "description": "The details of this corpus are not public.",
+        "titleAsUrl": "lingllama-communitycorpus"
+      };
+      expect(db.getCouchUrl(connection, "_session")).toEqual("https://corpus.example.org/_session");
+    });
+
   });
 
   describe("login", function() {

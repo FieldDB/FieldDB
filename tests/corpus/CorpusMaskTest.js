@@ -1,4 +1,5 @@
 var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
+var CorpusConnection = require("../../api/corpus/CorpusConnection").CorpusConnection;
 var CorpusConnections = require("../../api/corpus/CorpusConnections").CorpusConnections;
 
 describe("CorpusMask ", function() {
@@ -124,13 +125,50 @@ describe("CorpusMask ", function() {
 
   describe("corpus collections", function() {
 
+    it("should be able to get a default connection", function() {
+      var connection = new CorpusConnection().defaultCouchConnection();
+      expect(connection).toEqual({
+        fieldDBtype: "CorpusConnection",
+        protocol: "https://",
+        domain: "localhost",
+        port: "6984",
+        dbname: "default",
+        path: "",
+        authUrl: "https://localhost:3183",
+        userFriendlyServerName: "Localhost",
+        version: "v2.42.11",
+        pouchname: "default",
+        title: "default",
+        titleAsUrl: "default",
+        corpusUrl: "https://localhost:6984/default"
+      });
+    });
+
+    it("should be able to get a couch url from a deprecated connection", function() {
+      var connection = new CorpusConnection({
+        "protocol": "https://",
+        "domain": "corpus.example.org",
+        "port": "443",
+        "pouchname": "lingllama-communitycorpus",
+        "path": "",
+        "authUrl": "https://auth.example.org",
+        "userFriendlyServerName": "Example.org",
+        "corpusid": "",
+        "title": "lingllama-communitycorpus",
+        "description": "The details of this corpus are not public.",
+        "titleAsUrl": "lingllama-communitycorpus"
+      });
+      expect(connection.corpusUrl).toEqual("https://corpus.example.org/lingllama-communitycorpus");
+    });
+
     it("should be able to extract a connection from a mask", function() {
       expect(CorpusConnections).toBeDefined();
       var corpora = new CorpusConnections();
       expect(corpora).toBeDefined();
 
-      var corpus = new CorpusMask(CorpusMask.prototype.defaults);
-      corpus.title = "Group Data Entry tutorial";
+      var corpus = new CorpusMask({
+        title: "Group Data Entry tutorial"
+      });
       corpus.corpusConnection = {
         "protocol": "https://",
         "domain": "corpus.example.org",
@@ -145,31 +183,37 @@ describe("CorpusMask ", function() {
         "titleAsUrl": "computatio____entry_tutoria"
       };
       var connection = corpus.corpusConnection;
+      expect(connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
 
       expect(connection.toJSON().title).toEqual(corpus.title);
-      expect(connection.toJSON().pouchname).toEqual(corpus.pouchname);
-      expect(connection.toJSON().dbname).toEqual(corpus.pouchname);
+      expect(connection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
+      expect(connection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
+
+      //if th eparent pouchname changes, so should the corpus connection
+      corpus.pouchname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
+      expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
       expect(connection.toJSON()).toEqual({
-        fieldDBtype: "CorpusConnection",
-        protocol: "https://",
-        domain: "corpus.example.org",
-        port: "443",
-        dbname: "",
-        path: "",
-        authUrl: "https://auth.example.org",
-        userFriendlyServerName: "Example.org",
-        corpusid: "",
-        title: "Group Data Entry tutorial",
-        description: "The details of this corpus are not public.",
-        titleAsUrl: "group_data_entry_tutorial",
-        version: "v2.42.11",
-        pouchname: "",
-        corpusUrl: ""
+        fieldDBtype: 'CorpusConnection',
+        protocol: 'https://',
+        domain: 'corpus.example.org',
+        port: '443',
+        dbname: 'computationalfieldworkshop-group_data_entry_tutorial_copy',
+        path: '',
+        authUrl: 'https://auth.example.org',
+        userFriendlyServerName: 'Example.org',
+        corpusid: '',
+        title: 'Group Data Entry tutorial',
+        description: 'The details of this corpus are not public.',
+        titleAsUrl: 'group_data_entry_tutorial',
+        version: 'v2.42.11',
+        corpusUrl: 'https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial',
+        pouchname: 'computationalfieldworkshop-group_data_entry_tutorial_copy'
       });
       // connections.push(connection.toJSON("complete"));
 
     });
+
   });
 
 });
