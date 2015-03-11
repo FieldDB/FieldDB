@@ -501,8 +501,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(details) {
       var deferred = Q.defer(),
         self = this,
-        baseUrl = this.url,
-        authUrl;
+        baseUrl = this.url;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
@@ -527,10 +526,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        authUrl = details.authUrl || self.authUrl;
+        details.authUrl = details.authUrl || self.authUrl;
 
-        if (!authUrl) {
-          authUrl = self.BASE_AUTH_URL;
+        if (!details.authUrl) {
+          details.authUrl = self.BASE_AUTH_URL;
         }
 
         if (!details.username) {
@@ -580,27 +579,28 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
+        if (!details.corpusConnection) {
+          details.corpusConnection = CorpusConnection.prototype.defaultCouchConnection(details.authUrl);
+        }
+
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: authUrl + "/register",
+          url: details.authUrl + "/register",
           data: details
         }).then(function(result) {
-            self.debug("registration results", result);
-            deferred.resolve(result);
-            // self.login(details).then(function(result) {
-            // deferred.resolve(result);
-            // }, function(error) {
-            //   self.debug("Failed to login ");
-            //   deferred.reject(error);
-            // });
-          },
-          function(reason) {
-            self.debug(reason);
-            reason.details = details;
-            deferred.reject(reason);
-          }).fail(function(reason) {
+          self.debug("registration results", result);
+          deferred.resolve(result);
+          //dont automatically login, let the client side decide what to do.
+          // self.login(details).then(function(result) {
+          // deferred.resolve(result);
+          // }, function(error) {
+          //   self.debug("Failed to login ");
+          //   deferred.reject(error);
+          // });
+        }, function(reason) {
           self.debug(reason);
+          reason.details = details;
           deferred.reject(reason);
         });
 
@@ -608,8 +608,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       return deferred.promise;
     }
   },
-
-
 
   addCorpusRoleToUser: {
     value: function(role, userToAddToCorpus, successcallback, failcallback) {
