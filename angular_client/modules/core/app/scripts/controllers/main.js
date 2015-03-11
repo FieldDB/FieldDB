@@ -25,7 +25,7 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
       document.addEventListener("notauthenticated", function (e) {
         console.log(e);
         $scope.application.bug("user isn't able to see anything, show them the welcome page");
-        $scope.application.authentication.error = "";
+        // $scope.application.authentication.error = "";
         $scope.$apply(function() {
           console.log("  Redirecting the user to the welcome page");
           //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
