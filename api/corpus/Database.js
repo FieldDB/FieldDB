@@ -340,7 +340,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   login: {
-    value: function(loginDetails) {
+    value: function(details) {
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url,
@@ -352,40 +352,40 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
       Q.nextTick(function() {
 
-        if (!loginDetails) {
+        if (!details) {
           deferred.reject({
-            error: validateUsername,
+            details: details,
             userFriendlyErrors: ["This application has errored, please contact us."],
             status: 412
           });
           return;
         }
-        authUrl = loginDetails.authUrl || this.authUrl;
+        authUrl = details.authUrl || self.authUrl;
 
         if (!authUrl) {
           authUrl = self.BASE_AUTH_URL;
         }
 
-        if (!loginDetails.username) {
+        if (!details.username) {
           deferred.reject({
-            error: validateUsername,
+            details: details,
             userFriendlyErrors: ["Please supply a username."],
             status: 412
           });
           return;
         }
-        if (!loginDetails.password) {
+        if (!details.password) {
           deferred.reject({
-            error: validateUsername,
+            details: details,
             userFriendlyErrors: ["Please supply a password."],
             status: 412
           });
           return;
         }
 
-        var validateUsername = CorpusConnection.validateIdentifier(loginDetails.username);
+        var validateUsername = CorpusConnection.validateIdentifier(details.username);
         if (validateUsername.changes.length > 0) {
-          loginDetails.username = validateUsername.identifier;
+          details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
@@ -399,7 +399,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           type: "POST",
           dataType: "json",
           url: authUrl + "/login",
-          data: loginDetails
+          data: details
         }).then(function(authserverResult) {
             if (authserverResult.user) {
               var corpusServerURLs = [];
@@ -425,7 +425,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
                   url: corpusServerURLs[corpusUrlIndex],
                   data: {
                     name: authserverResult.user.username,
-                    password: loginDetails.password
+                    password: details.password
                   }
                 }));
               }
@@ -454,6 +454,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             }
           },
           function(reason) {
+            reason.details = details;
             self.debug(reason);
             deferred.reject(reason);
           }).fail(function(reason) {
@@ -480,65 +481,129 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         dataType: "json",
         url: baseUrl + "/_session"
       }).then(function(result) {
-          if (result.ok) {
-            self.connectionInfo = null;
-            deferred.resolve(result);
-          } else {
-            deferred.reject(result);
-          }
-        },
-        function(reason) {
-          this.debug(reason);
-          deferred.reject(reason);
+        if (result.ok) {
+          self.connectionInfo = null;
+          deferred.resolve(result);
+        } else {
+          deferred.reject(result);
+        }
+      }, function(reason) {
 
-        });
+        this.debug(reason);
+        deferred.reject(reason);
+
+      });
       return deferred.promise;
     }
   },
 
   register: {
-    value: function(registerDetails) {
+    value: function(details) {
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url,
-        authUrl = this.authUrl;
+        authUrl;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
       }
 
-      if (!authUrl) {
-        authUrl = this.BASE_AUTH_URL;
-      }
+      Q.nextTick(function() {
 
-      if (!registerDetails) {
-        registerDetails = {
-          username: this.dbname.split("-")[0],
-          password: "testtest"
-        };
-      }
+        if (!details && self.dbname && self.dbname.split("-").length === 2) {
+          details = {
+            username: self.dbname.split("-")[0],
+            password: "testtest",
+            confirmPassword: "testtest"
+          };
+        }
 
-      CORS.makeCORSRequest({
-        type: "POST",
-        dataType: "json",
-        url: authUrl + "/register",
-        data: registerDetails
-      }).then(function(result) {
-          self.debug("registration results", result);
-          deferred.resolve(result);
-          // self.login(registerDetails).then(function(result) {
-          // deferred.resolve(result);
-          // }, function(error) {
-          //   self.debug("Failed to login ");
-          //   deferred.reject(error);
-          // });
-        },
-        function(reason) {
+        if (!details) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+
+        authUrl = details.authUrl || self.authUrl;
+
+        if (!authUrl) {
+          authUrl = self.BASE_AUTH_URL;
+        }
+
+        if (!details.username) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a password."],
+            status: 412
+          });
+          return;
+        }
+
+        if (!details.confirmPassword) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please confirm your password."],
+            status: 412
+          });
+          return;
+        }
+
+        if (details.confirmPassword !== details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Passwords don't match, please double check your password."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        if (validateUsername.changes.length > 0) {
+          details.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: authUrl + "/register",
+          data: details
+        }).then(function(result) {
+            self.debug("registration results", result);
+            deferred.resolve(result);
+            // self.login(details).then(function(result) {
+            // deferred.resolve(result);
+            // }, function(error) {
+            //   self.debug("Failed to login ");
+            //   deferred.reject(error);
+            // });
+          },
+          function(reason) {
+            self.debug(reason);
+            reason.details = details;
+            deferred.reject(reason);
+          }).fail(function(reason) {
           self.debug(reason);
           deferred.reject(reason);
-        }).fail(function(reason) {
-        self.debug(reason);
-        deferred.reject(reason);
+        });
+
       });
       return deferred.promise;
     }
