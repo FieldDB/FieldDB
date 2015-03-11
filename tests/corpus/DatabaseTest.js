@@ -117,6 +117,7 @@ describe("Database", function() {
         port: "6984",
         dbname: "default",
         path: "",
+        serverLabel: "localhost",
         authUrl: "https://localhost:3183",
         userFriendlyServerName: "Localhost",
         version: connection.version,
@@ -245,8 +246,24 @@ describe("Database", function() {
         confirmPassword: "morpheme"
       }).then(function() {
         expect(false).toBeTruthy();
-
       }, function(error) {
+        expect(error.details.corpusConnection).toEqual({
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "localhost",
+          port: "6984",
+          dbname: "default",
+          path: "",
+          serverLabel: "localhost",
+          authUrl: "https://localhost:3183",
+          userFriendlyServerName: "Localhost",
+          version: "v2.42.11",
+          pouchname: "default",
+          title: "default",
+          titleAsUrl: "default",
+          corpusUrl: "https://localhost:6984/default"
+        });
+        expect(error.details.authUrl).toBeDefined();
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
@@ -257,11 +274,27 @@ describe("Database", function() {
         username: "testinganonymous" + Date.now(),
         password: "morpheme",
         confirmPassword: "morpheme",
-        authUrl: "https://auth.linguistics.university.edu:3222"
+        authUrl: "https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"
       }).then(function() {
         expect(false).toBeTruthy();
-
       }, function(error) {
+        expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
+        expect(error.details.corpusConnection).toEqual({
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "auth.linguistics.miauniversity.edu",
+          port: "3222",
+          dbname: "default",
+          path: "some/virtual/host",
+          serverLabel: "miauniversity",
+          authUrl: "https://auth.linguistics.miauniversity.edu:3222/some/virtual/host",
+          userFriendlyServerName: "miauniversity.edu",
+          version: "v2.42.11",
+          pouchname: "default",
+          title: "default",
+          titleAsUrl: "default",
+          corpusUrl: "https://auth.linguistics.miauniversity.edu:3222/some/virtual/host/default"
+        });
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
@@ -275,7 +308,24 @@ describe("Database", function() {
         expect(error.details).toEqual({
           username: "anonymouseuser123",
           password: "testtest",
-          confirmPassword: "testtest"
+          confirmPassword: "testtest",
+          authUrl: "https://localhost:3183",
+          corpusConnection: {
+            fieldDBtype: "CorpusConnection",
+            protocol: "https://",
+            domain: "localhost",
+            port: "6984",
+            dbname: "default",
+            path: "",
+            serverLabel: "localhost",
+            authUrl: "https://localhost:3183",
+            userFriendlyServerName: "Localhost",
+            version: "v2.42.11",
+            pouchname: "default",
+            title: "default",
+            titleAsUrl: "default",
+            corpusUrl: "https://localhost:6984/default"
+          }
         });
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
