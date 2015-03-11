@@ -136,7 +136,7 @@ describe("CorpusMask ", function() {
         path: "",
         authUrl: "https://localhost:3183",
         userFriendlyServerName: "Localhost",
-        version: "v2.42.11",
+        version: connection.version,
         pouchname: "default",
         title: "default",
         titleAsUrl: "default",
@@ -206,7 +206,7 @@ describe("CorpusMask ", function() {
         title: "Group Data Entry tutorial",
         description: "The details of this corpus are not public.",
         titleAsUrl: "group_data_entry_tutorial",
-        version: "v2.42.11",
+        version: connection.version,
         corpusUrl: "https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial",
         pouchname: "computationalfieldworkshop-group_data_entry_tutorial_copy"
       });
