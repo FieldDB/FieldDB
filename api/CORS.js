@@ -30,7 +30,7 @@ CORS.supportCORSandIE = function(method, url) {
   try {
     xhrCors = new XMLHttpRequest();
   } catch (e) {
-    this.warn("XMLHttpRequest is not defined, nothign will happen.", e);
+    this.warn("XMLHttpRequest is not defined, nothing will happen.", e);
     xhrCors = {};
   }
   if ("withCredentials" in xhrCors) {
