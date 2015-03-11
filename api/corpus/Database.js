@@ -23,6 +23,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: Database
   },
 
+  fieldDBtype: {
+    get: function() {
+      return this._fieldDBtype || "Database";
+    },
+    set: function(value) {
+      if (value !== this.fieldDBtype) {
+        this.debug("Using type " + this.fieldDBtype + " when the incoming object was " + value);
+      }
+    }
+  },
+
   DEFAULT_COLLECTION_MAPREDUCE: {
     value: DEFAULT_COLLECTION_MAPREDUCE
   },
@@ -333,80 +344,122 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       var deferred = Q.defer(),
         self = this,
         baseUrl = this.url,
-        authUrl = loginDetails.authUrl || this.authUrl;
+        authUrl;
 
       if (!baseUrl) {
         baseUrl = this.BASE_DB_URL;
       }
 
-      if (!authUrl) {
-        authUrl = this.BASE_AUTH_URL;
-      }
+      Q.nextTick(function() {
 
-      CORS.makeCORSRequest({
-        type: "POST",
-        dataType: "json",
-        url: authUrl + "/login",
-        data: loginDetails
-      }).then(function(authserverResult) {
-          if (authserverResult.user) {
-            var corpusServerURLs = [];
-            if (authserverResult.user.corpuses && authserverResult.user.corpuses[0]) {
-              authserverResult.user.corpuses.map(function(corpusConnection) {
-                var url = self.getCouchUrl(corpusConnection, "/_session");
-                if (!self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                  corpusServerURLs.push(url);
-                } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                  corpusServerURLs.push(url);
-                }
+        if (!loginDetails) {
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+        authUrl = loginDetails.authUrl || this.authUrl;
+
+        if (!authUrl) {
+          authUrl = self.BASE_AUTH_URL;
+        }
+
+        if (!loginDetails.username) {
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!loginDetails.password) {
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: ["Please supply a password."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = CorpusConnection.validateIdentifier(loginDetails.username);
+        if (validateUsername.changes.length > 0) {
+          loginDetails.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: authUrl + "/login",
+          data: loginDetails
+        }).then(function(authserverResult) {
+            if (authserverResult.user) {
+              var corpusServerURLs = [];
+              if (authserverResult.user.corpuses && authserverResult.user.corpuses[0]) {
+                authserverResult.user.corpuses.map(function(corpusConnection) {
+                  var url = self.getCouchUrl(corpusConnection, "/_session");
+                  if (!self.dbname && corpusServerURLs.indexOf(url) === -1) {
+                    corpusServerURLs.push(url);
+                  } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServerURLs.indexOf(url) === -1) {
+                    corpusServerURLs.push(url);
+                  }
+                });
+              }
+              if (corpusServerURLs.length < 1) {
+                corpusServerURLs = [baseUrl + "/_session"];
+              }
+              var promises = [];
+              authserverResult.user.roles = [];
+              for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServerURLs.length; corpusUrlIndex++) {
+                promises.push(CORS.makeCORSRequest({
+                  type: "POST",
+                  dataType: "json",
+                  url: corpusServerURLs[corpusUrlIndex],
+                  data: {
+                    name: authserverResult.user.username,
+                    password: loginDetails.password
+                  }
+                }));
+              }
+
+              Q.allSettled(promises).then(function(results) {
+                results.map(function(result) {
+                  if (result.state === "fulfilled") {
+                    authserverResult.user.roles = authserverResult.user.roles.concat(result.value.roles);
+                  } else {
+                    self.debug("Failed to login to one of the users's corpus servers ", result);
+                  }
+                });
+                deferred.resolve(authserverResult.user);
               });
-            }
-            if (corpusServerURLs.length < 1) {
-              corpusServerURLs = [baseUrl + "/_session"];
-            }
-            var promises = [];
-            authserverResult.user.roles = [];
-            for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServerURLs.length; corpusUrlIndex++) {
-              promises.push(CORS.makeCORSRequest({
-                type: "POST",
-                dataType: "json",
-                url: corpusServerURLs[corpusUrlIndex],
-                data: {
-                  name: authserverResult.user.username,
-                  password: loginDetails.password
-                }
-              }));
-            }
 
-            Q.allSettled(promises).then(function(results) {
-              results.map(function(result) {
-                if (result.state === "fulfilled") {
-                  authserverResult.user.roles = authserverResult.user.roles.concat(result.value.roles);
-                } else {
-                  self.debug("Failed to login to one of the users's corpus servers ", result);
-                }
-              });
-              deferred.resolve(authserverResult.user);
-            });
-
-            // .then(function(sessionInfo) {
-            //   // self.debug(sessionInfo);
-            //   result.user.roles = sessionInfo.roles;
-            //   deferred.resolve(result.user);
-            // }, function() {
-            //   self.debug("Failed to login ");
-            //   deferred.reject("Something is wrong.");
-            // });
-          } else {
-            deferred.reject(authserverResult.userFriendlyErrors.join(" "));
-          }
-        },
-        function(reason) {
+              // .then(function(sessionInfo) {
+              //   // self.debug(sessionInfo);
+              //   result.user.roles = sessionInfo.roles;
+              //   deferred.resolve(result.user);
+              // }, function() {
+              //   self.debug("Failed to login ");
+              //   deferred.reject("Something is wrong.");
+              // });
+            } else {
+              deferred.reject(authserverResult.userFriendlyErrors.join(" "));
+            }
+          },
+          function(reason) {
+            self.debug(reason);
+            deferred.reject(reason);
+          }).fail(function(reason) {
           self.debug(reason);
           deferred.reject(reason);
-        }).fail(function(reason) {
-        self.debug(reason);
-        deferred.reject(reason);
+        });
       });
       return deferred.promise;
     }
