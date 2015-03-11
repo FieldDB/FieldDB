@@ -50,10 +50,10 @@ var Authentication = function Authentication(options) {
     return self.user;
   }, function(error) {
     self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
-    if (error.status === 0) {
-      error.userFriendlyErrors = "Unable to resume session, are you sure you're not offline?";
+    if (error.status !== 409) {
+      // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
+      self.error = error.userFriendlyErrors.join(" ");
     }
-    self.error = error.userFriendlyErrors.join(" ");
     self.dispatchEvent("notauthenticated");
     self.render();
 
