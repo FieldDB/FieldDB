@@ -153,15 +153,15 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         if (typeof value.trim === "function") {
           value = value.trim();
           if (value !== "default") {
-            var dbnameValidationResults = CorpusConnection.validateDbnameFormat(value);
-            value = dbnameValidationResults.dbname;
-            if (dbnameValidationResults.changes.length > 0) {
-              this.warn(" Invalid dbname ", dbnameValidationResults.changes.join("\n "));
-              throw new Error(dbnameValidationResults.changes.join("\n "));
-            }
             var pieces = value.split("-");
             if (pieces.length !== 2) {
               throw new Error("Database names should be composed of a username-datbaseidentifier" + value);
+            }
+            var identifierValidationResults = CorpusConnection.validateIdentifier(pieces[1]);
+            value = pieces[0] + "-" + identifierValidationResults.identifier;
+            if (identifierValidationResults.changes.length > 0) {
+              this.warn(" Invalid identifier ", identifierValidationResults.changes.join("\n "));
+              throw new Error(identifierValidationResults.changes.join("\n "));
             }
           }
         }
@@ -400,43 +400,43 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
 /**
  * Ensures that dbnames can be used inside of corpus identifiers, which are couchdb database names.
  *
- * @param  {string} originalDbname the desired dbname
- * @return {object}                  the resulting dbname, the original dbname, and the changes that were applied.
+ * @param  {string} originalIdentifier the desired dbname or username
+ * @return {object}                  the resulting dbname or username, the original dbname, and the changes that were applied.
  */
-CorpusConnection.validateDbnameFormat = function(originalDbname) {
-  var dbname = originalDbname.toString();
+CorpusConnection.validateIdentifier = function(originalIdentifier) {
+  var identifier = originalIdentifier.toString();
   var changes = [];
-  if (dbname.toLowerCase() !== dbname) {
-    changes.push("The dbname has to be lowercase so that it can be used in your CouchDB database names.");
-    dbname = dbname.toLowerCase();
+  if (identifier.toLowerCase() !== identifier) {
+    changes.push("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
+    identifier = identifier.toLowerCase();
   }
 
-  if (dbname.split("-").length !== 2) {
-    changes.push("We are using - as a reserved symbol in database names, so you can\"t use it in your dbname.");
-    dbname = dbname.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
+  if (identifier.split("-").length > 1) {
+    changes.push("We are using - as a reserved symbol in database names, so you can't use it in your identifier.");
+    identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
   }
 
-  if (Diacritics.clean(dbname) !== dbname) {
-    changes.push("You have to use ascii characters in your dbnames because your dbname is used in your in web urls, so its better if you can use something more web friendly.");
-    dbname = Diacritics.clean(dbname);
+  if (Diacritics.clean(identifier) !== identifier) {
+    changes.push("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
+    identifier = Diacritics.clean(identifier);
   }
 
-  if (dbname.replace(/[^a-z0-9_-]/g, "_") !== dbname) {
-    changes.push("You have some characters which web servers wouldn\"t trust in your dbname.");
-    dbname = dbname.replace(/[^a-z0-9_]/g, "_");
+  if (identifier.replace(/[^a-z0-9_-]/g, "_") !== identifier) {
+    changes.push("You have some characters which web servers wouldn't trust in your identifier.");
+    identifier = identifier.replace(/[^a-z0-9_]/g, "_");
   }
 
-  if (dbname.length < 4) {
-    changes.push("Your dbname is really too short");
+  if (identifier.length < 2) {
+    changes.push("Your identifier is really too short.");
   }
 
   if (changes.length > 0) {
-    changes.unshift("You asked to use " + originalDbname + " but that isn\"t a very url friendly dbname, we would reccomend using this instead: " + dbname);
+    changes.unshift("You asked to use " + originalIdentifier + " but that isn't a very url friendly identifier, we would reccomend using this instead: " + identifier + " the following are a list of reason's why.");
   }
 
   return {
-    "dbname": dbname,
-    "original": originalDbname,
+    "identifier": identifier,
+    "original": originalIdentifier,
     "changes": changes
   };
 };
