@@ -241,7 +241,8 @@ describe("Database", function() {
       var db = new Database();
       db.register({
         username: "testinganonymous" + Date.now(),
-        password: "morpheme"
+        password: "morpheme",
+        confirmPassword: "morpheme"
       }).then(function() {
         expect(false).toBeTruthy();
 
@@ -249,6 +250,94 @@ describe("Database", function() {
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
+
+    it("should be able to register to any valid auth server", function(done) {
+      var db = new Database();
+      db.register({
+        username: "testinganonymous" + Date.now(),
+        password: "morpheme",
+        confirmPassword: "morpheme",
+        authUrl: "https://auth.linguistics.university.edu:3222"
+      }).then(function() {
+        expect(false).toBeTruthy();
+
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should be able to register a new user if its a new corpus (wordcloud users)", function(done) {
+      var db = new Database();
+      db.dbname = "anonymouseuser123-wordclouddb";
+      db.register().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.details).toEqual({
+          username: "anonymouseuser123",
+          password: "testtest",
+          confirmPassword: "testtest"
+        });
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should tell user there is a bug if the client didnt provide any register details", function(done) {
+      var db = new Database();
+      db.register().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a username", function(done) {
+      var db = new Database();
+      db.register({
+        username: "",
+        password: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a password", function(done) {
+      var db = new Database();
+      db.register({
+        username: "lingllama",
+        password: ""
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user enters an impossible username", function(done) {
+      var db = new Database();
+      db.register({
+        username: "Ling Llamâ-friend's",
+        password: "phoneme",
+        confirmPassword: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual([
+          "You asked to use Ling Llamâ-friend's but that isn't a very url friendly identifier, we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
+          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
+          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
+          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
+          "You have some characters which web servers wouldn't trust in your identifier."
+        ]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
   });
 
 });
