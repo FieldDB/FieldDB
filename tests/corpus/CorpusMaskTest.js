@@ -134,6 +134,7 @@ describe("CorpusMask ", function() {
         port: "6984",
         dbname: "default",
         path: "",
+        serverLabel: "localhost",
         authUrl: "https://localhost:3183",
         userFriendlyServerName: "Localhost",
         version: connection.version,

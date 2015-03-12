@@ -155,7 +155,7 @@ describe("User ", function() {
 
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
       expect(user.authUrl).toEqual("https://authdev.lingsync.org");
-      expect(user.corpora.toJSON()).toEqual([{
+      expect(user.corpora.toJSON()[0]).toEqual({
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
         domain: "corpusdev.lingsync.org",
@@ -163,13 +163,14 @@ describe("User ", function() {
         dbname: "sapir-cherokee",
         corpusid: "E038ECA6-AC69-43F3-8EE8-56AD3CDC9162",
         authUrl: "https://authdev.lingsync.org",
-        path: "",
+        // path: "",
         corpusUrl: "https://corpusdev.lingsync.org/sapir-cherokee",
         version: user.version,
         pouchname: "sapir-cherokee",
         title: "cherokee",
         titleAsUrl: "cherokee"
-      }, {
+      });
+      expect(user.corpora.toJSON()[1]).toEqual({
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
         domain: "corpusdev.lingsync.org",
@@ -177,13 +178,13 @@ describe("User ", function() {
         dbname: "sapir-firstcorpus",
         corpusid: "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
         authUrl: "https://authdev.lingsync.org",
-        path: "",
+        // path: "",
         corpusUrl: "https://corpusdev.lingsync.org/sapir-firstcorpus",
         version: user.version,
         pouchname: "sapir-firstcorpus",
         title: "firstcorpus",
         titleAsUrl: "firstcorpus"
-      }]);
+      });
     });
 
 

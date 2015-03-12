@@ -583,6 +583,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           details.corpusConnection = CorpusConnection.prototype.defaultCouchConnection(details.authUrl);
         }
 
+        if (self.application && self.application.brandLowerCase) {
+          details.appbrand = self.application.brandLowerCase;
+        }
+
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
