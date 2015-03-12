@@ -125,7 +125,17 @@ CORS.makeCORSRequest = function(options) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        self.debug("response was json", e);
+        if (e.message === "Unexpected token o") {
+          self.debug("response was json", e);
+        } else {
+          self.bug("There was a serious error on the server. It replied in plain text.", response);
+          response = {
+            error:  xhr.statusText,
+            status: xhr.status,
+            // statusText: xhr.statusText,
+            userFriendlyErrors: ["There was a problem contacting the server, please report this 2382"]
+          }
+        }
       }
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
       deferred.reject(response);
