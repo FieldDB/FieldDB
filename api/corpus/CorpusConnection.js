@@ -496,7 +496,7 @@ CorpusConnection.validateIdentifier = function(originalIdentifier) {
   }
 
   if (changes.length > 0) {
-    changes.unshift("You asked to use " + originalIdentifier + " but that isn't a very url friendly identifier, we would reccomend using this instead: " + identifier + " the following are a list of reason's why.");
+    changes.unshift("You asked to use " + originalIdentifier + " but we would reccomend using this instead: " + identifier + " the following are a list of reason's why.");
   }
 
   return {
