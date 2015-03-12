@@ -57,7 +57,14 @@ var CorpusConnection = function CorpusConnection(options) {
     this._fieldDBtype = "CorpusConnection";
   }
   this.debug("Constructing CorpusConnection ", options);
-
+  if (options) {
+    var cleanDefaultValues = ["dbname", "pouchname", "title", "titleAsUrl"]
+    cleanDefaultValues.map(function(cleanMe) {
+      if (options[cleanMe] === "default") {
+        options[cleanMe] = "";
+      }
+    });
+  }
   FieldDBObject.apply(this, arguments);
 };
 

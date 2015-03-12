@@ -25,6 +25,11 @@ var User = function User(options) {
     this._fieldDBtype = "User";
   }
   this.debug("Constructing User length: ", options);
+  if (options) {
+    if (options.corpora && options.corpuses) {
+      delete options.corpuses;
+    }
+  }
   UserMask.apply(this, arguments);
 };
 
@@ -128,15 +133,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
-  corpuses: {
-    get: function() {
-      return this.corpora;
-    },
-    set: function(value) {
-      this.corpora = value;
-    }
-  },
-
   corpora: {
     configurable: true,
     get: function() {
@@ -154,6 +150,19 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
           value = new this.INTERNAL_MODELS["corpora"](value);
         }
       }
+
+      if (value) {
+        value.map(function(couchConnection) {
+          if (couchConnection.authUrl) {
+            couchConnection.authUrl = couchConnection.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
+          }
+          if (couchConnection.domain) {
+            couchConnection.domain = couchConnection.domain.replace(/ifielddevs.iriscouch.com/g, "corpusdev.lingsync.org");
+          }
+          return couchConnection;
+        });
+      }
+
       this._corpora = value;
     }
   },
@@ -190,6 +199,21 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
         }
       }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      includeEvenEmptyAttributes = true;
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      // TODO not including the corpuses, instead include corpora
+      json.corpora = this.corpora;
+      delete json.corpora;
+
+      this.debug(json);
+      return json;
     }
   }
 

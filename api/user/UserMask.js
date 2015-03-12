@@ -26,17 +26,6 @@ var UserMask = function UserMask(options) {
       if (options.authUrl) {
         options.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
       }
-      if (options.corpuses) {
-        options.corpuses.map(function(couchConnection) {
-          if (couchConnection.authUrl) {
-            couchConnection.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
-          } else {
-            couchConnection.authUrl = options.authUrl;
-          }
-          couchConnection.domain = couchConnection.domain.replace(/ifielddevs.iriscouch.com/g, "corpusdev.lingsync.org");
-          return couchConnection;
-        });
-      }
     }
   }
 

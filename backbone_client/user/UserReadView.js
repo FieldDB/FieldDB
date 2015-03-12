@@ -136,8 +136,8 @@ define([
         }
 
         // Display the CorpusesReadView
-        this.corpusesReadView.el = $(this.el).find('.corpuses');
-        this.corpusesReadView.render();
+        this.corporaReadView.el = $(this.el).find('.corpora');
+        this.corporaReadView.render();
 
         var couchConnection = window.app.get("couchConnection");
         var self = this;
@@ -163,15 +163,15 @@ define([
 //        childViewTagName     : 'li'
 //      });
     //Create a CommentReadView
-      var corpuses = new Corpuses();
+      var corpora = new Corpuses();
       try {
-        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
-          this.model.get("username") + "corpusesUserHasAccessTo")));
+        corpora = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corporaUserHasAccessTo")));
       } catch (e) {
         console.log("Couldn't load the list of corpora which the user has access to.");
       }
-      this.corpusesReadView = new UpdatingCollectionView({
-        collection : corpuses,
+      this.corporaReadView = new UpdatingCollectionView({
+        collection : corpora,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });

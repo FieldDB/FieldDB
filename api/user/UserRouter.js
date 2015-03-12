@@ -60,7 +60,7 @@ define([
     });
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
       if(!connection){
         return;
       }
@@ -124,7 +124,7 @@ define([
         if (OPrime.debugMode) OPrime.debug("the pouchname is missing, this should never happen");
         return;
       }
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
       if(!connection){
         return;
       }
@@ -196,9 +196,9 @@ define([
         });
     },
     bringCorpusToThisDevice : function(corpus, callback) {
-      for (var x in window.app.get("authentication").get("userPrivate").get("corpuses")){
-        if(window.app.get("authentication").get("userPrivate").get("corpuses")[x].pouchname == corpus.get("pouchname")){
-          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpuses")[x]);
+      for (var x in window.app.get("authentication").get("userPrivate").get("corpora")){
+        if(window.app.get("authentication").get("userPrivate").get("corpora")[x].pouchname == corpus.get("pouchname")){
+          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){

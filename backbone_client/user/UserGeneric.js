@@ -1,5 +1,5 @@
-define([ 
-    "backbone", 
+define([
+    "backbone",
     "hotkey/HotKey",
     "permission/Permission",
     "user/UserPreference",
@@ -19,7 +19,7 @@ define([
     /**
      * @class A generic user has a repository and permission groups
      *        (read, write, admin). It can not login.
-     * 
+     *
      * @property {String} username This is a username used when login.
      * @property {String} password This is a password used when login. It should be secure (containing 1 digit, 1 uppercase) because it is what protects the confidentiality of the corpus.
      * @property {String} email This is user's email
@@ -29,17 +29,17 @@ define([
      * @property {String} affiliation This is user's affiliation
      * @property {String} description This user's description
      * @property {String} subtitle This user's subtitle
-     * @property {Array} corpuses The corpus connections of the corpuses owned by
+     * @property {Array} corpora The corpus connections of the corpora owned by
      *           this user
      * @property {Array} dataLists The datalist IDs of the datalists owned
      *           by this user.
      * @property {UserPreference} prefs This is where we'll have things like
      *           background/skin.
-     * 
+     *
      * @description The initialize function probably checks to see if
      *              the user is existing or new and creates a new
      *              account if it is new.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
@@ -50,7 +50,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("USERGENERIC init");
 
     },
-      
+
     // Internal models: used by the parse function
     internalModels : {
       prefs : UserPreference,
@@ -63,7 +63,7 @@ define([
       var cc = window.app.get("corpus").get("couchConnection");
       if(window.app.get("corpus").id != undefined){
         cc.corpusid =  window.app.get("corpus").id;
-        this.get("corpuses").push(cc);
+        this.get("corpora").push(cc);
       }else{
         window.appView.toastUser("The corpus has no id, cant add it to the user.","alert-danger","Bug!");
       }
@@ -73,7 +73,7 @@ define([
       if(typeof callback == "function"){
         callback();
       }
-    }, 
+    },
      getGravatar : function(email){
       var existingGravatar = this.get("gravatar");
       if(existingGravatar.indexOf("gravatar.com") > -1){

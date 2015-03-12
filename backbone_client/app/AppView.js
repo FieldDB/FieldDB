@@ -364,8 +364,8 @@ define([
       });
 
 
-      this.corpusesReadView = new UpdatingCollectionView({
-        collection : this.model.get("corpusesUserHasAccessTo"),
+      this.corporaReadView = new UpdatingCollectionView({
+        collection : this.model.get("corporaUserHasAccessTo"),
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
@@ -662,10 +662,10 @@ define([
       this.searchEditView.format = "centreWell";
       this.searchEditView.render();
 
-      this.corpusesReadView.el = $(this.el).find('.corpuses');
-      this.corpusesReadView.render();
-      if(this.model.get("corpusesUserHasAccessTo").length > 20 ){
-        $(this.el).find('.corpuses').addClass("scrollable");
+      this.corporaReadView.el = $(this.el).find('.corpora');
+      this.corporaReadView.render();
+      if(this.model.get("corporaUserHasAccessTo").length > 20 ){
+        $(this.el).find('.corpora').addClass("scrollable");
       }
 
       //put the version into the terminal, and into the user menu

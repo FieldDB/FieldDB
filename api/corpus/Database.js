@@ -403,8 +403,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }).then(function(authserverResult) {
             if (authserverResult.user) {
               var corpusServerURLs = [];
-              if (authserverResult.user.corpuses && authserverResult.user.corpuses[0]) {
-                authserverResult.user.corpuses.map(function(corpusConnection) {
+              if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
+                authserverResult.user.corpora.map(function(corpusConnection) {
                   var url = self.getCouchUrl(corpusConnection, "/_session");
                   if (!self.dbname && corpusServerURLs.indexOf(url) === -1) {
                     corpusServerURLs.push(url);
@@ -581,10 +581,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
         if (!details.corpusConnection) {
           details.corpusConnection = CorpusConnection.prototype.defaultCouchConnection(details.authUrl);
+          delete details.corpusConnection.dbname;
+          delete details.corpusConnection.pouchname;
+          delete details.corpusConnection.title;
+          delete details.corpusConnection.titleAsUrl;
+          delete details.corpusConnection.corpusUrl;
         }
 
         if (self.application && self.application.brandLowerCase) {
           details.appbrand = self.application.brandLowerCase;
+          details.appVersionWhenCreated = self.application.version;
         }
 
         CORS.makeCORSRequest({
@@ -594,7 +600,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           data: details
         }).then(function(result) {
           self.debug("registration results", result);
-          deferred.resolve(result);
+
+          if (!result.user) {
+            deferred.reject({
+              error: result,
+              status: 500,
+              userFriendlyErrors: ["Unknown error. Please report this 2391."]
+            });
+            return;
+          }
+
+          deferred.resolve(result.user);
           //dont automatically login, let the client side decide what to do.
           // self.login(details).then(function(result) {
           // deferred.resolve(result);
