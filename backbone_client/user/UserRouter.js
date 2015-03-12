@@ -57,7 +57,7 @@ define([
       });
     },
     guessCorpusIdAndShowDashboard : function(pouchname){
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
       if(!connection){
         return;
       }
@@ -85,7 +85,7 @@ define([
             if(!corpusidfromCorpusMask){
 
               var couchurl = OPrime.getCouchUrl(connection);
-              var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+              var queryUrl = couchurl + "/_design/pages/_view/private_corpora";
 
               var errorfunction = function(response) {
                 OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
@@ -152,7 +152,7 @@ define([
 
       this.veryifyWeAreInTheRightDB(pouchname);
 
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpuses")[0]));
+      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
       if(!connection){
         return;
       }
@@ -228,9 +228,9 @@ define([
         });
     },
     bringCorpusToThisDevice : function(corpus, callback) {
-      for (var x in window.app.get("authentication").get("userPrivate").get("corpuses")){
-        if(window.app.get("authentication").get("userPrivate").get("corpuses")[x].pouchname == corpus.get("pouchname")){
-          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpuses")[x]);
+      for (var x in window.app.get("authentication").get("userPrivate").get("corpora")){
+        if(window.app.get("authentication").get("userPrivate").get("corpora")[x].pouchname == corpus.get("pouchname")){
+          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){

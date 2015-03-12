@@ -4,7 +4,7 @@ if [ $# -lt 2 ]
 then
   echo "Usage: `basename $0` {arg}"
   echo "SORRY: To use this script you need to supply the couchurl and a user name which you would like to test with "
-  echo "Exiting..." 
+  echo "Exiting..."
   echo ""
   exit 65
 fi
@@ -23,7 +23,7 @@ SERVER=$1
 # We will debug on the testing couchdb
 bash scripts/switch_to_develop_easy_setup.sh
 
-# Optionally, if you have made changes to the html (handlebars templates) 
+# Optionally, if you have made changes to the html (handlebars templates)
 bash scripts/build_templates.sh
 
 # Optionally, if you have made changes to the activity feed widgets
@@ -41,7 +41,7 @@ couchapp push . $SERVER/public-firstcorpus
 # Deploy app to the template corpus
 couchapp push . $SERVER/new_corpus
 
-# Deploy app to the testing corpuses
+# Deploy app to the testing corpora
 couchapp push . $SERVER/$TESTUSERNAME-firstcorpus
 
 # deploy activity feeds too

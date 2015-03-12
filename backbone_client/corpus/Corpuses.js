@@ -1,5 +1,5 @@
-define([ 
-         "backbone", 
+define([
+         "backbone",
          "corpus/CorpusMask"
 ], function(
          Backbone,
@@ -11,37 +11,37 @@ define([
      * @class Collection of Corpuses in the form of CorpusMasks (normally
      *        referred to as Corpora, but using Backbone conventions a regular
      *        plural means a collection.)
-     * 
+     *
      * @description Nothing happens in the initialization.
-     * 
+     *
      * @extends Backbone.Collection
      * @constructs
      */
     initialize : function() {
     },
-    
+
     /**
      * backbone-couchdb adaptor set up
      */
     db : {
-      view : "corpuses",
+      view : "corpora",
       changes : false,
       // If you don't know what filters are in CouchDB, then read it up here:
       // <a href="http://guide.couchdb.org/draft/notifications.html#filters">http://guide.couchdb.org/draft/notifications.html#filters</a>
       // Look up how the filter works in `chat_example/filters/private_messages.js`.
       // IMPORTANT: see `filters/messages.js` to see how to retrieve remove events
-      filter : Backbone.couch_connector.config.ddoc_name + "/corpuses"
+      filter : Backbone.couch_connector.config.ddoc_name + "/corpora"
     },
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/corpuses",
+    url : "/corpora",
     // The messages should be ordered by date
     comparator : function(doc){
       return doc.get("timestamp");
     },
-    
-    
+
+
     internalModels : CorpusMask,
     model : CorpusMask,
     constructCollectionFromArray : function(arrayOfCorpora){
@@ -60,7 +60,7 @@ define([
         });
         corpuse.corpusid = couchConnection.corpusid;
         self.unshift(corpuse);
-        
+
 
         /*
          * if we want to fetch the corpus's title from the server: (if

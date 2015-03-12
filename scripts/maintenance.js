@@ -569,7 +569,7 @@ var MAINTAINENCE = {
             };
 
             var updateCorpusDoc = function(corpusDoc, localdbname) {
-              database.view("pages/private_corpuses", {
+              database.view("pages/private_corpora", {
                 success: function(privateCorpusDoc) {
                   var corpusid = "";
                   try {

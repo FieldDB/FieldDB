@@ -901,7 +901,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             }
             // Use map-reduce to get corpus details
 
-            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpuses")
+            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpora")
               .then(function(response) {
                 var corpus = {};
                 if (response.rows.length > 1) {

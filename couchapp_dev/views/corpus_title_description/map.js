@@ -4,7 +4,7 @@ function(doc) {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
 
-    if (doc.collection == "private_corpuses" || (doc.confidential && doc.confidential.secretkey)) {
+    if (doc.collection == "private_corpora" || (doc.confidential && doc.confidential.secretkey)) {
       //doc.fieldDBtype = "Corpus";
       emit(doc.timestamp, {
         title: doc.title,

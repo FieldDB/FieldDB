@@ -516,7 +516,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
   api: {
-    value: "private_corpuses"
+    value: "private_corpora"
   },
 
   loadPermissions: {
@@ -1059,9 +1059,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         //   url: "/_design/pages/_view/cleaning_example",
         //   map: requireoff("./../../couchapp_dev/views/cleaning_example/map")
         // },
-        // corpuses: {
-        //   url: "/_design/pages/_view/corpuses",
-        //   map: requireoff("./../../couchapp_dev/views/corpuses/map")
+        // corpora: {
+        //   url: "/_design/pages/_view/corpora",
+        //   map: requireoff("./../../couchapp_dev/views/corpora/map")
         // },
         // datalists: {
         //   url: "/_design/pages/_view/datalists",

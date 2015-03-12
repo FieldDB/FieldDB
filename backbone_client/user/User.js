@@ -56,18 +56,19 @@ define([
     originalParse : Backbone.Model.prototype.parse,
     parse: function(originalModel) {
       var tmp;
-      var corpusesUserHasAccessTo = localStorage.getItem(originalModel.username + "corpusesUserHasAccessTo");
-      if(corpusesUserHasAccessTo){
-        originalModel.corpuses = JSON.parse(corpusesUserHasAccessTo);
+      originalModel.corpora = originalModel.corpora || originalModel.corpuses;
+      var corporaUserHasAccessTo = localStorage.getItem(originalModel.username + "corporaUserHasAccessTo");
+      if(corporaUserHasAccessTo){
+        originalModel.corpora = JSON.parse(corporaUserHasAccessTo);
       }
-      for (var corpusIndex = 0; corpusIndex < originalModel.corpuses.length; corpusIndex++) {
-        tmp = originalModel.corpuses[corpusIndex];
-        originalModel.corpuses[corpusIndex] = OPrime.defaultCouchConnection();
-        originalModel.corpuses[corpusIndex].corpusid = tmp.corpusid;
-        originalModel.corpuses[corpusIndex].pouchname = tmp.pouchname;
-        originalModel.corpuses[corpusIndex].title = tmp.title;
-        originalModel.corpuses[corpusIndex].description = tmp.description;
-        originalModel.corpuses[corpusIndex].titleAsUrl = tmp.titleAsUrl;
+      for (var corpusIndex = 0; corpusIndex < originalModel.corpora.length; corpusIndex++) {
+        tmp = originalModel.corpora[corpusIndex];
+        originalModel.corpora[corpusIndex] = OPrime.defaultCouchConnection();
+        originalModel.corpora[corpusIndex].corpusid = tmp.corpusid;
+        originalModel.corpora[corpusIndex].pouchname = tmp.pouchname;
+        originalModel.corpora[corpusIndex].title = tmp.title;
+        originalModel.corpora[corpusIndex].description = tmp.description;
+        originalModel.corpora[corpusIndex].titleAsUrl = tmp.titleAsUrl;
       }
       if (originalModel.mostRecentIds && originalModel.mostRecentIds.couchConnection) {
         tmp = originalModel.mostRecentIds.couchConnection;
@@ -86,7 +87,7 @@ define([
 
       var couchConnection = originalModel.mostRecentIds.couchConnection;
       if (!couchConnection) {
-        couchConnection = originalModel.corpuses[0];
+        couchConnection = originalModel.corpora[0];
         originalModel.mostRecentIds.couchConnection = couchConnection;
       }
       if (!couchConnection) {
@@ -121,7 +122,7 @@ define([
       affiliation : "",
       description : "",
       subtitle : "",
-      corpuses : [],
+      corpora : [],
       dataLists : [],
       mostRecentIds : {},
       // Defaults from User
@@ -161,7 +162,7 @@ define([
     },
 
     updateListOfCorpora: function(roles, couchConnectionInscope){
-      var corpuses =  new Corpuses();
+      var corpora =  new Corpuses();
       var username = this.get("username");
       if(username == "public"){
         return;
@@ -182,17 +183,17 @@ define([
         }
         thisCouchConnection.id = thisCouchConnection.pouchname;
         if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
-          if (corpuses.where({
+          if (corpora.where({
             "pouchname": thisCouchConnection.pouchname
           }).length === 0) {
-            corpuses.push(new CorpusMask(thisCouchConnection));
+            corpora.push(new CorpusMask(thisCouchConnection));
           } else {
             OPrime.debug(thisCouchConnection.pouchname + " Already known");
           }
         }
       }
-      window.app.set("corpusesUserHasAccessTo", corpuses);
-      localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
+      window.app.set("corporaUserHasAccessTo", corpora);
+      localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora.toJSON()));
     }
 
   });

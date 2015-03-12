@@ -508,7 +508,7 @@ define([
       }else{
         var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
+        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "pouchname");
         if(pouches.indexOf(newPouchName) != -1){
           alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
           this.$el.find(".corpus-title-input").val("");

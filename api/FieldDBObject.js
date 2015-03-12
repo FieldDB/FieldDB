@@ -1234,7 +1234,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      if (this.collection !== "private_corpuses") {
+      if (this.collection !== "private_corpora") {
         delete json.confidential;
         delete json.confidentialEncrypter;
       } else {

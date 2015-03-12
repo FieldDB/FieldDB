@@ -60,7 +60,7 @@ define([
       affiliation : "",
       description : "",
       subtitle : "",
-      corpuses : [],
+      corpora : [],
       dataLists : [],
       mostRecentIds : {},
       // Defaults from User
