@@ -36,7 +36,8 @@ describe("User ", function() {
         researchInterest: "",
         description: "",
         version: u.version,
-        api: "users"
+        api: "users",
+        corpora: []
       });
     });
 
@@ -121,8 +122,8 @@ describe("User ", function() {
           audioUrls: [],
           activityUrls: [],
           title: "",
-          corpusUrl: ""
         },
+        authUrl: '',
         corpora: [],
         api: "users"
       });
@@ -154,17 +155,17 @@ describe("User ", function() {
       }]);
 
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
-      expect(user.authUrl).toEqual("https://authdev.lingsync.org");
+      expect(user.authUrl).toEqual("https://auth.lingsync.org");
       expect(user.corpora.toJSON()[0]).toEqual({
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
-        domain: "corpusdev.lingsync.org",
+        domain: "corpus.lingsync.org",
         port: "443",
         dbname: "sapir-cherokee",
         corpusid: "E038ECA6-AC69-43F3-8EE8-56AD3CDC9162",
-        authUrl: "https://authdev.lingsync.org",
+        // authUrls: ["https://auth.lingsync.org"],
         // path: "",
-        corpusUrl: "https://corpusdev.lingsync.org/sapir-cherokee",
+        corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
         version: user.version,
         pouchname: "sapir-cherokee",
         title: "cherokee",
@@ -173,21 +174,19 @@ describe("User ", function() {
       expect(user.corpora.toJSON()[1]).toEqual({
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
-        domain: "corpusdev.lingsync.org",
+        domain: "corpus.lingsync.org",
         port: "443",
         dbname: "sapir-firstcorpus",
         corpusid: "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
-        authUrl: "https://authdev.lingsync.org",
+        // authUrls: ["https://auth.lingsync.org"],
         // path: "",
-        corpusUrl: "https://corpusdev.lingsync.org/sapir-firstcorpus",
+        corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],
         version: user.version,
         pouchname: "sapir-firstcorpus",
         title: "firstcorpus",
         titleAsUrl: "firstcorpus"
       });
     });
-
-
 
     it("should serialize deprecated attributse", function() {
       expect(SAMPLE_USERS[0].appVersionWhenCreated).toEqual("1.22.1");

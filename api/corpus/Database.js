@@ -325,7 +325,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   defaultCouchConnection: {
     value: function(options) {
-      return new CorpusConnection().defaultCouchConnection(options);
+      return CorpusConnection.defaultCouchConnection(options);
     }
   },
 
@@ -580,7 +580,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
 
         if (!details.corpusConnection) {
-          details.corpusConnection = CorpusConnection.prototype.defaultCouchConnection(details.authUrl);
+          details.corpusConnection = CorpusConnection.defaultCouchConnection(details.authUrl);
           delete details.corpusConnection.dbname;
           delete details.corpusConnection.pouchname;
           delete details.corpusConnection.title;

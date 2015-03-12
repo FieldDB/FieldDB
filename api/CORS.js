@@ -134,7 +134,7 @@ CORS.makeCORSRequest = function(options) {
             status: xhr.status,
             // statusText: xhr.statusText,
             userFriendlyErrors: ["There was a problem contacting the server, please report this 2382"]
-          }
+          };
         }
       }
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];

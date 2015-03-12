@@ -25,11 +25,6 @@ var User = function User(options) {
     this._fieldDBtype = "User";
   }
   this.debug("Constructing User length: ", options);
-  if (options) {
-    if (options.corpora && options.corpuses) {
-      delete options.corpuses;
-    }
-  }
   UserMask.apply(this, arguments);
 };
 
@@ -63,6 +58,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       prefs: UserPreference,
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
       activityCouchConnection: CorpusConnection,
+      authUrl: FieldDBObject.DEFAULT_STRING,
       corpora: CorpusConnections
     }
   },
@@ -86,6 +82,28 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       }
       this.prefs.hotkeys = value;
       delete this.hotkeys;
+    }
+  },
+
+  authUrl: {
+    get: function() {
+      return this._authUrl || "";
+    },
+    set: function(value) {
+      console.log("setting authurl", value);
+      if (value === this._authUrl) {
+        return;
+      }
+      if (!value) {
+        delete this._authUrl;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+        value = value.replace(/[^.\/]*.fieldlinguist.com:3183/g, "auth.lingsync.org");
+      }
+      this._authUrl = value;
     }
   },
 
@@ -133,6 +151,16 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  corpuses: {
+    configurable: true,
+    get: function() {
+      return this.corpora;
+    },
+    set: function(value) {
+      this.corpora = value;
+    }
+  },
+
   corpora: {
     configurable: true,
     get: function() {
@@ -149,18 +177,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         if (Object.prototype.toString.call(value) === "[object Array]") {
           value = new this.INTERNAL_MODELS["corpora"](value);
         }
-      }
-
-      if (value) {
-        value.map(function(couchConnection) {
-          if (couchConnection.authUrl) {
-            couchConnection.authUrl = couchConnection.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
-          }
-          if (couchConnection.domain) {
-            couchConnection.domain = couchConnection.domain.replace(/ifielddevs.iriscouch.com/g, "corpusdev.lingsync.org");
-          }
-          return couchConnection;
-        });
       }
 
       this._corpora = value;
@@ -210,7 +226,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
       // TODO not including the corpuses, instead include corpora
       json.corpora = this.corpora;
-      delete json.corpora;
+      delete json.corpuses;
 
       this.debug(json);
       return json;

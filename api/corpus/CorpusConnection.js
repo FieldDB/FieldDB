@@ -58,7 +58,7 @@ var CorpusConnection = function CorpusConnection(options) {
   }
   this.debug("Constructing CorpusConnection ", options);
   if (options) {
-    var cleanDefaultValues = ["dbname", "pouchname", "title", "titleAsUrl"]
+    var cleanDefaultValues = ["dbname", "pouchname", "title", "titleAsUrl"];
     cleanDefaultValues.map(function(cleanMe) {
       if (options[cleanMe] === "default") {
         options[cleanMe] = "";
@@ -255,155 +255,69 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     }
   },
 
-  /*
-   * This function is the same in all webservicesconfig, now any couchapp can
-   * login to any server, and register on the corpus server which matches its
-   * origin.
-   */
-  defaultCouchConnection: {
-    value: function(optionalHREF) {
-      var localhost = {
-        protocol: "https://",
-        domain: "localhost",
-        port: "6984",
-        pouchname: "default",
-        path: "",
-        serverLabel: "localhost",
-        authUrl: "https://localhost:3183",
-        userFriendlyServerName: "Localhost"
-      };
-      var beta = {
-        protocol: "https://",
-        domain: "corpusdev.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        serverLabel: "beta",
-        authUrl: "https://authdev.lingsync.org",
-        userFriendlyServerName: "LingSync Beta"
-      };
-      var production = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        serverLabel: "production",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "LingSync.org"
-      };
-      //v1.90 all users are on production
-      // beta = production;
-
-      var mcgill = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        serverLabel: "mcgill",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "McGill ProsodyLab"
-      };
-
-      var concordia = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        serverLabel: "concordia",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "Concordia Linguistics"
-      };
-
-      /*
-       * If its a couch app, it can only contact databases on its same origin, so
-       * modify the domain to be that origin. the chrome extension can contact any
-       * authorized server that is authorized in the chrome app's manifest
-       */
-      var connection;
-
-      if (!optionalHREF) {
-        try {
-          if (window && window.location) {
-            optionalHREF = window.location.href;
-          } else {
-            connection = localhost;
-            optionalHREF = connection.authUrl;
-          }
-        } catch (e) {
-          connection = localhost;
-          optionalHREF = connection.authUrl;
-        }
+  authUrl: {
+    get: function() {
+      if (this.authUrls && this.authUrls[0]) {
+        return this.authUrls[0];
       }
-
-      if (optionalHREF.indexOf("_design/pages") > -1) {
-        if (optionalHREF.indexOf("corpusdev.lingsync.org") >= 0) {
-          connection = beta;
-        } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
-          connection = production;
-        } else if (optionalHREF.indexOf("prosody.linguistics.mcgill") >= 0) {
-          connection = mcgill;
-        } else if (optionalHREF.indexOf("localhost") >= 0) {
-          connection = localhost;
-        }
+      return "";
+    },
+    set: function(value) {
+      if (this.authUrls && value === this.authUrls[0]) {
+        return;
+      }
+      if (!value) {
+        return;
       } else {
-        if (optionalHREF.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-          connection = mcgill;
-        } else if (optionalHREF.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-          connection = beta;
-        } else if (optionalHREF.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
-          connection = production;
-        } else if (optionalHREF.indexOf("dev.lingsync.org") >= 0) {
-          connection = beta;
-        } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
-          connection = production;
-        } else if (optionalHREF.indexOf("prosody.linguistics.mcgill") >= 0) {
-          connection = mcgill;
-        } else if (optionalHREF.indexOf("linguistics.concordia") >= 0) {
-          connection = concordia;
-        } else if (optionalHREF.indexOf("localhost") >= 0) {
-          connection = localhost;
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+        value = value.replace(/[^.\/]*.fieldlinguist.com:3183/g, "auth.lingsync.org");
+      }
+
+      if (!this.authUrls) {
+        this.authUrls = [value];
+      } else if (this.authUrls.length === 0) {
+        this.authUrls.unshift(value);
+      } else {
+        var alreadyKnown = this.authUrls.indexOf(value);
+        if (alreadyKnown > -1) {
+          this.authUrls.splice(alreadyKnown, 1);
+        }
+        this.authUrls.unshift(value);
+      }
+
+    }
+  },
+
+  domain: {
+    get: function() {
+      return this._domain || "";
+    },
+    set: function(value) {
+      if (value === this._domain) {
+        return;
+      }
+      if (!value) {
+        delete this._domain;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+          value = value.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
         }
       }
-      if (!connection) {
-        console.warn("The user is trying to use a server which is unknown to the system. Attempting to construct its connection. ", optionalHREF);
-        var connectionUrlObject;
-        try {
-          connectionUrlObject = new URL(optionalHREF);
-        } catch (e) {
-          console.warn("Cant use new URL() in this browser/environment.", e);
-          connectionUrlObject = URL.parse(optionalHREF);
-          // console.log(connectionUrlObject);
-        }
-        var domainName = connectionUrlObject.hostname.split(".");
-        while (domainName.length > 2) {
-          domainName.shift();
-        }
-        domainName = domainName.join(".");
-        connection = {
-          protocol: connectionUrlObject.protocol + "//",
-          domain: connectionUrlObject.hostname,
-          port: connectionUrlObject.port,
-          pouchname: "default",
-          path: connectionUrlObject.pathname.replace("/", ""),
-          serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
-          authUrl: optionalHREF,
-          userFriendlyServerName: domainName
-        };
-      }
-      connection = new CorpusConnection(connection).toJSON();
-      return connection;
+      this._domain = value;
     }
   },
 
   corpusUrl: {
     get: function() {
-      if (this._corpusUrl) {
-        return this._corpusUrl;
+      if (this.corpusUrls && this.corpusUrls[0]) {
+        return this.corpusUrls[0];
       }
-      if (!this.domain) {
+
+      if (!this.domain || !this.dbname) {
         return "";
       }
 
@@ -423,23 +337,32 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
        * of couchdb directly
        */
       // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-      this._corpusUrl = couchurl;
+      this.corpusUrls = [couchurl];
       return couchurl;
     },
-
     set: function(value) {
-      if (value === this._corpusUrl) {
+      if (this.corpusUrls && value === this.corpusUrls[0]) {
         return;
       }
       if (!value) {
-        delete this._corpusUrl;
         return;
       } else {
         if (typeof value.trim === "function") {
           value = value.trim();
         }
       }
-      this._corpusUrl = value;
+
+      if (!this.corpusUrls) {
+        this.corpusUrls = [value];
+      } else if (this.corpusUrls.length === 0) {
+        this.corpusUrls.unshift(value);
+      } else {
+        var alreadyKnown = this.corpusUrls.indexOf(value);
+        if (alreadyKnown > -1) {
+          this.corpusUrls.splice(alreadyKnown, 1);
+        }
+        this.corpusUrls.unshift(value);
+      }
     }
   },
 
@@ -447,17 +370,16 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       includeEvenEmptyAttributes = true;
+      this.debug(" forcing corpusUrls to be defined ", this.corpusUrl);
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
       delete json.dateCreated;
       delete json.dateModified;
-      delete json.comments;
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.pouchname = json.dbname = this.dbname || "";
       json.title = this.title || json.dbname;
       json.titleAsUrl = this.titleAsUrl || json.dbname;
-      json.corpusUrl = this.corpusUrl || "";
 
       json.fieldDBtype = this.fieldDBtype;
       delete json._type;
@@ -468,6 +390,153 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
   }
 
 });
+
+
+/*
+ * This function is the same in all webservicesconfig, now any couchapp can
+ * login to any server, and register on the corpus server which matches its
+ * origin.
+ */
+CorpusConnection.defaultCouchConnection = function(optionalHREF) {
+  var localhost = {
+    protocol: "https://",
+    domain: "localhost",
+    port: "6984",
+    pouchname: "default",
+    path: "",
+    serverLabel: "localhost",
+    authUrls: ["https://localhost:3183"],
+    // corpusUrls: ["https://localhost:6984"],
+    userFriendlyServerName: "Localhost"
+  };
+  var beta = {
+    protocol: "https://",
+    domain: "corpusdev.lingsync.org",
+    port: "443",
+    pouchname: "default",
+    path: "",
+    serverLabel: "beta",
+    authUrls: ["https://authdev.lingsync.org"],
+    // corpusUrls: ["https://corpusdev.lingsync.org"],
+    userFriendlyServerName: "LingSync Beta"
+  };
+  var production = {
+    protocol: "https://",
+    domain: "corpus.lingsync.org",
+    port: "443",
+    pouchname: "default",
+    path: "",
+    serverLabel: "production",
+    authUrls: ["https://auth.lingsync.org"],
+    // corpusUrls: ["https://corpus.lingsync.org"],
+    userFriendlyServerName: "LingSync.org"
+  };
+  //v1.90 all users are on production
+  // beta = production;
+
+  var mcgill = {
+    protocol: "https://",
+    domain: "corpus.lingsync.org",
+    port: "443",
+    pouchname: "default",
+    path: "",
+    serverLabel: "mcgill",
+    authUrls: ["https://auth.lingsync.org"],
+    // corpusUrls: ["https://corpus.lingsync.org"],
+    userFriendlyServerName: "McGill ProsodyLab"
+  };
+
+  var concordia = {
+    protocol: "https://",
+    domain: "corpus.lingsync.org",
+    port: "443",
+    pouchname: "default",
+    path: "",
+    serverLabel: "concordia",
+    authUrls: ["https://auth.lingsync.org"],
+    // corpusUrls: ["https://corpus.lingsync.org"],
+    userFriendlyServerName: "Concordia Linguistics"
+  };
+
+  /*
+   * If its a couch app, it can only contact databases on its same origin, so
+   * modify the domain to be that origin. the chrome extension can contact any
+   * authorized server that is authorized in the chrome app's manifest
+   */
+  var connection;
+
+  if (!optionalHREF) {
+    try {
+      if (window && window.location) {
+        optionalHREF = window.location.href;
+      } else {
+        connection = localhost;
+        optionalHREF = connection.authUrls[0];
+      }
+    } catch (e) {
+      connection = localhost;
+      optionalHREF = connection.authUrls[0];
+    }
+  }
+
+  if (optionalHREF.indexOf("_design/pages") > -1) {
+    if (optionalHREF.indexOf("corpusdev.lingsync.org") >= 0) {
+      connection = beta;
+    } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
+      connection = production;
+    } else if (optionalHREF.indexOf("prosody.linguistics.mcgill") >= 0) {
+      connection = mcgill;
+    } else if (optionalHREF.indexOf("localhost") >= 0) {
+      connection = localhost;
+    }
+  } else {
+    if (optionalHREF.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+      connection = mcgill;
+    } else if (optionalHREF.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+      connection = beta;
+    } else if (optionalHREF.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+      connection = production;
+    } else if (optionalHREF.indexOf("dev.lingsync.org") >= 0) {
+      connection = beta;
+    } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
+      connection = production;
+    } else if (optionalHREF.indexOf("prosody.linguistics.mcgill") >= 0) {
+      connection = mcgill;
+    } else if (optionalHREF.indexOf("linguistics.concordia") >= 0) {
+      connection = concordia;
+    } else if (optionalHREF.indexOf("localhost") >= 0) {
+      connection = localhost;
+    }
+  }
+  if (!connection) {
+    console.warn("The user is trying to use a server which is unknown to the system. Attempting to construct its connection. ", optionalHREF);
+    var connectionUrlObject;
+    try {
+      connectionUrlObject = new URL(optionalHREF);
+    } catch (e) {
+      console.warn("Cant use new URL() in this browser/environment.", e);
+      connectionUrlObject = URL.parse(optionalHREF);
+      // console.log(connectionUrlObject);
+    }
+    var domainName = connectionUrlObject.hostname.split(".");
+    while (domainName.length > 2) {
+      domainName.shift();
+    }
+    domainName = domainName.join(".");
+    connection = {
+      protocol: connectionUrlObject.protocol + "//",
+      domain: connectionUrlObject.hostname,
+      port: connectionUrlObject.port,
+      pouchname: "default",
+      path: connectionUrlObject.pathname.replace("/", ""),
+      serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
+      authUrls: [optionalHREF],
+      userFriendlyServerName: domainName
+    };
+  }
+  connection = new CorpusConnection(connection).toJSON();
+  return connection;
+};
 
 /**
  * Ensures that dbnames can be used inside of corpus identifiers, which are couchdb database names.

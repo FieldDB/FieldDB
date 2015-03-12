@@ -59,7 +59,6 @@ describe("CorpusMask ", function() {
         audioUrls: [],
         activityUrls: [],
         title: "",
-        corpusUrl: ""
       },
       publicCorpus: "",
       validationStati: [],
@@ -122,98 +121,158 @@ describe("CorpusMask ", function() {
     expect(corpus.speakerFields.anonymouscode.labelNonLinguists).toEqual("Anonymous Code");
 
   });
+});
 
-  describe("corpus collections", function() {
+describe("corpus collections", function() {
 
-    it("should be able to get a default connection", function() {
-      var connection = new CorpusConnection().defaultCouchConnection();
-      expect(connection).toEqual({
-        fieldDBtype: "CorpusConnection",
-        protocol: "https://",
-        domain: "localhost",
-        port: "6984",
-        dbname: "default",
-        path: "",
-        serverLabel: "localhost",
-        authUrl: "https://localhost:3183",
-        userFriendlyServerName: "Localhost",
-        version: connection.version,
-        pouchname: "default",
-        title: "default",
-        titleAsUrl: "default",
-        corpusUrl: "https://localhost:6984/default"
-      });
+  it("should be able to set an auth url", function() {
+    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection());
+    expect(connection.authUrls).toEqual(["https://localhost:3183"]);
+    expect(connection.authUrl).toEqual("https://localhost:3183");
+
+    connection.authUrl = "https://auth.anotherserver.ca";
+    expect(connection.authUrl).toEqual("https://auth.anotherserver.ca");
+    expect(connection.authUrls).toEqual([
+      "https://auth.anotherserver.ca",
+      "https://localhost:3183"
+    ]);
+
+    connection.authUrl = "https://authdev.fieldlinguist.com:3183";
+    expect(connection.authUrl).toEqual("https://auth.lingsync.org");
+    expect(connection.authUrls).toEqual([
+      "https://auth.lingsync.org",
+      "https://auth.anotherserver.ca",
+      "https://localhost:3183",
+    ]);
+    connection.authUrl = "https://localhost:3183";
+    expect(connection.authUrl).toEqual("https://localhost:3183");
+    expect(connection.authUrls).toEqual([
+      "https://localhost:3183",
+      "https://auth.lingsync.org",
+      "https://auth.anotherserver.ca"
+    ]);
+
+  });
+
+  it("should be able to figure out a corpus url", function() {
+    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection());
+    connection.dbname = "jenkins-firstname";
+    expect(connection.corpusUrls).toBeUndefined();
+    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
+    expect(connection.corpusUrls).toEqual(["https://localhost:6984/jenkins-firstname"]);
+
+    connection.corpusUrl = "https://corpusdev.anotherserver.ca/jenkins-firstname";
+    expect(connection.corpusUrl).toEqual("https://corpusdev.anotherserver.ca/jenkins-firstname");
+    expect(connection.corpusUrls).toEqual([
+      "https://corpusdev.anotherserver.ca/jenkins-firstname",
+      "https://localhost:6984/jenkins-firstname"
+    ]);
+
+    connection.corpusUrl = "https://corpus.example.org/jenkins-firstname";
+    expect(connection.corpusUrl).toEqual("https://corpus.example.org/jenkins-firstname");
+    expect(connection.corpusUrls).toEqual([
+      "https://corpus.example.org/jenkins-firstname",
+      "https://corpusdev.anotherserver.ca/jenkins-firstname",
+      "https://localhost:6984/jenkins-firstname"
+    ]);
+
+    connection.corpusUrl = "https://localhost:6984/jenkins-firstname";
+    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
+    expect(connection.corpusUrls).toEqual([
+      "https://localhost:6984/jenkins-firstname",
+      "https://corpus.example.org/jenkins-firstname",
+      "https://corpusdev.anotherserver.ca/jenkins-firstname"
+    ]);
+
+  });
+
+  it("should be able to get a default connection", function() {
+    var connection = CorpusConnection.defaultCouchConnection();
+    expect(connection).toEqual({
+      fieldDBtype: 'CorpusConnection',
+      protocol: 'https://',
+      domain: 'localhost',
+      port: '6984',
+      path: '',
+      serverLabel: 'localhost',
+      authUrls: ['https://localhost:3183'],
+      // corpusUrls: ['https://localhost:6984'],
+      userFriendlyServerName: 'Localhost',
+      version: connection.version,
+      dbname: '',
+      pouchname: '',
+      title: '',
+      titleAsUrl: '',
     });
+  });
 
-    it("should be able to get a couch url from a deprecated connection", function() {
-      var connection = new CorpusConnection({
-        "protocol": "https://",
-        "domain": "corpus.example.org",
-        "port": "443",
-        "pouchname": "lingllama-communitycorpus",
-        "path": "",
-        "authUrl": "https://auth.example.org",
-        "userFriendlyServerName": "Example.org",
-        "corpusid": "",
-        "title": "lingllama-communitycorpus",
-        "description": "The details of this corpus are not public.",
-        "titleAsUrl": "lingllama-communitycorpus"
-      });
-      expect(connection.corpusUrl).toEqual("https://corpus.example.org/lingllama-communitycorpus");
+  it("should be able to get a couch url from a deprecated connection", function() {
+    var connection = new CorpusConnection({
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "lingllama-communitycorpus",
+      "path": "",
+      "authUrls": ["https://auth.example.org"],
+      "userFriendlyServerName": "Example.org",
+      "corpusid": "",
+      "title": "lingllama-communitycorpus",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "lingllama-communitycorpus"
     });
+    expect(connection.corpusUrl).toEqual("https://corpus.example.org/lingllama-communitycorpus");
+  });
 
-    it("should be able to extract a connection from a mask", function() {
-      expect(CorpusConnections).toBeDefined();
-      var corpora = new CorpusConnections();
-      expect(corpora).toBeDefined();
+  it("should be able to extract a connection from a mask", function() {
+    expect(CorpusConnections).toBeDefined();
+    var corpora = new CorpusConnections();
+    expect(corpora).toBeDefined();
 
-      var corpus = new CorpusMask({
-        title: "Group Data Entry tutorial"
-      });
-      corpus.corpusConnection = {
-        "protocol": "https://",
-        "domain": "corpus.example.org",
-        "port": "443",
-        "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
-        "path": "",
-        "authUrl": "https://auth.example.org",
-        "userFriendlyServerName": "Example.org",
-        "corpusid": "",
-        "title": "computatio..._entry_tutoria",
-        "description": "The details of this corpus are not public.",
-        "titleAsUrl": "computatio____entry_tutoria"
-      };
-      var connection = corpus.corpusConnection;
-      expect(connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
-
-      expect(connection.toJSON().title).toEqual(corpus.title);
-      expect(connection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
-      expect(connection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
-
-      //if th eparent pouchname changes, so should the corpus connection
-      corpus.pouchname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
-      expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
-
-      expect(connection.toJSON()).toEqual({
-        fieldDBtype: "CorpusConnection",
-        protocol: "https://",
-        domain: "corpus.example.org",
-        port: "443",
-        dbname: "computationalfieldworkshop-group_data_entry_tutorial_copy",
-        path: "",
-        authUrl: "https://auth.example.org",
-        userFriendlyServerName: "Example.org",
-        corpusid: "",
-        title: "Group Data Entry tutorial",
-        description: "The details of this corpus are not public.",
-        titleAsUrl: "group_data_entry_tutorial",
-        version: connection.version,
-        corpusUrl: "https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial",
-        pouchname: "computationalfieldworkshop-group_data_entry_tutorial_copy"
-      });
-      // connections.push(connection.toJSON("complete"));
-
+    var corpus = new CorpusMask({
+      title: "Group Data Entry tutorial"
     });
+    corpus.corpusConnection = {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
+      "path": "",
+      "authUrls": ["https://auth.example.org"],
+      "userFriendlyServerName": "Example.org",
+      "corpusid": "",
+      "title": "computatio..._entry_tutoria",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "computatio____entry_tutoria"
+    };
+    var connection = corpus.corpusConnection;
+    expect(connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
+
+    expect(connection.toJSON().title).toEqual(corpus.title);
+    expect(connection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
+    expect(connection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
+
+    //if th eparent pouchname changes, so should the corpus connection
+    corpus.pouchname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
+    expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
+
+    expect(connection.toJSON()).toEqual({
+      fieldDBtype: "CorpusConnection",
+      protocol: "https://",
+      domain: "corpus.example.org",
+      port: "443",
+      dbname: "computationalfieldworkshop-group_data_entry_tutorial_copy",
+      path: "",
+      authUrls: ["https://auth.example.org"],
+      userFriendlyServerName: "Example.org",
+      corpusid: "",
+      title: "Group Data Entry tutorial",
+      description: "The details of this corpus are not public.",
+      titleAsUrl: "group_data_entry_tutorial",
+      version: connection.version,
+      corpusUrls: ["https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial"],
+      pouchname: "computationalfieldworkshop-group_data_entry_tutorial_copy"
+    });
+    // connections.push(connection.toJSON("complete"));
 
   });
 
