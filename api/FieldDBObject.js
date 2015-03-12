@@ -1039,7 +1039,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
-      if (this._dbname) {
+      if (this._dbname && this._dbname !== "default") {
         throw "This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.";
       }
       if (!value) {
