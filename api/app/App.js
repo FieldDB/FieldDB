@@ -896,7 +896,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           self.debug("Failed to download corpus details.", result);
 
           self.status = self.corpus.status = "Failed to download corpus details. Are you sure this is the corpus you wanted to see: " + self.corpus.dbname;
-          self.loginDetails.username = self.team.username;
+          // self.loginDetails.username = self.team.username;
           self.render();
         }).catch(function(error) {
           self.warn("catch error", error);
