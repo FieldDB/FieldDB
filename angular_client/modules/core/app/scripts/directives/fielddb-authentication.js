@@ -9,7 +9,7 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbAuthentication", function() {
 
-  var controller = function($scope) {
+  var controller = function($scope, $rootScope) {
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
     // $scope.application.authentication = $scope.application.authentication || {};
@@ -20,12 +20,14 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       console.warn("Somethign is wrong, there is no app defined. ");
     }
 
-    $scope.register = function(loginDetails) {
-      console.warn("TODO use $scope.corpus.register", loginDetails);
-      $scope.application.authentication.register(loginDetails).then(function(user) {
+    $rootScope.register = function(registerDetails) {
+      $scope.application.authentication.register(registerDetails).then(function(user) {
         console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
+        if ($scope.application.authentication.error.toLowerCase().indexOf("username") > -1) {
+          registerDetails.username = "";
+        }
         $scope.application.authentication.render();
       });
     };
@@ -62,7 +64,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
 
 
   };
-  controller.$inject = ["$scope"];
+  controller.$inject = ["$scope", "$rootScope"];
 
   /* Directive declaration */
   var directiveDefinitionObject = {
