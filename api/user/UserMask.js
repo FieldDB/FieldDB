@@ -18,16 +18,6 @@ var UserMask = function UserMask(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "UserMask";
   }
-  /* Switch user to the new dev servers if they have the old ones prior to v1.38+ */
-  if (options && options.appVersionWhenCreated) {
-    var year = parseInt(options.appVersionWhenCreated.split(".")[0], 10);
-    var week = parseInt(options.appVersionWhenCreated.split(".")[1], 10);
-    if (year === 1 && week <= 38) {
-      if (options.authUrl) {
-        options.authUrl = options.authUrl.replace(/.fieldlinguist.com:3183/g, ".lingsync.org");
-      }
-    }
-  }
 
   this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
