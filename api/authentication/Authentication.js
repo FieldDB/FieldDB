@@ -161,19 +161,43 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
   register: {
     value: function(options) {
-      var self = this;
+      var self = this,
+        deferred = Q.defer();
 
-      if (this.application && this.application.brand) {
-        options = options || {};
-        options.appbrand = options.serverCode = this.application.brand.toLowerCase();
-      }
+      Database.prototype.register(options).then(function(userDetails) {
+        self.debug("registration succeeeded, waiting to login ", userDetails);
 
-      var registrationPromise = Database.prototype.register(options);
-      registrationPromise.then(function(result) {
-        self.debug("registration succeeeded proceeding to login ", result);
-        return self.login(options);
+        // self.user = userDetails;
+
+        var waitTime = 1000;
+        var loopExponentialDecayLogin = function(options) {
+          self.login(options).
+          then(function(results) {
+
+            self.debug("    login after registration is complete " + waitTime, results);
+            deferred.resolve(results);
+
+          }, function(error) {
+            waitTime = waitTime * 2;
+            if (waitTime > 60 * 1000) {
+              deferred.reject(error);
+            } else {
+              self.debug("    waiting to login " + waitTime, error);
+              self.loading = true;
+              setTimeout(function() {
+                loopExponentialDecayLogin(options);
+              }, waitTime);
+            }
+          });
+        };
+        loopExponentialDecayLogin(options);
+
+      }, function(error) {
+        self.debug("registration failed ", error);
+        deferred.reject(error);
       });
-      return registrationPromise;
+
+      return deferred.promise;
     }
   },
 
