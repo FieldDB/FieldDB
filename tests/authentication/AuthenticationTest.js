@@ -108,7 +108,8 @@ describe("Authentication ", function() {
 
     auth.register({
       username: "jenkins",
-      password: "phoneme"
+      password: "phoneme",
+      confirmPassword: "phoneme"
     }).then(function(result) {
       console.log("Done registering");
       expect(result).toBeDefined();

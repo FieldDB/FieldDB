@@ -45,6 +45,7 @@ var app = angular.module("fielddbAngularApp", [
       apiURL: "https://localhost:3183",
       offlineCouchURL: "https://localhost:6984",
       brand: "Example",
+      brandLowerCase: "example",
       website: "http://example.org",
       faq: "http://app.example.org/#/faq",
       basePathname: window.location.origin + "/#",
