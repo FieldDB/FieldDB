@@ -538,31 +538,43 @@ define([
           //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
           //use the get_datum_fields view
           //        alert("TODO test search in chrome extension");
-          $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
-            success: function(response) {
-              if (OPrime.debugMode) OPrime.debug("Got " + response.rows.length + "datums to check for the search query locally client side.");
-              var matchIds = [];
-              //            console.log(response);
-              for (i in response.rows) {
-                var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
-                // If the row's datum matches the given query string
-                if (thisDatumIsIn) {
-                  // Keep its datum's ID, which is the value
-                  matchIds.push(response.rows[i].id);
-                }
+          var afterDownload = function(response) {
+            if (response) {
+              window.get_search_fields_chronological = response;
+              window.get_search_fields_chronological_timestamp = Date.now();
+            }
+            if (OPrime.debugMode) OPrime.debug("Got " + response.rows.length + "datums to check for the search query locally client side.");
+            var matchIds = [];
+            //            console.log(response);
+            for (i in response.rows) {
+              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
+              // If the row's datum matches the given query string
+              if (thisDatumIsIn) {
+                // Keep its datum's ID, which is the value
+                matchIds.push(response.rows[i].id);
               }
+            }
 
-              if (typeof callback == "function") {
-                //callback with the unique members of the array
-                callback(_.unique(matchIds));
-                //              callback(matchIds); //loosing my this in SearchEditView
-              }
-            },
-            error: function(status) {
-              console.log("Error quering datum", status);
-            },
-            reduce: false
-          });
+            if (typeof callback == "function") {
+              //callback with the unique members of the array
+              callback(_.unique(matchIds));
+              //              callback(matchIds); //loosing my this in SearchEditView
+            }
+          };
+          if (window.get_search_fields_chronological_timestamp && (Date.now() - window.get_search_fields_chronological_timestamp) > 601000) {
+            delete window.get_search_fields_chronological;
+          }
+          if (!window.get_search_fields_chronological) {
+            $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
+              success: afterDownload,
+              error: function(status) {
+                console.log("Error quering datum", status);
+              },
+              reduce: false
+            });
+          } else {
+            afterDownload(window.get_search_fields_chronological);
+          }
 
           return;
         }
