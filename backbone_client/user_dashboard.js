@@ -7,7 +7,7 @@ require.config({
     "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery" : "libs/jquery",
+    "jquery" : "bower_components/jquery/jquery",
 
     /* Handlebars html templating libraries and compiled templates */
     "compiledTemplates" : "libs/compiled_handlebars",

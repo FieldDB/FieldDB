@@ -7,7 +7,7 @@ require.config({
     "CryptoJS" : "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery" : "libs/jquery",
+    "jquery" : "bower_components/jquery/jquery",
 
     /* Handlebars html templating libraries and compiled templates */
     "compiledTemplates" : "libs/compiled_handlebars",
@@ -91,8 +91,8 @@ require.config({
 });
 
 //Initialization
-require([ 
-      "app/App",  
+require([
+      "app/App",
       "backbone_pouchdb",
       "OPrime"
       ], function(
@@ -139,7 +139,7 @@ window.app = new App({filledWithDefaults: true});
 //  /*
 //   * Helper functions
 //   */
-//  
+//
 //  /* if they are browsing online, and not using the App version, bring them to the app version */
 //  if( window.location.href.indexOf("chrome-extension") == -1 ){
 //    var x = window.confirm("FieldDB works best in the Chrome Store where it has unlimited space to store your data, " +
@@ -149,7 +149,7 @@ window.app = new App({filledWithDefaults: true});
 //    		"\n Firefox almost works but not quite. It might work in a year or so." +
 //    		"\n Internet Exporer 10 might work, but not IE 6-9."+
 //    		"\n\nClick cancel to try it out here, but we can't guarentee your data will be saved in a database. " +
-//    		"\nClick OK to go to the Chrome Store App." 
+//    		"\nClick OK to go to the Chrome Store App."
 //    );
 //    if (x){
 //        window.location = "https://chrome.google.com/webstore/detail/niphooaoogiloklolkphlnhbbkdlfdlm";
@@ -159,25 +159,25 @@ window.app = new App({filledWithDefaults: true});
 //  }
 //
 //  /**
-//   * This function is the only place that starts the app, notably the app view and app router. 
+//   * This function is the only place that starts the app, notably the app view and app router.
 //   * It is called either by the main.js or by the UserWelcomeView.js
 //   */
 //  window.startApp = function(a, callback){
 //    window.app = a;
 //
 //    // Create and display the AppView and its dependents
-//    window.appView = new AppView({model: a}); 
+//    window.appView = new AppView({model: a});
 //    window.appView.render();
-//    
+//
 //    // Start the Router
 //    app.router = new AppRouter();
 //    Backbone.history.start();
-//    
+//
 //    if(typeof callback == "function"){
 //      if (OPrime.debugMode) OPrime.debug("Calling back the startApps callback");
 //      callback();
 //    }
-//    
+//
 //  };
 //  loadFreshApp = function(){
 //    if (OPrime.debugMode) OPrime.debug("Loading fresh app");
@@ -186,30 +186,30 @@ window.app = new App({filledWithDefaults: true});
 //  /*
 //   * End functions
 //   */
-//  
-//  
+//
+//
 //  /*
 //   * Start the pub sub hub
 //   */
 //  window.hub = {};
 //  OPrime.makePublisher(window.hub);
-//  
+//
 //  /*
 //   * Catch ajax errors, and re-throw them using the OPrime function
 //   * http://api.jquery.com/ajaxError/ mostly to catch pouch errors
 //   */
 ////  $(document).ajaxError(function(e, xhr, settings, exception) {
 ////    OPrime.catchAndThrowAjaxError(e, xhr, settings, exception);
-////  }); 
-////  
+////  });
+////
 ////  $(document).error(function(e, xhr, settings, exception) {
 ////    OPrime.catchAndThrowPouchError(e, xhr, settings, exception);
 ////  });
-//  
+//
 ////  window.hub.subscribe("ajaxError",function(e){
 ////    if (OPrime.debugMode) OPrime.debug("Ajax Error. The user is probably not logged in to their couch. ", e);
 ////  }, this);
-////  
+////
 ////  window.hub.subscribe("pouchError",function(e){
 ////    if (OPrime.debugMode) OPrime.debug("Pouch Error: ", e);
 ////  }, this);
@@ -223,7 +223,7 @@ window.app = new App({filledWithDefaults: true});
 ////    localStorage.clear();
 ////  localStorage.removeItem("appids");
 ////  localStorage.removeItem("pouchname");
-//    
+//
 //  /*
 //   * Check for user's cookie and the dashboard so we can load it
 //   */
@@ -255,7 +255,7 @@ window.app = new App({filledWithDefaults: true});
 //      }else{
 //        if(!localStorage.getItem("encryptedUser")){
 ////          alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
-//          
+//
 //          loadFreshApp();
 //          return;
 //        }else{
@@ -265,7 +265,7 @@ window.app = new App({filledWithDefaults: true});
 //          var u = localStorage.getItem("encryptedUser");
 //          auth.loadEncryptedUser(u, function(success, errors){
 //            if(success == null){
-//              alert("We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);  
+//              alert("We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);
 //              loadFreshApp();
 //              return;
 //            }else{
@@ -283,6 +283,6 @@ window.app = new App({filledWithDefaults: true});
 //    //new user, let them register or login as themselves or lingllama
 //    loadFreshApp();
 // }
-//  
-//  
+//
+//
 //});
