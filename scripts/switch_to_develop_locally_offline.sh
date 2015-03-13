@@ -8,9 +8,9 @@ mv output backbone_client/libs/OPrime.js
 
 echo ""
 echo ""
-echo "Put the dev analytics code."
-sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' backbone_client/libs/analytics.js  > output
-mv output backbone_client/libs/analytics.js
+# echo "Put the dev analytics code."
+# sed 's/_AnalyticsCode = "UA-[0123456789]*-1";/_AnalyticsCode = "UA-32705284-1";/' backbone_client/libs/analytics.js  > output
+# mv output backbone_client/libs/analytics.js
 
 echo ""
 echo ""
