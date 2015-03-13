@@ -185,6 +185,17 @@ define( [
         	return false;
         }
       },
+      "click .icon-trash": function(e){
+        if(e){
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "putInTrash", "batchmode");
+//        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
+//        this.render();
+
+        return false;
+      },
       "click .icon-lock": function(e){
         if(e){
           e.stopPropagation();
