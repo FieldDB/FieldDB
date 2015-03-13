@@ -114,7 +114,7 @@ define([
         } else if (serverResults.user != null) {
 
           this.staleAuthentication = false;
-
+          serverResults.user.corpora = serverResults.user.corpora || serverResults.user.corpuses;
           if (OPrime.isTouchDBApp()) {
             /* if on android, turn on replication. */
             var db = dataToPost.username + "-firstcorpus";
