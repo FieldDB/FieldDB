@@ -935,37 +935,38 @@ define([
        * Also remove it from the view so the user cant see it.
        *
        */
-      putInTrash: function() {
+      putInTrash: function(batchmode) {
         this.set("trashed", "deleted" + Date.now());
         this.preprendValidationStatus("Deleted");
+        var self = this;
         this.saveAndInterConnectInApp(function() {
 
-          window.app.addActivity({
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-            teamOrPersonal: "team",
-            context: " via Offline App.",
-            timeSpent: timeSpentDetails
-          });
+          if (!batchmode && window.appView) {
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "team",
+              context: " via Offline App.",
+              timeSpent: timeSpentDetails
+            });
 
-          window.app.addActivity({
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-            teamOrPersonal: "personal",
-            context: " via Offline App.",
-            timeSpent: timeSpentDetails
-          });
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "personal",
+              context: " via Offline App.",
+              timeSpent: timeSpentDetails
+            });
 
 
           /* This actually removes it from the database */
           //thisdatum.destroy();
-          if (window.appView) {
             window.appView.datumsEditView.showMostRecentDatum();
           }
         });
@@ -1572,27 +1573,31 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
-              directobjecticon: "icon-list",
-              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-              teamOrPersonal: "team",
-              context: " via Offline App.",
-              timeSpent: timeSpentDetails
-            });
+            if (self.get("trashed")) {
+              console.log("not setting a modified activity for a trashed item. ");
+            } else {
+              window.app.addActivity({
+                verb: "<a href='" + differences + "'>" + verb + "</a> ",
+                verbicon: verbicon,
+                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobjecticon: "icon-list",
+                indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App.",
+                timeSpent: timeSpentDetails
+              });
 
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
-              directobjecticon: "icon-list",
-              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-              teamOrPersonal: "personal",
-              context: " via Offline App.",
-              timeSpent: timeSpentDetails
-            });
+              window.app.addActivity({
+                verb: "<a href='" + differences + "'>" + verb + "</a> ",
+                verbicon: verbicon,
+                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobjecticon: "icon-list",
+                indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App.",
+                timeSpent: timeSpentDetails
+              });
+            }
             //            /*
             //             * If the current data list is the default
             //             * list, render the datum there since is the "Active" copy
