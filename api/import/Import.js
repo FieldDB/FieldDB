@@ -381,7 +381,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.documentCollection._collection.map(function(builtDoc) {
             if (self.importType === "participants") {
               builtDoc.id = builtDoc.anonymousCode || Date.now();
-              builtDoc.url = "https://corpusdev.lingsync.org/" + self.corpus.dbname;
+              builtDoc.url = self.corpus.url + self.corpus.dbname;
               self.debug(" saving", builtDoc.id);
               self.progress.total++;
               self.datalist.docs.add(builtDoc);

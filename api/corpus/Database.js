@@ -18,6 +18,9 @@ var Database = function Database(options) {
 var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
+
+Database.defaultCouchConnection = CorpusConnection.defaultCouchConnection;
+
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {
     value: Database
@@ -31,6 +34,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (value !== this.fieldDBtype) {
         this.debug("Using type " + this.fieldDBtype + " when the incoming object was " + value);
       }
+    }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      corpusConnection: CorpusConnection
     }
   },
 
@@ -53,6 +62,50 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     },
     set: function(value) {
       DEFAULT_BASE_DB_URL = value;
+    }
+  },
+
+  corpusConnection: {
+    get: function() {
+      if (this._corpusConnection) {
+        this._corpusConnection.parent = this;
+      }
+      return this._corpusConnection;
+    },
+    set: function(value) {
+      console.log("Setting corpus connection ", value);
+      if (Object.prototype.toString.call(value) === "[object Object]") {
+        value = new this.INTERNAL_MODELS["corpusConnection"](value);
+      }
+      this._corpusConnection = value;
+      this._corpusConnection.parent = this;
+    }
+  },
+
+  couchConnection: {
+    get: function() {
+      return this.corpusConnection;
+    },
+    set: function(value) {
+      this.corpusConnection = value;
+    }
+  },
+
+  url: {
+    get: function() {
+      if (this.corpusConnection && this.corpusConnection.corpusUrl) {
+        return this.corpusConnection.corpusUrl;
+      } else {
+        return this.BASE_DB_URL;
+      }
+    },
+    set: function(value) {
+      console.log("Setting url  ", value);
+
+      if (!this.corpusConnection) {
+        this.corpusConnection = CorpusConnection.defaultCouchConnection(value);
+      }
+      this.corpusConnection.corpusUrl = value;
     }
   },
 
@@ -323,11 +376,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
-  defaultCouchConnection: {
-    value: function(options) {
-      return CorpusConnection.defaultCouchConnection(options);
-    }
-  },
 
   getCouchUrl: {
     value: function(couchConnection, couchdbcommand) {
