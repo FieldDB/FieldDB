@@ -135,7 +135,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             });
             return;
           }
-          self.user = userDetails;
+          try {
+            self.user = userDetails;
+          } catch (e) {
+            console.warn("There was a problem assigning the user. ", e);
+          }
           self.user.authenticated = true;
           self.dispatchEvent("authenticated");
 
