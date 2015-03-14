@@ -426,31 +426,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
-  corpusConnection: {
-    get: function() {
-      if (this._corpusConnection) {
-        this._corpusConnection.parent = this;
-      }
-      return this._corpusConnection;
-    },
-    set: function(value) {
-      if (Object.prototype.toString.call(value) === "[object Object]") {
-        value = new this.INTERNAL_MODELS["corpusConnection"](value);
-      }
-      this._corpusConnection = value;
-      this._corpusConnection.parent = this;
-    }
-  },
-
-  couchConnection: {
-    get: function() {
-      return this.corpusConnection;
-    },
-    set: function(value) {
-      this.corpusConnection = value;
-    }
-  },
-
   pouchname: {
     get: function() {
       return this.dbname;

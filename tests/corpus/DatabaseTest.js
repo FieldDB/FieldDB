@@ -108,8 +108,7 @@ describe("Database", function() {
     });
 
     it("should be able to get a default connection", function() {
-      var db = new Database();
-      var connection = db.defaultCouchConnection();
+      var connection = Database.defaultCouchConnection();
       expect(connection).toEqual({
         fieldDBtype: "CorpusConnection",
         protocol: "https://",
@@ -124,6 +123,39 @@ describe("Database", function() {
         pouchname: "",
         title: "",
         titleAsUrl: "",
+      });
+    });
+
+
+    it("should be able to get a extrapolate  a connection", function() {
+      var db = new Database();
+      db.url = "https://corpus.lingsync.org";
+      expect(db.toJSON()).toEqual({
+        fieldDBtype: 'Database',
+        dateCreated: db.dateCreated,
+        corpusConnection: {
+          fieldDBtype: 'CorpusConnection',
+          protocol: 'https://',
+          domain: 'corpus.lingsync.org',
+          port: '443',
+          path: '',
+          serverLabel: 'production',
+          authUrls: ['https://auth.lingsync.org'],
+          userFriendlyServerName: 'LingSync.org',
+          version: db.version,
+          corpusUrls: ['https://corpus.lingsync.org'],
+          corpusid: '',
+          titleAsUrl: '',
+          dbname: '',
+          pouchname: '',
+          clientUrls: [],
+          lexiconUrls: [],
+          searchUrls: [],
+          audioUrls: [],
+          activityUrls: [],
+          title: ''
+        },
+        version: 'v2.46.12'
       });
     });
 
