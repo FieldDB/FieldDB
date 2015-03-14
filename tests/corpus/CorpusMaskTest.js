@@ -189,20 +189,20 @@ describe("corpus collections", function() {
   it("should be able to get a default connection", function() {
     var connection = CorpusConnection.defaultCouchConnection();
     expect(connection).toEqual({
-      fieldDBtype: 'CorpusConnection',
-      protocol: 'https://',
-      domain: 'localhost',
-      port: '6984',
-      path: '',
-      serverLabel: 'localhost',
-      authUrls: ['https://localhost:3183'],
-      // corpusUrls: ['https://localhost:6984'],
-      userFriendlyServerName: 'Localhost',
+      fieldDBtype: "CorpusConnection",
+      protocol: "https://",
+      domain: "localhost",
+      port: "6984",
+      path: "",
+      serverLabel: "localhost",
+      authUrls: ["https://localhost:3183"],
+      // corpusUrls: ["https://localhost:6984"],
+      userFriendlyServerName: "Localhost",
       version: connection.version,
-      dbname: '',
-      pouchname: '',
-      title: '',
-      titleAsUrl: '',
+      dbname: "",
+      pouchname: "",
+      title: "",
+      titleAsUrl: "",
     });
   });
 
