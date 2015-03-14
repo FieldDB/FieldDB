@@ -123,7 +123,7 @@ describe("User ", function() {
           activityUrls: [],
           title: "",
         },
-        authUrl: '',
+        authUrl: "",
         corpora: [],
         api: "users"
       });
