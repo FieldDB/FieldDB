@@ -266,7 +266,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
         if (!optionalElements.video) {
           console.warn("waiting for the video preview to get rendered, did you forget to declare it somewhere? ");
-          window.setTimeout(waitUntilVideoElementIsRendered, 2000);
+          setTimeout(waitUntilVideoElementIsRendered, 2000);
         } else {
           waitUntilVideoElementIsRendered();
         }

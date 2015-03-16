@@ -428,7 +428,7 @@ define([
           }
         },
         error : function(serverResults){
-          window.setTimeout(function(){
+          setTimeout(function(){
             //try one more time 5 seconds later
             $.couch.login({
               name: username,
