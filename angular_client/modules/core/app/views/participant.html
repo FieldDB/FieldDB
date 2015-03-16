@@ -1,0 +1,44 @@
+<i class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()" title="Toggle display of participant's confidential details"></i>
+<h3>
+ <i class="fa fa-child"></i>  Élève
+</h3>
+<ul class='list-unstyled'>
+  <li title="{{user.fields.firstname.help}}">
+    {{user.fields.firstname.labelExperimenters}}:
+    <span class="child_specific_results" contenteditable="true">
+      {{user.firstname}}
+    </span>
+  </li>
+  <li title="{{user.fields.lastname.help}}">
+    {{user.fields.lastname.labelExperimenters}}:
+    <span class="child_specific_results" contenteditable="true">
+      {{user.lastname}}
+    </span>
+  </li>
+  <li title="{{user.fields.dateOfBirth.help}}">
+    {{user.fields.dateOfBirth.labelExperimenters}}:
+    <span class="child_specific_results" contenteditable="true">
+      {{user.dateOfBirth}}
+    </span>
+  </li>
+  <li title="{{user.fields.anonymousCode.help}}">
+    {{user.fields.anonymousCode.labelExperimenters}}:
+    <span class="" contenteditable="true">
+      {{user.anonymousCode}}
+    </span>
+  </li>
+  <li ng-repeat="field in user.fields._collection" title="{{field.help}}" ng-show="field.value">
+    {{field.labelExperimenters}}:
+    <span class="" contenteditable="true">
+      {{field.value}}
+    </span>
+  </li>
+  <!--<li>
+    <span contenteditable="true">
+      Add new:
+    </span>
+    <span class="child_specific_results" contenteditable="true">
+      another field here
+    </span>
+  </li>-->
+</ul>
