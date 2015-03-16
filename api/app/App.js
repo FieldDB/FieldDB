@@ -864,14 +864,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       /*
        * Fetching models if they are not complete
        */
-
-      // FieldDBConnection.connect().done(function(userroles) {
-      // self.application.authentication.userroles = userroles;
-
-
       if (this.corpus && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
-        this.corpus.loadOrCreateCorpusByPouchName(this.corpus.dbname).then(function(result) {
+        return this.corpus.loadOrCreateCorpusByPouchName(this.corpus.dbname).then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
           self.status = self.corpus.status = "Loaded corpus details.";
           if (self.application.importer) {
@@ -879,16 +874,20 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
           self.render();
 
-
+          return self;
         }, function(result) {
           self.debug("Failed to download corpus details.", result);
 
           self.status = self.corpus.status = "Failed to download corpus details. Are you sure this is the corpus you wanted to see: " + self.corpus.dbname;
           // self.loginDetails.username = self.team.username;
           self.render();
+          return self;
         }).catch(function(error) {
           self.warn("catch error", error);
+          return self;
         });
+      } else {
+        console.log("Not fetching corpus, its aleady here.", this.corpus);
       }
     }
   },

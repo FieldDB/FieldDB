@@ -417,17 +417,14 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
       var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
         self = this,
-        baseUrl = this.url;
 
-      dbname = dbname.trim();
+        dbname = dbname.trim();
       this.dbname = dbname;
       this.loading = true;
 
+      // this.debugMode = true;
       Q.nextTick(function() {
 
-        if (!baseUrl) {
-          baseUrl = self.BASE_DB_URL;
-        }
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
@@ -436,7 +433,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           }
           self.runningloadOrCreateCorpusByPouchName = true;
           self.loadOrCreateCorpusByPouchNameDeferred = deferred;
-          window.setTimeout(function() {
+          self.debug("Wating 1000ms to try to load again.");
+          setTimeout(function() {
             self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
         };
@@ -456,13 +454,17 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
               deferred.reject(reason);
             });
           } else if (corpora.length > 0) {
-            console.warn("Impossibel to have more than one corpus for this dbname");
+            self.warn("Impossible to have more than one corpus for this dbname");
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
         }, function(reason) {
-          tryAgainInCaseThereWasALag(reason);
-          // deferred.reject(reason);
+          self.debug(JSON.stringify(reason))
+          if (reason && reason.userFriendlyErrors && reason.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
+            deferred.reject(reason);
+          } else {
+            tryAgainInCaseThereWasALag(reason);
+          }
 
         });
 
