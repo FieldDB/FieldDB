@@ -168,19 +168,19 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     }
   },
 
-  labelExperimenter: {
+  labelExperimenters: {
     get: function() {
-      return this._labelExperimenter || this.labelNonLinguists;
+      return this._labelExperimenters || this.labelNonLinguists;
     },
     set: function(value) {
-      if (value === this._labelExperimenter) {
+      if (value === this._labelExperimenters) {
         return;
       }
       if (!value) {
-        delete this._labelExperimenter;
+        delete this._labelExperimenters;
         return;
       }
-      this._labelExperimenter = value.trim();
+      this._labelExperimenters = value.trim();
     }
   },
 
