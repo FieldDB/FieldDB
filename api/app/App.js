@@ -3,6 +3,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Activity = require("./../activity/Activity").Activity;
 var Authentication = require("./../authentication/Authentication").Authentication;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
 var DataList = require("./../data_list/DataList").DataList;
 var Import = require("./../import/Import").Import;
 var Search = require("./../search/Search").Search;
@@ -164,7 +165,6 @@ var App = function App(options) {
   this.importer = this.importer || null;
   this.search = this.search || null;
   this.currentDoc = this.currentDoc || null;
-  this.team = this.team || null;
   this.corpus = this.corpus || null;
   this.thisyear = (new Date()).getFullYear();
 
@@ -276,56 +276,58 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
   fetch: {
     value: function() {
-      var self = this;
 
+      this.todo("not doing anything.");
+      // var self = this;
+      // this.authentication.resumingSessionPromise().then(self.authentication.user.loadEncryptedUser)
       /*
        * Load the user
        */
-      if (!this.loadTheAppForTheFirstTime) {
-        self.debug("Loading encrypted user");
-        self.status = "Loading encrypted user...";
-        var u = localStorage.getItem("encryptedUser");
-        self.authentication.loadEncryptedUser(u, function(success, errors) {
-          self.debug("loadEncryptedUser", success, errors);
+      // if (!this.loadTheAppForTheFirstTime) {
+      //   self.debug("Loading encrypted user");
+      //   self.status = "Loading encrypted user...";
+      //   var u = localStorage.getItem("encryptedUser");
+      //   self.authentication.loadEncryptedUser(u, function(success, errors) {
+      //     self.debug("loadEncryptedUser", success, errors);
 
-          self.status = "Turning on continuous sync with your team server...";
-          self.replicateContinuouslyWithCouch(function() {
-            /*
-             * Load the backbone objects
-             */
-            self.debug("Creating backbone objects");
-            self.status = "Building dashboard objects...";
-            self.createAppFieldDBObjects(self.couchConnection.pouchname, function() {
+      //     self.status = "Turning on continuous sync with your team server...";
+      //     self.replicateContinuouslyWithCouch(function() {
+      //       /*
+      //        * Load the backbone objects
+      //        */
+      //       self.debug("Creating backbone objects");
+      //       self.status = "Building dashboard objects...";
+      //       self.createAppFieldDBObjects(self.couchConnection.pouchname, function() {
 
-              /*
-               * If you know the user, load their most recent
-               * dashboard
-               */
-              self.debug("Loading the backbone objects");
-              self.status = "Loading dashboard objects...";
-              self.loadFieldDBObjectsByIdAndSetAsCurrentDashboard(
-                self.authentication.userPrivate.mostRecentIds, function() {
 
-                  self.debug("Starting the app");
-                  self.startApp(function() {
-                    self.showHelpOrNot();
-                    self.stopSpinner();
-                    self.router.renderDashboardOrNot(true);
+      //          * If you know the user, load their most recent
+      //          * dashboard
 
-                  });
-                });
-            });
+      //         self.debug("Loading the backbone objects");
+      //         self.status = "Loading dashboard objects...";
+      //         self.loadFieldDBObjectsByIdAndSetAsCurrentDashboard(
+      //           self.authentication.userPrivate.mostRecentIds, function() {
 
-          });
+      //             self.debug("Starting the app");
+      //             self.startApp(function() {
+      //               self.showHelpOrNot();
+      //               self.stopSpinner();
+      //               self.router.renderDashboardOrNot(true);
 
-        });
-      }
+      //             });
+      //           });
+      //       });
 
-      try {
-        window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
-      } catch (e) {
-        this.warn("Cannot prevent the user from exiting if there are unsaved changes.");
-      }
+      //     });
+
+      //   });
+      // }
+
+      // try {
+      //   window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
+      // } catch (e) {
+      //   this.warn("Cannot prevent the user from exiting if there are unsaved changes.");
+      // }
     }
   },
 
@@ -776,7 +778,6 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             } else {
               self.debug("Database replicating" + JSON.stringify(self.couchConnection));
             }
-
           }
         });
     }
@@ -799,7 +800,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         self.debug("Creating an importer");
         this.importer = this.importer || new Import({
           importType: routeParams.importType
-          // corpus: this.corpus
+            // corpus: this.corpus
         });
       } else if (routeParams.reportType) {
         this.reportsList.filter = function(report) {
@@ -834,25 +835,21 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
        * Letting the url determine which team is loaded
        */
       if (routeParams.team) {
-        if (this.team && this.team.save) {
-          this.team.bug("Switching to another team without saving...");
-        }
-        this.team = new Team({
-          username: routeParams.team
-        });
+        routeParams.team = CorpusConnection.validateIdentifier(routeParams.team).identifier;
 
         /*
          * Letting the url determine which corpus is loaded
          */
         if (routeParams.corpusidentifier) {
-          this.currentCorpusDashboard = this.team.validateUsername(routeParams.team).username + "/" + this.team.sanitizeStringForFileSystem(routeParams.corpusidentifier).toLowerCase();
-          this.currentCorpusDashboardDBname = this.team.validateUsername(routeParams.team).username + "-" + this.team.sanitizeStringForFileSystem(routeParams.corpusidentifier).toLowerCase();
+          routeParams.corpusidentifier = CorpusConnection.validateIdentifier(routeParams.corpusidentifier).identifier;
+          this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
+          this.currentCorpusDashboardDBname = routeParams.team + "-" + routeParams.corpusidentifier;
           if (this.currentCorpusDashboardDBname.split("-").length < 2) {
             this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
             return;
           }
 
-          this.team.dbname = this.currentCorpusDashboardDBname;
+          // this.team.dbname = this.currentCorpusDashboardDBname;
           if (this.corpus && this.corpus.save) {
             this.corpus.bug("Switching to another corpus without saving...");
           }
@@ -870,18 +867,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
       // FieldDBConnection.connect().done(function(userroles) {
       // self.application.authentication.userroles = userroles;
-      if (this.team && !this.team.gravatar) {
-        this.team.status = "Loading team details.";
-        this.team.fetch(Corpus.prototype.BASE_DB_URL).then(function(result) {
-          self.debug("Suceeded to download team\"s public details.", result);
-          self.status = self.team.status = "Loaded team details.";
-          self.render();
-        }, function(result) {
-          self.debug("Failed to download team details.", result);
-          self.status = self.team.status = "Failed to download team details.";
-          self.render();
-        });
-      }
+
 
       if (this.corpus && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
@@ -892,6 +878,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
             self.application.importer.corpus = self.corpus;
           }
           self.render();
+
+
         }, function(result) {
           self.debug("Failed to download corpus details.", result);
 
