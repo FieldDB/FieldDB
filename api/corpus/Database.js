@@ -15,11 +15,17 @@ var Database = function Database(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";
+var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true&limit=LIMIT";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
 Database.defaultCouchConnection = CorpusConnection.defaultCouchConnection;
+
+/**
+ * This limit is set to protect apps from requesting huge amounts of data without pagination.
+ * @type {Number}
+ */
+Database.DEFAULT_DOCUMENT_LIMIT = 1000;
 
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {
@@ -67,7 +73,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   corpusConnection: {
     get: function() {
-      if (this._corpusConnection) {
+      if (this._corpusConnection && this._corpusConnection.parent !== this) {
         this._corpusConnection.parent = this;
       }
       return this._corpusConnection;
@@ -84,9 +90,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   couchConnection: {
     get: function() {
+      this.warn("couchConnection is deprecated, use corpusConnection instead");
       return this.corpusConnection;
     },
     set: function(value) {
+      this.warn("couchConnection is deprecated, use corpusConnection instead");
       this.corpusConnection = value;
     }
   },
@@ -96,7 +104,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (this.corpusConnection && this.corpusConnection.corpusUrl) {
         return this.corpusConnection.corpusUrl;
       } else {
-        return this.BASE_DB_URL;
+        if (this.dbname) {
+          return this.BASE_DB_URL + "/" + this.dbname;
+        }
       }
     },
     set: function(value) {
@@ -105,6 +115,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (!this.corpusConnection) {
         this.corpusConnection = CorpusConnection.defaultCouchConnection(value);
       }
+
+      if (this.dbname && value.indexOf(this.dbname) === -1) {
+        this.warn("the url didnt contain this database identifier, that is strange. Adding it to the end", value);
+        value = value + "/" + this.dbname;
+      }
+
       this.corpusConnection.corpusUrl = value;
     }
   },
@@ -115,13 +131,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.bug("Cannot get something if the dbname is not defined ", id);
         throw "Cannot get something if the dbname is not defined ";
       }
-      var baseUrl = this.url;
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!this.url) {
+        this.bug("The url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
       }
       return CORS.makeCORSRequest({
         method: "GET",
-        url: baseUrl + "/" + this.dbname + "/" + id
+        url: this.url + "/" + id
       });
     }
   },
@@ -133,7 +148,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         throw "Cannot get something if the dbname is not defined ";
       }
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this,
         key,
         value;
@@ -145,13 +159,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         value = arg2;
         value.id = key;
       }
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!this.url) {
+        this.bug("the url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
       }
       CORS.makeCORSRequest({
         method: "POST",
         data: value,
-        url: baseUrl + "/" + this.dbname
+        url: this.url
       }).then(function(result) {
         if (result._rev) {
           value._rev = result._rev;
@@ -193,20 +207,22 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(collectionType, start, end, limit, reduce, key) {
       // this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
-        self = this,
-        baseUrl = this.url;
+        self = this;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-        // Q.nextTick(function() {
-        //   deferred.reject("Cannot fetch data with out a url");
-        // });
-        // return deferred.promise;
+      if (!this.url) {
+        this.warn("url of this database was not set, this might have strange behaviour.", this);
+        Q.nextTick(function() {
+          deferred.reject("Cannot fetch data with out a url");
+        });
+        return deferred.promise;
       }
 
       if (!collectionType) {
         Q.nextTick(function() {
-          deferred.reject("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data url."]
+          });
         });
         return deferred.promise;
       }
@@ -245,7 +261,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           promises.push(CORS.makeCORSRequest({
             type: "GET",
             dataType: "json",
-            url: baseUrl + "/" + self.dbname + "/" + id
+            url: self.url + "/" + id
           }));
         });
 
@@ -268,7 +284,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "GET",
           dataType: "json",
-          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType) + key
+          url: self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType).replace("LIMIT", 1000) + key
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {
@@ -287,20 +303,27 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  couchSessionUrl: {
+    get: function() {
+      var couchSessionUrl = this.url;
+      if (!couchSessionUrl) {
+        couchSessionUrl = this.BASE_DB_URL + "/_session";
+      } else {
+        couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+      }
+      return couchSessionUrl;
+    }
+  },
+
   resumeAuthenticationSession: {
     value: function() {
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this;
-
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
 
       CORS.makeCORSRequest({
         type: "GET",
         dataType: "json",
-        url: baseUrl + "/_session"
+        url: this.couchSessionUrl
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
         self.connectionInfo = sessionInfo;
@@ -391,12 +414,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(details) {
       var deferred = Q.defer(),
         self = this,
-        baseUrl = this.url,
         authUrl;
-
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
 
       Q.nextTick(function() {
 
@@ -450,27 +468,39 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           data: details
         }).then(function(authserverResult) {
             if (authserverResult.user) {
-              var corpusServerURLs = [];
+              var corpusServersWhichHouseUsersCorpora = [];
+              self.todo("move the logic to connect to all the users corpora to the authentication level instead.");
               if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
                 authserverResult.user.corpora.map(function(corpusConnection) {
-                  var url = self.getCouchUrl(corpusConnection, "/_session");
-                  if (!self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                    corpusServerURLs.push(url);
-                  } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                    corpusServerURLs.push(url);
+
+                  var addThisServerIfNotAlreadyThere = function(url) {
+                    if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(url) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(url);
+                    } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(url) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(url);
+                    }
+                  };
+
+                  if (corpusConnection.corpusUrls) {
+                    corpusConnection.corpusUrls.map(addThisServerIfNotAlreadyThere);
+                  } else {
+                    addThisServerIfNotAlreadyThere(self.getCouchUrl(corpusConnection, "/_session"));
                   }
+
                 });
               }
-              if (corpusServerURLs.length < 1) {
-                corpusServerURLs = [baseUrl + "/_session"];
+
+              if (corpusServersWhichHouseUsersCorpora.length < 1) {
+                this.warn("This user has no corpora, this is strange.");
               }
+              self.debug("Requesting session token for all corpora user has access to.");
               var promises = [];
               authserverResult.user.roles = [];
-              for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServerURLs.length; corpusUrlIndex++) {
+              for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServersWhichHouseUsersCorpora.length; corpusUrlIndex++) {
                 promises.push(CORS.makeCORSRequest({
                   type: "POST",
                   dataType: "json",
-                  url: corpusServerURLs[corpusUrlIndex],
+                  url: corpusServersWhichHouseUsersCorpora[corpusUrlIndex],
                   data: {
                     name: authserverResult.user.username,
                     password: details.password
@@ -515,19 +545,18 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   logout: {
-    value: function() {
+    value: function(optionalUrl) {
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!optionalUrl) {
+        optionalUrl = this.couchSessionUrl + "/_session";
       }
 
       CORS.makeCORSRequest({
         type: "DELETE",
         dataType: "json",
-        url: baseUrl + "/_session"
+        url: optionalUrl
       }).then(function(result) {
         if (result.ok) {
           self.connectionInfo = null;
@@ -548,12 +577,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   register: {
     value: function(details) {
       var deferred = Q.defer(),
-        self = this,
-        baseUrl = this.url;
-
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
+        self = this;
 
       Q.nextTick(function() {
 

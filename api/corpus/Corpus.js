@@ -90,17 +90,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  couchConnection: {
-    get: function() {
-      this.debug("couchConnection is deprecated");
-      return this._couchConnection;
-    },
-    set: function(value) {
-      this.debug("couchConnection is deprecated");
-      this._couchConnection = value;
-    }
-  },
-
   replicatedCorpusUrls: {
     get: function() {
       return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
@@ -432,6 +421,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       dbname = dbname.trim();
       this.dbname = dbname;
+      this.loading = true;
 
       Q.nextTick(function() {
 
@@ -457,10 +447,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             self.runningloadOrCreateCorpusByPouchName = false;
             delete self.loadOrCreateCorpusByPouchNameDeferred;
             self.id = corpora[0]._id;
-            self.fetch(baseUrl).then(function(result) {
+            self.fetch().then(function(result) {
               self.debug("Finished fetch of corpus ", result);
+              self.loading = false;
               deferred.resolve(result);
             }, function(reason) {
+              self.loading = false;
               deferred.reject(reason);
             });
           } else if (corpora.length > 0) {
