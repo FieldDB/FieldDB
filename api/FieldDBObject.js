@@ -932,13 +932,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   fetch: {
-    value: function(optionalBaseUrl) {
+    value: function(optionalUrl) {
       var deferred = Q.defer(),
-        id,
         self = this;
 
-      id = this.id;
-      if (!id) {
+      if (!this.id) {
         Q.nextTick(function() {
           self.fetching = false;
           deferred.reject({
@@ -947,12 +945,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return deferred.promise;
       }
+      if (!optionalUrl) {
+        optionalUrl = this.url + "/" + this.id;
+      }
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         dataType: "json",
-        url: optionalBaseUrl + "/" + self.dbname + "/" + id
+        url: optionalUrl
       }).then(function(result) {
           self.fetching = false;
           self.loaded = true;
