@@ -416,9 +416,10 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         throw "Cannot load corpus, its dbname was undefined";
       }
       var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
-        self = this,
+        self = this;
 
-        dbname = dbname.trim();
+      dbname = dbname.trim();
+
       this.dbname = dbname;
       this.loading = true;
 
@@ -459,7 +460,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             tryAgainInCaseThereWasALag(corpora);
           }
         }, function(reason) {
-          self.debug(JSON.stringify(reason))
+          self.debug(JSON.stringify(reason));
           if (reason && reason.userFriendlyErrors && reason.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
             deferred.reject(reason);
           } else {
