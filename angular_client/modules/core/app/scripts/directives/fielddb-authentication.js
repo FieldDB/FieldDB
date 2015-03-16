@@ -21,29 +21,40 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
     }
 
     $rootScope.register = function(registerDetails) {
-      $scope.application.authentication.register(registerDetails).then(function(user) {
-        console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
-      }, function(error) {
-        $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
-        if ($scope.application.authentication.error.toLowerCase().indexOf("username") > -1) {
-          registerDetails.username = "";
-        }
-        $scope.application.authentication.render();
-      });
+      console.log("running register");
+      try {
+        return $scope.application.authentication.register(registerDetails).then(function(user) {
+          console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
+          return $scope;
+        }, function(error) {
+          $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
+          if ($scope.application.authentication.error.toLowerCase().indexOf("username") > -1) {
+            registerDetails.username = "";
+          }
+          $scope.application.authentication.render();
+          return $scope;
+        });
+
+      } catch (e) {
+        console.log("there was a problem running register", e);
+      }
     };
 
     $scope.login = function(loginDetails) {
-      $scope.application.authentication.login(loginDetails).then(function(user) {
+      return $scope.application.authentication.login(loginDetails).then(function(user) {
         console.log("User has been downloaded. listen to 'authenticated' event to redirect the user", user);
+        return $scope;
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
         $scope.application.authentication.render();
+        return $scope;
       });
     };
 
     $scope.logout = function() {
-      $scope.application.authentication.logout().then(function(serverReply) {
+      return $scope.application.authentication.logout().then(function(serverReply) {
         console.log("User has been logged out. ", serverReply);
+        return $scope;
         // $scope.application.authentication = {
         //   user: new FieldDB.User({
         //     authenticated: false
@@ -59,6 +70,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
         $scope.$digest();
+        return $scope;
       });
     };
 
