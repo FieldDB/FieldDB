@@ -63,9 +63,9 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         }
         return;
       }
-      if (FieldDB && FieldDB.Database) {
-        $scope.corpus.authUrl = FieldDB.Database.prototype.BASE_AUTH_URL;
-      }
+      // if (FieldDB && FieldDB.Database) {
+      //   $scope.corpus.authUrl = FieldDB.Database.prototype.BASE_AUTH_URL;
+      // }
       // $scope.corpus.debugMode = true;
 
       // console.log("fetching docs for ", $scope.corpus.toJSON());
@@ -94,7 +94,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         console.log("downloaded docs", results);
         $scope.datalist.confidential = $scope.corpus.confidential;
         $scope.datalist.populate(results.map(function(doc) {
-          doc.url = FieldDB.Database.prototype.BASE_DB_URL + "/" + $scope.corpus.dbname;
+          doc.url = $scope.corpus.url;
           return doc;
         }));
 
@@ -136,7 +136,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         dbname: $scope.datalist.dbname,
         url: $scope.datalist.url
       });
-      $scope.datalist.fetch(FieldDB.Database.prototype.BASE_DB_URL).then(function() {
+      $scope.datalist.fetch().then(function() {
         fetchDatalistDocsIfEmpty();
       });
     };
