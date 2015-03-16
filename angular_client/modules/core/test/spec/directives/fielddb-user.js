@@ -6,7 +6,7 @@ var debugMode = false;
 describe("Directive: fielddb-user", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/user.html"));
+  beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html",  "views/participant.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

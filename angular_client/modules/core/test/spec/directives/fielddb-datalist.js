@@ -8,7 +8,7 @@ describe("Directive: fielddb-datalist", function() {
   describe("multiple lists of datalists", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngularApp", "views/user.html", "views/participant.html", "views/datalist.html"));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
@@ -22,11 +22,17 @@ describe("Directive: fielddb-datalist", function() {
           default: "This is a sample datalist of participants"
         },
         docs: {
-          _collection: [{
-            firstname: "Anony",
-            lastname: "Mouse",
+          _collection: [new FieldDB.Participant({
+            fields: [{
+              id: "firstname",
+              labelExperimenters: "Prénom",
+              value: "Annony"
+            }, {
+              id: "lastname",
+              value: "Mouse"
+            }],
             fieldDBtype: "Participant"
-          }]
+          })]
         }
       };
       compileFunction = $compile(el);
@@ -41,14 +47,17 @@ describe("Directive: fielddb-datalist", function() {
     it("should make a datalist element with only contents from scope", function() {
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
-        scope.$digest(); // <== digest to get the render to show the bound values
+        if (!scope.$$phase) {
+          scope.$digest(); // <== digest to get the render to show the bound values
+        }
         if (debugMode) {
           console.log("post link", el.html());
           console.log("scope datalist0 ", scope.datalist0);
           console.log(angular.element());
         }
         expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Sample participants");
-        expect(angular.element(el.find("h1")[1]).text().trim()).toEqual("Anony Mouse");
+        expect(angular.element(el.find("li")[0]).text().replace(/\W\W+/g, " ").trim()).toEqual("Prénom Annony");
+        expect(angular.element(el.find("li")[1]).text().replace(/\W\W+/g, " ").trim()).toEqual("lastname Mouse");
       });
     });
   });
@@ -57,30 +66,32 @@ describe("Directive: fielddb-datalist", function() {
   describe("mocked fetchCollection", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html", "views/participant.html", "views/datalist.html"));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
+      // el = angular.element("<div data-fielddb-datalist json='datalist1'></div>");
       el = angular.element("<div data-fielddb-datalist json='datalist2'></div> <div data-fielddb-datalist json='datalist1'></div>");
       scope = $rootScope.$new();
       scope.datalist1 = {
+        // debugMode: true,
         title: {
-          default: "Sample users"
+          default: "Community corpus team"
         },
         description: {
           default: "This is a sample datalist of users"
         },
-        docs: {
-          _collection: [{
-            firstname: "Ling",
-            lastname: "Llama",
-            fieldDBtype: "UserMask"
-          }, {
-            firstname: "Teammate",
-            lastname: "Tiger",
-            fieldDBtype: "UserMask"
-          }]
-        }
+        docs: new FieldDB.Users([{
+          username: "lingllama",
+          firstname: "Ling",
+          lastname: "Llama",
+          fieldDBtype: "UserMask"
+        }, {
+          username: "teammatetiger",
+          firstname: "Teammate",
+          lastname: "Tiger",
+          fieldDBtype: "UserMask"
+        }])
       };
       scope.datalist2 = {
         title: {
@@ -89,13 +100,18 @@ describe("Directive: fielddb-datalist", function() {
         description: {
           default: "This is a sample datalist of participants"
         },
-        docs: {
-          _collection: [{
-            firstname: "Anony",
-            lastname: "Mouse",
-            fieldDBtype: "Participant"
-          }]
-        }
+        docs: new FieldDB.Users([new FieldDB.Participant({
+          _id: "AM02",
+          fields: [{
+            id: "firstname",
+            labelExperimenters: "Prénom",
+            value: "Anony"
+          }, {
+            id: "lastname",
+            value: "Mouse"
+          }],
+          fieldDBtype: "Participant"
+        })])
       };
       compileFunction = $compile(el);
       // bring html from templateCache
@@ -110,15 +126,23 @@ describe("Directive: fielddb-datalist", function() {
 
       inject(function() {
         compileFunction(scope); // <== the html {{}} are bound
-        scope.$digest(); // <== digest to get the render to show the bound values
+        if (!scope.$$phase) {
+          scope.$digest(); // <== digest to get the render to show the bound values
+        }
         if (debugMode) {
           console.log("post link", el.html());
           console.log("scope datalist1 ", scope.datalist1);
           console.log(angular.element());
         }
-        expect(angular.element(el.find("h1")[1]).text().trim()).toEqual("Anony Mouse");
-        expect(angular.element(el.find("h1")[3]).text().trim()).toEqual("Ling Llama");
+        expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Sample participants");
+        expect(angular.element(el.find("li")[0]).text().replace(/\W\W+/g, " ").trim()).toEqual("Prénom Anony");
+        expect(angular.element(el.find("li")[1]).text().replace(/\W\W+/g, " ").trim()).toEqual("lastname Mouse");
+
+        expect(angular.element(el.find("h1")[1]).text().trim()).toEqual("Community corpus team");
+        expect(angular.element(el.find("h1")[2]).text().trim()).toEqual("Ling Llama");
+        expect(angular.element(el.find("h1")[3]).text().trim()).toEqual("Teammate Tiger");
       });
+
     });
   });
 
@@ -126,7 +150,7 @@ describe("Directive: fielddb-datalist", function() {
   describe("mocked http fetch of corpus datalist", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html", "views/participant.html", "views/datalist.html"));
     var el, scope, compileFunction, httpBackend, http;
 
     beforeEach(inject(function($rootScope, $compile, $controller, $httpBackend, $http) {
@@ -147,16 +171,34 @@ describe("Directive: fielddb-datalist", function() {
       httpBackend = $httpBackend;
       http = $http;
       httpBackend.when("GET", FieldDB.BASE_DB_URL + "/" + scope.corpus.dbname + "/_design/psycholinguistics/_view/" + scope.participantsList.api + "?descending=true").respond([{
-        firstname: "Ling",
-        lastname: "Llama",
+        _id: "lingllama",
+        fields: [{
+          id: "firstname",
+          value: "Ling"
+        }, {
+          id: "lastname",
+          value: "Llama"
+        }],
         fieldDBtype: "Participant"
       }, {
-        firstname: "Anony",
-        lastname: "Mouse",
+        _id: "AM04",
+        fields: [{
+          id: "firstname",
+          value: "Anony"
+        }, {
+          id: "lastname",
+          value: "Mouse"
+        }],
         fieldDBtype: "Participant"
       }, {
-        firstname: "Teammate",
-        lastname: "Tiger",
+        _id: "teammatetiger",
+        fields: [{
+          id: "firstname",
+          value: "Teammate"
+        }, {
+          id: "lastname",
+          value: "Tiger"
+        }],
         fieldDBtype: "Participant"
       }]);
 
@@ -173,10 +215,12 @@ describe("Directive: fielddb-datalist", function() {
     it("should mock network request of 3 docs", function() {
       // call the network request
       http.get(FieldDB.BASE_DB_URL + "/" + scope.corpus.dbname + "/_design/psycholinguistics/_view/" + scope.participantsList.api + "?descending=true").then(function(result) {
-        result.data.map(function(doc) {
-          scope.participantsList.docs._collection.push(doc);
-          // scope.$digest();
-        });
+        // scope.participantsList.debugMode = true;
+        scope.participantsList.populate(result.data)
+          // result.data.map(function(doc) {
+          //   scope.participantsList.docs._collection.push(new FieldDB.Document(doc));
+          //   // scope.$digest();
+          // });
       });
 
       // flush the mock backend
@@ -191,19 +235,24 @@ describe("Directive: fielddb-datalist", function() {
         scope.participantsList.description = {
           default: "This is a list of all participants who are currently in this corpus."
         };
-        scope.$digest(); // <== digest to get the render to show the bound values
+        if (!scope.$$phase) {
+          scope.$digest(); // <== digest to get the render to show the bound values
+        }
         if (debugMode) {
           console.log("post link", el.html());
           console.log("scope participantsList ", scope.participantsList);
           // console.log(angular.element(el.find("h1")));
         }
+        // console.log(angular.element(el.find("li")));
+        expect(angular.element(el.find("li")[0]).text().replace(/\W\W+/g, " ").trim()).toEqual("firstname Ling");
+        expect(angular.element(el.find("li")[1]).text().replace(/\W\W+/g, " ").trim()).toEqual("lastname Llama");
 
-        // expect(angular.element(el.find("h1").length)).toEqual(" ");
-        expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Participant List");
-        expect(angular.element(el.find("p")[0]).text().trim()).toContain("This is a list of all participants");
-        expect(angular.element(el.find("h1")[1]).text().trim()).toEqual("Ling Llama");
-        expect(angular.element(el.find("h1")[2]).text().trim()).toEqual("Anony Mouse");
-        expect(angular.element(el.find("h1")[3]).text().trim()).toEqual("Teammate Tiger");
+        expect(angular.element(el.find("li")[6]).text().replace(/\W\W+/g, " ").trim()).toEqual("firstname Anony");
+        expect(angular.element(el.find("li")[7]).text().replace(/\W\W+/g, " ").trim()).toEqual("lastname Mouse");
+
+        expect(angular.element(el.find("li")[12]).text().replace(/\W\W+/g, " ").trim()).toEqual("firstname Teammate");
+        expect(angular.element(el.find("li")[13]).text().replace(/\W\W+/g, " ").trim()).toEqual("lastname Tiger");
+
       });
 
     });
@@ -212,7 +261,7 @@ describe("Directive: fielddb-datalist", function() {
   describe("mocked fetch of corpus datalist", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngularApp", "views/user.html", "views/participant.html", "views/datalist.html"));
     var el, scope, compileFunction, timeout;
 
     beforeEach(inject(function($rootScope, $compile, $timeout) {
@@ -275,16 +324,34 @@ describe("Directive: fielddb-datalist", function() {
             FieldDB.Q.nextTick(function() {
               timeout(function() {
                 deferred.resolve([{
-                  firstname: "Ling",
-                  lastname: "Llama",
+                  _id: "lingllama",
+                  fields: [{
+                    id: "firstname",
+                    value: "Ling"
+                  }, {
+                    id: "lastname",
+                    value: "Llama"
+                  }],
                   fieldDBtype: "Participant"
                 }, {
-                  firstname: "Anony",
-                  lastname: "Mouse",
+                  _id: "AM04",
+                  fields: [{
+                    id: "firstname",
+                    value: "Anony"
+                  }, {
+                    id: "lastname",
+                    value: "Mouse"
+                  }],
                   fieldDBtype: "Participant"
                 }, {
-                  firstname: "Teammate",
-                  lastname: "Tiger",
+                  _id: "teammatetiger",
+                  fields: [{
+                    id: "firstname",
+                    value: "Teammate"
+                  }, {
+                    id: "lastname",
+                    value: "Tiger"
+                  }],
                   fieldDBtype: "Participant"
                 }]);
               }, 100);
@@ -300,7 +367,9 @@ describe("Directive: fielddb-datalist", function() {
         inject(function() {
 
           compileFunction(scope); // <== the html {{}} are bound
-          scope.$digest(); // <== digest to get the render to show the bound values
+          if (!scope.$$phase) {
+            scope.$digest(); // <== digest to get the render to show the bound values
+          }
           if (debugMode) {
             console.log("post link", el.html());
             console.log("scope participantsList ", scope.participantsList);
@@ -311,12 +380,16 @@ describe("Directive: fielddb-datalist", function() {
 
       runs(function() {
         expect(value).toBeGreaterThan(0);
-        scope.$digest(); // <== digest to get the render to show the bound values
+        compileFunction(scope); // <== the html {{}} are bound
+        if (!scope.$$phase) {
+          scope.$digest(); // <== digest to get the render to show the bound values
+        }
 
         if (debugMode) {
           console.log("el scope participantsList", el.scope().participantsList);
           console.log("el scope corpus", el.scope().corpus);
         }
+        // console.log(el.html());
         // expect(el.scope().participantsList.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);
         // expect(angular.element(el.find("h1")[0]).text().trim()).toEqual("Participant List");
         // expect(angular.element(el.find("p")[0]).text().trim()).toContain("This is a list of all participants");

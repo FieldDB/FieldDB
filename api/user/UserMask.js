@@ -80,7 +80,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       if (!this._username) {
         this._username = "";
       }
-      return this._username;
+      return this._username || this._id;
     },
     set: function(value) {
       if (value === this._username) {
@@ -89,7 +89,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       if (!value) {
         value = "";
       }
-      this._username = value.trim();
+      this._username = this._id = value.trim();
     }
   },
 

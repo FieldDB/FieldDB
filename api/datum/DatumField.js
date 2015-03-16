@@ -102,7 +102,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   label: {
     get: function() {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      return this._labelFieldLinguists || FieldDBObject.DEFAULT_STRING;
+      return this._labelFieldLinguists || this.id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
