@@ -1,7 +1,5 @@
-/* globals localStorage */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
-var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var MD5 = require("MD5");
 var Q = require("q");
 
@@ -323,114 +321,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
       this._fields = value;
     }
-  },
-
-  save: {
-    value: function(options) {
-      this.debug("Customizing save ", options);
-      var key,
-        userKey,
-        encryptedUserPreferences,
-        deferred = Q.defer();
-
-      if (this._fieldDBtype === "User") {
-        var self = this;
-        Q.nextTick(function() {
-          deferred.resolve(self);
-        });
-
-        if (!this._rev) {
-          this.warn("Refusing to save a user doc which is incomplete, and doesn't have a rev");
-          return deferred.promise;
-        }
-
-        try {
-          // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
-          key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
-          if (!key) {
-            key = Confidential.secretKeyGenerator();
-            localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
-          }
-        } catch (e) {
-          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
-          key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-          if (!key) {
-            key = Confidential.secretKeyGenerator();
-            this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
-          }
-          this.warn("unable to use local storage, this app wont be very usable offline ", e);
-        }
-        userKey = key + this.username;
-        encryptedUserPreferences = new Confidential({
-          secretkey: userKey
-        }).encrypt(this.toJSON());
-
-        try {
-          localStorage.setItem(userKey, encryptedUserPreferences);
-        } catch (e) {
-          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
-          this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
-          this.warn("unable to use local storage, this app wont be very usable offline ", e);
-        }
-
-        return deferred.promise;
-      } else {
-        return FieldDBObject.prototype.save.apply(this, arguments);
-      }
-    }
-  },
-
-  fetch: {
-    value: function(options) {
-      this.debug("Customizing fetch ", options);
-      var key,
-        userKey,
-        encryptedUserPreferences,
-        decryptedUser = {},
-        overwriteOrNot;
-
-      try {
-        // fetch the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
-        key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
-      } catch (e) {
-        this.constructor.prototype.temp = this.constructor.prototype.temp || {};
-        key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
-      }
-      if (!key) {
-        this.warn("cannot fetch user info locally");
-        return FieldDBObject.prototype.fetch.apply(this, arguments);
-      }
-      userKey = key + this.username;
-      try {
-        encryptedUserPreferences = localStorage.getItem(userKey);
-      } catch (e) {
-        if (!this.constructor.prototype.temp) {
-          this.warn("no local users have been saved");
-          return FieldDBObject.prototype.fetch.apply(this, arguments);
-        }
-        encryptedUserPreferences = this.constructor.prototype.temp[userKey];
-      }
-      decryptedUser = {};
-      if (!encryptedUserPreferences) {
-        this.warn("This user " + this.username + " hasnt been used this device before, need to request their prefs when they login.");
-        this.debug("userKey is " + userKey);
-        this.debug("user encrypted is " + this.constructor.prototype.temp[userKey]);
-        return FieldDBObject.prototype.fetch.apply(this, arguments);
-      }
-      decryptedUser = new Confidential({
-        secretkey: userKey
-      }).decrypt(encryptedUserPreferences);
-
-      this.debug(" Opening user prefs from previous session on this device", decryptedUser);
-      if (!this._rev) {
-        overwriteOrNot = "overwrite";
-      }
-
-      this.merge("self", decryptedUser, overwriteOrNot);
-      return FieldDBObject.prototype.fetch.apply(this, arguments);
-    }
   }
+
 
 });
 

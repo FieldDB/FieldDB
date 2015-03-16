@@ -1,10 +1,13 @@
+/* globals localStorage */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./UserMask").UserMask;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
 var CorpusConnections = require("./../corpus/CorpusConnections").CorpusConnections;
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var UserPreference = require("./UserPreference").UserPreference;
 var DEFAULT_USER_MODEL = require("./user.json");
+var Q = require("q");
 
 /**
  * @class User extends from UserGeneric. It inherits the same attributes as UserGeneric but can
@@ -230,6 +233,120 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
       this.debug(json);
       return json;
+    }
+  },
+
+  save: {
+    value: function(options) {
+      this.debug("Customizing save ", options);
+      var key,
+        userKey,
+        encryptedUserPreferences,
+        deferred = Q.defer();
+
+      if (this._fieldDBtype === "User") {
+        var self = this;
+        Q.nextTick(function() {
+          deferred.resolve(self);
+        });
+
+        if (!this._rev) {
+          this.warn("Refusing to save a user doc which is incomplete, and doesn't have a rev");
+          return deferred.promise;
+        }
+
+        try {
+          // save the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
+          key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
+          if (!key) {
+            key = Confidential.secretKeyGenerator();
+            localStorage.setItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C", key);
+          }
+        } catch (e) {
+          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+          key = this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+          if (!key) {
+            key = Confidential.secretKeyGenerator();
+            this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
+          }
+          this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        }
+        userKey = key + this.username;
+        encryptedUserPreferences = new Confidential({
+          secretkey: userKey
+        }).encrypt(this.toJSON());
+
+        try {
+          localStorage.setItem(userKey, encryptedUserPreferences);
+        } catch (e) {
+          this.constructor.prototype.temp = this.constructor.prototype.temp || {};
+          this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
+          this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        }
+
+        return deferred.promise;
+      } else {
+        return FieldDBObject.prototype.save.apply(this, arguments);
+      }
+    }
+  },
+
+  fetch: {
+    value: function(options) {
+      this.debug("Customizing fetch ", options);
+      var key,
+        userKey,
+        encryptedUserPreferences,
+        decryptedUser = {},
+        overwriteOrNot,
+        self = this,
+        deferred = Q.defer();
+
+      Q.nextTick(function() {
+
+        try {
+          // fetch the user's preferences encrypted in local storage so they can work without by connecting only to their corpus
+          key = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
+        } catch (e) {
+          self.constructor.prototype.temp = self.constructor.prototype.temp || {};
+          key = self.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
+          self.warn("unable to use local storage, this app wont be very usable offline ", e);
+        }
+        if (!key) {
+          self.warn("cannot fetch user info locally");
+          return FieldDBObject.prototype.fetch.apply(self, arguments);
+        }
+        userKey = key + self.username;
+        try {
+          encryptedUserPreferences = localStorage.getItem(userKey);
+        } catch (e) {
+          if (!self.constructor.prototype.temp) {
+            self.warn("no local users have been saved");
+            return FieldDBObject.prototype.fetch.apply(self, arguments);
+          }
+          encryptedUserPreferences = self.constructor.prototype.temp[userKey];
+        }
+        decryptedUser = {};
+        if (!encryptedUserPreferences) {
+          self.warn("This user " + self.username + " hasnt been used this device before, need to request their prefs when they login.");
+          self.debug("userKey is " + userKey);
+          self.debug("user encrypted is " + self.constructor.prototype.temp[userKey]);
+          return FieldDBObject.prototype.fetch.apply(self, arguments);
+        }
+        decryptedUser = new Confidential({
+          secretkey: userKey
+        }).decrypt(encryptedUserPreferences);
+
+        self.debug(" Opening user prefs from previous session on self device", decryptedUser);
+        if (!self._rev) {
+          overwriteOrNot = "overwrite";
+        }
+
+        self.merge("self", decryptedUser, overwriteOrNot);
+        deferred.resolve(self);
+      });
+
+      return deferred.promise;
     }
   }
 
