@@ -1,7 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var MD5 = require("MD5");
-var Q = require("q");
 
 /**
  * @class A mask of a user which can be saved along with the corpus. It is

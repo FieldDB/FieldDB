@@ -53,7 +53,7 @@ describe("Authentication ", function() {
     }, specIsRunningTooLong);
 
 
-    it("setting the user should indirectly cause the user to be saved locally", function() {
+    it("setting the user should indirectly cause the user to be saved locally", function(done) {
       var auth = new Authentication({
         // debugMode: true
       });
@@ -90,14 +90,16 @@ describe("Authentication ", function() {
         ]);
       // user has default prefs for now
       expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(10);
+      expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
-      anotherAuthLoad.user.fetch();
-      expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
-      // user has their own prefs now
-      expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
+      anotherAuthLoad.user.fetch().then(function() {
+        expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
+        // user has their own prefs now
+        expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
+        expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
+      }).done(done);
 
-    });
+    }, specIsRunningTooLong);
 
 
   });
