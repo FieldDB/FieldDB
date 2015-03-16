@@ -362,7 +362,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the prmary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
         return;
       }
       if (typeof value.trim === "function") {
@@ -404,7 +404,7 @@ Collection.prototype = Object.create(Object.prototype, {
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
         this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! " + value.fieldDBtype;
+        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype;
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);

@@ -13,6 +13,16 @@ angular.module("fielddbAngularApp").directive("fielddbUser", function() {
     $scope.toggleViewDecryptedDetails = function() {
       $scope.user.decryptedMode = !$scope.user.decryptedMode;
     };
+    // console.log("$scope.user");
+    // console.log($scope.user);
+    // if (!$scope.user) {
+    //   console.warn("This user is undefined for this directive, seems odd.");
+    //   // console.warn("This user is undefined for this directive, seems odd.", $scope);
+    // } else {
+    //   if ($scope.user.toJSON) {
+    //     console.log($scope.user.toJSON());
+    //   }
+    // }
   };
   controller.$inject = ["$scope"];
 

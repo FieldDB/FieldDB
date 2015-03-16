@@ -30,8 +30,11 @@
   </div>
 </div>
 <div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
+<pre ng-hide="datalist.debugMode">
+  {{datalist.docs._collection}}
+</pre>
 
-<blockquote hidden ng-hide="true" class="status">
+<blockquote ng-show="datalist.debugMode" class="status">
   {{datalist.warnMessage}}
   {{datalist.docs.warnMessage}}
 </blockquote>

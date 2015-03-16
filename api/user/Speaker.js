@@ -129,6 +129,9 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
           return this.fields.username.mask;
         }
       } else {
+        if (this.id) {
+          return this.id;
+        }
         return;
       }
     },
@@ -153,13 +156,10 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
 
   id: {
     get: function() {
-      // this._id = this.anonymousCode;
       return this.anonymousCode;
     },
     set: function(value) {
-      if (value === this.anonymousCode) {
-        this._id = value;
-      }
+      this.anonymousCode = value;
     }
   },
 
@@ -169,13 +169,15 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
         if (this.fields && this.fields.anonymousCode) {
           return this.fields.anonymousCode.value.toUpperCase();
         } else {
-          return;
+          return this._id;
         }
       } catch (e) {
         this.warn("there was a problem getting the anonymousCode of this speaker", e);
+        return this._id;
       }
     },
     set: function(value) {
+
       var actualUsername;
       if (this.fields && this.fields.username && this.fields.username.value) {
         this.fields.username.decryptedMode = true;
@@ -186,11 +188,12 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
         this.bug("Cannot set the anonymous code to contain any part of the user's actual username, this would potentially breach their confidentiality.");
         return;
       }
+
       if (!this.fields) {
         this.fields = new DatumFields(this.defaults.fields);
       }
-      this.fields.anonymousCode.value = value;
-      this.id = value;
+      this.fields.anonymousCode.value = this._id = value;
+      this.debug("Set the id and the anonymousCode of this user" + this._id, this);
       if (!this.encryptByCorpus) {
         this.confidential = new Confidential({
           secretkey: value
@@ -221,7 +224,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
   dateOfBirth: {
     configurable: true,
     get: function() {
-      if (this.fields) {
+      if (this.fields && this.fields.dateOfBirth) {
         return this.fields.dateOfBirth.value;
       } else {
         return;
