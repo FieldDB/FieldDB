@@ -11,7 +11,6 @@ var Session = require("./../FieldDBObject").FieldDBObject;
 var Router = require("./../Router").Router;
 var User = require("./../user/User").User;
 var UserMask = require("./../user/UserMask").UserMask;
-var Team = require("./../user/Team").Team;
 var Contextualizer = require("./../locales/Contextualizer").Contextualizer;
 var Q = require("q");
 
