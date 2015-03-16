@@ -550,7 +550,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         self = this;
 
       if (!optionalUrl) {
-        optionalUrl = this.couchSessionUrl + "/_session";
+        optionalUrl = this.couchSessionUrl;
       }
 
       CORS.makeCORSRequest({
@@ -565,10 +565,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           deferred.reject(result);
         }
       }, function(reason) {
-
-        this.debug(reason);
+        reason = reason || {};
+        reason.status = reason.status || 400;
+        reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+        self.debug(reason);
         deferred.reject(reason);
-
       });
       return deferred.promise;
     }
@@ -691,8 +692,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           //   deferred.reject(error);
           // });
         }, function(reason) {
-          self.debug(reason);
+          reason = reason || {};
           reason.details = details;
+          reason.status = reason.status || 400;
+          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+          self.debug(reason);
           deferred.reject(reason);
         });
 
