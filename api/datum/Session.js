@@ -1,5 +1,5 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DatumFields = require("./DatumFields").DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
@@ -81,8 +81,9 @@ var Session = function Session(options) {
   }
   this.debug("Constructing Session: ", options);
   if (!options || (!options._rev && !options.fields)) {
-    //If its a new participant with out a revision and without fields use the defaults
-    this.fields = this.defaults.fields;
+    //If its a new session with out a revision and without fields use the defaults
+    options = options || {};
+    options.fields = this.defaults.fields;
   }
   FieldDBObject.apply(this, arguments);
 };
@@ -91,20 +92,65 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   constructor: {
     value: Session
   },
-  goal: {
+
+
+  title: {
     get: function() {
-      var goal = "";
-      try {
-        goal = this.get("sessionFields").where({
-          label: "goal"
-        })[0].get("mask");
-      } catch (e) {
-        this.debug("This session doesnt seem to have a goal.");
-      }
-      return goal;
+      return this.goal;
     },
     set: function(value) {
-      this.todo("set goal", value);
+      this.warn("title is syntactic sugar for goal");
+      return this.goal = value;
+    }
+  },
+
+  goal: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.goal) {
+        return this.fields.goal.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.goal) {
+        // this.fields.debugMode = true;
+        this.fields.goal.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.goal.value = value;
+      }
+    }
+  },
+
+  date: {
+    get: function() {
+      return this.dateElicited;
+    },
+    set: function(value) {
+      this.warn("date is syntactic sugar for dateElicited");
+      return this.dateElicited = value;
+    }
+  },
+
+  dateElicited: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.dateElicited) {
+        return this.fields.dateElicited.value;
+      } else {
+        return;
+      }
+    },
+    set: function(value) {
+      if (this.fields) {
+        // this.fields.debugMode = true;
+        this.fields.dateElicited.value = value;
+      } else {
+        this.fields = new DatumFields(this.defaults.fields);
+        this.fields.dateElicited.value = value;
+      }
     }
   },
 
@@ -125,11 +171,31 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   sessionFields: {
     get: function() {
-      return this.feilds;
+      return this.fields;
     },
     set: function(value) {
       this.warn("sessionFields are depreacted, use fields instead");
       return this.fields = value;
+    }
+  },
+
+  fields: {
+    get: function() {
+      return this._fields ;
+    },
+    set: function(value) {
+      if (value === this._fields) {
+        return;
+      }
+      if (!value) {
+        delete this._fields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["fields"](value);
+        }
+      }
+      this._fields = value;
     }
   },
 
@@ -152,55 +218,102 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!this.fields) {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = [];
       }
       // this.warn("Cannot change the public/private of " + this.collection + " (it must be anonymous). " + value);
       this.fields.confidentiality.value = value;
     }
   },
 
-  user: {
+  participants: {
+    configurable: true,
     get: function() {
-      if (this.fields && this.fields.participants && this.fields.participants.value) {
-        // this.debug("this.fields.participants.value :", this.fields.participants.value + ":");
-
-        if (this.fields.confidentiality.value === "generalize") {
-          this.fields.participants.mask = "A native session";
-        } else if (this.fields.confidentiality.value === "team") {
-          this.todo("IF the user is part of the team, they can see the participants of the consultant.");
-          this.fields.participants.mask = this.anonymousCode;
-        } else if (this.fields.confidentiality.value === "anonymous") {
-          this.fields.participants.mask = this.anonymousCode || this.fields.participants.mask;
-        } else if (this.fields.confidentiality.value === "public") {
-          this.fields.participants.mask = this.fields.participants.value;
-        } else {
-          this.fields.participants.mask = "A native session";
-        }
-
-        if (this.fields.participants.decryptedMode) {
-          return this.fields.participants.value;
-        } else {
-          return this.fields.participants.mask;
-        }
+      if (this.fields && this.fields.participants && this.fields.participants.json && this.fields.participants.json.users) {
+        return this.fields.participants.json.users;
       } else {
-        if (this.id) {
-          return this.id;
-        }
         return;
       }
     },
     set: function(value) {
-      if (!this.confidential) {
-        this.warn("Cannot set the participants before the confidential is set");
-        return;
-      }
       if (!this.fields) {
         this.fields = new DatumFields(this.defaults.fields);
       }
-      // this.fields.participants.debugMode = true;
-      // this.fields.participants.decryptedMode = true;
-      this.fields.participants.confidential = this.confidential;
-      this.fields.participants.value = value;
+
+      if (Object.prototype.toString.call(value) === "[object Array]") {
+        var self = this;
+        value.map(function(usermask) {
+          self.fields.participants.json.users.unshift(usermask)
+        });
+      } else {
+        this.fields.participants.json.users.unshift(value);
+      }
+    }
+  },
+
+  consultants: {
+    get: function() {
+      var dataEntryPeople = [];
+      if (this.fields && this.fields.participants && this.fields.participants.json && this.fields.participants.json.users) {
+        this.fields.participants.json.users.map(function(usermask) {
+          if (usermask.role && usermask.role.indexOf("speaker") > -1) {
+            dataEntryPeople.push(usermask);
+          }
+        });
+        if (dataEntryPeople.length === 0) {
+          dataEntryPeople = this.fields.participants.json.users;
+        }
+      }
+      return dataEntryPeople;
+    },
+    set: function(value) {
+      if (!this.fields) {
+        this.fields = this.defaults.fields;
+      }
+
+      if (Object.prototype.toString.call(value) === "[object Array]") {
+        var self = this;
+        value.map(function(usermask) {
+          self.consultants = usermask;
+        });
+        return;
+      }
+      if (value.role) {
+        value.role = "speaker," + value.role;
+      } else {
+        value.role = "speaker"
+      }
+      this.debug("adding consultant", value);
+      this.fields.participants.json.users.unshift(value);
+    }
+  },
+
+  user: {
+    get: function() {
+      var dataEntryPeople = [];
+      if (this.fields && this.fields.participants && this.fields.participants.json && this.fields.participants.json.users) {
+        this.fields.participants.json.users.map(function(usermask) {
+          if (usermask.role && usermask.role.indexOf("dataEntry") > -1) {
+            dataEntryPeople.push(usermask);
+          }
+        });
+        if (dataEntryPeople.length === 0) {
+          dataEntryPeople = this.fields.participants.json.users;
+        }
+      }
+      return dataEntryPeople[0];
+    },
+    set: function(value) {
+      if (!this.fields) {
+        this.fields = this.defaults.fields;
+      }
+      if (value.role) {
+        value.role = "dataEntry," + value.role;
+      } else {
+        value.role = "speaker"
+      }
+
+      this.debug("adding user", value);
+      this.fields.participants.json.users.unshift(value);
     }
   },
 
@@ -226,6 +339,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
     }
   },
+
   languages: {
     get: function() {
       if (this.fields) {
@@ -299,7 +413,6 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
     }
   },
-
 
   /**
    * Accepts two functions to call back when save is successful or
