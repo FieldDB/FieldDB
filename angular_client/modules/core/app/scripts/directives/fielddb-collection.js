@@ -34,7 +34,7 @@ angular.module("fielddbAngularApp").directive("fielddbCollection", function() {
 
     $scope.save = function() {
       $scope.collection.save().then(function() {
-         try {
+        try {
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
           }
