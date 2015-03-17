@@ -474,10 +474,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
                 authserverResult.user.corpora.map(function(corpusConnection) {
 
                   var addThisServerIfNotAlreadyThere = function(url) {
-                    if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(url) === -1) {
-                      corpusServersWhichHouseUsersCorpora.push(url);
-                    } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(url) === -1) {
-                      corpusServersWhichHouseUsersCorpora.push(url);
+                    var couchdbSessionUrl = url.replace(corpusConnection.dbname, "_session");
+                    if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+                    } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
                     }
                   };
 
