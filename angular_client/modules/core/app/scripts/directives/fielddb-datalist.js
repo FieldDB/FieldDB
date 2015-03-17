@@ -107,7 +107,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
             $scope.$digest(); //$digest or $apply
           }
         } catch (e) {
-          console.warn("render threw errors", e);
+          console.warn("render threw errors");
         }
 
 
