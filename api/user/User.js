@@ -278,10 +278,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       encryptedUserPreferences = new Confidential({
         secretkey: userKey
       }).encrypt(userJSON);
-      if (true) {
-        return deferred.promise;
-      }
-
 
       try {
         localStorage.setItem(userKey, encryptedUserPreferences);
