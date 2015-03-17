@@ -140,7 +140,7 @@ describe("App", function() {
 
       var processingPromise = app.processRouteParams({
         team: "lingllama"
-      })
+      });
       expect(processingPromise).toBeUndefined();
 
       expect(app.currentCorpusDashboard).toBeUndefined();
