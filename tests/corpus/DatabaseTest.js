@@ -131,31 +131,31 @@ describe("Database", function() {
       var db = new Database();
       db.url = "https://corpus.lingsync.org";
       expect(db.toJSON()).toEqual({
-        fieldDBtype: 'Database',
+        fieldDBtype: "Database",
         dateCreated: db.dateCreated,
         corpusConnection: {
-          fieldDBtype: 'CorpusConnection',
-          protocol: 'https://',
-          domain: 'corpus.lingsync.org',
-          port: '443',
-          path: '',
-          serverLabel: 'production',
-          authUrls: ['https://auth.lingsync.org'],
-          userFriendlyServerName: 'LingSync.org',
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "corpus.lingsync.org",
+          port: "443",
+          path: "",
+          serverLabel: "production",
+          authUrls: ["https://auth.lingsync.org"],
+          userFriendlyServerName: "LingSync.org",
           version: db.version,
-          corpusUrls: ['https://corpus.lingsync.org'],
-          corpusid: '',
-          titleAsUrl: '',
-          dbname: '',
-          pouchname: '',
+          corpusUrls: ["https://corpus.lingsync.org"],
+          corpusid: "",
+          titleAsUrl: "",
+          dbname: "",
+          pouchname: "",
           clientUrls: [],
           lexiconUrls: [],
           searchUrls: [],
           audioUrls: [],
           activityUrls: [],
-          title: ''
+          title: ""
         },
-        version: 'v2.46.12'
+        version: db.version
       });
     });
 

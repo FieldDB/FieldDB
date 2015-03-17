@@ -214,7 +214,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     } else {
       expect(consultant.confidential.secretkey).toEqual("TH");
     }
-    expect(consultant.username).toEqual(undefined);
+    expect(consultant.username).toEqual("TH");
 
     consultant.username = "tilohash";
     expect(consultant.username).toEqual("TH");
