@@ -37,7 +37,8 @@ var Speaker = function Speaker(options) {
   this.debug("Constructing Speaker: ", options);
   if (!options || (!options._rev && !options.fields)) {
     //If its a new participant with out a revision and without fields use the defaults
-    this.fields = this.defaults.fields;
+    options = options || {};
+    options.fields = this.defaults.fields;
   }
   UserMask.apply(this, arguments);
 };
@@ -88,6 +89,25 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
     }
   },
 
+  fields: {
+    get: function() {
+      return this._fields;
+    },
+    set: function(value) {
+      if (value === this._fields) {
+        return;
+      }
+      if (!value) {
+        delete this._fields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["fields"](value);
+        }
+      }
+      this._fields = value;
+    }
+  },
 
   buildGravatar: {
     value: function() {
