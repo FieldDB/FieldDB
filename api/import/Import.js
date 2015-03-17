@@ -297,11 +297,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.extractedHeaderObjects[columnIndex] = correspondingDatumField;
           }
 
-          self.debug("importFields which will be used for this import", self.importFields.map(function(item) {
+          self.debug("extractedHeaderObjects which will be used for this import", self.extractedHeaderObjects.map(function(item) {
             return item.id;
           }));
 
-          self.debug("importFields after using the corpus field ", self.importFields.map(function(item) {
+          self.debug("extractedHeaderObjects after using the corpus field ", self.extractedHeaderObjects.map(function(item) {
             return item.labelFieldLinguists;
           }));
 
@@ -312,13 +312,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             primaryKey: "dateCreated"
           });
 
-          //Import from html table that the user might have edited.
+          //Import from html table that the user might have edited, using the order of the imported fields for how this datum is ordered.
           self.asCSV.map(function(row) {
             var docToSave;
             if (self.importType === "participants") {
               docToSave = new Participant({
                 confidential: self.corpus.confidential,
-                fields: new DatumFields(self.importFields.toJSON())
+                fields: new DatumFields(self.extractedHeaderObjects.concat([]))
               });
               self.debug("Creating a participant.", docToSave.fields);
             } else if (self.importType === "audioVideo") {
@@ -327,7 +327,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               self.debug("Creating a audioVideo.", docToSave.description);
             } else {
               docToSave = new Datum({
-                datumFields: new DatumFields(self.importFields.toJSON())
+                datumFields: new DatumFields(self.extractedHeaderObjects.toJSON())
               });
               self.debug("Creating a datum.", docToSave.datumFields);
             }
@@ -351,16 +351,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               //              self.bug("It seems like the line contiaining : "+newfieldValue+" : was badly recognized in the table import. You might want to take a look at the table and edit the data so it is in columns that you expected.");
               //            }
 
-              var headerLabel = self.extractedHeaderObjects[index].id;
-              self.debug("finding the matching label in the csv ", headerLabel);
-              self.debug("finding the matching label in the csv ", self.importFields.find(headerLabel, null, "match as close as possible"));
+              // var headerLabel = self.extractedHeaderObjects[index].id;
+              // self.debug("finding the matching label in the csv ", headerLabel);
+              // self.debug("finding the matching label in the csv ", self.importFields.find(headerLabel, null, "match as close as possible"));
               if (self.importType === "participants") {
-                docToSave.fields[headerLabel].value = item.trim();
+                docToSave.fields._collection[index].value = item.trim();
               } else if (self.importType === "audioVideo") {
                 self.debug("this is an audioVideo but we arent doing anything with the self.importFields");
                 // docToSave.datumFields[self.importFields.find(self.extractedHeader[index])[0].id].value = item.trim();
               } else {
-                docToSave.datumFields[headerLabel].value = item.trim();
+                docToSave.fields._collection[index].value = item.trim();
               }
               self.debug("new doc", docToSave);
 
