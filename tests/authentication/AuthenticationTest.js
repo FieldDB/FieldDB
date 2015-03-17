@@ -71,6 +71,8 @@ describe("Authentication ", function() {
       expect(auth.user.researchInterest).toContain("Phonemes");
 
       /* should be saved */
+      expect(auth.user.constructor.prototype.temp).toBeDefined();
+      expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toBeDefined();
       expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toContain("confidential");
 
       var anotherAuthLoad = new Authentication({
