@@ -8,8 +8,8 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
   var templates = {
-    UserMask: "<div data-fielddb-user view='User' json='doc' corpus='corpus'></div>",
-    User: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    UserMask: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    User: "<div data-fielddb-user view='User' json='doc' corpus='corpus'></div>",
     Team: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
     Speaker: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
     Consultant: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
