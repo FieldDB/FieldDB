@@ -99,12 +99,12 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           label: "goal"
         })[0].get("mask");
       } catch (e) {
-        OPrime.debug("This session doesnt seem to have a goal.");
+        this.debug("This session doesnt seem to have a goal.");
       }
       return goal;
     },
     set: function(value) {
-
+      this.todo("set goal", value);
     }
   },
 
@@ -315,7 +315,6 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
    */
   saveAndInterConnectInApp: {
     value: function(successcallback, failurecallback) {
-      if (OPrime.debugMode) OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
       if (this.id) {
@@ -323,12 +322,13 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       } else {
         this.set("dateCreated", JSON.stringify(new Date()));
       }
+      this.debug("Saving the Session");
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if (window.app.get("corpus").get("pouchname") != this.get("pouchname")) {
-        if (typeof failurecallback == "function") {
+      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+        if (typeof failurecallback === "function") {
           failurecallback();
         } else {
-          alert('Session save error. I cant save this session in this corpus, it belongs to another corpus. ');
+          this.bug("Session save error. I cant save this session in this corpus, it belongs to another corpus. ");
         }
         return;
       }
@@ -337,42 +337,42 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       this.set("timestamp", Date.now());
       self.save(null, {
         success: function(model, response) {
-          if (OPrime.debugMode) OPrime.debug('Session save success');
+          self.debug("Session save success");
           var goal = model.get("sessionFields").where({
             label: "goal"
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
           //TODO add privacy for session goals in corpus
-          //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
+          //            if(self.application.get("corpus").get("keepSessionDetailsPrivate")){
           //              goal = "";
           //              differences = "";
           //            }
-          if (window.appView) {
-            window.appView.toastUser("Sucessfully saved session: " + goal, "alert-success", "Saved!");
-            window.appView.addSavedDoc(model.id);
+          if (self.application) {
+            self.application.toastUser("Sucessfully saved session: " + goal, "alert-success", "Saved!");
+            self.application.addSavedDoc(model.id);
           }
           var verb = "modified";
-          verbicon = "icon-pencil";
+          var verbicon = "icon-pencil";
           if (newModel) {
             verb = "added";
             verbicon = "icon-plus";
           }
-          window.app.addActivity({
+          self.application.addActivity({
             verb: "<a href='" + differences + "'>" + verb + "</a> ",
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
 
-          window.app.addActivity({
+          self.application.addActivity({
             verb: "<a href='" + differences + "'>" + verb + "</a> ",
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -380,31 +380,31 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           /*
            * make sure the session is visible in this corpus
            */
-          var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
-          if (previousversionincorpus == undefined) {
-            window.app.get("corpus").sessions.unshift(model);
+          var previousversionincorpus = self.application.get("corpus").sessions.get(model.id);
+          if (previousversionincorpus === undefined) {
+            self.application.get("corpus").sessions.unshift(model);
           } else {
-            window.app.get("corpus").sessions.remove(previousversionincorpus);
-            window.app.get("corpus").sessions.unshift(model);
+            self.application.get("corpus").sessions.remove(previousversionincorpus);
+            self.application.get("corpus").sessions.unshift(model);
           }
-          window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+          self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
           //make sure the session is in the history of the user
-          if (window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1) {
-            window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+          if (self.application.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) === -1) {
+            self.application.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
           }
-          //            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
-          window.app.get("authentication").saveAndInterConnectInApp();
+          //            self.application.addUnsavedDoc(self.application.get("authentication").get("userPrivate").id);
+          self.application.get("authentication").saveAndInterConnectInApp();
 
-          if (typeof successcallback == "function") {
+          if (typeof successcallback === "function") {
             successcallback();
           }
         },
         error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
-          if (typeof failurecallback == "function") {
+          self.debug("Session save error", e, f, g);
+          if (typeof failurecallback === "function") {
             failurecallback();
           } else {
-            alert('Session save error: ' + f.reason);
+            self.bug("Session save error: " + f.reason);
           }
         }
       });
@@ -422,36 +422,37 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
    */
   setAsCurrentSession: {
     value: function(successcallback, failurecallback) {
-      if (window.app.get("corpus").get("pouchname") != this.get("pouchname")) {
-        if (typeof failurecallback == "function") {
+      var self = this;
+      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+        if (typeof failurecallback === "function") {
           failurecallback();
         } else {
-          alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
+          self.bug("This is a bug, cannot load the session you asked for, it is not in this corpus.");
         }
         return;
       }
 
-      if (window.app.get("currentSession").id != this.id) {
-        window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-        //      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+      if (self.application.get("currentSession").id !== this.id) {
+        self.application.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
+        //      self.application.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
       }
-      window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
-      window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
+      self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
+      self.application.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-      if (window.appView) {
-        window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
-          if (typeof successcallback == "function") {
+      if (self.application) {
+        self.application.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
+          if (typeof successcallback === "function") {
             successcallback();
           } else {
-            window.appView.currentSessionReadView.format = "leftSide";
-            window.appView.currentSessionReadView.render();
-            window.appView.toastUser("Sucessfully connected all views up to session: " + this.id, "alert-success", "Connected!");
-            //          window.appView.renderEditableSessionViews("leftSide");
-            //          window.appView.renderReadonlySessionViews("leftSide");
+            self.application.currentSessionReadView.format = "leftSide";
+            self.application.currentSessionReadView.render();
+            self.application.toastUser("Sucessfully connected all views up to session: " + this.id, "alert-success", "Connected!");
+            //          self.application.renderEditableSessionViews("leftSide");
+            //          self.application.renderReadonlySessionViews("leftSide");
           }
         });
       } else {
-        if (typeof successcallback == "function") {
+        if (typeof successcallback === "function") {
           successcallback();
         }
       }
