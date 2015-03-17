@@ -102,6 +102,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  fields: {
+    get: function() {
+      return this._fields;
+    },
+    set: function(value) {
+      if (value === this._fields) {
+        return;
+      }
+      if (!value) {
+        delete this._fields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["fields"](value);
+        }
+      }
+      this._fields = value;
+    }
+  },
+
   addFile: {
     value: function(newFileDetails) {
       if (newFileDetails.type.indexOf("audio") === 0) {
