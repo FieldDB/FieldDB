@@ -216,11 +216,11 @@ describe("Directive: fielddb-datalist", function() {
       // call the network request
       http.get(FieldDB.BASE_DB_URL + "/" + scope.corpus.dbname + "/_design/psycholinguistics/_view/" + scope.participantsList.api + "?descending=true").then(function(result) {
         // scope.participantsList.debugMode = true;
-        scope.participantsList.populate(result.data)
-          // result.data.map(function(doc) {
-          //   scope.participantsList.docs._collection.push(new FieldDB.Document(doc));
-          //   // scope.$digest();
-          // });
+        scope.participantsList.populate(result.data);
+        // result.data.map(function(doc) {
+        //   scope.participantsList.docs._collection.push(new FieldDB.Document(doc));
+        //   // scope.$digest();
+        // });
       });
 
       // flush the mock backend
@@ -228,15 +228,23 @@ describe("Directive: fielddb-datalist", function() {
       expect(scope.participantsList.docs.length).toBe(3);
 
       inject(function() {
-        compileFunction(scope); // <== the html {{}} are bound
+        try {
+          compileFunction(scope); // <== the html {{}} are bound
+        } catch (e) {
+          console.warn("couldnt bind scope html", e);
+        }
         scope.participantsList.title = {
           default: "Participant List"
         };
         scope.participantsList.description = {
           default: "This is a list of all participants who are currently in this corpus."
         };
-        if (!scope.$$phase) {
-          scope.$digest(); // <== digest to get the render to show the bound values
+        try {
+          if (!scope.$$phase) {
+            scope.$digest(); // <== digest to get the render to show the bound values
+          }
+        } catch (e) {
+          console.warn("couldnt/didn't need to digest scope to show the bound values");
         }
         if (debugMode) {
           console.log("post link", el.html());
