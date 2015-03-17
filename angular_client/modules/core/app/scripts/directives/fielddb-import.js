@@ -81,18 +81,42 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
         console.log($scope.importer);
         $scope.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log("Finished reading files ", sucessfullOptions);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
           $scope.importer.guessFormatAndPreviewImport();
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
 
         }, function(failedOptions) {
           console.log("Error reading files ", failedOptions);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
         });
       } else {
         $scope.importer.uploadFiles($files).then(function(result) {
           $scope.importer.todo(" Got an upload result in the angular directive", result);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
         }, function(reason) {
           console.log(reason);
         });

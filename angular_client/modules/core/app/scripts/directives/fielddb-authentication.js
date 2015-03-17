@@ -69,7 +69,13 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
         // $scope.$digest();
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
-        $scope.$digest();
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("render threw errors");
+        }
         return $scope;
       });
     };
