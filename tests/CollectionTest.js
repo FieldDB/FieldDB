@@ -141,6 +141,17 @@ describe("lib/Collection", function() {
       });
     });
 
+    it("should be able to change the primaryKey", function() {
+      var newcollection = new Collection();
+      newcollection.primaryKey = "tempId";
+      newcollection.add({
+        tempId: " A",
+        tipa: "llamda"
+      });
+      expect(newcollection.primaryKey).toEqual("tempId");
+      expect(newcollection.length).toEqual(1);
+      expect(newcollection.warnMessage).toBeUndefined();
+    });
 
   });
 
