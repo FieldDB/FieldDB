@@ -327,7 +327,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   value: {
     configurable: true,
     get: function() {
-      if (!this._value) {
+      if (this._value === undefined || this.value === null) {
         return FieldDBObject.DEFAULT_STRING;
       }
       // If there was a value before, there are extra precautions
