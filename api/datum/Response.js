@@ -48,7 +48,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
   addResponse: {
     value: function(responseEvent, stimulusId) {
       if (!responseEvent) {
-        throw "Cannot add response without the x y information found in the touch/click responseEvent";
+        throw new Error("Cannot add response without the x y information found in the touch/click responseEvent");
       }
 
       var reactionTimeEnd = Date.now();

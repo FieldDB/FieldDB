@@ -79,7 +79,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       return this._corpusConnection;
     },
     set: function(value) {
-      console.log("Setting corpus connection ", value);
+      this.debug("Setting corpus connection ", value);
       if (Object.prototype.toString.call(value) === "[object Object]") {
         value = new this.INTERNAL_MODELS["corpusConnection"](value);
       }
@@ -129,7 +129,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(id) {
       if (!this.dbname) {
         this.bug("Cannot get something if the dbname is not defined ", id);
-        throw "Cannot get something if the dbname is not defined ";
+        throw new Error("Cannot get something if the dbname is not defined ");
       }
       if (!this.url) {
         this.bug("The url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
@@ -145,7 +145,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(arg1, arg2) {
       if (!this.dbname) {
         this.bug("Cannot get something if the dbname is not defined ", arg1, arg2);
-        throw "Cannot get something if the dbname is not defined ";
+        throw new Error("Cannot get something if the dbname is not defined ");
       }
       var deferred = Q.defer(),
         self = this,
