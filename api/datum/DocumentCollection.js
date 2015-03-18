@@ -25,7 +25,12 @@ DocumentCollection.prototype = Object.create(Collection.prototype, /** @lends Do
   },
 
   primaryKey: {
-    value: "id"
+    get: function() {
+      return this._primaryKey || "id";
+    },
+    set: function(value) {
+      this._primaryKey = value;
+    }
   },
 
   INTERNAL_MODELS: {
