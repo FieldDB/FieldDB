@@ -99,18 +99,23 @@
       <table id="csv-table-area" class="table table-striped table-bordered table-condensed ">
         <tr >
           <th></th>
-          <th class="drop-zone" ng-repeat="headerCell in importer.extractedHeader track by $index" >
-            <input ng-model="headerCell" drag-hover-class="drop-zone-can-drop-now" ui-on-Drop="onDropRecieved($data, importer.extractedHeader, $index)"/>
+          <th class="drop-zone" ng-repeat="headerField in importer.extractedHeaderObjects._collection track by $index" title="headerField.help" >
+            <input ng-model="headerField.labelExperimenter" drag-hover-class="drop-zone-can-drop-now" ui-on-Drop="onDropFieldLabelRecieved($data, importer.extractedHeaderObjects._collection, $index)"/>
           </th>
         </tr>
-        <tr ng-repeat="row in importer.asCSV track by $index">
+        <tr ng-repeat="row in importer.asFieldMatrix track by $index">
           <td ng-click="removeRow($index)"><i class="fa fa-times-circle"></i></td>
-          <td ng-repeat="cell in row track by $index" contenteditable ng-model="cell"></td>
+          <td ng-repeat="cell in row track by $index" >
+            <span contenteditable ng-model="cell.value" title="cell | json" ng-hide="cell.type"></span>
+            <input ng-model="cell.value" title="cell | json" ng-show="cell.type" nt-type="cell.type"/>
+          </td>
         </tr>
       </table>
     </div>
 
-  <button class="btn btn-success approve-import" ng-show="importer.asCSV.length > 0" ng-click="runImport()">{{locale.locale_Attempt_Import}}</button>
+  <button class="btn btn-success approve-import" ng-show="importer.asFieldMatrix.length > 0" ng-click="previewDatalist()">
+    {{locale.locale_Attempt_Import}}
+  </button>
 </div>
 
 <progress  class="import-progress" value="{{importer.progress.completed}}">
@@ -125,7 +130,7 @@
     <div id="import-session" class="well"></div>
 
     <button
-    class="btn btn-success approve-save disabled">{{locale.locale_Save_And_Import}}</button>
+    class="btn btn-success approve-save disabled" ng-click="runImport()">{{locale.locale_Save_And_Import}}</button>
 
   </div>
 </div>
