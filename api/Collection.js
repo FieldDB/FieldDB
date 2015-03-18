@@ -358,7 +358,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(member) {
       if (!this.primaryKey) {
         this.warn("The primary key is undefined, nothing can be added!", this);
-        throw "The primary key is undefined, nothing can be added!";
+        throw new Error("The primary key is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
@@ -370,7 +370,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
-      if (value !== oldValue) {
+      if (value !== oldValue && this.fieldDBtype !== "DatumStates") {
         this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
@@ -379,12 +379,12 @@ Collection.prototype = Object.create(Object.prototype, {
 
   add: {
     value: function(value) {
-      if (Object.prototype.toString.call(value) === "[object Array]") {
+      if (value && Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
         value.map(function(item) {
           self.add(item);
         });
-        return;
+        return this;
       }
 
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
@@ -404,11 +404,23 @@ Collection.prototype = Object.create(Object.prototype, {
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
         this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype;
+        throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);
-      return this[dotNotationKey];
+      return this;
+    }
+  },
+
+  concat: {
+    value: function(anotherCollection) {
+      if (anotherCollection && anotherCollection._collection) {
+        return this.add(anotherCollection._collection);
+      }
+      if(!anotherCollection){
+        return this;
+      }
+      return this.add(anotherCollection);
     }
   },
 
@@ -417,12 +429,68 @@ Collection.prototype = Object.create(Object.prototype, {
       // self.debug(this.collection);
       this.set(this.getSanitizedDotNotationKey(value), value, null, false);
       // self.debug(this.collection);
+      return this;
     }
   },
 
   unshift: {
     value: function(value) {
       this.set(this.getSanitizedDotNotationKey(value), value, null, true);
+      return this;
+    }
+  },
+
+  pop: {
+    value: function() {
+      if (!this._collection || this._collection.length < 1) {
+        return;
+      }
+      var removed = this._collection.pop();
+      if (!removed) {
+        return;
+      }
+      key = this.getSanitizedDotNotationKey(removed);
+      if (!key) {
+        this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
+      }
+
+      if (this[key]) {
+        this.debug("removed dot notation for ", key);
+        delete this[key];
+      }
+
+      if (this[key.toLowerCase().replace(/_/g, "")]) {
+        this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
+        delete this[key.toLowerCase().replace(/_/g, "")];
+      }
+      return removed;
+    }
+  },
+
+  shift: {
+    value: function() {
+      if (!this._collection || this._collection.length < 1) {
+        return;
+      }
+      var removed = this._collection.shift();
+      if (!removed) {
+        return;
+      }
+      key = this.getSanitizedDotNotationKey(removed);
+      if (!key) {
+        this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
+      }
+
+      if (this[key]) {
+        this.debug("removed dot notation for ", key);
+        delete this[key];
+      }
+
+      if (this[key.toLowerCase().replace(/_/g, "")]) {
+        this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
+        delete this[key.toLowerCase().replace(/_/g, "")];
+      }
+      return removed;
     }
   },
 
@@ -531,6 +599,15 @@ Collection.prototype = Object.create(Object.prototype, {
 
       }
       return -1;
+    }
+  },
+
+  get: {
+    value: function(index) {
+      if (index === undefined || index === null || !this._collection) {
+        return;
+      }
+      return this._collection[index];
     }
   },
 
