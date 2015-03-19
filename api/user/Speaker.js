@@ -260,7 +260,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
       if (!this.fields) {
         this.fields = new DatumFields(this.defaults.fields);
       }
-      this.fields.debugMode = true;
+      // this.fields.debugMode = true;
       this.fields.dateOfBirth.value = value;
     }
   },
