@@ -118,19 +118,20 @@
   </button>
 </div>
 
-<progress  class="import-progress" value="{{importer.progress.completed}}">
+<progress  class="import-progress" value="{{importer.progress.completed}}" max="{{importer.progress.total}}" ng-show="importer.progress.total">
   <strong>{{locale.locale_percent_completed}}</strong>
 </progress>
 
 <div class="well container-fluid" ng-show="importer.showImportThirdStep">
   <span>{{locale.locale_Import_Third_Step}}</span>
 
-  <div class="row-fluid" data-fielddb-datalist json="importer.datalist" corpus="importer.corpus" >
-
-    <div id="import-session" class="well"></div>
-
-    <button
-    class="btn btn-success approve-save disabled" ng-click="runImport()">{{locale.locale_Save_And_Import}}</button>
-
+  <div class="row-fluid" data-fielddb-datalist json="importer.datalist" corpus="importer.corpus">
   </div>
+
+  <div class="well" data-fielddb-doc json="importer.session" corpus="importer.corpus" >
+  </div>
+
+  <button
+  class="btn btn-success approve-save disabled" ng-click="runImport()">{{locale.locale_Save_And_Import}}</button>
+
 </div>

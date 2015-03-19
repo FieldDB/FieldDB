@@ -275,7 +275,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             completed: 0
           };
         }
-        self.progress.total = self.progress.total + 1;
+        self.progress.total = self.asFieldMatrix.length;
 
         // self.datalist = new DataList({
         //   title: "Import Data",
@@ -390,6 +390,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           cell;
 
         self.asFieldMatrix.map(function(row) {
+          self.progress.completed = self.progress.completed + 1;
+
           if (!row || row.length < 1) {
             self.debug("Skipping empty row");
             return;
@@ -418,7 +420,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.debug("Creating a datum.", row);
           }
           docToSave.confidential = self.corpus.confidential;
-          docToSave.decryptedMode = true;
+          // docToSave.decryptedMode = true;
 
           // return;
           testForEmptyness = "";
@@ -463,7 +465,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
         self.showImportThirdStep = true;
         self.render();
-
+        self.progress.total = self.progress.completed = self.datalist.length;
 
 
         //   /*
