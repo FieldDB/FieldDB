@@ -131,11 +131,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         parallelText = {},
         tuples = [],
         feederWord,
-        fullWord;
+        fullWord,
+        lengthOfLongestIGTLineInWords,
+        igtLine,
+        cellIndex,
+        tuple;
 
       var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
       var whiteSpaceSplit = /[ \t\n]+/;
-      var leipzigSplit = /[=-]+/;
+      // var leipzigSplit = /[=-]+/;
       var cleanUngrammaticalitySubstitutions = false;
 
       this.fields.map(function(field) {
@@ -172,18 +176,18 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       this.debug("Collected all the Paralel Text lines", parallelText);
 
       // Build triples
-      var lengthOfLongestIGTLineInWords = 0;
-      for (var igtLine in igtLines) {
+      lengthOfLongestIGTLineInWords = 0;
+      for (igtLine in igtLines) {
         if (igtLines[igtLine] && igtLines[igtLine].length > lengthOfLongestIGTLineInWords) {
-          lengthOfLongestIGTLineInWords = igtLines[igtLine].length
+          lengthOfLongestIGTLineInWords = igtLines[igtLine].length;
         }
       }
 
       // for each word
-      for (var cellIndex = 0; cellIndex < lengthOfLongestIGTLineInWords; cellIndex++) {
-        var tuple = {};
+      for (cellIndex = 0; cellIndex < lengthOfLongestIGTLineInWords; cellIndex++) {
+        tuple = {};
         // for each row of the igt
-        for (var igtLine in igtLines) {
+        for (igtLine in igtLines) {
           this.debug("working on   " + igtLine, igtLines[igtLine]);
           if (igtLines[igtLine] && igtLines[igtLine].length > cellIndex && igtLines[igtLine][cellIndex]) {
             tuple[igtLine] = igtLines[igtLine][cellIndex];

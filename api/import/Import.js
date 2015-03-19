@@ -339,18 +339,19 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           columnIndex;
 
         try {
+          var getColumnHeadings = function(obj) {
+            if (obj && obj.id && obj.id !== "columnplaceholder") {
+              return "";
+            }
+            return obj.id;
+          };
           for (columnIndex = 0; columnIndex < self.extractedHeaderObjects.length; columnIndex++) {
             fieldLabelFromExtractedHeader = self.extractedHeaderObjects[columnIndex].id || self.extractedHeaderObjects[columnIndex];
             // self.debugMode = true;
             correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
 
             if (correspondingDatumField && correspondingDatumField.id) {
-              var fields = self.extractedHeaderObjects.map(function(obj) {
-                if (obj && obj.id && obj.id != "columnplaceholder") {
-                  return ""
-                }
-                return obj.id;
-              });
+              var fields = self.extractedHeaderObjects.map(getColumnHeadings);
               if (fields.indexOf(correspondingDatumField.id) >= 0) {
                 self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
                   " (the same label on two columns). This will result in a strange " +
@@ -403,7 +404,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             return headerField.toJSON();
           });
           self.debug("Cloned fields ", fields.length);
-          self.debug("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
+          self.debug("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0]);
           if (self.importType === "participants") {
             docToSave = new Participant({
               fields: fields
@@ -426,7 +427,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
             cell = row[cellIndex];
-            self.debug("working on cell ", cell)
+            self.debug("working on cell ", cell);
             if (!cell || cellIndex > self.extractedHeaderObjects.length || self.extractedHeaderObjects[cellIndex].id === "columnplaceholder") {
               self.debug("Skipping column " + cellIndex + " :", cell);
               continue;

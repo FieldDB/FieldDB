@@ -235,7 +235,7 @@ describe("Syntactic sugar", function() {
     });
 
   it("should be able to modify fields via a simple object", function() {
-    datum.fields.utterance.value = "Jaunpa much'asqami kani."
+    datum.fields.utterance.value = "Jaunpa much'asqami kani.";
 
     expect(datum.fields.utterance.value).toEqual("Jaunpa much'asqami kani.");
     expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
