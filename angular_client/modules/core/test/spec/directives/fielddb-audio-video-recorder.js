@@ -4,7 +4,7 @@ var debugMode = false;
 describe("Directive: fielddb-audio-video-recorder", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/audio-video-recorder.html", "views/import.html", "views/datalist.html"));
+  beforeEach(module("fielddbAngularApp", "views/audio-video-recorder.html", "views/import.html", "views/datalist.html", "views/session.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
