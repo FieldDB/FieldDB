@@ -88,6 +88,9 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "linguist",
     "defaultfield": true,
+    "json": {
+      "grammatical": true
+    },
     "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
     "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
@@ -200,8 +203,22 @@
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      },
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    },
     "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
-    "language": "",
     "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
   }, {
     "id": "context",
