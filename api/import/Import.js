@@ -858,6 +858,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  fileDetails: {
+    get: function() {
+      return this._fileDetails || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      this._fileDetails = value;
+    }
+  },
+
   /**
    * Holds meta data about the imported data list and references to the datum ids
    *
@@ -866,9 +875,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   datalist: {
     get: function() {
       if (!this._datalist) {
-        this.warn("creating a default data list");
+        this.debug("creating a default data list");
         this._datalist = new DataList({
-          title: "Import Data",
+          title: {
+            default: "Imported Data"
+          },
           docs: {
             collection: [],
             primaryKey: "tempId"
