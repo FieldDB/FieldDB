@@ -84,10 +84,22 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
    */
   encrypt: {
     value: function(value) {
+      if (!value) {
+        return value;
+      }
       if (typeof value === "object") {
         value = JSON.stringify(value);
         this.debug("Converted object to string before encryption");
       }
+      if (typeof value === "number") {
+        value = value + "";
+        this.debug("Converted object to string before encryption");
+      }
+      if (!this.secretkey) {
+        throw new Error("This confidential wasnt set up properly, cant encrypt.");
+      }
+      // this.debugMode = true;
+      this.debug("encrypting "+ value);
       var result = CryptoJS.AES.encrypt(value, this.secretkey.toString("base64"));
       this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
       // return the base64 version to save it as a string in the corpus

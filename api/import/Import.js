@@ -404,8 +404,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.debug("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
           if (self.importType === "participants") {
             docToSave = new Participant({
-              confidential: self.corpus.confidential,
-              decryptedMode: true,
               fields: fields
             });
             self.debug("Creating a participant.", row);
@@ -415,12 +413,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.debug("Creating a audioVideo.", docToSave.description);
           } else {
             docToSave = new Datum({
-              confidential: self.corpus.confidential,
-              decryptedMode: true,
               fields: fields
             });
             self.debug("Creating a datum.", row);
           }
+          docToSave.confidential = self.corpus.confidential;
+          docToSave.decryptedMode = true;
 
           // return;
           testForEmptyness = "";
