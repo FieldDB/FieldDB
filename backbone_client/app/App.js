@@ -1,4 +1,5 @@
 define([
+    "underscore",
     "backbone",
     "jquerycouch",
     "libs/backbone_couchdb/backbone-couchdb",
@@ -21,6 +22,7 @@ define([
     "text!locales/en/messages.json",
     "OPrime"
 ], function(
+    _,
     Backbone,
     jquerycouch,
     backbonecouch,
