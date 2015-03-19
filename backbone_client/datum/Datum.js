@@ -242,6 +242,11 @@ define([
         for (x in originalModel.datumFields) {
           originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
         }
+        if(!originalModel.session){
+          originalModel.session = {
+            datumFields: []
+          };
+        }
         for (x in originalModel.session.datumFields) {
           originalModel.session.datumFields[x].label = originalModel.session.datumFields[x].label ||originalModel.session.datumFields[x].id;
         }
