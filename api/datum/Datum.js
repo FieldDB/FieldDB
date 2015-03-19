@@ -73,37 +73,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   fields: {
     get: function() {
-      return this._fields || FieldDBObject.DEFAULT_COLLECTION;
-    },
-    set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["fields"] === "function") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      this._fields = value;
-    }
-  },
-
-  datumFields: {
-    get: function() {
-      this.debug("datumFields is depreacted, just use fields instead");
-      return this.fields;
-    },
-    set: function(value) {
-      this.debug("datumFields is depreacted, just use fields instead");
-      return this.fields = value;
-    }
-  },
-
-  fields: {
-    get: function() {
+      this.debug("getting fields");
       return this._fields;
     },
     set: function(value) {
@@ -118,7 +88,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           value = new this.INTERNAL_MODELS["fields"](value);
         }
       }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
       this._fields = value;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      this.debug("datumFields is depreacted, just use fields instead");
+      return this.fields;
+    },
+    set: function(value) {
+      this.debug("datumFields is depreacted, just use fields instead");
+      return this.fields = value;
     }
   },
 

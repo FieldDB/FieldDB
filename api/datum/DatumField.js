@@ -341,7 +341,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           return this._value;
         } else {
           if (!this.decryptedMode) {
-            this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
+            this.warn("User is not able to view the value of "+this.id+", it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
             return this.mask || FieldDBObject.DEFAULT_STRING;
           } else {
             if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
