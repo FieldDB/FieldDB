@@ -53,6 +53,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
+  if (FieldDB && FieldDB.FieldDBObject) {
+    FieldDB.FieldDBObject.bug = function(message) {
+      $rootScope.notificationMessage = message;
+      $rootScope.openNotification();
+    };
+  }
+
   $rootScope.appVersion = "2.47.19.18.21ss";
 
   // Functions to open/close generic notification modal
