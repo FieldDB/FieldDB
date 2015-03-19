@@ -115,7 +115,11 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       };
 
       this.fields.map(passValueReference);
-      this.session.fields.map(passValueReference);
+      if (this.session) {
+        this.session.fields.map(passValueReference);
+      } else {
+        this.warn("this datum is missing a session, this is stange");
+      }
 
       return obj;
     }
@@ -168,18 +172,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       this.debug("Collected all the Paralel Text lines", parallelText);
 
       // Build triples
-      var lengthOfDatum = 0;
-      if (igtLines.utterance && igtLines.utterance.length > 0) {
-        lengthOfDatum = igtLines.utterance.length;
+      var lengthOfLongestIGTLineInWords = 0;
+      for (var igtLine in igtLines) {
+        if (igtLines[igtLine] && igtLines[igtLine].length > lengthOfLongestIGTLineInWords) {
+          lengthOfLongestIGTLineInWords = igtLines[igtLine].length
+        }
       }
-      if (!lengthOfDatum && igtLines.orthography && igtLines.orthography.length > 0) {
-        lengthOfDatum = igtLines.orthography.length;
-      }
-      if (!lengthOfDatum && igtLines.morphemes && igtLines.morphemes.length > 0) {
-        lengthOfDatum = igtLines.morphemes.length;
-      }
+
       // for each word
-      for (var cellIndex = 0; cellIndex < lengthOfDatum; cellIndex++) {
+      for (var cellIndex = 0; cellIndex < lengthOfLongestIGTLineInWords; cellIndex++) {
         var tuple = {};
         // for each row of the igt
         for (var igtLine in igtLines) {

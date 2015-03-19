@@ -12,7 +12,10 @@ describe("Test Datum", function() {
 
   describe("popular fields", function() {
     var datum = new Datum({
-      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields))
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields)),
+      session: {
+        fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.sessionFields))
+      }
     });
 
     it("should get the fields from the corpus", function() {
@@ -24,8 +27,8 @@ describe("Test Datum", function() {
       expect(datum.fields.utterance.value).toEqual("Noqata");
       expect(datum.fields.utterance.json).toEqual({
         writingSystem: {
-          id: '',
-          referenceLink: ''
+          id: "",
+          referenceLink: ""
         }
       });
     });
@@ -42,12 +45,12 @@ describe("Test Datum", function() {
       datum.fields.gloss.value = "I-ACC";
       expect(datum.fields.gloss.value).toEqual("I-ACC");
       expect(datum.fields.gloss.json).toEqual({
-        language: '',
+        language: "",
         alternates: [],
         conventions: {
-          id: '',
+          id: "",
           tagSet: [],
-          referenceLink: ''
+          referenceLink: ""
         }
       });
     });
@@ -57,17 +60,17 @@ describe("Test Datum", function() {
       expect(datum.fields.translation.value).toEqual("I");
       expect(datum.fields.translation.json).toEqual({
         writingSystem: {
-          id: '',
-          referenceLink: ''
+          id: "",
+          referenceLink: ""
         },
         language: {
-          ethnologueUrl: '',
-          wikipediaUrl: '',
-          iso: '',
-          locale: '',
-          englishName: '',
-          nativeName: '',
-          alternateNames: ''
+          ethnologueUrl: "",
+          wikipediaUrl: "",
+          iso: "",
+          locale: "",
+          englishName: "",
+          nativeName: "",
+          alternateNames: ""
         }
       });
     });
@@ -119,26 +122,26 @@ describe("IGT support", function() {
 
     datum.fields.translation.value = "Des chiens";
 
-    datum.debugMode = true;
+    // datum.debugMode = true;
     expect(datum.igt).toEqual({
       tuples: [{
-        orthography: 'puppies',
-        utterance: 'pʌpiz',
-        allomorphs: 'pʌpi-z',
-        morphemes: 'pʌpi-z',
-        gloss: 'puppy-pl',
-        syntacticCategory: ''
+        orthography: "puppies",
+        utterance: "pʌpiz",
+        allomorphs: "pʌpi-z",
+        morphemes: "pʌpi-z",
+        gloss: "puppy-pl",
+        syntacticCategory: ""
       }],
       parallelText: {
-        orthography: 'puppies',
-        utterance: 'pʌpiz',
-        translation: 'Des chiens'
+        orthography: "puppies",
+        utterance: "pʌpiz",
+        translation: "Des chiens"
       }
     });
   });
 
 
-  it("should tollerate broken IGT data", function() {
+  it("should tollerate slightly unaligned IGT data", function() {
     // datum.fields.orthography.value = "this field has many words";
     datum.fields.utterance.value = "this field has many words";
     datum.fields.morphemes.value = "this field has fewer";
@@ -147,42 +150,63 @@ describe("IGT support", function() {
 
     datum.fields.translation.value = "totally different word count but its okay";
 
-    datum.debugMode = true;
+    // datum.debugMode = true;
     var igt = datum.igt;
 
     expect(igt.tuples[4]).toEqual({
-      orthography: '',
-      utterance: 'words',
-      allomorphs: '',
-      morphemes: '',
-      gloss: 'words',
-      syntacticCategory: ''
+      orthography: "",
+      utterance: "words",
+      allomorphs: "",
+      morphemes: "",
+      gloss: "words",
+      syntacticCategory: ""
     });
   });
 
 
-  it("should tollerate broken IGT data", function() {
+  it("should non-lossily tollerate drastically unaligned IGT data", function() {
     // datum.fields.orthography.value = "this field has many words";
     datum.fields.utterance.value = "this field has fewer";
-    datum.fields.morphemes.value = "this field has many more segmentations than the utterance";
+    datum.fields.morphemes.value = "this field has many more segmentations than the utterance line and will dictate the length of the tuples so they are non-lossy";
     // datum.fields.allomorphs.value = "this field has many words";
     datum.fields.gloss.value = "this field has many words";
 
     datum.fields.translation.value = "totally different word count but its okay";
 
-    datum.debugMode = true;
+    // datum.debugMode = true;
     var igt = datum.igt;
 
-    expect(igt.tuples[4]).toEqual({
-      orthography: '',
-      utterance: 'words',
-      allomorphs: '',
-      morphemes: '',
-      gloss: 'words',
-      syntacticCategory: ''
+    expect(igt.tuples[igt.tuples.length - 1]).toEqual({
+      orthography: "",
+      utterance: "",
+      allomorphs: "",
+      morphemes: "non-lossy",
+      gloss: "",
+      syntacticCategory: ""
     });
   });
 
+
+  it("should tollerate abnormal/irregular whitespacing", function() {
+    datum.fields.orthography.value = "this\tline\tis\t\"tabbed\"";
+    datum.fields.utterance.value = "this line is spaced";
+    datum.fields.morphemes.value = " this\t\tline is\na-combo";
+    datum.fields.allomorphs.value = "this\nline\n\nis\nline-breaked";
+    datum.fields.gloss.value = "this line (has punctuation)";
+
+    datum.fields.translation.value = "Des chiens";
+
+    var igt = datum.igt;
+    // datum.debugMode = true;
+    expect(igt.tuples[igt.tuples.length - 1]).toEqual({
+      orthography: "\"tabbed\"",
+      utterance: "spaced",
+      allomorphs: "line-breaked",
+      morphemes: "a-combo",
+      gloss: "punctuation)",
+      syntacticCategory: ""
+    });
+  });
 
 });
 
@@ -203,9 +227,15 @@ describe("Backward compatability with v1.22", function() {
 });
 
 describe("Syntactic sugar", function() {
-  var datum = new Datum(sample_1_22_datum[0]);
+  var datum = new Datum({
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields)),
+      session: {
+        fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.sessionFields))
+      }
+    });
 
   it("should be able to modify fields via a simple object", function() {
+    datum.fields.utterance.value = "Jaunpa much'asqami kani."
 
     expect(datum.fields.utterance.value).toEqual("Jaunpa much'asqami kani.");
     expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
@@ -221,4 +251,4 @@ describe("Syntactic sugar", function() {
 
   });
 
-})
+});

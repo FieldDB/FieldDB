@@ -199,7 +199,7 @@
     "labelFieldLinguists": "Translation",
     "labelNonLinguists": "English",
     "labelTranslators": "English",
-    "type": "IGT, parallelText",
+    "type": "parallelText",
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
