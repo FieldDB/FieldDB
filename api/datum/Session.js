@@ -181,7 +181,8 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   fields: {
     get: function() {
-      return this._fields ;
+      this.debug("getting fields");
+      return this._fields;
     },
     set: function(value) {
       if (value === this._fields) {
@@ -194,6 +195,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
           value = new this.INTERNAL_MODELS["fields"](value);
         }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
       }
       this._fields = value;
     }
