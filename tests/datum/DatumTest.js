@@ -10,7 +10,7 @@ describe("Test Datum", function() {
     expect(datum).toBeDefined();
   });
 
-  describe("IGT support", function() {
+  describe("popular fields", function() {
     var datum = new Datum({
       fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields))
     });
@@ -97,18 +97,90 @@ describe("Test Datum", function() {
     });
 
 
-    it("should represent IGT data in tuples", function() {
-      datum.fields.orthography.value = "puppies";
-      datum.fields.utterance.value = "pʌpiz";
-      datum.fields.morphemes.value = "pʌpi-z";
-      datum.fields.allomorphs.value = "pʌpi-z";
-      datum.fields.gloss.value = "puppy-pl";
+  });
 
-      datum.fields.translation.value = "Des chiens";
 
-      // expect(datum.igt).toEqual({});
+});
+
+describe("IGT support", function() {
+  var datum;
+  beforeEach(function() {
+    datum = new Datum({
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields))
     });
+  });
 
+  it("should represent IGT data in tuples and parallel text", function() {
+    datum.fields.orthography.value = "puppies";
+    datum.fields.utterance.value = "pʌpiz";
+    datum.fields.morphemes.value = "pʌpi-z";
+    datum.fields.allomorphs.value = "pʌpi-z";
+    datum.fields.gloss.value = "puppy-pl";
+
+    datum.fields.translation.value = "Des chiens";
+
+    datum.debugMode = true;
+    expect(datum.igt).toEqual({
+      tuples: [{
+        orthography: 'puppies',
+        utterance: 'pʌpiz',
+        allomorphs: 'pʌpi-z',
+        morphemes: 'pʌpi-z',
+        gloss: 'puppy-pl',
+        syntacticCategory: ''
+      }],
+      parallelText: {
+        orthography: 'puppies',
+        utterance: 'pʌpiz',
+        translation: 'Des chiens'
+      }
+    });
+  });
+
+
+  it("should tollerate broken IGT data", function() {
+    // datum.fields.orthography.value = "this field has many words";
+    datum.fields.utterance.value = "this field has many words";
+    datum.fields.morphemes.value = "this field has fewer";
+    // datum.fields.allomorphs.value = "this field has many words";
+    datum.fields.gloss.value = "this field has many words";
+
+    datum.fields.translation.value = "totally different word count but its okay";
+
+    datum.debugMode = true;
+    var igt = datum.igt;
+
+    expect(igt.tuples[4]).toEqual({
+      orthography: '',
+      utterance: 'words',
+      allomorphs: '',
+      morphemes: '',
+      gloss: 'words',
+      syntacticCategory: ''
+    });
+  });
+
+
+  it("should tollerate broken IGT data", function() {
+    // datum.fields.orthography.value = "this field has many words";
+    datum.fields.utterance.value = "this field has fewer";
+    datum.fields.morphemes.value = "this field has many more segmentations than the utterance";
+    // datum.fields.allomorphs.value = "this field has many words";
+    datum.fields.gloss.value = "this field has many words";
+
+    datum.fields.translation.value = "totally different word count but its okay";
+
+    datum.debugMode = true;
+    var igt = datum.igt;
+
+    expect(igt.tuples[4]).toEqual({
+      orthography: '',
+      utterance: 'words',
+      allomorphs: '',
+      morphemes: '',
+      gloss: 'words',
+      syntacticCategory: ''
+    });
   });
 
 

@@ -123,92 +123,84 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   igt: {
     get: function() {
-      var context = {},
+      var igtLines = {},
+        parallelText = {},
+        tuples = [],
         feederWord,
-        fullWord,
-        datum;
+        fullWord;
 
-      var datum = this.accessAsObject();
+      var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
+      var whiteSpaceSplit = /[ \t\n]+/;
+      var leipzigSplit = /[=-]+/;
+      var cleanUngrammaticalitySubstitutions = false;
 
-      var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(/[ ]+/);
-      for (var word in words) {
-        // If the token it not null or the empty string
-        if (words[word]) {
-          // Replace (*_) with ""
-          feederWord = words[word].replace(/\(\*[^)]*\)/g, "");
-          // Replace *(_) with _
-          feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-          // Remove all parentheses and *
-          fullWord = feederWord.replace(/[(*)]/g, "");
-          words[word] = fullWord;
+      this.fields.map(function(field) {
+        if (field.type && field.type.indexOf("parallelText") > -1) {
+          parallelText[field.id] = field.value;
         }
-      }
-      context.words = words;
-
-      var morphemes = datum.morphemes.replace(/#!,\//g, "").split(/[ ]+/);
-      for (var morphemegroup in morphemes) {
-        // If the token it not null or the empty string
-        if (morphemes[morphemegroup]) {
-          // Replace (*_) with ""
-          feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g, ""); // DONT replace ? it is used to indicate uncertainty with the data, . is used for fusional morphemes Replace *(_) with _ feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-          // Remove all parentheses and *
-          fullWord = feederWord.replace(/[(*)]/g, "");
-          morphemes[morphemegroup] = fullWord;
+        if (!field.type || field.type.indexOf("IGT") === -1) {
+          return;
         }
+
+        var chunks = field.value.replace(/#?!.,\//g, "").split(whiteSpaceSplit);
+
+        chunks = chunks.map(function(chunk) {
+          if (cleanUngrammaticalitySubstitutions) {
+            // If the token it not null or the empty string
+            if (chunk) {
+              // Replace (*_) with _
+              feederWord = chunk.replace(/\(\*[^)]*\)/g, "$1");
+              // Replace *(_) with _
+              feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
+              // Remove all remaining punctuation
+              fullWord = feederWord.replace(punctuationToRemove, "");
+              chunk = fullWord;
+            }
+          }
+
+          // return chunk.split(leipzigSplit);
+          return chunk;
+        });
+
+        igtLines[field.id] = chunks;
+      });
+      this.debug("Collected all the IGT lines", igtLines);
+      this.debug("Collected all the Paralel Text lines", parallelText);
+
+      // Build triples
+      var lengthOfDatum = 0;
+      if (igtLines.utterance && igtLines.utterance.length > 0) {
+        lengthOfDatum = igtLines.utterance.length;
       }
-      context.morphemes = morphemes;
-
-      var glosses = datum.gloss.replace(/#!,\//g, "").split(/[ ]+/); // DONT replace
-      // ? it is
-      // used to indicate
-      // uncertainty with the
-      // data, . is used for
-      // fusional morphemes
-      for (var glossgroup in glosses) {
-        // If the token it not null or the empty string
-        if (glosses[glossgroup]) {
-          // Replace (*_) with ""
-          feederWord = glosses[glossgroup].replace(/\(\*[^)]*\)/g, "");
-          // Replace *(_) with _
-          feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-          // Remove all parentheses and *
-          fullWord = feederWord.replace(/[(*)]/g, "");
-          glosses[glossgroup] = fullWord;
-        }
+      if (!lengthOfDatum && igtLines.orthography && igtLines.orthography.length > 0) {
+        lengthOfDatum = igtLines.orthography.length;
       }
-      context.glosses = glosses;
-
-
-
-
-      try {
-
-        var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
-        // Build triples
-        for (var j in context.words) {
-          // var w = context.words[j];
-          var ms = context.morphemes[j].split("-");
-          var gs = context.glosses[j].split("-");
-          for (var i in ms) {
-            var caseInsensitiveMorpheme = ms[i].toLowerCase();
-            caseInsensitiveMorpheme = caseInsensitiveMorpheme.replace(punctuationToRemove, " ").trim();
-            var caseInsensitiveGloss = gs[i] ? gs[i].toLowerCase() : "??";
-            caseInsensitiveGloss = caseInsensitiveGloss.replace(punctuationToRemove, " ").trim();
-            emit({
-              morpheme: caseInsensitiveMorpheme,
-              gloss: caseInsensitiveGloss
-            }, 1);
+      if (!lengthOfDatum && igtLines.morphemes && igtLines.morphemes.length > 0) {
+        lengthOfDatum = igtLines.morphemes.length;
+      }
+      // for each word
+      for (var cellIndex = 0; cellIndex < lengthOfDatum; cellIndex++) {
+        var tuple = {};
+        // for each row of the igt
+        for (var igtLine in igtLines) {
+          this.debug("working on   " + igtLine, igtLines[igtLine]);
+          if (igtLines[igtLine] && igtLines[igtLine].length > cellIndex && igtLines[igtLine][cellIndex]) {
+            tuple[igtLine] = igtLines[igtLine][cellIndex];
+          } else {
+            tuple[igtLine] = "";
           }
         }
-      } catch (e) {
-        //emit(e, 1);
+        tuples.push(tuple);
       }
 
+      this.debug("IGT+ tuples", tuples);
 
 
-      paraleltext.translation = "\u2018" + translation + "\u2019";
+      return {
+        tuples: tuples,
+        parallelText: parallelText
+      };
 
-      return {};
     },
     set: function() {
       this.warn("Setting the igt has to be copy pasted from one of the other codebases");
