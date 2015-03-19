@@ -166,10 +166,12 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
         console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
-      $scope.importer.convertTableIntoDataList().then(function(results) {
+      $scope.importer.convertMatrixIntoDataList().then(function(results) {
         console.log("Import is completed. ", results);
         console.log(" Progress ", $scope.importer.progress);
-        // $scope.$digest();
+      },function(results) {
+        console.log("Import is completed. ", results);
+        console.log(" Progress ", $scope.importer.progress);
       });
     };
     $scope.runImport = function() {
