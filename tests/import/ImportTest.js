@@ -106,7 +106,7 @@ describe("api/import/Import", function() {
     });
 
     it("should convert between matrix of objects to datalist", function(done) {
-      importer.debugMode = true;
+      // importer.debugMode = true;
       expect(importer.asFieldMatrix.length).toEqual(7);
       importer.metadataLines = ["Copy pasting"];
       importer.convertMatrixIntoDataList().then(function() {
@@ -187,7 +187,7 @@ describe("api/import/Import", function() {
 
 });
 
-xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
   var corpus,
     importer,
     localUri = "./sample_data/orthography.txt",
