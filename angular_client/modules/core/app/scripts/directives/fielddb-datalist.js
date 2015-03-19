@@ -36,8 +36,12 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
     $scope.save = function() {
       $scope.datalist.save().then(function() {
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.log("problem running angular render", e);
         }
       });
     };
@@ -63,9 +67,9 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         }
         return;
       }
-      if (FieldDB && FieldDB.Database) {
-        $scope.corpus.authUrl = FieldDB.Database.prototype.BASE_AUTH_URL;
-      }
+      // if (FieldDB && FieldDB.Database) {
+      //   $scope.corpus.authUrl = FieldDB.Database.prototype.BASE_AUTH_URL;
+      // }
       // $scope.corpus.debugMode = true;
 
       // console.log("fetching docs for ", $scope.corpus.toJSON());
@@ -94,13 +98,18 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         console.log("downloaded docs", results);
         $scope.datalist.confidential = $scope.corpus.confidential;
         $scope.datalist.populate(results.map(function(doc) {
-          doc.url = FieldDB.Database.prototype.BASE_DB_URL + "/" + $scope.corpus.dbname;
+          doc.url = $scope.corpus.url;
           return doc;
         }));
 
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("render threw errors");
         }
+
 
       }, function(reason) {
 
@@ -108,10 +117,13 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
         console.log(" No connetion, Waiting another " + fetchDatalistDocsExponentialDecay + " until trying to fetch docs again.");
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.log("problem running angular render", e);
         }
-
         $timeout(function() {
           if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
             return;
@@ -136,7 +148,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         dbname: $scope.datalist.dbname,
         url: $scope.datalist.url
       });
-      $scope.datalist.fetch(FieldDB.Database.prototype.BASE_DB_URL).then(function() {
+      $scope.datalist.fetch().then(function() {
         fetchDatalistDocsIfEmpty();
       });
     };

@@ -1,4 +1,5 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
 var MD5 = require("MD5");
 
 /**
@@ -14,6 +15,7 @@ var UserMask = function UserMask(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "UserMask";
   }
+
   this.debug("Constructing a UserMask " + options);
   FieldDBObject.apply(this, arguments);
 };
@@ -24,7 +26,20 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   api: {
-    value: "/users"
+    value: "users"
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      username: FieldDBObject.DEFAULT_STRING,
+      firstname: FieldDBObject.DEFAULT_STRING,
+      lastname: FieldDBObject.DEFAULT_STRING,
+      gravatar: FieldDBObject.DEFAULT_STRING,
+      researchInterest: FieldDBObject.DEFAULT_STRING,
+      affiliation: FieldDBObject.DEFAULT_STRING,
+      description: FieldDBObject.DEFAULT_STRING,
+      fields: DatumFields
+    }
   },
 
   buildGravatar: {
@@ -54,7 +69,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       lastname: "",
       email: "",
       gravatar: "",
-      researchInterests: "",
+      researchInterest: "",
       affiliation: "",
       description: ""
     }
@@ -65,7 +80,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       if (!this._username) {
         this._username = "";
       }
-      return this._username;
+      return this._username || this._id;
     },
     set: function(value) {
       if (value === this._username) {
@@ -74,7 +89,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       if (!value) {
         value = "";
       }
-      this._username = value.trim();
+      this._username = this._id = value.trim();
     }
   },
 
@@ -253,6 +268,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
     }
   },
+
   validateUsername: {
     value: function(value) {
       if (!value) {
@@ -276,7 +292,37 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
       return validation;
     }
+  },
+
+  fields: {
+    configurable: true,
+    get: function() {
+      if (this._fields) {
+        // this.debug("setting speaker fields confidential in the Speaker.fields get function.");
+
+        // this._fields.encrypted = true;
+        // this._fields.decryptedMode = true;
+        this._fields.confidential = this.confidential;
+      }
+      return this._fields;
+    },
+    set: function(value) {
+      if (value === this._fields) {
+        return;
+      }
+      if (!value) {
+        delete this._fields;
+        return;
+      } else {
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          value = new this.INTERNAL_MODELS["fields"](value);
+        }
+      }
+      this._fields = value;
+    }
   }
+
+
 });
 
 exports.UserMask = UserMask;

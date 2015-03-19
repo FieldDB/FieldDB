@@ -305,7 +305,7 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
             $rootScope.openNotification();
           } else {
-            $rootScope.notificationMessage = "Welcome! Your usenamme is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
+            $rootScope.notificationMessage = "Welcome! Your username is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
             $rootScope.openNotification();
 
             login(response.data.user.username, newLoginInfo.password).then(function() {

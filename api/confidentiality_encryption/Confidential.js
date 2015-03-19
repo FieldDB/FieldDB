@@ -1,5 +1,7 @@
 /* globals window */
-var AES = require("crypto-js/aes");
+var node_cryptojs = require("node-cryptojs-aes");
+var CryptoJS = node_cryptojs.CryptoJS;
+
 var CryptoEncoding = require("crypto-js/enc-utf8");
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
@@ -82,11 +84,23 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
    */
   encrypt: {
     value: function(value) {
+      if (!value) {
+        return value;
+      }
       if (typeof value === "object") {
         value = JSON.stringify(value);
         this.debug("Converted object to string before encryption");
       }
-      var result = AES.encrypt(value, this.secretkey);
+      if (typeof value === "number") {
+        value = value + "";
+        this.debug("Converted object to string before encryption");
+      }
+      if (!this.secretkey) {
+        throw new Error("This confidential wasnt set up properly, cant encrypt.");
+      }
+      // this.debugMode = true;
+      this.debug("encrypting "+ value);
+      var result = CryptoJS.AES.encrypt(value, this.secretkey.toString("base64"));
       this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
       // return the base64 version to save it as a string in the corpus
       return "confidential:" + window.btoa(result.toString());
@@ -111,7 +125,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
           // decode base64
           encrypted = window.atob(encrypted);
           self.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
-          result = AES.decrypt(encrypted, self.secretkey).toString(CryptoEncoding);
+          result = CryptoJS.AES.decrypt(encrypted, self.secretkey.toString("base64")).toString(CryptoEncoding);
           try {
             if ((result.indexOf("{") === 0 && result.indexOf("}") === result.length - 1) || (result.indexOf("[") === 0 && result.indexOf("]") === result.length - 1)) {
               result = JSON.parse(result);
@@ -126,8 +140,8 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         encrypted = encrypted.replace("confidential:", "");
         // decode base64
         encrypted = window.atob(encrypted);
-        this.verbose("Decrypting " + encrypted, this.secretkey);
-        result = AES.decrypt(encrypted, this.secretkey).toString(CryptoEncoding);
+        this.verbose("Decrypting " + encrypted, this.secretkey.toString("base64"));
+        result = CryptoJS.AES.decrypt(encrypted, this.secretkey.toString("base64")).toString(CryptoEncoding);
         try {
           if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
             result = JSON.parse(result);
@@ -161,8 +175,8 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
 
   fillWithDefaults: {
     value: function() {
-      if (this.secretkey === "This should be replaced with a top secret pass phrase.") {
-        this.secretkey = this.secretKeyGenerator();
+      if (!this.secretkey) {
+        this.secretkey = Confidential.secretKeyGenerator();
       }
     }
   },

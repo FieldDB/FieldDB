@@ -12,6 +12,7 @@
 (function(exports) {
   "use strict";
   var App = require("./app/App").App;
+  var Authentication = require("./authentication/Authentication").Authentication;
   var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
@@ -25,6 +26,7 @@
   var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
   var Datum = require("./datum/Datum").Datum;
+  var Session = require("./datum/Session").Session;
   var DatumField = require("./datum/DatumField").DatumField;
   var Stimulus = require("./datum/Stimulus").Stimulus;
   var Response = require("./datum/Response").Response;
@@ -33,6 +35,7 @@
   var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
   var Router = require("./Router").Router;
   var User = require("./user/User").User;
+  var Users = require("./user/Users").Users;
   var UserMask = require("./user/UserMask").UserMask;
   var Team = require("./user/Team").Team;
   var Permission = require("./permission/Permission").Permission;
@@ -41,6 +44,7 @@
   var Participant = require("./user/Participant").Participant;
   var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
+  var CorpusConnection = require("./corpus/CorpusConnection").CorpusConnection;
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
@@ -51,6 +55,7 @@
 
   FieldDB.App = App;
   FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;
+  FieldDB.Authentication = Authentication;
   FieldDB.Export = Export;
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB.Collection = Collection;
@@ -62,6 +67,7 @@
   FieldDB.AudioVideos = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
   FieldDB.Datum = Datum;
+  FieldDB.Session = Session;
   FieldDB.DatumField = DatumField;
   FieldDB.Stimulus = Stimulus;
   FieldDB.Response = Response;
@@ -70,6 +76,7 @@
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
   FieldDB.User = User;
+  FieldDB.Users = Users;
   FieldDB.UserMask = UserMask;
   FieldDB.Permission = Permission;
   FieldDB.Team = Team;
@@ -79,6 +86,7 @@
   FieldDB.Contextualizer = Contextualizer;
   FieldDB.Corpus = Corpus;
   FieldDB.CorpusMask = CorpusMask;
+  FieldDB.CorpusConnection = CorpusConnection;
   FieldDB.Import = Import;
   FieldDB.Search = Search;
   FieldDB.Q = Q;

@@ -3,7 +3,7 @@
   "jsonType": "user",
   "username": "",
   "email": "",
-  "corpuses": [{
+  "corpora": [{
     "protocol": "",
     "domain": "",
     "port": "",

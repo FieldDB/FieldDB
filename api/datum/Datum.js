@@ -11,7 +11,7 @@ var DatumStates = require("./DatumStates").DatumStates;
 // var DatumTag = require("./../FieldDBObject").FieldDBObject;
 var DatumTags = require("./DatumTags").DatumTags;
 var Images = require("./../image/Images").Images;
-var Session = require("./../FieldDBObject").FieldDBObject;
+var Session = require("./Session").Session;
 
 /**
  * @class The Datum widget is the place where all linguistic data is
@@ -73,7 +73,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   fields: {
     get: function() {
-      return this._fields || FieldDBObject.DEFAULT_COLLECTION;
+      this.debug("getting fields");
+      return this._fields;
     },
     set: function(value) {
       if (value === this._fields) {
@@ -83,9 +84,12 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         delete this._fields;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["fields"] === "function") {
+        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
           value = new this.INTERNAL_MODELS["fields"](value);
         }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
       }
       this._fields = value;
     }
@@ -99,6 +103,112 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     set: function(value) {
       this.debug("datumFields is depreacted, just use fields instead");
       return this.fields = value;
+    }
+  },
+
+  accessAsObject: {
+    get: function() {
+      var obj = {};
+
+      var passValueReference = function(field) {
+        obj[field.id] = field.value;
+      };
+
+      this.fields.map(passValueReference);
+      if (this.session) {
+        this.session.fields.map(passValueReference);
+      } else {
+        this.warn("this datum is missing a session, this is stange");
+      }
+
+      return obj;
+    }
+  },
+
+  igt: {
+    get: function() {
+      var igtLines = {},
+        parallelText = {},
+        tuples = [],
+        feederWord,
+        fullWord,
+        lengthOfLongestIGTLineInWords,
+        igtLine,
+        cellIndex,
+        tuple;
+
+      var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
+      var whiteSpaceSplit = /[ \t\n]+/;
+      // var leipzigSplit = /[=-]+/;
+      var cleanUngrammaticalitySubstitutions = false;
+
+      this.fields.map(function(field) {
+        if (field.type && field.type.indexOf("parallelText") > -1) {
+          parallelText[field.id] = field.value;
+        }
+        if (!field.type || field.type.indexOf("IGT") === -1) {
+          return;
+        }
+
+        var chunks = field.value.replace(/#?!.,\//g, "").split(whiteSpaceSplit);
+
+        chunks = chunks.map(function(chunk) {
+          if (cleanUngrammaticalitySubstitutions) {
+            // If the token it not null or the empty string
+            if (chunk) {
+              // Replace (*_) with _
+              feederWord = chunk.replace(/\(\*[^)]*\)/g, "$1");
+              // Replace *(_) with _
+              feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
+              // Remove all remaining punctuation
+              fullWord = feederWord.replace(punctuationToRemove, "");
+              chunk = fullWord;
+            }
+          }
+
+          // return chunk.split(leipzigSplit);
+          return chunk;
+        });
+
+        igtLines[field.id] = chunks;
+      });
+      this.debug("Collected all the IGT lines", igtLines);
+      this.debug("Collected all the Paralel Text lines", parallelText);
+
+      // Build triples
+      lengthOfLongestIGTLineInWords = 0;
+      for (igtLine in igtLines) {
+        if (igtLines[igtLine] && igtLines[igtLine].length > lengthOfLongestIGTLineInWords) {
+          lengthOfLongestIGTLineInWords = igtLines[igtLine].length;
+        }
+      }
+
+      // for each word
+      for (cellIndex = 0; cellIndex < lengthOfLongestIGTLineInWords; cellIndex++) {
+        tuple = {};
+        // for each row of the igt
+        for (igtLine in igtLines) {
+          this.debug("working on   " + igtLine, igtLines[igtLine]);
+          if (igtLines[igtLine] && igtLines[igtLine].length > cellIndex && igtLines[igtLine][cellIndex]) {
+            tuple[igtLine] = igtLines[igtLine][cellIndex];
+          } else {
+            tuple[igtLine] = "";
+          }
+        }
+        tuples.push(tuple);
+      }
+
+      this.debug("IGT+ tuples", tuples);
+
+
+      return {
+        tuples: tuples,
+        parallelText: parallelText
+      };
+
+    },
+    set: function() {
+      this.warn("Setting the igt has to be copy pasted from one of the other codebases");
     }
   },
 

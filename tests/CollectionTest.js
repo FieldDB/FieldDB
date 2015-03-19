@@ -100,14 +100,73 @@ describe("lib/Collection", function() {
       expect(collection.collection[0]).toEqual(useDefaults()[2]);
     });
 
+    it("should permit pop to remove from the bottom", function() {
+      expect(collection.collection.length).toEqual(2);
+      expect(collection.collection[1].validationStatus).toEqual("Checked*");
+      var removed = collection.pop();
+      expect(collection.collection.length).toEqual(1);
+      expect(removed.validationStatus).toEqual("Checked*");
+    });
+
+    it("should permit shift to remove from the top", function() {
+      expect(collection.collection.length).toEqual(2);
+      expect(collection.collection[0].validationStatus).toEqual("Published*");
+      var removed = collection.shift();
+      expect(collection.collection.length).toEqual(1);
+      expect(removed.validationStatus).toEqual("Published*");
+    });
+
+    it("should return reference to the added item", function() {
+      expect(collection.length).toEqual(2);
+      var addedItem = collection.add({
+        validationStatus: "ToBeChecked"
+      });
+      expect(collection.length).toEqual(3);
+      expect(collection._collection.length).toEqual(3);
+      expect(addedItem).toBe(collection.tobechecked);
+    });
+
     it("should permit add of an array", function() {
       expect(collection.length).toEqual(2);
-      collection.add([{
+      var addedItems = collection.add([{
         validationStatus: "CheckedWithSam"
       }, {
         validationStatus: "ToBeCheckedWithSam"
       }]);
       expect(collection.length).toEqual(4);
+      expect(collection._collection.length).toEqual(4);
+      expect(addedItems[0]).toBe(collection.checkedwithsam);
+      expect(addedItems[1]).toBe(collection.tobecheckedwithsam);
+    });
+
+    it("should permit concat of an array", function() {
+      expect(collection.length).toEqual(2);
+      expect(collection.concat([])).toEqual(collection);
+      expect(collection.concat()).toEqual(collection);
+
+      collection.concat([{
+        validationStatus: "CheckedWithSam"
+      }, {
+        validationStatus: "ToBeCheckedWithSam"
+      }]).concat([{
+        validationStatus: "CheckedWithJo"
+      }]);
+      expect(collection.length).toEqual(5);
+    });
+
+    it("should permit concat of a collection", function() {
+      expect(collection.length).toEqual(2);
+      collection.concat(new Collection({
+        collection: [{
+          validationStatus: "CheckedWithSam"
+        }, {
+          validationStatus: "ToBeCheckedWithSam"
+        }, {
+          validationStatus: "ToBeCheckedWithPhylis"
+        }],
+        primaryKey: "validationStatus"
+      }));
+      expect(collection.length).toEqual(5);
     });
 
     it("should permit constrution with just an array", function() {
@@ -141,6 +200,17 @@ describe("lib/Collection", function() {
       });
     });
 
+    it("should be able to change the primaryKey", function() {
+      var newcollection = new Collection();
+      newcollection.primaryKey = "tempId";
+      newcollection.add({
+        tempId: " A",
+        tipa: "llamda"
+      });
+      expect(newcollection.primaryKey).toEqual("tempId");
+      expect(newcollection.length).toEqual(1);
+      expect(newcollection.warnMessage).toBeUndefined();
+    });
 
   });
 

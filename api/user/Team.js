@@ -48,7 +48,6 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
       affiliation: "",
       description: "",
       subtitle: "",
-      corpuses: [],
       dataLists: [],
       mostRecentIds: {},
       // Defaults from User

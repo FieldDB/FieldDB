@@ -200,6 +200,18 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  length:{
+    get: function(){
+      if(this.docIds){
+        return this.docIds.length;
+      }
+      return 0;
+    },
+    set: function(value){
+      this.warn("data list lengths comes from the size of the datumids, it cant be set manually to "+ value);
+    }
+  },
+
   docIds: {
     get: function() {
       var self = this;

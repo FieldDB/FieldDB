@@ -9,7 +9,7 @@
  * # fielddbLocales
  */
 angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
-
+  var debugMode = false;
   var controller = function($scope, $timeout) {
 
     /**
@@ -19,6 +19,7 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
      */
     $timeout(function() {
       if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.contextualizer) {
+        debugMode = FieldDB.FieldDBObject.application.contextualizer.debugMode;
         $scope.locales = FieldDB.FieldDBObject.application.contextualizer;
       } else {
         console.warn("locales is not available on the scope. ");
@@ -29,7 +30,7 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
       $scope.locales.userOverridenLocalePreference = currentLocale;
     };
 
-    $scope.clearLocalizerUserPreferences = function(){
+    $scope.clearLocalizerUserPreferences = function() {
       $scope.locales.userOverridenLocalePreference = null;
     };
 
@@ -46,7 +47,9 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
     // },
     controller: controller,
     link: function postLink(scope, element, attrs) {
-      console.log("linking locales directive", scope, element, attrs);
+      if (debugMode) {
+        console.log("linking locales directive", scope, element, attrs);
+      }
       if (attrs.fielddbFullView) {
         scope.showFullView = true;
         scope.localeKeyToShow = "nativeName";

@@ -78,7 +78,7 @@ define([
 
       window.app = this;
       var appself = this;
-      if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
+      if (OPrime.debugMode) OPrime.debug("Loading user");
       var u = localStorage.getItem("encryptedUser");
       if(!u){
         window.location.replace("index.html");
@@ -428,7 +428,7 @@ define([
           }
         },
         error : function(serverResults){
-          window.setTimeout(function(){
+          setTimeout(function(){
             //try one more time 5 seconds later
             $.couch.login({
               name: username,

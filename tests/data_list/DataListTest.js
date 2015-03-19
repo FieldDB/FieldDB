@@ -21,8 +21,8 @@ describe("Data List", function() {
       expect(list.title).toBe("");
       expect(list.description).toBe("");
       expect(list.docIds).toEqual([]);
+      expect(list.length).toEqual(0);
     });
-
 
     it("should warn devs datumIds are deprecated", function() {
       var list = new DataList({
@@ -56,6 +56,7 @@ describe("Data List", function() {
       expect(list.docs.docone.id).toEqual("docone");
       expect(list.docs.length).toEqual(3);
       expect(list.docIds).toEqual(["docone", "doctwo", "docthree"]);
+      expect(list.length).toEqual(3);
     });
 
   });

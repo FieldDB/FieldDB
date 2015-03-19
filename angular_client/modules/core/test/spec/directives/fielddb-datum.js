@@ -1,17 +1,18 @@
+/* globals FieldDB */
 "use strict";
 var debugMode = false;
 
 describe("Directive: fielddb-datum", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/datum.html", "views/datum_list_item.html", "views/datum_igt.html", "views/datum_spreadsheet.html", "views/datum_language_lesson.html", "views/datum_stimulus.html", "views/datum_generic.html"));
+  beforeEach(module("fielddbAngularApp", "views/datum.html", "views/session.html", "views/session_list_item.html", "views/datum_list_item.html", "views/datum_igt.html", "views/datum_spreadsheet.html", "views/datum_language_lesson.html", "views/datum_stimulus.html", "views/datum_generic.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
     el = angular.element("<div data-fielddb-datum json='datum2' corpus='corpus'></div> <div data-fielddb-datum json='datum1' corpus='corpus'></div>");
     scope = $rootScope.$new();
-    scope.datum1 = {
-      datumFields: [{
+    scope.datum1 = new FieldDB.Datum({
+      fields: [{
         "id": "morphemes",
         "value": "Noqa-ta tusu-nay-wa-n-mi",
         "labelFieldLinguists": "Morphemes",
@@ -26,9 +27,9 @@ describe("Directive: fielddb-datum", function() {
         },
         "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
       }]
-    };
-    scope.datum2 = {
-      datumFields: [{
+    });
+    scope.datum2 = new FieldDB.Datum({
+      fields: [{
         "id": "morphemes",
         "value": "Noqa-ta tusu-nay-wan-mi",
         "labelFieldLinguists": "Morphemes",
@@ -43,7 +44,7 @@ describe("Directive: fielddb-datum", function() {
         },
         "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
       }]
-    };
+    });
     compileFunction = $compile(el);
     // bring html from templateCache
     scope.$digest();
@@ -57,14 +58,20 @@ describe("Directive: fielddb-datum", function() {
 
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
-      scope.$digest(); // <== digest to get the render to show the bound values
+      try{
+        if (!scope.$$phase) {
+          scope.$digest(); // <== digest to get the render to show the bound values
+        }
+      }catch(e){
+        console.log("error digesting scope");
+      }
       if (debugMode) {
         console.log("post link", el.html());
         console.log("scope datum2 ", scope.datum2);
         console.log("scope datum1 ", scope.datum1);
       }
-      // expect(angular.element(el.find("li")[0]).text().trim()).toEqual("Noqa-ta tusu-nay-wa-n-mi");
-      // expect(angular.element(el.find("li")[1]).text().trim()).toEqual("Noqa-ta tusu-nay-wan-mi");
+      expect(angular.element(el.find("dd")[1]).text().trim()).toEqual("Noqa-ta tusu-nay-wa-n-mi");
+      expect(angular.element(el.find("dd")[0]).text().trim()).toEqual("Noqa-ta tusu-nay-wan-mi");
     });
   });
 });

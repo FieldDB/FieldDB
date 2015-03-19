@@ -45,7 +45,7 @@ xdescribe("FieldDBController Routes", function() {
       $httpBackend.expectGET("views/corpus-page.html").respond(200);
       $location.path("/lingllama/community_corpus");
       $rootScope.$digest();
-      if(debugMode){
+      if (debugMode) {
         console.log($route);
       }
 

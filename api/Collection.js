@@ -160,17 +160,19 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (!value) {
-        value = [];
+        this._collection = [];
+        return;
       }
-      for (var index in value) {
-        if (!value.hasOwnProperty(index)) {
-          continue;
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        throw new Error("Cannot set collection to an object, only an array");
+      }
+      for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+        var item = value[itemIndex];
+        if (!item) {
+          this.warn("item" + itemIndex + "is undefined, not adding it to the collection " + this.fieldDBtype, item);
+        } else {
+          this.add(item);
         }
-        /* parse internal models as a model if specified */
-        if (!value[index]) {
-          this.warn(index + " is undefined on this member of the collection", value);
-        }
-        this.add(value[index]);
       }
       return this._collection;
     }
@@ -358,11 +360,11 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(member) {
       if (!this.primaryKey) {
         this.warn("The primary key is undefined, nothing can be added!", this);
-        throw "The primary key is undefined, nothing can be added!";
+        throw new Error("The primary key is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the prmary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
         return;
       }
       if (typeof value.trim === "function") {
@@ -370,21 +372,27 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
-      if (value !== oldValue) {
+      if (value !== oldValue && this.fieldDBtype !== "DatumStates") {
         this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
     }
   },
 
+  /**
+   * Adds to the bottom of the collection
+   *
+   * @param  {Object} value a simple object, and/or  an array of objects or items of the type of this collection.
+   * @return {Array}       returns a reference to the added item(s)
+   */
   add: {
     value: function(value) {
-      if (Object.prototype.toString.call(value) === "[object Array]") {
+      if (value && Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
-        value.map(function(item) {
-          self.add(item);
-        });
-        return;
+        for(var itemIndex in value){
+          value[itemIndex] = self.add(value[itemIndex]);
+        }
+        return value;
       }
 
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
@@ -404,11 +412,24 @@ Collection.prototype = Object.create(Object.prototype, {
       var dotNotationKey = this.getSanitizedDotNotationKey(value);
       if (!dotNotationKey) {
         this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-        throw "The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! " + value.fieldDBtype;
+        throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);
       return this[dotNotationKey];
+    }
+  },
+
+  concat: {
+    value: function(anotherCollection) {
+      if (anotherCollection && anotherCollection._collection) {
+        return this.add(anotherCollection._collection);
+      }
+      if (!anotherCollection) {
+        return this;
+      }
+      this.add(anotherCollection);
+      return this;
     }
   },
 
@@ -417,12 +438,68 @@ Collection.prototype = Object.create(Object.prototype, {
       // self.debug(this.collection);
       this.set(this.getSanitizedDotNotationKey(value), value, null, false);
       // self.debug(this.collection);
+      return this;
     }
   },
 
   unshift: {
     value: function(value) {
       this.set(this.getSanitizedDotNotationKey(value), value, null, true);
+      return this;
+    }
+  },
+
+  pop: {
+    value: function() {
+      if (!this._collection || this._collection.length < 1) {
+        return;
+      }
+      var removed = this._collection.pop();
+      if (!removed) {
+        return;
+      }
+      var key = this.getSanitizedDotNotationKey(removed);
+      if (!key) {
+        this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
+      }
+
+      if (this[key]) {
+        this.debug("removed dot notation for ", key);
+        delete this[key];
+      }
+
+      if (this[key.toLowerCase().replace(/_/g, "")]) {
+        this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
+        delete this[key.toLowerCase().replace(/_/g, "")];
+      }
+      return removed;
+    }
+  },
+
+  shift: {
+    value: function() {
+      if (!this._collection || this._collection.length < 1) {
+        return;
+      }
+      var removed = this._collection.shift();
+      if (!removed) {
+        return;
+      }
+      var key = this.getSanitizedDotNotationKey(removed);
+      if (!key) {
+        this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
+      }
+
+      if (this[key]) {
+        this.debug("removed dot notation for ", key);
+        delete this[key];
+      }
+
+      if (this[key.toLowerCase().replace(/_/g, "")]) {
+        this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
+        delete this[key.toLowerCase().replace(/_/g, "")];
+      }
+      return removed;
     }
   },
 
@@ -534,6 +611,15 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  get: {
+    value: function(index) {
+      if (index === undefined || index === null || !this._collection) {
+        return;
+      }
+      return this._collection[index];
+    }
+  },
+
   reorder: {
     value: function(old_index, new_index) {
       if (typeof old_index === "object") {
@@ -578,7 +664,13 @@ Collection.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
-      var json = JSON.parse(JSON.stringify(this.toJSON()));
+      var json;
+      try {
+        json = JSON.parse(JSON.stringify(this.toJSON()));
+      } catch (e) {
+        console.warn(e.stack);
+        this.bug("There was a problem cloning this collection", e);
+      }
 
       return json;
     }
@@ -788,41 +880,44 @@ Collection.prototype = Object.create(Object.prototype, {
           }
         }
       });
-      anotherCollection._collection.map(function(anotherItem) {
-        var idToMatch = anotherItem[aCollection.primaryKey];
-        var anItem = aCollection[idToMatch];
-        // var resultItem = resultCollection[idToMatch];
+      if (anotherCollection._collection && typeof anotherCollection._collection.map === "function") {
 
-        if (anotherItem !== anotherCollection[idToMatch]) {
-          self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
-        }
+        anotherCollection._collection.map(function(anotherItem) {
+          var idToMatch = anotherItem[aCollection.primaryKey];
+          var anItem = aCollection[idToMatch];
+          // var resultItem = resultCollection[idToMatch];
 
-        if (anItem === undefined) {
-          self.debug(idToMatch + " was missing in target, adding it");
-          var existingInCollection = resultCollection.find(anotherItem);
-          if (existingInCollection.length === 0) {
-            resultCollection.add(anotherItem);
-          } else {
-            anotherItem = existingInCollection[0];
-            self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+          if (anotherItem !== anotherCollection[idToMatch]) {
+            self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
           }
 
-        } else if (anotherItem === undefined) {
-          // no op, the new one isn't set
-          self.debug(idToMatch + " was oddly undefined");
-          resultCollection[idToMatch] = anItem;
-        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
-          // no op, they are equal enough
-          // self.debug(idToMatch + " were equal.", anItem, anotherItem);
-          resultCollection[idToMatch] = anItem;
-        } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
-          self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty anItem.");
-          resultCollection[idToMatch] = anotherItem;
-        } else {
-          // both exist and are not equal, and so have already been merged above.
-          self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
-        }
-      });
+          if (anItem === undefined) {
+            self.debug(idToMatch + " was missing in target, adding it");
+            var existingInCollection = resultCollection.find(anotherItem);
+            if (existingInCollection.length === 0) {
+              resultCollection.add(anotherItem);
+            } else {
+              anotherItem = existingInCollection[0];
+              self.debug("anotherItem was already in the resultCollection ", existingInCollection, anotherItem);
+            }
+
+          } else if (anotherItem === undefined) {
+            // no op, the new one isn't set
+            self.debug(idToMatch + " was oddly undefined");
+            resultCollection[idToMatch] = anItem;
+          } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
+            // no op, they are equal enough
+            // self.debug(idToMatch + " were equal.", anItem, anotherItem);
+            resultCollection[idToMatch] = anItem;
+          } else if (!anotherItem || anotherItem === [] || anotherItem.length === 0 || anotherItem === {}) {
+            self.warn(idToMatch + " was empty in the new collection, so it was replaced with an empty anItem.");
+            resultCollection[idToMatch] = anotherItem;
+          } else {
+            // both exist and are not equal, and so have already been merged above.
+            self.debug(idToMatch + " existed in both and are not equal, and so have already been merged above.");
+          }
+        });
+      }
 
       return resultCollection;
     }

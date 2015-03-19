@@ -8,8 +8,9 @@
       Login
     </button>
   </div>
-  {{application.authentication.error}}
-
+  <div ng-show="application.authentication.error">
+    {{application.authentication.error}}
+  </div>
   <span class="form-group" ng-show="application.authentication.user.authenticated" >
 
     <button class="btn btn-default" ng-click="logout()" tabindex="3">

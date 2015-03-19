@@ -9,6 +9,7 @@
 # $ npm install requirejs
 #
 # Note: If you have requirejs installed globally, replace the backbone_client/node_modules/requirejs/bin/r.js below with the global executable
+grunt browserify
 
 rm backbone_client/bower_components/fielddb/fielddb.js
 ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js

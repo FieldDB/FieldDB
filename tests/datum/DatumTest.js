@@ -1,5 +1,6 @@
 var Datum = require("./../../api/datum/Datum").Datum;
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
+var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
 
 describe("Test Datum", function() {
   it("should load", function() {
@@ -9,32 +10,202 @@ describe("Test Datum", function() {
     expect(datum).toBeDefined();
   });
 
-  it("should set the utterance", function() {
-    var datum = new Datum();
-    datum.datumFields.utterance = "Noqata";
-    expect(datum.datumFields.utterance).toEqual("Noqata");
+  describe("popular fields", function() {
+    var datum = new Datum({
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields)),
+      session: {
+        fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.sessionFields))
+      }
+    });
+
+    it("should get the fields from the corpus", function() {
+      expect(datum.fields.length).toEqual(16);
+    });
+
+    it("should set the utterance", function() {
+      datum.fields.utterance.value = "Noqata";
+      expect(datum.fields.utterance.value).toEqual("Noqata");
+      expect(datum.fields.utterance.json).toEqual({
+        writingSystem: {
+          id: "",
+          referenceLink: ""
+        }
+      });
+    });
+
+    it("should have a morphemes line ", function() {
+      datum.fields.morphemes.value = "noqa-ta";
+      expect(datum.fields.morphemes.value).toEqual("noqa-ta");
+      expect(datum.fields.morphemes.json).toEqual({
+        alternates: []
+      });
+    });
+
+    it("should have a gloss line ", function() {
+      datum.fields.gloss.value = "I-ACC";
+      expect(datum.fields.gloss.value).toEqual("I-ACC");
+      expect(datum.fields.gloss.json).toEqual({
+        language: "",
+        alternates: [],
+        conventions: {
+          id: "",
+          tagSet: [],
+          referenceLink: ""
+        }
+      });
+    });
+
+    it("should have a translation line ", function() {
+      datum.fields.translation.value = "I";
+      expect(datum.fields.translation.value).toEqual("I");
+      expect(datum.fields.translation.json).toEqual({
+        writingSystem: {
+          id: "",
+          referenceLink: ""
+        },
+        language: {
+          ethnologueUrl: "",
+          wikipediaUrl: "",
+          iso: "",
+          locale: "",
+          englishName: "",
+          nativeName: "",
+          alternateNames: ""
+        }
+      });
+    });
+
+    it("should have grammatical judgement", function() {
+      datum.fields.judgement.value = "*";
+      expect(datum.fields.judgement.value).toEqual("*");
+      expect(datum.fields.judgement.json).toEqual({
+        "grammatical": true
+      });
+    });
+
+    it("should have open ended tags", function() {
+      datum.fields.tags.value = "Causative";
+      expect(datum.fields.tags.value).toEqual("Causative");
+      expect(datum.fields.tags.json).toEqual({
+        tags: []
+      });
+    });
+
+    it("should have a validation status of who checked the data", function() {
+      datum.fields.validationStatus.value = "CheckedByPhylis, ToBeCheckedWithRejean";
+      expect(datum.fields.validationStatus.value).toEqual("CheckedByPhylis, ToBeCheckedWithRejean");
+      expect(datum.fields.validationStatus.json).toEqual({
+        tags: []
+      });
+    });
+
+
   });
 
-  it("should have a gloss line ", function() {
-    var datum = new Datum();
-    datum.datumFields.gloss = "I-ACC";
-    expect(datum.datumFields.gloss).toEqual("I-ACC");
+
+});
+
+describe("IGT support", function() {
+  var datum;
+  beforeEach(function() {
+    datum = new Datum({
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields))
+    });
   });
 
-  it("should have a translation line ", function() {
-    var datum = new Datum();
-    datum.datumFields.translation = "I";
-    expect(datum.datumFields.translation).toEqual("I");
+  it("should represent IGT data in tuples and parallel text", function() {
+    datum.fields.orthography.value = "puppies";
+    datum.fields.utterance.value = "pʌpiz";
+    datum.fields.morphemes.value = "pʌpi-z";
+    datum.fields.allomorphs.value = "pʌpi-z";
+    datum.fields.gloss.value = "puppy-pl";
+
+    datum.fields.translation.value = "Des chiens";
+
+    // datum.debugMode = true;
+    expect(datum.igt).toEqual({
+      tuples: [{
+        orthography: "puppies",
+        utterance: "pʌpiz",
+        allomorphs: "pʌpi-z",
+        morphemes: "pʌpi-z",
+        gloss: "puppy-pl",
+        syntacticCategory: ""
+      }],
+      parallelText: {
+        orthography: "puppies",
+        utterance: "pʌpiz",
+        translation: "Des chiens"
+      }
+    });
   });
 
-  it("should have grammatical tags", function() {
-    var datum = new Datum();
-    datum.datumFields.judgement = "*";
-    expect(datum.datumFields.judgement).toEqual("*");
 
-    datum = new Datum();
-    datum.datumFields.tags = "Causative";
-    expect(datum.datumFields.tags).toEqual("Causative");
+  it("should tollerate slightly unaligned IGT data", function() {
+    // datum.fields.orthography.value = "this field has many words";
+    datum.fields.utterance.value = "this field has many words";
+    datum.fields.morphemes.value = "this field has fewer";
+    // datum.fields.allomorphs.value = "this field has many words";
+    datum.fields.gloss.value = "this field has many words";
+
+    datum.fields.translation.value = "totally different word count but its okay";
+
+    // datum.debugMode = true;
+    var igt = datum.igt;
+
+    expect(igt.tuples[4]).toEqual({
+      orthography: "",
+      utterance: "words",
+      allomorphs: "",
+      morphemes: "",
+      gloss: "words",
+      syntacticCategory: ""
+    });
+  });
+
+
+  it("should non-lossily tollerate drastically unaligned IGT data", function() {
+    // datum.fields.orthography.value = "this field has many words";
+    datum.fields.utterance.value = "this field has fewer";
+    datum.fields.morphemes.value = "this field has many more segmentations than the utterance line and will dictate the length of the tuples so they are non-lossy";
+    // datum.fields.allomorphs.value = "this field has many words";
+    datum.fields.gloss.value = "this field has many words";
+
+    datum.fields.translation.value = "totally different word count but its okay";
+
+    // datum.debugMode = true;
+    var igt = datum.igt;
+
+    expect(igt.tuples[igt.tuples.length - 1]).toEqual({
+      orthography: "",
+      utterance: "",
+      allomorphs: "",
+      morphemes: "non-lossy",
+      gloss: "",
+      syntacticCategory: ""
+    });
+  });
+
+
+  it("should tollerate abnormal/irregular whitespacing", function() {
+    datum.fields.orthography.value = "this\tline\tis\t\"tabbed\"";
+    datum.fields.utterance.value = "this line is spaced";
+    datum.fields.morphemes.value = " this\t\tline is\na-combo";
+    datum.fields.allomorphs.value = "this\nline\n\nis\nline-breaked";
+    datum.fields.gloss.value = "this line (has punctuation)";
+
+    datum.fields.translation.value = "Des chiens";
+
+    var igt = datum.igt;
+    // datum.debugMode = true;
+    expect(igt.tuples[igt.tuples.length - 1]).toEqual({
+      orthography: "\"tabbed\"",
+      utterance: "spaced",
+      allomorphs: "line-breaked",
+      morphemes: "a-combo",
+      gloss: "punctuation)",
+      syntacticCategory: ""
+    });
   });
 
 });
@@ -51,6 +222,33 @@ describe("Backward compatability with v1.22", function() {
     expect(datum.datumTags.length).toEqual(2);
     expect(datum.datumTags.fieldDBtype).toEqual("DatumTags");
     expect(datum.datumFields.utterance.value).toEqual("Jaunpa much'asqami kani.");
+  });
+
+});
+
+describe("Syntactic sugar", function() {
+  var datum = new Datum({
+      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields)),
+      session: {
+        fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.sessionFields))
+      }
+    });
+
+  it("should be able to modify fields via a simple object", function() {
+    datum.fields.utterance.value = "Jaunpa much'asqami kani.";
+
+    expect(datum.fields.utterance.value).toEqual("Jaunpa much'asqami kani.");
+    expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
+    expect(datum.accessAsObject.utterance).toBe(datum.fields.utterance.value);
+
+    datum.accessAsObject.utterance = "pʌpiz";
+    expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
+    expect(datum.accessAsObject.utterance).toBe(datum.fields.utterance.value);
+
+    // expect(datum.accessAsObject.utterance).toEqual("");
+    // expect(datum.fields.utterance.value).toEqual("");
+
+
   });
 
 });

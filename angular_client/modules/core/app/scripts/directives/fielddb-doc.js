@@ -8,15 +8,15 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
   var templates = {
-    UserMask: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
-    User: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
-    Team: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
-    Speaker: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
-    Consultant: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
-    Participant: "<div data-fielddb-user json='doc' corpus='corpus'></div>",
+    UserMask: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    User: "<div data-fielddb-user view='User' json='doc' corpus='corpus'></div>",
+    Team: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    Speaker: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    Consultant: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
+    Participant: "<div data-fielddb-user view='Participant' json='doc' corpus='corpus'></div>",
 
     Corpus: "<div data-fielddb-corpus json='doc' corpus='corpus'></div>",
-    Session: "<div data-fielddb-datum json='doc' corpus='corpus'></div>",
+    Session: "<div data-fielddb-session json='doc' corpus='corpus'></div>",
 
     DataList: "<div data-fielddb-datalist json='doc' corpus='corpus'></div>",
     LessonDataList: "<div data-fielddb-datalist json='doc' corpus='corpus' view='LessonDataList'></div>",

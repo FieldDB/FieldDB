@@ -1,6 +1,6 @@
 define([
-    "backbone", 
-    "handlebars", 
+    "backbone",
+    "handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "corpus/CorpusLinkView",
@@ -8,8 +8,8 @@ define([
     "app/UpdatingCollectionView",
     "OPrime"
 ], function(
-    Backbone, 
-    Handlebars, 
+    Backbone,
+    Handlebars,
     Corpus,
     Corpuses,
     CorpusLinkView,
@@ -25,10 +25,10 @@ define([
      *        but also a list of their corpora which will allow their friends to
      *        browse their corpora, and also give them a quick way to navigate
      *        between corpora.
-     *  
+     *
      * @property {String} format Must be set when the view is initialized. Valid
      *           values are "modal" and "fullscreen".
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -43,7 +43,7 @@ define([
      * The underlying model of the UserEditView is a User, or a UserMask.
      */
 //    model : User,
-    
+
     /**
      * Events that the UserEditView is listening to and their handlers.
      */
@@ -60,13 +60,13 @@ define([
           e.preventDefault();
         }
         this.showReadVersion();
-        
+
       },
       "click .edit-public-user-profile" : function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
-        }        
+        }
         $("#user-modal").hide();
         window.app.router.showFullscreenUser();
         window.appView.publicEditUserView.render();
@@ -75,16 +75,16 @@ define([
     },
 
     /**
-     * The corpusesView is a child of the CorpusView.
+     * The corporaView is a child of the CorpusView.
      */
-//    corpusesView : CorpusesView, //TODO put this in as an updating collection
+//    corporaView : CorpusesView, //TODO put this in as an updating collection
 
     /**
      * The Handlebars template rendered as the UserModalEditView
      */
     modalTemplate : Handlebars.templates.user_edit_modal,
-    
-    /** 
+
+    /**
      * The Handlebars template rendered as the UserFullscreenEditView
      */
     fullscreenTemplate : Handlebars.templates.user_edit_fullscreen,
@@ -94,13 +94,13 @@ define([
      */
     render : function() {
      if (OPrime.debugMode) OPrime.debug("USER EDIT render: ");
-      
+
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\User model was undefined");
         return this;
       }
 
-      var jsonToRender = this.model.toJSON(); 
+      var jsonToRender = this.model.toJSON();
       jsonToRender.locale_Affiliation = Locale.get("locale_Affiliation");
       jsonToRender.locale_Close = Locale.get("locale_Close");
       jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
@@ -116,9 +116,9 @@ define([
       jsonToRender.locale_Research_Interests = Locale.get("locale_Research_Interests");
       jsonToRender.locale_Save = Locale.get("locale_Save");
       jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
-      jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");       
-      jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");      
-      
+      jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");
+      jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");
+
       if (this.format == "fullscreen") {
         this.setElement($("#user-fullscreen"));
         $(this.el).html(this.fullscreenTemplate(jsonToRender));
@@ -131,14 +131,14 @@ define([
       }
 
       // Display the CorpusesReadView
-      this.corpusesReadView.el = $(this.el).find('.corpuses');
-      this.corpusesReadView.render();
+      this.corporaReadView.el = $(this.el).find('.corpora');
+      this.corporaReadView.render();
 
       return this;
     },
     saveProfile : function(){
       if (OPrime.debugMode) OPrime.debug("Saving user");
-      
+
       this.model.set("firstname", $(this.el).find(".firstname").val());
       this.model.set("lastname", $(this.el).find(".lastname").val());
       var email = $(this.el).find(".email").val();
@@ -148,7 +148,7 @@ define([
       this.model.set("affiliation", $(this.el).find(".affiliation").val());
       this.model.set("description", $(this.el).find(".description").val());
       // this.model.set("gravatar", $(this.el).find(".gravatar").val());
-      
+
       //It is the private self
       if(this.format =="modal"){
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
@@ -174,7 +174,7 @@ define([
         this.model.saveAndInterConnectInApp(function(){
           window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         });
-        
+
         window.app.addActivity(
             {
               verb : "modified",
@@ -192,7 +192,7 @@ define([
               context : "via Offline App"
             });
       }
-      
+
       window.appView.toastUser("Sucessfully saved your profile.","alert-success","Saved!");
 
       this.showReadVersion();
@@ -218,22 +218,22 @@ define([
 //        childViewConstructor : CommentReadView,
 //        childViewTagName     : 'li'
 //      });
-    //Create a CommentReadView    
-      var corpuses = new Corpuses();
+    //Create a CommentReadView
+      var corpora = new Corpuses();
       try {
-        corpuses = new Backbone.Collection(JSON.parse(localStorage.getItem(
-          this.model.get("username") + "corpusesUserHasAccessTo")));
+        corpora = new Backbone.Collection(JSON.parse(localStorage.getItem(
+          this.model.get("username") + "corporaUserHasAccessTo")));
       } catch (e) {
         console.log("Couldn't load the list of corpora which the user has access to.");
-      } 
-      this.corpusesReadView = new UpdatingCollectionView({
-        collection : corpuses,
+      }
+      this.corporaReadView = new UpdatingCollectionView({
+        collection : corpora,
         childViewConstructor : CorpusLinkView,
         childViewTagName : 'li'
       });
-      
+
     }
   });
 
   return UserEditView;
-}); 
+});
