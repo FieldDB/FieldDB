@@ -118,7 +118,7 @@
   </button>
 </div>
 
-<progress  class="import-progress" value="{{importer.progress.completed}}" max="{{importer.progress.total}}" ng-show="importer.progress.total">
+<progress  class="import-progress" ng-value="importer.progress.completed" ng-max="importer.progress.total" ng-show="importer.progress.total">
   <strong>{{locale.locale_percent_completed}}</strong>
 </progress>
 
