@@ -116,14 +116,27 @@ describe("lib/Collection", function() {
       expect(removed.validationStatus).toEqual("Published*");
     });
 
+    it("should return reference to the added item", function() {
+      expect(collection.length).toEqual(2);
+      var addedItem = collection.add({
+        validationStatus: "ToBeChecked"
+      });
+      expect(collection.length).toEqual(3);
+      expect(collection._collection.length).toEqual(3);
+      expect(addedItem).toBe(collection.tobechecked);
+    });
+
     it("should permit add of an array", function() {
       expect(collection.length).toEqual(2);
-      collection.add([{
+      var addedItems = collection.add([{
         validationStatus: "CheckedWithSam"
       }, {
         validationStatus: "ToBeCheckedWithSam"
       }]);
       expect(collection.length).toEqual(4);
+      expect(collection._collection.length).toEqual(4);
+      expect(addedItems[0]).toBe(collection.checkedwithsam);
+      expect(addedItems[1]).toBe(collection.tobecheckedwithsam);
     });
 
     it("should permit concat of an array", function() {
@@ -135,8 +148,10 @@ describe("lib/Collection", function() {
         validationStatus: "CheckedWithSam"
       }, {
         validationStatus: "ToBeCheckedWithSam"
+      }]).concat([{
+        validationStatus: "CheckedWithJo"
       }]);
-      expect(collection.length).toEqual(4);
+      expect(collection.length).toEqual(5);
     });
 
     it("should permit concat of a collection", function() {
@@ -146,7 +161,7 @@ describe("lib/Collection", function() {
           validationStatus: "CheckedWithSam"
         }, {
           validationStatus: "ToBeCheckedWithSam"
-        },  {
+        }, {
           validationStatus: "ToBeCheckedWithPhylis"
         }],
         primaryKey: "validationStatus"
