@@ -8,8 +8,10 @@ backbone-couchdb.js is licensed under the MIT license.
 
 define([
     "backbone",
+    "underscore",
   ], function(
-    Backbone) {
+    Backbone,
+    _) {
 //parse models
   Backbone.Model.prototype.parse = function(response) {
     // parse internal models
