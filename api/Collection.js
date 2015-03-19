@@ -659,7 +659,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var json;
       try {
-        json = this.toJSON();
+        json = JSON.parse(JSON.stringify(this.toJSON()));
       } catch (e) {
         console.warn(e.stack);
         this.bug("There was a problem cloning this collection", e);
