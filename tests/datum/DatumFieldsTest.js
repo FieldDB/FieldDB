@@ -326,9 +326,9 @@ describe("lib/DatumFields", function() {
 
       field.decryptedMode = false;
       field.value = "noqa-ta tusu-nay-wan changed without access";
-      expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
       expect(field.value).toBe("xxxx-xx xxxx-xxx-xxx-xx");
-      expect(field.warnMessage).toContain("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of this item, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
       // console.log(field.toJSON());
     });
 
