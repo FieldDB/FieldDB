@@ -113,36 +113,41 @@ describe("api/import/Import", function() {
         expect(importer.datalist.docs.fieldDBtype).toEqual("DocumentCollection");
         expect(importer.datalist.docs.primaryKey).toEqual("tempId");
 
-        // expect(importer.progress).toBeDefined();
-        // expect(importer.progress.total).toEqual(1);
-        // expect(importer.progress.completed).toEqual(0);
+        expect(importer.progress).toBeDefined();
+        expect(importer.progress.total).toEqual(1);
+        expect(importer.progress.completed).toEqual(0);
 
-        // expect(importer.extractedHeaderObjects).toBeDefined();
-        // expect(importer.extractedHeaderObjects.length).toEqual(6);
+        expect(importer.extractedHeaderObjects).toBeDefined();
+        expect(importer.extractedHeaderObjects.length).toEqual(6);
         // expect(importer.extractedHeaderObjects.map(function(field) {
         //   return field.id;
         // })).toEqual(["field1", "field2", "field3", "columnplaceholder", "field5", "field6"]);
-        // expect(importer.extractedHeaderObjects[0].id).toEqual("field1");
-        // expect(importer.extractedHeaderObjects[0].value).toEqual("");
-        // expect(importer.extractedHeaderObjects[3]).toEqual({
-        //   _fieldDBtype: "DatumField",
-        //   useIdNotUnderscore: true,
-        //   _id: "columnplaceholder",
-        //   _version: importer.extractedHeaderObjects[3].version
-        // });
+        expect(importer.extractedHeaderObjects[0].id).toEqual("field1");
+        // importer.extractedHeaderObjects[0].debugMode = true;
+        expect(importer.extractedHeaderObjects[0].value).toEqual("");
+        expect(importer.extractedHeaderObjects[3].toJSON()).toEqual({
+          fieldDBtype: "DatumField",
+          id: "columnplaceholder",
+          value: "",
+          mask: "",
+          encryptedValue: "",
+          version: importer.version,
+          label: "columnplaceholder",
+          hint: ""
+        });
 
-        // expect(importer.datalist).toBeDefined();
-        // expect(importer.datalist.docs).toBeDefined();
-        // expect(importer.datalist.docs.length).toEqual(2);
-        // expect(importer.datalist.docs._collection).toBeDefined();
+        expect(importer.datalist).toBeDefined();
+        expect(importer.datalist.docs).toBeDefined();
+        expect(importer.datalist.docs.length).toEqual(2);
+        expect(importer.datalist.docs._collection).toBeDefined();
 
-        // expect(importer.datalist.docs._collection[0].fields.length).toEqual(importer.extractedHeaderObjects.length);
+        expect(importer.datalist.docs._collection[0].fields.length).toEqual(importer.extractedHeaderObjects.length);
 
 
-        // // no leaking state between header objects or docs
-        // expect(importer.extractedHeaderObjects.map(function(field) {
-        //   return field.value;
-        // })).toEqual(["", "", "", "", "", ""]);
+        // no leaking state between header objects or docs
+        expect(importer.extractedHeaderObjects.map(function(field) {
+          return field.value;
+        })).toEqual(["", "", "", "", "", ""]);
         // expect(importer.datalist.docs._collection[0].fields).not.toBe(importer.datalist.docs._collection[1].fields);
         // expect(importer.datalist.docs._collection[0].fields).not.toEqual(importer.datalist.docs._collection[1].fields);
         // expect(importer.extractedHeaderObjects).not.toBe(importer.datalist.docs._collection[0].fields);

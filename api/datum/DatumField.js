@@ -90,7 +90,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         value = value.trim();
       }
       var originalValue = value + "";
-      value = this.sanitizeStringForPrimaryKey(value); /*TODO dont do this on all objects */
+      value = this.sanitizeStringForPrimaryKey(value); //TODO dont do this on all objects
       if (value === null) {
         this.bug("Invalid id, not using " + originalValue + " id remains as " + this._id);
         return;
@@ -113,7 +113,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           this.labelFieldLinguists = value;
         }
       }
-      if (!this.id) {
+      if (!this._id) {
         this.id = value;
       }
     }
@@ -321,21 +321,24 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       this._defaultfield = !!value;
     }
   },
+
   repairMissingEncryption: {
     value: true
   },
+
   value: {
     configurable: true,
     get: function() {
-      if (this._value === undefined || this.value === null) {
+      this.debug("looking up the value of this field", this._value);
+      if (this._value === undefined || this._value === null || this._value === "") {
         return FieldDBObject.DEFAULT_STRING;
       }
       // If there was a value before, there are extra precautions
       if (!this._shouldBeEncrypted) {
-        return this._value.trim();
+        return this._value;
       } else {
         if (!this.encrypted) {
-          return this._value.trim();
+          return this._value;
         } else {
           if (!this.decryptedMode) {
             this.warn("User is not able to view the value of this item, it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
@@ -350,7 +353,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 this._mask = this.createMask(this._value);
                 this._value = this._mask;
               } else {
-                return this._value.trim();
+                return this._value;
               }
             }
             if (this._encryptedValue.indexOf("confidential:") === 0) {
@@ -388,10 +391,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         }
       }
       var encryptedValue;
-      if (!value.trim) {
-        value = value + "";
+      if (typeof value.trim === "function") {
+        value = value.trim();
       }
-      value = value.trim();
       if (!this._shouldBeEncrypted) {
         this._encryptedValue = value;
         this._mask = value;
@@ -474,7 +476,10 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       this.debug("Setting datum field mask " + value);
-      this._mask = value.trim();
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+      this._mask = value;
     }
   },
 
