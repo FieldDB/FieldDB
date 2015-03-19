@@ -875,6 +875,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
       var fuzzyLabel = incomingFieldIdOrLabel.toLowerCase().replace(/[^a-z]/g, "");
       if (!optionalAllFields) {
+        console.log("Using a clone of the corpus fields. ");
         optionalAllFields = new DatumFields();
         if (this.datumFields && this.datumFields.length > 0) {
           optionalAllFields.add(this.datumFields.toJSON());
@@ -933,7 +934,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
             correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         }
-
       }
 
       /* if the field is still not defined inthe corpus, construct a blank field with this label */
@@ -941,7 +941,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
         correspondingDatumField[0].id = incomingFieldIdOrLabel;
         correspondingDatumField[0].labelFieldLinguists = incomingFieldIdOrLabel;
-        correspondingDatumField[0].notInCorpus = true;
+        // correspondingDatumField[0].notInCorpus = true;
         optionalAllFields.add(correspondingDatumField[0]);
       }
       if (correspondingDatumField && correspondingDatumField[0]) {
@@ -950,7 +950,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       this.debug("correspondingDatumField ", correspondingDatumField);
 
-      return new DatumField(correspondingDatumField);
+      if (correspondingDatumField instanceof DatumField) {
+        return correspondingDatumField;
+      } else {
+        return new DatumField(correspondingDatumField);
+      }
     }
   },
 

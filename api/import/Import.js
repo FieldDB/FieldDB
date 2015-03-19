@@ -277,7 +277,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         self.progress.total = self.progress.total + 1;
 
-        self._datalist = null;
+        // self.datalist = new DataList({
+        //   title: "Import Data",
+        //   docs: {
+        //     collection: [],
+        //     primaryKey: "tempId"
+        //   },
+        //   // confidential: self.corpus.confidential,
+        //   // decryptedMode: true
+        // });
         self.datalist.docs.primaryKey = "tempId";
 
 
@@ -293,6 +301,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         // self.render();
 
+        // self.session = self.session || new Session();
         self.session.consultants = [];
         /* put metadata in the session goals */
         if (self.metadataLines) {
@@ -305,7 +314,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.warn("There was no extracted header.");
           if (self.asFieldMatrix && self.asFieldMatrix.length > 0 && self.asFieldMatrix[0].concat) {
             self.warn("Using the first row as the extracted header.");
-            self.extractedHeaderObjects = self.asFieldMatrix[0].concat([]);
+            // self.extractedHeaderObjects = self.asFieldMatrix[0].concat([]);
+            // self.extractedHeaderObjects = JSON.parse(JSON.stringify(self.asFieldMatrix[0]));
+            self.extractedHeaderObjects = self.asFieldMatrix.shift();
+
             self.extractedHeaderObjects = self.extractedHeaderObjects.map(function(object) {
               if (object === "" || object === undefined || object === null) {
                 return;
@@ -329,23 +341,47 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         try {
           for (columnIndex = 0; columnIndex < self.extractedHeaderObjects.length; columnIndex++) {
             fieldLabelFromExtractedHeader = self.extractedHeaderObjects[columnIndex].id || self.extractedHeaderObjects[columnIndex];
-            self.debugMode = true;
+            // self.debugMode = true;
             correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
-            if (correspondingDatumField && correspondingDatumField.id && self.extractedHeaderObjects.indexOf(correspondingDatumField.id) >= 0) {
-              self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
-                " (the same label on two columns). This will result in a strange " +
-                "import where only the second of the two will be used in the import. " +
-                "Is this really what you want?.");
+
+            if (correspondingDatumField && correspondingDatumField.id) {
+              // var fields = self.extractedHeaderObjects.map(function(obj) {
+              //   if (obj && obj.id && obj.id != "columnplaceholder") {
+              //     return ""
+              //   }
+              //   return obj.id;
+              // });
+              // if (fields.indexOf(correspondingDatumField.id) >= 0) {
+              //   self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
+              //     " (the same label on two columns). This will result in a strange " +
+              //     "import where only the second of the two will be used in the import. " +
+              //     "Is this really what you want?.");
+              // }
             }
-            self.debug(columnIndex + "correspondingDatumField", correspondingDatumField);
+            self.debug(columnIndex + " correspondingDatumField", correspondingDatumField);
+
+            self.todo("setting extractedHeaderObjects is problematic", self.extractedHeaderObjects[columnIndex], correspondingDatumField);
+
             self.extractedHeaderObjects[columnIndex] = correspondingDatumField;
           }
         } catch (e) {
-          console.log(e)
-          console.log(e.stack)
+          console.log(e);
+          console.log(e.stack);
           throw new Error(" problem in extractedHeaderObjects ");
         }
 
+        if (self.debugMode) {
+          // self.debug("  these are the extracted header cells ", self.extractedHeaderObjects.map(function(field) {
+          //   return field.id;
+          // }));
+        }
+
+        if (self.debugMode) {
+          self.debug("JSON.stringify(self.extractedHeaderObjects, null, 2)");
+          self.extractedHeaderObjects.map(function(headerField) {
+            self.debug("headerField", headerField);
+          });
+        }
 
         /*
          * Cycle through all the rows in table and create a datum with the matching fields.
@@ -355,12 +391,21 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           cell;
 
         self.asFieldMatrix.map(function(row) {
+          if (!row || row.length < 1) {
+            self.debug("Skipping empty row");
+            return;
+          }
+          self.debug("Working on row ", row);
           var docToSave;
+          console.log("Cloning fields ", self.extractedHeaderObjects.length);
+          var fields = new DatumFields(self.extractedHeaderObjects);
+          console.log("Cloned fields ", fields.length);
+          console.log("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
           if (self.importType === "participants") {
             docToSave = new Participant({
               confidential: self.corpus.confidential,
-              // decryptedMode: true,
-              fields: new DatumFields(self.extractedHeaderObjects).clone()
+              decryptedMode: true,
+              fields: fields
             });
             self.debug("Creating a participant.", row);
           } else if (self.importType === "audioVideo") {
@@ -369,17 +414,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.debug("Creating a audioVideo.", docToSave.description);
           } else {
             docToSave = new Datum({
-              fields: new DatumFields(self.extractedHeaderObjects).clone()
+              confidential: self.corpus.confidential,
+              decryptedMode: true,
+              fields: fields
             });
             self.debug("Creating a datum.", row);
           }
 
-          // if (docToSave.fields) {
-          //   docToSave.fields.decryptedMode = true;
-          // }
+          // return;
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
             cell = row[cellIndex];
+            console.log("working on cell ",cell)
             if (!cell || cellIndex > self.extractedHeaderObjects.length || self.extractedHeaderObjects[cellIndex].id === "columnplaceholder") {
               self.debug("Skipping column " + cellIndex + " :", cell);
               continue;
@@ -401,17 +447,21 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
           //if the table row has more than 2 non-white space characters, enter it as data
           if (testForEmptyness.replace(/[ \t\n]/g, "").length >= 2) {
-            self.debug("new doc", docToSave.fields.map(function(field) {
-              return field.value
-            }));
+            if (self.debugMode) {
+              // self.debug("new doc", docToSave.fields.map(function(field) {
+              //   return field.value
+              // }));
+            }
             docToSave.tempId = FieldDBObject.uuidGenerator();
             if (docToSave) {
               self.datalist.add(docToSave);
             }
           } else {
-            self.debug("Didn't add a blank row:" + testForEmptyness + ": ");
+            self.debug("Didn't add row with only blank cells:" + testForEmptyness + ": ");
           }
         });
+        self.debug("Finished building the data list");
+
         self.showImportThirdStep = true;
         self.render();
 
@@ -734,10 +784,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.debug("correspondingDatumField ", correspondingDatumField);
 
       if (correspondingDatumField) {
-        return new DatumField(correspondingDatumField);
+        return correspondingDatumField;
       } else {
         return new DatumField({
-          id: "columnplaceholder"
+          id: "columnplaceholder",
+          value: ""
         });
       }
     }
@@ -909,10 +960,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   id: {
     get: function() {
-      return this.datalist.id;
+      if (this.datalist) {
+        return this.datalist.id;
+      }
     },
     set: function(value) {
-      return this.datalist.id = value;
+      if (this.datalist) {
+        this.datalist.id = value;
+      }
     }
   },
 
