@@ -55,8 +55,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   if (FieldDB && FieldDB.FieldDBObject) {
     FieldDB.FieldDBObject.bug = function(message) {
-      $rootScope.notificationMessage = message;
-      $rootScope.openNotification();
+      if ($rootScope.openNotification) {
+        $rootScope.notificationMessage = message;
+        $rootScope.openNotification();
+      } else {
+        alert(message);
+      }
     };
   }
 
@@ -456,7 +460,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
     console.log(templateId);
     if (!$rootScope.admin) {
-      alert("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
+      $scope.application.bug("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
       return;
     }
     if ($rootScope.corpus.description) {
@@ -466,10 +470,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           console.log("Saved corpus template preferences ", result);
         }, function(reason) {
           console.log("Error saving corpus template.", reason);
-          alert("Error saving corpus template.");
+          $scope.application.bug("Error saving corpus template.");
         });
     } else {
-      alert("The corpus doc was never fetched. So I cant save the preferences... Please report this if you think you should be able to save the preferences.");
+      $scope.application.bug("The corpus doc was never fetched. So I cant save the preferences... Please report this if you think you should be able to save the preferences.");
     }
   };
 
@@ -497,7 +501,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     /** Prior to 1.37 wipe personalization and use current defaults */
     if (!existingPreferences.version) {
-      alert("Welcome to the Spring Field Methods session!\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
+      $scope.application.bug("Welcome to the Spring Field Methods session!\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
       // localStorage.clear(); //why?? left over from debugging?
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
       // return defaultPreferences;
@@ -931,7 +935,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   corpus.pouchname = corpusIdentifierToRetrieve;
                   corpus.title = corpusIdentifierToRetrieve;
                   console.warn("Error finding a corpus in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org ", response, corpus);
-                  alert("Error finding corpus details in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org  " + corpusIdentifierToRetrieve);
+                  $scope.application.bug("Error finding corpus details in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org  " + corpusIdentifierToRetrieve);
                   return;
                 }
                 corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
@@ -973,7 +977,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                   corpus.gravatar = corpus.team.gravatar;
                 }
                 console.warn("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us of this error if you are online and the connection should have succeeded.", error, corpus);
-                alert("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us support@lingsync.org about this error if you are online and the connection should have succeeded.");
+                $scope.application.bug("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us support@lingsync.org about this error if you are online and the connection should have succeeded.");
                 // $scope.corpora.push(corpus);
               });
           };
@@ -1204,7 +1208,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                       });
                   },
                   function() {
-                    window.alert("There was an error accessing the record.\nTry refreshing the page");
+                    $scope.application.bug("There was an error accessing the record.\nTry refreshing the page");
                   });
             }
           };
@@ -1266,7 +1270,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.activeSessionID = undefined;
               }, function(error) {
                 console.warn("there was an error deleting a session", error);
-                window.alert("Error deleting session.\nTry refreshing the page.");
+                $scope.application.bug("Error deleting session.\nTry refreshing the page.");
               });
           });
       }
@@ -1403,7 +1407,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 $scope.activeDatumIndex = null;
               }, function(error) {
                 console.warn(error);
-                window.alert("Error deleting record.\nTry refreshing the data first by clicking ↻.");
+                $scope.application.bug("Error deleting record.\nTry refreshing the data first by clicking ↻.");
               });
           });
       }
@@ -1689,7 +1693,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if ($scope.fullCurrentSession) {
           recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
         } else {
-          window.alert("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
+          $scope.application.bug("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
         }
       }
 
@@ -1708,7 +1712,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }, function(reason) {
           console.log(reason);
           $scope.saved = "no";
-          window.alert("There was an error saving a record. " + reason);
+          $scope.application.bug("There was an error saving a record. " + reason);
           // wish this would work:
           // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
           // $rootScope.openNotification();
@@ -1726,7 +1730,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (reason) {
         console.log(reason);
         $scope.saved = "no";
-        window.alert("There was an error saving one or more records. Please try again.");
+        $scope.application.bug("There was an error saving one or more records. Please try again.");
       } else {
         if ($scope.saved === "saving") {
           $scope.saved = "yes";
@@ -1826,7 +1830,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
     }, function(reason) {
       console.log("Error saving corpus details.", reason);
-      alert("Error saving corpus details.");
+      $scope.application.bug("Error saving corpus details.");
     });
   };
 
@@ -2036,7 +2040,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               },
               function(reason) {
                 console.warn("There was an error saving the activity. ", $scope.activities[index], reason);
-                window.alert("There was an error saving the activity. ");
+                $scope.application.bug("There was an error saving the activity. ");
                 $scope.saved = "no";
               });
         }
@@ -2318,14 +2322,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.removeAccessFromUser = function(userid, roles) {
     if (!roles || roles.length === 0) {
       console.warn("no roles were requested to be removed. cant do anything");
-      alert("There was a problem performing this operation. Please report this.");
+      $scope.application.bug("There was a problem performing this operation. Please report this.");
     }
     // Prevent an admin from removing him/herself from a corpus if there are no other admins; This
     // helps to avoid a situation in which there is no admin for a
     // corpus
     if (roles === ["admin"] && $scope.users.admins.length < 2) {
       if ($scope.users.admins[0].username.indexOf(userid) > -1) {
-        window.alert("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
+        $scope.application.bug("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
         return;
       }
     }
