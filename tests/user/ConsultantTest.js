@@ -47,6 +47,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
 
   it("should set consultant's date of birth", function() {
     var consultant = new Consultant({
+      // debugMode: true,
       confidential: mockcorpus.confidential
     });
     expect(consultant.fields).toBeDefined();
