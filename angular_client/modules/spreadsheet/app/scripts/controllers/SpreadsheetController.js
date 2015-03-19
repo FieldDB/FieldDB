@@ -1454,6 +1454,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
+    if (!$scope.fullCurrentSession && $scope.sessions && $scope.sessions.length > 0) {
+      $scope.fullCurrentSession = $scope.sessions[0];
+    }
     newSpreadsheetDatum.session = $scope.fullCurrentSession;
     // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
