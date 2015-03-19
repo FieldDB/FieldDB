@@ -123,86 +123,66 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   igt: {
     get: function() {
+      var context = {},
+        feederWord,
+        fullWord,
+        datum;
 
-      var convertDatumIntoIGT = function(datum) {
-        var context = {},
-          feederWord,
-          fullWord;
-        if (datum.judgement && datum.judgement.indexOf("*") >= 0) {
-          return;
-        }
-        if (datum.utterance && datum.utterance.indexOf("*") >= 0) {
-          return;
-        }
-        var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(/[ ]+/);
-        for (var word in words) {
-          // If the token it not null or the empty string
-          if (words[word]) {
-            // Replace (*_) with ""
-            feederWord = words[word].replace(/\(\*[^)]*\)/g, "");
-            // Replace *(_) with _
-            feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-            // Remove all parentheses and *
-            fullWord = feederWord.replace(/[(*)]/g, "");
-            words[word] = fullWord;
-          }
-        }
-        context.words = words;
+      var datum = this.accessAsObject();
 
-        var morphemes = datum.morphemes.replace(/#!,\//g, "").split(/[ ]+/);
-        for (var morphemegroup in morphemes) {
-          // If the token it not null or the empty string
-          if (morphemes[morphemegroup]) {
-            // Replace (*_) with ""
-            feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g, ""); // DONT replace ? it is used to indicate uncertainty with the data, . is used for fusional morphemes Replace *(_) with _ feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-            // Remove all parentheses and *
-            fullWord = feederWord.replace(/[(*)]/g, "");
-            morphemes[morphemegroup] = fullWord;
-          }
+      var words = datum.utterance.toLowerCase().replace(/#?!.,\//g, "").split(/[ ]+/);
+      for (var word in words) {
+        // If the token it not null or the empty string
+        if (words[word]) {
+          // Replace (*_) with ""
+          feederWord = words[word].replace(/\(\*[^)]*\)/g, "");
+          // Replace *(_) with _
+          feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
+          // Remove all parentheses and *
+          fullWord = feederWord.replace(/[(*)]/g, "");
+          words[word] = fullWord;
         }
-        context.morphemes = morphemes;
+      }
+      context.words = words;
 
-        var glosses = datum.gloss.replace(/#!,\//g, "").split(/[ ]+/); // DONT replace
-        // ? it is
-        // used to indicate
-        // uncertainty with the
-        // data, . is used for
-        // fusional morphemes
-        for (var glossgroup in glosses) {
-          // If the token it not null or the empty string
-          if (glosses[glossgroup]) {
-            // Replace (*_) with ""
-            feederWord = glosses[glossgroup].replace(/\(\*[^)]*\)/g, "");
-            // Replace *(_) with _
-            feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-            // Remove all parentheses and *
-            fullWord = feederWord.replace(/[(*)]/g, "");
-            glosses[glossgroup] = fullWord;
-          }
+      var morphemes = datum.morphemes.replace(/#!,\//g, "").split(/[ ]+/);
+      for (var morphemegroup in morphemes) {
+        // If the token it not null or the empty string
+        if (morphemes[morphemegroup]) {
+          // Replace (*_) with ""
+          feederWord = morphemes[morphemegroup].replace(/\(\*[^)]*\)/g, ""); // DONT replace ? it is used to indicate uncertainty with the data, . is used for fusional morphemes Replace *(_) with _ feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
+          // Remove all parentheses and *
+          fullWord = feederWord.replace(/[(*)]/g, "");
+          morphemes[morphemegroup] = fullWord;
         }
-        context.glosses = glosses;
+      }
+      context.morphemes = morphemes;
 
-        return context;
-      };
+      var glosses = datum.gloss.replace(/#!,\//g, "").split(/[ ]+/); // DONT replace
+      // ? it is
+      // used to indicate
+      // uncertainty with the
+      // data, . is used for
+      // fusional morphemes
+      for (var glossgroup in glosses) {
+        // If the token it not null or the empty string
+        if (glosses[glossgroup]) {
+          // Replace (*_) with ""
+          feederWord = glosses[glossgroup].replace(/\(\*[^)]*\)/g, "");
+          // Replace *(_) with _
+          feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
+          // Remove all parentheses and *
+          fullWord = feederWord.replace(/[(*)]/g, "");
+          glosses[glossgroup] = fullWord;
+        }
+      }
+      context.glosses = glosses;
+
+
+
 
       try {
-        /* if this document has been deleted, the ignore it and return immediately */
-        if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
-          return;
-        }
-        // If the document is a Datum
-        if (!doc.audioVideo) {
-          return;
-        }
 
-        var datum = accessAsObject(doc);
-        if (!datum) {
-          return;
-        }
-        var context = convertDatumIntoIGT(datum);
-        if (!context) {
-          return;
-        }
         var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
         // Build triples
         for (var j in context.words) {
@@ -225,14 +205,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
 
 
-      var tuples = [];
-      var paraleltext = [];
-      this.fields.map(function(field) {
-        if (field.type && field.type.indexOf("IGT") > -1) {
-          var tokenizedField = field.value.split(/[ \t=-]+/);
-          tuples.push(field);
-        }
-      });
 
       paraleltext.translation = "\u2018" + translation + "\u2019";
 
