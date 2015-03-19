@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "2.46.12",
+  "version": "2.47.19",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "repository": {
