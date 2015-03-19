@@ -345,28 +345,27 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
 
             if (correspondingDatumField && correspondingDatumField.id) {
-              // var fields = self.extractedHeaderObjects.map(function(obj) {
-              //   if (obj && obj.id && obj.id != "columnplaceholder") {
-              //     return ""
-              //   }
-              //   return obj.id;
-              // });
-              // if (fields.indexOf(correspondingDatumField.id) >= 0) {
-              //   self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
-              //     " (the same label on two columns). This will result in a strange " +
-              //     "import where only the second of the two will be used in the import. " +
-              //     "Is this really what you want?.");
-              // }
+              var fields = self.extractedHeaderObjects.map(function(obj) {
+                if (obj && obj.id && obj.id != "columnplaceholder") {
+                  return ""
+                }
+                return obj.id;
+              });
+              if (fields.indexOf(correspondingDatumField.id) >= 0) {
+                self.bug("You seem to have some column labels '" + correspondingDatumField.id + "' that are duplicated" +
+                  " (the same label on two columns). This will result in a strange " +
+                  "import where only the second of the two will be used in the import. " +
+                  "Is this really what you want?.");
+              }
             }
             self.debug(columnIndex + " correspondingDatumField", correspondingDatumField);
 
-            self.todo("setting extractedHeaderObjects is problematic", self.extractedHeaderObjects[columnIndex], correspondingDatumField);
-
+            self.debug("setting extractedHeaderObjects was once problematic", self.extractedHeaderObjects[columnIndex], correspondingDatumField);
             self.extractedHeaderObjects[columnIndex] = correspondingDatumField;
           }
         } catch (e) {
-          console.log(e);
-          console.log(e.stack);
+          this.warn(e);
+          this.warn(e.stack);
           throw new Error(" problem in extractedHeaderObjects ");
         }
 
@@ -397,12 +396,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
           self.debug("Working on row ", row);
           var docToSave;
-          console.log("Cloning fields ", self.extractedHeaderObjects.length);
+          self.debug("Cloning fields ", self.extractedHeaderObjects.length);
           var fields = self.extractedHeaderObjects.map(function(headerField) {
             return headerField.toJSON();
           });
-          console.log("Cloned fields ", fields.length);
-          console.log("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
+          self.debug("Cloned fields ", fields.length);
+          self.debug("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
           if (self.importType === "participants") {
             docToSave = new Participant({
               confidential: self.corpus.confidential,
@@ -427,7 +426,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
             cell = row[cellIndex];
-            console.log("working on cell ", cell)
+            self.debug("working on cell ", cell)
             if (!cell || cellIndex > self.extractedHeaderObjects.length || self.extractedHeaderObjects[cellIndex].id === "columnplaceholder") {
               self.debug("Skipping column " + cellIndex + " :", cell);
               continue;
