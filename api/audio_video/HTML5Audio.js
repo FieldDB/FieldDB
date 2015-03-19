@@ -130,7 +130,7 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
             var timeToPrepareAudio = Date.now() - startTime;
             var newDelay = delay - timeToPrepareAudio;
             if (newDelay > 0) {
-              window.setTimeout(function() {
+              setTimeout(function() {
                 self._audioElement.play();
                 self.isPlaying = true;
                 self.isPaused = false;

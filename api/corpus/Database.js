@@ -1,9 +1,11 @@
-/* globals localStorage, window */
+/* globals localStorage */
 
 var Q = require("q");
 var CORS = require("../CORS").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
+// var User = require("../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var CorpusConnection = require("./CorpusConnection").CorpusConnection;
 
 var Database = function Database(options) {
   if (!this._fieldDBtype) {
@@ -13,12 +15,38 @@ var Database = function Database(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true";
-var DEFAULT_BASE_AUTH_URL = "https://localhost:3181";
+var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true&limit=LIMIT";
+var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
+
+Database.defaultCouchConnection = CorpusConnection.defaultCouchConnection;
+
+/**
+ * This limit is set to protect apps from requesting huge amounts of data without pagination.
+ * @type {Number}
+ */
+Database.DEFAULT_DOCUMENT_LIMIT = 1000;
+
 Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.prototype */ {
   constructor: {
     value: Database
+  },
+
+  fieldDBtype: {
+    get: function() {
+      return this._fieldDBtype || "Database";
+    },
+    set: function(value) {
+      if (value !== this.fieldDBtype) {
+        this.debug("Using type " + this.fieldDBtype + " when the incoming object was " + value);
+      }
+    }
+  },
+
+  INTERNAL_MODELS: {
+    value: {
+      corpusConnection: CorpusConnection
+    }
   },
 
   DEFAULT_COLLECTION_MAPREDUCE: {
@@ -43,19 +71,72 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  corpusConnection: {
+    get: function() {
+      if (this._corpusConnection && this._corpusConnection.parent !== this) {
+        this._corpusConnection.parent = this;
+      }
+      return this._corpusConnection;
+    },
+    set: function(value) {
+      this.debug("Setting corpus connection ", value);
+      if (Object.prototype.toString.call(value) === "[object Object]") {
+        value = new this.INTERNAL_MODELS["corpusConnection"](value);
+      }
+      this._corpusConnection = value;
+      this._corpusConnection.parent = this;
+    }
+  },
+
+  couchConnection: {
+    get: function() {
+      this.warn("couchConnection is deprecated, use corpusConnection instead");
+      return this.corpusConnection;
+    },
+    set: function(value) {
+      this.warn("couchConnection is deprecated, use corpusConnection instead");
+      this.corpusConnection = value;
+    }
+  },
+
+  url: {
+    get: function() {
+      if (this.corpusConnection && this.corpusConnection.corpusUrl) {
+        return this.corpusConnection.corpusUrl;
+      } else {
+        if (this.dbname) {
+          return this.BASE_DB_URL + "/" + this.dbname;
+        }
+      }
+    },
+    set: function(value) {
+      console.log("Setting url  ", value);
+
+      if (!this.corpusConnection) {
+        this.corpusConnection = CorpusConnection.defaultCouchConnection(value);
+      }
+
+      if (this.dbname && value.indexOf(this.dbname) === -1) {
+        this.warn("the url didnt contain this database identifier, that is strange. Adding it to the end", value);
+        value = value + "/" + this.dbname;
+      }
+
+      this.corpusConnection.corpusUrl = value;
+    }
+  },
+
   get: {
     value: function(id) {
       if (!this.dbname) {
         this.bug("Cannot get something if the dbname is not defined ", id);
-        throw "Cannot get something if the dbname is not defined ";
+        throw new Error("Cannot get something if the dbname is not defined ");
       }
-      var baseUrl = this.url;
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!this.url) {
+        this.bug("The url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
       }
       return CORS.makeCORSRequest({
         method: "GET",
-        url: baseUrl + "/" + this.dbname + "/" + id
+        url: this.url + "/" + id
       });
     }
   },
@@ -64,10 +145,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(arg1, arg2) {
       if (!this.dbname) {
         this.bug("Cannot get something if the dbname is not defined ", arg1, arg2);
-        throw "Cannot get something if the dbname is not defined ";
+        throw new Error("Cannot get something if the dbname is not defined ");
       }
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this,
         key,
         value;
@@ -79,13 +159,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         value = arg2;
         value.id = key;
       }
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!this.url) {
+        this.bug("the url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
       }
       CORS.makeCORSRequest({
         method: "POST",
         data: value,
-        url: baseUrl + "/" + this.dbname
+        url: this.url
       }).then(function(result) {
         if (result._rev) {
           value._rev = result._rev;
@@ -125,22 +205,24 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   fetchCollection: {
     value: function(collectionType, start, end, limit, reduce, key) {
-      this.todo("Provide pagination ", start, end, limit, reduce);
+      // this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
-        self = this,
-        baseUrl = this.url;
+        self = this;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-        // Q.nextTick(function() {
-        //   deferred.reject("Cannot fetch data with out a url");
-        // });
-        // return deferred.promise;
+      if (!this.url) {
+        this.warn("url of this database was not set, this might have strange behaviour.", this);
+        Q.nextTick(function() {
+          deferred.reject("Cannot fetch data with out a url");
+        });
+        return deferred.promise;
       }
 
       if (!collectionType) {
         Q.nextTick(function() {
-          deferred.reject("Cannot fetch data with out a collectionType (eg consultants, sessions, datalists)");
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data url."]
+          });
         });
         return deferred.promise;
       }
@@ -162,6 +244,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         // });
       };
 
+
       // CORS.makeCORSRequest({
       //   type: "POST",
       //   dataType: "json",
@@ -178,7 +261,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           promises.push(CORS.makeCORSRequest({
             type: "GET",
             dataType: "json",
-            url: baseUrl + "/" + self.dbname + "/" + id
+            url: self.url + "/" + id
           }));
         });
 
@@ -201,7 +284,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "GET",
           dataType: "json",
-          url: baseUrl + "/" + self.dbname + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType) + key
+          url: self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType).replace("LIMIT", 1000) + key
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {
@@ -220,24 +303,45 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  couchSessionUrl: {
+    get: function() {
+      var couchSessionUrl = this.url;
+      if (!couchSessionUrl) {
+        couchSessionUrl = this.BASE_DB_URL + "/_session";
+      } else {
+        couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+      }
+      return couchSessionUrl;
+    }
+  },
+
   resumeAuthenticationSession: {
     value: function() {
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this;
-
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
 
       CORS.makeCORSRequest({
         type: "GET",
         dataType: "json",
-        url: baseUrl + "/_session"
+        url: this.couchSessionUrl
       }).then(function(sessionInfo) {
         self.debug(sessionInfo);
         self.connectionInfo = sessionInfo;
-        deferred.resolve(sessionInfo);
+        if (sessionInfo.userCtx.name) {
+          // var user = new User({
+          //   username: sessionInfo.userCtx.name
+          // }).fetch();
+          deferred.resolve({
+            username: sessionInfo.userCtx.name,
+            roles: sessionInfo.userCtx.roles
+          });
+        } else {
+          deferred.reject({
+            error: sessionInfo,
+            userFriendlyErrors: ["Please log in"],
+            status: 409
+          });
+        }
       }, function(reason) {
         deferred.reject(reason);
       });
@@ -267,6 +371,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
         connectionInfo = undefined;
       }
+      // this.todo(" Use CorpusConnection ");
       return connectionInfo;
     },
     set: function(value) {
@@ -289,293 +394,380 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete this._connectionInfo;
         }
       }
+      // this.todo(" Use CorpusConnection ");
+
     }
   },
 
-  /*
-   * This function is the same in all webservicesconfig, now any couchapp can
-   * login to any server, and register on the corpus server which matches its
-   * origin.
-   */
-  defaultCouchConnection: {
-    value: function() {
-      var localhost = {
-        protocol: "https://",
-        domain: "localhost",
-        port: "6984",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://localhost:3183",
-        userFriendlyServerName: "Localhost"
-      };
-      var testing = {
-        protocol: "https://",
-        domain: "corpusdev.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://authdev.lingsync.org",
-        userFriendlyServerName: "LingSync Beta"
-      };
-      var production = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "LingSync.org"
-      };
-      //v1.90 all users are on production
-      testing = production;
-
-      var mcgill = {
-        protocol: "https://",
-        domain: "corpus.lingsync.org",
-        port: "443",
-        pouchname: "default",
-        path: "",
-        authUrl: "https://auth.lingsync.org",
-        userFriendlyServerName: "McGill ProsodyLab"
-      };
-
-      /*
-       * If its a couch app, it can only contact databases on its same origin, so
-       * modify the domain to be that origin. the chrome extension can contact any
-       * authorized server that is authorized in the chrome app's manifest
-       */
-      var connection = production;
-
-      if (window.location.origin.indexOf("_design/pages") > -1) {
-        if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-          connection = testing;
-        } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
-          connection = production;
-        } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-          connection = mcgill;
-        } else if (window.location.origin.indexOf("localhost") >= 0) {
-          connection = localhost;
-        }
-      } else {
-        if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-          connection = mcgill;
-        } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-          connection = testing;
-        } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
-          connection = production;
-        }
-      }
-      return connection;
-    }
-  },
 
   getCouchUrl: {
     value: function(couchConnection, couchdbcommand) {
-      if (!couchConnection) {
-        couchConnection = this.defaultCouchConnection();
-        this.debug("Using the apps couchConnection", couchConnection);
+      var couchurl = new CorpusConnection(couchConnection).corpusUrl;
+      if (couchdbcommand) {
+        couchurl = couchurl.replace("/" + couchConnection.pouchname, couchdbcommand);
       }
-
-      var couchurl = couchConnection.protocol + couchConnection.domain;
-      if (couchConnection.port && couchConnection.port !== "443" && couchConnection.port !== "80") {
-        couchurl = couchurl + ":" + couchConnection.port;
-      }
-      if (!couchConnection.path) {
-        couchConnection.path = "";
-      }
-      couchurl = couchurl + couchConnection.path;
-      if (couchdbcommand === null || couchdbcommand === undefined) {
-        couchurl = couchurl + "/" + couchConnection.pouchname;
-      } else {
-        couchurl = couchurl + couchdbcommand;
-      }
-
-
-      /* Switch user to the new dev servers if they have the old ones */
-      couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
-      couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
-
-      /*
-       * For debugging cors #838: Switch to use the corsproxy corpus service instead
-       * of couchdb directly
-       */
-      // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-
       return couchurl;
     }
   },
 
   login: {
-    value: function(loginDetails) {
+    value: function(details) {
       var deferred = Q.defer(),
         self = this,
-        baseUrl = this.url,
-        authUrl = this.authUrl;
+        authUrl;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
+      Q.nextTick(function() {
 
-      if (!authUrl) {
-        authUrl = this.BASE_AUTH_URL;
-      }
+        if (!details) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+        authUrl = details.authUrl || self.authUrl;
 
-      CORS.makeCORSRequest({
-        type: "POST",
-        dataType: "json",
-        url: authUrl + "/login",
-        data: loginDetails
-      }).then(function(authserverResult) {
-          if (authserverResult.user) {
-            var corpusServerURLs = [];
-            if (authserverResult.user.corpuses && authserverResult.user.corpuses[0]) {
-              authserverResult.user.corpuses.map(function(corpusConnection) {
-                var url = self.getCouchUrl(corpusConnection, "/_session");
-                if (!self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                  corpusServerURLs.push(url);
-                } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServerURLs.indexOf(url) === -1) {
-                  corpusServerURLs.push(url);
-                }
+        if (!authUrl) {
+          authUrl = self.BASE_AUTH_URL;
+        }
+
+        if (!details.username) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a password."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        if (validateUsername.changes.length > 0) {
+          details.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: authUrl + "/login",
+          data: details
+        }).then(function(authserverResult) {
+            if (authserverResult.user) {
+              var corpusServersWhichHouseUsersCorpora = [];
+              self.todo("move the logic to connect to all the users corpora to the authentication level instead.");
+              if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
+                authserverResult.user.corpora.map(function(corpusConnection) {
+
+                  var addThisServerIfNotAlreadyThere = function(url) {
+                    var couchdbSessionUrl = url.replace(corpusConnection.dbname, "_session");
+                    if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+                    } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+                    }
+                  };
+
+                  if (corpusConnection.corpusUrls) {
+                    corpusConnection.corpusUrls.map(addThisServerIfNotAlreadyThere);
+                  } else {
+                    addThisServerIfNotAlreadyThere(self.getCouchUrl(corpusConnection, "/_session"));
+                  }
+
+                });
+              }
+
+              if (corpusServersWhichHouseUsersCorpora.length < 1) {
+                this.warn("This user has no corpora, this is strange.");
+              }
+              self.debug("Requesting session token for all corpora user has access to.");
+              var promises = [];
+              authserverResult.user.roles = [];
+              for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServersWhichHouseUsersCorpora.length; corpusUrlIndex++) {
+                promises.push(CORS.makeCORSRequest({
+                  type: "POST",
+                  dataType: "json",
+                  url: corpusServersWhichHouseUsersCorpora[corpusUrlIndex],
+                  data: {
+                    name: authserverResult.user.username,
+                    password: details.password
+                  }
+                }));
+              }
+
+              Q.allSettled(promises).then(function(results) {
+                results.map(function(result) {
+                  if (result.state === "fulfilled") {
+                    authserverResult.user.roles = authserverResult.user.roles.concat(result.value.roles);
+                  } else {
+                    self.debug("Failed to login to one of the users's corpus servers ", result);
+                  }
+                });
+                deferred.resolve(authserverResult.user);
               });
-            }
-            if (corpusServerURLs.length < 1) {
-              corpusServerURLs = [baseUrl + "/_session"];
-            }
-            var promises = [];
-            authserverResult.user.roles = [];
-            for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServerURLs.length; corpusUrlIndex++) {
-              promises.push(CORS.makeCORSRequest({
-                type: "POST",
-                dataType: "json",
-                url: corpusServerURLs[corpusUrlIndex],
-                data: {
-                  name: authserverResult.user.username,
-                  password: loginDetails.password
-                }
-              }));
-            }
 
-            Q.allSettled(promises).then(function(results) {
-              results.map(function(result) {
-                if (result.state === "fulfilled") {
-                  authserverResult.user.roles = authserverResult.user.roles.concat(result.value.roles);
-                } else {
-                  self.debug("Failed to login to one of the users's corpus servers ", result);
-                }
-              });
-              deferred.resolve(authserverResult.user);
-            });
-
-            // .then(function(sessionInfo) {
-            //   // self.debug(sessionInfo);
-            //   result.user.roles = sessionInfo.roles;
-            //   deferred.resolve(result.user);
-            // }, function() {
-            //   self.debug("Failed to login ");
-            //   deferred.reject("Something is wrong.");
-            // });
-          } else {
-            deferred.reject(authserverResult.userFriendlyErrors.join(" "));
-          }
-        },
-        function(reason) {
+              // .then(function(sessionInfo) {
+              //   // self.debug(sessionInfo);
+              //   result.user.roles = sessionInfo.roles;
+              //   deferred.resolve(result.user);
+              // }, function() {
+              //   self.debug("Failed to login ");
+              //   deferred.reject("Something is wrong.");
+              // });
+            } else {
+              deferred.reject(authserverResult.userFriendlyErrors.join(" "));
+            }
+          },
+          function(reason) {
+            reason.details = details;
+            self.debug(reason);
+            deferred.reject(reason);
+          }).fail(function(reason) {
           self.debug(reason);
           deferred.reject(reason);
-        }).fail(function(reason) {
-        self.debug(reason);
-        deferred.reject(reason);
+        });
       });
       return deferred.promise;
     }
   },
 
   logout: {
-    value: function() {
+    value: function(optionalUrl) {
       var deferred = Q.defer(),
-        baseUrl = this.url,
         self = this;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
+      if (!optionalUrl) {
+        optionalUrl = this.couchSessionUrl;
       }
 
       CORS.makeCORSRequest({
         type: "DELETE",
         dataType: "json",
-        url: baseUrl + "/_session"
+        url: optionalUrl
       }).then(function(result) {
-          if (result.ok) {
-            self.connectionInfo = null;
-            deferred.resolve(result);
-          } else {
-            deferred.reject(result);
-          }
-        },
-        function(reason) {
-          this.debug(reason);
-          deferred.reject(reason);
-
-        });
+        if (result.ok) {
+          self.connectionInfo = null;
+          deferred.resolve(result);
+        } else {
+          deferred.reject(result);
+        }
+      }, function(reason) {
+        reason = reason || {};
+        reason.status = reason.status || 400;
+        reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+        self.debug(reason);
+        deferred.reject(reason);
+      });
       return deferred.promise;
     }
   },
 
   register: {
-    value: function(registerDetails) {
+    value: function(details) {
       var deferred = Q.defer(),
-        self = this,
-        baseUrl = this.url,
-        authUrl = this.authUrl;
+        self = this;
 
-      if (!baseUrl) {
-        baseUrl = this.BASE_DB_URL;
-      }
+      Q.nextTick(function() {
 
-      if (!authUrl) {
-        authUrl = this.BASE_AUTH_URL;
-      }
+        if (!details && self.dbname && self.dbname.split("-").length === 2) {
+          details = {
+            username: self.dbname.split("-")[0],
+            password: "testtest",
+            confirmPassword: "testtest"
+          };
+        }
 
-      if (!registerDetails) {
-        registerDetails = {
-          username: this.dbname.split("-")[0],
-          password: "testtest"
-        };
-      }
+        if (!details) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
 
-      CORS.makeCORSRequest({
-        type: "POST",
-        dataType: "json",
-        url: authUrl + "/register",
-        data: registerDetails
-      }).then(function(result) {
-          if (result.user) {
-            CORS.makeCORSRequest({
-              type: "POST",
-              dataType: "json",
-              url: baseUrl + "/_session",
-              data: {
-                name: result.user.username,
-                password: registerDetails.password
-              }
-            }).then(function(session) {
-              self.debug(session);
-              deferred.resolve(result.user);
-            }, function() {
-              self.debug("Failed to login ");
-              deferred.reject();
+        details.authUrl = details.authUrl || self.authUrl;
+
+        if (!details.authUrl) {
+          details.authUrl = self.BASE_AUTH_URL;
+        }
+
+        if (!details.username) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a password."],
+            status: 412
+          });
+          return;
+        }
+
+        if (!details.confirmPassword) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please confirm your password."],
+            status: 412
+          });
+          return;
+        }
+
+        if (details.confirmPassword !== details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Passwords don't match, please double check your password."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        if (validateUsername.changes.length > 0) {
+          details.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        if (!details.corpusConnection) {
+          details.corpusConnection = CorpusConnection.defaultCouchConnection(details.authUrl);
+          delete details.corpusConnection.dbname;
+          delete details.corpusConnection.pouchname;
+          delete details.corpusConnection.title;
+          delete details.corpusConnection.titleAsUrl;
+          delete details.corpusConnection.corpusUrl;
+        }
+
+        if (self.application && self.application.brandLowerCase) {
+          details.appbrand = self.application.brandLowerCase;
+          details.appVersionWhenCreated = self.application.version;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: details.authUrl + "/register",
+          data: details
+        }).then(function(result) {
+          self.debug("registration results", result);
+
+          if (!result.user) {
+            deferred.reject({
+              error: result,
+              status: 500,
+              userFriendlyErrors: ["Unknown error. Please report this 2391."]
             });
-          } else {
-            deferred.reject();
+            return;
           }
-        },
-        function(reason) {
+
+          deferred.resolve(result.user);
+          //dont automatically login, let the client side decide what to do.
+          // self.login(details).then(function(result) {
+          // deferred.resolve(result);
+          // }, function(error) {
+          //   self.debug("Failed to login ");
+          //   deferred.reject(error);
+          // });
+        }, function(reason) {
+          reason = reason || {};
+          reason.details = details;
+          reason.status = reason.status || 400;
+          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
           self.debug(reason);
           deferred.reject(reason);
-        }).fail(function(reason) {
-        self.debug(reason);
-        deferred.reject(reason);
+        });
+
       });
       return deferred.promise;
+    }
+  },
+
+  addCorpusRoleToUser: {
+    value: function(role, userToAddToCorpus, successcallback, failcallback) {
+      this.debug("deprecated ", role, userToAddToCorpus, successcallback, failcallback);
+      // var self = this;
+      // $("#quick-authenticate-modal").modal("show");
+      // if (this.user.username === "lingllama") {
+      //   $("#quick-authenticate-password").val("phoneme");
+      // }
+      // window.hub.subscribe("quickAuthenticationClose", function() {
+
+      //   //prepare data and send it
+      //   var dataToPost = {};
+      //   var authUrl = "";
+      //   if (this.user !== undefined) {
+      //     //Send username to limit the requests so only valid users can get a user list
+      //     dataToPost.username = this.user.username;
+      //     dataToPost.password = $("#quick-authenticate-password").val();
+      //     dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
+      //     if (!dataToPost.couchConnection.path) {
+      //       dataToPost.couchConnection.path = "";
+      //       window.app.get("corpus").get("couchConnection").path = "";
+      //     }
+      //     dataToPost.roles = [role];
+      //     dataToPost.userToAddToRole = userToAddToCorpus.username;
+
+      //     authUrl = this.user.authUrl;
+      //   } else {
+      //     return;
+      //   }
+      //   CORS.makeCORSRequest({
+      //     type: "POST",
+      //     url: authUrl + "/addroletouser",
+      //     data: dataToPost,
+      //     success: function(serverResults) {
+      //       if (serverResults.userFriendlyErrors !== null) {
+      //         self.debug("User " + userToAddToCorpus.username + " not added to the corpus as " + role);
+      //         if (typeof failcallback === "function") {
+      //           failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+      //         }
+      //       } else if (serverResults.roleadded !== null) {
+      //         self.debug("User " + userToAddToCorpus.username + " added to the corpus as " + role);
+      //         if (typeof successcallback === "function") {
+      //           successcallback(userToAddToCorpus);
+      //         }
+      //       }
+      //     }, //end successful fetch
+      //     error: function(e) {
+      //       self.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
+
+      //       if (typeof failcallback === "function") {
+      //         failcallback("There was an error in contacting the authentication server to add " + userToAddToCorpus.username + " on your corpus team. Maybe you're offline?");
+      //       }
+      //     },
+      //     dataType: ""
+      //   });
+      //   //end send call
+
+      //   //Close the modal
+      //   $("#quick-authenticate-modal").modal("hide");
+      //   $("#quick-authenticate-password").val("");
+      //   window.hub.unsubscribe("quickAuthenticationClose", null, this);
+      // }, self);
     }
   }
 });

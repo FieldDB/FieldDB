@@ -114,11 +114,11 @@ define([
         } else if (serverResults.user != null) {
 
           this.staleAuthentication = false;
-
+          serverResults.user.corpora = serverResults.user.corpora || serverResults.user.corpuses;
           if (OPrime.isTouchDBApp()) {
             /* if on android, turn on replication. */
             var db = dataToPost.username + "-firstcorpus";
-            var dbServer = serverResults.user.corpuses[0].domain;
+            var dbServer = serverResults.user.corpora[0].domain;
             if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname) {
               db = serverResults.user.mostRecentIds.couchConnection.pouchname;
               dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
@@ -181,7 +181,7 @@ define([
         serverResults.user.publicSelf.authUrl = serverResults.user.authUrl;
         serverResults.user.publicSelf.id = serverResults.user._id; //this will end up as an attribute
         serverResults.user.publicSelf._id = serverResults.user._id; //this will end up as an attribute
-//        serverResults.user.publicSelf.pouchname = serverResults.user.corpuses[0].pouchname;
+//        serverResults.user.publicSelf.pouchname = serverResults.user.corpora[0].pouchname;
       }
 
 
@@ -199,8 +199,8 @@ define([
           window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
         }
         for(var x in serverResults.user.newCorpusConnections){
-          if(_.pluck(serverResults.user.corpuses,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
-            serverResults.user.corpuses.push(serverResults.user.newCorpusConnections[x]);
+          if(_.pluck(serverResults.user.corpora,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
+            serverResults.user.corpora.push(serverResults.user.newCorpusConnections[x]);
           }
         }
         delete serverResults.user.newCorpusConnections;

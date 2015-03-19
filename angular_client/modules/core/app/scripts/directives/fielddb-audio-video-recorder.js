@@ -46,8 +46,12 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           return;
         }
         $scope.datum.warn("Audio peripheralsCheck failed", e);
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("Rendering generated an erorr", e);
         }
       };
       var onAudioSuccess = function(s) {
@@ -58,8 +62,12 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           // dbname: $scope.parent.pouchname
         };
 
-        if (!$scope.$$phase) {
-          $scope.$digest(); //$digest or $apply
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("Rendering generated an erorr", e);
         }
       };
 

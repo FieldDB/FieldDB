@@ -123,6 +123,25 @@ var FieldDBObject = function FieldDBObject(json) {
   }
 
 };
+FieldDBObject.internalAttributesToNotJSONify = [
+  "temp",
+  "saving",
+  "fetching",
+  "loaded",
+  "loading",
+  "useIdNotUnderscore",
+  "decryptedMode",
+  "bugMessage",
+  "warnMessage",
+  "perObjectDebugMode",
+  "perObjectAlwaysConfirmOkay",
+  "application",
+  "contextualizer",
+  "perObjectDebugMode",
+  "perObjectAlwaysConfirmOkay",
+  "useIdNotUnderscore",
+  "parent"
+];
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -587,26 +606,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       url = this.url + url;
       var data = this.toJSON();
       CORS.makeCORSRequest({
-        type: this.id ? "PUT" : "POST",
-        dataType: "json",
-        url: url,
-        data: data
-      }).then(function(result) {
-          self.debug("saved ", result);
-          self.saving = false;
-          if (result.id) {
-            self.id = result.id;
-            self.rev = result.rev;
-            deferred.resolve(self);
-          } else {
-            deferred.reject(result);
-          }
-        },
-        function(reason) {
-          self.debug(reason);
-          self.saving = false;
-          deferred.reject(reason);
-        })
+          type: this.id ? "PUT" : "POST",
+          dataType: "json",
+          url: url,
+          data: data
+        }).then(function(result) {
+            self.debug("saved ", result);
+            self.saving = false;
+            if (result.id) {
+              self.id = result.id;
+              self.rev = result.rev;
+              deferred.resolve(self);
+            } else {
+              deferred.reject(result);
+            }
+          },
+          function(reason) {
+            self.debug(reason);
+            self.saving = false;
+            deferred.reject(reason);
+          })
         .catch(function(reason) {
           self.debug(reason);
           self.saving = false;
@@ -710,15 +729,33 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         aproperty,
         targetPropertyIsEmpty,
         overwrite,
-        localCallOnSelf;
+        localCallOnSelf,
+        propertyList = {},
+        json;
 
-      if (callOnSelf === "self") {
+      // this.debugMode = true;
+
+      if (arguments.length === 0) {
+        this.warn("Invalid call to merge, there was no object provided to merge");
+        return null;
+      }
+
+      if (!anotherObject && !optionalOverwriteOrAsk) {
+        anObject = this;
+        resultObject = anObject;
+        anotherObject = callOnSelf;
+      } else if (callOnSelf === "self") {
         this.debug("Merging properties into myself. ");
         anObject = this;
-      } else {
+        resultObject = anObject;
+      } else if (callOnSelf && anotherObject) {
         anObject = callOnSelf;
+        resultObject = this;
+      } else {
+        this.warn("Invalid call to merge, invalid arguments were provided to merge", arguments);
+        return null;
       }
-      resultObject = this;
+
       if (!optionalOverwriteOrAsk) {
         optionalOverwriteOrAsk = "";
       }
@@ -739,6 +776,19 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
+      for (aproperty in anObject) {
+        if (anObject.hasOwnProperty(aproperty)) {
+          propertyList[aproperty] = true;
+        }
+      }
+
+      for (aproperty in anotherObject) {
+        if (anotherObject.hasOwnProperty(aproperty)) {
+          propertyList[aproperty] = true;
+        }
+      }
+      this.debug(" Merging properties: ", propertyList);
+
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
         self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
           .then(function() {
@@ -756,105 +806,154 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           });
       };
 
-      for (aproperty in anotherObject) {
-        if (!anotherObject.hasOwnProperty(aproperty) || typeof anObject[aproperty] === "function" || aproperty === "dateCreated") {
-          this.debug("  merge: ignoring " + aproperty);
+      for (aproperty in propertyList) {
+
+        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || aproperty === "dateCreated" || aproperty === "_fieldDBtype" || FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) > -1) {
+          this.debug("  Ignoring ---" + aproperty + "----");
+          continue;
+        }
+        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+
+        // if the result is missing the property, clone it from anObject or anotherObject
+        if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
+          if (anObject[aproperty] !== undefined && anObject[aproperty] !== null) {
+            if (typeof anObject[aproperty] !== "string" && typeof anObject[aproperty].constructor === "function") {
+              json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
+              resultObject[aproperty] = new anObject[aproperty].constructor(json);
+              this.debug(" " + aproperty + " resultObject will have anObject's Cloned contents because it was empty");
+            } else {
+              resultObject[aproperty] = anObject[aproperty];
+              this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
+            }
+          } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
+            if (typeof anotherObject[aproperty] !== "string" && typeof anotherObject[aproperty].constructor === "function") {
+              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
+              resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
+              this.debug(" " + aproperty + " resultObject will have anotherObject's Cloned contents because it was empty");
+            } else {
+              resultObject[aproperty] = anotherObject[aproperty];
+              this.debug(" " + aproperty + " resultObject will have anotherObject's contents because it was empty");
+            }
+          }
+          // dont continue, instead let the iffs run
+        }
+        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+
+        /* jshint eqeqeq:false */
+        if (anObject[aproperty] == anotherObject[aproperty]) {
+          this.debug(aproperty + " were equal or had no conflict.");
+          if (resultObject[aproperty] != anObject[aproperty]) {
+            resultObject[aproperty] = anObject[aproperty];
+          }
           continue;
         }
 
-        if (anotherObject[aproperty] === undefined) {
-          // no op, the new one isn't set
-          this.debug(aproperty + " was missing in new object");
+        // Don't bother with equivalentcy, we will merge the internal elements recursively if they are not equivalent so this doesn't save time.
+        // if (anObject[aproperty] && typeof anObject[aproperty].equals === "function" && anObject[aproperty].equals(anotherObject[aproperty])) {
+        //   this.debug(aproperty + " were equivalent or had no conflict.");
+        //   if (!anObject[aproperty].equals(resultObject[aproperty])) {
+        //     resultObject[aproperty] = anObject[aproperty];
+        //   }
+        //   continue;
+        // }
+
+        if ((anotherObject[aproperty] === undefined || anotherObject[aproperty] === null) && resultObject[aproperty] != anObject[aproperty]) {
+          this.debug(aproperty + " was missing in new object, using the original");
           resultObject[aproperty] = anObject[aproperty];
-        } else if (anObject[aproperty] === anotherObject[aproperty]) {
-          // no op, they are equal enough
-          this.debug(aproperty + " were equal.");
-          resultObject[aproperty] = anObject[aproperty];
-        } else if (!anObject[aproperty] || anObject[aproperty] === [] || anObject[aproperty].length === 0 || anObject[aproperty] === {}) {
+          continue;
+        }
+
+        if (anotherObject[aproperty] && (anObject[aproperty] === undefined || anObject[aproperty] === null || anObject[aproperty] === [] || anObject[aproperty].length === 0 || anObject[aproperty] === {})) {
           targetPropertyIsEmpty = true;
           this.debug(aproperty + " was previously empty, taking the new value");
           resultObject[aproperty] = anotherObject[aproperty];
-        } else {
-          //  if two arrays: concat
-          if (Object.prototype.toString.call(anObject[aproperty]) === "[object Array]" && Object.prototype.toString.call(anotherObject[aproperty]) === "[object Array]") {
-            this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
-            resultObject[aproperty] = anObject[aproperty].concat(anotherObject[aproperty]);
+          continue;
+        }
 
-            //TODO unique it?
-            this.debug("  ", resultObject[aproperty]);
+        if (anObject[aproperty] && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
+          targetPropertyIsEmpty = true;
+          this.debug(aproperty + " target is empty, taking the old value");
+          resultObject[aproperty] = anObject[aproperty];
+          continue;
+        }
+
+        //  if two arrays: concat
+        if (Object.prototype.toString.call(anObject[aproperty]) === "[object Array]" && Object.prototype.toString.call(anotherObject[aproperty]) === "[object Array]") {
+          this.debug(aproperty + " was an array, concatinating with the new value", anObject[aproperty], " ->", anotherObject[aproperty]);
+          resultObject[aproperty] = anObject[aproperty].concat([]);
+
+          // only add the ones that were missing (dont remove any. merge wont remove stuff, only add.)
+          /* jshint loopfunc:true */
+          anotherObject[aproperty].map(function(item) {
+            if (resultObject[aproperty].indexOf(item) === -1) {
+              resultObject[aproperty].push(item);
+            }
+          });
+          this.debug("  added members of anotherObject " + aproperty + " to anObject ", resultObject[aproperty]);
+          continue;
+        }
+
+        // if two objects with merge function: recursively merge
+        if (resultObject[aproperty] && typeof resultObject[aproperty].merge === "function") {
+          if (callOnSelf === "self") {
+            localCallOnSelf = callOnSelf;
           } else {
-            // if the result is missing the property, clone it from anObject
-            if (!resultObject[aproperty] && typeof anObject[aproperty].constructor === "function") {
-              var json = anObject[aproperty].toJSON ? anObject[aproperty].toJSON() : anObject[aproperty];
-              resultObject[aproperty] = new anObject[aproperty].constructor(json);
-            }
-            // if two objects: recursively merge
-            if (resultObject[aproperty] && typeof resultObject[aproperty].merge === "function") {
-              if (callOnSelf === "self") {
-                localCallOnSelf = callOnSelf;
-              } else {
-                localCallOnSelf = anObject[aproperty];
-              }
-              this.debug("Requesting merge of internal property " + aproperty + " using method: " + localCallOnSelf);
-              var result = resultObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
-              this.debug("after internal merge ", result);
-              this.debug("after internal merge ", resultObject[aproperty]);
-            } else {
-              overwrite = optionalOverwriteOrAsk;
-              this.debug("Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
-              if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
-                handleAsyncConfirmMerge(this, aproperty);
-              }
-              if (overwrite) {
-                if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
-                  // resultObject._dbname = this.dbname;
-                  this.warn(" Keeping _dbname of " + resultObject.dbname);
-                } else {
-                  this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
-                  this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
-
-                  resultObject[aproperty] = anotherObject[aproperty];
-                }
-              } else {
-                resultObject[aproperty] = anObject[aproperty];
-              }
-            }
+            localCallOnSelf = anObject[aproperty];
           }
+          this.debug("Requesting recursive merge of internal property " + aproperty + " using method: " + localCallOnSelf);
+          var result = resultObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
+          this.debug("after internal merge ", result);
+          this.debug("after internal merge ", resultObject[aproperty]);
+          continue;
+        }
+
+        overwrite = optionalOverwriteOrAsk;
+        this.debug("Found conflict for " + aproperty + " Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
+        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+          handleAsyncConfirmMerge(this, aproperty);
+        }
+        if (overwrite) {
+          if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
+            // resultObject._dbname = this.dbname;
+            this.warn(" Keeping _dbname of " + resultObject.dbname);
+          } else {
+            this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+            this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
+
+            resultObject[aproperty] = anotherObject[aproperty];
+          }
+        } else {
+          resultObject[aproperty] = anObject[aproperty];
         }
       }
-
-      // for (aproperty in anObject) {
-      //   if (!anObject.hasOwnProperty(aproperty)) {
-      //     continue;
-      //   }
-      //   this.debug("todo merge this property " + aproperty + " backwards too");
-      // }
 
       return resultObject;
     }
   },
 
   fetch: {
-    value: function(optionalBaseUrl) {
+    value: function(optionalUrl) {
       var deferred = Q.defer(),
-        id,
         self = this;
 
-      id = this.id;
-      if (!id) {
+      if (!this.id) {
         Q.nextTick(function() {
+          self.fetching = false;
           deferred.reject({
             error: "Cannot fetch if there is no id"
           });
         });
         return deferred.promise;
       }
+      if (!optionalUrl) {
+        optionalUrl = this.url + "/" + this.id;
+      }
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         dataType: "json",
-        url: optionalBaseUrl + "/" + self.dbname + "/" + id
+        url: optionalUrl
       }).then(function(result) {
           self.fetching = false;
           self.loaded = true;
@@ -941,8 +1040,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
-      if (this._dbname) {
-        throw "This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.";
+      if (this._dbname && this._dbname !== "default") {
+        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.");
       }
       if (!value) {
         delete this._dbname;
@@ -1073,7 +1172,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         underscorelessProperty;
 
       if (this.fetching) {
-        throw "Cannot get json while object is fetching itself";
+        this.warn("Cannot get json while object is fetching itself", this);
+        // return;
+        // throw "Cannot get json while object is fetching itself";
       }
       /* this object has been updated to this version */
       this.version = this.version;
@@ -1085,7 +1186,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function") {
+        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
           underscorelessProperty = aproperty.replace(/^_/, "");
           if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
             underscorelessProperty = "_" + underscorelessProperty;
@@ -1128,18 +1229,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
       }
 
-      delete json.saving;
-      delete json.fetching;
-      delete json.loaded;
-      delete json.useIdNotUnderscore;
-      delete json.decryptedMode;
-      delete json.bugMessage;
-      delete json.warnMessage;
-      delete json.perObjectDebugMode;
-      delete json.perObjectAlwaysConfirmOkay;
-      delete json.application;
-      delete json.contextualizer;
-      if (this.collection !== "private_corpuses") {
+      for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
+        if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
+          delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+        }
+      }
+
+      if (this.collection !== "private_corpora") {
         delete json.confidential;
         delete json.confidentialEncrypter;
       } else {

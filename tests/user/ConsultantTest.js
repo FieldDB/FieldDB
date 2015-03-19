@@ -47,6 +47,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
 
   it("should set consultant's date of birth", function() {
     var consultant = new Consultant({
+      // debugMode: true,
       confidential: mockcorpus.confidential
     });
     expect(consultant.fields).toBeDefined();
@@ -214,7 +215,7 @@ describe("as an Consultant, I want my privacy to be prtotected", function() {
     } else {
       expect(consultant.confidential.secretkey).toEqual("TH");
     }
-    expect(consultant.username).toEqual(undefined);
+    expect(consultant.username).toEqual("TH");
 
     consultant.username = "tilohash";
     expect(consultant.username).toEqual("TH");

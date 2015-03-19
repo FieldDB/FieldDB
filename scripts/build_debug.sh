@@ -12,7 +12,7 @@
 # We will debug on a local couchdb
 bash scripts/switch_to_develop_locally_offline.sh
 
-# Optionally, if you have made changes to the html (handlebars templates) 
+# Optionally, if you have made changes to the html (handlebars templates)
 bash scripts/build_templates.sh
 
 # Optionally, if you have made changes to the activity feed widgets
@@ -30,7 +30,7 @@ couchapp push . https://admin:none@localhost:6984/public-firstcorpus
 # Deploy app to the template corpus
 couchapp push . https://admin:none@localhost:6984/new_corpus
 
-# Deploy app to the testing corpuses
+# Deploy app to the testing corpora
 couchapp push . https://admin:none@localhost:6984/testuser-firstcorpus
 
 # deploy activity feeds too

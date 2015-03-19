@@ -1,4 +1,5 @@
 define([
+    "underscore",
     "backbone",
     "jquerycouch",
     "libs/backbone_couchdb/backbone-couchdb",
@@ -21,6 +22,7 @@ define([
     "text!locales/en/messages.json",
     "OPrime"
 ], function(
+    _,
     Backbone,
     jquerycouch,
     backbonecouch,
@@ -117,8 +119,8 @@ define([
       if(!this.get("loadTheAppForTheFirstTime")){
         window.app = this;
         var appself = this;
-        if (OPrime.debugMode) OPrime.debug("Loading encrypted user");
-        $(".spinner-status").html("Loading encrypted user...");
+        if (OPrime.debugMode) OPrime.debug("Loading user");
+        $(".spinner-status").html("Loading user...");
         var u = localStorage.getItem("encryptedUser");
         appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
 
@@ -381,7 +383,7 @@ define([
             OPrime.bug("There was a problem logging you into your backup database, please report this.");
           }
           appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
-          // var corpuses =  window.app.get("corpusesUserHasAccessTo")  || new Corpuses();
+          // var corpora =  window.app.get("corporaUserHasAccessTo")  || new Corpuses();
           // var roles = serverResults.roles;
           // for (var role in roles) {
           //   var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
@@ -396,17 +398,17 @@ define([
           //   }
           //   thisCouchConnection.id = thisCouchConnection.pouchname;
           //   if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
-          //     if (corpuses.where({
+          //     if (corpora.where({
           //       "pouchname": thisCouchConnection.pouchname
           //     }).length === 0) {
-          //       corpuses.push(new CorpusMask(thisCouchConnection));
+          //       corpora.push(new CorpusMask(thisCouchConnection));
           //     } else {
           //       console.log(thisCouchConnection.pouchname + " Already known");
           //     }
           //   }
           // }
-          // window.app.set("corpusesUserHasAccessTo", corpuses);
-          // localStorage.setItem(username + "corpusesUserHasAccessTo", JSON.stringify(corpuses.toJSON()));
+          // window.app.set("corporaUserHasAccessTo", corpora);
+          // localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora.toJSON()));
 
           if (window.appView) {
             window.appView
@@ -755,8 +757,8 @@ define([
                                 window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
                               }
                               try {
-                                window.app.set("corpusesUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
-                                  window.app.get("authentication").get("userPrivate").get("username") + "corpusesUserHasAccessTo"))));
+                                window.app.set("corporaUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
+                                  window.app.get("authentication").get("userPrivate").get("username") + "corporaUserHasAccessTo"))));
                               } catch (e) {
                                 console.log("Couldn't load the list of corpora which the user has access to.");
                               }

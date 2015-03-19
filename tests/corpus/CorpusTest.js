@@ -393,6 +393,28 @@ describe("Build fields using fields in the corpus", function() {
     expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
   });
 
+  it("should ignore empty fields", function() {
+    var corpus = new Corpus();
+    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("");
+    expect(normalizedField).toBeUndefined();
+
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields(" ");
+    expect(normalizedField).toBeUndefined();
+
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({});
+    expect(normalizedField).toBeUndefined();
+
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
+      id: ""
+    });
+    expect(normalizedField).toBeUndefined();
+
+    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
+      label: ""
+    });
+    expect(normalizedField).toBeUndefined();
+  });
+
   it("should create new fields", function() {
     var corpus = new Corpus();
     var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Seat number");

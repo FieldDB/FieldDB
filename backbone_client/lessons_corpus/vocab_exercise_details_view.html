@@ -6,96 +6,96 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- Stylesheets -->
 <link rel="stylesheet" type="text/css"
-	href="./../bootstrap/css/bootstrap.css">
+    href="./../bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css"
-	href="./../bootstrap/css/bootstrap-responsive.css">
+    href="./../bootstrap/css/bootstrap-responsive.css">
 <link rel="stylesheet" type="text/css" href="./../app/app.css">
 <link rel="stylesheet" type="text/css"
-	href="lessons_prototype_style.css">
+    href="lessons_prototype_style.css">
 <link rel="stylesheet" type="text/css"
-	href="./../font_awesome/css/font-awesome.css">
+    href="./../font_awesome/css/font-awesome.css">
 
 
 <!-- END Stylesheets -->
 
 </head>
 <body class="body_background centered_page">
-	<div class="well">
-		<div class="btn-group">
-			<div class="btn-group pull-right">
-				<a href="vocab_exercise_details_view.html" rel="tooltip"
-					title="Previous vocab item"> <i class="icons icon-arrow-left"></i></a>
-				<a href="vocab_exercise_details_view.html" rel="tooltip"
-					title="Next vocab item"> <i class="icons icon-arrow-right"></i></a>
-			</div>
-			<div class="btn-group pull-left">
-				<a href="vocab_datalist_thumbnail_view.html"
-					class="btn btn-mini btn-primary pull-left ">Go to Vocab List</a>
-			</div>
-		</div>
+    <div class="well">
+        <div class="btn-group">
+            <div class="btn-group pull-right">
+                <a href="vocab_exercise_details_view.html" rel="tooltip"
+                    title="Previous vocab item"> <i class="icons icon-arrow-left"></i></a>
+                <a href="vocab_exercise_details_view.html" rel="tooltip"
+                    title="Next vocab item"> <i class="icons icon-arrow-right"></i></a>
+            </div>
+            <div class="btn-group pull-left">
+                <a href="vocab_datalist_thumbnail_view.html"
+                    class="btn btn-mini btn-primary pull-left ">Go to Vocab List</a>
+            </div>
+        </div>
 
-		<h1>Vocab Exercise</h1>
-	</div>
+        <h1>Vocab Exercise</h1>
+    </div>
 
-	<div class="well">
-		<img  src="sample_clam_sp.png" />
+    <div class="well">
+        <img  src="sample_clam_sp.png" />
 
-		<h3>Play Audio:</h3>
+        <h3>Play Audio:</h3>
 
-		<div class="android_audio_controls ">
-			<button id="play_stimulus_button"
-				class="btn btn-inverse icon-play"></button>
-			<button id="stop_stimulus_button"
-				class="btn btn-inverse icon-stop"></button>
-		</div>
-		<audio id="audio_stimuli_file"
-			src="/lessons_corpus/sample_vocab_clam.mp3" class="datum-audio-player">
-		</audio>
+        <div class="android_audio_controls ">
+            <button id="play_stimulus_button"
+                class="btn btn-inverse icon-play"></button>
+            <button id="stop_stimulus_button"
+                class="btn btn-inverse icon-stop"></button>
+        </div>
+        <audio id="audio_stimuli_file"
+            src="/lessons_corpus/sample_vocab_clam.mp3" class="datum-audio-player">
+        </audio>
 
-		<h3>Record and Repeat:</h3>
+        <h3>Record and Repeat:</h3>
 
-		<div class="android_audio_controls ">
-			<button id="record_vocab_response_button"
-				class="btn btn-inverse icon-record">
-				<img src="mic_white.png" />
-			</button>
-			<button id="play_response_button"
-				class="btn btn-inverse icon-play"></button>
-		</div>
-		<audio id="audio_response_file" src="" class="datum-audio-player">
-		</audio>
+        <div class="android_audio_controls ">
+            <button id="record_vocab_response_button"
+                class="btn btn-inverse icon-record">
+                <img src="mic_white.png" />
+            </button>
+            <button id="play_response_button"
+                class="btn btn-inverse icon-play"></button>
+        </div>
+        <audio id="audio_response_file" src="" class="datum-audio-player">
+        </audio>
 
-		<div class="accordion" id="accordion2">
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					<a class="accordion-toggle" data-toggle="collapse"
-						data-parent="#accordion2" href="#collapseOne"> Transcription </a>
-				</div>
-				<div id="collapseOne" class="accordion-body collapse ">
-					<div class="accordion-inner">e's, e'sig</div>
-				<span class="text_grid">
-					<input class="playable_syllable" min=0 max=0.9683475900602607 value="e's"></input>
-					<input class="playable_syllable" min=2.1172369020339983 max=3.8229791666666665 value="e'sig"></input>
-				</span>
-				</div>
-			</div>
-			<div class="accordion-group">
-				<div class="accordion-heading">
-					<a class="accordion-toggle" data-toggle="collapse"
-						data-parent="#accordion2" href="#collapseTwo">Translation </a>
-				</div>
-				<div id="collapseTwo" class="accordion-body collapse">
-					<div class="accordion-inner">clam, clams</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse"
+                        data-parent="#accordion2" href="#collapseOne"> Transcription </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse ">
+                    <div class="accordion-inner">e's, e'sig</div>
+                <span class="text_grid">
+                    <input class="playable_syllable" min=0 max=0.9683475900602607 value="e's"></input>
+                    <input class="playable_syllable" min=2.1172369020339983 max=3.8229791666666665 value="e'sig"></input>
+                </span>
+                </div>
+            </div>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse"
+                        data-parent="#accordion2" href="#collapseTwo">Translation </a>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse">
+                    <div class="accordion-inner">clam, clams</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<script src="./../libs/jquery.js"></script>
-	<script src="./../bootstrap/js/bootstrap.min.js"></script>
-	<script src="./../bootstrap/js/bootstrap-collapse.js"></script>
-	<script src="OPrime.js"></script>
-	<script src="vocab_exercise_details_view.js"></script>
+    <script src="./../bower_components/jquery/jquery.js"></script>
+    <script src="./../bootstrap/js/bootstrap.min.js"></script>
+    <script src="./../bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="OPrime.js"></script>
+    <script src="vocab_exercise_details_view.js"></script>
   <script>
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -105,22 +105,22 @@
      ga('create','UA-35422317-1','auto');
      ga('send', 'pageview');
   </script>
-	<!-- Needs...
+    <!-- Needs...
 
   video (or static image)
 
   audio player: number of listens of whole recording, date of last listen, who listened
-  	visualization (waveform)
-  	play/pause button ("play" can function as "repeat")
-  	slow button
+    visualization (waveform)
+    play/pause button ("play" can function as "repeat")
+    slow button
 
   audio recorder: number of pieces recorded, accuracy of each recording, recordings themselves,
   date of recordings, who recorded, privacy on recordings
-  	visualization (waveform)
-  	record button (records and stops recording, resumes)
-  	play/pause button ("play" can function as "repeat")
-  	redo button
-  		(built into "next", "back", "redo", "menu" buttons?) sends it to the array
+    visualization (waveform)
+    record button (records and stops recording, resumes)
+    play/pause button ("play" can function as "repeat")
+    redo button
+        (built into "next", "back", "redo", "menu" buttons?) sends it to the array
 
   optional transcription text
     button to show it or hide it
@@ -128,17 +128,17 @@
 
   optional translation text
 
-  	button to show it or hide it
-  		SHOW:
-  		<div class="pull-right">
-			<a href="#" class="locale_Show_Translation" rel="tooltip" title="Show Translation">
-   		    <i class="icons icon-plus-sign"></i></a>
-		</div>
-		HIDE:
-		<div class="pull-right">
-			<a href="#" class="locale_Hide_Translation" rel="tooltip" title="Hide Translation">
-	   		<i class="icons icon-minus-sign"></i></a>
-	   	</div>
+    button to show it or hide it
+        SHOW:
+        <div class="pull-right">
+            <a href="#" class="locale_Show_Translation" rel="tooltip" title="Show Translation">
+            <i class="icons icon-plus-sign"></i></a>
+        </div>
+        HIDE:
+        <div class="pull-right">
+            <a href="#" class="locale_Hide_Translation" rel="tooltip" title="Hide Translation">
+            <i class="icons icon-minus-sign"></i></a>
+        </div>
 
   "next" button
   "back" button

@@ -3,7 +3,7 @@ var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../datum/Datum").Datum;
 var DatumField = require("./../datum/DatumField").DatumField;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
-var Session = require("./../FieldDBObject").FieldDBObject;
+var Session = require("./../datum/Session").Session;
 var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Permissions = require("./../Collection").Collection;
@@ -87,17 +87,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         value = value.trim();
       }
       this._id = value;
-    }
-  },
-
-  couchConnection: {
-    get: function() {
-      this.debug("couchConnection is deprecated");
-      return this._couchConnection;
-    },
-    set: function(value) {
-      this.debug("couchConnection is deprecated");
-      this._couchConnection = value;
     }
   },
 
@@ -424,53 +413,79 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   loadOrCreateCorpusByPouchName: {
     value: function(dbname) {
       if (!dbname) {
-        throw "Cannot load corpus, its dbname was undefined";
+        throw new Error("Cannot load corpus, its dbname was undefined");
       }
       var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
-        self = this,
-        baseUrl = this.url;
+        self = this;
 
       dbname = dbname.trim();
-      this.dbname = dbname;
 
+      this.dbname = dbname;
+      this.loading = true;
+
+      // this.debugMode = true;
       Q.nextTick(function() {
 
-        if (!baseUrl) {
-          baseUrl = self.BASE_DB_URL;
-        }
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
+            self.warn("Error finding a corpus in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org ");
+            self.bug("Error finding corpus details in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org  ");
             deferred.reject(reason);
             return;
           }
           self.runningloadOrCreateCorpusByPouchName = true;
           self.loadOrCreateCorpusByPouchNameDeferred = deferred;
-          window.setTimeout(function() {
+          self.debug("Wating 1000ms to try to load again.");
+          setTimeout(function() {
             self.loadOrCreateCorpusByPouchName(dbname);
           }, 1000);
         };
 
         self.fetchCollection(self.api).then(function(corpora) {
           self.debug(corpora);
-          if (corpora.length === 1) {
+
+          var corpusAsSelf = function(corpusid) {
             self.runningloadOrCreateCorpusByPouchName = false;
             delete self.loadOrCreateCorpusByPouchNameDeferred;
-            self.id = corpora[0]._id;
-            self.fetch(baseUrl).then(function(result) {
+            self.id = corpusid;
+            self.fetch().then(function(result) {
               self.debug("Finished fetch of corpus ", result);
+              self.loading = false;
               deferred.resolve(result);
             }, function(reason) {
+              self.loading = false;
               deferred.reject(reason);
             });
-          } else if (corpora.length > 0) {
-            console.warn("Impossibel to have more than one corpus for this dbname");
+          };
+
+          if (corpora.length === 1) {
+            corpusAsSelf(corpora[0]._id);
+          } else if (corpora.length > 1) {
+            self.warn("Impossible to have more than one corpus for this dbname, marking irrelevant corpora as trashed");
+            corpora.map(function(row) {
+              if (row.value.pouchname === self.dbname) {
+                corpusAsSelf(row.value._id);
+              } else {
+                self.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);
+                row.value.trashed = "deleted";
+                self.set(row.value).then(function(result) {
+                  self.debug("flag as deleted succedded", result);
+                }, function(reason) {
+                  self.warn("flag as deleted failed", reason, row.value);
+                });
+              }
+            });
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
         }, function(reason) {
-          tryAgainInCaseThereWasALag(reason);
-          // deferred.reject(reason);
+          self.debug(JSON.stringify(reason));
+          if (reason && reason.userFriendlyErrors && reason.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
+            deferred.reject(reason);
+          } else {
+            tryAgainInCaseThereWasALag(reason);
+          }
 
         });
 
@@ -484,7 +499,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: function() {
       this.todo("test fetchPublicSelf");
       if (!this.dbname) {
-        throw "Cannot load corpus's public self, its dbname was undefined";
+        throw new Error("Cannot load corpus's public self, its dbname was undefined");
       }
       var deferred = Q.defer(),
         self = this;
@@ -516,7 +531,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   // proposed by the authors of Backbone to documents in your database,
   // so that you don't have to change existing apps when you switch the sync-strategy
   api: {
-    value: "private_corpuses"
+    value: "private_corpora"
   },
 
   loadPermissions: {
@@ -651,7 +666,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
         self.debug("Creating a datum for this corpus");
         if (!self.datumFields || !self.datumFields.clone) {
-          throw "This corpus has no default datum fields... It is unable to create a datum.";
+          throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
         }
         var datum = new Datum({
           datumFields: new DatumFields(self.datumFields.clone()),
@@ -694,7 +709,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
         self.debug("Creating a datum for this corpus");
         if (!self.speakerFields || !self.speakerFields.clone) {
-          throw "This corpus has no default datum fields... It is unable to create a datum.";
+          throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
         }
         var datum = new Speaker({
           speakerFields: new DatumFields(self.speakerFields.clone()),
@@ -842,7 +857,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var deferred = Q.defer();
 
       if (!uri) {
-        throw "Uri must be specified ";
+        throw new Error("Uri must be specified ");
       }
 
       Q.nextTick(function() {
@@ -861,82 +876,93 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * @return {DatumField}       A datum field with details filled in from the corresponding field in the corpus, or from a template.
    */
   normalizeFieldWithExistingCorpusFields: {
-    value: function(field) {
+    value: function(field, optionalAllFields) {
       if (field && typeof field.trim === "function") {
         field = field.trim();
       }
       if (field === undefined || field === null || field === "") {
         return;
       }
-      var incomingLabel = field.id || field.label || field;
-      var fuzzyLabel = incomingLabel.toLowerCase().replace(/[^a-z]/g, "");
-      var allFields = new DatumFields();
-      if (this.datumFields && this.datumFields.length > 0) {
-        allFields.add(this.datumFields.toJSON());
-      } else {
-        allFields.add(DEFAULT_CORPUS_MODEL.datumFields);
+      if (typeof field !== "object") {
+        field = {
+          id: field
+        };
       }
-      if (this.participantFields && this.participantFields.length > 0) {
-        allFields.add(this.participantFields.toJSON());
-      } else {
-        allFields.add(DEFAULT_CORPUS_MODEL.participantFields);
+      var incomingFieldIdOrLabel = field.id || field.label;
+      // incomingFieldIdOrLabel = incomingFieldIdOrLabel + "";
+      if (incomingFieldIdOrLabel === undefined || incomingFieldIdOrLabel === null || incomingFieldIdOrLabel === "") {
+        return;
       }
-      var correspondingDatumField = allFields.find(field, null, true);
-      /* if there is no corresponding field yet in the allFields, then maybe there is a field which is normalized to this label */
+      var fuzzyLabel = incomingFieldIdOrLabel.toLowerCase().replace(/[^a-z]/g, "");
+      if (!optionalAllFields) {
+        console.log("Using a clone of the corpus fields. ");
+        optionalAllFields = new DatumFields();
+        if (this.datumFields && this.datumFields.length > 0) {
+          optionalAllFields.add(this.datumFields.toJSON());
+        } else {
+          optionalAllFields.add(DEFAULT_CORPUS_MODEL.datumFields);
+        }
+        if (this.participantFields && this.participantFields.length > 0) {
+          optionalAllFields.add(this.participantFields.toJSON());
+        } else {
+          optionalAllFields.add(DEFAULT_CORPUS_MODEL.participantFields);
+        }
+      }
+      var correspondingDatumField = optionalAllFields.find(field, null, true);
+      /* if there is no corresponding field yet in the optionalAllFields, then maybe there is a field which is normalized to this label */
       if (!correspondingDatumField || correspondingDatumField.length === 0) {
         if (fuzzyLabel.indexOf("checkedwith") > -1 || fuzzyLabel.indexOf("checkedby") > -1 || fuzzyLabel.indexOf("publishedin") > -1) {
-          correspondingDatumField = allFields.find("validationStatus");
+          correspondingDatumField = optionalAllFields.find("validationStatus");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         } else if (fuzzyLabel.indexOf("codepermanent") > -1) {
-          correspondingDatumField = allFields.find("anonymouscode");
+          correspondingDatumField = optionalAllFields.find("anonymouscode");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         } else if (fuzzyLabel.indexOf("nsection") > -1) {
-          correspondingDatumField = allFields.find("courseNumber");
+          correspondingDatumField = optionalAllFields.find("courseNumber");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         } else if (fuzzyLabel.indexOf("prenom") > -1 || fuzzyLabel.indexOf("prnom") > -1) {
-          correspondingDatumField = allFields.find("firstname");
+          correspondingDatumField = optionalAllFields.find("firstname");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         } else if (fuzzyLabel.indexOf("nomdefamille") > -1) {
-          correspondingDatumField = allFields.find("lastname");
+          correspondingDatumField = optionalAllFields.find("lastname");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         } else if (fuzzyLabel.indexOf("datedenaissance") > -1) {
-          correspondingDatumField = allFields.find("dateofbirth");
+          correspondingDatumField = optionalAllFields.find("dateofbirth");
           if (correspondingDatumField.length > 0) {
             this.debug("This header matches an existing corpus field. ", correspondingDatumField);
-            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingLabel;
-            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingLabel;
+            correspondingDatumField[0].labelFieldLinguists = field.labelFieldLinguists || incomingFieldIdOrLabel;
+            correspondingDatumField[0].labelExperimenters = field.labelExperimenters || incomingFieldIdOrLabel;
           }
         }
-
       }
 
       /* if the field is still not defined inthe corpus, construct a blank field with this label */
       if (!correspondingDatumField || correspondingDatumField.length === 0) {
         correspondingDatumField = [new DatumField(DatumField.prototype.defaults)];
-        correspondingDatumField[0].id = incomingLabel;
-        correspondingDatumField[0].labelExperimenters = incomingLabel;
-        correspondingDatumField[0].labelFieldLinguists = incomingLabel;
-        allFields.add(correspondingDatumField[0]);
+        correspondingDatumField[0].id = incomingFieldIdOrLabel;
+        correspondingDatumField[0].labelFieldLinguists = incomingFieldIdOrLabel;
+        // correspondingDatumField[0].notInCorpus = true;
+        optionalAllFields.add(correspondingDatumField[0]);
       }
       if (correspondingDatumField && correspondingDatumField[0]) {
         correspondingDatumField = correspondingDatumField[0];
@@ -944,13 +970,17 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       this.debug("correspondingDatumField ", correspondingDatumField);
 
-      return new DatumField(correspondingDatumField);
+      if (correspondingDatumField instanceof DatumField) {
+        return correspondingDatumField;
+      } else {
+        return new DatumField(correspondingDatumField);
+      }
     }
   },
 
   prepareANewOfflinePouch: {
     value: function() {
-      throw "I dont know how to prepareANewOfflinePouch";
+      throw new Error("I dont know how to prepareANewOfflinePouch");
     }
   },
 
@@ -1059,9 +1089,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         //   url: "/_design/pages/_view/cleaning_example",
         //   map: requireoff("./../../couchapp_dev/views/cleaning_example/map")
         // },
-        // corpuses: {
-        //   url: "/_design/pages/_view/corpuses",
-        //   map: requireoff("./../../couchapp_dev/views/corpuses/map")
+        // corpora: {
+        //   url: "/_design/pages/_view/corpora",
+        //   map: requireoff("./../../couchapp_dev/views/corpora/map")
         // },
         // datalists: {
         //   url: "/_design/pages/_view/datalists",
@@ -1338,7 +1368,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   changeCorpusPublicPrivate: {
     value: function() {
       //      alert("TODO contact server to change the public private of the corpus");
-      throw " I dont know how change this corpus' public/private setting ";
+      throw new Error(" I dont know how change this corpus' public/private setting ");
     }
   }
 });

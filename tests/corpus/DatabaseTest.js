@@ -25,7 +25,7 @@ describe("Database", function() {
       db.get("D093j2ae-akmoi3m-2a3wkjen").then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -39,7 +39,7 @@ describe("Database", function() {
         expect(false).toBeTruthy();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -69,7 +69,7 @@ describe("Database", function() {
       db.resumeAuthenticationSession().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -106,6 +106,77 @@ describe("Database", function() {
       }
       expect(db.connectionInfo.userCtx.name).toEqual("lingllama");
     });
+
+    it("should be able to get a default connection", function() {
+      var connection = Database.defaultCouchConnection();
+      expect(connection).toEqual({
+        fieldDBtype: "CorpusConnection",
+        protocol: "https://",
+        domain: "localhost",
+        port: "6984",
+        dbname: "",
+        path: "",
+        serverLabel: "localhost",
+        authUrls: ["https://localhost:3183"],
+        userFriendlyServerName: "Localhost",
+        version: connection.version,
+        pouchname: "",
+        title: "",
+        titleAsUrl: "",
+      });
+    });
+
+
+    it("should be able to get a extrapolate  a connection", function() {
+      var db = new Database();
+      db.url = "https://corpus.lingsync.org";
+      expect(db.toJSON()).toEqual({
+        fieldDBtype: "Database",
+        dateCreated: db.dateCreated,
+        corpusConnection: {
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "corpus.lingsync.org",
+          port: "443",
+          path: "",
+          serverLabel: "production",
+          authUrls: ["https://auth.lingsync.org"],
+          userFriendlyServerName: "LingSync.org",
+          version: db.version,
+          corpusUrls: ["https://corpus.lingsync.org"],
+          corpusid: "",
+          titleAsUrl: "",
+          dbname: "",
+          pouchname: "",
+          clientUrls: [],
+          lexiconUrls: [],
+          searchUrls: [],
+          audioUrls: [],
+          activityUrls: [],
+          title: ""
+        },
+        version: db.version
+      });
+    });
+
+    it("should be able to get a couch url from a deprecated connection", function() {
+      var db = new Database();
+      var connection = {
+        "protocol": "https://",
+        "domain": "corpus.example.org",
+        "port": "443",
+        "pouchname": "lingllama-communitycorpus",
+        "path": "",
+        "authUrl": "https://auth.example.org",
+        "userFriendlyServerName": "Example.org",
+        "corpusid": "",
+        "title": "lingllama-communitycorpus",
+        "description": "The details of this corpus are not public.",
+        "titleAsUrl": "lingllama-communitycorpus"
+      };
+      expect(db.getCouchUrl(connection, "/_session")).toEqual("https://corpus.example.org/_session");
+    });
+
   });
 
   describe("login", function() {
@@ -117,7 +188,62 @@ describe("Database", function() {
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a username", function(done) {
+      var db = new Database();
+      db.login({
+        username: "",
+        password: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a password", function(done) {
+      var db = new Database();
+      db.login({
+        username: "lingllama",
+        password: ""
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user enters an impossible username", function(done) {
+      var db = new Database();
+      db.login({
+        username: "Ling Llamâ-friend's",
+        password: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual([
+          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
+          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
+          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
+          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
+          "You have some characters which web servers wouldn't trust in your identifier."
+        ]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should tell user there is a bug if the client didnt provide any login details", function(done) {
+      var db = new Database();
+      db.login().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -134,10 +260,10 @@ describe("Database", function() {
         db.logout().then(function() {
           expect(db.session).toBeUndefined();
         }, function(error) {
-          expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
         });
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
   });
@@ -147,14 +273,137 @@ describe("Database", function() {
       var db = new Database();
       db.register({
         username: "testinganonymous" + Date.now(),
-        password: "morpheme"
+        password: "morpheme",
+        confirmPassword: "morpheme"
       }).then(function() {
         expect(false).toBeTruthy();
-
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.details.corpusConnection).toEqual({
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "localhost",
+          port: "6984",
+          path: "",
+          serverLabel: "localhost",
+          authUrls: ["https://localhost:3183"],
+          userFriendlyServerName: "Localhost",
+          version: db.version,
+        });
+        expect(error.details.authUrl).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
+
+    it("should be able to register to any valid auth server", function(done) {
+      var db = new Database();
+      db.register({
+        username: "testinganonymous" + Date.now(),
+        password: "morpheme",
+        confirmPassword: "morpheme",
+        authUrl: "https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
+        expect(error.details.corpusConnection).toEqual({
+          fieldDBtype: "CorpusConnection",
+          protocol: "https://",
+          domain: "auth.linguistics.miauniversity.edu",
+          port: "3222",
+          path: "some/virtual/host",
+          serverLabel: "miauniversity",
+          authUrls: ["https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"],
+          userFriendlyServerName: "miauniversity.edu",
+          version: db.version,
+        });
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should be able to register a new user if its a new corpus (wordcloud users)", function(done) {
+      var db = new Database();
+      db.dbname = "anonymouseuser123-wordclouddb";
+      db.register().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.details).toEqual({
+          username: "anonymouseuser123",
+          password: "testtest",
+          confirmPassword: "testtest",
+          authUrl: "https://localhost:3183",
+          corpusConnection: {
+            fieldDBtype: "CorpusConnection",
+            protocol: "https://",
+            domain: "localhost",
+            port: "6984",
+            path: "",
+            serverLabel: "localhost",
+            authUrls: ["https://localhost:3183"],
+            userFriendlyServerName: "Localhost",
+            version: db.version
+          }
+        });
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should tell user there is a bug if the client didnt provide any register details", function(done) {
+      var db = new Database();
+      db.register().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a username", function(done) {
+      var db = new Database();
+      db.register({
+        username: "",
+        password: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user forgets to put a password", function(done) {
+      var db = new Database();
+      db.register({
+        username: "lingllama",
+        password: ""
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should return instructions is user enters an impossible username", function(done) {
+      var db = new Database();
+      db.register({
+        username: "Ling Llamâ-friend's",
+        password: "phoneme",
+        confirmPassword: "phoneme"
+      }).then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual([
+          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
+          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
+          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
+          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
+          "You have some characters which web servers wouldn't trust in your identifier."
+        ]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
   });
 
 });

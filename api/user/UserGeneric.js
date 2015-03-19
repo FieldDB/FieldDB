@@ -21,7 +21,7 @@
  * @property {String} affiliation This is user's affiliation
  * @property {String} description This user's description
  * @property {String} subtitle This user's subtitle
- * @property {Array} corpuses The corpus connections of the corpuses owned by
+ * @property {Array} corpora The corpus connections of the corpora owned by
  *           this user
  * @property {Array} dataLists The datalist IDs of the datalists owned
  *           by this user.
@@ -210,7 +210,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
   };
 
   this.addCorpusToUser = function(corpus) {
-    this.corpuses.unshift(corpus);
+    this.corpora.unshift(corpus);
   };
 
   this.save = function(user) {
@@ -293,7 +293,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
       "subtitle": optionalRequestedUserDetails.subtitle || "",
       "firstname": optionalRequestedUserDetails.firstname || "",
       "lastname": optionalRequestedUserDetails.lastname || "",
-      "corpuses": [{
+      "corpora": [{
         "corpusid": "TBA",
         "pouchname": optionalRequestedUserDetails.username + "-firstcorpus",
         "dbname": optionalRequestedUserDetails.username + "-firstcorpus",
@@ -383,12 +383,12 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
         "type": "email",
         "description": "Emails aren\"t actually required. If the user does provide an email at registration, is used to automaticaly link up their gravatar and send them a welcome email so that they know that they registered (in case they forget their username later). It\"s not used for any other purpose. Why are emails not required? Many academics who would use the service, claim that they don\"t like to share their emails. In practice, almost all the users who have signed up, did provide an email. If the user doesn\"t provide an email, what do they loose? They will have no way of resetting their password, they won\"t recieve a registration email, and they won\"t really have any way of proving who they are if they want to delete their corpus, or request their private data etc. While not requiring an email is not a good idea, we have other ways of identifying bogus accounts and leave whether they provide an email up to the user."
       },
-      "corpuses": {
+      "corpora": {
         "items": {
           "$ref": "CouchConnection"
         },
         "type": "Array",
-        "description": "A user can own or have access to any number of corpora. If the user has access to a corpus, it is generally storred in an array called corpuses in their user details. This array can be updated at any time by calling get user corpuses API. Example: <pre>" + JSON.stringify([{
+        "description": "A user can own or have access to any number of corpora. If the user has access to a corpus, it is generally storred in an array called corpora in their user details. This array can be updated at any time by calling get user corpora API. Example: <pre>" + JSON.stringify([{
           "corpusid": "89bc4d7dcc2b1fc9a7bb0f4f4743e705",
           "pouchname": "lingllama-communitycorpus",
           "dbname": "lingllama-communitycorpus",

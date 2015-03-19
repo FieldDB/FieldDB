@@ -242,6 +242,11 @@ define([
         for (x in originalModel.datumFields) {
           originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
         }
+        if(!originalModel.session){
+          originalModel.session = {
+            datumFields: []
+          };
+        }
         for (x in originalModel.session.datumFields) {
           originalModel.session.datumFields[x].label = originalModel.session.datumFields[x].label ||originalModel.session.datumFields[x].id;
         }
@@ -538,31 +543,43 @@ define([
           //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
           //use the get_datum_fields view
           //        alert("TODO test search in chrome extension");
-          $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
-            success: function(response) {
-              if (OPrime.debugMode) OPrime.debug("Got " + response.rows.length + "datums to check for the search query locally client side.");
-              var matchIds = [];
-              //            console.log(response);
-              for (i in response.rows) {
-                var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
-                // If the row's datum matches the given query string
-                if (thisDatumIsIn) {
-                  // Keep its datum's ID, which is the value
-                  matchIds.push(response.rows[i].id);
-                }
+          var afterDownload = function(response) {
+            if (response) {
+              window.get_search_fields_chronological = response;
+              window.get_search_fields_chronological_timestamp = Date.now();
+            }
+            if (OPrime.debugMode) OPrime.debug("Got " + response.rows.length + "datums to check for the search query locally client side.");
+            var matchIds = [];
+            //            console.log(response);
+            for (i in response.rows) {
+              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i].value, queryString, doGrossKeywordMatch, queryTokens);
+              // If the row's datum matches the given query string
+              if (thisDatumIsIn) {
+                // Keep its datum's ID, which is the value
+                matchIds.push(response.rows[i].id);
               }
+            }
 
-              if (typeof callback == "function") {
-                //callback with the unique members of the array
-                callback(_.unique(matchIds));
-                //              callback(matchIds); //loosing my this in SearchEditView
-              }
-            },
-            error: function(status) {
-              console.log("Error quering datum", status);
-            },
-            reduce: false
-          });
+            if (typeof callback == "function") {
+              //callback with the unique members of the array
+              callback(_.unique(matchIds));
+              //              callback(matchIds); //loosing my this in SearchEditView
+            }
+          };
+          if (window.get_search_fields_chronological_timestamp && (Date.now() - window.get_search_fields_chronological_timestamp) > 601000) {
+            delete window.get_search_fields_chronological;
+          }
+          if (!window.get_search_fields_chronological) {
+            $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
+              success: afterDownload,
+              error: function(status) {
+                console.log("Error quering datum", status);
+              },
+              reduce: false
+            });
+          } else {
+            afterDownload(window.get_search_fields_chronological);
+          }
 
           return;
         }
@@ -935,37 +952,38 @@ define([
        * Also remove it from the view so the user cant see it.
        *
        */
-      putInTrash: function() {
+      putInTrash: function(batchmode) {
         this.set("trashed", "deleted" + Date.now());
         this.preprendValidationStatus("Deleted");
+        var self = this;
         this.saveAndInterConnectInApp(function() {
 
-          window.app.addActivity({
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-            teamOrPersonal: "team",
-            context: " via Offline App.",
-            timeSpent: timeSpentDetails
-          });
+          if (!batchmode && window.appView) {
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "team",
+              context: " via Offline App.",
+              timeSpent: timeSpentDetails
+            });
 
-          window.app.addActivity({
-            verb: "deleted",
-            verbicon: "icon-trash",
-            directobject: "<a href='#corpus/" + this.get("pouchname") + "/datum/" + this.id + "'>a datum</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-            teamOrPersonal: "personal",
-            context: " via Offline App.",
-            timeSpent: timeSpentDetails
-          });
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "personal",
+              context: " via Offline App.",
+              timeSpent: timeSpentDetails
+            });
 
 
           /* This actually removes it from the database */
           //thisdatum.destroy();
-          if (window.appView) {
             window.appView.datumsEditView.showMostRecentDatum();
           }
         });
@@ -1572,27 +1590,31 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
-              directobjecticon: "icon-list",
-              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-              teamOrPersonal: "team",
-              context: " via Offline App.",
-              timeSpent: timeSpentDetails
-            });
+            if (self.get("trashed")) {
+              console.log("not setting a modified activity for a trashed item. ");
+            } else {
+              window.app.addActivity({
+                verb: "<a href='" + differences + "'>" + verb + "</a> ",
+                verbicon: verbicon,
+                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobjecticon: "icon-list",
+                indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App.",
+                timeSpent: timeSpentDetails
+              });
 
-            window.app.addActivity({
-              verb: "<a href='" + differences + "'>" + verb + "</a> ",
-              verbicon: verbicon,
-              directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
-              directobjecticon: "icon-list",
-              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-              teamOrPersonal: "personal",
-              context: " via Offline App.",
-              timeSpent: timeSpentDetails
-            });
+              window.app.addActivity({
+                verb: "<a href='" + differences + "'>" + verb + "</a> ",
+                verbicon: verbicon,
+                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobjecticon: "icon-list",
+                indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App.",
+                timeSpent: timeSpentDetails
+              });
+            }
             //            /*
             //             * If the current data list is the default
             //             * list, render the datum there since is the "Active" copy

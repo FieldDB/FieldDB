@@ -81,6 +81,22 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
       }
       this._showDocPosition = value;
     }
+  },
+
+  cloneStructure: {
+    value: function(includeEvenEmptyAttributes) {
+      if (includeEvenEmptyAttributes) {
+        this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
+      }
+      var json = Collection.prototype.toJSON.apply(this, arguments);
+      json.map = json.map(function(field){
+        field.value = "";
+        field.mask = "";
+        field.encryptedValue= "";
+        return field;
+      });
+      return json;
+    }
   }
 
 });

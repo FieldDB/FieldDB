@@ -1,8 +1,8 @@
 "use strict";
 /* globals FieldDB */
 
-angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "$routeParams", "$rootScope",
-  function($scope, $routeParams, $rootScope) {
+angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "$routeParams", "$rootScope", "$location",
+  function($scope, $routeParams, $rootScope, $location) {
 
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       $scope.application = FieldDB.FieldDBObject.application;
@@ -15,6 +15,24 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
           console.warn("Rendering generated an erorr", e);
         }
       };
+
+
+      document.addEventListener("logout", function (e) {
+        console.log(e);
+        $scope.application.bug("user has logged out, reload the page to clear state and take them to the welcome page.");
+      }, false);
+
+      document.addEventListener("notauthenticated", function (e) {
+        console.log(e);
+        $scope.application.warn("user isn't able to see anything, show them the welcome page");
+        // $scope.application.authentication.error = "";
+        $scope.$apply(function() {
+          console.log("  Redirecting the user to the welcome page");
+          //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
+          $location.path("/welcome", false);
+        });
+      }, false);
+
     } else {
       console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
       window.alert("The app cannot load, please report this. ");

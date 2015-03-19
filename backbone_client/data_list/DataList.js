@@ -146,6 +146,62 @@ define([
       if(datumIdsToApplyFunction.length == 0){
         datumIdsToApplyFunction = this.get("datumIds");
       }
+
+      if(functionToApply === "putInTrash"){
+        var sure = confirm("Are you sure you want to put these " + datumIdsToApplyFunction.length + " datum in the trash?");
+        if (!sure) {
+          return;
+        }
+        var self = this;
+        var totalCount = datumIdsToApplyFunction.length;
+        var trashAndLoop = function(ids) {
+          var thisId = ids.pop();
+          if (!thisId) {
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "team",
+              context: " via Offline App."
+            });
+
+            window.app.addActivity({
+              verb: "deleted",
+              verbicon: "icon-trash",
+              directobject: "<a href='#corpus/" + self.get("pouchname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
+              directobjecticon: "icon-list",
+              indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "personal",
+              context: " via Offline App."
+            });
+            return;
+          }
+          var datum;
+          datum = new Datum({
+            _id: thisId
+          });
+          datum.fetch({
+            success: function(model) {
+              datum.putInTrash("batchmode");
+              setTimeout(function() {
+                trashAndLoop(ids);
+              }, 500);
+            },
+            error: function(error) {
+              console.warn("wasnt able to open this datum. skipping... ", datum, error);
+              setTimeout(function() {
+                trashAndLoop(ids);
+              }, 500);
+            }
+          });
+        }
+        trashAndLoop(datumIdsToApplyFunction);
+        return;
+      }
+
+
       if(!functionToApply){
         functionToApply = "latexitDataList";
       }

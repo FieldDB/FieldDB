@@ -319,7 +319,7 @@ define([
         if(username == "public"){
           self.model.savePublicUserForOfflineUse();
         }
-        var couchConnection = self.model.get("userPrivate").get("corpuses")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        var couchConnection = self.model.get("userPrivate").get("corpora")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
         window.app.logUserIntoTheirCorpusServer(couchConnection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
             if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
@@ -460,7 +460,7 @@ define([
       //Send a pouchname to create
       var corpusConnection = OPrime.defaultCouchConnection();
       corpusConnection.pouchname = "firstcorpus";
-      dataToPost.corpuses = [corpusConnection];
+      dataToPost.corpora = [corpusConnection];
       dataToPost.mostRecentIds = {};
       dataToPost.mostRecentIds.couchConnection = JSON.parse(JSON.stringify(corpusConnection));
       dataToPost.mostRecentIds.couchConnection.pouchname = dataToPost.username+"-"+dataToPost.mostRecentIds.couchConnection.pouchname;
@@ -524,14 +524,14 @@ define([
             /*
              * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
              */
-            var potentialpouchname = serverResults.user.corpuses[0].pouchname;
+            var potentialpouchname = serverResults.user.corpora[0].pouchname;
             var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
 
             var couchConnection = OPrime.defaultCouchConnection();
             couchConnection.pouchname = potentialpouchname;
-            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/private_corpuses";
+            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/private_corpora";
 
-            window.app.logUserIntoTheirCorpusServer(serverResults.user.corpuses[0], dataToPost.username, dataToPost.password, function() {
+            window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
               OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
 
                 if (OPrime.isBackboneCouchDBApp()) {
@@ -567,7 +567,7 @@ define([
                         auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
                         model.get("couchConnection").corpusid = model.id;
                         auth.get("userPrivate").get("mostRecentIds").couchConnection = model.get("couchConnection");
-                        auth.get("userPrivate").get("corpuses")[0] = model.get("couchConnection");
+                        auth.get("userPrivate").get("corpora")[0] = model.get("couchConnection");
                         var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
                         localStorage.setItem("encryptedUser", u);
 
@@ -681,7 +681,7 @@ define([
           }
           if (!serverResults.user.mostRecentIds || !serverResults.user.mostRecentIds.couchConnection) {
             serverResults.user.mostRecentIds = {
-              couchConnection: serverResults.user.corpuses[0]
+              couchConnection: serverResults.user.corpora[0]
             };
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);

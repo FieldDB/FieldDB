@@ -44,10 +44,10 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       $scope.importer.todo("change import.html drag=\"participantField.labelExperimenter\" to send the entire participantfield");
       $scope.importer.todo("Use this dropSuccessHandler function for creating an acivity?");
     };
-    $scope.onDropRecieved = function(data, extractedHeader, headerCellIndex) {
-      $scope.importer.debug("onDropRecieved", data, extractedHeader, headerCellIndex);
-      extractedHeader[headerCellIndex] = data;
-      $scope.importer.todo("change Import.js to use fields for the extractedHeader cells instead of just labels.");
+    $scope.onDropFieldLabelRecieved = function(labelString, extractedHeaderFieldsCollection, headerCellIndex) {
+      $scope.importer.debug("onDropFieldLabelRecieved", labelString, extractedHeaderFieldsCollection, headerCellIndex);
+      extractedHeaderFieldsCollection[headerCellIndex].labelExperimenter = labelString;
+      $scope.importer.todo("change Import.js to use fields for the extractedHeaderFieldsCollection cells instead of just labels.");
     };
 
     var verifyImporterIsSetup = function() {
@@ -81,18 +81,42 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
         console.log($scope.importer);
         $scope.importer.readFiles({}).then(function(sucessfullOptions) {
           console.log("Finished reading files ", sucessfullOptions);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
           $scope.importer.guessFormatAndPreviewImport();
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
 
         }, function(failedOptions) {
           console.log("Error reading files ", failedOptions);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
         });
       } else {
         $scope.importer.uploadFiles($files).then(function(result) {
           $scope.importer.todo(" Got an upload result in the angular directive", result);
-          $scope.$digest();
+          try {
+            if (!$scope.$$phase) {
+              $scope.$digest(); //$digest or $apply
+            }
+          } catch (e) {
+            console.warn("render threw errors");
+          }
         }, function(reason) {
           console.log(reason);
         });
@@ -137,12 +161,25 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
       $scope.importer.guessFormatAndPreviewImport();
     };
 
+    $scope.previewDatalist = function() {
+      if (!$scope.importer) {
+        console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
+        return;
+      }
+      $scope.importer.convertMatrixIntoDataList().then(function(results) {
+        console.log("Import is completed. ", results);
+        console.log(" Progress ", $scope.importer.progress);
+      },function(results) {
+        console.log("Import is completed. ", results);
+        console.log(" Progress ", $scope.importer.progress);
+      });
+    };
     $scope.runImport = function() {
       if (!$scope.importer) {
         console.warn("The importer is undefined and the user is trying to import are you sure you passed an importer to this directive? or that your application has an importer?");
         return;
       }
-      $scope.importer.convertTableIntoDataList().then(function(results) {
+      $scope.importer.import().then(function(results) {
         console.log("Import is completed. ", results);
         console.log(" Progress ", $scope.importer.progress);
         // $scope.$digest();

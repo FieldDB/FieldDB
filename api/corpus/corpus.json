@@ -2,9 +2,7 @@
   "title": "",
   "titleAsUrl": "",
   "description": "This is probably your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
-  "couchConnection": {},
-  "replicatedCorpusUrls": [],
-  "olacExportConnections": [],
+  "corpusConnection": {},
   "termsOfUse": {
     "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
   },
@@ -21,7 +19,7 @@
     "secretkey": ""
   },
   "publicCorpus": "Private",
-  "api": "private_corpuses",
+  "api": "private_corpora",
   "comments": [],
   "validationStati": [{
     "validationStatus": "Checked*",
@@ -90,6 +88,9 @@
     "shouldBeEncrypted": false,
     "showToUserTypes": "linguist",
     "defaultfield": true,
+    "json": {
+      "grammatical": true
+    },
     "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
     "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
@@ -198,12 +199,26 @@
     "labelFieldLinguists": "Translation",
     "labelNonLinguists": "English",
     "labelTranslators": "English",
-    "type": "IGT, parallelText",
+    "type": "parallelText",
     "shouldBeEncrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      },
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    },
     "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
-    "language": "",
     "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
   }, {
     "id": "context",

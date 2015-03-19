@@ -141,7 +141,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       return this.admins;
     },
     set: function(value) {
-      this.admins = value
+      this.admins = value;
     }
   },
 
@@ -191,12 +191,13 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
           usersWhoAreOnlyInThisPermissionType.remove(user.username);
         }
       };
+      var showUsernames = function(user) {
+        return user.username;
+      };
 
       for (permissionTypeIndex = wantTheseRoles.length - 1; permissionTypeIndex >= 0; permissionTypeIndex--) {
         permissionType = wantTheseRoles[permissionTypeIndex];
-        self.debug("Making sure " + usersWhoAreOnlyInThisPermissionType.map(function(user) {
-          return user.username;
-        }) + " are " + permissionType);
+        self.debug("Making sure " + usersWhoAreOnlyInThisPermissionType.map(showUsernames) + " are " + permissionType);
 
 
         if (!self[permissionType]) {
@@ -214,7 +215,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         // If the user isn't in this permisisonType also, remove it
         for (var userIndex = usersWhoAreOnlyInThisPermissionType._collection.length - 1; userIndex >= 0; userIndex--) {
           howToRemoveSomeoneWhoIsntInAllRoles(usersWhoAreOnlyInThisPermissionType._collection[userIndex]);
-        };
+        }
       }
 
       this.debug("These users " + usersWhoAreOnlyInThisPermissionType.map(function(user) {
@@ -419,10 +420,10 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       if (this._readerCommenterWriterOnlys && this._readerCommenterWriterOnlys.timestamp && (Date.now() - this._readerCommenterWriterOnlys.timestamp < this.cacheTimeLength)) {
         this.debug("Not regenerating the list of readerCommenterWriterOnlys, its fresh enough. " + new Date(this._readerCommenterWriterOnlys.timestamp));
       } else {
-        this.debugMode = true;
+        // this.debugMode = true;
         this._readerCommenterWriterOnlys = this.giveMeUsersWithTheseRolesAndNotTheseRoles(["reader", "writer", "commenter"], ["admin"]);
         this._readerCommenterWriterOnlys.timestamp = Date.now();
-        this.debugMode = false;
+        // this.debugMode = false;
       }
 
       return this._readerCommenterWriterOnlys;
@@ -719,7 +720,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     value: function(users) {
       if (!users || users === "defaults") {
         users = {};
-        this.warn("Using default permission types");
+        this.debug("Using default permission types");
       }
       users.admins = users.admins || [];
       users.writers = users.writers || [];

@@ -124,7 +124,7 @@ define([
     },
     loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
       var couchurl = OPrime.getCouchUrl(couchConnection);
-      var queryUrl = couchurl + "/_design/pages/_view/private_corpuses";
+      var queryUrl = couchurl + "/_design/pages/_view/private_corpora";
 
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
@@ -548,7 +548,7 @@ define([
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/private_corpuses",
+    url : "/private_corpora",
 
 
     loadPermissions: function(doneLoadingPermissions){
@@ -895,7 +895,7 @@ define([
             var potentialpouchname = response.corpus.pouchname;
             var couchConnection =OPrime.defaultCouchConnection();
             couchConnection.pouchname =potentialpouchname;
-            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection)+ "/_design/pages/_view/private_corpuses";
+            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection)+ "/_design/pages/_view/private_corpora";
 
             OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl , function() {
               //              OPrime.bug("Attempting to save the new corpus in its database.");
@@ -1094,12 +1094,12 @@ define([
             }
             model.get("couchConnection").corpusid = model.id;
             //make sure the corpus is updated in the history of the user
-            var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpuses"), "pouchname");
+            var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "pouchname");
             var oldconnection = pouches.indexOf(model.get("couchConnection").pouchname);
             if(oldconnection != -1){
-              window.app.get("authentication").get("userPrivate").get("corpuses").splice(oldconnection, 1);
+              window.app.get("authentication").get("userPrivate").get("corpora").splice(oldconnection, 1);
             }
-            window.app.get("authentication").get("userPrivate").get("corpuses").unshift(model.get("couchConnection"));
+            window.app.get("authentication").get("userPrivate").get("corpora").unshift(model.get("couchConnection"));
 
             if(newModel){
 

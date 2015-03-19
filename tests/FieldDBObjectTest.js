@@ -202,7 +202,7 @@ describe("FieldDBObject", function() {
       object.fetch().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -218,7 +218,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.enteredByUser.value).toEqual("unknown");
@@ -265,7 +265,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.modifiedByUser.value).toEqual("inuktitutcleaningbot, unknown");
@@ -305,7 +305,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.enteredByUser.value).toEqual("teammatetiger");
@@ -356,7 +356,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.location.value).toEqual("45.5169767,-73.5537868");
@@ -379,7 +379,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.trashed).toEqual("deleted");
@@ -397,7 +397,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.trashed).toEqual("deleted");
@@ -417,7 +417,7 @@ describe("FieldDBObject", function() {
         expect(resultingdocument.id).toBeDefined();
         expect(resultingdocument.rev).toBeDefined();
       }, function(error) {
-        expect(error).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.trashed).toEqual("restored");
@@ -557,13 +557,13 @@ describe("FieldDBObject", function() {
       aBaseObject = new FieldDBObject({
         externalString: "easy model",
         externalEqualString: "merging",
-        externalArray: ["four"],
+        externalArray: ["four", "two"],
         externalObject: new FieldDBObject({
           internalString: "internal",
           internalTrue: true,
           internalEmptyString: "",
-          internalFalse: false,
-          internalNumber: 2,
+          internalBoolean: true,
+          internalNumber: 1,
           missingInTarget: "i'm a old property",
           // debugMode: true
         }),
@@ -579,7 +579,7 @@ describe("FieldDBObject", function() {
           internalString: "internal overwrite",
           internalTrue: true,
           internalEmptyString: "",
-          internalFalse: false,
+          internalBoolean: false,
           internalNumber: 2,
           missingInOriginal: "i'm a new property",
           // debugMode: true
@@ -596,13 +596,13 @@ describe("FieldDBObject", function() {
       expect(resultObject).toBe(aBaseObject);
       expect(aBaseObject.externalString).toEqual("trivial model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(["four", "one", "two", "three"]);
+      expect(aBaseObject.externalArray).toEqual(["four", "two", "one", "three"]);
       expect(aBaseObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
       expect(aBaseObject.externalObject.internalTrue).toEqual(true);
       expect(aBaseObject.externalObject.internalEmptyString).toEqual("");
-      expect(aBaseObject.externalObject.internalFalse).toEqual(false);
+      expect(aBaseObject.externalObject.internalBoolean).toEqual(false);
       expect(aBaseObject.externalObject.internalNumber).toEqual(2);
       expect(aBaseObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aBaseObject.externalObject.missingInOriginal).toEqual("i'm a new property");
@@ -618,7 +618,7 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
       expect(atriviallyDifferentObject.externalObject.internalTrue).toEqual(true);
       expect(atriviallyDifferentObject.externalObject.internalEmptyString).toEqual("");
-      expect(atriviallyDifferentObject.externalObject.internalFalse).toEqual(false);
+      expect(atriviallyDifferentObject.externalObject.internalBoolean).toEqual(false);
       expect(atriviallyDifferentObject.externalObject.internalNumber).toEqual(2);
       expect(atriviallyDifferentObject.externalObject.missingInTarget).toBeUndefined("i'm a old property");
       expect(atriviallyDifferentObject.externalObject.missingInOriginal).toEqual("i'm a new property");
@@ -635,13 +635,13 @@ describe("FieldDBObject", function() {
       expect(aThirdObject).not.toBe(aBaseObject);
       expect(aThirdObject.externalString).toEqual("trivial model");
       expect(aThirdObject.externalEqualString).toEqual("merging");
-      expect(aThirdObject.externalArray).toEqual(["four", "one", "two", "three"]);
+      expect(aThirdObject.externalArray).toEqual(["four", "two", "one", "three"]);
       expect(aThirdObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aThirdObject.externalObject.internalString).toEqual("internal overwrite");
       expect(aThirdObject.externalObject.internalTrue).toEqual(true);
       expect(aThirdObject.externalObject.internalEmptyString).toEqual("");
-      expect(aThirdObject.externalObject.internalFalse).toEqual(false);
+      expect(aThirdObject.externalObject.internalBoolean).toEqual(false);
       expect(aThirdObject.externalObject.internalNumber).toEqual(2);
       expect(aThirdObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aThirdObject.externalObject.missingInOriginal).toEqual("i'm a new property");
@@ -650,14 +650,14 @@ describe("FieldDBObject", function() {
       // Make sure aBaseObject is as it was
       expect(aBaseObject.externalString).toEqual("easy model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
-      expect(aBaseObject.externalArray).toEqual(["four"]);
+      expect(aBaseObject.externalArray).toEqual(["four", "two"]);
       expect(aBaseObject.warnMessage).toBeUndefined();
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal");
       expect(aBaseObject.externalObject.internalTrue).toEqual(true);
       expect(aBaseObject.externalObject.internalEmptyString).toEqual("");
-      expect(aBaseObject.externalObject.internalFalse).toEqual(false);
-      expect(aBaseObject.externalObject.internalNumber).toEqual(2);
+      expect(aBaseObject.externalObject.internalBoolean).toEqual(true);
+      expect(aBaseObject.externalObject.internalNumber).toEqual(1);
       expect(aBaseObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aBaseObject.externalObject.missingInOriginal).toBeUndefined();
       expect(aBaseObject.externalObject.warnMessage).toBeUndefined();
@@ -673,7 +673,7 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
       expect(atriviallyDifferentObject.externalObject.internalTrue).toEqual(true);
       expect(atriviallyDifferentObject.externalObject.internalEmptyString).toEqual("");
-      expect(atriviallyDifferentObject.externalObject.internalFalse).toEqual(false);
+      expect(atriviallyDifferentObject.externalObject.internalBoolean).toEqual(false);
       expect(atriviallyDifferentObject.externalObject.internalNumber).toEqual(2);
       expect(atriviallyDifferentObject.externalObject.missingInTarget).toBeUndefined("i'm a old property");
       expect(atriviallyDifferentObject.externalObject.missingInOriginal).toEqual("i'm a new property");
@@ -744,6 +744,28 @@ describe("FieldDBObject", function() {
       expect(resultObject.externalObject.internalString).toEqual("some object");
       expect(resultObject.externalObject.warnMessage).toEqual("Refusing to merge these objects, they have different ids: aw1we24  and ye12waer8");
 
+    });
+
+    it("should be merge larger objects into smaller ones", function(done) {
+      var subsetObject = new FieldDBObject({
+        _id: "13132",
+        // debugMode: true
+      });
+      var supersetObject = new FieldDBObject({
+        _id: "13132",
+        _rev: "3-3242",
+        lastname: "ioeaea",
+        firstname: "ioriqamoesdf",
+        // debugMode: true
+      });
+      subsetObject.merge("self", supersetObject);
+
+      setTimeout(function() {
+        expect(subsetObject._id).toEqual("13132");
+        expect(subsetObject.lastname).toEqual("ioeaea");
+        expect(subsetObject.firstname).toEqual("ioriqamoesdf");
+        done();
+      }, 10);
     });
 
   });
