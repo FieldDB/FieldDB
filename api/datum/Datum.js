@@ -106,40 +106,42 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
-  igt: {
-    get: function() {
-      var convertDatumIntoSimpleObject = function(datum) {
-        var obj = {},
-          fieldKeyName = "label";
+  convertDatumIntoSimpleObject: {
+    value: function() {
+      var obj = {};
 
-        for (var i = 0; i < datum.datumFields.length; i++) {
-          if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+      for (var i = 0; i < datum.datumFields.length; i++) {
+        if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+          fieldKeyName = "id"; /* update to version 2.35+ */
+        } else {
+          fieldKeyName = "label";
+        }
+        if (datum.datumFields[i].mask) {
+          obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+        }
+      }
+      if (datum.session.sessionFields) {
+        for (var j = 0; j < datum.session.sessionFields.length; j++) {
+          if (datum.session.sessionFields[j].id && datum.session.sessionFields[j].id.length > 0) {
             fieldKeyName = "id"; /* update to version 2.35+ */
           } else {
             fieldKeyName = "label";
           }
-          if (datum.datumFields[i].mask) {
-            obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+          if (datum.session.sessionFields[j].mask) {
+            obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
           }
         }
-        if (datum.session.sessionFields) {
-          for (var j = 0; j < datum.session.sessionFields.length; j++) {
-            if (datum.session.sessionFields[j].id && datum.session.sessionFields[j].id.length > 0) {
-              fieldKeyName = "id"; /* update to version 2.35+ */
-            } else {
-              fieldKeyName = "label";
-            }
-            if (datum.session.sessionFields[j].mask) {
-              obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
-            }
-          }
-        }
-        obj.utterance = obj.utterance || "";
-        obj.morphemes = obj.morphemes || "";
-        obj.gloss = obj.gloss || "";
+      }
+      obj.utterance = obj.utterance || "";
+      obj.morphemes = obj.morphemes || "";
+      obj.gloss = obj.gloss || "";
 
-        return obj;
-      };
+      return obj;
+    }
+  },
+
+  igt: {
+    get: function() {
 
       var convertDatumIntoIGT = function(datum) {
         var context = {},
@@ -242,6 +244,14 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
 
 
+      var tuples = [];
+      var paraleltext = [];
+      this.fields.map(function(field) {
+        if (field.type && field.type.indexOf("IGT") > -1) {
+          var tokenizedField = field.value.split(/[ \t=-]+/);
+          tuples.push(field);
+        }
+      });
 
       paraleltext.translation = "\u2018" + translation + "\u2019";
 
