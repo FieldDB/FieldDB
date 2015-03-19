@@ -106,6 +106,53 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  igt: {
+    get: function() {
+
+      // Return a list of strings of the form ['uw1<br />mw1<br />gw1', 'uw2<br />mw2<br />gw2']
+      // where uw1 is the first utterance word, mw1 is the first morphemes word, etc.
+      // Note that any empty strings in params are filtered out (cf. _.compact).  This allows
+      // Datums with only, say, utterance and gloss strings or only morphemes and gloss
+      // strings to be IGT-formatted.
+      var getIGTList = function(params) {
+        return _.map(_.zip.apply(null, _.compact(_.map(params, function(p) {
+          if (p) {
+            return _.map(p.split(/[ \t\n]+/), randomStrings2highlightSpans);
+          } else {
+            return null;
+          }
+        }))), function(t) {
+          return t.join('<br />')
+        });
+      }
+
+      try {
+        var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, gloss]);
+        // if there are only 3 or less words, they probably dont need the alignment visual that much
+        if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
+          return this;
+        } else if (this.format === "latexPreviewIGTonly" && tuple && tuple.length > 40) {
+          jsonToRender.scrollable = "scrollable";
+        }
+        if (translation != "" && this.format !== "latexPreviewIGTonly") {
+          jsonToRender.translation = "\u2018" + translation + "\u2019";
+        }
+        jsonToRender.tuple = tuple;
+        if (judgement !== "") {
+          jsonToRender.judgement = judgement;
+        }
+      } catch (e) {
+        console.log("Bug: this datum is not IGT: " + JSON.stringify(e));
+        jsonToRender.translation = "---";
+      }
+
+      return {};
+    },
+    set: function() {
+      this.warn("Setting the igt has to be copy pasted from one of the other codebases");
+    }
+  },
+
   addFile: {
     value: function(newFileDetails) {
       if (newFileDetails.type.indexOf("audio") === 0) {
