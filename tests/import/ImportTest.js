@@ -114,8 +114,8 @@ describe("api/import/Import", function() {
         expect(importer.datalist.docs.primaryKey).toEqual("tempId");
 
         expect(importer.progress).toBeDefined();
-        expect(importer.progress.total).toEqual(1);
-        expect(importer.progress.completed).toEqual(0);
+        expect(importer.progress.total).toEqual(2);
+        expect(importer.progress.completed).toEqual(2);
 
         expect(importer.extractedHeaderObjects).toBeDefined();
         expect(importer.extractedHeaderObjects.length).toEqual(6);
@@ -130,7 +130,6 @@ describe("api/import/Import", function() {
           id: "columnplaceholder",
           value: "",
           mask: "",
-          encryptedValue: "",
           version: importer.version,
           label: "columnplaceholder",
           hint: ""
@@ -245,7 +244,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
 
 
   xit("should read a uri if no a read function is defined", function(done) {
-    importer.debugMode= true;
+    importer.debugMode = true;
     importer
       .readUri({
         uri: remoteUri
@@ -470,7 +469,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
 
-  it("should not refuse to import participants if the corpus confidential is ready", function(done) {
+  xit("should not refuse to import participants if the corpus confidential is ready", function(done) {
     var importer = new Import({
       corpus: corpus,
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
@@ -486,122 +485,114 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.convertMatrixIntoDataList().then(function() {
       expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
     }, function(reason) {
+      console.log(reason);
       expect(false).toBeTruthy();
     }).done(done);
   }, specIsRunningTooLong);
 
 
-  it("should process csv participants", function() {
+  it("should process csv participants", function(done) {
     var importer = new Import({
       corpus: corpus,
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
       importType: "participants"
     });
 
-    importer.debugMode = true;
 
     // Step 1: import CSV
+    // importer.debugMode = true;
     importer.importCSV(importer.rawText, importer);
     expect(importer.extractedHeaderObjects).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
-
-
     expect(importer.asCSV.length).toEqual(17);
-    // expect(importer.asFieldMatrix.length).toEqual(17);
-    // expect(importer.asFieldMatrix[1].map(function(obj) {
-    //   return obj.value;
-    // })).toEqual(["alxd645210ki", 210, "Damiane", "Alexandre", "2010-02-02"]);
+    expect(importer.asFieldMatrix.length).toEqual(17);
+    expect(importer.asFieldMatrix[1].map(function(obj) {
+      return obj.value;
+    })).toEqual(["alxd645210ki", 210, "Damiane", "Alexandre", "2010-02-02"]);
+    expect(importer.showImportSecondStep).toBeTruthy();
 
 
-    // expect(importer.showImportSecondStep).toBeTruthy();
-
-    // // Step 2: build participants
+    // Step 2: build participants
     // importer.debugMode = true;
-    // expect(importer.corpus.confidential).toBeDefined();
-    // expect(importer.corpxus.confidential.encrypt).toBeDefined();
+    importer.convertMatrixIntoDataList().then(function(results) {
 
-    // importer.convertMatrixIntoDataList().then(function(results) {
+      expect(importer.extractedHeaderObjects.map(function(field) {
+        return field.labelExperimenters;
+      })).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+      expect(importer.extractedHeaderObjects.length).toEqual(5);
 
-      // expect(importer.extractedHeaderObjects.map(function(field) {
-      //   return field.labelExperimenters;
-      // })).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
-      // expect(importer.extractedHeaderObjects.length).toEqual(5);
+      expect(importer.extractedHeaderObjects.map(function(item) {
+        return item.id;
+      })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
 
-      // expect(importer.extractedHeaderObjects.map(function(item) {
-      //   return item.id;
-      // })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
+      expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
+      expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
+      expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
+      expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
+      expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
 
-      // expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
-      // expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
-      // expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
-      // expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
-      // expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
+      expect(importer.datalist.docs).toBeDefined();
+      expect(importer.datalist.docs._collection[1]).toBeDefined();
+      importer.datalist.docs._collection[1].debugMode = true;
 
-      // expect(importer.datalist.docs).toBeDefined();
-      // expect(importer.datalist.docs._collection[1]).toBeDefined();
-      // importer.datalist.docs._collection[1].debugMode = true;
+      /* make sure that the doc is a participant */
+      expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
+      expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
+      expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
+      expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
+      expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
+      expect(importer.datalist.docs._collection[1].api).toEqual("participants");
+      expect(importer.datalist.docs._collection[1].fields).toBeDefined();
+      expect(importer.datalist.docs._collection[1].fields.fieldDBtype).toEqual("DatumFields");
+      expect(importer.datalist.docs._collection[1].fields.toJSON().map(function(field) {
+        return field.label;
+      })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
 
-      // /* make sure that the doc is a participant */
-      // expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
-      // expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
-      // expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
-      // expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
-      // expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
-      // expect(importer.datalist.docs._collection[1].api).toEqual("participants");
-      // expect(importer.datalist.docs._collection[1].fields).toBeDefined();
-      // expect(importer.datalist.docs._collection[1].fields.fieldDBtype).toEqual("DatumFields");
-      // expect(importer.datalist.docs._collection[1].fields.toJSON().map(function(field) {
-      //   return field.label;
-      // })).toEqual(['anonymousCode', 'courseNumber', 'firstname', 'lastname', 'dateOfBirth']);
 
-      // importer.datalist.docs.shift();
-
-      // expect(importer.asFieldMatrix[1].map(function(obj) {
-      //   return obj.value;
-      // })).toEqual(["alxd645210ki", 210, "Damiane", "Alexandre", "2010-02-02"]);
+      expect(importer.asFieldMatrix[1].map(function(obj) {
+        return obj.value;
+      })).toEqual(["alxd645210ki", "xxx", "xxxxxxx", "xxxxxxxxx", "xxxx-xx-xx"]);
 
 
       // importer.datalist.docs.map(function(doc) {
+      // //   console.log(doc.fields.map(function(field) {
+      // //     var obj = {}
+      // //     obj[field.id] = field.value;
+      // //     return obj;
+      // //   }))
+      // // })
 
-      //   console.log(doc.fields.map(function(field) {
-      //     var obj = {}
-      //     obj[field.id] = field.value;
-      //     return obj;
-      //   }))
-      // })
+      // importer.datalist.docs.shift();
+      expect(importer.datalist.docs._collection[1].lastname).toEqual("xxxxxxxxx");
 
-      // expect(importer.datalist.docs._collection[3].fields.lastname.value).toEqual("Michel");
-      // expect(importer.datalist.docs._collection[1].lastname).toEqual("xxxxxxxxx"); /* the fields getter is broken */
+      importer.datalist.docs._collection[1].fields.decryptedMode = true;
+      expect(importer.datalist.docs._collection[1].fields.firstname.value).toEqual("Damiane");
+      expect(importer.datalist.docs._collection[1].fields.firstname.mask).toEqual("xxxxxxx");
 
-      // importer.datalist.docs._collection[1].fields.decryptedMode = true;
-      // expect(importer.datalist.docs._collection[1].fields.firstname.value).toEqual("Damiane");
-      // expect(importer.datalist.docs._collection[1].fields.firstname.mask).toEqual("xxxxxxx");
+      importer.datalist.docs._collection[2].fields.decryptedMode = true;
+      expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Ariane");
+      expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
 
-      // importer.datalist.docs._collection[2].fields.decryptedMode = true;
-      // expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Ariane");
-      // expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
+      importer.datalist.docs._collection[3].fields.decryptedMode = true;
+      expect(importer.datalist.docs._collection[3].fields.firstname.value).toEqual("Michel");
+      expect(importer.datalist.docs._collection[3].fields.firstname.mask).toEqual("xxxxxx");
 
-      // importer.datalist.docs._collection[3].fields.decryptedMode = true;
-      // expect(importer.datalist.docs._collection[3].fields.firstname.value).toEqual("Michel");
-      // expect(importer.datalist.docs._collection[3].fields.firstname.mask).toEqual("xxxxxx");
+      expect(importer.progress.total).toEqual(16);
+      expect(importer.progress.completed).toEqual(16);
 
-      // expect(importer.progress.total).toEqual(17);
-      // expect(importer.progress.completed).toEqual(17);
+      expect(results.length).toEqual(16);
 
-      // expect(results.length).toEqual(16);
+      expect(importer.datalist).toBeDefined();
+      expect(importer.datalist.title.default).toEqual("Imported Data");
+      expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
+      expect(importer.datalist.docs.length).toEqual(16);
+      expect(importer.showImportThirdStep).toBeTruthy();
 
-      // expect(importer.datalist).toBeDefined();
-      // expect(importer.datalist.title).toEqual("Import Data");
-      // expect(importer.datalist.description).toEqual("This is the data list which results from the import of the text typed/pasted in the import text area.");
-      // expect(importer.datalist.docs.length).toEqual(16);
-      // expect(importer.showImportThirdStep).toBeTruthy();
+    }).then(done, done);
 
-    // }).then(done, done);
-
-    // console.log(JSON.stringify(importer.importFields, null, 2));
-  });
+  }, specIsRunningTooLong);
 
 
-  xit("should process csv participants which were created in a French edition of Microsoft Excel", function(done) {
+  it("should process csv participants which were created in a French edition of Microsoft Excel", function(done) {
     var importer = new Import({
       corpus: corpus,
       rawText: fs.readFileSync("sample_data/students_point_vergule_msexcelfr.csv", "utf8"),
@@ -619,7 +610,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.convertMatrixIntoDataList().then(function(results) {
 
       importer.datalist.docs._collection[2].fields.decryptedMode = true;
-      expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("First Name");
+      expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Prénom");
       expect(importer.datalist.docs._collection[2].fields.firstname.labelFieldLinguists).toEqual("Prénom");
       expect(importer.datalist.docs._collection[2].fields.firstname.labelExperimenters).toEqual("Prénom");
       expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Amelie");
@@ -627,11 +618,10 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
       expect(results.length).toEqual(6);
 
-    }, function(error){
+    }, function(error) {
       expect(error).toEqual(" ");
     }).then(done, done);
 
-    // console.log(JSON.stringify(importer.importFields, null, 2));
   }, specIsRunningTooLong);
 
 
@@ -718,7 +708,7 @@ describe("Import: as a morphologist I want to import my data from CSV", function
       // Ensure the data is read into CSV format
       importer.guessFormatAndPreviewImport();
       expect(importer.asCSV.length).toEqual(147);
-      expect(importer.asCSV[4].map(function(obj){
+      expect(importer.asCSV[4].map(function(obj) {
         return obj.value || "";
       })).toEqual(["5/7/2010", "*Payta suwanayan monikita", "Pay-ta suwa-naya-n moniki-ta", "he-ACC steal.naya.3SG little animal-ACC", "He feels like stealing the little animal", "", "", "Impulsative", "Seberina", "Cusco Quechua"]);
 
