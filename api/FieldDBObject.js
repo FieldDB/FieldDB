@@ -1275,7 +1275,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         this.warn(includeEvenEmptyAttributes + " TODO includeEvenEmptyAttributes is not used ");
       }
-      var json = this.toJSON();
+      var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       var relatedData;
       if (json.datumFields && json.datumFields.relatedData) {
