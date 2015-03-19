@@ -368,7 +368,7 @@ module.exports = function(grunt) {
         logLevel: "ERROR",
         /* https://github.com/karma-runner/grunt-karma/issues/102 */
         client: {
-            captureConsole: false
+          captureConsole: false
         },
         // autoWatch: true,
         browsers: ["PhantomJS"]
