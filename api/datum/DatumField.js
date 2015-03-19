@@ -363,6 +363,12 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 return this.mask;
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
+              if (this.type && this.type.indexOf("number") > -1) {
+                var tryAsNumber = Number(decryptedValue)
+                if (!isNaN(tryAsNumber)) {
+                  decryptedValue = tryAsNumber;
+                }
+              }
               this.debug("decryptedValue " + decryptedValue);
               return decryptedValue;
             }
@@ -376,7 +382,13 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       if (value === this._value) {
         return;
       }
-      if (!value) {
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+      if (value === undefined || value === null || value === "" && !this._value) {
+        return;
+      }
+      if (!value && this._value) {
         var fieldCanBeEmptied = !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.decryptedMode);
         if (fieldCanBeEmptied) {
           this._value = "";
@@ -391,9 +403,6 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         }
       }
       var encryptedValue;
-      if (typeof value.trim === "function") {
-        value = value.trim();
-      }
       if (!this._shouldBeEncrypted) {
         this._encryptedValue = value;
         this._mask = value;
@@ -410,7 +419,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
             // If there was no value before, set the new value
 
             if (!this.confidential) {
-              if (value.indexOf("confidential:") === 0 && !this._encryptedValue) {
+              if (typeof value.indexOf === "function" && value.indexOf("confidential:") === 0 && !this._encryptedValue) {
                 this._encryptedValue = value;
                 this._value = this.mask;
                 this.debug("This is probably a new field initialization from old data (the value has \"confidential:\" in it, and yet the encryptedValue isn't set");
@@ -800,6 +809,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   createMask: {
     value: function(stringToMask) {
+      stringToMask = stringToMask || "";
+      stringToMask = stringToMask + "";
       return stringToMask.replace(/[^_=., -]/g, "x");
     }
   },
