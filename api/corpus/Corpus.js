@@ -429,6 +429,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadOrCreateCorpusByPouchName) {
+            self.warn("Error finding a corpus in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org ");
+            self.bug("Error finding corpus details in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org  ");
             deferred.reject(reason);
             return;
           }
@@ -442,10 +444,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
         self.fetchCollection(self.api).then(function(corpora) {
           self.debug(corpora);
-          if (corpora.length === 1) {
+
+          var corpusAsSelf = function(corpusid) {
             self.runningloadOrCreateCorpusByPouchName = false;
             delete self.loadOrCreateCorpusByPouchNameDeferred;
-            self.id = corpora[0]._id;
+            self.id = corpusid;
             self.fetch().then(function(result) {
               self.debug("Finished fetch of corpus ", result);
               self.loading = false;
@@ -454,8 +457,25 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
               self.loading = false;
               deferred.reject(reason);
             });
-          } else if (corpora.length > 0) {
-            self.warn("Impossible to have more than one corpus for this dbname");
+          };
+
+          if (corpora.length === 1) {
+            corpusAsSelf(corpora[0]._id);
+          } else if (corpora.length > 1) {
+            self.warn("Impossible to have more than one corpus for this dbname, marking irrelevant corpora as trashed");
+            corpora.map(function(row) {
+              if (row.value.pouchname === self.dbname) {
+                corpusAsSelf(row.value._id);
+              } else {
+                self.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);
+                row.value.trashed = "deleted";
+                self.set(row.value).then(function(result) {
+                  self.debug("flag as deleted succedded", result);
+                }, function(reason) {
+                  self.warn("flag as deleted failed", reason, row.value);
+                });
+              }
+            });
           } else {
             tryAgainInCaseThereWasALag(corpora);
           }
