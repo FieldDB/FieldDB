@@ -26,6 +26,7 @@
   var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
   var Datum = require("./datum/Datum").Datum;
+  var Session = require("./datum/Session").Session;
   var DatumField = require("./datum/DatumField").DatumField;
   var Stimulus = require("./datum/Stimulus").Stimulus;
   var Response = require("./datum/Response").Response;
@@ -66,6 +67,7 @@
   FieldDB.AudioVideos = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
   FieldDB.Datum = Datum;
+  FieldDB.Session = Session;
   FieldDB.DatumField = DatumField;
   FieldDB.Stimulus = Stimulus;
   FieldDB.Response = Response;

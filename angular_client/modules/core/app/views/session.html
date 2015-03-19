@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="pull-right">
+   <button class="hide btn btn-{{session.buttonColor}} save-session"value="Save">
+     {{locale.locale_Save}}
+   </button>
+ </div>
+
+<a class="session_id" name="{{session._id}}"></a>
+
+ <!-- list for the fields -->
+ <dl class="col-md-6 session_fields_ul unstyled" ng-repeat="field in session.fields._collection">
+  <dt ng-show="showThisFieldForThisUserType(field)">{{field.label}}: </dt>
+  <dd ng-show="showThisFieldForThisUserType(field)" title="field.help" contenteditable ng-model="field.value"></dd>
+</dl>
+
+
+<ul class="comments unstyled" ng-repeat="comment in session.comments"></ul>
+<div class="extra-session-info-which-can-be-hidden">
+  <span class="last-modified">{{session.dateModified}}</span><i class="fa fa-save "></i><br/>
+  <span class="date-created">{{session.dateEntered}}</span><i class="fa fa-time"></i><br/>
+
+  <!-- Session comments -->
+  <div class="new-comment-area"></div>
+
+</div>
