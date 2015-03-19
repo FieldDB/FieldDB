@@ -331,7 +331,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       }
       couchurl = couchurl + path;
       couchurl = couchurl + "/" + this.dbname;
-
+      couchurl = couchurl.replace("http://localhost:5984", "https://localhost:6984");
       /*
        * For debugging cors #838: Switch to use the corsproxy corpus service instead
        * of couchdb directly
@@ -349,6 +349,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       } else {
         if (typeof value.trim === "function") {
           value = value.trim();
+          value = value.replace("http://localhost:5984", "https://localhost:6984")
         }
       }
 
