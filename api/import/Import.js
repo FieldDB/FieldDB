@@ -314,9 +314,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.warn("There was no extracted header.");
           if (self.asFieldMatrix && self.asFieldMatrix.length > 0 && self.asFieldMatrix[0].concat) {
             self.warn("Using the first row as the extracted header.");
-            // self.extractedHeaderObjects = self.asFieldMatrix[0].concat([]);
+            self.extractedHeaderObjects = self.asFieldMatrix[0].concat([]);
             // self.extractedHeaderObjects = JSON.parse(JSON.stringify(self.asFieldMatrix[0]));
-            self.extractedHeaderObjects = self.asFieldMatrix.shift();
+            // self.extractedHeaderObjects = self.asFieldMatrix.shift();
 
             self.extractedHeaderObjects = self.extractedHeaderObjects.map(function(object) {
               if (object === "" || object === undefined || object === null) {
