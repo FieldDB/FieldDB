@@ -364,7 +364,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
               if (this.type && this.type.indexOf("number") > -1) {
-                var tryAsNumber = Number(decryptedValue)
+                var tryAsNumber = Number(decryptedValue);
                 if (!isNaN(tryAsNumber)) {
                   decryptedValue = tryAsNumber;
                 }

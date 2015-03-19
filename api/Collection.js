@@ -458,7 +458,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!removed) {
         return;
       }
-      key = this.getSanitizedDotNotationKey(removed);
+      var key = this.getSanitizedDotNotationKey(removed);
       if (!key) {
         this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
       }
@@ -485,7 +485,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!removed) {
         return;
       }
-      key = this.getSanitizedDotNotationKey(removed);
+      var key = this.getSanitizedDotNotationKey(removed);
       if (!key) {
         this.warn("This item had no primary key, it will only be removed from the collection. ", removed);
       }
