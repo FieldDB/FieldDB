@@ -532,12 +532,12 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
       expect(importer.datalist.docs).toBeDefined();
       expect(importer.datalist.docs._collection[1]).toBeDefined();
-      importer.datalist.docs._collection[1].debugMode = true;
+      // importer.datalist.docs._collection[1].debugMode = true;
+      // expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
 
       /* make sure that the doc is a participant */
       expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
       expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
-      expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
       expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
       expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
       expect(importer.datalist.docs._collection[1].api).toEqual("participants");
