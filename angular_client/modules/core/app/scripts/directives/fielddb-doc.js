@@ -16,7 +16,7 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
     Participant: "<div data-fielddb-user view='Participant' json='doc' corpus='corpus'></div>",
 
     Corpus: "<div data-fielddb-corpus json='doc' corpus='corpus'></div>",
-    Session: "<div data-fielddb-datum json='doc' corpus='corpus'></div>",
+    Session: "<div data-fielddb-session json='doc' corpus='corpus'></div>",
 
     DataList: "<div data-fielddb-datalist json='doc' corpus='corpus'></div>",
     LessonDataList: "<div data-fielddb-datalist json='doc' corpus='corpus' view='LessonDataList'></div>",

@@ -8,7 +8,7 @@
  */
 angular.module("fielddbAngularApp").directive("fielddbDatum", function() {
   return {
-    templateUrl: "views/datum.html",
+    templateUrl: "views/datum_generic.html",
     restrict: "A",
     transclude: false,
     scope: {
@@ -23,6 +23,9 @@ angular.module("fielddbAngularApp").directive("fielddbDatum", function() {
         // Don"t show empty fields
         if (!field.value) {
           return false;
+        }
+        if (!$rootScope.application || !$rootScope.application.prefs) {
+          return true;
         }
         // Only values which would be interesting for this user
         var prefs = $rootScope.application.prefs;
