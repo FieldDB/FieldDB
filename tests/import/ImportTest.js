@@ -82,6 +82,12 @@ describe("api/import/Import", function() {
       expect(importer.datalist).toBeDefined();
     });
 
+    it("should have the same id as the datalist", function() {
+      expect(importer.datalist).toBeDefined();
+      importer.datalist.id = "123";
+      expect(importer.id).toEqual("123");
+    });
+
     it("should have a collection of fields which gain specification during the import", function() {
       expect(importer.importFields).toBeDefined();
       expect(importer.importFields.length).toEqual(16);
@@ -100,12 +106,12 @@ describe("api/import/Import", function() {
     });
 
     it("should convert between matrix of objects to datalist", function(done) {
-      // importer.debugMode = true;
+      importer.debugMode = true;
       expect(importer.asFieldMatrix.length).toEqual(7);
       importer.metadataLines = ["Copy pasting"];
       importer.convertMatrixIntoDataList().then(function() {
-        // expect(importer.datalist.docs.fieldDBtype).toEqual("DocumentCollection");
-        // expect(importer.datalist.docs.primaryKey).toEqual("tempId");
+        expect(importer.datalist.docs.fieldDBtype).toEqual("DocumentCollection");
+        expect(importer.datalist.docs.primaryKey).toEqual("tempId");
 
         // expect(importer.progress).toBeDefined();
         // expect(importer.progress.total).toEqual(1);
@@ -441,7 +447,7 @@ xdescribe("Import: as a psycholinguist I want to import a list of participants f
 
 
   it("should refuse to import participants if the corpus confidential is not ready", function(done) {
-     var importer = new Import({
+    var importer = new Import({
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
       importType: "participants"
     });

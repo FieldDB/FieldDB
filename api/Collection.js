@@ -160,17 +160,19 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (!value) {
-        value = [];
+        this._collection = [];
+        return;
       }
-      for (var index in value) {
-        if (!value.hasOwnProperty(index)) {
-          continue;
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        throw new Error("Cannot set collection to an object, only an array");
+      }
+      for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+        var item = value[itemIndex];
+        if (!item) {
+          this.warn("item" + itemIndex + "is undefined, not adding it to the collection " + this.fieldDBtype, item);
+        } else {
+          this.add(item);
         }
-        /* parse internal models as a model if specified */
-        if (!value[index]) {
-          this.warn(index + " is undefined on this member of the collection", value);
-        }
-        this.add(value[index]);
       }
       return this._collection;
     }
@@ -417,7 +419,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (anotherCollection && anotherCollection._collection) {
         return this.add(anotherCollection._collection);
       }
-      if(!anotherCollection){
+      if (!anotherCollection) {
         return this;
       }
       return this.add(anotherCollection);
@@ -655,7 +657,13 @@ Collection.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
-      var json = JSON.parse(JSON.stringify(this.toJSON()));
+      var json;
+      try {
+        json = this.toJSON();
+      } catch (e) {
+        console.warn(e.stack);
+        this.bug("There was a problem cloning this collection", e);
+      }
 
       return json;
     }
