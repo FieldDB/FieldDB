@@ -11,7 +11,7 @@ var DatumStates = require("./DatumStates").DatumStates;
 // var DatumTag = require("./../FieldDBObject").FieldDBObject;
 var DatumTags = require("./DatumTags").DatumTags;
 var Images = require("./../image/Images").Images;
-var Session = require("./../FieldDBObject").FieldDBObject;
+var Session = require("./Session").Session;
 
 /**
  * @class The Datum widget is the place where all linguistic data is
@@ -106,35 +106,16 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
-  convertDatumIntoSimpleObject: {
-    value: function() {
+  accessAsObject: {
+    get: function() {
       var obj = {};
 
-      for (var i = 0; i < datum.datumFields.length; i++) {
-        if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
-          fieldKeyName = "id"; /* update to version 2.35+ */
-        } else {
-          fieldKeyName = "label";
-        }
-        if (datum.datumFields[i].mask) {
-          obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
-        }
-      }
-      if (datum.session.sessionFields) {
-        for (var j = 0; j < datum.session.sessionFields.length; j++) {
-          if (datum.session.sessionFields[j].id && datum.session.sessionFields[j].id.length > 0) {
-            fieldKeyName = "id"; /* update to version 2.35+ */
-          } else {
-            fieldKeyName = "label";
-          }
-          if (datum.session.sessionFields[j].mask) {
-            obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
-          }
-        }
-      }
-      obj.utterance = obj.utterance || "";
-      obj.morphemes = obj.morphemes || "";
-      obj.gloss = obj.gloss || "";
+      var passValueReference = function(field) {
+        obj[field.id] = field.value;
+      };
+
+      this.fields.map(passValueReference);
+      this.session.fields.map(passValueReference);
 
       return obj;
     }
@@ -214,7 +195,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           return;
         }
 
-        var datum = convertDatumIntoSimpleObject(doc);
+        var datum = accessAsObject(doc);
         if (!datum) {
           return;
         }
