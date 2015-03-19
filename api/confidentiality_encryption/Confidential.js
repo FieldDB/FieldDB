@@ -175,8 +175,8 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
 
   fillWithDefaults: {
     value: function() {
-      if (this.secretkey === "This should be replaced with a top secret pass phrase.") {
-        this.secretkey = this.secretKeyGenerator();
+      if (!this.secretkey) {
+        this.secretkey = Confidential.secretKeyGenerator();
       }
     }
   },
