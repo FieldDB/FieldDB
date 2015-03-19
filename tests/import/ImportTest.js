@@ -148,37 +148,37 @@ describe("api/import/Import", function() {
         expect(importer.extractedHeaderObjects.map(function(field) {
           return field.value;
         })).toEqual(["", "", "", "", "", ""]);
-        // expect(importer.datalist.docs._collection[0].fields).not.toBe(importer.datalist.docs._collection[1].fields);
-        // expect(importer.datalist.docs._collection[0].fields).not.toEqual(importer.datalist.docs._collection[1].fields);
-        // expect(importer.extractedHeaderObjects).not.toBe(importer.datalist.docs._collection[0].fields);
-        // expect(importer.extractedHeaderObjects).not.toEqual(importer.datalist.docs._collection[0].fields);
-        // expect(importer.datalist.docs._collection[0].tempId).not.toEqual(importer.datalist.docs._collection[1].tempId);
+        expect(importer.datalist.docs._collection[0].fields).not.toBe(importer.datalist.docs._collection[1].fields);
+        expect(importer.datalist.docs._collection[0].fields).not.toEqual(importer.datalist.docs._collection[1].fields);
+        expect(importer.extractedHeaderObjects).not.toBe(importer.datalist.docs._collection[0].fields);
+        expect(importer.extractedHeaderObjects).not.toEqual(importer.datalist.docs._collection[0].fields);
+        expect(importer.datalist.docs._collection[0].tempId).not.toEqual(importer.datalist.docs._collection[1].tempId);
 
-        // expect(importer.asFieldMatrix[2][0]).toBe(importer.datalist.docs._collection[0].fields._collection[0]);
-        // expect(importer.datalist.docs._collection[0]).toBeDefined();
-        // expect(importer.datalist.docs._collection[0].tempId).toBeDefined();
-        // expect(importer.datalist.docs._collection[0].fields.map(function(field) {
-        //   return field.value;
-        // })).toEqual(["lega665319is", "298", "noqata; hi \"", "", "2010-03-08", ""]);
-        // expect(importer.datalist.docs._collection[0].fields.field1.value).toEqual("lega665319is");
-        // expect(importer.datalist.docs._collection[0].fields.field2.value).toEqual("298");
-        // expect(importer.datalist.docs._collection[0].fields.field3.value).toEqual("noqata; hi \"");
-        // expect(importer.datalist.docs._collection[0].fields.field4).toBeUndefined();
-        // expect(importer.datalist.docs._collection[0].fields.field5.value).toEqual("2010-03-08");
-        // expect(importer.datalist.docs._collection[0].fields.field6.value).toEqual("");
+        expect(importer.asFieldMatrix[2][0]).toBe(importer.datalist.docs._collection[0].fields._collection[0]);
+        expect(importer.datalist.docs._collection[0]).toBeDefined();
+        expect(importer.datalist.docs._collection[0].tempId).toBeDefined();
+        expect(importer.datalist.docs._collection[0].fields.map(function(field) {
+          return field.value;
+        })).toEqual(["lega665319is", 298, "noqata; hi \"", "", "2010-03-08", ""]);
+        expect(importer.datalist.docs._collection[0].fields.field1.value).toEqual("lega665319is");
+        expect(importer.datalist.docs._collection[0].fields.field2.value).toEqual(298);
+        expect(importer.datalist.docs._collection[0].fields.field3.value).toEqual("noqata; hi \"");
+        expect(importer.datalist.docs._collection[0].fields.field4).toBeUndefined();
+        expect(importer.datalist.docs._collection[0].fields.field5.value).toEqual("2010-03-08");
+        expect(importer.datalist.docs._collection[0].fields.field6.value).toEqual("");
 
-        // expect(importer.asFieldMatrix[4][0]).toBe(importer.datalist.docs._collection[1].fields._collection[0]);
-        // expect(importer.datalist.docs._collection[1]).toBeDefined();
-        // expect(importer.datalist.docs._collection[1].tempId).toBeDefined();
-        // expect(importer.datalist.docs._collection[1].fields.map(function(field) {
-        //   return field.value;
-        // })).toEqual(["23213", "", "paul", "", "", ""]);
-        // expect(importer.datalist.docs._collection[1].fields.field1.value).toEqual("23213");
-        // expect(importer.datalist.docs._collection[1].fields.field2.value).toEqual("");
-        // expect(importer.datalist.docs._collection[1].fields.field3.value).toEqual("paul");
-        // expect(importer.datalist.docs._collection[1].fields.field4).toBeUndefined();
-        // expect(importer.datalist.docs._collection[1].fields.field5.value).toEqual("");
-        // expect(importer.datalist.docs._collection[1].fields.field6.value).toEqual("");
+        expect(importer.asFieldMatrix[4][0]).toBe(importer.datalist.docs._collection[1].fields._collection[0]);
+        expect(importer.datalist.docs._collection[1]).toBeDefined();
+        expect(importer.datalist.docs._collection[1].tempId).toBeDefined();
+        expect(importer.datalist.docs._collection[1].fields.map(function(field) {
+          return field.value;
+        })).toEqual([23213, "", "paul", "", "", ""]);
+        expect(importer.datalist.docs._collection[1].fields.field1.value).toEqual(23213);
+        expect(importer.datalist.docs._collection[1].fields.field2.value).toEqual("");
+        expect(importer.datalist.docs._collection[1].fields.field3.value).toEqual("paul");
+        expect(importer.datalist.docs._collection[1].fields.field4).toBeUndefined();
+        expect(importer.datalist.docs._collection[1].fields.field5.value).toEqual("");
+        expect(importer.datalist.docs._collection[1].fields.field6.value).toEqual("");
 
       }).done(done);
     }, specIsRunningTooLong);

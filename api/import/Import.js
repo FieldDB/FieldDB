@@ -398,7 +398,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.debug("Working on row ", row);
           var docToSave;
           console.log("Cloning fields ", self.extractedHeaderObjects.length);
-          var fields = new DatumFields(self.extractedHeaderObjects);
+          var fields = self.extractedHeaderObjects.map(function(headerField) {
+            return headerField.toJSON();
+          });
           console.log("Cloned fields ", fields.length);
           console.log("fields[0] equals extractedHeaderObjects[0]", fields[0] === self.extractedHeaderObjects[0])
           if (self.importType === "participants") {
@@ -425,7 +427,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
             cell = row[cellIndex];
-            console.log("working on cell ",cell)
+            console.log("working on cell ", cell)
             if (!cell || cellIndex > self.extractedHeaderObjects.length || self.extractedHeaderObjects[cellIndex].id === "columnplaceholder") {
               self.debug("Skipping column " + cellIndex + " :", cell);
               continue;
