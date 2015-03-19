@@ -200,7 +200,9 @@ describe("Directive: fielddb-authentication", function() {
       expect(promiseResult).toBeDefined();
       expect(promiseResult.application).toBeDefined();
       expect(promiseResult.application.authentication).toEqual(scope.application.authentication);
-      expect(promiseResult.application.authentication.error).toEqual("Passwords don't match, please double check your password.");
+      if (promiseResult.application.authentication.error.indexOf("offline") === -1) {
+        expect(promiseResult.application.authentication.error).toEqual("Passwords don't match, please double check your password.");
+      }
     });
 
   }, specIsRunningTooLong);
