@@ -106,7 +106,7 @@ describe("Test Datum", function() {
 
       datum.fields.translation.value = "Des chiens";
 
-      expect(datum.igt).toEqual({});
+      // expect(datum.igt).toEqual({});
     });
 
   });
@@ -129,3 +129,24 @@ describe("Backward compatability with v1.22", function() {
   });
 
 });
+
+describe("Syntactic sugar", function() {
+  var datum = new Datum(sample_1_22_datum[0]);
+
+  it("should be able to modify fields via a simple object", function() {
+
+    expect(datum.fields.utterance.value).toEqual("Jaunpa much'asqami kani.");
+    expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
+    expect(datum.accessAsObject.utterance).toBe(datum.fields.utterance.value);
+
+    datum.accessAsObject.utterance = "pʌpiz";
+    expect(datum.accessAsObject.utterance).toEqual(datum.fields.utterance.value);
+    expect(datum.accessAsObject.utterance).toBe(datum.fields.utterance.value);
+
+    // expect(datum.accessAsObject.utterance).toEqual("");
+    // expect(datum.fields.utterance.value).toEqual("");
+
+
+  });
+
+})
