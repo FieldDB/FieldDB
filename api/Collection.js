@@ -379,14 +379,20 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  /**
+   * Adds to the bottom of the collection
+   *
+   * @param  {Object} value a simple object, and/or  an array of objects or items of the type of this collection.
+   * @return {Array}       returns a reference to the added item(s)
+   */
   add: {
     value: function(value) {
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
-        value.map(function(item) {
-          self.add(item);
-        });
-        return this;
+        for(var itemIndex in value){
+          value[itemIndex] = self.add(value[itemIndex]);
+        }
+        return value;
       }
 
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
@@ -410,7 +416,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       this.debug("adding " + dotNotationKey);
       this.set(dotNotationKey, value);
-      return this;
+      return this[dotNotationKey];
     }
   },
 
@@ -422,7 +428,8 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!anotherCollection) {
         return this;
       }
-      return this.add(anotherCollection);
+      this.add(anotherCollection);
+      return this;
     }
   },
 
