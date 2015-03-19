@@ -48,11 +48,11 @@ module.exports = function(grunt) {
       },
       jsTest: {
         files: ["test/spec/{,*/}*.js"],
-        tasks: ["newer:jshint:test", "karma"]
+        tasks: ["newer:jshint:test", "karma:unit"]
       },
       karma: {
         files: ["test/spec/{,*/}*.js"],
-        tasks: ["newer:jshint:test", "karma:unit:run"] //https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
+        tasks: ["newer:jshint:test", "karma:watch:run"] //https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
       },
       styles: {
         files: ["<%= yeoman.app %>/styles/{,*/}*.css"],
@@ -352,12 +352,34 @@ module.exports = function(grunt) {
     // https://github.com/karma-runner/grunt-karma#karma-server-with-grunt-watch
     karma: {
       unit: {
+        // files: [{
+        //   src: ['test/**/*.js'],
+        //   served: true
+        // }, {
+        //   src: ['app/**/*.js'],
+        //   served: true,
+        //   included: false
+        // }],
         configFile: "karma.conf.js",
+        // reporters: ['dots'],
         // background: true,
         // singleRun: false,
-        singleRun: true
+        singleRun: true,
+        logLevel: "ERROR",
+        /* https://github.com/karma-runner/grunt-karma/issues/102 */
+        client: {
+            captureConsole: false
+        },
         // autoWatch: true,
-        // browsers: ["Chrome"]
+        browsers: ["PhantomJS"]
+      },
+      watch: {
+        configFile: "karma.conf.js",
+        // reporters: "dots",
+        // background: true,
+        singleRun: false,
+        autoWatch: true,
+        browsers: ["Chrome"]
       }
     }
   });
@@ -388,7 +410,7 @@ module.exports = function(grunt) {
     "concurrent:test",
     "autoprefixer",
     "connect:test",
-    "karma"
+    "karma:unit:unit"
   ]);
 
   /* might want to run $ grunt browserify in the FieldDB root to ensure the api build is up to date. */
