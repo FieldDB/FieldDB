@@ -861,7 +861,7 @@ var MAINTAINENCE = {
                 // return;
                 console.log("deploying to anonymous users");
               } else {
-                return; //deploy to only beta testers and/or phophlo users
+                // return; //deploy to only beta testers and/or phophlo users
                 // console.log("deploying to normal users");
               }
             }
