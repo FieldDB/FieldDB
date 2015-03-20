@@ -42,6 +42,95 @@ angular.module('spreadsheetApp')
       }
     };
 
+    // var getDataBySession = function(DB, sessionID, guessedAudioUrl, $scope) {
+    //   if (!sessionID) {
+
+    //     return this.getDocFromCouchDB(DB, sessionID);
+    //   }
+
+    //   if (!$rootScope.serverCode) {
+    //     console.log("Sever code is undefined");
+    //     window.location.assign("#/corpora_list");
+    //     return;
+    //   }
+    //   var deferred = $q.defer();
+
+    //     config;
+
+    //   config = {
+    //     method: "GET",
+    //     url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_list/as_data_list/list_of_data_by_session?key=%22sessionIDYouWantToSee%22".replace("sessionIDYouWantToSee", sessionID),
+    //     withCredentials: true
+    //   };
+    //   console.log("Contacting the DB to get all corpus data for " + DB);
+    //   promise = $http(config).then(function(response) {
+    //     console.log("Receiving data results ");
+    //     var arrayOfEventualData = [];
+    //     var expectedCount = response.data.datumIds.length;
+    //     response.data.datumIds.map(function(UUID) {
+    //       config = {
+    //         method: "GET",
+    //         url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
+    //         withCredentials: true
+    //       };
+
+    //       console.log("Contacting the DB to get data " + config.url);
+    //       promise = $http(config).then(function(response) {
+    //         console.log("Receiving data results ");
+
+    //         // Load data from current session into scope
+    //         if (response.data.session._id === sessionID) {
+    //           var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({},
+    //             response.data,
+    //             $rootScope.server + "/" + $rootScope.corpus.pouchname + "/",
+    //             $scope);
+    //           arrayOfEventualData.push(newDatumFromServer);
+    //         }
+    //         if(arrayOfEventualData.length >= expectedCount){
+    //           deferred.resolve(arrayOfEventualData);
+    //         }
+    //       });
+    //     });
+
+    //     return deferred.resolve();
+    //   });
+    //   return deferred.promise;
+    // };
+
+    var getDataBySession = function(DB, sessionID) {
+      if (!sessionID) {
+        return this.getDocFromCouchDB(DB, sessionID);
+      }
+
+      if (!$rootScope.serverCode) {
+        console.log("Sever code is undefined");
+        window.location.assign("#/corpora_list");
+        return;
+      }
+      var promise,
+        config;
+
+      config = {
+        method: "GET",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_list/as_data_list/list_of_data_by_session?key=%22sessionIDYouWantToSee%22".replace("sessionIDYouWantToSee", sessionID),
+        withCredentials: true
+      };
+      console.log("Contacting the DB to get all corpus data for " + DB);
+      promise = $http(config).then(function(response) {
+        console.log("Receiving data results ");
+        if(!response || !response.data || !response.data[sessionID] || !response.data[sessionID].datumIds){
+          return [];
+        }
+        return response.data[sessionID].datumIds.map(function(uuid) {
+          return {
+            _id: uuid,
+            loading: true
+          };
+        });
+      });
+      return promise;
+    };
+
     var saveCouchDoc = function(DB, newRecord) {
       if (!$rootScope.serverCode) {
         console.log("Sever code is undefined");
@@ -638,6 +727,7 @@ angular.module('spreadsheetApp')
 
     return {
       async: getDocFromCouchDB,
+      getDataBySession: getDataBySession,
       datumFields: datumFields,
       sessions: sessions,
       glosser: glosser,
