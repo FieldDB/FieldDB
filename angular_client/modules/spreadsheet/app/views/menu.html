@@ -127,32 +127,29 @@
         </span>
         <select class="span3" ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
         </select>
-        &nbsp;
-        <button class="btn btn-primary hide" hidden ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">
-          {{contextualize('locale_activate_session_button')}}
-        </button>
+
         &nbsp;&nbsp;
-        <span ng-hide="activeSessionID==undefined">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+        <span ng-hide="fullCurrentSession.id==undefined">
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click=";showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <span ng-show="(data | filter: activeSessionID).length==0">
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+        <span>
+          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly==true">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown;showEditSessionDetailsDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-plus">
           </i>
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSessionID!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined"ng-cloak>
         <form ng-model='editSessionInfo'>
           <table cellpadding="5px">
             <tr>
@@ -210,12 +207,12 @@
             {{contextualize('locale_save_changes_button')}}
           </button>
           &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
+          <button class="btn" ng-click="showEditSessionDetailsDropdown=false">
             {{contextualize('locale_cancel_button')}}
           </button>
         </div>
       </div>
-      <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
+      <div class="subSubMenubar" ng-show="showCreateNewSessionDropdown==true" ng-cloak>
         <ng-include src="views/session_quick_edit.html"></ng-include>
       </div>
     </div>
@@ -354,31 +351,31 @@
       <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
       &nbsp;&nbsp;
-      <span ng-hide="activeSessionID==undefined">
-        <button class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+      <span ng-hide="fullCurrentSession.id==undefined">
+        <button class="btn btn-success" ng-click="showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <span ng-show="(data | filter: activeSessionID).length==0">
-        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+      <span>
+        <button class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+      <button class="btn btn-primary" ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown;showEditSessionDetailsDropdown=false" ng-disabled="readOnly==true">
         <i class="fa whiteicon fa-plus">
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined" ng-cloak>
         <ng-include src="views/session_quick_edit.html"></ng-include>
       </div>
-      <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
+      <div class="subSubMenubar" ng-show="showCreateNewSessionDropdown==true" ng-cloak>
         <ng-include src="views/session_quick_edit.html"></ng-include>
       </div>
     </div>
