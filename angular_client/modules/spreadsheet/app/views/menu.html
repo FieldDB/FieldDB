@@ -351,19 +351,8 @@
       <span>
         {{contextualize('locale_change_session')}}
       </span>
-      <select class="span3" ng-model='activeSessionIDToSwitchTo'>
-        <option value='none'>
-          All sessions
-        </option>
-        <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value="{{session._id}}">
-          {{session.dateCreated | shortDate}} {{session.title}}
-        </option>
-      </select>
-      <button class="btn btn-primary" ng-click="selectSession(activeSessionIDToSwitchTo);navigateVerifySaved('none')">
-        <i class="fa whiteicon fa-calendar">
-        </i>
-        {{contextualize('locale_activate_session_button')}}
-      </button>
+      <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
+        </select>
       &nbsp;&nbsp;
       <span ng-hide="activeSessionID==undefined">
         <button class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
@@ -387,124 +376,10 @@
         {{contextualize('locale_create_new_session')}}
       </button>
       <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
-        <form ng-model='editSessionInfo'>
-          <table cellpadding="5px">
-            <tr>
-              <td>
-                {{contextualize('locale_goal_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
-              </td>
-              <td>
-                {{contextualize('locale_consultants_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
-                {{contextualize('locale_user_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {{contextualize('locale_language_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
-              </td>
-              <td>
-                {{contextualize('locale_dialect_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
-              </td>
-              <td>
-                {{contextualize('locale_date_elicited_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
-              </td>
-            </tr>
-          </table>
-        </form>
-        <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
-            <i class="fa whiteicon fa-save">
-            </i>
-            {{contextualize('locale_save_changes_button')}}
-          </button>
-          &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
-            {{contextualize('locale_cancel_button')}}
-          </button>
-        </div>
+        <ng-include src="views/session_quick_edit.html"></ng-include>
       </div>
       <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
-        <form ng-model='newSessionInfo'>
-          <table cellpadding="5px">
-            <tr>
-              <td>
-                <i class="fa whiteicon fa-calendar">
-                </i>
-                {{contextualize('locale_goal_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
-              </td>
-              <td>
-                <i class="fa whiteicon fa-group">
-                </i>
-                {{contextualize('locale_consultants_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
-                <i class="fa whiteicon fa-user">
-                </i>
-                {{contextualize('locale_user_textbox')}}:
-              </td>
-              <td>
-                <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {{contextualize('locale_language_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
-              </td>
-              <td>
-                {{contextualize('locale_dialect_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
-              </td>
-              <td>
-                {{contextualize('locale_date_elicited_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
-              </td>
-            </tr>
-          </table>
-        </form>
-        <div>
-          <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
-            <i class="fa whiteicon fa-save">
-            </i>
-            {{contextualize('locale_create_session_button')}}
-          </button>
-          &nbsp;
-          <button class="btn" ng-click="createNewSessionDropdown=false">
-            {{contextualize('locale_cancel_button')}}
-          </button>
-        </div>
+        <ng-include src="views/session_quick_edit.html"></ng-include>
       </div>
     </div>
     <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
