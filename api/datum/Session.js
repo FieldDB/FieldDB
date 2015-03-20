@@ -96,12 +96,12 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   dateAndGoalSnippet: {
     get: function() {
       var goal = this.goal;
-      if (goal.length > 20) {
-        goal = goal.substr(0, 20) + "...";
+      if (goal.length > 31) {
+        goal = goal.substr(0, 30) + "...";
       }
       var dateElicited = this.dateElicited;
-      if (dateElicited.length > 20) {
-        dateElicited = dateElicited.substr(0, 20) + "...";
+      if (dateElicited.length > 16) {
+        dateElicited = dateElicited.substr(0, 15) + "...";
       }
       return dateElicited + " : " + goal;
     },
@@ -132,11 +132,13 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     set: function(value) {
       if (this.fields && this.fields.goal) {
         // this.fields.debugMode = true;
-        this.fields.goal.value = value;
       } else {
         this.fields = new DatumFields(this.defaults.fields);
-        this.fields.goal.value = value;
       }
+      if (value && value.indexOf && value.indexOf("Change this session") > -1) {
+        value = "Practice collecting linguistic utterances or words";
+      }
+      this.fields.goal.value = value;
     }
   },
 
@@ -154,6 +156,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     configurable: true,
     get: function() {
       if (this.fields && this.fields.dateElicited) {
+        if (this.fields.dateElicited.value && this.fields.dateElicited.value.indexOf && this.fields.dateElicited.value.indexOf("Change this to a tim") > -1) {
+          this.fields.dateElicited.value = "Probably prior to " + new Date(this.dateCreated);
+        }
         return this.fields.dateElicited.value;
       } else {
         return FieldDBObject.DEFAULT_STRING
@@ -162,11 +167,13 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     set: function(value) {
       if (this.fields) {
         // this.fields.debugMode = true;
-        this.fields.dateElicited.value = value;
       } else {
         this.fields = new DatumFields(this.defaults.fields);
-        this.fields.dateElicited.value = value;
       }
+      if (value && value.indexOf && value.indexOf("Change this to a tim") > -1) {
+        value = "Probably prior to " + new Date(this.dateCreated);
+      }
+      this.fields.dateElicited.value = value;
     }
   },
 
