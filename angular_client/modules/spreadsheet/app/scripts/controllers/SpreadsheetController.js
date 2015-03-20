@@ -694,8 +694,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // });
 
       if (!$scope.fullCurrentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
-        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+
+        if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession]) {
+          $scope.fullCurrentSession = $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession];
+        } else {
+          $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+        }
+
       }
+
       $scope.documentReady = true;
     }, function(error) {
       $scope.documentReady = true;
@@ -1068,283 +1075,146 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  $scope.selectSession = function(activeSessionID) {
-    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession._id;
-    $scope.scopePreferences.savedState.sessionTitle = $scope.fullCurrentSession.title;
+
+  $scope.$watch('fullCurrentSession', function(newvalue, oldvalue) {
+    if (!$scope.fullCurrentSession) {
+      return;
+    }
+    console.log("fullCurrentSession changed", oldvalue);
+    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession.id;
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
 
+  });
+
+  $scope.selectSession = function() {
     console.log("selectSession is deprecated, dont need it anymore.");
-    if (true) {
-      return;
-    }
-
-    $scope.changeActiveSessionID(activeSessionID);
-    // Make sure that following variable is set (ng-model in select won't
-    // assign variable until chosen)
-    $scope.activeSessionIDToSwitchTo = activeSessionID;
-    $scope.dataentry = true;
-
-    // Update saved state in Preferences
-    $scope.loadData(activeSessionID);
-    $scope.loadUsersAndRoles();
   };
 
-  $scope.changeActiveSessionID = function(activeSessionIDToSwitchTo) {
-
+  $scope.changeActiveSessionID = function() {
     console.log("changeActiveSessionID is deprecated, dont need it anymore.");
-
-    if (true) {
-      return;
-    }
-    if (activeSessionIDToSwitchTo === 'none' || activeSessionIDToSwitchTo === undefined) {
-      $scope.activeSessionID = undefined;
-      $scope.fullCurrentSession = undefined;
-      $scope.editSessionInfo = undefined;
-    } else {
-      $scope.activeSessionID = activeSessionIDToSwitchTo;
-      for (var i in $scope.application.sessionsList) {
-        if ($scope.application.sessionsList[i]._id === activeSessionIDToSwitchTo) {
-          $scope.fullCurrentSession = $scope.application.sessionsList[i];
-
-          // Set up object to make session editing easier
-          var editSessionInfo = {};
-          editSessionInfo._id = $scope.fullCurrentSession._id;
-          editSessionInfo._rev = $scope.fullCurrentSession._rev;
-          for (var k in $scope.fullCurrentSession.sessionFields) {
-            editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
-            if ($scope.fullCurrentSession.sessionFields[k].label === "goal") {
-              $scope.currentSessionName = $scope.fullCurrentSession.sessionFields[k].mask;
-            }
-          }
-          $scope.editSessionInfo = editSessionInfo;
-        }
-      }
-    }
-    // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = $scope.activeSessionID;
-    $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
 
   $scope.getCurrentSessionName = function() {
-
     console.log("getCurrentSessionName is deprecated, dont need it anymore.");
-
-    if (true) {
-      return "TODO getCurrentSessionName";
-    }
-    if ($scope.activeSessionID === undefined) {
-      return "All Sessions";
-    } else {
-      var sessionTitle;
-      if (debugging) {
-        console.log(sessionTitle);
-      }
-      for (var i in $scope.application.sessionsList) {
-        if ($scope.application.sessionsList[i]._id === $scope.activeSessionID) {
-          for (var j in $scope.application.sessionsList[i].sessionFields) {
-            if ($scope.application.sessionsList[i].sessionFields[j].id === "goal") {
-              if ($scope.application.sessionsList[i].sessionFields[j].mask) {
-                $scope.currentSessionName = $scope.application.sessionsList[i].sessionFields[j].mask;
-                return $scope.application.sessionsList[i].sessionFields[j].mask.substr(0,
-                  20);
-              } else {
-                $scope.currentSessionName = $scope.application.sessionsList[i].sessionFields[j].value;
-                return $scope.application.sessionsList[i].sessionFields[j].value.substr(0,
-                  20);
-              }
-            }
-          }
-        }
-      }
-    }
   };
 
-  $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
-
-    console.log("editSession should use the session details in the template, instead of this proxy object, dont need it anymore.");
-
-    if(true){
+  $scope.editSession = function() {
+    var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
+    if (!r) {
       return;
     }
-    var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
-    if (r === true) {
-      $scope.editSessionDetails = false;
-      $rootScope.loading = true;
-      var newSession = $scope.fullCurrentSession;
-      for (var i in newSession.sessionFields) {
-        for (var key in editSessionInfo) {
-          if (newSession.sessionFields[i].id === key) {
-            newSession.sessionFields[i].value = editSessionInfo[key];
-            newSession.sessionFields[i].mask = editSessionInfo[key];
-          }
-        }
-      }
-      // Save session record
-      Data.saveCouchDoc($rootScope.corpus.pouchname, newSession)
-        .then(function() {
-          var directobject = $scope.currentSessionName || "an elicitation session";
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
-          $scope.addActivity([{
-            verb: "modified",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "modified",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }], "uploadnow");
+    // Save session record to all its datum
+    $scope.fullCurrentSession.save().then(function() {
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+      $scope.addActivity([{
+        verb: "modified",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-calendar",
+        directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>" + $scope.fullCurrentSession.goal + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "personal"
+      }, {
+        verb: "modified",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-calendar",
+        directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>" + $scope.fullCurrentSession.goal + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "team"
+      }], "uploadnow");
 
-          var doSomething = function(index) {
-            if (scopeDataToEdit[index].session._id === newSession._id) {
-              Data.async($rootScope.corpus.pouchname, scopeDataToEdit[index].id)
-                .then(function(editedRecord) {
-                    // Edit record with updated session info
-                    // and save
-                    editedRecord.session = newSession;
-                    Data.saveCouchDoc($rootScope.corpus.pouchname, editedRecord)
-                      .then(function() {
-                        $rootScope.loading = false;
-                      });
-                  },
-                  function() {
-                    $scope.application.bug("There was an error accessing the record.\nTry refreshing the page");
-                  });
-            }
-          };
-          // Update all records tied to this session
-          for (var i in scopeDataToEdit) {
-            $rootScope.loading = true;
-            doSomething(i);
-          }
-          $scope.loadData($scope.activeSessionID);
-        });
-    }
-
+      // $scope.fullCurrentSession.docs.map(function(datum) {
+      //   datum.session = $scope.fullCurrentSession;
+      //   datum.save().then(function() {
+      //       $rootScope.loading = false;
+      //     },
+      //     function() {
+      //       $scope.application.bug("There was an error accessing the record.\nTry refreshing the page");
+      //     });
+      // });
+    });
   };
 
-  $scope.deleteEmptySession = function(activeSessionID) {
-    if ($scope.fullCurrentSession._id === "none") {
+  $scope.deleteEmptySession = function() {
+    $scope.deleteSession();
+  };
+
+  $scope.deleteSession = function() {
+    if (!$scope.fullCurrentSession || $scope.fullCurrentSession.id === "none") {
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
       var r = confirm("Are you sure you want to put this session in the trash?");
-      if (r === true) {
-        Data.getDataBySession($rootScope.corpus.pouchname, activeSessionID)
-          .then(function(sessionToMarkAsDeleted) {
-            sessionToMarkAsDeleted.trashed = "deleted";
-            var rev = sessionToMarkAsDeleted._rev;
-            if (debugging) {
-              console.log(rev);
-            }
-            Data.saveCouchDoc($rootScope.corpus.pouchname, sessionToMarkAsDeleted)
-              .then(function(response) {
-
-                if (debugging) {
-                  console.log(response);
-                }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
-                $scope.addActivity([{
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "personal"
-                }, {
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "team"
-                }], "uploadnow");
-
-                // Remove session from scope
-                for (var i in $scope.application.sessionsList) {
-                  if ($scope.application.sessionsList[i]._id === activeSessionID) {
-                    $scope.application.sessionsList.splice(i, 1);
-                  }
-                }
-                // Set active session to All Sessions
-                $scope.activeSessionID = undefined;
-              }, function(error) {
-                console.warn("there was an error deleting a session", error);
-                $scope.application.bug("Error deleting session.\nTry refreshing the page.");
-              });
-          });
+      if (!r) {
+        return;
       }
-    }
-  };
-
-  $scope.createNewSession = function(newSession) {
-    $rootScope.loading = true;
-    // Get blank template to build new record
-    var newSessionRecord = Data.blankSessionTemplate();
-    newSessionRecord.pouchname = $rootScope.corpus.pouchname;
-    newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
-    newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
-    newSessionRecord.lastModifiedBy = $rootScope.user.username;
-    for (var key in newSession) {
-      for (var i in newSessionRecord.sessionFields) {
-        if (newSessionRecord.sessionFields[i].id === "user") {
-          newSessionRecord.sessionFields[i].value = $rootScope.user.username;
-          newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
+      $scope.fullCurrentSession.trashed = "deleted";
+      $scope.fullCurrentSession.save().then(function(response) {
+        if (debugging) {
+          console.log(response);
         }
-        if (newSessionRecord.sessionFields[i].id === "dateSEntered" || newSessionRecord.sessionFields[i].id === "dateSessionEntered") {
-          newSessionRecord.sessionFields[i].value = new Date().toString();
-          newSessionRecord.sessionFields[i].mask = new Date().toString();
-        }
-        if (key === newSessionRecord.sessionFields[i].id) {
-          newSessionRecord.sessionFields[i].value = newSession[key];
-          newSessionRecord.sessionFields[i].mask = newSession[key];
-        }
-      }
-    }
-    Data.saveCouchDoc($rootScope.corpus.pouchname, newSessionRecord)
-      .then(function(savedRecord) {
-
-        newSessionRecord._id = savedRecord.data.id;
-        newSessionRecord._rev = savedRecord.data.rev;
-        for (var i in newSessionRecord.sessionFields) {
-          if (newSessionRecord.sessionFields[i].id === "goal") {
-            newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
-          }
-        }
-        var directobject = newSessionRecord.title || "an elicitation session";
         var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
         $scope.addActivity([{
-          verb: "added",
-          verbicon: "icon-pencil",
+          verb: "deleted",
+          verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+          directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "personal"
         }, {
-          verb: "added",
-          verbicon: "icon-pencil",
+          verb: "deleted",
+          verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + savedRecord.data.id + "'>" + directobject + "</a> ",
+          directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "team"
         }], "uploadnow");
 
-        $scope.application.sessionsList.add(newSessionRecord);
-        $scope.dataentry = true;
-        $scope.selectSession(savedRecord.data.id);
-        window.location.assign("#/spreadsheet/" + $rootScope.templateId);
-      });
-    $rootScope.loading = false;
+        // Remove session from scope
+        $scope.application.sessionsList.docs.remove($scope.fullCurrentSession);
+        if ($scope.application.sessionsList.docs._collection.length > 0) {
+          $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
+        } else {
+          $scope.application.bug("Please create an elicitation session before continuing.");
+          window.location.assign("#/corpora_list");
+        }
 
+      }, function(error) {
+        console.warn("there was an error deleting a session", error);
+        $scope.application.bug("Error deleting session.\nTry refreshing the page.");
+      });
+    }
+  };
+
+
+  $scope.createNewSession = function(newSession) {
+    $rootScope.loading = true;
+    newSession.save().then(function() {
+
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
+      $scope.addActivity([{
+        verb: "added",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-calendar",
+        directobject: "<a href='#session/" + newSession.id + "'>" + newSession.goal + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "personal"
+      }, {
+        verb: "added",
+        verbicon: "icon-pencil",
+        directobjecticon: "icon-calendar",
+        directobject: "<a href='#session/" + newSession.id + "'>" + newSession.goal + "</a> ",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "team"
+      }], "uploadnow");
+
+      $scope.fullCurrentSession = $scope.application.sessionsList.add(newSession);
+      $scope.dataentry = true;
+      $rootScope.loading = false;
+      window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+    });
   };
 
 
@@ -1464,7 +1334,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
     if (!$scope.fullCurrentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
-      $scope.fullCurrentSession = $scope.application.sessionsList[0];
+
+      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession]) {
+        $scope.fullCurrentSession = $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession];
+      } else {
+        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[0];
+      }
+
     }
     newSpreadsheetDatum.session = $scope.fullCurrentSession;
     // newSpreadsheetDatum.sessionID = $scope.activeSessionID;

@@ -93,13 +93,29 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     value: Session
   },
 
+  dateAndGoalSnippet: {
+    get: function() {
+      var goal = this.goal;
+      if (goal.length > 20) {
+        goal = goal.substr(0, 20) + "...";
+      }
+      var dateElicited = this.dateElicited;
+      if (dateElicited.length > 20) {
+        dateElicited = dateElicited.substr(0, 20) + "...";
+      }
+      return dateElicited + " : " + goal;
+    },
+    set: function() {
+      this.debug("cant set the snippet.");
+    }
+  },
 
   title: {
     get: function() {
       return this.goal;
     },
     set: function(value) {
-      this.warn("title is syntactic sugar for goal");
+      this.warn("title is syntactic sugar for goal, if it was used this will make it overwrite the goal field");
       return this.goal = value;
     }
   },
@@ -110,7 +126,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields && this.fields.goal) {
         return this.fields.goal.value;
       } else {
-        return;
+        return FieldDBObject.DEFAULT_STRING;
       }
     },
     set: function(value) {
@@ -140,7 +156,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields && this.fields.dateElicited) {
         return this.fields.dateElicited.value;
       } else {
-        return;
+        return FieldDBObject.DEFAULT_STRING
       }
     },
     set: function(value) {
