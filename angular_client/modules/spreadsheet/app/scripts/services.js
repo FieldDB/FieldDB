@@ -1,9 +1,9 @@
-/* globals  Q, sjcl, SpreadsheetDatum */
+/* globals  Q, sjcl, SpreadsheetDatum, FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 
 angular.module('spreadsheetApp')
-  .factory('Data', function($http, $rootScope, $q, Servers, md5) {
+  .factory('Data', function($http, $rootScope, $q, Servers) {
 
     var getDocFromCouchDB = function(DB, UUID) {
       if (!$rootScope.serverCode) {
@@ -118,7 +118,7 @@ angular.module('spreadsheetApp')
       console.log("Contacting the DB to get all corpus data for " + DB);
       promise = $http(config).then(function(response) {
         console.log("Receiving data results ");
-        if(!response || !response.data || !response.data[sessionID] || !response.data[sessionID].datumIds){
+        if (!response || !response.data || !response.data[sessionID] || !response.data[sessionID].datumIds) {
           return [];
         }
         return response.data[sessionID].datumIds.map(function(uuid) {
@@ -295,88 +295,43 @@ angular.module('spreadsheetApp')
     };
 
     var login = function(user, password) {
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var deferred = $q.defer();
+      // if (!$rootScope.serverCode) {
+      //   console.log("Sever code is undefined");
+      //   window.location.assign("#/corpora_list");
+      //   return;
+      // }
+      // var deferred = $q.defer();
 
-      var authConfig = {
-        method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/login",
-        data: {
-          username: user,
-          password: password
-        },
-        withCredentials: true
-      };
-      var corpusConfig = {
-        method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/_session",
-        data: {
-          name: user,
-          password: password
-        },
-        withCredentials: true
-      };
+      // var loginInfo = {
+      //   authUrl: Servers.getServiceUrl($rootScope.serverCode, "auth"),
+      //   username: user,
+      //   password: password
+      // };
 
-      var userIsAuthenticated = function(user) {
-        user.name = user.firstname || user.lastname || user.username;
-        if (!user.gravatar || user.gravatar.indexOf("gravatar") > -1) {
-          user.gravatar = md5.createHash(user.email);
-        }
-        $rootScope.user = user;
-        $http(corpusConfig).then(
-          function(corpusResponse) {
-            console.log("Logging in to corpus server.");
-            deferred.resolve(corpusResponse);
-          },
-          function(err) {
-            console.warn(err);
-            var message = "";
-            if (err.status === 0) {
-              message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
-              }
-            }
-            if (err && err.status >= 400 && err.data && err.data.reason) {
-              message = err.data.reason;
-            } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
-            }
-            deferred.reject(message);
-          });
-      };
+      // FieldDB.FieldDBObject.application.authentication.login(loginInfo).then(
+      //   function(user) {
+      //     $rootScope.user = FieldDB.FieldDBObject.application.authentication.user;
+      //     console.log("Logged in to corpus server.");
+      //     deferred.resolve(user);
+      //   },
+      //   function(err) {
+      //     console.warn(err);
+      //     var message = "";
+      //     if (err.status === 0) {
+      //       message = "are you offline?";
+      //       if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+      //         message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+      //       }
+      //     }
+      //     if (err && err.status >= 400 && err.data && err.data.userFriendlyErrors) {
+      //       message = err.data.userFriendlyErrors;
+      //     } else {
+      //       message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+      //     }
+      //     deferred.reject(message);
 
-      $http(authConfig).then(
-        function(response) {
-          if (response.data.userFriendlyErrors) {
-            deferred.reject(response.data.userFriendlyErrors.join(" "));
-          } else {
-            userIsAuthenticated(response.data.user);
-          }
-
-        },
-        function(err) {
-          console.warn(err);
-          var message = "";
-          if (err.status === 0) {
-            message = "are you offline?";
-            if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-              message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
-            }
-          }
-          if (err && err.status >= 400 && err.data && err.data.userFriendlyErrors) {
-            message = err.data.userFriendlyErrors;
-          } else {
-            message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
-          }
-          deferred.reject(message);
-
-        });
-      return deferred.promise;
+      //   });
+      // return deferred.promise;
     };
 
     var register = function(newLoginInfo) {
