@@ -10,7 +10,7 @@
         <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
       </td>
       <td>
-        <i class="fa whiteicon fa-user">
+        <i class="fa whiteicon fa-group">
         </i>
         {{contextualize('locale_consultants_textbox')}}:
       </td>
@@ -48,14 +48,12 @@
     </tr>
   </table>
 </form>
-<div>
-  <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
-    <i class="fa whiteicon fa-save">
-    </i>
-    {{contextualize('locale_create_session_button')}}
-  </button>
-  &nbsp;
-  <button class="btn" ng-click="createNewSessionDropdown=false">
-    {{contextualize('locale_cancel_button')}}
-  </button>
-</div>
+<button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+  <i class="fa whiteicon fa-save">
+  </i>
+  {{contextualize('locale_create_session_button')}}
+</button>
+&nbsp;
+<button class="btn" ng-click="createNewSessionDropdown=false">
+  {{contextualize('locale_cancel_button')}}
+</button>
