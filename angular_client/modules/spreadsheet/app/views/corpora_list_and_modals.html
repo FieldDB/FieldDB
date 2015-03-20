@@ -32,7 +32,7 @@
     <br>
     <div class="form-horizontal">
       <form>
-        <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
+        <select ng-model="corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
         &nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown">

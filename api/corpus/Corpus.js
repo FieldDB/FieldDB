@@ -637,6 +637,15 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  currentSession: {
+    get: function() {
+      return this._currentSession;
+    },
+    set: function(value) {
+      this._currentSession = value;
+    }
+  },
+
   /**
    * Builds a new session in this corpus, copying the current session's fields (if available) or the corpus' session fields.
    * @return {Session} a new session for this corpus
@@ -651,7 +660,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
       var session = new Session({
         dbname: this.dbname,
-        sessionFields: sessionFields
+        fields: sessionFields,
+        url: this.url
       });
       return session;
     }

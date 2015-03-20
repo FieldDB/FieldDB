@@ -685,9 +685,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     /* avoid reloading sessions if they have already been loaded for this corpus */
     if ($scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0 && $scope.application.sessionsList.dbname === $scope.corpus.dbname) {
       console.log("sessions are already loaded", $scope.application.sessionsList);
-      if (!$scope.fullCurrentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
-        console.log("   but fullCurrentSession wasnt defined, this should never happen.");
-        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+      if (!$scope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+        console.log("   but corpus.currentSession wasnt defined, this should never happen.");
+        $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
       }
       return;
     }
@@ -714,14 +714,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // });
 
       /* Set the current session either form the user's last page load or to be the most recent session */
-      if (!$scope.fullCurrentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+      if (!$scope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
         if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID]) {
-          $scope.fullCurrentSession = $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID];
+          $scope.corpus.currentSession = $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID];
         } else {
-          $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+          $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
         }
       }
-
+      $scope.newSession = $scope.corpus.newSession();
       $scope.documentReady = true;
       $rootScope.loading = false;
     }, function(error) {
@@ -1096,12 +1096,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
 
-  $scope.$watch('fullCurrentSession', function(newvalue, oldvalue) {
-    if (!$scope.fullCurrentSession) {
+  $scope.$watch('corpus.currentSession', function(newvalue, oldvalue) {
+    if (!$scope.corpus.currentSession) {
       return;
     }
-    console.log("fullCurrentSession changed", oldvalue);
-    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession.id;
+    console.log("corpus.currentSession changed", oldvalue);
+    $scope.scopePreferences.savedState.sessionID = $scope.corpus.currentSession.id;
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
@@ -1134,26 +1134,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     // Save session record to all its datum
-    $scope.fullCurrentSession.save().then(function() {
+    $scope.corpus.currentSession.save().then(function() {
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-calendar",
-        directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>" + $scope.fullCurrentSession.goal + "</a> ",
+        directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>" + $scope.corpus.currentSession.goal + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "personal"
       }, {
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-calendar",
-        directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>" + $scope.fullCurrentSession.goal + "</a> ",
+        directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>" + $scope.corpus.currentSession.goal + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }], "uploadnow");
 
-      // $scope.fullCurrentSession.docs.map(function(datum) {
-      //   datum.session = $scope.fullCurrentSession;
+      // $scope.corpus.currentSession.docs.map(function(datum) {
+      //   datum.session = $scope.corpus.currentSession;
       //   datum.save().then(function() {
       //       $rootScope.loading = false;
       //     },
@@ -1169,7 +1169,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.deleteSession = function() {
-    if (!$scope.fullCurrentSession || $scope.fullCurrentSession.id === "none") {
+    if (!$scope.corpus.currentSession || $scope.corpus.currentSession.id === "none") {
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
@@ -1177,8 +1177,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (!r) {
         return;
       }
-      $scope.fullCurrentSession.trashed = "deleted";
-      $scope.fullCurrentSession.save().then(function(response) {
+      $scope.corpus.currentSession.trashed = "deleted";
+      $scope.corpus.currentSession.save().then(function(response) {
         if (debugging) {
           console.log(response);
         }
@@ -1187,22 +1187,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>an elicitation session</a> ",
+          directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "personal"
         }, {
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + $scope.fullCurrentSession.id + "'>an elicitation session</a> ",
+          directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "team"
         }], "uploadnow");
 
         // Remove session from scope
-        $scope.application.sessionsList.docs.remove($scope.fullCurrentSession);
+        $scope.application.sessionsList.docs.remove($scope.corpus.currentSession);
         if ($scope.application.sessionsList.docs._collection.length > 0) {
-          $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
+          $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
         } else {
           $scope.application.bug("Please create an elicitation session before continuing.");
           window.location.assign("#/corpora_list");
@@ -1237,7 +1237,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         teamOrPersonal: "team"
       }], "uploadnow");
 
-      $scope.fullCurrentSession = $scope.application.sessionsList.add(newSession);
+      $scope.corpus.currentSession = $scope.application.sessionsList.add(newSession);
       $scope.dataentry = true;
       $rootScope.loading = false;
       window.location.assign("#/spreadsheet/" + $rootScope.templateId);
@@ -1360,16 +1360,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
-    if (!$scope.fullCurrentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
+    if (!$scope.corpus.currentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
 
-      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession]) {
-        $scope.fullCurrentSession = $scope.scopePreferences.savedState.sessionID.docs[$scope.fullCurrentSession];
+      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$scope.corpus.currentSession]) {
+        $scope.corpus.currentSession = $scope.scopePreferences.savedState.sessionID.docs[$scope.corpus.currentSession];
       } else {
-        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[0];
+        $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[0];
       }
 
     }
-    newSpreadsheetDatum.session = $scope.fullCurrentSession;
+    newSpreadsheetDatum.session = $scope.corpus.currentSession;
     // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
 
@@ -1605,8 +1605,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         activities[1].verb = "modified";
         activities[1].verbicon = "icon-pencil";
       } else {
-        if ($scope.fullCurrentSession) {
-          recordToBeSaved.session = $scope.fullCurrentSession; //TODO check this, should work since the users only open data by elicitation session.
+        if ($scope.corpus.currentSession) {
+          recordToBeSaved.session = $scope.corpus.currentSession; //TODO check this, should work since the users only open data by elicitation session.
         } else {
           $scope.application.bug("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
         }

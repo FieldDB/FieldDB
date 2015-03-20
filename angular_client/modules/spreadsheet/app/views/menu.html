@@ -85,7 +85,7 @@
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
-            {{fullCurrentSession.dateAndGoalSnippet | limitTo:40}}
+            {{corpus.currentSession.dateAndGoalSnippet | limitTo:40}}
             <br />
             <i class="fa whiteicon fa-cloud">
             </i>
@@ -125,11 +125,11 @@
           </i>
           {{contextualize('locale_change_session')}}
         </span>
-        <select class="span3" ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
+        <select class="span3" ng-model="corpus.currentSession" ng-options="session.title for session in sessions">
         </select>
 
         &nbsp;&nbsp;
-        <span ng-hide="fullCurrentSession.id==undefined">
+        <span ng-hide="corpus.currentSession.id==undefined">
           <button ng-show="writePermissions==true" class="btn btn-success" ng-click=";showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
@@ -149,7 +149,7 @@
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && corpus.currentSession.id!=undefined"ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-model>
       </div>
     </div>
@@ -285,10 +285,10 @@
       <span>
         {{contextualize('locale_change_session')}}
       </span>
-      <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
+      <select ng-model="corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
       &nbsp;&nbsp;
-      <span ng-hide="fullCurrentSession.id==undefined">
+      <span ng-hide="corpus.currentSession.id==undefined">
         <button class="btn btn-success" ng-click="showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
@@ -309,7 +309,7 @@
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown==true && corpus.currentSession.id!=undefined" ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-include>
       </div>
     </div>
