@@ -35,15 +35,15 @@
         <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
         &nbsp;
-        <button class="btn btn-info" type='button'  ng-click="showCreateSessionDiv=!showCreateSessionDiv">
+        <button class="btn btn-info" type='button'  ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown">
           <i class="fa whiteicon fa-plus">
           </i> {{contextualize('locale_new_session_button')}}
         </button>
       </form>
     </div>
     <div class="newSessionDiv">
-      <div ng-show="showCreateSessionDiv==true">
-        <ng-include src="views/session_full_edit.html"></ng-include>
+      <div ng-show="showCreateNewSessionDropdown==true">
+        <ng-include src="'views/session_create_new.html'"></ng-include>
       </div>
     </div>
     <br />

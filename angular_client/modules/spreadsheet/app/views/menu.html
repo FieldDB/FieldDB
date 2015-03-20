@@ -143,17 +143,14 @@
           </button>
           &nbsp;&nbsp;
         </span>
-        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown;showEditSessionDetailsDropdown=false" ng-disabled="readOnly==true">
+        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-plus">
           </i>
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
       <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined"ng-cloak>
-        <ng-include src="views/session_quick_edit.html"></ng-model>
-      </div>
-      <div class="subSubMenubar" ng-show="showCreateNewSessionDropdown==true" ng-cloak>
-        <ng-include src="views/session_quick_edit.html"></ng-include>
+        <ng-include src="'views/session_edit.html'"></ng-model>
       </div>
     </div>
     <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
@@ -307,16 +304,13 @@
         </button>
         &nbsp;&nbsp;
       </span>
-      <button class="btn btn-primary" ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown;showEditSessionDetailsDropdown=false" ng-disabled="readOnly==true">
+      <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly==true">
         <i class="fa whiteicon fa-plus">
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
       <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined" ng-cloak>
-        <ng-include src="views/session_quick_edit.html"></ng-include>
-      </div>
-      <div class="subSubMenubar" ng-show="showCreateNewSessionDropdown==true" ng-cloak>
-        <ng-include src="views/session_quick_edit.html"></ng-include>
+        <ng-include src="'views/session_edit.html'"></ng-include>
       </div>
     </div>
     <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
