@@ -93,6 +93,19 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     }
   },
 
+  userMask: {
+    get: function() {
+      return {
+        username: this.username,
+        gravatar: this.gravatar,
+        name: this.name
+      }
+    },
+    set: function(value) {
+      this.debug("users masks cant be set.");
+    }
+  },
+
   username: {
     get: function() {
       if (!this._username) {
