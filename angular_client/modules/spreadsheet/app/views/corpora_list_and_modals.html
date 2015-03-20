@@ -51,7 +51,7 @@
       <div ng-hide="authenticated==true"> {{contextualize('locale_login_button')}}
         <br />
         <br />
-        <form ng-submit='loginUser(auth, selectedServer.serverCode)'>
+        <form ng-submit='loginUserFromScratch(auth, selectedServer.serverCode)'>
           <select ng-show="servers.length > 1" ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.userFriendlyServerName for server in servers">
           </select>
           <br>
