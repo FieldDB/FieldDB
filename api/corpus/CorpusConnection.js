@@ -349,7 +349,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       } else {
         if (typeof value.trim === "function") {
           value = value.trim();
-          value = value.replace("http://localhost:5984", "https://localhost:6984")
+          value = value.replace("http://localhost:5984", "https://localhost:6984");
         }
       }
 
