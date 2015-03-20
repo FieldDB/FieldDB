@@ -718,23 +718,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.appReloaded = true;
     $rootScope.loading = true;
-    Data.async($rootScope.corpus.pouchname)
-      .then(function(dataFromServer) {
-        var scopeData = [];
-        for (var i = 0; i < dataFromServer.length; i++) {
-          if (dataFromServer[i].value.datumFields && dataFromServer[i].value.session) {
-            var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.pouchname + "/", $scope);
-
-            // Load data from current session into scope
-            if (!sessionID || sessionID === "none") {
-              scopeData.push(newDatumFromServer);
-            } else if (dataFromServer[i].value.session._id === sessionID) {
-              scopeData.push(newDatumFromServer);
-            }
-          } else {
-            console.warn("This is a strange datum, it will not be loadable in this app", dataFromServer[i].value);
-          }
-        }
+    Data.getDataBySession($rootScope.corpus.pouchname, sessionID)
+      .then(function(dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum) {
 
         // TODO dont sort the data here, its being sorted by the templates too...?
         // scopeData.sort(function(a, b) {
@@ -747,12 +732,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         //   return 0;
         // });
 
-        $scope.allData = scopeData;
+        $scope.allData = dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum;
         var resultSize = $rootScope.resultSize;
         if (resultSize === "all") {
           resultSize = $scope.allData.length;
         }
-        $scope.data = scopeData.slice(0, resultSize);
+        $scope.data = dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum.slice(0, resultSize);
         $rootScope.currentPage = 0;
 
         $scope.loadAutoGlosserRules();
@@ -1230,7 +1215,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       var r = confirm("Are you sure you want to put this session in the trash?");
       if (r === true) {
-        Data.async($rootScope.corpus.pouchname, activeSessionID)
+        Data.getDataBySession($rootScope.corpus.pouchname, activeSessionID)
           .then(function(sessionToMarkAsDeleted) {
             sessionToMarkAsDeleted.trashed = "deleted";
             var rev = sessionToMarkAsDeleted._rev;
@@ -2462,6 +2447,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.activeDatumIndex = null;
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
+
 
   $rootScope.$watch('currentPage', function(newValue, oldValue) {
     if (newValue !== oldValue) {
