@@ -1,4 +1,4 @@
-<form ng-model='newSessionInfo'>
+<form ng-model='editSessionInfo'>
   <table cellpadding="5px">
     <tr>
       <td>
@@ -7,7 +7,7 @@
         {{contextualize('locale_goal_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+        <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
       </td>
       <td>
         <i class="fa whiteicon fa-group">
@@ -15,7 +15,7 @@
         {{contextualize('locale_consultants_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
+        <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
       </td>
       <td>
         <i class="fa whiteicon fa-user">
@@ -23,7 +23,7 @@
         {{contextualize('locale_user_textbox')}}:
       </td>
       <td>
-        <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
+        <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
       </td>
     </tr>
     <tr>
@@ -31,29 +31,29 @@
         {{contextualize('locale_language_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+        <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
       </td>
       <td>
         {{contextualize('locale_dialect_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+        <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
       </td>
       <td>
         {{contextualize('locale_date_elicited_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="date" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+        <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
       </td>
     </tr>
   </table>
 </form>
-<button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+<button class="btn" ng-click="editSession(editSessionInfo, data);">
   <i class="fa whiteicon fa-save">
   </i>
-  {{contextualize('locale_create_session_button')}}
+  {{contextualize('locale_save_changes_button')}}
 </button>
 &nbsp;
-<button class="btn" ng-click="createNewSessionDropdown=false">
+<button class="btn" ng-click="showEditSessionDetailsDropdown=false">
   {{contextualize('locale_cancel_button')}}
 </button>
