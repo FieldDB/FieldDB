@@ -36,6 +36,8 @@ describe("Session: as a linguist I often collect data in an elicitation session"
     expect(session.date).toBeDefined();
 
     expect(session.fields.participants).toBeDefined();
+    expect(session.consultants).toBeDefined();
+    expect(session.consultants.length).toEqual(0);
     session.consultants = [{
       username: "tilohash",
       anonymousCode: "TH",
@@ -56,6 +58,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       gravatar: "9104j3ewaijoi23"
     }];
     expect(session.user).toBeDefined();
+    expect(session.user.username).toEqual("lingllama");
+
+    session.user = "Teammate Tiger";
+    expect(session.user.username).toEqual("Teammate Tiger");
+
+    session.user = "lingllama, sally, suzie";
+    expect(session.user.username).toEqual("suzie");
+
+
+    session.consultants = "phylis, psaul, pieta";
+    expect(session.consultants.map(function(usermask) {
+      return usermask.username;
+    })).toEqual(["pieta", "psaul", "phylis", "maryjean", "tilohash"]);
+
 
     expect(session.fields.datesessionentered).toBeDefined();
     expect(session.fields.device).toBeDefined();
