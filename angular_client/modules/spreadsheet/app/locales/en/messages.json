@@ -80,7 +80,7 @@
         "description": "title for session info textbox. Consultant(s)' code(s) or name(s)"
     },
     "locale_user_textbox": {
-        "message": "User",
+        "message": "Users",
         "description": "title for session info textbox. Enter the name(s) of those who did the elicitation. If unspecified, the name of the user who enter the data will appear as default."
     },
     "locale_language_textbox": {
