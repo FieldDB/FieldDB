@@ -150,67 +150,7 @@
         </button>
       </div>
       <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && fullCurrentSession.id!=undefined"ng-cloak>
-        <form ng-model='editSessionInfo'>
-          <table cellpadding="5px">
-            <tr>
-              <td>
-                <i class="fa whiteicon fa-calendar">
-                </i>
-                {{contextualize('locale_goal_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
-              </td>
-              <td>
-                <i class="fa whiteicon fa-user">
-                </i>
-                {{contextualize('locale_consultants_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
-                <i class="fa whiteicon fa-user">
-                </i>
-                {{contextualize('locale_user_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {{contextualize('locale_language_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
-              </td>
-              <td>
-                {{contextualize('locale_dialect_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
-              </td>
-              <td>
-                {{contextualize('locale_date_elicited_textbox')}}:
-              </td>
-              <td>
-                <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
-              </td>
-            </tr>
-          </table>
-        </form>
-        <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
-            <i class="fa whiteicon fa-save">
-            </i>
-            {{contextualize('locale_save_changes_button')}}
-          </button>
-          &nbsp;
-          <button class="btn" ng-click="showEditSessionDetailsDropdown=false">
-            {{contextualize('locale_cancel_button')}}
-          </button>
-        </div>
+        <ng-include src="views/session_quick_edit.html"></ng-model>
       </div>
       <div class="subSubMenubar" ng-show="showCreateNewSessionDropdown==true" ng-cloak>
         <ng-include src="views/session_quick_edit.html"></ng-include>
