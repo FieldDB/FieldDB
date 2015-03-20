@@ -1,4 +1,6 @@
+/* globals FieldDB */
 'use strict';
+
 
 /**
  * @ngdoc overview
@@ -21,6 +23,26 @@ angular
     'ui.bootstrap'
   ])
   .config(function($routeProvider) {
+
+    var fieldDBApp = new FieldDB.App({
+      authentication: {
+        user: new FieldDB.User({
+          authenticated: false
+        })
+      },
+      contextualizer: new FieldDB.Contextualizer().loadDefaults(),
+      online: true,
+      apiURL: "https://localhost:3183",
+      offlineCouchURL: "https://localhost:6984",
+      brand: "Example",
+      brandLowerCase: "example",
+      website: "http://example.org",
+      faq: "http://app.example.org/#/faq",
+      basePathname: window.location.origin + "/#",
+    });
+    if (window.location.pathname.indexOf("android_asset") > -1) {
+      fieldDBApp.basePathname = window.location.pathname;
+    }
 
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'

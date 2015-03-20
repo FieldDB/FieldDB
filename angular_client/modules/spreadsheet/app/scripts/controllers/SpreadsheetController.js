@@ -667,52 +667,51 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   // Get sessions for pouchname; select specific session on saved state load
-  $scope.loadSessions = function(sessionID) {
-    var scopeSessions = [];
-    Data.sessions($rootScope.corpus.pouchname)
-      .then(function(response) {
-        for (var k in response) {
-          scopeSessions.push(response[k].value);
-        }
-        scopeSessions.push({
-          title: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
-          _id: "none"
-        });
+  $scope.loadSessions = function() {
+    if ($scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0) {
+      console.log("sessions are already loaded", $scope.application.sessionsList);
+      if (!$scope.fullCurrentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+      }
+      return;
+    }
 
-        for (var i in scopeSessions) {
-          if (scopeSessions[i]._id !== "none") {
-            scopeSessions[i].title = "";
-            for (var j in scopeSessions[i].sessionFields) {
-              if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "goal") {
-                if (scopeSessions[i].sessionFields[j].mask) {
-                  scopeSessions[i].title = scopeSessions[i].title + " " + scopeSessions[i].sessionFields[j].mask.substr(0, 20);
-                }
-              } else if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "dateelicited") {
-                if (scopeSessions[i].sessionFields[j].mask) {
-                  scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20) + " " + scopeSessions[i].title;
-                }
-              }
-            }
-          }
-        }
-        $scope.sessions = scopeSessions;
-        if (sessionID) {
-          $scope.selectSession(sessionID);
-        } else {
-          $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
-        }
-        $scope.documentReady = true;
-      }, function(error) {
-        $scope.documentReady = true;
-        console.log("Error loading sessions.", error);
-        $rootScope.notificationMessage = "Error loading corpus, please try loading page again.";
-        $rootScope.openNotification();
-        $rootScope.loading = false;
-      });
+    $scope.corpus.fetchCollection($scope.application.sessionsList.api).then(function(results) {
+      if (results.length === $scope.application.sessionsList.length) {
+        console.log("sessions are already loaded", results, $scope.application.sessionsList);
+        return;
+      }
+
+      $scope.application.sessionsList.confidential = $scope.corpus.confidential;
+      $scope.application.sessionsList.populate(results.map(function(doc) {
+        doc.url = $scope.corpus.url;
+        return doc;
+      }));
+
+      // $scope.application.sessionsList.push({
+      //   title: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
+      //   _id: "none"
+      // });
+
+      if (!$scope.fullCurrentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+        $scope.fullCurrentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+      }
+      $scope.documentReady = true;
+    }, function(error) {
+      $scope.documentReady = true;
+      console.log("Error loading sessions.", error);
+      $scope.application.bug("Error loading your list of elicitation sessions, please try loading page again.");
+      $rootScope.loading = false;
+    });
   };
 
   // Fetch data from server and put into template scope
   $scope.loadData = function(sessionID) {
+
+    console.log("loadData is deprecated.");
+    if (true) {
+      return;
+    }
     console.warn("Clearing search terms");
     $scope.searchHistory = "";
 
@@ -1070,6 +1069,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.selectSession = function(activeSessionID) {
+    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession._id;
+    $scope.scopePreferences.savedState.sessionTitle = $scope.fullCurrentSession.title;
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+    window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+
+    console.log("selectSession is deprecated, dont need it anymore.");
+    if (true) {
+      return;
+    }
+
     $scope.changeActiveSessionID(activeSessionID);
     // Make sure that following variable is set (ng-model in select won't
     // assign variable until chosen)
@@ -1077,24 +1087,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.dataentry = true;
 
     // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = activeSessionID;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
     $scope.loadData(activeSessionID);
     $scope.loadUsersAndRoles();
-    window.location.assign("#/spreadsheet/" + $rootScope.templateId);
   };
 
   $scope.changeActiveSessionID = function(activeSessionIDToSwitchTo) {
+
+    console.log("changeActiveSessionID is deprecated, dont need it anymore.");
+
+    if (true) {
+      return;
+    }
     if (activeSessionIDToSwitchTo === 'none' || activeSessionIDToSwitchTo === undefined) {
       $scope.activeSessionID = undefined;
       $scope.fullCurrentSession = undefined;
       $scope.editSessionInfo = undefined;
     } else {
       $scope.activeSessionID = activeSessionIDToSwitchTo;
-      for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === activeSessionIDToSwitchTo) {
-          $scope.fullCurrentSession = $scope.sessions[i];
+      for (var i in $scope.application.sessionsList) {
+        if ($scope.application.sessionsList[i]._id === activeSessionIDToSwitchTo) {
+          $scope.fullCurrentSession = $scope.application.sessionsList[i];
 
           // Set up object to make session editing easier
           var editSessionInfo = {};
@@ -1118,6 +1130,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.getCurrentSessionName = function() {
+
+    console.log("getCurrentSessionName is deprecated, dont need it anymore.");
+
+    if (true) {
+      return "TODO getCurrentSessionName";
+    }
     if ($scope.activeSessionID === undefined) {
       return "All Sessions";
     } else {
@@ -1125,17 +1143,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (debugging) {
         console.log(sessionTitle);
       }
-      for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === $scope.activeSessionID) {
-          for (var j in $scope.sessions[i].sessionFields) {
-            if ($scope.sessions[i].sessionFields[j].id === "goal") {
-              if ($scope.sessions[i].sessionFields[j].mask) {
-                $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
-                return $scope.sessions[i].sessionFields[j].mask.substr(0,
+      for (var i in $scope.application.sessionsList) {
+        if ($scope.application.sessionsList[i]._id === $scope.activeSessionID) {
+          for (var j in $scope.application.sessionsList[i].sessionFields) {
+            if ($scope.application.sessionsList[i].sessionFields[j].id === "goal") {
+              if ($scope.application.sessionsList[i].sessionFields[j].mask) {
+                $scope.currentSessionName = $scope.application.sessionsList[i].sessionFields[j].mask;
+                return $scope.application.sessionsList[i].sessionFields[j].mask.substr(0,
                   20);
               } else {
-                $scope.currentSessionName = $scope.sessions[i].sessionFields[j].value;
-                return $scope.sessions[i].sessionFields[j].value.substr(0,
+                $scope.currentSessionName = $scope.application.sessionsList[i].sessionFields[j].value;
+                return $scope.application.sessionsList[i].sessionFields[j].value.substr(0,
                   20);
               }
             }
@@ -1146,6 +1164,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
+
+    console.log("editSession should use the session details in the template, instead of this proxy object, dont need it anymore.");
+
+    if(true){
+      return;
+    }
     var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
     if (r === true) {
       $scope.editSessionDetails = false;
@@ -1246,9 +1270,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 }], "uploadnow");
 
                 // Remove session from scope
-                for (var i in $scope.sessions) {
-                  if ($scope.sessions[i]._id === activeSessionID) {
-                    $scope.sessions.splice(i, 1);
+                for (var i in $scope.application.sessionsList) {
+                  if ($scope.application.sessionsList[i]._id === activeSessionID) {
+                    $scope.application.sessionsList.splice(i, 1);
                   }
                 }
                 // Set active session to All Sessions
@@ -1314,7 +1338,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           teamOrPersonal: "team"
         }], "uploadnow");
 
-        $scope.sessions.push(newSessionRecord);
+        $scope.application.sessionsList.add(newSessionRecord);
         $scope.dataentry = true;
         $scope.selectSession(savedRecord.data.id);
         window.location.assign("#/spreadsheet/" + $rootScope.templateId);
@@ -1439,8 +1463,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
-    if (!$scope.fullCurrentSession && $scope.sessions && $scope.sessions.length > 0) {
-      $scope.fullCurrentSession = $scope.sessions[0];
+    if (!$scope.fullCurrentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
+      $scope.fullCurrentSession = $scope.application.sessionsList[0];
     }
     newSpreadsheetDatum.session = $scope.fullCurrentSession;
     // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
@@ -2404,6 +2428,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadPaginatedData = function(why) {
+
+    console.log("dont need loadPaginatedData anymore  ");
+    if (true) {
+      return;
+    }
     console.log("Loading paginated data ", why);
     var resultSize = $rootScope.resultSize;
     if (resultSize === "all") {
