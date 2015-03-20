@@ -23,7 +23,7 @@ angular
   .config(function($routeProvider) {
 
     $routeProvider.when('/corpora_list', {
-      templateUrl: 'views/main.html'
+      templateUrl: 'views/corpora_list_and_modals.html'
     }).when('/settings', {
       templateUrl: 'views/settings.html',
       controller: 'SpreadsheetStyleDataEntrySettingsController'
@@ -37,7 +37,7 @@ angular
       // templateUrl: 'views/compacttemplate.html'
       redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/fulltemplate', {
-      templateUrl: 'views/fulltemplate.html'
+      templateUrl: 'views/data_entry.html'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
       // templateUrl: 'views/yalefieldmethodsspring2014template.html'
       redirectTo: '/spreadsheet/fulltemplate'
