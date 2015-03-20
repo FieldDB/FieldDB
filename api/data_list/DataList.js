@@ -145,7 +145,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       if (!this.docs) {
         this.docs = [];
       }
-      this.docs.add(value);
+      return this.docs.add(value);
     }
   },
 

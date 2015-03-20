@@ -22,21 +22,19 @@
   <img src="images/logo.png">
   <br />
   <br />
-  <div ng-show="sessions!=undefined" class="mainPageDiv">
+  <div ng-show="application.sessionsList.dbname==corpus.dbname" class="mainPageDiv">
     <span ng-show="corpus.title!=undefined">
       <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{corpus.title}} {{contextualize('locale_loaded')}}
       <br />
-      <i class="fa fa-calendar">
+      <i class="fa fa-calendargoal">
       </i>{{contextualize('locale_select_create_session')}}
     </span>
     <br>
     <div class="form-horizontal">
-      <form ng-submit="selectSession(fullCurrentSession._id)">
-        <select ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
+      <form>
+        <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
-        <button type="submit"
-        class="btn btn-primary">{{contextualize('locale_go_button')}}
-        </button>&nbsp;
+        &nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateSessionDiv=!showCreateSessionDiv">
           <i class="fa whiteicon fa-plus">
           </i> {{contextualize('locale_new_session_button')}}
@@ -45,69 +43,7 @@
     </div>
     <div class="newSessionDiv">
       <div ng-show="showCreateSessionDiv==true">
-        <br />
-        <h3>
-          <i class="fa fa-calendar">
-          </i> {{contextualize('locale_new_session_for')}}
-          <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
-          <i>{{corpus.title}}
-          </i>
-        </h3>
-        <form ng-model="newSession">
-          <table class="newSessionTable" align='center'>
-            <tr>
-              <td>{{contextualize('locale_goal_textbox')}}
-              </td>
-              <td>
-                <input type="text" placeholder="Collecting examples of animacy agreement" ng-model='newSession.goal'>
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_consultants_textbox')}}
-              </td>
-              <td>
-                <input type="text" placeholder="ME,EV,FE" ng-model='newSession.consultants'>
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_language_textbox')}}
-              </td>
-              <td>
-                <input type="text" placeholder="Language" ng-model='newSession.language'>
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_dialect_textbox')}}
-              </td>
-              <td>
-                <input type="text" placeholder="Dialect" ng-model='newSession.dialect'>
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_date_elicited_textbox')}}
-              </td>
-              <td>
-                <input type="date" placeholder="Weds 2012-08-01" ng-model='newSession.dateElicited'>
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_user_textbox')}}
-              </td>
-              <td>{{user.name}}
-              </td>
-            </tr>
-            <tr>
-              <td>{{contextualize('locale_date_entered')}}
-              </td>
-              <td>{{currentDate | shortDate}}
-              </tr>
-            </table>
-            <button class="btn btn-success"  ng-click="createNewSession(newSession);showCreateSessionDiv=false">
-              <i class="fa whiteicon fa-save">
-              </i> {{contextualize('locale_create_access_new_session_button')}}
-            </button>
-          </form>
-        </div>
+        <ng-include src="views/session_full_edit.html"></ng-include>
       </div>
     </div>
     <br />
@@ -135,24 +71,24 @@
         <br />
         <table class="table">
           <tbody>
-          <tr ng-repeat="item in corpora track by item.pouchname" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" ng-class="{'corpus-selected': corpus.pouchname==item.pouchname}">
-            <td>
-              <img class="gravatar-small" ng-hide="item.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
-            </td>
-            <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> {{contextualize('locale_access')}} {{item.title}}
-            </td>
-          </tr>
-          <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
-            <td>
-              <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
-            </td>
-            <td class="text-left"> {{contextualize('locale_access_lingllama')}}
-              <br/>
-              <small>{{contextualize('locale_access_lingllama_footnote')}}
-              </small>
-            </td>
-          </tr>
-        </tbody>
+            <tr ng-repeat="item in corpora track by item.pouchname" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" ng-class="{'corpus-selected': corpus.pouchname==item.pouchname}">
+              <td>
+                <img class="gravatar-small" ng-hide="item.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
+              </td>
+              <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> {{contextualize('locale_access')}} {{item.title}}
+              </td>
+            </tr>
+            <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
+              <td>
+                <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
+              </td>
+              <td class="text-left"> {{contextualize('locale_access_lingllama')}}
+                <br/>
+                <small>{{contextualize('locale_access_lingllama_footnote')}}
+                </small>
+              </td>
+            </tr>
+          </tbody>
         </table>  &nbsp;
         <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </div>
