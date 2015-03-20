@@ -161,7 +161,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         }
         return this.fields.dateElicited.value;
       } else {
-        return FieldDBObject.DEFAULT_STRING
+        return FieldDBObject.DEFAULT_STRING;
       }
     },
     set: function(value) {
@@ -265,11 +265,25 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (!this.fields) {
         this.fields = new DatumFields(this.defaults.fields);
       }
-
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split();
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
+        });
+      }
       if (Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
         value.map(function(usermask) {
-          self.fields.participants.json.users.unshift(usermask)
+          self.fields.participants.json.users.unshift(usermask);
         });
       } else {
         this.fields.participants.json.users.unshift(value);
@@ -297,20 +311,43 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         this.fields = this.defaults.fields;
       }
 
-      if (Object.prototype.toString.call(value) === "[object Array]") {
-        var self = this;
-        value.map(function(usermask) {
-          self.consultants = usermask;
+      // if (Object.prototype.toString.call(value) === "[object Array]") {
+      //   var self = this;
+      //   value.map(function(usermask) {
+      //     self.consultants = usermask;
+      //   });
+      //   return;
+      // }
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split(",");
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
         });
-        return;
       }
-      if (value.role) {
-        value.role = "speaker," + value.role;
-      } else {
-        value.role = "speaker"
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        value = [value];
       }
+      var self = this;
+      value = value.map(function(userMask) {
+        if (userMask.role) {
+          userMask.role = "speaker," + userMask.role;
+        } else {
+          userMask.role = "speaker";
+        }
+        self.fields.participants.json.users.unshift(userMask);
+        return userMask;
+      });
+
       this.debug("adding consultant", value);
-      this.fields.participants.json.users.unshift(value);
     }
   },
 
@@ -333,14 +370,38 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (!this.fields) {
         this.fields = this.defaults.fields;
       }
-      if (value.role) {
-        value.role = "dataEntry," + value.role;
-      } else {
-        value.role = "speaker"
+
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split(",");
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
+        });
       }
 
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        value = [value];
+      }
+      var self = this;
+      value = value.map(function(userMask) {
+        if (userMask.role) {
+          userMask.role = "dataEntry," + userMask.role;
+        } else {
+          userMask.role = "dataEntry";
+        }
+        self.fields.participants.json.users.unshift(userMask);
+        return userMask;
+      });
+
       this.debug("adding user", value);
-      this.fields.participants.json.users.unshift(value);
     }
   },
 
