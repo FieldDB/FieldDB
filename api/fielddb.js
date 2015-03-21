@@ -95,20 +95,36 @@
   exports.FieldDB = FieldDB;
   global.FieldDB = FieldDB;
 
-  console.log("------------------------------------------------------------------------");
-  console.log("------------------------------------------------------------------------");
-  console.log("------------------------------------------------------------------------");
-  console.log("                     ___ _     _    _ ___  ___ ");
-  console.log("                    | __(_)___| |__| |   \\| _ )");
-  console.log("                    | _|| / -_) / _` | |) | _ \\");
-  console.log("                    |_| |_\\___|_\\__,_|___/|___/");
-  console.log("-----------------------------------------------loaded.------------------");
-  console.log("------------------------------------------------------------------------");
-  console.log("-----------------------Welcome to the power user console! Type----------");
-  console.log("--------------------------FieldDB.--------------------------------------");
-  console.log("------------------",new FieldDB.FieldDBObject().version);
-  // FieldDB["Response"] = Response;
-  console.log("---------------------------for available models/functionality-----------");
-  console.log("------------------------------------------------------------------------");
-  console.log("------------------------------------------------------------------------");
+  setTimeout(function() {
+    var brandname = "FieldDB";
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.brand) {
+      brandname = FieldDB.FieldDBObject.application.brand.replace(/\W/g, "_");
+      window[brandname] = FieldDB;
+    }
+    console.log("-----------------------------------------------------");
+    console.log("-----------------------------------------------------");
+    console.log("-----------------------------------------------------");
+    console.log("   ___                      _   _            _    ");
+    console.log("  | _ \\_____ __ _____ _ _  | | | |______ _ _( )___");
+    console.log("  |  _/ _ \\ V  V / -_| '_| | |_| (_-/ -_| '_|/(_-<");
+    console.log("  |_| \\___/\\_/\\_/\\___|_|    \\___//__\\___|_|   /__/");
+    console.log("    ___     _                   _   _         ");
+    console.log("   |_ _|_ _| |_ ___ _ _ __ _ __| |_(___ _____ ");
+    console.log("    | || ' |  _/ -_| '_/ _` / _|  _| \\ V / -_)");
+    console.log("   |___|_||_\\__\\___|_| \\__,_\\__|\\__|_|\\_/\\___|");
+    console.log("         ___                 _     ");
+    console.log("        / __|___ _ _  ______| |___ ");
+    console.log("       | (__/ _ | ' \\(_-/ _ | / -_)");
+    console.log("        \\___\\__.|_||_|__\\__.|_\\___|");
+    console.log("                                                                                                                  ");
+    console.log("-----Power User's Interactive Console loaded " +
+      new FieldDB.FieldDBObject().version);
+    console.log("-----------------------------------------------------");
+    console.log("-----for available models/functionality, type--------");
+    console.log("                            " + brandname + ".");
+    console.log("-----------------------------------------------------");
+    console.log("-----------------------------------------------------");
+    console.log("-----------------------------------------------------");
+    console.log("-----------------------------------------------------");
+  }, 1000);
 }(typeof exports === "object" && exports || this));

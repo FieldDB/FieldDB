@@ -54,6 +54,10 @@ angular.module('spreadsheetApp')
             FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
             FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
           }
+          FieldDB.FieldDBObject.application.brand = "Example";
+          FieldDB.FieldDBObject.application.brandLowerCase = "example";
+          FieldDB.FieldDBObject.application.website = "http://example.org";
+          FieldDB.FieldDBObject.application.faq = "http://app.example.org/#/faq";
         }
 
         if (serviceType === "auth" || "corpus") {
