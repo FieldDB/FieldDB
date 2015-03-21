@@ -37,7 +37,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   };
 
-  $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
     if ($rootScope.contextualize("locale_faq") === "FAQ") {
@@ -158,223 +157,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Set/get/update user preferences
   var defaultPreferences = {
     "userChosenTemplateId": "fulltemplate",
-    "resultSize": 10,
     "version": $rootScope.appVersion,
     "savedState": {
       "server": "",
       "username": "",
-      "password": "",
-      "DB": "",
-      "sessionID": ""
-    },
-    "availableFields": {
-      "judgement": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement",
-        "hint": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
-      },
-      "utterance": {
-        "label": "utterance",
-        "title": "Utterance",
-        "hint": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
-      },
-      "morphemes": {
-        "label": "morphemes",
-        "title": "Morphemes",
-        "hint": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
-      },
-      "gloss": {
-        "label": "gloss",
-        "title": "Gloss",
-        "hint": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
-      },
-      "translation": {
-        "label": "translation",
-        "title": "Translation",
-        "hint": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
-      },
-      // "comments": {
-      //   "label": "comments",
-      //   "title": "Comments"
-      // },
-      "refs": {
-        "label": "refs",
-        "title": "References"
-      },
-      "goal": {
-        "label": "goal",
-        "title": "Goal"
-      },
-      "consultants": {
-        "label": "consultants",
-        "title": "Consultants"
-      },
-      "dialect": {
-        "label": "dialect",
-        "title": "Dialect"
-      },
-      "language": {
-        "label": "language",
-        "title": "language"
-      },
-      // "dateElicited": {
-      //   "label": "dateElicited",
-      //   "title": "Date Elicited"
-      // },
-      // "user": {
-      //   "label": "user",
-      //   "title": "User"
-      // },
-      // "dateSEntered": {
-      //   "label": "dateSEntered",
-      //   "title": "Date entered"
-      // },
-      "tags": {
-        "label": "tags",
-        "title": "Tags"
-      },
-      "validationStatus": {
-        "label": "validationStatus",
-        "title": "validationStatus"
-      },
-      "syntacticCategory": {
-        "label": "syntacticCategory",
-        "title": "syntacticCategory",
-        "hint": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
-      },
-      "allomorphs": {
-        "label": "allomorphs",
-        "title": "Allomorphs"
-      },
-      "phonetic": {
-        "label": "phonetic",
-        "title": "Phonetic"
-      },
-      "housekeeping": {
-        "label": "housekeeping",
-        "title": "Housekeeping"
-      },
-      "spanish": {
-        "label": "spanish",
-        "title": "Spanish"
-      },
-      "orthography": {
-        "label": "orthography",
-        "title": "Orthography",
-        "hint": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography which speakers can read. If there are more than one orthography an additional orthography field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
-      }
-    },
-    "fulltemplate": {
-      "field1": {
-        "label": "utterance",
-        "title": "Utterance"
-      },
-      "field2": {
-        "label": "morphemes",
-        "title": "Morphemes"
-      },
-      "field3": {
-        "label": "gloss",
-        "title": "Gloss"
-      },
-      "field4": {
-        "label": "translation",
-        "title": "Translation"
-      },
-      "field5": {
-        "label": "validationStatus",
-        "title": "Status"
-      },
-      "field6": {
-        "label": "tags",
-        "title": "Tags"
-      }
-    },
-    "mcgillfieldmethodsspring2014template": {
-      "field1": {
-        "label": "utterance",
-        "title": "Utterance"
-      },
-      "field2": {
-        "label": "morphemes",
-        "title": "Morphemes"
-      },
-      "field3": {
-        "label": "gloss",
-        "title": "Gloss"
-      },
-      "field4": {
-        "label": "translation",
-        "title": "Translation"
-      },
-      "field5": {
-        "label": "judgement",
-        "title": "Grammaticality Judgement"
-      },
-      "field6": {
-        "label": "tags",
-        "title": "Tags"
-      }
-    },
-    "mcgillfieldmethodsfall2014template": {
-      "field1": {
-        "label": "utterance",
-        "title": "Utterance"
-      },
-      "field2": {
-        "label": "morphemes",
-        "title": "Morphemes"
-      },
-      "field3": {
-        "label": "gloss",
-        "title": "Gloss"
-      },
-      "field4": {
-        "label": "translation",
-        "title": "Translation"
-      },
-      "field5": {
-        "label": "phonetic",
-        "title": "IPA"
-      },
-      "field6": {
-        "label": "notes",
-        "title": "Notes"
-      }
-    },
-    "yalefieldmethodsspring2014template": {
-      "field1": {
-        "label": "orthography",
-        "title": "Orthography"
-      },
-      "field2": {
-        "label": "utterance",
-        "title": "Utterance"
-      },
-      "field3": {
-        "label": "morphemes",
-        "title": "Morphemes"
-      },
-      "field4": {
-        "label": "gloss",
-        "title": "Gloss"
-      },
-      "field5": {
-        "label": "translation",
-        "title": "Translation"
-      },
-      "field6": {
-        "label": "spanish",
-        "title": "Spanish"
-      },
-      "field7": {
-        "label": "housekeeping",
-        "title": "Housekeeping"
-      },
-      "field8": {
-        "label": "tags",
-        "title": "Tags"
-      }
+      "password": ""
     }
   };
 
@@ -388,23 +175,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return {};
     }
     var fields = $rootScope.corpus.datumFields._collection;
-    var numberOfColumns;
-
-    if (!numberOfColumns) {
-      numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
-    }
+    var numberOfColumns = $rootScope.corpus.prefs.preferedSpreadsheetShape.columns;
     numberOfColumns = parseInt(numberOfColumns, 10);
-
 
     try {
       $scope.judgementHelpText = $rootScope.corpus.datumFields.judgement.help;
     } catch (e) {
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
-    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn;
-    if ($rootScope.corpus && $rootScope.corpus.prefs && $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn) {
-      columnHeight = $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn;
-    }
+    var columnHeight = $rootScope.corpus.prefs.preferedSpreadsheetShape.rows;
+    columnHeight = parseInt(columnHeight, 10);
+
     if (columnHeight > fields.length - 1) {
       columnHeight = columnHeight || Math.ceil(fields.length / numberOfColumns);
     }
@@ -434,21 +215,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.overrideTemplateSetting = function(templateId, newFieldPreferences, notUserInitited) {
-    $rootScope.templateId = "fulltemplate"; // templateId;
-    if ($rootScope.templateId !== templateId) {
-      console.warn("Not using users prefered template " + templateId);
-    }
-    // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.updateAvailableFieldsInColumns();
 
-    console.log("notUserInitited", notUserInitited);
-    try {
-      if (!$scope.$$phase) {
-        $scope.$digest(); //$digest or $apply
-      }
-    } catch (e) {
-      console.warn(e);
-    }
   };
 
   $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
@@ -471,85 +238,47 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.mcgillOnly = false;
-  if (window.location.origin.indexOf("mcgill") > -1) {
-    $rootScope.mcgillOnly = true;
-  }
-  var overwiteAndUpdatePreferencesToCurrentVersion = function() {
-
-    var existingPreferences = localStorage.getItem('SpreadsheetPreferences');
-    if (!existingPreferences) {
-      console.log("No preferences. Setting default preferences in localStorage.");
-      // localStorage.clear(); //why?? left over from debugging?
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-      existingPreferences = JSON.stringify(defaultPreferences);
-      // return defaultPreferences;
-    }
-
-    // console.log("Loaded Preferences from localStorage. TODO test this",JSON.stringify(existingPreferences));
+  var updateAndOverwritePreferencesToCurrentVersion = function() {
+    $scope.scopePreferences = $scope.scopePreferences || localStorage.getItem('SpreadsheetPreferences') || JSON.stringify(defaultPreferences);
+    var prefsWereString;
     try {
-      existingPreferences = JSON.parse(existingPreferences);
+      prefsWereString = JSON.parse($scope.scopePreferences);
     } catch (e) {
-      console.warn("cant set existingPreferences, might have already been an object", e);
+      console.warn("cant set $scope.scopePreferences, might have already been an object", e);
+    }
+    if (prefsWereString) {
+      $scope.scopePreferences = prefsWereString
     }
 
     /** Prior to 1.37 wipe personalization and use current defaults */
-    if (!existingPreferences.version) {
-      $scope.application.bug("Welcome to the Spring Field Methods session!\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
+    if (!$scope.scopePreferences.version) {
+      $scope.application.bug("Welcome to the Spring Field Method's session!\n\n We have introduced a new data entry template in this version. \nYou might want to review your settings to change the order and number of fields in the data entry template. Current defaults are set to 2 columns, with 3 rows each.");
       // localStorage.clear(); //why?? left over from debugging?
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
-      // return defaultPreferences;
+      // localStorage.setItem('SpreadsheetPreferences', JSON.stringify(defaultPreferences));
+      $scope.scopePreferences = JSON.stringify(defaultPreferences);
+      console.log("ignoring users preferences.");
     }
 
-    var updatedPreferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-    /* Always get the most recent fields for field methods groups */
-    updatedPreferences.mcgillfieldmethodsspring2014template = defaultPreferences.mcgillfieldmethodsspring2014template;
-    updatedPreferences.mcgillfieldmethodsfall2014template = defaultPreferences.mcgillfieldmethodsfall2014template;
-    updatedPreferences.yalefieldmethodsspring2014template = defaultPreferences.yalefieldmethodsspring2014template;
-
-    /* Always get the most recent available fields */
-    updatedPreferences.availableFields = defaultPreferences.availableFields;
-
-    /* update the variable for user choosen template to 2.23+ */
-    if (!updatedPreferences.userChosenTemplateId && updatedPreferences.userTemplate) {
-      updatedPreferences.userChosenTemplateId = updatedPreferences.userTemplate;
-      delete updatedPreferences.userTemplate;
+    var pieces = $scope.scopePreferences.version.split(".");
+    var year = pieces[0],
+      week = pieces[1];
+    if (year < 2 || week < 47) {
+      $scope.scopePreferences = JSON.stringify(defaultPreferences);
+      console.log("ignoring users preferences.");
     }
 
-    /* upgrade fulltemplate to v1.923ss instead update to 2.22+ */
-    if (existingPreferences.fulltemplate && existingPreferences.fulltemplate.field7) {
-      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
-    }
-    if (existingPreferences.fulltemplate && existingPreferences.fulltemplate.field6.label === 'judgement') {
-      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
+    $scope.scopePreferences.savedState = $scope.scopePreferences.savedState || {};
+    if ($rootScope.user && $rootScope.user.username && $rootScope.loginInfo && $rootScope.loginInfo.password && $rootScope.loginInfo.password.length > 2) {
+      $scope.scopePreferences.savedState.username = $rootScope.user.username;
+      $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
     }
 
-    /* set the number of columns to use  to 2.23+ */
-    if (!existingPreferences.fullTemplateDefaultNumberOfColumns) {
-      updatedPreferences.fullTemplateDefaultNumberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
-    }
-    $rootScope.fullTemplateDefaultNumberOfColumns = updatedPreferences.fullTemplateDefaultNumberOfColumns;
-    if (!existingPreferences.fullTemplateDefaultNumberOfFieldsPerColumn) {
-      updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn || 3;
-    }
-    $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = updatedPreferences.fullTemplateDefaultNumberOfFieldsPerColumn;
-    // If this is the mcgillOnly deploy, overwrite the user's data entry view
-    if ($rootScope.mcgillOnly) {
-      updatedPreferences.fulltemplate = defaultPreferences.fulltemplate;
-      updatedPreferences.userChosenTemplateId = 'mcgillfieldmethodsfall2014template';
-      defaultPreferences.userChosenTemplateId = 'mcgillfieldmethodsfall2014template';
-      $rootScope.overrideTemplateSetting('mcgillfieldmethodsfall2014template', defaultPreferences.mcgillfieldmethodsfall2014template, true);
-    }
-
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(updatedPreferences));
-    return updatedPreferences;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
-  $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-
 
   // Set scope variables
   $scope.documentReady = false;
-  $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
+  $rootScope.templateId = "fulltemplate";
   $rootScope.fields = []; //$scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
   $rootScope.fieldsInColumns = {};
   $scope.orderProp = "dateEntered";
@@ -572,10 +301,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.newRecordHasBeenEdited = false;
 
   $rootScope.serverLabels = Servers.getHumanFriendlyLabels();
-
-  // Set data size for pagination
-  $rootScope.resultSize = $scope.scopePreferences.resultSize;
-
 
   $scope.changeActiveSubMenu = function(subMenu) {
     if ($rootScope.activeSubMenu === subMenu) {
@@ -714,11 +439,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
       /* Set the current session either form the user's last page load or to be the most recent session */
       if (!$rootScope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
-        if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID]) {
-          $rootScope.corpus.currentSession = $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID];
-        } else {
-          $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
-        }
+        $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
         $scope.currentSessionWasNotSetByAHuman = true;
       }
       $scope.newSession = $rootScope.corpus.newSession();
@@ -734,7 +455,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   // Fetch data from server and put into template scope
-  $scope.loadData = function(sessionID) {
+  $scope.loadData = function(sessionIdToLoad) {
 
     console.log("loadData is deprecated.");
     if (true) {
@@ -742,52 +463,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     console.warn("Clearing search terms");
     $scope.searchHistory = "";
-
-    $scope.appReloaded = true;
-    $rootScope.loading = true;
-    Data.getDataBySession($rootScope.corpus.pouchname, sessionID)
-      .then(function(dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum) {
-
-        // TODO dont sort the data here, its being sorted by the templates too...?
-        // scopeData.sort(function(a, b) {
-        //   // return a[$scope.orderProp] - b[$scope.orderProp];
-
-        //   if (a[$scope.orderProp] > b[$scope.orderProp])
-        //     return -1;
-        //   if (a[$scope.orderProp] < b[$scope.orderProp])
-        //     return 1;
-        //   return 0;
-        // });
-
-        $scope.allData = dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum;
-        var resultSize = $rootScope.resultSize;
-        if (resultSize === "all") {
-          resultSize = $scope.allData.length;
-        }
-        $scope.data = dataInThisSessionWhichWasConvertedIntoSpreadsheetDatum.slice(0, resultSize);
-        $rootScope.currentPage = 0;
-
-        $scope.loadAutoGlosserRules();
-        $scope.loadUsersAndRoles();
-
-        $scope.saved = "yes";
-        $rootScope.loading = false;
-
-        $scope.activeDatumIndex = "newEntry";
-
-
-      }, function(error) {
-        console.log("error loading the data", error);
-        // On error loading data, reset saved state
-        // Update saved state in Preferences
-        $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-        $scope.scopePreferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-        $scope.documentReady = true;
-        $rootScope.notificationMessage = "There was an error loading the data. Please reload and log in.";
-        $rootScope.openNotification();
-        $rootScope.loading = false;
-      });
   };
 
   $scope.loadAutoGlosserRules = function() {
@@ -899,11 +574,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.corpora = $scope.corpora || new FieldDB.Collection();
 
     // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.server = $rootScope.serverCode;
-    $scope.scopePreferences.savedState.username = $rootScope.user.username;
-    $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+    updateAndOverwritePreferencesToCurrentVersion();
 
     // if ($scope.application.authentication.user.mostRecentIds && $scope.application.authentication.user.mostRecentIds.couchConnection && $scope.application.authentication.user.mostRecentIds.couchConnection.dbname) {
     //   $scope.selectCorpus($scope.application.authentication.user.mostRecentIds.couchConnection);
@@ -966,9 +637,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.logout = function() {
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState = {};
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+    localStorage.removeItem('SpreadsheetPreferences');
     $scope.application.authentication.logout();
     // $scope.reloadPage();
   };
@@ -978,27 +647,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.log("setting templates is deprecated.");
       return;
     }
-    // If the currently choosen corpus has a default template, overwrite the user's preferences
-    if ($rootScope.mcgillOnly) {
-      console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
-      //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
 
-    } else if (corpus.preferredTemplate) {
-      var fieldsForTemplate = $rootScope.corpus.datumFields;
-      if (corpus.preferredTemplate !== "fulltemplate" && window.defaultPreferences[corpus.preferredTemplate]) {
-        fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
-      }
-      $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
-    }
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
     // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $rootScope.corpus.dbname;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-    $rootScope.updateAvailableFieldsInColumns();
-    $rootScope.overrideTemplateSetting();
 
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
@@ -1072,10 +725,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
       return;
     }
+
     console.log("corpus.currentSession changed", oldValue);
-    $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
+    $scope.user.mostRecentIds.sessionid = $rootScope.corpus.currentSession.id;
 
     if ($scope.currentSessionWasNotSetByAHuman) {
       $scope.currentSessionWasNotSetByAHuman = false;
@@ -1311,11 +964,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.setDataEntryFocusOn($event.target);
     }
 
-    // // Reset new datum form data and enable upload button; only reset audio field if present
-    // if ($rootScope.templateId === "fulltemplate" || $rootScope.templateId === "mcgillfieldmethodsspring2014template" || $rootScope.templateId === "yalefieldmethodsspring2014template") {
-    //   document.getElementById("form_new_datum_audio-file").reset();
-    //   $scope.newDatumHasAudioToUpload = false;
-    // }
     $rootScope.newRecordHasBeenEdited = false;
     $scope.newFieldData = {};
 
@@ -1338,16 +986,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
     if (!$rootScope.corpus.currentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
-
-      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$rootScope.corpus.currentSession]) {
-        $rootScope.corpus.currentSession = $scope.scopePreferences.savedState.sessionID.docs[$rootScope.corpus.currentSession];
-      } else {
-        $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[0];
-      }
-
+      $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[0];
     }
     newSpreadsheetDatum.session = $rootScope.corpus.currentSession;
-    // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
 
     // Add record to all scope data and update
@@ -1703,7 +1344,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
     $rootScope.corpus.save($rootScope.user).then(function(result) {
       console.log("Saved corpus details ", result);
-      $scope.overrideTemplateSetting();
+      $scope.updateAvailableFieldsInColumns();
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
@@ -1816,7 +1457,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (newScopeData.length > 0) {
       $scope.allData = newScopeData;
-      var resultSize = $rootScope.resultSize;
+      if (!$rootScope.user || $rootScope.user.prefs || $rootScope.user.prefs.numVisibleDatum) {
+        console.warn("the user isnt loaded, shouldnt be loading any data.");
+        return;
+      }
+      var resultSize = $rootScope.user.prefs.numVisibleDatum;
       if (resultSize === "all") {
         resultSize = $scope.allData.length;
       }
@@ -2315,13 +1960,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!numberOfRecords) {
       return 0;
     }
-    var resultSize = $rootScope.resultSize;
-    if (resultSize === "all") {
-      resultSize = $scope.allData.length;
-    }
-    var numberOfPages = Math.ceil(numberOfRecords / resultSize);
-    // console.log("requesting numberOfResultPages" + numberOfPages);
-    return numberOfPages;
   };
 
   $scope.loadPaginatedData = function(why) {
@@ -2329,17 +1967,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log("dont need loadPaginatedData anymore  ");
     if (true) {
       return;
-    }
-    console.log("Loading paginated data ", why);
-    var resultSize = $rootScope.resultSize;
-    if (resultSize === "all") {
-      resultSize = $scope.allData.length;
-    }
-    var lastRecordOnPage = (($rootScope.currentPage + 1) * resultSize);
-    var firstRecordOnPage = lastRecordOnPage - resultSize;
-
-    if ($scope.allData) {
-      $scope.data = $scope.allData.slice(firstRecordOnPage, lastRecordOnPage);
     }
   };
 
@@ -2535,16 +2162,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.$on('$viewContentLoaded', function() {
     // Return user to saved state, if it exists; only recover saved state on reload, not menu navigate
     if ($scope.appReloaded !== true) {
-      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+      updateAndOverwritePreferencesToCurrentVersion();
       // Update users to new saved state preferences if they were absent
-      if (!$scope.scopePreferences.savedState) {
-        $scope.scopePreferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-        $scope.documentReady = true;
-      } else if ($scope.scopePreferences.savedState && $scope.scopePreferences.savedState.server && $scope.scopePreferences.savedState.username && $scope.scopePreferences.savedState.password) {
-        $rootScope.serverCode = $scope.scopePreferences.savedState.server;
+
+      if ($scope.scopePreferences.savedState && $scope.scopePreferences.savedState.username && $scope.scopePreferences.savedState.password) {
         var auth = {};
-        auth.server = $scope.scopePreferences.savedState.server;
         auth.user = $scope.scopePreferences.savedState.username;
         try {
           auth.password = sjcl.decrypt("password", $scope.scopePreferences.savedState.password);
@@ -2553,7 +2175,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           auth.password = $scope.scopePreferences.savedState.password;
         }
         $scope.loginUser(auth);
-
       } else {
         $rootScope.openWelcomeNotificationDeprecated();
         $scope.documentReady = true;

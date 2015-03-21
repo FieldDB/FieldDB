@@ -131,6 +131,19 @@
         {{contextualize('locale_fields_in')}} <b>{{corpus.title}}</b>
       </h2>
     </div>
+
+    <br />
+    {{contextualize('locale_number_columns')}}
+    <select ng-model="corpus.prefs.preferedSpreadsheetShape.columns">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+    <!-- TODO css for these <option>3</option>
+      <option>4</option> -->
+    </select>
+    Number of Fields per column:
+    <input type="number" ng-model="corpus.prefs.preferedSpreadsheetShape.rows"/>
+
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems row">
       <button class="btn btn-primary"

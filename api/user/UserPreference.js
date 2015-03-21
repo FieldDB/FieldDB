@@ -98,6 +98,18 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
     }
   },
 
+  preferedSpreadsheetShape: {
+    get: function() {
+      return this._preferedSpreadsheetShape || {
+        columns: 2,
+        rows: 3
+      }
+    },
+    set: function(value) {
+      this._preferedSpreadsheetShape = value;
+    }
+  },
+
   hotkeys: {
     get: function() {
       return this._hotkeys || FieldDBObject.DEFAULT_COLLECTION;
