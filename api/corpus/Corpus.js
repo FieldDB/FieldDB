@@ -259,22 +259,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
    * @type {Object}
    */
-  team: {
-    get: function() {
-      return this._team;
-    },
-    set: function(value) {
-      if (value === this._team) {
-        return;
-      }
-      this._team = value;
-    }
-  },
-
-  /**
-   * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
-   * @type {Object}
-   */
   publicSelf: {
     get: function() {
       return this._publicSelf;

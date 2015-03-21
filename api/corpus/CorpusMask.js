@@ -9,6 +9,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Sessions = require("./../Collection").Collection;
 var DataLists = require("./../Collection").Collection;
 var TeamPreference = require("./../user/UserPreference").UserPreference;
+var Team = require("./../user/Team").Team;
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -200,7 +201,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       conversationFields: DatumFields,
       sessionFields: DatumFields,
 
-      prefs: TeamPreference
+      prefs: TeamPreference,
+      team: Team
     }
   },
 
@@ -252,6 +254,22 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._description = value.trim();
+    }
+  },
+
+  /**
+   * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
+   * @type {Object}
+   */
+  team: {
+    get: function() {
+      return this._team;
+    },
+    set: function(value) {
+      if (value === this._team) {
+        return;
+      }
+      this._team = value;
     }
   },
 
@@ -434,7 +452,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       this.dbname = value;
     }
   }
-
 
 
 });

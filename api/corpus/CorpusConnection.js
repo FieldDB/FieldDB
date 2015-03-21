@@ -193,6 +193,33 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     }
   },
 
+  gravatar: {
+    get: function() {
+      if (this.parent && this.parent.team) {
+        if (this.parent.team.gravatar) {
+          this._gravatar = this.parent.team.gravatar;
+        } else {
+          this._gravatar = this.parent.team.buildGravatar(this.dbname);
+        }
+      }
+      return this._gravatar;
+    },
+    set: function(value) {
+      if (value === this._gravatar) {
+        return;
+      }
+      if (!value) {
+        delete this._gravatar;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._gravatar = value;
+    }
+  },
+
   title: {
     get: function() {
       if (this.parent) {
