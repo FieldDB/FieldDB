@@ -140,7 +140,9 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "perObjectDebugMode",
   "perObjectAlwaysConfirmOkay",
   "useIdNotUnderscore",
-  "parent"
+  "parent",
+  "confirmMessage",
+  "bugMessage"
 ];
 
 FieldDBObject.software = {};
