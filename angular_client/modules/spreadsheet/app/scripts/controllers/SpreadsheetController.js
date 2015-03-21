@@ -2117,6 +2117,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadUsersAndRoles = function() {
+    if (!$rootScope.user || !$rootScope.user.roles) {
+      console.warn("strangely the user isnt defined, or ready right now.");
+      return;
+    }
+    if ($scope.loadedPermissionsForTeam === $rootScope.corpus.pouchname) {
+      console.log("already loaded permissions for this team");
+      return;
+    }
     // Get all users and roles (for this corpus) from server
 
     var dataToPost = {};
@@ -2153,7 +2161,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $rootScope.readPermissions = false;
         $rootScope.writePermissions = false;
         $rootScope.commentPermissions = false;
-
+        $scope.loadedPermissionsForTeam = $rootScope.corpus.pouchname;
         if ($rootScope.user.roles.indexOf($rootScope.corpus.pouchname + "_admin") > -1) {
           $rootScope.admin = true;
         }
@@ -2253,6 +2261,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           console.log(response);
         }
         var indirectObjectString = "on <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a> as " + rolesString;
+
+        $scope.loadedPermissionsForTeam = "";
+        $scope.loadUsersAndRoles();
+
         $scope.addActivity([{
           verb: "modified",
           verbicon: "icon-pencil",
@@ -2318,6 +2330,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (debugging) {
             console.log(response);
           }
+          $scope.loadedPermissionsForTeam = "";
+          $scope.loadUsersAndRoles();
           var indirectObjectString = roles.join(" ") + "access from <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "removed",
