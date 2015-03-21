@@ -32,8 +32,10 @@ var Authentication = function Authentication(options) {
     self.debug(user);
     self.user = user;
     self.user.fetch();
-    self.user.authenticated = true;
-    self.dispatchEvent("authenticated");
+    if (self.user._rev) {
+      self.user.authenticated = true;
+      self.dispatchEvent("authenticated");
+    }
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
     //   selfauthentication.user.username = sessionInfo.userCtx.name;
@@ -97,23 +99,23 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
    * @param callback A callback to call upon sucess.
    */
   login: {
-    value: function(user) {
+    value: function(loginDetails) {
       var deferred = Q.defer(),
         self = this;
 
+      var tempUser = new User(loginDetails);
       var dataToPost = {};
-      dataToPost.username = user.username;
-      dataToPost.password = user.password;
-      dataToPost.authUrl = user.authUrl;
+      dataToPost.username = loginDetails.username;
+      dataToPost.password = loginDetails.password;
+      dataToPost.authUrl = loginDetails.authUrl;
 
-      if (this.user && this.user.username && this.user._rev && !this.user.fetching && !this.user.loading) {
-        //if the same user is re-authenticating, include their details to sync to the server.
-        if (user.username === this.user.username && user.username !== "public") {
-          dataToPost.syncDetails = "true";
-          dataToPost.syncUserDetails = this.user.toJSON();
-          this.warn("Backing up user details", dataToPost.syncUserDetails);
-          delete dataToPost.syncUserDetails._rev;
-        }
+      //if the same user is re-authenticating, include their details to sync to the server.
+      tempUser.fetch();
+      if (tempUser._rev && tempUser.username !== "public") {
+        dataToPost.syncDetails = "true";
+        dataToPost.syncUserDetails = tempUser.toJSON();
+        tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
+        delete dataToPost.syncUserDetails._rev;
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server,
         //the server will overwrite their details.
         //should we automatically check here, or should we make htem a button
@@ -124,7 +126,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.status = "";
       this.loading = true;
 
-      Database.prototype.login(dataToPost).then(function(userDetails) {
+      self.resumingSessionPromise = Database.prototype.login(dataToPost).then(function(userDetails) {
           self.loading = false;
 
           if (!userDetails) {
@@ -208,10 +210,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   logout: {
     value: function(options) {
       var self = this;
+      this.save();
 
       return Database.prototype.logout(options).then(function() {
         self.dispatchEvent("logout");
-        alert("Reloading the page");
+        self.warn("Reloading the page");
         window.location.reload();
       });
     }
