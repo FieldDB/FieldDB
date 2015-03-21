@@ -2,39 +2,39 @@
 console.log("Declaring the SpreadsheetStyleDataEntryDirectives.");
 
 angular.module('spreadsheetApp')
-  .directive('selectFieldFromDefaultCompactTemplate', function() {
-    return function(scope, element, attrs) {
-      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-      if (scope.field.label === Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
-        element[0].selected = true;
-      }
-    };
-  })
-  .directive('selectFieldFromDefaultFullTemplate', function() {
-    return function(scope, element, attrs) {
-      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-      if (scope.field.label === Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
-        element[0].selected = true;
-      }
-    };
-  })
-  .directive('selectFieldFromYaleFieldMethodsSpring2014Template', function() {
-    return function(scope, element, attrs) {
-      var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-      if (scope.field.label === Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
-        element[0].selected = true;
-      }
-    };
-  })
-  .directive('selectDropdownSession', function() {
-    return function(scope, element) {
-      scope.$watch('activeSessionID', function() {
-        if (scope.session._id === scope.activeSessionID) {
-          element[0].selected = true;
-        }
-      });
-    };
-  })
+  // .directive('selectFieldFromDefaultCompactTemplate', function() {
+  //   return function(scope, element, attrs) {
+  //     var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+  //     if (scope.field.label === Preferences.compacttemplate[attrs.selectFieldFromDefaultCompactTemplate].label) {
+  //       element[0].selected = true;
+  //     }
+  //   };
+  // })
+  // .directive('selectFieldFromDefaultFullTemplate', function() {
+  //   return function(scope, element, attrs) {
+  //     var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+  //     if (scope.field.label === Preferences.fulltemplate[attrs.selectFieldFromDefaultFullTemplate].label) {
+  //       element[0].selected = true;
+  //     }
+  //   };
+  // })
+  // .directive('selectFieldFromYaleFieldMethodsSpring2014Template', function() {
+  //   return function(scope, element, attrs) {
+  //     var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
+  //     if (scope.field.label === Preferences.yalefieldmethodsspring2014template[attrs.selectFieldFromYaleFieldMethodsSpring2014Template].label) {
+  //       element[0].selected = true;
+  //     }
+  //   };
+  // })
+  // .directive('selectDropdownSession', function() {
+  //   return function(scope, element) {
+  //     scope.$watch('activeSessionID', function() {
+  //       if (scope.session._id === scope.activeSessionID) {
+  //         element[0].selected = true;
+  //       }
+  //     });
+  //   };
+  // })
   .directive('spreadsheetCatchArrowKey', function($rootScope) {
     return function(scope, element) {
       element.bind('keyup', function(e) {
