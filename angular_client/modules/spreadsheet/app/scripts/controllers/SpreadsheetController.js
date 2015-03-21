@@ -16,6 +16,27 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
   }
+
+  var reRouteUser = function(nextRoute) {
+    if (window.location.hash.indexOf(nextRoute) === window.location.hash.length - nextRoute.length) {
+      return;
+    }
+    window.location.assign("#/" + nextRoute);
+
+    // try {
+    //   if (!$scope.$$phase) {
+    //     $scope.$apply(function() {
+    //       console.log("  Re-routing the user to the " + nextRoute + " page");
+    //       //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
+    //       $location.path("/" + nextRoute, false);
+    //     });
+    //   }
+    // } catch (e) {
+    //   console.warn("reRouteUser generated an erorr", e);
+    // }
+
+  };
+
   $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
@@ -95,7 +116,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
-    window.location.assign("#/corpora_list");
+    reRouteUser("corpora_list");
   };
 
   document.addEventListener("notauthenticated", function() {
@@ -587,6 +608,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
+  $scope.showDataEntry = function() {
+    reRouteUser("spreadsheet/" + $rootScope.templateId);
+  };
+
   $scope.navigateVerifySaved = function(itemToDisplay) {
     if ($scope.saved === 'no') {
       $rootScope.notificationMessage = "Please save changes before continuing.";
@@ -614,43 +639,43 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $scope.dataentry = false;
           $scope.searching = false;
           $scope.changeActiveSubMenu('none');
-          window.location.assign("#/settings");
+          reRouteUser("settings");
           break;
         case "corpusSettings":
           $scope.dataentry = false;
           $scope.searching = false;
           $scope.changeActiveSubMenu('none');
-          window.location.assign("#/corpussettings");
+          reRouteUser("corpussettings");
           break;
         case "home":
           $scope.dataentry = false;
           $scope.searching = false;
           $scope.changeActiveSubMenu('none');
-          window.location.assign("#/corpora_list");
+          reRouteUser("corpora_list");
           break;
         case "searchMenu":
           $scope.changeActiveSubMenu(itemToDisplay);
           $scope.searching = true;
           $scope.activeDatumIndex = null;
-          window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+          reRouteUser("spreadsheet/" + $rootScope.templateId);
           break;
         case "faq":
           $scope.dataentry = false;
           $scope.searching = false;
           $scope.changeActiveSubMenu('none');
-          window.location.assign("#/faq");
+          reRouteUser("faq");
           break;
         case "none":
           $scope.dataentry = true;
           $scope.searching = false;
           $scope.changeActiveSubMenu('none');
-          window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+          reRouteUser("spreadsheet/" + $rootScope.templateId);
           break;
         case "register":
-          window.location.assign("#/register");
+          reRouteUser("register");
           break;
         default:
-          window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+          reRouteUser("spreadsheet/" + $rootScope.templateId);
           $scope.changeActiveSubMenu(itemToDisplay);
       }
     }
@@ -715,6 +740,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         } else {
           $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
         }
+        $scope.currentSessionWasNotSetByAHuman = true;
       }
       $scope.newSession = $rootScope.corpus.newSession();
       $scope.documentReady = true;
@@ -880,7 +906,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   document.addEventListener("authenticated", function() {
-    if ($scope.application.authentication.user && !$scope.application.authentication.user.rev) {
+    if (!$scope.application.authentication.user || !$scope.application.authentication.user.rev) {
       $rootScope.openWelcomeNotificationDeprecated();
       return;
     }
@@ -901,6 +927,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // }
     $scope.documentReady = true;
     $rootScope.loading = false;
+    try {
+      if (!$scope.$$phase) {
+        $scope.$apply(); //$digest or $apply
+      }
+    } catch (e) {
+      console.warn("Rendering generated an erorr", e);
+    }
+
   }, false);
 
   $scope.loginUserFromScratch = function(loginDetails, chosenServer) {
@@ -925,7 +959,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
     if (!$rootScope.serverCode) {
       console.log("Sever code is undefined");
-      window.location.assign("#/corpora_list");
+      reRouteUser("corpora_list");
       return;
     }
     $rootScope.loginInfo.serverCode = $rootScope.serverCode;
@@ -1037,31 +1071,40 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
-    if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus._rev) {
-      console.log("the corpus changed but it wasn't ready yet");
-      return;
-    }
-    if (newValue === oldValue & newValue === $rootScope.corpus.dbname) {
-      console.log("the corpus changed but it was the same corpus, not doing anything.");
-      return;
-    }
-    $scope.loadCorpusFieldsAndPreferences();
-  });
+  try {
+    $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+      if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus._rev) {
+        console.log("the corpus changed but it wasn't ready yet");
+        return;
+      }
+      if (newValue === oldValue && newValue === $rootScope.corpus.dbname) {
+        console.log("the corpus changed but it was the same corpus, not doing anything.");
+        return;
+      }
+      $scope.loadCorpusFieldsAndPreferences();
+    });
 
+    $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
+      if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
+        return;
+      }
+      console.log("corpus.currentSession changed", oldValue);
+      $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
+      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
-  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
-    if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
-      return;
-    }
-    console.log("corpus.currentSession changed", oldValue);
-    $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+      if ($scope.currentSessionWasNotSetByAHuman) {
+        $scope.currentSessionWasNotSetByAHuman = false;
+      } else {
+        reRouteUser("spreadsheet/" + $rootScope.templateId);
+      }
+      $scope.dataentry = true;
+    });
 
-    window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+  } catch (e) {
+    console.warn(e);
+  }
 
-  });
 
   $scope.selectSession = function() {
     console.log("selectSession is deprecated, dont need it anymore.");
@@ -1079,7 +1122,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.showCreateNewSessionDropdown = true;
     $scope.showEditSessionDetailsDropdown = false;
     $scope.changeActiveSubMenu("none");
-    window.location.assign("#/corpora_list");
+    reRouteUser("corpora_list");
   };
 
   $scope.editSession = function() {
@@ -1159,7 +1202,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
         } else {
           $scope.application.bug("Please create an elicitation session before continuing.");
-          window.location.assign("#/corpora_list");
+          reRouteUser("corpora_list");
         }
 
       }, function(error) {
@@ -1195,7 +1238,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.corpus.currentSession = $scope.application.sessionsList.add(newSession);
       $scope.dataentry = true;
       $rootScope.loading = false;
-      window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+      reRouteUser("spreadsheet/" + $rootScope.templateId);
     });
   };
 
@@ -1208,7 +1251,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
       $rootScope.openNotification();
     } else {
-      window.location.assign("#/");
+      reRouteUser("");
       window.location.reload();
     }
   };
@@ -2021,7 +2064,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.user.corpora.unshift(newCorpusConnection);
           $scope.selectCorpus(newCorpusConnection);
           $rootScope.loading = false;
-          window.location.assign("#/");
+          reRouteUser("");
         });
     } else {
       $rootScope.notificationMessage = "Please verify corpus name.";
@@ -2668,5 +2711,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
-angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
+SpreadsheetStyleDataEntryController.$inject = ["$scope", "$rootScope", "$resource", "$filter", "$document", "Data", "Servers", "md5", "$timeout", "$modal", "$log", "$http"];
+angular.module("spreadsheetApp").controller("SpreadsheetStyleDataEntryController", SpreadsheetStyleDataEntryController);
