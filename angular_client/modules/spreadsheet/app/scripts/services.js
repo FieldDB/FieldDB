@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, SpreadsheetDatum */
+/* globals  Q, sjcl, SpreadsheetDatum, alert, FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 
@@ -6,6 +6,10 @@ angular.module('spreadsheetApp')
   .factory('Data', function($http, $rootScope, $q, Servers) {
 
     var getDocFromCouchDB = function(DB, UUID) {
+      if (true) {
+        console.warn("getBlankDataTemplateFromCorpus is deprecated");
+        // return;
+      }
       if (!$rootScope.serverCode) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
@@ -42,96 +46,12 @@ angular.module('spreadsheetApp')
       }
     };
 
-    // var getDataBySession = function(DB, sessionID, guessedAudioUrl, $scope) {
-    //   if (!sessionID) {
-
-    //     return this.getDocFromCouchDB(DB, sessionID);
-    //   }
-
-    //   if (!$rootScope.serverCode) {
-    //     console.log("Sever code is undefined");
-    //     window.location.assign("#/corpora_list");
-    //     return;
-    //   }
-    //   var deferred = $q.defer();
-
-    //     config;
-
-    //   config = {
-    //     method: "GET",
-    //     url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_list/as_data_list/list_of_data_by_session?key=%22sessionIDYouWantToSee%22".replace("sessionIDYouWantToSee", sessionID),
-    //     withCredentials: true
-    //   };
-    //   console.log("Contacting the DB to get all corpus data for " + DB);
-    //   promise = $http(config).then(function(response) {
-    //     console.log("Receiving data results ");
-    //     var arrayOfEventualData = [];
-    //     var expectedCount = response.data.datumIds.length;
-    //     response.data.datumIds.map(function(UUID) {
-    //       config = {
-    //         method: "GET",
-    //         url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
-    //         withCredentials: true
-    //       };
-
-    //       console.log("Contacting the DB to get data " + config.url);
-    //       promise = $http(config).then(function(response) {
-    //         console.log("Receiving data results ");
-
-    //         // Load data from current session into scope
-    //         if (response.data.session._id === sessionID) {
-    //           var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({},
-    //             response.data,
-    //             $rootScope.server + "/" + $rootScope.corpus.pouchname + "/",
-    //             $scope);
-    //           arrayOfEventualData.push(newDatumFromServer);
-    //         }
-    //         if(arrayOfEventualData.length >= expectedCount){
-    //           deferred.resolve(arrayOfEventualData);
-    //         }
-    //       });
-    //     });
-
-    //     return deferred.resolve();
-    //   });
-    //   return deferred.promise;
-    // };
-
-    var getDataBySession = function(DB, sessionID) {
-      if (!sessionID) {
-        return this.getDocFromCouchDB(DB, sessionID);
-      }
-
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var promise,
-        config;
-
-      config = {
-        method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_list/as_data_list/list_of_data_by_session?key=%22sessionIDYouWantToSee%22".replace("sessionIDYouWantToSee", sessionID),
-        withCredentials: true
-      };
-      console.log("Contacting the DB to get all corpus data for " + DB);
-      promise = $http(config).then(function(response) {
-        console.log("Receiving data results ");
-        if (!response || !response.data || !response.data[sessionID] || !response.data[sessionID].datumIds) {
-          return [];
-        }
-        return response.data[sessionID].datumIds.map(function(uuid) {
-          return {
-            _id: uuid,
-            loading: true
-          };
-        });
-      });
-      return promise;
-    };
-
     var saveCouchDoc = function(DB, newRecord) {
+      if (true) {
+        console.warn("getBlankDataTemplateFromCorpus is deprecated");
+        // return;
+      }
+
       if (!$rootScope.serverCode) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
@@ -157,6 +77,10 @@ angular.module('spreadsheetApp')
     };
 
     var getBlankDataTemplateFromCorpus = function(fieldsType) {
+      if (true) {
+        console.warn("getBlankDataTemplateFromCorpus is deprecated");
+        // return;
+      }
       if (!fieldsType) {
         throw "You must specify a type of fields: datumFields or sessionFields or participantFields etc";
       }
@@ -193,6 +117,10 @@ angular.module('spreadsheetApp')
     };
 
     var datumFields = function(DB) {
+      if (true) {
+        console.warn("getBlankDataTemplateFromCorpus is deprecated");
+        // return;
+      }
       if (!$rootScope.serverCode) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
@@ -213,6 +141,10 @@ angular.module('spreadsheetApp')
     };
 
     var sessions = function(DB) {
+      if (true) {
+        console.warn("getBlankDataTemplateFromCorpus is deprecated");
+        // return;
+      }
       if (!$rootScope.serverCode) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
@@ -294,79 +226,20 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
-    var login = function() {
-      // if (!$rootScope.serverCode) {
-      //   console.log("Sever code is undefined");
-      //   window.location.assign("#/corpora_list");
-      //   return;
-      // }
-      // var deferred = $q.defer();
-
-      // var loginInfo = {
-      //   authUrl: Servers.getServiceUrl($rootScope.serverCode, "auth"),
-      //   username: user,
-      //   password: password
-      // };
-
-      // FieldDB.FieldDBObject.application.authentication.login(loginInfo).then(
-      //   function(user) {
-      //     $rootScope.user = FieldDB.FieldDBObject.application.authentication.user;
-      //     console.log("Logged in to corpus server.");
-      //     deferred.resolve(user);
-      //   },
-      //   function(err) {
-      //     console.warn(err);
-      //     var message = "";
-      //     if (err.status === 0) {
-      //       message = "are you offline?";
-      //       if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-      //         message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
-      //       }
-      //     }
-      //     if (err && err.status >= 400 && err.data && err.data.userFriendlyErrors) {
-      //       message = err.data.userFriendlyErrors;
-      //     } else {
-      //       message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
-      //     }
-      //     deferred.reject(message);
-
-      //   });
-      // return deferred.promise;
-    };
 
     var register = function(newLoginInfo) {
-
-      var config = {
-        method: "POST",
-        url: newLoginInfo.authUrl + "/register",
-        data: newLoginInfo,
-        withCredentials: true
-      };
-      var promise = $http(config).then(
+      alert("TODO test this.");
+      return FieldDB.FieldDBObject.application.authentication.register(newLoginInfo).then(
         function(response) {
-          console.log("Registered new user.");
-          if (response.data.userFriendlyErrors) {
-            $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
-            $rootScope.openNotification();
-          } else {
-            $rootScope.notificationMessage = "Welcome! Your username is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
-            $rootScope.openNotification();
-
-            login(response.data.user.username, newLoginInfo.password).then(function() {
-
-              // Update saved state in Preferences and reload the page to the corpora list.
-              var preferences = window.defaultPreferences;
-              preferences.savedState.server = $rootScope.serverCode;
-              preferences.savedState.username = $rootScope.user.username;
-              preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
-              localStorage.setItem('SpreadsheetPreferences', JSON.stringify(preferences));
-              window.setTimeout(function() {
-                if (window.location.hash.indexOf("register") > -1) {
-                  window.location.assign("#/corpora_list");
-                }
-              }, 500);
-            });
-          }
+          var preferences = window.defaultPreferences;
+          preferences.savedState.username = $rootScope.user.username;
+          preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
+          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(preferences));
+          window.setTimeout(function() {
+            if (window.location.hash.indexOf("register") > -1) {
+              window.location.assign("#/corpora_list");
+            }
+          }, 500);
           return response;
         },
         function(err) {
@@ -390,9 +263,8 @@ angular.module('spreadsheetApp')
           window.setTimeout(function() {
             window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
           }, 1500);
-
-        });
-      return promise;
+        }
+      );
     };
 
     var createcorpus = function(newCorpusInfo) {
@@ -682,13 +554,11 @@ angular.module('spreadsheetApp')
 
     return {
       async: getDocFromCouchDB,
-      getDataBySession: getDataBySession,
       datumFields: datumFields,
       sessions: sessions,
       glosser: glosser,
       lexicon: lexicon,
       getallusers: getallusers,
-      login: login,
       register: register,
       createcorpus: createcorpus,
       updateroles: updateroles,
