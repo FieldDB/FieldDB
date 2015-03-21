@@ -20,7 +20,7 @@
       </a>
     </p>
   </div>
-  <img src="images/logo.png">
+  <img ng-src="images/logo.png">
   <p> &nbsp;
   </p>
   <div ng-show="application.sessionsList.dbname==corpus.dbname" class="mainPageDiv">
@@ -35,16 +35,18 @@
       <form>
         <select ng-model="corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
-        &nbsp;
+        <button type="submit" ng-click="showDataEntry()" class="btn btn-primary">
+          {{contextualize('locale_go_button')}}
+        </button>&nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown">
           <i class="fa whiteicon fa-plus">
           </i> {{contextualize('locale_new_session_button')}}
         </button>
       </form>
     </div>
-  </div>
-  <div class="newSessionDiv" ng-show="showCreateNewSessionDropdown">
-    <ng-include src="'views/session_create_new.html'"></ng-include>
+    <div class="newSessionDiv" ng-show="showCreateNewSessionDropdown">
+      <ng-include src="'views/session_create_new.html'"></ng-include>
+    </div>
   </div>
   <br />
   <div class="mainPageDiv">
@@ -62,7 +64,7 @@
         <br>
         <button class="btn btn-primary" ng-disabled="loading">{{contextualize('locale_login_button')}}
         </button>&nbsp;
-        <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+        <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </form>
     </div>
     <div ng-show="authenticated && corpusSelected==false" >
@@ -90,7 +92,7 @@
           </tr>
         </tbody>
       </table>  &nbsp;
-      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
     </div>
     <div ng-show="corpusSelected"> {{contextualize('locale_logged_in_as')}} {{user.name}}
       <br />
@@ -126,7 +128,7 @@
       <br/>
       <button class="btn btn-primary" ng-disabled="loading">{{contextualize('locale_forgot_password')}}
       </button>&nbsp;
-      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
     </form>
   </div>
   <br />
@@ -148,7 +150,7 @@
       <br/>
       <button class="btn btn-primary" ng-disabled="loading">{{contextualize('locale_reset_password_button_2')}}
       </button>&nbsp;
-      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+      <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
     </form>
   </div>
 </div>

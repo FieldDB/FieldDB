@@ -1,6 +1,6 @@
 <div class="row-fluid document_not_ready_spinner" ng-hide="documentReady">
   <div class="span4 offset4 pagination-centered">
-    <img src="images/loading-spinner.gif" width="75" />
+    <img ng-src="images/loading-spinner.gif" width="75" />
   </div>
 </div>
 <div id="hideOnLoadDeprecated">
@@ -8,7 +8,7 @@
     <div class="menubar mainMenubar" ng-cloak>
       <span class="menuTitle">
         <a ng-click="navigateVerifySaved('home')">
-          <img src="images/icon48_dev.png" border="0" />
+          <img ng-src="images/icon48_dev.png" border="0" />
         </a>
       </span>
       <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}">
@@ -125,7 +125,7 @@
           </i>
           {{contextualize('locale_change_session')}}
         </span>
-        <select class="span3" ng-model="corpus.currentSession" ng-options="session.title for session in sessions">
+        <select ng-model="corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
 
         &nbsp;&nbsp;
@@ -190,7 +190,7 @@
     <div class="menubar mainMenubar" ng-cloak>
       <span class="menuTitle">
         <a ng-click="navigateVerifySaved('home')">
-          <img src="images/icon48_dev.png" border="0" />
+          <img ng-src="images/icon48_dev.png" border="0" />
         </a>
       </span>
       <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}">
