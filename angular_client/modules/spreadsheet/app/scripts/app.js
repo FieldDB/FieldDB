@@ -62,13 +62,10 @@ angular
     }).when('/spreadsheet/fulltemplate', {
       templateUrl: 'views/data_entry.html'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      // templateUrl: 'views/yalefieldmethodsspring2014template.html'
       redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
-      // templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
       redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
-      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
       redirectTo: '/spreadsheet/fulltemplate'
     }).otherwise({
       redirectTo: '/corpora_list'
