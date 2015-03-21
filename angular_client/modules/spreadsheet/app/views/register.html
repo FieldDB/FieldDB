@@ -15,7 +15,10 @@
       ng-model="newLoginInfo.confirmPassword"><br /> <input
       placeholder="e-mail (optional)" ng-model="newLoginInfo.email" type="email"><br />
     <button class="btn btn-primary"
-      ng-click="registerNewUser(newLoginInfo, selectedServer.serverCode)" ng-disabled="loading">{{contextualize('locale_register')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading">
+      ng-click="registerNewUser(newLoginInfo, selectedServer.serverCode)" ng-disabled="loading">
+      {{contextualize('locale_register')}}
+    </button> &nbsp;
+      <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading" />
   </form>
 
 </div>

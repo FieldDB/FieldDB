@@ -14,7 +14,7 @@
   		&nbsp;
       <button class="btn btn-primary"
   			ng-disabled="corpus.saving">{{contextualize('locale_create_button')}}</button>&nbsp;
-        <img src="images/spinner-small-mainbg.gif" ng-show="loading"/>
+        <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading"/>
   	</div>
   <form>
 </div>
@@ -42,7 +42,7 @@
       <textarea class="fielddb-large-textarea" ng-model="corpus.description"></textarea>
       <button class="btn btn-primary"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving">Save</button>
-        <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving">
+        <img ng-src="images/spinner-small-mainbg.gif" ng-show="corpus.saving">
     </div>
 
   </div>
@@ -72,7 +72,10 @@
 			</div>
 			<br />
 			<button class="btn btn-primary"
-				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">{{contextualize('locale_add_button')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading">
+				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">
+        {{contextualize('locale_add_button')}}
+      </button>&nbsp;
+      <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading">
 		</div>
 	</div>
 	<hr />
@@ -87,8 +90,8 @@
 		<div class="settingsItems row">
 				<h3>{{contextualize('locale_admins')}}</h3>
 			<div ng-repeat="user in users.admins" class="user_thumbnails">
-				<img
-					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+				<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
+        <br />
 				<a class="delete_button" ng-click="removeAccessFromUser(user.username, ['admin'])">ⓧ</a>
 				{{user.username}}
 			</div>
@@ -96,8 +99,8 @@
 		<div class="settingsItems row">
         <h3>{{contextualize('locale_writers')}}</h3>
       <div ng-repeat="user in users.writers" class="user_thumbnails">
-        <img
-          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
+        <br />
         <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['writer'])">ⓧ</a>
         {{user.username}}
       </div>
@@ -105,8 +108,8 @@
     <div class="settingsItems row">
 				<h3>{{contextualize('locale_readers')}}</h3>
 			<div ng-repeat="user in users.readers" class="user_thumbnails">
-				<img
-					ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+				<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
+        <br />
 				<a class="delete_button" ng-click="removeAccessFromUser(user.username, ['reader'])">ⓧ</a>
 				{{user.username}}
 			</div>
@@ -114,8 +117,8 @@
     <div class="settingsItems row">
         <h3>{{contextualize('locale_commenters')}}</h3>
       <div ng-repeat="user in users.commenters" class="user_thumbnails">
-        <img
-          ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
+        <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
+        <br />
         <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['commenter'])">ⓧ</a>
         {{user.username}}
       </div>
@@ -133,15 +136,18 @@
       <button class="btn btn-primary"
         ng-click="updateCorpusDetails(corpus)"
         ng-class="{'pulsing': corpus.saving}"
-        ng-disabled="corpus.saving">{{contextualize('locale_save_button')}}</button>
-      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving"/>
+        ng-disabled="corpus.saving">
+        {{contextualize('locale_save_button')}}
+      </button>
+      <img ng-src="images/spinner-small-mainbg.gif" ng-show="corpus.saving"/>
       <div data-fielddb-collection json='corpus.datumFields'></div>
       <button class="btn btn-info"
-        ng-click="corpus.newDatumField(addedDatumField)" ng-disabled="loading">{{contextualize('locale_add_field_button')}}</button>
+        ng-click="corpus.newDatumField(addedDatumField)" ng-disabled="loading">{{contextualize('locale_add_field_button')}}
+      </button>
       <button class="btn btn-primary"
         ng-class="{'pulsing': corpus.saving}"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving">{{contextualize('locale_save_button')}}</button>
-      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving"/>
+      <img ng-src="images/spinner-small-mainbg.gif" ng-show="corpus.saving"/>
 
     </div>
 
