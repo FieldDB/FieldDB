@@ -389,7 +389,7 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
-        for(var itemIndex in value){
+        for (var itemIndex in value) {
           value[itemIndex] = self.add(value[itemIndex]);
         }
         return value;
@@ -818,7 +818,7 @@ Collection.prototype = Object.create(Object.prototype, {
         }
 
         if (anItem !== aCollection[idToMatch]) {
-          self.bug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch);
+          self.warn(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
         }
 
         if (anotherItem === undefined) {
