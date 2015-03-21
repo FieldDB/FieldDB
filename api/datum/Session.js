@@ -135,7 +135,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       } else {
         this.fields = new DatumFields(this.defaults.fields);
       }
-      if (value && value.indexOf && value.indexOf("Change this session") > -1) {
+      if (!value || (value.indexOf && value.indexOf("Change this session") > -1)) {
         value = "Practice collecting linguistic utterances or words";
       }
       this.fields.goal.value = value;
@@ -158,6 +158,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields && this.fields.dateElicited) {
         if (this.fields.dateElicited.value && this.fields.dateElicited.value.indexOf && this.fields.dateElicited.value.indexOf("Change this to a tim") > -1) {
           this.fields.dateElicited.value = "Probably prior to " + new Date(this.dateCreated);
+        }
+        if (!this.fields.dateElicited.value && this.dateCreated) {
+          this.fields.dateElicited.value = new Date(this.dateCreated) + "";
         }
         return this.fields.dateElicited.value;
       } else {
