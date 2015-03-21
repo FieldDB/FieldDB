@@ -149,7 +149,7 @@
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id"ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-model>
       </div>
     </div>
@@ -309,7 +309,7 @@
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id" ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-include>
       </div>
     </div>

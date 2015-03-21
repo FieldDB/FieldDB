@@ -24,8 +24,8 @@
   <p> &nbsp;
   </p>
   <div ng-show="application.sessionsList.dbname==corpus.dbname" class="mainPageDiv">
-    <span ng-show="corpus.title!=undefined">
-      <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{corpus.title}} {{contextualize('locale_loaded')}}
+    <span ng-show="corpus.title">
+      <img ng-show="corpus.gravatar" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{corpus.title}} {{contextualize('locale_loaded')}}
       <br />
       <i class="fa fa-calendargoal">
       </i>{{contextualize('locale_select_create_session')}}
