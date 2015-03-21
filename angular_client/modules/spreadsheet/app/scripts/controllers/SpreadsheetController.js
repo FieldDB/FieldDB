@@ -18,7 +18,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
   $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
 
-
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
     if ($rootScope.contextualize("locale_faq") === "FAQ") {
       console.log("Locales already loaded.");
@@ -96,8 +95,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
+    window.location.assign("#/corpora_list");
   };
 
+  document.addEventListener("notauthenticated", function(e) {
+    console.log(e);
+    $scope.application.warn("user isn't able to see anything, show them the welcome page");
+    $rootScope.authenticated = false;
+    $rootScope.openWelcomeNotificationDeprecated();
+  }, false);
 
   // TEST FOR CHROME BROWSER
   var isChrome = window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
@@ -116,9 +122,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
 
 
-  $scope.$watch('useAutoGlosser', function(newvalue, oldvalue) {
-    console.log("useAutoGlosser", oldvalue);
-    localStorage.setItem("useAutoGlosser", newvalue);
+  $scope.$watch('useAutoGlosser', function(newValue, oldValue) {
+    console.log("useAutoGlosser", oldValue);
+    localStorage.setItem("useAutoGlosser", newValue);
   });
 
   /*
@@ -374,33 +380,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   window.defaultPreferences = defaultPreferences;
 
 
-  $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
-    if (!incomingFields || !$rootScope.corpus) {
+  $rootScope.getAvailableFieldsInColumns = function() {
+    if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus.datumFields._collection || $rootScope.corpus.datumFields._collection.length < 1) {
+      console.warn("the corpus isnt ready, not configuring the available fields in columns.");
       return {};
     }
-    incomingFields = $rootScope.availableFieldsInCurrentCorpus;
+    var fields = $rootScope.corpus.datumFields._collection;
+    var numberOfColumns;
+
     if (!numberOfColumns) {
       numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
     }
     numberOfColumns = parseInt(numberOfColumns, 10);
-    var fields = [];
-    if (incomingFields && typeof incomingFields.splice !== "function") {
-      for (var field in incomingFields) {
-        if (incomingFields.hasOwnProperty(field)) {
-          if (!incomingFields[field].hint && defaultPreferences.availableFields[incomingFields[field].label]) {
-            incomingFields[field].hint = defaultPreferences.availableFields[incomingFields[field].label].hint;
-          }
-          // add only unique fields
-          if (fields.indexOf() === -1) {
-            fields.push(incomingFields[field]);
-          }
-        }
-      }
-    } else {
-      fields = incomingFields;
-    }
+
+
     try {
-      $scope.judgementHelpText = $rootScope.availableFieldsInCurrentCorpus[0].help;
+      $scope.judgementHelpText = $rootScope.corpus.datumFields.judgement.help;
     } catch (e) {
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
@@ -445,7 +440,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("Not using users prefered template " + templateId);
     }
     // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
 
     console.log("notUserInitited", notUserInitited);
     try {
@@ -553,13 +548,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
 
 
-  // console.log(Preferences.availableFields);
   // Set scope variables
   $scope.documentReady = false;
   $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
   $rootScope.fields = []; //$scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
-  $rootScope.fieldsInColumns = {}; //$rootScope.getAvailableFieldsInColumns($scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId]);
-  $rootScope.availableFields = []; //defaultPreferences.availableFields;
+  $rootScope.fieldsInColumns = {}; //$rootScope.getAvailableFieldsInColumns();
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
@@ -887,15 +880,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
 
       $rootScope.user = $scope.application.authentication.user;
-
-      $scope.addActivity([{
-        verb: "logged in",
-        verbicon: "icon-check",
-        directobjecticon: "icon-user",
-        directobject: "",
-        indirectobject: "",
-        teamOrPersonal: "personal"
-      }], "uploadnow");
+      $rootScope.authenticated = true;
+      $scope.corpora = $scope.corpora || new FieldDB.Collection();
 
       // Update saved state in Preferences
       $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
@@ -904,112 +890,20 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
       localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
-      $rootScope.authenticated = true;
-      var userRoles = user.roles;
-      var availableDBs = {};
-      // Find databases the user is allowed to read from db roles with reader
-      for (var roleIndex = 0; roleIndex < userRoles.length; roleIndex++) {
-        var pieces = userRoles[roleIndex].split("_");
-        if (pieces.length > 1 && pieces[pieces.length - 1] === "reader") {
-          pieces.pop();
-          availableDBs[pieces.join("_").replace(/[\"]/g, "")] = {
-            roleIndex: roleIndex
-          };
-        }
+
+
+      // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
+      if ($scope.scopePreferences.savedState.DB) {
+        $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.scopePreferences.savedState.DB.pouchname;
+        delete $scope.scopePreferences.savedState.DB;
       }
-      // put dbs in order that they were added to the user rather than alphabetical by pouchname which isnt useful
-      var scopeDBs = [];
-      for (var dbName in availableDBs) {
-        if (availableDBs.hasOwnProperty(dbName)) {
-
-          // Only show lingllama's grafiti corpora to lingllama, per client request
-          if (dbName.indexOf("lingllama-communitycorpus") > -1 || dbName.indexOf("public-firstcorpus") > -1) {
-            continue;
-          }
-          scopeDBs.push(dbName);
-        }
-      }
-      $scope.corpora = [];
-      var corporaAlreadyIn = {};
-      var processCorpora = function(corpusIdentifierToRetrieve) {
-        if (!corpusIdentifierToRetrieve) {
-          return;
-        }
-        // Use map-reduce to get corpus details
-
-        Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpora")
-          .then(function(response) {
-            var corpus = {};
-            if (response.rows.length > 1) {
-              response.rows.map(function(row) {
-                if (row.value.pouchname === corpusIdentifierToRetrieve) {
-                  corpus = row.value;
-                } else {
-                  console.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);
-                  row.value.trashed = "deleted";
-                  Data.saveCouchDoc(corpusIdentifierToRetrieve, row.value).then(function(result) {
-                    console.log("flag as deleted succedded", result);
-                  }, function(reason) {
-                    console.warn("flag as deleted failed", reason, row.value);
-                  });
-                }
-              });
-            } else if (response.rows.length === 1 && response.rows[0].value && response.rows[0].value.pouchname === corpusIdentifierToRetrieve) {
-              corpus = response.rows[0].value;
-            } else {
-              corpus.pouchname = corpusIdentifierToRetrieve;
-              corpus.title = corpusIdentifierToRetrieve;
-              console.warn("Error finding a corpus in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org ", response, corpus);
-              $scope.application.bug("Error finding corpus details in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org  " + corpusIdentifierToRetrieve);
-              return;
-            }
-            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-            if (corpus.team && corpus.team.gravatar && corpus.team.gravatar.indexOf("user") === -1) {
-              corpus.gravatar = corpus.team.gravatar;
-            }
-            if (!corpus.gravatar || !corpus.gravatar.trim()) {
-              corpus.gravatar = md5.createHash(corpus.pouchname);
-            }
-            corpus.team = corpus.team || {
-              "_id": "team",
-              "gravatar": corpus.gravatar,
-              "username": corpus.pouchname.split("-")[0],
-              "collection": "users",
-              "firstname": "",
-              "lastname": "",
-              "subtitle": "",
-              "email": "",
-              "researchInterest": "No public information available",
-              "affiliation": "No public information available",
-              "description": "No public information available"
-            };
-            // If this is the corpus the user is looking at, update to the latest corpus details from the database.
-            if ($rootScope.corpus && $rootScope.corpus.pouchname === corpus.pouchname) {
-              $scope.selectCorpus(corpus);
-            }
-            if (!corporaAlreadyIn[corpus.pouchname]) {
-              $scope.corpora.push(corpus);
-              corporaAlreadyIn[corpus.pouchname] = true;
-            }
-
-          }, function(error) {
-            var corpus = {};
-            corpus.pouchname = corpusIdentifierToRetrieve;
-            corpus.title = corpusIdentifierToRetrieve;
-            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.pouchname);
-            if (corpus.team && corpus.team.gravatar) {
-              corpus.gravatar = corpus.team.gravatar;
-            }
-            console.warn("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us of this error if you are online and the connection should have succeeded.", error, corpus);
-            $scope.application.bug("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us support@lingsync.org about this error if you are online and the connection should have succeeded.");
-            // $scope.corpora.push(corpus);
-          });
-      };
-      for (var m = 0; m < scopeDBs.length; m++) {
-        if (scopeDBs[m]) {
-          processCorpora(scopeDBs[m]);
-        }
+      if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
+        /* load details for the most receent database */
+        $scope.selectCorpus({
+          dbname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
+        });
+      } else {
+        $scope.documentReady = true;
       }
       $rootScope.loading = false;
     }, /* login failure */ function(reason) {
@@ -1042,6 +936,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo.serverCode = $rootScope.serverCode;
     $scope.application.authentication.login($rootScope.loginInfo).then(function(user) {
       $rootScope.user = user;
+
+      $scope.addActivity([{
+        verb: "logged in",
+        verbicon: "icon-check",
+        directobjecticon: "icon-user",
+        directobject: "",
+        indirectobject: "",
+        teamOrPersonal: "personal"
+      }], "uploadnow");
+
       $scope.loginUser(loginDetails, chosenServer);
     }, function(error) {
       $scope.application.bug(error.userFriendlyErrors.join(" "));
@@ -1056,13 +960,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
+    if (true) {
+      console.log("setting templates is deprecated.");
+      return;
+    }
     // If the currently choosen corpus has a default template, overwrite the user's preferences
     if ($rootScope.mcgillOnly) {
       console.warn("not using the databases' preferredTemplate, this is the mcgill dashboard");
       //$rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
 
     } else if (corpus.preferredTemplate) {
-      var fieldsForTemplate = $rootScope.availableFieldsInCurrentCorpus;
+      var fieldsForTemplate = $rootScope.corpus.datumFields;
       if (corpus.preferredTemplate !== "fulltemplate" && window.defaultPreferences[corpus.preferredTemplate]) {
         fieldsForTemplate = window.defaultPreferences[corpus.preferredTemplate];
       }
@@ -1070,79 +978,82 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.selectCorpus = function(selectedCorpus) {
-    if (!selectedCorpus) {
+  $scope.selectCorpus = function(selectedCorpusConnection) {
+    if (!selectedCorpusConnection) {
       $rootScope.notificationMessage = "Please select a database.";
       $rootScope.openNotification();
       return;
     }
-    if (typeof selectedCorpus === "string") {
-      selectedCorpus = {
-        pouchname: selectedCorpus
+    if (typeof selectedCorpusConnection === "string") {
+      selectedCorpusConnection = {
+        dbname: selectedCorpusConnection
       };
     }
-
-    if (FieldDB && FieldDB.Corpus) {
-      if (!(selectedCorpus instanceof FieldDB.Corpus)) {
-        // try {
-        //   selectedCorpus = JSON.parse(selectedCorpus);
-        // } catch (e) {
-        //   console.log("must have been an object...", e, selectedCorpus);
-        // }
-        if (($rootScope.corpus && $rootScope.corpus.datumFields && $rootScope.corpus.datumFields.length > 0) && ($rootScope.corpus instanceof FieldDB.Corpus) && (selectedCorpus.pouchname === $rootScope.corpus.pouchname) && $rootScope.availableFieldsInCurrentCorpus === $rootScope.corpus.datumFields) {
-          console.log("requested load of a corpus which was already loaded.");
-          return;
-        }
-
-        if (!selectedCorpus.datumFields) {
-          $rootScope.corpus = new FieldDB.Corpus();
-          $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpus.pouchname).then(function(results) {
-            console.log("loaded the corpus", results);
-            $scope.selectCorpus($rootScope.corpus);
-          });
-          return;
-        } else {
-          selectedCorpus = new FieldDB.Corpus(selectedCorpus);
-        }
-      }
+    if (!selectedCorpusConnection.dbname) {
+      console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedCorpusConnection);
+      return;
     }
-    $rootScope.corpus = $scope.corpus = selectedCorpus;
+    if ($scope.corpus && $scope.corpus.dbname !== selectedCorpusConnection.dbname) {
+      console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpusConnection.dbname);
+    }
+    if ($scope.corpora && $scope.corpora[selectedCorpusConnection.pouchname]) {
+      $rootScope.corpus = FieldDB.FieldDBObject.application.corpus = $scope.corpora[selectedCorpusConnection.pouchname];
+      return;
+    }
 
-    $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
+    $rootScope.corpus = FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus();
+    $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpusConnection.pouchname).then(function(results) {
+      console.log("loaded the corpus", results);
+      $scope.corpora.add($rootScope.corpus);
 
+
+      $scope.addActivity([{
+        verb: "opened ",
+        verbicon: "icon-eye",
+        directobjecticon: "icon-cloud",
+        directobject: $rootScope.corpus.title,
+        indirectobject: "",
+        teamOrPersonal: "personal"
+      }], "uploadnow");
+
+      $scope.addActivity([{
+        verb: "opened ",
+        verbicon: "icon-eye",
+        directobjecticon: "icon-cloud",
+        directobject: $rootScope.corpus.title,
+        indirectobject: "",
+        teamOrPersonal: "team"
+      }], "uploadnow");
+
+    });
+  };
+
+  $scope.$watch('corpus.dbname', function(newValue, oldValue) {
+    if (!$scope.corpus || !$scope.corpus.datumFields || !$scope.corpus._rev) {
+      console.log("the corpus changed but it wasn't ready yet");
+      return;
+    }
+    if (newValue === oldValue || newValue === $scope.corpus.dbname) {
+      console.log("the corpus changed but it was the same corpus, not doing anything.");
+      return;
+    }
     // Update saved state in Preferences
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = selectedCorpus.pouchname;
+    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.corpus.dbname;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-
-    $scope.availableFields = $rootScope.corpus.datumFields._collection;
-    $rootScope.availableFieldsInCurrentCorpus = $rootScope.corpus.datumFields._collection;
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
-    $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
+    $rootScope.overrideTemplateSetting();
 
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
-
-    console.log("setting current corpus details: " + $rootScope.corpus);
-    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-      if (!FieldDB.FieldDBObject.application.corpus) {
-        FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
-      } else {
-        if (FieldDB.FieldDBObject.application.corpus.dbname !== selectedCorpus.dbname) {
-          console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpus.dbname);
-          FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
-        }
-      }
-    }
-  };
+  });
 
 
-
-  $scope.$watch('corpus.currentSession', function(newvalue, oldvalue) {
-    if (!$scope.corpus || !$scope.corpus.currentSession) {
+  $scope.$watch('corpus.currentSession', function(newValue, oldValue) {
+    if (!$scope.corpus || !$scope.corpus.currentSession || !$scope.corpus.currentSession.goal) {
       return;
     }
-    console.log("corpus.currentSession changed", oldvalue);
+    console.log("corpus.currentSession changed", oldValue);
     $scope.scopePreferences.savedState.sessionID = $scope.corpus.currentSession.id;
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
@@ -2092,9 +2003,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         .then(function(response) {
 
           // Add new corpus to scope
-          var newCorpus = {};
-          newCorpus.pouchname = response.corpus.pouchname;
-          newCorpus.title = response.corpus.title;
+          var newCorpusConnection = {};
+          newCorpusConnection.pouchname = response.corpus.pouchname;
+          newCorpusConnection.title = response.corpus.title;
           var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "added",
@@ -2105,7 +2016,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             teamOrPersonal: "personal"
           }], "uploadnow");
 
-          $scope.corpora.push(newCorpus);
+          alert("todo test this");
+          $scope.user.corpora.unshift(newCorpusConnection);
+          $scope.selectCorpus(newCorpusConnection);
           $rootScope.loading = false;
           window.location.assign("#/");
         });
@@ -2617,27 +2530,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           auth.password = $scope.scopePreferences.savedState.password;
         }
         $scope.loginUser(auth);
-        // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
-        if ($scope.scopePreferences.savedState.DB) {
-          $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.scopePreferences.savedState.DB.pouchname;
-          delete $scope.scopePreferences.savedState.DB;
-        }
-        if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
-          /* load details for the most receent database */
-          $scope.selectCorpus({
-            pouchname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-          });
 
-          if ($scope.scopePreferences.savedState.sessionID) {
-            // Load all sessions and go to current session
-            $scope.loadSessions($scope.scopePreferences.savedState.sessionID);
-            $scope.navigateVerifySaved('none');
-          } else {
-            $scope.loadSessions();
-          }
-        } else {
-          $scope.documentReady = true;
-        }
       } else {
         $rootScope.openWelcomeNotificationDeprecated();
         $scope.documentReady = true;
@@ -2763,6 +2656,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   window.onbeforeunload = function(e) {
     console.warn(e);
+    if ($scope.application && $scope.application.authentication && $scope.application.authentication.user && typeof $scope.application.authentication.user.save === "function") {
+      $scope.application.authentication.user.save();
+    }
     if ($scope.saved === "no") {
       return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
     } else {

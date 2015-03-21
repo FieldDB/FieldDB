@@ -26,7 +26,7 @@ CorpusConnections.prototype = Object.create(Collection.prototype, /** @lends Cor
   },
 
   primaryKey: {
-    value: "corpusUrl"
+    value: "dbname"
   },
 
   INTERNAL_MODELS: {
