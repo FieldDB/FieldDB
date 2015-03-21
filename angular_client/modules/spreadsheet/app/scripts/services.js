@@ -1,4 +1,4 @@
-/* globals  Q, sjcl, SpreadsheetDatum, FieldDB */
+/* globals  Q, sjcl, SpreadsheetDatum */
 'use strict';
 console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 
@@ -288,13 +288,13 @@ angular.module('spreadsheetApp')
 
       console.log("Contacting the DB to get all users for " + config.url);
       var promise = $http(config).then(function(response) {
-        console.log("Receiving all users");
+        console.log("Receiving all users on this team");
         return response.data.users;
       });
       return promise;
     };
 
-    var login = function(user, password) {
+    var login = function() {
       // if (!$rootScope.serverCode) {
       //   console.log("Sever code is undefined");
       //   window.location.assign("#/corpora_list");

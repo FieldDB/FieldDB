@@ -333,10 +333,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       decryptedUser = {};
       if (!encryptedUserPreferences) {
         self.warn("This user " + self.username + " hasnt been used this device before, need to request their prefs when they login.");
-        self.debug("userKey is " + userKey);
-        self.debug("user encrypted is " + self.constructor.prototype.temp[userKey]);
-        return FieldDBObject.prototype.fetch.apply(self, arguments);
+        return deferred.promise;
+        // return FieldDBObject.prototype.fetch.apply(self, arguments);
       }
+      self.debug("userKey is " + userKey);
+      self.debug("user encrypted is " + encryptedUserPreferences);
       decryptedUser = new Confidential({
         secretkey: userKey
       }).decrypt(encryptedUserPreferences);
