@@ -40,12 +40,19 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   };
 
   $scope.changeFieldToEdit = function(field) {
-    todo("what is changeFieldToEdit for");
+    if (true) {
+      console.log("what is changeFieldToEdit for");
+      return;
+    }
     $scope.fieldToEdit = field;
   };
 
 
   $scope.editFieldTitle = function(field, newFieldTitle) {
+    if (true) {
+      console.log("editTagInfo is deprecated");
+      return;
+    }
     var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     for (var key in Preferences.availableFields) {
       if (key === field.label) {
@@ -57,6 +64,10 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   };
 
   $scope.editTagInfo = function(oldTag, newTag) {
+    if (true) {
+      console.log("editTagInfo is deprecated");
+      return;
+    }
     var r = confirm("Are you sure you want to change all '" + oldTag + "' to '" + newTag + "'?\nThis may take a while.");
     if (r === true) {
       var changeThisRecord;
@@ -112,6 +123,10 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   };
 
   $scope.deleteDuplicateTags = function() {
+    if (true) {
+      console.log("deleteDuplicateTags is deprecated");
+      return;
+    }
     window.alert("Coming soon.");
     var changeThisRecord;
     var doSomethingLIkeDeletingDuplicateTags = function(indexi) {
@@ -135,6 +150,10 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
   // Get all tags
   $scope.getTags = function() {
+    if (true) {
+      console.log("getTags is deprecated");
+      return;
+    }
     Data.async($rootScope.corpus.pouchname)
       .then(
         function(dataFromServer) {
