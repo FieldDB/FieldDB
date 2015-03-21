@@ -231,6 +231,8 @@ describe("Corpus", function() {
       var serialization = corpus.toJSON();
       expect(serialization.team.gravatar).toEqual("888888we8888888888888");
       expect(serialization.team.username).toEqual("lingllama");
+
+      expect(corpus.corpusConnection.gravatar).toEqual("888888we8888888888888");
     });
 
     xit("should clean v1.22.1 to a maximal json", function() {

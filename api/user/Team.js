@@ -72,7 +72,20 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
       this.warn("subtitle is deprecated, use name instead.");
       this.name = value;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = UserMask.prototype.toJSON.apply(this, [false, true]);
+      delete json.fieldDBtype;
+      delete json.version;
+      delete json.api;
+      this.debug(json);
+      return json;
+    }
   }
+
 
 });
 

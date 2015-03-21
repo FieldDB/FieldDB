@@ -69,6 +69,7 @@ describe("CorpusMask ", function() {
       conversationFields: [],
       sessionFields: [],
       prefs: corpusJson.prefs,
+      team: {},
       pouchname: "lingllama-communitycorpus",
       api: "corpora"
     });
