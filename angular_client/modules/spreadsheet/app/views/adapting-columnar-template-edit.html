@@ -16,7 +16,7 @@
   <div ng-show="fieldsInColumns.third.length > 0" class="{{fieldSpanWidthClassName}}" fielddb-glosser-input datumornewdatum="datum" columnlabel="third">
   </div>
   <div class="span2 entered_modified_info">
-    <span ng-show="searching==true">
+    <span ng-show="searching">
       <button class="btn btn-primary" ng-click="selectNone()">
         {{contextualize('locale_done_button')}}
       </button>
@@ -58,14 +58,14 @@
     </div>
   </div>
 </form>
-<div class="row" ng-show="expandCollapse==true && !datum.id">
+<div class="row" ng-show="expandCollapse && !datum.id">
   <div class="span10 offset1 pagination-centered">
     <b>
       {{contextualize('locale_must_save_changes_message')}}
     </b>
   </div>
 </div>
-<div class="container-fluid" ng-show="expandCollapse==true && datum.id!=undefined">
+<div class="container-fluid" ng-show="expandCollapse && datum.id!=undefined">
   <div class="row" >
     <div class="span5 expandedDataComments">
       <div class="expandedDataInner">
@@ -85,7 +85,7 @@
             {{comment.text}}
           </li>
         </ul>
-        <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);" >
+        <button ng-show="commentPermissions" class="btn btn-primary" ng-click="addComment(datum);" >
           <i class="fa whiteicon fa-comment">
           </i>
           {{contextualize('locale_add_comment_button')}}
