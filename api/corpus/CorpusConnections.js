@@ -40,6 +40,12 @@ CorpusConnections.prototype = Object.create(Collection.prototype, /** @lends Cor
       commentObject.timestamp = Date.now();
       this.add(new CorpusConnection(commentObject));
     }
+  },
+
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      return value;
+    }
   }
 
 
