@@ -328,7 +328,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
     it('should have all the old things for authentication in scope that it had before', function() {
       expect(typeof scope.loginUser).toBe('function');
-      expect(typeof scope.logOut).toBe('function');
+      expect(typeof scope.logout).toBe('function');
 
       expect(typeof scope.registerNewUser).toBe('function');
 
