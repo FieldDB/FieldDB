@@ -114,20 +114,31 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
   },
 
   datalists: {
-    get: function(){
+    get: function() {
       return this.datalistHistory;
     },
-    set: function(){
-      this.datalistHistory = value;
+    set: function(value) {
+      if (value && !this._datalistHistory) {
+        this.datalistHistory = value;
+      }
     }
   },
 
   datalistHistory: {
-    get: function(){
-      return this._datalistHistory;
+    get: function() {
+      return this._datalistHistory || FieldDBObject.DEFAULT_ARRAY;
     },
-    set: function(){
+    set: function(value) {
       this._datalistHistory = value;
+    }
+  },
+
+  sessionHistory: {
+    get: function() {
+      return this._sessionHistory || FieldDBObject.DEFAULT_ARRAY;
+    },
+    set: function(value) {
+      this._sessionHistory = value;
     }
   },
 

@@ -37,7 +37,8 @@ describe("User ", function() {
         description: "",
         version: u.version,
         api: "users",
-        corpora: []
+        corpora: [],
+        datalists: []
       });
     });
 
@@ -125,6 +126,9 @@ describe("User ", function() {
         },
         authUrl: "",
         corpora: [],
+        sessionHistory: [],
+        datalistHistory: [],
+        datalists: [],
         api: "users"
       });
     });
