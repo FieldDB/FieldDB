@@ -98,8 +98,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     window.location.assign("#/corpora_list");
   };
 
-  document.addEventListener("notauthenticated", function(e) {
-    console.log(e);
+  document.addEventListener("notauthenticated", function() {
     $scope.application.warn("user isn't able to see anything, show them the welcome page");
     $rootScope.authenticated = false;
     $rootScope.openWelcomeNotificationDeprecated();
@@ -661,7 +660,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Get sessions for pouchname; select specific session on saved state load
   $scope.loadSessions = function() {
     /* reset the sessions list if the corpus has changed */
-    if ($scope.corpus && $scope.corpus.dbname && $scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0 && $scope.application.sessionsList.dbname !== $scope.corpus.dbname) {
+    if ($rootScope.corpus && $rootScope.corpus.dbname && $scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0 && $scope.application.sessionsList.dbname !== $rootScope.corpus.dbname) {
       $scope.application.previousSessionsList = $scope.application.sessionsList;
       $scope.application.sessionsList = new FieldDB.DataList({
         title: {
@@ -675,11 +674,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     /* avoid reloading sessions if they have already been loaded for this corpus */
-    if ($scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0 && $scope.application.sessionsList.dbname === $scope.corpus.dbname) {
+    if ($scope.application.sessionsList && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs.length > 0 && $scope.application.sessionsList.dbname === $rootScope.corpus.dbname) {
       console.log("sessions are already loaded", $scope.application.sessionsList);
-      if (!$scope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+      if (!$rootScope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
         console.log("   but corpus.currentSession wasnt defined, this should never happen.");
-        $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+        $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
       }
       return;
     }
@@ -687,9 +686,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.appReloaded = true;
     $rootScope.loading = true;
 
-    $scope.application.sessionsList.dbname = $scope.corpus.dbname;
-    $scope.corpus.fetchCollection($scope.application.sessionsList.api).then(function(results) {
-      if ($scope.application.sessionsList.dbname !== $scope.corpus.dbname) {
+    $scope.application.sessionsList.dbname = $rootScope.corpus.dbname;
+    $rootScope.corpus.fetchCollection($scope.application.sessionsList.api).then(function(results) {
+      if ($scope.application.sessionsList.dbname !== $rootScope.corpus.dbname) {
         console.log("  the session list and corpus dont match they arent from the same databse, not adding these results to the list");
         return;
       }
@@ -698,9 +697,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         return;
       }
 
-      $scope.application.sessionsList.confidential = $scope.corpus.confidential;
+      $scope.application.sessionsList.confidential = $rootScope.corpus.confidential;
       $scope.application.sessionsList.populate(results.map(function(doc) {
-        doc.url = $scope.corpus.url;
+        doc.url = $rootScope.corpus.url;
         return doc;
       }));
 
@@ -710,14 +709,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // });
 
       /* Set the current session either form the user's last page load or to be the most recent session */
-      if (!$scope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
+      if (!$rootScope.corpus.currentSession && $scope.application.sessionsList.docs && $scope.application.sessionsList.docs._collection && $scope.application.sessionsList.docs._collection.length > 0) {
         if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID]) {
-          $scope.corpus.currentSession = $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID];
+          $rootScope.corpus.currentSession = $scope.application.sessionsList.docs[$scope.scopePreferences.savedState.sessionID];
         } else {
-          $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
+          $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs.length - 1];
         }
       }
-      $scope.newSession = $scope.corpus.newSession();
+      $scope.newSession = $rootScope.corpus.newSession();
       $scope.documentReady = true;
       $rootScope.loading = false;
       $rootScope.saved = "yes";
@@ -864,48 +863,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.serverCode = loginDetails.server;
     $rootScope.server = Servers.getServiceUrl(loginDetails.server, "corpus");
 
-
     $scope.application.authentication.resumingSessionPromise.then(function(user) {
-      if (user === undefined) {
-        return;
-      }
-      if ($rootScope.user && $rootScope.user._rev === user._rev) {
-        console.log("the user's already resumed");
-        return;
-      }
-      if (!user.rev) {
+
+      if (!user.rev && !$scope.loginUserFromScratchIsRunning) {
         console.warn("this user doesnt have any details on this device, forcing them to login completely.");
         $scope.loginUserFromScratch(loginDetails, chosenServer);
         return;
       }
 
-      $rootScope.user = $scope.application.authentication.user;
-      $rootScope.authenticated = true;
-      $scope.corpora = $scope.corpora || new FieldDB.Collection();
-
-      // Update saved state in Preferences
-      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-      $scope.scopePreferences.savedState.server = $rootScope.serverCode;
-      $scope.scopePreferences.savedState.username = $rootScope.user.username;
-      $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-
-
-
-      // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
-      if ($scope.scopePreferences.savedState.DB) {
-        $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.scopePreferences.savedState.DB.pouchname;
-        delete $scope.scopePreferences.savedState.DB;
-      }
-      if ($scope.scopePreferences.savedState.mostRecentCorpusPouchname) {
-        /* load details for the most receent database */
-        $scope.selectCorpus({
-          dbname: $scope.scopePreferences.savedState.mostRecentCorpusPouchname
-        });
-      } else {
-        $scope.documentReady = true;
-      }
-      $rootScope.loading = false;
     }, /* login failure */ function(reason) {
       $rootScope.notificationMessage = "Error logging in.\n" + reason;
       $rootScope.openNotification(null, true);
@@ -913,10 +878,40 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
+
+  document.addEventListener("authenticated", function() {
+    if ($scope.application.authentication.user && !$scope.application.authentication.user.rev) {
+      $rootScope.openWelcomeNotificationDeprecated();
+      return;
+    }
+    $rootScope.user = $scope.application.authentication.user;
+    $rootScope.authenticated = true;
+    $scope.corpora = $scope.corpora || new FieldDB.Collection();
+
+    // Update saved state in Preferences
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.server = $rootScope.serverCode;
+    $scope.scopePreferences.savedState.username = $rootScope.user.username;
+    $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
+    // if ($scope.application.authentication.user.mostRecentIds && $scope.application.authentication.user.mostRecentIds.couchConnection && $scope.application.authentication.user.mostRecentIds.couchConnection.dbname) {
+    //   $scope.selectCorpus($scope.application.authentication.user.mostRecentIds.couchConnection);
+    // } else {
+    // }
+    $scope.documentReady = true;
+    $rootScope.loading = false;
+  }, false);
+
   $scope.loginUserFromScratch = function(loginDetails, chosenServer) {
+    if ($scope.loginUserFromScratchIsRunning) {
+      console.warn("loginUserFromScratch is already running");
+      return;
+    }
     if (chosenServer) {
       loginDetails.server = chosenServer;
     }
+    $scope.loginUserFromScratchIsRunning = true;
 
     if (!loginDetails || !loginDetails.server) {
       $rootScope.notificationMessage = "Please choose a server.";
@@ -934,9 +929,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     $rootScope.loginInfo.serverCode = $rootScope.serverCode;
-    $scope.application.authentication.login($rootScope.loginInfo).then(function(user) {
-      $rootScope.user = user;
-
+    $scope.application.authentication.login($rootScope.loginInfo).then(function() {
+      // $rootScope.user = user;
+      $scope.loginUserFromScratchIsRunning = false;
       $scope.addActivity([{
         verb: "logged in",
         verbicon: "icon-check",
@@ -946,17 +941,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         teamOrPersonal: "personal"
       }], "uploadnow");
 
-      $scope.loginUser(loginDetails, chosenServer);
     }, function(error) {
       $scope.application.bug(error.userFriendlyErrors.join(" "));
     });
   };
 
-  $scope.logOut = function() {
+  $scope.logout = function() {
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     $scope.scopePreferences.savedState = {};
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-    $scope.reloadPage();
+    $scope.application.authentication.logout();
+    // $scope.reloadPage();
   };
 
   $rootScope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
@@ -978,6 +973,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
+  $scope.loadCorpusFieldsAndPreferences = function() {
+    // Update saved state in Preferences
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $rootScope.corpus.dbname;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
+    $rootScope.overrideTemplateSetting();
+
+    $scope.loadSessions();
+    $scope.loadUsersAndRoles();
+  };
+
   $scope.selectCorpus = function(selectedCorpusConnection) {
     if (!selectedCorpusConnection) {
       $rootScope.notificationMessage = "Please select a database.";
@@ -989,11 +996,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         dbname: selectedCorpusConnection
       };
     }
+    selectedCorpusConnection.dbname = selectedCorpusConnection.dbname || selectedCorpusConnection.pouchname;
     if (!selectedCorpusConnection.dbname) {
       console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedCorpusConnection);
       return;
     }
-    if ($scope.corpus && $scope.corpus.dbname !== selectedCorpusConnection.dbname) {
+    if ($rootScope.corpus && $rootScope.corpus.dbname !== selectedCorpusConnection.dbname) {
       console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpusConnection.dbname);
     }
     if ($scope.corpora && $scope.corpora[selectedCorpusConnection.pouchname]) {
@@ -1005,7 +1013,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpusConnection.pouchname).then(function(results) {
       console.log("loaded the corpus", results);
       $scope.corpora.add($rootScope.corpus);
-
+      selectedCorpusConnection.parent = $rootScope.corpus;
 
       $scope.addActivity([{
         verb: "opened ",
@@ -1024,37 +1032,30 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         indirectobject: "",
         teamOrPersonal: "team"
       }], "uploadnow");
+      $scope.loadCorpusFieldsAndPreferences();
 
     });
   };
 
-  $scope.$watch('corpus.dbname', function(newValue, oldValue) {
-    if (!$scope.corpus || !$scope.corpus.datumFields || !$scope.corpus._rev) {
+  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+    if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus._rev) {
       console.log("the corpus changed but it wasn't ready yet");
       return;
     }
-    if (newValue === oldValue || newValue === $scope.corpus.dbname) {
+    if (newValue === oldValue & newValue === $rootScope.corpus.dbname) {
       console.log("the corpus changed but it was the same corpus, not doing anything.");
       return;
     }
-    // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $scope.corpus.dbname;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
-    $rootScope.overrideTemplateSetting();
-
-    $scope.loadSessions();
-    $scope.loadUsersAndRoles();
+    $scope.loadCorpusFieldsAndPreferences();
   });
 
 
-  $scope.$watch('corpus.currentSession', function(newValue, oldValue) {
-    if (!$scope.corpus || !$scope.corpus.currentSession || !$scope.corpus.currentSession.goal) {
+  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
+    if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
       return;
     }
     console.log("corpus.currentSession changed", oldValue);
-    $scope.scopePreferences.savedState.sessionID = $scope.corpus.currentSession.id;
+    $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
@@ -1087,26 +1088,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     // Save session record to all its datum
-    $scope.corpus.currentSession.save().then(function() {
+    $rootScope.corpus.currentSession.save().then(function() {
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.pouchname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-calendar",
-        directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>" + $scope.corpus.currentSession.goal + "</a> ",
+        directobject: "<a href='#session/" + $rootScope.corpus.currentSession.id + "'>" + $rootScope.corpus.currentSession.goal + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "personal"
       }, {
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-calendar",
-        directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>" + $scope.corpus.currentSession.goal + "</a> ",
+        directobject: "<a href='#session/" + $rootScope.corpus.currentSession.id + "'>" + $rootScope.corpus.currentSession.goal + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }], "uploadnow");
 
-      // $scope.corpus.currentSession.docs.map(function(datum) {
-      //   datum.session = $scope.corpus.currentSession;
+      // $rootScope.corpus.currentSession.docs.map(function(datum) {
+      //   datum.session = $rootScope.corpus.currentSession;
       //   datum.save().then(function() {
       //       $rootScope.loading = false;
       //     },
@@ -1122,7 +1123,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.deleteSession = function() {
-    if (!$scope.corpus.currentSession || $scope.corpus.currentSession.id === "none") {
+    if (!$rootScope.corpus.currentSession || $rootScope.corpus.currentSession.id === "none") {
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
@@ -1130,8 +1131,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       if (!r) {
         return;
       }
-      $scope.corpus.currentSession.trashed = "deleted";
-      $scope.corpus.currentSession.save().then(function(response) {
+      $rootScope.corpus.currentSession.trashed = "deleted";
+      $rootScope.corpus.currentSession.save().then(function(response) {
         if (debugging) {
           console.log(response);
         }
@@ -1140,22 +1141,22 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>an elicitation session</a> ",
+          directobject: "<a href='#session/" + $rootScope.corpus.currentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "personal"
         }, {
           verb: "deleted",
           verbicon: "icon-trash",
           directobjecticon: "icon-calendar",
-          directobject: "<a href='#session/" + $scope.corpus.currentSession.id + "'>an elicitation session</a> ",
+          directobject: "<a href='#session/" + $rootScope.corpus.currentSession.id + "'>an elicitation session</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "team"
         }], "uploadnow");
 
         // Remove session from scope
-        $scope.application.sessionsList.docs.remove($scope.corpus.currentSession);
+        $scope.application.sessionsList.docs.remove($rootScope.corpus.currentSession);
         if ($scope.application.sessionsList.docs._collection.length > 0) {
-          $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
+          $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[$scope.application.sessionsList.docs._collection.length - 1];
         } else {
           $scope.application.bug("Please create an elicitation session before continuing.");
           window.location.assign("#/corpora_list");
@@ -1191,7 +1192,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         teamOrPersonal: "team"
       }], "uploadnow");
 
-      $scope.corpus.currentSession = $scope.application.sessionsList.add(newSession);
+      $rootScope.corpus.currentSession = $scope.application.sessionsList.add(newSession);
       $scope.dataentry = true;
       $rootScope.loading = false;
       window.location.assign("#/spreadsheet/" + $rootScope.templateId);
@@ -1314,16 +1315,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateEntered = JSON.parse(JSON.stringify(new Date(newSpreadsheetDatum.timestamp)));
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
-    if (!$scope.corpus.currentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
+    if (!$rootScope.corpus.currentSession && $scope.application.sessionsList && $scope.application.sessionsList.length > 0) {
 
-      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$scope.corpus.currentSession]) {
-        $scope.corpus.currentSession = $scope.scopePreferences.savedState.sessionID.docs[$scope.corpus.currentSession];
+      if ($scope.scopePreferences && $scope.scopePreferences.savedState && $scope.scopePreferences.savedState.sessionID && $scope.scopePreferences.savedState.sessionID.docs[$rootScope.corpus.currentSession]) {
+        $rootScope.corpus.currentSession = $scope.scopePreferences.savedState.sessionID.docs[$rootScope.corpus.currentSession];
       } else {
-        $scope.corpus.currentSession = $scope.application.sessionsList.docs._collection[0];
+        $rootScope.corpus.currentSession = $scope.application.sessionsList.docs._collection[0];
       }
 
     }
-    newSpreadsheetDatum.session = $scope.corpus.currentSession;
+    newSpreadsheetDatum.session = $rootScope.corpus.currentSession;
     // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
 
@@ -1559,8 +1560,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         activities[1].verb = "modified";
         activities[1].verbicon = "icon-pencil";
       } else {
-        if ($scope.corpus.currentSession) {
-          recordToBeSaved.session = $scope.corpus.currentSession; //TODO check this, should work since the users only open data by elicitation session.
+        if ($rootScope.corpus.currentSession) {
+          recordToBeSaved.session = $rootScope.corpus.currentSession; //TODO check this, should work since the users only open data by elicitation session.
         } else {
           $scope.application.bug("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
         }
@@ -2017,7 +2018,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           alert("todo test this");
-          $scope.user.corpora.unshift(newCorpusConnection);
+          $rootScope.user.corpora.unshift(newCorpusConnection);
           $scope.selectCorpus(newCorpusConnection);
           $rootScope.loading = false;
           window.location.assign("#/");

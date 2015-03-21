@@ -17,6 +17,7 @@ var Q = require("q");
  * @property {String} lastname The user's last name.
  * @property {Array} teams This is a list of teams a user belongs to.
  * @property {Array} sessionHistory
+ * @property {Array} datalistHistory
  * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)
  *
  * @name  User
@@ -62,7 +63,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
       activityCouchConnection: CorpusConnection,
       authUrl: FieldDBObject.DEFAULT_STRING,
-      corpora: CorpusConnections
+      corpora: CorpusConnections,
+      sessionHistory: FieldDBObject.DEFAULT_ARRAY,
+      datalistHistory: FieldDBObject.DEFAULT_ARRAY
     }
   },
 
@@ -110,6 +113,24 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  datalists: {
+    get: function(){
+      return this.datalistHistory;
+    },
+    set: function(){
+      this.datalistHistory = value;
+    }
+  },
+
+  datalistHistory: {
+    get: function(){
+      return this._datalistHistory;
+    },
+    set: function(){
+      this._datalistHistory = value;
+    }
+  },
+
   mostRecentIds: {
     configurable: true,
     get: function() {
@@ -127,6 +148,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
       //   }
       // }
+      if (value && value.couchConnection) {
+        value.corpusConnection = value.couchConnection = new CorpusConnection(value.couchConnection);
+      }
       this._mostRecentIds = value;
     }
   },
@@ -230,6 +254,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       // TODO not including the corpuses, instead include corpora
       json.corpora = this.corpora;
       delete json.corpuses;
+
+      // TODO deprecated
+      json.datalists = this.datalists;
 
       this.debug(json);
       return json;
