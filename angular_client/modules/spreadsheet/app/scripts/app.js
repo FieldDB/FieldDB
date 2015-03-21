@@ -46,6 +46,8 @@ angular
 
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'
+    }).when('/welcome', {
+      templateUrl: 'views/corpora_list_and_modals.html'
     }).when('/settings', {
       templateUrl: 'views/settings.html',
       controller: 'SpreadsheetStyleDataEntrySettingsController'

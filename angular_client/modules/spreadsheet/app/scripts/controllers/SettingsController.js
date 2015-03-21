@@ -35,8 +35,6 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
     console.log("TODO remove the field.", field);
   };
 
-  // $scope.availableFields = $scope.scopePreferences.availableFields;
-  // console.log($scope.availableFields );
   $scope.changeTagToEdit = function(tag) {
     $scope.tagToEdit = tag;
   };
@@ -56,7 +54,6 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
     }
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     $scope.scopePreferences = Preferences;
-    $scope.availableFields = Preferences.availableFields;
   };
 
   $scope.editTagInfo = function(oldTag, newTag) {
@@ -173,21 +170,21 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
     var prefs = localStorage.getItem('SpreadsheetPreferences');
     var Preferences = JSON.parse(prefs || "{}");
-    for (var availableField in $scope.availableFields) {
-      for (var newField in newFieldPreferences) {
-        if (newFieldPreferences[newField] === "") {
-          Preferences[templateId][newField].title = "";
-          Preferences[templateId][newField].label = "";
-        } else if ($scope.availableFields[availableField].label === newFieldPreferences[newField]) {
-          if (!Preferences[templateId]) {
-            //hack for #1290 until we refactor the app into something more MVC
-            Preferences[templateId] = window.defaultPreferences[templateId];
-          }
-          Preferences[templateId][newField].title = $scope.availableFields[availableField].title;
-          Preferences[templateId][newField].label = $scope.availableFields[availableField].label;
-        }
-      }
-    }
+    // for (var availableField in $scope.corpus.datumFields._collection) {
+    //   for (var newField in newFieldPreferences) {
+    //     if (newFieldPreferences[newField] === "") {
+    //       Preferences[templateId][newField].title = "";
+    //       Preferences[templateId][newField].label = "";
+    //     } else if ($scope.corpus.datumFields._collection[availableField].label === newFieldPreferences[newField]) {
+    //       if (!Preferences[templateId]) {
+    //         //hack for #1290 until we refactor the app into something more MVC
+    //         Preferences[templateId] = window.defaultPreferences[templateId];
+    //       }
+    //       Preferences[templateId][newField].title = $scope.corpus.datumFields._collection[availableField].title;
+    //       Preferences[templateId][newField].label = $scope.corpus.datumFields._collection[availableField].label;
+    //     }
+    //   }
+    // }
     if (fullTemplateDefaultNumberOfColumns) {
       Preferences.fullTemplateDefaultNumberOfColumns = fullTemplateDefaultNumberOfColumns;
     }
@@ -200,7 +197,6 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
     $rootScope.templateId = Preferences.userChosenTemplateId;
     $rootScope.setTemplateUsingCorpusPreferedTemplate($rootScope.corpus);
     // $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-    // $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
 
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
     window.alert("Settings saved.");
