@@ -1,4 +1,4 @@
-<div class="span1 search_checkbox" ng-show="searching==true">
+<div class="span1 search_checkbox" ng-show="searching">
   <input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
 </div>
 <div class="span1" >
@@ -31,7 +31,7 @@
   </span>
 </div>
 <div class="span2 entered_modified_info">
-  <span ng-show="searching==true">
+  <span ng-show="searching">
     <button ng-hide="writePermissions==false" class="btn btn-primary" ng-click="editSearchResults($index)">
       <i class="fa whiteicon fa-pencil">
       </i>
@@ -59,7 +59,7 @@
   </span>
   <span class="expandCollapseButton">
     <br />
-    <i ng-show="datum.hasAudio==true" class="fa fa-microphone">
+    <i ng-show="datum.hasAudio" class="fa fa-microphone">
     </i>
     <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
   </span>
@@ -81,7 +81,7 @@
     </ul>
   </div>
 </div>
-<div class="row" ng-show="searching==true">
+<div class="row" ng-show="searching">
   <div class="span9 offset1">
     <table>
       <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">

@@ -1,15 +1,15 @@
 <div data-spreadsheet-no-data-to-display ></div>
 
-<div spreadsheet-catch-arrow-key class="row relativePosition" ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading==true || readPermissions==false">
+<div spreadsheet-catch-arrow-key class="row relativePosition" ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}" ng-repeat="datum in data | orderBy:orderProp" ng-click="selectRow($index)" ng-hide="loading || readPermissions==false">
 
   <!-- Show when editing -->
-  <div data-spreadsheet-adapting-columnar-template-edit ng-show=" writePermissions==true && readPermissions==true && activeDatumIndex==$index"></div>
+  <div data-spreadsheet-adapting-columnar-template-edit ng-show=" writePermissions && readPermissions && activeDatumIndex==$index"></div>
   <!-- Show when not editing -->
-  <div data-spreadsheet-adapting-columnar-template-read ng-show="(readPermissions==true && activeDatumIndex!=$index ) || (readPermissions==true && writePermissions!=true ) " ></div>
+  <div data-spreadsheet-adapting-columnar-template-read ng-show="(readPermissions && activeDatumIndex!=$index ) || (readPermissions && writePermissions!=true ) " ></div>
 
 </div>
 
-<div data-spreadsheet-adapting-columnar-template-new ng-show="writePermissions==true" class="row relativePosition" ng-class="{selectedRow: activeDatumIndex=='newEntry', unselectedNewRow: activeDatumIndex!='newEntry'}"></div>
+<div data-spreadsheet-adapting-columnar-template-new ng-show="writePermissions" class="row relativePosition" ng-class="{selectedRow: activeDatumIndex=='newEntry', unselectedNewRow: activeDatumIndex!='newEntry'}"></div>
 
 <br />
 <div data-spreadsheet-pagination > </div>

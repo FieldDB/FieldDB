@@ -1,9 +1,9 @@
-<div class="row" ng-show="activeSessionID==undefined && loading==false && searching==false && documentReady==true && data!=undefined && writePermissions==true">
+<div class="row" ng-show="activeSessionID==undefined && loading==false && searching==false && documentReady && data!=undefined && writePermissions">
   <div class="span12 pagination-centered">
     <h2 ng-bind-html="contextualize('locale_select_session_message')"> </h2>
   </div>
 </div>
-<div class="row" ng-show="loading==true">
+<div class="row" ng-show="loading">
   <div class="span12 pagination-centered">
     <img src="images/loading-spinner.gif" width="100px">
   </div>

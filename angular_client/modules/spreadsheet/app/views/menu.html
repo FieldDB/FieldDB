@@ -1,6 +1,6 @@
-<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady==true">
+<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady">
   <div class="span4 offset4 pagination-centered">
-    <img src="images/loading-spinner.gif" width="75">
+    <img src="images/loading-spinner.gif" width="75" />
   </div>
 </div>
 <div id="hideOnLoadDeprecated">
@@ -27,7 +27,7 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-show="dataentry" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
@@ -35,7 +35,7 @@
         </a>
       </span>
       |
-      <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+      <span ng-show="authenticated" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
         <ul class="dropdown_nav">
           <li>
             <a class="menuitem">
@@ -77,7 +77,7 @@
         </i>
         {{contextualize('locale_glosser')}}
       </span>
-      <span class="rightMenuItems" ng-show="authenticated==true">
+      <span class="rightMenuItems" ng-show="authenticated">
         <div class="rightMenuItemsDiv">
           <div ng-hide="corpus==undefined">
             <a class="floatLeft" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this {{corpus.pouchname}}'s webpage">
@@ -93,7 +93,7 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
+            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
               {{getSavedState().text}}
             </button>
             &nbsp;
@@ -130,26 +130,26 @@
 
         &nbsp;&nbsp;
         <span ng-hide="corpus.currentSession.id==undefined">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click=";showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" >
+          <button ng-show="writePermissions" class="btn btn-success" ng-click=";showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
         <span>
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly==true">
+          <button ng-show="writePermissions" class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly==true">
+        <button ng-show="writePermissions" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly">
           <i class="fa whiteicon fa-plus">
           </i>
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown==true && corpus.currentSession.id!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id!=undefined"ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-model>
       </div>
     </div>
@@ -207,14 +207,14 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-show="dataentry" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
         </a>
       </span>
       |
-      <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
+      <span ng-show="authenticated" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
         <ul class="small_dropdown_nav navitem">
           <li>
             <a class="menuitem" href="#">
@@ -251,7 +251,7 @@
         <i class="fa whiteicon fa-bar-chart-o">
         </i>
       </span>
-      <span class="smallMenuBarInfo" ng-show="authenticated==true">
+      <span class="smallMenuBarInfo" ng-show="authenticated">
         <span class=" smallMenuBarInfoItem" ng-hide="corpus==undefined">
           <a class="" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this corpus' webpage">
             <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
@@ -259,7 +259,7 @@
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
+          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
             <i ng-class="getSavedState().icon">
             </i>
           </button>
@@ -289,7 +289,7 @@
         </select>
       &nbsp;&nbsp;
       <span ng-hide="corpus.currentSession.id==undefined">
-        <button class="btn btn-success" ng-click="showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" ng-disabled="readOnly==true">
+        <button class="btn btn-success" ng-click="showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" ng-disabled="readOnly">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
@@ -297,19 +297,19 @@
         &nbsp;&nbsp;
       </span>
       <span>
-        <button class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly==true">
+        <button class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly==true">
+      <button ng-show="writePermissions" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly">
         <i class="fa whiteicon fa-plus">
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown==true && corpus.currentSession.id!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown && corpus.currentSession.id!=undefined" ng-cloak>
         <ng-include src="'views/session_edit.html'"></ng-include>
       </div>
     </div>
