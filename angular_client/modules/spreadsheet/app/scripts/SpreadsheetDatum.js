@@ -3,6 +3,11 @@
 console.log("Declaring the SpreadsheetDatum.");
 
 var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDBDatum, guessedAudioUrl, $scope) {
+
+  if (true) {
+    console.warn("DEPRECATED convertFieldDBDatumIntoSpreadSheetDatum");
+    return;
+  }
   var j,
     fieldKeyName = "label";
 
@@ -52,7 +57,6 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   // spreadsheetDatum.datumTags = fieldDBDatum.datumTags;
   spreadsheetDatum.comments = fieldDBDatum.comments;
   if (fieldDBDatum.session) {
-    // spreadsheetDatum.sessionID = fieldDBDatum.session._id;
     spreadsheetDatum.session = fieldDBDatum.session;
   } else {
     window.alert("This record is missing a session, please report this to support@lingsync.org " + fieldDBDatum._id);
@@ -171,6 +175,11 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
 };
 
 var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDBDatum) {
+  if (true) {
+    console.warn("DEPRECATED convertSpreadSheetDatumIntoFieldDBDatum");
+    return;
+  }
+
   var key,
     hasModifiedByUser,
     spreadsheetKeyWasInDatumFields,
