@@ -48,7 +48,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   };
 
 
-  $scope.editFieldTitle = function(field, newFieldTitle) {
+  $scope.editFieldTitle = function() {
     if (true) {
       console.log("editTagInfo is deprecated");
       return;

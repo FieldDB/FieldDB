@@ -119,7 +119,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   document.addEventListener("notauthenticated", function() {
-    $scope.application.warn("user isn't able to see anything, show them the welcome page");
+    if ($scope.application) {
+      $scope.application.warn("user isn't able to see anything, show them the welcome page");
+    }
     $rootScope.authenticated = false;
     $rootScope.openWelcomeNotificationDeprecated();
   }, false);
@@ -214,8 +216,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.overrideTemplateSetting = function(templateId, newFieldPreferences, notUserInitited) {
-
+  $rootScope.overrideTemplateSetting = function() {
+    console.warn("deprecated overrideTemplateSetting");
   };
 
   $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
@@ -247,7 +249,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("cant set $scope.scopePreferences, might have already been an object", e);
     }
     if (prefsWereString) {
-      $scope.scopePreferences = prefsWereString
+      $scope.scopePreferences = prefsWereString;
     }
 
     /** Prior to 1.37 wipe personalization and use current defaults */
@@ -455,7 +457,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   // Fetch data from server and put into template scope
-  $scope.loadData = function(sessionIdToLoad) {
+  $scope.loadData = function() {
 
     console.log("loadData is deprecated.");
     if (true) {
@@ -642,7 +644,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $scope.reloadPage();
   };
 
-  $rootScope.setTemplateUsingCorpusPreferedTemplate = function(corpus) {
+  $rootScope.setTemplateUsingCorpusPreferedTemplate = function() {
     if (true) {
       console.log("setting templates is deprecated.");
       return;
@@ -1964,7 +1966,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.loadPaginatedData = function(why) {
 
-    console.log("dont need loadPaginatedData anymore  ");
+    console.log("dont need loadPaginatedData anymore  ", why);
     if (true) {
       return;
     }
