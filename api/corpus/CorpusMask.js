@@ -351,7 +351,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
       } else if (value === "yalefieldmethodsspring2014template") {
         order = ["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags"];
-        this.prefs.fullTemplateDefaultNumberOfFieldsPerColumn = 4;
+
+        this.prefs.preferedSpreadsheetShape = this.prefs.preferedSpreadsheetShape;
+        this.prefs.preferedSpreadsheetShape.rows = 4;
       }
 
 

@@ -58,7 +58,6 @@ describe('Directive: fielddbGlosserInput', function() {
       'dateEntered': '2014-09-23T23:45:15.015Z',
       'dateModified': '2014-10-05T15:21:35.532Z',
       'comments': [],
-      'sessionID': '2c31b34b7f52c50617e31f4a86001804',
       'session': {
         '_id': '2c31b34b7f52c50617e31f4a86001804',
         '_rev': '1-924b67c28c381fd840fcd11245a7772b',

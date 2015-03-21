@@ -53,14 +53,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
       console.log("editTagInfo is deprecated");
       return;
     }
-    var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-    for (var key in Preferences.availableFields) {
-      if (key === field.label) {
-        Preferences.availableFields[key].title = newFieldTitle;
-      }
-    }
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
-    $scope.scopePreferences = Preferences;
+
   };
 
   $scope.editTagInfo = function(oldTag, newTag) {
@@ -181,56 +174,14 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
 
 
-  $scope.saveNewPreferences = function(templateId, newFieldPreferences, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn) {
-    if ($rootScope.corpus && $rootScope.corpus.preferredTemplate && $rootScope.corpus.preferredTemplate !== templateId) {
-      // window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.corpus.preferredTemplate + " for " + $rootScope.corpus.title);
-      // return;
-    }
+  $scope.saveNewPreferences = function() {
+    console.log("unnecesary");
 
-    var prefs = localStorage.getItem('SpreadsheetPreferences');
-    var Preferences = JSON.parse(prefs || "{}");
-    // for (var availableField in $scope.corpus.datumFields._collection) {
-    //   for (var newField in newFieldPreferences) {
-    //     if (newFieldPreferences[newField] === "") {
-    //       Preferences[templateId][newField].title = "";
-    //       Preferences[templateId][newField].label = "";
-    //     } else if ($scope.corpus.datumFields._collection[availableField].label === newFieldPreferences[newField]) {
-    //       if (!Preferences[templateId]) {
-    //         //hack for #1290 until we refactor the app into something more MVC
-    //         Preferences[templateId] = window.defaultPreferences[templateId];
-    //       }
-    //       Preferences[templateId][newField].title = $scope.corpus.datumFields._collection[availableField].title;
-    //       Preferences[templateId][newField].label = $scope.corpus.datumFields._collection[availableField].label;
-    //     }
-    //   }
-    // }
-    if (fullTemplateDefaultNumberOfColumns) {
-      Preferences.fullTemplateDefaultNumberOfColumns = fullTemplateDefaultNumberOfColumns;
-    }
-    if (fullTemplateDefaultNumberOfFieldsPerColumn) {
-      Preferences.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
-      $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
-    }
-    Preferences.userChosenTemplateId = templateId;
-    $scope.scopePreferences = Preferences;
-    $rootScope.templateId = Preferences.userChosenTemplateId;
-    $rootScope.setTemplateUsingCorpusPreferedTemplate($rootScope.corpus);
-    // $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
-    window.alert("Settings saved.");
   };
 
-  $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
-    var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
-    if (numberOfRecordsToDisplay) {
-      Preferences.resultSize = numberOfRecordsToDisplay;
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
-      $rootScope.resultSize = numberOfRecordsToDisplay;
-      window.alert("Settings saved.\nYou may need to reload for the new settings to take effect.");
-    } else {
-      window.alert("Please select a value from the dropdown.");
-    }
+  $scope.saveNumberOfRecordsToDisplay = function() {
+        console.log("unnecesary");
+
   };
 
 };

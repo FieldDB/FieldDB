@@ -48,7 +48,11 @@ angular.module('spreadsheetApp')
           // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
           console.log("calculating arrows and requesting numberOfResultPages");
           var lastPage = scope.numberOfResultPages(scope.allData.length);
-          var resultSize = $rootScope.resultSize;
+          if ($rootScope.user && $rootScope.user.prefs && $rootScope.user.prefs.numVisibleDatum) {
+            console.warn("users prefs aren't loaded");
+            return;
+          }
+          var resultSize = $rootScope.user.prefs.numVisibleDatum;
           if (resultSize === "all") {
             resultSize = scope.allData.length;
           }

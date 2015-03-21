@@ -11,7 +11,7 @@
     </div>
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems">
-      <select ng-model="numberOfRecordsToDisplay" ng-init="numberOfRecordsToDisplay=scopePreferences.resultSize">
+      <select ng-model="user.prefs.numVisibleDatum">
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="25" selected>25</option>
@@ -21,10 +21,6 @@
         </option>
       </select>
       &nbsp;
-      <button class="btn btn-primary"
-      ng-click="saveNumberOfRecordsToDisplay(numberOfRecordsToDisplay)">
-      {{contextualize('locale_save_button')}}
-    </button>
   </div>
 </div>
 <hr />
@@ -82,19 +78,4 @@
   </div>
 
 </div>
-<br />
-{{contextualize('locale_number_columns')}}
-<select ng-model="fullTemplateDefaultNumberOfColumns">
-  <option>1</option>
-  <option>2</option>
-  <option>3</option>
-<!-- TODO css for these <option>3</option>
-  <option>4</option> -->
-</select>
-Number of Fields per column:
-<input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
-<button class="btn btn-primary"
-ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">
-{{contextualize('locale_activate_full_button')}}
-</button>
 
