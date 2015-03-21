@@ -1,6 +1,5 @@
-
-<br />
-<br />
+<p> &nbsp;
+</p>
 <div id="login_screen" ng-show="documentReady==true">
   <div ng-show="notChrome">
     <h3>{{contextualize('locale_for_chrome_message')}}
@@ -10,18 +9,20 @@
       {{notChrome}}
       <br />
       <a  href="http://chrome.google.com">
-        <button class="btn btn-info">{{contextualize('locale_get_chrome_button')}}
+        <button class="btn btn-info">
+          {{contextualize('locale_get_chrome_button')}}
         </button>
       </a>
       <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
-        <button class="btn btn-success">{{contextualize('locale_browser_works_button')}}
+        <button class="btn btn-success">
+          {{contextualize('locale_browser_works_button')}}
         </button>
       </a>
     </p>
   </div>
   <img src="images/logo.png">
-  <br />
-  <br />
+  <p> &nbsp;
+  </p>
   <div ng-show="application.sessionsList.dbname==corpus.dbname" class="mainPageDiv">
     <span ng-show="corpus.title!=undefined">
       <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{corpus.title}} {{contextualize('locale_loaded')}}
@@ -41,111 +42,113 @@
         </button>
       </form>
     </div>
-    <div class="newSessionDiv">
-      <div ng-show="showCreateNewSessionDropdown==true">
-        <ng-include src="'views/session_create_new.html'"></ng-include>
-      </div>
-    </div>
-    <br />
-    <div class="mainPageDiv">
-      <div ng-hide="authenticated==true"> {{contextualize('locale_login_button')}}
-        <br />
-        <br />
-        <form ng-submit='loginUserFromScratch(auth, selectedServer.serverCode)'>
-          <select ng-show="servers.length > 1" ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.userFriendlyServerName for server in servers">
-          </select>
-          <br>
-          <br>
-          <input type="text" ng-model='auth.user'  placeholder="username" ng-disabled="loading==true">
-          <br>
-          <input type="password"  ng-model='auth.password' placeholder="password" ng-disabled="loading==true">
-          <br>
-          <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_login_button')}}
-          </button>&nbsp;
-          <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
-        </form>
-      </div>
-      <div ng-show="authenticated==true && corpusSelected==false" >
-        <i class="fa fa-cloud">
-        </i> {{contextualize('locale_corpora')}}
-        <br />
-        <table class="table">
-          <tbody>
-            <tr ng-repeat="item in corpora track by item.pouchname" ng-click="selectCorpus(item);corpusSelected=true;" ng-disabled="loading==true" ng-class="{'corpus-selected': corpus.pouchname==item.pouchname}">
-              <td>
-                <img class="gravatar-small" ng-hide="item.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{item.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
-              </td>
-              <td class="text-left" title="{{item.pouchname}} - {{item.description}}"> {{contextualize('locale_access')}} {{item.title}}
-              </td>
-            </tr>
-            <tr ng-click="selectCorpus({'pouchname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
-              <td>
-                <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
-              </td>
-              <td class="text-left"> {{contextualize('locale_access_lingllama')}}
-                <br/>
-                <small>{{contextualize('locale_access_lingllama_footnote')}}
-                </small>
-              </td>
-            </tr>
-          </tbody>
-        </table>  &nbsp;
-        <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
-      </div>
-      <div ng-show="corpusSelected==true"> {{contextualize('locale_logged_in_as')}} {{user.name}}
-        <br />
-        <i class="fa fa-cloud">
-        </i> {{contextualize('locale_selected_corpus')}} {{corpus.title}}
-        <br />
-        <button class="btn btn-primary" ng-click="corpusSelected=false">  {{contextualize('locale_select_different_corpus_button')}}
-        </button>
-      </div>
-    </div>
-    <br />
-    <div class="row-fluid pagination-centered">
+  </div>
+  <div class="newSessionDiv" ng-show="showCreateNewSessionDropdown==true">
+    <ng-include src="'views/session_create_new.html'"></ng-include>
+  </div>
+  <br />
+  <div class="mainPageDiv">
+    <div ng-hide="authenticated==true"> {{contextualize('locale_login_button')}}
       <br />
       <br />
-      <button class="btn btn-info" ng-click="contactUs()">
-        <i class="fa whiteicon fa-envelope-o">
-        </i> {{contextualize('locale_contact_us_button')}}
-      </button>
-      <button class="btn btn-info" ng-show="authenticated==false" ng-click="showForgotPassword=!showForgotPassword">{{contextualize('locale_forgot_password')}}
-      </button>
-      <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">{{contextualize('locale_reset_password_button_1')}}
-      </button>
-    </div>
-    <br />
-    <div class="mainPageDiv" ng-show="showForgotPassword==true">
-      <p>{{contextualize('locale_forgot_password')}}</p>
-      <br />
-      <form ng-submit='forgotPasswordSubmit()'>
-        <input placeholder="{{contextualize('locale_email')}}" type="email" ng-model="forgotPasswordInfo.email"/>
-        <br/>
-        <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_forgot_password')}}
+      <form ng-submit='loginUserFromScratch(auth, selectedServer.serverCode)'>
+        <select ng-show="servers.length > 1" ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.userFriendlyServerName for server in servers">
+        </select>
+        <br>
+        <br>
+        <input type="text" ng-model='auth.user'  placeholder="username" ng-disabled="loading==true">
+        <br>
+        <input type="password"  ng-model='auth.password' placeholder="password" ng-disabled="loading==true">
+        <br>
+        <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_login_button')}}
         </button>&nbsp;
         <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </form>
     </div>
-    <br />
-    <div class="mainPageDiv" ng-show="showResetPassword==true">
-      <p>{{contextualize('locale_password_reset')}}</p>
+    <div ng-show="authenticated==true && corpusSelected==false" >
+      <i class="fa fa-cloud">
+      </i> {{contextualize('locale_corpora')}}
       <br />
-      <form ng-submit='changePasswordSubmit()'>
-        <label>{{contextualize('locale_old_password')}}
-        </label>
-        <input type="password" ng-model="resetPasswordInfo.password"/>
-        <br/>
-        <label>{{contextualize('locale_new_password')}}
-        </label>
-        <input type="password" ng-model="resetPasswordInfo.newpassword"/>
-        <br/>
-        <label>{{contextualize('locale_confirm_new_password')}}
-        </label>
-        <input type="password" ng-model="resetPasswordInfo.confirmpassword"/>
-        <br/>
-        <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_reset_password_button_2')}}
-        </button>&nbsp;
-        <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
-      </form>
+      <table class="table">
+        <tbody>
+          <tr ng-repeat="corpusConnection in user.corpora._collection track by corpusConnection.dbname" ng-click="selectCorpus(corpusConnection);corpusSelected=true;" ng-disabled="loading==true" ng-class="{'corpus-selected': corpus.dbname==corpusConnection.dbname}">
+            <td>
+              <img class="gravatar-small" ng-hide="corpusConnection.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{corpusConnection.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
+            </td>
+            <td class="text-left" title="{{corpusConnection.dbname}} - {{corpusConnection.description}}"> {{contextualize('locale_access')}} {{corpusConnection.title}}
+            </td>
+          </tr>
+          <tr ng-click="selectCorpus({'dbname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading==true" >
+            <td>
+              <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
+            </td>
+            <td class="text-left"> {{contextualize('locale_access_lingllama')}}
+              <br/>
+              <small>{{contextualize('locale_access_lingllama_footnote')}}
+              </small>
+            </td>
+          </tr>
+        </tbody>
+      </table>  &nbsp;
+      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+    </div>
+    <div ng-show="corpusSelected==true"> {{contextualize('locale_logged_in_as')}} {{user.name}}
+      <br />
+      <i class="fa fa-cloud">
+      </i> {{contextualize('locale_selected_corpus')}} {{corpus.title}}
+      <br />
+      <button class="btn btn-primary" ng-click="corpusSelected=false">
+        {{contextualize('locale_select_different_corpus_button')}}
+      </button>
     </div>
   </div>
+  <br />
+  <div class="row-fluid pagination-centered">
+    <br />
+    <br />
+    <button class="btn btn-info" ng-click="contactUs()">
+      <i class="fa whiteicon fa-envelope-o">
+      </i> {{contextualize('locale_contact_us_button')}}
+    </button>
+    <button class="btn btn-info" ng-show="authenticated==false" ng-click="showForgotPassword=!showForgotPassword">
+      {{contextualize('locale_forgot_password')}}
+    </button>
+    <button class="btn btn-info" ng-show="authenticated==true" ng-click="showResetPassword=!showResetPassword">
+      {{contextualize('locale_reset_password_button_1')}}
+    </button>
+  </div>
+  <br />
+  <div class="mainPageDiv" ng-show="showForgotPassword==true">
+    <p>{{contextualize('locale_forgot_password')}}</p>
+    <br />
+    <form ng-submit='forgotPasswordSubmit()'>
+      <input placeholder="{{contextualize('locale_email')}}" type="email" ng-model="forgotPasswordInfo.email"/>
+      <br/>
+      <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_forgot_password')}}
+      </button>&nbsp;
+      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+    </form>
+  </div>
+  <br />
+  <div class="mainPageDiv" ng-show="showResetPassword==true">
+    <p>{{contextualize('locale_password_reset')}}</p>
+    <br />
+    <form ng-submit='changePasswordSubmit()'>
+      <label>{{contextualize('locale_old_password')}}
+      </label>
+      <input type="password" ng-model="resetPasswordInfo.password"/>
+      <br/>
+      <label>{{contextualize('locale_new_password')}}
+      </label>
+      <input type="password" ng-model="resetPasswordInfo.newpassword"/>
+      <br/>
+      <label>{{contextualize('locale_confirm_new_password')}}
+      </label>
+      <input type="password" ng-model="resetPasswordInfo.confirmpassword"/>
+      <br/>
+      <button class="btn btn-primary" ng-disabled="loading==true">{{contextualize('locale_reset_password_button_2')}}
+      </button>&nbsp;
+      <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
+    </form>
+  </div>
+</div>
