@@ -58,7 +58,6 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      // templateUrl: 'views/compacttemplate.html'
       redirectTo: '/spreadsheet/fulltemplate'
     }).when('/spreadsheet/fulltemplate', {
       templateUrl: 'views/data_entry.html'

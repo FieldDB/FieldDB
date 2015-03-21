@@ -264,24 +264,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         "hint": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography which speakers can read. If there are more than one orthography an additional orthography field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
       }
     },
-    "compacttemplate": {
-      "field1": {
-        "label": "utterance",
-        "title": "Utterance"
-      },
-      "field2": {
-        "label": "morphemes",
-        "title": "Morphemes"
-      },
-      "field3": {
-        "label": "gloss",
-        "title": "Gloss"
-      },
-      "field4": {
-        "label": "translation",
-        "title": "Translation"
-      }
-    },
     "fulltemplate": {
       "field1": {
         "label": "utterance",
