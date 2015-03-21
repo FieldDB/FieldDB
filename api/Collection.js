@@ -888,7 +888,7 @@ Collection.prototype = Object.create(Object.prototype, {
           // var resultItem = resultCollection[idToMatch];
 
           if (anotherItem !== anotherCollection[idToMatch]) {
-            self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
           }
 
           if (anItem === undefined) {
