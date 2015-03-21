@@ -382,7 +382,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   window.defaultPreferences = defaultPreferences;
 
 
-  $rootScope.getAvailableFieldsInColumns = function() {
+  $rootScope.updateAvailableFieldsInColumns = function() {
     if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus.datumFields._collection || $rootScope.corpus.datumFields._collection.length < 1) {
       console.warn("the corpus isnt ready, not configuring the available fields in columns.");
       return {};
@@ -412,28 +412,25 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
     }
 
-    var columns = {};
-
     if (numberOfColumns === 1) {
-      columns.first = fields.slice(1, columnHeight + 1);
-      columns.second = [];
-      columns.third = [];
+      $rootScope.fieldsInColumns.first = fields.slice(1, columnHeight + 1);
+      $rootScope.fieldsInColumns.second = [];
+      $rootScope.fieldsInColumns.third = [];
       $scope.fieldSpanWidthClassName = "span10";
       $scope.columnWidthClass = "span10";
     } else if (numberOfColumns === 2) {
-      columns.first = fields.slice(1, columnHeight + 1);
-      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
-      columns.third = [];
+      $rootScope.fieldsInColumns.first = fields.slice(1, columnHeight + 1);
+      $rootScope.fieldsInColumns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      $rootScope.fieldsInColumns.third = [];
       $scope.fieldSpanWidthClassName = "span5";
       $scope.columnWidthClass = "span5";
     } else if (numberOfColumns === 3) {
-      columns.first = fields.slice(1, columnHeight + 1);
-      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
-      columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
+      $rootScope.fieldsInColumns.first = fields.slice(1, columnHeight + 1);
+      $rootScope.fieldsInColumns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+      $rootScope.fieldsInColumns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
       $scope.fieldSpanWidthClassName = "span3";
       $scope.columnWidthClass = "span3";
     }
-    return columns;
   };
 
   $rootScope.overrideTemplateSetting = function(templateId, newFieldPreferences, notUserInitited) {
@@ -442,7 +439,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("Not using users prefered template " + templateId);
     }
     // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
+    $rootScope.updateAvailableFieldsInColumns();
 
     console.log("notUserInitited", notUserInitited);
     try {
@@ -554,7 +551,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.documentReady = false;
   $rootScope.templateId = $scope.scopePreferences.userChosenTemplateId;
   $rootScope.fields = []; //$scope.scopePreferences[$scope.scopePreferences.userChosenTemplateId];
-  $rootScope.fieldsInColumns = {}; //$rootScope.getAvailableFieldsInColumns();
+  $rootScope.fieldsInColumns = {};
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = 0;
   $scope.reverse = true;
@@ -856,10 +853,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     $rootScope.clickSuccess = true;
-    $rootScope.loginInfo = {
-      "username": loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, ""),
-      "password": loginDetails.password
-    };
+    $rootScope.loginInfo = $rootScope.loginInfo || {};
+    $rootScope.loginInfo.username = loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
+    $rootScope.loginInfo.password = loginDetails.password;
     // if (auth.user === "senhorzinho") {
     //   var r = confirm("Hello, developer! Would you like to enter developer mode?");
     //   if (r === true) {
@@ -867,12 +863,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     //   }
     // }
     $rootScope.loading = true;
+    if ($rootScope.serverCode !== loginDetails.server) {
+      $rootScope.serverCode = loginDetails.server;
+    }
 
     $rootScope.serverCode = loginDetails.server;
-    $rootScope.server = Servers.getServiceUrl(loginDetails.server, "corpus");
+    if ($rootScope.server !== Servers.getServiceUrl(loginDetails.server, "corpus")) {
+      $rootScope.server = Servers.getServiceUrl(loginDetails.server, "corpus");
+    }
 
     $scope.application.authentication.resumingSessionPromise.then(function(user) {
-
       if (!user.rev && !$scope.loginUserFromScratchIsRunning) {
         console.warn("this user doesnt have any details on this device, forcing them to login completely.");
         $scope.loginUserFromScratch(loginDetails, chosenServer);
@@ -892,7 +892,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openWelcomeNotificationDeprecated();
       return;
     }
-    $rootScope.user = $scope.application.authentication.user;
+    if ($rootScope.user !== $scope.application.authentication.user) {
+      $rootScope.user = $scope.application.authentication.user;
+    }
     $rootScope.authenticated = true;
     $scope.corpora = $scope.corpora || new FieldDB.Collection();
 
@@ -935,10 +937,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     $rootScope.clickSuccess = true;
-    $rootScope.loginInfo = {
-      "username": loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, ""),
-      "password": loginDetails.password
-    };
+
+    $rootScope.loginInfo = $rootScope.loginInfo || {};
+    $rootScope.loginInfo.username = loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
+    $rootScope.loginInfo.password = loginDetails.password;
+
     if (!$rootScope.serverCode) {
       console.log("Sever code is undefined");
       reRouteUser("corpora_list");
@@ -994,7 +997,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
     $scope.scopePreferences.savedState.mostRecentCorpusPouchname = $rootScope.corpus.dbname;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns();
+    $rootScope.updateAvailableFieldsInColumns();
     $rootScope.overrideTemplateSetting();
 
     $scope.loadSessions();
@@ -1053,40 +1056,34 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  try {
-    $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
-      if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus._rev) {
-        console.log("the corpus changed but it wasn't ready yet");
-        return;
-      }
-      if (newValue === oldValue && newValue === $rootScope.corpus.dbname) {
-        console.log("the corpus changed but it was the same corpus, not doing anything.");
-        return;
-      }
-      $scope.loadCorpusFieldsAndPreferences();
-    });
+  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+    if (!$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus._rev) {
+      console.log("the corpus changed but it wasn't ready yet");
+      return;
+    }
+    if (newValue === oldValue && newValue === $rootScope.corpus.dbname) {
+      console.log("the corpus changed but it was the same corpus, not doing anything.");
+      return;
+    }
+    $scope.loadCorpusFieldsAndPreferences();
+  });
 
-    $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
-      if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
-        return;
-      }
-      console.log("corpus.currentSession changed", oldValue);
-      $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
-      $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
+    if (!$rootScope.corpus || !$rootScope.corpus.currentSession || !$rootScope.corpus.currentSession.goal) {
+      return;
+    }
+    console.log("corpus.currentSession changed", oldValue);
+    $scope.scopePreferences.savedState.sessionID = $rootScope.corpus.currentSession.id;
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
-      if ($scope.currentSessionWasNotSetByAHuman) {
-        $scope.currentSessionWasNotSetByAHuman = false;
-      } else {
-        reRouteUser("spreadsheet/" + $rootScope.templateId);
-      }
-      $scope.dataentry = true;
-    });
-
-  } catch (e) {
-    console.warn(e);
-  }
-
+    if ($scope.currentSessionWasNotSetByAHuman) {
+      $scope.currentSessionWasNotSetByAHuman = false;
+    } else {
+      reRouteUser("spreadsheet/" + $rootScope.templateId);
+    }
+    $scope.dataentry = true;
+  });
 
   $scope.selectSession = function() {
     console.log("selectSession is deprecated, dont need it anymore.");
