@@ -138,7 +138,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       return this.dbname;
     },
     set: function(value) {
-      this.todo("pouchname is deprecated, use dbname instead ", value);
+      this.todo("pouchname is deprecated, use dbname instead " + value);
       this.dbname = value;
     }
   },
