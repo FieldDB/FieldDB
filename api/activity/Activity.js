@@ -1,4 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var CORS = require("./../CORS").CORS;
+
 /**
  * @class The Activity is a record of the user's activity during one
  *        session, i.e. it might say "Edward LingLlama added 30 datums in Na
@@ -424,10 +426,62 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
   },
 
   save: {
-    value: function() {
+    value: function(optionalUserWhoSaved) {
       this.debug("Customizing activity save ");
+      var deferred = Q.defer(),
+        self = this;
 
-      return FieldDBObject.prototype.save.apply(this, arguments);
+      if (this.fetching) {
+        self.warn("Fetching is in process, can't save right now...");
+        Q.nextText(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return;
+      }
+      if (this.saving) {
+        self.warn("Save was already in process...");
+        Q.nextText(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return;
+      }
+      this.saving = true;
+
+      //update to this version
+      this.version = FieldDBObject.DEFAULT_VERSION;
+      this.debug("saving   ", this);
+
+      var url = this.id ? "/" + this.id : "";
+      url = this.url + url;
+      var data = this.toJSON();
+      CORS.makeCORSRequest({
+          type: this.id ? "PUT" : "POST",
+          dataType: "json",
+          url: url,
+          data: data
+        }).then(function(result) {
+            self.debug("saved ", result);
+            self.saving = false;
+            if (result.id) {
+              self.id = result.id;
+              self.rev = result.rev;
+              deferred.resolve(self);
+            } else {
+              deferred.reject(result);
+            }
+          },
+          function(reason) {
+            self.debug(reason);
+            self.saving = false;
+            deferred.reject(reason);
+          })
+        .catch(function(reason) {
+          self.debug(reason);
+          self.saving = false;
+          deferred.reject(reason);
+        });
+
+      return deferred.promise;
     }
   },
 
