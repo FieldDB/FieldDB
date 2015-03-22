@@ -81,48 +81,7 @@
 	<hr />
 
 	<div>
-		<div class="settings_section_header">
-			<h2>
-				{{contextualize('locale_users_with_access_message')}} {{application.corpus.title}}
-			</h2>
-		</div>
-		<div class="clearDiv">&nbsp;</div>
-		<div class="settingsItems row">
-				<h3>{{contextualize('locale_admins')}}</h3>
-			<div ng-repeat="user in users.admins" class="user_thumbnails">
-				<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-        <br />
-				<a class="delete_button" ng-click="removeAccessFromUser(user.username, ['admin'])">ⓧ</a>
-				{{user.username}}
-			</div>
-		</div>
-		<div class="settingsItems row">
-        <h3>{{contextualize('locale_writers')}}</h3>
-      <div ng-repeat="user in users.writers" class="user_thumbnails">
-        <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-        <br />
-        <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['writer'])">ⓧ</a>
-        {{user.username}}
-      </div>
-    </div>
-    <div class="settingsItems row">
-				<h3>{{contextualize('locale_readers')}}</h3>
-			<div ng-repeat="user in users.readers" class="user_thumbnails">
-				<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-        <br />
-				<a class="delete_button" ng-click="removeAccessFromUser(user.username, ['reader'])">ⓧ</a>
-				{{user.username}}
-			</div>
-		</div>
-    <div class="settingsItems row">
-        <h3>{{contextualize('locale_commenters')}}</h3>
-      <div ng-repeat="user in users.commenters" class="user_thumbnails">
-        <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-        <br />
-        <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['commenter'])">ⓧ</a>
-        {{user.username}}
-      </div>
-    </div>
+    <ng-include src="views/permissions.html"></ng-include>
 	</div>
 
   <div>
