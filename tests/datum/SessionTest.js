@@ -91,6 +91,52 @@ describe("Session: as a linguist I often collect data in an elicitation session"
     expect(session.defaults.fields.length).toEqual(10);
   });
 
+  it("should support an ordered list of datum which are in the session", function() {
+    var session = new Session();
+    expect(session.docs).toBeDefined();
+    session.add({
+      id: "asimulidatum"
+    });
+    expect(session.docs).toBe(session.datalist.docs);
+    expect(session.docs).toBe(session.datalist.docs);
+    expect(session.defaults.fields.length).toEqual(10);
+  });
+
+  describe("datalist-like features", function() {
+
+    it("should support an ordered list of datum which are in the session", function() {
+      var session = new Session();
+      session.add({
+        id: "anothersimulidatum"
+      });
+      expect(session.docs).toBeDefined();
+      expect(session.docs).toBe(session.datalist.docs);
+      expect(session.docs).toBe(session.datalist.docs);
+      expect(session.defaults.fields.length).toEqual(10);
+    });
+
+    it("should serialize an ordered list of datum which are in the session", function() {
+      var session = new Session();
+      var serialized = session.toJSON();
+      expect(serialized.docIds).toBeUndefined();
+
+      session.add({
+        id: "yetanother"
+      });
+      expect(session.docs).toBeDefined();
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(1);
+      expect(session.docIds[0]).toEqual("yetanother");
+
+      serialized = session.toJSON();
+      expect(serialized.docIds).toBeDefined();
+      expect(serialized.docIds.length).toEqual(1);
+      expect(serialized.docIds[0]).toEqual("yetanother");
+    });
+
+  });
+
+
   xdescribe("Backward compatability with v1.22", function() {
 
 
