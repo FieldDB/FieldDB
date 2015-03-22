@@ -1,5 +1,7 @@
 var Session = require("./../../api/datum/Session").Session;
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
+var specIsRunningTooLong = 5000;
+var Q = require("q");
 
 describe("Session: as a linguist I often collect data in an elicitation session", function() {
   it("should load", function() {
@@ -84,55 +86,222 @@ describe("Session: as a linguist I often collect data in an elicitation session"
     expect(session.fields.goal.value).toEqual("Collecting examples of accusative experiencers");
   });
 
-  it("should have default  fields", function() {
+  it("should have default fields", function() {
     var session = new Session();
     expect(session.defaults).toBeDefined();
     expect(session.defaults.fields).toBeDefined();
     expect(session.defaults.fields.length).toEqual(10);
   });
 
-  it("should support an ordered list of datum which are in the session", function() {
-    var session = new Session();
-    expect(session.docs).toBeDefined();
-    session.add({
-      id: "asimulidatum"
+  describe("as a data list ", function() {
+
+
+    it("should provide a list of datum ids after datalist", function() {
+      var session = new Session({
+        id: "asessionwhichisreal"
+      });
+      session.datalist = {
+        title: "List of data in this session",
+        docIds: ["one1", "two", "three"]
+      };
+
+      expect(session.datalist.docIds).toBeDefined();
+      expect(session.datalist.docIds.length).toEqual(3);
+      expect(session.datalist.docIds[0]).toEqual("one1");
+
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(3);
+      expect(session.docIds[0]).toEqual("one1");
     });
-    expect(session.docs).toBe(session.datalist.docs);
-    expect(session.docs).toBe(session.datalist.docs);
-    expect(session.defaults.fields.length).toEqual(10);
-  });
 
-  describe("datalist-like features", function() {
+    it("should support a list of datum ids upon creation", function() {
+      var session = new Session({
+        id: "asessionwhichisreal",
+        datalist: {
+          title: "List of data in this session",
+          docIds: ["1", "two", "three"]
+        }
+      });
 
-    it("should support an ordered list of datum which are in the session", function() {
-      var session = new Session();
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(3);
+      expect(session.docIds[0]).toEqual("1");
+    });
+
+    it("should support a list of datum ids upon creation", function() {
+      var session = new Session({
+        debugMode: true,
+        id: "asessionwhichisreal",
+        docIds: ["0", "two", "three"]
+      });
+      expect(session).toBeDefined();
+
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(3);
+      expect(session.docIds[0]).toEqual("0");
+    });
+
+    it("should support a list of datum ids upon creation", function(done) {
+      var session = new Session({
+        debugMode: true,
+        id: "asessionwhichisreal",
+        docIds: ["01"]
+      });
+      expect(session).toBeDefined();
+
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(1);
+      expect(session.docIds[0]).toEqual("01");
+
+
+      session.datalistUpdatingPromise.then(function() {
+
+        expect(session.docIds).toBeDefined();
+        expect(session.docIds.length).toEqual(1);
+        expect(session.docIds[0]).toEqual("01");
+
+        expect(session.datalist.docIds).toBeDefined();
+        expect(session.datalist.docIds.length).toEqual(1);
+        expect(session.datalist.docIds[0]).toEqual("01");
+
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should support a add datum when data list exists", function(done) {
+      var session = new Session({
+        debugMode: true,
+        id: "asessionwhichisreal",
+        datalist: {
+          title: "List of data in this session",
+          docIds: ["One", "two", "three"]
+        }
+      });
+      expect(session).toBeDefined();
+
+      expect(session.docIds).toBeDefined();
+      expect(session.docIds.length).toEqual(3);
+      expect(session.docIds[0]).toEqual("One");
+
+      expect(session.datalist.docIds).toBeDefined();
+      expect(session.datalist.docIds.length).toEqual(3);
+      expect(session.datalist.docIds[0]).toEqual("One");
+
+      session.add({
+        id: "adatumafterdatlistexists"
+      });
+
+      expect(session.datalist.docs).toBeDefined();
+      expect(session.datalist.docs.length).toEqual(3);
+      expect(session.datalist.docs[0]).toEqual("One");
+
+      session.datalistUpdatingPromise.then(function() {
+
+        expect(session.docIds).toBeDefined();
+        expect(session.docIds.length).toEqual(1);
+        expect(session.docIds[0]).toEqual("One");
+
+        expect(session.datalist.docIds).toBeDefined();
+        expect(session.datalist.docIds.length).toEqual(1);
+        expect(session.datalist.docIds[0]).toEqual("One");
+
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    xit("should support add a datum before the datalist exists", function(done) {
+      var session = new Session({
+        id: "asessionwhichisreal"
+      });
       session.add({
         id: "anothersimulidatum"
       });
-      expect(session.docs).toBeDefined();
-      expect(session.docs).toBe(session.datalist.docs);
-      expect(session.docs).toBe(session.datalist.docs);
-      expect(session.defaults.fields.length).toEqual(10);
-    });
 
-    it("should serialize an ordered list of datum which are in the session", function() {
-      var session = new Session();
+      expect(session.datalistUpdatingPromise).toBeDefined();
+
+      // var deferred = Q.defer();
+
+      Q.nextTick(function() {
+
+        //   expect("nextTick").toBeFalsey();
+        session.datalistUpdatingPromise.then(function() {
+          // expect(session).toBeUndefined();
+
+          expect(session.docs).toBeDefined();
+          expect(session.docs).toBe(session.datalist.docs);
+          expect(session.docIds.length).toEqual(1);
+          expect(session.docIds[0]).toEqual("anothersimulidatum");
+          return session;
+        }, function() {
+          expect(session).toBeUndefined();
+          // expect(false).toBeTruthy();
+          return session;
+        }).done(done);
+
+        //   deferred.resolve(session)
+      });
+
+
+      // return deferred.promise;
+
+    }, specIsRunningTooLong);
+
+    xit("should support add a datum before the datalist exists", function(done) {
+      var session = new Session({
+        id: "asessionwhichisreal"
+      });
+      session.add({
+        id: "anothersimulidatum"
+      });
+
+      session.datalistUpdatingPromise.then(function() {
+        expect(false).toBeTruthy();
+        setTimeout(function() {
+
+          // expect(session.docs).toBeDefined();
+          // expect(session.docs).toBe(session.datalist.docs);
+          // expect(session.docIds.length).toEqual(1);
+          // expect(session.docIds[0]).toEqual("anothersimulidatum");
+        }, 500);
+
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    xit("should serialize an ordered list of datum which are in the session", function(done) {
+      var session = new Session({
+        id: "asessionwhichisreal",
+        docIds: ["thedocthatwasserialized", "andaotherdocthatwasserialized"]
+      });
       var serialized = session.toJSON();
-      expect(serialized.docIds).toBeUndefined();
+      expect(serialized.docIds).toEqual(["thedocthatwasserialized", "andaotherdocthatwasserialized"]);
 
       session.add({
         id: "yetanother"
       });
-      expect(session.docs).toBeDefined();
-      expect(session.docIds).toBeDefined();
-      expect(session.docIds.length).toEqual(1);
-      expect(session.docIds[0]).toEqual("yetanother");
 
-      serialized = session.toJSON();
-      expect(serialized.docIds).toBeDefined();
-      expect(serialized.docIds.length).toEqual(1);
-      expect(serialized.docIds[0]).toEqual("yetanother");
-    });
+      session.datalistUpdatingPromise.then(function() {
+        expect(false).toBeTruthy();
+
+        // expect(session.docs).toBeDefined();
+        // expect(session.docIds).toBeDefined();
+        // expect(session.docs.length).toEqual(3);
+        // expect(session.docIds.length).toEqual(3);
+        // expect(session.docIds[0]).toEqual("yetanother");
+        // expect(session.docIds[1]).toEqual("yetanother");
+        // expect(session.docIds[2]).toEqual("yetanother");
+
+        // serialized = session.toJSON();
+        // expect(serialized.docIds).toBeDefined();
+        // expect(serialized.docIds.length).toEqual(3);
+        // expect(serialized.docIds[0]).toEqual("yetanother");
+        // expect(serialized.docIds[0]).toEqual("yetanother");
+        // expect(serialized.docIds[0]).toEqual("yetanother");
+      }).done(done);
+
+    }, specIsRunningTooLong);
 
   });
 

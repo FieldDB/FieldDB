@@ -204,20 +204,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   fetchCollection: {
-    value: function(collectionType, start, end, limit, reduce, key) {
+    value: function(collectionUrl, start, end, limit, reduce, key) {
       // this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        baseUrl;
 
-      if (!this.url) {
-        this.warn("url of this database was not set, this might have strange behaviour.", this);
-        Q.nextTick(function() {
-          deferred.reject("Cannot fetch data with out a url");
-        });
-        return deferred.promise;
-      }
-
-      if (!collectionType) {
+      if (!collectionUrl) {
         Q.nextTick(function() {
           deferred.reject({
             status: 406,
@@ -226,6 +219,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         });
         return deferred.promise;
       }
+
+      if (collectionUrl.indexOf("/") === -1) {
+        collectionUrl = self.couchSessionUrl + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", 1000) + key;
+      } else if (collectionUrl.indexOf("://") === -1) {
+        collectionUrl = self.couchSessionUrl + "/" + collectionUrl;
+      }
+
       if (key) {
         key = "&key=\"" + key + "\"";
       } else {
@@ -236,7 +236,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         self.debug(reason);
         deferred.reject(reason);
         // self.register().then(function() {
-        //   self.fetchCollection(collectionType).then(function(documents) {
+        //   self.fetchCollection(collectionUrl).then(function(documents) {
         //     deferred.resolve(documents);
         //   }, function(reason) {
         //     deferred.reject(reason);
@@ -255,9 +255,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       //   }
       // }).then(function(session) {
 
-      if (Object.prototype.toString.call(collectionType) === "[object Array]") {
+      if (Object.prototype.toString.call(collectionUrl) === "[object Array]") {
         var promises = [];
-        collectionType.map(function(id) {
+        collectionUrl.map(function(id) {
           promises.push(CORS.makeCORSRequest({
             type: "GET",
             dataType: "json",
@@ -284,7 +284,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "GET",
           dataType: "json",
-          url: self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionType).replace("LIMIT", 1000) + key
+          url: collectionUrl
         }).then(function(result) {
           if (result.rows && result.rows.length) {
             deferred.resolve(result.rows.map(function(doc) {
@@ -295,8 +295,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           }
         }, cantLogIn);
       }
-
-
 
       // }, cantLogIn);
       return deferred.promise;
