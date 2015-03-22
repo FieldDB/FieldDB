@@ -28,9 +28,9 @@
   </p>
 
   <!-- Sessions area -->
-  <div ng-show="application.sessionsList.dbname==application.corpus.dbname" class="mainPageDiv">
-    <span ng-show="application.corpus.title">
-      <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{application.corpus.title}} {{contextualize('locale_loaded')}}
+  <div class="mainPageDiv">
+    <span  >
+      <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{application.corpus.title}} {{contextualize('locale_loaded')}}
       <br />
       <i class="fa fa-calendargoal">
       </i>
@@ -50,7 +50,7 @@
         </button>
       </form>
     </div>
-    <div class="newSessionDiv" ng-show="showCreateNewSessionDropdown">
+    <div class="newSessionDiv"  >
       <ng-include src="'views/session_create_new.html'"></ng-include>
     </div>
   </div>
@@ -58,7 +58,7 @@
   <br />
 
   <!-- Corpora user has access to -->
-  <div class="mainPageDiv" ng-show="application.authentication.user.authenticated" >
+  <div class="mainPageDiv"   >
     <i class="fa fa-cloud">
     </i>  &nbsp;
     {{contextualize('locale_corpora')}}
@@ -67,7 +67,7 @@
       <tbody>
         <tr ng-repeat="corpusConnection in application.authentication.user.corpora._collection track by corpusConnection.dbname" ng-click="selectCorpus(corpusConnection);" ng-disabled="loading" ng-class="{'corpus-selected': application.corpus.dbname==corpusConnection.dbname}">
           <td>
-            <img class="gravatar-small" ng-hide="corpusConnection.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{corpusConnection.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
+            <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{corpusConnection.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
           </td>
           <td class="text-left" title="{{corpusConnection.dbname}} - {{corpusConnection.description}}">
             {{contextualize('locale_access')}} {{corpusConnection.title}}
