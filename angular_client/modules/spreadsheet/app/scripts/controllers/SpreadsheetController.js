@@ -110,7 +110,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
-    reRouteUser("welcome");
+    // reRouteUser("welcome");
   };
 
   var processServerContactError = function(err) {
