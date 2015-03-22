@@ -1,42 +1,17 @@
-<div class="settings_section_header">
-  <h2>
-    {{contextualize('locale_users_with_access_message')}} {{application.corpus.title}}
-  </h2>
-</div>
-<div class="clearDiv">&nbsp;</div>
-<div class="settingsItems row">
-  <h3>{{contextualize('locale_admins')}}</h3>
-  <div ng-repeat="user in application.corpus.permissions.admins" class="user_thumbnails">
-    <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-    <br />
-    <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['admin'])">ⓧ</a>
-    {{user.username}}
-  </div>
-</div>
-<div class="settingsItems row">
-  <h3>{{contextualize('locale_writers')}}</h3>
-  <div ng-repeat="user in application.corpus.permissions.writers" class="user_thumbnails">
-    <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-    <br />
-    <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['writer'])">ⓧ</a>
-    {{user.username}}
-  </div>
-</div>
-<div class="settingsItems row">
-  <h3>{{contextualize('locale_readers')}}</h3>
-  <div ng-repeat="user in application.corpus.permissions.readers" class="user_thumbnails">
-    <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-    <br />
-    <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['reader'])">ⓧ</a>
-    {{user.username}}
-  </div>
-</div>
-<div class="settingsItems row">
-  <h3>{{contextualize('locale_commenters')}}</h3>
-  <div ng-repeat="user in application.corpus.permissions.commenters" class="user_thumbnails">
-    <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
-    <br />
-    <a class="delete_button" ng-click="removeAccessFromUser(user.username, ['commenter'])">ⓧ</a>
-    {{user.username}}
-  </div>
-</div>
+<h2>
+  {{contextualize('locale_users_with_access_message')}} {{application.corpus.title}}
+</h2>
+<ul class="unstyled">
+  <li ng-repeat="permission in application.corpus.permissions._collection">
+    <h3>{{permission.id}}</h3>
+    <ul class="unstyled">
+      <li ng-repeat="user in permission.users._collection">
+        <img class="gravatar-large" ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
+        <span ng-click="removeAccessFromUser(user.username, ['permission'])">
+          <i class="fa fa-remove"></i>
+        </span>
+        {{user.username}}
+      </li>
+    </ul>
+  </li>
+</ul>
