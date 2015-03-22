@@ -2,8 +2,8 @@
 <h3>
   <i class="fa fa-calendar">
   </i> {{contextualize('locale_new_session_for')}}
-  <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
-  <i>{{corpus.title}}
+  <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
+  <i>{{application.corpus.title}}
   </i>
 </h3>
 <form ng-model="newSession">
@@ -52,7 +52,7 @@
       <td><i class="fa fa-user">
         </i> {{contextualize('locale_user_textbox')}}
       </td>
-      <td>{{user.name}}
+      <td>{{application.authentication.user.name}}
       </td>
     </tr>
     <tr>

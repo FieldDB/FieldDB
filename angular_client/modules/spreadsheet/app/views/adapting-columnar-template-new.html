@@ -1,18 +1,18 @@
-<form ng-submit="createRecord(newFieldData, $event)" >
+<form ng-submit="createRecord(newFieldDatum, $event)" >
   <div class="span1" >
     <input
     ng-blur="markNewAsEdited()"
     class="span2"
     type="text"
-    ng-model="newFieldData['judgement']"
+    ng-model="newFieldDatum['judgement']"
     placeholder="*#?"
     title="{{judgementHelpText}}" />
   </div>
-  <div class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
+  <div class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldDatum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>
-  <div ng-show="fieldsInColumns.second.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="second">
+  <div ng-show="fieldsInColumns.second.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldDatum" columnlabel="second">
   </div>
-  <div ng-show="fieldsInColumns.third.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="third">
+  <div ng-show="fieldsInColumns.third.length > 0" class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldDatum" columnlabel="third">
   </div>
   <div class="span2">
     <button ng-class="newRecordHasBeenEditedButtonClass()" type="submit" ng-disabled="newRecordHasBeenEdited==false">

@@ -11,7 +11,7 @@ describe('Directive: fielddbGlosserInput', function() {
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    // el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
+    // el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="newFieldDatum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
     el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="datum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
     scope = $rootScope.$new();
     scope.fieldsInColumns = [{

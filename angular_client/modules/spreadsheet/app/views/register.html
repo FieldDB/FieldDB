@@ -3,7 +3,7 @@
 <div class="mainPageDiv">
   <form>
     {{contextualize('locale_server')}}<sup>*</sup>:<br />
-    <select ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections">
+    <select ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
     </select>
     <br />
     <font size="1"><i>{{contextualize('locale_data_shared_message')}}</i></font> <br />

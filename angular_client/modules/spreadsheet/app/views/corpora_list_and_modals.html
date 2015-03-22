@@ -23,9 +23,9 @@
   <img ng-src="images/logo.png">
   <p> &nbsp;
   </p>
-  <div ng-show="application.sessionsList.dbname==corpus.dbname" class="mainPageDiv">
-    <span ng-show="corpus.title">
-      <img ng-show="corpus.gravatar" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{corpus.title}} {{contextualize('locale_loaded')}}
+  <div ng-show="application.sessionsList.dbname==application.corpus.dbname" class="mainPageDiv">
+    <span ng-show="application.corpus.title">
+      <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{application.corpus.title}} {{contextualize('locale_loaded')}}
       <br />
       <i class="fa fa-calendargoal">
       </i>{{contextualize('locale_select_create_session')}}
@@ -33,7 +33,7 @@
     <br>
     <div class="form-horizontal">
       <form>
-        <select ng-model="corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
+        <select ng-model="application.corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
         <button type="submit" ng-click="showDataEntry()" class="btn btn-primary">
           {{contextualize('locale_go_button')}}
@@ -50,37 +50,37 @@
   </div>
   <br />
   <div class="mainPageDiv">
-    <div ng-hide="authenticated"> {{contextualize('locale_login_button')}}
+    <div ng-hide="application.authentication.user.authenticated"> {{contextualize('locale_login_button')}}
       <br />
       <br />
-      <form ng-submit='loginUserFromScratch(auth)'>
-        <select ng-show="application.connections.length > 1" ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections">
+      <form ng-submit='loginUserFromScratch(loginDetailsFromUI)'>
+        <select ng-show="application.connections.length > 1" ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
         </select>
         <br>
         <br>
-        <input type="text" ng-model='auth.user'  placeholder="username" ng-disabled="loading">
+        <input type="text" ng-model='loginDetailsFromUI.username'  placeholder="username" ng-disabled="loading">
         <br>
-        <input type="password"  ng-model='auth.password' placeholder="password" ng-disabled="loading">
+        <input type="password"  ng-model='loginDetailsFromUI.password' placeholder="password" ng-disabled="loading">
         <br>
         <button class="btn btn-primary" ng-disabled="loading">{{contextualize('locale_login_button')}}
         </button>&nbsp;
         <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
       </form>
     </div>
-    <div ng-show="authenticated && corpusSelected==false" >
+    <div ng-show="application.authentication.user.authenticated" >
       <i class="fa fa-cloud">
       </i> {{contextualize('locale_corpora')}}
       <br />
       <table class="table">
         <tbody>
-          <tr ng-repeat="corpusConnection in user.corpora._collection track by corpusConnection.dbname" ng-click="selectCorpus(corpusConnection);corpusSelected=true;" ng-disabled="loading" ng-class="{'corpus-selected': corpus.dbname==corpusConnection.dbname}">
+          <tr ng-repeat="corpusConnection in user.corpora._collection track by corpusConnection.dbname" ng-click="selectCorpus(corpusConnection);" ng-disabled="loading" ng-class="{'corpus-selected': application.corpus.dbname==corpusConnection.dbname}">
             <td>
               <img class="gravatar-small" ng-hide="corpusConnection.gravatar==undefined"  ng-src="https://secure.gravatar.com/avatar/{{corpusConnection.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
             </td>
             <td class="text-left" title="{{corpusConnection.dbname}} - {{corpusConnection.description}}"> {{contextualize('locale_access')}} {{corpusConnection.title}}
             </td>
           </tr>
-          <tr ng-click="selectCorpus({'dbname':'lingllama-communitycorpus','title':'CommunityCorpus'});corpusSelected=true;" ng-disabled="loading" >
+          <tr ng-click="selectCorpus({'dbname':'lingllama-communitycorpus','title':'CommunityCorpus'});" ng-disabled="loading" >
             <td>
               <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
             </td>
@@ -94,15 +94,6 @@
       </table>  &nbsp;
       <img ng-src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()">
     </div>
-    <div ng-show="corpusSelected"> {{contextualize('locale_logged_in_as')}} {{user.name}}
-      <br />
-      <i class="fa fa-cloud">
-      </i> {{contextualize('locale_selected_corpus')}} {{corpus.title}}
-      <br />
-      <button class="btn btn-primary" ng-click="corpusSelected=false">
-        {{contextualize('locale_select_different_corpus_button')}}
-      </button>
-    </div>
   </div>
   <br />
   <div class="row-fluid pagination-centered">
@@ -112,10 +103,10 @@
       <i class="fa whiteicon fa-envelope-o">
       </i> {{contextualize('locale_contact_us_button')}}
     </button>
-    <button class="btn btn-info" ng-show="authenticated==false" ng-click="showForgotPassword=!showForgotPassword">
+    <button class="btn btn-info" ng-hide="application.authentication.user.authenticated" ng-click="showForgotPassword=!showForgotPassword">
       {{contextualize('locale_forgot_password')}}
     </button>
-    <button class="btn btn-info" ng-show="authenticated" ng-click="showResetPassword=!showResetPassword">
+    <button class="btn btn-info" ng-show="application.authentication.user.authenticated" ng-click="showResetPassword=!showResetPassword">
       {{contextualize('locale_reset_password_button_1')}}
     </button>
   </div>

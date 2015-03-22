@@ -11,7 +11,7 @@
     </div>
     <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems">
-      <select ng-model="user.prefs.numVisibleDatum">
+      <select ng-model="application.authentication.user.prefs.numVisibleDatum">
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="25" selected>25</option>
@@ -44,8 +44,8 @@
 <div class="settingsItems">
   <!-- Full TEMPLATE -->
   <h3>
-    <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{contextualize('locale_full_template')}}
-    <small ng-show="corpus.preferredTemplate == 'fulltemplate'"> {{contextualize('locale_default_template')}} {{corpus.title}}</small>
+    <span ><b>✓</b></span> {{contextualize('locale_full_template')}}
+    <small> {{contextualize('locale_default_template')}} {{application.corpus.title}}</small>
   </h3>
   <div class="row settingsTemplate">
 
