@@ -31,6 +31,69 @@ describe("Authentication ", function() {
 
   }, specIsRunningTooLong);
 
+  describe("create corpora for users", function() {
+
+    it("should be able to create a new corpus", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        password: "phoneme",
+        title: "Long distance anaphors in Quechua"
+      }).then(function(result) {
+        console.log("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        console.log("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should be require the user to authenticate to create a new corpus", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        title: "Long distance anaphors in Quechua"
+      }).then(function(result) {
+        console.log("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        console.log("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["You must enter your password to prove that that this is you."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should require a new corpus title", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        password: "phoneme"
+      }).then(function(result) {
+        console.log("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        console.log("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["Please supply a title for your new corpus."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+  });
 
   describe("Offline", function() {
     it("should use a different random encryption key for each device", function() {
