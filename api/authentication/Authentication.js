@@ -226,7 +226,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.dispatchEvent("logout");
         self.loading = false;
         self.warn("Reloading the page");
-        window.location.reload();
+        try {
+          window.location.reload();
+        } catch (e) {
+          self.debug("Window is undefined", e)
+        }
       });
     }
   },
