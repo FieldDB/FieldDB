@@ -132,7 +132,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         delete this._docs;
         return;
       } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["docs"] === "function") {
+        if (!(value instanceof this.INTERNAL_MODELS["docs"])) {
           value = new this.INTERNAL_MODELS["docs"](value);
         }
       }
@@ -153,7 +153,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     value: function(results) {
       var self = this;
 
-      this.docs = this.docs || [];
+      if (!this.docs) {
+        this.docs = [];
+      }
+      var guessedType;
       results.map(function(doc) {
         try {
           // prevent recursion a bit
@@ -161,7 +164,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             doc.api = self.api;
           }
           doc.confidential = self.confidential;
-          var guessedType = doc.fieldDBtype;
+          guessedType = doc.fieldDBtype;
           if (!guessedType) {
             self.debug(" requesting guess type ");
             guessedType = Document.prototype.guessType(doc);
@@ -191,31 +194,31 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         }
         self.debug("adding doc", doc);
         self.docs.add(doc);
-        if (doc.fieldDBtype === "Datum") {
-          self.showDocPosition = true;
-          self.showDocCheckboxes = true;
-          self.docsAreReorderable = true;
-        }
       });
+
+      if (guessedType === "Datum") {
+        self.showDocPosition = true;
+        self.showDocCheckboxes = true;
+        self.docsAreReorderable = true;
+      }
     }
   },
 
-  length:{
-    get: function(){
-      if(this.docIds){
+  length: {
+    get: function() {
+      if (this.docIds) {
         return this.docIds.length;
       }
       return 0;
     },
-    set: function(value){
-      this.warn("data list lengths comes from the size of the datumids, it cant be set manually to "+ value);
+    set: function(value) {
+      this.warn("data list lengths comes from the size of the datumids, it cant be set manually to " + value);
     }
   },
 
   docIds: {
     get: function() {
       var self = this;
-
       if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
         this._docIds = this.docs.map(function(doc) {
           self.debug("geting doc id of this doc ", doc);

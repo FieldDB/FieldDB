@@ -1,18 +1,16 @@
-<div class="mainPageDiv">
-  <div ng-hide="application.authentication.user.authenticated">
-    <p>{{contextualize('locale_login_button')}}</p>
-    <form ng-submit='loginUserFromScratch(loginDetailsFromUI)'>
-      <select ng-show="application.connections.length > 1" ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
-      </select>
-      <p>&nbsp; </p>
-      <input type="text" ng-model='loginDetailsFromUI.username'  placeholder="username" ng-disabled="loading" />
-      <input type="password"  ng-model='loginDetailsFromUI.password' placeholder="password" ng-disabled="loading">
-      <button class="btn btn-primary" ng-disabled="loading">
-        {{contextualize('locale_login_button')}}
-      </button>&nbsp;
-      <img ng-src="images/spinner-small-maindiv.gif" ng-show="application.authentication.loading" />
-    </form>
-  </div>
+<div class="mainPageDiv" ng-hide="application.authentication.user.authenticated">
+  <p>{{contextualize('locale_login_button')}}</p>
+  <form ng-submit='loginUserFromScratch(loginDetailsFromUI)'>
+    <select ng-show="application.connections.length > 1" ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
+    </select>
+    <p>&nbsp; </p>
+    <input type="text" ng-model='loginDetailsFromUI.username'  placeholder="username" ng-disabled="loading" />
+    <input type="password"  ng-model='loginDetailsFromUI.password' placeholder="password" ng-disabled="loading">
+    <button class="btn btn-primary" ng-disabled="loading">
+      {{contextualize('locale_login_button')}}
+    </button>&nbsp;
+    <img ng-src="images/spinner-small-maindiv.gif" ng-show="application.authentication.loading" />
+  </form>
 </div>
 
 
