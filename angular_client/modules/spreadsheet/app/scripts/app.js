@@ -52,7 +52,6 @@ angular
       templateUrl: 'views/corpora_list_and_modals.html'
     }).when('/settings', {
       templateUrl: 'views/settings.html',
-      controller: 'SpreadsheetStyleDataEntrySettingsController'
     }).when('/corpussettings', {
       templateUrl: 'views/corpussettings.html'
     }).when('/register', {
