@@ -411,7 +411,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $scope.appReloaded = true;
     // $rootScope.loading = true;
     if ($rootScope.application.sessionsList.length > 0) {
-      console.log("  sessions are already loaded", results, $rootScope.application.sessionsList);
+      console.log("  sessions are already loaded", $rootScope.application.sessionsList);
       return;
     }
 
