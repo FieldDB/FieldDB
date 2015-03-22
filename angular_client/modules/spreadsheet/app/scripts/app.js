@@ -49,7 +49,7 @@ angular
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'
     }).when('/welcome', {
-      templateUrl: 'views/corpora_list_and_modals.html'
+      templateUrl: 'views/welcome.html'
     }).when('/settings', {
       templateUrl: 'views/settings.html',
     }).when('/corpussettings', {
