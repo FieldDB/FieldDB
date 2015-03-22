@@ -42,6 +42,7 @@
   var UserMask = require("./user/UserMask").UserMask;
   var Team = require("./user/Team").Team;
   var Permission = require("./permission/Permission").Permission;
+  var Permissions = require("./permission/Permissions").Permissions;
   var Speaker = require("./user/Speaker").Speaker;
   var Consultant = require("./user/Consultant").Consultant;
   var Participant = require("./user/Participant").Participant;
@@ -111,6 +112,8 @@
   FieldDB["UserMask"] = UserMask;
   FieldDB.Permission = Permission;
   FieldDB["Permission"] = Permission;
+  FieldDB.Permissions = Permissions;
+  FieldDB["Permissions"] = Permissions;
   FieldDB.Team = Team;
   FieldDB["Team"] = Team;
   FieldDB.Speaker = Speaker;

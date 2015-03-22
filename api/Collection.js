@@ -148,6 +148,12 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  application: {
+    get: function() {
+      return FieldDBObject.application;
+    }
+  },
+
   collection: {
     get: function() {
       if (!this._collection) {

@@ -1585,7 +1585,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.username = $rootScope.loginInfo.username;
     dataToPost.password = $rootScope.loginInfo.password;
 
-    $rootScope.application.corpus.loadPermissions(dataToPost)
+    $rootScope.application.corpus.permissions.fetch(dataToPost)
       .then(function(users) {
         if (!users) {
           console.log("User doesn't have access to roles.");
@@ -1598,8 +1598,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         //     $rootScope.application.authentication.user.gravatar = users.allusers[i].gravatar;
         //   }
         // }
-
-        $scope.users = users;
 
         // Get privileges for logged in user
         if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.roles) {
