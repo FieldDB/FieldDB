@@ -1,6 +1,8 @@
 var Collection = require("./../Collection").Collection;
 var Permission = require("./Permission").Permission;
 var Users = require("./../user/Users").Users;
+var CORS = require("./../CORS").CORS;
+var Q = require("q");
 
 /**
  * @class Permissions
@@ -707,6 +709,68 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
         directObject: "corpus",
         // debugMode: true
       };
+    }
+  },
+
+  fetch: {
+    value: function() {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!this.parent) {
+        Q.nextTick(function() {
+          self.fetching = false;
+          deferred.reject({
+            error: "Cannot fetch if the permissions are not attached to a corpus"
+          });
+        });
+        return deferred.promise;
+      }
+
+      if (!this.application || !this.application.authentication || !this.application.authentication.user || !this.application.authentication.user.username) {
+        Q.nextTick(function() {
+          self.fetching = false;
+          deferred.reject({
+            error: "Cannot fetch if the permissions are not in an application."
+          });
+        });
+        return deferred.promise;
+      }
+
+      if (this.loaded) {
+        this.warn("not fetching permissions, they are fresh.");
+        Q.nextTick(function() {
+          self.fetching = false;
+          deferred.resolve(self);
+        });
+        return deferred.promise;
+      }
+
+      var dataToPost = {
+        corpusConnection: this.parent.corpusConnection.toJSON(),
+        username: this.application.authentication.user.username,
+      };
+      dataToPost.couchConnection = dataToPost.corpusConnection;
+
+      this.fetching = true;
+      CORS.makeCORSRequest({
+        type: "POST",
+        data: dataToPost,
+        dataType: "json",
+        url: this.parent.corpusConnection.authUrl + "/corpusteam"
+      }).then(function(result) {
+          self.fetching = false;
+          self.loaded = true;
+          self.populate(result.users);
+          deferred.resolve(self);
+        },
+        function(reason) {
+          self.fetching = false;
+          self.debug(reason);
+          deferred.reject(reason);
+        });
+
+      return deferred.promise;
     }
   },
 

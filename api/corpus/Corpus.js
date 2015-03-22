@@ -6,7 +6,7 @@ var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../datum/Session").Session;
 var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Permissions = require("./../Collection").Collection;
+var Permissions = require("./../permission/Permissions").Permissions;
 var Q = require("q");
 
 
@@ -520,21 +520,19 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   loadPermissions: {
     value: function(dataToPost) {
-      this.todo("test loadPermissions", dataToPost);
       var deferred = Q.defer(),
         self = this;
 
-        dataToPost.authUrl = this.deduceAuthUrl( dataToPost.authUrl);
-
       Q.nextTick(function() {
 
-        if (!self.permissions) {
-          self.permissions = new Permissions();
+        if (!self.permissions || !(self.permissions instanceof Permissions)) {
+          self.permissions = new Permissions(self.permissions);
         }
         if (!self.permissions.dbname) {
           self.permissions.dbname = self.dbname;
         }
-        self.permissions.fetch()
+        self.permissions.parent = self;
+        self.permissions.fetch(dataToPost)
           .then(deferred.resolve, deferred.reject);
 
       });
