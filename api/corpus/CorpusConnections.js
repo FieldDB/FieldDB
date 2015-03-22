@@ -26,7 +26,12 @@ CorpusConnections.prototype = Object.create(Collection.prototype, /** @lends Cor
   },
 
   primaryKey: {
-    value: "dbname"
+    get: function() {
+      return this._primaryKey || "dbname";
+    },
+    set: function(value) {
+      this._primaryKey = value;
+    }
   },
 
   INTERNAL_MODELS: {

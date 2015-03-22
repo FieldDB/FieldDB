@@ -10,11 +10,11 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
   if (debugging) {
-    console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
+    console.log($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http);
   }
 
   var reRouteUser = function(nextRoute) {
@@ -142,26 +142,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log("Use autoglosser was not previously set.");
   }
 
-
   $scope.$watch('useAutoGlosser', function(newValue, oldValue) {
     console.log("useAutoGlosser", oldValue);
     localStorage.setItem("useAutoGlosser", newValue);
   });
-
-  /*
-   * Create an array of servers which the user may use
-   */
-  $rootScope.servers = Servers.getAvailable();
-  $rootScope.selectedServer = $rootScope.servers[0];
-  $rootScope.serverCode = $rootScope.selectedServer.serverCode;
-
 
   // Set/get/update user preferences
   var defaultPreferences = {
     "userChosenTemplateId": "fulltemplate",
     "version": $rootScope.appVersion,
     "savedState": {
-      "server": "",
+      "connection": "",
       "username": "",
       "password": ""
     }
@@ -301,8 +292,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.corpusSelected = false;
   $scope.newFieldData = {};
   $rootScope.newRecordHasBeenEdited = false;
-
-  $rootScope.serverLabels = Servers.getHumanFriendlyLabels();
 
   $scope.changeActiveSubMenu = function(subMenu) {
     if ($rootScope.activeSubMenu === subMenu) {
@@ -519,13 +508,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  $scope.loginUser = function(loginDetails, chosenServer) {
-    if (chosenServer) {
-      loginDetails.server = chosenServer;
-    }
-
-    if (!loginDetails || !loginDetails.server) {
-      $rootScope.notificationMessage = "Please choose a server.";
+  $scope.loginUser = function(loginDetails) {
+    if (!loginDetails) {
+      $rootScope.notificationMessage = "Please login.";
       $rootScope.openNotification();
       return;
     }
@@ -533,6 +518,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo = $rootScope.loginInfo || {};
     $rootScope.loginInfo.username = loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
+    $rootScope.loginInfo.brand = $scope.application.brand;
+    $rootScope.loginInfo.couchConnection = $scope.application.connection;
+
     // if (auth.user === "senhorzinho") {
     //   var r = confirm("Hello, developer! Would you like to enter developer mode?");
     //   if (r === true) {
@@ -540,19 +528,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     //   }
     // }
     $rootScope.loading = true;
-    if ($rootScope.serverCode !== loginDetails.server) {
-      $rootScope.serverCode = loginDetails.server;
-    }
-
-    $rootScope.serverCode = loginDetails.server;
-    if ($rootScope.server !== Servers.getServiceUrl(loginDetails.server, "corpus")) {
-      $rootScope.server = Servers.getServiceUrl(loginDetails.server, "corpus");
-    }
 
     $scope.application.authentication.resumingSessionPromise.then(function(user) {
       if (!user.rev && !$scope.loginUserFromScratchIsRunning) {
         console.warn("this user doesnt have any details on this device, forcing them to login completely.");
-        $scope.loginUserFromScratch(loginDetails, chosenServer);
+        $scope.loginUserFromScratch(loginDetails);
         return;
       }
 
@@ -594,33 +574,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   }, false);
 
-  $scope.loginUserFromScratch = function(loginDetails, chosenServer) {
+  $scope.loginUserFromScratch = function(loginDetails) {
     if ($scope.loginUserFromScratchIsRunning) {
       console.warn("loginUserFromScratch is already running");
       return;
     }
-    if (chosenServer) {
-      loginDetails.server = chosenServer;
-    }
+
     $scope.loginUserFromScratchIsRunning = true;
 
-    if (!loginDetails || !loginDetails.server) {
-      $rootScope.notificationMessage = "Please choose a server.";
-      $rootScope.openNotification();
-      return;
-    }
     $rootScope.clickSuccess = true;
 
     $rootScope.loginInfo = $rootScope.loginInfo || {};
     $rootScope.loginInfo.username = loginDetails.user.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
+    $rootScope.loginInfo.authUrl = $rootScope.application.connection.authUrl;
 
-    if (!$rootScope.serverCode) {
-      console.log("Sever code is undefined");
-      reRouteUser("corpora_list");
-      return;
-    }
-    $rootScope.loginInfo.serverCode = $rootScope.serverCode;
     $scope.application.authentication.login($rootScope.loginInfo).then(function() {
       // $rootScope.user = user;
       $scope.loginUserFromScratchIsRunning = false;
@@ -1591,63 +1559,42 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  $scope.registerNewUser = function(newLoginInfo, serverCode) {
-    if (!newLoginInfo.serverCode) {
-      newLoginInfo.serverCode = serverCode;
-    }
-    if (!newLoginInfo || !newLoginInfo.serverCode) {
-      $rootScope.notificationMessage = "Please select a server.";
-      $rootScope.openNotification();
-      return;
-    }
-    if (!newLoginInfo.password || !newLoginInfo.confirmPassword) {
-      $rootScope.notificationMessage = "Please enter a password.";
-      $rootScope.openNotification();
-      return;
-    }
-    if (!newLoginInfo.username) {
-      $rootScope.notificationMessage = "Please enter a username.";
-      $rootScope.openNotification();
-      return;
-    }
-
+  $scope.registerNewUser = function(newLoginInfo) {
     $rootScope.loading = true;
+    $scope.application.authentication.register(newLoginInfo)
+      .then(function(newUser) {
+        $rootScope.loading = false;
 
-    // Clean username and tell user about it
-    var safeUsernameForCouchDB = newLoginInfo.username.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
-    if (safeUsernameForCouchDB !== newLoginInfo.username) {
-      $rootScope.loading = false;
-      newLoginInfo.username = safeUsernameForCouchDB;
-      $rootScope.notificationMessage = "We have automatically changed your requested username to '" + safeUsernameForCouchDB + "' instead. \n\n(The username you have chosen isn't very safe for urls, which means your corpora would be potentially inaccessible in old browsers)";
-      $rootScope.openNotification();
-      return;
-    }
-    var dataToPost = {};
-    dataToPost.email = newLoginInfo.email ? newLoginInfo.email.trim().split(" ")[0] : "";
-    dataToPost.username = newLoginInfo.username.trim().toLowerCase();
-    dataToPost.password = newLoginInfo.password.trim();
-    dataToPost.authUrl = Servers.getServiceUrl(newLoginInfo.serverCode, "auth");
-    dataToPost.appVersionWhenCreated = $rootScope.appVersion;
+        var preferences = window.defaultPreferences;
+        console.warn("TODO test registerNewUser", newUser);
+        preferences.savedState.connection = newUser.corpora[0];
+        preferences.savedState.username = newUser.username;
+        preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
+        localStorage.setItem('SpreadsheetPreferences', JSON.stringify(preferences));
 
-    dataToPost.serverCode = newLoginInfo.serverCode;
+      }, function(err) {
+        $rootScope.loading = false;
+        console.warn(err);
 
-    if (dataToPost.username !== "" && (dataToPost.password === newLoginInfo.confirmPassword.trim())) {
-      // Create user
-      Data.register(dataToPost)
-        .then(function(response) {
-          if (debugging) {
-            console.log(response);
+        var message = "";
+        if (err.status === 0) {
+          message = "are you offline?";
+          if ($scope.application.brand === "mcgill" || $scope.application.brand === "concordia" || $scope.application.brand === "localhost") {
+            message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
-          $rootScope.loading = false;
-        }, function(error) {
-          console.warn(error);
-          $rootScope.loading = false;
-        });
-    } else {
-      $rootScope.loading = false;
-      $rootScope.notificationMessage = "Please verify user information.";
-      $rootScope.openNotification();
-    }
+        }
+        if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+          message = err.data.userFriendlyErrors.join(" ");
+        } else {
+          message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, please report this.";
+        }
+        $scope.application.bug(message);
+
+        window.setTimeout(function() {
+          window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
+        }, 1500);
+
+      });
   };
 
 
@@ -1662,14 +1609,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var dataToPost = {};
     dataToPost.username = $rootScope.user.username.trim();
     dataToPost.password = $rootScope.loginInfo.password.trim();
-    dataToPost.serverCode = $rootScope.serverCode;
-    dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+    dataToPost.title = newCorpusInfo.title;
 
-    dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
-
-    if (dataToPost.newCorpusName !== "") {
+    if (dataToPost.title !== "") {
       // Create new corpus
-      Data.createcorpus(dataToPost)
+      $scope.application.authentication.newCorpus(dataToPost)
         .then(function(response) {
 
           // Add new corpus to scope
@@ -1711,15 +1655,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Get all users and roles (for this corpus) from server
 
     var dataToPost = {};
-
     dataToPost.username = $rootScope.loginInfo.username;
     dataToPost.password = $rootScope.loginInfo.password;
-    dataToPost.serverCode = $rootScope.serverCode;
-    dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
-    dataToPost.pouchname = $rootScope.corpus.pouchname;
 
-
-    Data.getallusers(dataToPost)
+    $rootScope.corpus.loadPermissions(dataToPost)
       .then(function(users) {
         if (!users) {
           console.log("User doesn't have access to roles.");
@@ -1833,8 +1772,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var dataToPost = {};
     dataToPost.username = $rootScope.user.username.trim();
     dataToPost.password = $rootScope.loginInfo.password.trim();
-    dataToPost.serverCode = $rootScope.serverCode;
-    dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
     dataToPost.userRoleInfo = newUserRoles;
 
@@ -1898,8 +1835,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var dataToPost = {};
       dataToPost.username = $rootScope.user.username.trim();
       dataToPost.password = $rootScope.loginInfo.password.trim();
-      dataToPost.serverCode = $rootScope.serverCode;
-      dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+      dataToPost.serverCode = $scope.application.brand;
       dataToPost.pouchname = $rootScope.corpus.pouchname;
 
       dataToPost.users = [{
@@ -2208,14 +2144,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         var message = "";
         if (err.status === 0) {
           message = "are you offline?";
-          if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+          if ($scope.application.brand === "mcgill" || $scope.application.brand === "concordia") {
+            message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, please report this.";
         }
 
         $scope.showForgotPassword = false;
@@ -2265,14 +2201,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         var message = "";
         if (err.status === 0) {
           message = "are you offline?";
-          if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+          if ($scope.application.brand === "mcgill" || $scope.application.brand === "concordia") {
+            message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact " + $scope.application.connection.userFriendlyServerName + " server, please report this.";
         }
         $scope.showResetPassword = false;
 
@@ -2313,5 +2249,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 };
-SpreadsheetStyleDataEntryController.$inject = ["$scope", "$rootScope", "$resource", "$filter", "$document", "Data", "Servers", "md5", "$timeout", "$modal", "$log", "$http"];
+SpreadsheetStyleDataEntryController.$inject = ["$scope", "$rootScope", "$resource", "$filter", "$document", "Data", "md5", "$timeout", "$modal", "$log", "$http"];
 angular.module("spreadsheetApp").controller("SpreadsheetStyleDataEntryController", SpreadsheetStyleDataEntryController);

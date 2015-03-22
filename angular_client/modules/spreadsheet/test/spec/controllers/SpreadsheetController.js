@@ -410,12 +410,12 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(localStorage.getItem('useAutoGlosser')).toBeTruthy();
   });
 
-  it('should use the private services to get a list of servers', function() {
-    expect(scope.servers).toBeDefined();
-    expect(scope.servers[0].serverCode).toBeDefined();
-    expect(scope.servers[0].userFriendlyServerName).toBeDefined();
-    expect(scope.serverLabels).toBeDefined();
-    // expect(scope.serverLabels).toEqual(' '); //TODO  why is this empty?
+  it('should use the private services to get a list of connections', function() {
+    expect(scope.servers).toBeUndefined();
+    // expect(scope.connections).toBeDefined();
+    // expect(scope.connections[0].serverCode).toBeDefined();
+    // expect(scope.connections[0].userFriendlyServerName).toBeDefined();
+    expect(scope.serverLabels).toBeUndefined();
 
   });
 
@@ -432,7 +432,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
     // expect(scope.scopePreferences.savedState).toBeDefined();
     // expect(scope.scopePreferences.savedState.sessionID).toBeUndefined();
-    // expect(scope.scopePreferences.savedState.server).toBeUndefined();
+    // expect(scope.scopePreferences.savedState.connection).toBeUndefined();
   });
 
   it('should override availableFields with the current defaults', function() {

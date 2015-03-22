@@ -1,178 +1,49 @@
-/* globals  Q, sjcl, SpreadsheetDatum, alert, FieldDB */
+/* globals  Q, SpreadsheetDatum, FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 
 angular.module('spreadsheetApp')
-  .factory('Data', function($http, $rootScope, $q, Servers) {
+  .factory('Data', function($http, $rootScope) {
 
     var getDocFromCouchDB = function(DB, UUID) {
       if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated");
-        // return;
-      }
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var promise,
-        config;
-
-      if (UUID !== undefined) {
-        config = {
-          method: "GET",
-          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID,
-          withCredentials: true
-        };
-
-        console.log("Contacting the DB to get   record data " + config.url);
-        promise = $http(config).then(function(response) {
-          console.log("Receiving data results ");
-          return response.data;
-        });
-        return promise;
-      } else {
-        config = {
-          method: "GET",
-          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
-          withCredentials: true
-        };
-        console.log("Contacting the DB to get all corpus data for " + DB);
-        promise = $http(config).then(function(response) {
-          console.log("Receiving data results ");
-          return response.data.rows;
-        });
-        return promise;
+        console.warn("getDocFromCouchDB is deprecated",DB, UUID);
       }
     };
 
     var saveCouchDoc = function(DB, newRecord) {
       if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated");
-        // return;
+        console.warn("saveCouchDoc is deprecated", DB, newRecord);
       }
-
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var config = {
-        method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB,
-        data: newRecord,
-        withCredentials: true
-      };
-
-      if (newRecord._rev) {
-        config.method = "PUT";
-        config.url = config.url + "/" + newRecord._id + "?rev=" + newRecord._rev;
-      }
-
-      console.log("Contacting the DB to save record. " + config.url);
-      var promise = $http(config).then(function(response) {
-        return response;
-      });
-      return promise;
     };
 
     var getBlankDataTemplateFromCorpus = function(fieldsType) {
       if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated");
-        // return;
-      }
-      if (!fieldsType) {
-        throw "You must specify a type of fields: datumFields or sessionFields or participantFields etc";
-      }
-      var newDoc = {
-        "session": {},
-        "audioVideo": [],
-        "images": [],
-        "comments": [],
-        "dateEntered": "",
-        "dateModified": "",
-        "timestamp": 0,
-        "jsonType": "Datum",
-        "collection": "datums"
-      };
-      if (fieldsType === "sessionFields") {
-        newDoc = {
-          "comments": [],
-          "collection": "sessions",
-          "dateCreated": "",
-          "dateModified": ""
-        };
-      }
-      if ($rootScope.corpus && $rootScope.corpus[fieldsType]) {
-        if ($rootScope.corpus[fieldsType].clone) {
-          newDoc[fieldsType] = $rootScope.corpus[fieldsType].clone();
-        } else {
-          newDoc[fieldsType] = JSON.parse(JSON.stringify($rootScope.corpus[fieldsType]));
-        }
-        return newDoc;
-      } else {
-        console.warn("Corpus is not ready.");
-        throw "Corpus is not ready.";
+        console.warn("getBlankDataTemplateFromCorpus is deprecated", fieldsType);
       }
     };
 
     var datumFields = function(DB) {
       if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated");
-        // return;
+        console.warn("getBlankDataTemplateFromCorpus is deprecated", DB);
       }
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var config = {
-        method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/get_datum_fields",
-        withCredentials: true
-      };
-
-      console.log("Contacting the DB to get   datum fields for " + config.url);
-      var promise = $http(config).then(function(response) {
-        console.log("Receiving   datum fields ");
-        return response.data.rows;
-      });
-      return promise;
     };
 
     var sessions = function(DB) {
       if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated");
-        // return;
+        console.warn("getBlankDataTemplateFromCorpus is deprecated", DB);
       }
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var config = {
-        method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/sessions",
-        withCredentials: true
-      };
-
-      console.log("Contacting the DB to get sessions for " + config.url);
-      var promise = $http(config).then(function(response) {
-        console.log("Receiving sessions ");
-        return response.data.rows;
-      });
-      return promise;
     };
 
     var glosser = function(DB) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
+        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
         withCredentials: true
       };
 
@@ -186,14 +57,14 @@ angular.module('spreadsheetApp')
     };
 
     var lexicon = function(DB) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
+        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
         withCredentials: true
       };
 
@@ -205,127 +76,16 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
-    var getallusers = function(loginInfo) {
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var config = {
-        method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/corpusteam",
-        data: loginInfo,
-        withCredentials: true
-      };
-
-      console.log("Contacting the DB to get all users for " + config.url);
-      var promise = $http(config).then(function(response) {
-        console.log("Receiving all users on this team");
-        return response.data.users;
-      });
-      return promise;
-    };
-
-
-    var register = function(newLoginInfo) {
-      alert("TODO test this.");
-      return FieldDB.FieldDBObject.application.authentication.register(newLoginInfo).then(
-        function(response) {
-          var preferences = window.defaultPreferences;
-          preferences.savedState.username = $rootScope.user.username;
-          preferences.savedState.password = sjcl.encrypt("password", newLoginInfo.password);
-          localStorage.setItem('SpreadsheetPreferences', JSON.stringify(preferences));
-          window.setTimeout(function() {
-            if (window.location.hash.indexOf("register") > -1) {
-              window.location.assign("#/corpora_list");
-            }
-          }, 500);
-          return response;
-        },
-        function(err) {
-          console.warn(err);
-          var message = "";
-          if (err.status === 0) {
-            message = "are you offline?";
-            if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-              message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
-            }
-          }
-          if (err && err.status >= 400 && err.data.userFriendlyErrors) {
-            message = err.data.userFriendlyErrors.join(" ");
-          } else {
-            message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
-          }
-
-          $rootScope.notificationMessage = message;
-          $rootScope.openNotification();
-          $rootScope.loading = false;
-          window.setTimeout(function() {
-            window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
-          }, 1500);
-        }
-      );
-    };
-
-    var createcorpus = function(newCorpusInfo) {
-      if (!$rootScope.serverCode) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      var config = {
-        method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/newcorpus",
-        data: newCorpusInfo,
-        withCredentials: true
-      };
-
-      var promise = $http(config)
-        .then(
-          function(response) {
-            console.log("Created new corpus.");
-            console.log(JSON.stringify(response));
-            if (response.data.userFriendlyErrors) {
-              $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
-              $rootScope.openNotification();
-            } else {
-              $rootScope.notificationMessage = response.data.info.join(" ") + "\nYou may now select this corpus.";
-              $rootScope.openNotification();
-            }
-            return response.data;
-          },
-          function(err) {
-
-            console.warn(err);
-            var message = "";
-            if (err.status === 0) {
-              message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
-              }
-            }
-            if (err && err.status >= 400 && err.data.userFriendlyErrors) {
-              message = err.data.userFriendlyErrors.join(" ");
-            } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
-            }
-
-            $rootScope.notificationMessage = message;
-            $rootScope.openNotification();
-            $rootScope.loading = false;
-          });
-      return promise;
-    };
 
     var updateroles = function(newRoleInfo) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
       }
       var config = {
         method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/updateroles",
+        url: FieldDB.FieldDBObject.application.connection.authUrl + "/updateroles",
         data: newRoleInfo,
         withCredentials: true
       };
@@ -353,14 +113,14 @@ angular.module('spreadsheetApp')
             var message = "";
             if (err.status === 0) {
               message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              if (FieldDB.FieldDBObject.application.connection.userFriendlyServerName === "mcgill" || FieldDB.FieldDBObject.application.connection.userFriendlyServerName === "concordia") {
+                message = "Cannot contact " + FieldDB.FieldDBObject.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 400 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact " + FieldDB.FieldDBObject.application.connection.userFriendlyServerName + " server, please report this.";
             }
 
             $rootScope.notificationMessage = message;
@@ -371,14 +131,14 @@ angular.module('spreadsheetApp')
     };
 
     var removeroles = function(newRoleInfo) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
       }
       var config = {
         method: "POST",
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/updateroles",
+        url: FieldDB.FieldDBObject.application.connection.authUrl + "/updateroles",
         data: newRoleInfo,
         withCredentials: true
       };
@@ -396,14 +156,14 @@ angular.module('spreadsheetApp')
             var message = "";
             if (err.status === 0) {
               message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              if (FieldDB.FieldDBObject.application.connection.userFriendlyServerName === "mcgill" || FieldDB.FieldDBObject.application.connection.userFriendlyServerName === "concordia") {
+                message = "Cannot contact " + FieldDB.FieldDBObject.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 400 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact " + FieldDB.FieldDBObject.application.connection.userFriendlyServerName + " server, please report this.";
             }
 
             $rootScope.notificationMessage = message;
@@ -490,7 +250,7 @@ angular.module('spreadsheetApp')
     };
 
     var removeRecord = function(DB, UUID, rev) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
@@ -500,7 +260,7 @@ angular.module('spreadsheetApp')
 
       // var config = {
       //   method: "DELETE",
-      //   url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/" + UUID + "?rev=" + rev,
+      //   url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/" + UUID + "?rev=" + rev,
       //   withCredentials: true
       // };
 
@@ -512,7 +272,7 @@ angular.module('spreadsheetApp')
     };
 
     var forgotPassword = function(forgotPasswordInfo) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
@@ -520,7 +280,7 @@ angular.module('spreadsheetApp')
       var config = {
         method: "POST",
         data: forgotPasswordInfo,
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/forgotpassword",
+        url: FieldDB.FieldDBObject.application.connection.authUrl + "/forgotpassword",
         withCredentials: true
       };
 
@@ -532,7 +292,7 @@ angular.module('spreadsheetApp')
     };
 
     var changePassword = function(changePasswordInfo) {
-      if (!$rootScope.serverCode) {
+      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
         console.log("Sever code is undefined");
         window.location.assign("#/corpora_list");
         return;
@@ -540,7 +300,7 @@ angular.module('spreadsheetApp')
       var config = {
         method: "POST",
         data: changePasswordInfo,
-        url: Servers.getServiceUrl($rootScope.serverCode, "auth") + "/changepassword",
+        url: FieldDB.FieldDBObject.application.connection.authUrl + "/changepassword",
         withCredentials: true
       };
 
@@ -558,9 +318,6 @@ angular.module('spreadsheetApp')
       sessions: sessions,
       glosser: glosser,
       lexicon: lexicon,
-      getallusers: getallusers,
-      register: register,
-      createcorpus: createcorpus,
       updateroles: updateroles,
       removeroles: removeroles,
       saveCouchDoc: saveCouchDoc,
