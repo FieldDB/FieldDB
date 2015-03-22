@@ -1,4 +1,4 @@
-/* globals window, document, alert */
+/* globals window, document */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
@@ -6,6 +6,8 @@ var Database = require("./../corpus/Database").Database;
 var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
+var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
+var CORS = require("./../CORS").CORS;
 /**
  * @class The Authentication Model handles login and logout and
  *        authentication locally or remotely. *
@@ -297,6 +299,89 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       return this.renderQuickAuthentication().then(function(userinfo) {
         self.login(userinfo);
       });
+    }
+  },
+
+  newCorpus: {
+    value: function(details) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!details) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+
+        details.authUrl = Database.prototype.deduceAuthUrl(details.authUrl);
+
+        if (!details.username) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["You must enter your password to prove that that this is you."],
+            status: 412
+          });
+          return;
+        }
+        details.title = details.title || details.newCorpusName;
+        details.newCorpusName = details.title;
+
+        if (!details.title) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a title for your new corpus."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        if (validateUsername.changes.length > 0) {
+          details.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: details.authUrl + "/newcorpus",
+          data: details
+        }).then(function(authserverResult) {
+            self.debug(authserverResult);
+            self.user.corpora.shift(authserverResult.corpus);
+            self.save();
+
+            deferred.resolve(authserverResult.corpus);
+          },
+          function(reason) {
+            reason = reason || {};
+            reason.details = details;
+            reason.status = reason.status || 400;
+            reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+            self.debug(reason);
+            deferred.reject(reason);
+          });
+      });
+      return deferred.promise;
     }
   }
 
