@@ -140,7 +140,7 @@
 
   setTimeout(function() {
     var brandname = "FieldDB";
-    if (FieldDB && FieldDB.FieldDBObject = FieldDBObject; FieldDB["FieldDBObject"] && FieldDB["FieldDBObject"].application && FieldDB["FieldDBObject"].application.brand) {
+    if (FieldDB && FieldDB["FieldDBObject"] && FieldDB["FieldDBObject"].application && FieldDB["FieldDBObject"].application.brand) {
       brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
       try {
         window[brandname] = FieldDB;
