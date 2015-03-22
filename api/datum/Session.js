@@ -1,5 +1,6 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var DatumFields = require("./DatumFields").DatumFields;
+var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
@@ -191,7 +192,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   INTERNAL_MODELS: {
     value: {
       fields: DatumFields,
-      confidential: Confidential
+      confidential: Confidential,
+      docs: FieldDBObject.DEFAULT_COLLECTION,
+      docIds: FieldDBObject.DEFAULT_COLLECTION,
+      datalist: DataList
     }
   },
 
@@ -505,6 +509,65 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     }
   },
 
+  docIds: {
+    get: function() {
+      return this.datalist.docIds || [];
+    },
+    set: function(value) {
+      this.datalist.docIds = value;
+    }
+  },
+
+  docs: {
+    get: function() {
+      return this.datalist.docs || [];
+    },
+    set: function(value) {
+      this.datalist.docs = value;
+    }
+  },
+
+  add: {
+    value: function(value) {
+      if (value) {
+        return this.datalist.add(value);
+      }
+    }
+  },
+
+
+  length: {
+    get: function() {
+      return this.datalist.length || [];
+    },
+    set: function(value) {
+      this.datalist.length = value;
+    }
+  },
+
+  datalist: {
+    get: function() {
+      if (!this._datalist) {
+        this._datalist = new DataList();
+      }
+      return this._datalist;
+    },
+    set: function(value) {
+      if (value === this._docs) {
+        return;
+      }
+      if (!value) {
+        delete this._docs;
+        return;
+      } else {
+        if (!(value instanceof this.INTERNAL_MODELS["datalist"])) {
+          value = new this.INTERNAL_MODELS["datalist"](value);
+        }
+      }
+      this._datalist = value;
+    }
+  },
+
   /**
    * Accepts two functions to call back when save is successful or
    * fails. If the fail callback is not overridden it will alert
@@ -660,6 +723,21 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           successcallback();
         }
       }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      delete json.datalist;
+      if (this._datalist && this._datalist.docIds && this._datalist.docIds.length > 0) {
+        json.docIds = this.docIds;
+      }
+
+      this.debug(json);
+      return json;
     }
   }
 
