@@ -307,10 +307,19 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     get: function() {
       var couchSessionUrl = this.url;
       if (!couchSessionUrl) {
-        couchSessionUrl = this.BASE_DB_URL + "/_session";
-      } else {
-        couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+        if (this.application && this.application.corpusConnection && this.application.corpusConnection.corpusUrl) {
+          couchSessionUrl = this.application.corpusConnection.corpusUrl;
+        } else {
+          couchSessionUrl = this.BASE_DB_URL;
+        }
       }
+
+      if (couchSessionUrl.indexOf(this.dbname) > 0) {
+        couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+      } else {
+        couchSessionUrl = couchSessionUrl + "/_session";
+      }
+
       return couchSessionUrl;
     }
   },
@@ -413,8 +422,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   login: {
     value: function(details) {
       var deferred = Q.defer(),
-        self = this,
-        authUrl;
+        self = this;
 
       Q.nextTick(function() {
 
@@ -426,11 +434,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           });
           return;
         }
-        authUrl = details.authUrl || self.authUrl;
 
-        if (!authUrl) {
-          authUrl = self.BASE_AUTH_URL;
-        }
+        details.authUrl = self.deduceAuthUrl(details.authUrl);
 
         if (!details.username) {
           deferred.reject({
@@ -464,7 +469,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: authUrl + "/login",
+          url: details.authUrl + "/login",
           data: details
         }).then(function(authserverResult) {
             if (authserverResult.user) {
@@ -576,6 +581,21 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  deduceAuthUrl: {
+    value: function(optionalAuthUrl) {
+      if (!optionalAuthUrl) {
+        if (this.authUrl) {
+          optionalAuthUrl = this.authUrl;
+        } else if (this.application && this.application.corpusConnection && this.application.corpusConnection.authUrl) {
+          optionalAuthUrl = this.application.corpusConnection.authUrl;
+        } else {
+          optionalAuthUrl = this.BASE_AUTH_URL;
+        }
+      }
+      return optionalAuthUrl;
+    }
+  },
+
   register: {
     value: function(details) {
       var deferred = Q.defer(),
@@ -600,11 +620,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        details.authUrl = details.authUrl || self.authUrl;
-
-        if (!details.authUrl) {
-          details.authUrl = self.BASE_AUTH_URL;
-        }
+        details.authUrl = self.deduceAuthUrl(details.authUrl);
 
         if (!details.username) {
           deferred.reject({
@@ -654,7 +670,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
 
         if (!details.corpusConnection) {
-          details.corpusConnection = CorpusConnection.defaultCouchConnection(details.authUrl);
+          if (self.application && self.application.corpusConnection && self.application.corpusConnection.authUrl) {
+            details.corpusConnection = self.application.corpusConnection;
+          } else {
+            details.corpusConnection = CorpusConnection.defaultCouchConnection(details.authUrl);
+          }
           delete details.corpusConnection.dbname;
           delete details.corpusConnection.pouchname;
           delete details.corpusConnection.title;

@@ -44,6 +44,8 @@ angular
       fieldDBApp.basePathname = window.location.pathname;
     }
 
+    fieldDBApp.authentication.dispatchEvent("appready");
+
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'
     }).when('/welcome', {

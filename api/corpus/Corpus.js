@@ -519,10 +519,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   },
 
   loadPermissions: {
-    value: function() {
-      this.todo("test loadPermissions");
+    value: function(dataToPost) {
+      this.todo("test loadPermissions", dataToPost);
       var deferred = Q.defer(),
         self = this;
+
+        dataToPost.authUrl = this.deduceAuthUrl( dataToPost.authUrl);
 
       Q.nextTick(function() {
 
