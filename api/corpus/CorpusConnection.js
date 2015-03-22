@@ -1,8 +1,7 @@
-/* globals window */
+/* globals window, URL */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Diacritics = require("diacritic");
-var URL = URL || require("url");
 /**
  * @class Corpus connections by default define a set of web services which are used by that corpus,
  *         generally on one server. However, over time and use the user might move their audio data to
@@ -425,7 +424,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-CorpusConnection.defaultCouchConnection = function(optionalHREF) {
+CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLParser) {
   var localhost = {
     protocol: "https://",
     domain: "localhost",
@@ -532,35 +531,58 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
       connection = mcgill;
     } else if (optionalHREF.indexOf("linguistics.concordia") >= 0) {
       connection = concordia;
+    } else if (optionalHREF.indexOf("lingsync") >= 0) {
+      connection = production;
     } else if (optionalHREF.indexOf("localhost") >= 0) {
       connection = localhost;
     }
   }
   if (!connection) {
+
     console.warn("The user is trying to use a server which is unknown to the system. Attempting to construct its connection. ", optionalHREF);
     var connectionUrlObject;
     try {
-      connectionUrlObject = new URL(optionalHREF);
+      OptionalURLParser = OptionalURLParser || URL;
     } catch (e) {
-      console.warn("Cant use new URL() in this browser/environment.", e);
-      connectionUrlObject = URL.parse(optionalHREF);
+      console.log("Cant figure out what the URL parser is");
+      try {
+        OptionalURLParser = require("url");
+      } catch (e) {
+        console.log("wasnt able to require URL either, this wont work.");
+        OptionalURLParser = {
+          parse: function(url) {
+            return {};
+          }
+        };
+      }
+    }
+    try {
+      connectionUrlObject = new OptionalURLParser(optionalHREF);
+    } catch (e) {
+      console.warn("Cant use new OptionalURLParser() in this environment.", e);
+      connectionUrlObject = OptionalURLParser.parse(optionalHREF);
       // console.log(connectionUrlObject);
     }
-    var domainName = connectionUrlObject.hostname.split(".");
-    while (domainName.length > 2) {
-      domainName.shift();
+    if (!connectionUrlObject || !connectionUrlObject.hostname) {
+      console.warn("There was no way to deduce the HREF, probably we are in Node. Using localhost instead. ", optionalHREF);
+      connection = localhost;
+    } else {
+      var domainName = connectionUrlObject.hostname.split(".");
+      while (domainName.length > 2) {
+        domainName.shift();
+      }
+      domainName = domainName.join(".");
+      connection = {
+        protocol: connectionUrlObject.protocol + "//",
+        domain: connectionUrlObject.hostname,
+        port: connectionUrlObject.port,
+        pouchname: "default",
+        path: connectionUrlObject.pathname.replace("/", ""),
+        serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
+        authUrls: [optionalHREF],
+        userFriendlyServerName: domainName
+      };
     }
-    domainName = domainName.join(".");
-    connection = {
-      protocol: connectionUrlObject.protocol + "//",
-      domain: connectionUrlObject.hostname,
-      port: connectionUrlObject.port,
-      pouchname: "default",
-      path: connectionUrlObject.pathname.replace("/", ""),
-      serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
-      authUrls: [optionalHREF],
-      userFriendlyServerName: domainName
-    };
   }
   connection = new CorpusConnection(connection).toJSON();
   return connection;

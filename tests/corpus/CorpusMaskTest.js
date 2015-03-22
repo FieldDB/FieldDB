@@ -1,6 +1,7 @@
 var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
 var CorpusConnection = require("../../api/corpus/CorpusConnection").CorpusConnection;
 var CorpusConnections = require("../../api/corpus/CorpusConnections").CorpusConnections;
+var URL = require("url");
 
 describe("CorpusMask ", function() {
 
@@ -127,7 +128,7 @@ describe("CorpusMask ", function() {
 describe("corpus collections", function() {
 
   it("should be able to set an auth url", function() {
-    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection());
+    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection(null, URL));
     expect(connection.authUrls).toEqual(["https://localhost:3183"]);
     expect(connection.authUrl).toEqual("https://localhost:3183");
 
@@ -156,7 +157,7 @@ describe("corpus collections", function() {
   });
 
   it("should be able to figure out a corpus url", function() {
-    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection());
+    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection(null, URL));
     connection.dbname = "jenkins-firstname";
     expect(connection.corpusUrls).toBeUndefined();
     expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
@@ -188,7 +189,7 @@ describe("corpus collections", function() {
   });
 
   it("should be able to get a default connection", function() {
-    var connection = CorpusConnection.defaultCouchConnection();
+    var connection = CorpusConnection.defaultCouchConnection(null, URL);
     expect(connection).toEqual({
       fieldDBtype: "CorpusConnection",
       protocol: "https://",
