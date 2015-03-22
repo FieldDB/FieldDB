@@ -1,4 +1,4 @@
-<form ng-model='editSessionInfo'>
+<form ng-model='application.corpus.currentSession'>
   <table cellpadding="5px">
     <tr>
       <td>
@@ -7,7 +7,7 @@
         {{contextualize('locale_goal_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.goal" placeholder="Collecting examples of animacy agreement">
       </td>
       <td>
         <i class="fa whiteicon fa-group">
@@ -15,7 +15,7 @@
         {{contextualize('locale_consultants_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.consultants" placeholder="ME,EV,FE">
       </td>
       <td>
         <i class="fa whiteicon fa-group">
@@ -23,7 +23,7 @@
         {{contextualize('locale_user_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.user" placeholder="{{application.corpus.currentSession.user}}" disabled>
       </td>
     </tr>
     <tr>
@@ -33,7 +33,7 @@
         {{contextualize('locale_language_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.language" placeholder="Language">
       </td>
       <td>
         <i class="fa whiteicon fa-globe">
@@ -41,7 +41,7 @@
         {{contextualize('locale_dialect_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.dialect" placeholder="Dialect">
       </td>
       <td>
         <i class="fa whiteicon fa-calendar">
@@ -49,12 +49,12 @@
         {{contextualize('locale_date_elicited_textbox')}}:
       </td>
       <td>
-        <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+        <input class="span3" type="date" ng-model="application.corpus.currentSession.dateElicited" placeholder="Weds 2012-08-01">
       </td>
     </tr>
   </table>
 </form>
-<button class="btn" ng-click="editSession(editSessionInfo, data);">
+<button class="btn" ng-click="editSession(application.corpus.currentSession, data);">
   <i class="fa whiteicon fa-save">
   </i>
   {{contextualize('locale_save_changes_button')}}

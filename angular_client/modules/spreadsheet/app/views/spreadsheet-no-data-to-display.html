@@ -1,4 +1,4 @@
-<div class="row" ng-show="corpus.currentSession.id==undefined && loading==false && searching==false && documentReady && data && writePermissions">
+<div class="row" ng-show="application.corpus.currentSession.id==undefined && loading==false && searching==false && documentReady && writePermissions">
   <div class="span12 pagination-centered">
     <h2 ng-bind-html="contextualize('locale_select_session_message')"> </h2>
   </div>
@@ -8,7 +8,7 @@
     <img ng-src="images/loading-spinner.gif" width="100px" />
   </div>
 </div>
-<div class="row" ng-show="data==undefined && loading!=true">
+<div class="row" ng-show="application.corpus.currentSession.docs.length==0 && loading==false">
   <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
   </div>
 </div>

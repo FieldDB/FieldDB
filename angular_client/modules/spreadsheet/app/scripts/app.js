@@ -59,15 +59,15 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      redirectTo: '/spreadsheet/fulltemplate'
-    }).when('/spreadsheet/fulltemplate', {
-      templateUrl: 'views/data_entry.html'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
+    }).when('/spreadsheet', {
+      templateUrl: 'views/data_entry.html'
     }).otherwise({
       redirectTo: '/corpora_list'
     });
