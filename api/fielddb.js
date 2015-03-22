@@ -47,6 +47,7 @@
   var Contextualizer = require("./locales/Contextualizer").Contextualizer;
   var Corpus = require("./corpus/Corpus").Corpus;
   var CorpusConnection = require("./corpus/CorpusConnection").CorpusConnection;
+  var CorpusConnections = require("./corpus/CorpusConnections").CorpusConnections;
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
@@ -123,6 +124,8 @@
   FieldDB["CorpusMask"] = CorpusMask;
   FieldDB.CorpusConnection = CorpusConnection;
   FieldDB["CorpusConnection"] = CorpusConnection;
+  FieldDB.CorpusConnections = CorpusConnections;
+  FieldDB["CorpusConnections"] = CorpusConnections;
   FieldDB.Import = Import;
   FieldDB["Import"] = Import;
   FieldDB.Search = Search;
