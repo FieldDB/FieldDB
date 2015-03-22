@@ -1,5 +1,3 @@
-<br />
-<br />
 <div class="mainPageDiv">
   <form>
     {{contextualize('locale_server')}}<sup>*</sup>:<br />
@@ -18,7 +16,6 @@
       ng-click="registerNewUser(newLoginInfo)" ng-disabled="loading">
       {{contextualize('locale_register')}}
     </button> &nbsp;
-      <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading" />
+      <img ng-src="images/spinner-small-mainbg.gif" ng-show="application.authentication.loading" />
   </form>
-
 </div>

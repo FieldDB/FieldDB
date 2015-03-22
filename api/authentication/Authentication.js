@@ -30,7 +30,11 @@ var Authentication = function Authentication(options) {
 
   var self = this;
 
+
+
+  this.loading = true;
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
+    self.loading = false;
     self.debug(user);
     self.user = user;
     self.user.fetch();
@@ -53,6 +57,7 @@ var Authentication = function Authentication(options) {
     // }
     return self.user;
   }, function(error) {
+    self.loading = false;
     self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
     if (error.status !== 409) {
       // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
@@ -150,12 +155,12 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           deferred.resolve(self.user);
         }, //end successful login
         function(error) {
+          self.loading = false;
           if (!error || !error.userFriendlyErrors) {
             error.userFriendlyErrors = ["Unknown error."];
           }
           self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
           self.error = error.userFriendlyErrors.join(" ");
-          self.loading = false;
           deferred.reject(error);
         });
 
@@ -172,6 +177,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       var self = this,
         deferred = Q.defer();
 
+      this.loading = true;
       Database.prototype.register(options).then(function(userDetails) {
         self.debug("registration succeeeded, waiting to login ", userDetails);
 
@@ -201,6 +207,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         loopExponentialDecayLogin(options);
 
       }, function(error) {
+        self.loading = false;
         self.debug("registration failed ", error);
         deferred.reject(error);
       });
@@ -212,10 +219,12 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   logout: {
     value: function(options) {
       var self = this;
-      this.save();
+      this.loading = true;
 
+      this.save();
       return Database.prototype.logout(options).then(function() {
         self.dispatchEvent("logout");
+        self.loading = false;
         self.warn("Reloading the page");
         window.location.reload();
       });
