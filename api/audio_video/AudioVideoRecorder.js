@@ -1,4 +1,5 @@
-/* globals document, window, navigator, FieldDB, Media, FileReader */
+/* globals document, window, navigator, Media, FileReader */
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
 var RecordMP3 = require("recordmp3js/js/recordmp3");
 
@@ -134,8 +135,8 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
         deferred = Q.defer(),
         self = this;
 
-      if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        application = FieldDB.FieldDBObject.application;
+      if (FieldDBObject.application) {
+        application = FieldDBObject.application;
       }
       var errorInAudioVideoPeripheralsCheck = function(error) {
         application.videoRecordingVerified = false;
@@ -209,9 +210,9 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
               optionalElements.video.muted = true;
               navigator.geolocation.getCurrentPosition(function(position) {
                 console.warn("recieved position information");
-                if (FieldDB && FieldDB.FieldDBObject) {
-                  FieldDB.FieldDBObject.software = FieldDB.FieldDBObject.software || {};
-                  FieldDB.FieldDBObject.software.location = position.coords;
+                if (FieldDBObject.application) {
+                  FieldDBObject.application.software = FieldDBObject.application.software || {};
+                  FieldDBObject.application.software.location = position.coords;
                 }
               });
 
@@ -365,7 +366,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           // callingContext.status += "\nmp3name = " + mp3Name;
           // fd.append("filename", encodeURIComponent(mp3Name));
 
-          // xhr.open("POST", new FieldDB.AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances", true);
+          // xhr.open("POST", new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances", true);
           // xhr.onreadystatechange = function(response) {
           //   console.log(response);
           //   if (xhr.readyState === 4) {

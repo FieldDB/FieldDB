@@ -54,51 +54,89 @@
   var FieldDB = {};
 
   FieldDB.App = App;
+  FieldDB["App"] = App;
   FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;
+  FieldDB["PsycholinguisticsApp"] = PsycholinguisticsApp;
   FieldDB.Authentication = Authentication;
+  FieldDB["Authentication"] = Authentication;
   FieldDB.Export = Export;
+  FieldDB["Export"] = Export;
   FieldDB.FieldDBObject = FieldDBObject;
+  FieldDB["FieldDBObject"] = FieldDBObject;
   FieldDB.Collection = Collection;
+  FieldDB["Collection"] = Collection;
   FieldDB.Document = Document;
+  FieldDB["Document"] = Document;
   FieldDB.CORS = CORS;
+  FieldDB["CORS"] = CORS;
   FieldDB.DataList = DataList;
+  FieldDB["DataList"] = DataList;
   FieldDB.SubExperimentDataList = SubExperimentDataList;
+  FieldDB["SubExperimentDataList"] = SubExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
+  FieldDB["AudioVideo"] = AudioVideo;
   FieldDB.AudioVideos = AudioVideos;
+  FieldDB["AudioVideos"] = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
+  FieldDB["AudioVideoRecorder"] = AudioVideoRecorder;
   FieldDB.Datum = Datum;
+  FieldDB["Datum"] = Datum;
   FieldDB.Session = Session;
+  FieldDB["Session"] = Session;
   FieldDB.DatumField = DatumField;
+  FieldDB["DatumField"] = DatumField;
   FieldDB.Stimulus = Stimulus;
+  FieldDB["Stimulus"] = Stimulus;
   FieldDB.Response = Response;
+  FieldDB["Response"] = Response;
   FieldDB.Database = Database;
+  FieldDB["Database"] = Database;
   FieldDB.FieldDatabase = FieldDatabase;
+  FieldDB["FieldDatabase"] = FieldDatabase;
   FieldDB.PsycholinguisticsDatabase = PsycholinguisticsDatabase;
+  FieldDB["PsycholinguisticsDatabase"] = PsycholinguisticsDatabase;
   FieldDB.Router = Router;
+  FieldDB["Router"] = Router;
   FieldDB.User = User;
+  FieldDB["User"] = User;
   FieldDB.Users = Users;
+  FieldDB["Users"] = Users;
   FieldDB.UserMask = UserMask;
+  FieldDB["UserMask"] = UserMask;
   FieldDB.Permission = Permission;
+  FieldDB["Permission"] = Permission;
   FieldDB.Team = Team;
+  FieldDB["Team"] = Team;
   FieldDB.Speaker = Speaker;
+  FieldDB["Speaker"] = Speaker;
   FieldDB.Consultant = Consultant;
+  FieldDB["Consultant"] = Consultant;
   FieldDB.Participant = Participant;
+  FieldDB["Participant"] = Participant;
   FieldDB.Contextualizer = Contextualizer;
+  FieldDB["Contextualizer"] = Contextualizer;
   FieldDB.Corpus = Corpus;
+  FieldDB["Corpus"] = Corpus;
   FieldDB.CorpusMask = CorpusMask;
+  FieldDB["CorpusMask"] = CorpusMask;
   FieldDB.CorpusConnection = CorpusConnection;
+  FieldDB["CorpusConnection"] = CorpusConnection;
   FieldDB.Import = Import;
+  FieldDB["Import"] = Import;
   FieldDB.Search = Search;
+  FieldDB["Search"] = Search;
   FieldDB.Q = Q;
+  FieldDB["Q"] = Q;
   FieldDB.FieldDBConnection = FieldDBConnection;
+  FieldDB["FieldDBConnection"] = FieldDBConnection;
 
   exports.FieldDB = FieldDB;
   global.FieldDB = FieldDB;
 
   setTimeout(function() {
     var brandname = "FieldDB";
-    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.brand) {
-      brandname = FieldDB.FieldDBObject.application.brand.replace(/\W/g, "_");
+    if (FieldDB && FieldDB.FieldDBObject = FieldDBObject; FieldDB["FieldDBObject"] && FieldDB["FieldDBObject"].application && FieldDB["FieldDBObject"].application.brand) {
+      brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
       window[brandname] = FieldDB;
     }
     console.log("-----------------------------------------------------");
@@ -118,7 +156,7 @@
     console.log("        \\___\\__.|_||_|__\\__.|_\\___|");
     console.log("                                                                                                                  ");
     console.log("-----Power User's Interactive Console loaded " +
-      new FieldDB.FieldDBObject().version);
+      new FieldDB["FieldDBObject"]().version);
     console.log("-----------------------------------------------------");
     console.log("-----for available models/functionality, type--------");
     console.log("                            " + brandname + ".");
