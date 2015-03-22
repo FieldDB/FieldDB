@@ -1,6 +1,8 @@
+/* globals window */
+
 /**
  * FieldDB
- * A open ended database for  evolving data collection projects
+ * A open ended database for evolving data collection projects
  *
  * @module          FieldDB
  * @tutorial        tests/FieldDBTest.js
@@ -137,7 +139,11 @@
     var brandname = "FieldDB";
     if (FieldDB && FieldDB.FieldDBObject = FieldDBObject; FieldDB["FieldDBObject"] && FieldDB["FieldDBObject"].application && FieldDB["FieldDBObject"].application.brand) {
       brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
-      window[brandname] = FieldDB;
+      try {
+        window[brandname] = FieldDB;
+      } catch (e) {
+        console.warn("Couldnt attach the FieldDB library as " + brandname, e);
+      }
     }
     console.log("-----------------------------------------------------");
     console.log("-----------------------------------------------------");
