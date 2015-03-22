@@ -210,9 +210,9 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
               optionalElements.video.muted = true;
               navigator.geolocation.getCurrentPosition(function(position) {
                 console.warn("recieved position information");
-                if (FieldDBObject.application) {
-                  FieldDBObject.application.software = FieldDBObject.application.software || {};
-                  FieldDBObject.application.software.location = position.coords;
+                if (FieldDBObject) {
+                  FieldDBObject.software = FieldDBObject.software || {};
+                  FieldDBObject.software.location = position.coords;
                 }
               });
 

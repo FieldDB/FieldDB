@@ -583,6 +583,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
 
     }, function(error) {
+      $scope.loginUserFromScratchIsRunning = false;
       $rootScope.application.bug(error.userFriendlyErrors.join(" "));
     });
   };
@@ -1460,8 +1461,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           } else {
             activitydb = $rootScope.application.authentication.user.username + "-activity_feed";
           }
-
-          Data.saveCouchDoc(activitydb, $scope.activities[index])
+          $scope.activities[index].dbname = activitydb;
+          $scope.activities[index].url = FieldDB.Database.prototype.BASE_DB_URL + "/" + activitydb;
+          new FieldDB.Activity($scope.activities[index])
+            .save()
             .then(function(response) {
                 if (debugging) {
                   console.log("Saved new activity", response);
