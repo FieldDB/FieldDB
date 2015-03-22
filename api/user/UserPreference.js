@@ -103,7 +103,7 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       return this._preferedSpreadsheetShape || {
         columns: 2,
         rows: 3
-      }
+      };
     },
     set: function(value) {
       this._preferedSpreadsheetShape = value;
