@@ -21,11 +21,11 @@
 
 <hr />
 
-<div class="settingsItems" ng-show="admin==false">
+<div class="settingsItems" ng-show="adminPermissions">
 	{{contextualize('locale_not_admin_message')}}  <b>{{application.corpus.title}}</b>
 </div>
 
-<div ng-hide="corpus==undefined || admin==false">
+<div ng-show="application.corpus && adminPermissions">
 
   <div>
     <div class="settings_section_header">
@@ -81,7 +81,7 @@
 	<hr />
 
 	<div>
-    <ng-include src="views/permissions.html"></ng-include>
+    <ng-include src="'views/permissions.html'"></ng-include>
 	</div>
 
   <div>

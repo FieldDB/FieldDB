@@ -113,6 +113,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     reRouteUser("welcome");
   };
 
+  var processServerContactError = function(err) {
+    $rootScope.loading = false;
+    console.warn(err);
+
+    var message = "";
+    if (err.status === 0) {
+      message = "are you offline?";
+      if ($rootScope.application.brand === "mcgill" || $rootScope.application.brand === "concordia" || $rootScope.application.brand === "localhost") {
+        message = "Cannot contact " + $rootScope.application.connection.userFriendlyServerName + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+      }
+    }
+    if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+      message = err.data.userFriendlyErrors.join(" ");
+    } else {
+      message = "Cannot contact " + $rootScope.application.connection.userFriendlyServerName + " server, please report this.";
+    }
+    $rootScope.application.bug(message);
+
+    window.setTimeout(function() {
+      window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
+    }, 1500);
+
+  };
   document.addEventListener("notauthenticated", function() {
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
@@ -419,12 +442,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.documentReady = true;
       $rootScope.loading = false;
       $rootScope.saved = "yes";
-    }, function(error) {
-      $scope.documentReady = true;
-      console.log("Error loading sessions.", error);
-      $rootScope.application.bug("Error loading your list of elicitation sessions, please try loading page again.");
-      $rootScope.loading = false;
-    });
+    }, processServerContactError);
   };
 
   // Fetch data from server and put into template scope
@@ -484,9 +502,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
       localStorage.setItem(
         $rootScope.application.corpus.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
-    }, function(error) {
-      console.log("Error retrieving lexicon.", error);
-    });
+    }, processServerContactError);
   };
 
 
@@ -524,7 +540,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.loading = false;
     });
   };
-
 
   document.addEventListener("authenticated", function() {
     if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.rev) {
@@ -584,7 +599,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     }, function(error) {
       $scope.loginUserFromScratchIsRunning = false;
-      $rootScope.application.bug(error.userFriendlyErrors.join(" "));
+      processServerContactError(error);
     });
   };
 
@@ -1538,36 +1553,30 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.password = $rootScope.loginInfo.password.trim();
     dataToPost.title = newCorpusInfo.title;
 
-    if (dataToPost.title !== "") {
-      // Create new corpus
-      $rootScope.application.authentication.newCorpus(dataToPost)
-        .then(function(response) {
+    $rootScope.application.authentication.newCorpus(dataToPost)
+      .then(function(response) {
 
-          // Add new corpus to scope
-          var newCorpusConnection = {};
-          newCorpusConnection.pouchname = response.corpus.pouchname;
-          newCorpusConnection.title = response.corpus.title;
-          var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
-          $scope.addActivity([{
-            verb: "added",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-cloud",
-            directobject: directObjectString,
-            indirectobject: "",
-            teamOrPersonal: "personal"
-          }], "uploadnow");
+        // Add new corpus to scope
+        var newCorpusConnection = {};
+        newCorpusConnection.pouchname = response.corpus.pouchname;
+        newCorpusConnection.title = response.corpus.title;
+        var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
+        $scope.addActivity([{
+          verb: "added",
+          verbicon: "icon-plus",
+          directobjecticon: "icon-cloud",
+          directobject: directObjectString,
+          indirectobject: "",
+          teamOrPersonal: "personal"
+        }], "uploadnow");
 
-          alert("todo test this");
-          $rootScope.application.authentication.user.corpora.unshift(newCorpusConnection);
-          $scope.selectCorpus(newCorpusConnection);
-          $rootScope.loading = false;
-          reRouteUser("");
-        });
-    } else {
-      $rootScope.notificationMessage = "Please verify corpus name.";
-      $rootScope.openNotification();
-      $rootScope.loading = false;
-    }
+        alert("todo test this");
+        $rootScope.application.authentication.user.corpora.unshift(newCorpusConnection);
+        $scope.selectCorpus(newCorpusConnection);
+        $rootScope.loading = false;
+        reRouteUser("");
+      }, processServerContactError);
+
   };
 
   $scope.loadUsersAndRoles = function() {
@@ -1604,13 +1613,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           console.warn("strangely the user isnt defined, or ready right now.");
           return;
         }
-        $rootScope.admin = false;
+        $rootScope.adminPermissions = false;
         $rootScope.readPermissions = false;
         $rootScope.writePermissions = false;
         $rootScope.commentPermissions = false;
         $scope.loadedPermissionsForTeam = $rootScope.application.corpus.pouchname;
         if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_admin") > -1) {
-          $rootScope.admin = true;
+          $rootScope.adminPermissions = true;
         }
         if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_reader") > -1) {
           $rootScope.readPermissions = true;
@@ -1624,7 +1633,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
           $rootScope.commentPermissions = true;
         }
-      });
+      }, processServerContactError);
   };
 
   $scope.updateUserRoles = function(newUserRoles) {
@@ -1729,10 +1738,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         document.getElementById("userToModifyInput").value = "";
         $rootScope.loading = false;
         $scope.loadUsersAndRoles();
-      }, function(error) {
-        console.warn(error);
-        $rootScope.loading = false;
-      });
+      }, processServerContactError);
   };
 
   $scope.removeAccessFromUser = function(userid, roles) {
@@ -1743,8 +1749,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Prevent an admin from removing him/herself from a corpus if there are no other admins; This
     // helps to avoid a situation in which there is no admin for a
     // corpus
-    if (roles === ["admin"] && $scope.users.admins.length < 2) {
-      if ($scope.users.admins[0].username.indexOf(userid) > -1) {
+    if (roles === ["admin"] && $scope.application.corpus.permissions.admins.length < 2) {
+      if ($scope.application.corpus.permissions.admins._collection[0].username.indexOf(userid) > -1) {
         $rootScope.application.bug("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
         return;
       }
@@ -1793,7 +1799,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             teamOrPersonal: "team"
           }], "uploadnow");
 
-        });
+        }, processServerContactError);
     }
   };
 
@@ -2008,17 +2014,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.warn("requesting focus on an element that doesnt exist.");
       }
     }, 500);
-  };
-
-  // Use this function to show objects on loading without displacing other elements
-  $scope.hiddenOnLoading = function() {
-    if ($rootScope.loading !== true) {
-      return {
-        'visibility': 'hidden'
-      };
-    } else {
-      return {};
-    }
   };
 
   // Hide loader when all content is ready
