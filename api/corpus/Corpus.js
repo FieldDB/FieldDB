@@ -6,7 +6,6 @@ var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../datum/Session").Session;
 var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Permissions = require("./../permission/Permissions").Permissions;
 var Q = require("q");
 
 
@@ -518,27 +517,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: "private_corpora"
   },
 
-  loadPermissions: {
-    value: function(dataToPost) {
-      var deferred = Q.defer(),
-        self = this;
-
-      Q.nextTick(function() {
-
-        if (!self.permissions || !(self.permissions instanceof Permissions)) {
-          self.permissions = new Permissions(self.permissions);
-        }
-        if (!self.permissions.dbname) {
-          self.permissions.dbname = self.dbname;
-        }
-        self.permissions.parent = self;
-        self.permissions.fetch(dataToPost)
-          .then(deferred.resolve, deferred.reject);
-
-      });
-      return deferred.promise;
-    }
-  },
 
   defaults: {
     get: function() {

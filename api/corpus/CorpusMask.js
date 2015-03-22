@@ -10,6 +10,8 @@ var Sessions = require("./../Collection").Collection;
 var DataLists = require("./../Collection").Collection;
 var TeamPreference = require("./../user/UserPreference").UserPreference;
 var Team = require("./../user/Team").Team;
+var Permissions = require("./../permission/Permissions").Permissions;
+var Q = require("q");
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -202,7 +204,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       sessionFields: DatumFields,
 
       prefs: TeamPreference,
-      team: Team
+      team: Team,
+      permissions: Permissions
     }
   },
 
@@ -270,6 +273,54 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._team = value;
+    }
+  },
+
+  permissions: {
+    get: function() {
+      if (!this._permissions) {
+        this.permissions = {
+          dbname: this.dbname,
+          parent: this
+        };
+      }
+      return this._permissions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._permissions) {
+        return;
+      }
+      if (!value) {
+        delete this._permissions;
+        return;
+      } else {
+        if (!(value instanceof this.INTERNAL_MODELS["permissions"])) {
+          value = new this.INTERNAL_MODELS["permissions"](value);
+        }
+      }
+      this._permissions = value;
+    }
+  },
+
+  loadPermissions: {
+    value: function(dataToPost) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!self.permissions || !(self.permissions instanceof Permissions)) {
+          self.permissions = new Permissions(self.permissions);
+        }
+        if (!self.permissions.dbname) {
+          self.permissions.dbname = self.dbname;
+        }
+        self.permissions.parent = self;
+        self.permissions.fetch(dataToPost)
+          .then(deferred.resolve, deferred.reject);
+
+      });
+      return deferred.promise;
     }
   },
 
