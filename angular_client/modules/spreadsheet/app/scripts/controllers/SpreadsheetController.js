@@ -328,7 +328,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
     } else {
 
-      $scope.appReloaded = true;
+      // $scope.appReloaded = true;
 
       $rootScope.loading = false;
 
@@ -408,10 +408,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    $scope.appReloaded = true;
-    $rootScope.loading = true;
+    // $scope.appReloaded = true;
+    // $rootScope.loading = true;
+    if ($rootScope.application.sessionsList.length > 0) {
+      console.log("  sessions are already loaded", results, $rootScope.application.sessionsList);
+      return;
+    }
 
     $rootScope.application.sessionsList.dbname = $rootScope.application.corpus.dbname;
+    $rootScope.application.corpus.loading = true;
     $rootScope.application.corpus.fetchCollection($rootScope.application.sessionsList.api).then(function(results) {
       if ($rootScope.application.sessionsList.dbname !== $rootScope.application.corpus.dbname) {
         console.log("  the session list and corpus dont match they arent from the same databse, not adding these results to the list");
@@ -422,11 +427,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         return;
       }
 
-      $rootScope.application.sessionsList.confidential = $rootScope.application.corpus.confidential;
-      $rootScope.application.sessionsList.populate(results.map(function(doc) {
+      if ($rootScope.application.sessionsList.confidential === $rootScope.application.corpus.confidential) {
+        $rootScope.application.sessionsList.confidential = $rootScope.application.corpus.confidential;
+      }
+      results = results.map(function(doc) {
         doc.url = $rootScope.application.corpus.url;
         return doc;
-      }));
+      });
+      $rootScope.application.sessionsList.populate(results);
 
       // $rootScope.application.sessionsList.push({
       //   title: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
@@ -440,9 +448,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
       $scope.newSession = $rootScope.application.corpus.newSession();
       $scope.documentReady = true;
-      $rootScope.loading = false;
+      $rootScope.application.corpus.loading = $rootScope.loading = false;
       $rootScope.saved = "yes";
-    }, processServerContactError);
+    }, function(error) {
+      $rootScope.application.corpus.loading = $rootScope.loading = false;
+      processServerContactError(error);
+    });
   };
 
   // Fetch data from server and put into template scope
