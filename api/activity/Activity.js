@@ -1,6 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var CORS = require("./../CORS").CORS;
-
+var Q = require("q");
 /**
  * @class The Activity is a record of the user's activity during one
  *        session, i.e. it might say "Edward LingLlama added 30 datums in Na
