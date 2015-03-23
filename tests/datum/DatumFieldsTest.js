@@ -107,13 +107,13 @@ describe("lib/DatumFields", function() {
     });
 
     it("should permit push to add to the bottom", function() {
-      collection.push(sampleDatumFields()[3]);
-      expect(collection.collection[2]).toEqual(sampleDatumFields()[3]);
+      var addition = collection.push(sampleDatumFields()[3]);
+      expect(collection.collection[2]).toEqual(addition);
     });
 
     it("should permit unshift to add to the top", function() {
-      collection.unshift(sampleDatumFields()[4]);
-      expect(collection.collection[0]).toEqual(sampleDatumFields()[4]);
+      var addition = collection.unshift(sampleDatumFields()[4]);
+      expect(collection.collection[0]).toEqual(addition);
     });
 
   });
