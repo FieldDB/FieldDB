@@ -4,12 +4,18 @@ function(doc) {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
 
-    if (doc.collection == "private_corpora" || (doc.confidential && doc.confidential.secretkey)) {
+    if (doc.collection == "private_corpora" || doc.collection == "private_corpuses" || (doc.confidential && doc.confidential.secretkey)) {
       //doc.fieldDBtype = "Corpus";
+      var gravatar;
+      if (doc.team && doc.team.gravatar) {
+        gravatar = doc.team.gravatar;
+      }
       emit(doc.timestamp, {
         title: doc.title,
         titleAsUrl: doc.titleAsUrl,
-        description: doc.description
+        description: doc.description,
+        pouchname: doc.pouchname,
+        gravatar: gravatar
       });
     }
   } catch (e) {
