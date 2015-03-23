@@ -1,26 +1,11 @@
 {
-  "_id": "81B7D6F7-5ED0-4935-8E90-E9523AA3B391",
-  "_rev": "4-364510f38dcae24e72491febab21e919",
-  "title": "morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result",
-  "description": "This is the result of searching for : morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo in Sample Corpus on \"2012-09-26T14:37:48.068Z\"",
-  "datumIds": [
-    "5EB57D1E-5D97-428E-A9C7-377DEEC02A14",
-    "F60C2FE6-20FB-4B2B-BB3A-448B0784DBE5",
-    "D43A71E0-EFE3-4BC4-AABA-FDD152890326",
-    "B31DB3E0-1F43-4FE0-9299-D1C85F0C4C62",
-    "AF976245-1157-47DE-8B6A-28A7542D3497",
-    "23489BDF-68EF-46C9-BB06-4C8EC9D77F48",
-    "944C2CDE-74B8-4322-8940-72E8DD134841",
-    "ED5A2292-659E-4B27-A352-9DBC5065207E",
-    "924726BF-FAE7-4472-BD99-A13FCB5FEEFF"
-  ],
-  "pouchname": "sapir-firstcorpus",
-  "comments": [{
-    "text": "Here is an example of how you can refine your search to get only ungrammatical examples with one consultant on a particular morpheme/gloss",
-    "username": "sapir",
-    "timestamp": "2012-09-26T14:42:05.349Z",
-    "gravatar": "./../user/sapir_1910_gravatar.png"
-  }],
-  "dateCreated": "\"2012-09-26T14:37:51.764Z\"",
-  "dateModified": "\"2012-09-26T14:42:56.287Z\""
+  "title": {
+    "default": ""
+  },
+  "description": {
+    "default": ""
+  },
+  "docIds": [],
+  "pouchname": "",
+  "comments": []
 }
