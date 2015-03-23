@@ -145,8 +145,13 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   add: {
     value: function(value) {
-      if (!this.docs) {
-        this.docs = [];
+      if (!this.docs || this.docs.length === 0) {
+        if (Object.prototype.toString.call(value) === "[object Array]") {
+          this.docs = value;
+        } else {
+          this.docs = [value];
+        }
+        return this.docs._collection[0];
       }
       return this.docs.add(value);
     }
@@ -154,8 +159,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   push: {
     value: function(value) {
-      if (!this.docs) {
-        this.docs = [];
+      if (!this.docs || this.docs.length === 0) {
+        this.docs = [value];
+        return this.docs._collection[0];
       }
       return this.docs.push(value);
     }
@@ -163,8 +169,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   unshift: {
     value: function(value) {
-      if (!this.docs) {
-        this.docs = [];
+      if (!this.docs || this.docs.length === 0) {
+        this.docs = [value];
+        return this.docs._collection[0];
       }
       return this.docs.unshift(value);
     }
