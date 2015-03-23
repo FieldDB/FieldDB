@@ -296,7 +296,7 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalInverted = this.inverted;
       }
 
-      if (!searchingFor) {
+      if (!searchingFor && value) {
         //previously code in the add function
         if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
           this.debug("adding a internamodel ", value);

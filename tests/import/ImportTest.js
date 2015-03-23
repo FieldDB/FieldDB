@@ -30,6 +30,137 @@ describe("api/import/Import", function() {
     expect(importer).toBeDefined();
   });
 
+  it("should have a session", function() {
+    var importer = new Import();
+    expect(importer).toBeDefined();
+    expect(importer.session).toBeDefined();
+    expect(importer.session.fieldDBtype).toEqual("Session");
+    expect(importer._session).toBeDefined();
+    expect(importer._session.fieldDBtype).toEqual("Session");
+
+    var sessionCreatedDateIndicatesItDidntChange = importer.session.dateCreated;
+    expect(sessionCreatedDateIndicatesItDidntChange).toBeDefined();
+
+    delete importer.session;
+    expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+
+    importer.session = null;
+    expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+
+    //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+    importer.session = {
+      fields: [],
+      title: "This shoudl become the goal",
+      datalist: {
+        title: {
+          default: "Imported Data"
+        },
+        // confidential: self.corpus.confidential,
+        // decryptedMode: true,
+        // debugMode: true
+      }
+    };
+    expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+
+    //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+    importer.session = {
+      fields: [],
+      title: "This shoudl become the goal",
+      datalist: {
+        title: {
+          default: "Imported Data"
+        },
+        docs: {
+          id: "tempdatalist",
+          collection: []
+        },
+        // confidential: self.corpus.confidential,
+        // decryptedMode: true,
+        // debugMode: true
+      }
+    };
+    expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+
+    //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+    importer.session = {
+      fields: [],
+      title: "This shoudl become the goal",
+      datalist: {
+        title: {
+          default: "Imported Data"
+        },
+        docs: {
+          id: "tempdatalist",
+          collection: [],
+          primaryKey: "tempId"
+        },
+        // confidential: self.corpus.confidential,
+        // decryptedMode: true,
+        // debugMode: true
+      }
+    };
+    expect(importer.session.dateCreated).not.toEqual(sessionCreatedDateIndicatesItDidntChange);
+  });
+
+  it("should have a datalist", function() {
+    var importer = new Import();
+    expect(importer).toBeDefined();
+    expect(importer.session.datalist).toBeDefined();
+    expect(importer.session.datalist.fieldDBtype).toEqual("DataList");
+    expect(importer.datalist).toBeDefined();
+    expect(importer.datalist.fieldDBtype).toEqual("DataList");
+
+    expect(importer.datalist.docs).toBeDefined();
+    expect(importer.datalist.docs.primaryKey).toEqual("tempId");
+
+    var datalistCreatedDateIndicatesItDidntChange = importer.datalist.dateCreated;
+    expect(datalistCreatedDateIndicatesItDidntChange).toBeDefined();
+
+    delete importer.datalist;
+    expect(importer.datalist.dateCreated).toEqual(datalistCreatedDateIndicatesItDidntChange);
+
+    importer.datalist = null;
+    expect(importer.datalist.dateCreated).toEqual(datalistCreatedDateIndicatesItDidntChange);
+
+
+    //Datalists can only be overwritten by valid datalists (with a datalist that has the primary key of tempId )
+    importer.datalist = {
+      title: {
+        default: "Imported Data"
+      }
+    };
+    expect(importer.datalist.dateCreated).toEqual(datalistCreatedDateIndicatesItDidntChange);
+
+    //Datalists can only be overwritten by valid datalists (with a datalist that has the primary key of tempId )
+    importer.datalist = {
+      title: {
+        default: "Imported Data"
+      },
+      docs: {
+        id: "tempdatalist",
+        collection: []
+      }
+    };
+    expect(importer.datalist.dateCreated).toEqual(datalistCreatedDateIndicatesItDidntChange);
+
+
+    //Datalist can only be overwritten by valid datalists (with a datalist that has the primary key of tempId )
+    importer.datalist = {
+      title: {
+        default: "Imported Data"
+      },
+      docs: {
+        id: "tempdatalist",
+        collection: [],
+        primaryKey: "tempId"
+      },
+      // confidential: self.corpus.confidential,
+      // decryptedMode: true,
+      // debugMode: true
+    };
+    expect(importer.datalist.dateCreated).not.toEqual(datalistCreatedDateIndicatesItDidntChange);
+  });
+
   it("should be able to ask the corpus to create a datum", function() {
     var dbname = "testingcorpusinimport-firstcorpus";
     var corpus = new Corpus(Corpus.prototype.defaults);
@@ -109,6 +240,7 @@ describe("api/import/Import", function() {
       // importer.debugMode = true;
       expect(importer.asFieldMatrix.length).toEqual(7);
       importer.metadataLines = ["Copy pasting"];
+      expect(importer.datalist.docs.primaryKey).toEqual("tempId");
       importer.convertMatrixIntoDataList().then(function() {
         expect(importer.datalist.docs.fieldDBtype).toEqual("DocumentCollection");
         expect(importer.datalist.docs.primaryKey).toEqual("tempId");
@@ -307,6 +439,7 @@ describe("Batch Import: as a morphologist I want to import directories of text f
       }
     }).then(function(result) {
       importer.debug("after add file", result);
+      expect(result).toBeDefined();
       expect(result.rawText).toBeDefined();
     }).then(done, done);
 
@@ -452,7 +585,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
 
-  it("should refuse to import participants if the corpus confidential is not ready", function(done) {
+  xit("should refuse to import participants if the corpus confidential is not ready", function(done) {
     var importer = new Import({
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
       importType: "participants"
@@ -469,7 +602,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
 
-  xit("should not refuse to import participants if the corpus confidential is ready", function(done) {
+  it("should not refuse to import participants if the corpus confidential is ready", function(done) {
     var importer = new Import({
       corpus: corpus,
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
@@ -486,7 +619,11 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
       expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
     }, function(reason) {
       console.log(reason);
+      expect(reason).toEqual(" ");
       expect(false).toBeTruthy();
+      expect(importer.datalist.docs).toBeDefined();
+      expect(importer.datalist.docs.length).toEqual(" ");
+
     }).done(done);
   }, specIsRunningTooLong);
 
@@ -865,7 +1002,7 @@ describe("Import Template", function() {
 
 });
 
-// describe("Import routes", function() {
+// xdescribe("Import routes", function() {
 // beforeEach(function() {
 // this.router = new ImportRouter;
 // this.routeSpy = sinon.spy();
