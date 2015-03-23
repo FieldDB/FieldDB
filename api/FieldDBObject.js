@@ -814,7 +814,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
-        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+        if (this.debugMode) {
+          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        }
 
         // if the result is missing the property, clone it from anObject or anotherObject
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
@@ -828,18 +830,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
-            if (typeof anotherObject[aproperty] !== "string" && typeof anotherObject[aproperty].constructor === "function") {
-              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
-              resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
-              this.debug(" " + aproperty + " resultObject will have anotherObject's Cloned contents because it was empty");
+            var typeofAnotherObjectsProperty = Object.prototype.toString.call(anotherObject[aproperty]);
+
+            if (typeofAnotherObjectsProperty === "[object String]") {
+              resultObject[aproperty] = anotherObject[aproperty] + ""
+            } else if (typeofAnotherObjectsProperty === "[object Number]") {
+              resultObject[aproperty] = anotherObject[aproperty] + 0;
+            } else if (typeofAnotherObjectsProperty === "[object Date]") {
+              resultObject[aproperty] = new Date(anotherObject[aproperty]);
+            } else if (typeofAnotherObjectsProperty === "[object Array]") {
+              resultObject[aproperty] = anotherObject[aproperty].concat([]);
             } else {
-              resultObject[aproperty] = anotherObject[aproperty];
-              this.debug(" " + aproperty + " resultObject will have anotherObject's contents because it was empty");
+              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
+              this.debug("Using a constructor");
+              resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
             }
+
           }
           // dont continue, instead let the iffs run
         }
-        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+        if (this.debugMode) {
+          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        }
 
         /* jshint eqeqeq:false */
         if (anObject[aproperty] == anotherObject[aproperty]) {

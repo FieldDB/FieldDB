@@ -768,6 +768,58 @@ describe("FieldDBObject", function() {
       }, 10);
     });
 
+
+
+    it("should be merge arrays correctly", function(done) {
+      var subsetObject = new FieldDBObject({
+        _id: "13132",
+        debugMode: true
+      });
+      var supersetObject = new FieldDBObject({
+        _id: "13132",
+        _rev: "3-3242",
+        lastname: "ioeaea",
+        firstname: "ioriqamoesdf",
+        internalArray: [{
+          x: 200,
+          y: 200,
+          score: 1
+        }, {
+          x: 300,
+          y: 300,
+          score: 0.4
+        }],
+        internalNumber: 4,
+        internalDate: new Date(10),
+        debugMode: true
+      });
+      subsetObject.merge("self", supersetObject);
+
+      setTimeout(function() {
+        expect(subsetObject._id).toEqual("13132");
+        expect(subsetObject.lastname).toEqual("ioeaea");
+        expect(subsetObject.firstname).toEqual("ioriqamoesdf");
+
+        expect(subsetObject.internalArray[0]).toBeDefined();
+        expect(subsetObject.internalArray[0]).toEqual({
+          x: 200,
+          y: 200,
+          score: 1
+        });
+        expect(subsetObject.internalArray.length).toEqual(2);
+
+        expect(subsetObject.internalArray).toEqual(supersetObject.internalArray);
+        expect(subsetObject.internalNumber).toEqual(supersetObject.internalNumber);
+        expect(subsetObject.internalDate).toEqual(supersetObject.internalDate);
+
+        expect(subsetObject.internalArray[0].x).toEqual(200);
+        expect(subsetObject.internalNumber).toEqual(4);
+        expect(subsetObject.internalDate).toEqual(new Date(10));
+        done();
+      }, 10);
+    });
+
+
   });
 
   describe("equality", function() {
