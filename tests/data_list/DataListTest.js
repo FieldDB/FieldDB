@@ -123,10 +123,10 @@ describe("Data List", function() {
       });
       expect(list.docIds.length).toEqual(12);
       expect(list.docs.anotheritem.toJSON()).toEqual({
-        fieldDBtype: 'FieldDBObject',
-        id: 'anotheritem',
-        _rev: '2-9023',
-        withrReal: 'contents',
+        fieldDBtype: "FieldDBObject",
+        id: "anotheritem",
+        _rev: "2-9023",
+        withrReal: "contents",
         version: list.version
       });
       expect(list.docs.indexOf("anotheritem")).toEqual(0);
@@ -152,9 +152,9 @@ describe("Data List", function() {
       });
       expect(list.docIds.length).toEqual(10);
       expect(list.docs.yetanotheritem.toJSON()).toEqual({
-        fieldDBtype: 'FieldDBObject',
-        id: 'yetanotheritem',
-        _rev: '3-9023',
+        fieldDBtype: "FieldDBObject",
+        id: "yetanotheritem",
+        _rev: "3-9023",
         version: list.version
       });
       expect(list.docs.indexOf("anotheritem")).toEqual(1);
@@ -177,6 +177,46 @@ describe("Data List", function() {
       ]);
     });
 
+    it("should add fast if the docs are not declared", function() {
+      var startTimeAddWithExistingMembers = Date.now();
+      var datalist1 = new DataList({
+        docIds: ["one"]
+      });
+      var addition1 = datalist1.add({
+        id: "two"
+      },{
+        id: "three"
+      }, {
+        id: "four"
+      }, {
+        id: "five"
+      }, {
+        id: "six"
+      });
+      var slowerAddTime = Date.now() - startTimeAddWithExistingMembers;
+      // expect(slowerAddTime).toEqual(1);
+
+      var startTimeAddWithNoExistingMembers = Date.now();
+      var datalist2 = new DataList();
+      var addition2 = datalist2.add({
+        id: "two"
+      },{
+        id: "three"
+      }, {
+        id: "four"
+      }, {
+        id: "five"
+      }, {
+        id: "six"
+      });
+      var fasterAddTime = Date.now() - startTimeAddWithNoExistingMembers;
+      // expect(fasterAddTime).toEqual(1);
+
+
+      expect(fasterAddTime <= slowerAddTime).toBeTruthy();
+      expect(slowerAddTime >= fasterAddTime).toBeTruthy();
+    })
+
   });
 
   describe("pagination", function() {
@@ -192,8 +232,8 @@ describe("Data List", function() {
       expect(list.docs.length).toEqual(9);
       expect(list.docs.indexOf("ED5A2292-659E-4B27-A352-9DBC5065207E")).toEqual(7);
       expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].toJSON()).toEqual({
-        fieldDBtype: 'FieldDBObject',
-        id: 'ED5A2292-659E-4B27-A352-9DBC5065207E',
+        fieldDBtype: "FieldDBObject",
+        id: "ED5A2292-659E-4B27-A352-9DBC5065207E",
         version: list.version
       });
     });
@@ -286,7 +326,7 @@ describe("Data List", function() {
 
   describe("actions on items", function() {
 
-    it("should show filtered results of user's corpus (search)", function() {
+    it("should show filtered results of users corpus (search)", function() {
       expect(true).toBeTruthy();
     });
 
