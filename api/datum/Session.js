@@ -519,17 +519,17 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return [];
     },
     set: function(value) {
-      this._docIds = value;
       if (!this.datalist || !this.datalist.docIds) {
+        this.warn("This should rarely happen.");
+        // this.debugMode = true;
         var self = this;
-        Q.nextTick(function() {
-          self.datalistUpdatingPromise.then(function() {
-            self.debug(" maybe dont need this timeout");
-            return self;
-          }, function() {
-            self.warn("datalist still doesnt exist");
-            return self;
-          });
+        this._docIds = value;
+        this.datalistUpdatingPromise.then(function() {
+          self.debug(" maybe dont need this promise");
+          return self._datalist;
+        }, function() {
+          self.warn("datalist still doesnt exist");
+          return self._datalist;
         });
         return;
       }
@@ -544,16 +544,101 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
     },
     set: function(value) {
-      if (!this.datalist || !this.datalist.docs) {
+      if (!this.datalist) {
+        this.warn("This should never happen.");
+        this.debugMode = true;
         var self = this;
-        Q.nextTick(function() {
-          self.datalistUpdatingPromise.then(function() {
-            self.datalist.docs.add(value);
-          });
+        self.datalistUpdatingPromise.then(function() {
+          self._datalist.docs = value;
+          return self._datalist;
+        }, function() {
+          self._datalist.docs = value;
+          return self._datalist;
         });
         return;
       }
       this.datalist.docs = value;
+    }
+  },
+
+  utterances: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  transcriptions: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  items: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  datum: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  data: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  records: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  entries: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  examples: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  cards: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
     }
   },
 
@@ -562,10 +647,23 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (value) {
         if (!this.datalist || !this.datalist.docs) {
           var self = this;
-          Q.nextTick(function() {
-            self.datalistUpdatingPromise.then(function() {
-              self.datalist.docs.add(value);
-            });
+          // this.debugMode = true;
+          self.datalistUpdatingPromise.then(function() {
+            self.debug("Adding to session's data list", value);
+            if (!self._datalist.docs) {
+              self._datalist.docs = value;
+            } else {
+              self._datalist.docs.add(value);
+            }
+            return self._datalist;
+          }, function() {
+            self.debug("Adding to session's data list", value);
+            if (!self._datalist.docs) {
+              self._datalist.docs = value;
+            } else {
+              self._datalist.docs.add(value);
+            }
+            return self._datalist;
           });
           return;
         }
@@ -585,38 +683,41 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   datalist: {
     get: function() {
-      if (!this._datalist && this.id) {
-        var api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+      if (!this._datalist) {
         this._datalist = new DataList({
-          api: api,
-          dbname: this.dbname
+          dbname: this.dbname,
+          // docs: []
         });
-        if (this._docIds && this._docIds.length > 0) {
-          api = this._docIds;
-        }
-        var self = this;
-        self.datalistUpdatingPromise = Database.prototype.fetchCollection(api, null, null, null, null, this.id)
-          .then(function(genratedDatalist) {
-            self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", genratedDatalist);
-            if (self._docIds) {
-              self.warn("TODO test what happens when there were doc ids before a fetch of ids");
-              self._docIds.map(function(docId) {
-                self._datalist.add({
-                  id: docId
+        if (this.id) {
+          var api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+          this._datalist.api = api;
+          if (this._docIds && this._docIds.length > 0) {
+            api = this._docIds;
+          }
+          var self = this;
+          self.datalistUpdatingPromise = Database.prototype.fetchCollection(api, null, null, null, null, this.id)
+            .then(function(genratedDatalist) {
+              self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", genratedDatalist);
+              if (self._docIds) {
+                self.warn("TODO test what happens when there were doc ids before a fetch of ids");
+                self._docIds.map(function(docId) {
+                  self._datalist.add({
+                    id: docId
+                  });
                 });
-              });
-              delete self._docIds;
-            }
-            if (genratedDatalist) {
-              self._datalist.merge(genratedDatalist);
-            }
-            return self._datalist;
-          }, function(err) {
-            self.warn(" problem fetching the data list", err);
-            self._datalist.docs = self._datalist.docs || [];
-            self._datalist.docIds = self._datalist.docIds || self._docIds;
-            return self._datalist;
-          });
+                delete self._docIds;
+              }
+              if (genratedDatalist) {
+                self._datalist.merge(genratedDatalist);
+              }
+              return self._datalist;
+            }, function(err) {
+              self.warn(" problem fetching the data list", err);
+              self._datalist.docs = self._datalist.docs || [];
+              self._datalist.docIds = self._datalist.docIds || self._docIds;
+              return self._datalist;
+            });
+        }
       } else {
         if (!this.datalistUpdatingPromise) {
           var deferred = Q.defer();
