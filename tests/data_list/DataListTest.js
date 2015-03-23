@@ -6,7 +6,7 @@ var Contextualizer = require("./../../api/locales/Contextualizer").Contextualize
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 
 var specIsRunningTooLong = 5000;
-var SAMPLE_DATALIST_MODEL = require("../../api/data_list/datalist.json");
+var SAMPLE_DATALIST_MODEL = require("../../sample_data/datalist_v1.22.1.json")[0];
 
 describe("Data List", function() {
   describe("construction", function() {
@@ -28,7 +28,10 @@ describe("Data List", function() {
       var list = new DataList({
         title: "An old data list",
         description: "Testing upgrade of old datalists from backbone to commonjs.",
-        datumIds: ["123o4j", "1231qwaeisod", "23ea"]
+        datumIds: ["123o4j",
+          "1231qwaeisod",
+          "23ea"
+        ]
       });
       expect(list.title).toBe("An old data list");
       expect(list.warnMessage).toContain("datumIds is deprecated, please use docIds instead.");
@@ -55,8 +58,144 @@ describe("Data List", function() {
       expect(list.docs.fieldDBtype).toEqual("DocumentCollection");
       expect(list.docs.docone.id).toEqual("docone");
       expect(list.docs.length).toEqual(3);
-      expect(list.docIds).toEqual(["docone", "doctwo", "docthree"]);
+      expect(list.docIds).toEqual(["docone",
+        "doctwo",
+        "docthree"
+      ]);
       expect(list.length).toEqual(3);
+    });
+
+    it("should be able to empty docs", function() {
+      expect(SAMPLE_DATALIST_MODEL.datumIds.length).toEqual(9);
+
+      var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
+      list.docs = [];
+      // list.debugMode = true;
+      expect(list.docs.length).toEqual(0);
+      expect(list.docIds.length).toEqual(0);
+
+      list.populate([{
+        _id: "5EB57DXE-5D97-428E-A9C7-377DEEC02A19"
+      }, {
+        _id: "F60C2FX6-20FB-4B2B-BB3A-448B0784DBE9"
+      }, ]);
+
+      expect(list.docs.length).toEqual(2);
+      expect(list.docIds.length).toEqual(2);
+      expect(list.datumIds.length).toEqual(2);
+      expect(list.docs["5EB57DXE-5D97-428E-A9C7-377DEEC02A19"]._id).toEqual("5EB57DXE-5D97-428E-A9C7-377DEEC02A19");
+    });
+
+  });
+
+  describe("adding and removing docs", function() {
+
+    it("should add docs to a datalist which had docIds ", function() {
+      expect(SAMPLE_DATALIST_MODEL.datumIds.length).toEqual(9);
+
+      var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
+      expect(list.docIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds);
+      expect(list.datumIds.length).toEqual(9);
+      expect(list.docs["924726BF-FAE7-4472-BD99-A13FCB5FEEFF"]._id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
+
+      var additions = list.add([{
+        _id: "5EB57DXE-5D97-428E-A9C7-377DEEC02A10"
+      }, {
+        _id: "F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0"
+      }, ]);
+
+      expect(list.docs.length).toEqual(11);
+      expect(list.docIds.length).toEqual(11);
+      expect(list.docIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds.concat(["5EB57DXE-5D97-428E-A9C7-377DEEC02A10", "F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0"]));
+      expect(list.datumIds.length).toEqual(11);
+
+      expect(list.docs["5EB57DXE-5D97-428E-A9C7-377DEEC02A10"]._id).toEqual("5EB57DXE-5D97-428E-A9C7-377DEEC02A10");
+
+      expect(additions).toBeDefined();
+      expect(additions.length).toEqual(2);
+      expect(additions[0]).toBe(list.docs._collection[list.docs.length - 2]);
+      expect(additions[1]).toBe(list.docs._collection[list.docs.length - 1]);
+
+      additions = list.unshift({
+        id: "anotheritem",
+        _rev: "2-9023",
+        withrReal: "contents"
+      });
+      expect(list.docIds.length).toEqual(12);
+      expect(list.docs.anotheritem.toJSON()).toEqual({
+        fieldDBtype: 'FieldDBObject',
+        id: 'anotheritem',
+        _rev: '2-9023',
+        withrReal: 'contents',
+        version: list.version
+      });
+      expect(list.docs.indexOf("anotheritem")).toEqual(0);
+
+      expect(additions).toBeDefined();
+      expect(additions).toBe(list.docs._collection[0]);
+
+      var bottomItem = list.pop();
+      expect(bottomItem.id).toEqual("F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0");
+      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+
+      bottomItem = list.pop();
+      expect(bottomItem.id).toEqual("5EB57DXE-5D97-428E-A9C7-377DEEC02A10");
+      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+
+      bottomItem = list.pop();
+      expect(bottomItem.id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
+      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+
+      additions = list.unshift({
+        id: "yetanotheritem",
+        _rev: "3-9023"
+      });
+      expect(list.docIds.length).toEqual(10);
+      expect(list.docs.yetanotheritem.toJSON()).toEqual({
+        fieldDBtype: 'FieldDBObject',
+        id: 'yetanotheritem',
+        _rev: '3-9023',
+        version: list.version
+      });
+      expect(list.docs.indexOf("anotheritem")).toEqual(1);
+      expect(list.docs.indexOf("yetanotheritem")).toEqual(0);
+
+      expect(additions).toBeDefined();
+      expect(additions).toBe(list.docs._collection[0]);
+      expect(list.docs.get(0)).toBe(additions);
+
+      expect(list.docIds).toEqual(["yetanotheritem",
+        "anotheritem",
+        "5EB57D1E-5D97-428E-A9C7-377DEEC02A14",
+        "F60C2FE6-20FB-4B2B-BB3A-448B0784DBE5",
+        "D43A71E0-EFE3-4BC4-AABA-FDD152890326",
+        "B31DB3E0-1F43-4FE0-9299-D1C85F0C4C62",
+        "AF976245-1157-47DE-8B6A-28A7542D3497",
+        "23489BDF-68EF-46C9-BB06-4C8EC9D77F48",
+        "944C2CDE-74B8-4322-8940-72E8DD134841",
+        "ED5A2292-659E-4B27-A352-9DBC5065207E"
+      ]);
+    });
+
+  });
+
+  describe("pagination", function() {
+
+    it("should create placeholder docs if set with datumids", function() {
+      expect(SAMPLE_DATALIST_MODEL.datumIds.length).toEqual(9);
+      expect(SAMPLE_DATALIST_MODEL.docs).toBeUndefined();
+      expect(SAMPLE_DATALIST_MODEL.datumIds[7]).toEqual("ED5A2292-659E-4B27-A352-9DBC5065207E");
+
+      var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
+      expect(list.docIds.length).toEqual(9);
+
+      expect(list.docs.length).toEqual(9);
+      expect(list.docs.indexOf("ED5A2292-659E-4B27-A352-9DBC5065207E")).toEqual(7);
+      expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].toJSON()).toEqual({
+        fieldDBtype: 'FieldDBObject',
+        id: 'ED5A2292-659E-4B27-A352-9DBC5065207E',
+        version: list.version
+      });
     });
 
   });
@@ -81,14 +220,20 @@ describe("Data List", function() {
       });
       expect(list).toBeDefined();
       var listToSave = list.toJSON();
-      expect(listToSave.docIds).toEqual(["docone", "doctwo", "docthree"]);
-      expect(listToSave.datumIds).toEqual(["docone", "doctwo", "docthree"]);
+      expect(listToSave.docIds).toEqual(["docone",
+        "doctwo",
+        "docthree"
+      ]);
+      expect(listToSave.datumIds).toEqual(["docone",
+        "doctwo",
+        "docthree"
+      ]);
       expect(listToSave.docs).toBeUndefined();
     });
 
     it("should serialize existing datalists without breaking prototype app", function() {
-      // SAMPLE_DATALIST_MODEL.debugMode = true;
-      var list = new DataList(SAMPLE_DATALIST_MODEL);
+      // JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)).debugMode = true;
+      var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
       expect(list.comments).toBeDefined();
       expect(list.comments.collection[0].text).toContain("an example of how you can");
 
@@ -110,42 +255,33 @@ describe("Data List", function() {
       expect(listToSave.comments[0].timestamp).toEqual(1348670525349);
     });
 
-    it("should serialize datalists with docs into docIds without breaking the docids", function() {
-      var list = new DataList(SAMPLE_DATALIST_MODEL);
-      list.datumIds = [];
-      // list.debugMode = true;
-      expect(list.datumIds).toEqual([]);
-      list.populate([{
-        _id: "5EB57D1E-5D97-428E-A9C7-377DEEC02A14"
-      }, {
-        _id: "F60C2FE6-20FB-4B2B-BB3A-448B0784DBE5"
-      }, {
-        _id: "D43A71E0-EFE3-4BC4-AABA-FDD152890326"
-      }, {
-        _id: "B31DB3E0-1F43-4FE0-9299-D1C85F0C4C62"
-      }, {
-        _id: "AF976245-1157-47DE-8B6A-28A7542D3497"
-      }, {
-        _id: "23489BDF-68EF-46C9-BB06-4C8EC9D77F48"
-      }, {
-        _id: "944C2CDE-74B8-4322-8940-72E8DD134841"
-      }, {
-        _id: "ED5A2292-659E-4B27-A352-9DBC5065207E"
-      }, {
-        _id: "924726BF-FAE7-4472-BD99-A13FCB5FEEFF"
-      }]);
+    it("should serialize datalists with docs into docIds ", function() {
+      expect(SAMPLE_DATALIST_MODEL.datumIds.length).toEqual(9);
 
-      expect(list.docs.length).toEqual(9);
+      var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
       expect(list.docIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds);
+      // list.debugMode = true;
+      expect(list.datumIds.length).toEqual(9);
+      list.add([{
+        _id: "5EB57DXE-5D97-428E-A9C7-377DEEC02A10"
+      }, {
+        _id: "F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0"
+      }, ]);
+
+      expect(list.docs.length).toEqual(11);
+      expect(list.docIds.length).toEqual(11);
+      expect(list.datumIds.length).toEqual(11);
       expect(list.docs["924726BF-FAE7-4472-BD99-A13FCB5FEEFF"]._id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
       expect(list.docs["924726BF_FAE7_4472_BD99_A13FCB5FEEFF"]).toBeUndefined();
-      // expect(list.docs["924726BF_FAE7_4472_BD99_A13FCB5FEEFF"]._id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
 
       var listToSave = list.toJSON();
-      expect(listToSave.datumIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds);
+      expect(listToSave.datumIds.length).toEqual(11);
+      expect(listToSave.datumIds).toEqual(SAMPLE_DATALIST_MODEL.datumIds.concat(["5EB57DXE-5D97-428E-A9C7-377DEEC02A10",
+        "F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0"
+      ]));
+
 
     });
-
   });
 
   describe("actions on items", function() {
@@ -190,7 +326,10 @@ describe("Data List", function() {
       });
       // list.debugMode = true;
       list.getAllAudioAndVideoFiles().then(function(urls) {
-        expect(urls).toEqual(["http://youtube.com/iwoamoiemqo32", "http://soundcloud.com/iwoa/moiemqo32", "http://localhost:3184/example/oiemqo32"]);
+        expect(urls).toEqual(["http://youtube.com/iwoamoiemqo32",
+          "http://soundcloud.com/iwoa/moiemqo32",
+          "http://localhost:3184/example/oiemqo32"
+        ]);
         // expect(dl.playDatum()).toBeTruthy();
       }).done(done);
     }, specIsRunningTooLong);
@@ -230,7 +369,9 @@ describe("Data List", function() {
 
       spyOn(dl.docs.doctwo, "star");
       expect(dl.docs.docOne.id).toEqual("docOne");
-      dl.applyFunctionToAllIds(["doctwo", "docOne"], "star", ["on"]);
+      dl.applyFunctionToAllIds(["doctwo",
+        "docOne"
+      ], "star", ["on"]);
       expect(dl.docs.doctwo.star).toHaveBeenCalledWith("on");
 
     });
@@ -308,9 +449,22 @@ describe("Data List", function() {
 
     it("should serialize results", function() {
       var experiment = new SubExperimentDataList({
-        trials: ["idoftrialafromdatabase", "idoftrialbfromdatabase"]
+        trials: ["idoftrialafromdatabase",
+          "idoftrialbfromdatabase"
+        ]
       });
+      expect(experiment.docs).toBeDefined();
+      expect(experiment.docs.length).toEqual(2);
+
+      expect(experiment.trials).toBe(experiment.docs);
       expect(experiment.trials).toBeDefined();
+      expect(experiment.trials.length).toEqual(2);
+
+      expect(experiment.docs.idoftrialafromdatabase).toBeDefined();
+      expect(experiment.docs.idoftrialafromdatabase.id).toEqual("idoftrialafromdatabase");
+      expect(experiment.docs.idoftrialbfromdatabase).toBeDefined();
+      expect(experiment.docs.idoftrialbfromdatabase.id).toEqual("idoftrialbfromdatabase");
+
       experiment.populate([{
         id: "idoftrialafromdatabase",
         type: "Datum",
@@ -327,11 +481,15 @@ describe("Data List", function() {
         id: "idoftrialbfromdatabase",
         type: "Datum"
       }]);
+      expect(experiment.docs.length).toEqual(2);
       expect(experiment.trials.length).toEqual(2);
+
       expect(experiment.trials.idoftrialafromdatabase.responses[0].x).toEqual(200);
 
       var toSave = experiment.toJSON();
-      expect(toSave.trials).toEqual(["idoftrialafromdatabase", "idoftrialbfromdatabase"]);
+      expect(toSave.trials).toEqual(["idoftrialafromdatabase",
+        "idoftrialbfromdatabase"
+      ]);
       expect(toSave.results[0].responses[0].x).toEqual(200);
 
     });

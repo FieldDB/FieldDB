@@ -132,10 +132,13 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         delete this._docs;
         return;
       } else {
+        this.debug("creating the " + this.id + " datalist's docs");
         if (!(value instanceof this.INTERNAL_MODELS["docs"])) {
+          this.debug("casting the " + this.id + " datalist's docs to type ", this.INTERNAL_MODELS["docs"]);
           value = new this.INTERNAL_MODELS["docs"](value);
         }
       }
+      delete this._docIds;
       this._docs = value;
     }
   },
@@ -149,6 +152,42 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  push: {
+    value: function(value) {
+      if (!this.docs) {
+        this.docs = [];
+      }
+      return this.docs.push(value);
+    }
+  },
+
+  unshift: {
+    value: function(value) {
+      if (!this.docs) {
+        this.docs = [];
+      }
+      return this.docs.unshift(value);
+    }
+  },
+
+  pop: {
+    value: function() {
+      if (!this.docs) {
+        return;
+      }
+      return this.docs.pop();
+    }
+  },
+
+  shift: {
+    value: function() {
+      if (!this.docs) {
+        return;
+      }
+      return this.docs.shift();
+    }
+  },
+
   populate: {
     value: function(results) {
       var self = this;
@@ -157,7 +196,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         this.docs = [];
       }
       var guessedType;
-      results.map(function(doc) {
+      results = results.map(function(doc) {
         try {
           // prevent recursion a bit
           if (self.api !== "datalists") {
@@ -193,8 +232,13 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           doc = new FieldDBObject(doc);
         }
         self.debug("adding doc", doc);
-        self.docs.add(doc);
+        // self.docs.add(doc);
+        return doc;
       });
+      console.warn("MERGING NEW INFO INTO EXISTING DATALIST");
+      self.docs.debugMode = true;
+      self.docs = results;
+      // self.docs.merge("self", results);
 
       if (guessedType === "Datum") {
         self.showDocPosition = true;
@@ -219,7 +263,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   docIds: {
     get: function() {
       var self = this;
-      if ((!this._docIds || this._docIds.length === 0) && (this.docs && this.docs.length > 0)) {
+      if (this.docs && this.docs.length) {
+        this._docIds = [];
         this._docIds = this.docs.map(function(doc) {
           self.debug("geting doc id of this doc ", doc);
           return doc.id;
@@ -234,6 +279,14 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       if (!value) {
         delete this._docIds;
         return;
+      }
+      if (!this.docs || this.docs.length === 0) {
+        var self = this;
+        value.map(function(docId) {
+          self.add({
+            id: docId
+          })
+        });
       }
       this._docIds = value;
     }
