@@ -4,12 +4,11 @@ var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
 var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
-var DataList = require("./../data_list/DataList").DataList;
+// var DataList = require("./../data_list/DataList").DataList;
 var Participant = require("./../user/Participant").Participant;
 var Datum = require("./../datum/Datum").Datum;
 var DatumField = require("./../datum/DatumField").DatumField;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
-var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 // var FileReader = {};
 var Session = require("./../datum/Session").Session;
@@ -81,6 +80,23 @@ var Import = function Import(options) {
   }
   this.debug(" new import ", options);
   FieldDBObject.apply(this, arguments);
+  options = options || {};
+  var sessionOptions = options.session || {};
+  sessionOptions.datalist = options.datalist || {
+    title: {
+      default: "Imported Data"
+    },
+    docs: {
+      id: "tempdatalist",
+      collection: [],
+      primaryKey: "tempId"
+    },
+    // confidential: self.corpus.confidential,
+    // decryptedMode: true,
+    debugMode: true
+  };
+  this.session = new Session(sessionOptions);
+  this.session.goal = "Goal from file import";
 };
 
 Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prototype */ {
@@ -120,7 +136,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   INTERNAL_MODELS: {
     value: {
       progress: {},
-      datalist: DataList,
+      // datalist: DataList,
       datumFields: DatumFields,
       session: Session,
       corpus: Corpus
@@ -277,18 +293,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         self.progress.total = self.asFieldMatrix.length;
 
-        // self.datalist = new DataList({
-        //   title: "Import Data",
-        //   docs: {
-        //     collection: [],
-        //     primaryKey: "tempId"
-        //   },
-        //   // confidential: self.corpus.confidential,
-        //   // decryptedMode: true
-        // });
-        self.datalist.docs.primaryKey = "tempId";
-
-
         var filename = " typing/copy paste into text area";
         var descript = "This is the data list which results from the import of the text typed/pasted in the import text area.";
         try {
@@ -301,7 +305,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         // self.render();
 
-        // self.session = self.session || new Session();
         self.session.consultants = [];
         /* put metadata in the session goals */
         if (self.metadataLines) {
@@ -423,6 +426,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           docToSave.confidential = self.corpus.confidential;
           // docToSave.decryptedMode = true;
 
+
           // return;
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
@@ -454,6 +458,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               //   return field.value
               // }));
             }
+            // docToSave.tempId = docToSave.id = FieldDBObject.uuidGenerator();
             docToSave.tempId = FieldDBObject.uuidGenerator();
             if (docToSave) {
               self.datalist.add(docToSave);
@@ -681,7 +686,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       } catch (e) {
         self.warn("There was a problem while converting the matrix into a data list.", e);
         self.warn(e.stack);
-        deferred.reject(e);
+        deferred.reject("There was a problem while converting the matrix into a data list.");
       }
 
       return deferred.promise;
@@ -875,44 +880,51 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    */
   datalist: {
     get: function() {
-      if (!this._datalist) {
-        this.debug("creating a default data list");
-        this._datalist = new DataList({
-          title: {
-            default: "Imported Data"
-          },
-          docs: {
-            collection: [],
-            primaryKey: "tempId"
-          },
-          // confidential: self.corpus.confidential,
-          // decryptedMode: true
-        });
+      if (!this.session || !this.session.datalist) {
+        return;
+        // this.debug("creating a default data list");
+        //   this.session.datalist = new DataList();
+        //   console.log("this.session.datalist", this.session.datalist);
       }
-      return this._datalist;
+      return this.session.datalist;
     },
     set: function(value) {
-      if (value === this._datalist) {
-        return;
+      if (this._session && value === this._session.datalist) {
+        return this;
       }
-      this._datalist = value;
+      if (!value || !value || !value.docs || !value.docs.primaryKey || value.docs.primaryKey !== "tempId") {
+        console.warn("  not setting the datalist, its missing some stuff ", value);
+        return this;
+      }
+      console.warn("  setting the _session.datalist", value.docs.primaryKey);
+      this._session.datalist = value;
+      return this;
     }
   },
 
   session: {
     get: function() {
       if (!this._session) {
-        this.warn("creating a default data list");
-        this._session = new Session();
-        this._session.goal = "Goal from file import";
+        console.warn("There's no session!");
+        return;
       }
+      this.debug("getting the _session", this._session.datalist);
       return this._session;
     },
     set: function(value) {
       if (value === this._session) {
-        return;
+        return this;
+      }
+      if (!value || !value.datalist || !value.datalist.docs || !value.datalist.docs.primaryKey || value.datalist.docs.primaryKey !== "tempId") {
+        console.warn("  not setting the session, its missing some stuff ", value);
+        return this;
+      }
+      console.warn("  setting the _session", value.datalist.docs.primaryKey);
+      if (!(value instanceof Session)) {
+        value = new Session(value);
       }
       this._session = value;
+      return this;
     }
   },
 
@@ -926,6 +938,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.debug("Getting Datum collection");
       if (!this._files) {
         this._files = new Collection({
+          id: "importfiles",
           inverted: false,
           primaryKey: "fileName"
         });
