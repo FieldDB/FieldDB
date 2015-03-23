@@ -92,12 +92,12 @@ describe("lib/Collection", function() {
 
     it("should permit push to add to the bottom", function() {
       collection.push(useDefaults()[2]);
-      expect(collection.collection[2]).toEqual(useDefaults()[2]);
+      expect(collection.collection[2].validationStatus).toEqual(useDefaults()[2].validationStatus);
     });
 
     it("should permit unshift to add to the top", function() {
       collection.unshift(useDefaults()[2]);
-      expect(collection.collection[0]).toEqual(useDefaults()[2]);
+      expect(collection.collection[0].validationStatus).toEqual(useDefaults()[2].validationStatus);
     });
 
     it("should permit pop to remove from the bottom", function() {

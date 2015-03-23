@@ -296,6 +296,33 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalInverted = this.inverted;
       }
 
+      if(!searchingFor){
+        //previously code in the add function
+        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
+          this.debug("adding a internamodel ", value);
+          if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
+            this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
+            value = new this.INTERNAL_MODELS.item(value);
+          } else {
+            if (value.constructor === Object) {
+              this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
+              value = new FieldDBObject(value);
+            } else {
+              this.debug("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
+            }
+          }
+        } else {
+          this.debug("  not modifying value ", this.INTERNAL_MODELS);
+        }
+        searchingFor = this.getSanitizedDotNotationKey(value);
+        if (!searchingFor) {
+          this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+          throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
+        }
+        this.debug("adding " + searchingFor);
+
+      }
+
       if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
         this.debug("Not setting " + searchingFor + ", it  was already the same in the collection");
         return this[searchingFor];
@@ -320,14 +347,14 @@ Collection.prototype = Object.create(Object.prototype, {
             this.warn("Overwriting ", this.collection[index], "->", value);
             this.collection[index] = value;
           }
-          return value;
+          return this.collection[index];
         }
       }
       /* if not a reserved attribute, set on object for dot notation access */
       if (["collection", "primaryKey", "find", "set", "add", "inverted", "toJSON", "length", "encrypted", "confidential", "decryptedMode"].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
         /* also provide a case insensitive cleaned version if the key can be lower cased */
-        if (typeof searchingFor.toLowerCase === "function") {
+        if (searchingFor && typeof searchingFor.toLowerCase === "function") {
           this[searchingFor.toLowerCase().replace(/_/g, "")] = value;
         }
 
@@ -340,7 +367,8 @@ Collection.prototype = Object.create(Object.prototype, {
       } else {
         this.collection.push(value);
       }
-      return value;
+      return this[searchingFor];
+      // return value;
     }
   },
 
@@ -401,28 +429,7 @@ Collection.prototype = Object.create(Object.prototype, {
         return value;
       }
 
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
-        // console.log("adding a internamodel ", value);
-        if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
-          this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
-          value = new this.INTERNAL_MODELS.item(value);
-        } else {
-          if (value.constructor === "object") {
-            this.warn("this is going to be a FieldDBObject, even though its supposed to be a Document.", value);
-            value = new FieldDBObject(value);
-          } else {
-            this.debug("this is " + value[this.primaryKey] + " already some sort of an object.", value.fieldDBtype);
-          }
-        }
-      }
-      var dotNotationKey = this.getSanitizedDotNotationKey(value);
-      if (!dotNotationKey) {
-        this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-        throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
-      }
-      this.debug("adding " + dotNotationKey);
-      this.set(dotNotationKey, value);
-      return this[dotNotationKey];
+      return this.set(null, value);
     }
   },
 
@@ -441,17 +448,14 @@ Collection.prototype = Object.create(Object.prototype, {
 
   push: {
     value: function(value) {
-      // self.debug(this.collection);
-      this.set(this.getSanitizedDotNotationKey(value), value, null, false);
-      // self.debug(this.collection);
-      return this;
+      // self.debug(this.collectioan);
+      return this.set(null, value, null, false);
     }
   },
 
   unshift: {
     value: function(value) {
-      this.set(this.getSanitizedDotNotationKey(value), value, null, true);
-      return this;
+      return this.set(null, value, null, true);
     }
   },
 
@@ -800,6 +804,13 @@ Collection.prototype = Object.create(Object.prototype, {
       resultCollection = this;
       if (!optionalOverwriteOrAsk) {
         optionalOverwriteOrAsk = "";
+      }
+
+      if (!(anotherCollection instanceof aCollection.constructor)) {
+        this.debug("The anotherCollection  isnt of the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
+        anotherCollection = new aCollection.constructor(anotherCollection);
+      } else {
+        this.debug("The anotherCollection  is  the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
       }
 
       if (!anotherCollection || anotherCollection.length === 0) {
