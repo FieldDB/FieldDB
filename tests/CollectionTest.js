@@ -1,6 +1,7 @@
 "use strict";
 
 var Collection = require("../api/Collection").Collection;
+var DocumentCollection = require("../api/datum/DocumentCollection").DocumentCollection;
 var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
 
@@ -330,6 +331,68 @@ describe("lib/Collection", function() {
 
   });
 
+  describe("customized primary key", function() {
+    it("should provide map on its internal collection", function() {
+      // var HasInternalCollection = function HasInternalCollection() {
+      //   FieldDBObject.apply(this, arguments);
+      // };
+      // HasInternalCollection.prototype = Object.create(FieldDBObject.prototype, {
+      //   constructor: {
+      //     value: HasInternalCollection
+      //   },
+
+      //   datalist: {
+      //     get: function() {
+      //       if (!this._datalist) {
+      //         this.debug("creating a default data list");
+      //         this._datalist = new FieldDBObject({
+      //           title: {
+      //             default: "Imported Data"
+      //           },
+      //           docs: {
+      //             collection: [],
+      //             primaryKey: "tempId"
+      //           },
+      //           // confidential: self.corpus.confidential,
+      //           // decryptedMode: true
+      //         });
+      //       }
+      //       return this._datalist;
+      //     },
+      //     set: function(value) {
+      //       if (value === this._datalist) {
+      //         return;
+      //       }
+      //       this._datalist = value;
+      //     }
+      //   }
+      // });
+
+      var customizedWithTempId = new DocumentCollection({
+        debugMode: true,
+        collection: [],
+        primaryKey: "tempId"
+      });
+      expect(customizedWithTempId).toBeDefined();
+      expect(customizedWithTempId.primaryKey).toEqual("tempId");
+      expect(customizedWithTempId._primaryKey).toEqual("tempId");
+      expect(customizedWithTempId._collection).toBeDefined();
+
+      customizedWithTempId.add({
+        tempId: "123",
+        some: "contents"
+      });
+      expect(customizedWithTempId["123"].toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "123",
+        some: "contents",
+        dateCreated: customizedWithTempId["123"].dateCreated,
+        version: customizedWithTempId["123"].version
+      });
+    });
+
+  });
+
   describe("cleaning contents", function() {
     var collection,
       item,
@@ -394,7 +457,7 @@ describe("lib/Collection", function() {
     });
 
 
-    it("should complain about setting a non equivalent object to itself.", function() {
+    it("should ask the user if they want to merge non equivalent object to itself.", function() {
       var duck = collection._collection[3];
       expect(duck).toBeDefined();
       expect(collection.duck).toEqual(duck);
@@ -404,7 +467,7 @@ describe("lib/Collection", function() {
         feet: "yellow"
       }));
       expect(collection.duck).toEqual(duck);
-      expect(collection.warnMessage).toContain("Overwriting an existing _collection member duck at index 3 (they have the same key but are not equal, nor the same object)");
+      expect(collection.warnMessage).toContain("Merging an existing _collection member duck at index 3 (they have the same key but are not equal, nor the same object)");
 
     });
 

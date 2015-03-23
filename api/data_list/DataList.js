@@ -147,12 +147,21 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     value: function(value) {
       if (!this.docs || this.docs.length === 0) {
         if (Object.prototype.toString.call(value) === "[object Array]") {
-          this.docs = value;
+          value = {
+            collection: value,
+            // primaryKey: "hithere"
+          };
         } else {
-          this.docs = [value];
+          value = {
+            collection: [value]
+          };
         }
+        value.primaryKey = this.primaryKey;
+        console.log("setting the docs  : ", value);
+        this.docs = value;
         return this.docs._collection[0];
       }
+      console.log("adding to existing data list", value);
       return this.docs.add(value);
     }
   },
@@ -267,6 +276,21 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  primaryKey: {
+    get: function() {
+      if (this.docs && this.docs.primaryKey) {
+        return this.docs.primaryKey;
+      }
+      this.warn("cant get the primary key ", this.docs);
+      return "id";
+    },
+    set: function(value) {
+      if (this.docs && this.docs.primaryKey) {
+        this.docs.primaryKey = value;
+      }
+    }
+  },
+
   docIds: {
     get: function() {
       var self = this;
@@ -274,7 +298,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         this._docIds = [];
         this._docIds = this.docs.map(function(doc) {
           self.debug("geting doc id of this doc ", doc);
-          return doc.id;
+          return doc[self.primaryKey];
         });
       }
       return this._docIds || FieldDBObject.DEFAULT_ARRAY;
@@ -289,10 +313,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
       if (!this.docs || this.docs.length === 0) {
         var self = this;
-        value.map(function(docId) {
-          self.add({
-            id: docId
-          })
+        value.map(function(docPrimaryKey) {
+          var docPlaceholder = {};
+          docPlaceholder[self.primaryKey] = docPrimaryKey;
+          self.add(docPlaceholder);
         });
       }
       this._docIds = value;

@@ -296,7 +296,7 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalInverted = this.inverted;
       }
 
-      if(!searchingFor){
+      if (!searchingFor) {
         //previously code in the add function
         if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
           this.debug("adding a internamodel ", value);
@@ -343,9 +343,14 @@ Collection.prototype = Object.create(Object.prototype, {
           if (this.collection[index] !== value ||
             (typeof this.collection[index].equals === "function" && !this.collection[index].equals(value))
           ) {
-            this.warn("Overwriting an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
-            this.warn("Overwriting ", this.collection[index], "->", value);
-            this.collection[index] = value;
+            if (typeof this.collection[index].merge === "function") {
+              this.warn("Merging an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
+              this.collection[index].merge("self", value);
+            } else {
+              this.warn("Overwriting an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
+              this.warn("Overwriting ", this.collection[index], "->", value);
+              this.collection[index] = value;
+            }
           }
           return this.collection[index];
         }
@@ -378,6 +383,19 @@ Collection.prototype = Object.create(Object.prototype, {
         return this.collection.length;
       } else {
         return 0;
+      }
+    }
+  },
+
+  primaryKey: {
+    get: function() {
+      this.debug(this.id + "  getting collection prmary key " + this._primaryKey);
+      return this._primaryKey || "id";
+    },
+    set: function(value) {
+      this.debug(this.id + "setting collection prmary key " + this._primaryKey);
+      if (value) {
+        this._primaryKey = value;
       }
     }
   },
