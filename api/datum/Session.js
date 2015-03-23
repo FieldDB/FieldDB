@@ -524,10 +524,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         // this.debugMode = true;
         var self = this;
         this._docIds = value;
-        this.datalistUpdatingPromise.then(function() {
-          self.debug(" maybe dont need this promise");
-          return self._datalist;
-        }, function() {
+        this.datalistUpdatingPromise.done(function() {
           self.warn("datalist still doesnt exist");
           return self._datalist;
         });
@@ -548,10 +545,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         this.warn("This should never happen.");
         this.debugMode = true;
         var self = this;
-        self.datalistUpdatingPromise.then(function() {
-          self._datalist.docs = value;
-          return self._datalist;
-        }, function() {
+        self.datalistUpdatingPromise.done(function() {
           self._datalist.docs = value;
           return self._datalist;
         });
@@ -648,15 +642,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         if (!this.datalist || !this.datalist.docs) {
           var self = this;
           // this.debugMode = true;
-          self.datalistUpdatingPromise.then(function() {
-            self.debug("Adding to session's data list", value);
-            if (!self._datalist.docs) {
-              self._datalist.docs = value;
-            } else {
-              self._datalist.docs.add(value);
-            }
-            return self._datalist;
-          }, function() {
+          self.datalistUpdatingPromise.done(function() {
             self.debug("Adding to session's data list", value);
             if (!self._datalist.docs) {
               self._datalist.docs = value;
