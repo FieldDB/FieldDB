@@ -65,6 +65,24 @@ describe("Data List", function() {
       expect(list.length).toEqual(3);
     });
 
+
+    it("should support custom primary keys", function() {
+      var datalist = new DataList({
+        docs: {
+          primaryKey: "tempId"
+        },
+        docIds: ["one"],
+      });
+      expect(datalist.docs.primaryKey).toEqual("tempId");
+      expect(datalist.docIds).toEqual(["one"]);
+      expect(datalist.docs.one.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "one",
+        dateCreated: datalist.docs.one.dateCreated,
+        version: datalist.version
+      });
+    });
+
     it("should be able to empty docs", function() {
       expect(SAMPLE_DATALIST_MODEL.datumIds.length).toEqual(9);
 
@@ -184,7 +202,7 @@ describe("Data List", function() {
       });
       var addition1 = datalist1.add({
         id: "two"
-      },{
+      }, {
         id: "three"
       }, {
         id: "four"
@@ -193,6 +211,8 @@ describe("Data List", function() {
       }, {
         id: "six"
       });
+      expect(addition1).toBeDefined();
+
       var slowerAddTime = Date.now() - startTimeAddWithExistingMembers;
       // expect(slowerAddTime).toEqual(1);
 
@@ -200,7 +220,7 @@ describe("Data List", function() {
       var datalist2 = new DataList();
       var addition2 = datalist2.add({
         id: "two"
-      },{
+      }, {
         id: "three"
       }, {
         id: "four"
@@ -209,14 +229,127 @@ describe("Data List", function() {
       }, {
         id: "six"
       });
+      expect(addition2).toBeDefined();
+
       var fasterAddTime = Date.now() - startTimeAddWithNoExistingMembers;
       // expect(fasterAddTime).toEqual(1);
 
-
       expect(fasterAddTime <= slowerAddTime).toBeTruthy();
       expect(slowerAddTime >= fasterAddTime).toBeTruthy();
-    })
+    });
 
+    it("should add fast if the docs are not declared, but keep other customization", function() {
+      var datalist = new DataList({
+        docs: {
+          primaryKey: "tempId"
+        },
+        docIds: ["tempone"]
+      });
+      expect(datalist.docs.primaryKey).toEqual("tempId");
+      expect(datalist.docIds).toEqual(["tempone"]);
+      expect(datalist.docs.tempone.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "tempone",
+        dateCreated: datalist.docs.tempone.dateCreated,
+        version: datalist.version
+      });
+
+      var additions = datalist.add([{
+        tempId: "temptwo",
+        some: "content"
+      }, {
+        tempId: "tempthree",
+        num: 1
+      }, {
+        tempId: "tempfour",
+        some: "other content"
+      }]);
+      expect(additions).toBeDefined();
+
+      expect(datalist.docs.primaryKey).toEqual("tempId");
+      expect(datalist.docIds).toEqual(["tempone", "temptwo", "tempthree", "tempfour"]);
+      expect(datalist.docs.tempone.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "tempone",
+        dateCreated: datalist.docs.tempone.dateCreated,
+        version: datalist.version
+      });
+      expect(datalist.docs.temptwo).toBeDefined();
+      expect(datalist.docs.temptwo.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "temptwo",
+        some: "content",
+        dateCreated: datalist.docs.temptwo.dateCreated,
+        version: datalist.version
+      });
+
+      expect(datalist.docs.tempthree.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "tempthree",
+        num: 1,
+        dateCreated: datalist.docs.tempthree.dateCreated,
+        version: datalist.version
+      });
+
+    });
+  });
+
+  describe("merging", function() {
+    it("should add fast if the docs are not declared, but keep other customization", function() {
+      var datalist = new DataList({
+        docs: {
+          primaryKey: "tempId"
+        },
+        docIds: ["tempone"]
+      });
+
+      var additions = datalist.add([{
+        tempId: "temptwo",
+        some: "content"
+      }, {
+        tempId: "tempthree",
+        num: 1
+      }, {
+        tempId: "tempfour",
+        _rev: "1-456",
+        some: "other content"
+      }]);
+
+      expect(datalist.docs.primaryKey).toEqual("tempId");
+      expect(datalist.docIds).toEqual(["tempone", "temptwo", "tempthree", "tempfour"]);
+
+      expect(datalist.docs.tempfour.toJSON()).toEqual({
+        fieldDBtype: "FieldDBObject",
+        tempId: "tempfour",
+        _rev: "1-456",
+        some: "other content",
+        dateCreated: datalist.docs.tempfour.dateCreated,
+        version: datalist.version
+      });
+
+      additions = datalist.add([{
+        tempId: "tempthree",
+        num: 1
+      }, {
+        tempId: "tempfour",
+        _rev: "2-123",
+        some: "other content changed"
+      }]);
+
+      expect(datalist.docs.tempfour.confirmMessage).toBeDefined();
+      expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for _rev, Do you want to overwrite it from \"1-456\" -> \"2-123\"");
+      expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for some, Do you want to overwrite it from \"other content\" -> \"other content changed\"");
+      expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for _dateCreated, Do you want to overwrite it from ");
+
+      // expect(datalist.docs.tempfour.toJSON()).toEqual({
+      //   fieldDBtype: 'FieldDBObject',
+      //   tempId: 'tempfour',
+      //   some: 'other content changed',
+      //   _rev: "2-123",
+      //   dateCreated: datalist.docs.tempfour.dateCreated,
+      //   version: datalist.version
+      // });
+    });
   });
 
   describe("pagination", function() {
