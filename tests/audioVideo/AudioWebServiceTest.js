@@ -1,18 +1,10 @@
 /* globals runs, waitsFor */
 
-var AudioService = AudioService || require("./AudioService");
-var CouchDBConnection =  CouchDBConnection || require("../corpus/CouchDBConnection");
-var OPrime =  OPrime || require("../../backbone_client/libs/OPrime.js");
+var AudioService = AudioService || require("../../api/audio_video/AudioService");
+var Database = Database || require("../../api/corpus/Database").Database;
 
 var runCORSTests = function(whichServer) {
 
-  /*
-   * Turn off CORS alerts
-   */
-  OPrime.bug = function(message) {
-    console.log(message);
-    // expect(false).toBeTruthy();
-  };
   var corpusServerUrl;
 
   var serverURL = "https://audiodev.lingsync.org";
@@ -36,11 +28,15 @@ var runCORSTests = function(whichServer) {
   };
 
   it(
-    "should be able asyncronously retrieve a TextGrid, given that all has been already cached", function() {
+    "should be able asyncronously retrieve a TextGrid, given that all has been already cached",
+    function() {
       /*
        * Declare an object and its functions which will be in scope
        */
-      var corpus = new CouchDBConnection(corpusServerUrl, user);
+      var corpus = new Database({
+        url: corpusServerUrl,
+        user: user
+      });
       corpus.dbname = "test-cors";
       var serverResult = new AudioService(serverURL, user, corpus,
         "sampleDatumWithMultipleAudio");
@@ -73,7 +69,7 @@ var runCORSTests = function(whichServer) {
   // "should be able asyncronously retrieve a TextGrid, if audio files have not
   // yet been uploaded",
   // function() {
-  // var corpus = new CouchDBConnection(corpusServerUrl, user);
+  // var corpus = new Database(corpusServerUrl, user);
   // corpus.dbname = "lingllama-firstcorpus";
   // var serverResult = new AudioService(serverURL, user, corpus,
   // "fakedatum" + Date.now());

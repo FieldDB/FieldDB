@@ -74,7 +74,6 @@ module.exports = function(grunt) {
           "api/FieldDBObject.js",
           "api/Collection.js",
           "api/CORS.js",
-          "api/FieldDBConnection.js",
           "api/activity/Activites.js",
           "api/activity/Activity.js",
           "api/app/App.js",
