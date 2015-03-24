@@ -211,18 +211,18 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         return deferred.promise;
       }
 
-      if (collectionUrl.indexOf("/") === -1) {
-        collectionUrl = self.couchSessionUrl + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", 1000) + key;
-      } else if (collectionUrl.indexOf("://") === -1) {
-        collectionUrl = self.couchSessionUrl + "/" + collectionUrl;
-      } else {
-        this.warn("Fetching data from a user supplied url", collectionUrl);
-      }
-
       if (key) {
         key = "&key=\"" + key + "\"";
       } else {
         key = "";
+      }
+
+      if (collectionUrl.indexOf("/") === -1) {
+        collectionUrl = self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", 1000) + key;
+      } else if (collectionUrl.indexOf("://") === -1) {
+        collectionUrl = self.url + "/" + collectionUrl;
+      } else {
+        this.warn("Fetching data from a user supplied url", collectionUrl);
       }
 
       var cantLogIn = function(reason) {
@@ -284,7 +284,18 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               return doc.value;
             }));
           } else {
-            deferred.resolve([]);
+            var datalists = []
+            for (var property in result) {
+              if (result.hasOwnProperty(property) && result[property].collection && result[property].collection === "datalists") {
+                datalists.push(result[property]);
+              }
+            }
+            if (datalists && datalists.length === 1) {
+              deferred.resolve(datalists[0]);
+              return datalists[0];
+            }
+            deferred.resolve(datalists);
+            return datalists;
           }
         }, cantLogIn);
       }

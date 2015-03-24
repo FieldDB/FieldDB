@@ -136,6 +136,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "perObjectDebugMode",
   "perObjectAlwaysConfirmOkay",
   "application",
+  "corpus",
   "contextualizer",
   "perObjectDebugMode",
   "perObjectAlwaysConfirmOkay",
@@ -144,6 +145,14 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "confirmMessage",
   "bugMessage"
 ];
+
+FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
+  "dateCreated",
+  "_dateCreated",
+  "_fieldDBtype",
+  "version",
+  "_version"
+]);
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -738,8 +747,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       if (!anotherObject && !optionalOverwriteOrAsk) {
-        anObject = this;
-        resultObject = anObject;
+        resultObject = anObject = this;
         anotherObject = callOnSelf;
       } else if (callOnSelf === "self") {
         this.debug("Merging properties into myself. ");
@@ -805,7 +813,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       for (aproperty in propertyList) {
 
-        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || aproperty === "dateCreated" || aproperty === "_fieldDBtype" || FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) > -1) {
+        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
@@ -994,6 +1002,25 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   application: {
     get: function() {
       return FieldDBObject.application;
+    }
+  },
+
+  corpus: {
+    get: function() {
+      if (this._corpus) {
+        return this._corpus;
+      }
+      if (FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus) {
+        return this.application.corpus
+      }
+      return Database.prototype;
+    },
+    set: function(value) {
+      if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {
+        this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
+        return;
+      }
+      this._corpus = value;
     }
   },
 

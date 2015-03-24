@@ -221,6 +221,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             doc.api = self.api;
           }
           doc.confidential = self.confidential;
+          doc.url = self.url;
           guessedType = doc.fieldDBtype;
           if (!guessedType) {
             self.debug(" requesting guess type ");
