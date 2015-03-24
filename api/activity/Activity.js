@@ -427,7 +427,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
   save: {
     value: function(optionalUserWhoSaved) {
-      this.debug("Customizing activity save ");
+      this.debug("Customizing activity save ", optionalUserWhoSaved);
       var deferred = Q.defer(),
         self = this;
 
@@ -436,14 +436,14 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return whenReady;
+        return this.whenReady;
       }
       if (this.saving) {
         self.warn("Save was already in process...");
         Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return whenReady;
+        return this.whenReady;
       }
       this.saving = true;
 

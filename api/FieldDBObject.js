@@ -828,7 +828,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             var typeofAnotherObjectsProperty = Object.prototype.toString.call(anotherObject[aproperty]);
 
             if (typeofAnotherObjectsProperty === "[object String]") {
-              resultObject[aproperty] = anotherObject[aproperty] + ""
+              resultObject[aproperty] = anotherObject[aproperty] + "";
             } else if (typeofAnotherObjectsProperty === "[object Number]") {
               resultObject[aproperty] = anotherObject[aproperty] + 0;
             } else if (typeofAnotherObjectsProperty === "[object Date]") {
@@ -1282,7 +1282,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   clone: {
     value: function(includeEvenEmptyAttributes) {
       var json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
-      var underscorelessProperty;
+      var aproperty,
+        underscorelessProperty;
 
       // Use clone on internal properties which have a clone function
       for (aproperty in json) {
