@@ -1,4 +1,4 @@
-/* globals alert, confirm, navigator, Android */
+/* globals alert, confirm, navigator, Android, FieldDB */
 var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
@@ -1011,9 +1011,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return this._corpus;
       }
       if (FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus) {
-        return this.application.corpus
+        return this.application.corpus;
       }
-      return Database.prototype;
+      if (FieldDB && FieldDB["Database"]) {
+        return FieldDB["Database"].prototype;
+      }
     },
     set: function(value) {
       if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {

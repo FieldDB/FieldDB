@@ -284,7 +284,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               return doc.value;
             }));
           } else {
-            var datalists = []
+            var datalists = [];
             for (var property in result) {
               if (result.hasOwnProperty(property) && result[property].collection && result[property].collection === "datalists") {
                 datalists.push(result[property]);
