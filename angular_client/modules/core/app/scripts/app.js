@@ -9,7 +9,7 @@
 //       return FieldDB[modelName];
 //     });
 // }
-var app = angular.module("fielddbAngularApp", [
+var fielddbAngulaModule = angular.module("fielddbAngularApp", [
   "ngAnimate",
   "ngCookies",
   "ngResource",
@@ -33,8 +33,10 @@ var app = angular.module("fielddbAngularApp", [
     "https://localhost:3184/**",
     "https://localhost/**"
   ]);
-  if (FieldDB && FieldDB.PsycholinguisticsApp && FieldDB.Contextualizer && FieldDB.User) {
-    var fieldDBApp = new FieldDB.PsycholinguisticsApp({
+  var fieldDBApp;
+
+  if (FieldDB && FieldDB.PsycholinguisticsApp && FieldDB.Contextualizer && FieldDB.User && !FieldDB.FieldDBObject.application) {
+    fieldDBApp = new FieldDB.PsycholinguisticsApp({
       authentication: {
         user: new FieldDB.User({
           authenticated: false
@@ -63,8 +65,8 @@ var app = angular.module("fielddbAngularApp", [
   // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.example.org";
 
 });
-console.log(app);
-// app.run(["$route", "$rootScope", "$location",
+console.log("Loaded fielddbAngulaModule", fielddbAngulaModule);
+// fielddbAngulaModule.run(["$route", "$rootScope", "$location",
 //   function($route, $rootScope, $location) {
 //     var original = $location.path;
 //     $location.path = function(path, reload) {
