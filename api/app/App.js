@@ -500,11 +500,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     }
   },
 
-  renderHelp : function(helptype){
-    if(helptype.indexOf("illustratedguide") >= 0){
-      $("#illustrated_guide_to_dash").modal("show");
-      window.location.href= "#";
-    }
+  renderHelp: function(helptype) {
+    this.render(helptype);
   },
 
   /**
@@ -575,8 +572,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    */
   save: {
     value: function() {
-      var self = this,
-        promises = [];
+      var promises = [];
 
       this.authentication.dispatchEvent("saveyourselfnow");
 
