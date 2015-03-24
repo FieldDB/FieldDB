@@ -85,6 +85,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
       this._corpusConnection = value;
       this._corpusConnection.parent = this;
+      if (!this.dbname && value.dbname) {
+        this.dbname = value.dbname;
+      }
     }
   },
 
@@ -307,6 +310,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (!couchSessionUrl) {
         if (this.application && this.application.corpusConnection && this.application.corpusConnection.corpusUrl) {
           couchSessionUrl = this.application.corpusConnection.corpusUrl;
+        } else if (this.corpusConnection && this.corpusConnection.corpusUrl) {
+          couchSessionUrl = this.corpusConnection.corpusUrl;
         } else {
           couchSessionUrl = this.BASE_DB_URL;
         }
@@ -411,7 +416,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(couchConnection, couchdbcommand) {
       var couchurl = new CorpusConnection(couchConnection).corpusUrl;
       if (couchdbcommand) {
-        couchurl = couchurl.replace("/" + couchConnection.pouchname, couchdbcommand);
+        couchurl = couchurl.replace("/" + couchConnection.dbname, couchdbcommand);
       }
       return couchurl;
     }
@@ -475,12 +480,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               self.todo("move the logic to connect to all the users corpora to the authentication level instead.");
               if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
                 authserverResult.user.corpora.map(function(corpusConnection) {
-
+                  corpusConnection.dbname = corpusConnection.dbname || corpusConnection.pouchname;
                   var addThisServerIfNotAlreadyThere = function(url) {
                     var couchdbSessionUrl = url.replace(corpusConnection.dbname, "_session");
                     if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
                       corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
-                    } else if (self.dbname && corpusConnection.pouchname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                    } else if (self.dbname && corpusConnection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
                       corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
                     }
                   };

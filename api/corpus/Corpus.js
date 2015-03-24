@@ -447,7 +447,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           } else if (corpora.length > 1) {
             self.warn("Impossible to have more than one corpus for this dbname, marking irrelevant corpora as trashed");
             corpora.map(function(row) {
-              if (row.value.pouchname === self.dbname) {
+              if (row.value.dbname === self.dbname || row.value.pouchname === self.dbname) {
                 corpusAsSelf(row.value._id);
               } else {
                 self.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);

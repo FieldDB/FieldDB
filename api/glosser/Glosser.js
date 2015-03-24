@@ -1,6 +1,6 @@
 var Glosser = Glosser || {};
 Glosser.currentCorpusName = "";
-Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
+Glosser.downloadPrecedenceRules = function(dbname, glosserURL, callback){
   if(!glosserURL ||glosserURL == "default"){
     var couchConnection = app.get("corpus").get("couchConnection");
     var couchurl = OPrime.getCouchUrl(couchConnection);
@@ -10,7 +10,7 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
     type : "GET",
     url : glosserURL,
     success : function(rules) {
-      localStorage.setItem(pouchname+"precendenceRules", JSON.stringify(rules.rows));
+      localStorage.setItem(dbname+"precendenceRules", JSON.stringify(rules.rows));
 
       // Reduce the rules such that rules which are found in multiple source
       // words are only used/included once.
@@ -19,8 +19,8 @@ Glosser.downloadPrecedenceRules = function(pouchname, glosserURL, callback){
       }).value();
 
       // Save the reduced precedence rules in localStorage
-      localStorage.setItem(pouchname+"reducedRules", JSON.stringify(reducedRules));
-      Glosser.currentCorpusName = pouchname;
+      localStorage.setItem(dbname+"reducedRules", JSON.stringify(reducedRules));
+      Glosser.currentCorpusName = dbname;
       if(typeof callback == "function"){
         callback();
       }
@@ -188,12 +188,12 @@ Glosser.glossFinder = function(morphemesLine){
  * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
  * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
  */
-Glosser.generateForceDirectedRulesJsonForD3 = function(rules, pouchname) {
-  if(!pouchname){
-    pouchname = Glosser.currentCorpusName;
+Glosser.generateForceDirectedRulesJsonForD3 = function(rules, dbname) {
+  if(!dbname){
+    dbname = Glosser.currentCorpusName;
   }
   if(!rules){
-    rules = localStorage.getItem(pouchname+"precendenceRules");
+    rules = localStorage.getItem(dbname+"precendenceRules");
     if(rules){
       rules = JSON.parse(rules);
     }
@@ -266,10 +266,10 @@ Glosser.saveAndInterConnectInApp = function(callback){
  *
  */
 //Glosser.rulesGraph = Glosser.rulesGraph || {};
-Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, pouchname){
+Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement, dbname){
 
-  if(pouchname){
-    Glosser.currentCorpusName = pouchname;
+  if(dbname){
+    Glosser.currentCorpusName = dbname;
   }else{
     throw("Must provide corpus name to be able to visualize morphemes");
   }
@@ -314,7 +314,7 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
 
   var svg = d3.select(divElement).append("svg")
     .attr("width", width)
-    .attr("title", "Morphology Visualization for "+ pouchname)
+    .attr("title", "Morphology Visualization for "+ dbname)
     .attr("height", height);
 
   var titletext = "Click to search morphemes in your corpus";
@@ -367,8 +367,8 @@ Glosser.visualizeMorphemesAsForceDirectedGraph = function(rulesGraph, divElement
       .on("click", function(d) {
         /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
         if(window.app && window.app.router){
-          // window.app.router.showEmbeddedSearch(pouchname, "morphemes:"+d.name);
-          var url = "corpus/"+pouchname+"/search/"+"morphemes:"+d.name;
+          // window.app.router.showEmbeddedSearch(dbname, "morphemes:"+d.name);
+          var url = "corpus/"+dbname+"/search/"+"morphemes:"+d.name;
           // window.location.replace(url);
           window.app.router.navigate(url, {trigger: true});
 

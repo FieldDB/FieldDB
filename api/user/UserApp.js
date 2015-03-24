@@ -128,7 +128,7 @@ define([
 
       if(OPrime.isChromeApp()){
         Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
-        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+        Backbone.couch_connector.config.db_name = couchConnection.dbname;
       }else{
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
         try{
@@ -152,11 +152,11 @@ define([
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
+        // + couchConnection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
+            + couchConnection.dbname : OPrime.pouchUrl
+            + couchConnection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -183,11 +183,11 @@ define([
 
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
+        // + couchConnection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
+            + couchConnection.dbname : OPrime.pouchUrl
+            + couchConnection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -238,7 +238,7 @@ define([
 
       /* if on android, turn on replication and don't get a session token */
       if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+        Android.setCredentialsAndReplicate(couchConnection.dbname,
             username, password, couchConnection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +
@@ -393,7 +393,7 @@ define([
 
       /* if on android, turn on replication and dont get a session token */
       if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+        Android.setCredentialsAndReplicate(couchConnection.dbname,
             username, password, couchConnection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +

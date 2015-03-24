@@ -377,7 +377,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             }
           } else {
             var obj = new Datum({
-              pouchname: self.dbname,
+              dbname: self.dbname,
               id: id
             });
             obj.fetch().then(function(results) {

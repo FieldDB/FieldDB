@@ -15,6 +15,7 @@ describe("Corpus", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
+      expect(corpus.pouchname).toEqual(corpus.dbname);
 
       var serialized = corpus.toJSON();
       expect(serialized.pouchname).toBeDefined();

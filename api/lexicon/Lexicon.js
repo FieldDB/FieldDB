@@ -3,31 +3,31 @@ define([
 		"lexicon/LexiconNode",
 		"lexicon/LexiconNodes"
 ], function(
-    Backbone, 
-    LexiconNode, 
+    Backbone,
+    LexiconNode,
     LexiconNodes
-) {	
-	var Lexicon = Backbone.Model.extend(	
+) {
+	var Lexicon = Backbone.Model.extend(
 	/** @lends Lexicon.prototype */
 	{
 		/**
 		 * @class Lexicon is directed graph (triple store) between morphemes and
 		 *        their allomorphs and glosses. It allows the search to index
 		 *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
-		 * 
+		 *
 		 * @description  Lexicon is directed graph (triple store) between morphemes and
      *        their allomorphs and glosses. It allows the search to index
      *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
-     * 
-		 * 
+     *
+		 *
 		 * @extends Backbone.Model
-		 * 
+		 *
 		 * @constructs
-		 * 
+		 *
 		 */
 		initialize : function(){
 		},
-		
+
 		// Internal models: used by the parse function
     internalModels : {
       lexiconNodes : LexiconNodes
@@ -35,11 +35,11 @@ define([
     /**
      * Overwrite/build the lexicon from the corpus server if it is there, saves
      * the results to local storage so they can be reused offline.
-     * 
-     * @param pouchname
+     *
+     * @param dbname
      * @param callback
      */
-    buildLexiconFromCouch : function(pouchname, callback){
+    buildLexiconFromCouch : function(dbname, callback){
       var self = this;
       var couchConnection = app.get("corpus").get("couchConnection");
       var couchurl = OPrime.getCouchUrl(couchConnection);
@@ -51,7 +51,7 @@ define([
           if (! self.get("lexiconNodes")){
             self.set("lexiconNodes", new LexiconNodes());
           }
-          localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          localStorage.setItem(dbname+"lexiconResults", JSON.stringify(results));
           var lexiconTriples = results.rows;
           for (triple in lexiconTriples) {
             self.get("lexiconNodes").add(new LexiconNode({
@@ -70,12 +70,12 @@ define([
     },
     /**
      * Overwrite/build the lexicon from local storage if it is there.
-     * 
-     * @param pouchname
+     *
+     * @param dbname
      * @param callback
      */
-    buildLexiconFromLocalStorage  : function(pouchname, callback){
-      var results = localStorage.getItem(pouchname+"lexiconResults");
+    buildLexiconFromLocalStorage  : function(dbname, callback){
+      var results = localStorage.getItem(dbname+"lexiconResults");
       if(!results){
         return;
       }
@@ -91,13 +91,13 @@ define([
       }
     },
     saveAndInterConnectInApp : function(callback){
-      
+
       if(typeof callback == "function"){
         callback();
       }
     }
-    
-	}); 
-	
+
+	});
+
 	return Lexicon;
-}); 
+});
