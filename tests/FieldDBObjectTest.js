@@ -173,7 +173,60 @@ describe("FieldDBObject", function() {
       expect(babypenguin.body.beak).toBeUndefined();
     });
 
-    it("should have side effects on the original object", function() {
+
+    it("should clone objects recursively", function() {
+      var datumTypeThing = new FieldDBObject({
+        _id: "82u398jaeoiajwo3a",
+        _rev: "8-ojqa3ja0eios09k3aw",
+        utterance: "noqata tusunaywanmi",
+        translation: "I feel like dancing",
+        sessionTypeThing: new FieldDBObject({
+          _id: "9a0j0ejoi32jo",
+          _rev: "29-903jaoijoiw3ajow",
+          page: "34",
+          publisher: "MITWPL",
+          speakerTypeThing: new FieldDBObject({
+            _id: "yuioiuni98y932",
+            _rev: "3-i3orj0jw203j",
+            fields: []
+          })
+        })
+      });
+
+      var clonedParentForMinimalPairs = datumTypeThing.clone();
+      expect(clonedParentForMinimalPairs).toEqual({
+        fieldDBtype: "FieldDBObject",
+        utterance: "noqata tusunaywanmi",
+        translation: "I feel like dancing",
+        sessionTypeThing: {
+          fieldDBtype: "FieldDBObject",
+          page: "34",
+          publisher: "MITWPL",
+          speakerTypeThing: {
+            fieldDBtype: "FieldDBObject",
+            fields: [],
+            version: "v2.47.20",
+            relatedData: [{
+              URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
+              relation: "clonedFrom"
+            }]
+          },
+          version: "v2.47.20",
+          relatedData: [{
+            URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
+            relation: "clonedFrom"
+          }]
+        },
+        version: "v2.47.20",
+        relatedData: [{
+          URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
+          relation: "clonedFrom"
+        }]
+      });
+
+    });
+
+    it("should not effect clone if original object is changed", function() {
       var babypenguin = penguin.clone();
       penguin.body.beak = "yellow";
 

@@ -608,26 +608,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       url = this.url + url;
       var data = this.toJSON();
       this.whenReady = CORS.makeCORSRequest({
-          type: this.id ? "PUT" : "POST",
-          dataType: "json",
-          url: url,
-          data: data
-        }).then(function(result) {
-            self.debug("saved ", result);
-            self.saving = false;
-            if (result.id) {
-              self.id = result.id;
-              self.rev = result.rev;
-              deferred.resolve(self);
-            } else {
-              deferred.reject(result);
-            }
-          },
-          function(reason) {
-            self.debug(reason);
-            self.saving = false;
-            deferred.reject(reason);
-          });
+        type: this.id ? "PUT" : "POST",
+        dataType: "json",
+        url: url,
+        data: data
+      }).then(function(result) {
+          self.debug("saved ", result);
+          self.saving = false;
+          if (result.id) {
+            self.id = result.id;
+            self.rev = result.rev;
+            deferred.resolve(self);
+          } else {
+            deferred.reject(result);
+          }
+        },
+        function(reason) {
+          self.debug(reason);
+          self.saving = false;
+          deferred.reject(reason);
+        });
 
       return deferred.promise;
     }
@@ -1281,10 +1281,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
-      if (includeEvenEmptyAttributes) {
-        this.warn(includeEvenEmptyAttributes + " TODO includeEvenEmptyAttributes is not used ");
+      var json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
+      var underscorelessProperty;
+
+      // Use clone on internal properties which have a clone function
+      for (aproperty in json) {
+        underscorelessProperty = aproperty.replace(/^_/, "");
+        if (this[aproperty] && typeof this[aproperty].clone === "function") {
+          json[underscorelessProperty] = this[aproperty].clone(includeEvenEmptyAttributes);
+        }
       }
-      var json = JSON.parse(JSON.stringify(this.toJSON()));
 
       var relatedData;
       if (json.datumFields && json.datumFields.relatedData) {
@@ -1294,12 +1300,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       } else {
         json.relatedData = relatedData = [];
       }
-      var source = json._id;
-      if (json._rev) {
-        source = source + "?rev=" + json._rev;
+      var source = this.id;
+      if (this.rev) {
+        source = source + "?rev=" + this.rev;
       } else {
         if (this.parent && this.parent._rev) {
-          source = this.parent._id + "?rev=" + this.parent._rev;
+          source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
         }
       }
       relatedData.push({
@@ -1311,6 +1317,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json._id;
       delete json._rev;
       delete json.parent;
+      delete json.dbname;
+      delete json.pouchname;
 
       return json;
     }
