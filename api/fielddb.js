@@ -35,7 +35,7 @@
   var Response = require("./datum/Response").Response;
   var Database = require("./corpus/Database").Database;
   var PsycholinguisticsDatabase = require("./corpus/PsycholinguisticsDatabase").PsycholinguisticsDatabase;
-  var FieldDBConnection = require("./FieldDBConnection").FieldDBConnection;
+  var FieldDBConnection = require("./corpus/Database").FieldDBConnection;
   var Router = require("./Router").Router;
   var User = require("./user/User").User;
   var Users = require("./user/Users").Users;
