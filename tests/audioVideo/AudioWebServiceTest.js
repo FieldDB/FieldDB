@@ -41,7 +41,7 @@ var runCORSTests = function(whichServer) {
        * Declare an object and its functions which will be in scope
        */
       var corpus = new CouchDBConnection(corpusServerUrl, user);
-      corpus.pouchname = "test-cors";
+      corpus.dbname = "test-cors";
       var serverResult = new AudioService(serverURL, user, corpus,
         "sampleDatumWithMultipleAudio");
       /*
@@ -74,7 +74,7 @@ var runCORSTests = function(whichServer) {
   // yet been uploaded",
   // function() {
   // var corpus = new CouchDBConnection(corpusServerUrl, user);
-  // corpus.pouchname = "lingllama-firstcorpus";
+  // corpus.dbname = "lingllama-firstcorpus";
   // var serverResult = new AudioService(serverURL, user, corpus,
   // "fakedatum" + Date.now());
   // /*

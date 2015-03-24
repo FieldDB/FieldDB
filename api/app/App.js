@@ -298,7 +298,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       //        */
       //       self.debug("Creating backbone objects");
       //       self.status = "Building dashboard objects...";
-      //       self.createAppFieldDBObjects(self.couchConnection.pouchname, function() {
+      //       self.createAppFieldDBObjects(self.couchConnection.dbname, function() {
 
 
       //          * If you know the user, load their most recent
@@ -360,7 +360,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
       if (this.isChromeApp) {
         FieldDBObject.couch_connector.config.base_url = this.getCouchUrl(couchConnection, "");
-        FieldDBObject.couch_connector.config.db_name = couchConnection.pouchname;
+        FieldDBObject.couch_connector.config.db_name = couchConnection.dbname;
       } else {
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
         try {
@@ -386,9 +386,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       // self.bug("TODO set/validate that the the pouch connection");
       // if (this.pouch === undefined) {
       //   // this.pouch = FieldDBObject.sync.pouch("https://localhost:6984/"
-      //   // + couchConnection.pouchname);
+      //   // + couchConnection.dbname);
       //   this.pouch = FieldDBObject.sync
-      //     .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.pouchname : OPrime.pouchUrl + couchConnection.pouchname);
+      //     .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + couchConnection.dbname : OPrime.pouchUrl + couchConnection.dbname);
       // }
       // if (typeof callback === "function") {
       //   callback();
@@ -406,9 +406,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
    * @param callback
    */
   createAppFieldDBObjects: {
-    value: function(optionalpouchname, callback) {
-      if (optionalpouchname === null) {
-        optionalpouchname = "default";
+    value: function(optionaldbname, callback) {
+      if (optionaldbname === null) {
+        optionaldbname = "default";
       }
 
       if (FieldDBObject.couch_connector.config.db_name === "default") {
@@ -417,27 +417,27 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
       if (this.authentication.userPublic === undefined) {
         this.authentication.set("userPublic", new UserMask({
-          pouchname: optionalpouchname
+          dbname: optionaldbname
         }));
       }
       if (this.authentication.userPrivate === undefined) {
         this.authentication.set("userPrivate", new User());
       }
       var c = new Corpus({
-        pouchname: optionalpouchname
+        dbname: optionaldbname
       });
       this.set("corpus", c);
 
       this.set("currentSession", new Session({
-        pouchname: optionalpouchname,
+        dbname: optionaldbname,
       }));
 
       this.set("currentDataList", new DataList({
-        pouchname: optionalpouchname
+        dbname: optionaldbname
       }));
 
       this.set("search", new Search({
-        pouchname: optionalpouchname
+        dbname: optionaldbname
       }));
 
 
@@ -535,7 +535,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
       /* if on android, turn on replication and don't get a session token */
       if (this.isTouchDBApp()) {
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
+        Android.setCredentialsAndReplicate(couchConnection.dbname,
           username, password, couchConnection.domain);
         this.debug("Not getting a session token from the users corpus server " + "since this is touchdb on android which has no idea of tokens.");
         if (typeof succescallback === "function") {
@@ -996,7 +996,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var backboneActivity = new Activity(bareActivityObject);
 
       var couchConnection = this.couchConnection;
-      var activitydb = couchConnection.pouchname + "-activity_feed";
+      var activitydb = couchConnection.dbname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal !== "team") {
         activitydb = this.authentication.userPrivate.username + "-activity_feed";
         backboneActivity.attributes.user.set("gravatar", this.authentication.userPrivate.gravatar);

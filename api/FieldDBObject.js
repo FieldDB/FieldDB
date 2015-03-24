@@ -1065,7 +1065,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
-      this.debug("pouchname is deprecated, use dbname instead.");
+      this.debug("Pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
@@ -1235,7 +1235,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (json.dbname) {
         json.pouchname = json.dbname;
-        this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
+        this.debug("Serializing Pouchname for backward compatability until prototype can handle dbname");
       }
 
       for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {

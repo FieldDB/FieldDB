@@ -132,16 +132,6 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     }
   },
 
-  pouchname: {
-    get: function() {
-      return this.dbname;
-    },
-    set: function(value) {
-      this.todo("pouchname is deprecated, use dbname instead " + value);
-      this.dbname = value;
-    }
-  },
-
   dbname: {
     get: function() {
       if (this.parent && this.parent.dbname) {
@@ -429,7 +419,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
     protocol: "https://",
     domain: "localhost",
     port: "6984",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "localhost",
     authUrls: ["https://localhost:3183"],
@@ -440,7 +430,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
     protocol: "https://",
     domain: "corpusdev.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "beta",
     authUrls: ["https://authdev.lingsync.org"],
@@ -451,7 +441,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "production",
     authUrls: ["https://auth.lingsync.org"],
@@ -465,7 +455,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "mcgill",
     authUrls: ["https://auth.lingsync.org"],
@@ -477,7 +467,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "concordia",
     authUrls: ["https://auth.lingsync.org"],
@@ -576,7 +566,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
         protocol: connectionUrlObject.protocol + "//",
         domain: connectionUrlObject.hostname,
         port: connectionUrlObject.port,
-        pouchname: "default",
+        dbname: "default",
         path: connectionUrlObject.pathname.replace("/", ""),
         serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
         authUrls: [optionalHREF],

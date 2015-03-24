@@ -238,7 +238,7 @@ describe("corpus collections", function() {
       "protocol": "https://",
       "domain": "corpus.example.org",
       "port": "443",
-      "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
+      "dbname": "computationalfieldworkshop-group_data_entry_tutorial",
       "path": "",
       "authUrls": ["https://auth.example.org"],
       "userFriendlyServerName": "Example.org",
@@ -254,8 +254,8 @@ describe("corpus collections", function() {
     expect(connection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
     expect(connection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
 
-    //if th eparent pouchname changes, so should the corpus connection
-    corpus.pouchname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
+    //if the parent dbname changes, so should the corpus connection
+    corpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
     expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
     expect(connection.toJSON()).toEqual({

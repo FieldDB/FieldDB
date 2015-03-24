@@ -249,6 +249,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
         "protocol": "",
         "domain": "",
         "port": "",
+        "dbname": "",
         "pouchname": "",
         "path": "",
         "authUrls": "",
@@ -421,14 +422,14 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
           "protocol": "https://",
           "domain": "corpusdev.fielddb.org",
           "port": "443",
-          "pouchname": "lingllama-cherokee",
+          "dbname": "lingllama-cherokee",
           "path": "",
           "corpusid": "958227C0-FF0E-46AC-8F7B-579330A24A95"
         }, {
           "protocol": "https://",
           "domain": "corpusdev.fielddb.org",
           "port": "443",
-          "pouchname": "lingllama-firstcorpus",
+          "dbname": "lingllama-firstcorpus",
           "path": "",
           "corpusid": "1B6127DC-F156-4F48-B1D8-6F4EBA5848A5"
         }], null, 2) + "</pre>"
@@ -440,7 +441,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
           "protocol": "https://",
           "domain": "ifielddevs.iriscouch.com",
           "port": "443",
-          "pouchname": "lingllama-activity_feed",
+          "dbname": "lingllama-activity_feed",
           "path": ""
         }, null, 2) + "</pre>"
       },
@@ -476,7 +477,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
             "protocol": "https://",
             "domain": "corpusdev.fielddb.org",
             "port": "",
-            "pouchname": "lingllama-communitycorpus",
+            "dbname": "lingllama-communitycorpus",
             "path": "",
             "corpusid": "89bc4d7dcc2b1fc9a7bb0f4f4743e705"
           }

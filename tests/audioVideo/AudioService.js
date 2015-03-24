@@ -30,18 +30,18 @@ var AudioService = function(url, user, corpusConnection, datumid) {
         md5: "c07f75de65dc1c99763cee300dcd44a0",
         filename: "testing_audio.wav",
         labelsToAlign: "TESTING AUDIO UPLOAD.",
-        textGrid: this.corpus.url.replace("/_session", "/") + this.corpus.pouchname + "/" + this.datumid + "/testing_audio.textGrid"
+        textGrid: this.corpus.url.replace("/_session", "/") + this.corpus.dbname + "/" + this.datumid + "/testing_audio.textGrid"
       }, {
         md5: "c07f75de65dc1c99763cee300dcd44a0",
         filename: "testing_audio2.wav",
         labelsToAlign: "TESTING AUDIO UPLOAD.",
-        textGrid: this.corpus.url.replace("/_session", "/") + this.pouchname + "/" + this.datumid + "/testing_audio2.textGrid"
+        textGrid: this.corpus.url.replace("/_session", "/") + this.dbname + "/" + this.datumid + "/testing_audio2.textGrid"
       }],
       user: {
         username: user.name
       },
       corpus: {
-        corpusname: this.corpus.pouchname
+        corpusname: this.corpus.dbname
       },
       dictionary: {
         dialect: "AmericanEnglish",

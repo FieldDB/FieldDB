@@ -752,7 +752,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
       this.debug("Saving the Session");
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+      if (self.application.corpus.dbname !== this.dbname) {
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
@@ -771,7 +771,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
           //TODO add privacy for session goals in corpus
-          //            if(self.application.get("corpus").get("keepSessionDetailsPrivate")){
+          //            if(self.application.corpus.get("keepSessionDetailsPrivate")){
           //              goal = "";
           //              differences = "";
           //            }
@@ -790,7 +790,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
@@ -800,7 +800,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -808,12 +808,12 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           /*
            * make sure the session is visible in this corpus
            */
-          var previousversionincorpus = self.application.get("corpus").sessions.get(model.id);
+          var previousversionincorpus = self.application.corpus.sessions.get(model.id);
           if (previousversionincorpus === undefined) {
-            self.application.get("corpus").sessions.unshift(model);
+            self.application.corpus.sessions.unshift(model);
           } else {
-            self.application.get("corpus").sessions.remove(previousversionincorpus);
-            self.application.get("corpus").sessions.unshift(model);
+            self.application.corpus.sessions.remove(previousversionincorpus);
+            self.application.corpus.sessions.unshift(model);
           }
           self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
           //make sure the session is in the history of the user
@@ -851,7 +851,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   setAsCurrentSession: {
     value: function(successcallback, failurecallback) {
       var self = this;
-      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+      if (self.application.corpus.dbname !== this.dbname) {
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
@@ -862,7 +862,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
       if (self.application.get("currentSession").id !== this.id) {
         self.application.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-        //      self.application.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+        //      self.application.set("currentSession", app.corpus.sessions.get(this.id)); //this is a bad idea too, use above instead
       }
       self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
       self.application.get("authentication").saveAndInterConnectInApp(); //saving users is cheep

@@ -21,7 +21,7 @@ var _ = require("underscore");
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
  * @property {FileList} files These are the file(s) that were dragged in.
- * @property {String} pouchname This is the corpusid wherej the data should be imported
+ * @property {String} dbname This is the corpusid wherej the data should be imported
  * @property {DatumFields} fields The fields array contains titles of the data columns.
  * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
  * @property {Event} event The drag/drop event.
@@ -125,7 +125,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         },
         datalist: {},
         session: {},
-        pouchname: "",
+        dbname: "",
         files: [],
         asFieldMatrix: [],
         asCSV: []
@@ -615,7 +615,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //       }
         //       audioVideo.set("filename", value);
         //       audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
-        //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").pouchname + "/" + value);
+        //       audioVideo.set("URL", self.audioUrl + "/" + window.app.get("corpus").dbname + "/" + value);
         //       audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
         //       audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
         //     } else if (index === "startTime") {
@@ -644,7 +644,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //   for (var a in array) {
         //     var d = new Datum({
         //       filledWithDefaults: true,
-        //       pouchname: self.dbname
+        //       dbname: self.dbname
         //     });
         //     //copy the corpus"s datum fields and empty them.
         //     var datumfields = self.importFields.clone();
@@ -1638,6 +1638,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         // data.append("files", files);
         data.append("token", self.uploadtoken);
         data.append("pouchname", self.dbname);
+        data.append("dbname", self.dbname);
         data.append("username", self.username);
         data.append("returnTextGrid", self.returnTextGrid);
 
