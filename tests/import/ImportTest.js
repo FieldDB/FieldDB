@@ -615,6 +615,8 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     expect(importer.corpus.confidential.encrypt).toBeDefined();
     expect(importer.corpus.confidential.secretkey).toEqual("abc123");
 
+    expect(importer.rawText).toBeDefined();
+
     importer.convertMatrixIntoDataList().then(function() {
       expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
     }, function(reason) {
