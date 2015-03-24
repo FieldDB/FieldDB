@@ -602,7 +602,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
   }, specIsRunningTooLong);
 
 
-  it("should not refuse to import participants if the corpus confidential is ready", function(done) {
+  xit("should not refuse to import participants if the corpus confidential is ready", function(done) {
     var importer = new Import({
       corpus: corpus,
       rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
