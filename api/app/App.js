@@ -3,6 +3,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Activity = require("./../activity/Activity").Activity;
 var Authentication = require("./../authentication/Authentication").Authentication;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var Database = require("./../corpus/Database").Database;
 var Connection = require("./../corpus/Connection").Connection;
 var DataList = require("./../data_list/DataList").DataList;
 var Import = require("./../import/Import").Import;
@@ -164,7 +165,7 @@ var App = function App(options) {
   this.importer = this.importer || null;
   this.search = this.search || null;
   this.currentDoc = this.currentDoc || null;
-  this.corpus = this.corpus || null;
+  this._corpus = this._corpus || null;
   this.thisyear = (new Date()).getFullYear();
 
   var self = this;
@@ -197,6 +198,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         }
       }
       this._authentication = value;
+    }
+  },
+
+  corpus: {
+    get: function() {
+      if (this._corpus) {
+        return this._corpus;
+      }
+      return Database.prototype;
+    },
+    set: function(value) {
+      this._corpus = value;
     }
   },
 
@@ -414,9 +427,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       /*
        * Fetching models if they are not complete
        */
-      if (this.corpus && !this.corpus.title) {
+      if (this.corpus && this.corpus.dbname && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
-        return this.corpus.loadOrCreateCorpusByPouchName(this.corpus.dbname).then(function(result) {
+        return this.corpus.loadCorpusByDBname(this.corpus.dbname).then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
           self.status = self.corpus.status = "Loaded corpus details.";
           if (self.application.importer) {

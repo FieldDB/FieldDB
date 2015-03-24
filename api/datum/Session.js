@@ -681,7 +681,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             api = this._docIds;
           }
           var self = this;
-          self.datalistUpdatingPromise = Database.prototype.fetchCollection(api, null, null, null, null, this.id)
+          self.datalistUpdatingPromise = self.corpus.fetchCollection(api, null, null, null, null, this.id)
             .then(function(genratedDatalist) {
               self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", genratedDatalist);
               if (self._docIds) {
@@ -694,7 +694,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
                 delete self._docIds;
               }
               if (genratedDatalist) {
-                self._datalist.merge(genratedDatalist);
+                delete genratedDatalist.title;
+                delete genratedDatalist.description;
+                self._datalist.merge("self", genratedDatalist);
               }
               return self._datalist;
             }, function(err) {
