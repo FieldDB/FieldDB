@@ -1,8 +1,8 @@
-<form ng-submit="markAsEdited(fieldData, datum, $event);">
+<form ng-submit="markAsEdited(datum.utterance, datum, $event);">
   <div class="span1" >
     <!-- todo try ng-change to reduce edits which are not edits -->
     <input
-    ng-blur="markAsEdited(fieldData, datum)"
+    ng-blur="markAsEdited(datum.utterance, datum)"
     class="span2"
     type="text"
     ng-model="datum['judgement']"
