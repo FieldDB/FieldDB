@@ -212,6 +212,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         this.docs = [];
       }
       var guessedType;
+      this.save();
+
       results = results.map(function(doc) {
         try {
           // prevent recursion a bit
@@ -251,8 +253,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         // self.docs.add(doc);
         return doc;
       });
-      console.warn("MERGING NEW INFO INTO EXISTING DATALIST");
-      self.docs.debugMode = true;
+      self.todo("OVERWRITING NEW INFO INTO EXISTING DATALIST, instead save the existing list, then add them and remove the ones that arent supposed ot be there.");
+      // self.docs.debugMode = true;
       self.docs = results;
       // self.docs.merge("self", results);
 
