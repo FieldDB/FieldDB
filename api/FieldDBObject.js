@@ -1166,7 +1166,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
       "You can vote for it in our issue tracker</a>.  " +
       "We use the " +
-      "<a target='blank' href='" + this.url + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
+      "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
   },
 
   comments: {
@@ -1314,7 +1314,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in json) {
         underscorelessProperty = aproperty.replace(/^_/, "");
         if (this[aproperty] && typeof this[aproperty].clone === "function") {
-          json[underscorelessProperty] = this[aproperty].clone(includeEvenEmptyAttributes);
+          json[underscorelessProperty] = JSON.parse(JSON.stringify(this[aproperty].clone(includeEvenEmptyAttributes)));
         }
       }
 
