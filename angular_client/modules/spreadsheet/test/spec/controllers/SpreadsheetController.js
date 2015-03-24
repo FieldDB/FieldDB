@@ -488,7 +488,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
     expect(typeof scope.triggerExpandCollapse).toBe('function');
     expect(typeof scope.setDataEntryFocusOn).toBe('function');
-    expect(typeof scope.hiddenOnLoading).toBe('function');
+    // expect(typeof scope.hiddenOnLoading).toBeUndefined();
 
 
   });
