@@ -205,19 +205,19 @@ describe("FieldDBObject", function() {
           speakerTypeThing: {
             fieldDBtype: "FieldDBObject",
             fields: [],
-            version: "v2.47.20",
+            version: datumTypeThing.version,
             relatedData: [{
               URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
               relation: "clonedFrom"
             }]
           },
-          version: "v2.47.20",
+          version: datumTypeThing.version,
           relatedData: [{
             URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
             relation: "clonedFrom"
           }]
         },
-        version: "v2.47.20",
+        version: datumTypeThing.version,
         relatedData: [{
           URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
           relation: "clonedFrom"
