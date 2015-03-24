@@ -661,7 +661,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     $rootScope.application.corpus = new FieldDB.Corpus();
-    $rootScope.application.corpus.loadOrCreateCorpusByPouchName(selectedConnection.dbname).then(function(results) {
+    $rootScope.application.corpus.loadCorpusByDBname(selectedConnection.dbname).then(function(results) {
       console.log("loaded the corpus", results);
       $scope.corpora.add($rootScope.application.corpus);
       selectedConnection.parent = $rootScope.application.corpus;

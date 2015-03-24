@@ -393,12 +393,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  loadOrCreateCorpusByPouchName: {
+  loadCorpusByDBname: {
     value: function(dbname) {
       if (!dbname) {
         throw new Error("Cannot load corpus, its dbname was undefined");
       }
-      var deferred = this.loadOrCreateCorpusByPouchNameDeferred || Q.defer(),
+      var deferred = this.loadCorpusByDBnameDeferred || Q.defer(),
         self = this;
 
       dbname = dbname.trim();
@@ -411,17 +411,17 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
-          if (self.runningloadOrCreateCorpusByPouchName) {
+          if (self.runningloadCorpusByDBname) {
             self.warn("Error finding a corpus in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org ");
             self.bug("Error finding corpus details in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org  ");
             deferred.reject(reason);
             return;
           }
-          self.runningloadOrCreateCorpusByPouchName = true;
-          self.loadOrCreateCorpusByPouchNameDeferred = deferred;
+          self.runningloadCorpusByDBname = true;
+          self.loadCorpusByDBnameDeferred = deferred;
           self.debug("Wating 1000ms to try to load again.");
           setTimeout(function() {
-            self.loadOrCreateCorpusByPouchName(dbname);
+            self.loadCorpusByDBname(dbname);
           }, 1000);
         };
 
@@ -429,8 +429,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           self.debug(corpora);
 
           var corpusAsSelf = function(corpusid) {
-            self.runningloadOrCreateCorpusByPouchName = false;
-            delete self.loadOrCreateCorpusByPouchNameDeferred;
+            self.runningloadCorpusByDBname = false;
+            delete self.loadCorpusByDBnameDeferred;
             self.id = corpusid;
             self.fetch().then(function(result) {
               self.debug("Finished fetch of corpus ", result);
