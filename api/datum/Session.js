@@ -2,7 +2,6 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var DatumFields = require("./DatumFields").DatumFields;
 var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Database = require("./../corpus/Database").Database;
 var Q = require("q");
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
