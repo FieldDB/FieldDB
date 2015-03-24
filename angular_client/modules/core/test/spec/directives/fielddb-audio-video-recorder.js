@@ -12,11 +12,11 @@ describe("Directive: fielddb-audio-video-recorder", function() {
     scope = $rootScope.$new();
     scope.datum1 = {
       utterance: "a first entry",
-      pouchname: "lingllama-firstcorpus"
+      dbname: "lingllama-firstcorpus"
     };
     scope.datum2 = {
       utterance: "another entry",
-      pouchname: "lingllama-firstcorpus"
+      dbname: "lingllama-firstcorpus"
     };
     compileFunction = $compile(el);
     // bring html from templateCache

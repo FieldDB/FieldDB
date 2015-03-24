@@ -61,7 +61,7 @@ describe('Directive: fielddbGlosserInput', function() {
       'session': {
         '_id': '2c31b34b7f52c50617e31f4a86001804',
         '_rev': '1-924b67c28c381fd840fcd11245a7772b',
-        'pouchname': 'testingspreadsheet-firstcorpus',
+        'dbname': 'testingspreadsheet-firstcorpus',
         'comments': [],
         'sessionFields': [{
           'label': 'goal',

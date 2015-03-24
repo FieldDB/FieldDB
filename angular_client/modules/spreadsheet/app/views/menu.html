@@ -51,7 +51,7 @@
                   {{contextualize('locale_corpus')}}
                 </a>
               </li>
-              <li ng-show="application.corpus.pouchname">
+              <li ng-show="application.corpus.dbname">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -80,7 +80,7 @@
       <span class="rightMenuItems" ng-show="application.authentication.user.authenticated">
         <div class="rightMenuItemsDiv">
           <div ng-show="application.corpus">
-            <a class="floatLeft" href="{{application.website}}/{{application.corpus.pouchname.replace('-','/')}}/{{application.corpus.pouchname}}" target="_blank" title="Visit this {{application.corpus.pouchname}}'s webpage">
+            <a class="floatLeft" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this {{application.corpus.dbname}}'s webpage">
               <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
             </a>
             <i class="fa whiteicon fa-calendar">
@@ -228,7 +228,7 @@
                   </i>
                 </a>
               </li>
-              <li ng-show="application.corpus.pouchname">
+              <li ng-show="application.corpus.dbname">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -253,7 +253,7 @@
       </span>
       <span class="smallMenuBarInfo" ng-show="application.authentication.user.authenticated">
         <span class=" smallMenuBarInfoItem" ng-show="application.corpus">
-          <a class="" href="{{application.website}}/{{application.corpus.pouchname.replace('-','/')}}/{{application.corpus.pouchname}}" target="_blank" title="Visit this corpus' webpage">
+          <a class="" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this corpus' webpage">
             <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
           </a>
         </span>

@@ -382,7 +382,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  // Get sessions for pouchname; select specific session on saved state load
+  // Get sessions for dbname; select specific session on saved state load
   $scope.loadSessions = function() {
     /* reset the sessions list if the corpus has changed */
     if ($rootScope.application.corpus && $rootScope.application.corpus.dbname && $rootScope.application.sessionsList && $rootScope.application.sessionsList.docs && $rootScope.application.sessionsList.docs.length > 0 && $rootScope.application.sessionsList.dbname !== $rootScope.application.corpus.dbname) {
@@ -469,9 +469,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.loadAutoGlosserRules = function() {
     // Get precedence rules for Glosser
-    Data.glosser($rootScope.application.corpus.pouchname)
+    Data.glosser($rootScope.application.corpus.dbname)
       .then(function(rules) {
-        localStorage.setItem($rootScope.application.corpus.pouchname + "precedenceRules", JSON.stringify(rules));
+        localStorage.setItem($rootScope.application.corpus.dbname + "precedenceRules", JSON.stringify(rules));
 
         // Reduce the rules such that rules which are found in multiple
         // source words are only used/included once.
@@ -480,14 +480,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }).value();
 
         // Save the reduced precedence rules in localStorage
-        localStorage.setItem($rootScope.application.corpus.pouchname + "reducedRules",
+        localStorage.setItem($rootScope.application.corpus.dbname + "reducedRules",
           JSON.stringify(reducedRules));
       }, function(error) {
         console.log("Error retrieving precedence rules.", error);
       });
 
     // Get lexicon for Glosser and organize based on frequency
-    Data.lexicon($rootScope.application.corpus.pouchname).then(function(lexicon) {
+    Data.lexicon($rootScope.application.corpus.dbname).then(function(lexicon) {
       var sortedLexicon = {};
       for (var i in lexicon) {
         if (lexicon[i].key.gloss) {
@@ -512,7 +512,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         sortedLexicon[key].sort(sorter);
       }
       localStorage.setItem(
-        $rootScope.application.corpus.pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+        $rootScope.application.corpus.dbname + "lexiconResults", JSON.stringify(sortedLexicon));
     }, processServerContactError);
   };
 
@@ -528,7 +528,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo.username = loginDetails.username.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
     $rootScope.loginInfo.brand = $rootScope.application.brand;
-    $rootScope.loginInfo.couchConnection = $rootScope.application.connection;
+    $rootScope.loginInfo.connection = $rootScope.application.connection;
 
     // if (auth.user === "senhorzinho") {
     //   var r = confirm("Hello, developer! Would you like to enter developer mode?");
@@ -562,8 +562,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Update saved state in Preferences
     updateAndOverwritePreferencesToCurrentVersion();
 
-    // if ($rootScope.application.authentication.user.mostRecentIds && $rootScope.application.authentication.user.mostRecentIds.couchConnection && $rootScope.application.authentication.user.mostRecentIds.couchConnection.dbname) {
-    //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.couchConnection);
+    // if ($rootScope.application.authentication.user.mostRecentIds && $rootScope.application.authentication.user.mostRecentIds.connection && $rootScope.application.authentication.user.mostRecentIds.connection.dbname) {
+    //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.connection);
     // } else {
     // }
     $scope.documentReady = true;
@@ -636,35 +636,35 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadUsersAndRoles();
   };
 
-  $scope.selectCorpus = function(selectedCorpusConnection) {
-    if (!selectedCorpusConnection) {
+  $scope.selectCorpus = function(selectedConnection) {
+    if (!selectedConnection) {
       $rootScope.notificationMessage = "Please select a database.";
       $rootScope.openNotification();
       return;
     }
-    if (typeof selectedCorpusConnection === "string") {
-      selectedCorpusConnection = {
-        dbname: selectedCorpusConnection
+    if (typeof selectedConnection === "string") {
+      selectedConnection = {
+        dbname: selectedConnection
       };
     }
-    selectedCorpusConnection.dbname = selectedCorpusConnection.dbname || selectedCorpusConnection.pouchname;
-    if (!selectedCorpusConnection.dbname) {
-      console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedCorpusConnection);
+    selectedConnection.dbname = selectedConnection.dbname || selectedConnection.dbname;
+    if (!selectedConnection.dbname) {
+      console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedConnection);
       return;
     }
-    if ($rootScope.application.corpus && $rootScope.application.corpus.dbname !== selectedCorpusConnection.dbname) {
-      console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedCorpusConnection.dbname);
+    if ($rootScope.application.corpus && $rootScope.application.corpus.dbname !== selectedConnection.dbname) {
+      console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedConnection.dbname);
     }
-    if ($scope.corpora && $scope.corpora[selectedCorpusConnection.pouchname]) {
-      $rootScope.application.corpus = $scope.corpora[selectedCorpusConnection.pouchname];
+    if ($scope.corpora && $scope.corpora[selectedConnection.dbname]) {
+      $rootScope.application.corpus = $scope.corpora[selectedConnection.dbname];
       return;
     }
 
     $rootScope.application.corpus = new FieldDB.Corpus();
-    $rootScope.application.corpus.loadOrCreateCorpusByPouchName(selectedCorpusConnection.pouchname).then(function(results) {
+    $rootScope.application.corpus.loadOrCreateCorpusByPouchName(selectedConnection.dbname).then(function(results) {
       console.log("loaded the corpus", results);
       $scope.corpora.add($rootScope.application.corpus);
-      selectedCorpusConnection.parent = $rootScope.application.corpus;
+      selectedConnection.parent = $rootScope.application.corpus;
 
       $scope.addActivity([{
         verb: "opened ",
@@ -731,7 +731,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     // Save session record to all its datum
     $rootScope.application.corpus.currentSession.save().then(function() {
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
@@ -778,7 +778,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (debugging) {
           console.log(response);
         }
-        var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+        var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
         $scope.addActivity([{
           verb: "deleted",
           verbicon: "icon-trash",
@@ -817,7 +817,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSession.user = $rootScope.application.authentication.user.userMask;
     newSession.save().then(function() {
 
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "added",
         verbicon: "icon-pencil",
@@ -869,7 +869,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       var r = confirm("Are you sure you want to put this datum in the trash?");
       if (r === true) {
 
-        Data.async($rootScope.application.corpus.pouchname, datum.id)
+        Data.async($rootScope.application.corpus.dbname, datum.id)
           .then(function(recordToMarkAsDeleted) {
             recordToMarkAsDeleted.trashed = "deleted";
             var rev = recordToMarkAsDeleted._rev;
@@ -878,13 +878,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (recordToMarkAsDeleted.attachmentInfo) {
               delete recordToMarkAsDeleted.attachmentInfo;
             }
-            Data.saveCouchDoc($rootScope.application.corpus.pouchname, recordToMarkAsDeleted)
+            Data.saveCouchDoc($rootScope.application.corpus.dbname, recordToMarkAsDeleted)
               .then(function(response) {
                 // Remove record from scope
                 if (debugging) {
                   console.log(response);
                 }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+                var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
                 $scope.addActivity([{
                   verb: "deleted",
                   verbicon: "icon-trash",
@@ -1019,19 +1019,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       datum.modifiedByUser.users.push(modifiedByUser);
 
       // Update activity feed
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "personal"
       }, {
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.pouchname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }]);
@@ -1124,7 +1124,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         utteranceForActivityFeed = recordToBeSaved.utterance;
       }
 
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       var activities = [{
         verb: "added",
         verbicon: "icon-plus",
@@ -1153,7 +1153,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
 
       $scope.saved = "saving";
-      recordToBeSaved.pouchname = $rootScope.application.corpus.pouchname;
+      recordToBeSaved.dbname = $rootScope.application.corpus.dbname;
       // spreadsheetDatum.dateModified =
       // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
       promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
@@ -1162,7 +1162,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       promiseToSaveThisDatum
         .then(function(spreadSheetDatum) {
           spreadSheetDatum.saved = "yes";
-          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.application.corpus.pouchname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
+          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
           $scope.addActivity(activities, "uploadnow");
         }, function(reason) {
           console.log(reason);
@@ -1267,19 +1267,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.application.corpus.save($rootScope.application.authentication.user).then(function(result) {
       console.log("Saved corpus details ", result);
       $scope.updateAvailableFieldsInColumns();
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-cloud",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "personal"
       }, {
         verb: "modified",
         verbicon: "icon-pencil",
         directobjecticon: "icon-cloud",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a> ",
+        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a> ",
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }], "uploadnow");
@@ -1483,7 +1483,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if ($scope.activities[index]) {
           var activitydb;
           if ($scope.activities[index].teamOrPersonal === "team") {
-            activitydb = $rootScope.application.corpus.pouchname + "-activity_feed";
+            activitydb = $rootScope.application.corpus.dbname + "-activity_feed";
           } else {
             activitydb = $rootScope.application.authentication.user.username + "-activity_feed";
           }
@@ -1568,10 +1568,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       .then(function(response) {
 
         // Add new corpus to scope
-        var newCorpusConnection = {};
-        newCorpusConnection.pouchname = response.corpus.pouchname;
-        newCorpusConnection.title = response.corpus.title;
-        var directObjectString = "<a href='#corpus/" + response.corpus.pouchname + "'>" + response.corpus.title + "</a>";
+        var newConnection = {};
+        newConnection.dbname = response.corpus.dbname;
+        newConnection.title = response.corpus.title;
+        var directObjectString = "<a href='#corpus/" + response.corpus.dbname + "'>" + response.corpus.title + "</a>";
         $scope.addActivity([{
           verb: "added",
           verbicon: "icon-plus",
@@ -1582,8 +1582,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }], "uploadnow");
 
         alert("todo test this");
-        $rootScope.application.authentication.user.corpora.unshift(newCorpusConnection);
-        $scope.selectCorpus(newCorpusConnection);
+        $rootScope.application.authentication.user.corpora.unshift(newConnection);
+        $scope.selectCorpus(newConnection);
         $rootScope.loading = false;
         reRouteUser("");
       }, processServerContactError);
@@ -1595,7 +1595,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("strangely the user isnt defined, or ready right now.");
       return;
     }
-    if ($scope.loadedPermissionsForTeam === $rootScope.application.corpus.pouchname) {
+    if ($scope.loadedPermissionsForTeam === $rootScope.application.corpus.dbname) {
       console.log("already loaded permissions for this team");
       return;
     }
@@ -1628,17 +1628,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $rootScope.readPermissions = false;
         $rootScope.writePermissions = false;
         $rootScope.commentPermissions = false;
-        $scope.loadedPermissionsForTeam = $rootScope.application.corpus.pouchname;
-        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_admin") > -1) {
+        $scope.loadedPermissionsForTeam = $rootScope.application.corpus.dbname;
+        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.dbname + "_admin") > -1) {
           $rootScope.adminPermissions = true;
         }
-        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_reader") > -1) {
+        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.dbname + "_reader") > -1) {
           $rootScope.readPermissions = true;
         }
-        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_writer") > -1) {
+        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.dbname + "_writer") > -1) {
           $rootScope.writePermissions = true;
         }
-        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.pouchname + "_commenter") > -1) {
+        if ($rootScope.application.authentication.user.roles.indexOf($rootScope.application.corpus.dbname + "_commenter") > -1) {
           $rootScope.commentPermissions = true;
         }
         if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
@@ -1712,7 +1712,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         break;
     }
 
-    newUserRoles.pouchname = $rootScope.application.corpus.pouchname;
+    newUserRoles.dbname = $rootScope.application.corpus.dbname;
 
     var dataToPost = {};
     dataToPost.username = $rootScope.application.authentication.user.username.trim();
@@ -1725,7 +1725,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (debugging) {
           console.log(response);
         }
-        var indirectObjectString = "on <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a> as " + rolesString;
+        var indirectObjectString = "on <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a> as " + rolesString;
 
         $scope.loadedPermissionsForTeam = "";
         $scope.loadUsersAndRoles();
@@ -1778,7 +1778,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       dataToPost.username = $rootScope.application.authentication.user.username.trim();
       dataToPost.password = $rootScope.loginInfo.password.trim();
       dataToPost.serverCode = $rootScope.application.brand;
-      dataToPost.pouchname = $rootScope.application.corpus.pouchname;
+      dataToPost.dbname = $rootScope.application.corpus.dbname;
 
       dataToPost.users = [{
         username: userid,
@@ -1793,7 +1793,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }
           $scope.loadedPermissionsForTeam = "";
           $scope.loadUsersAndRoles();
-          var indirectObjectString = roles.join(" ") + "access from <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+          var indirectObjectString = roles.join(" ") + "access from <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
           $scope.addActivity([{
             verb: "removed",
             verbicon: "icon-remove-sign",
@@ -1907,7 +1907,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (r === true) {
       var record = datum.id + "/" + filename;
       console.log(record);
-      Data.async($rootScope.application.corpus.pouchname, datum.id)
+      Data.async($rootScope.application.corpus.dbname, datum.id)
         .then(function(originalRecord) {
           // mark as trashed in scope
           var inDatumAudioFiles = false;
@@ -1933,13 +1933,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             delete originalRecord.attachmentInfo;
           }
           // console.log(originalRecord);
-          Data.saveCouchDoc($rootScope.application.corpus.pouchname, originalRecord)
+          Data.saveCouchDoc($rootScope.application.corpus.dbname, originalRecord)
             .then(function(response) {
               console.log("Saved attachment as trashed.");
               if (debugging) {
                 console.log(response);
               }
-              var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.pouchname + "'>" + $rootScope.application.corpus.title + "</a>";
+              var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
               $scope.addActivity([{
                 verb: "deleted",
                 verbicon: "icon-trash",
@@ -1957,7 +1957,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               }], "uploadnow");
 
               // Dont actually let users delete data...
-              // Data.async($rootScope.application.corpus.pouchname, datum.id)
+              // Data.async($rootScope.application.corpus.dbname, datum.id)
               // .then(function(record) {
               //   // Delete attachment info for deleted record
               //   for (var key in record.attachmentInfo) {
@@ -1965,7 +1965,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               //       delete record.attachmentInfo[key];
               //     }
               //   }
-              //   Data.saveCouchDoc($rootScope.application.corpus.pouchname, datum.id, record, record._rev)
+              //   Data.saveCouchDoc($rootScope.application.corpus.dbname, datum.id, record, record._rev)
               // .then(function(response) {
               //     if (datum.audioVideo.length === 0) {
               //       datum.hasAudio = false;
