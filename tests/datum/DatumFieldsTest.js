@@ -18,11 +18,11 @@ describe("lib/DatumFields", function() {
     var collection;
 
     beforeEach(function() {
-      // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
         collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
       });
+      collection.debug("beforeEach");
     });
 
     it("should construct using options", function() {
@@ -40,7 +40,7 @@ describe("lib/DatumFields", function() {
           id: "thisIsCamelCase"
         }]
       });
-      // console.log(collection._collection);
+      collection.debug(collection._collection);
       expect(collection.thisIsCamelCase).toBeDefined();
       expect(collection.thisiscamelcase).toBeDefined();
       expect(collection._collection.length).toEqual(1);
@@ -208,7 +208,7 @@ describe("lib/DatumFields", function() {
 
     it("should seem like an array when serialized using both the canonical JSON.stringify", function() {
       var asStringified = JSON.stringify(collection);
-      // console.log(asStringified);
+      collection.debug(asStringified);
       expect(JSON.parse(asStringified)[2].type).toEqual("date");
       expect(JSON.parse(asStringified)[0].type).toEqual(collectionToLoad[0].type);
       expect(JSON.parse(asStringified)[1].value).toEqual(collectionToLoad[1].value);
@@ -329,7 +329,7 @@ describe("lib/DatumFields", function() {
       expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
       expect(field.value).toBe("xxxx-xx xxxx-xxx-xxx-xx");
       expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
-      // console.log(field.toJSON());
+      field.debug(field.toJSON());
     });
 
   });

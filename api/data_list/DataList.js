@@ -31,8 +31,8 @@ var DataList = function DataList(options) {
   }
   this.debug("Constructing DataList ", options);
   if (options && options.comments) {
-    // console.log("DataList comments", options.comments);
-    // console.log("DataList comments", options.comments);
+    // this.debug("DataList comments", options.comments);
+    // this.debug("DataList comments", options.comments);
   }
   FieldDBObject.apply(this, arguments);
 };
@@ -157,11 +157,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           };
         }
         value.primaryKey = this.primaryKey;
-        console.log("setting the docs  : ", value);
+        this.debug("setting the docs  : ", value);
         this.docs = value;
         return this.docs._collection[0];
       }
-      console.log("adding to existing data list", value);
+      this.debug("adding to existing data list", value);
       return this.docs.add(value);
     }
   },

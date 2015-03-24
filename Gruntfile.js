@@ -106,7 +106,7 @@ module.exports = function(grunt) {
           "api/datum/Document.js",
           "api/datum/DocumentCollection.js",
           "api/datum/Response.js",
-          // "api/datum/Session.js",
+          "api/datum/Session.js",
           // "api/datum/Session.js",
           "api/datum/Stimulus.js",
           "api/export/Export.js",
@@ -157,8 +157,8 @@ module.exports = function(grunt) {
           "tests/image/*.js",
           "tests/import/*.js",
           "tests/insert_unicode/*.js",
-          "tests/locales/*.js",
           "tests/lexicon/*.js",
+          "tests/locales/*.js",
           "tests/permission/*.js",
           "tests/search/*.js",
           "tests/user/*.js"

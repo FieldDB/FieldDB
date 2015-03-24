@@ -35,7 +35,7 @@ AudioVideos.prototype = Object.create(Collection.prototype, /** @lends AudioVide
 
   play: {
     value: function(optionalIndexToPlay) {
-      console.log("playing");
+      this.debug("playing collection");
       if (!optionalIndexToPlay) {
         optionalIndexToPlay = 0;
       }

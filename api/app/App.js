@@ -888,7 +888,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           return self;
         });
       } else {
-        console.log("Not fetching corpus, its aleady here.", this.corpus);
+        this.debug("Not fetching corpus, its aleady here.", this.corpus);
       }
     }
   },

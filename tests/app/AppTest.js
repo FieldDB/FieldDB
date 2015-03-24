@@ -121,8 +121,8 @@ describe("App", function() {
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
       expect(processingPromise).toBeDefined();
-      console.log("processingPromise");
-      console.log(processingPromise);
+      // console.log("processingPromise");
+      // console.log(processingPromise);
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
         expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");

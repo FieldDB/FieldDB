@@ -620,7 +620,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
     importer.convertMatrixIntoDataList().then(function() {
       expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
     }, function(reason) {
-      console.log(reason);
+      importer.debug(reason);
       expect(reason).toEqual(" ");
       expect(false).toBeTruthy();
       expect(importer.datalist.docs).toBeDefined();
@@ -693,7 +693,7 @@ describe("Import: as a psycholinguist I want to import a list of participants fr
 
 
       // importer.datalist.docs.map(function(doc) {
-      // //   console.log(doc.fields.map(function(field) {
+      // //   importer.debug(doc.fields.map(function(field) {
       // //     var obj = {}
       // //     obj[field.id] = field.value;
       // //     return obj;

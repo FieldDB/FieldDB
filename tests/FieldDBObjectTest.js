@@ -432,7 +432,7 @@ describe("FieldDBObject", function() {
     it("should not error if it has no render function", function() {
       var app = new FieldDBObject();
       expect(app.render).toBeDefined();
-      console.log(app.render);
+      app.debug(app.render);
       app.render();
       expect(app.warnMessage).toContain("but the render was not injected for this");
     });
@@ -441,7 +441,7 @@ describe("FieldDBObject", function() {
       var app = new FieldDBObject();
       var oldRender = FieldDBObject.render;
       FieldDBObject.render = function() {
-        console.log("I rendered.");
+        this.debug("I rendered.");
       };
       expect(app.render).toBeDefined();
       app.render();
@@ -494,7 +494,7 @@ describe("FieldDBObject", function() {
 
     it("should be possible for client apps to override the bug function", function() {
       FieldDBObject.bug = function(message) {
-        console.log(this.mystuff + " will render this bug message in a user friendly modal or in a error message " + message);
+        this.debug(this.mystuff + " will render this bug message in a user friendly modal or in a error message " + message);
         this.showBugMessage = message;
         this.render();
       };
@@ -773,7 +773,7 @@ describe("FieldDBObject", function() {
     it("should be merge arrays correctly", function(done) {
       var subsetObject = new FieldDBObject({
         _id: "13132",
-        debugMode: true
+        // debugMode: true
       });
       var supersetObject = new FieldDBObject({
         _id: "13132",
@@ -791,7 +791,7 @@ describe("FieldDBObject", function() {
         }],
         internalNumber: 4,
         internalDate: new Date(10),
-        debugMode: true
+        // debugMode: true
       });
       subsetObject.merge("self", supersetObject);
 
