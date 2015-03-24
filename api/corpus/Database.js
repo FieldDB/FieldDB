@@ -210,8 +210,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     value: function(collectionUrl, start, end, limit, reduce, key) {
       // this.todo("Provide pagination ", start, end, limit, reduce);
       var deferred = Q.defer(),
-        self = this,
-        baseUrl;
+        self = this;
 
       if (!collectionUrl) {
         Q.nextTick(function() {
@@ -227,6 +226,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         collectionUrl = self.couchSessionUrl + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", 1000) + key;
       } else if (collectionUrl.indexOf("://") === -1) {
         collectionUrl = self.couchSessionUrl + "/" + collectionUrl;
+      } else {
+        this.warn("Fetching data from a user supplied url", collectionUrl);
       }
 
       if (key) {

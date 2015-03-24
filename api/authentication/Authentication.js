@@ -229,7 +229,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         try {
           window.location.reload();
         } catch (e) {
-          self.debug("Window is undefined", e)
+          self.debug("Window is undefined", e);
         }
       });
     }

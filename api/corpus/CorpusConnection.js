@@ -541,6 +541,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
         console.log("wasnt able to require URL either, this wont work.");
         OptionalURLParser = {
           parse: function(url) {
+            console.warn("Not parsing this url", url);
             return {};
           }
         };
