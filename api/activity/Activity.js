@@ -433,17 +433,17 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
       if (this.fetching) {
         self.warn("Fetching is in process, can't save right now...");
-        Q.nextText(function() {
+        Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return;
+        return whenReady;
       }
       if (this.saving) {
         self.warn("Save was already in process...");
-        Q.nextText(function() {
+        Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return;
+        return whenReady;
       }
       this.saving = true;
 
@@ -454,7 +454,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
       var data = this.toJSON();
-      CORS.makeCORSRequest({
+      this.whenReady = CORS.makeCORSRequest({
           type: this.id ? "PUT" : "POST",
           dataType: "json",
           url: url,

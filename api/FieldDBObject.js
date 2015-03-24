@@ -436,17 +436,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (this.fetching) {
         self.warn("Fetching is in process, can't save right now...");
-        Q.nextText(function() {
+        Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return;
+        return this.whenReady;
       }
       if (this.saving) {
         self.warn("Save was already in process...");
-        Q.nextText(function() {
+        Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return;
+        return this.whenReady;
       }
       this.saving = true;
 
@@ -607,7 +607,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
       var data = this.toJSON();
-      CORS.makeCORSRequest({
+      this.whenReady = CORS.makeCORSRequest({
           type: this.id ? "PUT" : "POST",
           dataType: "json",
           url: url,
@@ -627,12 +627,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             self.debug(reason);
             self.saving = false;
             deferred.reject(reason);
-          })
-        .catch(function(reason) {
-          self.debug(reason);
-          self.saving = false;
-          deferred.reject(reason);
-        });
+          });
 
       return deferred.promise;
     }
@@ -964,7 +959,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       this.fetching = true;
-      CORS.makeCORSRequest({
+      this.whenReady = CORS.makeCORSRequest({
         type: "GET",
         dataType: "json",
         url: optionalUrl

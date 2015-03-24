@@ -282,7 +282,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         encryptedUserPreferences,
         deferred = Q.defer();
 
-      this.savingPromise = deferred.promise;
+      this.whenReady = deferred.promise;
 
       var self = this;
       Q.nextTick(function() {
