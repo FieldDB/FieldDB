@@ -16,7 +16,7 @@
     "titleAsUrl": "",
     "description": "The details of this corpus are not public."
   }],
-  "activityCouchConnection": {
+  "activityConnection": {
     "protocol": "",
     "domain": "",
     "port": "",
@@ -140,7 +140,7 @@
     "corpusid": "",
     "datalistid": "",
     "sessionid": "",
-    "couchConnection": {
+    "connection": {
       "protocol": "",
       "domain": "",
       "port": "",
@@ -160,7 +160,7 @@
     "description": "",
     "filledWithDefaults": true
   },
-  "newCorpusConnections": [{
+  "newCorpora": [{
     "protocol": "",
     "domain": "",
     "port": "",

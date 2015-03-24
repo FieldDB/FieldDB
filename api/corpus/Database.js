@@ -403,22 +403,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
 
   getCouchUrl: {
-    value: function(connection, couchdbcommand) {
-      if (!connection) {
-        connection = this.connection;
-        this.debug("Using the database cconnection", connection);
-      } else {
-        this.debug("Using the connection passed in,", connection, this.connection);
-      }
-      if (!connection) {
-        this.warn("The couch url cannot be guessed. It extrapolated from the url where this app is running.");
-      }
-
-      var couchurl = new Connection(connection).corpusUrl;
-      if (couchdbcommand) {
-        couchurl = couchurl.replace("/" + connection.dbname, couchdbcommand);
-      }
-      return couchurl;
+    value: function() {
+      return this.connectioncorpusUrl;
     }
   },
 
@@ -743,7 +729,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         return;
       }
       self.pouch(function(err, db) {
-        var couchurl = self.getCouchUrl();
+        var couchurl = self.connection.couchUrl;
         if (err) {
           self.debug("Opening db error", err);
           if (typeof failurecallback === "function") {
@@ -787,7 +773,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
 
       self.pouch(function(err, db) {
-        var couchurl = self.getCouchUrl();
+        var couchurl = self.connection.corpusUrl;
         if (err) {
           self.debug("Opening db error", err);
           if (typeof failurecallback === "function") {

@@ -15,7 +15,7 @@ var Diacritics = require("diacritic");
  *
  *
  *
- * @param  {CorpusConnection} optionalRequestedCorpusConnection a object with minimally a dbname
+ * @param  {Connection} optionalRequestedConnection a object with minimally a dbname
  *
  * @param  {string} dbname                 a name space for the database also a url friendly permanent
  *                                         datbase name (composed of a username and an identifier)
@@ -47,15 +47,15 @@ var Diacritics = require("diacritic");
  * @param  {array} lexiconUrls             an array of lexicon urls which can be used with this corpus
  * @param  {array} searchUrls              an array of search urls which can be used with this corpus
  *
- * @name  CorpusConnection
+ * @name  Connection
  * @extends FieldDBObject
  * @constructs
  */
-var CorpusConnection = function CorpusConnection(options) {
+var Connection = function Connection(options) {
   if (!this._fieldDBtype) {
-    this._fieldDBtype = "CorpusConnection";
+    this._fieldDBtype = "Connection";
   }
-  this.debug("Constructing CorpusConnection ", options);
+  this.debug("Constructing Connection ", options);
   if (options) {
     var cleanDefaultValues = ["dbname", "pouchname", "title", "titleAsUrl"];
     cleanDefaultValues.map(function(cleanMe) {
@@ -69,7 +69,7 @@ var CorpusConnection = function CorpusConnection(options) {
 
 
 
-CorpusConnection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
+Connection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
   return {
     "corpusid": "TBA",
     "dbname": options.dbname,
@@ -103,10 +103,10 @@ CorpusConnection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
   };
 };
 
-CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusConnection.prototype */ {
+Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connection.prototype */ {
 
   constructor: {
-    value: CorpusConnection
+    value: Connection
   },
 
   INTERNAL_MODELS: {
@@ -154,7 +154,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
             if (pieces.length !== 2) {
               throw new Error("Database names should be composed of a username-datbaseidentifier" + value);
             }
-            var identifierValidationResults = CorpusConnection.validateIdentifier(pieces[1]);
+            var identifierValidationResults = Connection.validateIdentifier(pieces[1]);
             value = pieces[0] + "-" + identifierValidationResults.identifier;
             if (identifierValidationResults.changes.length > 0) {
               this.warn(" Invalid identifier ", identifierValidationResults.changes.join("\n "));
@@ -337,24 +337,24 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         return "";
       }
 
-      var couchurl = this.protocol + this.domain;
+      var corpusurl = this.protocol + this.domain;
       if (this.port && this.port !== "443" && this.port !== "80") {
-        couchurl = couchurl + ":" + this.port;
+        corpusurl = corpusurl + ":" + this.port;
       }
       var path = this.path || "";
       if (path) {
         path = "/" + path;
       }
-      couchurl = couchurl + path;
-      couchurl = couchurl + "/" + this.dbname;
-      couchurl = couchurl.replace("http://localhost:5984", "https://localhost:6984");
+      corpusurl = corpusurl + path;
+      corpusurl = corpusurl + "/" + this.dbname;
+      corpusurl = corpusurl.replace("http://localhost:5984", "https://localhost:6984");
       /*
        * For debugging cors #838: Switch to use the corsproxy corpus service instead
        * of couchdb directly
        */
-      // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-      this.corpusUrls = [couchurl];
-      return couchurl;
+      // corpusurl = corpusurl.replace(/https/g,"http").replace(/6984/g,"3186");
+      this.corpusUrls = [corpusurl];
+      return corpusurl;
     },
     set: function(value) {
       if (this.corpusUrls && value === this.corpusUrls[0]) {
@@ -414,7 +414,7 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLParser) {
+Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
   var localhost = {
     protocol: "https://",
     domain: "localhost",
@@ -575,7 +575,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
       };
     }
   }
-  connection = new CorpusConnection(connection).toJSON();
+  connection = new Connection(connection).toJSON();
   return connection;
 };
 
@@ -585,7 +585,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF, OptionalURLPars
  * @param  {string} originalIdentifier the desired dbname or username
  * @return {object}                  the resulting dbname or username, the original dbname, and the changes that were applied.
  */
-CorpusConnection.validateIdentifier = function(originalIdentifier) {
+Connection.validateIdentifier = function(originalIdentifier) {
   var identifier = originalIdentifier.toString();
   var changes = [];
   if (identifier.toLowerCase() !== identifier) {
@@ -627,12 +627,12 @@ CorpusConnection.validateIdentifier = function(originalIdentifier) {
 
 /**
  * This is the base schema of a corpus connection, other fields may be added.
- * This schema is used by the API docs, it should be updated as the above newCorpusConnection changes.
+ * This schema is used by the API docs, it should be updated as the above newConnection changes.
  *
  * @type {Object}
  */
-CorpusConnection.baseSchema = {
-  "id": "CouchConnection",
+Connection.baseSchema = {
+  "id": "Connection",
   "properties": {
     "corpusid": {
       "type": "string"
@@ -695,4 +695,4 @@ CorpusConnection.baseSchema = {
 };
 
 
-exports.CorpusConnection = CorpusConnection;
+exports.Connection = Connection;

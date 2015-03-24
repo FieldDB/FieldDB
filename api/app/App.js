@@ -500,6 +500,13 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     }
   },
 
+  renderHelp : function(helptype){
+    if(helptype.indexOf("illustratedguide") >= 0){
+      $("#illustrated_guide_to_dash").modal("show");
+      window.location.href= "#";
+    }
+  },
+
   /**
      * This function is used to save the entire app state that is needed to load when the app is re-opened.
      * http://stackoverflow.com/questions/7794301/window-onunload-is-not-working-properly-in-chrome-browser-can-any-one-help-me

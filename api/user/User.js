@@ -2,8 +2,8 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./UserMask").UserMask;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
-var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
-var CorpusConnections = require("./../corpus/CorpusConnections").CorpusConnections;
+var Connection = require("./../corpus/Connection").Connection;
+var Corpora = require("./../corpus/Corpora").Corpora;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var UserPreference = require("./UserPreference").UserPreference;
 var DEFAULT_USER_MODEL = require("./user.json");
@@ -61,9 +61,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       fields: DatumFields,
       prefs: UserPreference,
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
-      activityCouchConnection: CorpusConnection,
+      activityConnection: Connection,
       authUrl: FieldDBObject.DEFAULT_STRING,
-      corpora: CorpusConnections,
+      corpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
       datalistHistory: FieldDBObject.DEFAULT_ARRAY
     }
@@ -159,8 +159,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
       //   }
       // }
-      if (value && value.couchConnection) {
-        value.corpusConnection = value.couchConnection = new CorpusConnection(value.couchConnection);
+      if (value && value.connection) {
+        value.connection = value.connection = new Connection(value.connection);
       }
       this._mostRecentIds = value;
     }

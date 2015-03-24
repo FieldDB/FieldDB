@@ -108,9 +108,9 @@ describe("Database", function() {
     });
 
     it("should be able to get a default connection", function() {
-      var connection = Database.defaultCouchConnection();
+      var connection = Database.defaultConnection();
       expect(connection).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "localhost",
         port: "6984",
@@ -133,8 +133,8 @@ describe("Database", function() {
       expect(db.toJSON()).toEqual({
         fieldDBtype: "Database",
         dateCreated: db.dateCreated,
-        corpusConnection: {
-          fieldDBtype: "CorpusConnection",
+        connection: {
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "corpus.lingsync.org",
           port: "443",
@@ -174,7 +174,7 @@ describe("Database", function() {
         "description": "The details of this corpus are not public.",
         "titleAsUrl": "lingllama-communitycorpus"
       };
-      db.corpusConnection = connection;
+      db.connection = connection;
       expect(db.couchSessionUrl).toEqual("https://corpus.example.org/_session");
     });
 
@@ -279,8 +279,8 @@ describe("Database", function() {
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.details.corpusConnection).toEqual({
-          fieldDBtype: "CorpusConnection",
+        expect(error.details.connection).toEqual({
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "localhost",
           port: "6984",
@@ -306,8 +306,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
-        expect(error.details.corpusConnection).toEqual({
-          fieldDBtype: "CorpusConnection",
+        expect(error.details.connection).toEqual({
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "auth.linguistics.miauniversity.edu",
           port: "3222",
@@ -332,8 +332,8 @@ describe("Database", function() {
           password: "testtest",
           confirmPassword: "testtest",
           authUrl: "https://localhost:3183",
-          corpusConnection: {
-            fieldDBtype: "CorpusConnection",
+          connection: {
+            fieldDBtype: "Connection",
             protocol: "https://",
             domain: "localhost",
             port: "6984",

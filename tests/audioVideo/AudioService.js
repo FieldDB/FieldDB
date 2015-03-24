@@ -1,8 +1,8 @@
 /*globals FileReader, CryptoJS, OPrime, Blob, FormData */
 
-var AudioService = function(url, user, corpusConnection, datumid) {
+var AudioService = function(url, user, connection, datumid) {
 
-  this.corpus = corpusConnection;
+  this.corpus = connection;
   this.url = url;
   this.user = user;
   this.datumid = datumid;

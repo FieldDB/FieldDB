@@ -80,33 +80,7 @@ define([
     showDashboard : function() {
       if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
     },
-    /**
-     * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
-     */
-    showDiffs : function(oldrevision, newrevision){
-      var couchConnection = window.app.get("corpus").get("couchConnection");
-      var couchDatabaseUrl = couchConnection.protocol+couchConnection.domain;
-      if(couchConnection.port != null){
-        couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
-      }
-      couchDatabaseUrl = couchDatabaseUrl + couchConnection.path +"/_utils/database.html?"+ couchConnection.dbname;
 
-
-      window.appView.toastUser("We haven't implemented the 'diff' tool yet" +
-      		" (ie, showing the changes, letting you undo changes etc)." +
-      		" We will do it eventually, when it becomes a priority. " +
-      		"<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
-      		"You can vote for it in our issue tracker</a>.  " +
-      		"We use the " +
-      		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
-    },
-
-    renderHelp : function(helptype){
-      if(helptype.indexOf("illustratedguide") >= 0){
-        $("#illustrated_guide_to_dash").modal("show");
-        window.location.href= "#";
-      }
-    },
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
@@ -446,7 +420,7 @@ define([
      */
     showAllDataInSession : function(dbname, id, goal) {
       /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
-      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("couchConnection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("connection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
 
 //    this.hideEverything();
 //    $("#dashboard-view").show();

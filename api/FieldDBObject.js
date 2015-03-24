@@ -1074,6 +1074,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  couchConnection: {
+    get: function() {
+      this.warn("CouchConnection is deprecated, use connection instead");
+      return this.connection;
+    },
+    set: function(value) {
+      this.warn("CouchConnection is deprecated, use connection instead");
+      this.connection = value;
+    }
+  },
+
   version: {
     get: function() {
       return this._version || FieldDBObject.DEFAULT_VERSION;
@@ -1142,6 +1153,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       this._dateModified = value;
     }
+  },
+
+  /**
+   * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
+   */
+  showDiffs: function(oldrevision, newrevision) {
+
+    this.todo("We haven't implemented the 'diff' tool yet" +
+      " (ie, showing the changes, letting you undo changes etc)." +
+      " We will do it eventually, when it becomes a priority. " +
+      "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
+      "You can vote for it in our issue tracker</a>.  " +
+      "We use the " +
+      "<a target='blank' href='" + this.url + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
   },
 
   comments: {
