@@ -5,7 +5,7 @@ var CORS = require("../CORS").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 // var User = require("../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
-var CorpusConnection = require("./CorpusConnection").CorpusConnection;
+var Connection = require("./Connection").Connection;
 
 var Database = function Database(options) {
   if (!this._fieldDBtype) {
@@ -19,7 +19,7 @@ var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=tr
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
-Database.defaultCouchConnection = CorpusConnection.defaultCouchConnection;
+Database.defaultConnection = Connection.defaultConnection;
 
 /**
  * This limit is set to protect apps from requesting huge amounts of data without pagination.
@@ -45,7 +45,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   INTERNAL_MODELS: {
     value: {
-      corpusConnection: CorpusConnection
+      connection: Connection
     }
   },
 
@@ -71,41 +71,30 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
-  corpusConnection: {
+  connection: {
     get: function() {
-      if (this._corpusConnection && this._corpusConnection.parent !== this) {
-        this._corpusConnection.parent = this;
+      if (this._connection && this._connection.parent !== this) {
+        this._connection.parent = this;
       }
-      return this._corpusConnection;
+      return this._connection;
     },
     set: function(value) {
       this.debug("Setting corpus connection ", value);
       if (Object.prototype.toString.call(value) === "[object Object]") {
-        value = new this.INTERNAL_MODELS["corpusConnection"](value);
+        value = new this.INTERNAL_MODELS["connection"](value);
       }
-      this._corpusConnection = value;
-      this._corpusConnection.parent = this;
+      this._connection = value;
+      this._connection.parent = this;
       if (!this.dbname && value.dbname) {
         this.dbname = value.dbname;
       }
     }
   },
 
-  couchConnection: {
-    get: function() {
-      this.warn("couchConnection is deprecated, use corpusConnection instead");
-      return this.corpusConnection;
-    },
-    set: function(value) {
-      this.warn("couchConnection is deprecated, use corpusConnection instead");
-      this.corpusConnection = value;
-    }
-  },
-
   url: {
     get: function() {
-      if (this.corpusConnection && this.corpusConnection.corpusUrl) {
-        return this.corpusConnection.corpusUrl;
+      if (this.connection && this.connection.corpusUrl) {
+        return this.connection.corpusUrl;
       } else {
         if (this.dbname) {
           return this.BASE_DB_URL + "/" + this.dbname;
@@ -115,8 +104,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     set: function(value) {
       this.debug("Setting url  ", value);
 
-      if (!this.corpusConnection) {
-        this.corpusConnection = CorpusConnection.defaultCouchConnection(value);
+      if (!this.connection) {
+        this.connection = Connection.defaultConnection(value);
       }
 
       if (this.dbname && value.indexOf(this.dbname) === -1) {
@@ -124,7 +113,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         value = value + "/" + this.dbname;
       }
 
-      this.corpusConnection.corpusUrl = value;
+      this.connection.corpusUrl = value;
     }
   },
 
@@ -309,10 +298,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     get: function() {
       var couchSessionUrl = this.url;
       if (!couchSessionUrl) {
-        if (this.application && this.application.corpusConnection && this.application.corpusConnection.corpusUrl) {
-          couchSessionUrl = this.application.corpusConnection.corpusUrl;
-        } else if (this.corpusConnection && this.corpusConnection.corpusUrl) {
-          couchSessionUrl = this.corpusConnection.corpusUrl;
+        if (this.application && this.application.connection && this.application.connection.corpusUrl) {
+          couchSessionUrl = this.application.connection.corpusUrl;
+        } else if (this.connection && this.connection.corpusUrl) {
+          couchSessionUrl = this.connection.corpusUrl;
         } else {
           couchSessionUrl = this.BASE_DB_URL;
         }
@@ -384,7 +373,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
         connectionInfo = undefined;
       }
-      // this.todo(" Use CorpusConnection ");
+      // this.todo(" Use Connection ");
       return connectionInfo;
     },
     set: function(value) {
@@ -407,17 +396,27 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete this._connectionInfo;
         }
       }
-      // this.todo(" Use CorpusConnection ");
+      // this.todo(" Use Connection ");
 
     }
   },
 
 
   getCouchUrl: {
-    value: function(couchConnection, couchdbcommand) {
-      var couchurl = new CorpusConnection(couchConnection).corpusUrl;
+    value: function(connection, couchdbcommand) {
+      if (!connection) {
+        connection = this.connection;
+        this.debug("Using the database cconnection", connection);
+      } else {
+        this.debug("Using the connection passed in,", connection, this.connection);
+      }
+      if (!connection) {
+        this.warn("The couch url cannot be guessed. It extrapolated from the url where this app is running.");
+      }
+
+      var couchurl = new Connection(connection).corpusUrl;
       if (couchdbcommand) {
-        couchurl = couchurl.replace("/" + couchConnection.dbname, couchdbcommand);
+        couchurl = couchurl.replace("/" + connection.dbname, couchdbcommand);
       }
       return couchurl;
     }
@@ -458,7 +457,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateIdentifier(details.username);
         if (validateUsername.changes.length > 0) {
           details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
@@ -480,21 +479,21 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               var corpusServersWhichHouseUsersCorpora = [];
               self.todo("move the logic to connect to all the users corpora to the authentication level instead.");
               if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
-                authserverResult.user.corpora.map(function(corpusConnection) {
-                  corpusConnection.dbname = corpusConnection.dbname || corpusConnection.pouchname;
+                authserverResult.user.corpora.map(function(connection) {
+                  connection.dbname = connection.dbname || connection.pouchname;
                   var addThisServerIfNotAlreadyThere = function(url) {
-                    var couchdbSessionUrl = url.replace(corpusConnection.dbname, "_session");
+                    var couchdbSessionUrl = url.replace(connection.dbname, "_session");
                     if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
                       corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
-                    } else if (self.dbname && corpusConnection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+                    } else if (self.dbname && connection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
                       corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
                     }
                   };
 
-                  if (corpusConnection.corpusUrls) {
-                    corpusConnection.corpusUrls.map(addThisServerIfNotAlreadyThere);
+                  if (connection.corpusUrls) {
+                    connection.corpusUrls.map(addThisServerIfNotAlreadyThere);
                   } else {
-                    addThisServerIfNotAlreadyThere(self.getCouchUrl(corpusConnection, "/_session"));
+                    addThisServerIfNotAlreadyThere(self.getCouchUrl(connection, "/_session"));
                   }
 
                 });
@@ -590,8 +589,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (!optionalAuthUrl) {
         if (this.authUrl) {
           optionalAuthUrl = this.authUrl;
-        } else if (this.application && this.application.corpusConnection && this.application.corpusConnection.authUrl) {
-          optionalAuthUrl = this.application.corpusConnection.authUrl;
+        } else if (this.application && this.application.connection && this.application.connection.authUrl) {
+          optionalAuthUrl = this.application.connection.authUrl;
         } else {
           optionalAuthUrl = this.BASE_AUTH_URL;
         }
@@ -661,7 +660,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateIdentifier(details.username);
         if (validateUsername.changes.length > 0) {
           details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
@@ -673,17 +672,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        if (!details.corpusConnection) {
-          if (self.application && self.application.corpusConnection && self.application.corpusConnection.authUrl) {
-            details.corpusConnection = self.application.corpusConnection;
+        if (!details.connection) {
+          if (self.application && self.application.connection && self.application.connection.authUrl) {
+            details.connection = self.application.connection;
           } else {
-            details.corpusConnection = CorpusConnection.defaultCouchConnection(details.authUrl);
+            details.connection = Connection.defaultConnection(details.authUrl);
           }
-          delete details.corpusConnection.dbname;
-          delete details.corpusConnection.pouchname;
-          delete details.corpusConnection.title;
-          delete details.corpusConnection.titleAsUrl;
-          delete details.corpusConnection.corpusUrl;
+          delete details.connection.dbname;
+          delete details.connection.pouchname;
+          delete details.connection.title;
+          delete details.connection.titleAsUrl;
+          delete details.connection.corpusUrl;
         }
 
         if (self.application && self.application.brandLowerCase) {
@@ -730,6 +729,175 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  /**
+   * Synchronize to server and from database.
+   */
+  replicateContinuouslyWithCouch: {
+    value: function(successcallback, failurecallback) {
+      var self = this;
+      if (!self.pouch) {
+        self.debug("Not replicating, no pouch ready.");
+        if (typeof successcallback === "function") {
+          successcallback();
+        }
+        return;
+      }
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          self.debug("Opening db error", err);
+          if (typeof failurecallback === "function") {
+            failurecallback();
+          } else {
+            this.bug("Opening DB error" + JSON.stringify(err));
+            self.debug("Opening DB error" + JSON.stringify(err));
+          }
+        } else {
+          self.debug("Opening db success", db);
+          self.bug("TODO check to see if  needs a slash if replicating with pouch on " + couchurl);
+          self.replicateFromCorpus(db, couchurl, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          }, function() {
+            //turn on to regardless of fail or succeed
+            self.replicateToCorpus(db, couchurl);
+          });
+
+          if (typeof successcallback === "function") {
+            successcallback();
+          }
+        }
+      });
+    }
+  },
+
+  /**
+   * Pull down corpus to offline pouch, if its there.
+   */
+  replicateOnlyFromCorpus: {
+    value: function(connection, successcallback, failurecallback) {
+      var self = this;
+
+      if (!self.pouch) {
+        self.debug("Not replicating, no pouch ready.");
+        if (typeof successcallback === "function") {
+          successcallback();
+        }
+        return;
+      }
+
+      self.pouch(function(err, db) {
+        var couchurl = self.getCouchUrl();
+        if (err) {
+          self.debug("Opening db error", err);
+          if (typeof failurecallback === "function") {
+            failurecallback();
+          } else {
+            self.bug("Opening DB error" + JSON.stringify(err));
+            self.debug("Opening DB error" + JSON.stringify(err));
+          }
+        } else {
+          db.replicate.from(couchurl, {
+            continuous: false
+          }, function(err, response) {
+            self.debug("Replicate from " + couchurl, response, err);
+            if (err) {
+              if (typeof failurecallback === "function") {
+                failurecallback();
+              } else {
+                self.bug("Corpus replicate from error" + JSON.stringify(err));
+                self.debug("Corpus replicate from error" + JSON.stringify(err));
+              }
+            } else {
+              self.debug("Corpus replicate from success", response);
+              if (typeof successcallback === "function") {
+                successcallback();
+              }
+            }
+          });
+        }
+      });
+    }
+  },
+
+  replicateToCorpus: {
+    value: function(db, couchurl, success, failure) {
+      var self = this;
+
+      db.replicate.to(couchurl, {
+        continuous: true
+      }, function(err, response) {
+        self.debug("Replicated to " + couchurl);
+        self.debug(response);
+        self.debug(err);
+        if (err) {
+          self.debug("replicate to db  error", err);
+          if (typeof failure === "function") {
+            failure();
+          } else {
+            self.bug("Database replicate to error" + JSON.stringify(err));
+            self.debug("Database replicate to error" + JSON.stringify(err));
+          }
+        } else {
+          self.debug("Database replicate to success", response);
+          if (typeof success === "function") {
+            success();
+          } else {
+            self.debug("Database replicating" + JSON.stringify(self.connection));
+          }
+
+        }
+      });
+    }
+  },
+
+  replicateFromCorpus: {
+    value: function(db, couchurl, succes, fail) {
+      var self = this;
+
+      db.replicate.from(couchurl, {
+          continuous: true
+        },
+        function(err, response) {
+          self.debug("Replicated from " + couchurl);
+          self.debug(response);
+          self.debug(err);
+          if (err) {
+            self.debug("replicate from db  error", err);
+            if (typeof fail === "function") {
+              fail();
+            } else {
+              self.bug("Database replicate from error" + JSON.stringify(err));
+              self.debug("Database replicate from error" + JSON.stringify(err));
+            }
+          } else {
+            self.debug("Database replicate from success",
+              response);
+            if (typeof succes === "function") {
+              succes();
+            } else {
+              self.debug("Database replicating" + JSON.stringify(self.connection));
+            }
+          }
+        });
+    }
+  },
+
+  /*
+   * This will be the only time the app should open the pouch.
+   */
+  changePouch: {
+    value: function(connection, callback) {
+      if (this.pouch === undefined) {
+        // this.pouch = FieldDBObject.sync.pouch("https://localhost:6984/" + connection.dbname);
+        this.pouch = FieldDBObject.sync.pouch(this.isAndroidApp() ? connection.touchUrl + connection.dbname : connection.pouchUrl + connection.dbname);
+      }
+      if (typeof callback === "function") {
+        callback();
+      }
+    }
+  },
+
   addCorpusRoleToUser: {
     value: function(role, userToAddToCorpus, successcallback, failcallback) {
       this.debug("deprecated ", role, userToAddToCorpus, successcallback, failcallback);
@@ -747,10 +915,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       //     //Send username to limit the requests so only valid users can get a user list
       //     dataToPost.username = this.user.username;
       //     dataToPost.password = $("#quick-authenticate-password").val();
-      //     dataToPost.couchConnection = window.app.get("corpus").get("couchConnection");
-      //     if (!dataToPost.couchConnection.path) {
-      //       dataToPost.couchConnection.path = "";
-      //       window.app.get("corpus").get("couchConnection").path = "";
+      //     dataToPost.connection = window.app.get("corpus").get("connection");
+      //     if (!dataToPost.connection.path) {
+      //       dataToPost.connection.path = "";
+      //       window.app.get("corpus").get("connection").path = "";
       //     }
       //     dataToPost.roles = [role];
       //     dataToPost.userToAddToRole = userToAddToCorpus.username;
