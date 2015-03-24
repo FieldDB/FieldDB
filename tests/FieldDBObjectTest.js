@@ -154,95 +154,115 @@ describe("FieldDBObject", function() {
       });
     });
 
-    it("should not clone id and rev", function() {
-      expect(penguin.rev).toEqual("2-123");
-      var babypenguin = penguin.clone();
-      expect(penguin.rev).toEqual("2-123");
-      expect(babypenguin.rev).toBeUndefined();
-    });
+    describe("cloning and minimal pairs", function() {
 
-    it("should clone objects deeply", function() {
-      expect(penguin.body).toBe(body);
-      var babypenguin = penguin.clone();
-
-      expect(babypenguin.body).not.toBe(body);
-      expect(babypenguin.body).toEqual(body);
-
-      penguin.body.beak = "yellow";
-      expect(penguin.body.beak).toEqual("yellow");
-      expect(babypenguin.body.beak).toBeUndefined();
-    });
-
-
-    it("should clone objects recursively", function() {
-      var datumTypeThing = new FieldDBObject({
-        _id: "82u398jaeoiajwo3a",
-        _rev: "8-ojqa3ja0eios09k3aw",
-        utterance: "noqata tusunaywanmi",
-        translation: "I feel like dancing",
-        sessionTypeThing: new FieldDBObject({
-          _id: "9a0j0ejoi32jo",
-          _rev: "29-903jaoijoiw3ajow",
-          page: "34",
-          publisher: "MITWPL",
-          speakerTypeThing: new FieldDBObject({
-            _id: "yuioiuni98y932",
-            _rev: "3-i3orj0jw203j",
-            fields: []
-          })
-        })
+      it("should not clone id and rev", function() {
+        expect(penguin.rev).toEqual("2-123");
+        var babypenguin = penguin.clone();
+        expect(penguin.rev).toEqual("2-123");
+        expect(babypenguin.rev).toBeUndefined();
       });
 
-      var clonedParentForMinimalPairs = datumTypeThing.clone();
-      expect(clonedParentForMinimalPairs).toEqual({
-        fieldDBtype: "FieldDBObject",
-        utterance: "noqata tusunaywanmi",
-        translation: "I feel like dancing",
-        sessionTypeThing: {
+      it("should clone objects deeply", function() {
+        expect(penguin.body).toBe(body);
+        var babypenguin = penguin.clone();
+
+        expect(babypenguin.body).not.toBe(body);
+        expect(babypenguin.body).toEqual(body);
+
+        penguin.body.beak = "yellow";
+        expect(penguin.body.beak).toEqual("yellow");
+        expect(babypenguin.body.beak).toBeUndefined();
+      });
+
+
+      it("should clone objects recursively", function() {
+        var datumTypeThing = new FieldDBObject({
+          _id: "82u398jaeoiajwo3a",
+          _rev: "8-ojqa3ja0eios09k3aw",
+          utterance: "noqata tusunaywanmi",
+          translation: "I feel like dancing",
+          sessionTypeThing: new FieldDBObject({
+            _id: "9a0j0ejoi32jo",
+            _rev: "29-903jaoijoiw3ajow",
+            page: "34",
+            publisher: "MITWPL",
+            speakerTypeThing: new FieldDBObject({
+              _id: "yuioiuni98y932",
+              _rev: "3-i3orj0jw203j",
+              fields: []
+            })
+          })
+        });
+
+        var clonedParentForMinimalPairs = datumTypeThing.clone();
+        expect(clonedParentForMinimalPairs).toEqual({
           fieldDBtype: "FieldDBObject",
-          page: "34",
-          publisher: "MITWPL",
-          speakerTypeThing: {
+          utterance: "noqata tusunaywanmi",
+          translation: "I feel like dancing",
+          sessionTypeThing: {
             fieldDBtype: "FieldDBObject",
-            fields: [],
+            page: "34",
+            publisher: "MITWPL",
+            speakerTypeThing: {
+              fieldDBtype: "FieldDBObject",
+              fields: [],
+              version: datumTypeThing.version,
+              relatedData: [{
+                URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
+                relation: "clonedFrom"
+              }]
+            },
             version: datumTypeThing.version,
             relatedData: [{
-              URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
+              URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
               relation: "clonedFrom"
             }]
           },
           version: datumTypeThing.version,
           relatedData: [{
-            URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
+            URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
             relation: "clonedFrom"
           }]
-        },
-        version: datumTypeThing.version,
-        relatedData: [{
-          URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
+        });
+
+      });
+
+      it("should not effect clone if original object is changed", function() {
+        var adatum = new FieldDBObject({
+          "tags": "apositive",
+          fields: [new FieldDBObject({
+            id: "judgement",
+            value: "#"
+          }), new FieldDBObject({
+            id: "utterance",
+            value: "noqata tusunayawanmi"
+          })]
+        });
+        var aminimalPair = adatum.clone();
+
+        aminimalPair.fields[1].value = "noqata tusunayami";
+        aminimalPair.fields[0].value = "*";
+
+        expect(adatum.fields[0].value).toEqual("#");
+        expect(aminimalPair.fields[0].value).toEqual("*");
+
+        adatum.fields[1].value = "noqata tusunayawaanmi";
+
+        expect(adatum.fields[1].value).toEqual("noqata tusunayawaanmi");
+        expect(aminimalPair.fields[1].value).toEqual("noqata tusunayami");
+      });
+
+      it("should add a new linked data to the original", function() {
+        var babypenguin = penguin.clone();
+
+        expect(babypenguin.relatedData).toEqual([{
+          URI: "firstPenguin?rev=2-123",
           relation: "clonedFrom"
-        }]
+        }]);
       });
 
     });
-
-    it("should not effect clone if original object is changed", function() {
-      var babypenguin = penguin.clone();
-      penguin.body.beak = "yellow";
-
-      expect(penguin.body.beak).toEqual("yellow");
-      expect(babypenguin.body.beak).toBeUndefined();
-    });
-
-    it("should add a new linked data to the original", function() {
-      var babypenguin = penguin.clone();
-
-      expect(babypenguin.relatedData).toEqual([{
-        URI: "firstPenguin?rev=2-123",
-        relation: "clonedFrom"
-      }]);
-    });
-
   });
 
   describe("persisance", function() {

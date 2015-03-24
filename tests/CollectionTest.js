@@ -306,7 +306,23 @@ describe("lib/Collection", function() {
       })).toEqual(["green", "orange", "green", "orange"]);
     });
 
+
+    it("should provide map on its internal collection", function() {
+      expect(collection.map).toBeDefined();
+      expect(collection.map(function(item) {
+        return item.validationStatus;
+      })).toEqual(["Checked*", "Published*", "ToBeChecked*", "ApprovedLanguageLearningContent*", "ContributedLanguageLearningContent*", "Deleted*", "Duplicate*"]);
+    });
+
+  });
+
+  describe("cloning and minimal pairs", function() {
     it("should be able to clone an existing collection", function() {
+      var collection = new Collection({
+        primaryKey: "validationStatus",
+        collection: useDefaults(),
+        capitalizeFirstCharacterOfPrimaryKeys: true
+      });
       var newbarecollection = collection.clone();
       expect(newbarecollection.map(removeFieldDBFields)).toEqual(useDefaults());
       var newcollection = new Collection({
@@ -322,11 +338,32 @@ describe("lib/Collection", function() {
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
-    it("should provide map on its internal collection", function() {
-      expect(collection.map).toBeDefined();
-      expect(collection.map(function(item) {
-        return item.validationStatus;
-      })).toEqual(["Checked*", "Published*", "ToBeChecked*", "ApprovedLanguageLearningContent*", "ContributedLanguageLearningContent*", "Deleted*", "Duplicate*"]);
+
+    it("should not effect clone if original object is changed", function() {
+      var adatum = new FieldDBObject({
+        "tags": "apositive"
+      });
+      adatum.fields = new Collection([{
+        id: "judgement",
+        value: "#"
+      }, {
+        id: "utterance",
+        value: "noqata tusunayawanmi"
+      }]);
+
+      var aminimalPair = adatum.clone();
+
+      console.log("  aminimalPair.fields1 ", aminimalPair.fields[1]);
+      aminimalPair.fields[1].value = "noqata tusunayami";
+      aminimalPair.fields[0].value = "*";
+
+      expect(adatum.fields.judgement.value).toEqual("#");
+      expect(aminimalPair.fields[0].value).toEqual("*");
+
+      adatum.fields.utterance.value = "noqata tusunayawaanmi";
+
+      expect(adatum.fields.utterance.value).toEqual("noqata tusunayawaanmi");
+      expect(aminimalPair.fields[1].value).toEqual("noqata tusunayami");
     });
 
   });

@@ -692,13 +692,22 @@ Collection.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
-      var json;
+      var json,
+        self = this;
       try {
         json = JSON.parse(JSON.stringify(this.toJSON()));
       } catch (e) {
         console.warn(e.stack);
         this.bug("There was a problem cloning this collection", e);
       }
+      json = json.map(function(item) {
+        if (typeof item.clone === "function") {
+          self.debug("This item has a clone, which we will call instead");
+          return JSON.parse(JSON.stringify(item.clone()));
+        } else {
+          return item;
+        }
+      });
 
       return json;
     }
