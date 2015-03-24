@@ -9,15 +9,15 @@ document.addEventListener("authenticated", function() {
     FieldDB.FieldDBObject.application.website = "http://example.org";
     FieldDB.FieldDBObject.application.faq = "http://app.example.org/#/faq";
 
-    FieldDB.FieldDBObject.application.connections = new FieldDB.CorpusConnections({
+    FieldDB.FieldDBObject.application.connections = new FieldDB.Corpora({
       primaryKey: "serverlabel"
     });
 
     if (window.location.host.indexOf("localhost") > -1) {
-      FieldDB.FieldDBObject.application.connections.add(FieldDB.CorpusConnection.defaultCouchConnection("localhost"));
+      FieldDB.FieldDBObject.application.connections.add(FieldDB.Connection.defaultConnection("localhost"));
     }
-    FieldDB.FieldDBObject.application.connections.add(FieldDB.CorpusConnection.defaultCouchConnection("example"));
-    // FieldDB.FieldDBObject.application.connections.Example_Beta = FieldDB.CorpusConnection.defaultCouchConnection();
+    FieldDB.FieldDBObject.application.connections.add(FieldDB.Connection.defaultConnection("example"));
+    // FieldDB.FieldDBObject.application.connections.Example_Beta = FieldDB.Connection.defaultConnection();
     FieldDB.FieldDBObject.application.connection = FieldDB.FieldDBObject.application.connections.example;
   } else {
     console.warn("FieldDB library is not available. the application won't behave normally. Please notify us.");

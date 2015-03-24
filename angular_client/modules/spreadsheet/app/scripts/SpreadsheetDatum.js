@@ -11,7 +11,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   var j,
     fieldKeyName = "label";
 
-  spreadsheetDatum.pouchname = fieldDBDatum.pouchname;
+  spreadsheetDatum.dbname = fieldDBDatum.dbname;
   spreadsheetDatum.id = fieldDBDatum._id;
   spreadsheetDatum.rev = fieldDBDatum._rev;
 
@@ -186,7 +186,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     fieldKeyName = "label",
     i;
 
-  if (fieldDBDatum._id && fieldDBDatum.pouchname !== spreadsheetDatum.pouchname) {
+  if (fieldDBDatum._id && fieldDBDatum.dbname !== spreadsheetDatum.dbname) {
     throw ("This record belongs to another corpus.");
   }
   console.log(fieldDBDatum);
@@ -226,7 +226,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     }
 
     /* If the key isnt empty, and it wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
-    if (spreadsheetDatum[key] !== undefined && !spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "markAsNeedsToBeSaved" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "pouchname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
+    if (spreadsheetDatum[key] !== undefined && !spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "markAsNeedsToBeSaved" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "dbname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
       fieldDBDatum.datumFields.push({
         "label": key,
@@ -264,7 +264,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   // fieldDBDatum.lastModifiedBy = spreadsheetDatum.lastModifiedBy;
   fieldDBDatum.timestamp = spreadsheetDatum.timestamp;
   fieldDBDatum.session = spreadsheetDatum.session;
-  fieldDBDatum.pouchname = spreadsheetDatum.pouchname;
+  fieldDBDatum.dbname = spreadsheetDatum.dbname;
   fieldDBDatum.dateEntered = spreadsheetDatum.dateEntered;
 
 
