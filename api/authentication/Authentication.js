@@ -6,7 +6,7 @@ var Database = require("./../corpus/Database").Database;
 var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
-var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
+var Connection = require("./../corpus/Connection").Connection;
 var CORS = require("./../CORS").CORS;
 /**
  * @class The Authentication Model handles login and logout and
@@ -361,7 +361,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           return;
         }
 
-        var validateUsername = CorpusConnection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateIdentifier(details.username);
         if (validateUsername.changes.length > 0) {
           details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));

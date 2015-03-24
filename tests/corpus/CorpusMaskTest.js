@@ -1,6 +1,6 @@
 var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
-var CorpusConnection = require("../../api/corpus/CorpusConnection").CorpusConnection;
-var CorpusConnections = require("../../api/corpus/CorpusConnections").CorpusConnections;
+var Connection = require("../../api/corpus/Connection").Connection;
+var Corpora = require("../../api/corpus/Corpora").Corpora;
 var URL = require("url");
 
 describe("CorpusMask ", function() {
@@ -39,9 +39,9 @@ describe("CorpusMask ", function() {
       termsOfUse: {},
       license: {},
       copyright: "",
-      corpusConnection: {
-        fieldDBtype: "CorpusConnection",
-        dateCreated: corpusJson.corpusConnection.dateCreated,
+      connection: {
+        fieldDBtype: "Connection",
+        dateCreated: corpusJson.connection.dateCreated,
         version: currentVersion,
         corpusid: "",
         titleAsUrl: "",
@@ -89,9 +89,9 @@ describe("CorpusMask ", function() {
       accuracy: 0
     });
 
-    expect(corpus.corpusConnection.dbname).toEqual("jenkins-anothercorpus");
-    expect(corpus.corpusConnection.titleAsUrl).toEqual("private_corpus");
-    expect(corpus.corpusConnection.owner).toEqual("jenkins");
+    expect(corpus.connection.dbname).toEqual("jenkins-anothercorpus");
+    expect(corpus.connection.titleAsUrl).toEqual("private_corpus");
+    expect(corpus.connection.owner).toEqual("jenkins");
 
     expect(corpus.termsOfUse).toEqual({
       "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
@@ -129,7 +129,7 @@ describe("CorpusMask ", function() {
 describe("corpus collections", function() {
 
   it("should be able to set an auth url", function() {
-    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection(null, URL));
+    var connection = new Connection(Connection.defaultConnection(null, URL));
     expect(connection.authUrls).toEqual(["https://localhost:3183"]);
     expect(connection.authUrl).toEqual("https://localhost:3183");
 
@@ -158,7 +158,7 @@ describe("corpus collections", function() {
   });
 
   it("should be able to figure out a corpus url", function() {
-    var connection = new CorpusConnection(CorpusConnection.defaultCouchConnection(null, URL));
+    var connection = new Connection(Connection.defaultConnection(null, URL));
     connection.dbname = "jenkins-firstname";
     expect(connection.corpusUrls).toBeUndefined();
     expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
@@ -190,9 +190,9 @@ describe("corpus collections", function() {
   });
 
   it("should be able to get a default connection", function() {
-    var connection = CorpusConnection.defaultCouchConnection(null, URL);
+    var connection = Connection.defaultConnection(null, URL);
     expect(connection).toEqual({
-      fieldDBtype: "CorpusConnection",
+      fieldDBtype: "Connection",
       protocol: "https://",
       domain: "localhost",
       port: "6984",
@@ -210,7 +210,7 @@ describe("corpus collections", function() {
   });
 
   it("should be able to get a couch url from a deprecated connection", function() {
-    var connection = new CorpusConnection({
+    var connection = new Connection({
       "protocol": "https://",
       "domain": "corpus.example.org",
       "port": "443",
@@ -227,8 +227,8 @@ describe("corpus collections", function() {
   });
 
   it("should be able to extract a connection from a mask", function() {
-    expect(CorpusConnections).toBeDefined();
-    var corpora = new CorpusConnections();
+    expect(Corpora).toBeDefined();
+    var corpora = new Corpora();
     expect(corpora).toBeDefined();
 
     var corpus = new CorpusMask({
@@ -236,7 +236,7 @@ describe("corpus collections", function() {
       _rev: "3-56789fghj5678dfgh567fghjtyu456",
       title: "Group Data Entry tutorial"
     });
-    corpus.corpusConnection = {
+    corpus.connection = {
       "protocol": "https://",
       "domain": "corpus.example.org",
       "port": "443",
@@ -249,17 +249,17 @@ describe("corpus collections", function() {
       "description": "The details of this corpus are not public.",
       "titleAsUrl": "computatio____entry_tutoria"
     };
-    expect(corpus.corpusConnection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
+    expect(corpus.connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
 
-    expect(corpus.corpusConnection.toJSON().title).toEqual(corpus.title);
-    expect(corpus.corpusConnection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
-    expect(corpus.corpusConnection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
+    expect(corpus.connection.toJSON().title).toEqual(corpus.title);
+    expect(corpus.connection.toJSON().pouchname).toEqual(corpus.connection.pouchname);
+    expect(corpus.connection.toJSON().dbname).toEqual(corpus.connection.pouchname);
 
     //if the parent dbname changes, so should the corpus connection
     var duplicatedCorpus = corpus.clone();
     duplicatedCorpus = new CorpusMask(duplicatedCorpus);
     duplicatedCorpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
-    expect(duplicatedCorpus.corpusConnection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
+    expect(duplicatedCorpus.connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
     // connections.push(connection.toJSON("complete"));
 

@@ -182,14 +182,14 @@ define([
           corpusid : c.id,
           datalistid : c.datalists.models[0].id,
           sessionid : c.sessions.models[0].id,
-          couchConnection : c.get("couchConnection")
+          connection : c.get("connection")
         };
         console.log("mostRecentIds", mostRecentIds);
         window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
         window.app.get("authentication").saveAndInterConnectInApp(function(){
           var optionalCouchAppPath= "";
-          if(c.get("couchConnection").dbname){
-             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("couchConnection").dbname);
+          if(c.get("connection").dbname){
+             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("connection").dbname);
           }
           window.location.replace(optionalCouchAppPath+"corpus.html");
           return;
@@ -198,7 +198,7 @@ define([
     bringCorpusToThisDevice : function(corpus, callback) {
       for (var x in window.app.get("authentication").get("userPrivate").get("corpora")){
         if(window.app.get("authentication").get("userPrivate").get("corpora")[x].dbname == corpus.get("dbname")){
-          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
+          corpus.set("connection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){

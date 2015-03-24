@@ -103,8 +103,8 @@ describe("User ", function() {
           unicodes: []
         },
         mostRecentIds: {},
-        activityCouchConnection: {
-          fieldDBtype: "CorpusConnection",
+        activityConnection: {
+          fieldDBtype: "Connection",
           version: u.version,
           corpusid: "",
           titleAsUrl: "",
@@ -161,7 +161,7 @@ describe("User ", function() {
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
       expect(user.authUrl).toEqual("https://auth.lingsync.org");
       expect(user.corpora.toJSON()[0]).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "corpus.lingsync.org",
         port: "443",
@@ -176,7 +176,7 @@ describe("User ", function() {
         titleAsUrl: "cherokee"
       });
       expect(user.corpora.toJSON()[1]).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "corpus.lingsync.org",
         port: "443",

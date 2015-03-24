@@ -747,17 +747,17 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       }
 
       var dataToPost = {
-        corpusConnection: this.parent.corpusConnection.toJSON(),
+        connection: this.parent.connection.toJSON(),
         username: this.application.authentication.user.username,
       };
-      dataToPost.couchConnection = dataToPost.corpusConnection;
+      dataToPost.connection = dataToPost.couchConnection = dataToPost.connection;
 
       this.fetching = true;
       CORS.makeCORSRequest({
         type: "POST",
         data: dataToPost,
         dataType: "json",
-        url: this.parent.corpusConnection.authUrl + "/corpusteam"
+        url: this.parent.connection.authUrl + "/corpusteam"
       }).then(function(result) {
           self.fetching = false;
           self.loaded = true;
