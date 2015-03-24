@@ -232,6 +232,8 @@ describe("corpus collections", function() {
     expect(corpora).toBeDefined();
 
     var corpus = new CorpusMask({
+      _id: "corpus",
+      _rev: "3-56789fghj5678dfgh567fghjtyu456",
       title: "Group Data Entry tutorial"
     });
     corpus.corpusConnection = {
@@ -247,34 +249,18 @@ describe("corpus collections", function() {
       "description": "The details of this corpus are not public.",
       "titleAsUrl": "computatio____entry_tutoria"
     };
-    var connection = corpus.corpusConnection;
-    expect(connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
+    expect(corpus.corpusConnection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
 
-    expect(connection.toJSON().title).toEqual(corpus.title);
-    expect(connection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
-    expect(connection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
+    expect(corpus.corpusConnection.toJSON().title).toEqual(corpus.title);
+    expect(corpus.corpusConnection.toJSON().pouchname).toEqual(corpus.corpusConnection.pouchname);
+    expect(corpus.corpusConnection.toJSON().dbname).toEqual(corpus.corpusConnection.pouchname);
 
     //if the parent dbname changes, so should the corpus connection
-    corpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
-    expect(connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
+    var duplicatedCorpus = corpus.clone();
+    duplicatedCorpus = new CorpusMask(duplicatedCorpus);
+    duplicatedCorpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
+    expect(duplicatedCorpus.corpusConnection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
-    expect(connection.toJSON()).toEqual({
-      fieldDBtype: "CorpusConnection",
-      protocol: "https://",
-      domain: "corpus.example.org",
-      port: "443",
-      dbname: "computationalfieldworkshop-group_data_entry_tutorial_copy",
-      path: "",
-      authUrls: ["https://auth.example.org"],
-      userFriendlyServerName: "Example.org",
-      corpusid: "",
-      title: "Group Data Entry tutorial",
-      description: "The details of this corpus are not public.",
-      titleAsUrl: "group_data_entry_tutorial",
-      version: connection.version,
-      corpusUrls: ["https://corpus.example.org/computationalfieldworkshop-group_data_entry_tutorial"],
-      pouchname: "computationalfieldworkshop-group_data_entry_tutorial_copy"
-    });
     // connections.push(connection.toJSON("complete"));
 
   });
