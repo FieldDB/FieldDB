@@ -369,7 +369,7 @@ describe("lib/Collection", function() {
       // });
 
       var customizedWithTempId = new DocumentCollection({
-        debugMode: true,
+        // debugMode: true,
         collection: [],
         primaryKey: "tempId"
       });
@@ -722,11 +722,11 @@ describe("lib/Collection", function() {
       collection = new Collection({
         collection: collectionToLoad,
         aHellperFunction: function() {
-          console.log("called");
+          this.debug("called");
         }
       });
       collection.anotherHelperFunction = function() {
-        console.log("called");
+        this.debug("called");
       };
     });
 

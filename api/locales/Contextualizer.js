@@ -58,7 +58,7 @@ var Contextualizer = function Contextualizer(options) {
         this.currentLocale = navigator.languages[0];
       }
     } catch (e) {
-      console.log("not using hte browser's language", e);
+      this.warn("not using hte browser's language", e);
     }
   }
   return this;

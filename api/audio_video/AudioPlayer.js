@@ -16,10 +16,10 @@ var AudioPlayer = function AudioPlayer(options) {
     this._fieldDBtype = "AudioPlayer";
   }
   if (this.options) {
-    console.log("AudioPlayer was created with options but it doesnt accept options", options);
+    console.warn("AudioPlayer was created with options but it doesnt accept options", options);
   }
-  console.log(HTML5Audio);
-  console.log(CordovaAudio.play);
+  // console.log(HTML5Audio);
+  // console.log(CordovaAudio.play);
   this.mediaController = new HTML5Audio();
 
   Object.apply(this, arguments);

@@ -17,11 +17,11 @@ describe("Authentication ", function() {
         username: "jenkins",
         password: "phoneme"
       }).then(function(result) {
-        console.log("Done authentication");
+        auth.debug("Done authentication");
         expect(result).toBeDefined();
         expect(result).toEqual(" ");
       }, function(result) {
-        console.log("Failed authentication");
+        auth.debug("Failed authentication");
         expect(result).toBeDefined();
         expect(result.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
@@ -42,11 +42,11 @@ describe("Authentication ", function() {
         password: "phoneme",
         title: "Long distance anaphors in Quechua"
       }).then(function(result) {
-        console.log("Done creating new corpus");
+        auth.debug("Done creating new corpus");
         expect(result).toBeDefined();
         expect(result).toEqual("Cannot be succesful in jasmine-node");
       }, function(error) {
-        console.log("Failed creating new corpus");
+        auth.debug("Failed creating new corpus");
         expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
@@ -62,11 +62,11 @@ describe("Authentication ", function() {
         username: "jenkins",
         title: "Long distance anaphors in Quechua"
       }).then(function(result) {
-        console.log("Done creating new corpus");
+        auth.debug("Done creating new corpus");
         expect(result).toBeDefined();
         expect(result).toEqual("Cannot be succesful in jasmine-node");
       }, function(error) {
-        console.log("Failed creating new corpus");
+        auth.debug("Failed creating new corpus");
         expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toEqual(["You must enter your password to prove that that this is you."]);
       }).done(done);
@@ -82,11 +82,11 @@ describe("Authentication ", function() {
         username: "jenkins",
         password: "phoneme"
       }).then(function(result) {
-        console.log("Done creating new corpus");
+        auth.debug("Done creating new corpus");
         expect(result).toBeDefined();
         expect(result).toEqual("Cannot be succesful in jasmine-node");
       }, function(error) {
-        console.log("Failed creating new corpus");
+        auth.debug("Failed creating new corpus");
         expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toEqual(["Please supply a title for your new corpus."]);
       }).done(done);
@@ -178,11 +178,11 @@ describe("Authentication ", function() {
       password: "phoneme",
       confirmPassword: "phoneme"
     }).then(function(result) {
-      console.log("Done registering");
+      auth.debug("Done registering");
       expect(result).toBeDefined();
       expect(result).toEqual("Cannot be succesful in jasmine-node");
     }, function(error) {
-      console.log("Failed registering");
+      auth.debug("Failed registering");
       expect(error).toBeDefined();
       expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
     }).done(done);

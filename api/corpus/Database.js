@@ -110,7 +110,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
     },
     set: function(value) {
-      console.log("Setting url  ", value);
+      this.debug("Setting url  ", value);
 
       if (!this.corpusConnection) {
         this.corpusConnection = CorpusConnection.defaultCouchConnection(value);

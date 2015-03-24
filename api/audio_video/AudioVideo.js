@@ -84,7 +84,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
 
   play: {
     value: function(optionalStartTime, optionalEndTime, optionalDuration) {
-      console.log("playing", this, optionalStartTime, optionalEndTime, optionalDuration);
+      this.warn("playing", this, optionalStartTime, optionalEndTime, optionalDuration);
       this.audioPlayer = this.audioPlayer || new AudioPlayer();
       this.audioPlayer.play(this.URL);
     }

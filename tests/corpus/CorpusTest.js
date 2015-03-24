@@ -93,17 +93,17 @@ describe("Corpus", function() {
     it("should have default datumFields", function() {
       expect(corpus.datumFields instanceof DatumFields).toBeTruthy();
       expect(corpus.datumFields.constructor === DatumFields);
-      // console.log(corpus.datumFields.utterance);
-      // console.log(corpus.datumFields.toJSON());
+      corpus.debug(corpus.datumFields.utterance);
+      corpus.debug(corpus.datumFields.toJSON());
       expect(corpus.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       expect(corpus.datumFields.clone()).toBeDefined();
     });
 
     it("should create a datum with the datumFields", function(done) {
       corpus.newDatum().then(function(datum) {
+        corpus.debug(datum.toJSON());
         expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       }).then(done, done);
-      // console.log(datum.toJSON());
     }, specIsRunningTooLong);
 
   });
@@ -119,7 +119,7 @@ describe("Corpus", function() {
 
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
-        // console.log(speaker);
+        corpus.debug(speaker);
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
         speaker.fields = [];
@@ -163,13 +163,13 @@ describe("Corpus", function() {
         expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
         expect(speaker.fields.indexOf("lastname")).toEqual(corpus.speakerFields.indexOf("lastname"));
 
+        corpus.debug(speaker.toJSON());
       }).then(done, done);
-      // console.log(speaker.toJSON());
     }, specIsRunningTooLong);
 
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
-        // console.log(speaker);
+        corpus.debug(speaker);
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
         speaker.fields = [];

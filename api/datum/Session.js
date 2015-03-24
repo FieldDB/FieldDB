@@ -543,7 +543,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     set: function(value) {
       if (!this.datalist) {
         this.warn("This should never happen.");
-        this.debugMode = true;
+        // this.debugMode = true;
         var self = this;
         self.datalistUpdatingPromise.done(function() {
           self._datalist.docs = value;

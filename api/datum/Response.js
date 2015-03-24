@@ -56,7 +56,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
       if (audioDuration) {
         audioDuration = audioDuration * 1000;
       } else {
-        console.log("The audio has no duration.. This is strange.");
+        this.warn("The audio has no duration.. This is strange.");
       }
       if (this.pauseAudioWhenConfirmingResponse) {
         this.pauseAudio();
@@ -84,7 +84,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         self.stopAudio();
         self.ownerComponent.nextStimulus();
       }, function(reason) {
-        console.log("Not continuing to next stimulus", reason);
+        self.warn("Not continuing to next stimulus", reason);
         if (this.pauseAudioWhenConfirmingResponse) {
           self.playAudio();
         }
@@ -119,7 +119,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         "score": this.scoreResponse(this.target, choice)
       };
       this.responses.push(response);
-      console.log("Recorded response", JSON.stringify(response));
+      self.warn("Recorded response", JSON.stringify(response));
     }
   },
 
@@ -130,7 +130,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
       if (audioDuration) {
         audioDuration = audioDuration * 1000;
       } else {
-        console.log("The audio has no duration.. This is strange.");
+        this.warn("The audio has no duration.. This is strange.");
       }
       if (this.pauseAudioWhenConfirmingResponse) {
         this.pauseAudio();
@@ -160,7 +160,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         self.stopAudio();
         self.ownerComponent.nextStimulus();
       }, function(reason) {
-        console.log("Not continuing to next stimulus", reason);
+        self.warn("Not continuing to next stimulus", reason);
         if (this.pauseAudioWhenConfirmingResponse) {
           self.playAudio();
         }
@@ -178,7 +178,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
       };
       this.responses = this.responses || [];
       this.responses.push(response);
-      console.log("Recorded response", JSON.stringify(response));
+      self.warn("Recorded response", JSON.stringify(response));
     }
   },
 
@@ -213,7 +213,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
       };
       this.responses = this.responses || [];
       this.nonResponses.push(response);
-      console.log("Recorded non-response, the user is confused or not playing the game.", JSON.stringify(response));
+      this.warn("Recorded non-response, the user is confused or not playing the game.", JSON.stringify(response));
     }
   },
 

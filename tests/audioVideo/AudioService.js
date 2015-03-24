@@ -15,7 +15,7 @@ var AudioService = function(url, user, corpusConnection, datumid) {
     var reader = new FileReader();
     reader.onload = function() {
       var md5 = CryptoJS.MD5(reader.result);
-      console.log("MD5 is " + md5);
+      // console.log("MD5 is " + md5);
       callback(md5);
     };
     reader.onerror = function() {
@@ -63,7 +63,7 @@ var AudioService = function(url, user, corpusConnection, datumid) {
       },
       error: function(serverResults) {
         that.result = serverResults;
-        console.log("There was a problem contacting the server to login.");
+        // console.log("There was a problem contacting the server to login.");
       }
     });
 
@@ -119,11 +119,11 @@ var AudioService = function(url, user, corpusConnection, datumid) {
         data: filesToBeSent,
         success: function(serverResults) {
           self.uploadResult = serverResults;
-          console.log("server contacted", serverResults);
+          // console.log("server contacted", serverResults);
         },
         error: function(serverResults) {
           self.uploadResult = serverResults;
-          console.log("There was a problem contacting the server to login.");
+          // console.log("There was a problem contacting the server to login.");
         }
       });
 

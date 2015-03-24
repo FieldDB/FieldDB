@@ -93,7 +93,7 @@ var Import = function Import(options) {
     },
     // confidential: self.corpus.confidential,
     // decryptedMode: true,
-    debugMode: true
+    // debugMode: true
   };
   this.session = new Session(sessionOptions);
   this.session.goal = "Goal from file import";

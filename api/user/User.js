@@ -96,7 +96,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._authUrl || "";
     },
     set: function(value) {
-      console.log("setting authurl", value);
+      this.debug("setting authurl", value);
       if (value === this._authUrl) {
         return;
       }
