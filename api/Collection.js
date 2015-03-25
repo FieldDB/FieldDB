@@ -302,7 +302,7 @@ Collection.prototype = Object.create(Object.prototype, {
         if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && !(value instanceof this.INTERNAL_MODELS.item)) {
           // this.debug("adding a internamodel ", value);
           // if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
-          console.warn("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value);
+          this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value);
           if (typeof value.toJSON === "function") {
             value = value.toJSON();
           }
@@ -312,11 +312,11 @@ Collection.prototype = Object.create(Object.prototype, {
           //     this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
           //     value = new FieldDBObject(value);
           //   } else {
-          //     console.warn("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
+          //     this.warn("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
           //   }
           // }
         } else {
-          console.warn("  item to set was already of the right type for " + this.fieldDBtype, value);
+          this.debug("  item to set was already of the right type for " + this.fieldDBtype, value);
         }
         searchingFor = this.getSanitizedDotNotationKey(value);
         if (!searchingFor) {
