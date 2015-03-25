@@ -382,7 +382,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
       expect(typeof scope.exportResults).toBe('function');
 
-      expect(typeof scope.mainBodyClass).toBe('function');
+      expect(typeof scope.mainBodyClass).toBeUndefined();
     });
 
     it('should have all the old things for activites in scope that it had before', function() {
