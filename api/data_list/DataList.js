@@ -219,7 +219,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         }
         doc.confidential = self.confidential;
         doc.url = self.url;
-        doc = self.convertDocIntoItsType(doc);
+        doc = FieldDBObject.convertDocIntoItsType(doc);
         if (doc.fieldDBtype && doc.fieldDBtype === "Datum") {
           guessedType = "Datum";
         }
