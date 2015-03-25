@@ -100,6 +100,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return this.BASE_DB_URL + "/" + this.dbname;
         }
       }
+      this.warn("Using an unlikely url, as if this app was running in a website where the databse is.");
     },
     set: function(value) {
       this.debug("Setting url  ", value);
@@ -118,17 +119,18 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   get: {
-    value: function(id) {
-      if (!this.dbname) {
-        this.bug("Cannot get something if the dbname is not defined ", id);
-        throw new Error("Cannot get something if the dbname is not defined ");
-      }
-      if (!this.url) {
+    value: function(id, optionalUrl) {
+      // if (!this.dbname) {
+      //   this.bug("Cannot get something if the dbname is not defined ", id);
+      //   throw new Error("Cannot get something if the dbname is not defined ");
+      // }
+      optionalUrl = optionalUrl || this.url;
+      if (!optionalUrl) {
         this.bug("The url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
       }
       return CORS.makeCORSRequest({
         method: "GET",
-        url: this.url + "/" + id
+        url: optionalUrl + "/" + id
       });
     }
   },
