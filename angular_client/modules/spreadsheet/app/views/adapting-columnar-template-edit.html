@@ -23,20 +23,20 @@
       <br />
       <br />
     </span>
-    <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | fielddbPrettyDate}}">
       <i class="fa whiteicon fa-clock-o">
       </i>
-      {{datum.dateEntered | standardDate}}
+      {{datum.dateEntered | fielddbPrettyDate}}
     </span>
     <span ng-hide="!datum.enteredByUser">
       <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
       <br />
     </span>
     <br />
-    <span title="{{contextualize('locale_date_entered')}}  {{datum.dateModified | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}}  {{datum.dateModified | fielddbPrettyDate}}">
       <i class="fa whiteicon fa-save">
       </i>
-      {{datum.dateModified | standardDate}}
+      {{datum.dateModified | fielddbPrettyDate}}
     </span>
     <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"> </i> </span> -->
     <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
@@ -69,7 +69,7 @@
   <div class="row" >
     <div class="span5 expandedDataComments">
       <div class="expandedDataInner">
-        <ul class="unstyled">
+        <ul class="list-unstyled">
           <li ng-repeat="comment in datum.comments">
             <a ng-click="deleteComment(comment, datum)" class=" delete_button" >
               <i class="fa fa-times-circle">
@@ -79,7 +79,7 @@
             &nbsp;
             <i class="fa fa-clock-o">
             </i>
-            {{comment.timestamp | standardDateFromTimestamp}}
+            {{comment.timestamp | fielddbPrettyDateFromTimestamp}}
             <i class="fa fa-comment">
             </i>
             {{comment.text}}
