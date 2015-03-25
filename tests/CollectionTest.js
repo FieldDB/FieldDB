@@ -673,7 +673,8 @@ describe("lib/Collection", function() {
       var removedOne = collection.remove(duck);
       expect(collection.length).toEqual(5);
       expect(removedOne.length).toEqual(1);
-      expect(collection.warnMessage).toContain("One of the requested removal items dont match what was removed");
+      expect(removedOne[0].equals(duck)).toBeTruthy();
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
       expect(removedOne[0].name).toEqual(duck.name);
       expect(removedOne[0].difference).toEqual(duck.difference);
 
@@ -683,7 +684,8 @@ describe("lib/Collection", function() {
       expect(collection.length).toEqual(5);
       removedOne = collection.remove(pigeon);
       expect(collection.length).toEqual(4);
-      expect(collection.warnMessage).toContain("One of the requested removal items dont match what was removed");
+      expect(removedOne[0].equals(pigeon)).toBeTruthy();
+      expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
 
     });
 

@@ -1,5 +1,5 @@
 var Collection = require("./../Collection").Collection;
-var Document = require("./Document").Document;
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
  * @class Collection of CouchDB docs
@@ -26,7 +26,7 @@ DocumentCollection.prototype = Object.create(Collection.prototype, /** @lends Do
 
   INTERNAL_MODELS: {
     value: {
-      item: Document
+      item: FieldDBObject
     }
   },
 

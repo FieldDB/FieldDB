@@ -1,7 +1,5 @@
-/* globals FieldDB */
 var Datum = require("./../datum/Datum").Datum;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Document = require("./../datum/Document").Document;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
@@ -215,49 +213,24 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.save();
 
       results = results.map(function(doc) {
-        try {
-          // prevent recursion a bit
-          if (self.api !== "datalists") {
-            doc.api = self.api;
-          }
-          doc.confidential = self.confidential;
-          doc.url = self.url;
-          guessedType = doc.fieldDBtype;
-          if (!guessedType) {
-            self.debug(" requesting guess type ");
-            guessedType = Document.prototype.guessType(doc);
-            self.debug("request complete");
-          }
-          self.debug("Converting doc into type " + guessedType);
-
-          if (guessedType === "Datum") {
-            doc = new Datum(doc);
-          } else if (guessedType === "Document") {
-            doc._type = guessedType;
-            doc = new Document(doc);
-          } else if (guessedType === "FieldDBObject") {
-            doc = new FieldDBObject(doc);
-          } else if (FieldDB && FieldDB[guessedType]) {
-            self.warn("Converting doc into guessed type " + guessedType);
-            doc = new FieldDB[guessedType](doc);
-          } else {
-            self.warn("This doc does not have a type than can be used, it might display oddly ", doc);
-            doc = new FieldDBObject(doc);
-          }
-
-        } catch (e) {
-          self.warn("error converting this doc: " + JSON.stringify(doc) + e);
-          doc.confidential = self.confidential;
-          doc = new FieldDBObject(doc);
+        // prevent recursion a bit
+        if (self.api !== "datalists") {
+          doc.api = self.api;
         }
-        self.debug("adding doc", doc);
-        // self.docs.add(doc);
+        doc.confidential = self.confidential;
+        doc.url = self.url;
+        doc = self.convertDocIntoItsType(doc);
+        if (doc.fieldDBtype && doc.fieldDBtype === "Datum") {
+          guessedType = "Datum";
+        }
+        // self.debug("adding doc", doc);
+        // self.docs.add(doc); //This overwrites this doc if in the collection
         return doc;
       });
       self.todo("OVERWRITING NEW INFO INTO EXISTING DATALIST, instead save the existing list, then add them and remove the ones that arent supposed ot be there.");
       // self.docs.debugMode = true;
-      self.docs = results;
-      // self.docs.merge("self", results);
+      self.docs = results; //This ensures that the docs list matches what the server thinks.
+      // self.docs.merge("self", results); //This overwrites this doc if in the collection
 
       if (guessedType === "Datum") {
         self.showDocPosition = true;
