@@ -1,121 +1,57 @@
-<div class="span1 search_checkbox"  >
-  <input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
-</div>
-<div class="span1" >
-  <span title="{{judgementHelpText}}">
-    {{datum.fields['judgement'].value}}
-  </span>
-</div>
-<div  ng-show="corpus.fieldsInColumns.first.length > 0" class="{{columnWidthClass}}">
-  <span class="{{fieldSpanWidthClassName}}"
+<span ng-class="{'col-md-1': corpus.currentSession.datalist.showDocCheckboxes || corpus.currentSession.datalist.showDocPosition}">
+  <input type="checkbox" ng-show="corpus.currentSession.datalist.showDocCheckboxes"/>
+  <span class="badge badge-info"
+  ng-show="corpus.currentSession.datalist.showDocPosition"
+  title="Position in Elicitation Session/Transcript">
+  N. <!-- {{$index +1}} -->
+</span>
+</span>
+
+<span title="{{judgementHelpText}}">
+  {{datum.fields['judgement'].value}}
+</span>
+
+<span ng-show="corpus.fieldsInColumns.first.length > 0"
   ng-repeat="corpusField in corpus.fieldsInColumns.first track by $index"
   ng-hide="corpusField.showToUserTypes == 'readonly'"
   title="{{corpusField.help}}">
-    {{datum.fields[corpusField.id].value | neverEmpty}}
-  </span>
-</div>
-<div ng-show="corpus.fieldsInColumns.second.length > 0" class="{{columnWidthClass}}">
-  <span class="{{fieldSpanWidthClassName}}"
-    ng-repeat="corpusField in corpus.fieldsInColumns.second track by $index"
-    ng-hide="corpusField.showToUserTypes == 'readonly'"
-    title="{{corpusField.help}}">
-    {{datum.fields[corpusField.id].value | neverEmpty}}
-  </span>
-</div>
-<div ng-show="corpus.fieldsInColumns.third.length > 0" class="{{columnWidthClass}}">
-  <span class="{{fieldSpanWidthClassName}}"
-    ng-repeat="corpusField in corpus.fieldsInColumns.third track by $index"
-    ng-hide="corpusField.showToUserTypes == 'readonly'"
-    title="{{corpusField.help}}">
-    {{datum.fields[corpusField.id].value | neverEmpty}}
-  </span>
-</div>
-<div class="span2 entered_modified_info">
-  <span  >
-    <button ng-hide="writePermissions==false" class="btn btn-primary" ng-click="editSearchResults($index)">
-      <i class="fa whiteicon fa-pencil">
-      </i>
-      {{contextualize('locale_Edit_button')}}
-    </button>
-    <br />
-    <br />
-  </span>
-  <span title="Date entered">
-    <i class="fa fa-clock-o">
+  {{datum.fields[corpusField.id].value | neverEmpty}}
+</span>
+<span ng-show="corpus.fieldsInColumns.second.length > 0"
+  ng-repeat="corpusField in corpus.fieldsInColumns.second track by $index"
+  ng-hide="corpusField.showToUserTypes == 'readonly'"
+  title="{{corpusField.help}}">
+  {{datum.fields[corpusField.id].value | neverEmpty}}
+</span>
+<span ng-show="corpus.fieldsInColumns.third.length > 0"
+  ng-repeat="corpusField in corpus.fieldsInColumns.third track by $index"
+  ng-hide="corpusField.showToUserTypes == 'readonly'"
+  title="{{corpusField.help}}">
+  {{datum.fields[corpusField.id].value | neverEmpty}}
+</span>
+
+<ul class="unstyled" ng-show="datum.comments.length > 0">
+  <li ng-repeat="comment in datum.comments">
+    <img class="gravatar-small" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon">
+    &nbsp;
+    <i class=" fa fa-comment">
     </i>
-    {{datum.dateEntered | standardDate}} <span ng-hide="!datum.fields.enteredByUser">
-    <img title="{{datum.fields.enteredByUser.username}}" ng-hide="!datum.fields.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.fields.enteredByUser.gravatar}}?s=15&d=identicon">
-    <br />
-  </span>
-  <br />
-  <span title="Date modified">
-    <i class="fa fa-save">
-    </i>
-    {{datum.dateModified | standardDate}}
-  </span>
-  <!-- <span ng-hide="!datum.fields.modifiedByUser.users[0]"> <i class="fa fa-group"> </i> </span> -->
-  <span ng-repeat="fields.modifiedByUser in datum.fields.modifiedByUser.users">
-    <img ng-src="https://secure.gravatar.com/avatar/{{fields.modifiedByUser.gravatar}}?s=15&d=identicon" title="{{fields.modifiedByUser.username}} at {{fields.modifiedByUser.timestamp | fielddbPrettyDate}}" />
-  </span>
-  <span class="expandCollapseButton">
-    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
-    <i  class="fa fa-download" ng-click="datum.fetch()">
-    </i>
-    <br />
-    <i ng-show="datum.hasAudio" class="fa fa-microphone">
-    </i>
-    <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
-  </span>
-</div>
-<div class="row" ng-show="datum.comments.length >0">
-  <div class="span5 ">
-    <ul class="unstyled">
-      <li ng-repeat="comment in datum.comments">
-        <p>
-          <!-- <a ng-click="deleteComment(comment, datum)" class=" delete_button" > <i class="fa fa-times-circle"> </i> </a> -->
-          <img class="" title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon">
-          &nbsp;
-          <!-- <i class="fa fa-clock-o"> </i> {{comment.timestamp | standardDateFromTimestamp}} -->
-          <i class=" fa fa-comment">
-          </i>
-          {{comment.text}}
-        </p>
-      </li>
-    </ul>
-  </div>
-</div>
-<div class="row"  >
-  <div class="span9 offset1">
-    <table>
-      <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
-        <td>
-          <span class="form-horizontal">
-            <audio controls>
-              <source ng-src="{{audioFile.URL}}"/>
-            </audio>
-          </span>
-        </td>
-        <td>
-          <span class="form-horizontal">
-            <p>
-              {{audioFile.description}}
-            </p>
-          </span>
-        </td>
-        <td>
-          <a href="{{audioFile.URL}}" target="_blank">
-            <i class="fa whiteicon fa-link">
-            </i>
-          </a>
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
-<pre>
+    {{comment.text}}
+  </li>
+</ul>
+
+<ul class="unstyled" ng-show="datum.hasAudio">
+  <li ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
+   <audio controls title="{{audioFile.description}}" >
+     <source ng-src="{{audioFile.URL}}"/>
+   </audio>
+ </li>
+</ul>
+
+<pre ng-hide="true">
   {{datum}}
 </pre>
 
-<pre hidden>
+<pre ng-hide="true">
   {{corpus.fieldsInColumns.first[0] | json}}
 </pre>

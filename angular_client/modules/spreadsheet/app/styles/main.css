@@ -502,6 +502,20 @@ input:focus {
   transform: translate(0, 0) !important;*/
 }
 
+.spreadsheet-row {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  clear: both;
+}
+
+.spreadsheet-cell {
+  width: 30%;
+  margin: 0;
+  padding: 10px;
+  clear: both;
+}
+
 .exportLine {
 
 }

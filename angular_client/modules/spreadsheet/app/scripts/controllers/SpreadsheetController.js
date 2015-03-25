@@ -184,6 +184,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
+    $rootScope.application.corpus.fieldsInColumns = $rootScope.application.corpus.fieldsInColumns || {
+      first: [],
+      second: [],
+      third: [],
+      fourth: []
+    };
+
     try {
       $scope.judgementHelpText = $rootScope.application.corpus.datumFields.judgement.help;
     } catch (e) {
@@ -206,8 +213,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       );
       $rootScope.application.corpus.fieldsInColumns.second = [];
       $rootScope.application.corpus.fieldsInColumns.third = [];
-      $scope.fieldSpanWidthClassName = "span10";
-      $scope.columnWidthClass = "span10";
+      $rootScope.application.corpus.fieldsInColumns.fieldSpanWidthClassName = "col-md-10";
+      $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-md-10";
     } else if (preferedSpreadsheetShape.columns === 2) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
@@ -218,8 +225,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         preferedSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = [];
-      $scope.fieldSpanWidthClassName = "span5";
-      $scope.columnWidthClass = "span5";
+      $rootScope.application.corpus.fieldsInColumns.fieldSpanWidthClassName = "col-md-5";
+      $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-md-5";
     } else if (preferedSpreadsheetShape.columns === 3) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
@@ -233,8 +240,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         preferedSpreadsheetShape.rows * 2 + 1,
         preferedSpreadsheetShape.rows * 3 + 1
       );
-      $scope.fieldSpanWidthClassName = "span3";
-      $scope.columnWidthClass = "span3";
+      $rootScope.application.corpus.fieldsInColumns.fieldSpanWidthClassName = "span3";
+      $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "span3";
     }
   };
 
@@ -283,12 +290,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Set scope variables
   $scope.documentReady = false;
-  $rootScope.application.corpus.fieldsInColumns = $rootScope.application.corpus.fieldsInColumns || {
-    first: [],
-    second: [],
-    third: [],
-    fourth: []
-  };
   $scope.orderProp = "dateEntered";
   $rootScope.currentPage = $rootScope.currentPage || 0;
   $scope.reverse = true;
