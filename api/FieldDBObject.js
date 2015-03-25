@@ -139,7 +139,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "corpus",
   "contextualizer",
   "perObjectDebugMode",
-  "perObjectAlwaysConfirmOkay",
+  "whenReady",
   "useIdNotUnderscore",
   "parent",
   "confirmMessage",
