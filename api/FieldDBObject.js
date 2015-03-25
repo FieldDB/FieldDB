@@ -331,6 +331,71 @@ FieldDBObject.getHumanReadableTimestamp = function() {
   return year + "-" + month + "-" + day + "_" + hour + "." + minute;
 };
 
+FieldDBObject.guessType = function(doc) {
+  if (!doc || JSON.stringify(doc) === {}) {
+    return "FieldDBObject";
+  }
+  FieldDBObject.debug("Guessing type " + doc._id);
+  var guessedType = doc.jsonType || doc.collection || "FieldDBObject";
+  if (doc.api && doc.api.length > 0) {
+    FieldDBObject.debug("using api" + doc.api);
+    guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
+  }
+  guessedType = guessedType.replace(/s$/, "");
+  guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
+  if (guessedType === "Datalist") {
+    guessedType = "DataList";
+  }
+  if (guessedType === "FieldDBObject") {
+    if (doc.session) {
+      guessedType = "Datum";
+    } else if (doc.datumFields && doc.sessionFields) {
+      guessedType = "Corpus";
+    } else if (doc.collection === "sessions" && doc.sessionFields) {
+      guessedType = "Session";
+    } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
+      guessedType = "Comment";
+    }
+  }
+
+  FieldDBObject.warn("Guessed type " + doc._id + " is a " + guessedType);
+  return guessedType;
+};
+
+FieldDBObject.convertDocIntoItsType = function(doc) {
+  var guessedType;
+
+  if (!doc || typeof doc !== "object") {
+    return doc;
+  }
+  try {
+    guessedType = doc.fieldDBtype;
+    if (!guessedType) {
+      FieldDBObject.debug(" requesting guess type ");
+      guessedType = FieldDBObject.guessType(doc);
+      FieldDBObject.debug("request complete");
+    }
+    FieldDBObject.debug("Converting doc into type " + guessedType);
+
+    if (FieldDB && FieldDB[guessedType]) {
+      if (doc instanceof FieldDB[guessedType]) {
+        return doc;
+      }
+      FieldDBObject.warn("Converting doc into guessed type " + guessedType);
+      doc = new FieldDB[guessedType](doc);
+    } else {
+      FieldDBObject.warn("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
+      doc = new FieldDBObject(doc);
+    }
+  } catch (e) {
+    FieldDBObject.warn("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
+    FieldDBObject.debug(" error: ", e);
+    doc = new FieldDBObject(doc);
+  }
+  return doc;
+};
+
+
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {

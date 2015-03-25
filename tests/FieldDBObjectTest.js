@@ -75,6 +75,23 @@ describe("FieldDBObject", function() {
     });
 
   });
+  describe("deserialization", function() {
+
+    it("should be able to guess its type", function() {
+      var mysteryObject = {
+        _id: "2389jr9rj490",
+        collection: "somethingnotinthesystem"
+      };
+      mysteryObject = FieldDBObject.convertDocIntoItsType(mysteryObject);
+      expect(mysteryObject).toEqual({
+        _fieldDBtype: "FieldDBObject",
+        _id: "2389jr9rj490",
+        collection: "somethingnotinthesystem"
+      });
+
+    });
+
+  });
 
   describe("serialization", function() {
     var penguin;

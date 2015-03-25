@@ -298,21 +298,22 @@ Collection.prototype = Object.create(Object.prototype, {
 
       if (!searchingFor && value) {
         //previously code in the add function
-        if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
-          this.debug("adding a internamodel ", value);
-          if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
-            this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
-            value = new this.INTERNAL_MODELS.item(value);
-          } else {
-            if (value.constructor === Object) {
-              this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
-              value = new FieldDBObject(value);
-            } else {
-              this.debug("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
-            }
-          }
+        value = FieldDBObject.convertDocIntoItsType(value);
+        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && !(value instanceof this.INTERNAL_MODELS.item)) {
+          // this.debug("adding a internamodel ", value);
+          // if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
+          this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value);
+          value = new this.INTERNAL_MODELS.item(value);
+          // } else {
+          //   if (value.constructor === Object) {
+          //     this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
+          //     value = new FieldDBObject(value);
+          //   } else {
+          //     this.debug("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
+          //   }
+          // }
         } else {
-          this.debug("  not modifying value ", this.INTERNAL_MODELS);
+          this.debug("  item to set was already of the right type ", value);
         }
         searchingFor = this.getSanitizedDotNotationKey(value);
         if (!searchingFor) {
@@ -850,11 +851,13 @@ Collection.prototype = Object.create(Object.prototype, {
         var anotherItem = anotherCollection[idToMatch];
         var resultItem = resultCollection[idToMatch];
         if (!resultItem && typeof anItem.constructor === "function") {
+          self.debug("Cloning into anItem into a fielddbObjects ifits not one already");
           var json = anItem.toJSON ? anItem.toJSON() : anItem;
-          resultItem = new anItem.constructor(json);
+          resultItem = FieldDBObject.convertDocIntoItsType(json);
           var existingInCollection = resultCollection.find(resultItem);
           if (existingInCollection.length === 0) {
-            resultCollection.add(resultItem);
+            self.debug("This item wasnt in the result collection yet, adding it.", resultItem);
+            resultItem = resultCollection.add(resultItem);
           } else {
             resultItem = existingInCollection[0];
             self.debug("resultItem was already in the resultCollection  ", existingInCollection, resultItem);
@@ -868,14 +871,9 @@ Collection.prototype = Object.create(Object.prototype, {
         if (anotherItem === undefined) {
           // no op, the new one isn't set
           self.debug(idToMatch + " was missing in new collection");
-          resultCollection[idToMatch] = anItem;
-
-        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
+        } else if (resultItem === anotherItem || (typeof resultItem.equals === "function" && resultItem.equals(anotherItem))) {
           // no op, they are equal enough
           self.debug(idToMatch + " were equal.", anItem, anotherItem);
-          if (resultItem !== anItem) {
-            resultCollection[idToMatch] = anItem;
-          }
         } else if (!anItem || anItem === [] || anItem.length === 0 || anItem === {}) {
           self.debug(idToMatch + " was previously empty, taking the new value");
           resultCollection[idToMatch] = anotherItem;

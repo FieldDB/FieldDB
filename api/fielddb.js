@@ -20,7 +20,7 @@
   var Export = require("./export/Export");
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   var Collection = require("./Collection").Collection;
-  var Document = require("./datum/Document").Document;
+  var Document = FieldDBObject;
   var CORS = require("./CORS").CORS;
   CORS.bug = FieldDBObject.prototype.bug;
   var DataList = require("./data_list/DataList").DataList;
