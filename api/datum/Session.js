@@ -668,50 +668,86 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   datalist: {
     get: function() {
-      if (!this._datalist) {
-        this._datalist = new DataList({
-          dbname: this.dbname,
-          // docs: []
-        });
-        if (this.id) {
-          var api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
-          this._datalist.api = api;
-          if (this._docIds && this._docIds.length > 0) {
-            api = this._docIds;
-          }
-          var self = this;
-          self.datalistUpdatingPromise = self.corpus.fetchCollection(api, null, null, null, null, this.id)
-            .then(function(genratedDatalist) {
-              self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", genratedDatalist);
-              if (self._docIds) {
-                self.warn("TODO test what happens when there were doc ids before a fetch of ids");
-                self._docIds.map(function(docId) {
-                  self._datalist.add({
-                    id: docId
-                  });
-                });
-                delete self._docIds;
-              }
-              if (genratedDatalist) {
-                delete genratedDatalist.title;
-                delete genratedDatalist.description;
-                self._datalist.merge("self", genratedDatalist);
-              }
-              return self._datalist;
-            }, function(err) {
-              self.warn(" problem fetching the data list", err);
-              self._datalist.docs = self._datalist.docs || [];
-              self._datalist.docIds = self._datalist.docIds || self._docIds;
-              return self._datalist;
-            });
-        }
-      } else {
+      var api,
+        self = this,
+        deferred = Q.defer();
+
+      if (this._datalist) {
         if (!this.datalistUpdatingPromise) {
-          var deferred = Q.defer();
-          this.datalistUpdatingPromise = deferred.promise;
-          deferred.resolve(this._datalist);
+          self.datalistUpdatingPromise = deferred.promise;
+          deferred.resolve(self._datalist);
+        }
+        return this._datalist;
+      }
+
+      this._datalist = new DataList({
+        dbname: this.dbname,
+        // docs: []
+      });
+
+      if (this.id) {
+        api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+        this._datalist.api = api;
+        if (this._docIds && this._docIds.length > 0) {
+          api = this._docIds;
         }
       }
+
+      var unableToFetchCurrentDataAffiliatedWithThisSession = function(err) {
+        self.warn(" problem fetching the data list", err);
+        self._datalist.docs = self._datalist.docs || [];
+        self._datalist.docIds = self._datalist.docIds || self._docIds;
+        return self._datalist;
+      };
+
+      if (!this.corpus) {
+        if (!this.datalistUpdatingPromise) {
+          deferred = Q.defer();
+          this.datalistUpdatingPromise = deferred.promise;
+          Q.nextTick(function() {
+            unableToFetchCurrentDataAffiliatedWithThisSession("This session has no corpus, it doesnt know how to find out which data are in it.");
+            deferred.resolve(self._datalist);
+          });
+        }
+        return this._datalist;
+      }
+
+      this.datalistUpdatingPromise = this.corpus.fetchCollection(api, null, null, null, null, this.id).then(function(generatedDatalist) {
+        self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", generatedDatalist);
+        if (generatedDatalist) {
+          generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
+          if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
+            // If the data list was empty, assign the docIds which will populate it with placeholders
+            if (!self._datalist.docs || self._datalist.docs.length < 1) {
+              self._datalist.docIds = generatedDatalist.docIds;
+            } else {
+              // If the data list doesn't have this id, add a placeholder
+              generatedDatalist.docIds.map(function(docPrimaryKey) {
+                if (!self._datalist.docs[docPrimaryKey]) {
+                  var docPlaceholder = {
+                    fieldDBType: "Datum"
+                  };
+                  docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
+                  self._datalist.add(docPlaceholder);
+                }
+              });
+              // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
+              if (self._datalist.length !== generatedDatalist.docIds.length) {
+                self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+              }
+              delete generatedDatalist.docIds;
+            }
+          }
+          delete generatedDatalist.title;
+          delete generatedDatalist.description;
+          // self._datalist.merge("self", generatedDatalist);
+          self.render();
+        } else {
+          self.bug("There was a problem downloading the list of data in the " + self.goal + " session. Please report this.");
+        }
+        return self._datalist;
+      }, unableToFetchCurrentDataAffiliatedWithThisSession);
+
       return this._datalist;
     },
     set: function(value) {
