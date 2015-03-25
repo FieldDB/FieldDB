@@ -409,7 +409,7 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       // FieldDBObject.warn("Converting doc into guessed type " + guessedType);
     } else {
       doc = new FieldDBObject(doc);
-      FieldDBObject.warn("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
+      FieldDBObject.todo("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
     }
   } catch (e) {
     FieldDBObject.debug("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
