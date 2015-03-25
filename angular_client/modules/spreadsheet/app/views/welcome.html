@@ -9,7 +9,7 @@
     <button class="btn btn-primary" ng-disabled="loading">
       {{contextualize('locale_login_button')}}
     </button>&nbsp;
-    <img ng-src="images/spinner-small-maindiv.gif" ng-show="application.authentication.loading" />
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
   </form>
 </div>
 
@@ -34,7 +34,7 @@
   <form ng-submit='forgotPasswordSubmit()'>
     <input placeholder="{{contextualize('locale_email')}}" type="email" ng-model="forgotPasswordInfo.email"/>
     <button class="btn btn-primary" ng-disabled="application.authentication.loading">{{contextualize('locale_forgot_password')}} </button> &nbsp;
-    <img ng-src="images/spinner-small-maindiv.gif" ng-show="application.authentication.loading" />
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
   </form>
 </div>
 
@@ -58,6 +58,6 @@
       {{contextualize('locale_reset_password_button_2')}}
     </button>
     &nbsp;
-    <img ng-src="images/spinner-small-maindiv.gif" ng-show="application.authentication.loading" />
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
   </form>
 </div>
