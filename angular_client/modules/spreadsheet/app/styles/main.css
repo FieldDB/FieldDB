@@ -269,6 +269,10 @@ span ul {
   text-align: center;
 }
 
+span, div, ul, li {
+  border: 1px solid black !important;
+}
+
 .mainPageDiv {
   background-color: #F0F5FF;
   border-radius: 10px;
@@ -378,8 +382,8 @@ a.delete_button {
 
 .expandCollapseButton {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 10px;
+  right: 15px;
 }
 
 .expandedData {
@@ -505,14 +509,8 @@ input:focus {
 .spreadsheet-row {
   width: 100%;
   margin: 0;
-  padding: 10px;
-  clear: both;
-}
-
-.spreadsheet-cell {
-  width: 30%;
-  margin: 0;
-  padding: 10px;
+  /*padding: 10px;*/
+  display: block;
   clear: both;
 }
 

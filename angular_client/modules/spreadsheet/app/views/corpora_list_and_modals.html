@@ -2,7 +2,7 @@
 </p>
 <div class="centered" >
   <!-- Chrome works better message -->
-  <div >
+  <div ng-show="notChrome" >
     <h3>{{contextualize('locale_for_chrome_message')}}
     </h3>
     <p>
@@ -89,9 +89,8 @@
     </table>  &nbsp;
     <img ng-src="images/loading-spinner.gif" ng-show="application.authentication.loading">
   </div>
-  <br />
-
 </div>
+
 <div class="centered">
   <ng-include src="'views/welcome.html'"></ng-include>
 </div>
