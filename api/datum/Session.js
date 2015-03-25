@@ -711,8 +711,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         }
         return this._datalist;
       }
-
+      this.fetching = this.loading = true;
       this.datalistUpdatingPromise = this.corpus.fetchCollection(api, null, null, null, null, this.id).then(function(generatedDatalist) {
+        self.fetching = self.loading = true;
         self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", generatedDatalist);
         if (generatedDatalist) {
           generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
@@ -726,7 +727,8 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             generatedDatalist.docIds.map(function(docPrimaryKey) {
               if (!self._datalist.docs[docPrimaryKey]) {
                 var docPlaceholder = {
-                  fieldDBtype: "Datum"
+                  fieldDBtype: "Datum",
+                  loading: true
                 };
                 docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
                 self._datalist.add(docPlaceholder);

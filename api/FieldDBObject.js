@@ -1074,35 +1074,32 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var deferred = Q.defer(),
         self = this;
 
-      if (!this.id) {
+      if (!this.id || !this.corpus) {
         Q.nextTick(function() {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           deferred.reject({
-            error: "Cannot fetch if there is no id"
+            error: "Cannot fetch if there is no id, or there is no corpus"
           });
         });
         return deferred.promise;
       }
-      if (!optionalUrl) {
-        optionalUrl = this.url + "/" + this.id;
-      }
 
-      this.fetching = true;
-      this.whenReady = CORS.makeCORSRequest({
-        type: "GET",
-        dataType: "json",
-        url: optionalUrl
-      }).then(function(result) {
-          self.fetching = false;
-          self.loaded = true;
-          self.merge("self", result, "overwrite");
-          deferred.resolve(self);
-        },
-        function(reason) {
-          self.fetching = false;
-          self.debug(reason);
-          deferred.reject(reason);
-        });
+      this.fetching = this.loading = true;
+      this.whenReady = this.corpus.get(this.id, optionalUrl)
+        .then(function(result) {
+            self.fetching = self.loading = false;
+            self.loaded = true;
+            self.merge("self", result, "overwrite");
+            self.todo("Auto overwriting from fetch, this means the user might loose data that they were editing", self);
+            deferred.resolve(self);
+            return self;
+          },
+          function(reason) {
+            self.fetching = self.loading = false;
+            self.debug(reason);
+            deferred.reject(reason);
+            return self;
+          });
 
       return deferred.promise;
     }
