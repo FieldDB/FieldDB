@@ -12,7 +12,7 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
             $scope.$apply(); //$digest or $apply
           }
         } catch (e) {
-          console.warn("Rendering generated an erorr", e);
+          console.warn("Rendering generated probably a digest erorr");
         }
       };
 
