@@ -629,9 +629,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
-    // Update saved state in Preferences
-
-    $scope.newFieldDatum = $scope.application.corpus.newDatum();
+    $scope.updateAvailableFieldsInColumns();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
   };
@@ -706,6 +704,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     console.log("corpus.currentSession changed", oldValue);
+
+    $scope.newDatum = $scope.newDatum || $rootScope.application.corpus.newDatum();
+    $scope.newDatum.session = $rootScope.application.corpus.currentSession;
 
     $scope.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
 
@@ -930,9 +931,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($event && $event.type && $event.type === "submit" && $event.target) {
       $scope.setDataEntryFocusOn($event.target);
     }
+    alert("TODO test this");
 
+    fieldDBDatum.save().done(function(error) {
+      if (!fieldDBDatum.id) {
+        fieldDBDatum.warn("Couldnt contact the database to save this datum, giving a random id and putting it in the session list for saving again later", error);
+        fieldDBDatum.id = FieldDB.FieldDBObject.uuidGenerator();
+      }
+      if (fieldDBDatum.session !== $rootScope.application.currentSession) {
+        fieldDBDatum.session = $rootScope.application.currentSession;
+      }
+    });
+
+    $rootScope.application.currentSession.add(fieldDBDatum);
     $rootScope.newRecordHasBeenEdited = false;
-    $scope.newFieldDatum = $rootScope.application.corpus.newDatum();
+    $scope.newDatum = $rootScope.application.corpus.newDatum();
 
 
     // Add record to all scope data and update
@@ -941,7 +954,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
     $scope.activeDatumIndex = "newEntry";
 
-    $scope.newFieldDatumhasAudio = false;
+    $scope.newDatumhasAudio = false;
     $scope.saved = "no";
 
     try {
@@ -1222,7 +1235,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.activeDatumIndex = scopeIndex;
       } else {
         $scope.activeDatumIndex = scopeIndex + 1;
-        $scope.createRecord($scope.newFieldDatum);
+        // $scope.createRecord($scope.newDatum);
       }
       if (targetDatumEntryDomElement) {
         $scope.setDataEntryFocusOn(targetDatumEntryDomElement);
