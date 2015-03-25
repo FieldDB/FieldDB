@@ -506,6 +506,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     expect(scope.currentDate).toBeDefined();
     expect(scope.activities).toBeDefined();
     expect(scope.corpusSelected).toBeUndefined();
+    expect(scope.newDatum).toBeUndefined();
     expect(scope.newFieldDatum).toBeUndefined();
   });
 
