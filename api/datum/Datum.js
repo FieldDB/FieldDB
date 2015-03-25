@@ -250,6 +250,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
+  hasAudio: {
+    get: function() {
+      var hasAudio = false;
+      if (this.audioVideo.length > 0) {
+        this.audioVideo.map(function(audioVideo) {
+          if (audioVideo.trashed !== "deleted") {
+            hasAudio = true;
+          }
+        });
+      }
+      return hasAudio;
+    },
+    set: function() {}
+  },
+
   play: {
     value: function(optionalIndex) {
       this.debug("optionalIndex", optionalIndex);
@@ -280,6 +295,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
       this._images = value;
     }
+  },
+
+  hasImages: {
+    get: function() {
+      var hasImages = false;
+      if (this.images.length > 0) {
+        this.images.map(function(image) {
+          if (image.trashed !== "deleted") {
+            hasImages = true;
+          }
+        });
+      }
+      return hasImages;
+    },
+    set: function() {}
   },
 
   // The couchdb-connector is capable of mapping the url scheme
