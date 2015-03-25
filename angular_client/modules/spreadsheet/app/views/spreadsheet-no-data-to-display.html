@@ -1,6 +1,7 @@
 <div class="row" ng-hide="application.corpus.currentSession.id">
   <div class="span12 pagination-centered">
-    <h2 ng-bind-html="contextualize('locale_select_session_message')"> </h2>
+    <h2 ng-bind-html="contextualize('locale_select_session_message')">
+    </h2>
   </div>
 </div>
 <div class="row" ng-show="application.corpus.loading || application.currentSession.loading">
@@ -8,7 +9,7 @@
     <img ng-src="images/loading-spinner.gif" />
   </div>
 </div>
-<div class="row">
+<div class="row" ng-hide="application.corpus.currentSession.length">
   <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
   </div>
 </div>
