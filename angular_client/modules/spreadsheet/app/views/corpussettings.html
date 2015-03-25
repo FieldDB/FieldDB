@@ -14,7 +14,7 @@
   		&nbsp;
       <button class="btn btn-primary"
   			ng-disabled="application.corpus.saving">{{contextualize('locale_create_button')}}</button>&nbsp;
-        <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading"/>
+        <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading"/>
   	</div>
   <form>
 </div>
@@ -42,7 +42,7 @@
       <textarea class="fielddb-large-textarea" ng-model="application.corpus.description"></textarea>
       <button class="btn btn-primary"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="application.corpus.saving">Save</button>
-        <img ng-src="images/spinner-small-mainbg.gif" ng-show="application.corpus.saving">
+        <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving">
     </div>
 
   </div>
@@ -75,7 +75,7 @@
 				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">
         {{contextualize('locale_add_button')}}
       </button>&nbsp;
-      <img ng-src="images/spinner-small-mainbg.gif" ng-show="loading">
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading">
 		</div>
 	</div>
 	<hr />
@@ -111,7 +111,7 @@
         ng-disabled="application.corpus.saving">
         {{contextualize('locale_save_button')}}
       </button>
-      <img ng-src="images/spinner-small-mainbg.gif" ng-show="application.corpus.saving"/>
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.saving"/>
       <div data-fielddb-collection json='application.corpus.datumFields'></div>
       <button class="btn btn-info"
         ng-click="application.corpus.newDatumField(addedDatumField)" ng-disabled="loading">{{contextualize('locale_add_field_button')}}
@@ -119,7 +119,7 @@
       <button class="btn btn-primary"
         ng-class="{'pulsing': application.corpus.saving}"
         ng-click="updateCorpusDetails(corpus)" ng-disabled="application.corpus.saving">{{contextualize('locale_save_button')}}</button>
-      <img ng-src="images/spinner-small-mainbg.gif" ng-show="application.corpus.saving"/>
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving"/>
 
     </div>
 
