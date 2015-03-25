@@ -1,17 +1,20 @@
-<div class="span1 search_checkbox" ng-show="searching">
+<div class="span1 search_checkbox"  >
   <input type="checkbox" value="{{datum.id}}" ng-checked="datum.checked" ng-model="datum.checked">
 </div>
 <div class="span1" >
   <span title="{{judgementHelpText}}">
-    {{datum['judgement']}}
+    {{datum.fields['judgement'].value}}
   </span>
 </div>
 <div class="{{columnWidthClass}}">
+  {{datum.id}}
+
   <span class="{{fieldSpanWidthClassName}}"
   ng-repeat="corpusField in fieldsInColumns.first track by $index"
   ng-hide="corpusField.showToUserTypes == 'readonly'"
   title="{{corpusField.help}}">
-    {{datum[corpusField.id] | neverEmpty}}
+    {{corpusField.id}}
+    {{datum.fields[corpusField.id].value | neverEmpty}}
   </span>
 </div>
 <div ng-show="fieldsInColumns.second.length > 0" class="{{columnWidthClass}}">
@@ -19,7 +22,8 @@
     ng-repeat="corpusField in fieldsInColumns.second track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
     title="{{corpusField.help}}">
-    {{datum[corpusField.id] | neverEmpty}}
+    {{corpusField.id}}
+    {{datum.fields[corpusField.id].value | neverEmpty}}
   </span>
 </div>
 <div ng-show="fieldsInColumns.third.length > 0" class="{{columnWidthClass}}">
@@ -27,11 +31,12 @@
     ng-repeat="corpusField in fieldsInColumns.third track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
     title="{{corpusField.help}}">
-    {{datum[corpusField.id] | neverEmpty}}
+    {{corpusField.id}}
+    {{datum.fields[corpusField.id].value | neverEmpty}}
   </span>
 </div>
 <div class="span2 entered_modified_info">
-  <span ng-show="searching">
+  <span  >
     <button ng-hide="writePermissions==false" class="btn btn-primary" ng-click="editSearchResults($index)">
       <i class="fa whiteicon fa-pencil">
       </i>
@@ -43,8 +48,8 @@
   <span title="Date entered">
     <i class="fa fa-clock-o">
     </i>
-    {{datum.dateEntered | standardDate}} <span ng-hide="!datum.enteredByUser">
-    <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
+    {{datum.dateEntered | standardDate}} <span ng-hide="!datum.fields.enteredByUser">
+    <img title="{{datum.fields.enteredByUser.username}}" ng-hide="!datum.fields.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.fields.enteredByUser.gravatar}}?s=15&d=identicon">
     <br />
   </span>
   <br />
@@ -53,18 +58,21 @@
     </i>
     {{datum.dateModified | standardDate}}
   </span>
-  <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa fa-group"> </i> </span> -->
-  <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
-    <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}} at {{modifiedByUser.timestamp | fielddbPrettyDate}}" />
+  <!-- <span ng-hide="!datum.fields.modifiedByUser.users[0]"> <i class="fa fa-group"> </i> </span> -->
+  <span ng-repeat="fields.modifiedByUser in datum.fields.modifiedByUser.users">
+    <img ng-src="https://secure.gravatar.com/avatar/{{fields.modifiedByUser.gravatar}}?s=15&d=identicon" title="{{fields.modifiedByUser.username}} at {{fields.modifiedByUser.timestamp | fielddbPrettyDate}}" />
   </span>
   <span class="expandCollapseButton">
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
+    <i  class="fa fa-download" ng-click="datum.fetch()">
+    </i>
     <br />
     <i ng-show="datum.hasAudio" class="fa fa-microphone">
     </i>
     <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
   </span>
 </div>
-<div class="row" ng-show="datum.comments[0]">
+<div class="row" ng-show="datum.comments.length >0">
   <div class="span5 ">
     <ul class="unstyled">
       <li ng-repeat="comment in datum.comments">
@@ -81,7 +89,7 @@
     </ul>
   </div>
 </div>
-<div class="row" ng-show="searching">
+<div class="row"  >
   <div class="span9 offset1">
     <table>
       <tr ng-repeat="audioFile in datum.audioVideo.collection track by $index" ng-hide="audioFile.trashed == 'deleted'">
@@ -109,3 +117,6 @@
     </table>
   </div>
 </div>
+<pre>
+  {{datum}}
+</pre>

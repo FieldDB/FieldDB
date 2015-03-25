@@ -625,7 +625,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.log("setting templates is deprecated.");
       return;
     }
-
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
