@@ -118,7 +118,7 @@ var FieldDBObject = function FieldDBObject(json) {
   }
   Object.apply(this, arguments);
   // if (!this._rev) {
-  if (!this.id) {
+  if (!this.id && !this._dateCreated) {
     this.dateCreated = Date.now();
   }
 
@@ -191,7 +191,7 @@ FieldDBObject.verbose = function(message, message2, message3, message4) {
     }
   }
 };
-
+FieldDBObject.debugMode = false;
 FieldDBObject.debug = function(message, message2, message3, message4) {
   try {
     if (navigator && navigator.appName === "Microsoft Internet Explorer") {
@@ -336,7 +336,7 @@ FieldDBObject.guessType = function(doc) {
     return "FieldDBObject";
   }
   FieldDBObject.debug("Guessing type " + doc._id);
-  var guessedType = doc.jsonType || doc.collection || "FieldDBObject";
+  var guessedType = doc.previousFieldDBtype || doc.jsonType || doc.collection || "FieldDBObject";
   if (doc.api && doc.api.length > 0) {
     FieldDBObject.debug("using api" + doc.api);
     guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
@@ -358,7 +358,7 @@ FieldDBObject.guessType = function(doc) {
     }
   }
 
-  FieldDBObject.warn("Guessed type " + doc._id + " is a " + guessedType);
+  FieldDBObject.debug("Guessed type " + doc._id + " is a " + guessedType);
   return guessedType;
 };
 
@@ -394,7 +394,7 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
 
   try {
     guessedType = doc.fieldDBtype;
-    if (!guessedType) {
+    if (!guessedType || guessedType === "FieldDBObject") {
       FieldDBObject.debug(" requesting guess type ");
       guessedType = FieldDBObject.guessType(doc);
       FieldDBObject.debug("request complete");
@@ -405,15 +405,20 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       if (doc instanceof FieldDB[guessedType]) {
         return doc;
       }
-      FieldDBObject.warn("Converting doc into guessed type " + guessedType);
       doc = new FieldDB[guessedType](doc);
+      // FieldDBObject.warn("Converting doc into guessed type " + guessedType);
     } else {
-      FieldDBObject.warn("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
       doc = new FieldDBObject(doc);
+      FieldDBObject.warn("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
     }
   } catch (e) {
-    FieldDBObject.warn("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
+    FieldDBObject.debug("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
     FieldDBObject.debug(" error: ", e);
+    var checkPreviousTypeWithoutS = doc.previousFieldDBtype ? doc.previousFieldDBtype.replace(/s$/, "") : "";
+    if (guessedType !== "FieldDBObject" && guessedType !== checkPreviousTypeWithoutS) {
+      doc.previousFieldDBtype = doc.previousFieldDBtype || "";
+      doc.previousFieldDBtype = doc.previousFieldDBtype + guessedType;
+    }
     doc = new FieldDBObject(doc);
   }
   return doc;
@@ -1129,8 +1134,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus) {
         return this.application.corpus;
       }
-      if (FieldDB && FieldDB["Database"]) {
-        return FieldDB["Database"].prototype;
+      try {
+        if (FieldDB && FieldDB["Database"]) {
+          return FieldDB["Database"].prototype;
+        }
+      } catch (e) {
+        if (e.message !== "FieldDB is not defined") {
+          this.warn("Cant get the corpus, cant find the Database class.", e);
+          this.warn("  stack trace" + e.stack);
+        }
       }
     },
     set: function(value) {
@@ -1248,6 +1260,36 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  timestamp: {
+    get: function() {
+      return this._timestamp || this._dateCreated;
+    },
+    set: function(value) {
+      if (value === this._timestamp) {
+        return;
+      }
+      if (!value) {
+        // delete this._timestamp;
+        return;
+      }
+      if (value.replace) {
+        try {
+          value = value.replace(/["\\]/g, "");
+          value = new Date(value);
+          value = value.getTime();
+        } catch (e) {
+          this.warn("Upgraded timestamp" + value);
+        }
+      }
+      this._timestamp = value;
+
+      // Use timestamp as date created if there was none, or the timestamp is older.
+      if (!this._dateCreated || this._dateCreated > value) {
+        this._dateCreated = value;
+      }
+    }
+  },
+
   dateCreated: {
     get: function() {
       return this._dateCreated || FieldDBObject.DEFAULT_DATE;
@@ -1257,14 +1299,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (!value) {
-        delete this._dateCreated;
+        // delete this._dateCreated;
         return;
       }
       if (value.replace) {
         try {
           value = value.replace(/["\\]/g, "");
           value = new Date(value);
-          /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
           this.warn("Upgraded dateCreated" + value);
@@ -1290,7 +1331,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           value = value.replace(/["\\]/g, "");
           value = new Date(value);
-          /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
           this.warn("Upgraded dateModified" + value);
@@ -1422,6 +1462,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (this.api) {
         json.api = this.api;
+      }
+
+      if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
+        delete json.previousFieldDBtype;
       }
 
       return json;

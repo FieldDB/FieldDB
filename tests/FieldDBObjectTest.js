@@ -75,6 +75,7 @@ describe("FieldDBObject", function() {
     });
 
   });
+
   describe("deserialization", function() {
 
     it("should be able to guess its type", function() {
@@ -86,9 +87,42 @@ describe("FieldDBObject", function() {
       expect(mysteryObject).toEqual({
         _fieldDBtype: "FieldDBObject",
         _id: "2389jr9rj490",
-        collection: "somethingnotinthesystem"
+        collection: "somethingnotinthesystem",
+        previousFieldDBtype: 'Somethingnotinthesystem'
       });
 
+    });
+
+    it("should be mark the previous type if it cant guess its type", function() {
+      var wasACommentButFieldDBIsUndefinedInNPMRequireContexts = {
+        "text": "How to do something",
+        "username": "lingllama",
+        "timestamp": "2012-09-26T14:42:05.349Z",
+        "gravatar": "weoaeoriaew"
+      };
+      wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
+      expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
+        _fieldDBtype: 'FieldDBObject',
+        text: 'How to do something',
+        username: 'lingllama',
+        _timestamp: 1348670525349,
+        gravatar: 'weoaeoriaew',
+        previousFieldDBtype: 'Comment',
+        _dateCreated: wasACommentButFieldDBIsUndefinedInNPMRequireContexts.timestamp
+      });
+    });
+
+    it("should be use the previous type when guessing type", function() {
+      var hadAPreviousType = {
+        "text": "How to do something",
+        "username": "lingllama",
+        "timestamp": "2012-09-26T14:42:05.349Z",
+        "gravatar": "weoaeoriaew",
+        "previousFieldDBtype": "SomeSpecializedCommentYouCantGuess"
+      };
+      hadAPreviousType = FieldDBObject.convertDocIntoItsType(hadAPreviousType);
+      expect(hadAPreviousType.fieldDBtype).toEqual("FieldDBObject");
+      expect(hadAPreviousType.previousFieldDBtype).toEqual("SomeSpecializedCommentYouCantGuess");
     });
 
   });
@@ -605,7 +639,7 @@ describe("FieldDBObject", function() {
         debugMode: true,
         mystuff: "this is me"
       });
-      quietDebugging.debug("looking at value of mystuff: "+ quietDebugging.mystuff);
+      quietDebugging.debug("looking at value of mystuff: " + quietDebugging.mystuff);
       expect(quietDebugging.debugMessages).toEqual("looking at value of mystuff: this is me");
     });
 
