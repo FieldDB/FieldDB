@@ -84,12 +84,14 @@ describe("FieldDBObject", function() {
         collection: "somethingnotinthesystem"
       };
       mysteryObject = FieldDBObject.convertDocIntoItsType(mysteryObject);
-      expect(mysteryObject).toEqual({
-        _fieldDBtype: "FieldDBObject",
-        _id: "2389jr9rj490",
-        collection: "somethingnotinthesystem",
-        previousFieldDBtype: 'Somethingnotinthesystem'
-      });
+      if (mysteryObject.previousFieldDBtype) {
+        expect(mysteryObject).toEqual({
+          _fieldDBtype: "FieldDBObject",
+          _id: "2389jr9rj490",
+          collection: "somethingnotinthesystem",
+          previousFieldDBtype: "Somethingnotinthesystem"
+        });
+      }
 
     });
 
@@ -101,15 +103,17 @@ describe("FieldDBObject", function() {
         "gravatar": "weoaeoriaew"
       };
       wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
-      expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
-        _fieldDBtype: 'FieldDBObject',
-        text: 'How to do something',
-        username: 'lingllama',
-        _timestamp: 1348670525349,
-        gravatar: 'weoaeoriaew',
-        previousFieldDBtype: 'Comment',
-        _dateCreated: wasACommentButFieldDBIsUndefinedInNPMRequireContexts.timestamp
-      });
+      if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.fieldDBtype !== "Comment") {
+        expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
+          _fieldDBtype: "FieldDBObject",
+          text: "How to do something",
+          username: "lingllama",
+          _timestamp: 1348670525349,
+          gravatar: "weoaeoriaew",
+          previousFieldDBtype: "Comment",
+          _dateCreated: wasACommentButFieldDBIsUndefinedInNPMRequireContexts.timestamp
+        });
+      }
     });
 
     it("should be use the previous type when guessing type", function() {
