@@ -168,16 +168,83 @@ FieldDBObject.render = function(options) {
   this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
 };
 
+FieldDBObject.verbose = function(message, message2, message3, message4) {
+  try {
+    if (navigator && navigator.appName === "Microsoft Internet Explorer") {
+      return;
+    }
+  } catch (e) {
+    //do nothing, we are in node or some non-friendly browser.
+  }
+  if (this.verboseMode) {
+    var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+    console.log(type.toUpperCase() + " VERBOSE: " + message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
+  }
+};
+
+FieldDBObject.debug = function(message, message2, message3, message4) {
+  try {
+    if (navigator && navigator.appName === "Microsoft Internet Explorer") {
+      return;
+    }
+  } catch (e) {
+    //do nothing, we are in node or some non-friendly browser.
+  }
+  if (this.debugMode) {
+    var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+    console.log(type.toUpperCase() + " DEBUG: " + message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
+  }
+};
+
+FieldDBObject.todo = function(message, message2, message3, message4) {
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  console.warn(type.toUpperCase() + " TODO: " + message);
+  if (message2) {
+    console.warn(message2);
+  }
+  if (message3) {
+    console.warn(message3);
+  }
+  if (message4) {
+    console.warn(message4);
+  }
+};
+
 FieldDBObject.bug = function(message) {
   try {
     alert(message);
   } catch (e) {
-    console.warn(this.fieldDBtype.toUpperCase() + " BUG: " + message);
+    console.log("Alert is not defined, this is strange.");
   }
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  //outputing a stack trace
+  console.error(type.toUpperCase() + " BUG: " + message);
 };
 
 FieldDBObject.warn = function(message, message2, message3, message4) {
-  console.warn(this.fieldDBtype.toUpperCase() + " WARN: " + message);
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  // putting out a stacktrace
+  console.error(type.toUpperCase() + " WARN: " + message);
   if (message2) {
     console.warn(message2);
   }
@@ -308,26 +375,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   debug: {
-    value: function(message, message2, message3, message4) {
-      try {
-        if (navigator && navigator.appName === "Microsoft Internet Explorer") {
-          return;
-        }
-      } catch (e) {
-        //do nothing, we are in node or some non-friendly browser.
-      }
+    value: function( /* message, message2, message3, message4 */ ) {
       if (this.debugMode) {
-        console.log(this.fieldDBtype.toUpperCase() + " DEBUG: " + message);
-
-        if (message2) {
-          console.log(message2);
-        }
-        if (message3) {
-          console.log(message3);
-        }
-        if (message4) {
-          console.log(message4);
-        }
+        FieldDBObject.debug.apply(this, arguments);
       }
     }
   },
@@ -351,9 +401,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   verbose: {
-    value: function(message, message2, message3, message4) {
+    value: function( /* message, message2, message3, message4 */ ) {
       if (this.verboseMode) {
-        this.debug(message, message2, message3, message4);
+        FieldDBObject.verbose.apply(this, arguments);
       }
     }
   },
@@ -416,17 +466,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   todo: {
-    value: function(message, message2, message3, message4) {
-      console.warn(this.fieldDBtype.toUpperCase() + " TODO: " + message);
-      if (message2) {
-        console.warn(message2);
-      }
-      if (message3) {
-        console.warn(message3);
-      }
-      if (message4) {
-        console.warn(message4);
-      }
+    value: function( /* message, message2, message3, message4 */ ) {
+      FieldDBObject.todo.apply(this, arguments);
     }
   },
 
@@ -686,7 +727,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function") {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
@@ -782,13 +823,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in anObject) {
-        if (anObject.hasOwnProperty(aproperty)) {
+        if (anObject.hasOwnProperty(aproperty) && typeof anObject[aproperty] !== "function" && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
           propertyList[aproperty] = true;
         }
       }
 
       for (aproperty in anotherObject) {
-        if (anotherObject.hasOwnProperty(aproperty)) {
+        if (anotherObject.hasOwnProperty(aproperty) && typeof anotherObject[aproperty] !== "function" && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
           propertyList[aproperty] = true;
         }
       }
@@ -813,7 +854,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       for (aproperty in propertyList) {
 
-        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
+        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function") {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
@@ -1452,3 +1493,4 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 });
 
 exports.FieldDBObject = FieldDBObject;
+exports.Document = FieldDBObject;

@@ -577,6 +577,35 @@ describe("FieldDBObject", function() {
       buggy.bug("oopps somethign is wrong, please report this.");
       expect(buggy.showBugMessage).toEqual("oopps somethign is wrong, please report this.");
     });
+
+    it("should be possible for client apps to override the debug function", function() {
+      FieldDBObject.internalAttributesToAutoMerge.push("debugMessages");
+      FieldDBObject.debug = function(message) {
+        this.debugMessages = message;
+      };
+
+      var quietDebugging = new FieldDBObject({
+        debugMode: true,
+        mystuff: "this is me"
+      });
+      quietDebugging.debug("looking at value of mystuff: "+ quietDebugging.mystuff);
+      expect(quietDebugging.debugMessages).toEqual("looking at value of mystuff: this is me");
+    });
+
+
+    it("should be possible for client apps to override the todo function", function() {
+      FieldDBObject.internalAttributesToAutoMerge.push("todoMessages");
+      FieldDBObject.todo = function(message) {
+        this.todoMessages = message;
+      };
+      var quietedTodos = new FieldDBObject({
+        mystuff: "this is me"
+      });
+      quietedTodos.todo("should we override mystuff?");
+      expect(quietedTodos.todoMessages).toEqual("should we override mystuff?");
+    });
+
+
   });
 
   describe("confirming", function() {
@@ -916,6 +945,8 @@ describe("FieldDBObject", function() {
         })
       });
       expect(item1.equals).toBeDefined();
+      // expect(item1).toEqual();
+      // expect(item2).toEqual();
       expect(item1.internalObject.equals(item2.internalObject)).toBe(true);
       expect(item1.equals(item2)).toBe(true);
 
