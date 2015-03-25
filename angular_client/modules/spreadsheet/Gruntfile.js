@@ -50,7 +50,7 @@ module.exports = function(grunt) {
       },
       templates: {
         files: ['index.html', '<%= yeoman.app %>/views/{,*/}*.html'],
-        tasks: ['htmlangular','ngtemplates', 'copy:templates'],
+        tasks: ['ngtemplates', 'copy:templates'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -149,29 +149,6 @@ module.exports = function(grunt) {
         },
         src: ['test/spec/{,*/}*.js']
       }
-    },
-
-    htmlangular: {
-      options: {
-        tmplext: 'html.tmpl',
-        customtags: [
-          'top-nav',
-          'left-bar',
-          'right-bar',
-          'client-footer'
-        ],
-        customattrs: [
-          'fixed-width-box',
-          'video-box'
-        ],
-        relaxerror: [
-          'The frameborder attribute on the iframe element is obsolete. Use CSS instead.'
-        ],
-        reportpath: 'dist/html-angular-validate-report.json'
-      },
-      files: {
-        src: ['app/views/*.html'],
-      },
     },
 
     // Empties folders to start fresh
@@ -381,7 +358,7 @@ module.exports = function(grunt) {
         }]
       },
       templates: {
-        src: ['<%= yeoman.dist %>/scripts/templates.js'],
+        src:['<%= yeoman.dist %>/scripts/templates.js'],
         dest: '<%= yeoman.app %>/scripts/templates.js'
       },
       styles: {
