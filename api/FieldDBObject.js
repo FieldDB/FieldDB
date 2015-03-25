@@ -362,12 +362,36 @@ FieldDBObject.guessType = function(doc) {
   return guessedType;
 };
 
-FieldDBObject.convertDocIntoItsType = function(doc) {
-  var guessedType;
+FieldDBObject.convertDocIntoItsType = function(doc, clone) {
+  var guessedType,
+    typeofAnotherObjectsProperty = Object.prototype.toString.call(doc);
 
-  if (!doc || typeof doc !== "object") {
-    return doc;
+  if (clone) {
+    // Return a clone of simple types, or a new clone of the json of this object
+    if (typeofAnotherObjectsProperty === "[object String]") {
+      return doc + "";
+    } else if (typeofAnotherObjectsProperty === "[object Number]") {
+      return doc + 0;
+    } else if (typeofAnotherObjectsProperty === "[object Date]") {
+      return new Date(doc);
+    } else if (typeofAnotherObjectsProperty === "[object Array]") {
+      return doc.concat([]);
+    } else {
+      doc = doc.toJSON ? doc.toJSON() : doc;
+    }
+  } else {
+    // Return the doc if its a simple type
+    if (typeofAnotherObjectsProperty === "[object String]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Number]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Date]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Array]") {
+      return doc;
+    }
   }
+
   try {
     guessedType = doc.fieldDBtype;
     if (!guessedType) {
@@ -939,22 +963,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
-            var typeofAnotherObjectsProperty = Object.prototype.toString.call(anotherObject[aproperty]);
-
-            if (typeofAnotherObjectsProperty === "[object String]") {
-              resultObject[aproperty] = anotherObject[aproperty] + "";
-            } else if (typeofAnotherObjectsProperty === "[object Number]") {
-              resultObject[aproperty] = anotherObject[aproperty] + 0;
-            } else if (typeofAnotherObjectsProperty === "[object Date]") {
-              resultObject[aproperty] = new Date(anotherObject[aproperty]);
-            } else if (typeofAnotherObjectsProperty === "[object Array]") {
-              resultObject[aproperty] = anotherObject[aproperty].concat([]);
-            } else {
-              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
-              this.debug("Using a constructor");
-              resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
-            }
-
+            this.debug("Using a constructor");
+            resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty], "clone");
           }
           // dont continue, instead let the iffs run
         }
