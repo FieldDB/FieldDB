@@ -196,6 +196,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       validationStati: DatumStates,
       tags: DatumTags,
 
+      fields: DatumFields,
       datumFields: DatumFields,
       speakerFields: DatumFields,
       participantFields: DatumFields,
@@ -320,6 +321,150 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
       });
       return deferred.promise;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      this.debug("getting datumFields");
+      return this._datumFields;
+    },
+    set: function(value) {
+      if (value === this._datumFields) {
+        return;
+      }
+      if (!value) {
+        delete this._datumFields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["datumFields"] === "function" && !(value instanceof this.INTERNAL_MODELS["datumFields"])) {
+          value = new this.INTERNAL_MODELS["datumFields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._datumFields = value;
+    }
+  },
+
+  sessionFields: {
+    get: function() {
+      this.debug("getting sessionFields");
+      return this._sessionFields;
+    },
+    set: function(value) {
+      if (value === this._sessionFields) {
+        return;
+      }
+      if (!value) {
+        delete this._sessionFields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["sessionFields"] === "function" && !(value instanceof this.INTERNAL_MODELS["sessionFields"])) {
+          value = new this.INTERNAL_MODELS["sessionFields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._sessionFields = value;
+    }
+  },
+
+  speakerFields: {
+    get: function() {
+      this.debug("getting speakerFields");
+      return this._speakerFields;
+    },
+    set: function(value) {
+      if (value === this._speakerFields) {
+        return;
+      }
+      if (!value) {
+        delete this._speakerFields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["speakerFields"] === "function" && !(value instanceof this.INTERNAL_MODELS["speakerFields"])) {
+          value = new this.INTERNAL_MODELS["speakerFields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._speakerFields = value;
+    }
+  },
+
+  participantFields: {
+    get: function() {
+      this.debug("getting participantFields");
+      return this._participantFields;
+    },
+    set: function(value) {
+      if (value === this._participantFields) {
+        return;
+      }
+      if (!value) {
+        delete this._participantFields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["participantFields"] === "function" && !(value instanceof this.INTERNAL_MODELS["participantFields"])) {
+          value = new this.INTERNAL_MODELS["participantFields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._participantFields = value;
+    }
+  },
+
+  conversationFields: {
+    get: function() {
+      this.debug("getting conversationFields");
+      return this._conversationFields;
+    },
+    set: function(value) {
+      if (value === this._conversationFields) {
+        return;
+      }
+      if (!value) {
+        delete this._conversationFields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["conversationFields"] === "function" && !(value instanceof this.INTERNAL_MODELS["conversationFields"])) {
+          value = new this.INTERNAL_MODELS["conversationFields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._conversationFields = value;
+    }
+  },
+
+  fields: {
+    get: function() {
+      this.debug("getting fields");
+      return this._fields;
+    },
+    set: function(value) {
+      if (value === this._fields) {
+        return;
+      }
+      if (!value) {
+        delete this._fields;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["fields"] === "function" && !(value instanceof this.INTERNAL_MODELS["fields"])) {
+          value = new this.INTERNAL_MODELS["fields"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._fields = value;
     }
   },
 
