@@ -132,31 +132,7 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   }
   spreadsheetDatum.datumTags = [];
 
-  //TODO do we really need this flag?, yes we need it because the audio might be flagged as deleted
-  spreadsheetDatum.hasAudio = false;
-  if (spreadsheetDatum.audioVideo.length > 0) {
-    spreadsheetDatum.audioVideo.map(function(audioVideo) {
-      if (audioVideo.trashed !== "deleted") {
-        spreadsheetDatum.hasAudio = true;
-      }
-    });
-  }
-  spreadsheetDatum.hasImages = false;
-  if (spreadsheetDatum.images.length > 0) {
-    spreadsheetDatum.images.map(function(image) {
-      if (image.trashed !== "deleted") {
-        spreadsheetDatum.hasImages = true;
-      }
-    });
-  }
-  spreadsheetDatum.hasRelatedData = false;
-  if (spreadsheetDatum.relatedData.length > 0) {
-    spreadsheetDatum.relatedData.map(function(relatedItem) {
-      if (relatedItem.trashed !== "deleted") {
-        spreadsheetDatum.hasRelatedData = true;
-      }
-    });
-  }
+
 
   spreadsheetDatum.saved = "fresh";
   spreadsheetDatum.fossil = JSON.parse(JSON.stringify(spreadsheetDatum));
