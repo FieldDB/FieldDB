@@ -718,25 +718,26 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
           if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
             // If the data list was empty, assign the docIds which will populate it with placeholders
-            if (!self._datalist.docs || self._datalist.docs.length < 1) {
-              self._datalist.docIds = generatedDatalist.docIds;
-            } else {
-              // If the data list doesn't have this id, add a placeholder
-              generatedDatalist.docIds.map(function(docPrimaryKey) {
-                if (!self._datalist.docs[docPrimaryKey]) {
-                  var docPlaceholder = {
-                    fieldDBType: "Datum"
-                  };
-                  docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
-                  self._datalist.add(docPlaceholder);
-                }
-              });
-              // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
-              if (self._datalist.length !== generatedDatalist.docIds.length) {
-                self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
-              }
-              delete generatedDatalist.docIds;
+            if (!self._datalist.docs) {
+              self._datalist.docs = [];
             }
+
+            // If the data list doesn't have this id, add a placeholder
+            generatedDatalist.docIds.map(function(docPrimaryKey) {
+              if (!self._datalist.docs[docPrimaryKey]) {
+                var docPlaceholder = {
+                  fieldDBtype: "Datum"
+                };
+                docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
+                self._datalist.add(docPlaceholder);
+              }
+            });
+            // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
+            if (self._datalist.length !== generatedDatalist.docIds.length) {
+              self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+            }
+            delete generatedDatalist.docIds;
+
           }
           delete generatedDatalist.title;
           delete generatedDatalist.description;
