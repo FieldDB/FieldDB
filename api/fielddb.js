@@ -28,6 +28,8 @@
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
   var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
+  var Comment = require("./comment/Comment").Comment;
+  var Comments = require("./comment/Comments").Comments;
   var Datum = require("./datum/Datum").Datum;
   var Session = require("./datum/Session").Session;
   var DatumField = require("./datum/DatumField").DatumField;
@@ -86,6 +88,10 @@
   FieldDB["AudioVideos"] = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
   FieldDB["AudioVideoRecorder"] = AudioVideoRecorder;
+  FieldDB.Comment = Comment;
+  FieldDB["Comment"] = Comment;
+  FieldDB.Comments = Comments;
+  FieldDB["Comments"] = Comments;
   FieldDB.Datum = Datum;
   FieldDB["Datum"] = Datum;
   FieldDB.Session = Session;

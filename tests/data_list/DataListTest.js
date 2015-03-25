@@ -410,6 +410,11 @@ describe("Data List", function() {
       var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
       expect(list.comments).toBeDefined();
       expect(list.comments.collection[0].text).toContain("an example of how you can");
+      expect(list.comments.fieldDBtype).toEqual("Comments");
+
+      list.comments.debugMode = true;
+      expect(list.comments._collection[0].previousFieldDBtype).toEqual("Comment");
+      expect(list.comments._collection[0].fieldDBtype).toEqual("Comment");
 
       var listToSave = list.toJSON();
       expect(listToSave._id).toEqual(list.id);
@@ -421,7 +426,9 @@ describe("Data List", function() {
       expect(listToSave.dateCreated).toEqual(list.dateCreated);
       expect(listToSave.dateModified).toEqual(list.dateModified);
       expect(listToSave.comments).toBeDefined();
+
       expect(listToSave.comments[0].text).toContain("an example of how you can");
+      expect(listToSave.comments[0].previousFieldDBtype).toBeUndefined();
       expect(listToSave.comments[0].fieldDBtype).toEqual("Comment");
       expect(listToSave.comments[0].text).toEqual(list.comments.collection[0].text);
       expect(listToSave.comments[0].username).toEqual(list.comments.collection[0].username);
