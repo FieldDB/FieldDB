@@ -1,6 +1,8 @@
 <div class="spreadsheet-row" data-spreadsheet-no-data-to-display ></div>
 
-<div class="spreadsheet-row relativePosition" spreadsheet-catch-arrow-key
+<div
+class="container-fluid"
+spreadsheet-catch-arrow-key
 ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}"
 ng-repeat="datum in collection._collection track by $index "
 ng-click="selectRow($index)"
@@ -12,11 +14,11 @@ ng-hide="loading || readPermissions==false">
 -->
 
 <!-- Show when not editing -->
-<div class="spreadsheet-row" data-spreadsheet-adapting-columnar-template-read>
+<div class="row-fluid" data-spreadsheet-adapting-columnar-template-read>
 </div>
 </div>
 
-<div class="spreadsheet-row relativePosition"
+<div ng-show="corpus.currentSession.id" class="spreadsheet-row"
 data-spreadsheet-adapting-columnar-template-new >
 </div>
 
