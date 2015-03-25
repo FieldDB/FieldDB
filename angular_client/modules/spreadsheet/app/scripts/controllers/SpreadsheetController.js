@@ -200,36 +200,36 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     if (preferedSpreadsheetShape.columns === 1) {
-      $rootScope.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
         preferedSpreadsheetShape.rows + 1
       );
-      $rootScope.fieldsInColumns.second = [];
-      $rootScope.fieldsInColumns.third = [];
+      $rootScope.application.corpus.fieldsInColumns.second = [];
+      $rootScope.application.corpus.fieldsInColumns.third = [];
       $scope.fieldSpanWidthClassName = "span10";
       $scope.columnWidthClass = "span10";
     } else if (preferedSpreadsheetShape.columns === 2) {
-      $rootScope.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
         preferedSpreadsheetShape.rows + 1
       );
-      $rootScope.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
         preferedSpreadsheetShape.rows + 1,
         preferedSpreadsheetShape.rows * 2 + 1
       );
-      $rootScope.fieldsInColumns.third = [];
+      $rootScope.application.corpus.fieldsInColumns.third = [];
       $scope.fieldSpanWidthClassName = "span5";
       $scope.columnWidthClass = "span5";
     } else if (preferedSpreadsheetShape.columns === 3) {
-      $rootScope.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
         preferedSpreadsheetShape.rows + 1
       );
-      $rootScope.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
         preferedSpreadsheetShape.rows + 1,
         preferedSpreadsheetShape.rows * 2 + 1
       );
-      $rootScope.fieldsInColumns.third = $rootScope.application.corpus.datumFields._collection.slice(
+      $rootScope.application.corpus.fieldsInColumns.third = $rootScope.application.corpus.datumFields._collection.slice(
         preferedSpreadsheetShape.rows * 2 + 1,
         preferedSpreadsheetShape.rows * 3 + 1
       );
@@ -283,7 +283,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Set scope variables
   $scope.documentReady = false;
-  $rootScope.fieldsInColumns = $rootScope.fieldsInColumns || {
+  $rootScope.application.corpus.fieldsInColumns = $rootScope.application.corpus.fieldsInColumns || {
     first: [],
     second: [],
     third: [],
@@ -1308,9 +1308,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var mapFieldsToTrue = function(datumField) {
       fieldsInScope[datumField.id] = true;
     };
-    for (var column in $scope.fieldsInColumns) {
-      if ($scope.fieldsInColumns.hasOwnProperty(column)) {
-        $scope.fieldsInColumns[column].map(mapFieldsToTrue);
+    for (var column in $rootScope.application.corpus.fieldsInColumns) {
+      if ($rootScope.application.corpus.fieldsInColumns.hasOwnProperty(column)) {
+        $rootScope.application.corpus.fieldsInColumns[column].map(mapFieldsToTrue);
       }
     }
     fieldsInScope.judgement = true;
