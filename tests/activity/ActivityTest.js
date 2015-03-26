@@ -1,6 +1,8 @@
 var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 var Activity = require("../../api/activity/Activity").Activity;
 var Activities = require("../../api/activity/Activities").Activities;
+var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
+var specIsRunningTooLong = 5000;
 
 describe("Activities: Test Activity Feed replication.", function() {
   it("should have an id if it gets inserted into pouch.", function() {
@@ -237,10 +239,111 @@ describe(
     });
 
 
-    xdescribe("serialization", function() {
+    describe("serialization", function() {
 
-      it("should save all activities", function() {
+
+      it("should refuse to save an item hasn't changed", function(done) {
+        var activity = new Activity({
+          user: {
+            username: "hi",
+            gravatar: "yo"
+          },
+          verb: "modified",
+          directobject: "noqata"
+        });
+        activity.save().then(function(result) {
+          expect(result).toBe(activity);
+          expect(result.warnMessage).toContain("Item hasn't really changed, no need to save...");
+        }, function(error) {
+          expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
+        }).done(done);
+      }, specIsRunningTooLong);
+
+
+      it("should save an item which has changed if the right database is defined", function(done) {
+        var activity = new Activity({
+          user: {
+            username: "hi",
+            gravatar: "yo"
+          },
+          verb: "modified",
+          directobject: "noqata",
+          dbname: "jenkins-testingdb"
+        });
+
+        // add a mock database
+        activity.corpus = mockDatabase;
+        activity.corpus.dbname = "jenkins-testingdb";
+        expect(activity.corpus).toBeDefined();
+        expect(activity._database).toBeDefined();
+        expect(activity.corpus).toBe(activity._database);
+        expect(activity.corpus.set).toBeDefined();
+
+        activity.fossil = {};
+        activity.save().then(function(result) {
+          expect(result).toBe(activity);
+          expect(activity.rev).toBeDefined();
+          expect(activity.rev.length).toBeGreaterThan(14);
+          expect(activity.warnMessage).toBeUndefined();
+        }, function(error) {
+          console.log(error);
+          expect(false).toBeTruthy();
+        }).done(done);
+      }, specIsRunningTooLong);
+
+
+      it("should refuse to save if there is no database to save an item which has changed", function(done) {
+        var activity = new Activity({
+          user: {
+            username: "hi",
+            gravatar: "yo"
+          },
+          verb: "modified",
+          directobject: "noqata"
+        });
+        activity.fossil = {};
+        activity.save().then(function(result) {
+          expect(true).toBeFalsy();
+        }, function(error) {
+          expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
+        }).done(done);
+      }, specIsRunningTooLong);
+
+      it("should not complain about saving an empty feed", function(done) {
         var activityFeed = new Activities({
+          parent: mockDatabase,
+          connection: {
+            protocol: "https://",
+            domain: "localhost",
+            port: "6984",
+            dbname: "jenkins-testingcorpus",
+            path: "",
+            serverLabel: "localhost",
+            authUrls: ["https://localhost:3183"],
+            // corpusUrls: ["https://localhost:6984"],
+            userFriendlyServerName: "Localhost"
+          }
+        });
+
+        expect(activityFeed.length).toEqual(0);
+        activityFeed.save().then(function(result) {
+          expect(result).toBe(activityFeed);
+
+          expect(activityFeed.saving).toEqual(false);
+          expect(activityFeed.warnMessage).toContain("Save was unncessary, the activity feed was empty...");
+        }, function(error) {
+          expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
+        }).done(done);
+
+        expect(activityFeed.whenReady).toBeDefined();
+        expect(activityFeed.saving).toEqual(true);
+
+      }, specIsRunningTooLong);
+
+
+      xit("should save all activities", function(done) {
+        var activityFeed = new Activities({
+          parent: mockDatabase,
           connection: {
             protocol: "https://",
             domain: "localhost",
@@ -260,6 +363,7 @@ describe(
           teamOrPersonal: "personal"
         });
 
+
         var activity = activityFeed.add({
           verb: "modified"
         });
@@ -275,17 +379,59 @@ describe(
           teamOrPersonal: "personal"
         });
         expect(activity).toBeDefined();
+        expect(activity.user).toEqual({
+          _fieldDBtype: "UserMask",
+          _username: "unknown"
+        });
         expect(activity.verb).toEqual("logged in");
 
         expect(activityFeed.length).toEqual(2);
-        // activityFeed.save().then(function(){
+        activityFeed.save().then(function(result) {
+          expect(result).toBe(activityFeed);
 
-        // }, function(){
+          delete activityFeed.docs._collection[0].warnMessage;
+          expect(activityFeed.docs._collection[0]).toEqual({
+            _fieldDBtype: 'Activity',
+            _verb: 'modified',
+            _timestamp: activityFeed.docs._collection[0].timestamp,
+            _dateCreated: activityFeed.docs._collection[0].timestamp,
+            user: {
+              _fieldDBtype: 'UserMask',
+              _username: 'unknown'
+            },
+            previousFieldDBtype: 'Activity',
+            _version: activityFeed.version,
+            _unsaved: true
+          });
 
-        // });
+          delete activityFeed.docs._collection[1].warnMessage;
+          expect(activityFeed.docs._collection[1]).toEqual({
+            _fieldDBtype: 'Activity',
+            _verb: 'logged in',
+            _verbicon: 'icon-check',
+            directobjecticon: 'icon-user',
+            teamOrPersonal: 'personal',
+            _timestamp: activityFeed.docs._collection[1].timestamp,
+            _dateCreated: activityFeed.docs._collection[1].timestamp,
+            user: {
+              _fieldDBtype: 'UserMask',
+              _username: 'unknown'
+            },
+            previousFieldDBtype: 'Activity',
+            _version: activityFeed.version,
+            _unsaved: true
+          });
 
-      });
+          expect(activityFeed.saving).toEqual(false);
+          expect(activityFeed.warnMessage).toContain("Saving 2 items out of a collection with  2 items");
+        }, function(error) {
+          expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
+        }).done(done);
 
+        expect(activityFeed.whenReady).toBeDefined();
+        expect(activityFeed.saving).toEqual(true);
+
+      }, specIsRunningTooLong);
     });
 
     xit("should show my most recent team's activities by default.", function() {

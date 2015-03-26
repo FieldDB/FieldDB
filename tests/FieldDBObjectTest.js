@@ -324,7 +324,6 @@ describe("FieldDBObject", function() {
   describe("persisance", function() {
 
 
-
     it("should be able to return a promise for an item from the database", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
@@ -355,6 +354,27 @@ describe("FieldDBObject", function() {
 
 
     }, specIsRunningTooLong);
+
+
+    it("should refuse to save an item which belongs in another database", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+      });
+
+      // add a mock database
+      object._corpus = mockDatabase;
+      object._corpus.dbname = "jenkins-doesntmatchdb";
+      expect(object._corpus).toBeDefined();
+      expect(object.corpus.set).toBeDefined();
+
+      object.fossil = {};
+      object.save().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["This item belongs in the lingallama-communitycorpusdatabase, not in the jenkins-doesntmatchdb database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
 
     it("should refuse to fetch an item which has no id", function(done) {
       var object = new FieldDBObject({
@@ -526,6 +546,7 @@ describe("FieldDBObject", function() {
     });
 
     it("should be able to set the revision number and other housekeeping after a save of a new item", function(done) {
+      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
@@ -552,6 +573,7 @@ describe("FieldDBObject", function() {
     }, specIsRunningTooLong);
 
     it("should be able to set the revision number and other housekeeping after a save of an existing item", function(done) {
+      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
         corpus: mockDatabase,
         dbname: "lingallama-communitycorpus",
@@ -679,6 +701,7 @@ describe("FieldDBObject", function() {
 
 
     it("should detect if item was actually changed", function(done) {
+      mockDatabase.dbname = "jenkins-firstcorpus";
       var object = new FieldDBObject({
         corpus: mockDatabase,
         dbname: "jenkins-firstcorpus",
@@ -744,6 +767,7 @@ describe("FieldDBObject", function() {
 
 
     it("should be able set entered by user using database connection info", function(done) {
+      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
@@ -1305,7 +1329,6 @@ describe("FieldDBObject", function() {
         done();
       }, 10);
     });
-
 
   });
 

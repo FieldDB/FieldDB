@@ -700,22 +700,47 @@ Collection.prototype = Object.create(Object.prototype, {
   // },
 
   save: {
-    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
       var deferred = Q.defer(),
         self = this,
         promises = [];
 
       this.saving = true;
+      this.whenReady = deferred.promise;
+
       this.map(function(item) {
-        promises.push(item.save(optionalUserWhoSaved, saveEvenIfSeemsUnchanged));
+        console.log("saving ", item);
+        if (item) {
+          promises.push(item.save(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl));
+        } else {
+          console.log("not saving this item", item);
+        }
       });
 
+      this.warn("Saving " + promises.length + " items out of a collection with  " + this.length + " items.");
+
       Q.allSettled(promises).done(function(results) {
-        self.bug("TODO test save on collection");
-        self.debug(results);
+        self.warn("Saved a collection", results.length);
+        // self.debug(results);
         self.saving = false;
         deferred.resolve(self);
+        return self;
       });
+
+      // .then(function(results) {
+      //   self.warn("Saved a collection", results.length);
+      //   // self.debug(results);
+      //   self.saving = false;
+      //   deferred.resolve(self);
+      //   return self;
+      // }, function(results) {
+      //   self.warn("Saved a collection,", results.length);
+      //   // self.debug(results);
+      //   self.saving = false;
+      //   deferred.resolve(self);
+      //   return self;
+      // });
+
 
       return deferred.promise;
     }
