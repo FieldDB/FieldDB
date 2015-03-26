@@ -1,5 +1,6 @@
 var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
+var Q = require("q");
 
 describe("FieldDBObject", function() {
 
@@ -322,6 +323,48 @@ describe("FieldDBObject", function() {
 
   describe("persisance", function() {
     it("should be able to return a promise for an item from the database", function(done) {
+      var mockDatabase = {
+        get: function(id) {
+          console.log("pretending we are getting id ", id);
+          var deferred = Q.defer();
+          Q.nextTick(function() {
+            deferred.resolve({
+              _id: id,
+              _rev: "2-aweomw",
+              title: "Community corpus"
+            });
+          });
+          return deferred.promise;
+        }
+      };
+
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        id: "D093j2ae-akmoi3m-2a3wkjen",
+        corpus: mockDatabase
+      });
+
+      object.fetch().then(function() {
+        expect(object.title).toEqual("Community corpus");
+      }, function(error) {
+        expect(false).toBeTruthy();
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should refuse to fetch an item which has no id", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+      });
+
+      object.fetch().then(function() {
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["Cannot fetch if there is no id, or there is no corpus"]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should refuse to fetch if no database can be deduced", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         id: "D093j2ae-akmoi3m-2a3wkjen"
@@ -330,7 +373,7 @@ describe("FieldDBObject", function() {
       object.fetch().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error.userFriendlyErrors).toEqual(["Cannot fetch if there is no id, or there is no corpus"]);
       }).done(done);
     }, specIsRunningTooLong);
 
