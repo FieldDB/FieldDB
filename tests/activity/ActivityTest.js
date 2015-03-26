@@ -303,6 +303,7 @@ describe(
         });
         activity.fossil = {};
         activity.save().then(function(result) {
+          console.log(result);
           expect(true).toBeFalsy();
         }, function(error) {
           expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
@@ -365,7 +366,7 @@ describe(
         activityFeed._database = mockDatabase;
         expect(activityFeed.dbname).toEqual("jenkins-activity_feed");
 
-        activity = activityFeed.add({
+        var activity = activityFeed.add({
           verb: "logged in",
           verbicon: "icon-check",
           directobjecticon: "icon-user",
@@ -386,17 +387,17 @@ describe(
           expect(result).toBe(activityFeed);
           expect(activityFeed.saving).toEqual(false);
 
-          expect(activityFeed.docs._collection[0].id).toBeDefined()
-          expect(activityFeed.docs._collection[0].rev).toBeDefined()
-          expect(activityFeed.docs._collection[0].dbname).toEqual("jenkins-activity_feed")
-          expect(activityFeed.docs._collection[0].teamOrPersonal).toEqual("personal")
-          expect(activityFeed.docs._collection[0].user).toBeDefined()
-          expect(activityFeed.docs._collection[0].user.username).toBeDefined()
-          expect(activityFeed.docs._collection[0].fossil._rev).toEqual(activityFeed.docs._collection[0].rev)
-          expect(activityFeed.docs._collection[0].fossil.api).toEqual(activityFeed.docs._collection[0].api)
-          expect(activityFeed.docs._collection[0].unsaved).toEqual(false)
-          expect(activityFeed.docs._collection[0].saving).toEqual(false)
-          expect(activityFeed.docs._collection[0].whenReady).toBeDefined()
+          expect(activityFeed.docs._collection[0].id).toBeDefined();
+          expect(activityFeed.docs._collection[0].rev).toBeDefined();
+          expect(activityFeed.docs._collection[0].dbname).toEqual("jenkins-activity_feed");
+          expect(activityFeed.docs._collection[0].teamOrPersonal).toEqual("personal");
+          expect(activityFeed.docs._collection[0].user).toBeDefined();
+          expect(activityFeed.docs._collection[0].user.username).toBeDefined();
+          expect(activityFeed.docs._collection[0].fossil._rev).toEqual(activityFeed.docs._collection[0].rev);
+          expect(activityFeed.docs._collection[0].fossil.api).toEqual(activityFeed.docs._collection[0].api);
+          expect(activityFeed.docs._collection[0].unsaved).toEqual(false);
+          expect(activityFeed.docs._collection[0].saving).toEqual(false);
+          expect(activityFeed.docs._collection[0].whenReady).toBeDefined();
 
         }, function(error) {
           expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);

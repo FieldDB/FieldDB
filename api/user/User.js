@@ -5,6 +5,7 @@ var UserMask = require("./UserMask").UserMask;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Connection = require("./../corpus/Connection").Connection;
 var Corpora = require("./../corpus/Corpora").Corpora;
+var Database = require("./../corpus/Database").Database;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var UserPreference = require("./UserPreference").UserPreference;
 var DEFAULT_USER_MODEL = require("./user.json");
