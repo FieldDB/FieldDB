@@ -341,89 +341,63 @@ describe(
       }, specIsRunningTooLong);
 
 
-      xit("should save all activities", function(done) {
+      it("should save all activities", function(done) {
+        mockDatabase.dbname = "jenkins-activity_feed";
         var activityFeed = new Activities({
-          parent: mockDatabase,
           connection: {
             protocol: "https://",
             domain: "localhost",
             port: "6984",
-            dbname: "default",
+            dbname: "jenkins-activity_feed",
             path: "",
             serverLabel: "localhost",
             authUrls: ["https://localhost:3183"],
             // corpusUrls: ["https://localhost:6984"],
             userFriendlyServerName: "Localhost"
           },
-          // dbname: "lingllama-activity_feed",
-          user: {
-            username: "lingllama",
+          // dbname: "jenkins-activity_feed",
+          parent: {
+            username: "jenkins",
             gravatar: "54b53868cb4d555b804125f1a3969e87"
           },
           teamOrPersonal: "personal"
         });
-
-
-        var activity = activityFeed.add({
-          verb: "modified"
-        });
-        expect(activity).toBeDefined();
-        expect(activity.verb).toEqual("modified");
+        activityFeed._database = mockDatabase;
+        expect(activityFeed.dbname).toEqual("jenkins-activity_feed");
 
         activity = activityFeed.add({
           verb: "logged in",
           verbicon: "icon-check",
           directobjecticon: "icon-user",
-          directobject: "",
+          directobject: "noqata tusu",
           indirectobject: "",
           teamOrPersonal: "personal"
         });
         expect(activity).toBeDefined();
+        expect(activity.dbname).toEqual(activityFeed.dbname);
         expect(activity.user).toEqual({
           _fieldDBtype: "UserMask",
           _username: "unknown"
         });
         expect(activity.verb).toEqual("logged in");
 
-        expect(activityFeed.length).toEqual(2);
+        expect(activityFeed.length).toEqual(1);
         activityFeed.save().then(function(result) {
           expect(result).toBe(activityFeed);
-
-          delete activityFeed.docs._collection[0].warnMessage;
-          expect(activityFeed.docs._collection[0]).toEqual({
-            _fieldDBtype: 'Activity',
-            _verb: 'modified',
-            _timestamp: activityFeed.docs._collection[0].timestamp,
-            _dateCreated: activityFeed.docs._collection[0].timestamp,
-            user: {
-              _fieldDBtype: 'UserMask',
-              _username: 'unknown'
-            },
-            previousFieldDBtype: 'Activity',
-            _version: activityFeed.version,
-            _unsaved: true
-          });
-
-          delete activityFeed.docs._collection[1].warnMessage;
-          expect(activityFeed.docs._collection[1]).toEqual({
-            _fieldDBtype: 'Activity',
-            _verb: 'logged in',
-            _verbicon: 'icon-check',
-            directobjecticon: 'icon-user',
-            teamOrPersonal: 'personal',
-            _timestamp: activityFeed.docs._collection[1].timestamp,
-            _dateCreated: activityFeed.docs._collection[1].timestamp,
-            user: {
-              _fieldDBtype: 'UserMask',
-              _username: 'unknown'
-            },
-            previousFieldDBtype: 'Activity',
-            _version: activityFeed.version,
-            _unsaved: true
-          });
-
           expect(activityFeed.saving).toEqual(false);
-          expect(activityFeed.warnMessage).toContain("Saving 2 items out of a collection with  2 items");
+
+          expect(activityFeed.docs._collection[0].id).toBeDefined()
+          expect(activityFeed.docs._collection[0].rev).toBeDefined()
+          expect(activityFeed.docs._collection[0].dbname).toEqual("jenkins-activity_feed")
+          expect(activityFeed.docs._collection[0].teamOrPersonal).toEqual("personal")
+          expect(activityFeed.docs._collection[0].user).toBeDefined()
+          expect(activityFeed.docs._collection[0].user.username).toBeDefined()
+          expect(activityFeed.docs._collection[0].fossil._rev).toEqual(activityFeed.docs._collection[0].rev)
+          expect(activityFeed.docs._collection[0].fossil.api).toEqual(activityFeed.docs._collection[0].api)
+          expect(activityFeed.docs._collection[0].unsaved).toEqual(false)
+          expect(activityFeed.docs._collection[0].saving).toEqual(false)
+          expect(activityFeed.docs._collection[0].whenReady).toBeDefined()
+
         }, function(error) {
           expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]);
         }).done(done);
@@ -437,16 +411,14 @@ describe(
     xit("should show my most recent team's activities by default.", function() {
       expect(true).toBeTruthy();
     });
-    it(
-      "should display a drop down box of my teams and members of my teams.",
-      function() {
-        expect(true).toBeTruthy();
-      });
-    it(
-      "should let me enter anyone's user name to see their activity feed if its public.",
-      function() {
-        expect(true).toBeTruthy();
-      });
+
+    it("should display a drop down box of my teams and members of my teams.", function() {
+      expect(true).toBeTruthy();
+    });
+
+    it("should let me enter anyone's user name to see their activity feed if its public.", function() {
+      expect(true).toBeTruthy();
+    });
   });
 
 describe(
