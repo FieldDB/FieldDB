@@ -1,4 +1,5 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var UserMask = require("./../user/UserMask").UserMask;
 var CORS = require("./../CORS").CORS;
 var Q = require("q");
 /**
@@ -44,6 +45,33 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
   api: {
     value: "/activities"
+  },
+
+  whenWhatWho: {
+    get: function() {
+      if (this.id) {
+        return this.id;
+      }
+      var uniqueActivitiesOnWhenWhatWho = "";
+      if (this.timestamp) {
+        uniqueActivitiesOnWhenWhatWho = uniqueActivitiesOnWhenWhatWho + this.timestamp;
+      } else {
+        return;
+      }
+      if (this.verb) {
+        uniqueActivitiesOnWhenWhatWho = uniqueActivitiesOnWhenWhatWho + this.verb;
+      } else {
+        return;
+      }
+      if (this.directobject) {
+        uniqueActivitiesOnWhenWhatWho = uniqueActivitiesOnWhenWhatWho + this.directobject;
+      }
+      if (this.user && this.user.username) {
+        uniqueActivitiesOnWhenWhatWho = uniqueActivitiesOnWhenWhatWho + this.user.username;
+      }
+
+      return uniqueActivitiesOnWhenWhatWho;
+    }
   },
 
   defaults: {
@@ -244,12 +272,15 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
   // Internal models: used by the parse function
   INTERNAL_MODELS: {
     value: {
-      // user: UserMask
+      user: UserMask
     }
   },
 
   getDefaultForVerb: {
     value: function(value) {
+      if (!value) {
+        return {};
+      }
       if (value.replace) {
         value.replace(/ed$/, "");
       }
@@ -493,8 +524,13 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
       this.directobject = this.directobject;
       this.indirectobject = this.indirectobject;
       this.context = this.context;
+      this.user = this.user;
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      json.user = {
+        username: json.user.username,
+        gravatar: json.user.gravatar
+      }
       this.debug(json);
       return json;
     }
