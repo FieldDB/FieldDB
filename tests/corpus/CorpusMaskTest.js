@@ -64,6 +64,7 @@ describe("CorpusMask ", function() {
       publicCorpus: "",
       validationStati: [],
       tags: [],
+      fields: [],
       datumFields: [],
       participantFields: [],
       speakerFields: [],
@@ -157,34 +158,43 @@ describe("corpus collections", function() {
 
   });
 
+
+  it("should be to deduce a dbname if entered invalidly", function() {
+    var connection = new Connection();
+    connection.dbname = "jenkins-firstcorpus";
+
+    expect(connection.dbname).toEqual("jenkins-firstcorpus");
+
+  });
+
   it("should be able to figure out a corpus url", function() {
     var connection = new Connection(Connection.defaultConnection(null, URL));
-    connection.dbname = "jenkins-firstname";
+    connection.dbname = "jenkins-firstcorpus";
     expect(connection.corpusUrls).toBeUndefined();
-    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
-    expect(connection.corpusUrls).toEqual(["https://localhost:6984/jenkins-firstname"]);
+    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
+    expect(connection.corpusUrls).toEqual(["https://localhost:6984/jenkins-firstcorpus"]);
 
-    connection.corpusUrl = "https://corpusdev.anotherserver.ca/jenkins-firstname";
-    expect(connection.corpusUrl).toEqual("https://corpusdev.anotherserver.ca/jenkins-firstname");
+    connection.corpusUrl = "https://corpusdev.anotherserver.ca/jenkins-firstcorpus";
+    expect(connection.corpusUrl).toEqual("https://corpusdev.anotherserver.ca/jenkins-firstcorpus");
     expect(connection.corpusUrls).toEqual([
-      "https://corpusdev.anotherserver.ca/jenkins-firstname",
-      "https://localhost:6984/jenkins-firstname"
+      "https://corpusdev.anotherserver.ca/jenkins-firstcorpus",
+      "https://localhost:6984/jenkins-firstcorpus"
     ]);
 
-    connection.corpusUrl = "https://corpus.example.org/jenkins-firstname";
-    expect(connection.corpusUrl).toEqual("https://corpus.example.org/jenkins-firstname");
+    connection.corpusUrl = "https://corpus.example.org/jenkins-firstcorpus";
+    expect(connection.corpusUrl).toEqual("https://corpus.example.org/jenkins-firstcorpus");
     expect(connection.corpusUrls).toEqual([
-      "https://corpus.example.org/jenkins-firstname",
-      "https://corpusdev.anotherserver.ca/jenkins-firstname",
-      "https://localhost:6984/jenkins-firstname"
+      "https://corpus.example.org/jenkins-firstcorpus",
+      "https://corpusdev.anotherserver.ca/jenkins-firstcorpus",
+      "https://localhost:6984/jenkins-firstcorpus"
     ]);
 
-    connection.corpusUrl = "https://localhost:6984/jenkins-firstname";
-    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstname");
+    connection.corpusUrl = "https://localhost:6984/jenkins-firstcorpus";
+    expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
     expect(connection.corpusUrls).toEqual([
-      "https://localhost:6984/jenkins-firstname",
-      "https://corpus.example.org/jenkins-firstname",
-      "https://corpusdev.anotherserver.ca/jenkins-firstname"
+      "https://localhost:6984/jenkins-firstcorpus",
+      "https://corpus.example.org/jenkins-firstcorpus",
+      "https://corpusdev.anotherserver.ca/jenkins-firstcorpus"
     ]);
 
   });
