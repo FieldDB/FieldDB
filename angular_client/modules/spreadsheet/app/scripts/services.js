@@ -173,64 +173,64 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
-    var saveSpreadsheetDatum = function(spreadsheetDatumToBeSaved) {
-      var deferred = Q.defer();
+    // var saveSpreadsheetDatum = function(spreadsheetDatumToBeSaved) {
+    //   var deferred = Q.defer();
 
-      Q.nextTick(function() {
-        // spreadsheetDatumToBeSaved.timestamp = Date.now();
-        // spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date())); //These were done in the edit functions because the data might get saved an hour after it was modified... or more...
-        var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
-          var fieldDBDatum;
-          try {
-            fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
-          } catch (e) {
-            deferred.reject("Error saving datum: " + JSON.stringify(e));
-            return;
-          }
-          saveCouchDoc(fieldDBDatum.dbname, fieldDBDatum).then(function(response) {
-            console.log(response);
-            if (response.status >= 400) {
-              deferred.reject("Error saving datum " + response.status);
-              return;
-            }
-            if (!spreadsheetDatumToBeSaved.id) {
-              spreadsheetDatumToBeSaved.id = response.data.id;
-              spreadsheetDatumToBeSaved.rev = response.data.rev;
-            }
-            deferred.resolve(spreadsheetDatumToBeSaved);
-          }, function(e) {
-            var reason = "Error saving datum. Maybe you're offline?";
-            if (e.data && e.data.reason) {
-              reason = e.data.reason;
-            } else if (e.status) {
-              reason = "Error saving datum: " + e.status;
-            }
-            console.log(reason, fieldDBDatum, e);
-            deferred.reject(reason);
-          });
-        };
+    //   Q.nextTick(function() {
+    //     // spreadsheetDatumToBeSaved.timestamp = Date.now();
+    //     // spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date())); //These were done in the edit functions because the data might get saved an hour after it was modified... or more...
+    //     var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
+    //       var fieldDBDatum;
+    //       try {
+    //         fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
+    //       } catch (e) {
+    //         deferred.reject("Error saving datum: " + JSON.stringify(e));
+    //         return;
+    //       }
+    //       saveCouchDoc(fieldDBDatum.dbname, fieldDBDatum).then(function(response) {
+    //         console.log(response);
+    //         if (response.status >= 400) {
+    //           deferred.reject("Error saving datum " + response.status);
+    //           return;
+    //         }
+    //         if (!spreadsheetDatumToBeSaved.id) {
+    //           spreadsheetDatumToBeSaved.id = response.data.id;
+    //           spreadsheetDatumToBeSaved.rev = response.data.rev;
+    //         }
+    //         deferred.resolve(spreadsheetDatumToBeSaved);
+    //       }, function(e) {
+    //         var reason = "Error saving datum. Maybe you're offline?";
+    //         if (e.data && e.data.reason) {
+    //           reason = e.data.reason;
+    //         } else if (e.status) {
+    //           reason = "Error saving datum: " + e.status;
+    //         }
+    //         console.log(reason, fieldDBDatum, e);
+    //         deferred.reject(reason);
+    //       });
+    //     };
 
-        if (spreadsheetDatumToBeSaved.id) {
-          getDocFromCouchDB(spreadsheetDatumToBeSaved.dbname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
-            var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
-            if (e.data && e.data.reason) {
-              if (e.data.reason === "missing") {
-                e.data.reason = e.data.reason + " Please report this.";
-              }
-              reason = e.data.reason;
-            } else if (e.status) {
-              reason = "Error getting the most recent version of the datum: " + e.status;
-            }
-            console.log(reason, spreadsheetDatumToBeSaved, e);
-            deferred.reject(reason);
-          });
-        } else {
-          convertAndSaveAsFieldDBDatum(getBlankDataTemplateFromCorpus("datumFields"));
-        }
+    //     if (spreadsheetDatumToBeSaved.id) {
+    //       getDocFromCouchDB(spreadsheetDatumToBeSaved.dbname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
+    //         var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
+    //         if (e.data && e.data.reason) {
+    //           if (e.data.reason === "missing") {
+    //             e.data.reason = e.data.reason + " Please report this.";
+    //           }
+    //           reason = e.data.reason;
+    //         } else if (e.status) {
+    //           reason = "Error getting the most recent version of the datum: " + e.status;
+    //         }
+    //         console.log(reason, spreadsheetDatumToBeSaved, e);
+    //         deferred.reject(reason);
+    //       });
+    //     } else {
+    //       convertAndSaveAsFieldDBDatum(getBlankDataTemplateFromCorpus("datumFields"));
+    //     }
 
-      });
-      return deferred.promise;
-    };
+    //   });
+    //   return deferred.promise;
+    // };
 
     var blankDatumTemplate = function() {
       return getBlankDataTemplateFromCorpus("datumFields");
@@ -321,7 +321,7 @@ angular.module('spreadsheetApp')
       updateroles: updateroles,
       removeroles: removeroles,
       saveCouchDoc: saveCouchDoc,
-      saveSpreadsheetDatum: saveSpreadsheetDatum,
+      // saveSpreadsheetDatum: saveSpreadsheetDatum,
       blankDatumTemplate: blankDatumTemplate,
       blankSessionTemplate: blankSessionTemplate,
       blankActivityTemplate: blankActivityTemplate,
