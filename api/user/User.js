@@ -1,4 +1,5 @@
 /* globals localStorage */
+var Activities = require("./../activity/Activities").Activities;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./UserMask").UserMask;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
@@ -61,7 +62,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       fields: DatumFields,
       prefs: UserPreference,
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
-      activityConnection: Connection,
+      activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
       corpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
@@ -253,6 +254,31 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
         }
       }
+    }
+  },
+
+  activityConnection: {
+    get: function() {
+      this.debug("getting activityConnection");
+      return this._activityConnection;
+    },
+    set: function(value) {
+      if (value === this._activityConnection) {
+        return;
+      }
+      if (!value) {
+        delete this._activityConnection;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["activityConnection"] === "function" && !(value instanceof this.INTERNAL_MODELS["activityConnection"])) {
+          value = new this.INTERNAL_MODELS["activityConnection"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      value.parent = this;
+      this._activityConnection = value;
     }
   },
 
