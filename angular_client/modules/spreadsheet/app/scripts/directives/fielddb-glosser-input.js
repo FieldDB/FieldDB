@@ -1,4 +1,4 @@
-/* globals Glosser */
+/* globals Glosser, alert */
 'use strict';
 
 /**
@@ -53,29 +53,45 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
     };
 
     $scope.runGlosserUsingThisField = function(fieldKey, originalvalue, datumornewdatum) {
-      var currentValue = datumornewdatum[fieldKey];
+      if (!$scope.corpus || !$scope.corpus.currentSession) {
+        return;
+      }
+      var tempDatum;
+      if (datumornewdatum === "newDatum") {
+        if (!$scope.corpus.currentSession.newDatum) {
+          return;
+        }
+        tempDatum = $scope.corpus.currentSession.newDatum;
+      } else {
+        if (!$scope.corpus.currentSession.docs || !$scope.corpus.currentSession.docs._collection || !$scope.corpus.currentSession.activeDatumIndex) {
+          return;
+        }
+        tempDatum = $scope.corpus.currentSession.docs._collection[$scope.corpus.currentSession.activeDatumIndex];
+      }
+      var currentValue = tempDatum[fieldKey];
       if (debuggingMode) {
         console.log('requesting semi-automatic glosser: ' + originalvalue + '->' + currentValue);
       }
 
-      if (datumornewdatum.rev) {
-        $rootScope.markAsEdited($scope.fieldData, datumornewdatum);
+      if (tempDatum.rev) {
+        $rootScope.markAsEdited(currentValue, tempDatum);
       } else {
-        if (JSON.stringify(datumornewdatum) === "{}") {
+        alert("TODO decide if its empty");
+        if (JSON.stringify(tempDatum) === "{}") {
           return;
         }
         $rootScope.newRecordHasBeenEdited = true;
       }
-      if (datumornewdatum.fossil && datumornewdatum.fossil[fieldKey] === currentValue) {
+      if (tempDatum.fossil && tempDatum.fossil.fields[fieldKey].value === currentValue) {
         return;
       }
 
-      datumornewdatum.dbname = $scope.corpus.dbname;
+      // tempDatum.dbname = tempDatum.pouchname = $scope.corpus.dbname;
       if (fieldKey === 'utterance') {
-        datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, !$scope.useAutoGlosser);
+        tempDatum = Glosser.guessMorphemesFromUtterance(tempDatum, !$scope.useAutoGlosser);
       } else if (fieldKey === 'morphemes') {
-        datumornewdatum = Glosser.guessUtteranceFromMorphemes(datumornewdatum, !$scope.useAutoGlosser);
-        datumornewdatum = Glosser.guessGlossFromMorphemes(datumornewdatum, !$scope.useAutoGlosser);
+        tempDatum = Glosser.guessUtteranceFromMorphemes(tempDatum, !$scope.useAutoGlosser);
+        tempDatum = Glosser.guessGlossFromMorphemes(tempDatum, !$scope.useAutoGlosser);
       }
     };
 
@@ -85,15 +101,14 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
     template: function(element, attrs) {
       console.log('loading template for fielddbGlosserInput', attrs);
       var templateString =
-        '<input ' +
-        '  ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
-        '  class="{{fieldSpanWidthClassName}}"' +
-        '  type="text"' +
-        '  ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
+        '<input class="spreadsheet-row"' +
+        '  ng-repeat="corpusField in corpus.fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
+        '  ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '.fields[corpusField.id].value, ' + attrs.datumornewdatum + ', $event)"' +
+        '  type="{{corpusField.type}}"' +
         '  placeholder="{{corpusField.label}}"' +
+        '  ng-hide="corpusField.showToUserTypes == \'readonly\'" ' +
         '  title="{{corpusField.help}}"' +
-        '  ng-hide="corpusField.showToUserTypes == \'readonly\'"' +
-        '  ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)"' +
+        '  ng-model="' + attrs.datumornewdatum + '.fields[corpusField.id].value"' +
         '/>';
 
       return templateString;

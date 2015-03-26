@@ -71,6 +71,82 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: Datum
   },
 
+  orthography: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.orthography) {
+        return this.fields.orthography.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.orthography) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.orthography.value = value;
+    }
+  },
+
+  utterance: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.utterance) {
+        return this.fields.utterance.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.utterance) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.utterance.value = value;
+    }
+  },
+
+  morphemes: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.morphemes) {
+        return this.fields.morphemes.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.morphemes) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.morphemes.value = value;
+    }
+  },
+
+  gloss: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.gloss) {
+        return this.fields.gloss.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.gloss) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.gloss.value = value;
+    }
+  },
+
   fields: {
     get: function() {
       this.debug("getting fields");

@@ -4,7 +4,7 @@
 class="container-fluid"
 spreadsheet-catch-arrow-key
 ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}"
-ng-repeat="datum in collection._collection track by $index "
+ng-repeat="datum in application.corpus.currentSession.docs._collection track by $index "
 ng-click="selectRow($index)"
 ng-hide="loading || readPermissions==false">
 
@@ -18,7 +18,8 @@ ng-hide="loading || readPermissions==false">
 </div>
 </div>
 
-<div ng-show="corpus.currentSession.id" class="spreadsheet-row"
+<div
+class="container-fluid"
 data-spreadsheet-adapting-columnar-template-new >
 </div>
 
