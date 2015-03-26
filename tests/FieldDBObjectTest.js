@@ -328,7 +328,10 @@ describe("FieldDBObject", function() {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         id: "D093j2ae-akmoi3m-2a3wkjen",
-        corpus: mockDatabase
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set
+        }
       });
 
       expect(object.fetching).toEqual(undefined);
@@ -362,7 +365,10 @@ describe("FieldDBObject", function() {
       });
 
       // add a mock database
-      object._corpus = mockDatabase;
+      object._corpus = {
+        get: mockDatabase.get,
+        set: mockDatabase.set
+      };
       object._corpus.dbname = "jenkins-doesntmatchdb";
       expect(object._corpus).toBeDefined();
       expect(object.corpus.set).toBeDefined();
@@ -377,6 +383,7 @@ describe("FieldDBObject", function() {
 
 
     it("should refuse to fetch an item which has no id", function(done) {
+      // FieldDBObject.application = null;
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
       });
@@ -546,12 +553,15 @@ describe("FieldDBObject", function() {
     });
 
     it("should be able to set the revision number and other housekeeping after a save of a new item", function(done) {
-      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
-        corpus: mockDatabase
-          // debugMode: true
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        }
+        // debugMode: true
       });
 
       object.fossil = object.toJSON();
@@ -573,9 +583,12 @@ describe("FieldDBObject", function() {
     }, specIsRunningTooLong);
 
     it("should be able to set the revision number and other housekeeping after a save of an existing item", function(done) {
-      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
-        corpus: mockDatabase,
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        },
         dbname: "lingallama-communitycorpus",
         something: "else",
         _rev: "5-ioewmraoimwa",
@@ -642,7 +655,10 @@ describe("FieldDBObject", function() {
     it("should avoid unnecesary saving", function(done) {
       var object = new FieldDBObject({
         id: "2839aj983aja",
-        corpus: mockDatabase
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set
+        }
       });
 
       expect(object.fossil).toBeUndefined();
@@ -701,9 +717,12 @@ describe("FieldDBObject", function() {
 
 
     it("should detect if item was actually changed", function(done) {
-      mockDatabase.dbname = "jenkins-firstcorpus";
       var object = new FieldDBObject({
-        corpus: mockDatabase,
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "jenkins-firstcorpus"
+        },
         dbname: "jenkins-firstcorpus",
         something: "else",
         _rev: "2-28q9ja9q0ka",
@@ -767,11 +786,14 @@ describe("FieldDBObject", function() {
 
 
     it("should be able set entered by user using database connection info", function(done) {
-      mockDatabase.dbname = "lingallama-communitycorpus";
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
-        corpus: mockDatabase
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        }
       });
       object.corpus.connectionInfo = {
         "ok": true,
@@ -819,7 +841,11 @@ describe("FieldDBObject", function() {
       };
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
-        corpus: mockDatabase,
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        },
         something: "else",
         location: {
           "id": "location",
@@ -869,7 +895,11 @@ describe("FieldDBObject", function() {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
-        corpus: mockDatabase
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        }
       });
 
       object.delete("I entered this by mistake").then(function(resultingdocument) {
@@ -893,7 +923,11 @@ describe("FieldDBObject", function() {
         something: "else",
         trashed: "deleted",
         trashedReason: "I imported this by mistake",
-        corpus: mockDatabase
+        corpus: {
+          get: mockDatabase.get,
+          set: mockDatabase.set,
+          dbname: "lingallama-communitycorpus"
+        }
       });
       object.undelete("I deleted this by mistake").then(function(resultingdocument) {
         expect(resultingdocument).toEqual(object);
