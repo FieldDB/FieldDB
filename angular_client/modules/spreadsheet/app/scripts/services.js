@@ -1,4 +1,4 @@
-/* globals  Q, SpreadsheetDatum, FieldDB */
+/* globals  FieldDB */
 'use strict';
 console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 

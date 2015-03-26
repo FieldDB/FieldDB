@@ -1,5 +1,6 @@
 var Diacritics = require("diacritic");
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+var Q = require("q");
 
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").
@@ -664,6 +665,59 @@ Collection.prototype = Object.create(Object.prototype, {
         }
       }
       this._collection.splice(new_index, 0, this._collection.splice(old_index, 1)[0]);
+    }
+  },
+
+  unsaved: {
+    get: function() {
+      for (var itemIndex = this._collection.length - 1; itemIndex >= 0; itemIndex--) {
+        if (this._collection[itemIndex].unsaved) {
+          this._unsaved = true;
+          return this._unsaved;
+        }
+      }
+      this._unsaved = false;
+      return this._unsaved;
+    },
+    set: function(value) {
+      this._unsaved = !!value;
+    }
+  },
+
+  // calculateUnsaved: {
+  //   value: function() {
+  //     var previous = new this.constructor(this.fossil);
+  //     var current = new this.constructor(this);
+
+  //     if (previous.equals(current)) {
+  //       this.warn("The " + this.fieldDBtype + "collection didnt actually change. Not marking as editied");
+  //       this._unsaved = false;
+  //     } else {
+  //       this._unsaved = true;
+  //     }
+  //     return this._unsaved;
+  //   }
+  // },
+
+  save: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
+      var deferred = Q.defer(),
+        self = this,
+        promises = [];
+
+      this.saving = true;
+      this.map(function(item) {
+        promises.push(item.save(optionalUserWhoSaved, saveEvenIfSeemsUnchanged));
+      });
+
+      Q.allSettled(promises).done(function(results) {
+        self.bug("TODO test save on collection");
+        self.debug(results);
+        self.saving = false;
+        deferred.resolve(self);
+      });
+
+      return deferred.promise;
     }
   },
 

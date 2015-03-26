@@ -1,4 +1,4 @@
-/* globals  FieldDB, Q, sjcl, _, confirm, alert, prompt */
+/* globals  FieldDB, sjcl, _, confirm, alert, prompt */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -301,7 +301,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.showEditSessionDetailsDropdown = false;
   $scope.currentDate = new Date();
   $scope.activities = [];
-  $rootScope.newRecordHasBeenEdited = false;
 
   $scope.changeActiveSubMenu = function(subMenu) {
     if ($rootScope.activeSubMenu === subMenu) {
@@ -318,13 +317,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.navigateVerifySaved = function(itemToDisplay) {
-    if ($scope.saved === 'no') {
+    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-    } else if ($scope.saved === "saving") {
+    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
       $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
       $rootScope.openNotification();
-    } else if ($rootScope.newRecordHasBeenEdited === true) {
+    } else if ($rootScope.application.corpus.currentSession.newDatum.unsaved) {
       $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
       $rootScope.openNotification();
     } else {
@@ -450,7 +449,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.newSession = $rootScope.application.corpus.newSession();
       $scope.documentReady = true;
       $rootScope.application.corpus.loading = $rootScope.loading = false;
-      $rootScope.saved = "yes";
     }, function(error) {
       $rootScope.application.corpus.loading = $rootScope.loading = false;
       processServerContactError(error);
@@ -632,9 +630,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.updateAvailableFieldsInColumns();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
-    if (!$scope.newDatum) {
-      $scope.newDatum = $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
-    }
   };
 
   $scope.selectCorpus = function(selectedConnection) {
@@ -708,12 +703,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     console.log("corpus.currentSession changed", oldValue);
 
-    if (!$scope.newDatum) {
-      $scope.newDatum = $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
-      $scope.newDatum.session = $rootScope.application.corpus.currentSession;
+    if (!$rootScope.application.corpus.currentSession.newDatum) {
+      $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
+      $rootScope.application.corpus.currentSession.newDatum.session = $rootScope.application.corpus.currentSession;
     }
 
-    $scope.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
+    $rootScope.application.authentication.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
 
     if ($scope.currentSessionWasNotSetByAHuman) {
       $scope.currentSessionWasNotSetByAHuman = false;
@@ -849,10 +844,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.reloadPage = function() {
-    if ($scope.saved === "no") {
+    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-    } else if ($scope.saved === "saving") {
+    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
       $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
       $rootScope.openNotification();
     } else {
@@ -863,64 +858,50 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.deleteRecord = function(datum) {
+    var r;
     if (!datum.id) {
-      $rootScope.notificationMessage = "Please save changes before continuing.";
-      $rootScope.openNotification();
-      $scope.activeDatumIndex = datum;
-      // } else if (datum.audioVideo && datum.audioVideo[0]) {
-      //   $rootScope.notificationMessage = "You must delete all recordings from this record first.";
-      //   $rootScope.openNotification();
-      //   $scope.activeDatumIndex = datum;
-    } else {
-      var r = confirm("Are you sure you want to put this datum in the trash?");
-      if (r === true) {
-
-        Data.async($rootScope.application.corpus.dbname, datum.id)
-          .then(function(recordToMarkAsDeleted) {
-            recordToMarkAsDeleted.trashed = "deleted";
-            var rev = recordToMarkAsDeleted._rev;
-            console.log(rev);
-            //Upgrade to v1.90
-            if (recordToMarkAsDeleted.attachmentInfo) {
-              delete recordToMarkAsDeleted.attachmentInfo;
-            }
-            Data.saveCouchDoc($rootScope.application.corpus.dbname, recordToMarkAsDeleted)
-              .then(function(response) {
-                // Remove record from scope
-                if (debugging) {
-                  console.log(response);
-                }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
-                $scope.addActivity([{
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-list",
-                  directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "personal"
-                }, {
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-list",
-                  directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "team"
-                }], "uploadnow");
-
-                // Remove record from all scope data and update
-                var index = $scope.allData.indexOf(datum);
-                $scope.allData.splice(index, 1);
-                $scope.loadPaginatedData();
-
-                $scope.saved = "yes";
-                $scope.activeDatumIndex = null;
-              }, function(error) {
-                console.warn(error);
-                $rootScope.application.bug("Error deleting record.\nTry refreshing the data first by clicking ↻.");
-              });
-          });
+      r = confirm("This datum has never been saved, If you delete it you wont be able to recover it. Are you sure you want to delete it?");
+      if (!r) {
+        return;
       }
+      $rootScope.application.corpus.currentSession.docs.remove(datum);
+      return;
     }
+
+    r = confirm("Are you sure you want to put this datum in the trash?");
+    if (!r) {
+      return;
+    }
+    var reason;
+    while (!reason) {
+      reason = prompt("Why are you putting this in the trash?");
+    }
+
+    var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
+    $scope.addActivity([{
+      verb: "deleted",
+      verbicon: "icon-trash",
+      directobjecticon: "icon-list",
+      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "personal"
+    }, {
+      verb: "deleted",
+      verbicon: "icon-trash",
+      directobjecticon: "icon-list",
+      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "team"
+    }], "uploadnow");
+
+
+    datum.trash(reason).then(function() {
+      $rootScope.application.corpus.currentSession.docs.remove(datum);
+      $scope.activeDatumIndex = null;
+    }, function(error) {
+      console.warn(error);
+      $rootScope.application.bug("Error deleting record.");
+    });
   };
 
 
@@ -939,116 +920,58 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         fieldDBDatum.session = $rootScope.application.currentSession;
       }
     });
+    // $rootScope.application.corpus.currentSession.docs.unsaved = true;
 
     $rootScope.application.currentSession.add(fieldDBDatum);
-    $rootScope.newRecordHasBeenEdited = false;
-    $scope.newDatum = $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
+    $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
 
 
-    // Add record to all scope data and update
-    // $scope.allData.push(fieldDBDatum); //inserts new data at the bottom for future pagination.
-    // $scope.data.push(fieldDBDatum);
-    // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
     $scope.activeDatumIndex = "newEntry";
 
-    $scope.saved = "no";
-
-    try {
-      if (!$scope.$$phase) {
-        $scope.$digest(); //$digest or $apply
-      }
-    } catch (e) {
-      console.warn("Digest errored", e);
-    }
+    $rootScope.application.currentSession.render();
   };
 
-  $rootScope.markNewAsEdited = function() {
-    $rootScope.newRecordHasBeenEdited = true;
-  };
 
   $rootScope.markAsNotSaved = function(datum) {
-    datum.saved = "no";
-    $scope.saved = "no";
+    datum.unsaved = true;
+    $rootScope.application.corpus.currentSession.docs.unsaved = true;
   };
 
-  // TODO why does this do somethign with datum tags, can any of this be done in the spreadsheet datum ?
   $rootScope.markAsEdited = function(utterance, datum, $event) {
-    if (FieldDB && FieldDB.FieldDBObject) {
-      var previous = new FieldDB.Datum(datum.fossil);
-      var current = new FieldDB.Datum(datum);
-      delete current.fossil;
-      delete current.$$hashKey;
-      delete current.modifiedByUser;
-      delete previous.modifiedByUser;
 
-      delete current._dateModified;
-      delete previous._dateModified;
-
-      if (previous.equals(current)) {
-        console.log("The datum didnt actually change. Not marking as editied");
-        return;
-      } else {
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        console.warn("@hisakonog turning on debugmode for equality look below here.");
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        current.debugMode = true;
-        current.debugMode = true;
-        previous.equals(current);
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        console.warn("@hisakonog look in the above text for what attribute is not equal on the unchanged datum, we can add it to the list of attributes to ignore.");
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        // datum.saved = "no";
-      }
-    }
-
-    datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-    datum.timestamp = Date.now();
-
-    // Limit activity to one instance in the case of multiple edits to the same datum before 'save'
-    if (!datum.saved || datum.saved === "fresh" || datum.saved === "yes") {
-
-      // Dont Limit users array to unique usernames
-      // datum.modifiedByUser.users = _.map(_.groupBy(datum.modifiedByUser.users, function(x) {
-      //   return x.username;
-      // }), function(grouped) {
-      //   return grouped[0];
-      // });
-      var modifiedByUser = {
-        "username": $rootScope.application.authentication.user.username,
-        "gravatar": $rootScope.application.authentication.user.gravatar,
-        "appVersion": $rootScope.appVersion,
-        "timestamp": datum.timestamp
-      };
-
-      if (!datum.modifiedByUser || !datum.modifiedByUser.users) {
-        datum.modifiedByUser = {
-          "users": []
-        };
-      }
-      datum.modifiedByUser.users.push(modifiedByUser);
-
-      // Update activity feed
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
-      $scope.addActivity([{
-        verb: "modified",
-        verbicon: "icon-pencil",
-        directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "personal"
-      }, {
-        verb: "modified",
-        verbicon: "icon-pencil",
-        directobjecticon: "icon-list",
-        directobject: "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + datum.id + "'>" + utterance + "</a> ",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "team"
-      }]);
-    }
-    datum.saved = "no";
-    $scope.saved = "no";
+    // Update activity feed
+    var indirectObjectString = "in <a href='#corpus/" +
+      $rootScope.application.corpus.dbname + "'>" +
+      $rootScope.application.corpus.title +
+      "</a>";
+    $scope.addActivity([{
+      verb: "modified",
+      verbicon: "icon-pencil",
+      directobjecticon: "icon-list",
+      directobject: "<a href='#corpus/" +
+        $rootScope.application.corpus.dbname +
+        "/datum/" + datum.id + "'>" +
+        utterance +
+        "</a> ",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "personal"
+    }, {
+      verb: "modified",
+      verbicon: "icon-pencil",
+      directobjecticon: "icon-list",
+      directobject: "<a href='#corpus/" +
+        $rootScope.application.corpus.dbname +
+        "/datum/" + datum.id + "'>" +
+        utterance +
+        "</a> ",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "team"
+    }]);
+    datum.unsaved = true;
+    $rootScope.application.corpus.currentSession.docs.unsaved = true;
 
     if ($event && $event.type && $event.type === "submit") {
+      datum.save();
       $scope.selectRow($scope.activeDatumIndex + 1);
     }
   };
@@ -1068,8 +991,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       datum.comments = [];
     }
     datum.comments.push(comment);
-    datum.saved = "no";
-    $scope.saved = "no";
+    datum.unsaved = true;
+    $rootScope.application.corpus.currentSession.docs.unsaved = true;
     datum.dateModified = JSON.parse(JSON.stringify(new Date()));
     datum.timestamp = Date.now();
     datum.lastModifiedBy = $rootScope.application.authentication.user.username;
@@ -1118,103 +1041,67 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.saveChanges = function() {
-    var saveDatumPromises = [];
 
-    var doSomethingElse = function(recordToBeSaved) {
-      if (!recordToBeSaved || recordToBeSaved.saved !== "no") {
-        //not saving this record
-        return;
-      }
+    var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
 
-      var promiseToSaveThisDatum;
+    var activities = [{
+      verb: "added",
+      verbicon: "icon-plus",
+      directobjecticon: "icon-list",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "personal"
+    }, {
+      verb: "added",
+      verbicon: "icon-plus",
+      directobjecticon: "icon-list",
+      indirectobject: indirectObjectString,
+      teamOrPersonal: "team"
+    }];
 
-      var utteranceForActivityFeed = "Datum";
-      if (recordToBeSaved.utterance && recordToBeSaved.utterance !== "") {
-        utteranceForActivityFeed = recordToBeSaved.utterance;
-      }
-
-      var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
-      var activities = [{
-        verb: "added",
-        verbicon: "icon-plus",
-        directobjecticon: "icon-list",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "personal"
-      }, {
-        verb: "added",
-        verbicon: "icon-plus",
-        directobjecticon: "icon-list",
-        indirectobject: indirectObjectString,
-        teamOrPersonal: "team"
-      }];
-
-      if (recordToBeSaved.id) {
-        activities[0].verb = "modified";
-        activities[0].verbicon = "icon-pencil";
-        activities[1].verb = "modified";
-        activities[1].verbicon = "icon-pencil";
-      } else {
-        if ($rootScope.application.corpus.currentSession) {
-          recordToBeSaved.session = $rootScope.application.corpus.currentSession; //TODO check this, should work since the users only open data by elicitation session.
-        } else {
-          $rootScope.application.bug("This appears to be a new record, but there isnt a current data entry session to associate it with. Please report this to support@lingsync.org");
+    alert("TODO pass acitivites to save.", activities);
+    $rootScope.application.corpus.currentSession.docs.save()
+      .then(function(result) {
+        if (result) {
+          console.log(result);
         }
-      }
+        // $rootScope.application.corpus.currentSession.docs.unsaved = true;
+        // // $rootScope.application.bug("There was an error saving one or more records. Please try again.");
+        // $rootScope.application.corpus.currentSession.docs.unsaved = false;
+      });
 
-      $scope.saved = "saving";
-      recordToBeSaved.dbname = $rootScope.application.corpus.dbname;
-      // spreadsheetDatum.dateModified =
-      // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
-      promiseToSaveThisDatum = recordToBeSaved.save();
-      saveDatumPromises.push(promiseToSaveThisDatum);
-
-      promiseToSaveThisDatum
-        .then(function(spreadSheetDatum) {
-          spreadSheetDatum.saved = "yes";
-          activities[0].directobject = activities[1].directobject = "<a href='#corpus/" + $rootScope.application.corpus.dbname + "/datum/" + spreadSheetDatum.id + "'>" + utteranceForActivityFeed + "</a> ";
-          $scope.addActivity(activities, "uploadnow");
-        }, function(reason) {
-          console.log(reason);
-          $scope.saved = "no";
-          $rootScope.application.bug("There was an error saving a record. " + reason);
-          // wish this would work:
-          // $rootScope.notificationMessage = "There was an error saving a record. " + reason;
-          // $rootScope.openNotification();
-          // return;
-        });
-
-    };
-    for (var index in $scope.allData) {
-      console.log(index);
-      if ($scope.allData.hasOwnProperty(index)) {
-        doSomethingElse($scope.allData[index]);
-      }
-    }
-    Q.all(saveDatumPromises).done(function(success, reason) {
-      if (reason) {
-        console.log(reason);
-        $scope.saved = "no";
-        $rootScope.application.bug("There was an error saving one or more records. Please try again.");
-      } else {
-        if ($scope.saved === "saving") {
-          $scope.saved = "yes";
+    $rootScope.application.corpus.activityConnection.docs.save()
+      .then(function(result) {
+        if (result) {
+          console.log(result);
         }
-      }
-    });
+        // $rootScope.application.corpus.currentSession.docs.unsaved = true;
+        // // $rootScope.application.bug("There was an error saving one or more records. Please try again.");
+        // $rootScope.application.corpus.currentSession.docs.unsaved = false;
+      });
+
+
+    $rootScope.application.authentication.activityConnection.docs.save()
+      .then(function(result) {
+        if (result) {
+          console.log(result);
+        }
+        // $rootScope.application.corpus.currentSession.docs.unsaved = true;
+        // // $rootScope.application.bug("There was an error saving one or more records. Please try again.");
+        // $rootScope.application.corpus.currentSession.docs.unsaved = false;
+      });
   };
-
 
   // Set auto-save interval for 5 minutes
   var autoSave = window.setInterval(function() {
-    if ($scope.saved === "no") {
+    // if ($rootScope.application.corpus.currentSession.docs.unsaved) {
       $scope.saveChanges();
-    } else {
+    // } else {
       // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
       // if ($rootScope.loginInfo) {
       //   Data.login($rootScope.application.authentication.user.username,
       //     $rootScope.loginInfo.password);
       // }
-    }
+    // }
   }, 300000);
   if (debugging) {
     console.log("autoSave was defined but not used", autoSave);
@@ -1227,11 +1114,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     if ($scope.searching !== true) {
-      if ($rootScope.newRecordHasBeenEdited !== true) {
+      if (!$rootScope.application.corpus.currentSession.newDatum.unsaved) {
         $scope.activeDatumIndex = scopeIndex;
       } else {
         $scope.activeDatumIndex = scopeIndex + 1;
-        // $scope.createRecord($scope.newDatum);
+        // $scope.createRecord($rootScope.application.corpus.currentSession.newDatum);
       }
       if (targetDatumEntryDomElement) {
         $scope.setDataEntryFocusOn(targetDatumEntryDomElement);
@@ -1250,13 +1137,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.loadDataEntryScreen = function() {
     $scope.dataentry = true;
     $scope.navigateVerifySaved('none');
-    $scope.loadData($scope.application.corpus.currentSession.id);
+    $scope.loadData($rootScope.application.corpus.currentSession.id);
   };
 
   $scope.clearSearch = function() {
     $scope.searchTerm = '';
     $scope.searchHistory = null;
-    $scope.loadData($scope.application.corpus.currentSession.id);
+    $scope.loadData($rootScope.application.corpus.currentSession.id);
   };
   if (FieldDB && FieldDB.DatumField) {
     $scope.addedDatumField = new FieldDB.DatumField({
@@ -1367,14 +1254,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return false;
     };
 
-    // if (!$scope.application.corpus.currentSession.id) {
+    // if (!$rootScope.application.corpus.currentSession.id) {
     // Search allData in scope
     for (var i in $scope.allData) {
       // Determine if record should be included in session search
       var searchTarget = false;
-      if (!$scope.application.corpus.currentSession.id) {
+      if (!$rootScope.application.corpus.currentSession.id) {
         searchTarget = true;
-      } else if ($scope.allData[i].session._id === $scope.application.corpus.currentSession.id) {
+      } else if ($scope.allData[i].session._id === $rootScope.application.corpus.currentSession.id) {
         searchTarget = true;
       }
       if (searchTarget === true) {
@@ -1403,20 +1290,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.selectAll = function() {
-    for (var i in $scope.allData) {
-      if (!$scope.application.corpus.currentSession.id) {
-        $scope.allData[i].checked = true;
-      } else if ($scope.allData[i].session._id === $scope.application.corpus.currentSession.id) {
-        $scope.allData[i].checked = true;
-      }
-    }
+    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
+      datum.selected = true;
+    });
   };
 
   $scope.exportResults = function(size) {
-
-    var results = $filter('filter')($scope.allData, {
-      checked: true
+    var results = [];
+    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
+      if (datum.selected) {
+        results.push(datum);
+      }
     });
+
     if (results.length > 0) {
       $scope.resultsMessage = results.length + " Record(s):";
       $scope.results = results;
@@ -1510,7 +1396,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               function(reason) {
                 console.warn("There was an error saving the activity. ", $scope.activities[index], reason);
                 $rootScope.application.bug("There was an error saving the activity. ");
-                $scope.saved = "no";
+                $rootScope.application.corpus.currentSession.docs.unsaved = true;
               });
         }
       };
@@ -1769,8 +1655,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Prevent an admin from removing him/herself from a corpus if there are no other admins; This
     // helps to avoid a situation in which there is no admin for a
     // corpus
-    if (roles === ["admin"] && $scope.application.corpus.permissions.admins.length < 2) {
-      if ($scope.application.corpus.permissions.admins._collection[0].username.indexOf(userid) > -1) {
+    if (roles === ["admin"] && $rootScope.application.corpus.permissions.admins.length < 2) {
+      if ($rootScope.application.corpus.permissions.admins._collection[0].username.indexOf(userid) > -1) {
         $rootScope.application.bug("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
         return;
       }
@@ -1901,9 +1787,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.flagAsDeleted = function(json, datum) {
     json.trashed = "deleted";
-    if (datum) {
-      $rootScope.markAsNotSaved(datum);
-    }
+    datum.unsaved = true;
   };
 
   $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
@@ -1996,26 +1880,42 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.getSavedState = function() {
-    if ($scope.saved === "yes") {
+    if ($rootScope.application.corpus.currentSession.docs.unsaved === false &&
+      $rootScope.application.corpus.activityConnection.docs.unsaved === false &&
+      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved === false) {
+
       return {
         state: "Saved",
         class: "btn btn-success",
         icon: "fa whiteicon fa-folder",
         text: $rootScope.contextualize("locale_Saved")
       };
-    } else if ($scope.saved === "no") {
+    } else if ($rootScope.application.corpus.currentSession.docs.unsaved ||
+      $rootScope.application.corpus.activityConnection.docs.unsaved ||
+      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved) {
+
       return {
         state: "Save",
         class: "btn btn-danger",
         icon: "fa whiteicon fa-save",
         text: $rootScope.contextualize("locale_Save")
       };
-    } else {
+    } else if ($rootScope.application.corpus.currentSession.docs.saving ||
+      $rootScope.application.corpus.activityConnection.docs.saving ||
+      $rootScope.application.authentication.user.activityConnection.currentSession.docs.saving) {
+
       return {
         state: "Saving",
         class: "pulsing",
         icon: "fa whiteicon fa-folder-open",
         text: $rootScope.contextualize("locale_Saving")
+      };
+    } else {
+      return {
+        state: "Saved",
+        class: "btn",
+        icon: "fa whiteicon fa-folder",
+        text: $rootScope.contextualize("locale_Saved")
       };
     }
   };
@@ -2161,20 +2061,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  $scope.newRecordHasBeenEditedButtonClass = function() {
-    if ($rootScope.newRecordHasBeenEdited === true) {
-      return "btn btn-danger";
-    } else {
-      return "btn btn-primary";
-    }
-  };
-
   window.onbeforeunload = function(e) {
     console.warn(e);
     if ($rootScope.application && $rootScope.application.authentication && $rootScope.application.authentication.user && typeof $rootScope.application.authentication.user.save === "function") {
       $rootScope.application.authentication.user.save();
     }
-    if ($scope.saved === "no") {
+    if ($rootScope.application.corpus.currentSession.docs.unsaved || $rootScope.application.corpus.currentSession.newDatum.unsaved) {
       return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
     } else {
       return;
