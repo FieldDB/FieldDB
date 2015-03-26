@@ -138,6 +138,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
       delete this._docIds;
       this._docs = value;
+      this._docs.primaryKey = this.primaryKey;
     }
   },
 
@@ -157,6 +158,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         value.primaryKey = this.primaryKey;
         this.debug("setting the docs  : ", value);
         this.docs = value;
+        this.docs.primaryKey = this.primaryKey;
         return this.docs._collection[0];
       }
       this.debug("adding to existing data list", value);
@@ -240,6 +242,76 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  reindexFromApi: {
+    value: function() {
+      var self = this,
+        deferred = Q.defer();
+
+      if (!this.api) {
+        this.warn("Not reindexing from the database, this has no api.");
+        deferred.resolve(self);
+        return deferred.promise;
+      }
+
+      var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
+        self.fetching = self.loading = true;
+        self.warn(" problem fetching the data list", err);
+        self.docs = self.docs || [];
+        self.docIds = self.docIds || self._docIds;
+        deferred.reject(err);
+      };
+
+      if (!this.corpus) {
+        Q.nextTick(function() {
+          unableToFetchCurrentDataAffiliatedWithThisDataList("This datalist has no corpus, it doesnt know how to find out which data are in it.");
+          deferred.resolve(self);
+        });
+        return deferred.promise;
+      }
+
+      this.fetching = this.loading = true;
+      this.whenReindexedFromApi = this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
+        self.fetching = self.loading = true;
+        self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", generatedDatalist);
+        if (generatedDatalist) {
+          generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
+          if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
+            // If the data list was empty, assign the docIds which will populate it with placeholders
+            if (!self.docs) {
+              self.docs = [];
+            }
+
+            // If the data list doesn't have this id, add a placeholder
+            generatedDatalist.docIds.map(function(docPrimaryKey) {
+              if (!self.docs[docPrimaryKey]) {
+                var docPlaceholder = {
+                  fieldDBtype: "Datum",
+                  loading: true
+                };
+                docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
+                self.add(docPlaceholder);
+              }
+            });
+            // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
+            if (self.length !== generatedDatalist.docIds.length) {
+              self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+            }
+            delete generatedDatalist.docIds;
+          }
+          delete generatedDatalist.title;
+          delete generatedDatalist.description;
+          // self.merge("self", generatedDatalist);
+          self.render();
+        } else {
+          self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
+        }
+        return self;
+      }, unableToFetchCurrentDataAffiliatedWithThisDataList);
+
+      return deferred.promise;
+    }
+  },
+
   length: {
     get: function() {
       if (this.docIds) {
@@ -254,10 +326,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   primaryKey: {
     get: function() {
-      if (this.docs && this.docs.primaryKey) {
-        return this.docs.primaryKey;
+      if (this._docs && this._docs.primaryKey) {
+        return this._docs.primaryKey;
       }
-      this.warn("cant get the primary key ", this.docs);
+      this.warn("cant get the primary key ", this._docs);
       return "id";
     },
     set: function(value) {
