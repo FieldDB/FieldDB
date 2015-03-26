@@ -132,6 +132,25 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     }
   },
 
+  guessDbType: {
+    value: function(value) {
+      if (!value) {
+        return;
+      }
+      var dbType;
+      if (value.indexOf("activity_feed") > -1) {
+        if (value.split("-").length >= 3) {
+          dbType = "corpus_activity_feed";
+        } else {
+          dbType = "user_activity_feed";
+        }
+      } else {
+        dbType = "corpus";
+      }
+      return dbType;
+    }
+  },
+
   dbname: {
     get: function() {
       if (this.parent && this.parent.dbname) {
@@ -147,24 +166,48 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         delete this._dbname;
         return;
       } else {
-        if (typeof value.trim === "function") {
-          value = value.trim();
-          if (value !== "default") {
-            var pieces = value.split("-");
-            if (pieces.length !== 2) {
-              throw new Error("Database names should be composed of a username-datbaseidentifier" + value);
+        if (typeof value.trim !== "function") {
+          return;
+        }
+        value = value.trim();
+
+        if (value !== "default") {
+          var pieces = value.replace(/-activity_feed$/, "").split("-");
+          var username = pieces.shift();
+          var corpusidentifier = pieces.join("-");
+
+          username = Connection.validateIdentifier(username);
+          corpusidentifier = Connection.validateIdentifier(corpusidentifier);
+
+          var dbType = this.guessDbType(value);
+
+          if (value.indexOf("activity_feed") > -1) {
+            if (value.split("-").length >= 3) {
+              dbType = "corpus_activity_feed";
+            } else {
+              dbType = "user_activity_feed";
             }
-            var identifierValidationResults = Connection.validateIdentifier(pieces[1]);
-            value = pieces[0] + "-" + identifierValidationResults.identifier;
-            if (identifierValidationResults.changes.length > 0) {
-              this.warn(" Invalid identifier ", identifierValidationResults.changes.join("\n "));
-              throw new Error(identifierValidationResults.changes.join("\n "));
+          } else {
+            dbType = "corpus";
+          }
+
+          if (dbType === "corpus") {
+            if (corpusidentifier.identifier.length < 2) {
+              throw new Error("Database names should be composed of a username-datbaseidentifier : " + value);
             }
+            if (corpusidentifier.changes.length > 0) {
+              this.warn(" Invalid identifier ", corpusidentifier.changes.join("\n "));
+              throw new Error(corpusidentifier.changes.join("\n "));
+            }
+            value = username.identifier + "-" + corpusidentifier.identifier;
+          } else if (dbType === "corpus_activity_feed") {
+            value = username.identifier + "-" + corpusidentifier.identifier + "-activity_feed";
+          } else if (dbType === "user_activity_feed") {
+            value = username.identifier + "-activity_feed";
           }
         }
       }
       this._dbname = value;
-
     }
   },
 

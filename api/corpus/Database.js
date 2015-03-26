@@ -162,17 +162,22 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: this.url
       }).then(function(result) {
         if (result._rev) {
-          value._rev = result._rev;
           value.rev = result._rev;
         }
         if (!value._id) {
-          value._id = result._id;
           value.id = result._id;
         }
         deferred.resolve(value);
-      }, function(error) {
-        self.warn("error saving " + error);
-        deferred.reject(error);
+      }, function(reason) {
+        if (!reason) {
+          reason = {
+            status: 400,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."]
+          };
+        }
+        reason.details = details;
+        self.debug(reason);
+        deferred.reject(reason);
       });
       return deferred.promise;
     }
