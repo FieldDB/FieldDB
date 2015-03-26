@@ -210,7 +210,7 @@ describe("FieldDBObject", function() {
       });
     });
 
-    describe("cloning and minimal pairs", function() {
+    xdescribe("cloning and minimal pairs", function() {
 
       it("should not clone id and rev", function() {
         expect(penguin.rev).toEqual("2-123");
@@ -322,35 +322,103 @@ describe("FieldDBObject", function() {
   });
 
   describe("persisance", function() {
-    it("should be able to return a promise for an item from the database", function(done) {
-      var mockDatabase = {
-        get: function(id) {
-          console.log("pretending we are getting id ", id);
-          var deferred = Q.defer();
-          Q.nextTick(function() {
+    var mockDatabase = {
+      get: function(id) {
+        console.log("Mocking database get(id) ", id);
+        var deferred = Q.defer();
+        Q.nextTick(function() {
+          if (id === "2839aj983aja") {
+            deferred.resolve({
+              dbname: "lingallama-communitycorpus",
+              something: "else",
+              _rev: Date.now() + "-fetchresult",
+              _id: "2839aj983aja",
+              modifiedByUser: {
+                "label": "modifiedByUser",
+                "value": "inuktitutcleaningbot",
+                "mask": "inuktitutcleaningbot",
+                "encrypted": "",
+                "shouldBeEncrypted": "",
+                "help": "An array of users who modified the datum",
+                "showToUserTypes": "all",
+                "readonly": true,
+                "users": [{
+                  "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
+                  "username": "inuktitutcleaningbot",
+                  "collection": "users",
+                  "firstname": "Cleaner",
+                  "lastname": "Bot"
+                }],
+                "userchooseable": "disabled"
+              }
+            });
+          } else {
             deferred.resolve({
               _id: id,
               _rev: "2-aweomw",
               title: "Community corpus"
             });
-          });
-          return deferred.promise;
-        }
-      };
+          }
+        });
+        return deferred.promise;
+      },
+      set: function(arg1, arg2) {
+        var deferred = Q.defer(),
+          key,
+          value;
 
+        if (!arg2) {
+          value = arg1;
+          key = value.id || value._id;
+        } else {
+          key = arg1;
+          value = arg2;
+          value.id = key;
+        }
+
+        console.log("Mocking database set(key, value) ", key);
+        Q.nextTick(function() {
+          value.rev = Date.now() + "-saveresult";
+          value.id = key || "aBc" + Date.now();
+          console.log("resolving the samething that was saved, with a new rev", value);
+          delete value.fossil;
+          deferred.resolve(value);
+        });
+        return deferred.promise;
+      }
+    };
+
+
+    it("should be able to return a promise for an item from the database", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         id: "D093j2ae-akmoi3m-2a3wkjen",
         corpus: mockDatabase
       });
 
-      object.fetch().then(function() {
-        expect(object.title).toEqual("Community corpus");
-      }, function(error) {
-        expect(false).toBeTruthy();
-      }).done(done);
-    }, specIsRunningTooLong);
+      expect(object.fetching).toEqual(undefined);
+      expect(object.loading).toEqual(undefined);
 
+      object.fetch().then(function(resultingdocument) {
+        expect(resultingdocument).toEqual(object);
+
+        expect(object.warnMessage).toContain("calling merge with overwrite from server");
+        expect(object.fetching).toEqual(false);
+        expect(object.loading).toEqual(false);
+
+        expect(object.title).toEqual("Community corpus");
+        // return object;
+      }, function(error) {
+        console.log(error);
+        expect(false).toBeTruthy();
+        // return object;
+      }).done(done);
+
+      expect(object.fetching).toEqual(true);
+      expect(object.loading).toEqual(true);
+
+
+    }, specIsRunningTooLong);
 
     it("should refuse to fetch an item which has no id", function(done) {
       var object = new FieldDBObject({
@@ -360,7 +428,7 @@ describe("FieldDBObject", function() {
       object.fetch().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["Cannot fetch if there is no id, or there is no corpus"]);
+        expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot fetch data which has no id, or the if database is not currently opened."]);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -373,41 +441,186 @@ describe("FieldDBObject", function() {
       object.fetch().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["Cannot fetch if there is no id, or there is no corpus"]);
+        expect(error.userFriendlyErrors).toEqual(["This application has errored. Please notify its developers: Cannot fetch data which has no id, or the if database is not currently opened."]);
       }).done(done);
     }, specIsRunningTooLong);
 
-    it("should be able to set the revision number and other housekeeping after a save of a new item", function(done) {
+    it("should add the user who saved and other housekeeping before a save of a new item", function() {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
         // debugMode: true
       });
 
-      object.save().then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
-      }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-      }).done(done);
+      var snapshot = object.createSaveSnapshot();
+      expect(snapshot.fieldDBtype).toEqual("FieldDBObject");
+      expect((snapshot.dateCreated + "").length).toEqual(13);
+      expect(snapshot.version).toEqual(object.version);
+      expect(snapshot.enteredByUser).toBeDefined();
+      expect(snapshot.enteredByUser.value).toEqual("unknown");
+      expect(snapshot.enteredByUser.json).toBeDefined();
+      expect(snapshot.enteredByUser.json.user).toEqual({
+        username: "unknown",
+        name: "",
+        lastname: undefined,
+        firstname: undefined,
+        gravatar: undefined
+      });
+      expect(snapshot.enteredByUser.json.software).toBeDefined();
+      expect(snapshot.enteredByUser.json.hardware).toBeDefined();
 
-      expect(object.enteredByUser.value).toEqual("unknown");
-      expect(object.enteredByUser.json.user).toEqual({
+      // {
+      //   value: 'unknown',
+      //   json: {
+      //     user: {
+      //       username: 'unknown',
+      //       name: "",
+      //       lastname: undefined,
+      //       firstname: undefined,
+      //       gravatar: undefined
+      //     },
+      //     software: {
+      //       version: 'v0.10.29',
+      //       appVersion: 'PhantomJS unknown'
+      //     },
+      //     hardware: {
+      //       endianness: 'LE',
+      //       platform: 'darwin',
+      //       hostname: 'nariakira.local',
+      //       type: 'Darwin',
+      //       arch: 'x64',
+      //       release: '13.4.0',
+      //       totalmem: 8589934592,
+      //       cpus: 8
+      //     }
+      //   }
+      // }
+
+
+      expect(snapshot.enteredByUser.value).toEqual("unknown");
+      expect(snapshot.enteredByUser.json.user).toEqual({
         name: "",
         username: "unknown"
       });
-      expect(object.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
-      console.log("hardware", object.enteredByUser.json.hardware);
-      expect(object.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+      expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+      console.log("hardware", snapshot.enteredByUser.json.hardware);
+      expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+
+
+      expect(object.fieldDBtype).toEqual("FieldDBObject");
+      expect((object.dateCreated + "").length).toEqual(13);
+      expect(object.version).toEqual(object.version);
+      expect(object.enteredByUser).toBeDefined();
+      expect(object.enteredByUser.value).toEqual("unknown");
+      expect(object.enteredByUser.json).toBeDefined();
+      expect(object.enteredByUser.json.user).toEqual({
+        username: "unknown",
+        name: "",
+        lastname: undefined,
+        firstname: undefined,
+        gravatar: undefined
+      });
+      expect(object.enteredByUser.json.software).toBeDefined();
+      expect(object.enteredByUser.json.hardware).toBeDefined();
+
+    });
+
+    it("should add the user who saved and other housekeeping before a save of an existing item", function() {
+      var originalObject = {
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        _id: "67gwes98rdjo",
+        _rev: "8-aeifnaoao"
+          // debugMode: true
+      };
+
+      var object = new FieldDBObject(originalObject);
+
+      var snapshot = object.createSaveSnapshot();
+      expect(snapshot.fieldDBtype).toEqual("FieldDBObject");
+      expect(snapshot.dateCreated).toEqual(originalObject.dateCreated);
+
+      expect(snapshot.version).toEqual(object.version);
+      expect(snapshot.enteredByUser).toEqual(originalObject.enteredByUser);
+      expect(snapshot.modifiedByUser).toBeDefined();
+      expect(snapshot.modifiedByUser).toBeDefined();
+      expect(snapshot.modifiedByUser.value).toEqual("unknown");
+      expect(snapshot.modifiedByUser.json).toBeDefined();
+      expect(snapshot.modifiedByUser.json.users).toBeDefined();
+      expect(snapshot.modifiedByUser.json.users[0]).toBeDefined();
+      expect(snapshot.modifiedByUser.json.users[0].username).toEqual("unknown");
+      expect(snapshot.modifiedByUser.json.users[0].software).toBeDefined();
+      expect(snapshot.modifiedByUser.json.users[0].hardware).toBeDefined();
+      // {
+      //   users: [{
+      //     username: 'unknown',
+      //     name: "",
+      //     lastname: undefined,
+      //     firstname: undefined,
+      //     gravatar: undefined,
+      //     software: {
+      //       version: 'v0.10.29',
+      //       appVersion: 'PhantomJS unknown'
+      //     },
+      //     hardware: {
+      //       endianness: 'LE',
+      //       platform: 'darwin',
+      //       hostname: 'nariakira.local',
+      //       type: 'Darwin',
+      //       arch: 'x64',
+      //       release: '13.4.0',
+      //       totalmem: 8589934592,
+      //       cpus: 8
+      //     }
+      //   }]
+      // }
+
+      expect(object.fieldDBtype).toEqual("FieldDBObject");
+
+      expect(object.modifiedByUser).toBeDefined();
+      expect(object.modifiedByUser).toBeDefined();
+      expect(object.modifiedByUser.value).toEqual("unknown");
+      expect(object.modifiedByUser.json).toBeDefined();
+      expect(object.modifiedByUser.json.users).toBeDefined();
+      expect(object.modifiedByUser.json.users[0]).toBeDefined();
+      expect(object.modifiedByUser.json.users[0].username).toEqual("unknown");
+      expect(object.modifiedByUser.json.users[0].software).toBeDefined();
+      expect(object.modifiedByUser.json.users[0].hardware).toBeDefined();
+
+    });
+
+    it("should be able to set the revision number and other housekeeping after a save of a new item", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        corpus: mockDatabase
+          // debugMode: true
+      });
+
+      object.fossil = object.toJSON();
+      object.something = "must change something in order to do a true save.";
+
+      object.save().then(function(resultingdocument) {
+        expect(resultingdocument).toBe(object);
+
+        expect(object.id).toBeDefined();
+        expect(object.rev).toBeDefined();
+        expect(object.unsaved).toEqual(false);
+        expect(object.fossil).toBeDefined();
+
+      }, function(error) {
+        console.log(error);
+        expect(true).toBeFalsy();
+      }).done(done);
 
     }, specIsRunningTooLong);
 
     it("should be able to set the revision number and other housekeeping after a save of an existing item", function(done) {
       var object = new FieldDBObject({
+        corpus: mockDatabase,
         dbname: "lingallama-communitycorpus",
         something: "else",
-        _rev: "2-ioewmraoimwa",
+        _rev: "5-ioewmraoimwa",
         _id: "weomaoi23o",
         modifiedByUser: {
           "label": "modifiedByUser",
@@ -429,15 +642,33 @@ describe("FieldDBObject", function() {
         },
         // debugMode: true
       });
+
       expect(object.modifiedByUser.users).toBeDefined();
 
+      object.fossil = object.toJSON();
+      object.something = "causing a real save";
+
       object.save().then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
+        expect(resultingdocument).toBe(object);
+
+        expect(object.id).toBeDefined();
+        expect(object.rev).toBeDefined();
+        expect(object.unsaved).toEqual(false);
+        expect(object.fossil).toBeDefined();
+        expect(object.modifiedByUser.value).toEqual("inuktitutcleaningbot, unknown");
+        expect(object.modifiedByUser.users).toBeUndefined();
+        expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
+        expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
+        expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+        // console.log("hardware", object.modifiedByUser.json.hardware);
+        expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+
+
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
+
+      expect(object.saving).toEqual(true);
 
       expect(object.modifiedByUser.value).toEqual("inuktitutcleaningbot, unknown");
       expect(object.modifiedByUser.users).toBeUndefined();
@@ -449,37 +680,167 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
 
-    it("should be able set entered by user using database connection info", function(done) {
-      FieldDBObject.application = {
-        corpus: {
-          connectionInfo: {
-            "ok": true,
-            "userCtx": {
-              "name": "teammatetiger",
-              "roles": ["computationalfieldworkshop-group_data_entry_tutorial_reader", "fielddbuser", "jessepollak-spring_2013_field_methods_reader", "lingllama-cherokee_admin", "lingllama-cherokee_commenter", "lingllama-cherokee_reader", "lingllama-cherokee_writer", "lingllama-communitycorpus_admin", "lingllama-firstcorpus_admin", "lingllama-firstcorpus_commenter", "lingllama-firstcorpus_reader", "lingllama-firstcorpus_writer", "lingllama-test_corpus_admin", "lingllama-test_corpus_commenter", "lingllama-test_corpus_reader", "lingllama-test_corpus_writer", "teammatetiger-firstcorpus_commenter", "teammatetiger-firstcorpus_reader", "teammatetiger-firstcorpus_writer", "lingllama-communitycorpus_commenter", "lingllama-communitycorpus_reader", "lingllama-communitycorpus_writer"]
-            },
-            "info": {
-              "authentication_db": "_users",
-              "authentication_handlers": ["oauth", "cookie", "default"],
-              "authenticated": "cookie"
-            }
-          }
-        }
-      };
+
+    it("should avoid unnecesary saving", function(done) {
       var object = new FieldDBObject({
-        dbname: "lingallama-communitycorpus",
-        something: "else"
+        id: "2839aj983aja",
+        corpus: mockDatabase
       });
 
-      object.save().then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
-      }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      expect(object.fossil).toBeUndefined();
+      expect(object.unsaved).toEqual(undefined);
+      expect(object.calculateUnsaved()).toEqual(undefined);
+
+      object.fetch().then(function(result) {
+
+        // fetch is working
+        expect(result).toBe(object);
+        expect(object.id).toEqual("2839aj983aja");
+        expect(object.rev).toBeDefined();
+        expect(object.modifiedByUser).toEqual({
+          _fieldDBtype: "FieldDBObject",
+          label: "modifiedByUser",
+          value: "inuktitutcleaningbot",
+          mask: "inuktitutcleaningbot",
+          encrypted: "",
+          shouldBeEncrypted: "",
+          help: "An array of users who modified the datum",
+          showToUserTypes: "all",
+          readonly: true,
+          users: [{
+            gravatar: "968b8e7fb72b5ffe2915256c28a9414c",
+            username: "inuktitutcleaningbot",
+            collection: "users",
+            firstname: "Cleaner",
+            lastname: "Bot"
+          }],
+          userchooseable: "disabled",
+          _dateCreated: object.modifiedByUser.dateCreated,
+          _version: "v2.48.24"
+        });
+
+        // this was a placeholder because it had no rev, so we should now have a fossil
+        expect(object.fossil).toBeDefined();
+        expect(object.unsaved).toEqual(false);
+        expect(object.calculateUnsaved()).toEqual(false);
+
+        object.warnMessage = "";
+        var oldRev = object.rev + "";
+        object.save().then(function(result) {
+          expect(result).toBe(object);
+          expect(object.warnMessage).toContain("Item hasn't really changed, no need to save...");
+          expect(object.rev).toEqual(oldRev);
+          return object;
+        }, function(error) {
+          console.log(error);
+          expect(false).toBeTruthy();
+          return object;
+        });
+
       }).done(done);
 
-      expect(object.enteredByUser.value).toEqual("teammatetiger");
+    }, specIsRunningTooLong);
+
+
+    it("should detect if item was actually changed", function(done) {
+      var object = new FieldDBObject({
+        corpus: mockDatabase,
+        dbname: "jenkins-firstcorpus",
+        something: "else",
+        _rev: "2-28q9ja9q0ka",
+        _id: "weomaoi23o",
+        modifiedByUser: {
+          "label": "modifiedByUser",
+          "value": "quotecleaningbot",
+          "mask": "quotecleaningbot",
+          "encrypted": "",
+          "shouldBeEncrypted": "",
+          "help": "An array of users who modified the datum",
+          "showToUserTypes": "all",
+          "readonly": true,
+          "users": [{
+            "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
+            "username": "quotecleaningbot",
+            "collection": "users",
+            "firstname": "Cleaner",
+            "lastname": "Bot"
+          }],
+          "userchooseable": "disabled"
+        },
+        // debugMode: true
+      });
+
+      // When we load an object, we dont know where it comes from we wont set the fossil, since it might not match any database version
+      expect(object.fossil).toBeUndefined();
+      // It will have an undefined (falsy) status which means to most UIs that it should be saved before they leave the page.
+      expect(object.calculateUnsaved()).toEqual(undefined);
+
+      var oldRev = object.rev;
+      expect(oldRev).toEqual("2-28q9ja9q0ka");
+      object.save().then(function(result) {
+        expect(result).toEqual(object);
+
+        // It really saved
+        expect(object.rev.length).toBeGreaterThan(13);
+        expect(oldRev).not.toEqual(object.rev);
+
+        // It now has an updated fossil
+        expect(object.fossil).toBeDefined();
+        expect(object.fossil.rev).not.toEqual(oldRev);
+        expect(object.unsaved).toEqual(false);
+        expect(object.calculateUnsaved()).toEqual(false);
+
+        // Make modifications and it should detect them
+        object.fields = [{
+          value: "something new"
+        }];
+        expect(object.unsaved).toEqual(false);
+        expect(object.calculateUnsaved()).toEqual(true);
+        expect(object.unsaved).toEqual(true);
+
+      }, function(error) {
+        console.log(error);
+        expect(true).toBeFalsy();
+        return object;
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should be able set entered by user using database connection info", function(done) {
+      var object = new FieldDBObject({
+        dbname: "lingallama-communitycorpus",
+        something: "else",
+        corpus: mockDatabase
+      });
+      object.corpus.connectionInfo = {
+        "ok": true,
+        "userCtx": {
+          "name": "teammatetiger",
+          "roles": ["computationalfieldworkshop-group_data_entry_tutorial_reader", "fielddbuser", "jessepollak-spring_2013_field_methods_reader", "lingllama-cherokee_admin", "lingllama-cherokee_commenter", "lingllama-cherokee_reader", "lingllama-cherokee_writer", "lingllama-communitycorpus_admin", "lingllama-firstcorpus_admin", "lingllama-firstcorpus_commenter", "lingllama-firstcorpus_reader", "lingllama-firstcorpus_writer", "lingllama-test_corpus_admin", "lingllama-test_corpus_commenter", "lingllama-test_corpus_reader", "lingllama-test_corpus_writer", "teammatetiger-firstcorpus_commenter", "teammatetiger-firstcorpus_reader", "teammatetiger-firstcorpus_writer", "lingllama-communitycorpus_commenter", "lingllama-communitycorpus_reader", "lingllama-communitycorpus_writer"]
+        },
+        "info": {
+          "authentication_db": "_users",
+          "authentication_handlers": ["oauth", "cookie", "default"],
+          "authenticated": "cookie"
+        }
+      };
+      expect(object.corpus.connectionInfo.userCtx.name).toEqual("teammatetiger");
+
+      object.fossil = object.toJSON();
+      object.something = "modified after fossil was created";
+
+      object.save().then(function(resultingdocument) {
+        expect(resultingdocument).toEqual(object);
+        expect(object.rev.length).toBeGreaterThan(13);
+
+        expect(object.enteredByUser).toBeDefined();
+        expect(object.enteredByUser.value).toEqual("teammatetiger");
+      }, function(error) {
+        console.log(error);
+        expect(true).toBeFalsy();
+        return object;
+      }).done(done);
 
     }, specIsRunningTooLong);
 
@@ -498,6 +859,7 @@ describe("FieldDBObject", function() {
       };
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
+        corpus: mockDatabase,
         something: "else",
         location: {
           "id": "location",
@@ -521,13 +883,16 @@ describe("FieldDBObject", function() {
         }
       });
       expect(object.location.value).toEqual("41,21");
+      object.fossil = object.toJSON();
+
+      object.something = "i changed this after the fossil was created";
 
       object.save().then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
+        expect(resultingdocument).toEqual(object);
+        expect(object.rev.length).toBeGreaterThan(13);
+
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.location.value).toEqual("45.5169767,-73.5537868");
@@ -540,55 +905,41 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
 
-    it("should flag an item as deleted", function(done) {
+    var putInTrash = function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
-        something: "else"
+        something: "else",
+        corpus: mockDatabase
       });
+
       object.delete("I entered this by mistake").then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
+        expect(resultingdocument).toEqual(object);
+        expect(object.rev.length).toBeGreaterThan(13);
+
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.trashed).toEqual("deleted");
       expect(object.trashedReason).toEqual("I entered this by mistake");
 
-    }, specIsRunningTooLong);
-
-    it("should be able to put items in the trash", function(done) {
-      var object = new FieldDBObject({
-        dbname: "lingallama-communitycorpus",
-        something: "else"
-      });
-      object.trash("I entered this by mistake").then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
-      }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-      }).done(done);
-
-      expect(object.trashed).toEqual("deleted");
-      expect(object.trashedReason).toEqual("I entered this by mistake");
-
-    }, specIsRunningTooLong);
+    };
+    it("should flag an item as deleted", putInTrash, specIsRunningTooLong);
+    it("should be able to put items in the trash", putInTrash, specIsRunningTooLong);
 
     it("should undelete items", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
         something: "else",
         trashed: "deleted",
-        trashedReason: "I imported this by mistake"
+        trashedReason: "I imported this by mistake",
+        corpus: mockDatabase
       });
       object.undelete("I deleted this by mistake").then(function(resultingdocument) {
-        expect(false).toBeTruthy();
-        expect(resultingdocument.id).toBeDefined();
-        expect(resultingdocument.rev).toBeDefined();
+        expect(resultingdocument).toEqual(object);
+        expect(object.rev.length).toBeGreaterThan(13);
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
 
       expect(object.trashed).toEqual("restored");
