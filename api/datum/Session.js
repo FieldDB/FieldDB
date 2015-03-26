@@ -711,6 +711,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         }
         return this._datalist;
       }
+      this.todo("Use reindexFromApi on datalists instead");
       this.fetching = this.loading = true;
       this.datalistUpdatingPromise = this.corpus.fetchCollection(api, null, null, null, null, this.id).then(function(generatedDatalist) {
         self.fetching = self.loading = true;
