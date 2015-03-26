@@ -679,6 +679,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
             optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
+          } else if (FieldDBObject.application && FieldDBObject.application.user && FieldDBObject.application.user.username) {
+            optionalUserWhoSaved.username = optionalUserWhoSaved.username || FieldDBObject.application.user.username;
+            optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || FieldDBObject.application.user.gravatar;
           }
         } catch (e) {
           this.warn("Can't get the corpus connection info to guess who saved this.", e);
@@ -781,8 +784,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       // return selfOrSnapshot.toJSON ? selfOrSnapshot.toJSON() : selfOrSnapshot;
     }
   },
+
   save: {
-    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
       var deferred = Q.defer(),
         self = this;
 
@@ -826,10 +830,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return deferred.promise;
       }
 
+      if (this.corpus.dbname !== this.dbname) {
+        this.warn("This item belongs in the " + this.dbname + "database, not in the " + this.corpus.dbname + " database.");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This item belongs in the " + self.dbname + "database, not in the " + self.corpus.dbname + " database."]
+          });
+        });
+        return deferred.promise;
+      }
+
       var data = this.createSaveSnapshot();
       console.log("    Requesting corpus to run save...");
       this.saving = true;
-      this.whenReady = this.corpus.set(data).then(function(result) {
+      this.whenReady = deferred.promise;
+      this.corpus.set(data).then(function(result) {
           self.saving = false;
           console.log("    Save completed...");
           self.debug("saved ", result);
@@ -925,6 +942,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
+        if (!anotherObject) {
+          return false;
+        }
+
         if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equalivalent to ", anotherObject[aproperty]);

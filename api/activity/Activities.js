@@ -3,9 +3,11 @@ var Activity = require("./Activity").Activity;
 var Connection = require("./../corpus/Connection").Connection;
 var Comments = require("./../comment/Comments").Comments;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
+var Database = require("./../corpus/Database").Database;
 var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
+var Q = require("q");
 
-var ActivityCollection = function ActivityCollection(options) {
+var ActivityCollection = function ActivityCollection() {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "ActivityCollection";
   }
@@ -62,7 +64,8 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       comments: Comments,
       docs: ActivityCollection,
       title: ContextualizableObject,
-      description: ContextualizableObject
+      description: ContextualizableObject,
+      database: Database
     }
   },
 
@@ -143,6 +146,9 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         }
       }
       this._connection = value;
+
+      this.title = this._connection.title || "Activity feed";
+      this.description = this._connection.description || "";
     }
   },
 
@@ -180,7 +186,34 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
 
       if (value) {
         this._parent = value;
+        if (value && value.set && value.get && this.teamOrPersonal === "team") {
+          this._database = value;
+        }
       }
+    }
+  },
+
+  database: {
+    get: function() {
+      this.debug("getting database");
+      return this._database;
+    },
+    set: function(value) {
+      if (value === this._database) {
+        return;
+      }
+      if (!value) {
+        delete this._database;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["database"] === "function" && !(value instanceof this.INTERNAL_MODELS["database"])) {
+          value = new this.INTERNAL_MODELS["database"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._database = value;
     }
   },
 
@@ -217,7 +250,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
   },
 
   add: {
-    value: function(activity) {
+    value: function(activity, optionalUserWhoSaved) {
       if (activity.url && activity.url !== this.url) {
         this.bug("Cannot add " + activity.url + " activity to " + this.url + " server, please report this. ");
         return;
@@ -233,8 +266,56 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       activity.fieldDBtype = "Activity";
       this.debug("adding activity", activity);
       activity.timestamp = Date.now();
+
+
+      if (!activity.user) {
+        if (!optionalUserWhoSaved) {
+          optionalUserWhoSaved = {
+            name: "",
+            username: "unknown"
+          };
+          try {
+            if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
+              optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
+            } else if (this.application && this.application.user && this.application.user.username) {
+              optionalUserWhoSaved.username = optionalUserWhoSaved.username || this.application.user.username;
+              optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || this.application.user.gravatar;
+            }
+          } catch (e) {
+            this.warn("Can't get the corpus connection info to guess who saved this.", e);
+          }
+        }
+        // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
+        if (typeof optionalUserWhoSaved.toJSON === "function") {
+          var asJson = optionalUserWhoSaved.toJSON();
+          asJson.name = optionalUserWhoSaved.name;
+          optionalUserWhoSaved = asJson;
+        } else {
+          optionalUserWhoSaved.name = optionalUserWhoSaved.name;
+        }
+        // optionalUserWhoSaved.browser = browser;
+
+        activity.user = {
+          username: optionalUserWhoSaved.username,
+          name: optionalUserWhoSaved.name,
+          lastname: optionalUserWhoSaved.lastname,
+          firstname: optionalUserWhoSaved.firstname,
+          gravatar: optionalUserWhoSaved.gravatar
+        };
+      }
+
+      activity.parent = this;
       try {
-        return DataList.prototype.add.apply(this, [activity]);
+        var addedActivity = DataList.prototype.add.apply(this, [activity]);
+        if (this._database) {
+          addedActivity.corpus = this._database;
+        }
+        if (!addedActivity.rev) {
+          // addedActivity.warn("This activity has no evidence of having been saved before, makeing its fossil empty to trigger save next time the activity feed gets saved.");
+          // addedActivity.unsaved = true;
+          // addedActivity.fossil = {};
+        }
+        return addedActivity;
       } catch (e) {
         this.warn("Error adding this activity, it was not complete enough", e);
         this.warn(e.stack);
@@ -242,15 +323,45 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         this.incompleteActivitesStockPile.push({
           activity: activity,
           errorMessage: e.message
-        })
+        });
         return undefined;
       }
     }
   },
 
+
+
   save: {
     value: function() {
-      this.docs.save();
+      var deferred = Q.defer(),
+        self = this;
+
+      this.whenReady = deferred.promise;
+
+      this.saving = true;
+      if (!this._docs || this._docs.length === 0) {
+        this.warn("Save was unncessary, the activity feed was empty...");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.resolve(self);
+          return self;
+        });
+        return deferred.promise;
+      }
+
+      try {
+        this._docs.save(null, null, this.url).done(function() {
+          self.saving = false;
+          deferred.resolve(self);
+          return self;
+        });
+        this.warn("Requested save of activity feed", this.whenReady);
+      } catch (e) {
+        console.log("problem saving activity feed");
+        console.error(e);
+      }
+
+      return deferred.promise;
     }
   },
 

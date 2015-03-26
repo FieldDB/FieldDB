@@ -456,8 +456,68 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
     }
   },
 
-  save: {
-    value: function(optionalUserWhoSaved) {
+  corpus:{
+    get: function(){
+      return this._database;
+    },
+    set: function(value){
+      this._database = value;
+    }
+  },
+
+  createSaveSnapshot: {
+    value: function(selfOrSnapshot, optionalUserWhoSaved) {
+      var self = this;
+
+      selfOrSnapshot = this;
+
+      if (!selfOrSnapshot.user) {
+        if (!optionalUserWhoSaved) {
+          optionalUserWhoSaved = {
+            name: "",
+            username: "unknown"
+          };
+          try {
+            if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
+              optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
+            } else if (this.application && this.application.user && this.application.user.username) {
+              optionalUserWhoSaved.username = optionalUserWhoSaved.username || this.application.user.username;
+              optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || this.application.user.gravatar;
+            }
+          } catch (e) {
+            this.warn("Can't get the corpus connection info to guess who saved this.", e);
+          }
+        }
+
+        // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
+        if (typeof optionalUserWhoSaved.toJSON === "function") {
+          var asJson = optionalUserWhoSaved.toJSON();
+          asJson.name = optionalUserWhoSaved.name;
+          optionalUserWhoSaved = asJson;
+        } else {
+          optionalUserWhoSaved.name = optionalUserWhoSaved.name;
+        }
+        // optionalUserWhoSaved.browser = browser;
+
+        selfOrSnapshot.user = {
+          username: optionalUserWhoSaved.username,
+          name: optionalUserWhoSaved.name,
+          lastname: optionalUserWhoSaved.lastname,
+          firstname: optionalUserWhoSaved.firstname,
+          gravatar: optionalUserWhoSaved.gravatar
+        };
+      }
+
+      //update to this version
+      selfOrSnapshot.version = FieldDBObject.DEFAULT_VERSION;
+
+      return selfOrSnapshot.toJSON();
+      // return selfOrSnapshot.toJSON ? selfOrSnapshot.toJSON() : selfOrSnapshot;
+    }
+  },
+
+  saveDoesntNeedCustomziation: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
       this.debug("Customizing activity save ", optionalUserWhoSaved);
       var deferred = Q.defer(),
         self = this;
@@ -467,28 +527,96 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return this.whenReady;
+        return deferred.promise;
       }
       if (this.saving) {
         self.warn("Save was already in process...");
         Q.nextTick(function() {
           deferred.reject("Fetching is in process, can't save right now...");
         });
-        return this.whenReady;
+        return deferred.promise;
       }
-      this.saving = true;
+
+      if (saveEvenIfSeemsUnchanged) {
+        this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
+      } else {
+        console.log("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
+
+        if (!this.unsaved && !this.calculateUnsaved()) {
+          self.warn("Item hasn't really changed, no need to save...");
+          Q.nextTick(function() {
+            deferred.resolve(self);
+            return self;
+          });
+          return deferred.promise;
+        }
+      }
+
+      if (!optionalUrl && this.parent && this.parent.url) {
+        optionalUrl = this.parent.url;
+      }
+
+      if (!optionalUrl) {
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save activity the  activity" + this.dbname + " database is not currently opened."]
+          });
+        });
+        return deferred.promise;
+      }
+
+      self.debug("    Calculating userWhoSaved...");
+
+      if (!this.user) {
+
+        if (!optionalUserWhoSaved) {
+          optionalUserWhoSaved = {
+            name: "",
+            username: "unknown"
+          };
+          try {
+            if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
+              optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
+            } else if (this.application && this.application.user && this.application.user.username) {
+              optionalUserWhoSaved.username = optionalUserWhoSaved.username || this.application.user.username;
+              optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || this.application.user.gravatar;
+            }
+          } catch (e) {
+            this.warn("Can't get the corpus connection info to guess who saved this.", e);
+          }
+
+        }
+        // optionalUserWhoSaved._name = optionalUserWhoSaved.name || optionalUserWhoSaved.username || optionalUserWhoSaved.browserVersion;
+        if (typeof optionalUserWhoSaved.toJSON === "function") {
+          var asJson = optionalUserWhoSaved.toJSON();
+          asJson.name = optionalUserWhoSaved.name;
+          optionalUserWhoSaved = asJson;
+        } else {
+          optionalUserWhoSaved.name = optionalUserWhoSaved.name;
+        }
+        // optionalUserWhoSaved.browser = browser;
+
+        this.user = {
+          username: optionalUserWhoSaved.username,
+          name: optionalUserWhoSaved.name,
+          lastname: optionalUserWhoSaved.lastname,
+          firstname: optionalUserWhoSaved.firstname,
+          gravatar: optionalUserWhoSaved.gravatar
+        };
+      }
 
       //update to this version
       this.version = FieldDBObject.DEFAULT_VERSION;
       this.debug("saving   ", this);
 
-      var url = this.id ? "/" + this.id : "";
-      url = this.url + url;
       var data = this.toJSON();
+      this.saving = true;
       this.whenReady = CORS.makeCORSRequest({
           type: this.id ? "PUT" : "POST",
           dataType: "json",
-          url: url,
+          url: optionalUrl,
           data: data
         }).then(function(result) {
             self.debug("saved ", result);
@@ -524,13 +652,14 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
       this.directobject = this.directobject;
       this.indirectobject = this.indirectobject;
       this.context = this.context;
-      this.user = this.user;
+      // this.user = this.user;
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
-      json.user = {
-        username: json.user.username,
-        gravatar: json.user.gravatar
+
+      if(json){
+        delete json.dateCreated;
       }
+
       this.debug(json);
       return json;
     }

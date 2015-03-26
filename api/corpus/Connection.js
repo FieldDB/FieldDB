@@ -217,9 +217,9 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         return;
       }
       var pieces = this.dbname.split("-");
-      if (pieces.length !== 2) {
-        throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-      }
+      // if (pieces.length !== 2 && this.dbname.indexOf("-activity_feed") !== (this.dbname.length - "-activity_feed".length) ){
+      //   throw new Error("Database names should be composed of a username-datbaseidentifier " + this.dbname);
+      // }
       var username = pieces[0];
       return username;
     }
@@ -260,9 +260,9 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
       if (!this._title && this.dbname) {
         var pieces = this.dbname.split("-");
-        if (this.dbname !== "default" && pieces.length !== 2) {
-          throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-        }
+        // if (this.dbname !== "default" && pieces.length !== 2) {
+        //   throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
+        // }
         pieces.shift();
         var corpusidentifier = pieces.join("-");
         this._title = corpusidentifier;
