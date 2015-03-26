@@ -1118,20 +1118,32 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   fetch: {
     value: function(optionalUrl) {
       var deferred = Q.defer(),
-        self = this;
+        self = this,
+        db = null;
 
-      if (!this.id || !this.corpus) {
+      if (this._corpus) {
+        db = this._corpus;
+      } else if (this.resumeAuthenticationSession && typeof this.resumeAuthenticationSession === "function") {
+        db = this;
+      } else if (this._application && this._application._corpus) {
+        db = this._application._corpus;
+      }
+
+      if (!db || !this._id) {
         Q.nextTick(function() {
           self.fetching = self.loading = false;
           deferred.reject({
-            error: "Cannot fetch if there is no id, or there is no corpus"
+            status: 406,
+            userFriendlyErrors: ["Cannot fetch if there is no id, or there is no corpus"]
           });
         });
         return deferred.promise;
       }
 
+      this.debug("Fetching from db ", db);
+
       this.fetching = this.loading = true;
-      this.whenReady = this.corpus.get(this.id, optionalUrl)
+      this.whenReady = db.get(this.id, optionalUrl)
         .then(function(result) {
             self.fetching = self.loading = false;
             self.loaded = true;
