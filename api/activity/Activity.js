@@ -44,7 +44,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
   },
 
   api: {
-    value: "/activities"
+    value: "activities"
   },
 
   whenWhatWho: {
