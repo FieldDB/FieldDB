@@ -467,7 +467,6 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
   createSaveSnapshot: {
     value: function(selfOrSnapshot, optionalUserWhoSaved) {
-      var self = this;
 
       selfOrSnapshot = this;
 

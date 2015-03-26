@@ -175,7 +175,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."]
           };
         }
-        reason.details = details;
+        reason.details = value;
         self.debug(reason);
         deferred.reject(reason);
       });

@@ -841,6 +841,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return deferred.promise;
       }
+      if (optionalUrl) {
+        this.todo("Url for save was specified, but it is not being used. optionalUrl", optionalUrl);
+      }
 
       var data = this.createSaveSnapshot();
       console.log("    Requesting corpus to run save...");
