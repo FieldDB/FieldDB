@@ -1,5 +1,4 @@
 /* globals alert, confirm, navigator, Android, FieldDB */
-var CORS = require("./CORS").CORS;
 var Diacritics = require("diacritic");
 var Q = require("q");
 var package;
@@ -130,6 +129,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "loaded",
   "loading",
   "unsaved",
+  "_unsaved",
   "selected",
   "useIdNotUnderscore",
   "decryptedMode",
@@ -139,6 +139,9 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "perObjectAlwaysConfirmOkay",
   "application",
   "corpus",
+  "_corpus",
+  "db",
+  "_db",
   "contextualizer",
   "perObjectDebugMode",
   "whenReady",
@@ -591,11 +594,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   calculateUnsaved: {
     value: function() {
-      var previous = new this.constructor(this.fossil);
-      var current = new this.constructor(this);
+      if (!this.fossil) {
+        this._unsaved = true;
+        return;
+      }
 
+      var previous = new this.constructor(this.fossil);
+      var current = new this.constructor(this.toJSON());
+
+      current.debugMode = this.debugMode;
       if (previous.equals(current)) {
-        this.warn("The " + this.id + " didnt actually change. Not marking as editied");
+        this.warn("The " + this.id + " didnt actually change. Not marking as edited");
         this._unsaved = false;
       } else {
         this._unsaved = true;
@@ -604,42 +613,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
-  save: {
-    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
-      var deferred = Q.defer(),
-        self = this;
+  createSaveSnapshot: {
+    value: function(selfOrSnapshot, optionalUserWhoSaved) {
+      var self = this;
 
-      if (this.fetching) {
-        self.warn("Fetching is in process, can't save right now...");
-        Q.nextTick(function() {
-          deferred.reject("Fetching is in process, can't save right now...");
-        });
-        return this.whenReady;
-      }
-      if (this.saving) {
-        self.warn("Save was already in process...");
-        Q.nextTick(function() {
-          deferred.reject("Fetching is in process, can't save right now...");
-        });
-        return this.whenReady;
-      }
+      selfOrSnapshot = this;
 
-      if (saveEvenIfSeemsUnchanged) {
-        this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
-      } else {
-        if (!this.unsaved && !this.calculateUnsaved) {
-          self.warn("Item hasn't really changed, no need to save...");
-          Q.nextTick(function() {
-            deferred.resolve(self);
-          });
-          return this.whenReady;
-        }
-      }
-
-      this.saving = true;
-
-      //update to this version
-      this.version = FieldDBObject.DEFAULT_VERSION;
+      console.log("    Running snapshot...");
+      //update to selfOrSnapshot version
+      selfOrSnapshot.version = FieldDBObject.DEFAULT_VERSION;
 
       try {
         FieldDBObject.software = FieldDBObject.software || {};
@@ -695,9 +677,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           username: "unknown"
         };
         try {
-          if (FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.connectionInfo) {
-            var connectionInfo = FieldDBObject.application.corpus.connectionInfo;
-            optionalUserWhoSaved.username = connectionInfo.userCtx.name;
+          if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
+            optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
           }
         } catch (e) {
           this.warn("Can't get the corpus connection info to guess who saved this.", e);
@@ -713,6 +694,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       // optionalUserWhoSaved.browser = browser;
 
+      console.log("    Calculating userWhoSaved...");
+
       var userWhoSaved = {
         username: optionalUserWhoSaved.username,
         name: optionalUserWhoSaved.name,
@@ -721,13 +704,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         gravatar: optionalUserWhoSaved.gravatar
       };
 
-      if (!this._rev) {
-        this._dateCreated = Date.now();
-        var enteredByUser = this.enteredByUser || {};
-        if (this.fields && this.fields.enteredbyuser) {
-          enteredByUser = this.fields.enteredbyuser;
-        } else if (!this.enteredByUser) {
-          this.enteredByUser = enteredByUser;
+      if (!selfOrSnapshot._rev) {
+        selfOrSnapshot._dateCreated = Date.now();
+        var enteredByUser = selfOrSnapshot.enteredByUser || {};
+        if (selfOrSnapshot.fields && selfOrSnapshot.fields.enteredbyuser) {
+          enteredByUser = selfOrSnapshot.fields.enteredbyuser;
+        } else if (!selfOrSnapshot.enteredByUser) {
+          selfOrSnapshot.enteredByUser = enteredByUser;
         }
         enteredByUser.value = userWhoSaved.name || userWhoSaved.username;
         enteredByUser.json = enteredByUser.json || {};
@@ -736,26 +719,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
         } catch (e) {
-          this.debug("Cannot detect the hardware used for this save.", e);
+          this.debug("Cannot detect the hardware used for selfOrSnapshot save.", e);
           enteredByUser.json.hardware = FieldDBObject.hardware;
         }
 
       } else {
-        this._dateModified = Date.now();
+        selfOrSnapshot._dateModified = Date.now();
 
-        var modifiedByUser = this.modifiedByUser || {};
-        if (this.fields && this.fields.modifiedbyuser) {
-          modifiedByUser = this.fields.modifiedbyuser;
-        } else if (!this.modifiedByUser) {
-          this.modifiedByUser = modifiedByUser;
+        var modifiedByUser = selfOrSnapshot.modifiedByUser || {};
+        if (selfOrSnapshot.fields && selfOrSnapshot.fields.modifiedbyuser) {
+          modifiedByUser = selfOrSnapshot.fields.modifiedbyuser;
+        } else if (!selfOrSnapshot.modifiedByUser) {
+          selfOrSnapshot.modifiedByUser = modifiedByUser;
         }
-        if (this.modifiedByUsers) {
+        if (selfOrSnapshot.modifiedByUsers) {
           modifiedByUser = {
             json: {
-              users: this.modifiedByUsers
+              users: selfOrSnapshot.modifiedByUsers
             }
           };
-          delete this.modifiedByUsers;
+          delete selfOrSnapshot.modifiedByUsers;
         }
 
         modifiedByUser.value = modifiedByUser.value ? modifiedByUser.value + ", " : "";
@@ -773,10 +756,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (FieldDBObject.software && FieldDBObject.software.location) {
         var location;
-        if (this.location) {
-          location = this.location;
-        } else if (this.fields && this.fields.location) {
-          location = this.fields.location;
+        if (selfOrSnapshot.location) {
+          location = selfOrSnapshot.location;
+        } else if (selfOrSnapshot.fields && selfOrSnapshot.fields.location) {
+          location = selfOrSnapshot.fields.location;
         }
         if (location) {
           location.json = location.json || {};
@@ -790,31 +773,101 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      this.debug("saving   ", this);
-      var url = this.id ? "/" + this.id : "";
-      url = this.url + url;
-      var data = this.toJSON();
-      this.whenReady = CORS.makeCORSRequest({
-        type: this.id ? "PUT" : "POST",
-        dataType: "json",
-        url: url,
-        data: data
-      }).then(function(result) {
-          self.debug("saved ", result);
-          self.saving = self.unsaved = false;
-          self.fossil = self.toJSON();
-          if (result.id) {
-            self.id = result.id;
-            self.rev = result.rev;
+      console.log("    Serializing to send object to selfOrSnapshotbase...");
+      // this.debug("snapshot   ", selfOrSnapshot);
+
+      return selfOrSnapshot.toJSON();
+
+      // return selfOrSnapshot.toJSON ? selfOrSnapshot.toJSON() : selfOrSnapshot;
+    }
+  },
+  save: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (this.fetching) {
+        self.warn("Fetching is in process, can't save right now...");
+        Q.nextTick(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return deferred.promise;
+      }
+      if (this.saving) {
+        self.warn("Save was already in process...");
+        Q.nextTick(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return deferred.promise;
+      }
+
+      if (saveEvenIfSeemsUnchanged) {
+        this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
+      } else {
+        console.log("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
+
+        if (!this.unsaved && !this.calculateUnsaved()) {
+          self.warn("Item hasn't really changed, no need to save...");
+          Q.nextTick(function() {
             deferred.resolve(self);
-          } else {
-            deferred.reject(result);
+            return self;
+          });
+          return deferred.promise;
+        }
+      }
+      if (!this.corpus || typeof this.corpus.set !== "function") {
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]
+          });
+        });
+        return deferred.promise;
+      }
+
+      var data = this.createSaveSnapshot();
+      console.log("    Requesting corpus to run save...");
+      this.saving = true;
+      this.whenReady = this.corpus.set(data).then(function(result) {
+          self.saving = false;
+          console.log("    Save completed...");
+          self.debug("saved ", result);
+          if (!result) {
+            deferred.reject({
+              status: 400,
+              userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data."]
+            });
+            return "self";
           }
+
+          if (!result.id) {
+            console.log("    Rejecting promise, the id was not set by the database ..");
+            deferred.reject({
+              status: 500,
+              userFriendlyErrors: ["This application has errored. Please notify its developers: Save operation returned abnormal results."],
+              details: result
+            });
+            return self;
+          }
+
+          self.unsaved = false;
+
+          self.id = result.id;
+          self.rev = result.rev;
+
+          console.log("    Updating fossil...");
+          self.fossil = self.toJSON();
+
+          console.log("    Resolving promise...", self);
+          deferred.resolve(self);
+          return self;
         },
         function(reason) {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
+          return self;
         });
 
       return deferred.promise;
@@ -836,7 +889,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.todo("consider using a confirm to ask for a reason for deleting the item");
       }
 
-      return this.save();
+      return this.save(null, "forcesavesinceweneedtopersistthischange");
     }
   },
 
@@ -845,9 +898,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.trashed = "restored";
       if (reason) {
         this.untrashedReason = reason;
+      } else {
+        this.todo("consider using a confirm to ask for a reason for undeleting the item");
       }
-      this.todo("consider using a confirm to ask for a reason for undeleting the item");
-      return this.save();
+      return this.save(null, "forcesavesinceweneedtopersistthischange");
     }
   },
 
@@ -874,6 +928,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equalivalent to ", anotherObject[aproperty]);
+            if (true || this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         } /* then try normal equality */
@@ -886,10 +943,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           // return true;
         } else if (anotherObject[aproperty] === undefined && (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode")) {
           this.debug(aproperty + " is missing " + this[aproperty] + " on anotherObject " + anotherObject[aproperty]);
+          if (true || this.debugMode) {
+            console.error("objects are not equal stactrace");
+          }
           return false;
         } else {
           if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
             this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            if (true || this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         }
@@ -899,6 +962,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.dontRecurse = true;
           anotherObject.dontRecurse = true;
           if (!anotherObject.equals(this)) {
+            if (true || this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         }
@@ -963,19 +1029,21 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in anObject) {
-        if (anObject.hasOwnProperty(aproperty) && typeof anObject[aproperty] !== "function" && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+        if (anObject.hasOwnProperty(aproperty) && typeof anObject[aproperty] !== "function") {
           propertyList[aproperty] = true;
         }
       }
 
       for (aproperty in anotherObject) {
-        if (anotherObject.hasOwnProperty(aproperty) && typeof anotherObject[aproperty] !== "function" && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+        if (anotherObject.hasOwnProperty(aproperty) && typeof anotherObject[aproperty] !== "function") {
           propertyList[aproperty] = true;
         }
       }
+
       this.debug(" Merging properties: ", propertyList);
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
+
         self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
           .then(function() {
             if (apropertylocal === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
@@ -1054,7 +1122,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           continue;
         }
 
-        if (anObject[aproperty] && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
+        if ((anObject[aproperty] !== undefined || anObject[aproperty] !== null) && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
           targetPropertyIsEmpty = true;
           this.debug(aproperty + " target is empty, taking the old value");
           resultObject[aproperty] = anObject[aproperty];
@@ -1096,7 +1164,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
           handleAsyncConfirmMerge(this, aproperty);
         }
-        if (overwrite) {
+        if (overwrite || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
           if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
             // resultObject._dbname = this.dbname;
             this.warn(" Keeping _dbname of " + resultObject.dbname);
@@ -1118,47 +1186,58 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   fetch: {
     value: function(optionalUrl) {
       var deferred = Q.defer(),
-        self = this,
-        db = null;
+        self = this;
 
-      if (this._corpus) {
-        db = this._corpus;
-      } else if (this.resumeAuthenticationSession && typeof this.resumeAuthenticationSession === "function") {
-        db = this;
-      } else if (this._application && this._application._corpus) {
-        db = this._application._corpus;
-      }
-
-      if (!db || !this._id) {
+      if (!this.corpus || typeof this.corpus.get !== "function" || !this._id) {
         Q.nextTick(function() {
           self.fetching = self.loading = false;
           deferred.reject({
             status: 406,
-            userFriendlyErrors: ["Cannot fetch if there is no id, or there is no corpus"]
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data which has no id, or the if database is not currently opened."]
           });
         });
         return deferred.promise;
       }
 
-      this.debug("Fetching from db ", db);
+      this.todo("Should probably call save before fetch to create a snapshot of the item regardless of whether the save is completeable, ");
+      var oldRev = this.rev;
 
       this.fetching = this.loading = true;
-      this.whenReady = db.get(this.id, optionalUrl)
-        .then(function(result) {
-            self.fetching = self.loading = false;
-            self.loaded = true;
-            self.merge("self", result, "overwrite");
-            self.fossil = self.toJSON();
-            self.todo("Auto overwriting from fetch, this means the user might loose data that they were editing", self);
-            deferred.resolve(self);
-            return self;
-          },
-          function(reason) {
-            self.fetching = self.loading = false;
-            self.debug(reason);
-            deferred.reject(reason);
-            return self;
+      this.whenReady = self.corpus.get(self.id, optionalUrl).then(function(result) {
+        self.fetching = self.loading = false;
+        if (!result) {
+          deferred.reject({
+            status: 400,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data url."]
           });
+          return self;
+        }
+        self.loaded = true;
+
+        // If this had no revision number before, and it does now, then this is a good fossil point
+        if (!oldRev && (result._rev || result.rev)) {
+          self.warn("This was probabbly a placeholder which is now filled in, calling merge with overwrite from server.", self);
+          self.merge("self", result, "overwrite");
+          // Setting the fossil causes
+          // A: the merge to count as something which needs to be seaved
+          // B: the user's previous changes prior to fetch might get lost
+          self.fossil = self.toJSON();
+          self.unsaved = false;
+        } else {
+          self.warn("Cant tell if this was a placeholder, calling merge and asking user if there are merge conflicts.", result);
+          self.merge("self", result);
+          console.log("After merge ", self.modifiedByUser);
+        }
+
+        deferred.resolve(self);
+        return self;
+      }, function(reason) {
+        self.fetching = self.loading = false;
+        self.loaded = false;
+        self.debug(reason);
+        deferred.reject(reason);
+        return self;
+      });
 
       return deferred.promise;
     }
@@ -1184,22 +1263,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   corpus: {
     get: function() {
-      if (this._corpus) {
-        return this._corpus;
-      }
-      if (FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus) {
-        return this.application.corpus;
-      }
-      try {
-        if (FieldDB && FieldDB["Database"]) {
-          return FieldDB["Database"].prototype;
+      var db = null;
+
+      if (this.resumeAuthenticationSession && typeof this.resumeAuthenticationSession === "function") {
+        db = this;
+      } else if (this._corpus) {
+        db = this._corpus;
+      } else if (this._application && this._application._corpus) {
+        db = this._application._corpus;
+      } else {
+        try {
+          if (FieldDB && FieldDB["Database"]) {
+            db = FieldDB["Database"].prototype;
+          }
+        } catch (e) {
+          if (e.message !== "FieldDB is not defined") {
+            this.warn("Cant get the corpus, cant find the Database class.", e);
+            this.warn("  stack trace" + e.stack);
+          }
         }
-      } catch (e) {
-        if (e.message !== "FieldDB is not defined") {
-          this.warn("Cant get the corpus, cant find the Database class.", e);
-          this.warn("  stack trace" + e.stack);
-        }
       }
+
+      return db;
     },
     set: function(value) {
       if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {
@@ -1440,91 +1525,98 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      var json = {
-          fieldDBtype: this.fieldDBtype
-        },
-        aproperty,
-        underscorelessProperty;
+      try {
+        var json = {
+            fieldDBtype: this.fieldDBtype
+          },
+          aproperty,
+          underscorelessProperty;
 
-      if (this.fetching) {
-        this.warn("Cannot get json while object is fetching itself", this);
-        // return;
-        // throw "Cannot get json while object is fetching itself";
-      }
-      /* this object has been updated to this version */
-      this.version = this.version;
-      /* force id to be set if possible */
-      // this.id = this.id;
+        if (this.fetching) {
+          this.warn("Cannot get json while object is fetching itself", this);
+          // return;
+          // throw "Cannot get json while object is fetching itself";
+        }
+        /* this object has been updated to this version */
+        this.version = this.version;
+        /* force id to be set if possible */
+        // this.id = this.id;
 
-      if (this.useIdNotUnderscore) {
-        json.id = this.id;
-      }
+        if (this.useIdNotUnderscore) {
+          json.id = this.id;
+        }
 
-      for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
-          underscorelessProperty = aproperty.replace(/^_/, "");
-          if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
-            underscorelessProperty = "_" + underscorelessProperty;
-          }
-          if (!removeEmptyAttributes || (removeEmptyAttributes && !this.isEmpty(aproperty))) {
-            if (this[aproperty] && typeof this[aproperty].toJSON === "function") {
-              json[underscorelessProperty] = this[aproperty].toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
-            } else {
-              json[underscorelessProperty] = this[aproperty];
+        for (aproperty in this) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+            underscorelessProperty = aproperty.replace(/^_/, "");
+            if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
+              underscorelessProperty = "_" + underscorelessProperty;
+            }
+            if (!removeEmptyAttributes || (removeEmptyAttributes && !this.isEmpty(aproperty))) {
+              if (this[aproperty] && typeof this[aproperty].toJSON === "function") {
+                json[underscorelessProperty] = this[aproperty].toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+              } else {
+                json[underscorelessProperty] = this[aproperty];
+              }
             }
           }
         }
-      }
 
-      /* if the caller requests a complete object include the default for all defauls by calling get on them */
-      if (includeEvenEmptyAttributes) {
-        for (aproperty in this.INTERNAL_MODELS) {
-          if (!json[aproperty] && this.INTERNAL_MODELS) {
-            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
-              json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
-            } else {
-              json[aproperty] = this.INTERNAL_MODELS[aproperty];
+        /* if the caller requests a complete object include the default for all defauls by calling get on them */
+        if (includeEvenEmptyAttributes) {
+          for (aproperty in this.INTERNAL_MODELS) {
+            if (!json[aproperty] && this.INTERNAL_MODELS) {
+              if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+              } else {
+                json[aproperty] = this.INTERNAL_MODELS[aproperty];
+              }
             }
           }
         }
-      }
 
-      if (!json._id) {
-        delete json._id;
-      }
-      if (this.useIdNotUnderscore) {
-        delete json._id;
-      }
-
-      if (!json._rev) {
-        delete json._rev;
-      }
-      if (json.dbname) {
-        json.pouchname = json.dbname;
-        this.debug("Serializing Pouchname for backward compatability until prototype can handle dbname");
-      }
-
-      for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
-        if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
-          delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+        if (!json._id) {
+          delete json._id;
         }
-      }
+        if (this.useIdNotUnderscore) {
+          delete json._id;
+        }
 
-      if (this.collection !== "private_corpora") {
-        delete json.confidential;
-        delete json.confidentialEncrypter;
-      } else {
-        this.warn("serializing confidential in this object " + this._collection);
-      }
-      if (this.api) {
-        json.api = this.api;
-      }
+        if (!json._rev) {
+          delete json._rev;
+        }
+        if (json.dbname) {
+          json.pouchname = json.dbname;
+          this.debug("Serializing Pouchname for backward compatability until prototype can handle dbname");
+        }
 
-      if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
-        delete json.previousFieldDBtype;
-      }
+        for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
+          if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
+            delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+          }
+        }
 
-      return json;
+        if (this.collection !== "private_corpora") {
+          delete json.confidential;
+          delete json.confidentialEncrypter;
+        } else {
+          this.warn("serializing confidential in this object " + this._collection);
+        }
+        if (this.api) {
+          json.api = this.api;
+        }
+
+        if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
+          delete json.previousFieldDBtype;
+        }
+
+        return json;
+
+      } catch (e) {
+        console.log(e);
+        console.log(e.stack);
+        this.bug("Unable to serialze " + this.id + ". Please report this.");
+      }
     }
   },
 
