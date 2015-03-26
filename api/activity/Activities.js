@@ -373,6 +373,8 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       if (this.connection && typeof this.connection.toJSON === "function") {
         json = this.connection.toJSON.apply(this.connection, arguments);
         json.dbname = this.dbname;
+      } else {
+        json = new Connection().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
       }
 
       this.debug(json);
