@@ -2,7 +2,6 @@
 
 <div
 class="container-fluid"
-spreadsheet-catch-arrow-key
 ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}"
 ng-repeat="datum in application.corpus.currentSession.docs._collection track by $index "
 ng-click="selectRow($index)"

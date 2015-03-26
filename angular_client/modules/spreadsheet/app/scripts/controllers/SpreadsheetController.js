@@ -924,14 +924,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
 
-  //TODO what does this do? can any of this be done in the SpreadsheetDatum file instead?
-  // Here is what fieldData looks like:
-  // {
-  //   "field2": "",
-  //   "field3": "",
-  //   "field1": "hi does this call createRecord"
-  // }
-
   $scope.createRecord = function(fieldDBDatum, $event) {
     if ($event && $event.type && $event.type === "submit" && $event.target) {
       $scope.setDataEntryFocusOn($event.target);
@@ -1173,7 +1165,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       recordToBeSaved.dbname = $rootScope.application.corpus.dbname;
       // spreadsheetDatum.dateModified =
       // recordToBeSaved.timestamp = Date.now(); // these come from the edit function, and from the create function because the save can happen minutes or hours after the user actually modifies/creates the datum.
-      promiseToSaveThisDatum = Data.saveSpreadsheetDatum(recordToBeSaved);
+      promiseToSaveThisDatum = recordToBeSaved.save();
       saveDatumPromises.push(promiseToSaveThisDatum);
 
       promiseToSaveThisDatum
