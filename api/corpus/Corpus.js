@@ -558,20 +558,22 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
         }
         var datum = new Datum({
-          datumFields: new DatumFields(self.datumFields.clone()),
+          fields: new DatumFields(self.datumFields.clone()),
+          dbname: self.dbname
         });
         for (var field in options) {
           if (!options.hasOwnProperty(field)) {
             continue;
           }
-          if (datum.datumFields[field]) {
+          if (datum.fields[field]) {
             self.debug("  this option appears to be a datumField " + field);
-            datum.datumFields[field].value = options[field];
+            datum.fields[field].value = options[field];
           } else {
             datum[field] = options[field];
           }
         }
         deferred.resolve(datum);
+        return datum;
       });
       return deferred.promise;
     }

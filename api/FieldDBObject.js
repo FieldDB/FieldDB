@@ -143,7 +143,8 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "useIdNotUnderscore",
   "parent",
   "confirmMessage",
-  "bugMessage"
+  "bugMessage",
+  "fossil"
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
@@ -759,6 +760,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }).then(function(result) {
           self.debug("saved ", result);
           self.saving = false;
+          self.fossil = self.toJSON();
           if (result.id) {
             self.id = result.id;
             self.rev = result.rev;
@@ -1090,6 +1092,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             self.fetching = self.loading = false;
             self.loaded = true;
             self.merge("self", result, "overwrite");
+            self.fossil = self.toJSON();
             self.todo("Auto overwriting from fetch, this means the user might loose data that they were editing", self);
             deferred.resolve(self);
             return self;
