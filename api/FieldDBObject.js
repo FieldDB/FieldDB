@@ -129,6 +129,8 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "fetching",
   "loaded",
   "loading",
+  "unsaved",
+  "selected",
   "useIdNotUnderscore",
   "decryptedMode",
   "bugMessage",
@@ -144,7 +146,8 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "parent",
   "confirmMessage",
   "bugMessage",
-  "fossil"
+  "fossil",
+  "$$hashKey"
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
@@ -152,7 +155,10 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
   "_dateCreated",
   "_fieldDBtype",
   "version",
-  "_version"
+  "_version",
+  "modifiedByUser",
+  "_dateModified",
+  "dateModified"
 ]);
 
 FieldDBObject.software = {};
@@ -574,8 +580,32 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  unsaved: {
+    get: function() {
+      return this._unsaved;
+    },
+    set: function(value) {
+      this._unsaved = !!value;
+    }
+  },
+
+  calculateUnsaved: {
+    value: function() {
+      var previous = new this.constructor(this.fossil);
+      var current = new this.constructor(this);
+
+      if (previous.equals(current)) {
+        this.warn("The " + this.id + " didnt actually change. Not marking as editied");
+        this._unsaved = false;
+      } else {
+        this._unsaved = true;
+      }
+      return this._unsaved;
+    }
+  },
+
   save: {
-    value: function(optionalUserWhoSaved) {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged) {
       var deferred = Q.defer(),
         self = this;
 
@@ -593,6 +623,19 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         });
         return this.whenReady;
       }
+
+      if (saveEvenIfSeemsUnchanged) {
+        this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
+      } else {
+        if (!this.unsaved && !this.calculateUnsaved) {
+          self.warn("Item hasn't really changed, no need to save...");
+          Q.nextTick(function() {
+            deferred.resolve(self);
+          });
+          return this.whenReady;
+        }
+      }
+
       this.saving = true;
 
       //update to this version
@@ -748,7 +791,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       this.debug("saving   ", this);
-
       var url = this.id ? "/" + this.id : "";
       url = this.url + url;
       var data = this.toJSON();
@@ -759,7 +801,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         data: data
       }).then(function(result) {
           self.debug("saved ", result);
-          self.saving = false;
+          self.saving = self.unsaved = false;
           self.fossil = self.toJSON();
           if (result.id) {
             self.id = result.id;
@@ -790,8 +832,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.trashed = "deleted";
       if (reason) {
         this.trashedReason = reason;
+      } else {
+        this.todo("consider using a confirm to ask for a reason for deleting the item");
       }
-      this.todo("consider using a confirm to ask for a reason for deleting the item");
+
       return this.save();
     }
   },
