@@ -32,7 +32,6 @@ describe("Contextualizer", function() {
       expect(contextualizer.currentContext).toEqual("default");
     });
 
-
     it("should let users update locale strings without confirmation", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
@@ -551,5 +550,103 @@ describe("Contextualizer", function() {
 
     });
 
+  });
+
+  describe("backward compatability", function() {
+
+    it("should accept an object", function() {
+      var obj = new ContextualizableObject({
+        default: "An old data list"
+      });
+
+      expect(obj.default).toEqual("An old data list");
+      expect(obj.warnMessage).toBeUndefined();
+    });
+
+    /**
+     * Use this to undo/detect the new String() constructor
+
+     // http://stackoverflow.com/questions/1978049/what-values-can-a-constructor-return-to-avoid-returning-this
+     if (!(value instanceof this.INTERNAL_MODELS[propertyname])) {
+       this.warn(" This item was supposed to be " + this.INTERNAL_MODELS[propertyname] + "  but was returned by the constructor as a string.");
+       value = value.toString();
+     }
+
+     *
+     */
+    it("should return a String", function() {
+      expect(ContextualizableObject.updateAllToContextualizableObjects).toBeFalsy();
+      var obj = {
+        title: new ContextualizableObject("An old data list")
+      };
+
+      // It will pass == tests
+      expect(obj.title).toEqual("An old data list");
+      expect(obj.title == "An old data list").toEqual(true);
+
+      // It wont pass === tests
+      expect("An old data list" === "An old data list").toEqual(true);
+      expect("An old data list").toBe("An old data list");
+      expect(obj.title).not.toBe("An old data list");
+
+      // It will actually be an object array of characters
+      expect(obj.title).toEqual({
+        0: 'A',
+        1: 'n',
+        2: ' ',
+        3: 'o',
+        4: 'l',
+        5: 'd',
+        6: ' ',
+        7: 'd',
+        8: 'a',
+        9: 't',
+        10: 'a',
+        11: ' ',
+        12: 'l',
+        13: 'i',
+        14: 's',
+        15: 't'
+      });
+
+      // They are equivalent if concatinated.
+      expect(obj.title.toString()).toBe("An old data list");
+      expect(obj.title + "").toBe("An old data list");
+
+      // They are equivalent if stringified.
+      expect(JSON.stringify({
+        title: "An old data list"
+      })).toBe("{\"title\":\"An old data list\"}");
+
+      expect(JSON.stringify(obj)).toBe("{\"title\":\"An old data list\"}");
+    });
+
+    /**
+     *
+     * if using the throw strategie use this in the FieldDBObject ensureSetViaAppropriateType method
+
+      try {
+          value = new this.INTERNAL_MODELS[propertyname](value);
+        } catch (constructorRejectedValue) {
+          if (value === constructorRejectedValue) {
+            value = constructorRejectedValue;
+          } else {
+            this.warn("There was an error setting the " + propertyname + " on this object " + this._id, constructorRejectedValue);
+          }
+        }
+
+     *
+     */
+    xit("should thow a string", function() {
+      expect(ContextualizableObject.updateAllToContextualizableObjects).toBeFalsy();
+      var obj;
+      try {
+        obj = new ContextualizableObject("An old data list");
+      } catch (constructorRejectedValue) {
+        obj = constructorRejectedValue;
+      }
+      expect(obj.toString()).toEqual("An old data list");
+      expect(obj).toEqual("An old data list");
+    });
   });
 });

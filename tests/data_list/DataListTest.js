@@ -42,7 +42,7 @@ describe("Data List", function() {
           "23ea"
         ]
       });
-      expect(list.title).toBe("An old data list");
+      expect(list.title).toEqual("An old data list");
       expect(list.warnMessage).toContain("datumIds is deprecated, please use docIds instead.");
     });
 
@@ -417,6 +417,14 @@ describe("Data List", function() {
     it("should serialize existing datalists without breaking prototype app", function() {
       // JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)).debugMode = true;
       var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
+
+
+      expect(list.title).toEqual("morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result");
+      expect(list.title + "").toEqual("morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result");
+      expect(list.title.toString()).toEqual("morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result");
+      expect(list.description).toEqual("This is the result of searching for : morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo in Sample Corpus on \"2012-09-26T14:37:48.068Z\"");
+
+
       expect(list.comments).toBeDefined();
       expect(list.comments.collection[0].text).toContain("an example of how you can");
       expect(list.comments.fieldDBtype).toEqual("Comments");
@@ -428,8 +436,11 @@ describe("Data List", function() {
 
       var listToSave = list.toJSON();
       expect(listToSave._id).toEqual(list.id);
-      expect(listToSave.title).toEqual(list.title);
-      expect(listToSave.description).toEqual(list.description);
+
+      expect(listToSave.title).toEqual("morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result");
+      expect(listToSave.title).toEqual("morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo search result");
+      expect(listToSave.description).toEqual("This is the result of searching for : morphemes:nay AND gloss:des AND judgement:* AND consultants:Ricardo in Sample Corpus on \"2012-09-26T14:37:48.068Z\"");
+
       expect(listToSave.dbname).toEqual(list.dbname);
       expect(listToSave.datumIds).toEqual(list.datumIds);
       expect(listToSave.pouchname).toEqual(list.pouchname);

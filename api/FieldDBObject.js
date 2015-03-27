@@ -98,14 +98,14 @@ var FieldDBObject = function FieldDBObject(json) {
       continue;
     }
     this.debug("JSON: " + member);
-    if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.fieldDBtype === "ContextualizableObject") {
-        this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
-        simpleModels.push(member);
-      } else {
-        this.debug("Parsing model: " + member);
-        json[member] = new this.INTERNAL_MODELS[member](json[member]);
-      }
+    if (json[member] &&
+      this.INTERNAL_MODELS &&
+      this.INTERNAL_MODELS[member] &&
+      typeof this.INTERNAL_MODELS[member] === "function" &&
+      !(json[member] instanceof this.INTERNAL_MODELS[member]) &&
+      !(this.INTERNAL_MODELS[member].compatibleWithSimpleStrings && typeof json[member] === "string")) {
+
+      json[member] = new this.INTERNAL_MODELS[member](json[member]);
 
     } else {
       simpleModels.push(member);
@@ -600,8 +600,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         delete this[optionalInnerPropertyName];
         return;
       }
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[propertyname] && typeof this.INTERNAL_MODELS[propertyname] === "function" && !(value instanceof this.INTERNAL_MODELS[propertyname])) {
+
+      if (this.INTERNAL_MODELS &&
+        this.INTERNAL_MODELS[propertyname] &&
+        typeof this.INTERNAL_MODELS[propertyname] === "function" &&
+        !(value instanceof this.INTERNAL_MODELS[propertyname]) &&
+        !(this.INTERNAL_MODELS[propertyname].compatibleWithSimpleStrings && typeof value === "string")) {
+
         value = new this.INTERNAL_MODELS[propertyname](value);
+
       }
 
       // This trims all strings in the system...
