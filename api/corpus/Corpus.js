@@ -99,7 +99,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     },
     set: function(value) {
       if (this._connection) {
-        this._connection.replicatedCorpusUrls = value
+        this._connection.replicatedCorpusUrls = value;
       }
     }
   },
@@ -113,7 +113,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     },
     set: function(value) {
       if (this._connection) {
-        this._connection.olacExportConnections = value
+        this._connection.olacExportConnections = value;
       }
     }
   },
@@ -521,7 +521,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * @return {Session} a new session for this corpus
    */
   newSession: {
-    value: function() {
+    value: function(options) {
       var sessionFields;
       if (this.currentSession && this.currentSession.sessionFields) {
         sessionFields = this.currentSession.sessionFields.clone();
@@ -531,9 +531,22 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var session = new Session({
         dbname: this.dbname,
         fields: sessionFields,
-        confidential: self.confidential,
+        confidential: this.confidential,
         url: this.url
       });
+
+      for (var field in options) {
+        if (!options.hasOwnProperty(field)) {
+          continue;
+        }
+        if (session.fields[field]) {
+          this.debug("  this option appears to be a sessionField " + field);
+          session.fields[field].value = options[field];
+        } else {
+          session[field] = options[field];
+        }
+      }
+
       return session;
     }
   },
@@ -682,29 +695,42 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    */
   newCorpus: {
     value: function(options) {
-      var newCorpusJson = this.clone();
+      var newCorpusJson,
+        self = this;
 
-      newCorpusJson.comments = [];
-      newCorpusJson.confidential = new Confidential().fillWithDefaults().toJSON();
+      if (this.dbname && this.dbname.indexOf("firstcorpus") > -1) {
+        newCorpusJson = new Corpus(Corpus.prototype.defaults);
+      } else {
+        newCorpusJson = this.clone();
 
-      var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields", "fields"];
-      //clear out search terms from the new corpus's datum fields
-      fieldsToClear.map(function(fieldsType) {
-        /* use default datum fields if this is going to based on teh users' first practice corpus */
-        if (this.dbname && this.dbname.indexOf("firstcorpus") > -1) {
-          newCorpusJson[fieldsType] = DEFAULT_CORPUS_MODEL[fieldsType] || []
-        } else {
-          if (this[fieldsType]) {
-            newCorpusJson[fieldsType] = this[fieldsType].cloneStructure();
+        newCorpusJson.comments = [];
+        newCorpusJson.confidential = new Confidential().fillWithDefaults().toJSON();
+
+        var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields", "fields"];
+        //clear out search terms from the new corpus's datum fields
+        var defaults = this.defaults;
+        fieldsToClear.map(function(fieldsType) {
+          if (self[fieldsType]) {
+            self.debug("Cloning structure only of fieldsType: ", fieldsType);
+            newCorpusJson[fieldsType] = self[fieldsType].cloneStructure();
+          } else {
+            self.debug("fieldsType " + fieldsType + " was missing on this corpus, it's copy will have the fields. ", self);
+            newCorpusJson[fieldsType] = defaults[fieldsType];
           }
-        }
-      });
+        });
 
-      newCorpusJson = new Corpus(newCorpusJson)
-      newCorpusJson.dbname = newCorpusJson.dbname + "copy";
-      newCorpusJson.title = newCorpusJson.title + " copy";
-      newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
-      newCorpusJson.description = "Copy of: " + newCorpusJson.description;
+        newCorpusJson = new Corpus(newCorpusJson);
+        newCorpusJson.dbname = newCorpusJson.dbname + "copy";
+        newCorpusJson.title = newCorpusJson.title + " copy";
+        newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
+        newCorpusJson.description = "Copy of: " + newCorpusJson.description;
+      }
+
+      for (var aproperty in options) {
+        if (options.hasOwnProperty(aproperty)) {
+          newCorpusJson[aproperty] = options[aproperty];
+        }
+      }
 
       return newCorpusJson;
     }

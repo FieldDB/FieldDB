@@ -100,6 +100,7 @@ describe("Corpus", function() {
       // console.log(Corpus.prototype.defaults);
       corpus = new Corpus(Corpus.prototype.defaults);
       corpus.dbname = "testingnewdatum-kartuli";
+      corpus.title = "ქართული";
     });
 
     it("should have default datumFields", function() {
@@ -134,6 +135,9 @@ describe("Corpus", function() {
 
     it("should create a corpus with a similar structure", function() {
       corpus.datumFields.utterance.value = "the last thing i searched for";
+
+      // add some fields
+      expect(corpus.datumFields.length).toEqual(16);
       corpus.datumFields.push(corpus.newField({
         "id": "phonetics"
       }));
@@ -143,34 +147,52 @@ describe("Corpus", function() {
       corpus.datumFields.push(corpus.newField({
         "id": "anotherfieldtheteamwantedtohave"
       }));
+
+      // remove some fields
+      expect(corpus.datumFields.length).toEqual(19);
+      expect(corpus.datumFields.syntactictreelatex).toBeDefined();
+      corpus.datumFields.remove(corpus.datumFields.syntactictreelatex);
+      expect(corpus.datumFields.syntactictreelatex).toBeUndefined();
+      expect(corpus.datumFields.length).toEqual(18);
 
       var newcorpus = corpus.newCorpus();
       corpus.debug(newcorpus.toJSON());
-      expect(newcorpus.datumFields.utterance.value).toEqual(" ");
+      expect(newcorpus.title).toEqual("ქართული copy");
+
+      expect(newcorpus.datumFields.utterance).not.toEqual(corpus.datumFields.utterance);
+      expect(corpus.datumFields.utterance.value).toEqual("the last thing i searched for");
+      expect(newcorpus.datumFields.utterance.value).toEqual("");
+
+      // added fields are there
       expect(newcorpus.datumFields.phonetics).toBeDefined();
       expect(newcorpus.datumFields.semanticContext).toBeDefined();
       expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeDefined();
+
+      // removed fields are not there
+      expect(newcorpus.datumFields.syntactictreelatex).toBeUndefined();
+
     });
 
-
     it("should create a default corpus if called on the user's practice firstcorpus", function() {
-      var modifiedPracticeCorpus = corpus.newCorpus();
-
-      modifiedPracticeCorpus.dbname = "firstcorpus";
-      modifiedPracticeCorpus.datumFields.utterance.value = "the last thing i searched for";
-      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+      corpus.dbname = "firstcorpus";
+      corpus.datumFields.utterance.value = "the last thing i searched for";
+      corpus.datumFields.push(corpus.newField({
         "id": "phonetics"
       }));
-      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+      corpus.datumFields.push(corpus.newField({
         "id": "semanticContext"
       }));
-      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+      corpus.datumFields.push(corpus.newField({
         "id": "anotherfieldtheteamwantedtohave"
       }));
 
-      var newcorpus = modifiedPracticeCorpus.newCorpus();
+      var newcorpus = corpus.newCorpus({
+        title: "Azeri"
+      });
       corpus.debug(newcorpus.toJSON());
-      expect(newcorpus.datumFields.utterance.value).toEqual(" ");
+      expect(newcorpus.title).toEqual("Azeri");
+      expect(newcorpus.title).not.toEqual("ქართული copy");
+
       expect(newcorpus.datumFields.phonetics).toBeUndefined();
       expect(newcorpus.datumFields.semanticContext).toBeUndefined();
       expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeUndefined();
@@ -248,8 +270,13 @@ describe("Corpus", function() {
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
         corpus.debug(speaker);
+
+
+        // the speaker starts with the expected number
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
+
+        // remove all the fields from the speaker
         speaker.fields = [];
         speaker.fields.add({
           "type": "",
@@ -284,6 +311,9 @@ describe("Corpus", function() {
         expect(speaker.fields.lastname.value).toEqual("xxxxxx");
         expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
         expect(speaker.fields.length).toEqual(2);
+
+        // update the speaker to have the fields of the corpus.
+        expect(corpus.participantFields.length).toEqual(8);
         corpus.updateParticipantToCorpusFields(speaker);
         expect(speaker.fields.length).toEqual(11);
         expect(speaker.fields.lastname.value).toEqual("xxxxxx");
