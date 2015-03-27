@@ -1,6 +1,7 @@
 var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
 var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
+var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 
 var specIsRunningTooLong = 5000;
 
@@ -11,6 +12,10 @@ describe("Contextualizer", function() {
       console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
   });
 
   describe("construction", function() {
@@ -168,18 +173,43 @@ describe("Contextualizer", function() {
   });
 
   describe("accept user contributions", function() {
-    it("should be able to save the messages.json to a corpus", function(done) {
-      var contextualizer = new Contextualizer();
+    it("should be able to save the messages.json to a corpus if they were modified", function(done) {
+      var contextualizer = new Contextualizer({
+        dbname: "teammatiger-psycholingdash"
+      });
+      FieldDBObject.application = new FieldDBObject();
+      FieldDBObject.application.corpus = {
+        set: mockDatabase.set,
+        dbname: "teammatiger-psycholingdash"
+      };
+      expect(contextualizer.application).toBeDefined();
+      expect(contextualizer.application.corpus.dbname).toEqual("teammatiger-psycholingdash");
+      expect(contextualizer.application.corpus.set).toEqual(mockDatabase.set);
+
       contextualizer.addMessagesToContextualizedStrings("en", {
         "locale_practice": {
           "message": "Practice"
         }
       });
+
+      contextualizer.updateContextualization("locale_practice", "Practic-ification");
+
       expect(contextualizer.save).toBeDefined();
+      // contextualizer.debugMode = true;
       contextualizer.save().then(function(results) {
-        contextualizer.debug(" save user contribution results", results);
-        expect(results[0].state).toEqual("rejected");
-      })
+          expect(results).not.toBe(contextualizer);
+          contextualizer.debug(" save user contribution results", results);
+          // expect(results[0]).toEqual(" ");
+          // expect(results[0].stack).toEqual(" ");
+
+
+          // expect(results[0]).toEqual(" ");
+          expect(results[0].state).toEqual("fulfilled");
+          expect(results[0].value.warnMessage).toBeUndefined();
+          // expect(results[0].value.warnMessage).toContain("Item hasn't really changed, no need to save");
+          expect(results[0].value.rev).toBeDefined();
+          expect(results[0].value.rev.length).toBeGreaterThan(10);
+        })
         .then(done, done);
     }, specIsRunningTooLong);
 
@@ -192,9 +222,9 @@ describe("Contextualizer", function() {
       });
       contextualizer.email = "lingllama@lingsync.org";
       contextualizer.save().then(function(results) {
-        contextualizer.debug(results);
-        expect(results[0].state).toEqual("fulfilled");
-      })
+          contextualizer.debug(results);
+          expect(results[0].state).toEqual("fulfilled");
+        })
         .then(done, done);
     }, specIsRunningTooLong);
   });
@@ -458,7 +488,7 @@ describe("Contextualizer", function() {
         // with INTERNAL_MODELS set as ContextualizableObject
         containingObject = new DataListMock({
           title: "Import data",
-          // debugMode: true
+          debugMode: true
         });
         expect(containingObject.title).toEqual("Import data");
         expect(containingObject.toJSON().title).toEqual("Import data");
