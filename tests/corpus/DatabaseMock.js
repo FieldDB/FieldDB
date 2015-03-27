@@ -63,7 +63,29 @@ var mockDatabase = {
       deferred.resolve(value);
     });
     return deferred.promise;
-  }
+  },
+  fetchCollection: function(collectionUrl) {
+    console.log("Mocking database fetchCollection(collectionUrl) ", collectionUrl);
+    var deferred = Q.defer();
+    Q.nextTick(function() {
+      if (collectionUrl === "comments") {
+        deferred.resolve({
+          collection: collectionUrl,
+          title: "A generated datalist",
+          description: "something here",
+          docIds: ["abc", "123", "kweo", "654"]
+        });
+      } else {
+        deferred.resolve({
+          collection: collectionUrl,
+          title: "Another generated datalist",
+          description: "something here",
+          docIds: ["abc", "123", "654"]
+        });
+      }
+    });
+    return deferred.promise;
+  },
 };
 
 exports.mockDatabase = mockDatabase;
