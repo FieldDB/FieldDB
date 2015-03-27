@@ -4,17 +4,15 @@
 class="container-fluid"
 ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}"
 ng-repeat="datum in application.corpus.currentSession.docs._collection track by $index "
-ng-click="selectRow($index)"
 ng-hide="loading || readPermissions==false">
 
 <!-- Show when editing -->
-<!--
-  <div fielddb-id="{{datum.id}}" data-spreadsheet-adapting-columnar-template-edit  ></div>
--->
 
-<!-- Show when not editing -->
-<div class="row-fluid" data-spreadsheet-adapting-columnar-template-read>
-</div>
+  <div fielddb-id="{{datum.id}}" data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode">
+
+  <!-- Show when not editing -->
+  <div class="row-fluid" data-spreadsheet-adapting-columnar-template-read ng-hide="datum.editingMode" ng-dblclick="datum.editingMode=writePermissions ? true : false">
+  </div>
 </div>
 
 <div
