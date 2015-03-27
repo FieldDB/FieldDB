@@ -1,4 +1,5 @@
 "use strict";
+var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
 var DatumField = require("./../../api/datum/DatumField").DatumField;
 var DatumFields = require("./../../api/datum/DatumFields").DatumFields;
@@ -9,6 +10,13 @@ var sampleDatumFields = function() {
 };
 
 describe("lib/DatumFields", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
 
   it("should load", function() {
     expect(DatumFields).toBeDefined();

@@ -9,6 +9,15 @@ var specIsRunningTooLong = 5000;
 var SAMPLE_DATALIST_MODEL = require("../../sample_data/datalist_v1.22.1.json")[0];
 
 describe("Data List", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
+
+
   describe("construction", function() {
 
     it("should load the DataList", function() {

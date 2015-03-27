@@ -1,95 +1,112 @@
+var FieldDBObject =FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
 var Session = require("./../../api/datum/Session").Session;
+var DataList = require("./../../api/data_list/DataList").DataList;
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
 describe("Session: as a linguist I often collect data in an elicitation session", function() {
-  it("should load", function() {
-    expect(Session).toBeDefined();
 
-    var session = new Session();
-    expect(session).toBeDefined();
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    // mockDatabase = {
+    //   get: mockDatabase.get,
+    //   set: mockDatabase.set
+    // };
   });
 
-  it("should set the fields", function() {
-    var session = new Session();
+  describe("construction", function() {
 
-    session.fields = session.defaults.fields;
-    expect(session.fields.length).toEqual(10);
-    expect(session.fields.fieldDBtype).toEqual("DatumFields");
-    expect(session.fields._collection.length).toEqual(10);
+    it("should load", function() {
+      expect(Session).toBeDefined();
 
-    expect(session.fields).toBeDefined();
-    expect(session.fields.length).toEqual(10);
-    expect(session.fields.fieldDBtype).toEqual("DatumFields");
+      var session = new Session();
+      expect(session).toBeDefined();
+    });
 
-    expect(session.fields.goal).toBeDefined();
-    expect(session.goal).toBeDefined();
-    expect(session.title).toBeDefined();
+    it("should set the fields", function() {
+      var session = new Session();
 
-    expect(session.fields.source).toBeDefined();
-    expect(session.fields.dialect).toBeDefined();
-    expect(session.fields.register).toBeDefined();
-    expect(session.fields.language).toBeDefined();
-    expect(session.fields.location).toBeDefined();
+      session.fields = session.defaults.fields;
+      expect(session.fields.length).toEqual(10);
+      expect(session.fields.fieldDBtype).toEqual("DatumFields");
+      expect(session.fields._collection.length).toEqual(10);
 
-    expect(session.fields.dateElicited).toBeDefined();
-    expect(session.dateElicited).toBeDefined();
-    expect(session.date).toBeDefined();
+      expect(session.fields).toBeDefined();
+      expect(session.fields.length).toEqual(10);
+      expect(session.fields.fieldDBtype).toEqual("DatumFields");
 
-    expect(session.fields.participants).toBeDefined();
-    expect(session.consultants).toBeDefined();
-    expect(session.consultants.length).toEqual(0);
-    session.consultants = [{
-      username: "tilohash",
-      anonymousCode: "TH",
-      gravatar: "ouranonymousgravatar"
-    }, {
-      username: "maryjean",
-      anonymousCode: "MJ",
-      gravatar: "ouranonymousgravatar"
-    }];
-    expect(session.consultants).toBeDefined();
-    expect(session.consultants.length).toEqual(2);
-    expect(session.consultants[0].username).toEqual("maryjean");
-    expect(session.consultants[1].username).toEqual("tilohash");
-    expect(session.participants.length).toEqual(2);
+      expect(session.fields.goal).toBeDefined();
+      expect(session.goal).toBeDefined();
+      expect(session.title).toBeDefined();
 
-    session.user = [{
-      username: "lingllama",
-      gravatar: "9104j3ewaijoi23"
-    }];
-    expect(session.user).toBeDefined();
-    expect(session.user.username).toEqual("lingllama");
+      expect(session.fields.source).toBeDefined();
+      expect(session.fields.dialect).toBeDefined();
+      expect(session.fields.register).toBeDefined();
+      expect(session.fields.language).toBeDefined();
+      expect(session.fields.location).toBeDefined();
 
-    session.user = "Teammate Tiger";
-    expect(session.user.username).toEqual("Teammate Tiger");
+      expect(session.fields.dateElicited).toBeDefined();
+      expect(session.dateElicited).toBeDefined();
+      expect(session.date).toBeDefined();
 
-    session.user = "lingllama, sally, suzie";
-    expect(session.user.username).toEqual("suzie");
+      expect(session.fields.participants).toBeDefined();
+      expect(session.consultants).toBeDefined();
+      expect(session.consultants.length).toEqual(0);
+      session.consultants = [{
+        username: "tilohash",
+        anonymousCode: "TH",
+        gravatar: "ouranonymousgravatar"
+      }, {
+        username: "maryjean",
+        anonymousCode: "MJ",
+        gravatar: "ouranonymousgravatar"
+      }];
+      expect(session.consultants).toBeDefined();
+      expect(session.consultants.length).toEqual(2);
+      expect(session.consultants[0].username).toEqual("maryjean");
+      expect(session.consultants[1].username).toEqual("tilohash");
+      expect(session.participants.length).toEqual(2);
+
+      session.user = [{
+        username: "lingllama",
+        gravatar: "9104j3ewaijoi23"
+      }];
+      expect(session.user).toBeDefined();
+      expect(session.user.username).toEqual("lingllama");
+
+      session.user = "Teammate Tiger";
+      expect(session.user.username).toEqual("Teammate Tiger");
+
+      session.user = "lingllama, sally, suzie";
+      expect(session.user.username).toEqual("suzie");
 
 
-    session.consultants = "phylis, psaul, pieta";
-    expect(session.consultants.map(function(usermask) {
-      return usermask.username;
-    })).toEqual(["pieta", "psaul", "phylis", "maryjean", "tilohash"]);
+      session.consultants = "phylis, psaul, pieta";
+      expect(session.consultants.map(function(usermask) {
+        return usermask.username;
+      })).toEqual(["pieta", "psaul", "phylis", "maryjean", "tilohash"]);
 
 
-    expect(session.fields.datesessionentered).toBeDefined();
-    expect(session.fields.device).toBeDefined();
-  });
+      expect(session.fields.datesessionentered).toBeDefined();
+      expect(session.fields.device).toBeDefined();
+    });
 
-  it("should set the goal", function() {
-    var session = new Session();
-    expect(session.fields).toBeUndefined();
-    session.goal = "Collecting examples of accusative experiencers";
-    expect(session.fields.goal.value).toEqual("Collecting examples of accusative experiencers");
-  });
+    it("should set the goal", function() {
+      var session = new Session();
+      expect(session.fields).toBeUndefined();
+      session.goal = "Collecting examples of accusative experiencers";
+      expect(session.fields.goal.value).toEqual("Collecting examples of accusative experiencers");
+    });
 
-  it("should have default fields", function() {
-    var session = new Session();
-    expect(session.defaults).toBeDefined();
-    expect(session.defaults.fields).toBeDefined();
-    expect(session.defaults.fields.length).toEqual(10);
+    it("should have default fields", function() {
+      var session = new Session();
+      expect(session.defaults).toBeDefined();
+      expect(session.defaults.fields).toBeDefined();
+      expect(session.defaults.fields.length).toEqual(10);
+    });
   });
 
 

@@ -1,7 +1,15 @@
-var App = App || require("../../api/app/App.js").App;
+var App = require("../../api/app/App").App;
+var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
 
 describe("App", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
 
   describe("construction", function() {
     it("should load", function() {
@@ -90,7 +98,7 @@ describe("App", function() {
       expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
     }, specIsRunningTooLong);
 
-    it("should be able to load an import dashboard based on routeParams", function(done) {
+    xit("should be able to load an import dashboard based on routeParams", function(done) {
       var app = new App({
         // debugMode: true
       });
@@ -155,6 +163,14 @@ describe("App", function() {
 // Testing to see where the app is running, if it is installed on android,
 // installed in chrome or if it is a web widget.
 describe("App: as a developer I want to deploy to multiple targets", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
+
   it("should not be a Chrome extension", function() {
     var app = new App();
     expect(app.isChromeApp).toBeFalsy();
