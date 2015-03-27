@@ -851,6 +851,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
       if (!this.corpus || typeof this.corpus.set !== "function") {
+        self.warn("The corpus for this doc isnt acessible, this is probably a bug.", this);
         Q.nextTick(function() {
           self.saving = false;
           deferred.reject({
@@ -957,11 +958,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   saveToGit: {
-    value: function(commit) {
+    value: function(commit, saveEvenIfSeemsUnchanged) {
       var deferred = Q.defer(),
         self = this;
       Q.nextTick(function() {
-        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username");
+        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username", saveEvenIfSeemsUnchanged);
         self.debug("Commit to be used: ", commit);
         deferred.resolve(self);
       });
@@ -1319,24 +1320,32 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   corpus: {
     get: function() {
       var db = null;
-
+      // this.debugMode = true;
       if (this.resumeAuthenticationSession && typeof this.resumeAuthenticationSession === "function") {
         db = this;
+        this.debug("this " + this._id + " has the functions of a corpus, using it.", db);
       } else if (this._corpus) {
         db = this._corpus;
-      } else if (this._application && this._application._corpus) {
-        db = this._application._corpus;
+        this.debug("this " + this._id + " has a _corpus hard coded inside it, using it.", db);
+      } else if (FieldDBObject.application && FieldDBObject.application._corpus) {
+        db = FieldDBObject.application._corpus;
+        this.debug("this " + this._id + " is running in the context where FieldDBObject.application._corpus is defined, using it.", db);
       } else {
+
         try {
           if (FieldDB && FieldDB["Database"]) {
             db = FieldDB["Database"].prototype;
+            this.warn("  using the Database prototype for corpus reference on " + this._id + ", this could be problematic " + this._id + " wasnt a database, and had no acces to an application or _corpus which it could use.", db);
           }
         } catch (e) {
           if (e.message !== "FieldDB is not defined") {
-            this.warn("Cant get the corpus, cant find the Database class.", e);
+            this.warn(this._id + "Cant get the corpus, cant find the Database class.", e);
             this.warn("  stack trace" + e.stack);
           }
         }
+      }
+      if (!db) {
+        this.warn("Operations that need a database wont work for the " + this._id + " object");
       }
 
       return db;

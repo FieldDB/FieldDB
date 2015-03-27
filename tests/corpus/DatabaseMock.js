@@ -58,7 +58,7 @@ var mockDatabase = {
     Q.nextTick(function() {
       value.rev = Date.now() + "-saveresult";
       value.id = key || "aBc" + Date.now();
-      console.log("resolving the samething that was saved, with a new rev", value);
+      // console.log("resolving the samething that was saved, with a new rev", value);
       delete value.fossil;
       deferred.resolve(value);
     });
