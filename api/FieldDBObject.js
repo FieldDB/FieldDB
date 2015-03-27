@@ -585,23 +585,32 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   ensureSetViaAppropriateType: {
-    value: function(propertyname, value) {
+    value: function(propertyname, value, optionalInnerPropertyName) {
       if (!propertyname) {
         console.error("Invalid call to ensureSetViaAppropriateType", value);
         throw new Error("Invalid call to ensureSetViaAppropriateType");
       }
-      if (value === this["_" + propertyname]) {
-        return this["_" + propertyname];
+
+      optionalInnerPropertyName = optionalInnerPropertyName || "_" + propertyname;
+
+      if (value === this[optionalInnerPropertyName]) {
+        return this[optionalInnerPropertyName];
       }
       if (!value) {
-        delete this["_" + propertyname];
+        delete this[optionalInnerPropertyName];
         return;
       }
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[propertyname] && typeof this.INTERNAL_MODELS[propertyname] === "function" && !(value instanceof this.INTERNAL_MODELS[propertyname])) {
         value = new this.INTERNAL_MODELS[propertyname](value);
       }
-      this["_" + propertyname] = value;
-      return this["_" + propertyname];
+
+      // This trims all strings in the system...
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+
+      this[optionalInnerPropertyName] = value;
+      return this[optionalInnerPropertyName];
     }
   },
 

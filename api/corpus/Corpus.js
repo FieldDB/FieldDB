@@ -71,25 +71,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: Corpus
   },
 
-  id: {
-    get: function() {
-      return this._id || FieldDBObject.DEFAULT_STRING;
-    },
-    set: function(value) {
-      if (value === this._id) {
-        return;
-      }
-      if (!value) {
-        delete this._id;
-        return;
-      }
-      if (value.trim) {
-        value = value.trim();
-      }
-      this._id = value;
-    }
-  },
-
   replicatedCorpusUrls: {
     get: function() {
       if (this._connection && this._connection.replicatedCorpusUrls) {
@@ -123,14 +104,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
     },
     set: function(value) {
-      if (value === this._termsOfUse) {
-        return;
-      }
-      if (!value) {
-        delete this._termsOfUse;
-        return;
-      }
-      this._termsOfUse = value;
+      this.ensureSetViaAppropriateType("termsOfUse", value);
     }
   },
 
@@ -139,14 +113,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._license || {};
     },
     set: function(value) {
-      if (value === this._license) {
-        return;
-      }
-      if (!value) {
-        delete this._license;
-        return;
-      }
-      this._license = value;
+      this.ensureSetViaAppropriateType("license", value);
     }
   },
 
@@ -155,14 +122,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._copyright || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._copyright) {
-        return;
-      }
-      if (!value) {
-        delete this._copyright;
-        return;
-      }
-      this._copyright = value.trim();
+      this.ensureSetViaAppropriateType("copyright", value);
     }
   },
 
@@ -174,18 +134,19 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this.unserializedSessions) {
-        return;
-      }
-      if (!value) {
-        delete this.unserializedSessions;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["sessions"](value);
-        }
-      }
-      this.unserializedSessions = value;
+      this.ensureSetViaAppropriateType("sessions", value, "unserializedSessions");
+    }
+  },
+
+  unserializedDatalists: {
+    value: null
+  },
+  datalists: {
+    get: function() {
+      return this.unserializedDatalists || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("datalists", value, "unserializedDatalists");
     }
   },
 
@@ -207,19 +168,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._confidential || FieldDBObject.DEFAULT_OBJECT;
     },
     set: function(value) {
-      if (value === this._confidential) {
-        return;
-      }
-      if (!value) {
-        delete this._confidential;
-        return;
-      } else {
-        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["confidential"] && typeof this.INTERNAL_MODELS["confidential"] === "function" && value.constructor !== this.INTERNAL_MODELS["confidential"]) {
-          this.debug("Parsing model: " + value);
-          value = new this.INTERNAL_MODELS["confidential"](value);
-        }
-      }
-      this._confidential = value;
+      this.ensureSetViaAppropriateType("confidential", value);
     }
   },
 
@@ -231,12 +180,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       if (value === this._publicCorpus) {
         return;
       }
-      if (!value) {
-        delete this._publicCorpus;
-        return;
-      }
-      if (value !== "Public" && value !== "Private") {
-        this.warn("Corpora can be either Public or Private");
+      if (!value || (value !== "Public" && value !== "Private")) {
+        this.warn("Corpora can be either Public or Private, if you make your corpus Public you can customize which fields are visible to public visitors.");
         value = "Private";
       }
       this._publicCorpus = value;
@@ -264,18 +209,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._validationStati || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._validationStati) {
-        return;
-      }
-      if (!value) {
-        delete this._validationStati;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["datumStates"](value);
-        }
-      }
-      this._validationStati = value;
+      this.ensureSetViaAppropriateType("validationStati", value);
     }
   },
 
@@ -284,18 +218,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this._tags || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._tags) {
-        return;
-      }
-      if (!value) {
-        delete this._tags;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["tags"](value);
-        }
-      }
-      this._tags = value;
+      this.ensureSetViaAppropriateType("tags", value);
     }
   },
 
