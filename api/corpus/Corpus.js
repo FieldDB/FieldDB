@@ -113,15 +113,26 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
    * @type {Object}
    */
-  publicSelf: {
+  corpusMask: {
     get: function() {
-      return this._publicSelf;
+      return this._corpusMask;
     },
     set: function(value) {
-      if (value === this._publicSelf) {
+      if (value === this._corpusMask) {
         return;
       }
-      this._publicSelf = value;
+      this._corpusMask = value;
+    }
+  },
+
+  publicSelf: {
+    get: function() {
+      console.error("publicSelf is deprecated, use corpusMask instead");
+      return this.corpusMask;
+    },
+    set: function(value) {
+      // console.error("publicSelf is deprecated, use corpusMask instead");
+      this.corpusMask = value;
     }
   },
 
@@ -228,9 +239,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  fetchPublicSelf: {
+  fetchMask: {
     value: function() {
-      this.todo("test fetchPublicSelf");
+      this.todo("test fetchMask");
       if (!this.dbname) {
         throw new Error("Cannot load corpus's public self, its dbname was undefined");
       }
@@ -239,16 +250,16 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
       Q.nextTick(function() {
 
-        if (self.publicSelf && self.publicSelf.rev) {
-          deferred.resolve(self.publicSelf);
+        if (self.corpusMask && self.corpusMask.rev) {
+          deferred.resolve(self.corpusMask);
           return;
         }
 
-        self.publicSelf = new CorpusMask({
+        self.corpusMask = new CorpusMask({
           dbname: self.dbname
         });
 
-        self.publicSelf.fetch()
+        self.corpusMask.fetch()
           .then(deferred.resolve, deferred.reject);
 
       });
