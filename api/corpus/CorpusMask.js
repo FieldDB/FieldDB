@@ -295,9 +295,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["connection"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
+      value.parent = this;
       this._connection = value;
     }
   },
