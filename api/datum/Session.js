@@ -523,7 +523,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         // this.debugMode = true;
         var self = this;
         this._docIds = value;
-        this.datalistUpdatingPromise.done(function() {
+        this.whenReindexedFromApi.done(function() {
           self.warn("datalist still doesnt exist");
           return self._datalist;
         });
@@ -544,7 +544,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         this.warn("This should never happen.");
         // this.debugMode = true;
         var self = this;
-        self.datalistUpdatingPromise.done(function() {
+        self.whenReindexedFromApi.done(function() {
           self._datalist.docs = value;
           return self._datalist;
         });
@@ -641,7 +641,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         if (!this.datalist || !this.datalist.docs) {
           var self = this;
           // this.debugMode = true;
-          self.datalistUpdatingPromise.done(function() {
+          self.whenReindexedFromApi.done(function() {
             self.debug("Adding to session's data list", value);
             if (!self._datalist.docs) {
               self._datalist.docs = value;
@@ -673,15 +673,15 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         deferred = Q.defer();
 
       if (this._datalist) {
-        if (!this.datalistUpdatingPromise) {
-          self.datalistUpdatingPromise = deferred.promise;
+        if (!this.whenReindexedFromApi) {
+          this.whenReindexedFromApi = deferred.promise;
           deferred.resolve(self._datalist);
         }
         return this._datalist;
       }
 
       this._datalist = new DataList({
-        dbname: this.dbname,
+        dbname: this.dbname
         // docs: []
       });
 
@@ -693,64 +693,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         }
       }
 
-      var unableToFetchCurrentDataAffiliatedWithThisSession = function(err) {
-        self.warn(" problem fetching the data list", err);
-        self._datalist.docs = self._datalist.docs || [];
-        self._datalist.docIds = self._datalist.docIds || self._docIds;
-        return self._datalist;
-      };
-
-      if (!this.corpus) {
-        if (!this.datalistUpdatingPromise) {
-          deferred = Q.defer();
-          this.datalistUpdatingPromise = deferred.promise;
-          Q.nextTick(function() {
-            unableToFetchCurrentDataAffiliatedWithThisSession("This session has no corpus, it doesnt know how to find out which data are in it.");
-            deferred.resolve(self._datalist);
-          });
-        }
-        return this._datalist;
-      }
-      this.todo("Use reindexFromApi on datalists instead");
+      this.todo("Using reindexFromApi on datalists instead");
       this.fetching = this.loading = true;
-      this.datalistUpdatingPromise = this.corpus.fetchCollection(api, null, null, null, null, this.id).then(function(generatedDatalist) {
-        self.fetching = self.loading = true;
-        self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", generatedDatalist);
-        if (generatedDatalist) {
-          generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
-          if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
-            // If the data list was empty, assign the docIds which will populate it with placeholders
-            if (!self._datalist.docs) {
-              self._datalist.docs = [];
-            }
-
-            // If the data list doesn't have this id, add a placeholder
-            generatedDatalist.docIds.map(function(docPrimaryKey) {
-              if (!self._datalist.docs[docPrimaryKey]) {
-                var docPlaceholder = {
-                  fieldDBtype: "Datum",
-                  loading: true
-                };
-                docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
-                self._datalist.add(docPlaceholder);
-              }
-            });
-            // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
-            if (self._datalist.length !== generatedDatalist.docIds.length) {
-              self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
-            }
-            delete generatedDatalist.docIds;
-
-          }
-          delete generatedDatalist.title;
-          delete generatedDatalist.description;
-          // self._datalist.merge("self", generatedDatalist);
-          self.render();
-        } else {
-          self.bug("There was a problem downloading the list of data in the " + self.goal + " session. Please report this.");
-        }
-        return self._datalist;
-      }, unableToFetchCurrentDataAffiliatedWithThisSession);
+      this.whenReindexedFromApi = this._datalist.reindexFromApi();
 
       return this._datalist;
     },
