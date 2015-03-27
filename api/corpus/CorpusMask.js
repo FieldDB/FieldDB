@@ -234,15 +234,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._title || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._title) {
-        return;
+      this.ensureSetViaAppropriateType("title", value);
+      if (this._title) {
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
       }
-      if (!value) {
-        delete this._title;
-        return;
-      }
-      this._title = value.trim();
-      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 
@@ -251,14 +246,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._description || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._description) {
-        return;
-      }
-      if (!value) {
-        delete this._description;
-        return;
-      }
-      this._description = value.trim();
+      this.ensureSetViaAppropriateType("description", value);
     }
   },
 
@@ -271,10 +259,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._team;
     },
     set: function(value) {
-      if (value === this._team) {
-        return;
-      }
-      this._team = value;
+      this.ensureSetViaAppropriateType("team", value);
     }
   },
 
@@ -284,22 +269,13 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._connection || FieldDBObject.DEFAULT_OBJECT;
     },
     set: function(value) {
-      if (value === this._connection) {
-        return;
-      }
-      if (!value) {
-        delete this._connection;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["connection"] === "function" && !(value instanceof this.INTERNAL_MODELS["connection"])) {
-          value = new this.INTERNAL_MODELS["connection"](value);
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
         }
       }
-      if (!value.confidential && this.confidential) {
-        value.confidential = this.confidential;
-      }
-      value.parent = this;
-      this._connection = value;
+      this.ensureSetViaAppropriateType("connection", value);
     }
   },
 
@@ -309,22 +285,13 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._activityConnection;
     },
     set: function(value) {
-      if (value === this._activityConnection) {
-        return;
-      }
-      if (!value) {
-        delete this._activityConnection;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["activityConnection"] === "function" && !(value instanceof this.INTERNAL_MODELS["activityConnection"])) {
-          value = new this.INTERNAL_MODELS["activityConnection"](value);
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
         }
       }
-      if (!value.confidential && this.confidential) {
-        value.confidential = this.confidential;
-      }
-      value.parent = this;
-      this._activityConnection = value;
+      this.ensureSetViaAppropriateType("activityConnection", value);
     }
   },
 
@@ -418,18 +385,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._permissions || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._permissions) {
-        return;
-      }
-      if (!value) {
-        delete this._permissions;
-        return;
-      } else {
-        if (!(value instanceof this.INTERNAL_MODELS["permissions"])) {
-          value = new this.INTERNAL_MODELS["permissions"](value);
-        }
-      }
-      this._permissions = value;
+      this.ensureSetViaAppropriateType("permissions", value);
     }
   },
 
@@ -538,18 +494,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._prefs;
     },
     set: function(value) {
-      if (value === this._prefs) {
-        return;
-      }
-      if (!value) {
-        delete this._prefs;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Object]") {
-          value = new this.INTERNAL_MODELS["prefs"](value);
-        }
-      }
-      this._prefs = value;
+      this.ensureSetViaAppropriateType("prefs", value);
     }
   },
 

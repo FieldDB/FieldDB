@@ -295,11 +295,17 @@ describe("CorpusMask ", function() {
         "description": "The details of this corpus are not public.",
         "titleAsUrl": "computatio____entry_tutoria"
       };
-      expect(corpus.connection.toJSON().pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
 
-      expect(corpus.connection.toJSON().title).toEqual(corpus.title);
-      expect(corpus.connection.toJSON().pouchname).toEqual(corpus.connection.pouchname);
-      expect(corpus.connection.toJSON().dbname).toEqual(corpus.connection.pouchname);
+      expect(corpus.connection.pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
+      expect(corpus.connection.title).toEqual(corpus.title);
+      expect(corpus.connection.pouchname).toEqual(corpus.connection.pouchname);
+      expect(corpus.connection.dbname).toEqual(corpus.connection.pouchname);
+
+      var serializedCorpusConnection = corpus.connection.toJSON();
+      expect(serializedCorpusConnection.pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
+      expect(serializedCorpusConnection.title).toEqual(corpus.title);
+      expect(serializedCorpusConnection.pouchname).toEqual(corpus.connection.pouchname);
+      expect(serializedCorpusConnection.dbname).toEqual(corpus.connection.pouchname);
 
       //if the parent dbname changes, so should the corpus connection
       var duplicatedCorpus = corpus.clone();
