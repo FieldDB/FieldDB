@@ -328,6 +328,85 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  replicatedCorpusUrls: {
+    get: function() {
+      if (this._connection && this._connection.replicatedCorpusUrls) {
+        return this._connection.replicatedCorpusUrls;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (this._connection) {
+        this._connection.replicatedCorpusUrls = value;
+      }
+    }
+  },
+
+  olacExportConnections: {
+    get: function() {
+      if (this._connection && this._connection.olacExportConnections) {
+        return this._connection.olacExportConnections;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (this._connection) {
+        this._connection.olacExportConnections = value;
+      }
+    }
+  },
+
+  termsOfUse: {
+    get: function() {
+      return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("termsOfUse", value);
+    }
+  },
+
+  license: {
+    get: function() {
+      return this._license || {};
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("license", value);
+    }
+  },
+
+  copyright: {
+    get: function() {
+      return this._copyright || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("copyright", value);
+    }
+  },
+
+  unserializedSessions: {
+    value: null
+  },
+  sessions: {
+    get: function() {
+      return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("sessions", value, "unserializedSessions");
+    }
+  },
+
+  unserializedDatalists: {
+    value: null
+  },
+  datalists: {
+    get: function() {
+      return this.unserializedDatalists || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("datalists", value, "unserializedDatalists");
+    }
+  },
+
   permissions: {
     get: function() {
       if (!this._permissions) {
@@ -417,8 +496,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   participantFields: {
     get: function() {
-        this.debug("getting participantFields");
-        return this._participantFields;
+      this.debug("getting participantFields");
+      return this._participantFields;
     },
     set: function(value) {
       if (value && !value.confidential && this.confidential) {
