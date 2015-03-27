@@ -74,13 +74,13 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
       }
 
       if (tempDatum.rev) {
-        $rootScope.markAsEdited(currentValue, tempDatum);
+        // $rootScope.markAsEdited(currentValue, tempDatum);
       } else {
         alert("TODO decide if its empty");
         if (JSON.stringify(tempDatum) === "{}") {
           return;
         }
-        $rootScope.newRecordHasBeenEdited = true;
+        $rootScope.application.corpus.currentSession.newDatum.unsaved = true;
       }
       if (tempDatum.fossil && tempDatum.fossil.fields[fieldKey].value === currentValue) {
         return;
