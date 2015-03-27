@@ -391,7 +391,11 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         self.permissions.parent = self;
         self.permissions.fetch(dataToPost)
-          .then(deferred.resolve, deferred.reject);
+          .then(deferred.resolve, deferred.reject)
+          .fail(function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
+          });
 
       });
       return deferred.promise;

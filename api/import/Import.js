@@ -188,6 +188,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             deferred.resolve(result);
           })
           .fail(function(reason) {
+            console.error(reason.stack);
             deferred.reject(reason);
           });
 
@@ -231,6 +232,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               function(reason) {
                 self.debug(reason);
                 deferred.reject(reason);
+              }).fail(
+              function(error) {
+                console.error(error.stack);
+                deferred.reject(error);
               });
           }
         };
@@ -842,6 +847,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }, function(error) {
             self.debug(error);
             self.progress.completed++;
+          }).fail(function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
           });
           savePromises.push(promise);
         }
@@ -859,6 +867,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self.progress.completed++;
         self.render();
         return options;
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
 
       return deferred.promise;
@@ -1799,6 +1810,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             window.appView.toastUser(reason.userFriendlyErrors.join(" "), "alert-danger", "Import:");
           }
         }
+      }).fail(function(error) {
+        console.error(error.stack);
       });
     }
   },
@@ -2078,8 +2091,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }, function(results) {
           self.error = "Error processing files";
           deferred.reject(results);
-        }).catch(function(error) {
+        }).fail(function(error) {
+          console.error(error.stack);
           self.warn("There was an error when importing these options ", error, options);
+          deferred.reject(error);
         });
 
       });

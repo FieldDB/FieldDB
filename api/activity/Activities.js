@@ -193,7 +193,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         this.warn("Activites can only be viewed in masked form in this app. The parent of the activity feed is not defined.");
       }
     },
-    set: function(value) {
+    set: function() {
       // cant set confidential on activity feeds, it must come from the parent. This means activities cannot be demasked unless in the context of the orignal corpus or user
     }
   },
@@ -309,11 +309,15 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         return addedActivity;
       } catch (e) {
         this.warn("Error adding this activity, it was not complete enough", e);
-        this.warn(e.stack);
+        var message = e ? e.message : " Error adding this activity, it was not complete enough";
+        if (e) {
+          console.error(e.stack);
+        }
+        this.warn(message);
         this.incompleteActivitesStockPile = this.incompleteActivitesStockPile || [];
         this.incompleteActivitesStockPile.push({
           activity: activity,
-          errorMessage: e.message
+          errorMessage: message
         });
         return undefined;
       }

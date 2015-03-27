@@ -67,6 +67,8 @@ var Authentication = function Authentication(options) {
     self.render();
 
     return error;
+  }).fail(function(error) {
+    console.error(error.stack);
   });
 
   FieldDBObject.apply(this, arguments);
@@ -162,6 +164,10 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
           self.error = error.userFriendlyErrors.join(" ");
           deferred.reject(error);
+        }).fail(
+        function(error) {
+          console.error(error.stack);
+          deferred.reject(error);
         });
 
       // Q.nextTick(function(){
@@ -202,7 +208,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
                 loopExponentialDecayLogin(options);
               }, waitTime);
             }
-          });
+          }).fail(
+            function(error) {
+              console.error(error.stack);
+              deferred.reject(error);
+            });
         };
         loopExponentialDecayLogin(options);
 
@@ -309,9 +319,13 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     value: function() {
       var self = this;
       this.todo("will this return a promise.");
-      return this.renderQuickAuthentication().then(function(userinfo) {
-        self.login(userinfo);
-      });
+      return this.renderQuickAuthentication()
+        .then(function(userinfo) {
+          self.login(userinfo);
+        })
+        .fail(function(error) {
+          console.error(error.stack);
+        });
     }
   },
 
@@ -392,6 +406,10 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
             self.debug(reason);
             deferred.reject(reason);
+          }).fail(
+          function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
           });
       });
       return deferred.promise;

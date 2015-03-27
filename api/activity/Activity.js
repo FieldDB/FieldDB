@@ -456,11 +456,11 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
     }
   },
 
-  corpus:{
-    get: function(){
+  corpus: {
+    get: function() {
       return this._database;
     },
-    set: function(value){
+    set: function(value) {
       this._database = value;
     }
   },
@@ -633,10 +633,10 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
             self.saving = false;
             deferred.reject(reason);
           })
-        .catch(function(reason) {
-          self.debug(reason);
+        .fail(function(error) {
+          console.error(error.stack);
           self.saving = false;
-          deferred.reject(reason);
+          deferred.reject(error);
         });
 
       return deferred.promise;
@@ -655,7 +655,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
-      if(json){
+      if (json) {
         delete json.dateCreated;
       }
 

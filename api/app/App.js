@@ -251,6 +251,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
           }, function(error) {
             deferred.reject(error);
+          }).fail(function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
           });
         } else {
           deferred.reject("User is not authenticated. Please log in.");
@@ -423,9 +426,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           // self.loginDetails.username = self.team.username;
           self.render();
           return self;
-        }).catch(function(error) {
-          self.warn("catch error", error);
-          return self;
+        }).fail(function(error) {
+          console.error(error.stack);
         });
       } else {
         this.debug("Not fetching corpus, its aleady here.", this.corpus);

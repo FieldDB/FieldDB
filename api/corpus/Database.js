@@ -181,6 +181,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         reason.details = value;
         self.debug(reason);
         deferred.reject(reason);
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
       return deferred.promise;
     }
@@ -243,7 +246,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         //     deferred.resolve(documents);
         //   }, function(reason) {
         //     deferred.reject(reason);
-        //   });
+        //   }).fail(function(error) {
+        //   console.error(error.stack);
+        //   deferred.reject(error);
+        // });
         // });
       };
 
@@ -281,7 +287,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           } else {
             deferred.resolve([]);
           }
-        }, cantLogIn);
+        }, cantLogIn).fail(
+          function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
+          });
 
       } else {
         CORS.makeCORSRequest({
@@ -307,7 +317,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             deferred.resolve(datalists);
             return datalists;
           }
-        }, cantLogIn);
+        }, cantLogIn).fail(
+          function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
+          });
       }
 
       // }, cantLogIn);
@@ -369,6 +383,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }, function(reason) {
         deferred.reject(reason);
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
 
       return deferred.promise;
@@ -553,10 +570,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             reason.details = details;
             self.debug(reason);
             deferred.reject(reason);
-          }).fail(function(reason) {
-          self.debug(reason);
-          deferred.reject(reason);
-        });
+          }).fail(
+          function(reason) {
+            self.debug(reason);
+            deferred.reject(reason);
+          });
+
       });
       return deferred.promise;
     }
@@ -588,6 +607,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
         self.debug(reason);
         deferred.reject(reason);
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
       return deferred.promise;
     }
@@ -731,6 +753,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
           self.debug(reason);
           deferred.reject(reason);
+        }).fail(function(error) {
+          console.error(error.stack);
+          deferred.reject(error);
         });
 
       });
@@ -770,6 +795,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           }, function() {
             //turn on to regardless of fail or succeed
             self.replicateToCorpus(db, couchurl);
+          }).fail(function(error) {
+            console.error(error.stack);
           });
 
           if (typeof successcallback === "function") {
