@@ -153,21 +153,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._fields;
     },
     set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      if (!value.confidential) {
+       if (value && !value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
-      this._fields = value;
+      this.ensureSetViaAppropriateType("fields", value);
     }
   },
 
@@ -311,18 +300,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._audioVideo) {
-        return;
-      }
-      if (!value) {
-        delete this._audioVideo;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["audioVideo"] === "function") {
-          value = new this.INTERNAL_MODELS["audioVideo"](value);
-        }
-      }
-      this._audioVideo = value;
+      this.ensureSetViaAppropriateType("audioVideo", value);
     }
   },
 
@@ -358,18 +336,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._images || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._images) {
-        return;
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
       }
-      if (!value) {
-        delete this._images;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["images"] === "function") {
-          value = new this.INTERNAL_MODELS["images"](value);
-        }
-      }
-      this._images = value;
+      this.ensureSetViaAppropriateType("images", value);
     }
   },
 

@@ -6,10 +6,14 @@ var specIsRunningTooLong = 5000;
 
 describe("Session: as a linguist I often collect data in an elicitation session", function() {
 
-  afterEach(function() {
+  beforeEach(function() {
     if (FieldDBObject.application) {
       console.log("Cleaning up.");
       FieldDBObject.application = null;
+    }
+
+    if(!DataList){
+      throw("DataList has become undefined in this area.");
     }
     // mockDatabase = {
     //   get: mockDatabase.get,

@@ -135,7 +135,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields && this.fields.goal) {
         // this.fields.debugMode = true;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
       if (!value || (value.indexOf && value.indexOf("Change this session") > -1)) {
         value = "Practice collecting linguistic utterances or words";
@@ -173,7 +173,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields) {
         // this.fields.debugMode = true;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
       if (value && value.indexOf && value.indexOf("Change this to a tim") > -1) {
         value = "Probably prior to " + new Date(this.dateCreated);
@@ -216,21 +216,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this._fields;
     },
     set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      if (!value.confidential) {
+      if (value && !value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
-      this._fields = value;
+      this.ensureSetViaAppropriateType("fields", value);
     }
   },
 
@@ -253,7 +242,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!this.fields) {
-        this.fields = [];
+        this.fields = this.defaults.fields;
       }
       // this.warn("Cannot change the public/private of " + this.collection + " (it must be anonymous). " + value);
       this.fields.confidentiality.value = value;
@@ -271,7 +260,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!this.fields) {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
       if (typeof value === "string") {
         if (value.indexOf(",") > -1) {
@@ -422,16 +411,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this.confidentialEncrypter;
     },
     set: function(value) {
-      if (value === this.confidentialEncrypter) {
-        return;
-      }
-      if (typeof value.encrypt !== "function" && value.secretkey) {
-        value = new this.INTERNAL_MODELS["confidential"](value);
-      }
-      this.confidentialEncrypter = value;
-      if (this.fields) {
+      this.ensureSetViaAppropriateType("confidential", value, "confidentialEncrypter");
+      if (this._fields && this.confidentialEncrypter) {
         // this.debug("setting session fields confidential in the Session.confidential set function.");
-        this.fields.confidential = value;
+        this._fields.confidential = this.confidentialEncrypter;
       }
     }
   },
@@ -472,7 +455,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
 
       if (!this.fields) {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
       if (stringvalue) {
         this.fields.languages.value = stringvalue;
@@ -545,6 +528,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         // this.debugMode = true;
         var self = this;
         self.whenReindexedFromApi.done(function() {
+          self.todo("add the docs instead? like this:");
+          // if (self._datalist.docs) {
+          //   self._datalist.docs.add(value);
+          // }
           self._datalist.docs = value;
           return self._datalist;
         });
@@ -659,7 +646,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   length: {
     get: function() {
-      return this.datalist.length || [];
+      return this.datalist.length || 0;
     },
     set: function(value) {
       this.datalist.length = value;
@@ -680,9 +667,9 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         return this._datalist;
       }
 
-      this._datalist = new DataList({
+      this.ensureSetViaAppropriateType("datalist", {
         dbname: this.dbname
-        // docs: []
+          // docs: []
       });
 
       if (this.id) {
@@ -700,18 +687,13 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this._datalist;
     },
     set: function(value) {
-      if (value === this._datalist) {
-        return;
+      console.warn("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
+      console.warn("DataList is currently this ", DataList);
+      if (!DataList) {
+        throw new Error("DataList has been ovewritten somewhere");
       }
-      if (!value) {
-        delete this._datalist;
-        return;
-      } else {
-        if (!(value instanceof this.INTERNAL_MODELS["datalist"])) {
-          value = new this.INTERNAL_MODELS["datalist"](value);
-        }
-      }
-      this._datalist = value;
+
+      this.ensureSetViaAppropriateType("datalist", value);
     }
   },
 
