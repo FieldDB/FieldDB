@@ -1371,8 +1371,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
-      if (this._dbname && this._dbname !== "default") {
-        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.");
+      if (this._dbname && this._dbname !== "default"&& this.rev) {
+        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
       }
       if (!value) {
         delete this._dbname;
@@ -1398,11 +1398,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   couchConnection: {
     get: function() {
-      this.warn("CouchConnection is deprecated, use connection instead");
+      console.error("CouchConnection is deprecated, use connection instead");
       return this.connection;
     },
     set: function(value) {
-      this.warn("CouchConnection is deprecated, use connection instead");
+      // console.error("CouchConnection is deprecated, use connection instead");
       this.connection = value;
     }
   },
@@ -1667,10 +1667,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
-      var json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
-      var aproperty,
+      var json = {},
+        aproperty,
         underscorelessProperty;
-
+      try {
+        json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
+      } catch (e) {
+        console.log(e);
+        console.log(e.stack);
+        console.log(e.message);
+        console.log(this);
+        // throw e;
+      }
       // Use clone on internal properties which have a clone function
       for (aproperty in json) {
         underscorelessProperty = aproperty.replace(/^_/, "");
