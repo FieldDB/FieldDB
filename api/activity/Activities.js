@@ -1,3 +1,4 @@
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var DataList = require("./../data_list/DataList").DataList;
 var Activity = require("./Activity").Activity;
 var Connection = require("./../corpus/Connection").Connection;
@@ -65,7 +66,8 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       docs: ActivityCollection,
       title: ContextualizableObject,
       description: ContextualizableObject,
-      database: Database
+      database: Database,
+      confidential: Confidential
     }
   },
 
@@ -134,18 +136,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       return this._connection;
     },
     set: function(value) {
-      if (value === this._connection) {
-        return;
-      }
-      if (!value) {
-        delete this._connection;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["connection"] === "function" && !(value instanceof this.INTERNAL_MODELS["connection"])) {
-          value = new this.INTERNAL_MODELS["connection"](value);
-        }
-      }
-      this._connection = value;
+      this.ensureSetViaAppropriateType("connection", value);
 
       this.title = this._connection.title || "Activity feed";
       this.description = this._connection.description || "";
@@ -193,27 +184,27 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
     }
   },
 
+  confidential: {
+    get: function() {
+      this.debug("getting confidential");
+      if (this.parent && this.parent.confidential) {
+        return this.parent.confidential;
+      } else {
+        this.warn("Activites can only be viewed in masked form in this app. The parent of the activity feed is not defined.");
+      }
+    },
+    set: function(value) {
+      // cant set confidential on activity feeds, it must come from the parent. This means activities cannot be demasked unless in the context of the orignal corpus or user
+    }
+  },
+
   database: {
     get: function() {
       this.debug("getting database");
       return this._database;
     },
     set: function(value) {
-      if (value === this._database) {
-        return;
-      }
-      if (!value) {
-        delete this._database;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["database"] === "function" && !(value instanceof this.INTERNAL_MODELS["database"])) {
-          value = new this.INTERNAL_MODELS["database"](value);
-        }
-      }
-      if (!value.confidential) {
-        value.confidential = this.confidential;
-      }
-      this._database = value;
+      this.ensureSetViaAppropriateType("database", value);
     }
   },
 
