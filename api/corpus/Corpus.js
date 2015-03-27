@@ -71,6 +71,28 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: Corpus
   },
 
+  /**
+   *  Must customize id to the original method since CorpusMask overrides it with "corpus"
+   */
+  id: {
+    get: function() {
+      return this._id || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      if (!value) {
+        delete this._id;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._id = value;
+    }
+  },
+
   dateOfLastDatumModifiedToCheckForOldSession: {
     get: function() {
       var timestamp = 0;
