@@ -1,4 +1,4 @@
-/* globals  FieldDB, sjcl, _, confirm, alert, prompt */
+/* globals  FieldDB, sjcl, _, confirm, alert */
 'use strict';
 console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 
@@ -36,7 +36,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // }
 
   };
-
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
     $rootScope.application = $rootScope.application || FieldDB.FieldDBObject.application;
@@ -136,6 +135,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }, 1500);
 
   };
+
   document.addEventListener("notauthenticated", function() {
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
@@ -176,7 +176,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
   window.defaultPreferences = defaultPreferences;
-
 
   $rootScope.updateAvailableFieldsInColumns = function() {
     if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.datumFields || !$rootScope.application.corpus.datumFields._collection || $rootScope.application.corpus.datumFields._collection.length < 1) {
@@ -381,7 +380,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
   // Get sessions for dbname; select specific session on saved state load
   $scope.loadSessions = function() {
     /* reset the sessions list if the corpus has changed */
@@ -515,7 +513,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }, processServerContactError);
   };
 
-
   $scope.loginUser = function(loginDetails) {
     if (!loginDetails) {
       $rootScope.notificationMessage = "Please login.";
@@ -574,7 +571,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } catch (e) {
       console.warn("Rendering generated an erorr", e);
     }
-
   }, false);
 
   $scope.loginUserFromScratch = function(loginDetails) {
@@ -617,13 +613,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     localStorage.removeItem('SpreadsheetPreferences');
     $rootScope.application.authentication.logout();
     // $scope.reloadPage();
-  };
-
-  $rootScope.setTemplateUsingCorpusPreferedTemplate = function() {
-    if (true) {
-      console.log("setting templates is deprecated.");
-      return;
-    }
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
@@ -813,7 +802,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
   $scope.createNewSession = function(newSession) {
     $rootScope.loading = true;
     newSession.user = $rootScope.application.authentication.user.userMask;
@@ -843,7 +831,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-
   $scope.reloadPage = function() {
     if ($rootScope.application.corpus.currentSession.docs.unsaved) {
       $rootScope.notificationMessage = "Please save changes before continuing.";
@@ -854,190 +841,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       reRouteUser("");
       window.location.reload();
-    }
-  };
-
-
-  $scope.deleteRecord = function(datum) {
-    var r;
-    if (!datum.id) {
-      r = confirm("This datum has never been saved, If you delete it you wont be able to recover it. Are you sure you want to delete it?");
-      if (!r) {
-        return;
-      }
-      $rootScope.application.corpus.currentSession.docs.remove(datum);
-      return;
-    }
-
-    r = confirm("Are you sure you want to put this datum in the trash?");
-    if (!r) {
-      return;
-    }
-    var reason;
-    while (!reason) {
-      reason = prompt("Why are you putting this in the trash?");
-    }
-
-    var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
-    $scope.addActivity([{
-      verb: "deleted",
-      verbicon: "icon-trash",
-      directobjecticon: "icon-list",
-      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "personal"
-    }, {
-      verb: "deleted",
-      verbicon: "icon-trash",
-      directobjecticon: "icon-list",
-      directobject: "<a href='#data/" + datum.id + "'>a datum</a> ",
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "team"
-    }], "uploadnow");
-
-
-    datum.trash(reason).then(function() {
-      $rootScope.application.corpus.currentSession.docs.remove(datum);
-      $scope.activeDatumIndex = null;
-    }, function(error) {
-      console.warn(error);
-      $rootScope.application.bug("Error deleting record.");
-    });
-  };
-
-
-  $scope.createRecord = function(fieldDBDatum, $event) {
-    if ($event && $event.type && $event.type === "submit" && $event.target) {
-      $scope.setDataEntryFocusOn($event.target);
-    }
-    alert("TODO test this");
-
-    fieldDBDatum.save().done(function(error) {
-      if (!fieldDBDatum.id) {
-        fieldDBDatum.warn("Couldnt contact the database to save this datum, giving a random id and putting it in the session list for saving again later", error);
-        fieldDBDatum.id = FieldDB.FieldDBObject.uuidGenerator();
-      }
-      if (fieldDBDatum.session !== $rootScope.application.currentSession) {
-        fieldDBDatum.session = $rootScope.application.currentSession;
-      }
-    });
-    // $rootScope.application.corpus.currentSession.docs.unsaved = true;
-
-    $rootScope.application.currentSession.add(fieldDBDatum);
-    $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
-
-
-    $scope.activeDatumIndex = "newEntry";
-
-    $rootScope.application.currentSession.render();
-  };
-
-
-  $rootScope.markAsNotSaved = function(datum) {
-    datum.unsaved = true;
-    $rootScope.application.corpus.currentSession.docs.unsaved = true;
-  };
-
-  $rootScope.markAsEdited = function(utterance, datum, $event) {
-
-    // Update activity feed
-    var indirectObjectString = "in <a href='#corpus/" +
-      $rootScope.application.corpus.dbname + "'>" +
-      $rootScope.application.corpus.title +
-      "</a>";
-    $scope.addActivity([{
-      verb: "modified",
-      verbicon: "icon-pencil",
-      directobjecticon: "icon-list",
-      directobject: "<a href='#corpus/" +
-        $rootScope.application.corpus.dbname +
-        "/datum/" + datum.id + "'>" +
-        utterance +
-        "</a> ",
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "personal"
-    }, {
-      verb: "modified",
-      verbicon: "icon-pencil",
-      directobjecticon: "icon-list",
-      directobject: "<a href='#corpus/" +
-        $rootScope.application.corpus.dbname +
-        "/datum/" + datum.id + "'>" +
-        utterance +
-        "</a> ",
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "team"
-    }]);
-    datum.unsaved = true;
-    $rootScope.application.corpus.currentSession.docs.unsaved = true;
-
-    if ($event && $event.type && $event.type === "submit") {
-      datum.save();
-      $scope.selectRow($scope.activeDatumIndex + 1);
-    }
-  };
-
-  $scope.addComment = function(datum) {
-    var newComment = prompt("Enter new comment.");
-    if (newComment === "" || newComment === null) {
-      return;
-    }
-    var comment = {};
-    comment.text = newComment;
-    comment.username = $rootScope.application.authentication.user.username;
-    comment.timestamp = Date.now();
-    comment.gravatar = $rootScope.application.authentication.user.gravatar || "0df69960706112e38332395a4f2e7542";
-    comment.timestampModified = Date.now();
-    if (!datum.comments) {
-      datum.comments = [];
-    }
-    datum.comments.push(comment);
-    datum.unsaved = true;
-    $rootScope.application.corpus.currentSession.docs.unsaved = true;
-    datum.dateModified = JSON.parse(JSON.stringify(new Date()));
-    datum.timestamp = Date.now();
-    datum.lastModifiedBy = $rootScope.application.authentication.user.username;
-    // $rootScope.currentPage = 0;
-    // $rootScope.editsHaveBeenMade = true;
-
-    var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.application.corpus.title + "</a>";
-    // Update activity feed
-    $scope.addActivity([{
-      verb: "commented",
-      verbicon: "icon-comment",
-      directobjecticon: "icon-list",
-      directobject: comment.text,
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "personal"
-    }, {
-      verb: "commented",
-      verbicon: "icon-comment",
-      directobjecticon: "icon-list",
-      directobject: comment.text,
-      indirectobject: indirectObjectString,
-      teamOrPersonal: "team"
-    }]);
-
-  };
-
-  $scope.deleteComment = function(comment, datum) {
-    if ($rootScope.commentPermissions === false) {
-      $rootScope.notificationMessage = "You do not have permission to delete comments.";
-      $rootScope.openNotification();
-      return;
-    }
-    if (comment.username !== $rootScope.application.authentication.user.username) {
-      $rootScope.notificationMessage = "You may only delete comments created by you.";
-      $rootScope.openNotification();
-      return;
-    }
-    var verifyCommentDelete = confirm("Are you sure you want to remove the comment '" + comment.text + "'?");
-    if (verifyCommentDelete === true) {
-      for (var i in datum.comments) {
-        if (datum.comments[i] === comment) {
-          datum.comments.splice(i, 1);
-        }
-      }
     }
   };
 
@@ -1095,37 +898,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Set auto-save interval for 5 minutes
   var autoSave = window.setInterval(function() {
     // if ($rootScope.application.corpus.currentSession.docs.unsaved) {
-      $scope.saveChanges();
+    $scope.saveChanges();
     // } else {
-      // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
-      // if ($rootScope.loginInfo) {
-      //   Data.login($rootScope.application.authentication.user.username,
-      //     $rootScope.loginInfo.password);
-      // }
+    // TODO Dont need to FIND BETTER WAY TO KEEP SESSION ALIVE;
+    // if ($rootScope.loginInfo) {
+    //   Data.login($rootScope.application.authentication.user.username,
+    //     $rootScope.loginInfo.password);
+    // }
     // }
   }, 300000);
   if (debugging) {
     console.log("autoSave was defined but not used", autoSave);
   }
-
-
-  $scope.selectRow = function(scopeIndex, targetDatumEntryDomElement) {
-    // Do nothing if clicked row is currently selected
-    if ($scope.activeDatumIndex === scopeIndex) {
-      return;
-    }
-    if ($scope.searching !== true) {
-      if (!$rootScope.application.corpus.currentSession.newDatum.unsaved) {
-        $scope.activeDatumIndex = scopeIndex;
-      } else {
-        $scope.activeDatumIndex = scopeIndex + 1;
-        // $scope.createRecord($rootScope.application.corpus.currentSession.newDatum);
-      }
-      if (targetDatumEntryDomElement) {
-        $scope.setDataEntryFocusOn(targetDatumEntryDomElement);
-      }
-    }
-  };
 
   $scope.editSearchResults = function(scopeIndex) {
     $scope.activeDatumIndex = scopeIndex;
@@ -1138,24 +922,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.loadDataEntryScreen = function() {
     $scope.dataentry = true;
     $scope.navigateVerifySaved('none');
-    $scope.loadData($rootScope.application.corpus.currentSession.id);
   };
 
   $scope.clearSearch = function() {
     $scope.searchTerm = '';
     $scope.searchHistory = null;
-    $scope.loadData($rootScope.application.corpus.currentSession.id);
   };
+
   if (FieldDB && FieldDB.DatumField) {
     $scope.addedDatumField = new FieldDB.DatumField({
       id: Date.now(),
       label: "New Field " + Date.now()
     });
-  } else {
-    $scope.addedDatumField = {
-      id: Date.now(),
-      label: "New Field " + Date.now()
-    };
   }
 
   $scope.updateCorpusDetails = function(corpus) {
@@ -1199,7 +977,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }
     }
     fieldsInScope.judgement = true;
-
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
 
@@ -1335,7 +1112,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-
   // Add activities to scope object, to be uploaded when 'SAVE' is clicked
   $scope.addActivity = function(activityArray, uploadnow) {
     Data.blankActivityTemplate()
@@ -1407,7 +1183,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
   $scope.registerNewUser = function(newLoginInfo) {
     $rootScope.loading = true;
     $rootScope.application.authentication.register(newLoginInfo)
@@ -1446,7 +1221,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       });
   };
 
-
   $scope.createNewCorpus = function(newCorpusInfo) {
     if (!newCorpusInfo) {
       $rootScope.notificationMessage = "Please enter a corpus name.";
@@ -1483,7 +1257,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $rootScope.loading = false;
         reRouteUser("");
       }, processServerContactError);
-
   };
 
   $scope.loadUsersAndRoles = function() {
@@ -1710,26 +1483,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
-  // $scope.commaList = function(tags) {
-  //   var dataString = "";
-  //   for (var i = 0; i < tags.length; i++) {
-  //     if (i < (tags.length - 1)) {
-  //       if (tags[i].tag) {
-  //         dataString = dataString + tags[i].tag + ", ";
-  //       }
-  //     } else {
-  //       if (tags[i].tag) {
-  //         dataString = dataString + tags[i].tag;
-  //       }
-  //     }
-  //   }
-  //   if (dataString === "") {
-  //     return "Tags";
-  //   }
-  //   return dataString;
-  // };
-
   // Paginate data tables
 
   $scope.numberOfResultPages = function(numberOfRecords) {
@@ -1753,8 +1506,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }, 100);
 
-
-
   // $scope.testFunction = function() {
   //   console.log($rootScope.currentPage);
   // };
@@ -1777,7 +1528,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
 
-
   $rootScope.$watch('currentPage', function(newValue, oldValue) {
     if (newValue !== oldValue) {
       $scope.loadPaginatedData();
@@ -1785,92 +1535,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
     }
   });
-
-  $scope.flagAsDeleted = function(json, datum) {
-    json.trashed = "deleted";
-    datum.unsaved = true;
-  };
-
-  $scope.deleteAttachmentFromCorpus = function(datum, filename, description) {
-    if ($rootScope.writePermissions === false) {
-      $rootScope.notificationMessage = "You do not have permission to delete attachments.";
-      $rootScope.openNotification();
-      return;
-    }
-    var r = confirm("Are you sure you want to put the file " + description + " (" + filename + ") in the trash?");
-    if (r === true) {
-      var record = datum.id + "/" + filename;
-      console.log(record);
-      Data.async($rootScope.application.corpus.dbname, datum.id)
-        .then(function(originalRecord) {
-          // mark as trashed in scope
-          var inDatumAudioFiles = false;
-          for (var i in datum.audioVideo) {
-            if (datum.audioVideo[i].filename === filename) {
-              datum.audioVideo[i].description = datum.audioVideo[i].description + ":::Trashed " + Date.now() + " by " + $rootScope.application.authentication.user.username;
-              datum.audioVideo[i].trashed = "deleted";
-              inDatumAudioFiles = true;
-              // mark as trashed in database record
-              for (var k in originalRecord.audioVideo) {
-                if (originalRecord.audioVideo[k].filename === filename) {
-                  originalRecord.audioVideo[k] = datum.audioVideo[i];
-                }
-              }
-            }
-          }
-          if (datum.audioVideo.length === 0) {
-            datum.hasAudio = false;
-          }
-          originalRecord.audioVideo = datum.audioVideo;
-          //Upgrade to v1.90
-          if (originalRecord.attachmentInfo) {
-            delete originalRecord.attachmentInfo;
-          }
-          // console.log(originalRecord);
-          Data.saveCouchDoc($rootScope.application.corpus.dbname, originalRecord)
-            .then(function(response) {
-              console.log("Saved attachment as trashed.");
-              if (debugging) {
-                console.log(response);
-              }
-              var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
-              $scope.addActivity([{
-                verb: "deleted",
-                verbicon: "icon-trash",
-                directobjecticon: "icon-list",
-                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>the audio file " + description + " (" + filename + ") on " + datum.utterance + "</a> ",
-                indirectobject: indirectObjectString,
-                teamOrPersonal: "personal"
-              }, {
-                verb: "deleted",
-                verbicon: "icon-trash",
-                directobjecticon: "icon-list",
-                directobject: "<a href='#data/" + datum.id + "/" + filename + "'>an audio file on " + datum.utterance + "</a> ",
-                indirectobject: indirectObjectString,
-                teamOrPersonal: "team"
-              }], "uploadnow");
-
-              // Dont actually let users delete data...
-              // Data.async($rootScope.application.corpus.dbname, datum.id)
-              // .then(function(record) {
-              //   // Delete attachment info for deleted record
-              //   for (var key in record.attachmentInfo) {
-              //     if (key === filename) {
-              //       delete record.attachmentInfo[key];
-              //     }
-              //   }
-              //   Data.saveCouchDoc($rootScope.application.corpus.dbname, datum.id, record, record._rev)
-              // .then(function(response) {
-              //     if (datum.audioVideo.length === 0) {
-              //       datum.hasAudio = false;
-              //     }
-              //     console.log("File successfully deleted.");
-              //   });
-              // });
-            });
-        });
-    }
-  };
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
@@ -1923,18 +1587,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.contactUs = function() {
     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
-  };
-
-  $scope.setDataEntryFocusOn = function(targetDatumEntryDomElement) {
-    $timeout(function() {
-      if (targetDatumEntryDomElement && targetDatumEntryDomElement[1]) {
-        console.log("old focus", document.activeElement);
-        targetDatumEntryDomElement[1].focus();
-        console.log("new focus", document.activeElement);
-      } else {
-        console.warn("requesting focus on an element that doesnt exist.");
-      }
-    }, 500);
   };
 
   // Hide loader when all content is ready
@@ -2060,7 +1712,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
       });
   };
-
 
   window.onbeforeunload = function(e) {
     console.warn(e);
