@@ -45,17 +45,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       return this._api || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._api) {
-        return;
-      }
-      if (!value) {
-        delete this._api;
-        return;
-      }
-      if (value.trim) {
-        value = value.trim();
-      }
-      this._api = value;
+      this.ensureSetViaAppropriateType("api", value);
     }
   },
 
@@ -85,17 +75,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       return this._title || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._title) {
-        return;
-      }
-      if (!value) {
-        delete this._title;
-        return;
-      }
-      if (value.trim) {
-        value = value.trim();
-      }
-      this._title = value;
+      this.ensureSetViaAppropriateType("title", value);
     }
   },
 
@@ -104,45 +84,41 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       return this._description || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._description) {
-        return;
-      }
-      if (!value) {
-        delete this._description;
-        return;
-      }
-      if (value.trim) {
-        value = value.trim();
-      }
-      this._description = value;
+      this.ensureSetViaAppropriateType("description", value);
     }
   },
 
   docs: {
     get: function() {
+      if (this._docs && this._docs.primaryKey !== this.primaryKey) {
+        this._docs.primaryKey = this.primaryKey;
+      }
       return this._docs;
     },
     set: function(value) {
-      if (value === this._docs) {
-        return;
+      this.debug("creating the " + this.id + " datalist's docs");
+      this.ensureSetViaAppropriateType("docs", value);
+
+      if (this._docs) {
+        delete this._docIds;
+        this._docs.primaryKey = this.primaryKey;
       }
-      if (!value) {
-        delete this._docs;
-        return;
-      } else {
-        this.debug("creating the " + this.id + " datalist's docs");
-        if (!(value instanceof this.INTERNAL_MODELS["docs"])) {
-          this.debug("casting the " + this.id + " datalist's docs to type ", this.INTERNAL_MODELS["docs"]);
-          value = new this.INTERNAL_MODELS["docs"](value);
-        }
-      }
-      delete this._docIds;
-      this._docs = value;
-      this._docs.primaryKey = this.primaryKey;
     }
   },
 
   add: {
+    value: function(value) {
+      if (!this.docs) {
+        this.debug("creating the datalist docs ", value);
+        this.docs = [];
+      } else {
+        this.debug("adding to existing datalist docs ", value);
+      }
+      return this.docs.add(value);
+    }
+  },
+
+  addReallyComplicatedDeprecated: {
     value: function(value) {
       if (!this.docs || this.docs.length === 0) {
         if (Object.prototype.toString.call(value) === "[object Array]") {
@@ -158,7 +134,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         value.primaryKey = this.primaryKey;
         this.debug("setting the docs  : ", value);
         this.docs = value;
-        this.docs.primaryKey = this.primaryKey;
+        // this.docs.primaryKey = this.primaryKey;
         return this.docs._collection[0];
       }
       this.debug("adding to existing data list", value);
@@ -168,9 +144,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   push: {
     value: function(value) {
-      if (!this.docs || this.docs.length === 0) {
-        this.docs = [value];
-        return this.docs._collection[0];
+      if (!this.docs) {
+        this.debug("creating the datalist docs ", value);
+        this.docs = [];
+      } else {
+        this.debug("adding to existing datalist docs ", value);
       }
       return this.docs.push(value);
     }
@@ -178,9 +156,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   unshift: {
     value: function(value) {
-      if (!this.docs || this.docs.length === 0) {
-        this.docs = [value];
-        return this.docs._collection[0];
+      if (!this.docs) {
+        this.debug("creating the datalist docs ", value);
+        this.docs = [];
+      } else {
+        this.debug("adding to existing datalist docs ", value);
       }
       return this.docs.unshift(value);
     }
@@ -209,8 +189,12 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       var self = this;
 
       if (!this.docs) {
+        this.debug("creating the datalist docs to populate ", this);
         this.docs = [];
+      } else {
+        this.debug("populating an existing database ", this);
       }
+
       var guessedType;
       this.save();
 
@@ -247,6 +231,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       var self = this,
         deferred = Q.defer();
 
+      Q.nextTick(function() {
+        deferred.resolve(self);
+      });
+
       if (!this.api) {
         this.warn("Not reindexing from the database, this has no api.");
         Q.nextTick(function() {
@@ -277,45 +265,52 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
 
       this.fetching = this.loading = true;
-      this.whenReindexedFromApi = this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
-        self.fetching = self.loading = true;
-        self.warn("Downloaded the autogenrated data list of datum ordered by creation date in this session", generatedDatalist);
-        if (generatedDatalist) {
-          generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
-          if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
-            // If the data list was empty, assign the docIds which will populate it with placeholders
-            if (!self.docs) {
-              self.docs = [];
-            }
-
-            // If the data list doesn't have this id, add a placeholder
-            generatedDatalist.docIds.map(function(docPrimaryKey) {
-              if (!self.docs[docPrimaryKey]) {
-                var docPlaceholder = {
-                  fieldDBtype: "Datum",
-                  loading: true
-                };
-                docPlaceholder[self.datalist.primaryKey] = docPrimaryKey;
-                self.add(docPlaceholder);
+      this.whenReindexedFromApi = deferred.promise;
+      this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
+          self.fetching = self.loading = true;
+          self.warn("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
+          if (generatedDatalist) {
+            generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
+            if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
+              // If the data list was empty, assign the docIds which will populate it with placeholders
+              if (!self.docs) {
+                self.docs = [];
               }
-            });
-            // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
-            if (self.length !== generatedDatalist.docIds.length) {
-              self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+
+              self.debug("Iterating through the docids to make sure they are in the list.");
+              // If the data list doesn't have this id, add a placeholder
+              generatedDatalist.docIds.map(function(docPrimaryKey) {
+                self.debug("Looking at " + docPrimaryKey);
+                if (!self._docs[docPrimaryKey]) {
+                  self.debug("converting " + docPrimaryKey + " into a placeholder");
+                  var docPlaceholder = {
+                    fieldDBtype: "Datum",
+                    dbname: self.dbname,
+                    loaded: false
+                  };
+                  docPlaceholder[self.primaryKey] = docPrimaryKey;
+                  self.debug("adding " + docPrimaryKey + " into the docs");
+                  self._docs.add(docPlaceholder);
+                }
+              });
+              // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
+              if (self.length !== generatedDatalist.docIds.length) {
+                self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+              }
+              delete generatedDatalist.docIds;
             }
-            delete generatedDatalist.docIds;
+            delete generatedDatalist.title;
+            delete generatedDatalist.description;
+            // self.merge("self", generatedDatalist);
+            self.render();
+          } else {
+            self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
           }
-          delete generatedDatalist.title;
-          delete generatedDatalist.description;
-          // self.merge("self", generatedDatalist);
-          self.render();
-        } else {
-          self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
-        }
-        return self;
-      }, unableToFetchCurrentDataAffiliatedWithThisDataList).done(function() {
-        return self;
-      });
+          return self;
+        }, unableToFetchCurrentDataAffiliatedWithThisDataList)
+        .fail(function(error) {
+          console.error(error.stack);
+        });
 
       return deferred.promise;
     }
@@ -438,11 +433,13 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
             obj.fetch().then(function(results) {
               this.debug("Fetched datum to get audio file", results);
               if (doc.audioVideo) {
-
                 obj.audioVideo.map(function(audioVideoFile) {
                   audioVideoFiles.push(audioVideoFile.URL);
                 });
               }
+            }).fail(function(error) {
+              console.error(error.stack);
+              deferred.reject(error);
             });
           }
         });
