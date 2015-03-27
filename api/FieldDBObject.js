@@ -927,6 +927,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           self.saving = false;
           deferred.reject(reason);
           return self;
+        }).fail(
+        function(error) {
+          console.error(error.stack);
+          deferred.reject(error);
         });
 
       return deferred.promise;
@@ -1120,6 +1124,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
           }, function() {
             resultObject[apropertylocal] = anObject[apropertylocal];
+          }).fail(function(error) {
+            console.error(error.stack);
           });
       };
 
@@ -1300,6 +1306,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         self.debug(reason);
         deferred.reject(reason);
         return self;
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
 
       return deferred.promise;
@@ -1345,9 +1354,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             this.warn("  using the Database prototype for corpus reference on " + this._id + ", this could be problematic " + this._id + " wasnt a database, and had no acces to an application or _corpus which it could use.", db);
           }
         } catch (e) {
-          if (e.message !== "FieldDB is not defined") {
+          var message = e ? e.message : " unknown error in getting the corpus";
+          if (message !== "FieldDB is not defined") {
             this.warn(this._id + "Cant get the corpus, cant find the Database class.", e);
-            this.warn("  stack trace" + e.stack);
+            if (e) {
+              this.warn("  stack trace" + e.stack);
+            }
           }
         }
       }
@@ -1720,11 +1732,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       try {
         json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
       } catch (e) {
-        console.log(e);
-        console.log(e.stack);
-        console.log(e.message);
-        console.log(this);
-        // throw e;
+        if (e) {
+          console.log(e);
+          console.log(e.stack);
+          console.log(e.message);
+          console.log(this);
+          // throw e;
+        }
       }
       // Use clone on internal properties which have a clone function
       for (aproperty in json) {

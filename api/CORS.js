@@ -125,7 +125,7 @@ CORS.makeCORSRequest = function(options) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        if (e.message === "Unexpected token o") {
+        if (e && e.message === "Unexpected token o") {
           self.debug("response was json", e);
         } else {
           if (xhr.status >= 500) {

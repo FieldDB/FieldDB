@@ -768,6 +768,10 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
           self.fetching = false;
           self.debug(reason);
           deferred.reject(reason);
+        }).fail(
+        function(error) {
+          console.error(error.stack);
+          deferred.reject(error);
         });
 
       return deferred.promise;

@@ -331,6 +331,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           addTheUsersMessage,
           function() {
             self.debug("Not updating ");
+          }).fail(
+          function(error) {
+            console.error(error.stack);
           });
       }
 
@@ -404,9 +407,16 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         self.originalDocs.push(file);
         self.addMessagesToContextualizedStrings(localeCode, localeMessages)
           .then(deferred.resolve,
-            deferred.reject);
+            deferred.reject)
+          .fail(function(error) {
+            console.error(error.stack);
+            deferred.reject(error);
+          });
       }, function(error) {
         self.warn("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
+      }).fail(function(error) {
+        console.error(error.stack);
+        deferred.reject(error);
       });
 
       return deferred.promise;

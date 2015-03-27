@@ -1074,6 +1074,7 @@ describe("FieldDBObject", function() {
       expect(riskyObject.alwaysConfirmOkay).toBeFalsy();
 
       riskyObject.confirm("Do you want to do this, are you really sure?").then(function(results) {
+        expect(results).toBeDefined();
         expect(results.message).toEqual(" ");
         expect(riskyObject.confirmMessage).toEqual("Do you want to do this, are you really sure?");
         expect(results.response).toEqual(false);
