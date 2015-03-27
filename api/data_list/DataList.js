@@ -249,22 +249,29 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
       if (!this.api) {
         this.warn("Not reindexing from the database, this has no api.");
-        deferred.resolve(self);
+        Q.nextTick(function() {
+          deferred.resolve(self);
+        });
         return deferred.promise;
       }
 
       var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
-        self.fetching = self.loading = true;
+        self.fetching = self.loading = false;
         self.warn(" problem fetching the data list", err);
         self.docs = self.docs || [];
         self.docIds = self.docIds || self._docIds;
         deferred.reject(err);
+        return self;
       };
 
       if (!this.corpus) {
+        self.fetching = self.loading = false;
+        self.warn("This datalist has no corpus, it doesnt know how to find out which data are in it.");
         Q.nextTick(function() {
-          unableToFetchCurrentDataAffiliatedWithThisDataList("This datalist has no corpus, it doesnt know how to find out which data are in it.");
+          self.docIds = self.docIds || self._docIds;
+          self.docs = self.docs || [];
           deferred.resolve(self);
+          return self;
         });
         return deferred.promise;
       }
@@ -306,7 +313,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
         }
         return self;
-      }, unableToFetchCurrentDataAffiliatedWithThisDataList);
+      }, unableToFetchCurrentDataAffiliatedWithThisDataList).done(function() {
+        return self;
+      });
 
       return deferred.promise;
     }

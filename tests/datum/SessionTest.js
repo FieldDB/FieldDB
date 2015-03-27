@@ -229,7 +229,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         id: "thefirstdocinthissession"
       }]);
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
         expect(session).toBeDefined();
 
         expect(session.datalist).toBeDefined();
@@ -313,7 +313,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docIds[0]).toEqual("01");
 
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(1);
@@ -365,7 +365,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docs._collection).toBeDefined();
       expect(session.docs._collection[0].id).toEqual("One");
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(4);
@@ -402,9 +402,9 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docs.anidthatshouldbethere.id).toEqual("anidthatshouldbethere");
       expect(session.docs.evenifthedocsisntready.id).toEqual("evenifthedocsisntready");
 
-      expect(session.datalistUpdatingPromise).toBeDefined();
+      expect(session.whenReindexedFromApi).toBeDefined();
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
         expect(session.docs).toBeDefined();
         expect(session.docs.anidthatshouldbethere.id).toEqual("anidthatshouldbethere");
         expect(session.docs.evenifthedocsisntready.id).toEqual("evenifthedocsisntready");
@@ -423,9 +423,9 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         id: "anothersimulidatum"
       });
       expect(session.docIds).toEqual([]);
-      expect(session.datalistUpdatingPromise).toBeDefined();
+      expect(session.whenReindexedFromApi).toBeDefined();
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(1);
@@ -450,13 +450,13 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         id: "anothersimulidatum"
       });
       expect(session.docIds).toEqual([]);
-      expect(session.datalistUpdatingPromise).toBeDefined();
+      expect(session.whenReindexedFromApi).toBeDefined();
 
       session.add({
         id: "yetanothersimulidatum"
       });
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(2);
@@ -500,7 +500,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(serialized.docIds[1]).toEqual("andaotherdocthatwasserialized");
       expect(serialized.docIds[2]).toEqual("yetanother");
 
-      session.datalistUpdatingPromise.then(function() {
+      session.whenReindexedFromApi.then(function() {
 
         expect(session.docs).toBeDefined();
         expect(session.docIds).toBeDefined();
