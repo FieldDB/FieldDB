@@ -810,8 +810,7 @@ Collection.prototype = Object.create(Object.prototype, {
   },
 
   /**
-   *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
-   *  formerly: item.replace(/[-\""+=?.*&^%,\/\[\]{}() ]/g, "")
+   *  Cleans a value to be safe for a file system or the key of a hash
    *
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
@@ -822,15 +821,11 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!value) {
         return null;
       }
-      if (value.trim) {
-        value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_/, "").replace(/_$/, "");
-        return this.camelCased(value);
-      } else if (typeof value === "number") {
-        return parseInt(value, 10);
-      } else {
-        return null;
+      value = FieldDBObject.prototype.sanitizeStringForFileSystem.apply(this, arguments);
+      if (value && value.trim) {
+        value = this.camelCased(value);
       }
+      return value;
     }
   },
   capitalizeFirstCharacterOfPrimaryKeys: {
