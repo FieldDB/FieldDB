@@ -706,6 +706,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!$rootScope.application.corpus.currentSession.newDatum) {
       $rootScope.application.corpus.currentSession.newDatum = $rootScope.application.corpus.newDatum();
       $rootScope.application.corpus.currentSession.newDatum.session = $rootScope.application.corpus.currentSession;
+      $rootScope.application.corpus.currentSession.newDatum.fossil = $rootScope.application.corpus.currentSession.newDatum.toJSON();
     }
 
     $rootScope.application.authentication.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
