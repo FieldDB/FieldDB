@@ -16,6 +16,7 @@ describe("Contextualizer", function() {
       get: mockDatabase.get,
       set: mockDatabase.set
     };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
   });
 
   describe("construction", function() {
@@ -209,6 +210,9 @@ describe("Contextualizer", function() {
           expect(results[0].value.rev).toBeDefined();
           expect(results[0].value.rev.length).toBeGreaterThan(10);
         })
+        .fail(function(error) {
+          console.error(error.stack);
+        })
         .then(done, done);
     }, specIsRunningTooLong);
 
@@ -223,6 +227,9 @@ describe("Contextualizer", function() {
       contextualizer.save().then(function(results) {
           contextualizer.debug(results);
           expect(results[0].state).toEqual("fulfilled");
+        })
+        .fail(function(error) {
+          console.error(error.stack);
         })
         .then(done, done);
     }, specIsRunningTooLong);
@@ -451,7 +458,7 @@ describe("Contextualizer", function() {
 
 
       it("should not break if its only 1 string", function() {
-        ContextualizableObject.updateAllToContextualizableObjects = false;
+        ContextualizableObject.compatibleWithSimpleStrings = true;
 
         expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
         // console.log("ContextualizableObject.constructor",  ContextualizableObject.constructor);
@@ -487,7 +494,7 @@ describe("Contextualizer", function() {
         // with INTERNAL_MODELS set as ContextualizableObject
         containingObject = new DataListMock({
           title: "Import data",
-          debugMode: true
+          // debugMode: true
         });
         expect(containingObject.title).toEqual("Import data");
         expect(containingObject.toJSON().title).toEqual("Import data");
@@ -496,8 +503,8 @@ describe("Contextualizer", function() {
         expect(containingObject.title.toJSON).toBeUndefined();
       });
 
-      it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function(done) {
-        ContextualizableObject.updateAllToContextualizableObjects = true;
+      it("should update a string to the default of a contextualizable object if compatibleWithSimpleStrings is true", function(done) {
+        ContextualizableObject.compatibleWithSimpleStrings = false;
         var onlyAString = new ContextualizableObject("Import datalist");
         expect(onlyAString.data).toEqual({
           locale_Import_datalist: {
@@ -520,8 +527,10 @@ describe("Contextualizer", function() {
             expect(onlyAString.default).toEqual("Imported datalist");
             expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
             expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
+
+            expect(ContextualizableObject.compatibleWithSimpleStrings).toEqual(false);
             expect(onlyAString.toJSON()).toEqual("Imported datalist");
-            ContextualizableObject.updateAllToContextualizableObjects = false;
+            ContextualizableObject.compatibleWithSimpleStrings = true;
             expect(onlyAString.toJSON()).toEqual({
               default: "locale_Import_datalist",
               locale_Import_datalist: "Imported datalist"
@@ -555,6 +564,7 @@ describe("Contextualizer", function() {
   describe("backward compatability", function() {
 
     it("should accept an object", function() {
+      ContextualizableObject.compatibleWithSimpleStrings = true;
       var obj = new ContextualizableObject({
         default: "An old data list"
       });
@@ -575,14 +585,17 @@ describe("Contextualizer", function() {
      *
      */
     it("should return a String", function() {
-      expect(ContextualizableObject.updateAllToContextualizableObjects).toBeFalsy();
+      ContextualizableObject.compatibleWithSimpleStrings = true;
+      expect(ContextualizableObject.compatibleWithSimpleStrings).toBeTruthy();
       var obj = {
         title: new ContextualizableObject("An old data list")
       };
 
       // It will pass == tests
       expect(obj.title).toEqual("An old data list");
+      /* jshint ignore:start  */
       expect(obj.title == "An old data list").toEqual(true);
+      /* jshint ignore:end  */
 
       // It wont pass === tests
       expect("An old data list" === "An old data list").toEqual(true);
@@ -591,22 +604,22 @@ describe("Contextualizer", function() {
 
       // It will actually be an object array of characters
       expect(obj.title).toEqual({
-        0: 'A',
-        1: 'n',
-        2: ' ',
-        3: 'o',
-        4: 'l',
-        5: 'd',
-        6: ' ',
-        7: 'd',
-        8: 'a',
-        9: 't',
-        10: 'a',
-        11: ' ',
-        12: 'l',
-        13: 'i',
-        14: 's',
-        15: 't'
+        0: "A",
+        1: "n",
+        2: " ",
+        3: "o",
+        4: "l",
+        5: "d",
+        6: " ",
+        7: "d",
+        8: "a",
+        9: "t",
+        10: "a",
+        11: " ",
+        12: "l",
+        13: "i",
+        14: "s",
+        15: "t"
       });
 
       // They are equivalent if concatinated.
@@ -638,7 +651,8 @@ describe("Contextualizer", function() {
      *
      */
     xit("should thow a string", function() {
-      expect(ContextualizableObject.updateAllToContextualizableObjects).toBeFalsy();
+      ContextualizableObject.compatibleWithSimpleStrings = true;
+      expect(ContextualizableObject.compatibleWithSimpleStrings).toBeTruthy();
       var obj;
       try {
         obj = new ContextualizableObject("An old data list");

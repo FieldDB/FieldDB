@@ -22,7 +22,9 @@ var ContextualizableObject = function ContextualizableObject(json) {
       // Dont localize this, return what you received to be backward compatible
 
       // http://stackoverflow.com/questions/1978049/what-values-can-a-constructor-return-to-avoid-returning-this
-      return String(json);
+      /* jshint ignore:start  */
+      return new String(json);
+      /* jshint ignore:end  */
 
       // Can also throw the string and catch it and use the original value...
       // throw json;
@@ -194,8 +196,11 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         aproperty,
         underscorelessProperty;
 
-      if (ContextualizableObject.compatibleWithSimpleStrings && this.originalString) {
+      // this.debugMode = true;
+      if (!ContextualizableObject.compatibleWithSimpleStrings && this.originalString) {
         return this.originalString;
+      } else {
+        this.debug("Original string is not defined, returning an object. ", ContextualizableObject.compatibleWithSimpleStrings, this.originalString);
       }
 
       for (aproperty in this) {
