@@ -664,7 +664,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   updateSpeakerToCorpusFields: {
     value: function(speaker) {
       if (!this.speakerFields) {
-        return speaker;
+        this.speakerFields = this.defaults_psycholinguistics.speakerFields;
       }
       if (!speaker.fields) {
         speaker.fields = this.speakerFields.clone();
@@ -678,7 +678,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   updateParticipantToCorpusFields: {
     value: function(participant) {
       if (!this.participantFields) {
-        return participant;
+        this.participantFields = this.defaults_psycholinguistics.participantFields;
       }
       if (!participant.fields) {
         participant.fields = this.participantFields.clone();
@@ -823,7 +823,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         if (this.participantFields && this.participantFields.length > 0) {
           optionalAllFields.add(this.participantFields.toJSON());
         } else {
-          optionalAllFields.add(DEFAULT_CORPUS_MODEL.participantFields);
+          optionalAllFields.add(this.defaults_psycholinguistics.participantFields);
         }
       }
       var correspondingDatumField = optionalAllFields.find(field, null, true);

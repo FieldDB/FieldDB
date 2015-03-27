@@ -267,7 +267,7 @@ describe("Corpus", function() {
       }).then(done, done);
     }, specIsRunningTooLong);
 
-    it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
+    it("should update a speaker to become a participant with all the participantFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
         corpus.debug(speaker);
 
@@ -312,9 +312,11 @@ describe("Corpus", function() {
         expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
         expect(speaker.fields.length).toEqual(2);
 
-        // update the speaker to have the fields of the corpus.
-        expect(corpus.participantFields.length).toEqual(8);
+        // update the speaker to have the fields of the corpus, and cause the corpus to become an experimental corpus if it wasnt already.
+        expect(corpus.participantFields).toBeUndefined();
         corpus.updateParticipantToCorpusFields(speaker);
+        expect(corpus.participantFields.length).toEqual(10);
+
         expect(speaker.fields.length).toEqual(11);
         expect(speaker.fields.lastname.value).toEqual("xxxxxx");
         expect(corpus.speakerFields.lastname.value).toEqual("");
