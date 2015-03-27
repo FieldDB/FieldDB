@@ -569,6 +569,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       FieldDBObject.warn.apply(this, arguments);
     }
   },
+
   todo: {
     value: function( /* message, message2, message3, message4 */ ) {
       FieldDBObject.todo.apply(this, arguments);
@@ -580,6 +581,24 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     value: function(options) {
       this.debug("Calling render with options", options);
       FieldDBObject.render.apply(this, arguments);
+    }
+  },
+
+  ensureSetViaAppropriateType: {
+    value: function(propertyname, value) {
+      if (value === this["_" + propertyname]) {
+        return;
+      }
+      if (!value) {
+        delete this["_" + propertyname];
+        return;
+      } else {
+        if (this.INTERNAL_MODELS[propertyname] && typeof this.INTERNAL_MODELS[propertyname] === "function" && !(value instanceof this.INTERNAL_MODELS[propertyname])) {
+          value = new this.INTERNAL_MODELS[propertyname](value);
+        }
+      }
+      this["_" + propertyname] = value;
+      return this["_" + propertyname];
     }
   },
 
@@ -1371,7 +1390,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
-      if (this._dbname && this._dbname !== "default"&& this.rev) {
+      if (this._dbname && this._dbname !== "default" && this.rev) {
         throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
       }
       if (!value) {
