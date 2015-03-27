@@ -1,4 +1,5 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var Activities = require("./../activity/Activities").Activities;
 var Database = require("./Database").Database;
 var Connection = require("./Connection").Connection;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
@@ -190,6 +191,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       license: FieldDBObject.DEFAULT_OBJECT,
       copyright: FieldDBObject.DEFAULT_STRING,
       connection: Connection,
+      activityConnection: Activities,
       publicCorpus: FieldDBObject.DEFAULT_STRING,
       confidential: Confidential,
 
@@ -273,6 +275,55 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         return;
       }
       this._team = value;
+    }
+  },
+
+  connection: {
+    get: function() {
+      this.debug("getting connection");
+      return this._connection || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      if (value === this._connection) {
+        return;
+      }
+      if (!value) {
+        delete this._connection;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["connection"] === "function" && !(value instanceof this.INTERNAL_MODELS["connection"])) {
+          value = new this.INTERNAL_MODELS["connection"](value);
+        }
+      }
+      if (!value.confidential) {
+        value.confidential = this.confidential;
+      }
+      this._connection = value;
+    }
+  },
+
+  activityConnection: {
+    get: function() {
+      this.debug("getting activityConnection");
+      return this._activityConnection;
+    },
+    set: function(value) {
+      if (value === this._activityConnection) {
+        return;
+      }
+      if (!value) {
+        delete this._activityConnection;
+        return;
+      } else {
+        if (typeof this.INTERNAL_MODELS["activityConnection"] === "function" && !(value instanceof this.INTERNAL_MODELS["activityConnection"])) {
+          value = new this.INTERNAL_MODELS["activityConnection"](value);
+        }
+      }
+      if (!value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      value.parent = this;
+      this._activityConnection = value;
     }
   },
 
