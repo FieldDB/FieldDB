@@ -4,6 +4,17 @@ var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
 
 describe("FieldDBObject", function() {
 
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+  });
+
   describe("construction", function() {
 
     it("should accept a json object", function() {
@@ -396,9 +407,11 @@ describe("FieldDBObject", function() {
     }, specIsRunningTooLong);
 
     it("should refuse to fetch if no database can be deduced", function(done) {
+      FieldDBObject.application = null;
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
-        id: "D093j2ae-akmoi3m-2a3wkjen"
+        id: "D093j2ae-akmoi3m-2a3wkjen",
+        corpus: {}
       });
 
       object.fetch().then(function() {

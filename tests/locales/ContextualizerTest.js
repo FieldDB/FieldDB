@@ -5,6 +5,14 @@ var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
 
 describe("Contextualizer", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
+
   describe("construction", function() {
 
     it("should load the Contextualizer", function() {
