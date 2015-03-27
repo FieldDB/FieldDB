@@ -716,32 +716,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-
-  activityConnection: {
-    get: function() {
-      this.debug("getting activityConnection");
-      return this._activityConnection;
-    },
-    set: function(value) {
-      if (value === this._activityConnection) {
-        return;
-      }
-      if (!value) {
-        delete this._activityConnection;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["activityConnection"] === "function" && !(value instanceof this.INTERNAL_MODELS["activityConnection"])) {
-          value = new this.INTERNAL_MODELS["activityConnection"](value);
-        }
-      }
-      if (!value.confidential) {
-        value.confidential = this.confidential;
-      }
-      value.parent = this;
-      this._activityConnection = value;
-    }
-  },
-
   /**
    * DO NOT store in attributes when saving to pouch (too big)
    * @type {FieldDBGlosser}
