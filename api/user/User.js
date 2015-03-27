@@ -280,7 +280,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       }
       value.parent = this;
       this._activityConnection = value;
-      if (this.username) {
+      if (this.username  && !this._activityConnection._database) {
         this._activityConnection._database = new Database({
           dbname: this.username + "-activity_feed",
           connection: value

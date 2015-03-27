@@ -30,14 +30,13 @@ describe("CorpusMask ", function() {
 
     it("should have unknown defaults if not loaded from the server", function() {
       var corpus = new CorpusMask(CorpusMask.defaults);
-      var currentVersion = corpus.version;
       corpus.dbname = "lingllama-communitycorpus";
       // delete corpus.prefs;
       var corpusJson = corpus.toJSON("complete");
       expect(corpusJson).toEqual({
         fieldDBtype: "CorpusMask",
         dbname: "lingllama-communitycorpus",
-        version: currentVersion,
+        version: corpus.version,
         dateCreated: 0,
         dateModified: 0,
         comments: [],
@@ -49,28 +48,8 @@ describe("CorpusMask ", function() {
         termsOfUse: {},
         license: {},
         copyright: "",
-        connection: {
-          fieldDBtype: "Connection",
-          dateCreated: corpusJson.connection.dateCreated,
-          version: currentVersion,
-          corpusid: "",
-          titleAsUrl: "",
-          dbname: "",
-          pouchname: "",
-          protocol: "",
-          domain: "",
-          port: "",
-          path: "",
-          userFriendlyServerName: "",
-          authUrls: [],
-          clientUrls: [],
-          corpusUrls: [],
-          lexiconUrls: [],
-          searchUrls: [],
-          audioUrls: [],
-          activityUrls: [],
-          title: "",
-        },
+        connection: corpusJson.connection,
+        activityConnection: corpusJson.activityConnection,
         publicCorpus: "",
         validationStati: [],
         tags: [],
@@ -86,6 +65,50 @@ describe("CorpusMask ", function() {
         pouchname: "lingllama-communitycorpus",
         api: "corpora"
       });
+      expect(corpusJson.connection).toEqual({
+        fieldDBtype: "Connection",
+        dateCreated: corpusJson.connection.dateCreated,
+        version: corpus.version,
+        corpusid: "",
+        titleAsUrl: "",
+        dbname: "",
+        pouchname: "",
+        protocol: "",
+        domain: "",
+        port: "",
+        path: "",
+        userFriendlyServerName: "",
+        authUrls: [],
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        title: "",
+      });
+      expect(corpusJson.activityConnection).toEqual({
+        fieldDBtype: 'Connection',
+        version: corpus.version,
+        corpusid: '',
+        titleAsUrl: '',
+        dbname: '',
+        pouchname: '',
+        protocol: '',
+        domain: '',
+        port: '',
+        path: '',
+        userFriendlyServerName: '',
+        authUrls: [],
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        title: ''
+      });
+
     });
 
     it("should be able to have defaults", function() {
@@ -100,6 +123,9 @@ describe("CorpusMask ", function() {
         accuracy: 0
       });
 
+      expect(corpus.dbname).toEqual("jenkins-anothercorpus");
+      expect(corpus.connection.parent).toBeDefined;
+      expect(corpus.connection.parent).toBe(corpus);
       expect(corpus.connection.dbname).toEqual("jenkins-anothercorpus");
       expect(corpus.connection.titleAsUrl).toEqual("private_corpus");
       expect(corpus.connection.owner).toEqual("jenkins");
