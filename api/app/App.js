@@ -185,19 +185,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       return this._authentication || FieldDBObject.DEFAULT_OBJECT;
     },
     set: function(value) {
-      if (value === this._authentication) {
-        return;
-      }
-      if (!value) {
-        delete this._authentication;
-        return;
-      } else {
-        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["authentication"] && typeof this.INTERNAL_MODELS["authentication"] === "function" && !(value instanceof this.INTERNAL_MODELS["authentication"])) {
-          this.debug("Parsing model: " + value);
-          value = new this.INTERNAL_MODELS["authentication"](value);
-        }
-      }
-      this._authentication = value;
+      this.ensureSetViaAppropriateType("authentication", value);
     }
   },
 
@@ -218,20 +206,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       return this._contextualizer;
     },
     set: function(value) {
-      if (value === this._contextualizer) {
-        return;
+      this.ensureSetViaAppropriateType("contextualizer", value);
+      if (this._contextualizer && typeof this._contextualizer.loadDefaults === "function") {
+        this._contextualizer.loadDefaults();
       }
-      if (!value) {
-        delete this._contextualizer;
-        return;
-      } else {
-        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS["contextualizer"] && typeof this.INTERNAL_MODELS["contextualizer"] === "function" && value.constructor !== this.INTERNAL_MODELS["contextualizer"]) {
-          this.debug("Parsing model: ", value);
-          value = new this.INTERNAL_MODELS["contextualizer"](value);
-          value.loadDefaults();
-        }
-      }
-      this._contextualizer = value;
     }
   },
 

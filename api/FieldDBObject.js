@@ -586,16 +586,19 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   ensureSetViaAppropriateType: {
     value: function(propertyname, value) {
+      if (!propertyname) {
+        console.error("Invalid call to ensureSetViaAppropriateType", value);
+        throw new Error("Invalid call to ensureSetViaAppropriateType");
+      }
       if (value === this["_" + propertyname]) {
-        return;
+        return this["_" + propertyname];
       }
       if (!value) {
         delete this["_" + propertyname];
         return;
-      } else {
-        if (this.INTERNAL_MODELS[propertyname] && typeof this.INTERNAL_MODELS[propertyname] === "function" && !(value instanceof this.INTERNAL_MODELS[propertyname])) {
-          value = new this.INTERNAL_MODELS[propertyname](value);
-        }
+      }
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS[propertyname] && typeof this.INTERNAL_MODELS[propertyname] === "function" && !(value instanceof this.INTERNAL_MODELS[propertyname])) {
+        value = new this.INTERNAL_MODELS[propertyname](value);
       }
       this["_" + propertyname] = value;
       return this["_" + propertyname];
