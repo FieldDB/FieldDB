@@ -1,4 +1,5 @@
 /* global window, OPrime */
+var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var CorpusMask = require("./CorpusMask").CorpusMask;
 var Datum = require("./../datum/Datum").Datum;
 var DatumField = require("./../datum/DatumField").DatumField;
@@ -91,41 +92,29 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   replicatedCorpusUrls: {
     get: function() {
-      return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
+      if (this._connection && this._connection.replicatedCorpusUrls) {
+        return this._connection.replicatedCorpusUrls;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._replicatedCorpusUrls) {
-        return;
+      if (this._connection) {
+        this._connection.replicatedCorpusUrls = value
       }
-      if (!value) {
-        delete this._replicatedCorpusUrls;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["sessionFields"](value);
-        }
-      }
-      this._replicatedCorpusUrls = value;
     }
   },
 
   olacExportConnections: {
     get: function() {
-      return this._olacExportConnections || FieldDBObject.DEFAULT_COLLECTION;
+      if (this._connection && this._connection.olacExportConnections) {
+        return this._connection.olacExportConnections;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._olacExportConnections) {
-        return;
+      if (this._connection) {
+        this._connection.olacExportConnections = value
       }
-      if (!value) {
-        delete this._olacExportConnections;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["sessionFields"](value);
-        }
-      }
-      this._olacExportConnections = value;
     }
   },
 
@@ -437,7 +426,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   defaults: {
     get: function() {
-      return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+      var corpusTemplate = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
+      corpusTemplate.confidential.secretKey = FieldDBObject.uuidGenerator();
+      return corpusTemplate;
     }
   },
 
@@ -540,6 +531,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var session = new Session({
         dbname: this.dbname,
         fields: sessionFields,
+        confidential: self.confidential,
         url: this.url
       });
       return session;
@@ -548,31 +540,38 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 
   newDatum: {
     value: function(options) {
+      this.debug("Creating a datum for this corpus");
+      if (!this.datumFields || !this.datumFields.clone) {
+        throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
+      }
+      var datum = new Datum({
+        fields: new DatumFields(this.datumFields.cloneStructure()),
+        dbname: this.dbname,
+        confidential: this.confidential
+      });
+      for (var field in options) {
+        if (!options.hasOwnProperty(field)) {
+          continue;
+        }
+        if (datum.fields[field]) {
+          this.debug("  this option appears to be a datumField " + field);
+          datum.fields[field].value = options[field];
+        } else {
+          datum[field] = options[field];
+        }
+      }
+      datum.fossil = datum.toJSON();
+      return datum;
+    }
+  },
+
+  newDatumAsync: {
+    value: function(options) {
       var deferred = Q.defer(),
         self = this;
 
       Q.nextTick(function() {
-
-        self.debug("Creating a datum for this corpus");
-        if (!self.datumFields || !self.datumFields.clone) {
-          throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
-        }
-        var datum = new Datum({
-          fields: new DatumFields(self.datumFields.clone()),
-          dbname: self.dbname
-        });
-        for (var field in options) {
-          if (!options.hasOwnProperty(field)) {
-            continue;
-          }
-          if (datum.fields[field]) {
-            self.debug("  this option appears to be a datumField " + field);
-            datum.fields[field].value = options[field];
-          } else {
-            datum[field] = options[field];
-          }
-        }
-        datum.fossil = datum.toJSON();
+        var datum = self.newDatum(options);
         deferred.resolve(datum);
         return datum;
       });
@@ -580,7 +579,18 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-  newDatumField: {
+  newField: {
+    value: function(field) {
+      field = field || {};
+
+      if (!(field instanceof DatumField)) {
+        field = new DatumField(field);
+      }
+      return field;
+    }
+  },
+
+  addDatumField: {
     value: function(field) {
       if (!field.id && field.label) {
         field.id = field.label;
@@ -605,6 +615,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         }
         var datum = new Speaker({
           speakerFields: new DatumFields(self.speakerFields.clone()),
+          confidential: self.confidential
         });
         for (var field in options) {
           if (!options.hasOwnProperty(field)) {
@@ -664,55 +675,44 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return participant;
     }
   },
+
   /**
    * Builds a new corpus based on this one (if this is not the team's practice corpus)
    * @return {Corpus} a new corpus based on this one
    */
   newCorpus: {
-    value: function() {
+    value: function(options) {
       var newCorpusJson = this.clone();
 
+      newCorpusJson.comments = [];
+      newCorpusJson.confidential = new Confidential().fillWithDefaults().toJSON();
+
+      var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields", "fields"];
+      //clear out search terms from the new corpus's datum fields
+      fieldsToClear.map(function(fieldsType) {
+        /* use default datum fields if this is going to based on teh users' first practice corpus */
+        if (this.dbname && this.dbname.indexOf("firstcorpus") > -1) {
+          newCorpusJson[fieldsType] = DEFAULT_CORPUS_MODEL[fieldsType] || []
+        } else {
+          if (this[fieldsType]) {
+            newCorpusJson[fieldsType] = this[fieldsType].cloneStructure();
+          }
+        }
+      });
+
+      newCorpusJson = new Corpus(newCorpusJson)
+      newCorpusJson.dbname = newCorpusJson.dbname + "copy";
       newCorpusJson.title = newCorpusJson.title + " copy";
       newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
       newCorpusJson.description = "Copy of: " + newCorpusJson.description;
 
-      newCorpusJson.dbname = newCorpusJson.dbname + "copy";
-      newCorpusJson.replicatedCorpusUrls = newCorpusJson.replicatedCorpusUrls.map(function(remote) {
-        return remote.replace(new RegExp(this.dbname, "g"), newCorpusJson.dbname);
-      });
+      return newCorpusJson;
+    }
+  },
 
-      newCorpusJson.comments = [];
-
-      /* use default datum fields if this is going to based on teh users' first practice corpus */
-      if (this.dbname.indexOf("firstcorpus") > -1) {
-        newCorpusJson.datumFields = DEFAULT_CORPUS_MODEL.datumFields;
-        newCorpusJson.conversationFields = DEFAULT_CORPUS_MODEL.conversationFields;
-        newCorpusJson.sessionFields = DEFAULT_CORPUS_MODEL.sessionFields;
-      }
-      var x;
-      //clear out search terms from the new corpus's datum fields
-      for (x in newCorpusJson.datumFields) {
-        newCorpusJson.datumFields[x].mask = "";
-        newCorpusJson.datumFields[x].value = "";
-      }
-      if (newCorpusJson.participantFields) {
-        for (x in newCorpusJson.participantFields) {
-          newCorpusJson.participantFields[x].mask = "";
-          newCorpusJson.participantFields[x].value = "";
-        }
-      }
-      //clear out search terms from the new corpus's conversation fields
-      for (x in newCorpusJson.conversationFields) {
-        newCorpusJson.conversationFields[x].mask = "";
-        newCorpusJson.conversationFields[x].value = "";
-      }
-      //clear out search terms from the new corpus's session fields
-      for (x in newCorpusJson.sessionFields) {
-        newCorpusJson.sessionFields[x].mask = "";
-        newCorpusJson.sessionFields[x].value = "";
-      }
-
-      return new Corpus(newCorpusJson);
+  cloneStructure: {
+    value: function() {
+      return this.newCorpus();
     }
   },
 

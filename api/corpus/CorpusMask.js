@@ -393,7 +393,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["datumFields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._datumFields = value;
@@ -417,7 +417,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["sessionFields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._sessionFields = value;
@@ -441,7 +441,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["speakerFields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._speakerFields = value;
@@ -465,7 +465,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["participantFields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._participantFields = value;
@@ -489,7 +489,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["conversationFields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._conversationFields = value;
@@ -513,7 +513,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           value = new this.INTERNAL_MODELS["fields"](value);
         }
       }
-      if (!value.confidential) {
+      if (!value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this._fields = value;

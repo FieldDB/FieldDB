@@ -426,6 +426,38 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     }
   },
 
+  replicatedCorpusUrls: {
+    get: function() {
+      return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._replicatedCorpusUrls) {
+        return;
+      }
+      if (!value) {
+        delete this._replicatedCorpusUrls;
+        return;
+      }
+      this._replicatedCorpusUrls = value;
+    }
+  },
+
+  olacExportConnections: {
+    get: function() {
+      return this._olacExportConnections || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._olacExportConnections) {
+        return;
+      }
+      if (!value) {
+        delete this._olacExportConnections;
+        return;
+      }
+      this._olacExportConnections = value;
+    }
+  },
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);

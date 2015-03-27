@@ -35,11 +35,22 @@ describe("Corpus", function() {
 
     it("should not be able to change a dbname if it has been set", function() {
       var corpus = new Corpus(Corpus.prototype.defaults);
+      corpus.id = "aneixstingsavedthingy";
+      corpus.rev = "3-siamweoiamwoawem";
       expect(corpus.dbname).toEqual("");
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of a corpus, you must create a new object first.");
+      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+    });
+
+    it("should be able to build a corpus by calling defaults", function() {
+      var corpus;
+      corpus = new Corpus(Corpus.prototype.defaults);
+      expect(corpus.confidential).toBeDefined();
+      expect(corpus.confidential.secretKey).toBeDefined();
+      // expect(corpus.confidential.secretKey.length).toEqual(45);
+      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
     });
 
   });
@@ -100,12 +111,70 @@ describe("Corpus", function() {
       expect(corpus.datumFields.clone()).toBeDefined();
     });
 
-    it("should create a datum with the datumFields", function(done) {
-      corpus.newDatum().then(function(datum) {
+    it("should create a datum with the datumFields of the corpus", function() {
+      var datum = corpus.newDatum({
+        utterance: "a simple object",
+        translation: "with translation",
+        novelproperty: "a field which is not known and will be a property not a full field"
+      });
+      corpus.debug(datum.toJSON());
+      expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
+      expect(datum.datumFields.utterance.value).toEqual("a simple object");
+      expect(datum.datumFields.translation.value).toEqual("with translation");
+      expect(datum.datumFields.novelproperty).toBeUndefined();
+      expect(datum.novelproperty).toEqual("a field which is not known and will be a property not a full field");
+    });
+
+    it("should also create a datum with datumFields asynchonously", function(done) {
+      corpus.newDatumAsync().then(function(datum) {
         corpus.debug(datum.toJSON());
         expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       }).then(done, done);
     }, specIsRunningTooLong);
+
+    it("should create a corpus with a similar structure", function() {
+      corpus.datumFields.utterance.value = "the last thing i searched for";
+      corpus.datumFields.push(corpus.newField({
+        "id": "phonetics"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "semanticContext"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "anotherfieldtheteamwantedtohave"
+      }));
+
+      var newcorpus = corpus.newCorpus();
+      corpus.debug(newcorpus.toJSON());
+      expect(newcorpus.datumFields.utterance.value).toEqual(" ");
+      expect(newcorpus.datumFields.phonetics).toBeDefined();
+      expect(newcorpus.datumFields.semanticContext).toBeDefined();
+      expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeDefined();
+    });
+
+
+    it("should create a default corpus if called on the user's practice firstcorpus", function() {
+      var modifiedPracticeCorpus = corpus.newCorpus();
+
+      modifiedPracticeCorpus.dbname = "firstcorpus";
+      modifiedPracticeCorpus.datumFields.utterance.value = "the last thing i searched for";
+      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+        "id": "phonetics"
+      }));
+      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+        "id": "semanticContext"
+      }));
+      modifiedPracticeCorpus.datumFields.push(modifiedPracticeCorpus.newField({
+        "id": "anotherfieldtheteamwantedtohave"
+      }));
+
+      var newcorpus = modifiedPracticeCorpus.newCorpus();
+      corpus.debug(newcorpus.toJSON());
+      expect(newcorpus.datumFields.utterance.value).toEqual(" ");
+      expect(newcorpus.datumFields.phonetics).toBeUndefined();
+      expect(newcorpus.datumFields.semanticContext).toBeUndefined();
+      expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeUndefined();
+    });
 
   });
 
@@ -119,8 +188,16 @@ describe("Corpus", function() {
     });
 
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
+      expect(corpus.confidential).toBeDefined();
+      expect(corpus.confidential.secretkey).toBeDefined();
+      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
+
       corpus.newSpeaker().then(function(speaker) {
         corpus.debug(speaker);
+
+        expect(speaker).toBeDefined();
+        expect(speaker.confidential).toEqual(corpus.confidential);
+
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
         speaker.fields = [];
