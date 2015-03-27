@@ -263,25 +263,12 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
-  connection: {
-    get: function() {
-      this.debug("getting connection");
-      return this._connection || FieldDBObject.DEFAULT_OBJECT;
-    },
-    set: function(value) {
-      if (value) {
-        value.parent = this;
-        if (!value.confidential && this.confidential) {
-          value.confidential = this.confidential;
-        }
-      }
-      this.ensureSetViaAppropriateType("connection", value);
-    }
-  },
-
   activityConnection: {
     get: function() {
       this.debug("getting activityConnection");
+      if (this._activityConnection && this._activityConnection.parent !== this) {
+        this._activityConnection.parent = this;
+      }
       return this._activityConnection;
     },
     set: function(value) {
@@ -519,7 +506,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       var upgradeSucess = this.upgradeCorpusFieldsToMatchDatumTemplate(value.trim());
       if (!upgradeSucess) {
         this.prefs.preferredDatumTemplate = value.trim();
@@ -614,7 +601,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       this.prefs.preferredLocale = value.trim();
     }
   },
@@ -635,7 +622,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       this.prefs.preferredDashboardLayout = value.trim();
     }
   },

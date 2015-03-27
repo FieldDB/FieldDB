@@ -73,20 +73,22 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   connection: {
     get: function() {
+      this.debug("getting connection");
       if (this._connection && this._connection.parent !== this) {
         this._connection.parent = this;
       }
       return this._connection;
     },
     set: function(value) {
-      this.debug("Setting corpus connection ", value);
-      if (Object.prototype.toString.call(value) === "[object Object]") {
-        value = new this.INTERNAL_MODELS["connection"](value);
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
+        }
       }
-      this._connection = value;
-      this._connection.parent = this;
-      if (!this.dbname && value.dbname) {
-        this.dbname = value.dbname;
+      this.ensureSetViaAppropriateType("connection", value);
+      if (this._connection && this._connection.dbname && this._connection.dbname !== "default" && !this.dbname) {
+        this.dbname = this._connection.dbname;
       }
     }
   },
@@ -136,7 +138,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   set: {
-    value: function(arg1, arg2) {
+    value: function(arg1, arg2, optionalUrl) {
       if (!this.dbname) {
         this.bug("Cannot get something if the dbname is not defined ", arg1, arg2);
         throw new Error("Cannot get something if the dbname is not defined ");
@@ -155,6 +157,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
       if (!this.url) {
         this.bug("the url could not be extrapolated for this database, that is strange. The app will likely behave abnormally.");
+        this.todo("Consider letting users/apps use the optionalUrl in individual save of docs", optionalUrl);
       }
       CORS.makeCORSRequest({
         method: "POST",
@@ -325,8 +328,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }
 
-      if (couchSessionUrl.indexOf(this.dbname) > 0) {
+      if (this.dbname && couchSessionUrl.indexOf(this.dbname) > 0) {
         couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+      } else if (this.connection && this.connection.dbname && couchSessionUrl.indexOf(this.connection.dbname) > 0) {
+        couchSessionUrl = couchSessionUrl.replace(this.connection.dbname, "_session");
       } else {
         couchSessionUrl = couchSessionUrl + "/_session";
       }
