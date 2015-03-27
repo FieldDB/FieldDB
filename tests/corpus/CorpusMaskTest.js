@@ -88,17 +88,17 @@ describe("CorpusMask ", function() {
         title: "",
       });
       expect(corpusJson.activityConnection).toEqual({
-        fieldDBtype: 'Connection',
+        fieldDBtype: "Connection",
         version: corpus.version,
-        corpusid: '',
-        titleAsUrl: '',
-        dbname: '',
-        pouchname: '',
-        protocol: '',
-        domain: '',
-        port: '',
-        path: '',
-        userFriendlyServerName: '',
+        corpusid: "",
+        titleAsUrl: "",
+        dbname: "",
+        pouchname: "",
+        protocol: "",
+        domain: "",
+        port: "",
+        path: "",
+        userFriendlyServerName: "",
         authUrls: [],
         clientUrls: [],
         corpusUrls: [],
@@ -106,7 +106,7 @@ describe("CorpusMask ", function() {
         searchUrls: [],
         audioUrls: [],
         activityUrls: [],
-        title: ''
+        title: ""
       });
 
     });
@@ -124,7 +124,7 @@ describe("CorpusMask ", function() {
       });
 
       expect(corpus.dbname).toEqual("jenkins-anothercorpus");
-      expect(corpus.connection.parent).toBeDefined;
+      expect(corpus.connection.parent).toBeDefined();
       expect(corpus.connection.parent).toBe(corpus);
       expect(corpus.connection.dbname).toEqual("jenkins-anothercorpus");
       expect(corpus.connection.titleAsUrl).toEqual("private_corpus");

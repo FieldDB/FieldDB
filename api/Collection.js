@@ -1,4 +1,3 @@
-var Diacritics = require("diacritic");
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 
@@ -146,6 +145,11 @@ Collection.prototype = Object.create(Object.prototype, {
   render: {
     value: function() {
       return FieldDBObject.prototype.render.apply(this, arguments);
+    }
+  },
+  ensureSetViaAppropriateType: {
+    value: function() {
+      return FieldDBObject.prototype.ensureSetViaAppropriateType.apply(this, arguments);
     }
   },
 
