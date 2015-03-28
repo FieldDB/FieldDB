@@ -539,7 +539,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
       if (saveEvenIfSeemsUnchanged) {
         this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
       } else {
-        console.log("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
+        this.debug("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
 
         if (!this.unsaved && !this.calculateUnsaved()) {
           self.warn("Item hasn't really changed, no need to save...");
@@ -583,6 +583,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
               optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || this.application.user.gravatar;
             }
           } catch (e) {
+            console.error(e);
             this.warn("Can't get the corpus connection info to guess who saved this.", e);
           }
 

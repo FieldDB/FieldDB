@@ -81,21 +81,18 @@ var Session = function Session(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Session";
   }
-  this.debugMode = true;
+  // this.debugMode = true;
   this.debug("Constructing Session: ", options);
   options = options || {};
   if (!options || (!options._rev && !options.fields)) {
     //If its a new session with out a revision and without fields use the defaults
     options.fields = this.defaults.fields;
   }
-  // this.warn("Overwriting session datalist upon construction from ", options.datalist);
-  // options.datalist = options.datalist || {};
-  // options.datalist.docIds = options.datalist.docIds || [];
-  // options.datalist.docs = options.datalist.docs || {};
+  // Initialize the datalist and docs to ensure its ready incase we want to use them.
   this.initializeDatalist();
-  this.warn(" -> ", options.datalist);
+  this.debug(" -> ", options.datalist);
   FieldDBObject.apply(this, arguments);
-  this.warn("   after construction: ", this._datalist);
+  this.debug("   after construction: ", this._datalist);
 };
 
 Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.prototype */ {
@@ -518,7 +515,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
         var self = this;
 
-        this.debugMode = true;
+        // this.debugMode = true;
         this._docIds = value;
         Q.nextTick(function() {
           if (!self.whenReindexedFromApi) {
@@ -756,24 +753,15 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   datalist: {
     get: function() {
-      this.warn("Getting datalist", this._datalist);
+      this.debug("Getting datalist", this._datalist);
       if (!this._datalist || !(this._datalist instanceof DataList) || typeof this._datalist.reindexFromApi !== "function") {
         this.initializeDatalist();
       }
-
       return this._datalist;
     },
     set: function(value) {
-      this.warn("Setting datalist", this._datalist, value);
-
-      // console.error("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
-      // // console.warn("DataList is currently this ", DataList);
-      // if (!DataList) {
-      //   throw new Error("DataList has been ovewritten somewhere");
-      // }
-
-      this._datalist = new DataList(value);
-      // this.ensureSetViaAppropriateType("datalist", value);
+      this.debug("Setting datalist", this._datalist, value);
+      this.ensureSetViaAppropriateType("datalist", value);
     }
   },
 

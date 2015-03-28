@@ -187,7 +187,7 @@ describe("Activities", function() {
 
     it("should refuse to add incomplete activities to add to the feed", function() {
       expect(activityFeed).toBeDefined();
-      activityFeed.debugMode = true;
+      // activityFeed.debugMode = true;
       var addedResult = activityFeed.add({
         verb: "",
         indirectobject: "this doesnt matter, its not part of the subcategorization of activity :)"
@@ -203,7 +203,7 @@ describe("Activities", function() {
 
     it("should accept bare activities to add to the feed", function() {
       expect(activityFeed).toBeDefined();
-      activityFeed.debugMode = true;
+      // activityFeed.debugMode = true;
       activityFeed.add({
         verb: "modified",
         directobject: "tusunaywanmi"
