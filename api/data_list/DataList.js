@@ -309,7 +309,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           return self;
         }, unableToFetchCurrentDataAffiliatedWithThisDataList)
         .fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
 
       return deferred.promise;
@@ -438,7 +438,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
                 });
               }
             }).fail(function(error) {
-              console.error(error.stack);
+              console.error(error.stack, self);
               deferred.reject(error);
             });
           }

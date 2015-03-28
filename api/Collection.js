@@ -744,7 +744,7 @@ Collection.prototype = Object.create(Object.prototype, {
       //   deferred.resolve(self);
       //   return self;
       // }).fail(function(error) {
-      //   console.error(error.stack);
+      //   console.error(error.stack, self);
       //   deferred.reject(error);
       // });
 
@@ -997,7 +997,7 @@ Collection.prototype = Object.create(Object.prototype, {
                     self.debug("Not Overwriting  ", anItem, " ->", anotherItem);
                     resultCollection[idToMatch] = anItem;
                   }).fail(function(error) {
-                    console.error(error.stack);
+                    console.error(error.stack, self);
                   });
               } else {
                 self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");

@@ -356,7 +356,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           })
         .fail(
           function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
 
@@ -433,13 +433,13 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           .then(deferred.resolve,
             deferred.reject)
           .fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
       }, function(error) {
         self.warn("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
 

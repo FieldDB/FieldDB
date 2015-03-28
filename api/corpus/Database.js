@@ -182,7 +182,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         self.debug(reason);
         deferred.reject(reason);
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
       return deferred.promise;
@@ -247,7 +247,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         //   }, function(reason) {
         //     deferred.reject(reason);
         //   }).fail(function(error) {
-        //   console.error(error.stack);
+        //   console.error(error.stack, self);
         //   deferred.reject(error);
         // });
         // });
@@ -289,7 +289,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           }
         }, cantLogIn).fail(
           function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
 
@@ -319,7 +319,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           }
         }, cantLogIn).fail(
           function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
       }
@@ -384,7 +384,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }, function(reason) {
         deferred.reject(reason);
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
 
@@ -608,7 +608,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         self.debug(reason);
         deferred.reject(reason);
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
       return deferred.promise;
@@ -754,7 +754,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           self.debug(reason);
           deferred.reject(reason);
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           deferred.reject(error);
         });
 
@@ -796,7 +796,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             //turn on to regardless of fail or succeed
             self.replicateToCorpus(db, couchurl);
           }).fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
           });
 
           if (typeof successcallback === "function") {

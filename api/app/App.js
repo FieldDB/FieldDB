@@ -252,7 +252,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }, function(error) {
             deferred.reject(error);
           }).fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
         } else {
@@ -427,7 +427,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           self.render();
           return self;
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
       } else {
         this.debug("Not fetching corpus, its aleady here.", this.corpus);

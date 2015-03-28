@@ -223,7 +223,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
               self.loading = false;
               deferred.reject(reason);
             }).fail(function(error) {
-              console.error(error.stack);
+              console.error(error.stack, self);
               deferred.reject(error);
             });
           };
@@ -243,7 +243,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
                 }, function(reason) {
                   self.warn("flag as deleted failed", reason, row.value);
                 }).fail(function(error) {
-                  console.error(error.stack);
+                  console.error(error.stack, self);
                   deferred.reject(error);
                 });
               }
@@ -290,7 +290,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         self.corpusMask.fetch()
           .then(deferred.resolve, deferred.reject)
           .fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
 
@@ -607,7 +607,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         });
 
         newCorpusJson = new Corpus(newCorpusJson);
-        newCorpusJson.dbname = newCorpusJson.dbname + "copy";
+        if(this.dbname){
+          newCorpusJson.dbname = newCorpusJson.dbname + "copy";
+        }
         newCorpusJson.title = newCorpusJson.title + " copy";
         newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
         newCorpusJson.description = "Copy of: " + newCorpusJson.description;
@@ -853,7 +855,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         deferred.resolve(self);
       }, deferred.reject).fail(
         function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           deferred.reject(error);
         });
 
@@ -1105,7 +1107,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           self.warn("The requested locale wasn't loaded");
           self.debug("locale loading error", error);
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
       } else {
         this.fetchCollection("locales").then(function(locales) {
@@ -1120,7 +1122,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           self.warn("The locales didn't loaded");
           self.debug("locale loading error", error);
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
       }
 
