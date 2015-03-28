@@ -6,7 +6,7 @@ describe("FieldDBObject", function() {
 
   afterEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
     mockDatabase = {
@@ -703,7 +703,7 @@ describe("FieldDBObject", function() {
           }],
           userchooseable: "disabled",
           _dateCreated: object.modifiedByUser.dateCreated,
-          _version: "v2.48.24"
+          _version: object.version
         });
 
         // this was a placeholder because it had no rev, so we should now have a fossil

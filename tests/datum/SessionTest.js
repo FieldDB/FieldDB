@@ -8,7 +8,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   beforeEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
 
@@ -337,7 +337,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docIds[0]).toEqual("0");
     });
 
-    xit("should support a list of datum ids upon creation", function(done) {
+    it("should support a list of datum ids upon creation", function(done) {
       var session = new Session({
         // debugMode: true,
         id: "asessionwhichisreal",

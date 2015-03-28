@@ -1,4 +1,5 @@
 var Consultant = require("../../api/user/Consultant").Consultant;
+var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 
 
 describe("as an Consultant, I want to set up my Consultant info", function() {
@@ -20,6 +21,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       });
       consultant.anonymousCode = "AA";
       expect(consultant.anonymousCode).toEqual("AA");
+      expect(consultant.id).toEqual("AA");
 
       consultant = new Consultant({
         confidential: mockcorpus.confidential,
@@ -28,32 +30,65 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       expect(consultant.fields.anonymousCode.value).toEqual("");
     });
 
-  });
 
-  it("should be of type Consultant", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
+    it("should be of type Consultant", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential
+      });
+      expect(consultant.fieldDBtype).toEqual("Consultant");
     });
-    expect(consultant.fieldDBtype).toEqual("Consultant");
-  });
 
-  it("should set an consultant code", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
+    it("should set an consultant code", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential
+      });
+      consultant.anonymousCode = "C.M.B.";
+      expect(consultant.anonymousCode).toEqual("C.M.B.");
     });
-    consultant.anonymousCode = "C.M.B.";
-    expect(consultant.anonymousCode).toEqual("C.M.B.");
-  });
 
-  it("should set consultant's date of birth", function() {
-    var consultant = new Consultant({
-      // debugMode: true,
-      confidential: mockcorpus.confidential
+    it("should set consultant's date of birth", function() {
+      var consultant = new Consultant({
+        // debugMode: true,
+        confidential: mockcorpus.confidential
+      });
+      expect(consultant.fields).toBeDefined();
+      expect(consultant.dateOfBirth).toBeDefined();
+      consultant.dateOfBirth = "January 1, 1900";
+      expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
     });
-    expect(consultant.fields).toBeDefined();
-    expect(consultant.dateOfBirth).toBeDefined();
-    consultant.dateOfBirth = "January 1, 1900";
-    expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
+
+    // TODO found this wasnt working in the angular core, it shoudl be worked on .
+    xit("should be able to add speakers to a collection", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential,
+        firstname: "Anony",
+        lastname: "Mouse",
+        username: "9ja9j3",
+        anonymousCode: "am",
+        fieldDBtype: "Participant",
+      });
+      expect(consultant.fields).toBeDefined();
+      expect(consultant.anonymousCode).toEqual(" ");
+      expect(consultant.firstname).toEqual(" ");
+      expect(consultant.lastname).toEqual(" ");
+      expect(consultant.username).toEqual(" ");
+      expect(consultant.id).toEqual(" ");
+      expect(consultant._id).toEqual(" ");
+    });
+
+    it("should vacously convert a Speaker into a Speaker", function() {
+      var consultant = new Consultant();
+
+      expect(consultant).toBeDefined();
+      expect(consultant.fieldDBtype).toEqual("Consultant");
+      // expect(consultant).toEqual(" ");
+      expect(consultant.previousFieldDBtype).toBeUndefined();
+
+      var sameconsultant = FieldDBObject.convertDocIntoItsType(consultant);
+      expect(sameconsultant).toEqual(consultant);
+      expect(sameconsultant).toBe(consultant);
+    });
+
   });
 
 
