@@ -607,8 +607,8 @@ Collection.prototype = Object.create(Object.prototype, {
                 }
               }
               if (!itMatches) {
-                this.warn("One of the requested removal items dont match what was removed ");
-                this.debug("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
+                this.warn("One of the requested removal items doesnt match exactly what was removed ");
+                this.debug("One of the requested removal items doesnt match exactly ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
               }
             }
           }
