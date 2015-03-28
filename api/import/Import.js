@@ -284,6 +284,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return deferred.promise;
       }
 
+      if (!this.asFieldMatrix || this.asFieldMatrix.length === 0) {
+        Q.nextTick(function() {
+          deferred.reject({
+            userFriendlyErrors: ["There was nothing to import. Are you sure you ran step 1?"]
+          });
+        });
+        return deferred.promise;
+      }
+
+
       Q.nextTick(function() {
         deferred.resolve(self.datalist);
       });

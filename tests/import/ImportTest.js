@@ -608,7 +608,7 @@ describe("api/import/Import", function() {
     }, specIsRunningTooLong);
 
 
-    xit("should refuse to import participants if the corpus confidential is not ready", function(done) {
+    it("should refuse to import participants if the corpus confidential is not ready", function(done) {
       var importer = new Import({
         rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
         importType: "participants"
@@ -625,7 +625,7 @@ describe("api/import/Import", function() {
     }, specIsRunningTooLong);
 
 
-    xit("should not refuse to import participants if the corpus confidential is ready", function(done) {
+    it("should not refuse to import participants if the corpus confidential is ready", function(done) {
       var importer = new Import({
         corpus: corpus,
         rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
@@ -641,13 +641,12 @@ describe("api/import/Import", function() {
       expect(importer.rawText).toBeDefined();
 
       importer.convertMatrixIntoDataList().then(function() {
-        expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
+        expect(false).toBeTruthy();
       }, function(reason) {
         importer.debug(reason);
-        expect(reason).toEqual(" ");
-        expect(false).toBeTruthy();
+        expect(reason.userFriendlyErrors).toEqual(["There was nothing to import. Are you sure you ran step 1?"]);
         expect(importer.datalist.docs).toBeDefined();
-        expect(importer.datalist.docs.length).toEqual(" ");
+        expect(importer.datalist.docs.length).toEqual(0);
 
       }).done(done);
     }, specIsRunningTooLong);
