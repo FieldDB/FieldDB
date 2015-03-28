@@ -44,8 +44,10 @@ describe("InsertUnicode: as a User I want to use my favourite symbols", function
       symbol: "cd /root"
     });
     expect(unicodes.length).toEqual(1);
-    expect(unicodes.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: cd /root -> cdroot");
     expect(unicodes.cdroot.symbol).toEqual("cd /root");
+    if (unicodes.warnMessage) {
+      expect(unicodes.warnMessage).toContain("The sanitized the dot notation key of this object is not the same as its primaryKey: cd /root -> cdroot");
+    }
   });
 
   it("should show Unicode palette", function() {
