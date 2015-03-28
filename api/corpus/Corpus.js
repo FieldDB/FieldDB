@@ -607,8 +607,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         });
 
         newCorpusJson = new Corpus(newCorpusJson);
-        if(this.dbname){
-          newCorpusJson.dbname = newCorpusJson.dbname + "copy";
+        if (this.dbname) {
+          newCorpusJson.dbname = this.dbname + "copy";
         }
         newCorpusJson.title = newCorpusJson.title + " copy";
         newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
@@ -702,7 +702,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
       var fuzzyLabel = incomingFieldIdOrLabel.toLowerCase().replace(/[^a-z]/g, "");
       if (!optionalAllFields) {
-        console.log("Using a clone of the corpus fields. ");
         optionalAllFields = new DatumFields();
         if (this.datumFields && this.datumFields.length > 0) {
           optionalAllFields.add(this.datumFields.toJSON());
@@ -714,6 +713,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         } else {
           optionalAllFields.add(this.defaults_psycholinguistics.participantFields);
         }
+        this.debug("Using a clone of the corpus fields. ", optionalAllFields);
       }
       var correspondingDatumField = optionalAllFields.find(field, null, true);
       /* if there is no corresponding field yet in the optionalAllFields, then maybe there is a field which is normalized to this label */

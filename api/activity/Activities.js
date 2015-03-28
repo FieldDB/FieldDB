@@ -302,9 +302,10 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
           addedActivity.corpus = this._database;
         }
         if (!addedActivity.rev) {
-          addedActivity.warn("This activity has no evidence of having been saved before, makeing its fossil empty to trigger save next time the activity feed gets saved.");
+          addedActivity.debug("This activity "+addedActivity.directobject+" has no evidence of having been saved before, makeing its fossil empty to trigger save.");
           addedActivity.unsaved = true;
           addedActivity.fossil = {};
+          addedActivity.debug("This activity", addedActivity);
         }
         return addedActivity;
       } catch (e) {

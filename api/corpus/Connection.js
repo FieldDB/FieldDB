@@ -193,11 +193,15 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
           if (dbType === "corpus") {
             if (corpusidentifier.identifier.length < 2) {
-              throw new Error("Database names should be composed of a username-datbaseidentifier : " + value);
+              this.warn("Database names should be composed of a username-datbaseidentifier : " + value);
+              return;
+              // throw new Error("Database names should be composed of a username-datbaseidentifier : " + value);
             }
             if (corpusidentifier.changes.length > 0) {
               this.warn(" Invalid identifier ", corpusidentifier.changes.join("\n "));
-              throw new Error(corpusidentifier.changes.join("\n "));
+              this.warn(corpusidentifier.changes.join("\n "));
+              return;
+              // throw new Error(corpusidentifier.changes.join("\n "));
             }
             value = username.identifier + "-" + corpusidentifier.identifier;
           } else if (dbType === "corpus_activity_feed") {

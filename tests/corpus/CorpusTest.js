@@ -155,7 +155,11 @@ describe("Corpus", function() {
       expect(corpus.datumFields.syntactictreelatex).toBeUndefined();
       expect(corpus.datumFields.length).toEqual(18);
 
+      expect(corpus.dbname).toEqual("testingnewdatum-kartuli");
+
       var newcorpus = corpus.newCorpus();
+      expect(newcorpus.dbname).toEqual("testingnewdatum-kartulicopy");
+
       corpus.debug(newcorpus.toJSON());
       expect(newcorpus.title).toEqual("ქართული copy");
 
