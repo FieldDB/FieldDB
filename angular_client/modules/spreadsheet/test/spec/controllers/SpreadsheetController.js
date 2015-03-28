@@ -354,7 +354,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     it('should have all the old things for datum in scope that it had before', function() {
       expect(typeof scope.deleteRecord).toBe('function');
       expect(typeof scope.createRecord).toBe('function');
-      expect(typeof scope.markAsEdited).toBeUndefined;
+      expect(typeof scope.markAsEdited).toBeUndefined();
       expect(typeof scope.addComment).toBe('function');
       expect(typeof scope.deleteComment).toBe('function');
       expect(typeof scope.saveChanges).toBe('function');
