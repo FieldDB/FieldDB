@@ -19,6 +19,19 @@ describe("Contextualizer", function() {
     ContextualizableObject.compatibleWithSimpleStrings = true;
   });
 
+
+  beforeEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
+  });
+
   describe("construction", function() {
 
     it("should load the Contextualizer", function() {
