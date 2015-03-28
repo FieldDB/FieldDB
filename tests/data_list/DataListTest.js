@@ -20,7 +20,8 @@ describe("Data List", function() {
     }
     mockDatabase = {
       get: mockDatabase.get,
-      set: mockDatabase.set
+      set: mockDatabase.set,
+      fetchCollection: mockDatabase.fetchCollection
     };
     ContextualizableObject.compatibleWithSimpleStrings = true;
   });
@@ -33,7 +34,8 @@ describe("Data List", function() {
     }
     mockDatabase = {
       get: mockDatabase.get,
-      set: mockDatabase.set
+      set: mockDatabase.set,
+      fetchCollection: mockDatabase.fetchCollection
     };
     ContextualizableObject.compatibleWithSimpleStrings = true;
   });
