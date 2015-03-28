@@ -8,7 +8,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   beforeEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
 

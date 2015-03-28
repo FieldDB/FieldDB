@@ -6,7 +6,7 @@ describe("App", function() {
 
   afterEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
   });
@@ -164,7 +164,7 @@ describe("App: as a developer I want to deploy to multiple targets", function() 
 
   afterEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
   });
