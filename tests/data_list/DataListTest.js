@@ -10,7 +10,7 @@ var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 var specIsRunningTooLong = 5000;
 var SAMPLE_DATALIST_MODEL = require("../../sample_data/datalist_v1.22.1.json")[0];
 
-xdescribe("Data List", function() {
+describe("Data List", function() {
 
 
   afterEach(function() {

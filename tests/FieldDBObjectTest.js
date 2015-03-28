@@ -221,7 +221,7 @@ describe("FieldDBObject", function() {
       });
     });
 
-    xdescribe("cloning and minimal pairs", function() {
+    describe("cloning and minimal pairs", function() {
 
       it("should not clone id and rev", function() {
         expect(penguin.rev).toEqual("2-123");
