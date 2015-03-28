@@ -659,7 +659,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         self = this,
         deferred = Q.defer();
 
-      if (this._datalist) {
+      if (this._datalist && this._datalist instanceof DataList && typeof this._datalist.reindexFromApi === "function") {
         if (!this.whenReindexedFromApi) {
           this.whenReindexedFromApi = deferred.promise;
           deferred.resolve(self._datalist);
@@ -667,7 +667,12 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         return this._datalist;
       }
 
-      this.ensureSetViaAppropriateType("datalist", {
+      // this.ensureSetViaAppropriateType("datalist", {
+      //   dbname: this.dbname
+      //     // docs: []
+      // });
+
+       this._datalist = new DataList({
         dbname: this.dbname
           // docs: []
       });
@@ -682,12 +687,16 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
       this.todo("Using reindexFromApi on datalists instead");
       this.fetching = this.loading = true;
+      if(!this._datalist.reindexFromApi){
+        this.warn("THis dataalist isnt real  throwing error... ",this, this._datalist);
+        throw new Error("this DataList isnt real.");
+      }
       this.whenReindexedFromApi = this._datalist.reindexFromApi();
 
       return this._datalist;
     },
     set: function(value) {
-      console.warn("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
+      console.error("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
       console.warn("DataList is currently this ", DataList);
       if (!DataList) {
         throw new Error("DataList has been ovewritten somewhere");
