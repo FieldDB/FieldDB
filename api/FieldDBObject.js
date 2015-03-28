@@ -1621,7 +1621,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           underscorelessProperty;
 
         if (this.fetching) {
-          this.warn("Cannot get json while object is fetching itself", this);
+          this.warn("Cannot get json while " + this.id + " is fetching itself");
+          this.debug(" this is the object", this);
           // return;
           // throw "Cannot get json while object is fetching itself";
         }
