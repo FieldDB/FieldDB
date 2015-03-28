@@ -161,6 +161,7 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
   "_version",
   "modifiedByUser",
   "_dateModified",
+  "_fieldDBtype",
   "dateModified"
 ]);
 
@@ -175,7 +176,7 @@ FieldDBObject.DEFAULT_VERSION = "v" + package.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.render = function(options) {
-  this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
+  this.debug("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
 };
 
 FieldDBObject.verbose = function(message, message2, message3, message4) {
@@ -244,7 +245,8 @@ FieldDBObject.bug = function(message) {
   try {
     alert(message);
   } catch (e) {
-    console.log("Alert is not defined, this is strange.");
+    this.warn(" Couldn't tell user about a bug: " + message);
+      // console.log("Alert is not defined, this is strange.");
   }
   var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
   //outputing a stack trace
@@ -657,7 +659,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       selfOrSnapshot = this;
 
-      console.log("    Running snapshot...");
+      this.debug("    Running snapshot...");
       //update to selfOrSnapshot version
       selfOrSnapshot.version = FieldDBObject.DEFAULT_VERSION;
 
@@ -735,7 +737,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       // optionalUserWhoSaved.browser = browser;
 
-      console.log("    Calculating userWhoSaved...");
+      this.debug("    Calculating userWhoSaved...");
 
       var userWhoSaved = {
         username: optionalUserWhoSaved.username,
@@ -814,7 +816,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      console.log("    Serializing to send object to selfOrSnapshotbase...");
+      this.debug("    Serializing to send object to selfOrSnapshotbase...");
       // this.debug("snapshot   ", selfOrSnapshot);
 
       return selfOrSnapshot.toJSON();
@@ -846,7 +848,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (saveEvenIfSeemsUnchanged) {
         this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
       } else {
-        console.log("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
+        self.debug("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
 
         if (!this.unsaved && !this.calculateUnsaved()) {
           self.warn("Item hasn't really changed, no need to save...");
@@ -885,12 +887,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       var data = this.createSaveSnapshot();
-      console.log("    Requesting corpus to run save...");
+      self.debug("    Requesting corpus to run save...");
       this.saving = true;
       this.whenReady = deferred.promise;
       this.corpus.set(data).then(function(result) {
           self.saving = false;
-          console.log("    Save completed...");
+          self.debug("    Save completed...");
           self.debug("saved ", result);
           if (!result) {
             deferred.reject({
@@ -901,7 +903,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           }
 
           if (!result.id) {
-            console.log("    Rejecting promise, the id was not set by the database ..");
+            self.debug("    Rejecting promise, the id was not set by the database ..");
             deferred.reject({
               status: 500,
               userFriendlyErrors: ["This application has errored. Please notify its developers: Save operation returned abnormal results."],
@@ -915,10 +917,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           self.id = result.id;
           self.rev = result.rev;
 
-          console.log("    Updating fossil...");
+          self.debug("    Updating fossil...");
           self.fossil = self.toJSON();
 
-          console.log("    Resolving promise...", self);
+          self.debug("    Resolving promise...", self);
           deferred.resolve(self);
           return self;
         },
@@ -1285,7 +1287,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         // If this had no revision number before, and it does now, then this is a good fossil point
         if (!oldRev && (result._rev || result.rev)) {
-          self.warn("This was probabbly a placeholder which is now filled in, calling merge with overwrite from server.", self);
+          self.warn(self.id + " was probabbly a placeholder (didnt have .rev before fetch, but now it does) which is now filled in, calling merge with overwrite from server.");
+
           self.merge("self", result, "overwrite");
           // Setting the fossil causes
           // A: the merge to count as something which needs to be seaved
@@ -1295,7 +1298,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         } else {
           self.warn("Cant tell if this was a placeholder, calling merge and asking user if there are merge conflicts.", result);
           self.merge("self", result);
-          console.log("After merge ", self.modifiedByUser);
+          self.debug("After merge ", self.modifiedByUser);
         }
 
         deferred.resolve(self);
@@ -1351,7 +1354,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           if (FieldDB && FieldDB["Database"]) {
             db = FieldDB["Database"].prototype;
-            this.warn("  using the Database prototype for corpus reference on " + this._id + ", this could be problematic " + this._id + " wasnt a database, and had no acces to an application or _corpus which it could use.", db);
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .", db);
           }
         } catch (e) {
           var message = e ? e.message : " unknown error in getting the corpus";
@@ -1696,8 +1699,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return json;
 
       } catch (e) {
-        console.log(e);
-        console.log(e.stack);
+        console.warn(e);
+        console.error(e.stack);
         this.bug("Unable to serialze " + this.id + ". Please report this.");
       }
     }
@@ -1733,10 +1736,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
       } catch (e) {
         if (e) {
-          console.log(e);
-          console.log(e.stack);
-          console.log(e.message);
-          console.log(this);
+          console.warn(e);
+          console.warn(e.stack);
+          console.warn(e.message);
+          console.warn(this);
           // throw e;
         }
       }
