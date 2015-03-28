@@ -995,7 +995,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equalivalent to ", anotherObject[aproperty]);
-            if (true || this.debugMode) {
+            if (this.debugMode) {
               console.error("objects are not equal stactrace");
             }
             return false;
@@ -1010,14 +1010,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           // return true;
         } else if (anotherObject[aproperty] === undefined && (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode")) {
           this.debug(aproperty + " is missing " + this[aproperty] + " on anotherObject " + anotherObject[aproperty]);
-          if (true || this.debugMode) {
+          if (this.debugMode) {
             console.error("objects are not equal stactrace");
           }
           return false;
         } else {
           if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
             this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
-            if (true || this.debugMode) {
+            if (this.debugMode) {
               console.error("objects are not equal stactrace");
             }
             return false;
@@ -1029,7 +1029,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.dontRecurse = true;
           anotherObject.dontRecurse = true;
           if (!anotherObject.equals(this)) {
-            if (true || this.debugMode) {
+            if (this.debugMode) {
               console.error("objects are not equal stactrace");
             }
             return false;
