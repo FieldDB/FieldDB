@@ -1437,7 +1437,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
-      this.todo("saving fields as the deprecated datumFields");
+      this.debug("saving fields as the deprecated datumFields");
       json.datumFields = json.fields;
       delete json.fields;
 
