@@ -81,13 +81,21 @@ var Session = function Session(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Session";
   }
+  this.debugMode = true;
   this.debug("Constructing Session: ", options);
+  options = options || {};
   if (!options || (!options._rev && !options.fields)) {
     //If its a new session with out a revision and without fields use the defaults
-    options = options || {};
     options.fields = this.defaults.fields;
   }
+  // this.warn("Overwriting session datalist upon construction from ", options.datalist);
+  // options.datalist = options.datalist || {};
+  // options.datalist.docIds = options.datalist.docIds || [];
+  // options.datalist.docs = options.datalist.docs || {};
+  this.initializeDatalist();
+  this.warn(" -> ", options.datalist);
   FieldDBObject.apply(this, arguments);
+  this.warn("   after construction: ", this._datalist);
 };
 
 Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.prototype */ {
@@ -495,49 +503,100 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   docIds: {
     get: function() {
-      if (this.datalist && this.datalist.docIds) {
-        return this.datalist.docIds;
+      if (this._datalist && this._datalist.docIds) {
+        return this._datalist.docIds;
       }
       return [];
     },
     set: function(value) {
-      if (!this.datalist || !this.datalist.docIds) {
-        this.warn("This should rarely happen.");
-        // this.debugMode = true;
-        var self = this;
-        this._docIds = value;
-        this.whenReindexedFromApi.done(function() {
-          self.warn("datalist still doesnt exist");
-          return self._datalist;
-        });
+      if (!value || value.length === 0) {
+        self.debug("cant clear the docids of a session like this.");
         return;
       }
-      this.datalist.docIds = value;
+      if (!this._datalist) {
+        this.initializeDatalist();
+
+        var self = this;
+
+        this.debugMode = true;
+        this._docIds = value;
+        Q.nextTick(function() {
+          if (!self.whenReindexedFromApi) {
+            self.warn("This should never happen. we asked the datalist to be created.");
+            return;
+          }
+          self.whenReindexedFromApi.done(function() {
+            self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
+            if (self._docIds && self._docIds.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
+              self.warn("  making sure " + self._docIds.length + " items are in the list of data.");
+              self._docIds.map(function(docId) {
+                if (!self._datalist._docs[docId]) {
+                  self.warn("Adding " + docId + " to the list. ");
+                  self._datalist._docs.add({
+                    id: docId,
+                    fieldDBtype: "Datum",
+                    loaded: false
+                  });
+                }
+              });
+              delete self._docIds;
+            } else {
+              self.debug("  saw no reason to add doc ids to the datalist docs ", self._docids, self._datalist);
+            }
+          });
+        });
+
+        return;
+      }
+      this._datalist.docIds = value;
     }
   },
 
   docs: {
     get: function() {
-      if (this.datalist && this.datalist.docs) {
-        return this.datalist.docs;
+      if (this._datalist && this._datalist._docs) {
+        return this._datalist._docs;
       }
     },
     set: function(value) {
-      if (!this.datalist) {
-        this.warn("This should never happen.");
-        // this.debugMode = true;
-        var self = this;
-        self.whenReindexedFromApi.done(function() {
-          self.todo("add the docs instead? like this:");
-          // if (self._datalist.docs) {
-          //   self._datalist.docs.add(value);
-          // }
-          self._datalist.docs = value;
-          return self._datalist;
-        });
+
+      if (!value || value.length === 0) {
+        self.debug("cant clear the docs of a session like this.");
         return;
       }
-      this.datalist.docs = value;
+
+      if (!this._datalist || !this._datalist.docs || typeof this._datalist.docs.add !== "function") {
+        this.initializeDatalist();
+
+        this._tempDocs = value;
+        var self = this;
+        Q.nextTick(function() {
+          if (!self.whenReindexedFromApi) {
+            self.bug("This should never happen.");
+            return;
+          }
+          self.whenReindexedFromApi.done(function() {
+            self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
+            if (self._tempDocs && self._tempDocs.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
+              self.warn("  making sure " + self._tempDocs.length + " items are in the list of data.");
+              self._tempDocs.map(function(tempDoc) {
+                if (!self._datalist._docs[tempDoc.id]) {
+                  self.warn("Adding " + tempDoc + " to the list. ");
+                  self._datalist._docs.add(tempDoc);
+                }
+              });
+              delete self._tempDocs;
+            } else {
+              self.debug("  saw no reason to add doc ids to the datalist docs ", self._tempDocs, self._datalist);
+            }
+          });
+
+        });
+
+        return;
+      }
+      this.todo(" adding docs to existing docs, instead of reseting it.");
+      this._datalist.docs.add(value);
     }
   },
 
@@ -625,31 +684,73 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   add: {
     value: function(value) {
       if (value) {
-        if (!this.datalist || !this.datalist.docs) {
+        if (!this._datalist || !this._datalist._docs || typeof !this._datalist._docs.add === "function") {
+
+          if (this._datalist) {
+            this.debug("trying to get datalist to be defined by just calling it.");
+          }
+
           var self = this;
           // this.debugMode = true;
+          if (!self.whenReindexedFromApi) {
+            console.error("The whenReindexedFromApi is not defined!", self);
+            return;
+          }
           self.whenReindexedFromApi.done(function() {
-            self.debug("Adding to session's data list", value);
+            self.warn("Adding to session's data list", value);
+            if (!self._datalist || !self._datalist._docs || typeof !self._datalist._docs.add === "function") {
+              console.error("The datalist is still not operational on this session", session);
+              return;
+            }
             if (!self._datalist.docs) {
               self._datalist.docs = value;
             } else {
               self._datalist.docs.add(value);
             }
-            return self._datalist;
+            // return self._datalist;
           });
           return;
         }
-        return this.datalist.add(value);
+        return this._datalist.add(value);
       }
     }
   },
 
   length: {
     get: function() {
-      return this.datalist.length || 0;
+      return this._datalist.length || 0;
     },
     set: function(value) {
-      this.datalist.length = value;
+      this._datalist.length = value;
+    }
+  },
+
+  initializeDatalist: {
+    value: function() {
+
+      // this.ensureSetViaAppropriateType("datalist", {
+      //   dbname: this.dbname
+      //     // docs: []
+      // });
+
+      this._datalist = new DataList({
+        dbname: this.dbname,
+        docs: []
+      });
+
+      if (this.id) {
+        api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+        this._datalist.api = api;
+      }
+
+      this.todo("Using reindexFromApi on datalists instead");
+      this.fetching = this.loading = true;
+      if (typeof this._datalist.reindexFromApi !== "function") {
+        this.warn("THis dataalist isnt real  throwing error... ", this, this._datalist);
+        throw new Error("this DataList isnt real.");
+      }
+      this.whenReindexedFromApi = this._datalist.reindexFromApi();
+
     }
   },
 
@@ -659,50 +760,24 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         self = this,
         deferred = Q.defer();
 
-      if (this._datalist && this._datalist instanceof DataList && typeof this._datalist.reindexFromApi === "function") {
-        if (!this.whenReindexedFromApi) {
-          this.whenReindexedFromApi = deferred.promise;
-          deferred.resolve(self._datalist);
-        }
-        return this._datalist;
+      this.warn("Getting datalist", this._datalist);
+      if (!this._datalist || !(this._datalist instanceof DataList) || typeof this._datalist.reindexFromApi !== "function") {
+        this.initializeDatalist();
       }
-
-      // this.ensureSetViaAppropriateType("datalist", {
-      //   dbname: this.dbname
-      //     // docs: []
-      // });
-
-       this._datalist = new DataList({
-        dbname: this.dbname
-          // docs: []
-      });
-
-      if (this.id) {
-        api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
-        this._datalist.api = api;
-        if (this._docIds && this._docIds.length > 0) {
-          api = this._docIds;
-        }
-      }
-
-      this.todo("Using reindexFromApi on datalists instead");
-      this.fetching = this.loading = true;
-      if(!this._datalist.reindexFromApi){
-        this.warn("THis dataalist isnt real  throwing error... ",this, this._datalist);
-        throw new Error("this DataList isnt real.");
-      }
-      this.whenReindexedFromApi = this._datalist.reindexFromApi();
 
       return this._datalist;
     },
     set: function(value) {
-      console.error("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
-      console.warn("DataList is currently this ", DataList);
-      if (!DataList) {
-        throw new Error("DataList has been ovewritten somewhere");
-      }
+      this.warn("Setting datalist", this._datalist, value);
 
-      this.ensureSetViaAppropriateType("datalist", value);
+      // console.error("this.INTERNAL_MODELS[datalist]", this.INTERNAL_MODELS["datalist"]);
+      // // console.warn("DataList is currently this ", DataList);
+      // if (!DataList) {
+      //   throw new Error("DataList has been ovewritten somewhere");
+      // }
+
+      this._datalist = new DataList(value);
+      // this.ensureSetViaAppropriateType("datalist", value);
     }
   },
 
@@ -869,7 +944,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
-      delete json.datalist;
+      delete json._datalist;
       if (this._datalist && this._datalist.docIds && this._datalist.docIds.length > 0) {
         json.docIds = this.docIds;
       }
