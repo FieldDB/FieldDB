@@ -764,8 +764,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   importFields: {
     get: function() {
       if (!this._importFields || this._importFields.length === 0) {
-        if (this.importType === "participants" && this.corpus && this.corpus.participantFields) {
-          this._importFields = new DatumFields(this.corpus.participantFields.clone());
+        if (this.importType === "participants") {
+          if (this.corpus && this.corpus.participantFields) {
+            this._importFields = new DatumFields(this.corpus.participantFields.clone());
+          } else {
+            this._importFields = new DatumFields(this.corpus.defaults_psycholinguistics.participantFields);
+          }
         } else if (this.corpus && this.corpus.datumFields) {
           this._importFields = new DatumFields(this.corpus.datumFields.clone());
         }

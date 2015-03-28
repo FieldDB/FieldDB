@@ -467,7 +467,7 @@ describe("api/import/Import", function() {
     beforeEach(function() {
       importer = new Import({
         importType: "participants",
-        corpus: new Corpus(Corpus.prototype.defaults)
+        corpus: new Corpus(Corpus.prototype.defaults_psycholinguistics)
       });
     });
 
@@ -484,6 +484,28 @@ describe("api/import/Import", function() {
     });
 
     it("should normalize french fields to their english equivalents", function() {
+      var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
+      expect(normalizedField.id).toEqual("anonymousCode");
+      expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+    });
+
+  });
+
+  describe("Build fields using fields appropriate to the import type", function() {
+    var importer;
+    beforeEach(function() {
+      importer = new Import({
+        importType: "participants",
+        corpus: new Corpus(Corpus.prototype.defaults)
+      });
+    });
+
+    it("should create import fields based on import types", function() {
+      expect(importer.importFields).toBeDefined();
+      // expect(importer.importFields.translation).toBeUndefined();
+      expect(importer.importFields.anonymouscode).toBeDefined();
+
       var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
       expect(normalizedField.id).toEqual("anonymousCode");
       expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
@@ -679,6 +701,7 @@ describe("api/import/Import", function() {
 
         /* make sure that the doc is a participant */
         expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
+        expect(importer.datalist.docs._collection[1].fieldDBtype).toEqual("Participant");
         expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
         expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
         expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
