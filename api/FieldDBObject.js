@@ -246,7 +246,7 @@ FieldDBObject.bug = function(message) {
     alert(message);
   } catch (e) {
     this.warn(" Couldn't tell user about a bug: " + message);
-      // console.log("Alert is not defined, this is strange.");
+    // console.log("Alert is not defined, this is strange.");
   }
   var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
   //outputing a stack trace
@@ -1232,7 +1232,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         overwrite = optionalOverwriteOrAsk;
         this.debug("Found conflict for " + aproperty + " Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
-        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
           handleAsyncConfirmMerge(this, aproperty);
         }
         if (overwrite || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
@@ -1240,7 +1240,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             // resultObject._dbname = this.dbname;
             this.warn(" Keeping _dbname of " + resultObject.dbname);
           } else {
-            this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+            if (FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+              this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+            }
             this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
 
             resultObject[aproperty] = anotherObject[aproperty];
