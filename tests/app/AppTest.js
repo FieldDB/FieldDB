@@ -97,7 +97,7 @@ describe("App", function() {
       expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
     }, specIsRunningTooLong);
 
-    xit("should be able to load an import dashboard based on routeParams", function(done) {
+    it("should be able to load an import dashboard based on routeParams", function(done) {
       var app = new App({
         // debugMode: true
       });
@@ -110,7 +110,7 @@ describe("App", function() {
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
+        expect(app.warnMessage).toContain("An app of type App has become automagically available to all fielddb objects");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
