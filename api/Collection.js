@@ -180,7 +180,7 @@ Collection.prototype = Object.create(Object.prototype, {
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
         if (!item) {
-          this.warn("item" + itemIndex + "is undefined, not adding it to the collection " + this.fieldDBtype, item);
+          this.warn("item " + itemIndex + "is  (" + item + ") undefined or empty, not adding it to the collection " + this.fieldDBtype, item);
         } else {
           this.add(item);
         }
@@ -420,12 +420,13 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        this.warn("The primary key is undefined, nothing can be added!", this);
-        throw new Error("The primary key is undefined, nothing can be added!").stack;
+        this.warn("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
+        throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.");
+        this.debug("  not adding: ", member);
         return;
       }
       if (typeof value.trim === "function") {
@@ -434,7 +435,7 @@ Collection.prototype = Object.create(Object.prototype, {
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
       if (value !== oldValue && this.fieldDBtype !== "DatumStates") {
-        this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
+        this.debug("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
     }
