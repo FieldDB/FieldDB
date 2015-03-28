@@ -510,7 +510,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!value || value.length === 0) {
-        self.debug("cant clear the docids of a session like this.");
+        this.debug("cant clear the docids of a session like this.");
         return;
       }
       if (!this._datalist) {
@@ -561,7 +561,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     set: function(value) {
 
       if (!value || value.length === 0) {
-        self.debug("cant clear the docs of a session like this.");
+        this.debug("cant clear the docs of a session like this.");
         return;
       }
 
@@ -699,7 +699,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           self.whenReindexedFromApi.done(function() {
             self.warn("Adding to session's data list", value);
             if (!self._datalist || !self._datalist._docs || typeof !self._datalist._docs.add === "function") {
-              console.error("The datalist is still not operational on this session", session);
+              console.error("The datalist is still not operational on this session", self);
               return;
             }
             if (!self._datalist.docs) {
@@ -737,7 +737,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         dbname: this.dbname,
         docs: []
       });
-
+      var api;
       if (this.id) {
         api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
         this._datalist.api = api;
@@ -756,10 +756,6 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   datalist: {
     get: function() {
-      var api,
-        self = this,
-        deferred = Q.defer();
-
       this.warn("Getting datalist", this._datalist);
       if (!this._datalist || !(this._datalist instanceof DataList) || typeof this._datalist.reindexFromApi !== "function") {
         this.initializeDatalist();
