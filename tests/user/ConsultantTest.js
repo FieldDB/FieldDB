@@ -21,6 +21,7 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       });
       consultant.anonymousCode = "AA";
       expect(consultant.anonymousCode).toEqual("AA");
+      expect(consultant.id).toEqual("AA");
 
       consultant = new Consultant({
         confidential: mockcorpus.confidential,
@@ -54,6 +55,25 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       expect(consultant.dateOfBirth).toBeDefined();
       consultant.dateOfBirth = "January 1, 1900";
       expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
+    });
+
+    // TODO found this wasnt working in the angular core, it shoudl be worked on .
+    xit("should be able to add speakers to a collection", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential,
+        firstname: "Anony",
+        lastname: "Mouse",
+        username: "9ja9j3",
+        anonymousCode: "am",
+        fieldDBtype: "Participant",
+      });
+      expect(consultant.fields).toBeDefined();
+      expect(consultant.anonymousCode).toEqual(" ");
+      expect(consultant.firstname).toEqual(" ");
+      expect(consultant.lastname).toEqual(" ");
+      expect(consultant.username).toEqual(" ");
+      expect(consultant.id).toEqual(" ");
+      expect(consultant._id).toEqual(" ");
     });
 
     it("should vacously convert a Speaker into a Speaker", function() {
