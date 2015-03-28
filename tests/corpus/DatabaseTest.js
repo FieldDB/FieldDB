@@ -407,25 +407,26 @@ describe("Database", function() {
 
   });
 
-});
 
-xdescribe("Database: as a team we want to be able to go back in time in the db revisions", function() {
-  it("should be able to import from GitHub repository", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a team we want to be able to go back in time in the db revisions", function() {
+    it("should be able to import from GitHub repository", function() {
+      expect(true).toBeTruthy();
+    });
   });
-});
 
-xdescribe("Database: as a user I want to be able to import via drag and drop", function() {
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a user I want to be able to import via drag and drop", function() {
+    it("should detect drag and drop", function() {
+      expect(true).toBeTruthy();
+    });
   });
-});
 
-xdescribe("Database: as a user I want to be able to go offline, but still have the most recent objects in my db available", function() {
-  it("should have the most recent entries available", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a user I want to be able to go offline, but still have the most recent objects in my db available", function() {
+    it("should have the most recent entries available", function() {
+      expect(true).toBeTruthy();
+    });
+    it("should store the db offine", function() {
+      expect(true).toBeTruthy();
+    });
   });
-  it("should store the db offine", function() {
-    expect(true).toBeTruthy();
-  });
+
 });
