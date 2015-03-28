@@ -963,7 +963,8 @@ describe("FieldDBObject", function() {
       expect(app.render).toBeDefined();
       app.debug(app.render);
       app.render();
-      expect(app.warnMessage).toContain("but the render was not injected for this");
+      expect(app.warnMessage).toBeUndefined();
+      // expect(app.warnMessage).toContain("but the render was not injected for this");
     });
 
     it("should accept a render function from the containing app or framework", function() {
@@ -993,17 +994,17 @@ describe("FieldDBObject", function() {
       var buggy = new FieldDBObject();
       buggy.debugMode = true;
       expect(buggy.debugMode).toEqual(true);
-      buggy.debug("This is some debug output", buggy, FieldDBObject);
+      buggy.debug("This is some debug output", buggy);
       buggy.debugMode = false;
       console.log("It should say \" Done debugMode testing\" after this: ");
-      buggy.debug("THERE WAS SOME OUTPUT", buggy, FieldDBObject);
+      buggy.debug("THERE WAS SOME OUTPUT", buggy);
       if (buggy.debugMode) {
         buggy.debugMode = true;
         buggy.debug("THIS IS SOME HEAVY STRINGIFICATION OUPUT THAT IS AVOIDED", JSON.stringify(buggy), JSON.stringify(FieldDBObject));
       }
       console.log(" Done debugMode testing");
 
-      buggy.warn("This will print a warning", buggy);
+      buggy.warn("This will print a warning with an object also", buggy);
       buggy.bug("This will print an warning in Nodejs");
       buggy.todo("This will print a todo", buggy);
       expect(buggy.toJSON().warnMessage).toBeUndefined();

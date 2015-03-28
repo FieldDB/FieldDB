@@ -341,7 +341,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
           return this._value;
         } else {
           if (!this.decryptedMode) {
-            if(this.mask){
+            if (this.mask) {
               this.warn("User is not able to view the value of " + this.label + ", it is encrypted and the user isn't in decryptedMode."); //" mask: "+ this._mask +" value: " +this._value);
             }
             return this.mask || FieldDBObject.DEFAULT_STRING;
@@ -503,7 +503,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       if (!value || value === this._encryptedValue) {
         return;
       }
-      this.warn("encryptedValue cannot be changed directly, instead field must be in decryptedMode and then set the value. " + value);
+      this.warn(this.id + " cannot be changed directly, instead you must be in decryptedMode ");
+      this.debug(" not setting " + value);
     }
   },
 

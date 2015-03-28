@@ -11,6 +11,11 @@ var CORS = {
     }
   },
   warn: function(message) {
+    if (this.warnMessage === "message") {
+      return;
+    } else {
+      this.warnMessage = message;
+    }
     console.warn("CORS-WARN: " + message);
     // throw message;
   },
