@@ -2,6 +2,7 @@ var Contextualizer = require("./../../api/locales/Contextualizer").Contextualize
 var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
+var Q = require("q");
 
 var specIsRunningTooLong = 5000;
 
@@ -453,18 +454,28 @@ describe("Contextualizer", function() {
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
       }, specIsRunningTooLong);
 
-      xit("should be able to modify localization using dot notation asynchonously false case", function(done) {
+      it("should be able to modify localization asynchonously: user replies no", function(done) {
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
         contextualizer.alwaysConfirmOkay = undefined;
         expect(contextualizer.alwaysConfirmOkay).toBeFalsy();
         obj.for_child = "In this game the mouse will eat all the cheese with your help.";
 
-        setTimeout(function() {
-          expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+        expect(contextualizer.whenReadys).toBeDefined();
+        expect(contextualizer.whenReadys.length).toEqual(1);
+
+        Q.allSettled(contextualizer.whenReadys).then(function(results){
+          contextualizer.debug("whenReadys are done", results);
+          expect(results).toBeDefined();
+          expect(results[0]).toBeDefined();
+          expect(results[0].state).toEqual("rejected");
+          expect(results[0].reason).toBeDefined();
+          expect(results[0].reason.message).toBeDefined("Do you also want to update locale_practice_description_for_child for other users? \nIn this game, you will help the mouse eat all the cheese! -> In this game the mouse will eat all the cheese with your help.");
+          expect(results[0].reason.response).toEqual(false);
+
+          expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game, you will help the mouse eat all the cheese!");
           expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
-          done();
-        }, 10);
+        }).done(done);
 
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
       }, specIsRunningTooLong);
