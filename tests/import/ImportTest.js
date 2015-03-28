@@ -751,7 +751,7 @@ describe("api/import/Import", function() {
       // importer.debugMode = true;
       importer.convertMatrixIntoDataList().then(function(results) {
 
-        importer.datalist.docs._collection[2].fields.toBeDefined();
+        expect(importer.datalist.docs._collection[2].fields).toBeDefined();
         importer.datalist.docs._collection[2].fields.decryptedMode = true;
         expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Prénom");
         expect(importer.datalist.docs._collection[2].fields.firstname.labelFieldLinguists).toEqual("Prénom");
