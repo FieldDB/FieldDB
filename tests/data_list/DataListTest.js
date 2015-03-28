@@ -3,21 +3,40 @@
 var DataList = require("./../../api/data_list/DataList").DataList;
 var SubExperimentDataList = require("./../../api/data_list/SubExperimentDataList").SubExperimentDataList;
 var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
+var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 
 var specIsRunningTooLong = 5000;
 var SAMPLE_DATALIST_MODEL = require("../../sample_data/datalist_v1.22.1.json")[0];
 
-describe("Data List", function() {
+xdescribe("Data List", function() {
+
 
   afterEach(function() {
     if (FieldDBObject.application) {
       console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
   });
 
+
+  beforeEach(function() {
+    if (FieldDBObject.application) {
+      console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
+  });
 
   describe("construction", function() {
 
