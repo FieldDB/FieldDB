@@ -280,7 +280,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       }
       value.parent = this;
       this._activityConnection = value;
-      if (this.username  && !this._activityConnection._database) {
+      if (this.username && !this._activityConnection._database) {
         this._activityConnection._database = new Database({
           dbname: this.username + "-activity_feed",
           connection: value
@@ -341,7 +341,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
           key = Confidential.secretKeyGenerator();
           this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
         }
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug(" error ", e);
       }
       userKey = key + this.username;
       var userJSON = this.toJSON();
@@ -355,7 +356,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         this.constructor.prototype.temp = this.constructor.prototype.temp || {};
         this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug(" error ", e);
       }
 
       return deferred.promise;
@@ -385,7 +387,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         self.constructor.prototype.temp = self.constructor.prototype.temp || {};
         key = self.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-        self.warn("unable to use local storage, this app wont be very usable offline ", e);
+        self.warn("unable to use local storage, this app wont be very usable offline ");
+        self.debug(" error ", e);
       }
       if (!key) {
         self.warn("cannot fetch user info locally");
@@ -418,7 +421,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         overwriteOrNot = "overwrite";
       }
 
-      self.merge("self", decryptedUser, overwriteOrNot);
+      self.merge("self", new User(decryptedUser), overwriteOrNot);
       return deferred.promise;
     }
   }
