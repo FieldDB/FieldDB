@@ -170,7 +170,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (value === this._collection) {
         return;
       }
-      if (!value) {
+      if (!value || value.length === 0) {
         this._collection = [];
         return;
       }
