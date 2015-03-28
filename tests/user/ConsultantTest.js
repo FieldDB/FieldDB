@@ -1,4 +1,5 @@
 var Consultant = require("../../api/user/Consultant").Consultant;
+var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 
 
 describe("as an Consultant, I want to set up my Consultant info", function() {
@@ -28,32 +29,46 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       expect(consultant.fields.anonymousCode.value).toEqual("");
     });
 
-  });
 
-  it("should be of type Consultant", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
+    it("should be of type Consultant", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential
+      });
+      expect(consultant.fieldDBtype).toEqual("Consultant");
     });
-    expect(consultant.fieldDBtype).toEqual("Consultant");
-  });
 
-  it("should set an consultant code", function() {
-    var consultant = new Consultant({
-      confidential: mockcorpus.confidential
+    it("should set an consultant code", function() {
+      var consultant = new Consultant({
+        confidential: mockcorpus.confidential
+      });
+      consultant.anonymousCode = "C.M.B.";
+      expect(consultant.anonymousCode).toEqual("C.M.B.");
     });
-    consultant.anonymousCode = "C.M.B.";
-    expect(consultant.anonymousCode).toEqual("C.M.B.");
-  });
 
-  it("should set consultant's date of birth", function() {
-    var consultant = new Consultant({
-      // debugMode: true,
-      confidential: mockcorpus.confidential
+    it("should set consultant's date of birth", function() {
+      var consultant = new Consultant({
+        // debugMode: true,
+        confidential: mockcorpus.confidential
+      });
+      expect(consultant.fields).toBeDefined();
+      expect(consultant.dateOfBirth).toBeDefined();
+      consultant.dateOfBirth = "January 1, 1900";
+      expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
     });
-    expect(consultant.fields).toBeDefined();
-    expect(consultant.dateOfBirth).toBeDefined();
-    consultant.dateOfBirth = "January 1, 1900";
-    expect(consultant.dateOfBirth).toEqual("xxxxxxx x, xxxx");
+
+    it("should vacously convert a Speaker into a Speaker", function() {
+      var consultant = new Consultant();
+
+      expect(consultant).toBeDefined();
+      expect(consultant.fieldDBtype).toEqual("Consultant");
+      // expect(consultant).toEqual(" ");
+      expect(consultant.previousFieldDBtype).toBeUndefined();
+
+      var sameconsultant = FieldDBObject.convertDocIntoItsType(consultant);
+      expect(sameconsultant).toEqual(consultant);
+      expect(sameconsultant).toBe(consultant);
+    });
+
   });
 
 

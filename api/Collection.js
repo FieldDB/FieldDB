@@ -303,12 +303,23 @@ Collection.prototype = Object.create(Object.prototype, {
 
       if (!searchingFor && value) {
         //previously code in the add function
+
+        this.debug("  the constructor of this before casting it ", value.constructor);
         value = FieldDBObject.convertDocIntoItsType(value);
-        if (value && this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && !(value instanceof this.INTERNAL_MODELS.item)) {
+        this.debug(" checking the constructor of this after casting it ", value.constructor);
+
+        if (value &&
+          this.INTERNAL_MODELS &&
+          this.INTERNAL_MODELS.item &&
+          typeof this.INTERNAL_MODELS.item === "function" &&
+          !(value instanceof this.INTERNAL_MODELS.item) &&
+          !(this.INTERNAL_MODELS.item.compatibleWithSimpleStrings && typeof value === "string")) {
+
           // this.debug("adding a internamodel ", value);
           // if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
-          this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value);
+          this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value.constructor.toString());
           if (typeof value.toJSON === "function") {
+            this.debug(" why defereincing this?");
             value = value.toJSON();
           }
           value = new this.INTERNAL_MODELS.item(value);

@@ -375,6 +375,7 @@ FieldDBObject.guessType = function(doc) {
 };
 
 FieldDBObject.convertDocIntoItsType = function(doc, clone) {
+  // this.debugMode = true;
   var guessedType,
     typeofAnotherObjectsProperty = Object.prototype.toString.call(doc);
 
@@ -420,6 +421,10 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       doc = new FieldDB[guessedType](doc);
       // FieldDBObject.warn("Converting doc into guessed type " + guessedType);
     } else {
+      if (doc instanceof FieldDBObject) {
+        // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject
+        return doc;
+      }
       doc = new FieldDBObject(doc);
       FieldDBObject.todo("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
     }
@@ -430,6 +435,10 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     if (guessedType !== "FieldDBObject" && guessedType !== checkPreviousTypeWithoutS) {
       doc.previousFieldDBtype = doc.previousFieldDBtype || "";
       doc.previousFieldDBtype = doc.previousFieldDBtype + guessedType;
+    }
+    if (doc instanceof FieldDBObject) {
+      // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject
+      return doc;
     }
     doc = new FieldDBObject(doc);
   }
@@ -609,6 +618,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         !(value instanceof this.INTERNAL_MODELS[propertyname]) &&
         !(this.INTERNAL_MODELS[propertyname].compatibleWithSimpleStrings && typeof value === "string")) {
 
+        this.debug("Converting this into its type.", value.constructor.toString());
         value = new this.INTERNAL_MODELS[propertyname](value);
 
       }
