@@ -929,7 +929,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           return self;
         }).fail(
         function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           deferred.reject(error);
         });
 
@@ -1125,7 +1125,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           }, function() {
             resultObject[apropertylocal] = anObject[apropertylocal];
           }).fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
           });
       };
 
@@ -1307,7 +1307,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         deferred.reject(reason);
         return self;
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
 

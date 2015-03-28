@@ -634,7 +634,7 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
             deferred.reject(reason);
           })
         .fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           self.saving = false;
           deferred.reject(error);
         });

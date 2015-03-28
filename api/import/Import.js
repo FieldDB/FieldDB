@@ -234,7 +234,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                 deferred.reject(reason);
               }).fail(
               function(error) {
-                console.error(error.stack);
+                console.error(error.stack, self);
                 deferred.reject(error);
               });
           }
@@ -848,7 +848,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.debug(error);
             self.progress.completed++;
           }).fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
           savePromises.push(promise);
@@ -868,7 +868,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self.render();
         return options;
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
         deferred.reject(error);
       });
 
@@ -1811,7 +1811,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
         }
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
       });
     }
   },
@@ -2092,7 +2092,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.error = "Error processing files";
           deferred.reject(results);
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           self.warn("There was an error when importing these options ", error, options);
           deferred.reject(error);
         });

@@ -68,7 +68,7 @@ var Authentication = function Authentication(options) {
 
     return error;
   }).fail(function(error) {
-    console.error(error.stack);
+    console.error(error.stack, self);
   });
 
   FieldDBObject.apply(this, arguments);
@@ -166,7 +166,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           deferred.reject(error);
         }).fail(
         function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           deferred.reject(error);
         });
 
@@ -210,7 +210,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             }
           }).fail(
             function(error) {
-              console.error(error.stack);
+              console.error(error.stack, self);
               deferred.reject(error);
             });
         };
@@ -324,7 +324,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           self.login(userinfo);
         })
         .fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
     }
   },
@@ -408,7 +408,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             deferred.reject(reason);
           }).fail(
           function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
             deferred.reject(error);
           });
       });

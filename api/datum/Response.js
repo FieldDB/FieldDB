@@ -76,7 +76,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         }, function() {
           continueToNextStimulus.reject(new Error("The x prevented the cancel?"));
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
       } else {
         continueToNextStimulus.resolve();
@@ -91,7 +91,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
           self.playAudio();
         }
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
       });
       var choice = "";
       if (stimulusId) {
@@ -154,7 +154,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
         }, function() {
           continueToNextStimulus.reject(new Error("The x prevented the cancel?"));
         }).fail(function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
         });
       } else {
         if (!dontAutoAdvance) {
@@ -171,7 +171,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
           self.playAudio();
         }
       }).fail(function(error) {
-        console.error(error.stack);
+        console.error(error.stack, self);
       });
 
       var response = {

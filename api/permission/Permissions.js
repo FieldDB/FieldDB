@@ -770,7 +770,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
           deferred.reject(reason);
         }).fail(
         function(error) {
-          console.error(error.stack);
+          console.error(error.stack, self);
           deferred.reject(error);
         });
 

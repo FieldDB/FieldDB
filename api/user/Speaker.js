@@ -384,7 +384,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
           }, function(error) {
             self.debug("Failed to fetch speaker\"s user mask", error);
           }).fail(function(error) {
-            console.error(error.stack);
+            console.error(error.stack, self);
           });
 
         } else {
