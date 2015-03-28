@@ -938,18 +938,19 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     },
     set: function(value) {
       if (value === this._session) {
-        return this;
+        return;
       }
-      if (!value || !value.datalist || !value.datalist.docs || !value.datalist.docs.primaryKey || value.datalist.docs.primaryKey !== "tempId") {
+      if (!value || !value.datalist || !value.datalist.docs) {
         this.warn("  not setting the session on import, its missing some stuff ", value);
-        return this;
+        return;
       }
+      value.datalist.docs.primaryKey = "tempId";
       this.debug("  setting the _session", value.datalist.docs.primaryKey);
       if (!(value instanceof Session)) {
         value = new Session(value);
       }
       this._session = value;
-      return this;
+      return;
     }
   },
 

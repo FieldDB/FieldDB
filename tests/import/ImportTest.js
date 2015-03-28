@@ -48,10 +48,10 @@ describe("api/import/Import", function() {
       importer.session = null;
       expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
 
-      //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+      //Session can only be overwritten by valid sessions (with a datalist that has docs )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
@@ -63,29 +63,31 @@ describe("api/import/Import", function() {
       };
       expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
 
-      //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+      //Import Session will override the primary key to be tempId )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
           },
           docs: {
             id: "tempdatalist",
-            collection: []
+            collection: [],
+            primaryKey: "someotherprimarykey"
           },
           // confidential: self.corpus.confidential,
           // decryptedMode: true,
           // debugMode: true
         }
       };
-      expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+      expect(importer.session.datalist.primaryKey).not.toEqual("someotherprimarykey");
+      expect(importer.session.datalist.primaryKey).toEqual("tempId");
 
       //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
