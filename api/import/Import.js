@@ -247,9 +247,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               pipeline(options);
             } else {
               // self.debug("readUri corpus", self);
-              self.corpus.newDatum().then(function(datum) {
+              self.corpus.newDatumAsync().then(function(datum) {
                 options.datum = datum;
-
                 pipeline(options);
               });
             }
@@ -905,10 +904,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return this;
       }
       if (!value || !value || !value.docs || !value.docs.primaryKey || value.docs.primaryKey !== "tempId") {
-        console.warn("  not setting the datalist, its missing some stuff ", value);
+        this.warn("  not setting the datalist, its missing some stuff ", value);
         return this;
       }
-      console.warn("  setting the _session.datalist", value.docs.primaryKey);
+      this.debug("  setting the _session.datalist", value.docs.primaryKey);
       this._session.datalist = value;
       return this;
     }
@@ -917,7 +916,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   session: {
     get: function() {
       if (!this._session) {
-        console.warn("There's no session!");
+        this.debug("There's no session!");
         return;
       }
       this.debug("getting the _session", this._session.datalist);
@@ -928,10 +927,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return this;
       }
       if (!value || !value.datalist || !value.datalist.docs || !value.datalist.docs.primaryKey || value.datalist.docs.primaryKey !== "tempId") {
-        console.warn("  not setting the session, its missing some stuff ", value);
+        this.warn("  not setting the session on import, its missing some stuff ", value);
         return this;
       }
-      console.warn("  setting the _session", value.datalist.docs.primaryKey);
+      this.debug("  setting the _session", value.datalist.docs.primaryKey);
       if (!(value instanceof Session)) {
         value = new Session(value);
       }
