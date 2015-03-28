@@ -592,7 +592,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
         return;
       }
-      this.todo(" adding docs to existing docs, instead of reseting it.");
+      this.todo(" test this, adding docs to existing docs, instead of reseting it.");
       this._datalist.docs.add(value);
     }
   },
@@ -740,7 +740,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         this._datalist.api = api;
       }
 
-      this.todo("Using reindexFromApi on datalists instead");
+      this.debug("Using reindexFromApi on datalists instead");
       this.fetching = this.loading = true;
       if (typeof this._datalist.reindexFromApi !== "function") {
         this.warn("THis dataalist isnt real  throwing error... ", this, this._datalist);
