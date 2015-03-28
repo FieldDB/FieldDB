@@ -710,22 +710,22 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         } else {
           optionalAllFields.add(DEFAULT_CORPUS_MODEL.datumFields);
         }
-        // if (this.participantFields && this.participantFields.length > 0 && this.participantFields.toJSON) {
-        //   optionalAllFields.add(this.participantFields.toJSON());
-        // } else {
-        //   optionalAllFields.add(DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields);
-        // }
-        // if (this.speakerFields && this.speakerFields.length > 0 && this.speakerFields.toJSON) {
-        //   optionalAllFields.add(this.speakerFields.toJSON());
-        // } else {
-        //   optionalAllFields.add(DEFAULT_CORPUS_MODEL.speakerFields);
-        // }
-        // if (this.conversationFields && this.conversationFields.length > 0 && this.conversationFields.toJSON) {
-        //   optionalAllFields.add(this.conversationFields.toJSON());
-        // } else {
-        //   optionalAllFields.add(DEFAULT_CORPUS_MODEL.conversationFields);
-        // }
-        this.warn("Using a clone of the corpus fields. ", optionalAllFields);
+        if (this.participantFields && this.participantFields.length > 0 && this.participantFields.toJSON) {
+          optionalAllFields.add(this.participantFields.toJSON());
+        } else {
+          optionalAllFields.add(DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL.participantFields);
+        }
+        if (this.speakerFields && this.speakerFields.length > 0 && this.speakerFields.toJSON) {
+          optionalAllFields.add(this.speakerFields.toJSON());
+        } else {
+          optionalAllFields.add(DEFAULT_CORPUS_MODEL.speakerFields);
+        }
+        if (this.conversationFields && this.conversationFields.length > 0 && this.conversationFields.toJSON) {
+          optionalAllFields.add(this.conversationFields.toJSON());
+        } else {
+          optionalAllFields.add(DEFAULT_CORPUS_MODEL.conversationFields);
+        }
+        this.debug("Using a clone of the corpus fields. ", optionalAllFields);
       }
       var correspondingDatumField = optionalAllFields.find(field, null, true);
       /* if there is no corresponding field yet in the optionalAllFields, then maybe there is a field which is normalized to this label */
