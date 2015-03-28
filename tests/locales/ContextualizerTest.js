@@ -10,7 +10,7 @@ describe("Contextualizer", function() {
 
   afterEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
     mockDatabase = {
@@ -23,7 +23,7 @@ describe("Contextualizer", function() {
 
   beforeEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
     mockDatabase = {
