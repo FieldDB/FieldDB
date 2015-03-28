@@ -6,7 +6,7 @@ var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 var Q = require("q");
 
-console.log("Requireing FieldDBObject from session library ", FieldDBObject);
+// console.log("Requireing FieldDBObject from datalist library ", FieldDBObject);
 
 /**
  * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
@@ -39,7 +39,7 @@ var DataList = function DataList(options) {
   this.debug("   Constructed datalist ", this);
 };
 
-console.log("DataList constructor", DataList);
+// console.log("DataList constructor", DataList);
 
 DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {
   constructor: {
@@ -237,17 +237,30 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       var self = this,
         deferred = Q.defer();
 
-      Q.nextTick(function() {
-        deferred.resolve(self);
-      });
 
       if (!this.api) {
-        this.warn("Not reindexing from the database, this has no api.");
+        this.debug("Not reindexing from the database, this has no api.");
         Q.nextTick(function() {
           deferred.resolve(self);
         });
         return deferred.promise;
       }
+
+      if (!this.corpus || typeof this.corpus.fetchCollection !== "function") {
+        self.fetching = self.loading = false;
+        self.warn("This datalist has no corpus, it doesnt know how to find out which data are in it.");
+        Q.nextTick(function() {
+          self.docIds = self.docIds || self._docIds;
+          self.docs = self.docs || [];
+          deferred.resolve(self);
+        });
+        return deferred.promise;
+      }
+
+      Q.nextTick(function() {
+        deferred.resolve(self);
+      });
+
 
       var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
         self.fetching = self.loading = false;
@@ -255,20 +268,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         self.docs = self.docs || [];
         self.docIds = self.docIds || self._docIds;
         deferred.reject(err);
-        return self;
+        // return self;
       };
 
-      if (!this.corpus) {
-        self.fetching = self.loading = false;
-        self.warn("This datalist has no corpus, it doesnt know how to find out which data are in it.");
-        Q.nextTick(function() {
-          self.docIds = self.docIds || self._docIds;
-          self.docs = self.docs || [];
-          deferred.resolve(self);
-          return self;
-        });
-        return deferred.promise;
-      }
 
       this.fetching = this.loading = true;
       this.whenReindexedFromApi = deferred.promise;
@@ -514,4 +516,4 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
 exports.DataList = DataList;
 
-console.log("Exported DataList", exports);
+// console.log("Exported DataList", exports);
