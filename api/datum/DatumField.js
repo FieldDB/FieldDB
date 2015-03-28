@@ -503,7 +503,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       if (!value || value === this._encryptedValue) {
         return;
       }
-      this.warn(this.id + " cannot be changed directly, instead you must be in decryptedMode ");
+      if (this._encryptedValue) {
+        this.warn(this.id + " cannot be changed directly, instead you must be in decryptedMode ");
+      }
       this.debug(" not setting " + value);
     }
   },
