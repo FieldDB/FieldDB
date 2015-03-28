@@ -1,9 +1,12 @@
-var Datum = require("./../datum/Datum").Datum;
+console.log("Loading DataList.js");
+
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
 var Q = require("q");
+
+console.log("Requireing FieldDBObject from session library ", FieldDBObject);
 
 /**
  * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
@@ -35,6 +38,8 @@ var DataList = function DataList(options) {
   FieldDBObject.apply(this, arguments);
   this.debug("   Constructed datalist ", this);
 };
+
+console.log("DataList constructor", DataList);
 
 DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {
   constructor: {
@@ -366,7 +371,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
       if (!this.docs || this.docs.length === 0) {
         var self = this;
-        if(typeof value.map !== "function"){
+        if (typeof value.map !== "function") {
           console.error(" trying to set docIds of datalist to something that isnt an array.", value);
           throw new Error("This is a very odd set of docIds");
         }
@@ -431,12 +436,14 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
               });
             }
           } else {
-            var obj = new Datum({
+            var obj = FieldDBObject.convertDocIntoItsType({
               dbname: self.dbname,
-              id: id
+              id: id,
+              fieldDBtype: "Datum"
             });
+            this.todo("This " + doc.fieldDBtype + " might no longer be a datum, will this affect the ability to find the audioVideo?", doc);
             obj.fetch().then(function(results) {
-              this.debug("Fetched datum to get audio file", results);
+              self.debug("Fetched datum to get audio file", results);
               if (doc.audioVideo) {
                 obj.audioVideo.map(function(audioVideoFile) {
                   audioVideoFiles.push(audioVideoFile.URL);
@@ -506,3 +513,5 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 });
 
 exports.DataList = DataList;
+
+console.log("Exported DataList", exports);
