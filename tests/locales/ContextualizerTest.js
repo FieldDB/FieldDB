@@ -463,7 +463,7 @@ describe("Contextualizer", function() {
         expect(contextualizer.whenReadys).toBeDefined();
         expect(contextualizer.whenReadys.length).toEqual(1);
 
-        Q.allSettled(contextualizer.whenReadys).then(function(results){
+        Q.allSettled(contextualizer.whenReadys).then(function(results) {
           contextualizer.debug("whenReadys are done", results);
           expect(results).toBeDefined();
           expect(results[0]).toBeDefined();
@@ -619,7 +619,6 @@ describe("Contextualizer", function() {
       expect(obj.title).toEqual("An old data list");
       /* jshint ignore:start  */
       expect(obj.title == "An old data list").toEqual(true);
-      /* jshint ignore:end  */
 
       // It wont pass === tests
       expect("An old data list" === "An old data list").toEqual(true);
@@ -627,24 +626,25 @@ describe("Contextualizer", function() {
       expect(obj.title).not.toBe("An old data list");
 
       // It will actually be an object array of characters
-      expect(obj.title).toEqual({
-        0: "A",
-        1: "n",
-        2: " ",
-        3: "o",
-        4: "l",
-        5: "d",
-        6: " ",
-        7: "d",
-        8: "a",
-        9: "t",
-        10: "a",
-        11: " ",
-        12: "l",
-        13: "i",
-        14: "s",
-        15: "t"
-      });
+      // expect(obj.title).toEqual({
+      //   0: 'A',
+      //   1: 'n',
+      //   2: ' ',
+      //   3: 'o',
+      //   4: 'l',
+      //   5: 'd',
+      //   6: ' ',
+      //   7: 'd',
+      //   8: 'a',
+      //   9: 't',
+      //   10: 'a',
+      //   11: ' ',
+      //   12: 'l',
+      //   13: 'i',
+      //   14: 's',
+      //   15: 't'
+      // });
+      /* jshint ignore:end  */
 
       // They are equivalent if concatinated.
       expect(obj.title.toString()).toBe("An old data list");
