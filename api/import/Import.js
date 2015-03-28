@@ -352,9 +352,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             }
             return obj.id;
           };
+          // this.debugMode = true;
           for (columnIndex = 0; columnIndex < self.extractedHeaderObjects.length; columnIndex++) {
             fieldLabelFromExtractedHeader = self.extractedHeaderObjects[columnIndex].id || self.extractedHeaderObjects[columnIndex];
-            // self.debugMode = true;
             correspondingDatumField = self.normalizeImportFieldWithExistingCorpusFields(fieldLabelFromExtractedHeader);
 
             if (correspondingDatumField && correspondingDatumField.id) {
@@ -371,6 +371,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             self.debug("setting extractedHeaderObjects was once problematic", self.extractedHeaderObjects[columnIndex], correspondingDatumField);
             self.extractedHeaderObjects[columnIndex] = correspondingDatumField;
           }
+          // this.debugMode = false;
         } catch (e) {
           this.warn(e);
           this.warn(e.stack);
@@ -919,7 +920,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         this.debug("There's no session!");
         return;
       }
-      this.debug("getting the _session", this._session.datalist);
+      this.debug("getting the _session", this._session);
       return this._session;
     },
     set: function(value) {
