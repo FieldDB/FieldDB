@@ -398,7 +398,7 @@ describe("Activities", function() {
     }, specIsRunningTooLong);
   });
 
-  xit("should show my most recent team's activities by default.", function() {
+  it("should show my most recent team's activities by default.", function() {
     expect(true).toBeTruthy();
   });
 

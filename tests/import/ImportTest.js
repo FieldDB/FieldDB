@@ -48,10 +48,10 @@ describe("api/import/Import", function() {
       importer.session = null;
       expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
 
-      //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+      //Session can only be overwritten by valid sessions (with a datalist that has docs )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
@@ -63,29 +63,31 @@ describe("api/import/Import", function() {
       };
       expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
 
-      //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
+      //Import Session will override the primary key to be tempId )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
           },
           docs: {
             id: "tempdatalist",
-            collection: []
+            collection: [],
+            primaryKey: "someotherprimarykey"
           },
           // confidential: self.corpus.confidential,
           // decryptedMode: true,
           // debugMode: true
         }
       };
-      expect(importer.session.dateCreated).toEqual(sessionCreatedDateIndicatesItDidntChange);
+      expect(importer.session.datalist.primaryKey).not.toEqual("someotherprimarykey");
+      expect(importer.session.datalist.primaryKey).toEqual("tempId");
 
       //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
       importer.session = {
         fields: [],
-        title: "This shoudl become the goal",
+        title: "This should become the goal",
         datalist: {
           title: {
             default: "Imported Data"
@@ -467,7 +469,7 @@ describe("api/import/Import", function() {
     beforeEach(function() {
       importer = new Import({
         importType: "participants",
-        corpus: new Corpus(Corpus.prototype.defaults)
+        corpus: new Corpus(Corpus.prototype.defaults_psycholinguistics)
       });
     });
 
@@ -484,6 +486,28 @@ describe("api/import/Import", function() {
     });
 
     it("should normalize french fields to their english equivalents", function() {
+      var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
+      expect(normalizedField.id).toEqual("anonymousCode");
+      expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+    });
+
+  });
+
+  describe("Build fields using fields appropriate to the import type", function() {
+    var importer;
+    beforeEach(function() {
+      importer = new Import({
+        importType: "participants",
+        corpus: new Corpus(Corpus.prototype.defaults)
+      });
+    });
+
+    it("should create import fields based on import types", function() {
+      expect(importer.importFields).toBeDefined();
+      // expect(importer.importFields.translation).toBeUndefined();
+      expect(importer.importFields.anonymouscode).toBeDefined();
+
       var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
       expect(normalizedField.id).toEqual("anonymousCode");
       expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
@@ -586,7 +610,7 @@ describe("api/import/Import", function() {
     }, specIsRunningTooLong);
 
 
-    xit("should refuse to import participants if the corpus confidential is not ready", function(done) {
+    it("should refuse to import participants if the corpus confidential is not ready", function(done) {
       var importer = new Import({
         rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
         importType: "participants"
@@ -603,7 +627,7 @@ describe("api/import/Import", function() {
     }, specIsRunningTooLong);
 
 
-    xit("should not refuse to import participants if the corpus confidential is ready", function(done) {
+    it("should not refuse to import participants if the corpus confidential is ready", function(done) {
       var importer = new Import({
         corpus: corpus,
         rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
@@ -619,13 +643,12 @@ describe("api/import/Import", function() {
       expect(importer.rawText).toBeDefined();
 
       importer.convertMatrixIntoDataList().then(function() {
-        expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
+        expect(false).toBeTruthy();
       }, function(reason) {
         importer.debug(reason);
-        expect(reason).toEqual(" ");
-        expect(false).toBeTruthy();
+        expect(reason.userFriendlyErrors).toEqual(["There was nothing to import. Are you sure you ran step 1?"]);
         expect(importer.datalist.docs).toBeDefined();
-        expect(importer.datalist.docs.length).toEqual(" ");
+        expect(importer.datalist.docs.length).toEqual(0);
 
       }).done(done);
     }, specIsRunningTooLong);
@@ -679,6 +702,7 @@ describe("api/import/Import", function() {
 
         /* make sure that the doc is a participant */
         expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
+        expect(importer.datalist.docs._collection[1].fieldDBtype).toEqual("Participant");
         expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
         expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
         expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);

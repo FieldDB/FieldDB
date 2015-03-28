@@ -13,7 +13,7 @@ describe("lib/DatumFields", function() {
 
   afterEach(function() {
     if (FieldDBObject.application) {
-      console.log("Cleaning up.");
+      // console.log("Cleaning up.");
       FieldDBObject.application = null;
     }
   });
