@@ -145,7 +145,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
       };
 
       Q.nextTick(function() {
-        if(self.peripheralsCheckRunning){
+        if (self.peripheralsCheckRunning) {
           deferred.reject("Already running");
           return;
         }
@@ -153,12 +153,17 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
         var waitUntilVideoElementIsRendered = function() {
           if (!optionalElements) {
-            optionalElements = {
-              image: document.getElementById("video-snapshot"),
-              video: document.getElementById("video-preview"),
-              audio: document.getElementById("audio-preview"),
-              canvas: document.getElementById("video-snapshot-canvas"),
-            };
+            try {
+              optionalElements = {
+                image: document.getElementById("video-snapshot"),
+                video: document.getElementById("video-preview"),
+                audio: document.getElementById("audio-preview"),
+                canvas: document.getElementById("video-snapshot-canvas"),
+              };
+            } catch (e) {
+              this.warn("There is no DOM, cant run peripheralsCheck unless the elements are supplied ");
+              this.debug(e);
+            }
           }
           if (!optionalElements.canvas) {
             errorInAudioVideoPeripheralsCheck("video-snapshot-canvas is not present, cant verify peripheralsCheck");
@@ -340,29 +345,34 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           // var xhr = new XMLHttpRequest();
           var url = event.target.result;
 
-          // Add audio element and download URL to page.
-          var showAudioArea = document.createElement("p");
-          var au = document.createElement("audio");
-          au.classList = ["fielddb-audio-temp-play-audio"];
-          var hf = document.createElement("a");
-          hf.classList = ["fielddb-audio-temp-save-link"];
-          hf.innerText = "Save to this device";
-          au.controls = true;
-          au.src = url;
-          hf.href = url;
-          hf.download = mp3Name;
-          hf.innerHTML = mp3Name;
-          showAudioArea.appendChild(au);
-          au.play();
-          showAudioArea.appendChild(hf);
-          console.log("todo dont need to append this audio after upload");
+          try {
+            // Add audio element and download URL to page.
+            var showAudioArea = document.createElement("p");
+            var au = document.createElement("audio");
+            au.classList = ["fielddb-audio-temp-play-audio"];
+            var hf = document.createElement("a");
+            hf.classList = ["fielddb-audio-temp-save-link"];
+            hf.innerText = "Save to this device";
+            au.controls = true;
+            au.src = url;
+            hf.href = url;
+            hf.download = mp3Name;
+            hf.innerHTML = mp3Name;
+            showAudioArea.appendChild(au);
+            au.play();
+            showAudioArea.appendChild(hf);
+            console.log("todo dont need to append this audio after upload");
 
-          element.appendChild(showAudioArea);
-          callingContext.parent.addFile({
-            filename: mp3Name,
-            description: "Recorded using spreadsheet app",
-            data: url
-          });
+            element.appendChild(showAudioArea);
+            callingContext.parent.addFile({
+              filename: mp3Name,
+              description: "Recorded using spreadsheet app",
+              data: url
+            });
+          } catch (e) {
+            this.warn("There is no DOM, cant show audio player");
+            this.debug(e);
+          }
           // callingContext.status += "\nmp3name = " + mp3Name;
           // fd.append("filename", encodeURIComponent(mp3Name));
 
@@ -377,7 +387,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           //   console.warn("dont clear if upload fialed");
           // };
           // xhr.send(fd);
-            recorder.clear();
+          recorder.clear();
         };
         reader.readAsDataURL(mp3Data);
 

@@ -97,22 +97,27 @@ AudioPlayer.prototype = Object.create(Object.prototype, /** @lends AudioPlayer.p
         this._src = value;
         this.mediaController = CordovaAudio;
       } else {
-        if (!value.match(/^[^:]+:\/\//)) {
-          this._src = document.location.href.replace(document.location.pathname, "/" + value);
-        } else {
-          this._src = value;
-        }
-        if (!this.mediaController._audioElement) {
-          //Try to use the full path to the audio file if its a relative path
-          if (document.getElementById(this._src)) {
-            this.mediaController._audioElement = document.getElementById(this._src);
+        try {
+          if (!value.match(/^[^:]+:\/\//)) {
+            this._src = document.location.href.replace(document.location.pathname, "/" + value);
           } else {
-            var audio = document.createElement("audio");
-            audio.setAttribute("id", this._src);
-            //todo set hidden?
-            document.body.appendChild(audio);
-            this.mediaController._audioElement = audio;
+            this._src = value;
           }
+          if (!this.mediaController._audioElement) {
+            //Try to use the full path to the audio file if its a relative path
+            if (document.getElementById(this._src)) {
+              this.mediaController._audioElement = document.getElementById(this._src);
+            } else {
+              var audio = document.createElement("audio");
+              audio.setAttribute("id", this._src);
+              //todo set hidden?
+              document.body.appendChild(audio);
+              this.mediaController._audioElement = audio;
+            }
+          }
+        } catch (e) {
+          this.warn("There is no DOM, cant set audio src");
+          this.debug(e);
         }
       }
 

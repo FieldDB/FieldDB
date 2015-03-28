@@ -94,7 +94,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         event.initEvent(eventChannelName, true, true);
         document.dispatchEvent(event);
       } catch (e) {
-        this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.", e);
+        this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.");
+        this.debug(" error ", e);
       }
     }
   },
