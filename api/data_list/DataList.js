@@ -33,6 +33,7 @@ var DataList = function DataList(options) {
     // this.debug("DataList comments", options.comments);
   }
   FieldDBObject.apply(this, arguments);
+  this.debug("   Constructed datalist ", this);
 };
 
 DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.prototype */ {
@@ -365,6 +366,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
       if (!this.docs || this.docs.length === 0) {
         var self = this;
+        if(typeof value.map !== "function"){
+          console.error(" trying to set docIds of datalist to something that isnt an array.", value);
+          throw new Error("This is a very odd set of docIds");
+        }
         value.map(function(docPrimaryKey) {
           var docPlaceholder = {};
           docPlaceholder[self.primaryKey] = docPrimaryKey;
