@@ -91,7 +91,6 @@ describe("App", function() {
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
@@ -133,7 +132,6 @@ describe("App", function() {
       // console.log(processingPromise);
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
