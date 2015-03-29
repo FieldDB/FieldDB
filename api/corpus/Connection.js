@@ -172,43 +172,22 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         value = value.trim();
 
         if (value !== "default") {
-          var pieces = value.replace(/-activity_feed$/, "").split("-");
+          var pieces = value.split("-");
           var username = pieces.shift();
           var corpusidentifier = pieces.join("-");
 
-          username = Connection.validateIdentifier(username);
+          username = Connection.validateUsername(username);
           corpusidentifier = Connection.validateIdentifier(corpusidentifier);
 
-          var dbType = this.guessDbType(value);
-
-          if (value.indexOf("activity_feed") > -1) {
-            if (value.split("-").length >= 3) {
-              dbType = "corpus_activity_feed";
-            } else {
-              dbType = "user_activity_feed";
-            }
-          } else {
-            dbType = "corpus";
+          if (username.changes && username.changes.length >0) {
+            this.warn(username.changes.join("; "), username.originalIdentifier);
+          }
+          if (corpusidentifier.changes && corpusidentifier.changes.length >0) {
+            this.warn(corpusidentifier.changes.join("; "), corpusidentifier.originalIdentifier);
           }
 
-          if (dbType === "corpus") {
-            if (corpusidentifier.identifier.length < 2) {
-              this.warn("Database names should be composed of a username-datbaseidentifier : " + value);
-              return;
-              // throw new Error("Database names should be composed of a username-datbaseidentifier : " + value);
-            }
-            if (corpusidentifier.changes.length > 0) {
-              this.warn(" Invalid identifier ", corpusidentifier.changes.join("\n "));
-              this.warn(corpusidentifier.changes.join("\n "));
-              return;
-              // throw new Error(corpusidentifier.changes.join("\n "));
-            }
-            value = username.identifier + "-" + corpusidentifier.identifier;
-          } else if (dbType === "corpus_activity_feed") {
-            value = username.identifier + "-" + corpusidentifier.identifier + "-activity_feed";
-          } else if (dbType === "user_activity_feed") {
-            value = username.identifier + "-activity_feed";
-          }
+          value = username.identifier + "-" + corpusidentifier.identifier;
+
         }
       }
       this._dbname = value;
@@ -493,7 +472,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
+Connection.defaultConnection = function(optionalHREF) {
   var localhost = {
     protocol: "https://",
     domain: "localhost",
@@ -611,26 +590,23 @@ Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
     console.warn("The user is trying to use a server which is unknown to the system. Attempting to construct its connection. ", optionalHREF);
     var connectionUrlObject;
     try {
-      OptionalURLParser = OptionalURLParser || URL;
+      if (!Connection.URLParser) {
+        Connection.URLParser = URL;
+      }
     } catch (e) {
       console.log("Cant figure out what the URL parser is");
-      try {
-        OptionalURLParser = require("url");
-      } catch (e) {
-        console.log("wasnt able to require URL either, this wont work.");
-        OptionalURLParser = {
-          parse: function(url) {
-            console.warn("Not parsing this url", url);
-            return {};
-          }
-        };
-      }
+      Connection.URLParser = {
+        parse: function(url) {
+          console.warn("Not parsing this url", url);
+          return {};
+        }
+      };
     }
     try {
-      connectionUrlObject = new OptionalURLParser(optionalHREF);
+      connectionUrlObject = new Connection.URLParser(optionalHREF);
     } catch (e) {
-      console.warn("Cant use new OptionalURLParser() in this environment.", e);
-      connectionUrlObject = OptionalURLParser.parse(optionalHREF);
+      console.warn("Cant use new Connection.URLParser() in this environment.", e);
+      connectionUrlObject = Connection.URLParser.parse(optionalHREF);
       // console.log(connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
@@ -667,7 +643,7 @@ Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
 Connection.validateIdentifier = function(originalIdentifier, username) {
   if (!originalIdentifier) {
     return {
-      changes: "Identifier was empty"
+      changes: ["Identifier was empty"]
     };
   }
   var identifier = originalIdentifier.toString();
@@ -680,11 +656,11 @@ Connection.validateIdentifier = function(originalIdentifier, username) {
   if (identifier.split("-").length > 1) {
     if (username) {
       identifier = identifier.replace(/-/g, "");
+      changes.push("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
     } else {
-      // permit the first - which seperates username from corpus
-      identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
+      // permit the all - which might be in the username or the database
+      // identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
     }
-    changes.push("We are using - as a reserved symbol in database names, so you can't use it in your identifier.");
   }
 
   if (Diacritics.clean(identifier) !== identifier) {
@@ -694,7 +670,11 @@ Connection.validateIdentifier = function(originalIdentifier, username) {
 
   if (identifier.replace(/[^a-z0-9_-]/g, "_") !== identifier) {
     changes.push("You have some characters which web servers wouldn't trust in your identifier.");
-    identifier = identifier.replace(/[^a-z0-9_]/g, "_");
+    if (username) {
+      identifier = identifier.replace(/[^a-z0-9_-]/g, "");
+    } else {
+      identifier = identifier.replace(/[^a-z0-9_-]/g, "_");
+    }
   }
 
   if (identifier.length < 2) {
@@ -711,9 +691,10 @@ Connection.validateIdentifier = function(originalIdentifier, username) {
     "changes": changes
   };
 };
+
 Connection.validateUsername = function(originalIdentifier) {
   return Connection.validateIdentifier(originalIdentifier, "username");
-}
+};
 
 
 /**

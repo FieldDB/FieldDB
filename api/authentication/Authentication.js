@@ -466,7 +466,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           return;
         }
 
-        var validateUsername = Connection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateUsername(details.username);
         if (validateUsername.changes.length > 0) {
           details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));

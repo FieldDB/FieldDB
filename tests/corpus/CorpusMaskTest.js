@@ -4,6 +4,8 @@ var Connection = require("../../api/corpus/Connection").Connection;
 var Corpora = require("../../api/corpus/Corpora").Corpora;
 var URL = require("url");
 
+Connection.URLParser = require("url");
+
 describe("CorpusMask ", function() {
 
   afterEach(function() {
