@@ -664,7 +664,7 @@ Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
  * @param  {string} originalIdentifier the desired dbname or username
  * @return {object}                  the resulting dbname or username, the original dbname, and the changes that were applied.
  */
-Connection.validateIdentifier = function(originalIdentifier) {
+Connection.validateIdentifier = function(originalIdentifier, username) {
   if (!originalIdentifier) {
     return {
       changes: "Identifier was empty"
@@ -678,8 +678,13 @@ Connection.validateIdentifier = function(originalIdentifier) {
   }
 
   if (identifier.split("-").length > 1) {
+    if (username) {
+      identifier = identifier.replace(/-/g, "");
+    } else {
+      // permit the first - which seperates username from corpus
+      identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
+    }
     changes.push("We are using - as a reserved symbol in database names, so you can't use it in your identifier.");
-    identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
   }
 
   if (Diacritics.clean(identifier) !== identifier) {
@@ -706,7 +711,9 @@ Connection.validateIdentifier = function(originalIdentifier) {
     "changes": changes
   };
 };
-
+Connection.validateUsername = function(originalIdentifier) {
+  return Connection.validateIdentifier(originalIdentifier, "username");
+}
 
 
 /**

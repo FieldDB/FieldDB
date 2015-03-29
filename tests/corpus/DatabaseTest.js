@@ -229,7 +229,7 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
+          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llamafriend_s the following are a list of reason's why.",
           "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
           "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
           "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
@@ -394,7 +394,7 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
+          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llamafriend_s the following are a list of reason's why.",
           "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
           "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
           "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
