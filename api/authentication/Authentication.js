@@ -34,6 +34,9 @@ var Authentication = function Authentication(options) {
 
   this.loading = true;
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
+
+    CORS.application = FieldDB.FieldDBObject.application;
+
     self.loading = false;
     self.debug(user);
     self.user = user;
