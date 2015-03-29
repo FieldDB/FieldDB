@@ -19,7 +19,7 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
 
       document.addEventListener("logout", function (e) {
         console.log(e);
-        $scope.application.bug("user has logged out, reload the page to clear state and take them to the welcome page.");
+        $scope.application.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
       }, false);
 
       document.addEventListener("notauthenticated", function (e) {
