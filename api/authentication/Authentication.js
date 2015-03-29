@@ -41,6 +41,9 @@ var Authentication = function Authentication(options) {
     if (self.user._rev) {
       self.user.authenticated = true;
       self.dispatchEvent("authenticated");
+    }else {
+      self.user.authenticated = false;
+      self.dispatchEvent("notauthenticated");
     }
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
@@ -361,7 +364,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         if (!this._user._rev) {
           overwriteOrNot = "overwrite";
         }
-        this._user.merge("self", new User(value), overwriteOrNot);
+        this._user.merge("self", value, overwriteOrNot);
       } else {
         this.debug("Setting the user");
         this._user = new User(value);
