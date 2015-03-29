@@ -156,8 +156,16 @@
       brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
       try {
         window[brandname] = FieldDB;
+
+        // Inject browser URL as the URL parser.
+        Connection.URLParser = URL;
+
       } catch (e) {
         console.warn("Couldnt attach the FieldDB library as " + brandname, e);
+
+        // Inject nodejs URL as the URL parser.
+        Connection.URLParser = require("url");
+
       }
     }
     console.log("-----------------------------------------------------");

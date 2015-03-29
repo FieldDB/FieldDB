@@ -379,7 +379,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
        * Letting the url determine which team is loaded
        */
       if (routeParams.team) {
-        routeParams.team = Connection.validateIdentifier(routeParams.team).identifier;
+        routeParams.team = Connection.validateUsername(routeParams.team).identifier;
 
         /*
          * Letting the url determine which corpus is loaded

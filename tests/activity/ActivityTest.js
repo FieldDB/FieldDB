@@ -139,7 +139,7 @@ describe("Activities", function() {
         userFriendlyServerName: "Localhost"
       });
       expect(activityFeed).toBeDefined();
-      expect(activityFeed.dbname).toEqual("jenkins-another-corpus_with_dashes_in_its_name-activity_feed");
+      expect(activityFeed.dbname).toEqual("jenkins-another-corpus-with-dashes-in-its-name-activity_feed");
 
     });
 
@@ -222,7 +222,7 @@ describe("Activities", function() {
         teamOrPersonal: "personal"
       });
       expect(activityFeed.length).toEqual(1);
-      expect(activity.dbname).toEqual("jenkins-testing-via_jasmine_node-activity_feed");
+      expect(activity.dbname).toEqual("jenkins-testing-via-jasmine-node-activity_feed");
     });
 
   });

@@ -223,18 +223,16 @@ describe("Database", function() {
     it("should return instructions is user enters an impossible username", function(done) {
       var db = new Database();
       db.login({
-        username: "Ling Llamâ-friend's",
+        username: "Ling Llamâ's-friend",
         password: "phoneme"
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llamafriend_s the following are a list of reason's why.",
-          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
-          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
-          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
-          "You have some characters which web servers wouldn't trust in your identifier."
-        ]);
+        expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
+        expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
+        expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
+        expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
+        expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -387,19 +385,17 @@ describe("Database", function() {
     it("should return instructions is user enters an impossible username", function(done) {
       var db = new Database();
       db.register({
-        username: "Ling Llamâ-friend's",
+        username: "Ling Llamâ's-friend",
         password: "phoneme",
         confirmPassword: "phoneme"
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llamafriend_s the following are a list of reason's why.",
-          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
-          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
-          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
-          "You have some characters which web servers wouldn't trust in your identifier."
-        ]);
+        expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
+        expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
+        expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
+        expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
+        expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).done(done);
 
     }, specIsRunningTooLong);
