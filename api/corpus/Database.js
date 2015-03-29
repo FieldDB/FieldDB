@@ -444,7 +444,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
   getCouchUrl: {
     value: function() {
-      return this.connectioncorpusUrl;
+      return this.corpusUrl;
     }
   },
 
@@ -464,9 +464,14 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
+        var usernameField = "name";
         details.authUrl = self.deduceAuthUrl(details.authUrl);
+        if (details.authUrl.indexOf("/_session") === -1 && details.authUrl.indexOf("/login") === -1) {
+          details.authUrl = details.authUrl + "/login";
+          usernameField = "username";
+        }
 
-        if (!details.username) {
+        if (!details[usernameField]) {
           deferred.reject({
             details: details,
             userFriendlyErrors: ["Please supply a username."],
@@ -474,6 +479,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           });
           return;
         }
+
+        if (!details.name && details.authUrl.indexOf("/_session") > -1) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+
         if (!details.password) {
           deferred.reject({
             details: details,
@@ -483,9 +498,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        var validateUsername = Connection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateIdentifier(details[usernameField]);
         if (validateUsername.changes.length > 0) {
-          details.username = validateUsername.identifier;
+          details[usernameField] = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
@@ -498,72 +513,20 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: details.authUrl + "/login",
+          url: details.authUrl,
           data: details
-        }).then(function(authserverResult) {
-            if (authserverResult.user) {
-              var corpusServersWhichHouseUsersCorpora = [];
-              self.todo("move the logic to connect to all the users corpora to the authentication level instead.");
-              if (authserverResult.user.corpora && authserverResult.user.corpora[0]) {
-                authserverResult.user.corpora.map(function(connection) {
-                  connection.dbname = connection.dbname || connection.pouchname;
-                  var addThisServerIfNotAlreadyThere = function(url) {
-                    var couchdbSessionUrl = url.replace(connection.dbname, "_session");
-                    if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
-                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
-                    } else if (self.dbname && connection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
-                      corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
-                    }
-                  };
-
-                  if (connection.corpusUrls) {
-                    connection.corpusUrls.map(addThisServerIfNotAlreadyThere);
-                  } else {
-                    addThisServerIfNotAlreadyThere(self.getCouchUrl(connection, "/_session"));
-                  }
-
-                });
+        }).then(function(authOrCorpusServerResult) {
+            if (authOrCorpusServerResult && authOrCorpusServerResult.user) {
+              if (authOrCorpusServerResult.info && authOrCorpusServerResult.info[0] === "Preferences saved." && self.application.authentication) {
+                self.application.authentication = "Welcome back " + authOrCorpusServerResult.user.username;
               }
-
-              if (corpusServersWhichHouseUsersCorpora.length < 1) {
-                this.warn("This user has no corpora, this is strange.");
-              }
-              self.debug("Requesting session token for all corpora user has access to.");
-              var promises = [];
-              authserverResult.user.roles = [];
-              for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServersWhichHouseUsersCorpora.length; corpusUrlIndex++) {
-                promises.push(CORS.makeCORSRequest({
-                  type: "POST",
-                  dataType: "json",
-                  url: corpusServersWhichHouseUsersCorpora[corpusUrlIndex],
-                  data: {
-                    name: authserverResult.user.username,
-                    password: details.password
-                  }
-                }));
-              }
-
-              Q.allSettled(promises).then(function(results) {
-                results.map(function(result) {
-                  if (result.state === "fulfilled") {
-                    authserverResult.user.roles = authserverResult.user.roles.concat(result.value.roles);
-                  } else {
-                    self.debug("Failed to login to one of the users's corpus servers ", result);
-                  }
-                });
-                deferred.resolve(authserverResult.user);
-              });
-
-              // .then(function(sessionInfo) {
-              //   // self.debug(sessionInfo);
-              //   result.user.roles = sessionInfo.roles;
-              //   deferred.resolve(result.user);
-              // }, function() {
-              //   self.debug("Failed to login ");
-              //   deferred.reject("Something is wrong.");
-              // });
+              deferred.resolve(authOrCorpusServerResult.user);
+            } else if (authOrCorpusServerResult && authOrCorpusServerResult.roles) {
+              deferred.resolve(authOrCorpusServerResult);
             } else {
-              deferred.reject(authserverResult.userFriendlyErrors.join(" "));
+              authOrCorpusServerResult = authOrCorpusServerResult || {};
+              authOrCorpusServerResult.userFriendlyErrors = authOrCorpusServerResult.userFriendlyErrors || [" Unknown response from server, please report this."];
+              deferred.reject(authOrCorpusServerResult.userFriendlyErrors.join(" "));
             }
           },
           function(reason) {

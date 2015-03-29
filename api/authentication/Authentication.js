@@ -136,45 +136,129 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.status = "";
       this.loading = true;
 
-      self.resumingSessionPromise = Database.prototype.login(dataToPost).then(function(userDetails) {
-          self.loading = false;
+      var handleFailedLogin = function(error) {
+        self.loading = false;
+        if (!error || !error.userFriendlyErrors) {
+          error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
+        }
+        self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
+        self.error = error.userFriendlyErrors.join(" ");
+        deferred.reject(error);
+      };
 
-          if (!userDetails) {
-            deferred.reject({
-              error: userDetails,
-              status: 500,
-              userFriendlyErrors: ["Unknown error. Please report this 2391."]
+      self.resumingSessionPromise = deferred.promise;
+      Database.prototype.login(dataToPost)
+        .then(function(userDetails) {
+
+            if (!userDetails) {
+              self.loading = false;
+              deferred.reject({
+                error: userDetails,
+                status: 500,
+                userFriendlyErrors: ["Unknown error. Please report this 2391."]
+              });
+              return;
+            }
+
+            try {
+              self.user = userDetails;
+            } catch (e) {
+              console.warn("There was a problem assigning the user. ", e);
+            }
+            self.authenticateWithAllCorpusServers(loginDetails).then(function() {
+              self.loading = false;
+              self.user.authenticated = true;
+              self.dispatchEvent("authenticated");
+              deferred.resolve(self.user);
+            }, function() {
+              self.loading = false;
+              deferred.resolve(self.user);
+            }).fail(function(error) {
+              self.loading = false;
+              console.error(error.stack, self);
+              deferred.resolve(self.user);
             });
-            return;
-          }
-          try {
-            self.user = userDetails;
-          } catch (e) {
-            console.warn("There was a problem assigning the user. ", e);
-          }
-          self.user.authenticated = true;
-          self.dispatchEvent("authenticated");
 
-          deferred.resolve(self.user);
-        }, //end successful login
-        function(error) {
-          self.loading = false;
-          if (!error || !error.userFriendlyErrors) {
-            error.userFriendlyErrors = ["Unknown error."];
-          }
-          self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
-          self.error = error.userFriendlyErrors.join(" ");
-          deferred.reject(error);
-        }).fail(
-        function(error) {
+          }, //end successful login
+          handleFailedLogin)
+        .fail(function(error) {
           console.error(error.stack, self);
-          deferred.reject(error);
+          handleFailedLogin(error);
         });
 
-      // Q.nextTick(function(){
-      //   deferred.reject("hi")
-      // });
+      return deferred.promise;
+    }
+  },
 
+  authenticateWithAllCorpusServers: {
+    value: function(loginDetails) {
+      var deferred = Q.defer(),
+        self = this,
+        corpusServersWhichHouseUsersCorpora = [],
+        promises = [];
+
+      if (!this.user.corpora || this.user.corpora.length === 0) {
+        Q.nextTick(function() {
+          self.bug("You don't have access to any corpora. This is strange.");
+          deferred.resolve(self.user);
+        });
+        return deferred.promise;
+      }
+
+      this.user.corpora.map(function(connection) {
+        var addThisServerIfNotAlreadyThere = function(url) {
+          var couchdbSessionUrl = url.replace(connection.dbname, "_session");
+          if (corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+            corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          }
+
+          //old logic from database.
+          // if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+          //   corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          // } else if (self.dbname && connection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+          //   corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          // }
+        };
+
+        if (connection.corpusUrls) {
+          connection.corpusUrls.map(addThisServerIfNotAlreadyThere);
+        } else {
+          addThisServerIfNotAlreadyThere(connection.corpusUrl);
+        }
+      });
+
+      if (corpusServersWhichHouseUsersCorpora.length < 1) {
+        this.bug("You don't have access to any corpora. This is strange.");
+      }
+      this.debug("Requesting session token for all corpora user has access to.");
+      this.user.roles = [];
+      for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServersWhichHouseUsersCorpora.length; corpusUrlIndex++) {
+        promises.push(Database.prototype.login({
+          authUrl: corpusServersWhichHouseUsersCorpora[corpusUrlIndex],
+          name: this.user.username,
+          password: loginDetails.password
+        }));
+      }
+
+      Q.allSettled(promises).then(function(results) {
+        results.map(function(result) {
+          if (result.state === "fulfilled" && result.value && result.value.roles) {
+            self.user.roles = self.user.roles.concat(result.value.roles);
+          } else {
+            self.debug("Failed to login to one of the users's corpus servers ", result);
+          }
+        });
+        deferred.resolve(self.user);
+      });
+
+      // .then(function(sessionInfo) {
+      //   // self.debug(sessionInfo);
+      //   result.user.roles = sessionInfo.roles;
+      //   deferred.resolve(result.user);
+      // }, function() {
+      //   self.debug("Failed to login ");
+      //   deferred.reject("Something is wrong.");
+      // });
       return deferred.promise;
     }
   },
