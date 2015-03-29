@@ -1,4 +1,4 @@
-console.log("Loading DataList.js");
+// console.log("Loading DataList.js");
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
