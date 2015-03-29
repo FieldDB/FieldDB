@@ -78,6 +78,9 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
+  // if (json instanceof this.constructor) {
+  //   return json;
+  // }
   if (!this._fieldDBtype) {
     this._fieldDBtype = "FieldDBObject";
   }
@@ -368,7 +371,7 @@ FieldDBObject.guessType = function(doc) {
       guessedType = "Session";
     } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
       guessedType = "Comment";
-    } else if (doc.symbol && doc.tipa){
+    } else if (doc.symbol && doc.tipa) {
       guessedType = "InsertUnicode";
     }
   }
@@ -429,7 +432,7 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
         return doc;
       }
       doc = new FieldDBObject(doc);
-      FieldDBObject.todo("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
+      FieldDBObject.debug("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
     }
   } catch (e) {
     FieldDBObject.debug("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
@@ -1077,13 +1080,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (!anotherObject && !optionalOverwriteOrAsk) {
         resultObject = anObject = this;
-        anotherObject = callOnSelf;
+        anotherObject = FieldDBObject.convertDocIntoItsType(callOnSelf);
       } else if (callOnSelf === "self") {
         this.debug("Merging properties into myself. ");
         anObject = this;
         resultObject = anObject;
       } else if (callOnSelf && anotherObject) {
-        anObject = callOnSelf;
+        anObject =  FieldDBObject.convertDocIntoItsType(callOnSelf);
+        anotherObject = FieldDBObject.convertDocIntoItsType(anotherObject);
         resultObject = this;
       } else {
         this.warn("Invalid call to merge, invalid arguments were provided to merge", arguments);
