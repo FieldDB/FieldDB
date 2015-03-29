@@ -162,7 +162,8 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
   "modifiedByUser",
   "_dateModified",
   "_fieldDBtype",
-  "dateModified"
+  "dateModified",
+  "updated_at"
 ]);
 
 FieldDBObject.software = {};
@@ -367,6 +368,8 @@ FieldDBObject.guessType = function(doc) {
       guessedType = "Session";
     } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
       guessedType = "Comment";
+    } else if (doc.symbol && doc.tipa){
+      guessedType = "InsertUnicode";
     }
   }
 

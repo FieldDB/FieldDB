@@ -665,6 +665,11 @@ Connection.defaultConnection = function(optionalHREF, OptionalURLParser) {
  * @return {object}                  the resulting dbname or username, the original dbname, and the changes that were applied.
  */
 Connection.validateIdentifier = function(originalIdentifier) {
+  if (!originalIdentifier) {
+    return {
+      changes: "Identifier was empty"
+    };
+  }
   var identifier = originalIdentifier.toString();
   var changes = [];
   if (identifier.toLowerCase() !== identifier) {
