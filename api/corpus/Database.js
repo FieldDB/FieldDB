@@ -498,7 +498,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        var validateUsername = Connection.validateIdentifier(details[usernameField]);
+        var validateUsername = Connection.validateUsername(details[usernameField]);
         if (validateUsername.changes.length > 0) {
           details[usernameField] = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
@@ -654,7 +654,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        var validateUsername = Connection.validateIdentifier(details.username);
+        var validateUsername = Connection.validateUsername(details.username);
         if (validateUsername.changes.length > 0) {
           details.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
