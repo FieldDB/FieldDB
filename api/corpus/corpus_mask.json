@@ -1,0 +1,235 @@
+{
+  "_id": "corpus",
+  "title": "Private Corpus",
+  "titleAsUrl": "private_corpus",
+  "description": "The details of this corpus are not public.",
+  "connection": {},
+  "activityConnection": {},
+  "termsOfUse": {
+    "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+  },
+  "license": {
+    "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+    "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+    "imageUrl": "https://i.creativecommons.org/l/by/4.0/88x31.png",
+    "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "copyright": "Default: Add names of the copyright holders of the corpus.",
+  "dbname": "",
+  "api": "corpora",
+  "comments": [],
+  "validationStati": [{
+    "validationStatus": "Checked*",
+    "color": "green",
+    "default": true
+  }, {
+    "validationStatus": "Published*",
+    "color": "blue"
+  }, {
+    "validationStatus": "ApprovedLanguageLearningContent*",
+    "color": "green",
+    "showInLanguageLearnignApps": true
+  }],
+  "tags": [{
+    "tag": "SampleData",
+    "color": "green"
+  }],
+  "datumFields": [{
+    "id": "judgement",
+    "labelFieldLinguists": "Gramaticality Judgement",
+    "labelExperimenters": "Naturalness",
+    "labelNonLinguists": "Not-a-normal-thing-to-say",
+    "labelTranslators": "Grammatical/How-normal-Is-This-Example",
+    "size": "3",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "grammatical": true
+    },
+    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
+    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
+  }, {
+    "id": "gloss",
+    "labelFieldLinguists": "Gloss",
+    "labelNonLinguists": "Word-for-word Translation",
+    "labelTranslators": "Word-for-word Translation",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "language": "",
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "Translation for each prefix, root and suffix in the words",
+    "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
+  }, {
+    "id": "syntacticCategory",
+    "labelFieldLinguists": "Morpho-Syntactic Category",
+    "labelNonLinguists": "",
+    "labelTranslators": "Part of Speech",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine, linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
+  }, {
+    "id": "relatedData",
+    "labelFieldLinguists": "Related Data",
+    "labelNonLinguists": "Linked to",
+    "labelTranslators": "Linked to",
+    "labelComputationalLinguists": "Linked Data",
+    "type": "relatedData",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "relatedData": []
+    },
+    "help": "Related data in the database, or at any web url.",
+    "helpLinguists": "Related data in the database, or at any web url.",
+    "helpDevelopers": "Related data in the database, or at any web url."
+  }, {
+    "id": "tags",
+    "labelFieldLinguists": "Tags",
+    "labelNonLinguists": "Tags",
+    "labelTranslators": "Tags",
+    "type": "tags",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
+  }, {
+    "id": "validationStatus",
+    "labelFieldLinguists": "Data validity/verification Status",
+    "labelNonLinguists": "Data validity/verification Status",
+    "labelTranslators": "Data validity/verification Status",
+    "type": "tags",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+    "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
+  }, {
+    "id": "syntacticTreeLatex",
+    "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "type": "LaTeX",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine",
+    "defaultfield": true,
+    "json": {
+      "alternates": []
+    },
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+    "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
+  }],
+  "conversationFields": [],
+  "sessionFields": [{
+    "id": "source",
+    "labelFieldLinguists": "Language Speakers/Publication/Source",
+    "labelNonLinguists": "By",
+    "labelTranslators": "Language Speakers/Publication/Source",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "users": []
+    },
+    "help": "This is a comma seperated field of all the consultants/publications/sources who were were the source/present for this elicitation session.",
+    "helpLinguists": "This is a comma seperated field of all the consultants/publications/sources who  were were the source/present for this elicitation session.",
+    "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymouse codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
+  }, {
+    "id": "dialect",
+    "type": "language",
+    "labelFieldLinguists": "Dialect",
+    "labelNonLinguists": "Dialect",
+    "labelTranslators": "Dialect",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "help": "Dialect of this example (city, village, region etc)",
+    "helpLinguists": "This dialect may precise as the team chooses (province, region, city, village or any other measure of dialect)"
+  }, {
+    "id": "register",
+    "type": "language",
+    "labelFieldLinguists": "Social Register",
+    "labelNonLinguists": "Social Register",
+    "labelTranslators": "Social Register",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "help": "Social register of this example (friends, children speaking with children, formal, religious, ceremonial etc)",
+    "helpLinguists": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial etc)"
+  }, {
+    "id": "language",
+    "type": "language",
+    "labelFieldLinguists": "Language Name",
+    "labelNonLinguists": "Language Name",
+    "labelTranslators": "Language Name (Ethnologue)",
+    "labelComputationalLinguists": "Language Name (ISO 639-3)",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    },
+    "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
+    "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
+  },{
+    "id": "dateElicited",
+    "type": "date",
+    "labelFieldLinguists": "Original Date Elicited",
+    "labelNonLinguists": "OriginalDate Spoken",
+    "labelTranslators": "Original Date Spoken/Published",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "The date when the elicitation session took place, or when the datum was spoken/published.",
+    "helpLinguists": "The date when the elicitation session took place, or when the datum was spoken/published."
+  }],
+  "speakerFields": [{
+    "id": "anonymousCode",
+    "labelFieldLinguists": "Anonymous Code",
+    "labelNonLinguists": "Anonymous Code",
+    "labelTranslators": "Anonymous Code",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "A field to anonymously identify language speakers/participants.",
+    "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc)."
+  }]
+}
