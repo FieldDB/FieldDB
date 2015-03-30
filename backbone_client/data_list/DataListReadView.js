@@ -427,8 +427,8 @@ define( [
       return datumIdsChecked;
     },
     createPlaylistAndPlayAudioVideo : function(datumIds){
-      alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
+        // alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       });
     },
     removeDatumFromThisList : function(datumIds){
