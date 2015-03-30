@@ -18,6 +18,29 @@ define([
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("UserMask init");
 
+      var self = this;
+      setTimeout(function(){
+        if(self.get("id") && !self.get("rev")){
+          self.fetch({
+            error : function(model, xhr, options) {
+              if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            },
+            success : function(model, response, options) {
+              if (OPrime.debugMode) OPrime.debug("Overwriting your UserMask in this corpus, with your UserMask from your preferences.");
+              self._rev = model.get("_rev");
+              self.set("_rev", model.get("_rev"));
+              self.save();
+
+              if(typeof successcallback == "function"){
+                successcallback();
+              }
+            }
+          });
+        }
+      }, 500);
     },
     /**
      * backbone-couchdb adaptor set up
