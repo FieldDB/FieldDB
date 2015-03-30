@@ -29,7 +29,10 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
+    "http://*.example.org/**",
     "https://*.example.org/**",
+    "http://*.dyslexdisorth.ca/**",
+    "https://*.dyslexdisorth.ca/**",
     "https://localhost:3184/**",
     "https://localhost/**"
   ]);
