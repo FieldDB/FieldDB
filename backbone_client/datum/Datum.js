@@ -175,7 +175,7 @@ define([
             descending: true,
             limit: howmany,
             error: function(model, xhr, options) {
-              OPrime.bug("There was an error loading your datums.");
+              OPrime.bug("There was an error loading your data.");
               if (typeof callback == "function") {
                 callback([]);
               }
