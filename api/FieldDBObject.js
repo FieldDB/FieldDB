@@ -371,8 +371,8 @@ FieldDBObject.guessType = function(doc) {
       guessedType = "Session";
     } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
       guessedType = "Comment";
-    } else if (doc.symbol && doc.tipa) {
-      guessedType = "InsertUnicode";
+    } else if (doc.symbol && doc.tipa !== undefined) {
+      guessedType = "UnicodeSymbol";
     }
   }
 
@@ -386,6 +386,13 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     typeofAnotherObjectsProperty = Object.prototype.toString.call(doc);
 
   if (clone) {
+    var cloneDoc;
+    if (typeof doc.clone === "function") {
+      // if (doc instanceof FieldDBObject || typeof doc.fuzzyFind === "function") {
+      // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject or Collection
+      cloneDoc = doc.clone();
+      doc = new doc.constructor(cloneDoc);
+    } else
     // Return a clone of simple types, or a new clone of the json of this object
     if (typeofAnotherObjectsProperty === "[object String]") {
       return doc + "";
@@ -396,7 +403,8 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     } else if (typeofAnotherObjectsProperty === "[object Array]") {
       return doc.concat([]);
     } else {
-      doc = doc.toJSON ? doc.toJSON() : doc;
+      clone = doc.toJSON ? doc.toJSON() : doc;
+      doc = new doc.constructor(clone);
     }
   } else {
     // Return the doc if its a simple type
@@ -409,6 +417,12 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     } else if (typeofAnotherObjectsProperty === "[object Array]") {
       return doc;
     }
+  }
+
+  if (typeof doc.debug === "function" && doc.constructor !== FieldDBObject) {
+    // if (doc instanceof FieldDBObject || typeof doc.fuzzyFind === "function") {
+    // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject or Collection
+    return doc;
   }
 
   try {
@@ -427,10 +441,6 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       doc = new FieldDB[guessedType](doc);
       // FieldDBObject.warn("Converting doc into guessed type " + guessedType);
     } else {
-      if (doc instanceof FieldDBObject) {
-        // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject
-        return doc;
-      }
       doc = new FieldDBObject(doc);
       FieldDBObject.debug("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
     }
@@ -441,10 +451,6 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     if (guessedType !== "FieldDBObject" && guessedType !== checkPreviousTypeWithoutS) {
       doc.previousFieldDBtype = doc.previousFieldDBtype || "";
       doc.previousFieldDBtype = doc.previousFieldDBtype + guessedType;
-    }
-    if (doc instanceof FieldDBObject) {
-      // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject
-      return doc;
     }
     doc = new FieldDBObject(doc);
   }
@@ -906,6 +912,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       self.debug("    Requesting corpus to run save...");
       this.saving = true;
       this.whenReady = deferred.promise;
+
+      if (true) {
+        this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.resolve(self);
+        });
+        return deferred.promise;
+      }
+
       this.corpus.set(data).then(function(result) {
           self.saving = false;
           self.debug("    Save completed...");
@@ -1086,7 +1102,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         anObject = this;
         resultObject = anObject;
       } else if (callOnSelf && anotherObject) {
-        anObject =  FieldDBObject.convertDocIntoItsType(callOnSelf);
+        anObject = FieldDBObject.convertDocIntoItsType(callOnSelf);
         anotherObject = FieldDBObject.convertDocIntoItsType(anotherObject);
         resultObject = this;
       } else {
@@ -1308,7 +1324,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if (!oldRev && (result._rev || result.rev)) {
           self.warn(self.id + " was probabbly a placeholder (didnt have .rev before fetch, but now it does) which is now filled in, calling merge with overwrite from server.");
 
-          self.merge("self", result, "overwrite");
+          self.merge("self", FieldDBObject.convertDocIntoItsType(result), "overwrite");
           // Setting the fossil causes
           // A: the merge to count as something which needs to be seaved
           // B: the user's previous changes prior to fetch might get lost
