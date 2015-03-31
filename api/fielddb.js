@@ -1,4 +1,4 @@
-/* globals window */
+/* globals window, URL */
 
 /**
  * FieldDB
