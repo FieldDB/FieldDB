@@ -265,13 +265,13 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       }
 
       if (!this._title && this.dbname) {
-        var pieces = this.dbname.split("-");
-        // if (this.dbname !== "default" && pieces.length !== 2) {
-        //   throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-        // }
-        pieces.shift();
-        var corpusidentifier = pieces.join("-");
-        this._title = corpusidentifier;
+        // var pieces = this.dbname.split("-");
+        // // if (this.dbname !== "default" && pieces.length !== 2) {
+        // //   throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
+        // // }
+        // pieces.shift();
+        // var corpusidentifier = pieces.join("-");
+        this._title = this.dbname;
       }
       return this._title;
     },
