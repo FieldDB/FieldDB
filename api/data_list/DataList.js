@@ -72,7 +72,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       comments: Comments,
       docs: DocumentCollection,
       title: ContextualizableObject,
-      description: ContextualizableObject
+      description: ContextualizableObject,
+      item: FieldDBObject
     }
   },
 
@@ -291,11 +292,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
                 self.debug("Looking at " + docPrimaryKey);
                 if (!self._docs[docPrimaryKey]) {
                   self.debug("converting " + docPrimaryKey + " into a placeholder");
-                  var docPlaceholder = {
-                    fieldDBtype: "Datum",
+                  var docPlaceholder =  new self.INTERNAL_MODELS.item({
                     dbname: self.dbname,
                     loaded: false
-                  };
+                  });
                   docPlaceholder[self.primaryKey] = docPrimaryKey;
                   self.debug("adding " + docPrimaryKey + " into the docs");
                   self._docs.add(docPlaceholder);
@@ -378,7 +378,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           throw new Error("This is a very odd set of docIds");
         }
         value.map(function(docPrimaryKey) {
-          var docPlaceholder = {};
+          var docPlaceholder = new self.INTERNAL_MODELS.item({
+            dbname: self.dbname,
+            loaded: false
+          });
           docPlaceholder[self.primaryKey] = docPrimaryKey;
           self.add(docPlaceholder);
         });

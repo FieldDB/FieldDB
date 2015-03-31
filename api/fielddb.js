@@ -25,6 +25,7 @@
   CORS.bug = FieldDBObject.prototype.bug;
   var DataList = require("./data_list/DataList").DataList;
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
+  var ExperimentDataList = require("./data_list/ExperimentDataList").ExperimentDataList;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
   var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
@@ -42,6 +43,7 @@
   var User = require("./user/User").User;
   var Users = require("./user/Users").Users;
   var UserMask = require("./user/UserMask").UserMask;
+  var UserPreference = require("./user/UserPreference").UserPreference;
   var Team = require("./user/Team").Team;
   var Permission = require("./permission/Permission").Permission;
   var Permissions = require("./permission/Permissions").Permissions;
@@ -84,6 +86,8 @@
   FieldDB["DataList"] = DataList;
   FieldDB.SubExperimentDataList = SubExperimentDataList;
   FieldDB["SubExperimentDataList"] = SubExperimentDataList;
+  FieldDB.ExperimentDataList = ExperimentDataList;
+  FieldDB["ExperimentDataList"] = ExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
   FieldDB["AudioVideo"] = AudioVideo;
   FieldDB.AudioVideos = AudioVideos;
@@ -118,6 +122,8 @@
   FieldDB["Users"] = Users;
   FieldDB.UserMask = UserMask;
   FieldDB["UserMask"] = UserMask;
+  FieldDB.UserPreference = UserPreference;
+  FieldDB["UserPreference"] = UserPreference;
   FieldDB.Permission = Permission;
   FieldDB["Permission"] = Permission;
   FieldDB.Permissions = Permissions;

@@ -1,4 +1,5 @@
 var DataList = require("./DataList").DataList;
+var Stimulus = require("./../datum/Stimulus").Stimulus;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
 var ContextualizableObject = require("./../locales/ContextualizableObject").ContextualizableObject;
@@ -31,7 +32,8 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
       docs: DocumentCollection,
       title: ContextualizableObject,
       description: ContextualizableObject,
-      instructions: ContextualizableObject
+      instructions: ContextualizableObject,
+      item: Stimulus
     }
   },
 
