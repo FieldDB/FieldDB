@@ -154,7 +154,7 @@ describe("Authentication ", function() {
           auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
         ]);
       // user has default prefs for now
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(10);
+      expect(anotherAuthLoad.user.prefs).toBeUndefined();
       expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
       anotherAuthLoad.user.fetch().then(function() {
