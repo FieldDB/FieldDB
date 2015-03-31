@@ -173,8 +173,8 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
         version: user.version,
         pouchname: "sapir-cherokee",
-        title: "cherokee",
-        titleAsUrl: "cherokee"
+        title: "sapir-cherokee",
+        titleAsUrl: "sapir-cherokee"
       });
       expect(user.corpora.toJSON()[1]).toEqual({
         fieldDBtype: "Connection",
@@ -188,8 +188,8 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],
         version: user.version,
         pouchname: "sapir-firstcorpus",
-        title: "firstcorpus",
-        titleAsUrl: "firstcorpus"
+        title: "sapir-firstcorpus",
+        titleAsUrl: "sapir-firstcorpus"
       });
     });
 
