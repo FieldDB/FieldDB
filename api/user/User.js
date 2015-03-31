@@ -176,7 +176,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._prefs;
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("prefs", value)
+      this.ensureSetViaAppropriateType("prefs", value);
       // if(this._prefs){
       //   this._prefs.parent = this;
       // }
@@ -199,7 +199,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._corpora || FieldDBObject.DEFAULT_ARRAY;
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("corpora", value)
+      this.ensureSetViaAppropriateType("corpora", value);
     }
   },
 
@@ -244,28 +244,30 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._activityConnection;
     },
     set: function(value) {
-      if (value === this._activityConnection) {
-        return;
-      }
-      if (!value) {
-        delete this._activityConnection;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["activityConnection"] === "function" && !(value instanceof this.INTERNAL_MODELS["activityConnection"])) {
-          value = new this.INTERNAL_MODELS["activityConnection"](value);
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
         }
       }
-      if (!value.confidential) {
-        value.confidential = this.confidential;
-      }
-      value.parent = this;
-      this._activityConnection = value;
-      if (this.username && !this._activityConnection._database) {
+      this.ensureSetViaAppropriateType("activityConnection", value);
+
+      if (this.username && this._activityConnection && this._activityConnection._connection && !this._activityConnection._database) {
         this._activityConnection._database = new Database({
           dbname: this.username + "-activity_feed",
-          connection: value
+          connection: this._activityConnection._connection
         });
       }
+    }
+  },
+
+  activityCouchConnection: {
+    configurable: true,
+    get: function() {
+      return this.activityConnection;
+    },
+    set: function(value) {
+      this.activityConnection = value;
     }
   },
 
