@@ -338,6 +338,30 @@ describe("lib/Collection", function() {
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
+    it("should be able to clone a collection run convertToDocType and still be a collection", function(){
+      var corpora = new Collection([{
+        id: "first item"
+      },{
+        id: "second item"
+      },{
+        id: "third item"
+      },{
+        id: "fourth item"
+      },{
+        id: "fifth item"
+      }]);
+
+      expect(corpora.length).toEqual(5);
+      var shouldbethesamecollection = FieldDBObject.convertDocIntoItsType(corpora);
+
+      expect(shouldbethesamecollection.length).toEqual(5);
+      expect(corpora.length).toEqual(5);
+      expect(corpora.constructor).toBe(Collection);
+
+      expect(shouldbethesamecollection).toBe(corpora);
+      expect(shouldbethesamecollection._collection[2]).toBe(corpora._collection[2]);
+    });
+
 
     it("should not effect clone if original object is changed", function() {
       var adatum = new FieldDBObject({
