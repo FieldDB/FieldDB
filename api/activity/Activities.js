@@ -67,7 +67,8 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       title: ContextualizableObject,
       description: ContextualizableObject,
       database: Database,
-      confidential: Confidential
+      confidential: Confidential,
+      item: Activity
     }
   },
 
