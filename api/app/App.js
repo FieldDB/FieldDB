@@ -404,6 +404,17 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }
         }
       }
+      if (routeParams.docid) {
+        var tempdoc = new FieldDBObject({
+          id: routeParams.docid
+        }).fetch().then(function(result) {
+          console.log(tempdoc);
+          self.currentDoc = FieldDBObject.convertDocIntoItsType(result);
+          self.render();
+        }, function(error) {
+          console.log("Unable to display this document.", error);
+        });
+      }
 
       /*
        * Fetching models if they are not complete
