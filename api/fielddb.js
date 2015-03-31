@@ -56,6 +56,8 @@
   var CorpusMask = require("./corpus/CorpusMask").CorpusMask;
   var Import = require("./import/Import").Import;
   var Search = require("./search/Search").Search;
+  var UnicodeSymbol = require("./unicode/UnicodeSymbol").UnicodeSymbol;
+  var UnicodeSymbols = require("./unicode/UnicodeSymbols").UnicodeSymbols;
   var Q = require("q");
 
   var FieldDB = {};
@@ -142,6 +144,10 @@
   FieldDB["Import"] = Import;
   FieldDB.Search = Search;
   FieldDB["Search"] = Search;
+  FieldDB.UnicodeSymbol = UnicodeSymbol;
+  FieldDB["UnicodeSymbol"] = UnicodeSymbol;
+  FieldDB.UnicodeSymbols = UnicodeSymbols;
+  FieldDB["UnicodeSymbols"] = UnicodeSymbols;
   FieldDB.Q = Q;
   FieldDB["Q"] = Q;
   FieldDB.FieldDBConnection = FieldDBConnection;
