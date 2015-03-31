@@ -1,17 +1,17 @@
 <button class="btn pull-right" ng-click="save()" ng-class="{'btn-default': datalist.saving, 'btn-success': !datalist.saving}">Save</button>
 <button class="btn pull-right" ng-click="undo()" ng-class="{'btn-default': datalist.saving, 'btn-inverse': !datalist.saving}">Undo</button>
 <h1 ng-model="datalist.label"></h1>
-<h3>Titles:</h3>
-<ul>
-  <li ng-repeat="context in datalist.title" contenteditable ng-model="context"></li>
+<h3>{{datalist.title.default}}</h3>
+<ul class="list-unstyled">
+  <li ng-repeat="context in datalist.title" ng-hide="!context || context.indexOf('_') > -1" contenteditable ng-model="context"></li>
 </ul>
 <h3>Descriptions:</h3>
-<ul>
-  <li ng-repeat="context in datalist.description" contenteditable ng-model="context"></li>
+<ul class="list-unstyled">
+  <li ng-repeat="context in datalist.description" ng-hide="!context || context.indexOf('_') > -1" contenteditable ng-model="context"></li>
 </ul>
 <h3>Instructions:</h3>
-<ul>
-  <li ng-repeat="context in datalist.instructions" contenteditable ng-model="context"></li>
+<ul class="list-unstyled">
+  <li ng-repeat="context in datalist.instructions" ng-hide="!context || context.indexOf('_') > -1" contenteditable ng-model="context"></li>
 </ul>
 <h3>Reinforcement Cartoon:</h3>
 <div>
@@ -24,7 +24,7 @@
 <div contenteditable ng-model="datalist.passingScore">
 </div>
 
-<h3>Stimuli:</h3>
+<h3></h3>
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a stimulus' number to re-order it</div>
   <div class="well"
@@ -45,7 +45,7 @@
       </span>
       <span ng-click="removeItemFromList(item)"><i class="fa fa-times-circle"></i></span>
     </div>
-    <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-datum json="item" corpus="corpus">
+    <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-doc json="item" corpus="corpus">
     </div>
   </div>
 </div>
