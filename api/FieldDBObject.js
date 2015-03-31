@@ -913,14 +913,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.saving = true;
       this.whenReady = deferred.promise;
 
-      if (true) {
-        this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
-        Q.nextTick(function() {
-          self.saving = false;
-          deferred.resolve(self);
-        });
-        return deferred.promise;
-      }
+      // if (true) {
+      //   this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
+      //   Q.nextTick(function() {
+      //     self.saving = false;
+      //     deferred.resolve(self);
+      //   });
+      //   return deferred.promise;
+      // }
 
       this.corpus.set(data).then(function(result) {
           self.saving = false;
