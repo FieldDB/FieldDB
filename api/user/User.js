@@ -170,24 +170,16 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
   prefs: {
     get: function() {
-      if (!this._prefs && this.INTERNAL_MODELS["prefs"] && typeof this.INTERNAL_MODELS["prefs"] === "function") {
-        this.prefs = new this.INTERNAL_MODELS["prefs"](this.defaults.prefs);
-      }
+      // if (!this._prefs && this.INTERNAL_MODELS["prefs"] && typeof this.INTERNAL_MODELS["prefs"] === "function") {
+      //   this.prefs = new this.INTERNAL_MODELS["prefs"](this.defaults.prefs);
+      // }
       return this._prefs;
     },
     set: function(value) {
-      if (value === this._prefs) {
-        return;
-      }
-      if (!value) {
-        delete this._prefs;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["prefs"](value);
-        }
-      }
-      this._prefs = value;
+      this.ensureSetViaAppropriateType("prefs", value)
+      // if(this._prefs){
+      //   this._prefs.parent = this;
+      // }
     }
   },
 
@@ -207,19 +199,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._corpora || FieldDBObject.DEFAULT_ARRAY;
     },
     set: function(value) {
-      if (value === this._corpora) {
-        return;
-      }
-      if (!value) {
-        delete this._corpora;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["corpora"](value);
-        }
-      }
-
-      this._corpora = value;
+      this.ensureSetViaAppropriateType("corpora", value)
     }
   },
 

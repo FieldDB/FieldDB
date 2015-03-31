@@ -53,6 +53,7 @@ describe("User ", function() {
 
     it("should have a user preferences ", function() {
       var u = new User();
+      u.prefs = u.defaults.prefs;
       expect(u.prefs).toBeDefined();
       expect(u.prefs.preferedDashboardType).toEqual("");
     });
@@ -62,8 +63,8 @@ describe("User ", function() {
   describe("resume where user left off", function() {
     it("should guess an appropriate dashboard for a user", function() {
       var u = new User({
-        appbrand: "phophlo",
-        // prefs: {}
+        prefs: {},
+        appbrand: "phophlo"
       });
 
       // u.appbrand = "phophlo";
