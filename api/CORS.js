@@ -150,7 +150,7 @@ CORS.makeCORSRequest = function(options) {
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
       if (xhr.status === 401) {
         if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
-          CORS.application.authentication.dispatchEvent("notauthenticated");
+          CORS.application.authentication.dispatchEvent("unauthorized");
         }
       }
       deferred.reject(response);
