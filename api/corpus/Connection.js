@@ -179,10 +179,10 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
           username = Connection.validateUsername(username);
           corpusidentifier = Connection.validateIdentifier(corpusidentifier);
 
-          if (username.changes && username.changes.length >0) {
+          if (username.changes && username.changes.length > 0) {
             this.warn(username.changes.join("; "), username.originalIdentifier);
           }
-          if (corpusidentifier.changes && corpusidentifier.changes.length >0) {
+          if (corpusidentifier.changes && corpusidentifier.changes.length > 0) {
             this.warn(corpusidentifier.changes.join("; "), corpusidentifier.originalIdentifier);
           }
 
@@ -232,6 +232,29 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         }
       }
       this._gravatar = value;
+    }
+  },
+
+  corpusid: {
+    get: function() {
+      if (!this._corpusid && this.parent && this.parent.id && this.parent.rev && typeof this.parent.normalizeFieldWithExistingCorpusFields === "function") {
+        this._corpusid = this.parent.id;
+      }
+      return this._corpusid;
+    },
+    set: function(value) {
+      if (value === this._corpusid) {
+        return;
+      }
+      if (!value) {
+        delete this._corpusid;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._corpusid = value;
     }
   },
 
