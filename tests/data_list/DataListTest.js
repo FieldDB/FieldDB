@@ -1,7 +1,9 @@
 /* globals spyOn */
 
 var DataList = require("./../../api/data_list/DataList").DataList;
+var Datum = require("./../../api/datum/Datum").Datum;
 var SubExperimentDataList = require("./../../api/data_list/SubExperimentDataList").SubExperimentDataList;
+var ExperimentDataList = require("./../../api/data_list/ExperimentDataList").ExperimentDataList;
 var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
 var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
@@ -437,6 +439,7 @@ describe("Data List", function() {
       expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].toJSON()).toEqual({
         fieldDBtype: "FieldDBObject",
         id: "ED5A2292-659E-4B27-A352-9DBC5065207E",
+        dateCreated: list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].dateCreated,
         version: list.version
       });
     });
@@ -727,6 +730,8 @@ describe("Data List", function() {
       expect(experiment.docs.idoftrialbfromdatabase).toBeDefined();
       expect(experiment.docs.idoftrialbfromdatabase.id).toEqual("idoftrialbfromdatabase");
 
+      expect(experiment.docs.idoftrialbfromdatabase instanceof Datum).toEqual(true);
+
       experiment.populate([{
         id: "idoftrialafromdatabase",
         type: "Datum",
@@ -753,6 +758,30 @@ describe("Data List", function() {
         "idoftrialbfromdatabase"
       ]);
       expect(toSave.results[0].responses[0].x).toEqual(200);
+
+    });
+
+    it("should create docs of the appropriate type for the data list so they can be fetched without losing reference", function() {
+      var experiment = new ExperimentDataList({
+        trials: ["practiceblock",
+          "testblock"
+        ]
+      });
+
+      expect(experiment).toBeDefined();
+      expect(experiment.docs).toBeDefined();
+      expect(experiment.docs.practiceblock).toBeDefined();
+      expect(experiment.docs.testblock).toBeDefined();
+
+      expect(experiment.docs.testblock instanceof SubExperimentDataList).toEqual(true);
+      expect(experiment.docs.testblock instanceof DataList).toEqual(true);
+      expect(experiment.docs.testblock instanceof FieldDBObject).toEqual(true);
+      expect(experiment.docs.testblock instanceof ExperimentDataList).toEqual(false);
+
+      expect(experiment.docs.testblock.constructor).not.toBe(FieldDBObject);
+      expect(experiment.docs.testblock.constructor).not.toBe(DataList);
+      expect(experiment.docs.testblock.constructor).not.toBe(ExperimentDataList);
+      expect(experiment.docs.testblock.constructor).toBe(SubExperimentDataList);
 
     });
 
