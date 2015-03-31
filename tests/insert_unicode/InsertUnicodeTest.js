@@ -1,31 +1,31 @@
-var InsertUnicodes = require("../../api/unicode/UnicodeSymbols").InsertUnicodes;
+var UnicodeSymbols = require("../../api/unicode/UnicodeSymbols").UnicodeSymbols;
 var SAMPLE_USER = require("../../api/user/user.json");
 
-describe("InsertUnicode: as a User I want to use my favourite symbols", function() {
+describe("UnicodeSymbol: as a User I want to use my favourite symbols", function() {
   it("should load", function() {
-    expect(InsertUnicodes).toBeDefined();
+    expect(UnicodeSymbols).toBeDefined();
   });
 
   it("should construct", function() {
-    var unicodes = new InsertUnicodes();
+    var unicodes = new UnicodeSymbols();
     expect(unicodes).toBeDefined();
   });
 
   it("should accept serializations from <v2.0", function() {
-    var unicodes = new InsertUnicodes(SAMPLE_USER.prefs.unicodes);
+    var unicodes = new UnicodeSymbols(SAMPLE_USER.prefs.unicodes);
     expect(unicodes).toBeDefined();
     expect(unicodes.length).toEqual(22);
   });
 
   it("should be able to fill with default symbols", function() {
-    var unicodes = new InsertUnicodes();
+    var unicodes = new UnicodeSymbols();
     expect(unicodes.length).toEqual(0);
     unicodes.fill();
     expect(unicodes.length).toEqual(22);
   });
 
   it("should permit unicode characters as primary keys", function() {
-    var unicodes = new InsertUnicodes();
+    var unicodes = new UnicodeSymbols();
     unicodes.add({
       tipa: "",
       symbol: " ɦ"
@@ -38,7 +38,7 @@ describe("InsertUnicode: as a User I want to use my favourite symbols", function
   });
 
   it("should not permit fishy characters in primary keys", function() {
-    var unicodes = new InsertUnicodes();
+    var unicodes = new UnicodeSymbols();
     unicodes.add({
       tipa: "",
       symbol: "cd /root"
