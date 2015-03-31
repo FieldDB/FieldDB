@@ -35,7 +35,7 @@ var Authentication = function Authentication(options) {
   this.loading = true;
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
 
-    CORS.application = FieldDB.FieldDBObject.application;
+    CORS.application = FieldDBObject.application;
 
     self.loading = false;
     self.debug(user);
@@ -44,7 +44,7 @@ var Authentication = function Authentication(options) {
     if (self.user._rev) {
       self.user.authenticated = true;
       self.dispatchEvent("authenticated");
-    }else {
+    } else {
       self.user.authenticated = false;
       self.dispatchEvent("notauthenticated");
     }
@@ -369,8 +369,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         }
         this._user.merge("self", value, overwriteOrNot);
       } else {
+        if (!(value instanceof User)) {
+          value = new User(value);
+        }
         this.debug("Setting the user");
-        this._user = new User(value);
+        this._user = value;
       }
 
       var self = this;
