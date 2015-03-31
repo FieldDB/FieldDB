@@ -1,25 +1,25 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
- * @class InsertUnicode allows a user to use IPA symbols, characters other than Roman alphabets, etc..
+ * @class UnicodeSymbol allows a user to use IPA symbols, characters other than Roman alphabets, etc..
  *    Users can add new symbols. Added symbols are saved and stored, and will show up next time the user
- *    opens InsertUnicode box.
+ *    opens UnicodeSymbol box.
  *
- * @name  InsertUnicode
+ * @name  UnicodeSymbol
  * @extends FieldDBObject
  * @constructs
  */
-var InsertUnicode = function InsertUnicode(options) {
+var UnicodeSymbol = function UnicodeSymbol(options) {
   if (!this._fieldDBtype) {
-    this._fieldDBtype = "InsertUnicode";
+    this._fieldDBtype = "UnicodeSymbol";
   }
-  this.debug("Constructing InsertUnicode length: ", options);
+  this.debug("Constructing UnicodeSymbol length: ", options);
   FieldDBObject.apply(this, arguments);
 };
 
-InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends InsertUnicode.prototype */ {
+UnicodeSymbol.prototype = Object.create(FieldDBObject.prototype, /** @lends UnicodeSymbol.prototype */ {
   constructor: {
-    value: InsertUnicode
+    value: UnicodeSymbol
   },
 
   defaults: {
@@ -49,4 +49,4 @@ InsertUnicode.prototype = Object.create(FieldDBObject.prototype, /** @lends Inse
   }
 
 });
-exports.InsertUnicode = InsertUnicode;
+exports.UnicodeSymbol = UnicodeSymbol;
