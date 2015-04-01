@@ -47,7 +47,7 @@ var Contextualizer = function Contextualizer(options) {
   }
   FieldDBObject.apply(this, localArguments);
   if (!options || options.alwaysConfirmOkay === undefined) {
-    this.warn("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
+    this.debug("By default it will be okay for users to modify global locale strings. IF they are saved this will affect other users.");
     this.alwaysConfirmOkay = true;
   }
   if (this.userOverridenLocalePreference) {
@@ -58,7 +58,7 @@ var Contextualizer = function Contextualizer(options) {
         this.currentLocale = navigator.languages[0];
       }
     } catch (e) {
-      console.log("not using hte browser's language", e);
+      this.debug("not using hte browser's language", e);
     }
   }
   return this;
@@ -114,7 +114,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
       }
 
-      this.warn("SETTING LOCALE FROM " + this._currentLocale + " to " + value, this.data);
+      this.warn("SETTING LOCALE FROM " + this._currentLocale + " to ", value, this.data);
       this._currentLocale = value;
     }
   },
@@ -125,7 +125,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       try {
         userOverridenLocalePreference = JSON.parse(localStorage.getItem("_userOverridenLocalePreference"));
       } catch (e) {
-        this.warn("Localstorage is not available, using the object there will be no persistance across loads", e, this._userOverridenLocalePreference);
+        this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._userOverridenLocalePreference);
         userOverridenLocalePreference = this._userOverridenLocalePreference;
       }
       if (!userOverridenLocalePreference) {
@@ -283,7 +283,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         FieldDBObject.application.corpus.getCorpusSpecificLocalizations();
         this.requestedCorpusSpecificLocalizations = true;
       }
-      result = result.replace(/^locale_/,"");
+      result = result.replace(/^locale_/, "");
       return result;
     }
   },
@@ -296,41 +296,71 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
    */
   updateContextualization: {
     value: function(key, value) {
+      var deferred = Q.defer(),
+        self = this,
+        previousMessage = "",
+        verb = "create ";
+
+      this.whenReadys = this.whenReadys || [];
+
       this.data[this.currentLocale.iso] = this.data[this.currentLocale.iso] || {};
       if (this.data[this.currentLocale.iso][key] && this.data[this.currentLocale.iso][key].message === value) {
-        return value; //no change
+        Q.nextTick(function() {
+          deferred.resolve(value);
+        });
+        return deferred.promise; //no change
       }
-      var previousMessage = "";
-      var verb = "create ";
+
       if (this.data[this.currentLocale.iso][key]) {
         previousMessage = this.data[this.currentLocale.iso][key].message;
         verb = "update ";
       }
-      var self = this;
-      if (!this.testingAsyncConfirm && this.alwaysConfirmOkay /* run synchonosuly whenever possible */ ) {
-        this.data[this.currentLocale.iso][key] = this.data[this.currentLocale.iso][key] || {};
-        this.data[this.currentLocale.iso][key].message = value;
+
+      var addTheUsersMessage = function(addkey, addvalue) {
+        self.debug("Adding the user's message. ", addkey, addvalue);
+        self.data[self.currentLocale.iso][addkey] = self.data[self.currentLocale.iso][addkey] || {};
+        self.data[self.currentLocale.iso][addkey].message = addvalue;
+
+        if (!self.fossil) {
+          self.fossil = self.toJSON();
+        }
+        self.unsaved = true;
         var newLocaleItem = {};
         newLocaleItem[key] = {
-          message: value
+          message: addvalue
         };
-        this.addMessagesToContextualizedStrings(this.currentLocale.iso, newLocaleItem);
-      } else {
-        this.todo("Test async updateContextualization");
-
-        return this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value).then(function() {
-          self.data[self.currentLocale.iso][key] = self.data[self.currentLocale.iso][key] || {};
-          self.data[self.currentLocale.iso][key].message = value;
-          var newLocaleItem = {};
-          newLocaleItem[key] = {
-            message: value
-          };
-          self.addMessagesToContextualizedStrings(self.currentLocale.iso, newLocaleItem);
-        }, function() {
-          self.debug("Not updating ");
+        self.addMessagesToContextualizedStrings(self.currentLocale.iso, newLocaleItem);
+        Q.nextTick(function() {
+          deferred.resolve(addvalue);
         });
+      };
+
+      if (!this.testingAsyncConfirm && this.alwaysConfirmOkay /* run synchonosuly whenever possible */ ) {
+        self.debug("  Running synchonosuly. ", key, value);
+        addTheUsersMessage(key, value);
+        return deferred.promise;
       }
 
+      this.todo("Test async updateContextualization");
+      this.whenReadys.push(deferred.promise);
+
+      self.debug("     Running asynchonosuly. ", key, value);
+      this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value)
+        .then(function(response) {
+            self.debug("Recieved confirmation ,", response);
+            addTheUsersMessage(key, value);
+          },
+          function(reason) {
+            self.debug("Not updating , user clicked cancel", reason);
+            deferred.reject(reason);
+          })
+        .fail(
+          function(error) {
+            console.error(error.stack, self);
+            deferred.reject(error);
+          });
+
+      return deferred.promise;
     }
   },
 
@@ -401,9 +431,16 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         self.originalDocs.push(file);
         self.addMessagesToContextualizedStrings(localeCode, localeMessages)
           .then(deferred.resolve,
-            deferred.reject);
+            deferred.reject)
+          .fail(function(error) {
+            console.error(error.stack, self);
+            deferred.reject(error);
+          });
       }, function(error) {
         self.warn("There werent any locales at this url" + baseUrl + " :( Maybe this database has no custom locale messages.", error);
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
       });
 
       return deferred.promise;
@@ -415,11 +452,12 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       var deferred = Q.defer(),
         self = this;
 
-      // Q.nextTick(function() {
 
       if (!localeData) {
-        deferred.reject("The locales data was empty!");
-        return;
+        Q.nextTick(function() {
+          deferred.reject("The locales data was empty!");
+        });
+        return deferred.promise;
       }
 
       if (!localeCode && localeData._id) {
@@ -445,9 +483,10 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
           self.data[localeCode].length++;
         }
       }
-      deferred.resolve(self.data);
 
-      // });
+      Q.nextTick(function() {
+        deferred.resolve(self.data);
+      });
       return deferred.promise;
     }
   },
@@ -459,17 +498,25 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         if (!this.data.hasOwnProperty(locale)) {
           continue;
         }
+
         this.debug("Requsting save of " + locale);
         var doc = new FieldDBObject(this.data[locale]);
-        this.debug(doc);
+        doc.dbname = this.dbname;
+        this.debug("Will save locale save of ", doc);
+
+        var userHasModifiedContexualizations = !!this.fossil;
+
         if (this.email) {
-          promises.push(FieldDBObject.prototype.saveToGit.apply(doc, [{
+          this.debug(" via Git ", doc);
+          promises.push(doc.saveToGit({
             email: this.email,
             message: "Updated locale messages"
-          }]));
+          }, userHasModifiedContexualizations));
         } else {
           doc.id = locale + "/messages.json";
-          promises.push(FieldDBObject.prototype.save.apply(doc));
+          // doc.debugMode = true;
+          this.debug("   via REST ", doc);
+          promises.push(doc.save(null, userHasModifiedContexualizations));
         }
 
       }

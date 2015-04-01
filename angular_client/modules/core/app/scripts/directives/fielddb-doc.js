@@ -1,3 +1,4 @@
+/* globals setTimeout */
 "use strict";
 
 /**
@@ -21,6 +22,7 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
     DataList: "<div data-fielddb-datalist json='doc' corpus='corpus'></div>",
     LessonDataList: "<div data-fielddb-datalist json='doc' corpus='corpus' view='LessonDataList'></div>",
     SubExperimentDataList: "<div class='well' data-fielddb-datalist json='doc' corpus='corpus' view='SubExperimentDataList'></div>",
+    ExperimentDataList: "<div class='well' data-fielddb-datalist json='doc' corpus='corpus' view='SubExperimentDataList'></div>",
 
     Document: "<div class='well' data-fielddb-datum json='doc' corpus='corpus'></div>",
     DatumField: "<div class='well' data-fielddb-datum-field json='doc' corpus='corpus'></div>",
@@ -31,7 +33,7 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
     Response: "<div data-fielddb-datum json='doc' corpus='corpus'></div>"
   };
   return {
-    template: "{{doc.fieldDBtype}} Unable to display this document. {{doc._id}}",
+    template: "{{doc.fieldDBtype}} Loading... {{doc._id}}",
     restrict: "A",
     transclude: false,
     scope: {
@@ -50,6 +52,12 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
           // console.log("Scope value changed", value);
           // when the "compile" expression changes
           // assign it into the current DOM
+          if(!scope.doc){
+            // setTimeout(function(){
+            //   FieldDB.FieldDBObject.application.render();
+            // }, 500);
+            return;
+          }
           console.log("doc type is ", scope.doc.fieldDBtype);
           if (templates[scope.doc.fieldDBtype]) {
             element.html(templates[scope.doc.fieldDBtype]);
@@ -58,12 +66,14 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
               // scope.doc = new FieldDB[scope.doc.fieldDBtype](scope.doc);
             }
           } else {
-            element.html("{{doc.fieldDBtype}} Unable to display this document. {{doc | json}}");
-            if (scope && scope.doc && scope.doc.fetch) {
+            // element.html("{{doc.fieldDBtype}} Unable to display this document. {{doc | json}}");
+            if (scope && scope.doc && !scope.doc.rev && scope.doc.fetch) {
               console.log("TODO fetch the doc details and refresh the render to the right template if necessary");
-              // doc.fetch().then(function(){
-              //   scope.$digest();
-              // });
+              scope.doc.fetch().then(function(result){
+                console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...", result);
+                // scope.doc.parent.add(FieldDB.FieldDBObject.convertDocIntoItsType(result));
+                scope.$digest();
+              });
             }
           }
           // console.log("Using html: " + element.html());

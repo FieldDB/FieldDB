@@ -2,7 +2,7 @@ define([
     "backbone",
     "datum/Datum"
 ], function(
-    Backbone, 
+    Backbone,
     Datum
 ) {
     var Datums = Backbone.Collection.extend(
@@ -33,7 +33,7 @@ define([
 //       comparator : function(doc){
 //         return doc.get("timestamp");
 //       },
-       
+
        internalModels : Datum,
 
        model: Datum,
@@ -43,7 +43,7 @@ define([
            error : function(model, xhr, options) {
              if (OPrime.debugMode) OPrime.debug("There was an error loading your datums.");
              console.log(model,xhr,options);
-             OPrime.bug("There was an error loading your datums.");
+             OPrime.bug("There was an error loading your data.");
              if(typeof fail == "function"){
                fail();
              }
@@ -60,6 +60,6 @@ define([
          });
        }
     });
-    
+
     return Datums;
 });

@@ -1,6 +1,6 @@
 {
   "name": "LingSync Prototype",
-  "version": "2.47.20",
+  "version": "2.49.1",
   "description": "A bleeding edge version, with new features faster",
   "app": {
     "background": {
@@ -24,5 +24,5 @@
     "128": "images/icon128_dev.png"
   },
   "manifest_version": 2,
-  "content_security_policy": "media-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://www.google-analytics.com https://stats.g.doubleclick.net https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* ; style-src 'self' 'unsafe-inline' https://*.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/;"
+  "content_security_policy": "media-src *; img-src *; default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://www.google-analytics.com https://stats.g.doubleclick.net https://*.mcgill.ca https://*.concordia.ca https://*.phophlo.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* ;  style-src 'self' 'unsafe-inline' https://*.lingsync.org https://fonts.googleapis.com/ https://themes.googleusercontent.com/;"
 }

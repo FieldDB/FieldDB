@@ -1,7 +1,15 @@
-var App = App || require("../../api/app/App.js").App;
+var App = require("../../api/app/App").App;
+var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
 
 describe("App", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      // console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
 
   describe("construction", function() {
     it("should load", function() {
@@ -83,7 +91,6 @@ describe("App", function() {
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
@@ -103,7 +110,7 @@ describe("App", function() {
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
+        expect(app.warnMessage).toContain("An app of type App has become automagically available to all fielddb objects");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
@@ -121,11 +128,10 @@ describe("App", function() {
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
       expect(processingPromise).toBeDefined();
-      console.log("processingPromise");
-      console.log(processingPromise);
+      // console.log("processingPromise");
+      // console.log(processingPromise);
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
-        expect(app.warnMessage).toContain("Rendering, but the render was not injected for this App");
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
@@ -155,6 +161,14 @@ describe("App", function() {
 // Testing to see where the app is running, if it is installed on android,
 // installed in chrome or if it is a web widget.
 describe("App: as a developer I want to deploy to multiple targets", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      // console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
+
   it("should not be a Chrome extension", function() {
     var app = new App();
     expect(app.isChromeApp).toBeFalsy();

@@ -1,0 +1,70 @@
+<br />
+<h3>
+  <i class="fa fa-calendar">
+  </i> {{contextualize('locale_new_session_for')}}
+  <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" >
+  <i>{{application.corpus.title}}
+  </i>
+</h3>
+<form ng-model="newSession">
+  <table class="newSessionTable" align='center'>
+    <tr>
+      <td><i class="fa fa-question">
+        </i> {{contextualize('locale_goal_textbox')}}
+      </td>
+      <td>
+        <input type="text" placeholder="Collecting examples of animacy agreement" ng-model='newSession.goal'>
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-group">
+        </i> {{contextualize('locale_consultants_textbox')}}
+      </td>
+      <td>
+        <input type="text" placeholder="ME,EV,FE" ng-model='newSession.consultants'>
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-globe">
+        </i> {{contextualize('locale_language_textbox')}}
+      </td>
+      <td>
+        <input type="text" placeholder="Language" ng-model='newSession.language'>
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-globe">
+        </i> {{contextualize('locale_dialect_textbox')}}
+      </td>
+      <td>
+        <input type="text" placeholder="Dialect" ng-model='newSession.dialect'>
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-calendar">
+        </i> {{contextualize('locale_date_elicited_textbox')}}
+      </td>
+      <td>
+        <input type="date" placeholder="Weds 2012-08-01" ng-model='newSession.dateElicited'>
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-user">
+        </i> {{contextualize('locale_user_textbox')}}
+      </td>
+      <td>{{application.authentication.user.name}}
+      </td>
+    </tr>
+    <tr>
+      <td><i class="fa fa-calendar">
+        </i> {{contextualize('locale_date_entered')}}
+      </td>
+      <td>{{currentDate | fielddbShortDate}}
+      </td>
+    </tr>
+  </table>
+  <button class="btn btn-success"  ng-click="createNewSession(newSession);showCreateNewSessionDropdown=false">
+    <i class="fa whiteicon fa-save">
+    </i> {{contextualize('locale_create_access_new_session_button')}}
+  </button>
+</form>

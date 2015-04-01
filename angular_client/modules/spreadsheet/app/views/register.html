@@ -1,9 +1,7 @@
-<br />
-<br />
 <div class="mainPageDiv">
   <form>
     {{contextualize('locale_server')}}<sup>*</sup>:<br />
-    <select ng-model="selectedServer" ng-disabled="loading==true" ng-options="server.userFriendlyServerName for server in servers">
+    <select ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
     </select>
     <br />
     <font size="1"><i>{{contextualize('locale_data_shared_message')}}</i></font> <br />
@@ -15,7 +13,9 @@
       ng-model="newLoginInfo.confirmPassword"><br /> <input
       placeholder="e-mail (optional)" ng-model="newLoginInfo.email" type="email"><br />
     <button class="btn btn-primary"
-      ng-click="registerNewUser(newLoginInfo, selectedServer.serverCode)" ng-disabled="loading==true">{{contextualize('locale_register')}}</button>&nbsp;<img src="images/spinner-small-mainbg.gif" ng-show="loading==true">
+      ng-click="registerNewUser(newLoginInfo)" ng-disabled="loading">
+      {{contextualize('locale_register')}}
+    </button> &nbsp;
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
   </form>
-
 </div>

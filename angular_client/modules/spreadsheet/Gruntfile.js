@@ -57,7 +57,7 @@ module.exports = function(grunt) {
       },
       jsTest: {
         files: ['test/spec/{,*/}*.js'],
-        tasks: ['newer:jshint:test', 'karma']
+        tasks: ['newer:jshint:test', 'karma:unit']
       },
       styles: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.css', 'bower_components/fielddb-angular/dist/styles/main.css'],
@@ -387,8 +387,20 @@ module.exports = function(grunt) {
     // Test settings
     karma: {
       unit: {
-        configFile: 'test/karma.conf.js',
-        singleRun: true
+        configFile: "test/karma.conf.js",
+        singleRun: true,
+        logLevel: "ERROR",
+        /* https://github.com/karma-runner/grunt-karma/issues/102 */
+        client: {
+          captureConsole: false
+        },
+        browsers: ["PhantomJS"]
+      },
+      watch: {
+        configFile: "test/karma.conf.js",
+        singleRun: false,
+        autoWatch: true,
+        browsers: ["Chrome"]
       }
     },
 
@@ -433,7 +445,7 @@ module.exports = function(grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    'karma:unit'
   ]);
 
   grunt.registerTask('build', [

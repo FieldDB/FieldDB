@@ -7,7 +7,7 @@
         {{resultsMessageFromExternalController}}
     </p>
 
-    <ul ng-show="useWordpressIGTFormat" class="unstyled" ng-repeat="result in resultsFromExternalController">
+    <ul ng-show="useWordpressIGTFormat" class="list-unstyled" ng-repeat="result in resultsFromExternalController">
         <li>
           [gloss] {{result.utterance}}
         </li>
@@ -22,7 +22,7 @@
         </li>
     </ul>
 
-    <ul ng-hide="useWordpressIGTFormat" class="unstyled" ng-repeat="result in resultsFromExternalController">
+    <ul ng-hide="useWordpressIGTFormat" class="list-unstyled" ng-repeat="result in resultsFromExternalController">
         <li ng-repeat="corpusField in fieldsInColumns.first">
           {{result[corpusField.id]}}
         </li>

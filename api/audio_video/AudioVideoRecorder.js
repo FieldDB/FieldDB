@@ -1,4 +1,5 @@
-/* globals document, window, navigator, FieldDB, Media, FileReader */
+/* globals document, window, navigator, Media, FileReader */
+var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
 var RecordMP3 = require("recordmp3js/js/recordmp3");
 
@@ -134,8 +135,8 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
         deferred = Q.defer(),
         self = this;
 
-      if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        application = FieldDB.FieldDBObject.application;
+      if (FieldDBObject.application) {
+        application = FieldDBObject.application;
       }
       var errorInAudioVideoPeripheralsCheck = function(error) {
         application.videoRecordingVerified = false;
@@ -144,7 +145,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
       };
 
       Q.nextTick(function() {
-        if(self.peripheralsCheckRunning){
+        if (self.peripheralsCheckRunning) {
           deferred.reject("Already running");
           return;
         }
@@ -152,12 +153,17 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
 
         var waitUntilVideoElementIsRendered = function() {
           if (!optionalElements) {
-            optionalElements = {
-              image: document.getElementById("video-snapshot"),
-              video: document.getElementById("video-preview"),
-              audio: document.getElementById("audio-preview"),
-              canvas: document.getElementById("video-snapshot-canvas"),
-            };
+            try {
+              optionalElements = {
+                image: document.getElementById("video-snapshot"),
+                video: document.getElementById("video-preview"),
+                audio: document.getElementById("audio-preview"),
+                canvas: document.getElementById("video-snapshot-canvas"),
+              };
+            } catch (e) {
+              this.warn("There is no DOM, cant run peripheralsCheck unless the elements are supplied ");
+              this.debug(e);
+            }
           }
           if (!optionalElements.canvas) {
             errorInAudioVideoPeripheralsCheck("video-snapshot-canvas is not present, cant verify peripheralsCheck");
@@ -209,9 +215,9 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
               optionalElements.video.muted = true;
               navigator.geolocation.getCurrentPosition(function(position) {
                 console.warn("recieved position information");
-                if (FieldDB && FieldDB.FieldDBObject) {
-                  FieldDB.FieldDBObject.software = FieldDB.FieldDBObject.software || {};
-                  FieldDB.FieldDBObject.software.location = position.coords;
+                if (FieldDBObject) {
+                  FieldDBObject.software = FieldDBObject.software || {};
+                  FieldDBObject.software.location = position.coords;
                 }
               });
 
@@ -339,33 +345,38 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           // var xhr = new XMLHttpRequest();
           var url = event.target.result;
 
-          // Add audio element and download URL to page.
-          var showAudioArea = document.createElement("p");
-          var au = document.createElement("audio");
-          au.classList = ["fielddb-audio-temp-play-audio"];
-          var hf = document.createElement("a");
-          hf.classList = ["fielddb-audio-temp-save-link"];
-          hf.innerText = "Save to this device";
-          au.controls = true;
-          au.src = url;
-          hf.href = url;
-          hf.download = mp3Name;
-          hf.innerHTML = mp3Name;
-          showAudioArea.appendChild(au);
-          au.play();
-          showAudioArea.appendChild(hf);
-          console.log("todo dont need to append this audio after upload");
+          try {
+            // Add audio element and download URL to page.
+            var showAudioArea = document.createElement("p");
+            var au = document.createElement("audio");
+            au.classList = ["fielddb-audio-temp-play-audio"];
+            var hf = document.createElement("a");
+            hf.classList = ["fielddb-audio-temp-save-link"];
+            hf.innerText = "Save to this device";
+            au.controls = true;
+            au.src = url;
+            hf.href = url;
+            hf.download = mp3Name;
+            hf.innerHTML = mp3Name;
+            showAudioArea.appendChild(au);
+            au.play();
+            showAudioArea.appendChild(hf);
+            console.log("todo dont need to append this audio after upload");
 
-          element.appendChild(showAudioArea);
-          callingContext.parent.addFile({
-            filename: mp3Name,
-            description: "Recorded using spreadsheet app",
-            data: url
-          });
+            element.appendChild(showAudioArea);
+            callingContext.parent.addFile({
+              filename: mp3Name,
+              description: "Recorded using spreadsheet app",
+              data: url
+            });
+          } catch (e) {
+            this.warn("There is no DOM, cant show audio player");
+            this.debug(e);
+          }
           // callingContext.status += "\nmp3name = " + mp3Name;
           // fd.append("filename", encodeURIComponent(mp3Name));
 
-          // xhr.open("POST", new FieldDB.AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances", true);
+          // xhr.open("POST", new AudioVideo().BASE_SPEECH_URL + "/upload/extract/utterances", true);
           // xhr.onreadystatechange = function(response) {
           //   console.log(response);
           //   if (xhr.readyState === 4) {
@@ -376,7 +387,7 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
           //   console.warn("dont clear if upload fialed");
           // };
           // xhr.send(fd);
-            recorder.clear();
+          recorder.clear();
         };
         reader.readAsDataURL(mp3Data);
 

@@ -1,8 +1,8 @@
 /*globals FileReader, CryptoJS, OPrime, Blob, FormData */
 
-var AudioService = function(url, user, corpusConnection, datumid) {
+var AudioService = function(url, user, connection, datumid) {
 
-  this.corpus = corpusConnection;
+  this.corpus = connection;
   this.url = url;
   this.user = user;
   this.datumid = datumid;
@@ -15,7 +15,7 @@ var AudioService = function(url, user, corpusConnection, datumid) {
     var reader = new FileReader();
     reader.onload = function() {
       var md5 = CryptoJS.MD5(reader.result);
-      console.log("MD5 is " + md5);
+      // console.log("MD5 is " + md5);
       callback(md5);
     };
     reader.onerror = function() {
@@ -30,18 +30,18 @@ var AudioService = function(url, user, corpusConnection, datumid) {
         md5: "c07f75de65dc1c99763cee300dcd44a0",
         filename: "testing_audio.wav",
         labelsToAlign: "TESTING AUDIO UPLOAD.",
-        textGrid: this.corpus.url.replace("/_session", "/") + this.corpus.pouchname + "/" + this.datumid + "/testing_audio.textGrid"
+        textGrid: this.corpus.url.replace("/_session", "/") + this.corpus.dbname + "/" + this.datumid + "/testing_audio.textGrid"
       }, {
         md5: "c07f75de65dc1c99763cee300dcd44a0",
         filename: "testing_audio2.wav",
         labelsToAlign: "TESTING AUDIO UPLOAD.",
-        textGrid: this.corpus.url.replace("/_session", "/") + this.pouchname + "/" + this.datumid + "/testing_audio2.textGrid"
+        textGrid: this.corpus.url.replace("/_session", "/") + this.dbname + "/" + this.datumid + "/testing_audio2.textGrid"
       }],
       user: {
         username: user.name
       },
       corpus: {
-        corpusname: this.corpus.pouchname
+        corpusname: this.corpus.dbname
       },
       dictionary: {
         dialect: "AmericanEnglish",
@@ -63,7 +63,7 @@ var AudioService = function(url, user, corpusConnection, datumid) {
       },
       error: function(serverResults) {
         that.result = serverResults;
-        console.log("There was a problem contacting the server to login.");
+        // console.log("There was a problem contacting the server to login.");
       }
     });
 
@@ -119,11 +119,11 @@ var AudioService = function(url, user, corpusConnection, datumid) {
         data: filesToBeSent,
         success: function(serverResults) {
           self.uploadResult = serverResults;
-          console.log("server contacted", serverResults);
+          // console.log("server contacted", serverResults);
         },
         error: function(serverResults) {
           self.uploadResult = serverResults;
-          console.log("There was a problem contacting the server to login.");
+          // console.log("There was a problem contacting the server to login.");
         }
       });
 

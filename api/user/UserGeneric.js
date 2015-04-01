@@ -35,13 +35,13 @@
  * @extends Object
  *
  */
-var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritics, HotKeys, MD5, UserPreference) {
-  if (!appVersion || !defaultCorpusConnection) {
-    throw new Error("You must supply an appVersion and a defaultCorpusConnection which will be used to create new users");
+var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, HotKeys, MD5, UserPreference) {
+  if (!appVersion || !defaultConnection) {
+    throw new Error("You must supply an appVersion and a defaultConnection which will be used to create new users");
   }
 
   this.appVersion = appVersion;
-  this.defaultCorpusConnection = defaultCorpusConnection;
+  this.defaultConnection = defaultConnection;
 
   /* TODO move these to seperate files as they are created */
   if (!HotKeys) {
@@ -245,10 +245,11 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
       "corpusid": "",
       "datalistid": "",
       "sessionid": "",
-      "couchConnection": {
+      "connection": {
         "protocol": "",
         "domain": "",
         "port": "",
+        "dbname": "",
         "pouchname": "",
         "path": "",
         "authUrls": "",
@@ -258,7 +259,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
     };
   };
 
-  this.build = function(optionalRequestedUserDetails, optionalRequestedCorpusConnection) {
+  this.build = function(optionalRequestedUserDetails, optionalRequestedConnection) {
     console.log("Creating user with ", optionalRequestedUserDetails);
 
     if (!optionalRequestedUserDetails || !optionalRequestedUserDetails.username) {
@@ -270,11 +271,11 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
     if (userNameValidationResults.changes.length > 0) {
       throw new Error(userNameValidationResults.changes.join("\n "));
     }
-    var usersCorpusConnection = optionalRequestedCorpusConnection;
-    if (!usersCorpusConnection) {
-      usersCorpusConnection = JSON.parse(JSON.stringify(this.defaultCorpusConnection));
+    var usersConnection = optionalRequestedConnection;
+    if (!usersConnection) {
+      usersConnection = JSON.parse(JSON.stringify(this.defaultConnection));
     }
-    console.log("Corpus connection ", JSON.stringify(usersCorpusConnection, null, 2));
+    console.log("Corpus connection ", JSON.stringify(usersConnection, null, 2));
 
     return {
       "_id": optionalRequestedUserDetails.username,
@@ -298,36 +299,36 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
         "pouchname": optionalRequestedUserDetails.username + "-firstcorpus",
         "dbname": optionalRequestedUserDetails.username + "-firstcorpus",
 
-        "protocol": usersCorpusConnection.protocol,
-        "domain": usersCorpusConnection.domain,
-        "port": usersCorpusConnection.port,
-        "path": usersCorpusConnection.path,
+        "protocol": usersConnection.protocol,
+        "domain": usersConnection.domain,
+        "port": usersConnection.port,
+        "path": usersConnection.path,
 
-        "userFriendlyServerName": usersCorpusConnection.userFriendlyServerName,
-        "authUrls": usersCorpusConnection.authUrls,
-        "clientUrls": usersCorpusConnection.clientUrls,
-        "corpusUrls": usersCorpusConnection.corpusUrls,
-        "lexiconUrls": usersCorpusConnection.lexiconUrls,
-        "searchUrls": usersCorpusConnection.searchUrls,
-        "audioUrls": usersCorpusConnection.audioUrls
+        "userFriendlyServerName": usersConnection.userFriendlyServerName,
+        "authUrls": usersConnection.authUrls,
+        "clientUrls": usersConnection.clientUrls,
+        "corpusUrls": usersConnection.corpusUrls,
+        "lexiconUrls": usersConnection.lexiconUrls,
+        "searchUrls": usersConnection.searchUrls,
+        "audioUrls": usersConnection.audioUrls
       }],
-      "activityCouchConnection": {
+      "activityConnection": {
         "pouchname": optionalRequestedUserDetails.username + "-activity_feed",
         "dbname": optionalRequestedUserDetails.username + "-activity_feed",
 
-        "protocol": usersCorpusConnection.protocol,
-        "domain": usersCorpusConnection.domain,
-        "port": usersCorpusConnection.port,
-        "path": usersCorpusConnection.path,
+        "protocol": usersConnection.protocol,
+        "domain": usersConnection.domain,
+        "port": usersConnection.port,
+        "path": usersConnection.path,
 
-        "userFriendlyServerName": usersCorpusConnection.userFriendlyServerName,
-        "activityUrls": usersCorpusConnection.activityUrls,
+        "userFriendlyServerName": usersConnection.userFriendlyServerName,
+        "activityUrls": usersConnection.activityUrls,
       },
       "recentDataLists": [],
       "recentSessions": [],
       "authUrls": optionalRequestedUserDetails.authUrls || "default",
       "mostRecentIds": this.getMostRecentIds(),
-      "newCorpusConnections": [],
+      "newCorpora": [],
       "hotkeys": [],
       "prefs": UserPreference.create(),
       "serverlogs": {
@@ -385,7 +386,7 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
       },
       "corpora": {
         "items": {
-          "$ref": "CouchConnection"
+          "$ref": "Connection"
         },
         "type": "Array",
         "description": "A user can own or have access to any number of corpora. If the user has access to a corpus, it is generally storred in an array called corpora in their user details. This array can be updated at any time by calling get user corpora API. Example: <pre>" + JSON.stringify([{
@@ -421,26 +422,26 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
           "protocol": "https://",
           "domain": "corpusdev.fielddb.org",
           "port": "443",
-          "pouchname": "lingllama-cherokee",
+          "dbname": "lingllama-cherokee",
           "path": "",
           "corpusid": "958227C0-FF0E-46AC-8F7B-579330A24A95"
         }, {
           "protocol": "https://",
           "domain": "corpusdev.fielddb.org",
           "port": "443",
-          "pouchname": "lingllama-firstcorpus",
+          "dbname": "lingllama-firstcorpus",
           "path": "",
           "corpusid": "1B6127DC-F156-4F48-B1D8-6F4EBA5848A5"
         }], null, 2) + "</pre>"
 
       },
-      "activityCouchConnection": {
-        "type": "CouchConnection",
+      "activityConnection": {
+        "type": "Connection",
         "description": "This is where the user's activities can be saved and retrieved. In general, if your client side app let\"s the user do something you should save activites in the user's couch and if its something that has to do with a corpus, and the other team members might want to be in the loop, also save a similar activity in the corpus activity feed (composed of corpusname-activity_feed). Here is an example of the user's feed: <pre>" + JSON.stringify({
           "protocol": "https://",
           "domain": "ifielddevs.iriscouch.com",
           "port": "443",
-          "pouchname": "lingllama-activity_feed",
+          "dbname": "lingllama-activity_feed",
           "path": ""
         }, null, 2) + "</pre>"
       },
@@ -472,11 +473,11 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
           "datalistid": "89bc4d7dcc2b1fc9a7bb0f4f474432b4",
           "sessionid": "89bc4d7dcc2b1fc9a7bb0f4f474415e4",
           "corpusUrl": "https://corpusdev.lingsync.org/lingllama-communitycorpus",
-          "couchConnection": {
+          "connection": {
             "protocol": "https://",
             "domain": "corpusdev.fielddb.org",
             "port": "",
-            "pouchname": "lingllama-communitycorpus",
+            "dbname": "lingllama-communitycorpus",
             "path": "",
             "corpusid": "89bc4d7dcc2b1fc9a7bb0f4f4743e705"
           }
@@ -502,9 +503,9 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
         "description": "This is the last time the users details were updated (ie login) server side. This doesn\"t mean the last time the user used the app since they can be pretty active offline too, and most of their activity is client side not server side. To find out about recent activity you can query their activity feed instead. <br/>Client side apps cannot modify the user updated date, if they attempt to add information it will be discarded.",
         "required": true
       },
-      "newCorpusConnections": {
+      "newCorpora": {
         "items": {
-          "$ref": "CouchConnection"
+          "$ref": "Connection"
         },
         "type": "Array",
         "description": "deprecated, was used by the client apps to add new corpora to the users details, now use the user corpora API"
@@ -566,9 +567,9 @@ var UserGenericFactory = function(appVersion, defaultCorpusConnection, Diacritic
     }
   };
 
-  this.set = function(user, additionalOptions, optionalRequestedCorpusConnection) {
+  this.set = function(user, additionalOptions, optionalRequestedConnection) {
     if (!user) {
-      user = this.build(additionalOptions, optionalRequestedCorpusConnection);
+      user = this.build(additionalOptions, optionalRequestedConnection);
     }
     for (var option in additionalOptions) {
       user[option] = additionalOptions[option];

@@ -71,27 +71,92 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: Datum
   },
 
+  orthography: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.orthography) {
+        return this.fields.orthography.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.orthography) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.orthography.value = value;
+    }
+  },
+
+  utterance: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.utterance) {
+        return this.fields.utterance.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.utterance) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.utterance.value = value;
+    }
+  },
+
+  morphemes: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.morphemes) {
+        return this.fields.morphemes.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.morphemes) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.morphemes.value = value;
+    }
+  },
+
+  gloss: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.gloss) {
+        return this.fields.gloss.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (this.fields && this.fields.gloss) {
+        // this.fields.debugMode = true;
+      } else {
+        return;
+      }
+      this.fields.gloss.value = value;
+    }
+  },
+
   fields: {
     get: function() {
       this.debug("getting fields");
       return this._fields;
     },
     set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      if (!value.confidential) {
+       if (value && !value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
-      this._fields = value;
+      this.ensureSetViaAppropriateType("fields", value);
     }
   },
 
@@ -235,19 +300,23 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._audioVideo || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._audioVideo) {
-        return;
-      }
-      if (!value) {
-        delete this._audioVideo;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["audioVideo"] === "function") {
-          value = new this.INTERNAL_MODELS["audioVideo"](value);
-        }
-      }
-      this._audioVideo = value;
+      this.ensureSetViaAppropriateType("audioVideo", value);
     }
+  },
+
+  hasAudio: {
+    get: function() {
+      var hasAudio = false;
+      if (this.audioVideo.length > 0) {
+        this.audioVideo.map(function(audioVideo) {
+          if (audioVideo.trashed !== "deleted") {
+            hasAudio = true;
+          }
+        });
+      }
+      return hasAudio;
+    },
+    set: function() {}
   },
 
   play: {
@@ -267,19 +336,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._images || FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (value === this._images) {
-        return;
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
       }
-      if (!value) {
-        delete this._images;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]" && typeof this.INTERNAL_MODELS["images"] === "function") {
-          value = new this.INTERNAL_MODELS["images"](value);
-        }
-      }
-      this._images = value;
+      this.ensureSetViaAppropriateType("images", value);
     }
+  },
+
+  hasImages: {
+    get: function() {
+      var hasImages = false;
+      if (this.images.length > 0) {
+        this.images.map(function(image) {
+          if (image.trashed !== "deleted") {
+            hasImages = true;
+          }
+        });
+      }
+      return hasImages;
+    },
+    set: function() {}
   },
 
   // The couchdb-connector is capable of mapping the url scheme
@@ -356,7 +432,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
                * Its possible that the pouch has no by date views, create them and then try searching again.
                */
               window.toldSearchtomakebydateviews = true;
-              window.app.get("corpus").createPouchView("pages/datums", function() {
+              window.app.corpus.createPouchView("pages/datums", function() {
                 window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.", "alert-success", "Sort:");
                 self.getMostRecentIdsByDate(howmany, callback);
               });
@@ -380,19 +456,19 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   fillWithCorpusFieldsIfMissing: {
     value: function() {
-      if (!this.get("fields")) {
+      if (!this.fields) {
         return;
       }
       /* Update the datum to show all fields which are currently in the corpus, they are only added if saved. */
-      var corpusFields = window.app.get("corpus").get("fields").models;
+      var corpusFields = window.app.corpus.datumFields.models;
       for (var field in corpusFields) {
         var label = corpusFields[field].get("label");
         this.debug("Label " + label);
-        var correspondingFieldInThisDatum = this.get("fields").where({
+        var correspondingFieldInThisDatum = this.fields.where({
           label: label
         });
         if (correspondingFieldInThisDatum.length === 0) {
-          this.get("fields").push(corpusFields[field]);
+          this.fields.push(corpusFields[field]);
         }
       }
     }
@@ -435,10 +511,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         //          }
         //          emit( result,  doc._id );
         //        };
-        //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
+        //        $.couch.db(this.dbname).query(mapFunction, "_count", "javascript", {
         //use the get_datum_fields view
         //        self.bug("TODO test search in chrome extension");
-        $.couch.db(self.get("pouchname")).view("pages/get_datum_fields", {
+        $.couch.db(self.dbname).view("pages/get_datum_fields", {
           success: function(response) {
             self.debug("Got " + response.length + "datums to check for the search query locally client side.");
             var matchIds = [];
@@ -502,7 +578,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
                 " <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>", "alert-success", "Search:");
               window.toldSearchtomakeviews = true;
               var previousquery = queryString;
-              window.app.get("corpus").createPouchView("pages/get_datum_fields", function() {
+              window.app.corpus.createPouchView("pages/get_datum_fields", function() {
                 window.appView.searchEditView.search(previousquery);
               });
             }
@@ -642,7 +718,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   },
   getDisplayableFieldForActivitiesEtc: {
     value: function() {
-      return this.model.get("fields").where({
+      return this.model.fields.where({
         label: "utterance"
       })[0].get("mask");
     }
@@ -665,7 +741,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         }),
         dateEntered: this.get("dateEntered"),
         dateModified: this.get("dateModified"),
-        fields: new DatumFields(this.get("fields").toJSON(), {
+        fields: new DatumFields(this.fields.toJSON(), {
           parse: true
         }),
         datumStates: new DatumStates(this.get("datumStates").toJSON(), {
@@ -674,7 +750,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         datumTags: new DatumTags(this.get("datumTags").toJSON(), {
           parse: true
         }),
-        pouchname: this.get("pouchname"),
+        dbname: this.dbname,
         session: this.get("session")
       });
 
@@ -692,7 +768,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   getValidationStatus: {
     value: function() {
       var validationStatus = "";
-      var stati = this.get("fields").where({
+      var stati = this.fields.where({
         "label": "validationStatus"
       });
       if (stati.length > 0) {
@@ -761,7 +837,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       this.debug("Asking to change the datum state to " + selectedValue);
       /* make sure all the corpus states are availible in this datum */
       var thisdatumStates = this.get("datumStates");
-      window.app.get("corpus").get("datumStates").each(function(datumstate) {
+      window.app.corpus.get("datumStates").each(function(datumstate) {
         var obj = datumstate.toJSON();
         obj.selected = "";
         thisdatumStates.addIfNew(obj);
@@ -782,7 +858,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
 
       /* prepend this state to the new validationStates as of v1.46.2 */
-      var n = this.get("fields").where({
+      var n = this.fields.where({
         label: "validationStatus"
       })[0];
       if (n === [] || !n) {
@@ -793,7 +869,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           userchooseable: "disabled",
           help: "Any number of status of validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc..."
         });
-        this.get("fields").add(n);
+        this.fields.add(n);
       }
       var validationStatus = n.get("mask") || "";
       validationStatus = selectedValue + " " + validationStatus;
@@ -844,10 +920,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function(showInExportModal) {
       this.debug(showInExportModal);
       //corpus's most frequent fields
-      var frequentFields = window.app.get("corpus").frequentFields;
+      var frequentFields = window.app.corpus.frequentFields;
       //this datum/datalist's datumfields and their names
-      var fields = _.pluck(this.get("fields").toJSON(), "mask");
-      var fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
+      var fields = _.pluck(this.fields.toJSON(), "mask");
+      var fieldLabels = _.pluck(this.fields.toJSON(), "label");
       //setting up for IGT case...
       var judgementIndex = -1;
       var judgement = "";
@@ -1006,7 +1082,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   datumIsInterlinearGlossText: {
     value: function(fieldLabels) {
       if (!fieldLabels) {
-        fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
+        fieldLabels = _.pluck(this.fields.toJSON(), "label");
       }
       var utteranceOrMorphemes = false;
       var gloss = false;
@@ -1036,8 +1112,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   exportAsPlainText: {
     value: function(showInExportModal) {
-      // var header = _.pluck(this.get("fields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
+      // var header = _.pluck(this.fields.toJSON(), "label") || [];
+      var fields = _.pluck(this.fields.toJSON(), "mask") || [];
       var result = fields.join("\n");
       if (showInExportModal !== null) {
         $("#export-type-description").html(" as text (Word)");
@@ -1055,18 +1131,18 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   exportAsCSV: {
     value: function(showInExportModal, orderedFields, printheaderonly) {
 
-      var header = _.pluck(this.get("fields").toJSON(), "label") || [];
-      var fields = _.pluck(this.get("fields").toJSON(), "mask") || [];
+      var header = _.pluck(this.fields.toJSON(), "label") || [];
+      var fields = _.pluck(this.fields.toJSON(), "mask") || [];
       var result = fields.join(",") + "\n";
 
       //      if (orderedFields === null) {
       //        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       //      }
-      //      judgement = this.get("fields").where({label: "judgement"})[0].get("mask");
-      //      morphemes = this.get("fields").where({label: "morphemes"})[0].get("mask");
-      //      utterance= this.get("fields").where({label: "utterance"})[0].get("mask");
-      //      gloss = this.get("fields").where({label: "gloss"})[0].get("mask");
-      //      translation= this.get("fields").where({label: "translation"})[0].get("mask");
+      //      judgement = this.fields.where({label: "judgement"})[0].get("mask");
+      //      morphemes = this.fields.where({label: "morphemes"})[0].get("mask");
+      //      utterance= this.fields.where({label: "utterance"})[0].get("mask");
+      //      gloss = this.fields.where({label: "gloss"})[0].get("mask");
+      //      translation= this.fields.where({label: "translation"})[0].get("mask");
       //      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
       //      var result = '"' + resultarray.join('","') + '"\n';
       if (printheaderonly) {
@@ -1089,7 +1165,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   encrypt: {
     value: function() {
       this.set("confidential", true);
-      this.get("fields").each(function(dIndex) {
+      this.fields.each(function(dIndex) {
         dIndex.set("encrypted", "checked");
       });
       //TODO scrub version history to get rid of all unencrypted versions.
@@ -1104,7 +1180,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function() {
       this.set("confidential", false);
 
-      this.get("fields").each(function(dIndex) {
+      this.fields.each(function(dIndex) {
         dIndex.set("encrypted", "");
       });
     }
@@ -1132,7 +1208,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         this.set("dateEntered", JSON.stringify(new Date()));
       }
       //protect against users moving datums from one corpus to another on purpose or accidentially
-      if (window.app.get("corpus").get("pouchname") !== this.get("pouchname")) {
+      if (window.app.corpus.dbname !== this.dbname) {
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
@@ -1142,7 +1218,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
       //If it was decrypted, this will save the changes before we go into encryptedMode
 
-      this.get("fields").each(function(dIndex) {
+      this.fields.each(function(dIndex) {
         //Anything can be done here, it is the set function which does all the work.
         dIndex.set("value", dIndex.get("mask"));
       });
@@ -1150,7 +1226,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       // Store the current Session, the current corpus, and the current date
       // in the Datum
       this.set({
-        "pouchname": window.app.get("corpus").get("pouchname"),
+        "dbname": window.app.corpus.dbname,
         "dateModified": JSON.stringify(new Date()),
         "timestamp": Date.now(),
         "jsonType": "Datum"
@@ -1161,7 +1237,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       } else {
         self.debug("Not setting the session on this datum.");
       }
-      window.app.get("corpus").set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()));
+      window.app.corpus.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()));
 
       var oldrev = this.get("_rev");
       /*
@@ -1182,12 +1258,12 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       self.save(null, {
         success: function(model, response) {
           self.debug("Datum save success");
-          var utterance = model.get("fields").where({
+          var utterance = model.fields.where({
             label: "utterance"
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
           //TODO add privacy for datum goals in corpus
-          //            if(window.app.get("corpus").get("keepDatumDetailsPrivate")){
+          //            if(window.app.corpus.get("keepDatumDetailsPrivate")){
           //              utterance = "";
           //              differences = "";
           //            }
@@ -1204,9 +1280,9 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           window.app.addActivity({
             verb: "<a href='" + differences + "'>" + verb + "</a> ",
             verbicon: verbicon,
-            directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+            directobject: "<a href='#corpus/" + model.dbname + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.corpus.id + "'>" + window.app.corpus.get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
@@ -1214,9 +1290,9 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           window.app.addActivity({
             verb: "<a href='" + differences + "'>" + verb + "</a> ",
             verbicon: verbicon,
-            directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+            directobject: "<a href='#corpus/" + model.dbname + "/datum/" + model.id + "'>" + utterance + "</a> ",
             directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + window.app.corpus.id + "'>" + window.app.corpus.get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -1226,8 +1302,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           //             * that will eventually overwrite the default in the
           //             * corpus if the user saves the current data list
           //             */
-          //            var defaultIndex = window.app.get("corpus").datalists.length - 1;
-          //            if(window.appView.currentEditDataListView.model.id === window.app.get("corpus").datalists.models[defaultIndex].id){
+          //            var defaultIndex = window.app.corpus.datalists.length - 1;
+          //            if(window.appView.currentEditDataListView.model.id === window.app.corpus.datalists.models[defaultIndex].id){
           //              //Put it into the current data list views
           //              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was,
           //              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
@@ -1243,21 +1319,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           //               * Make sure the datum is at the top of the default data list which is in the corpus,
           //               * this is in case the default data list is not being displayed
           //               */
-          //              var positionInDefaultDataList = window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").indexOf(model.id);
+          //              var positionInDefaultDataList = window.app.corpus.datalists.models[defaultIndex].get("datumIds").indexOf(model.id);
           //              if(positionInDefaultDataList !== -1 ){
           //                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them.
-          //                window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
+          //                window.app.corpus.datalists.models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
           //              }
-          //              window.app.get("corpus").datalists.models[defaultIndex].get("datumIds").unshift(model.id);
-          //              window.app.get("corpus").datalists.models[defaultIndex].needsSave  = true;
-          //              window.appView.addUnsavedDoc(window.app.get("corpus").id);
+          //              window.app.corpus.datalists.models[defaultIndex].get("datumIds").unshift(model.id);
+          //              window.app.corpus.datalists.models[defaultIndex].needsSave  = true;
+          //              window.appView.addUnsavedDoc(window.app.corpus.id);
           //            }
           /*
            * Also, see if this datum matches the search datalist, and add it to the top of the search list
            */
           if ($("#search_box").val() !== "") {
             //TODO check this
-            var datumJson = model.get("fields").toJSON();
+            var datumJson = model.fields.toJSON();
             var datumAsDBResponseRow = {};
             for (var x in datumJson) {
               datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
@@ -1325,7 +1401,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   setAsCurrentDatum: {
     value: function() {
       this.warn("Using deprected method setAsCurrentDatum.");
-      //      if( window.app.get("corpus").get("pouchname") !== this.get("pouchname") ){
+      //      if( window.app.corpus.dbname !== this.dbname ){
       //        if (typeof failurecallback === "function") {
       //          failurecallback();
       //        }else{
@@ -1361,7 +1437,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
-      this.todo("saving fields as the deprecated datumFields");
+      this.debug("saving fields as the deprecated datumFields");
       json.datumFields = json.fields;
       delete json.fields;
 

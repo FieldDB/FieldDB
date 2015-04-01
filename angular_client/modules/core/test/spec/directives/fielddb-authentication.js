@@ -15,6 +15,12 @@ describe("Directive: fielddb-authentication", function() {
     compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
+
+    if (FieldDB && FieldDB.FieldDBObject) {
+      FieldDB.FieldDBObject.bug = FieldDB.FieldDBObject.warn;
+      FieldDB.FieldDBObject.alwaysConfirmOkay = true;
+    }
+
     el = angular.element("<div data-fielddb-authentication json='authentication'></div>");
     rootScope = $rootScope;
     scope = $rootScope.$new();
@@ -91,7 +97,7 @@ describe("Directive: fielddb-authentication", function() {
         username: "jenkins",
         anotherfield: "hi",
         researchInterest: "Test automation",
-        prefs:{
+        prefs: {
           numVisibleDatum: 2
         }
       };
@@ -188,6 +194,10 @@ describe("Directive: fielddb-authentication", function() {
       }, function(resultScope) {
         promiseResult = resultScope;
         promisHasCompleted = true;
+      }).fail(function(error) {
+        console.log("error", error);
+        promiseResult = {};
+        promisHasCompleted = true;
       });
       setTimeout(function() {
         promiseResult = {
@@ -227,8 +237,12 @@ describe("Directive: fielddb-authentication", function() {
         promiseResult = resultScope;
         promisHasCompleted = true;
       }, function(resultScope) {
-        console.log("fail");
+        console.log("fail", resultScope);
         promiseResult = resultScope;
+        promisHasCompleted = true;
+      }).fail(function(error) {
+        console.log("error", error);
+        promiseResult = {};
         promisHasCompleted = true;
       });
 
@@ -245,7 +259,7 @@ describe("Directive: fielddb-authentication", function() {
 
   }, specIsRunningTooLong);
 
-  it("setting the user should indirectly causes the user to be saved locally", function() {
+  it("should indirectly cause the user to be saved locally by setting the user ", function() {
     var promiseResult,
       promisHasCompleted,
       anotherAuthLoad;
@@ -262,7 +276,7 @@ describe("Directive: fielddb-authentication", function() {
       anotherAuthLoad.user.warnMessage = "";
 
       // user has default prefs for now
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(10);
+      expect(anotherAuthLoad.user.prefs).toBeUndefined();
       expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
       anotherAuthLoad.user.fetch().then(function(userFetchResult) {
@@ -270,6 +284,10 @@ describe("Directive: fielddb-authentication", function() {
         promisHasCompleted = true;
       }, function(userFetchResult) {
         promiseResult = userFetchResult;
+        promisHasCompleted = true;
+      }).fail(function(error) {
+        console.error("error fetching user from locally cached version", error);
+        promiseResult = {};
         promisHasCompleted = true;
       });
     });

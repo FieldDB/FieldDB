@@ -250,6 +250,9 @@ progress {
   border: 1px solid red;
 }
 
+.centered {
+  text-align: center;
+}
 
 .Spreadsheet-selectedRow {
   background-color: #6D8CA0;

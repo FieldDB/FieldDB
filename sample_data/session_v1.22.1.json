@@ -1,0 +1,65 @@
+[{
+  "_id": "763568EE-BB24-48D2-BEAD-D46E22D11418",
+  "_rev": "8-a34f78e2ddcd02d92dbb37486a88aadc",
+  "dbname": "sapir-firstcorpus",
+  "comments": [],
+  "sessionFields": [{
+    "label": "goal",
+    "value": "Collecting naya",
+    "mask": "Collecting naya",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This describes the goals of the session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "consultants",
+    "value": "Seberina, Ricardo, Lucia",
+    "mask": "Seberina, Ricardo, Lucia",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dialect",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "language",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the langauge (or language family) if you would like to use it.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateElicited",
+    "value": "2010",
+    "mask": "2010",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session took place.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "user",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateSEntered",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session was entered.",
+    "userchooseable": "disabled"
+  }],
+  "dateCreated": "\"2012-09-26T13:51:49.256Z\"",
+  "dateModified": "\"2012-09-26T14:42:56.257Z\""
+}]

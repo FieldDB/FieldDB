@@ -474,12 +474,13 @@ define([
           repairedTimestamp : Date.now()
         };
       }
-      if (!originalModel.team) {
-        originalModel.team = {
-          _id: "team",
-          username: originalModel.pouchname.split("-")[0]
-        };
+      originalModel.team = originalModel.team || {};
+      originalModel.team._id = originalModel.team.id = "team";
+      originalModel.team.username = originalModel.pouchname.split("-")[0]
+      if (window.app.get("authentication").get("userPrivate").get("username") === originalModel.team.username) {
+        originalModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
       }
+
       /* Update the corpus to show all fields which are defaults on corpora,
       they are only added permanently if saved. */
       var tempCorpus = new Corpus();
@@ -1008,14 +1009,18 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            var teamid = model.get("team").id; //Works if UserMask was saved
-            if(!teamid){
-              teamid = model.get("team")._id; //Works if UserMask came from a mongodb id
-              if(!teamid){
-                if(model.get("team").get("username") == window.app.get("authentication").get("userPrivate").get("username")){
-                  teamid = window.app.get("authentication").get("userPrivate").id; //Assumes the user private and team are the same user...this is dangerous
-                }
-              }
+            var teamname = model.get("pouchname").split("-").shift();
+            if(teamname !== model.get("team").get("username")){
+              model.get("team").set("username", teamname);
+            }
+            if (model.get("team").get("username") === window.app.get("authentication").get("userPrivate").get("username")) {
+              model.get("team").set("gravatar", window.app.get("authentication").get("userPrivate").get("gravatar"));
+              model.get("team").saveAndInterConnectInApp(function(savedTeam){
+                console.log("savedTeam", savedTeam);
+              }, function(errorSavingTeam){
+                console.log("errorSavingTeam", errorSavingTeam);
+              });
+            }
               /**
                * The idea of the masks in the activity
                * is that the teams/users can make a
@@ -1034,7 +1039,7 @@ define([
                * at least we can test the map reduce
                * function.
                */
-              window.app.addActivity(
+             window.app.addActivity(
                   {
                     verb : "<a href='"+differences+"'>"+verb+"</a> ",
                     verbmask : verb,
@@ -1042,8 +1047,8 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamname+"'>"+teamname+"</a>",
+                    indirectobject : "created by <a href='#user/"+teamname+"'>"+teamname+"</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "personal"
@@ -1056,42 +1061,12 @@ define([
                     directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
                     directobjectmask : "a corpus",
                     directobjecticon : "icon-cloud",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamname+"'>this team</a>",
+                    indirectobject : "created by <a href='#user/"+teamname+"'>this team</a>",
                     context : " via Offline App.",
                     contextmask : "",
                     teamOrPersonal : "team"
                   });
-            }else{
-              window.app.addActivity(
-                  {
-                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                    verbmask : verb,
-                    verbicon : verbicon,
-                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>"+teamid+"</a>",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "personal"
-                  });
-              window.app.addActivity(
-                  {
-                    verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                    verbmask : verb,
-                    verbicon : verbicon,
-                    directobject : "<a href='#corpus/"+model.id+"'>"+title+"</a>",
-                    directobjectmask : "a corpus",
-                    directobjecticon : "icon-cloud",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
-                    indirectobject : "created by <a href='#user/"+teamid+"'>this team</a>",
-                    context : " via Offline App.",
-                    contextmask : "",
-                    teamOrPersonal : "team"
-                  });
-            }
             model.get("couchConnection").corpusid = model.id;
             //make sure the corpus is updated in the history of the user
             var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "pouchname");

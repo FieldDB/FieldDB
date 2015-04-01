@@ -8,14 +8,14 @@ function(head, req) {
     }
   });
 
-  var buildDatalist = function(groupedByKey, dataListTitle, datumIds) {
+  var buildDatalist = function(groupedByKey, dataListTitle, docIds) {
     var timestamp = Date.now();
     groupedByKey = groupedByKey || "empty";
     dataListTitle = dataListTitle || "Empty list ";
     var datalist = {
       title: dataListTitle + " on " + new Date(timestamp),
       description: "All the data in " + dataListTitle + " (" + groupedByKey + ") as of " + new Date(timestamp),
-      datumIds: datumIds,
+      docIds: docIds,
       collection: "datalists",
       username: "datalistbot",
       timestamp: timestamp

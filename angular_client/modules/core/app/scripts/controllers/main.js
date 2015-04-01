@@ -12,14 +12,14 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
             $scope.$apply(); //$digest or $apply
           }
         } catch (e) {
-          console.warn("Rendering generated an erorr", e);
+          console.warn("Rendering generated probably a digest erorr");
         }
       };
 
 
       document.addEventListener("logout", function (e) {
         console.log(e);
-        $scope.application.bug("user has logged out, reload the page to clear state and take them to the welcome page.");
+        $scope.application.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
       }, false);
 
       document.addEventListener("notauthenticated", function (e) {
@@ -42,11 +42,11 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
         return message;
       }
       var result = FieldDB.FieldDBObject.application.contextualize(message);
-      if ($rootScope.corpus && $rootScope.corpus.pouchname && FieldDB) {
-        var url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
+      if ($rootScope.corpus && $rootScope.corpus.dbname && FieldDB) {
+        var url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.dbname;
         result = result
           .replace(/CORPUS_DB_URL/g, url)
-          .replace(/CORPUS_PAGE_URL/g, "http://lingsync.org/" + $rootScope.corpus.pouchname.replace("-", "/") + "/" + $rootScope.corpus.titleAsUrl);
+          .replace(/CORPUS_PAGE_URL/g, "http://lingsync.org/" + $rootScope.corpus.dbname.replace("-", "/") + "/" + $rootScope.corpus.titleAsUrl);
       }
       // if (!$scope.$$phase) {
       //   $scope.$digest(); //$digest or $apply

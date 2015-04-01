@@ -7,7 +7,7 @@
     "protocol": "",
     "domain": "",
     "port": "",
-    "pouchname": "",
+    "dbname": "",
     "path": "",
     "authUrl": "",
     "userFriendlyServerName": "",
@@ -16,11 +16,11 @@
     "titleAsUrl": "",
     "description": "The details of this corpus are not public."
   }],
-  "activityCouchConnection": {
+  "activityConnection": {
     "protocol": "",
     "domain": "",
     "port": "",
-    "pouchname": "",
+    "dbname": "",
     "path": "",
     "authUrl": "",
     "userFriendlyServerName": ""
@@ -140,11 +140,11 @@
     "corpusid": "",
     "datalistid": "",
     "sessionid": "",
-    "couchConnection": {
+    "connection": {
       "protocol": "",
       "domain": "",
       "port": "",
-      "pouchname": "",
+      "dbname": "",
       "path": "",
       "authUrl": "",
       "userFriendlyServerName": "",
@@ -160,11 +160,11 @@
     "description": "",
     "filledWithDefaults": true
   },
-  "newCorpusConnections": [{
+  "newCorpora": [{
     "protocol": "",
     "domain": "",
     "port": "",
-    "pouchname": "",
+    "dbname": "",
     "path": "",
     "authUrl": "",
     "userFriendlyServerName": ""

@@ -1,36 +1,36 @@
 <div class="activity_feed_widget_header">{{username}} - {{corpusid}}
-	<a href="http://lingsync.org/{{corpus.team.username}}/{{corpus.pouchname}}"
-		target="_blank"><img class="gravatar-small"
-		ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar | gravatar}}?d=identicon" /></a><span class="team_name"
-		title="{{corpus.description}}"><a
-		href="http://lingsync.org/{{corpus.team.username}}/{{corpus.pouchname}}"
-		target="_blank">{{corpus.title}}</a></span>
+    <a href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}"
+        target="_blank"><img class="gravatar-small"
+        ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar | gravatar}}?d=identicon" /></a><span class="team_name"
+        title="{{corpus.description}}"><a
+        href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}"
+        target="_blank">{{corpus.title}}</a></span>
 </div>
 <div class="activity_feed_body zebra">
-	<ul>
-		<li ng-repeat="activity in activities"><a
-			href="http://lingsync.org/{{activity.user.username}}" target="_blank">
-				<img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{activity.user.gravatar | gravatar}}?d=identicon"
-				border="0"
-				title="Click here to see {{activity.user.username}}'s page" />
-		</a> <span class="timestamp pull-right hover_link"
-			title="{{activity.timestamp | localizedDate}}"><i
-				class="icon-time"></i>{{activity.timestamp | agoDate}}</span> <i
-			class="activity_verb_icon {{activity.verbicon}}"></i><span
-			class="activity_verb" ng-bind-html-unsafe="activity.verb"
-			title="Click here to see differences"></span> <i
-			class="activity_direct_object_icon {{activity.directobjecticon}}"></i><span
-			class="activity_direct_object"
-			ng-bind-html-unsafe="activity.directobject"
-			title="Click here to see data"> </span> <span
-			class="activity_indirect_object"
-			ng-bind-html-unsafe="activity.indirectobject"
-			title="Click here to see corpus"> </span></li>
-	</ul>
+    <ul>
+        <li ng-repeat="activity in activities"><a
+            href="http://lingsync.org/{{activity.user.username}}" target="_blank">
+                <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{activity.user.gravatar | gravatar}}?d=identicon"
+                border="0"
+                title="Click here to see {{activity.user.username}}'s page" />
+        </a> <span class="timestamp pull-right hover_link"
+            title="{{activity.timestamp | localizedDate}}"><i
+                class="icon-time"></i>{{activity.timestamp | agoDate}}</span> <i
+            class="activity_verb_icon {{activity.verbicon}}"></i><span
+            class="activity_verb" ng-bind-html-unsafe="activity.verb"
+            title="Click here to see differences"></span> <i
+            class="activity_direct_object_icon {{activity.directobjecticon}}"></i><span
+            class="activity_direct_object"
+            ng-bind-html-unsafe="activity.directobject"
+            title="Click here to see data"> </span> <span
+            class="activity_indirect_object"
+            ng-bind-html-unsafe="activity.indirectobject"
+            title="Click here to see corpus"> </span></li>
+    </ul>
 </div>
 <div class="activity_feed_widget_footer">
-	<a href="http://lingsync.org" target="_blank"> <img class="gravatar-small"
-		src="img/icon.png" border="0"><span class='brand'>Powered
-			by LingSync.org!</span>
-	</a>
+    <a href="http://lingsync.org" target="_blank"> <img class="gravatar-small"
+        src="img/icon.png" border="0"><span class='brand'>Powered
+            by LingSync.org!</span>
+    </a>
 </div>

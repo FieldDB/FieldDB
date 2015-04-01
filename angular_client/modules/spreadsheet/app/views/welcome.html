@@ -1,0 +1,63 @@
+<div class="mainPageDiv" ng-hide="application.authentication.user.authenticated">
+  <p>{{contextualize('locale_login_button')}}</p>
+  <form ng-submit='loginUserFromScratch(loginDetailsFromUI)'>
+    <select ng-show="application.connections.length > 1" ng-model="application.connection" ng-disabled="loading" ng-options="connection.userFriendlyServerName for connection in application.connections._collection">
+    </select>
+    <p>&nbsp; </p>
+    <input type="text" ng-model='loginDetailsFromUI.username'  placeholder="username" ng-disabled="loading" />
+    <input type="password"  ng-model='loginDetailsFromUI.password' placeholder="password" ng-disabled="loading">
+    <button class="btn btn-primary" ng-disabled="loading">
+      {{contextualize('locale_login_button')}}
+    </button>&nbsp;
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
+  </form>
+</div>
+
+
+<div class="row-fluid pagination-centered">
+  <p> &nbsp; </p>
+  <button class="btn btn-info" ng-click="contactUs()">
+    <i class="fa whiteicon fa-envelope-o"></i>
+    {{contextualize('locale_contact_us_button')}}
+  </button>
+  <button class="btn btn-info" ng-hide="application.authentication.user.authenticated" ng-click="showForgotPassword=!showForgotPassword">
+    {{contextualize('locale_forgot_password')}}
+  </button>
+  <button class="btn btn-info" ng-show="application.authentication.user.authenticated" ng-click="showResetPassword=!showResetPassword">
+    {{contextualize('locale_reset_password_button_1')}}
+  </button>
+</div>
+
+
+<div class="mainPageDiv" ng-show="showForgotPassword">
+  <p> {{contextualize('locale_forgot_password')}} </p>
+  <form ng-submit='forgotPasswordSubmit()'>
+    <input placeholder="{{contextualize('locale_email')}}" type="email" ng-model="forgotPasswordInfo.email"/>
+    <button class="btn btn-primary" ng-disabled="application.authentication.loading">{{contextualize('locale_forgot_password')}} </button> &nbsp;
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
+  </form>
+</div>
+
+
+<div class="mainPageDiv" ng-show="showResetPassword">
+  <p>{{contextualize('locale_password_reset')}}</p>
+  <form ng-submit='changePasswordSubmit()'>
+    <label>
+      {{contextualize('locale_old_password')}}
+    </label>
+    <input type="password" ng-model="resetPasswordInfo.password"/>
+    <label>
+      {{contextualize('locale_new_password')}}
+    </label>
+    <input type="password" ng-model="resetPasswordInfo.newpassword"/>
+    <label>
+      {{contextualize('locale_confirm_new_password')}}
+    </label>
+    <input type="password" ng-model="resetPasswordInfo.confirmpassword"/>
+    <button class="btn btn-primary" ng-disabled="application.authentication.loading">
+      {{contextualize('locale_reset_password_button_2')}}
+    </button>
+    &nbsp;
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.authentication.loading" />
+  </form>
+</div>

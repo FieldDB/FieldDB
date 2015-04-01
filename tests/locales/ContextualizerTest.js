@@ -1,10 +1,38 @@
 var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
 var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
 var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
+var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
+var Q = require("q");
 
 var specIsRunningTooLong = 5000;
 
 describe("Contextualizer", function() {
+
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      // console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
+  });
+
+
+  beforeEach(function() {
+    if (FieldDBObject.application) {
+      // console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+    mockDatabase = {
+      get: mockDatabase.get,
+      set: mockDatabase.set
+    };
+    ContextualizableObject.compatibleWithSimpleStrings = true;
+  });
+
   describe("construction", function() {
 
     it("should load the Contextualizer", function() {
@@ -18,7 +46,6 @@ describe("Contextualizer", function() {
       expect(contextualizer.currentLocale.iso).toEqual("en");
       expect(contextualizer.currentContext).toEqual("default");
     });
-
 
     it("should let users update locale strings without confirmation", function() {
       var contextualizer = new Contextualizer();
@@ -160,18 +187,46 @@ describe("Contextualizer", function() {
   });
 
   describe("accept user contributions", function() {
-    it("should be able to save the messages.json to a corpus", function(done) {
-      var contextualizer = new Contextualizer();
+    it("should be able to save the messages.json to a corpus if they were modified", function(done) {
+      var contextualizer = new Contextualizer({
+        dbname: "teammatiger-psycholingdash"
+      });
+      FieldDBObject.application = new FieldDBObject();
+      FieldDBObject.application.corpus = {
+        set: mockDatabase.set,
+        dbname: "teammatiger-psycholingdash"
+      };
+      expect(contextualizer.application).toBeDefined();
+      expect(contextualizer.application.corpus.dbname).toEqual("teammatiger-psycholingdash");
+      expect(contextualizer.application.corpus.set).toEqual(mockDatabase.set);
+
       contextualizer.addMessagesToContextualizedStrings("en", {
         "locale_practice": {
           "message": "Practice"
         }
       });
+
+      contextualizer.updateContextualization("locale_practice", "Practic-ification");
+
       expect(contextualizer.save).toBeDefined();
+      // contextualizer.debugMode = true;
       contextualizer.save().then(function(results) {
-        contextualizer.debug(" save user contribution results", results);
-        expect(results[0].state).toEqual("rejected");
-      })
+          expect(results).not.toBe(contextualizer);
+          contextualizer.debug(" save user contribution results", results);
+          // expect(results[0]).toEqual(" ");
+          // expect(results[0].stack).toEqual(" ");
+
+
+          // expect(results[0]).toEqual(" ");
+          expect(results[0].state).toEqual("fulfilled");
+          expect(results[0].value.warnMessage).toBeUndefined();
+          // expect(results[0].value.warnMessage).toContain("Item hasn't really changed, no need to save");
+          expect(results[0].value.rev).toBeDefined();
+          expect(results[0].value.rev.length).toBeGreaterThan(10);
+        })
+        .fail(function(error) {
+          console.error(error.stack);
+        })
         .then(done, done);
     }, specIsRunningTooLong);
 
@@ -184,9 +239,12 @@ describe("Contextualizer", function() {
       });
       contextualizer.email = "lingllama@lingsync.org";
       contextualizer.save().then(function(results) {
-        contextualizer.debug(results);
-        expect(results[0].state).toEqual("fulfilled");
-      })
+          contextualizer.debug(results);
+          expect(results[0].state).toEqual("fulfilled");
+        })
+        .fail(function(error) {
+          console.error(error.stack);
+        })
         .then(done, done);
     }, specIsRunningTooLong);
   });
@@ -396,25 +454,35 @@ describe("Contextualizer", function() {
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
       }, specIsRunningTooLong);
 
-      xit("should be able to modify localization using dot notation asynchonously false case", function(done) {
+      it("should be able to modify localization asynchonously: user replies no", function(done) {
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
         contextualizer.alwaysConfirmOkay = undefined;
         expect(contextualizer.alwaysConfirmOkay).toBeFalsy();
         obj.for_child = "In this game the mouse will eat all the cheese with your help.";
 
-        setTimeout(function() {
-          expect(obj.for_child).toEqual("In this game the mouse will eat all the cheese with your help.");
-          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game the mouse will eat all the cheese with your help.");
+        expect(contextualizer.whenReadys).toBeDefined();
+        expect(contextualizer.whenReadys.length).toEqual(1);
+
+        Q.allSettled(contextualizer.whenReadys).then(function(results) {
+          contextualizer.debug("whenReadys are done", results);
+          expect(results).toBeDefined();
+          expect(results[0]).toBeDefined();
+          expect(results[0].state).toEqual("rejected");
+          expect(results[0].reason).toBeDefined();
+          expect(results[0].reason.message).toBeDefined("Do you also want to update locale_practice_description_for_child for other users? \nIn this game, you will help the mouse eat all the cheese! -> In this game the mouse will eat all the cheese with your help.");
+          expect(results[0].reason.response).toEqual(false);
+
+          expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
+          expect(obj.contextualizer.contextualize("locale_practice_description_for_child")).toEqual("In this game, you will help the mouse eat all the cheese!");
           expect(obj.toJSON().for_child).toEqual("locale_practice_description_for_child");
-          done();
-        }, 10);
+        }).done(done);
 
         expect(obj.for_child).toEqual("In this game, you will help the mouse eat all the cheese!");
       }, specIsRunningTooLong);
 
 
       it("should not break if its only 1 string", function() {
-        ContextualizableObject.updateAllToContextualizableObjects = false;
+        ContextualizableObject.compatibleWithSimpleStrings = true;
 
         expect("preventing this in FieldDBObject's initialization").toEqual("preventing this in FieldDBObject's initialization");
         // console.log("ContextualizableObject.constructor",  ContextualizableObject.constructor);
@@ -459,8 +527,8 @@ describe("Contextualizer", function() {
         expect(containingObject.title.toJSON).toBeUndefined();
       });
 
-      it("should update a string to the default of a contextualizable object if updateAllToContextualizableObjects is true", function(done) {
-        ContextualizableObject.updateAllToContextualizableObjects = true;
+      it("should update a string to the default of a contextualizable object if compatibleWithSimpleStrings is true", function(done) {
+        ContextualizableObject.compatibleWithSimpleStrings = false;
         var onlyAString = new ContextualizableObject("Import datalist");
         expect(onlyAString.data).toEqual({
           locale_Import_datalist: {
@@ -483,8 +551,10 @@ describe("Contextualizer", function() {
             expect(onlyAString.default).toEqual("Imported datalist");
             expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
             expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
+
+            expect(ContextualizableObject.compatibleWithSimpleStrings).toEqual(false);
             expect(onlyAString.toJSON()).toEqual("Imported datalist");
-            ContextualizableObject.updateAllToContextualizableObjects = false;
+            ContextualizableObject.compatibleWithSimpleStrings = true;
             expect(onlyAString.toJSON()).toEqual({
               default: "locale_Import_datalist",
               locale_Import_datalist: "Imported datalist"
@@ -513,5 +583,108 @@ describe("Contextualizer", function() {
 
     });
 
+  });
+
+  describe("backward compatability", function() {
+
+    it("should accept an object", function() {
+      ContextualizableObject.compatibleWithSimpleStrings = true;
+      var obj = new ContextualizableObject({
+        default: "An old data list"
+      });
+
+      expect(obj.default).toEqual("An old data list");
+      expect(obj.warnMessage).toBeUndefined();
+    });
+
+    /**
+     * Use this to undo/detect the new String() constructor
+
+     // http://stackoverflow.com/questions/1978049/what-values-can-a-constructor-return-to-avoid-returning-this
+     if (!(value instanceof this.INTERNAL_MODELS[propertyname])) {
+       this.warn(" This item was supposed to be " + this.INTERNAL_MODELS[propertyname] + "  but was returned by the constructor as a string.");
+       value = value.toString();
+     }
+
+     *
+     */
+    it("should return a String", function() {
+      ContextualizableObject.compatibleWithSimpleStrings = true;
+      expect(ContextualizableObject.compatibleWithSimpleStrings).toBeTruthy();
+      var obj = {
+        title: new ContextualizableObject("An old data list")
+      };
+
+      // It will pass == tests
+      expect(obj.title).toEqual("An old data list");
+      /* jshint ignore:start  */
+      expect(obj.title == "An old data list").toEqual(true);
+
+      // It wont pass === tests
+      expect("An old data list" === "An old data list").toEqual(true);
+      expect("An old data list").toBe("An old data list");
+      expect(obj.title).not.toBe("An old data list");
+
+      // It will actually be an object array of characters
+      // expect(obj.title).toEqual({
+      //   0: 'A',
+      //   1: 'n',
+      //   2: ' ',
+      //   3: 'o',
+      //   4: 'l',
+      //   5: 'd',
+      //   6: ' ',
+      //   7: 'd',
+      //   8: 'a',
+      //   9: 't',
+      //   10: 'a',
+      //   11: ' ',
+      //   12: 'l',
+      //   13: 'i',
+      //   14: 's',
+      //   15: 't'
+      // });
+      /* jshint ignore:end  */
+
+      // They are equivalent if concatinated.
+      expect(obj.title.toString()).toBe("An old data list");
+      expect(obj.title + "").toBe("An old data list");
+
+      // They are equivalent if stringified.
+      expect(JSON.stringify({
+        title: "An old data list"
+      })).toBe("{\"title\":\"An old data list\"}");
+
+      expect(JSON.stringify(obj)).toBe("{\"title\":\"An old data list\"}");
+    });
+
+    /**
+     *
+     * if using the throw strategie use this in the FieldDBObject ensureSetViaAppropriateType method
+
+      try {
+          value = new this.INTERNAL_MODELS[propertyname](value);
+        } catch (constructorRejectedValue) {
+          if (value === constructorRejectedValue) {
+            value = constructorRejectedValue;
+          } else {
+            this.warn("There was an error setting the " + propertyname + " on this object " + this._id, constructorRejectedValue);
+          }
+        }
+
+     *
+     */
+    xit("should thow a string", function() {
+      ContextualizableObject.compatibleWithSimpleStrings = true;
+      expect(ContextualizableObject.compatibleWithSimpleStrings).toBeTruthy();
+      var obj;
+      try {
+        obj = new ContextualizableObject("An old data list");
+      } catch (constructorRejectedValue) {
+        obj = constructorRejectedValue;
+      }
+      expect(obj.toString()).toEqual("An old data list");
+      expect(obj).toEqual("An old data list");
+    });
   });
 });

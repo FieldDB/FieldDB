@@ -99,7 +99,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
         throw new Error("This confidential wasnt set up properly, cant encrypt.");
       }
       // this.debugMode = true;
-      this.debug("encrypting "+ value);
+      this.debug("encrypting " + value);
       var result = CryptoJS.AES.encrypt(value, this.secretkey.toString("base64"));
       this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
       // return the base64 version to save it as a string in the corpus
@@ -166,6 +166,9 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       if (value === this._secretkey) {
         return;
       }
+      if (this._secretkey && this._secretkey.length >2) {
+        throw new Error("Confidential key cant be changed once it was created. Please create another Confidential encrypter if you wish to change the key.");
+      }
       if (!value) {
         value = "";
       }
@@ -178,6 +181,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       if (!this.secretkey) {
         this.secretkey = Confidential.secretKeyGenerator();
       }
+      return this;
     }
   },
 

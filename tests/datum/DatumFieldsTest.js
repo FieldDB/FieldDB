@@ -1,4 +1,5 @@
 "use strict";
+var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
 var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
 var DatumField = require("./../../api/datum/DatumField").DatumField;
 var DatumFields = require("./../../api/datum/DatumFields").DatumFields;
@@ -10,6 +11,13 @@ var sampleDatumFields = function() {
 
 describe("lib/DatumFields", function() {
 
+  afterEach(function() {
+    if (FieldDBObject.application) {
+      // console.log("Cleaning up.");
+      FieldDBObject.application = null;
+    }
+  });
+
   it("should load", function() {
     expect(DatumFields).toBeDefined();
   });
@@ -18,11 +26,11 @@ describe("lib/DatumFields", function() {
     var collection;
 
     beforeEach(function() {
-      // console.log("beforeEach");
       collection = new DatumFields({
         inverted: true,
         collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
       });
+      collection.debug("beforeEach");
     });
 
     it("should construct using options", function() {
@@ -40,7 +48,7 @@ describe("lib/DatumFields", function() {
           id: "thisIsCamelCase"
         }]
       });
-      // console.log(collection._collection);
+      collection.debug(collection._collection);
       expect(collection.thisIsCamelCase).toBeDefined();
       expect(collection.thisiscamelcase).toBeDefined();
       expect(collection._collection.length).toEqual(1);
@@ -107,13 +115,13 @@ describe("lib/DatumFields", function() {
     });
 
     it("should permit push to add to the bottom", function() {
-      collection.push(sampleDatumFields()[3]);
-      expect(collection.collection[2]).toEqual(sampleDatumFields()[3]);
+      var addition = collection.push(sampleDatumFields()[3]);
+      expect(collection.collection[2]).toEqual(addition);
     });
 
     it("should permit unshift to add to the top", function() {
-      collection.unshift(sampleDatumFields()[4]);
-      expect(collection.collection[0]).toEqual(sampleDatumFields()[4]);
+      var addition = collection.unshift(sampleDatumFields()[4]);
+      expect(collection.collection[0]).toEqual(addition);
     });
 
   });
@@ -208,7 +216,7 @@ describe("lib/DatumFields", function() {
 
     it("should seem like an array when serialized using both the canonical JSON.stringify", function() {
       var asStringified = JSON.stringify(collection);
-      // console.log(asStringified);
+      collection.debug(asStringified);
       expect(JSON.parse(asStringified)[2].type).toEqual("date");
       expect(JSON.parse(asStringified)[0].type).toEqual(collectionToLoad[0].type);
       expect(JSON.parse(asStringified)[1].value).toEqual(collectionToLoad[1].value);
@@ -326,10 +334,10 @@ describe("lib/DatumFields", function() {
 
       field.decryptedMode = false;
       field.value = "noqa-ta tusu-nay-wan changed without access";
-      expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
+      expect(field.warnMessage).toContain("User is not able to view the  xxxx-xx xxxx-xxx-xx-x-xx  value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
       expect(field.value).toBe("xxxx-xx xxxx-xxx-xxx-xx");
-      expect(field.warnMessage).toContain("User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to change the value of Morphemes, it is encrypted and the user isn't in decryptedMode.;;; User is not able to view the value of Morphemes, it is encrypted and the user isn't in decryptedMode.");
-      // console.log(field.toJSON());
+      expect(field.warnMessage).toContain("User is not able to change the value xxxx-xx xxxx-xxx-xxx-xx of Morphemes, it is encrypted and the user isn't in decryptedMode.");
+      field.debug(field.toJSON());
     });
 
   });

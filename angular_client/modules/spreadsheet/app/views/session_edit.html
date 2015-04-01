@@ -1,0 +1,65 @@
+<form ng-model='application.corpus.currentSession'>
+  <table cellpadding="5px">
+    <tr>
+      <td>
+        <i class="fa whiteicon fa-question">
+        </i>
+        {{contextualize('locale_goal_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.goal" placeholder="Collecting examples of animacy agreement">
+      </td>
+      <td>
+        <i class="fa whiteicon fa-group">
+        </i>
+        {{contextualize('locale_consultants_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.consultants" placeholder="ME,EV,FE">
+      </td>
+      <td>
+        <i class="fa whiteicon fa-group">
+        </i>
+        {{contextualize('locale_user_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.user" placeholder="{{application.corpus.currentSession.user}}" disabled>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <i class="fa whiteicon fa-globe">
+        </i>
+        {{contextualize('locale_language_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.language" placeholder="Language">
+      </td>
+      <td>
+        <i class="fa whiteicon fa-globe">
+        </i>
+        {{contextualize('locale_dialect_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="text" ng-model="application.corpus.currentSession.dialect" placeholder="Dialect">
+      </td>
+      <td>
+        <i class="fa whiteicon fa-calendar">
+        </i>
+        {{contextualize('locale_date_elicited_textbox')}}:
+      </td>
+      <td>
+        <input class="span3" type="date" ng-model="application.corpus.currentSession.dateElicited" placeholder="Weds 2012-08-01">
+      </td>
+    </tr>
+  </table>
+</form>
+<button class="btn" ng-click="editSession(application.corpus.currentSession, data);">
+  <i class="fa whiteicon fa-save">
+  </i>
+  {{contextualize('locale_save_changes_button')}}
+</button>
+&nbsp;
+<button class="btn" ng-click="showEditSessionDetailsDropdown=false">
+  {{contextualize('locale_cancel_button')}}
+</button>

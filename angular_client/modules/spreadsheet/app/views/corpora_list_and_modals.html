@@ -1,0 +1,96 @@
+<p> &nbsp;
+</p>
+<div class="centered" >
+  <!-- Chrome works better message -->
+  <div ng-show="notChrome" >
+    <h3>{{contextualize('locale_for_chrome_message')}}
+    </h3>
+    <p>
+      {{contextualize('locale_other_browser_message')}}
+      {{notChrome}}
+      <br />
+      <a  href="http://chrome.google.com">
+        <button class="btn btn-info">
+          {{contextualize('locale_get_chrome_button')}}
+        </button>
+      </a>
+      <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
+        <button class="btn btn-success">
+          {{contextualize('locale_browser_works_button')}}
+        </button>
+      </a>
+    </p>
+  </div>
+
+  <img ng-src="images/logo.png">
+  <p>
+    &nbsp;
+  </p>
+
+  <!-- Sessions area -->
+  <div class="mainPageDiv" ng-show="application.corpus">
+    <span  >
+      <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" > {{application.corpus.title}} {{contextualize('locale_loaded')}}
+      <br />
+      <i class="fa fa-calendargoal">
+      </i>
+      {{contextualize('locale_select_create_session')}}
+    </span>
+    <br/>
+    <div class="form-horizontal">
+      <form>
+        <select ng-show="application.sessionsList.docs.length>0" ng-model="application.corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
+        </select>
+        <button  ng-show="application.corpus.currentSession" type="submit" ng-click="showDataEntry()" class="btn btn-primary">
+          {{contextualize('locale_go_button')}}
+        </button>&nbsp;
+        <button class="btn btn-info" type='button'  ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown">
+          <i class="fa whiteicon fa-plus">
+          </i> {{contextualize('locale_new_session_button')}}
+        </button>
+      </form>
+    </div>
+    <div class="newSessionDiv"  >
+      <ng-include src="'views/session_create_new.html'"></ng-include>
+    </div>
+  </div>
+
+  <br />
+
+  <!-- Corpora user has access to -->
+  <div class="mainPageDiv"   >
+    <i class="fa fa-cloud">
+    </i>  &nbsp;
+    {{contextualize('locale_corpora')}}
+    <br />
+    <table class="table">
+      <tbody>
+        <tr ng-repeat="corpusConnection in application.authentication.user.corpora._collection track by corpusConnection.dbname" ng-click="selectCorpus(corpusConnection);" ng-disabled="loading" ng-class="{'corpus-selected': application.corpus.dbname==corpusConnection.dbname}">
+          <td>
+            <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{corpusConnection.gravatar}}.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
+          </td>
+          <td class="text-left" title="{{corpusConnection.dbname}} - {{corpusConnection.description}}">
+            {{contextualize('locale_access')}} {{corpusConnection.title}}
+          </td>
+        </tr>
+        <tr ng-click="selectCorpus({'dbname':'lingllama-communitycorpus','title':'CommunityCorpus'});" ng-disabled="loading" >
+          <td>
+            <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=30&amp;d=retro&amp;r=pg" alt="" />
+          </td>
+          <td class="text-left">
+            {{contextualize('locale_access_lingllama')}}
+            <br/>
+            <small>
+              {{contextualize('locale_access_lingllama_footnote')}}
+            </small>
+          </td>
+        </tr>
+      </tbody>
+    </table>  &nbsp;
+    <img ng-src="images/loading-spinner.gif" ng-show="application.authentication.loading">
+  </div>
+</div>
+
+<div class="centered">
+  <ng-include src="'views/welcome.html'"></ng-include>
+</div>

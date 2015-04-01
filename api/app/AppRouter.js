@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone",
     "datum/Datum",
     "data_list/DataList",
@@ -25,7 +25,7 @@ define([
      *        buttons or uses the navigation menu, and it also happens any time
      *        the URL changes it will make the component full screen by hiding
      *        and showing divs using jquery.
-     * 
+     *
      * @extends Backbone.Router
      * @constructs
      */
@@ -33,19 +33,19 @@ define([
     },
 
     routes : {
-      "corpus/:pouchname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
-      "corpus/:pouchname/datum/:id"     : "showEmbeddedDatum", //pouchname has to match the pouch of the datum
-      "corpus/:pouchname/search/:searchterm"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
-      "corpus/:pouchname/search"        : "showEmbeddedSearch",//pouchname has to match the pouch of the corpus
-      "corpus/:pouchname/conversation/:id" : "showEmbeddedConversation", 
-      "corpus/:pouchname/alldata"       : "showAllData",//pouchname has to match the pouch of the corpus
-      "corpus/:pouchname"               : "showFullscreenCorpus", 
-      "corpus"                          : "showFullscreenCorpus", 
-      "data/:dataListid"                : "showFullscreenDataList",//TODO: consider putting corpus and pouchname here
-      "session/:sessionid"              : "showFullscreenSession",//TODO: consider putting corpus and pouchname here
+      "corpus/:dbname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
+      "corpus/:dbname/datum/:id"     : "showEmbeddedDatum", //dbname has to match the pouch of the datum
+      "corpus/:dbname/search/:searchterm"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
+      "corpus/:dbname/search"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
+      "corpus/:dbname/conversation/:id" : "showEmbeddedConversation",
+      "corpus/:dbname/alldata"       : "showAllData",//dbname has to match the pouch of the corpus
+      "corpus/:dbname"               : "showFullscreenCorpus",
+      "corpus"                          : "showFullscreenCorpus",
+      "data/:dataListid"                : "showFullscreenDataList",//TODO: consider putting corpus and dbname here
+      "session/:sessionid"              : "showFullscreenSession",//TODO: consider putting corpus and dbname here
       "user/:userid"                    : "showFullscreenUser",
-      "import"                          : "showImport",//TODO: consider putting corpus and pouchname here
-      "corpus/:pouchname/export"        : "showExport",
+      "import"                          : "showImport",//TODO: consider putting corpus and dbname here
+      "corpus/:dbname/export"        : "showExport",
       "diff/oldrev/:oldrevision/newrev/:newrevision" : "showDiffs",
       "render/:render"                  : "renderDashboardOrNot",
       "help/:helptype"                  : "renderHelp",
@@ -55,9 +55,9 @@ define([
 
     /**
      * Does nothing or renders
-     * 
+     *
      * @param {String}
-     *          pouchname (Optional) The name of the corpus to display.
+     *          dbname (Optional) The name of the corpus to display.
      */
     renderDashboardOrNot : function(render) {
       if (OPrime.debugMode) OPrime.debug("In renderDashboardOrNot: " );
@@ -66,61 +66,35 @@ define([
         this.hideEverything();
         $("#dashboard-view").show();
         $("#datums-embedded").show();
-        window.location.href = "#"; 
+        window.location.href = "#";
       }
     },
 
     /**
-     * Displays the dashboard view of the given pouchname, if one was given. Or
+     * Displays the dashboard view of the given dbname, if one was given. Or
      * the blank dashboard view, otherwise.
-     * 
+     *
      * @param {String}
-     *          pouchname (Optional) The name of the corpus to display.
+     *          dbname (Optional) The name of the corpus to display.
      */
     showDashboard : function() {
       if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
     },
-    /**
-     * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority.. 
-     */
-    showDiffs : function(oldrevision, newrevision){
-      var couchConnection = window.app.get("corpus").get("couchConnection");
-      var couchDatabaseUrl = couchConnection.protocol+couchConnection.domain;
-      if(couchConnection.port != null){
-        couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
-      }
-      couchDatabaseUrl = couchDatabaseUrl + couchConnection.path +"/_utils/database.html?"+ couchConnection.pouchname;
-     
-      
-      window.appView.toastUser("We haven't implemented the 'diff' tool yet" +
-      		" (ie, showing the changes, letting you undo changes etc)." +
-      		" We will do it eventually, when it becomes a priority. " +
-      		"<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
-      		"You can vote for it in our issue tracker</a>.  " +
-      		"We use the " +
-      		"<a target='blank' href='"+couchDatabaseUrl+"'>" +"Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).","alert","Track Changes:");
-    },
-    
-    renderHelp : function(helptype){
-      if(helptype.indexOf("illustratedguide") >= 0){
-        $("#illustrated_guide_to_dash").modal("show");
-        window.location.href= "#";
-      }
-    },
+
     /**
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
-    showFullscreenUser : function(userid, pouchname) {
+    showFullscreenUser : function(userid, dbname) {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
-        if(!pouchname){
-          pouchname = app.get("corpus").get("pouchname");
+        if(!dbname){
+          dbname = app.get("corpus").get("dbname");
         }
         //if it is someone different, then change the model.
         if(userid != window.appView.publicReadUserView.model.id){
           var userToShow = new UserMask({
-            "pouchname": pouchname
+            "dbname": dbname
           });
           userToShow.id = userid;
             userToShow.fetch({
@@ -144,18 +118,18 @@ define([
       window.scrollTo(0,0);
 
     },
-    
+
     renderlogin : function(){
       $("#login_modal").show("modal");
       window.local.href="#";
       //window.local.replace("#login_modal");
     },
-    
+
     /**
-     * Displays all of the corpus details and settings. 
-     * 
+     * Displays all of the corpus details and settings.
+     *
      * @param {String}
-     *          pouchname The name of the corpus this datum is from.
+     *          dbname The name of the corpus this datum is from.
      */
     showFullscreenCorpus : function() {
       if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
@@ -170,8 +144,8 @@ define([
 
     },
     /**
-     * Displays all of the corpus details and settings. 
-     * 
+     * Displays all of the corpus details and settings.
+     *
      */
     showEmbeddedCorpus : function() {
       if (OPrime.debugMode) OPrime.debug("In showEmbeddedCorpus: " );
@@ -180,35 +154,35 @@ define([
       $("#dashboard-view").show();
       $("#corpus-embedded").show();
     },
-    
-   
-    
+
+
+
     /**
      * Displays the fullscreen view of the session specified by the given
-     * pouchname and the given datumid.
-     * 
+     * dbname and the given datumid.
+     *
      * @param {String}
-     *          pouchname The name of the corpus this datum is from, this needs to direclty match its pouch.
+     *          dbname The name of the corpus this datum is from, this needs to direclty match its pouch.
      * @param {Number}
      *          sessionid The ID of the session within the corpus.
      */
-    showEmbeddedSession : function(sessionid, pouchname) {
-      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + pouchname + " *** "
+    showEmbeddedSession : function(sessionid, dbname) {
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + dbname + " *** "
           + sessionid);
       if(sessionid){
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+        if(!dbname){
+          dbname = window.app.get("corpus").get("dbname");
         }
         if( sessionid != window.app.get("currentSession").id ){
           var cs = new Session({
-            "pouchname" : pouchname});
+            "dbname" : dbname});
           cs.id = sessionid;
-          
+
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if(window.app.get("corpus").get("pouchname") != pouchname ){
+          if(window.app.get("corpus").get("dbname") != dbname ){
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
-          
+
             cs.fetch({
               success : function(model) {
                 if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
@@ -221,37 +195,37 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-          });      
+          });
         }
       }
-      
+
       // Display the edit session view and hide all the other views
       this.hideEverything();
       $("#dashboard-view").show();
       $("#session-embedded").show();
-      
+
     },
-    
+
     /**
      * Displays the fullscreen view of the session.
      */
-    showFullscreenSession : function(sessionid, pouchname) {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + pouchname + " *** "
+    showFullscreenSession : function(sessionid, dbname) {
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + dbname + " *** "
           + sessionid);
       if(sessionid){
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+        if(!dbname){
+          dbname = window.app.get("corpus").get("dbname");
         }
         if( sessionid != window.app.get("currentSession").id ){
           var cs = new Session({
-            "pouchname" : pouchname});
+            "dbname" : dbname});
           cs.id = sessionid;
-          
+
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if(window.app.get("corpus").get("pouchname") != pouchname ){
+          if(window.app.get("corpus").get("dbname") != dbname ){
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
-          
+
             cs.fetch({
               success : function(model) {
                 if (OPrime.debugMode) OPrime.debug("Session fetched successfully" +model);
@@ -264,7 +238,7 @@ define([
               error : function(e) {
                 alert("There was an error fetching the sessions. Loading defaults..."+e);
               }
-          });      
+          });
         }
       }
       if($("#session-fullscreen").html() == ""){
@@ -275,18 +249,18 @@ define([
       window.scrollTo(0,0);
 
     },
-   
+
     /**
      * Displays the fullscreen view of the datalist specified by the given
-     * pouchname and the given dataListid
-     * 
+     * dbname and the given dataListid
+     *
      * @param {String}
-     *          pouchname The name of the corpus this datalist is from.
+     *          dbname The name of the corpus this datalist is from.
      * @param {Number}
      *          dataListid The ID of the datalist within the corpus.
      */
-    showFullscreenDataList : function(dataListid, pouchname) {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + pouchname + " *** "
+    showFullscreenDataList : function(dataListid, dbname) {
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + dbname + " *** "
           + dataListid);
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
       if( !dataListid || dataListid == app.get("currentDataList").id  ){
@@ -294,19 +268,19 @@ define([
           window.appView.renderReadonlyDataListViews("fullscreen");
         }
         this.hideEverything();
-        $("#data-list-fullscreen").show();    
+        $("#data-list-fullscreen").show();
         window.scrollTo(0,0);
         return;
       }
 
-      if(!pouchname){
-        pouchname = window.app.get("corpus").get("pouchname");
+      if(!dbname){
+        dbname = window.app.get("corpus").get("dbname");
       }
       var dl = new DataList({
-        "pouchname" : pouchname});
+        "dbname" : dbname});
       dl.id = dataListid;
       //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-      if(window.app.get("corpus").get("pouchname") != pouchname ){
+      if(window.app.get("corpus").get("dbname") != dbname ){
         alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         return;
       }
@@ -322,7 +296,7 @@ define([
               window.appView.setUpAndAssociateViewsAndModelsWithCurrentDataList(function(){
                 window.appView.renderReadonlyDataListViews("fullscreen");
                 window.app.router.hideEverything();
-                $("#data-list-fullscreen").show();    
+                $("#data-list-fullscreen").show();
                 window.scrollTo(0,0);
               });
             });
@@ -336,23 +310,23 @@ define([
      //TODO test other cases where datalist id needs to be changed
 
     },
-    
-    showMiddleDataList : function(dataListid, pouchname) {
+
+    showMiddleDataList : function(dataListid, dbname) {
       if (OPrime.debugMode) OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+        if(!dbname){
+          dbname = window.app.get("corpus").get("dbname");
         }
         var dl = new DataList({
-          "pouchname" : pouchname});
+          "dbname" : dbname});
         dl.id = dataListid;
 
         //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if(window.app.get("corpus").get("pouchname") != pouchname ){
+        if(window.app.get("corpus").get("dbname") != dbname ){
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?");//TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         }
-        
+
           dl.fetch({
             success : function(e) {
               if (OPrime.debugMode) OPrime.debug("Datalist fetched successfully" +e);
@@ -369,23 +343,23 @@ define([
       }
       this.hideEverything();
       $("#dashboard-view").show();
-      $("#data-list-embedded").show();      
+      $("#data-list-embedded").show();
     },
-    
+
     /**
      * Displays the advanced search in fullscreen form.
      */
-    showFullscreenSearch : function(pouchname, corpusid) {
+    showFullscreenSearch : function(dbname, corpusid) {
       this.hideEverything();
       window.appView.searchEditView.format = "fullscreen";
       window.appView.searchEditView.render();
       $("#search-fullscreen").show();
     },
-    
+
     /**
      * Displays the advanced search in embedded form.
      */
-    showEmbeddedSearch : function(pouchname, searchterm) {
+    showEmbeddedSearch : function(dbname, searchterm) {
       if(searchterm){
         window.app.get("search").set("searchKeywords", searchterm);
         window.appView.searchEditView.searchTop();
@@ -396,14 +370,14 @@ define([
       window.appView.searchEditView.render();
       $("#search-embedded").show();
     },
-    
+
     /**
      * The showAllData function gives the user a Datalist of all the  Datums in their corpus (embedded Datalist view)
      * it does this by calling the search method of searchEditView within appView
-     * @param pouchname   identifies the database to look in 
+     * @param dbname   identifies the database to look in
      * TODO: try saving it, setting it as current datalist and rendering that fullscreen
      */
-    showAllData : function(pouchname) {
+    showAllData : function(dbname) {
 //    this.hideEverything();
 //    $("#dashboard-view").show();
       window.app.showSpinner();
@@ -428,7 +402,7 @@ define([
       });
 
     },
-   
+
     /**
      * The showAllData function gives the user a Datalist of all the Datums in
      * this session (embedded Datalist view) it does this by calling the search
@@ -437,16 +411,16 @@ define([
      * datum in a session too (more precisely) however, we believe that it is
      * usually the goal which the user is actually searching for, not the
      * session itself.
-     * 
-     * @param pouchname
+     *
+     * @param dbname
      *          identifies the database to look in TODO: try saving it, setting
      *          it as current datalist and rendering that fullscreen
      * @param id this is the id of the session itself
-     * @param goal this is the goal of the session or what to search for. 
+     * @param goal this is the goal of the session or what to search for.
      */
-    showAllDataInSession : function(pouchname, id, goal) {
+    showAllDataInSession : function(dbname, id, goal) {
       /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
-      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("couchConnection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("connection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
 
 //    this.hideEverything();
 //    $("#dashboard-view").show();
@@ -474,12 +448,12 @@ define([
 
     },
 
-    showEmbeddedDatum : function(pouchname, datumid){
-      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + pouchname + " *** "
+    showEmbeddedDatum : function(dbname, datumid){
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + dbname + " *** "
           + datumid);
       if(datumid){
-        if(!pouchname){
-          pouchname = window.app.get("corpus").get("pouchname");
+        if(!dbname){
+          dbname = window.app.get("corpus").get("dbname");
         }
         if(datumid == "new"){
           appView.datumsEditView.newDatum();
@@ -487,7 +461,7 @@ define([
           $($($(".utterance")[0]).find(".datum_field_input")[0]).focus()
           return;
         }
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        var obj = new Datum({dbname: app.get("corpus").get("dbname")});
         obj.id  = datumid;
           obj.fetch({
             success : function(model, response) {
@@ -499,15 +473,15 @@ define([
         window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
       }
     },
-    
-    showEmbeddedConversation : function(pouchname, conversationid){
+
+    showEmbeddedConversation : function(dbname, conversationid){
         $("#datums-embedded").hide();
     	$("#conversation-embedded").show();
-    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + pouchname + " *** "
+    	if (OPrime.debugMode) OPrime.debug("In showEmbeddedConversation"  + dbname + " *** "
             + conversationid);
         if(conversationid){
-          if(!pouchname){
-            pouchname = window.app.get("corpus").get("pouchname");
+          if(!dbname){
+            dbname = window.app.get("corpus").get("dbname");
           }
           if(conversationid == "new"){
 //            appView.datumsEditView.newDatum(); //change this so it's relevant for Conversation
@@ -515,7 +489,7 @@ define([
 //            $($($(".utterance")[0]).find(".datum_field_input")[0]).focus() //change so relevant to Conversation
             return;
           }
-          var obj = new Conversation({pouchname: app.get("corpus").get("pouchname")});
+          var obj = new Conversation({dbname: app.get("corpus").get("dbname")});
           obj.id  = conversationid;
             obj.fetch({
               success : function(model, response) {
@@ -527,7 +501,7 @@ define([
           window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
         }
       },
-      
+
     showImport : function() {
       if (OPrime.debugMode) OPrime.debug("In import: ");
       //DONT render here, that way the user can come and go to the import dashboard
@@ -537,16 +511,16 @@ define([
       this.hideEverything();
       $('#import-fullscreen').show();
     },
-    
-    showExport : function(pouchname) {
-      if (OPrime.debugMode) OPrime.debug("In showExport: " + pouchname);
+
+    showExport : function(dbname) {
+      if (OPrime.debugMode) OPrime.debug("In showExport: " + dbname);
       //DONT render here, that way the user can come and go to the import dashboard
       if($("#export-modal").html() == ""){
         window.appView.exportView.render();
       }
       $('#export-modal').modal("show");
     },
-    
+
     // Functions that toggle between editable and readonly datums view
     showEditableDatums : function(format) {
       window.appView.renderEditableDatumsViews(format);
@@ -572,7 +546,7 @@ define([
         $("#datum-container-fullscreen").show();
       }
     },
-    
+
     hideEverything: function() {
       $("#dashboard-view").hide();
       $("#datums-embedded").hide();

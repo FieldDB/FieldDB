@@ -1,8 +1,8 @@
-<form ng-submit="markAsEdited(fieldData, datum, $event);">
+<form ng-submit="markAsEdited(datum.utterance, datum, $event);">
   <div class="span1" >
     <!-- todo try ng-change to reduce edits which are not edits -->
     <input
-    ng-blur="markAsEdited(fieldData, datum)"
+    ng-blur="markAsEdited(datum.utterance, datum)"
     class="span2"
     type="text"
     ng-model="datum['judgement']"
@@ -16,27 +16,27 @@
   <div ng-show="fieldsInColumns.third.length > 0" class="{{fieldSpanWidthClassName}}" fielddb-glosser-input datumornewdatum="datum" columnlabel="third">
   </div>
   <div class="span2 entered_modified_info">
-    <span ng-show="searching==true">
+    <span ng-show="searching">
       <button class="btn btn-primary" ng-click="selectNone()">
         {{contextualize('locale_done_button')}}
       </button>
       <br />
       <br />
     </span>
-    <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | fielddbPrettyDate}}">
       <i class="fa whiteicon fa-clock-o">
       </i>
-      {{datum.dateEntered | standardDate}}
+      {{datum.dateEntered | fielddbPrettyDate}}
     </span>
     <span ng-hide="!datum.enteredByUser">
       <img title="{{datum.enteredByUser.username}}" ng-hide="!datum.enteredByUser.gravatar" ng-src="https://secure.gravatar.com/avatar/{{datum.enteredByUser.gravatar}}?s=15&d=identicon">
       <br />
     </span>
     <br />
-    <span title="{{contextualize('locale_date_entered')}}  {{datum.dateModified | standardDate}}">
+    <span title="{{contextualize('locale_date_entered')}}  {{datum.dateModified | fielddbPrettyDate}}">
       <i class="fa whiteicon fa-save">
       </i>
-      {{datum.dateModified | standardDate}}
+      {{datum.dateModified | fielddbPrettyDate}}
     </span>
     <!-- <span ng-hide="!datum.modifiedByUser.users[0]"> <i class="fa whiteicon fa-group"> </i> </span> -->
     <span ng-repeat="modifiedByUser in datum.modifiedByUser.users">
@@ -58,18 +58,18 @@
     </div>
   </div>
 </form>
-<div class="row" ng-show="expandCollapse==true && !datum.id">
+<div class="row" ng-show="expandCollapse && !datum.id">
   <div class="span10 offset1 pagination-centered">
     <b>
       {{contextualize('locale_must_save_changes_message')}}
     </b>
   </div>
 </div>
-<div class="container-fluid" ng-show="expandCollapse==true && datum.id!=undefined">
+<div class="container-fluid" ng-show="expandCollapse && datum.id">
   <div class="row" >
     <div class="span5 expandedDataComments">
       <div class="expandedDataInner">
-        <ul class="unstyled">
+        <ul class="list-unstyled">
           <li ng-repeat="comment in datum.comments">
             <a ng-click="deleteComment(comment, datum)" class=" delete_button" >
               <i class="fa fa-times-circle">
@@ -79,13 +79,13 @@
             &nbsp;
             <i class="fa fa-clock-o">
             </i>
-            {{comment.timestamp | standardDateFromTimestamp}}
+            {{comment.timestamp | fielddbPrettyDateFromTimestamp}}
             <i class="fa fa-comment">
             </i>
             {{comment.text}}
           </li>
         </ul>
-        <button ng-show="commentPermissions==true" class="btn btn-primary" ng-click="addComment(datum);" >
+        <button ng-show="commentPermissions" class="btn btn-primary" ng-click="addComment(datum);" >
           <i class="fa whiteicon fa-comment">
           </i>
           {{contextualize('locale_add_comment_button')}}

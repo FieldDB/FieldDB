@@ -1,10 +1,10 @@
-define([ 
-    "backbone", 
+define([
+    "backbone",
     "datum/Datum",
     "comment/Comment",
     "comment/Comments"
 ], function(
-    Backbone, 
+    Backbone,
     Datum,
     Comment,
     Comments
@@ -15,19 +15,19 @@ define([
     /**
      * @class The Conversation widget is under construction (it is a combo of a data list and a datum)
      * @description The Conversation widget is under construction (it is a combo of a data list and a datum)
-     * 
+     *
      * @property {String} title The title of the Data List.
      * @property {String} dateCreated The date that this Data List was created.
      * @property {String} description The description of the Data List.
      * @property {Array<String>} datumIds An ordered list of the datum IDs of the
      *   Datums in the Data List.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("CONVERSATION init");
-      
+
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
@@ -38,7 +38,7 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      
+
       if (!this.get("dateCreated")) {
         this.set("dateCreated", (new Date()).toDateString());
       }
@@ -48,7 +48,7 @@ define([
       description : "",
       datumIds : []
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       comments: Comments
@@ -59,10 +59,10 @@ define([
       var m = new Comment({
         "text" : commentstring,
      });
-      
+
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -73,7 +73,7 @@ define([
             teamOrPersonal : "team",
             context : " via Offline App."
           });
-      
+
       window.app.addActivity(
           {
             verb : "commented",
@@ -93,16 +93,16 @@ define([
         datumIdsToGetAudioVideo = this.get("datumIds");
       }
       var audioVideoFiles = [];
-      
+
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        var obj = new Datum({dbname: app.get("corpus").get("dbname")});
         obj.id  = datumIdsToGetAudioVideo[id];
         var thisobjid = id;
           obj.fetch({
             success : function(model, response) {
               audioVideoFiles.push(model.get("audioVideo").get("URL"));
-              
+
               if(thisobjid == datumIdsToGetAudioVideo.length - 1){
                 if(typeof callback == "function"){
                   callback(audioVideoFiles);
@@ -110,7 +110,7 @@ define([
               }
             }
           });
-        
+
       }
     },
 
@@ -129,26 +129,26 @@ define([
       }
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " +JSON.stringify(datumIdsToApplyFunction));
       for(var id in datumIdsToApplyFunction){
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        var obj = new Datum({dbname: app.get("corpus").get("dbname")});
         obj.id  = datumIdsToApplyFunction[id];
           obj.fetch({
             success : function(model, response) {
               model[functionToAppy](functionArguments);
             }
           });
-        
+
       }
     },
-    
+
     /**
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the dataList to the corpus if it is in the right corpus, and wasnt already there
      * - Adds the dataList to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -162,7 +162,7 @@ define([
         this.set("dateCreated",JSON.stringify(new Date()));
       }
       //protect against users moving dataLists from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
+      if(window.app.get("corpus").get("dbname") != this.get("dbname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -193,7 +193,7 @@ define([
               verb = "added";
               verbicon = "icon-plus";
             }
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -204,7 +204,7 @@ define([
                   teamOrPersonal : "team",
                   context : " via Offline App."
                 });
-            
+
             window.app.addActivity(
                 {
                   verb : "<a href='"+differences+"'>"+verb+"</a> ",
@@ -215,7 +215,7 @@ define([
                   teamOrPersonal : "personal",
                   context : " via Offline App."
                 });
-            
+
             window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = model.id;
 
             //make sure the dataList is in the history of the user
@@ -243,12 +243,12 @@ define([
      * the dataList isn't in the current corpus it will call the fail
      * callback or it will alert a bug to the user. Override the fail
      * callback if you don't want the alert.
-     * 
+     *
      * @param successcallback
      * @param failurecallback
      */
     setAsCurrentConversation : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
+      if( window.app.get("corpus").get("dbname") != this.get("dbname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{
@@ -257,7 +257,7 @@ define([
         return;
       }else{
         if (window.app.get("currentConversation").id != this.id ) {
-          window.app.set("currentConversation", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes. 
+          window.app.set("currentConversation", this); //This results in a non-identical copy in the currentDatalist, it doesn't change when the one in the corpus changes.
         }
         window.app.get("authentication").get("userPrivate").get("mostRecentIds").datalistid = this.id;
         window.app.get("authentication").saveAndInterConnectInApp();
@@ -266,7 +266,7 @@ define([
             if (typeof successcallback == "function") {
               successcallback();
             }
-          }); 
+          });
         }else{
           if (typeof successcallback == "function") {
             successcallback();

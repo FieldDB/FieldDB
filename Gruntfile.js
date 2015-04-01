@@ -26,7 +26,16 @@ module.exports = function(grunt) {
           shim: {},
           basedir: "./"
         }
-      }
+      },
+      // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
+      test: {
+        src: ["tests/**/*Test.js"],
+        dest: "dist/<%= pkg.name %>-spec.js",
+        options: {
+          // external: ["api/**/*.js"],
+          // ignore: ["./node_modules/underscore/underscore.js"],
+        }
+      },
     },
     uglify: {
       options: {
@@ -39,25 +48,47 @@ module.exports = function(grunt) {
     },
     // to run one folder of tests only: $ jasmine-node tests/corpus --matchall
     jasmine_node: {
-      options: {
-        match: ".",
-        matchall: false,
-        extensions: "js",
-        specNameMatcher: "Test",
-        projectRoot: "./",
-        requirejs: false,
-        forceExit: true,
-        isVerbose: true,
-        showColors: true,
-        jUnit: {
-          report: true,
-          savePath: "./build/reports/jasmine/",
-          consolidate: true,
-          useDotNotation: false
-        }
+      dev: {
+        options: {
+          specFolders: ["tests"],
+          //   match: ".",
+          //   matchall: false,
+          //   extensions: "js",
+          specNameMatcher: "Test",
+          projectRoot: "api",
+          //   requirejs: false,
+          forceExit: true,
+          isVerbose: true,
+          showColors: true,
+          // jUnit: {
+          //   report: true,
+          //   savePath: "./build/reports/jasmine/",
+          //   consolidate: true,
+          //   useDotNotation: true
+          // }
+        },
+        all: ["tests/"]
       },
-      all: ["tests/"]
+      travis: {
+        options: {
+          specFolders: ["tests"],
+          specNameMatcher: "Test",
+          projectRoot: "api",
+          forceExit: true,
+          isVerbose: false,
+          showColors: false,
+        },
+        all: ["tests/"]
+      }
     },
+    jasmine: {
+      src: "<%= browserify.src.dest %>",
+      options: {
+        specs: "<%= browserify.test.dest %>",
+        // vendor: ["libs/jquery-1.9.1.js", "libs/underscore.js"]
+      }
+    },
+
     jshint: {
       options: {
         jshintrc: ".jshintrc"
@@ -74,7 +105,6 @@ module.exports = function(grunt) {
           "api/FieldDBObject.js",
           "api/Collection.js",
           "api/CORS.js",
-          "api/FieldDBConnection.js",
           "api/activity/Activites.js",
           "api/activity/Activity.js",
           "api/app/App.js",
@@ -106,7 +136,7 @@ module.exports = function(grunt) {
           "api/datum/Document.js",
           "api/datum/DocumentCollection.js",
           "api/datum/Response.js",
-          // "api/datum/Session.js",
+          "api/datum/Session.js",
           // "api/datum/Session.js",
           "api/datum/Stimulus.js",
           "api/export/Export.js",
@@ -157,8 +187,8 @@ module.exports = function(grunt) {
           "tests/image/*.js",
           "tests/import/*.js",
           "tests/insert_unicode/*.js",
-          "tests/locales/*.js",
           "tests/lexicon/*.js",
+          "tests/locales/*.js",
           "tests/permission/*.js",
           "tests/search/*.js",
           "tests/user/*.js"
@@ -186,7 +216,7 @@ module.exports = function(grunt) {
       },
       test: {
         files: "<%= jshint.test.src %>",
-        tasks: ["newer:jshint:test", "newer:jasmine_node"]
+        tasks: ["newer:jshint:test", "newer:jasmine_node:dev"]
       },
     },
     exec: {
@@ -219,18 +249,19 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-jasmine-node");
+  grunt.loadNpmTasks("grunt-contrib-jasmine");
   grunt.loadNpmTasks("grunt-jsdoc");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-watch");
 
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
-  grunt.registerTask("test", ["jasmine_node"]);
+  grunt.registerTask("test", ["jasmine_node:dev", "browserify", "jasmine"]);
   grunt.registerTask("build", ["jshint", "browserify"]);
-  grunt.registerTask("dist", ["jshint", "jasmine_node", "exec:updateFieldDBVersion", "browserify", "uglify"]);
+  grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
 
 };

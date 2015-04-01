@@ -1,9 +1,11 @@
 /* globals localStorage */
+var Activities = require("./../activity/Activities").Activities;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./UserMask").UserMask;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
-var CorpusConnection = require("./../corpus/CorpusConnection").CorpusConnection;
-var CorpusConnections = require("./../corpus/CorpusConnections").CorpusConnections;
+var Connection = require("./../corpus/Connection").Connection;
+var Corpora = require("./../corpus/Corpora").Corpora;
+var Database = require("./../corpus/Database").Database;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var UserPreference = require("./UserPreference").UserPreference;
 var DEFAULT_USER_MODEL = require("./user.json");
@@ -17,6 +19,7 @@ var Q = require("q");
  * @property {String} lastname The user's last name.
  * @property {Array} teams This is a list of teams a user belongs to.
  * @property {Array} sessionHistory
+ * @property {Array} datalistHistory
  * @property {Permission} permissions This is where permissions are specified (eg. read only; add/edit data etc.)
  *
  * @name  User
@@ -60,9 +63,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       fields: DatumFields,
       prefs: UserPreference,
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
-      activityCouchConnection: CorpusConnection,
+      activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
-      corpora: CorpusConnections
+      corpora: Corpora,
+      sessionHistory: FieldDBObject.DEFAULT_ARRAY,
+      datalistHistory: FieldDBObject.DEFAULT_ARRAY
     }
   },
 
@@ -93,7 +98,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._authUrl || "";
     },
     set: function(value) {
-      console.log("setting authurl", value);
+      this.debug("setting authurl", value);
       if (value === this._authUrl) {
         return;
       }
@@ -107,6 +112,35 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         value = value.replace(/[^.\/]*.fieldlinguist.com:3183/g, "auth.lingsync.org");
       }
       this._authUrl = value;
+    }
+  },
+
+  datalists: {
+    get: function() {
+      return this.datalistHistory;
+    },
+    set: function(value) {
+      if (value && !this._datalistHistory) {
+        this.datalistHistory = value;
+      }
+    }
+  },
+
+  datalistHistory: {
+    get: function() {
+      return this._datalistHistory || FieldDBObject.DEFAULT_ARRAY;
+    },
+    set: function(value) {
+      this._datalistHistory = value;
+    }
+  },
+
+  sessionHistory: {
+    get: function() {
+      return this._sessionHistory || FieldDBObject.DEFAULT_ARRAY;
+    },
+    set: function(value) {
+      this._sessionHistory = value;
     }
   },
 
@@ -127,30 +161,25 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
       //   }
       // }
+      if (value && value.connection) {
+        value.connection = value.connection = new Connection(value.connection);
+      }
       this._mostRecentIds = value;
     }
   },
 
   prefs: {
     get: function() {
-      if (!this._prefs && this.INTERNAL_MODELS["prefs"] && typeof this.INTERNAL_MODELS["prefs"] === "function") {
-        this.prefs = new this.INTERNAL_MODELS["prefs"](this.defaults.prefs);
-      }
+      // if (!this._prefs && this.INTERNAL_MODELS["prefs"] && typeof this.INTERNAL_MODELS["prefs"] === "function") {
+      //   this.prefs = new this.INTERNAL_MODELS["prefs"](this.defaults.prefs);
+      // }
       return this._prefs;
     },
     set: function(value) {
-      if (value === this._prefs) {
-        return;
-      }
-      if (!value) {
-        delete this._prefs;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["prefs"](value);
-        }
-      }
-      this._prefs = value;
+      this.ensureSetViaAppropriateType("prefs", value);
+      // if(this._prefs){
+      //   this._prefs.parent = this;
+      // }
     }
   },
 
@@ -170,19 +199,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       return this._corpora || FieldDBObject.DEFAULT_ARRAY;
     },
     set: function(value) {
-      if (value === this._corpora) {
-        return;
-      }
-      if (!value) {
-        delete this._corpora;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["corpora"](value);
-        }
-      }
-
-      this._corpora = value;
+      this.ensureSetViaAppropriateType("corpora", value);
     }
   },
 
@@ -221,6 +238,39 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  activityConnection: {
+    get: function() {
+      this.debug("getting activityConnection");
+      return this._activityConnection;
+    },
+    set: function(value) {
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
+        }
+      }
+      this.ensureSetViaAppropriateType("activityConnection", value);
+
+      if (this.username && this._activityConnection && this._activityConnection._connection && !this._activityConnection._database) {
+        this._activityConnection._database = new Database({
+          dbname: this.username + "-activity_feed",
+          connection: this._activityConnection._connection
+        });
+      }
+    }
+  },
+
+  activityCouchConnection: {
+    configurable: true,
+    get: function() {
+      return this.activityConnection;
+    },
+    set: function(value) {
+      this.activityConnection = value;
+    }
+  },
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
@@ -230,6 +280,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       // TODO not including the corpuses, instead include corpora
       json.corpora = this.corpora;
       delete json.corpuses;
+
+      // TODO deprecated
+      json.datalists = this.datalists;
 
       this.debug(json);
       return json;
@@ -244,7 +297,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         encryptedUserPreferences,
         deferred = Q.defer();
 
-      this.savingPromise = deferred.promise;
+      this.whenReady = deferred.promise;
 
       var self = this;
       Q.nextTick(function() {
@@ -270,7 +323,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
           key = Confidential.secretKeyGenerator();
           this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
         }
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug(" error ", e);
       }
       userKey = key + this.username;
       var userJSON = this.toJSON();
@@ -284,7 +338,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         this.constructor.prototype.temp = this.constructor.prototype.temp || {};
         this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
-        this.warn("unable to use local storage, this app wont be very usable offline ", e);
+        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug(" error ", e);
       }
 
       return deferred.promise;
@@ -314,7 +369,8 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         self.constructor.prototype.temp = self.constructor.prototype.temp || {};
         key = self.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-        self.warn("unable to use local storage, this app wont be very usable offline ", e);
+        self.warn("unable to use local storage, this app wont be very usable offline ");
+        self.debug(" error ", e);
       }
       if (!key) {
         self.warn("cannot fetch user info locally");
@@ -333,10 +389,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       decryptedUser = {};
       if (!encryptedUserPreferences) {
         self.warn("This user " + self.username + " hasnt been used this device before, need to request their prefs when they login.");
-        self.debug("userKey is " + userKey);
-        self.debug("user encrypted is " + self.constructor.prototype.temp[userKey]);
-        return FieldDBObject.prototype.fetch.apply(self, arguments);
+        return deferred.promise;
+        // return FieldDBObject.prototype.fetch.apply(self, arguments);
       }
+      self.debug("userKey is " + userKey);
+      self.debug("user encrypted is " + encryptedUserPreferences);
       decryptedUser = new Confidential({
         secretkey: userKey
       }).decrypt(encryptedUserPreferences);
@@ -346,7 +403,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         overwriteOrNot = "overwrite";
       }
 
-      self.merge("self", decryptedUser, overwriteOrNot);
+      self.merge("self", new User(decryptedUser), overwriteOrNot);
       return deferred.promise;
     }
   }

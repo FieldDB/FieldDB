@@ -1,14 +1,18 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
+var Activities = require("./../activity/Activities").Activities;
 var Database = require("./Database").Database;
-var CorpusConnection = require("./CorpusConnection").CorpusConnection;
+var Connection = require("./Connection").Connection;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var DatumStates = require("./../datum/DatumStates").DatumStates;
 var DatumTags = require("./../datum/DatumTags").DatumTags;
 var Comments = require("./../comment/Comments").Comments;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Sessions = require("./../Collection").Collection;
-var DataLists = require("./../Collection").Collection;
+var Sessions = require("./../datum/DocumentCollection").DocumentCollection;
+var DataLists = require("./../datum/DocumentCollection").DocumentCollection;
 var TeamPreference = require("./../user/UserPreference").UserPreference;
+var Team = require("./../user/Team").Team;
+var Permissions = require("./../permission/Permissions").Permissions;
+var Q = require("q");
 
 
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
@@ -44,8 +48,8 @@ var DEFAULT_CORPUS_MODEL = require("./corpus.json");
  *           of roughly where the data is from.
  * @property {String} remote The url of the remote eg:
  *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
- * @property {Array} corpusConnections The url of remote server(s) where the
- *           corpus is replicated or backed up as well as other connections it is connected to.
+ * @property {Array} connection The url of remote server(s) where the
+ *           corpus is replicated or backed up as well as other connection it is connected to.
  *
  * @property {Array} members Collection of public browsable/search engine
  *           discoverable members associated to the corpus
@@ -186,21 +190,24 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       termsOfUse: FieldDBObject.DEFAULT_OBJECT,
       license: FieldDBObject.DEFAULT_OBJECT,
       copyright: FieldDBObject.DEFAULT_STRING,
-      corpusConnection: CorpusConnection,
-      // olacExportConnections: FieldDBObject.DEFAULT_ARRAY,
+      connection: Connection,
+      activityConnection: Activities,
       publicCorpus: FieldDBObject.DEFAULT_STRING,
       confidential: Confidential,
 
       validationStati: DatumStates,
       tags: DatumTags,
 
+      fields: DatumFields,
       datumFields: DatumFields,
       speakerFields: DatumFields,
       participantFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
 
-      prefs: TeamPreference
+      prefs: TeamPreference,
+      team: Team,
+      permissions: Permissions
     }
   },
 
@@ -227,15 +234,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._title || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._title) {
-        return;
+      this.ensureSetViaAppropriateType("title", value);
+      if (this._title) {
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
       }
-      if (!value) {
-        delete this._title;
-        return;
-      }
-      this._title = value.trim();
-      this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase(); //this makes the accented char unnecessarily unreadable: encodeURIComponent(attributes.title.replace(/ /g,"_"));
     }
   },
 
@@ -244,14 +246,237 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._description || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
-      if (value === this._description) {
-        return;
+      this.ensureSetViaAppropriateType("description", value);
+    }
+  },
+
+  /**
+   * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
+   * @type {Object}
+   */
+  team: {
+    get: function() {
+      return this._team;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("team", value);
+    }
+  },
+
+  activityConnection: {
+    get: function() {
+      this.debug("getting activityConnection");
+      if (this._activityConnection && this._activityConnection.parent !== this) {
+        this._activityConnection.parent = this;
       }
-      if (!value) {
-        delete this._description;
-        return;
+      return this._activityConnection;
+    },
+    set: function(value) {
+      if (value) {
+        value.parent = this;
+        if (!value.confidential && this.confidential) {
+          value.confidential = this.confidential;
+        }
       }
-      this._description = value.trim();
+      this.ensureSetViaAppropriateType("activityConnection", value);
+    }
+  },
+
+  replicatedCorpusUrls: {
+    get: function() {
+      if (this._connection && this._connection.replicatedCorpusUrls) {
+        return this._connection.replicatedCorpusUrls;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (this._connection) {
+        this._connection.replicatedCorpusUrls = value;
+      }
+    }
+  },
+
+  olacExportConnections: {
+    get: function() {
+      if (this._connection && this._connection.olacExportConnections) {
+        return this._connection.olacExportConnections;
+      }
+      return FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (this._connection) {
+        this._connection.olacExportConnections = value;
+      }
+    }
+  },
+
+  termsOfUse: {
+    get: function() {
+      return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("termsOfUse", value);
+    }
+  },
+
+  license: {
+    get: function() {
+      return this._license || {};
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("license", value);
+    }
+  },
+
+  copyright: {
+    get: function() {
+      return this._copyright || FieldDBObject.DEFAULT_STRING;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("copyright", value);
+    }
+  },
+
+  unserializedSessions: {
+    value: null
+  },
+  sessions: {
+    get: function() {
+      return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("sessions", value, "unserializedSessions");
+    }
+  },
+
+  unserializedDatalists: {
+    value: null
+  },
+  datalists: {
+    get: function() {
+      return this.unserializedDatalists || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("datalists", value, "unserializedDatalists");
+    }
+  },
+
+  permissions: {
+    get: function() {
+      if (!this._permissions) {
+        this.permissions = {
+          dbname: this.dbname,
+          parent: this
+        };
+      }
+      return this._permissions || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("permissions", value);
+    }
+  },
+
+  loadPermissions: {
+    value: function(dataToPost) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!self.permissions || !(self.permissions instanceof Permissions)) {
+          self.permissions = new Permissions(self.permissions);
+        }
+        if (!self.permissions.dbname) {
+          self.permissions.dbname = self.dbname;
+        }
+        self.permissions.parent = self;
+        self.permissions.fetch(dataToPost)
+          .then(deferred.resolve, deferred.reject)
+          .fail(function(error) {
+            console.error(error.stack, self);
+            deferred.reject(error);
+          });
+
+      });
+      return deferred.promise;
+    }
+  },
+
+  datumFields: {
+    get: function() {
+      this.debug("getting datumFields");
+      return this._datumFields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("datumFields", value);
+    }
+  },
+
+  sessionFields: {
+    get: function() {
+      this.debug("getting sessionFields");
+      return this._sessionFields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("sessionFields", value);
+    }
+  },
+
+  speakerFields: {
+    get: function() {
+      this.debug("getting speakerFields");
+      return this._speakerFields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("speakerFields", value);
+    }
+  },
+
+  participantFields: {
+    get: function() {
+      this.debug("getting participantFields");
+      return this._participantFields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("participantFields", value);
+    }
+  },
+
+  conversationFields: {
+    get: function() {
+      this.debug("getting conversationFields");
+      return this._conversationFields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("conversationFields", value);
+    }
+  },
+
+  fields: {
+    get: function() {
+      this.debug("getting fields");
+      return this._fields;
+    },
+    set: function(value) {
+      if (value && !value.confidential && this.confidential) {
+        value.confidential = this.confidential;
+      }
+      this.ensureSetViaAppropriateType("fields", value);
     }
   },
 
@@ -260,18 +485,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       return this._prefs;
     },
     set: function(value) {
-      if (value === this._prefs) {
-        return;
-      }
-      if (!value) {
-        delete this._prefs;
-        return;
-      } else {
-        if (Object.prototype.toString.call(value) === "[object Object]") {
-          value = new this.INTERNAL_MODELS["prefs"](value);
-        }
-      }
-      this._prefs = value;
+      this.ensureSetViaAppropriateType("prefs", value);
     }
   },
 
@@ -296,7 +510,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       var upgradeSucess = this.upgradeCorpusFieldsToMatchDatumTemplate(value.trim());
       if (!upgradeSucess) {
         this.prefs.preferredDatumTemplate = value.trim();
@@ -333,7 +547,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
       } else if (value === "yalefieldmethodsspring2014template") {
         order = ["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags"];
-        this.prefs.fullTemplateDefaultNumberOfFieldsPerColumn = 4;
+
+        this.prefs.preferedSpreadsheetShape = this.prefs.preferedSpreadsheetShape;
+        this.prefs.preferedSpreadsheetShape.rows = 4;
       }
 
 
@@ -389,7 +605,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       this.prefs.preferredLocale = value.trim();
     }
   },
@@ -410,7 +626,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         }
         return;
       }
-      this.prefs = this.prefs || new this.INTERNAL_MODELS["prefs"]();
+      this.prefs = this.prefs || {};
       this.prefs.preferredDashboardLayout = value.trim();
     }
   },
@@ -424,17 +640,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       this.warn("preferredTemplate is deprecated, please use preferredDatumTemplate instead.");
       this.preferredDatumTemplate = value;
     }
-  },
-
-  pouchname: {
-    get: function() {
-      return this.dbname;
-    },
-    set: function(value) {
-      this.dbname = value;
-    }
   }
-
 
 
 });

@@ -1,5 +1,5 @@
-var Diacritics = require("diacritic");
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
+var Q = require("q");
 
 var regExpEscape = function(s) {
   return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").
@@ -147,6 +147,17 @@ Collection.prototype = Object.create(Object.prototype, {
       return FieldDBObject.prototype.render.apply(this, arguments);
     }
   },
+  ensureSetViaAppropriateType: {
+    value: function() {
+      return FieldDBObject.prototype.ensureSetViaAppropriateType.apply(this, arguments);
+    }
+  },
+
+  application: {
+    get: function() {
+      return FieldDBObject.application;
+    }
+  },
 
   collection: {
     get: function() {
@@ -159,17 +170,18 @@ Collection.prototype = Object.create(Object.prototype, {
       if (value === this._collection) {
         return;
       }
-      if (!value) {
+      if (!value || value.length === 0) {
         this._collection = [];
         return;
       }
       if (Object.prototype.toString.call(value) !== "[object Array]") {
-        throw new Error("Cannot set collection to an object, only an array");
+        console.error("Cannot set collection to an object, only an array");
+        return;
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
         if (!item) {
-          this.warn("item" + itemIndex + "is undefined, not adding it to the collection " + this.fieldDBtype, item);
+          this.warn("item " + itemIndex + "is  (" + item + ") undefined or empty, not adding it to the collection " + this.fieldDBtype, item);
         } else {
           this.add(item);
         }
@@ -290,6 +302,48 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalInverted = this.inverted;
       }
 
+      if (!searchingFor && value) {
+        //previously code in the add function
+
+        this.debug("  the constructor of this before casting it ", value.constructor);
+        value = FieldDBObject.convertDocIntoItsType(value);
+        this.debug(" checking the constructor of this after casting it ", value.constructor);
+
+        if (value &&
+          this.INTERNAL_MODELS &&
+          this.INTERNAL_MODELS.item &&
+          typeof this.INTERNAL_MODELS.item === "function" &&
+          !(value instanceof this.INTERNAL_MODELS.item) &&
+          !(this.INTERNAL_MODELS.item.compatibleWithSimpleStrings && typeof value === "string")) {
+
+          // this.debug("adding a internamodel ", value);
+          // if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
+          this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value.constructor.toString());
+          if (typeof value.toJSON === "function") {
+            this.debug(" why defereincing this?");
+            value = value.toJSON();
+          }
+          value = new this.INTERNAL_MODELS.item(value);
+          // } else {
+          //   if (value.constructor === Object) {
+          //     this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
+          //     value = new FieldDBObject(value);
+          //   } else {
+          //     this.warn("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
+          //   }
+          // }
+        } else {
+          this.debug("  item to set was already of the right type for " + this.fieldDBtype, value);
+        }
+        searchingFor = this.getSanitizedDotNotationKey(value);
+        if (!searchingFor) {
+          this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+          throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
+        }
+        this.debug("adding " + searchingFor);
+
+      }
+
       if (value && this[searchingFor] && (value === this[searchingFor] || (typeof this[searchingFor].equals === "function" && this[searchingFor].equals(value)))) {
         this.debug("Not setting " + searchingFor + ", it  was already the same in the collection");
         return this[searchingFor];
@@ -310,18 +364,23 @@ Collection.prototype = Object.create(Object.prototype, {
           if (this.collection[index] !== value ||
             (typeof this.collection[index].equals === "function" && !this.collection[index].equals(value))
           ) {
-            this.warn("Overwriting an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
-            this.warn("Overwriting ", this.collection[index], "->", value);
-            this.collection[index] = value;
+            if (typeof this.collection[index].merge === "function") {
+              this.warn("Merging an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
+              this.collection[index].merge("self", value);
+            } else {
+              this.warn("Overwriting an existing _collection member " + searchingFor + " at index " + index + " (they have the same key but are not equal, nor the same object) ");
+              this.warn("Overwriting ", this.collection[index], "->", value);
+              this.collection[index] = value;
+            }
           }
-          return value;
+          return this.collection[index];
         }
       }
       /* if not a reserved attribute, set on object for dot notation access */
       if (["collection", "primaryKey", "find", "set", "add", "inverted", "toJSON", "length", "encrypted", "confidential", "decryptedMode"].indexOf(searchingFor) === -1) {
         this[searchingFor] = value;
         /* also provide a case insensitive cleaned version if the key can be lower cased */
-        if (typeof searchingFor.toLowerCase === "function") {
+        if (searchingFor && typeof searchingFor.toLowerCase === "function") {
           this[searchingFor.toLowerCase().replace(/_/g, "")] = value;
         }
 
@@ -334,7 +393,8 @@ Collection.prototype = Object.create(Object.prototype, {
       } else {
         this.collection.push(value);
       }
-      return value;
+      return this[searchingFor];
+      // return value;
     }
   },
 
@@ -344,6 +404,19 @@ Collection.prototype = Object.create(Object.prototype, {
         return this.collection.length;
       } else {
         return 0;
+      }
+    }
+  },
+
+  primaryKey: {
+    get: function() {
+      this.debug(this.id + "  getting collection prmary key " + this._primaryKey);
+      return this._primaryKey || "id";
+    },
+    set: function(value) {
+      this.debug(this.id + "setting collection prmary key " + this._primaryKey);
+      if (value) {
+        this._primaryKey = value;
       }
     }
   },
@@ -359,12 +432,13 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        this.warn("The primary key is undefined, nothing can be added!", this);
-        throw new Error("The primary key is undefined, nothing can be added!").stack;
+        this.warn("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
+        throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.", member);
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.");
+        this.debug("  not adding: ", member);
         return;
       }
       if (typeof value.trim === "function") {
@@ -373,7 +447,7 @@ Collection.prototype = Object.create(Object.prototype, {
       var oldValue = value;
       value = this.sanitizeStringForPrimaryKey(value);
       if (value !== oldValue && this.fieldDBtype !== "DatumStates") {
-        this.warn("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
+        this.debug("The sanitized the dot notation key of this object is not the same as its primaryKey: " + oldValue + " -> " + value);
       }
       return value;
     }
@@ -389,34 +463,13 @@ Collection.prototype = Object.create(Object.prototype, {
     value: function(value) {
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
-        for(var itemIndex in value){
+        for (var itemIndex in value) {
           value[itemIndex] = self.add(value[itemIndex]);
         }
         return value;
       }
 
-      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && value && !(value instanceof this.INTERNAL_MODELS.item)) {
-        // console.log("adding a internamodel ", value);
-        if (!this.INTERNAL_MODELS.item.fieldDBtype || this.INTERNAL_MODELS.item.fieldDBtype !== "Document") {
-          this.debug("casting an item to match the internal model", this.INTERNAL_MODELS.item, value);
-          value = new this.INTERNAL_MODELS.item(value);
-        } else {
-          if (value.constructor === "object") {
-            this.warn("this is going to be a FieldDBObject, even though its supposed to be a Document.", value);
-            value = new FieldDBObject(value);
-          } else {
-            this.debug("this is " + value[this.primaryKey] + " already some sort of an object.", value.fieldDBtype);
-          }
-        }
-      }
-      var dotNotationKey = this.getSanitizedDotNotationKey(value);
-      if (!dotNotationKey) {
-        this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-        throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
-      }
-      this.debug("adding " + dotNotationKey);
-      this.set(dotNotationKey, value);
-      return this[dotNotationKey];
+      return this.set(null, value);
     }
   },
 
@@ -435,17 +488,14 @@ Collection.prototype = Object.create(Object.prototype, {
 
   push: {
     value: function(value) {
-      // self.debug(this.collection);
-      this.set(this.getSanitizedDotNotationKey(value), value, null, false);
-      // self.debug(this.collection);
-      return this;
+      // self.debug(this.collectioan);
+      return this.set(null, value, null, false);
     }
   },
 
   unshift: {
     value: function(value) {
-      this.set(this.getSanitizedDotNotationKey(value), value, null, true);
-      return this;
+      return this.set(null, value, null, true);
     }
   },
 
@@ -569,8 +619,8 @@ Collection.prototype = Object.create(Object.prototype, {
                 }
               }
               if (!itMatches) {
-                this.warn("One of the requested removal items dont match what was removed ");
-                this.debug("One of the requested removal items dont match what was removed ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
+                this.warn("One of the requested removal items doesnt match exactly what was removed ");
+                this.debug("One of the requested removal items doesnt match exactly ", requestedRemoveFor, "-> ", thisremoved[removedIndex]);
               }
             }
           }
@@ -635,6 +685,87 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  unsaved: {
+    get: function() {
+      for (var itemIndex = this._collection.length - 1; itemIndex >= 0; itemIndex--) {
+        if (this._collection[itemIndex].unsaved) {
+          this._unsaved = true;
+          return this._unsaved;
+        }
+      }
+      this._unsaved = false;
+      return this._unsaved;
+    },
+    set: function(value) {
+      this._unsaved = !!value;
+    }
+  },
+
+  // calculateUnsaved: {
+  //   value: function() {
+  //     var previous = new this.constructor(this.fossil);
+  //     var current = new this.constructor(this);
+
+  //     if (previous.equals(current)) {
+  //       this.warn("The " + this.fieldDBtype + "collection didnt actually change. Not marking as editied");
+  //       this._unsaved = false;
+  //     } else {
+  //       this._unsaved = true;
+  //     }
+  //     return this._unsaved;
+  //   }
+  // },
+
+  save: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
+      var deferred = Q.defer(),
+        self = this,
+        promises = [];
+
+      this.saving = true;
+      this.whenReady = deferred.promise;
+
+      this.map(function(item) {
+        console.log("saving ", item);
+        if (item) {
+          promises.push(item.save(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl));
+        } else {
+          console.log("not saving this item", item);
+        }
+      });
+
+      this.warn("Saving " + promises.length + " items out of a collection with  " + this.length + " items.");
+
+      Q.allSettled(promises).done(function(results) {
+        self.warn("Saved a collection", results.length);
+        // self.debug(results);
+        self.saving = false;
+        deferred.resolve(self);
+        return self;
+      });
+
+      // .then(function(results) {
+      //   self.warn("Saved a collection", results.length);
+      //   // self.debug(results);
+      //   self.saving = false;
+      //   deferred.resolve(self);
+      //   return self;
+      // }, function(results) {
+      //   self.warn("Saved a collection,", results.length);
+      //   // self.debug(results);
+      //   self.saving = false;
+      //   deferred.resolve(self);
+      //   return self;
+      // }).fail(function(error) {
+      //   console.error(error.stack, self);
+      //   deferred.reject(error);
+      // });
+
+
+      return deferred.promise;
+    }
+  },
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       if (removeEmptyAttributes) {
@@ -664,13 +795,22 @@ Collection.prototype = Object.create(Object.prototype, {
       if (includeEvenEmptyAttributes) {
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
-      var json;
+      var json,
+        self = this;
       try {
         json = JSON.parse(JSON.stringify(this.toJSON()));
       } catch (e) {
         console.warn(e.stack);
         this.bug("There was a problem cloning this collection", e);
       }
+      json = json.map(function(item) {
+        if (typeof item.clone === "function") {
+          self.debug("This item has a clone, which we will call instead");
+          return JSON.parse(JSON.stringify(item.clone()));
+        } else {
+          return item;
+        }
+      });
 
       return json;
     }
@@ -690,8 +830,7 @@ Collection.prototype = Object.create(Object.prototype, {
   },
 
   /**
-   *  Cleans a value to become a primary key on an object (replaces punctuation and symbols with underscore)
-   *  formerly: item.replace(/[-\""+=?.*&^%,\/\[\]{}() ]/g, "")
+   *  Cleans a value to be safe for a file system or the key of a hash
    *
    * @param  String value the potential primary key to be cleaned
    * @return String       the value cleaned and safe as a primary key
@@ -702,15 +841,11 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!value) {
         return null;
       }
-      if (value.trim) {
-        value = Diacritics.clean(value);
-        value = value.trim().replace(/[^a-zA-Z0-9]+/g, "_").replace(/^_/, "").replace(/_$/, "");
-        return this.camelCased(value);
-      } else if (typeof value === "number") {
-        return parseInt(value, 10);
-      } else {
-        return null;
+      value = FieldDBObject.prototype.sanitizeStringForFileSystem.apply(this, arguments);
+      if (value && value.trim) {
+        value = this.camelCased(value);
       }
+      return value;
     }
   },
   capitalizeFirstCharacterOfPrimaryKeys: {
@@ -796,6 +931,13 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalOverwriteOrAsk = "";
       }
 
+      if (!(anotherCollection instanceof aCollection.constructor)) {
+        this.debug("The anotherCollection  isnt of the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
+        anotherCollection = new aCollection.constructor(anotherCollection);
+      } else {
+        this.debug("The anotherCollection  is  the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
+      }
+
       if (!anotherCollection || anotherCollection.length === 0) {
         this.debug("The new collection was empty, not merging.", anotherCollection);
         return resultCollection;
@@ -806,11 +948,13 @@ Collection.prototype = Object.create(Object.prototype, {
         var anotherItem = anotherCollection[idToMatch];
         var resultItem = resultCollection[idToMatch];
         if (!resultItem && typeof anItem.constructor === "function") {
+          self.debug("Cloning into anItem into a fielddbObjects ifits not one already");
           var json = anItem.toJSON ? anItem.toJSON() : anItem;
-          resultItem = new anItem.constructor(json);
+          resultItem = FieldDBObject.convertDocIntoItsType(json);
           var existingInCollection = resultCollection.find(resultItem);
           if (existingInCollection.length === 0) {
-            resultCollection.add(resultItem);
+            self.debug("This item wasnt in the result collection yet, adding it.", resultItem);
+            resultItem = resultCollection.add(resultItem);
           } else {
             resultItem = existingInCollection[0];
             self.debug("resultItem was already in the resultCollection  ", existingInCollection, resultItem);
@@ -818,20 +962,15 @@ Collection.prototype = Object.create(Object.prototype, {
         }
 
         if (anItem !== aCollection[idToMatch]) {
-          self.bug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch);
+          self.warn(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
         }
 
         if (anotherItem === undefined) {
           // no op, the new one isn't set
           self.debug(idToMatch + " was missing in new collection");
-          resultCollection[idToMatch] = anItem;
-
-        } else if (anItem === anotherItem || (typeof anItem.equals === "function" && anItem.equals(anotherItem))) {
+        } else if (resultItem === anotherItem || (typeof resultItem.equals === "function" && resultItem.equals(anotherItem))) {
           // no op, they are equal enough
           self.debug(idToMatch + " were equal.", anItem, anotherItem);
-          if (resultItem !== anItem) {
-            resultCollection[idToMatch] = anItem;
-          }
         } else if (!anItem || anItem === [] || anItem.length === 0 || anItem === {}) {
           self.debug(idToMatch + " was previously empty, taking the new value");
           resultCollection[idToMatch] = anotherItem;
@@ -870,6 +1009,8 @@ Collection.prototype = Object.create(Object.prototype, {
                   }, function() {
                     self.debug("Not Overwriting  ", anItem, " ->", anotherItem);
                     resultCollection[idToMatch] = anItem;
+                  }).fail(function(error) {
+                    console.error(error.stack, self);
                   });
               } else {
                 self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
@@ -888,7 +1029,7 @@ Collection.prototype = Object.create(Object.prototype, {
           // var resultItem = resultCollection[idToMatch];
 
           if (anotherItem !== anotherCollection[idToMatch]) {
-            self.bug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
           }
 
           if (anItem === undefined) {

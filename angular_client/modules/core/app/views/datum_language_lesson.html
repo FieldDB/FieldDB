@@ -1,8 +1,8 @@
 <div class="pull-right">
-	 <!-- Issue #797 -->
+     <!-- Issue #797 -->
 
-	<button class="btn btn-{{buttonColor}} save-datum"
-		value="Save">{{locale_Save}}</button>
+    <button class="btn btn-{{buttonColor}} save-datum"
+        value="Save">{{locale_Save}}</button>
 </div>
 <h1>Gegina'matimgewei</h1>
 <h3>{{datum.datumFields.utterance.value}}</h3>
@@ -18,71 +18,71 @@
 
 
 <a  href="#"   title="{{locale_See_Fields}}" rel="tooltip" >
-	<i class="icons icon-list-alt pull-right"> </i>
+    <i class="icons icon-list-alt pull-right"> </i>
 </a>
 <!-- Datum Edit view specialized fields and menu area -->
 <div class="row-fluid ">
-	<div class="span6">
-		<!-- Buttons for various actions -->
-	  <div class=" btn-group hide">
-	    <a href="#corpus/{{pouchname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
-	      <i class=" icon-plus"></i></a>
-	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
-	      <i class=" icon-copy"></i></a>
-	    <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
-	      <i class="fa" ng-class="{'fa-lock': !datum.encrypted, 'fa-unlock': datum.encrypted}"></i>
+    <div class="span6">
+        <!-- Buttons for various actions -->
+      <div class=" btn-group hide">
+        <a href="#corpus/{{dbname}}/datum/new" class="btn btn-mini btn-primary" title="{{locale_Insert_New_Datum}}" rel="tooltip">
+          <i class=" icon-plus"></i></a>
+        <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Duplicate}}" rel="tooltip">
+          <i class=" icon-copy"></i></a>
+        <a  href="#" class="btn btn-mini btn-primary" title="{{locale_Encrypt}}" rel="tooltip">
+          <i class="fa" ng-class="{'fa-lock': !datum.encrypted, 'fa-unlock': datum.encrypted}"></i>
       </a>
-	    <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
-	      <i class="fa" ng-class="{'fa-eye': !datum.decryptedMode, 'fa-eye-slash': datum.decryptedMode}"></i>
-	    </a>
-	    <a  href="#" class="btn btn-mini btn-primary play-audio" title="{{locale_Play_Audio}}" rel="tooltip">
-	      <i class=" icon-bullhorn"></i></a>
-	    <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
-	      <i class=" icon-paste"></i></a>
-	    <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
-	      <i>LaTeX</i>
-	    </a>
-	    <a href="#" class="CSV btn btn-mini btn-info" title="{{locale_CSV_Tooltip}}" rel="tooltip">
-	      <i>CSV</i>
-	    </a>
-	    <a href="#" class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
-			<i class="icon-trash "></i>
-		</a>
-	  </div>
-	  <br/>
-		<a href="#" class="audio_video" title="{{locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></a>
-		<ul class="audio_video_ul unstyled"></ul>
-	</div>
+        <a href="#" class="btn btn-mini btn-primary" title="{{locale_Show_confidential_items_Tooltip}}" rel="tooltip">
+          <i class="fa" ng-class="{'fa-eye': !datum.decryptedMode, 'fa-eye-slash': datum.decryptedMode}"></i>
+        </a>
+        <a  href="#" class="btn btn-mini btn-primary play-audio" title="{{locale_Play_Audio}}" rel="tooltip">
+          <i class=" icon-bullhorn"></i></a>
+        <a  href="#" class="btn btn-mini btn-info" title="{{locale_Plain_Text_Export_Tooltip}}" rel="tooltip" >
+          <i class=" icon-paste"></i></a>
+        <a href="#" class="LaTeX btn btn-mini btn-info" title="{{locale_LaTeX}}" rel="tooltip">
+          <i>LaTeX</i>
+        </a>
+        <a href="#" class="CSV btn btn-mini btn-info" title="{{locale_CSV_Tooltip}}" rel="tooltip">
+          <i>CSV</i>
+        </a>
+        <a href="#" class="btn btn-mini  btn-danger trash-button" title="Put datum in the trash" rel="tooltip">
+            <i class="icon-trash "></i>
+        </a>
+      </div>
+      <br/>
+        <a href="#" class="audio_video" title="{{locale_Drag_and_Drop_Audio_Tooltip}}" rel="tooltip"></a>
+        <ul class="audio_video_ul unstyled"></ul>
+    </div>
   <div class="span3 border-left hide">
-		<!-- list for the tags -->
-		<ul class="datum_tags_ul unstyled"></ul>
-		<div class="controls  no-margin-left">
-			<!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
-			<div class="input-append ">
-			  <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4"
-	            data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
-	      /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
-	        <i class=" icon-tag"></i>
-	        <span>{{locale_Add}}</span>
-	      </button>
-	    </div>
-		</div>
-	</div>
-	<div class="datum_state span3 border-left hide">
-	    <span class="label label-{{datumstatecolor}} datum-primary-validation-status-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
-	</div>
+        <!-- list for the tags -->
+        <ul class="datum_tags_ul unstyled"></ul>
+        <div class="controls  no-margin-left">
+            <!-- TODO go through the corpus to find tags, and put them in this autocomplete -->
+            <div class="input-append ">
+              <input class="add_tag span6" type="text" data-provide="typeahead" data-items="4"
+                data-source="[&quot;Passive&quot;,&quot;Nominalization&quot;]"
+          /><button class=" btn btn-small btn-primary add_datum_tag" type="button">
+            <i class=" icon-tag"></i>
+            <span>{{locale_Add}}</span>
+          </button>
+        </div>
+        </div>
+    </div>
+    <div class="datum_state span3 border-left hide">
+        <span class="label label-{{datumstatecolor}} datum-primary-validation-status-color "><i class = " icon-flag"></i><span class="datum-state-value">{{datum.datumstate}}</span></span><br/>
+    </div>
 </div>
 
 <ul class="comments unstyled"></ul>
 <div class="extra-datum-info-which-can-be-hidden">
-	<!-- list for the fields -->
-	<table class="datum_fields_ul unstyled language-learning-lesson"></table>
-	<span class="last-modified">{{datum.dateModified}}</span><i class=" icon-save "></i><br/>
-	<span class="date-created">{{datum.dateEntered}}</span><i class=" icon-time"></i><br/>
+    <!-- list for the fields -->
+    <table class="datum_fields_ul unstyled language-learning-lesson"></table>
+    <span class="last-modified">{{datum.dateModified}}</span><i class=" icon-save "></i><br/>
+    <span class="date-created">{{datum.dateEntered}}</span><i class=" icon-time"></i><br/>
 
-	<span class="session-link hide"></span>
+    <span class="session-link hide"></span>
 
-	<!-- Datum comments -->
-	<div class="new-comment-area"></div>
+    <!-- Datum comments -->
+    <div class="new-comment-area"></div>
 
 </div>
