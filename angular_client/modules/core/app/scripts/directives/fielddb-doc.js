@@ -53,9 +53,9 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
           // when the "compile" expression changes
           // assign it into the current DOM
           if(!scope.doc){
-            setTimeout(function(){
-              FieldDB.FieldDBObject.application.render();
-            }, 500);
+            // setTimeout(function(){
+            //   FieldDB.FieldDBObject.application.render();
+            // }, 500);
             return;
           }
           console.log("doc type is ", scope.doc.fieldDBtype);
