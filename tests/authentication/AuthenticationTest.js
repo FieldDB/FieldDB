@@ -160,7 +160,7 @@ describe("Authentication ", function() {
       anotherAuthLoad.user.fetch().then(function() {
         expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
         // user has their own prefs now
-        expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
+        expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(20);
         expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
       }).done(done);
 
