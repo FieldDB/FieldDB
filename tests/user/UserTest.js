@@ -209,6 +209,47 @@ describe("User ", function() {
 
   });
 
+  describe("Merging a user from the server side", function() {
+
+    it("should not add relatedData for docs without _id", function() {
+      expect(SAMPLE_USERS[0].relatedData).toBeUndefined();
+      var user = new User({
+        username: "sapir"
+      });
+
+      var cloned = user.clone();
+      expect(cloned).toBeDefined();
+      expect(cloned.username).toEqual("sapir");
+      expect(cloned.relatedData).toBeUndefined();
+
+      user.merge("self", new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0]))));
+      expect(user.email).toBeDefined();
+      expect(user.researchInterest).toBeDefined();
+      expect(user.email).toBeDefined();
+      expect(user.email).toBeDefined();
+      expect(user.mostRecentIds).toBeDefined();
+      expect(user.corpora.length).toEqual(2);
+
+      expect(user.prefs.numVisibleDatum).toEqual(2);
+      user.prefs.numVisibleDatum = 5;
+      expect(user.prefs.numVisibleDatum).toEqual(5);
+
+      user.merge("self", new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0]))));
+      expect(user.prefs.numVisibleDatum).toEqual(5);
+      expect(user.relatedData).toBeUndefined();
+
+      cloned = user.clone();
+      expect(cloned).toBeDefined();
+      expect(cloned.username).toEqual("sapir");
+      expect(cloned.relatedData).toEqual([{
+        relation: "clonedFrom",
+        URI: "sapir?rev=54-9f7e36fb47cb94b5e000c82e93318c4e"
+      }]);
+
+    });
+
+  });
+
   describe("Client side user preferences", function() {
 
     it("should be able to save the user's prefs for the next app load", function() {
