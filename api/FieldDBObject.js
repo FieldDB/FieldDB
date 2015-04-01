@@ -126,47 +126,43 @@ var FieldDBObject = function FieldDBObject(json) {
 
 };
 FieldDBObject.internalAttributesToNotJSONify = [
-  "temp",
-  "saving",
+  "$$hashKey",
+  "_corpus",
+  "_db",
+  "_unsaved",
+  "application",
+  "bugMessage",
+  "confirmMessage",
+  "contextualizer",
+  "corpus",
+  "db",
+  "decryptedMode",
   "fetching",
+  "fossil",
   "loaded",
   "loading",
-  "unsaved",
-  "_unsaved",
-  "selected",
-  "useIdNotUnderscore",
-  "decryptedMode",
-  "bugMessage",
-  "warnMessage",
-  "perObjectDebugMode",
-  "perObjectAlwaysConfirmOkay",
-  "application",
-  "corpus",
-  "_corpus",
-  "db",
-  "_db",
-  "contextualizer",
-  "perObjectDebugMode",
-  "whenReady",
-  "useIdNotUnderscore",
   "parent",
-  "confirmMessage",
-  "bugMessage",
-  "fossil",
-  "$$hashKey"
+  "perObjectAlwaysConfirmOkay",
+  "perObjectDebugMode",
+  "saving",
+  "selected",
+  "temp",
+  "unsaved",
+  "useIdNotUnderscore",
+  "warnMessage",
+  "whenReady"
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
-  "dateCreated",
   "_dateCreated",
-  "_fieldDBtype",
-  "version",
-  "_version",
-  "modifiedByUser",
   "_dateModified",
   "_fieldDBtype",
+  "_version",
+  "dateCreated",
   "dateModified",
-  "updated_at"
+  "modifiedByUser",
+  "updated_at",
+  "version",
 ]);
 
 FieldDBObject.software = {};
@@ -394,7 +390,9 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       doc = new doc.constructor(cloneDoc);
     } else
     // Return a clone of simple types, or a new clone of the json of this object
-    if (typeofAnotherObjectsProperty === "[object String]") {
+    if (typeofAnotherObjectsProperty === "[object Boolean]") {
+      return !!doc;
+    } else if (typeofAnotherObjectsProperty === "[object String]") {
       return doc + "";
     } else if (typeofAnotherObjectsProperty === "[object Number]") {
       return doc + 0;
@@ -408,7 +406,9 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     }
   } else {
     // Return the doc if its a simple type
-    if (typeofAnotherObjectsProperty === "[object String]") {
+    if (typeofAnotherObjectsProperty === "[object Boolean]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object String]") {
       return doc;
     } else if (typeofAnotherObjectsProperty === "[object Number]") {
       return doc;
@@ -1787,26 +1787,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      var relatedData;
-      if (json.datumFields && json.datumFields.relatedData) {
-        relatedData = json.datumFields.relatedData.json.relatedData || [];
-      } else if (json.relatedData) {
-        relatedData = json.relatedData;
-      } else {
-        json.relatedData = relatedData = [];
-      }
       var source = this.id;
-      if (this.rev) {
-        source = source + "?rev=" + this.rev;
-      } else {
-        if (this.parent && this.parent._rev) {
-          source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
+      if (this.id && this.rev) {
+        var relatedData;
+        if (json.datumFields && json.datumFields.relatedData) {
+          relatedData = json.datumFields.relatedData.json.relatedData || [];
+        } else if (json.relatedData) {
+          relatedData = json.relatedData;
+        } else {
+          json.relatedData = relatedData = [];
         }
+        if (this.rev) {
+          source = source + "?rev=" + this.rev;
+        } else {
+          if (this.parent && this.parent._rev) {
+            source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
+          }
+        }
+        relatedData.push({
+          relation: "clonedFrom",
+          URI: source
+        });
       }
-      relatedData.push({
-        URI: source,
-        relation: "clonedFrom"
-      });
 
       /* Clear the current object's info which we shouldnt clone */
       delete json._id;
