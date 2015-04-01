@@ -189,7 +189,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
-    // reRouteUser("welcome");
+    reRouteUser("welcome");
   };
 
   var processServerContactError = function(err) {
@@ -647,7 +647,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openWelcomeNotificationDeprecated();
       return;
     }
-    $scope.corpora = $scope.corpora || new FieldDB.Collection();
+    $scope.corporaCacheToReduceRedownloading = $scope.corporaCacheToReduceRedownloading || new FieldDB.Collection();
 
     // Update saved state in Preferences
     updateAndOverwritePreferencesToCurrentVersion();
@@ -656,6 +656,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.connection);
     // } else {
     // }
+    if (window.location.hash.indexOf("welcome") > -1) {
+      reRouteUser("corpora_list");
+    }
+
     $scope.documentReady = true;
     $rootScope.loading = false;
     try {
@@ -687,6 +691,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo.authUrl = $rootScope.application.connection.authUrl;
 
     $rootScope.application.authentication.login($rootScope.loginInfo).then(function() {
+      $rootScope.loading = false;
       $scope.loginUserFromScratchIsRunning = false;
       $scope.addActivity([{
         verb: "logged in",
@@ -714,6 +719,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
+    $rootScope.loading = false;
+
     $scope.updateAvailableFieldsInColumns();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
@@ -738,15 +745,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.application.corpus && $rootScope.application.corpus.dbname !== selectedConnection.dbname) {
       console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedConnection.dbname);
     }
-    if ($scope.corpora && $scope.corpora[selectedConnection.dbname]) {
-      $rootScope.application.corpus = $scope.corpora[selectedConnection.dbname];
+    if ($scope.corporaCacheToReduceRedownloading && $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname]) {
+      $rootScope.application.corpus = $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname];
       return;
     }
 
     $rootScope.application.corpus = new FieldDB.Corpus();
     $rootScope.application.corpus.loadCorpusByDBname(selectedConnection.dbname).then(function(results) {
       console.log("loaded the corpus", results);
-      $scope.corpora.add($rootScope.application.corpus);
+      $scope.corporaCacheToReduceRedownloading.add($rootScope.application.corpus);
       selectedConnection.parent = $rootScope.application.corpus;
 
       $scope.addActivity([{
@@ -1356,7 +1363,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    $rootScope.loading = true;
+
+    $scope.creatingNewCorpus = true;
     var dataToPost = {};
     dataToPost.username = $rootScope.application.authentication.user.username.trim();
     dataToPost.password = $rootScope.loginInfo.password.trim();
@@ -1364,6 +1372,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $rootScope.application.authentication.newCorpus(dataToPost)
       .then(function(response) {
+      $scope.creatingNewCorpus = false;
 
         // Add new corpus to scope
         var newConnection = {};
