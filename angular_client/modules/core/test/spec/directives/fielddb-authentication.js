@@ -194,7 +194,7 @@ describe("Directive: fielddb-authentication", function() {
       }, function(resultScope) {
         promiseResult = resultScope;
         promisHasCompleted = true;
-      }).fail(function(error){
+      }).fail(function(error) {
         console.log("error", error);
         promiseResult = {};
         promisHasCompleted = true;
@@ -240,9 +240,9 @@ describe("Directive: fielddb-authentication", function() {
         console.log("fail", resultScope);
         promiseResult = resultScope;
         promisHasCompleted = true;
-      }).fail(function(error){
-       console.log("error", error);
-       promiseResult = {};
+      }).fail(function(error) {
+        console.log("error", error);
+        promiseResult = {};
         promisHasCompleted = true;
       });
 
@@ -285,8 +285,8 @@ describe("Directive: fielddb-authentication", function() {
       }, function(userFetchResult) {
         promiseResult = userFetchResult;
         promisHasCompleted = true;
-      }).fail(function(error){
-        console.error("error fetching user from locally cached version" ,error);
+      }).fail(function(error) {
+        console.error("error fetching user from locally cached version", error);
         promiseResult = {};
         promisHasCompleted = true;
       });
