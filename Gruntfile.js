@@ -26,7 +26,16 @@ module.exports = function(grunt) {
           shim: {},
           basedir: "./"
         }
-      }
+      },
+      // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
+      test: {
+        src: ["tests/**/*Test.js"],
+        dest: "dist/<%= pkg.name %>-spec.js",
+        options: {
+          // external: ["api/**/*.js"],
+          // ignore: ["./node_modules/underscore/underscore.js"],
+        }
+      },
     },
     uglify: {
       options: {
@@ -70,6 +79,13 @@ module.exports = function(grunt) {
           showColors: false,
         },
         all: ["tests/"]
+      }
+    },
+    jasmine: {
+      src: "<%= browserify.src.dest %>",
+      options: {
+        specs: "<%= browserify.test.dest %>",
+        // vendor: ["libs/jquery-1.9.1.js", "libs/underscore.js"]
       }
     },
 
@@ -233,15 +249,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-jasmine-node");
+  grunt.loadNpmTasks("grunt-contrib-jasmine");
   grunt.loadNpmTasks("grunt-jsdoc");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-watch");
 
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
-  grunt.registerTask("test", ["jasmine_node:dev"]);
+  grunt.registerTask("test", ["jasmine_node:dev", "browserify", "jasmine"]);
   grunt.registerTask("build", ["jshint", "browserify"]);
-  grunt.registerTask("dist", ["jshint", "jasmine_node", "exec:updateFieldDBVersion", "browserify", "uglify"]);
+  grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
