@@ -167,7 +167,7 @@ Collection.prototype = Object.create(Object.prototype, {
       return this._collection;
     },
     set: function(value) {
-      if (value === this._collection) {
+      if (value === this._collection || value === [] && this._collection === []) {
         return;
       }
       if (!value || value.length === 0) {
