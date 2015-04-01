@@ -167,6 +167,7 @@ var App = function App(options) {
   this.currentDoc = this.currentDoc || null;
   this._corpus = this._corpus || null;
   this.thisyear = (new Date()).getFullYear();
+  this.whiteListCORS = this.whiteListCORS || ["self"];
 
   var self = this;
   Q.nextTick(function() {
