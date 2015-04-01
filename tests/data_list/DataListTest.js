@@ -436,12 +436,8 @@ describe("Data List", function() {
 
       expect(list.docs.length).toEqual(9);
       expect(list.docs.indexOf("ED5A2292-659E-4B27-A352-9DBC5065207E")).toEqual(7);
-      expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        id: "ED5A2292-659E-4B27-A352-9DBC5065207E",
-        dateCreated: list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].dateCreated,
-        version: list.version
-      });
+      expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].id).toEqual("ED5A2292-659E-4B27-A352-9DBC5065207E");
+      expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("FieldDBObject");
     });
 
   });
