@@ -14,7 +14,8 @@ function(doc) {
         title: doc.title,
         titleAsUrl: doc.titleAsUrl,
         description: doc.description,
-        pouchname: doc.pouchname,
+        pouchname: doc.dbname || doc.pouchname,
+        dbname: doc.dbname || doc.pouchname,
         gravatar: gravatar
       });
     }
