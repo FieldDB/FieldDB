@@ -614,7 +614,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
       return;
     }
-    $rootScope.clickSuccess = true;
     $rootScope.loginInfo = $rootScope.loginInfo || {};
     $rootScope.loginInfo.username = loginDetails.username.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
@@ -699,6 +698,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
 
     }, function(error) {
+      $scope.loginUserFromScratchIsRunning = false;
+      processServerContactError(error);
+    }).fail(function(error) {
+      console.log(" error logging in  ", error);
       $scope.loginUserFromScratchIsRunning = false;
       processServerContactError(error);
     });
