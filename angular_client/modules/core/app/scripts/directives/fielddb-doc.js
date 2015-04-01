@@ -1,4 +1,3 @@
-/* globals setTimeout */
 "use strict";
 
 /**
