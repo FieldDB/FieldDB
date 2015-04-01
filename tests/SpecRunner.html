@@ -2,91 +2,44 @@
 
 <html>
 <head>
-  <title>Jasmine Spec Runner</title>
-
-  <link rel="shortcut icon" type="image/png"
-  href="libs/jasmine/jasmine_favicon.png">
-  <link rel="stylesheet" type="text/css" href="libs/jasmine/jasmine.css">
+  <meta charset="utf-8">
+  <title>Jasmine Spec Runner v2.2.0</title>
+  <link rel="shortcut icon" type="image/png" href="./../bower_components/jasmine/images/jasmine_favicon.png">
+  <link rel="stylesheet" type="text/css" href="./../bower_components/jasmine/lib/jasmine-core/jasmine.css">
 </head>
 <body>
 
-	<form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
-   <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/>
-   <input type="text" name="user" value="lingllama"><br/>
-   <input type="text" name="dictionary" value="Url goes here"><br/>
-   <input type="text" name="dialect" value="AmericanEnglish"><br/>
-   <input type="text" name="labels1" value="TESTING AUDIO FOR UPLOAD."><br/>
-   <input type="text" name="labels2" value="TESTING AUDIO FOR UPLOAD TWO."><br/>
-   <input type="text" name="corpusName" value="lingllama-firstcorpus"><br/>
-   <input type="file" id="userFileInput" name="filesToUpload[]" multiple="multiple" /><br/>
-   <input type="submit" value="Upload to server" />
- </form>
- <script type="text/javascript" src="./../fielddb.js"></script>
+  <form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
+    <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/>
+    <input type="text" name="user" value="lingllama"><br/>
+    <input type="text" name="dictionary" value="Url goes here"><br/>
+    <input type="text" name="dialect" value="AmericanEnglish"><br/>
+    <input type="text" name="labels1" value="TESTING AUDIO FOR UPLOAD."><br/>
+    <input type="text" name="labels2" value="TESTING AUDIO FOR UPLOAD TWO."><br/>
+    <input type="text" name="corpusName" value="lingllama-firstcorpus"><br/>
+    <input type="file" id="userFileInput" name="filesToUpload[]" multiple="multiple" /><br/>
+    <input type="submit" value="Upload to server" />
+  </form>
+
+  <script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+  <script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+  <script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-core/boot.js"></script>
 
 
- <script type="text/javascript" src="libs/jasmine/jasmine.js"></script>
- <script type="text/javascript" src="libs/jasmine/jasmine-html.js"></script>
- <script type="text/javascript" src="libs/jasmine-reporters/src/jasmine.junit_reporter.js"></script>
- <script type="text/javascript" src="libs/jasmine-reporters/src/jasmine.console_reporter.js"></script>
- <script type="text/javascript" src="libs/jasmine-reporters/src/jasmine.terminal_reporter.js"></script>
-
- <script type="text/javascript" src="../backbone_client/libs/OPrime.js"></script>
- <script type="text/javascript" src="corpus/CouchDBConnection.js"></script>
-
-
- <script type="text/javascript" src="activity/ActivityTest.js"></script>
- <script type="text/javascript" src="app/AppTest.js"></script><!--
- <script type="text/javascript" src="audioVideo/AudioService.js"></script>
- <script type="text/javascript" src="audioVideo/AudioWebServiceTest.js"></script> -->
- <script type="text/javascript" src="comment/CommentTest.js"></script>
- <script type="text/javascript" src="../backbone_client/libs/Crypto_AES.js"></script>
- <script type="text/javascript" src="../api/confidentiality_encryption/Confidential.js"></script>
-<!-- <script type="text/javascript" src="confidentiality_encryption/ConfidentialTest.js"></script> -->
-
-
- <script type="text/javascript" src="corpus/CorpusTest.js"></script>
- <script type="text/javascript" src="data_list/DataListTest.js"></script>
- <script type="text/javascript" src="datum/DatumMenuTest.js"></script>
- <script type="text/javascript" src="datum/DatumMenuViewTest.js"></script>
- <script type="text/javascript" src="datum/DatumStatusTest.js"></script>
- <script type="text/javascript" src="datum/DatumsTest.js"></script>
- <script type="text/javascript" src="datum/DatumTagTest.js"></script>
- <script type="text/javascript" src="datum/DatumTest.js"></script>
- <script type="text/javascript" src="datum/SessionTest.js"></script>
- <script type="text/javascript" src="../api/export/Export.js"></script>
- <script type="text/javascript" src="export/ExportTest.js"></script>
- <script type="text/javascript" src="glosser/GlosserTest.js"></script>
- <script type="text/javascript" src="hotkey/HotKeyTest.js"></script>
- <script type="text/javascript" src="import/ImportTest.js"></script>
- <script type="text/javascript" src="insert_unicode/UnicodeSymbolTest.js"></script>
- <script type="text/javascript" src="lexicon/LexiconTest.js"></script>
- <script type="text/javascript" src="permission/PermissionTest.js"></script>
- <script type="text/javascript" src="search/SearchTest.js"></script>
- <script type="text/javascript" src="user/BotTest.js"></script>
- <script type="text/javascript" src="user/ConsultantTest.js"></script>
- <script type="text/javascript" src="user/TeamTest.js"></script>
- <script type="text/javascript" src="user/UserGenericTest.js"></script>
- <script type="text/javascript" src="user/UserPreferenceTest.js"></script>
- <script type="text/javascript" src="user/UserTest.js"></script>
-
-  <!-- "../tests/comment/CommentTest",
-    "../tests/confidentiality_encryption/ConfidentialTest",
-    "../tests/corpus/CorpusTest",
-//    "../tests/corpus/CorpusWebServiceTest",
-    "../tests/export/ExportTest",
-    "../tests/glosser/GlosserTest",
-    "../tests/hotkey/",
-    "../tests/import/ImportTest",
-    "../tests/insert_unicode/UnicodeSymbolTest",
-    "../tests/lexicon/LexiconTest",
-    "../tests/permission/PermissionTest",
-    "../tests/search/SearchTest",
-    "../tests/datum/SessionTest",
-    "../tests/user/UserTest", -->
+<!-- Dont need Jasmine reporters for now
+<script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-reporters/src/jasmine.junit_reporter.js"></script>
+<script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-reporters/src/jasmine.console_reporter.js"></script>
+<script type="text/javascript" src="./../bower_components/jasmine/lib/jasmine-reporters/src/jasmine.terminal_reporter.js"></script>
+-->
 
 
 
- <script type="text/javascript" src="jasmine-main-api.js" ></script>
+<!-- Browserify test bundle includes the Commonjs core files, so src and specs are loaded in one file.
+
+   Unicode characters get messed up: must add charset="utf-8" to script tag to load correctly
+   https://github.com/substack/node-browserify/issues/349
+-->
+<script type="text/javascript" src="./../dist/fielddb-spec.js" charset="utf-8"></script>
 
 </body>
 </html>
