@@ -175,7 +175,7 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (Object.prototype.toString.call(value) !== "[object Array]") {
-        console.error("Cannot set collection to an object, only an array");
+        console.error("Cannot set collection to an object, only an array", value);
         return;
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
