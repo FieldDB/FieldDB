@@ -28,7 +28,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           $scope.importer = new FieldDB.Import({
             importType: "audioVideo",
             parent: $scope.parent,
-            dbname: $scope.parent.pouchname,
+            dbname: $scope.parent.dbname,
             corpus: FieldDB.FieldDBObject.application.corpus,
             dontShowSecondStep: true
           });
@@ -59,7 +59,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         $scope.audioRecorder.element = $scope.audioRecorder.element || angular.element($scope.element.find("p")[0])[0];
         $scope.audioRecorder.parent = {
           addFile: $scope.addFile
-          // dbname: $scope.parent.pouchname
+          // dbname: $scope.parent.dbname
         };
 
         try {
@@ -103,7 +103,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
           console.warn("Filename not specified.");
           return;
         }
-        newAudioFile.dbname = $scope.parent.pouchname;
+        newAudioFile.dbname = $scope.parent.dbname;
         if (FieldDB && FieldDB.AudioVideo) {
           var audioVideoImageOrOtherFile = new FieldDB.AudioVideo(newAudioFile).toJSON();
           delete audioVideoImageOrOtherFile.data;

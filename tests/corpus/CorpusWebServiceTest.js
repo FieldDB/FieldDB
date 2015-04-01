@@ -1,7 +1,7 @@
 /* globals runs, waitsFor */
 
-var CouchDBConnection = require("./CouchDBConnection");
-var FieldDBConnection = require("../../api/FieldDBConnection").FieldDBConnection;
+var CouchDBConnection = require("../../api/corpus/Database").CouchDBConnection;
+var FieldDBConnection = require("../../api/corpus/Database").FieldDBConnection;
 var CORS = require("../../api/CORSNode").CORS;
 
 var user = {

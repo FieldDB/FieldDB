@@ -1,4 +1,3 @@
-/* globals FieldDB */
 var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
@@ -33,11 +32,11 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
         fields: []
       };
       try {
-        if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && FieldDB.FieldDBObject.application.corpus) {
-          if (FieldDB.FieldDBObject.application.corpus.participantFields) {
-            doc.fields = FieldDB.FieldDBObject.application.corpus.participantFields.clone();
-          } else if (FieldDB.FieldDBObject.application.corpus.speakerFields) {
-            doc.fields = FieldDB.FieldDBObject.application.corpus.speakerFields.clone();
+        if (this.application && this.application.corpus) {
+          if (this.application.corpus.participantFields) {
+            doc.fields = this.application.corpus.participantFields.clone();
+          } else if (this.application.corpus.speakerFields) {
+            doc.fields = this.application.corpus.speakerFields.clone();
           }
         }
       } catch (e) {

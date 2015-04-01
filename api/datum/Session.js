@@ -1,6 +1,8 @@
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var DatumFields = require("./DatumFields").DatumFields;
+var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Q = require("q");
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 /**
@@ -79,13 +81,18 @@ var Session = function Session(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Session";
   }
+  // this.debugMode = true;
   this.debug("Constructing Session: ", options);
+  options = options || {};
   if (!options || (!options._rev && !options.fields)) {
     //If its a new session with out a revision and without fields use the defaults
-    options = options || {};
     options.fields = this.defaults.fields;
   }
+  // Initialize the datalist and docs to ensure its ready incase we want to use them.
+  this.initializeDatalist();
+  this.debug(" -> ", options.datalist);
   FieldDBObject.apply(this, arguments);
+  this.debug("   after construction: ", this._datalist);
 };
 
 Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.prototype */ {
@@ -93,13 +100,29 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     value: Session
   },
 
+  dateAndGoalSnippet: {
+    get: function() {
+      var goal = this.goal;
+      if (goal.length > 31) {
+        goal = goal.substr(0, 30) + "...";
+      }
+      var dateElicited = this.dateElicited;
+      if (dateElicited.length > 16) {
+        dateElicited = dateElicited.substr(0, 15) + "...";
+      }
+      return dateElicited + " : " + goal;
+    },
+    set: function() {
+      this.debug("cant set the snippet.");
+    }
+  },
 
   title: {
     get: function() {
       return this.goal;
     },
     set: function(value) {
-      this.warn("title is syntactic sugar for goal");
+      this.warn("title is syntactic sugar for goal, if it was used this will make it overwrite the goal field");
       return this.goal = value;
     }
   },
@@ -110,17 +133,19 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this.fields && this.fields.goal) {
         return this.fields.goal.value;
       } else {
-        return;
+        return FieldDBObject.DEFAULT_STRING;
       }
     },
     set: function(value) {
       if (this.fields && this.fields.goal) {
         // this.fields.debugMode = true;
-        this.fields.goal.value = value;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
-        this.fields.goal.value = value;
+        this.fields = this.defaults.fields;
       }
+      if (!value || (value.indexOf && value.indexOf("Change this session") > -1)) {
+        value = "Practice collecting linguistic utterances or words";
+      }
+      this.fields.goal.value = value;
     }
   },
 
@@ -138,19 +163,27 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     configurable: true,
     get: function() {
       if (this.fields && this.fields.dateElicited) {
+        if (this.fields.dateElicited.value && this.fields.dateElicited.value.indexOf && this.fields.dateElicited.value.indexOf("Change this to a tim") > -1) {
+          this.fields.dateElicited.value = "Probably prior to " + new Date(this.dateCreated);
+        }
+        if (!this.fields.dateElicited.value && this.dateCreated) {
+          this.fields.dateElicited.value = new Date(this.dateCreated) + "";
+        }
         return this.fields.dateElicited.value;
       } else {
-        return;
+        return FieldDBObject.DEFAULT_STRING;
       }
     },
     set: function(value) {
       if (this.fields) {
         // this.fields.debugMode = true;
-        this.fields.dateElicited.value = value;
       } else {
-        this.fields = new DatumFields(this.defaults.fields);
-        this.fields.dateElicited.value = value;
+        this.fields = this.defaults.fields;
       }
+      if (value && value.indexOf && value.indexOf("Change this to a tim") > -1) {
+        value = "Probably prior to " + new Date(this.dateCreated);
+      }
+      this.fields.dateElicited.value = value;
     }
   },
 
@@ -165,7 +198,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   INTERNAL_MODELS: {
     value: {
       fields: DatumFields,
-      confidential: Confidential
+      confidential: Confidential,
+      docs: FieldDBObject.DEFAULT_COLLECTION,
+      docIds: FieldDBObject.DEFAULT_COLLECTION,
+      datalist: DataList
     }
   },
 
@@ -185,21 +221,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this._fields;
     },
     set: function(value) {
-      if (value === this._fields) {
-        return;
-      }
-      if (!value) {
-        delete this._fields;
-        return;
-      } else {
-        if (typeof this.INTERNAL_MODELS["fields"] === "function" && Object.prototype.toString.call(value) === "[object Array]") {
-          value = new this.INTERNAL_MODELS["fields"](value);
-        }
-      }
-      if (!value.confidential) {
+      if (value && !value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
-      this._fields = value;
+      this.ensureSetViaAppropriateType("fields", value);
     }
   },
 
@@ -222,7 +247,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!this.fields) {
-        this.fields = [];
+        this.fields = this.defaults.fields;
       }
       // this.warn("Cannot change the public/private of " + this.collection + " (it must be anonymous). " + value);
       this.fields.confidentiality.value = value;
@@ -240,13 +265,27 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     },
     set: function(value) {
       if (!this.fields) {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
-
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split();
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
+        });
+      }
       if (Object.prototype.toString.call(value) === "[object Array]") {
         var self = this;
         value.map(function(usermask) {
-          self.fields.participants.json.users.unshift(usermask)
+          self.fields.participants.json.users.unshift(usermask);
         });
       } else {
         this.fields.participants.json.users.unshift(value);
@@ -274,20 +313,43 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         this.fields = this.defaults.fields;
       }
 
-      if (Object.prototype.toString.call(value) === "[object Array]") {
-        var self = this;
-        value.map(function(usermask) {
-          self.consultants = usermask;
+      // if (Object.prototype.toString.call(value) === "[object Array]") {
+      //   var self = this;
+      //   value.map(function(usermask) {
+      //     self.consultants = usermask;
+      //   });
+      //   return;
+      // }
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split(",");
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
         });
-        return;
       }
-      if (value.role) {
-        value.role = "speaker," + value.role;
-      } else {
-        value.role = "speaker"
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        value = [value];
       }
+      var self = this;
+      value = value.map(function(userMask) {
+        if (userMask.role) {
+          userMask.role = "speaker," + userMask.role;
+        } else {
+          userMask.role = "speaker";
+        }
+        self.fields.participants.json.users.unshift(userMask);
+        return userMask;
+      });
+
       this.debug("adding consultant", value);
-      this.fields.participants.json.users.unshift(value);
     }
   },
 
@@ -310,14 +372,38 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (!this.fields) {
         this.fields = this.defaults.fields;
       }
-      if (value.role) {
-        value.role = "dataEntry," + value.role;
-      } else {
-        value.role = "speaker"
+
+      if (typeof value === "string") {
+        if (value.indexOf(",") > -1) {
+          value = value.split(",");
+        } else {
+          value = [value];
+        }
+        value = value.map(function(username) {
+          username = username.trim();
+          return {
+            username: username,
+            name: username,
+            gravatar: ""
+          };
+        });
       }
 
+      if (Object.prototype.toString.call(value) !== "[object Array]") {
+        value = [value];
+      }
+      var self = this;
+      value = value.map(function(userMask) {
+        if (userMask.role) {
+          userMask.role = "dataEntry," + userMask.role;
+        } else {
+          userMask.role = "dataEntry";
+        }
+        self.fields.participants.json.users.unshift(userMask);
+        return userMask;
+      });
+
       this.debug("adding user", value);
-      this.fields.participants.json.users.unshift(value);
     }
   },
 
@@ -330,16 +416,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this.confidentialEncrypter;
     },
     set: function(value) {
-      if (value === this.confidentialEncrypter) {
-        return;
-      }
-      if (typeof value.encrypt !== "function" && value.secretkey) {
-        value = new this.INTERNAL_MODELS["confidential"](value);
-      }
-      this.confidentialEncrypter = value;
-      if (this.fields) {
+      this.ensureSetViaAppropriateType("confidential", value, "confidentialEncrypter");
+      if (this._fields && this.confidentialEncrypter) {
         // this.debug("setting session fields confidential in the Session.confidential set function.");
-        this.fields.confidential = value;
+        this._fields.confidential = this.confidentialEncrypter;
       }
     }
   },
@@ -380,7 +460,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
 
       if (!this.fields) {
-        this.fields = new DatumFields(this.defaults.fields);
+        this.fields = this.defaults.fields;
       }
       if (stringvalue) {
         this.fields.languages.value = stringvalue;
@@ -418,6 +498,273 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     }
   },
 
+  docIds: {
+    get: function() {
+      if (this._datalist && this._datalist.docIds) {
+        return this._datalist.docIds;
+      }
+      return [];
+    },
+    set: function(value) {
+      if (!value || value.length === 0) {
+        this.debug("cant clear the docids of a session like this.");
+        return;
+      }
+      if (!this._datalist) {
+        this.initializeDatalist();
+
+        var self = this;
+
+        // this.debugMode = true;
+        this._docIds = value;
+        Q.nextTick(function() {
+          if (!self.whenReindexedFromApi) {
+            self.warn("This should never happen. we asked the datalist to be created.");
+            return;
+          }
+          self.whenReindexedFromApi.done(function() {
+            self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
+            if (self._docIds && self._docIds.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
+              self.warn("  making sure " + self._docIds.length + " items are in the list of data.");
+              self._docIds.map(function(docId) {
+                if (!self._datalist._docs[docId]) {
+                  self.warn("Adding " + docId + " to the list. ");
+                  self._datalist._docs.add({
+                    id: docId,
+                    fieldDBtype: "Datum",
+                    loaded: false
+                  });
+                }
+              });
+              delete self._docIds;
+            } else {
+              self.debug("  saw no reason to add doc ids to the datalist docs ", self._docids, self._datalist);
+            }
+          });
+        });
+
+        return;
+      }
+      this._datalist.docIds = value;
+    }
+  },
+
+  docs: {
+    get: function() {
+      if (this._datalist && this._datalist._docs) {
+        return this._datalist._docs;
+      }
+    },
+    set: function(value) {
+
+      if (!value || value.length === 0) {
+        this.debug("cant clear the docs of a session like this.");
+        return;
+      }
+
+      if (!this._datalist || !this._datalist.docs || typeof this._datalist.docs.add !== "function") {
+        this.initializeDatalist();
+
+        this._tempDocs = value;
+        var self = this;
+        Q.nextTick(function() {
+          if (!self.whenReindexedFromApi) {
+            self.bug("This should never happen.");
+            return;
+          }
+          self.whenReindexedFromApi.done(function() {
+            self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
+            if (self._tempDocs && self._tempDocs.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
+              self.warn("  making sure " + self._tempDocs.length + " items are in the list of data.");
+              self._tempDocs.map(function(tempDoc) {
+                if (!self._datalist._docs[tempDoc.id]) {
+                  self.warn("Adding " + tempDoc + " to the list. ");
+                  self._datalist._docs.add(tempDoc);
+                }
+              });
+              delete self._tempDocs;
+            } else {
+              self.debug("  saw no reason to add doc ids to the datalist docs ", self._tempDocs, self._datalist);
+            }
+          });
+
+        });
+
+        return;
+      }
+      this.todo(" test this, adding docs to existing docs, instead of reseting it.");
+      this._datalist.docs.add(value);
+    }
+  },
+
+  utterances: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  transcriptions: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  items: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  datum: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  data: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  records: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  entries: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  examples: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  cards: {
+    get: function() {
+      return this.docs;
+    },
+    set: function(value) {
+      return this.docs = value;
+    }
+  },
+
+  add: {
+    value: function(value) {
+      if (value) {
+        if (!this._datalist || !this._datalist._docs || typeof !this._datalist._docs.add === "function") {
+
+          if (this._datalist) {
+            this.debug("trying to get datalist to be defined by just calling it.");
+          }
+
+          var self = this;
+          // this.debugMode = true;
+          if (!self.whenReindexedFromApi) {
+            console.error("The whenReindexedFromApi is not defined!", self);
+            return;
+          }
+          self.whenReindexedFromApi.done(function() {
+            self.warn("Adding to session's data list", value);
+            if (!self._datalist || !self._datalist._docs || typeof !self._datalist._docs.add === "function") {
+              console.error("The datalist is still not operational on this session", self);
+              return;
+            }
+            if (!self._datalist.docs) {
+              self._datalist.docs = value;
+            } else {
+              self._datalist.docs.add(value);
+            }
+            // return self._datalist;
+          });
+          return;
+        }
+        return this._datalist.add(value);
+      }
+    }
+  },
+
+  length: {
+    get: function() {
+      return this._datalist.length || 0;
+    },
+    set: function(value) {
+      this._datalist.length = value;
+    }
+  },
+
+  initializeDatalist: {
+    value: function() {
+
+      // this.ensureSetViaAppropriateType("datalist", {
+      //   dbname: this.dbname
+      //     // docs: []
+      // });
+
+      this._datalist = new DataList({
+        dbname: this.dbname,
+        docs: []
+      });
+      var api;
+      if (this.id) {
+        api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+        this._datalist.api = api;
+      }
+
+      this.debug("Using reindexFromApi on datalists instead");
+      this.fetching = this.loading = true;
+      if (typeof this._datalist.reindexFromApi !== "function") {
+        this.warn("THis dataalist isnt real  throwing error... ", this, this._datalist);
+        throw new Error("this DataList isnt real.");
+      }
+      this.whenReindexedFromApi = this._datalist.reindexFromApi();
+
+    }
+  },
+
+  datalist: {
+    get: function() {
+      this.debug("Getting datalist", this._datalist);
+      if (!this._datalist || !(this._datalist instanceof DataList) || typeof this._datalist.reindexFromApi !== "function") {
+        this.initializeDatalist();
+      }
+      return this._datalist;
+    },
+    set: function(value) {
+      this.debug("Setting datalist", this._datalist, value);
+      this.ensureSetViaAppropriateType("datalist", value);
+    }
+  },
+
   /**
    * Accepts two functions to call back when save is successful or
    * fails. If the fail callback is not overridden it will alert
@@ -441,7 +788,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
       this.debug("Saving the Session");
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+      if (self.application.corpus.dbname !== this.dbname) {
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
@@ -460,7 +807,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           })[0].get("mask");
           var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
           //TODO add privacy for session goals in corpus
-          //            if(self.application.get("corpus").get("keepSessionDetailsPrivate")){
+          //            if(self.application.corpus.get("keepSessionDetailsPrivate")){
           //              goal = "";
           //              differences = "";
           //            }
@@ -479,7 +826,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
             teamOrPersonal: "team",
             context: " via Offline App."
           });
@@ -489,7 +836,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
             verbicon: verbicon,
             directobjecticon: "icon-calendar",
             directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.get("corpus").id + "'>" + self.application.get("corpus").get("title") + "</a>",
+            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
             teamOrPersonal: "personal",
             context: " via Offline App."
           });
@@ -497,12 +844,12 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           /*
            * make sure the session is visible in this corpus
            */
-          var previousversionincorpus = self.application.get("corpus").sessions.get(model.id);
+          var previousversionincorpus = self.application.corpus.sessions.get(model.id);
           if (previousversionincorpus === undefined) {
-            self.application.get("corpus").sessions.unshift(model);
+            self.application.corpus.sessions.unshift(model);
           } else {
-            self.application.get("corpus").sessions.remove(previousversionincorpus);
-            self.application.get("corpus").sessions.unshift(model);
+            self.application.corpus.sessions.remove(previousversionincorpus);
+            self.application.corpus.sessions.unshift(model);
           }
           self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
           //make sure the session is in the history of the user
@@ -540,7 +887,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   setAsCurrentSession: {
     value: function(successcallback, failurecallback) {
       var self = this;
-      if (self.application.get("corpus").get("pouchname") !== this.get("pouchname")) {
+      if (self.application.corpus.dbname !== this.dbname) {
         if (typeof failurecallback === "function") {
           failurecallback();
         } else {
@@ -551,7 +898,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
       if (self.application.get("currentSession").id !== this.id) {
         self.application.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-        //      self.application.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+        //      self.application.set("currentSession", app.corpus.sessions.get(this.id)); //this is a bad idea too, use above instead
       }
       self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
       self.application.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
@@ -573,6 +920,21 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           successcallback();
         }
       }
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      delete json._datalist;
+      if (this._datalist && this._datalist.docIds && this._datalist.docIds.length > 0) {
+        json.docIds = this.docIds;
+      }
+
+      this.debug(json);
+      return json;
     }
   }
 

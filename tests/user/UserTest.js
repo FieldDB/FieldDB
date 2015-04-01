@@ -37,7 +37,8 @@ describe("User ", function() {
         description: "",
         version: u.version,
         api: "users",
-        corpora: []
+        corpora: [],
+        datalists: []
       });
     });
 
@@ -52,6 +53,7 @@ describe("User ", function() {
 
     it("should have a user preferences ", function() {
       var u = new User();
+      u.prefs = u.defaults.prefs;
       expect(u.prefs).toBeDefined();
       expect(u.prefs.preferedDashboardType).toEqual("");
     });
@@ -61,8 +63,8 @@ describe("User ", function() {
   describe("resume where user left off", function() {
     it("should guess an appropriate dashboard for a user", function() {
       var u = new User({
-        appbrand: "phophlo",
-        // prefs: {}
+        prefs: {},
+        appbrand: "phophlo"
       });
 
       // u.appbrand = "phophlo";
@@ -102,8 +104,8 @@ describe("User ", function() {
           unicodes: []
         },
         mostRecentIds: {},
-        activityCouchConnection: {
-          fieldDBtype: "CorpusConnection",
+        activityConnection: {
+          fieldDBtype: "Connection",
           version: u.version,
           corpusid: "",
           titleAsUrl: "",
@@ -125,6 +127,9 @@ describe("User ", function() {
         },
         authUrl: "",
         corpora: [],
+        sessionHistory: [],
+        datalistHistory: [],
+        datalists: [],
         api: "users"
       });
     });
@@ -157,7 +162,7 @@ describe("User ", function() {
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
       expect(user.authUrl).toEqual("https://auth.lingsync.org");
       expect(user.corpora.toJSON()[0]).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "corpus.lingsync.org",
         port: "443",
@@ -168,11 +173,11 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
         version: user.version,
         pouchname: "sapir-cherokee",
-        title: "cherokee",
-        titleAsUrl: "cherokee"
+        title: "sapir-cherokee",
+        titleAsUrl: "sapir-cherokee"
       });
       expect(user.corpora.toJSON()[1]).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "corpus.lingsync.org",
         port: "443",
@@ -183,8 +188,8 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],
         version: user.version,
         pouchname: "sapir-firstcorpus",
-        title: "firstcorpus",
-        titleAsUrl: "firstcorpus"
+        title: "sapir-firstcorpus",
+        titleAsUrl: "sapir-firstcorpus"
       });
     });
 

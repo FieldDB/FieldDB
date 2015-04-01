@@ -15,6 +15,7 @@ describe("Corpus", function() {
       var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
+      expect(corpus.pouchname).toEqual(corpus.dbname);
 
       var serialized = corpus.toJSON();
       expect(serialized.pouchname).toBeDefined();
@@ -34,11 +35,22 @@ describe("Corpus", function() {
 
     it("should not be able to change a dbname if it has been set", function() {
       var corpus = new Corpus(Corpus.prototype.defaults);
+      corpus.id = "aneixstingsavedthingy";
+      corpus.rev = "3-siamweoiamwoawem";
       expect(corpus.dbname).toEqual("");
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of a corpus, you must create a new object first.");
+      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+    });
+
+    it("should be able to build a corpus by calling defaults", function() {
+      var corpus;
+      corpus = new Corpus(Corpus.prototype.defaults);
+      expect(corpus.confidential).toBeDefined();
+      expect(corpus.confidential.secretKey).toBeDefined();
+      // expect(corpus.confidential.secretKey.length).toEqual(45);
+      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
     });
 
   });
@@ -88,23 +100,107 @@ describe("Corpus", function() {
       // console.log(Corpus.prototype.defaults);
       corpus = new Corpus(Corpus.prototype.defaults);
       corpus.dbname = "testingnewdatum-kartuli";
+      corpus.title = "ქართული";
     });
 
     it("should have default datumFields", function() {
       expect(corpus.datumFields instanceof DatumFields).toBeTruthy();
       expect(corpus.datumFields.constructor === DatumFields);
-      // console.log(corpus.datumFields.utterance);
-      // console.log(corpus.datumFields.toJSON());
+      corpus.debug(corpus.datumFields.utterance);
+      corpus.debug(corpus.datumFields.toJSON());
       expect(corpus.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       expect(corpus.datumFields.clone()).toBeDefined();
     });
 
-    it("should create a datum with the datumFields", function(done) {
-      corpus.newDatum().then(function(datum) {
+    it("should create a datum with the datumFields of the corpus", function() {
+      var datum = corpus.newDatum({
+        utterance: "a simple object",
+        translation: "with translation",
+        novelproperty: "a field which is not known and will be a property not a full field"
+      });
+      corpus.debug(datum.toJSON());
+      expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
+      expect(datum.datumFields.utterance.value).toEqual("a simple object");
+      expect(datum.datumFields.translation.value).toEqual("with translation");
+      expect(datum.datumFields.novelproperty).toBeUndefined();
+      expect(datum.novelproperty).toEqual("a field which is not known and will be a property not a full field");
+    });
+
+    it("should also create a datum with datumFields asynchonously", function(done) {
+      corpus.newDatumAsync().then(function(datum) {
+        corpus.debug(datum.toJSON());
         expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       }).then(done, done);
-      // console.log(datum.toJSON());
     }, specIsRunningTooLong);
+
+    it("should create a corpus with a similar structure", function() {
+      corpus.datumFields.utterance.value = "the last thing i searched for";
+
+      // add some fields
+      expect(corpus.datumFields.length).toEqual(16);
+      corpus.datumFields.push(corpus.newField({
+        "id": "phonetics"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "semanticContext"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "anotherfieldtheteamwantedtohave"
+      }));
+
+      // remove some fields
+      expect(corpus.datumFields.length).toEqual(19);
+      expect(corpus.datumFields.syntactictreelatex).toBeDefined();
+      corpus.datumFields.remove(corpus.datumFields.syntactictreelatex);
+      expect(corpus.datumFields.syntactictreelatex).toBeUndefined();
+      expect(corpus.datumFields.length).toEqual(18);
+
+      expect(corpus.dbname).toEqual("testingnewdatum-kartuli");
+
+      var newcorpus = corpus.newCorpus();
+      expect(newcorpus.dbname).toEqual("testingnewdatum-kartulicopy");
+
+      corpus.debug(newcorpus.toJSON());
+      expect(newcorpus.title).toEqual("ქართული copy");
+
+      expect(newcorpus.datumFields.utterance).not.toEqual(corpus.datumFields.utterance);
+      expect(corpus.datumFields.utterance.value).toEqual("the last thing i searched for");
+      expect(newcorpus.datumFields.utterance.value).toEqual("");
+
+      // added fields are there
+      expect(newcorpus.datumFields.phonetics).toBeDefined();
+      expect(newcorpus.datumFields.semanticContext).toBeDefined();
+      expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeDefined();
+
+      // removed fields are not there
+      expect(newcorpus.datumFields.syntactictreelatex).toBeUndefined();
+
+    });
+
+    it("should create a default corpus if called on the user's practice firstcorpus", function() {
+      corpus.dbname = "firstcorpus";
+      corpus.datumFields.utterance.value = "the last thing i searched for";
+      corpus.datumFields.push(corpus.newField({
+        "id": "phonetics"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "semanticContext"
+      }));
+      corpus.datumFields.push(corpus.newField({
+        "id": "anotherfieldtheteamwantedtohave"
+      }));
+
+      var newcorpus = corpus.newCorpus({
+        title: "Azeri"
+      });
+      corpus.debug(newcorpus.toJSON());
+      expect(newcorpus.title).toEqual("Azeri");
+      expect(newcorpus.title).not.toEqual("ქართული copy");
+
+      expect(newcorpus.datumFields.phonetics).toBeUndefined();
+      expect(newcorpus.datumFields.semanticContext).toBeUndefined();
+      expect(newcorpus.datumFields.anotherfieldtheteamwantedtohave).toBeUndefined();
+    });
 
   });
 
@@ -118,8 +214,16 @@ describe("Corpus", function() {
     });
 
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
+      expect(corpus.confidential).toBeDefined();
+      expect(corpus.confidential.secretkey).toBeDefined();
+      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
+
       corpus.newSpeaker().then(function(speaker) {
-        // console.log(speaker);
+        corpus.debug(speaker);
+
+        expect(speaker).toBeDefined();
+        expect(speaker.confidential).toEqual(corpus.confidential);
+
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
         speaker.fields = [];
@@ -163,15 +267,20 @@ describe("Corpus", function() {
         expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
         expect(speaker.fields.indexOf("lastname")).toEqual(corpus.speakerFields.indexOf("lastname"));
 
+        corpus.debug(speaker.toJSON());
       }).then(done, done);
-      // console.log(speaker.toJSON());
     }, specIsRunningTooLong);
 
-    it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
+    it("should update a speaker to become a participant with all the participantFields in the same order", function(done) {
       corpus.newSpeaker().then(function(speaker) {
-        // console.log(speaker);
+        corpus.debug(speaker);
+
+
+        // the speaker starts with the expected number
         expect(speaker.fields.length).toEqual(8);
         expect(speaker.fields.indexOf("lastname")).toEqual(2);
+
+        // remove all the fields from the speaker
         speaker.fields = [];
         speaker.fields.add({
           "type": "",
@@ -206,7 +315,12 @@ describe("Corpus", function() {
         expect(speaker.fields.lastname.value).toEqual("xxxxxx");
         expect(speaker.fields.afieldfromimport.value).toEqual("xxxxxx xxxxxxxxxxxx");
         expect(speaker.fields.length).toEqual(2);
+
+        // update the speaker to have the fields of the corpus, and cause the corpus to become an experimental corpus if it wasnt already.
+        expect(corpus.participantFields).toBeUndefined();
         corpus.updateParticipantToCorpusFields(speaker);
+        expect(corpus.participantFields.length).toEqual(10);
+
         expect(speaker.fields.length).toEqual(11);
         expect(speaker.fields.lastname.value).toEqual("xxxxxx");
         expect(corpus.speakerFields.lastname.value).toEqual("");
@@ -231,6 +345,8 @@ describe("Corpus", function() {
       var serialization = corpus.toJSON();
       expect(serialization.team.gravatar).toEqual("888888we8888888888888");
       expect(serialization.team.username).toEqual("lingllama");
+
+      expect(corpus.connection.gravatar).toEqual("888888we8888888888888");
     });
 
     xit("should clean v1.22.1 to a maximal json", function() {
@@ -290,173 +406,173 @@ describe("Corpus", function() {
 
   });
 
-});
 
 
+  describe("Corpus: as a user I want to be able to merge two corpora", function() {
+    var oneCorpus;
+    var anotherCorpus;
 
-describe("Corpus: as a user I want to be able to merge two corpora", function() {
-  var oneCorpus;
-  var anotherCorpus;
-
-  beforeEach(function() {
-    oneCorpus = new Corpus({
-      dbname: "teammatetiger-quechua",
-      title: "Quechua Corpus",
-      datumFields: [{
-        "label": "utterance",
-        "help": "Teammate's help info"
-      }]
+    beforeEach(function() {
+      oneCorpus = new Corpus({
+        dbname: "teammatetiger-quechua",
+        title: "Quechua Corpus",
+        datumFields: [{
+          "label": "utterance",
+          "help": "Teammate's help info"
+        }]
+      });
+      anotherCorpus = new Corpus({
+        dbname: "lingllama-quechua",
+        title: "Quechua",
+        datumFields: [{
+          "label": "utterance",
+          "help": "An adapted utterance line for quechua data"
+        }]
+      });
     });
-    anotherCorpus = new Corpus({
-      dbname: "lingllama-quechua",
-      title: "Quechua",
-      datumFields: [{
-        "label": "utterance",
-        "help": "An adapted utterance line for quechua data"
-      }]
+
+    it("should merge the corpus details into the first corpus", function() {
+      oneCorpus.merge("self", anotherCorpus, "overwrite&changeDBname");
+      expect(oneCorpus).toBeDefined();
+      expect(oneCorpus.title).toEqual("Quechua");
+      expect(oneCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+    });
+
+    it("should be able to ask the user what to do if the corpus details conflict", function() {
+      oneCorpus.merge("self", anotherCorpus, "changeDBname");
+      expect(oneCorpus).toBeDefined();
+      expect(oneCorpus.confirmMessage).toContain("I found a conflict for _dbname, Do you want to overwrite it from \"teammatetiger-quechua\" -> \"lingllama-quechua\"");
+      expect(oneCorpus.confirmMessage).toContain("I found a conflict for _title, Do you want to overwrite it from \"Quechua Corpus\" -> \"Quechua\"");
+      expect(oneCorpus.confirmMessage).toContain("I found a conflict for _titleAsUrl, Do you want to overwrite it from \"quechua_corpus\" -> \"quechua\"");
+    });
+
+    it("should merge the corpus details into a third corpus without affecting the other corpora", function() {
+      var aNewCorpus = new Corpus({
+        dbname: "comunity-quechua",
+        datumFields: [{
+          "label": "morphemes",
+          "help": "A help text"
+        }]
+      });
+      expect(aNewCorpus.dbname).toEqual("comunity-quechua");
+      expect(aNewCorpus.title).toEqual("");
+
+      aNewCorpus.merge(oneCorpus, anotherCorpus, "overwrite&keepDBname");
+      expect(aNewCorpus).toBeDefined();
+
+      expect(aNewCorpus.dbname).toEqual("comunity-quechua");
+      expect(aNewCorpus.title).toEqual("Quechua");
+      expect(aNewCorpus.datumFields.morphemes.help).toEqual("A help text");
+      expect(aNewCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+
+      expect(oneCorpus.dbname).toEqual("teammatetiger-quechua");
+      expect(oneCorpus.title).toEqual("Quechua Corpus");
+      expect(oneCorpus.datumFields.utterance.help).toEqual("Teammate's help info");
+      expect(oneCorpus.datumFields.morphemes).toBeUndefined();
+
+      expect(anotherCorpus.dbname).toEqual("lingllama-quechua");
+      expect(anotherCorpus.title).toEqual("Quechua");
+      expect(anotherCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
+      expect(anotherCorpus.datumFields.morphemes).toBeUndefined();
+
+    });
+
+    xit("should change the dbname of the datum to the target corpus dbname", function() {
+      expect(true).toBeTruthy();
+    });
+
+  });
+
+
+  describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
+    it("should be have speaker fields on participants", function() {
+      expect(Corpus.prototype.defaults_psycholinguistics.participantFields.length).toBe(10);
     });
   });
 
-  it("should merge the corpus details into the first corpus", function() {
-    oneCorpus.merge("self", anotherCorpus, "overwrite&changeDBname");
-    expect(oneCorpus).toBeDefined();
-    expect(oneCorpus.title).toEqual("Quechua");
-    expect(oneCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
-  });
 
-  it("should be able to ask the user what to do if the corpus details conflict", function() {
-    oneCorpus.merge("self", anotherCorpus, "changeDBname");
-    expect(oneCorpus).toBeDefined();
-    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _dbname, Do you want to overwrite it from \"teammatetiger-quechua\" -> \"lingllama-quechua\"");
-    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _title, Do you want to overwrite it from \"Quechua Corpus\" -> \"Quechua\"");
-    expect(oneCorpus.confirmMessage).toContain("I found a conflict for _titleAsUrl, Do you want to overwrite it from \"quechua_corpus\" -> \"quechua\"");
-  });
-
-  it("should merge the corpus details into a third corpus without affecting the other corpora", function() {
-    var aNewCorpus = new Corpus({
-      dbname: "comunity-quechua",
-      datumFields: [{
-        "label": "morphemes",
-        "help": "A help text"
-      }]
+  describe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
+    it("should be able to import from GitHub repository", function() {
+      expect(true).toBeTruthy();
     });
-    expect(aNewCorpus.dbname).toEqual("comunity-quechua");
-    expect(aNewCorpus.title).toEqual("");
-
-    aNewCorpus.merge(oneCorpus, anotherCorpus, "overwrite&keepDBname");
-    expect(aNewCorpus).toBeDefined();
-
-    expect(aNewCorpus.dbname).toEqual("comunity-quechua");
-    expect(aNewCorpus.title).toEqual("Quechua");
-    expect(aNewCorpus.datumFields.morphemes.help).toEqual("A help text");
-    expect(aNewCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
-
-    expect(oneCorpus.dbname).toEqual("teammatetiger-quechua");
-    expect(oneCorpus.title).toEqual("Quechua Corpus");
-    expect(oneCorpus.datumFields.utterance.help).toEqual("Teammate's help info");
-    expect(oneCorpus.datumFields.morphemes).toBeUndefined();
-
-    expect(anotherCorpus.dbname).toEqual("lingllama-quechua");
-    expect(anotherCorpus.title).toEqual("Quechua");
-    expect(anotherCorpus.datumFields.utterance.help).toEqual("An adapted utterance line for quechua data");
-    expect(anotherCorpus.datumFields.morphemes).toBeUndefined();
-
   });
 
-  xit("should change the dbname of the datum to the target corpus dbname", function() {
-    expect(true).toBeTruthy();
-  });
 
-});
+  describe("Build fields using fields in the corpus", function() {
 
-
-describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
-  it("should be have speaker fields on participants", function() {
-    expect(Corpus.prototype.defaults_psycholinguistics.participantFields.length).toBe(10);
-  });
-});
-
-
-xdescribe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
-  it("should be able to import from GitHub repository", function() {
-    expect(true).toBeTruthy();
-  });
-});
-
-
-describe("Build fields using fields in the corpus", function() {
-
-  it("should find existing fields", function() {
-    var corpus = new Corpus();
-    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("lastname");
-    expect(normalizedField.id).toEqual("lastname");
-    expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
-  });
-
-  it("should ignore empty fields", function() {
-    var corpus = new Corpus();
-    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("");
-    expect(normalizedField).toBeUndefined();
-
-    normalizedField = corpus.normalizeFieldWithExistingCorpusFields(" ");
-    expect(normalizedField).toBeUndefined();
-
-    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({});
-    expect(normalizedField).toBeUndefined();
-
-    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
-      id: ""
+    it("should find existing fields", function() {
+      var corpus = new Corpus();
+      var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("lastname");
+      expect(normalizedField.id).toEqual("lastname");
+      expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
     });
-    expect(normalizedField).toBeUndefined();
 
-    normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
-      label: ""
+    it("should ignore empty fields", function() {
+      var corpus = new Corpus();
+      var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("");
+      expect(normalizedField).toBeUndefined();
+
+      normalizedField = corpus.normalizeFieldWithExistingCorpusFields(" ");
+      expect(normalizedField).toBeUndefined();
+
+      normalizedField = corpus.normalizeFieldWithExistingCorpusFields({});
+      expect(normalizedField).toBeUndefined();
+
+      normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
+        id: ""
+      });
+      expect(normalizedField).toBeUndefined();
+
+      normalizedField = corpus.normalizeFieldWithExistingCorpusFields({
+        label: ""
+      });
+      expect(normalizedField).toBeUndefined();
     });
-    expect(normalizedField).toBeUndefined();
-  });
 
-  it("should create new fields", function() {
-    var corpus = new Corpus();
-    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Seat number");
-    expect(normalizedField.id).toEqual("seatNumber");
-    expect(normalizedField.labelFieldLinguists).toEqual("Seat number");
-    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
-  });
-
-  it("should normalize french fields to their english equivalents", function() {
-    var corpus = new Corpus();
-    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Code Permanent");
-    expect(normalizedField.id).toEqual("anonymousCode");
-    expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
-    expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
-  });
-
-  it("should find existing non default fields", function() {
-    var corpus = new Corpus({
-      datumFields: [{
-        label: "nodefaultfieldsinthiscorpus"
-      }]
+    it("should create new fields", function() {
+      var corpus = new Corpus();
+      var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Seat number");
+      expect(normalizedField.id).toEqual("seatNumber");
+      expect(normalizedField.labelFieldLinguists).toEqual("Seat number");
+      expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
     });
-    var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("syntacticTreeLatex");
-    expect(normalizedField.id).toEqual("syntacticTreeLatex");
-    normalizedField = corpus.normalizeFieldWithExistingCorpusFields("utterance");
-    expect(normalizedField.id).toEqual("utterance");
-    expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+
+    it("should normalize french fields to their english equivalents", function() {
+      var corpus = new Corpus();
+      var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Code Permanent");
+      expect(normalizedField.id).toEqual("anonymousCode");
+      expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+    });
+
+    it("should find existing non default fields", function() {
+      var corpus = new Corpus({
+        datumFields: [{
+          label: "nodefaultfieldsinthiscorpus"
+        }]
+      });
+      var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("syntacticTreeLatex");
+      expect(normalizedField.id).toEqual("syntacticTreeLatex");
+      normalizedField = corpus.normalizeFieldWithExistingCorpusFields("utterance");
+      expect(normalizedField.id).toEqual("utterance");
+      expect(normalizedField.help).toEqual("Put your team's data entry conventions here (if any)...");
+    });
+
   });
 
-});
+  describe("Corpus: as a user I want to be able to import via drag and drop", function() {
+    it("should detect drag and drop", function() {
+      expect(true).toBeTruthy();
+    });
+  });
 
-xdescribe("Corpus: as a user I want to be able to import via drag and drop", function() {
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+  describe("Corpus: as a user I want to be able to go offline, but still have the most recent objects in my corpus available", function() {
+    it("should have the most recent entries available", function() {
+      expect(true).toBeTruthy();
+    });
+    it("should store the corpus offine", function() {
+      expect(true).toBeTruthy();
+    });
   });
-});
 
-xdescribe("Corpus: as a user I want to be able to go offline, but still have the most recent objects in my corpus available", function() {
-  it("should have the most recent entries available", function() {
-    expect(true).toBeTruthy();
-  });
-  it("should store the corpus offine", function() {
-    expect(true).toBeTruthy();
-  });
 });

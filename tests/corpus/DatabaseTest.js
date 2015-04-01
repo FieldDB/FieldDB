@@ -108,9 +108,9 @@ describe("Database", function() {
     });
 
     it("should be able to get a default connection", function() {
-      var connection = Database.defaultCouchConnection();
+      var connection = Database.defaultConnection();
       expect(connection).toEqual({
-        fieldDBtype: "CorpusConnection",
+        fieldDBtype: "Connection",
         protocol: "https://",
         domain: "localhost",
         port: "6984",
@@ -133,8 +133,8 @@ describe("Database", function() {
       expect(db.toJSON()).toEqual({
         fieldDBtype: "Database",
         dateCreated: db.dateCreated,
-        corpusConnection: {
-          fieldDBtype: "CorpusConnection",
+        connection: {
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "corpus.lingsync.org",
           port: "443",
@@ -174,7 +174,8 @@ describe("Database", function() {
         "description": "The details of this corpus are not public.",
         "titleAsUrl": "lingllama-communitycorpus"
       };
-      expect(db.getCouchUrl(connection, "/_session")).toEqual("https://corpus.example.org/_session");
+      db.connection = connection;
+      expect(db.couchSessionUrl).toEqual("https://corpus.example.org/_session");
     });
 
   });
@@ -222,18 +223,16 @@ describe("Database", function() {
     it("should return instructions is user enters an impossible username", function(done) {
       var db = new Database();
       db.login({
-        username: "Ling Llamâ-friend's",
+        username: "Ling Llamâ's-friend",
         password: "phoneme"
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
-          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
-          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
-          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
-          "You have some characters which web servers wouldn't trust in your identifier."
-        ]);
+        expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
+        expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
+        expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
+        expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
+        expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -278,8 +277,8 @@ describe("Database", function() {
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.details.corpusConnection).toEqual({
-          fieldDBtype: "CorpusConnection",
+        expect(error.details.connection).toEqual({
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "localhost",
           port: "6984",
@@ -305,8 +304,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
-        expect(error.details.corpusConnection).toEqual({
-          fieldDBtype: "CorpusConnection",
+        expect(error.details.connection).toEqual({
+          fieldDBtype: "Connection",
           protocol: "https://",
           domain: "auth.linguistics.miauniversity.edu",
           port: "3222",
@@ -331,8 +330,8 @@ describe("Database", function() {
           password: "testtest",
           confirmPassword: "testtest",
           authUrl: "https://localhost:3183",
-          corpusConnection: {
-            fieldDBtype: "CorpusConnection",
+          connection: {
+            fieldDBtype: "Connection",
             protocol: "https://",
             domain: "localhost",
             port: "6984",
@@ -386,19 +385,17 @@ describe("Database", function() {
     it("should return instructions is user enters an impossible username", function(done) {
       var db = new Database();
       db.register({
-        username: "Ling Llamâ-friend's",
+        username: "Ling Llamâ's-friend",
         password: "phoneme",
         confirmPassword: "phoneme"
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual([
-          "You asked to use Ling Llamâ-friend's but we would reccomend using this instead: ling_llama_friend_s the following are a list of reason's why.",
-          "The identifier has to be lowercase so that it can be used in your CouchDB database names.",
-          "We are using - as a reserved symbol in database names, so you can't use it in your identifier.",
-          "You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.",
-          "You have some characters which web servers wouldn't trust in your identifier."
-        ]);
+        expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
+        expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
+        expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
+        expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
+        expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -406,25 +403,26 @@ describe("Database", function() {
 
   });
 
-});
 
-xdescribe("Database: as a team we want to be able to go back in time in the db revisions", function() {
-  it("should be able to import from GitHub repository", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a team we want to be able to go back in time in the db revisions", function() {
+    it("should be able to import from GitHub repository", function() {
+      expect(true).toBeTruthy();
+    });
   });
-});
 
-xdescribe("Database: as a user I want to be able to import via drag and drop", function() {
-  it("should detect drag and drop", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a user I want to be able to import via drag and drop", function() {
+    it("should detect drag and drop", function() {
+      expect(true).toBeTruthy();
+    });
   });
-});
 
-xdescribe("Database: as a user I want to be able to go offline, but still have the most recent objects in my db available", function() {
-  it("should have the most recent entries available", function() {
-    expect(true).toBeTruthy();
+  describe("Database: as a user I want to be able to go offline, but still have the most recent objects in my db available", function() {
+    it("should have the most recent entries available", function() {
+      expect(true).toBeTruthy();
+    });
+    it("should store the db offine", function() {
+      expect(true).toBeTruthy();
+    });
   });
-  it("should store the db offine", function() {
-    expect(true).toBeTruthy();
-  });
+
 });

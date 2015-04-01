@@ -1,6 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var HotKeys = require("./../hotkey/HotKeys").HotKeys;
-var InsertUnicodes = require("./../unicode/UnicodeSymbols").InsertUnicodes;
+var UnicodeSymbols = require("./../unicode/UnicodeSymbols").UnicodeSymbols;
 
 /**
  * @class  Hold preferences for users like the skin of the app
@@ -41,7 +41,7 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
   INTERNAL_MODELS: {
     value: {
       hotkeys: HotKeys,
-      unicodes: InsertUnicodes
+      unicodes: UnicodeSymbols
     }
   },
 
@@ -95,6 +95,18 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       }
 
       this._preferedDashboardLayout = value;
+    }
+  },
+
+  preferedSpreadsheetShape: {
+    get: function() {
+      return this._preferedSpreadsheetShape || {
+        columns: 2,
+        rows: 3
+      };
+    },
+    set: function(value) {
+      this._preferedSpreadsheetShape = value;
     }
   },
 

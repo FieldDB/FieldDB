@@ -11,7 +11,7 @@ describe('Directive: fielddbGlosserInput', function() {
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    // el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
+    // el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="newDatum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
     el = angular.element('<div class="span5" fielddb-glosser-input datumornewdatum="datum" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>');
     scope = $rootScope.$new();
     scope.fieldsInColumns = [{
@@ -58,11 +58,10 @@ describe('Directive: fielddbGlosserInput', function() {
       'dateEntered': '2014-09-23T23:45:15.015Z',
       'dateModified': '2014-10-05T15:21:35.532Z',
       'comments': [],
-      'sessionID': '2c31b34b7f52c50617e31f4a86001804',
       'session': {
         '_id': '2c31b34b7f52c50617e31f4a86001804',
         '_rev': '1-924b67c28c381fd840fcd11245a7772b',
-        'pouchname': 'testingspreadsheet-firstcorpus',
+        'dbname': 'testingspreadsheet-firstcorpus',
         'comments': [],
         'sessionFields': [{
           'label': 'goal',
@@ -108,7 +107,7 @@ describe('Directive: fielddbGlosserInput', function() {
         console.log('scope corpus ', scope.corpus);
         console.log(angular.element(el.find('input')[0]));
       }
-      expect(el.html()).toEqual('<!-- ngRepeat: corpusField in fieldsInColumns.first track by $index -->');
+      expect(el.html()).toEqual('<!-- ngRepeat: corpusField in corpus.fieldsInColumns.first track by $index -->');
       // console.log(el.html());
       // expect(angular.element(el.find('input')[0]).html('testing glosser'));
       // expect(angular.element(el.find('input')[0]).html().trim()).toEqual('Sample: The materials included in this corpus');

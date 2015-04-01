@@ -65,7 +65,8 @@ angular.module("fielddbAngularApp").directive("fielddbCollection", function() {
     restrict: "A",
     transclude: false,
     scope: {
-      collection: "=json"
+      collection: "=json",
+      corpus:"=corpus"
     },
     controller: controller,
     link: function postLink() {},

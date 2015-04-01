@@ -17,11 +17,11 @@ describe("Authentication ", function() {
         username: "jenkins",
         password: "phoneme"
       }).then(function(result) {
-        console.log("Done authentication");
+        auth.debug("Done authentication");
         expect(result).toBeDefined();
         expect(result).toEqual(" ");
       }, function(result) {
-        console.log("Failed authentication");
+        auth.debug("Failed authentication");
         expect(result).toBeDefined();
         expect(result.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
@@ -31,6 +31,69 @@ describe("Authentication ", function() {
 
   }, specIsRunningTooLong);
 
+  describe("create corpora for users", function() {
+
+    it("should be able to create a new corpus", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        password: "phoneme",
+        title: "Long distance anaphors in Quechua"
+      }).then(function(result) {
+        auth.debug("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        auth.debug("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should be require the user to authenticate to create a new corpus", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        title: "Long distance anaphors in Quechua"
+      }).then(function(result) {
+        auth.debug("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        auth.debug("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["You must enter your password to prove that that this is you."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should require a new corpus title", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.newCorpus({
+        username: "jenkins",
+        password: "phoneme"
+      }).then(function(result) {
+        auth.debug("Done creating new corpus");
+        expect(result).toBeDefined();
+        expect(result).toEqual("Cannot be succesful in jasmine-node");
+      }, function(error) {
+        auth.debug("Failed creating new corpus");
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toEqual(["Please supply a title for your new corpus."]);
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+  });
 
   describe("Offline", function() {
     it("should use a different random encryption key for each device", function() {
@@ -91,13 +154,13 @@ describe("Authentication ", function() {
           auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
         ]);
       // user has default prefs for now
-      expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(10);
+      expect(anotherAuthLoad.user.prefs).toBeUndefined();
       expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
       anotherAuthLoad.user.fetch().then(function() {
         expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
         // user has their own prefs now
-        expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
+        expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(20);
         expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
       }).done(done);
 
@@ -115,11 +178,11 @@ describe("Authentication ", function() {
       password: "phoneme",
       confirmPassword: "phoneme"
     }).then(function(result) {
-      console.log("Done registering");
+      auth.debug("Done registering");
       expect(result).toBeDefined();
       expect(result).toEqual("Cannot be succesful in jasmine-node");
     }, function(error) {
-      console.log("Failed registering");
+      auth.debug("Failed registering");
       expect(error).toBeDefined();
       expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
     }).done(done);

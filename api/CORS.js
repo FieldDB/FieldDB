@@ -11,6 +11,11 @@ var CORS = {
     }
   },
   warn: function(message) {
+    if (this.warnMessage && this.warnMessage.indexOf("message") > -1) {
+      return;
+    } else {
+      this.warnMessage = this.warnMessage + message;
+    }
     console.warn("CORS-WARN: " + message);
     // throw message;
   },
@@ -125,7 +130,7 @@ CORS.makeCORSRequest = function(options) {
       try {
         response = JSON.parse(response);
       } catch (e) {
-        if (e.message === "Unexpected token o") {
+        if (e && e.message === "Unexpected token o") {
           self.debug("response was json", e);
         } else {
           if (xhr.status >= 500) {
@@ -139,7 +144,15 @@ CORS.makeCORSRequest = function(options) {
           };
         }
       }
+      if (response.reason && !response.userFriendlyErrors) {
+        response.userFriendlyErrors = [response.reason];
+      }
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
+      if (xhr.status === 401) {
+        if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
+          CORS.application.authentication.dispatchEvent("unauthorized");
+        }
+      }
       deferred.reject(response);
       return;
     }

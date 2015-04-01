@@ -1,8 +1,7 @@
-/* globals window */
+/* globals window, URL */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Diacritics = require("diacritic");
-var URL = URL || require("url");
 /**
  * @class Corpus connections by default define a set of web services which are used by that corpus,
  *         generally on one server. However, over time and use the user might move their audio data to
@@ -16,7 +15,7 @@ var URL = URL || require("url");
  *
  *
  *
- * @param  {CorpusConnection} optionalRequestedCorpusConnection a object with minimally a dbname
+ * @param  {Connection} optionalRequestedConnection a object with minimally a dbname
  *
  * @param  {string} dbname                 a name space for the database also a url friendly permanent
  *                                         datbase name (composed of a username and an identifier)
@@ -48,15 +47,15 @@ var URL = URL || require("url");
  * @param  {array} lexiconUrls             an array of lexicon urls which can be used with this corpus
  * @param  {array} searchUrls              an array of search urls which can be used with this corpus
  *
- * @name  CorpusConnection
+ * @name  Connection
  * @extends FieldDBObject
  * @constructs
  */
-var CorpusConnection = function CorpusConnection(options) {
+var Connection = function Connection(options) {
   if (!this._fieldDBtype) {
-    this._fieldDBtype = "CorpusConnection";
+    this._fieldDBtype = "Connection";
   }
-  this.debug("Constructing CorpusConnection ", options);
+  this.debug("Constructing Connection ", options);
   if (options) {
     var cleanDefaultValues = ["dbname", "pouchname", "title", "titleAsUrl"];
     cleanDefaultValues.map(function(cleanMe) {
@@ -70,7 +69,7 @@ var CorpusConnection = function CorpusConnection(options) {
 
 
 
-CorpusConnection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
+Connection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
   return {
     "corpusid": "TBA",
     "dbname": options.dbname,
@@ -104,10 +103,10 @@ CorpusConnection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
   };
 };
 
-CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends CorpusConnection.prototype */ {
+Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connection.prototype */ {
 
   constructor: {
-    value: CorpusConnection
+    value: Connection
   },
 
   INTERNAL_MODELS: {
@@ -133,13 +132,22 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
     }
   },
 
-  pouchname: {
-    get: function() {
-      return this.dbname;
-    },
-    set: function(value) {
-      this.todo("pouchname is deprecated, use dbname instead ", value);
-      this.dbname = value;
+  guessDbType: {
+    value: function(value) {
+      if (!value) {
+        return;
+      }
+      var dbType;
+      if (value.indexOf("activity_feed") > -1) {
+        if (value.split("-").length >= 3) {
+          dbType = "corpus_activity_feed";
+        } else {
+          dbType = "user_activity_feed";
+        }
+      } else {
+        dbType = "corpus";
+      }
+      return dbType;
     }
   },
 
@@ -158,24 +166,31 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         delete this._dbname;
         return;
       } else {
-        if (typeof value.trim === "function") {
-          value = value.trim();
-          if (value !== "default") {
-            var pieces = value.split("-");
-            if (pieces.length !== 2) {
-              throw new Error("Database names should be composed of a username-datbaseidentifier" + value);
-            }
-            var identifierValidationResults = CorpusConnection.validateIdentifier(pieces[1]);
-            value = pieces[0] + "-" + identifierValidationResults.identifier;
-            if (identifierValidationResults.changes.length > 0) {
-              this.warn(" Invalid identifier ", identifierValidationResults.changes.join("\n "));
-              throw new Error(identifierValidationResults.changes.join("\n "));
-            }
+        if (typeof value.trim !== "function") {
+          return;
+        }
+        value = value.trim();
+
+        if (value !== "default") {
+          var pieces = value.split("-");
+          var username = pieces.shift();
+          var corpusidentifier = pieces.join("-");
+
+          username = Connection.validateUsername(username);
+          corpusidentifier = Connection.validateIdentifier(corpusidentifier);
+
+          if (username.changes && username.changes.length > 0) {
+            this.warn(username.changes.join("; "), username.originalIdentifier);
           }
+          if (corpusidentifier.changes && corpusidentifier.changes.length > 0) {
+            this.warn(corpusidentifier.changes.join("; "), corpusidentifier.originalIdentifier);
+          }
+
+          value = username.identifier + "-" + corpusidentifier.identifier;
+
         }
       }
       this._dbname = value;
-
     }
   },
 
@@ -185,11 +200,61 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         return;
       }
       var pieces = this.dbname.split("-");
-      if (pieces.length !== 2) {
-        throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-      }
+      // if (pieces.length !== 2 && this.dbname.indexOf("-activity_feed") !== (this.dbname.length - "-activity_feed".length) ){
+      //   throw new Error("Database names should be composed of a username-datbaseidentifier " + this.dbname);
+      // }
       var username = pieces[0];
       return username;
+    }
+  },
+
+  gravatar: {
+    get: function() {
+      if (this.parent && this.parent.team) {
+        if (this.parent.team.gravatar) {
+          this._gravatar = this.parent.team.gravatar;
+        } else {
+          this._gravatar = this.parent.team.buildGravatar(this.dbname);
+        }
+      }
+      return this._gravatar;
+    },
+    set: function(value) {
+      if (value === this._gravatar) {
+        return;
+      }
+      if (!value) {
+        delete this._gravatar;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._gravatar = value;
+    }
+  },
+
+  corpusid: {
+    get: function() {
+      if (!this._corpusid && this.parent && this.parent.id && this.parent.rev && typeof this.parent.normalizeFieldWithExistingCorpusFields === "function") {
+        this._corpusid = this.parent.id;
+      }
+      return this._corpusid;
+    },
+    set: function(value) {
+      if (value === this._corpusid) {
+        return;
+      }
+      if (!value) {
+        delete this._corpusid;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._corpusid = value;
     }
   },
 
@@ -200,13 +265,13 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
       }
 
       if (!this._title && this.dbname) {
-        var pieces = this.dbname.split("-");
-        if (this.dbname !== "default" && pieces.length !== 2) {
-          throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-        }
-        pieces.shift();
-        var corpusidentifier = pieces.join("-");
-        this._title = corpusidentifier;
+        // var pieces = this.dbname.split("-");
+        // // if (this.dbname !== "default" && pieces.length !== 2) {
+        // //   throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
+        // // }
+        // pieces.shift();
+        // var corpusidentifier = pieces.join("-");
+        this._title = this.dbname;
       }
       return this._title;
     },
@@ -321,24 +386,24 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         return "";
       }
 
-      var couchurl = this.protocol + this.domain;
+      var corpusurl = this.protocol + this.domain;
       if (this.port && this.port !== "443" && this.port !== "80") {
-        couchurl = couchurl + ":" + this.port;
+        corpusurl = corpusurl + ":" + this.port;
       }
       var path = this.path || "";
       if (path) {
         path = "/" + path;
       }
-      couchurl = couchurl + path;
-      couchurl = couchurl + "/" + this.dbname;
-      couchurl = couchurl.replace("http://localhost:5984", "https://localhost:6984");
+      corpusurl = corpusurl + path;
+      corpusurl = corpusurl + "/" + this.dbname;
+      corpusurl = corpusurl.replace("http://localhost:5984", "https://localhost:6984");
       /*
        * For debugging cors #838: Switch to use the corsproxy corpus service instead
        * of couchdb directly
        */
-      // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-      this.corpusUrls = [couchurl];
-      return couchurl;
+      // corpusurl = corpusurl.replace(/https/g,"http").replace(/6984/g,"3186");
+      this.corpusUrls = [corpusurl];
+      return corpusurl;
     },
     set: function(value) {
       if (this.corpusUrls && value === this.corpusUrls[0]) {
@@ -364,6 +429,38 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
         }
         this.corpusUrls.unshift(value);
       }
+    }
+  },
+
+  replicatedCorpusUrls: {
+    get: function() {
+      return this._replicatedCorpusUrls || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._replicatedCorpusUrls) {
+        return;
+      }
+      if (!value) {
+        delete this._replicatedCorpusUrls;
+        return;
+      }
+      this._replicatedCorpusUrls = value;
+    }
+  },
+
+  olacExportConnections: {
+    get: function() {
+      return this._olacExportConnections || FieldDBObject.DEFAULT_COLLECTION;
+    },
+    set: function(value) {
+      if (value === this._olacExportConnections) {
+        return;
+      }
+      if (!value) {
+        delete this._olacExportConnections;
+        return;
+      }
+      this._olacExportConnections = value;
     }
   },
 
@@ -398,12 +495,12 @@ CorpusConnection.prototype = Object.create(FieldDBObject.prototype, /** @lends C
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-CorpusConnection.defaultCouchConnection = function(optionalHREF) {
+Connection.defaultConnection = function(optionalHREF) {
   var localhost = {
     protocol: "https://",
     domain: "localhost",
     port: "6984",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "localhost",
     authUrls: ["https://localhost:3183"],
@@ -414,7 +511,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
     protocol: "https://",
     domain: "corpusdev.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "beta",
     authUrls: ["https://authdev.lingsync.org"],
@@ -425,7 +522,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "production",
     authUrls: ["https://auth.lingsync.org"],
@@ -439,7 +536,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "mcgill",
     authUrls: ["https://auth.lingsync.org"],
@@ -451,7 +548,7 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     serverLabel: "concordia",
     authUrls: ["https://auth.lingsync.org"],
@@ -505,37 +602,58 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
       connection = mcgill;
     } else if (optionalHREF.indexOf("linguistics.concordia") >= 0) {
       connection = concordia;
+    } else if (optionalHREF.indexOf("lingsync") >= 0) {
+      connection = production;
     } else if (optionalHREF.indexOf("localhost") >= 0) {
       connection = localhost;
     }
   }
   if (!connection) {
+
     console.warn("The user is trying to use a server which is unknown to the system. Attempting to construct its connection. ", optionalHREF);
     var connectionUrlObject;
     try {
-      connectionUrlObject = new URL(optionalHREF);
+      if (!Connection.URLParser) {
+        Connection.URLParser = URL;
+      }
     } catch (e) {
-      console.warn("Cant use new URL() in this browser/environment.", e);
-      connectionUrlObject = URL.parse(optionalHREF);
+      console.log("Cant figure out what the URL parser is");
+      Connection.URLParser = {
+        parse: function(url) {
+          console.warn("Not parsing this url", url);
+          return {};
+        }
+      };
+    }
+    try {
+      connectionUrlObject = new Connection.URLParser(optionalHREF);
+    } catch (e) {
+      console.warn("Cant use new Connection.URLParser() in this environment.", e);
+      connectionUrlObject = Connection.URLParser.parse(optionalHREF);
       // console.log(connectionUrlObject);
     }
-    var domainName = connectionUrlObject.hostname.split(".");
-    while (domainName.length > 2) {
-      domainName.shift();
+    if (!connectionUrlObject || !connectionUrlObject.hostname) {
+      console.warn("There was no way to deduce the HREF, probably we are in Node. Using localhost instead. ", optionalHREF);
+      connection = localhost;
+    } else {
+      var domainName = connectionUrlObject.hostname.split(".");
+      while (domainName.length > 2) {
+        domainName.shift();
+      }
+      domainName = domainName.join(".");
+      connection = {
+        protocol: connectionUrlObject.protocol + "//",
+        domain: connectionUrlObject.hostname,
+        port: connectionUrlObject.port,
+        dbname: "default",
+        path: connectionUrlObject.pathname.replace("/", ""),
+        serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
+        authUrls: [optionalHREF],
+        userFriendlyServerName: domainName
+      };
     }
-    domainName = domainName.join(".");
-    connection = {
-      protocol: connectionUrlObject.protocol + "//",
-      domain: connectionUrlObject.hostname,
-      port: connectionUrlObject.port,
-      pouchname: "default",
-      path: connectionUrlObject.pathname.replace("/", ""),
-      serverLabel: domainName.substring(0, domainName.lastIndexOf(".")),
-      authUrls: [optionalHREF],
-      userFriendlyServerName: domainName
-    };
   }
-  connection = new CorpusConnection(connection).toJSON();
+  connection = new Connection(connection).toJSON();
   return connection;
 };
 
@@ -545,7 +663,12 @@ CorpusConnection.defaultCouchConnection = function(optionalHREF) {
  * @param  {string} originalIdentifier the desired dbname or username
  * @return {object}                  the resulting dbname or username, the original dbname, and the changes that were applied.
  */
-CorpusConnection.validateIdentifier = function(originalIdentifier) {
+Connection.validateIdentifier = function(originalIdentifier, username) {
+  if (!originalIdentifier) {
+    return {
+      changes: ["Identifier was empty"]
+    };
+  }
   var identifier = originalIdentifier.toString();
   var changes = [];
   if (identifier.toLowerCase() !== identifier) {
@@ -554,8 +677,13 @@ CorpusConnection.validateIdentifier = function(originalIdentifier) {
   }
 
   if (identifier.split("-").length > 1) {
-    changes.push("We are using - as a reserved symbol in database names, so you can't use it in your identifier.");
-    identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
+    if (username) {
+      identifier = identifier.replace(/-/g, "");
+      changes.push("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
+    } else {
+      // permit the all - which might be in the username or the database
+      // identifier = identifier.replace("-", ":::").replace(/-/g, "_").replace(":::", "-");
+    }
   }
 
   if (Diacritics.clean(identifier) !== identifier) {
@@ -565,7 +693,11 @@ CorpusConnection.validateIdentifier = function(originalIdentifier) {
 
   if (identifier.replace(/[^a-z0-9_-]/g, "_") !== identifier) {
     changes.push("You have some characters which web servers wouldn't trust in your identifier.");
-    identifier = identifier.replace(/[^a-z0-9_]/g, "_");
+    if (username) {
+      identifier = identifier.replace(/[^a-z0-9_-]/g, "");
+    } else {
+      identifier = identifier.replace(/[^a-z0-9_-]/g, "_");
+    }
   }
 
   if (identifier.length < 2) {
@@ -583,16 +715,19 @@ CorpusConnection.validateIdentifier = function(originalIdentifier) {
   };
 };
 
+Connection.validateUsername = function(originalIdentifier) {
+  return Connection.validateIdentifier(originalIdentifier, "username");
+};
 
 
 /**
  * This is the base schema of a corpus connection, other fields may be added.
- * This schema is used by the API docs, it should be updated as the above newCorpusConnection changes.
+ * This schema is used by the API docs, it should be updated as the above newConnection changes.
  *
  * @type {Object}
  */
-CorpusConnection.baseSchema = {
-  "id": "CouchConnection",
+Connection.baseSchema = {
+  "id": "Connection",
   "properties": {
     "corpusid": {
       "type": "string"
@@ -655,4 +790,4 @@ CorpusConnection.baseSchema = {
 };
 
 
-exports.CorpusConnection = CorpusConnection;
+exports.Connection = Connection;

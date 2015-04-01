@@ -5,6 +5,7 @@ compiled_handlebars.js
 *.handlebars.js
 #ignore generated folders
 release/
+dist
 couchapp_dev/_attachments
 couchapp_minified/views
 couchapp_minified/lists

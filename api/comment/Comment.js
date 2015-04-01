@@ -36,26 +36,6 @@ Comment.prototype = Object.create(FieldDBObject.prototype, /** @lends Comment.pr
     }
   },
 
-  timestamp: {
-    get: function() {
-      return this._timestamp;
-    },
-    set: function(value) {
-      if (value === this._timestamp) {
-        return;
-      }
-      if (!value) {
-        delete this._timestamp;
-        return;
-      }
-      if (("" + value).indexOf("Z") > -1) {
-        value = (new Date(value)).getTime();
-      }
-
-      this._timestamp = value;
-    }
-  },
-
   /**
    * The edit function allows users to edit a comment.
    *

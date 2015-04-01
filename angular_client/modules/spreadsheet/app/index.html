@@ -11,8 +11,8 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/recordmp3js/css/style.css" />
+    <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/vendor.css" />
     <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/main.css" />
-    <link rel="stylesheet" href="bower_components/bootstrap/docs/assets/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -27,9 +27,10 @@
 
     <!-- Add your site or application content here -->
     <ng-include src="'views/menu.html'" scope="" onload=""></ng-include>
-    <div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
-      <ng-view></ng-view>
+
+    <div ng-class="{'mainBody': !searching, 'mainBodySearching': searching}" ng-view="" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true">
     </div>
+
     <div class="loading_trouble_message" ng-hide="clickSuccess==true" class="clearCacheMessage">
       If you are having trouble viewing the page, you may need to empty your browser's cache.
     </div>
@@ -73,13 +74,10 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/SpreadsheetDatum.js"></script>
-        <script src="scripts/app.js"></script>
         <script src="scripts/private_services.js"></script>
+        <script src="scripts/app.js"></script>
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
-        <script src="scripts/directives.js"></script>
-        <script src="scripts/controllers/SettingsController.js"></script>
         <script src="scripts/controllers/SpreadsheetController.js"></script>
         <script src="scripts/controllers/spreadsheet-export.js"></script>
         <script src="scripts/controllers/spreadsheet-notification.js"></script>

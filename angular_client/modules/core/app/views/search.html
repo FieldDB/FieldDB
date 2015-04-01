@@ -1,25 +1,25 @@
-<form role="form" class="form-inline" id="searchCorpus" ng-action="{{corpus.searchUrl}}/{{corpus.pouchname}}" method="POST" enctype="application/json" >
-	<input type="text" class="form-control" id="queryString" name="queryString" placeholder="Enter search terms…">
-	<button type="submit" id="corpus_search" class="btn  btn-success">
-		<i style="margin-top:2px" class="fa fa-search fa fa-white">
-		</i>
-		Search…
-	</button>
+<form role="form" class="form-inline" id="searchCorpus" ng-action="{{corpus.searchUrl}}/{{corpus.dbname}}" method="POST" enctype="application/json" >
+    <input type="text" class="form-control" id="queryString" name="queryString" placeholder="Enter search terms…">
+    <button type="submit" id="corpus_search" class="btn  btn-success">
+        <i style="margin-top:2px" class="fa fa-search fa fa-white">
+        </i>
+        Search…
+    </button>
 
-	<button id="corpus_build" class="form-control btn btn-info"  ng-click="reindex('{{corpus.pouchname}}')" >
-		<i class="fa fa-refresh fa fa-white">
-		</i>
-		Rebuild search lexicon
-	</button>
-	<div class="progress col-md-2">
-		<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-		</div>
-	</div>
+    <button id="corpus_build" class="form-control btn btn-info"  ng-click="reindex('{{corpus.dbname}}')" >
+        <i class="fa fa-refresh fa fa-white">
+        </i>
+        Rebuild search lexicon
+    </button>
+    <div class="progress col-md-2">
+        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+        </div>
+    </div>
 </form>
 <p id="clearresults" class="hide">
-	<button type="button" id="clear_results" onclick="clearresults()" class="btn btn-mini btn-danger">
-		<i style="margin-top:2px" class="fa fa-remove fa fa-white">
-		</i>
-		Clear…
-	</button>
+    <button type="button" id="clear_results" onclick="clearresults()" class="btn btn-mini btn-danger">
+        <i style="margin-top:2px" class="fa fa-remove fa fa-white">
+        </i>
+        Clear…
+    </button>
 </p>

@@ -30,7 +30,7 @@ ELanguages.prototype = Object.create(Collection.prototype, /** @lends ELanguages
 
   INTERNAL_MODELS: {
     value: {
-      item: FieldDBObject
+      item: FieldDBObject /* TODO use normal object? */
     }
   },
 

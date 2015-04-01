@@ -1,4 +1,4 @@
-/* globals window, document, alert */
+/* globals window, document */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
@@ -6,6 +6,8 @@ var Database = require("./../corpus/Database").Database;
 var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
+var Connection = require("./../corpus/Connection").Connection;
+var CORS = require("./../CORS").CORS;
 /**
  * @class The Authentication Model handles login and logout and
  *        authentication locally or remotely. *
@@ -28,12 +30,24 @@ var Authentication = function Authentication(options) {
 
   var self = this;
 
+
+
+  this.loading = true;
   this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
+
+    CORS.application = FieldDBObject.application;
+
+    self.loading = false;
     self.debug(user);
     self.user = user;
     self.user.fetch();
-    self.user.authenticated = true;
-    self.dispatchEvent("authenticated");
+    if (self.user._rev) {
+      self.user.authenticated = true;
+      self.dispatchEvent("authenticated");
+    } else {
+      self.user.authenticated = false;
+      self.dispatchEvent("notauthenticated");
+    }
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
     //   selfauthentication.user.username = sessionInfo.userCtx.name;
@@ -49,6 +63,7 @@ var Authentication = function Authentication(options) {
     // }
     return self.user;
   }, function(error) {
+    self.loading = false;
     self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
     if (error.status !== 409) {
       // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
@@ -58,6 +73,8 @@ var Authentication = function Authentication(options) {
     self.render();
 
     return error;
+  }).fail(function(error) {
+    console.error(error.stack, self);
   });
 
   FieldDBObject.apply(this, arguments);
@@ -83,7 +100,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         event.initEvent(eventChannelName, true, true);
         document.dispatchEvent(event);
       } catch (e) {
-        this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.", e);
+        this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.");
+        this.debug(" error ", e);
       }
     }
   },
@@ -97,23 +115,23 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
    * @param callback A callback to call upon sucess.
    */
   login: {
-    value: function(user) {
+    value: function(loginDetails) {
       var deferred = Q.defer(),
         self = this;
 
+      var tempUser = new User(loginDetails);
       var dataToPost = {};
-      dataToPost.username = user.username;
-      dataToPost.password = user.password;
-      dataToPost.authUrl = user.authUrl;
+      dataToPost.username = loginDetails.username;
+      dataToPost.password = loginDetails.password;
+      dataToPost.authUrl = loginDetails.authUrl;
 
-      if (this.user && this.user.username && this.user._rev && !this.user.fetching && !this.user.loading) {
-        //if the same user is re-authenticating, include their details to sync to the server.
-        if (user.username === this.user.username && user.username !== "public") {
-          dataToPost.syncDetails = "true";
-          dataToPost.syncUserDetails = this.user.toJSON();
-          this.warn("Backing up user details", dataToPost.syncUserDetails);
-          delete dataToPost.syncUserDetails._rev;
-        }
+      //if the same user is re-authenticating, include their details to sync to the server.
+      tempUser.fetch();
+      if (tempUser._rev && tempUser.username !== "public") {
+        dataToPost.syncDetails = "true";
+        dataToPost.syncUserDetails = tempUser.toJSON();
+        tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
+        delete dataToPost.syncUserDetails._rev;
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server,
         //the server will overwrite their details.
         //should we automatically check here, or should we make htem a button
@@ -124,41 +142,129 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.status = "";
       this.loading = true;
 
-      Database.prototype.login(dataToPost).then(function(userDetails) {
-          self.loading = false;
+      var handleFailedLogin = function(error) {
+        self.loading = false;
+        if (!error || !error.userFriendlyErrors) {
+          error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
+        }
+        self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
+        self.error = error.userFriendlyErrors.join(" ");
+        deferred.reject(error);
+      };
 
-          if (!userDetails) {
-            deferred.reject({
-              error: userDetails,
-              status: 500,
-              userFriendlyErrors: ["Unknown error. Please report this 2391."]
+      self.resumingSessionPromise = deferred.promise;
+      Database.prototype.login(dataToPost)
+        .then(function(userDetails) {
+
+            if (!userDetails) {
+              self.loading = false;
+              deferred.reject({
+                error: userDetails,
+                status: 500,
+                userFriendlyErrors: ["Unknown error. Please report this 2391."]
+              });
+              return;
+            }
+
+            try {
+              self.user = userDetails;
+            } catch (e) {
+              console.warn("There was a problem assigning the user. ", e);
+            }
+            self.authenticateWithAllCorpusServers(loginDetails).then(function() {
+              self.loading = false;
+              self.user.authenticated = true;
+              self.dispatchEvent("authenticated");
+              deferred.resolve(self.user);
+            }, function() {
+              self.loading = false;
+              deferred.resolve(self.user);
+            }).fail(function(error) {
+              self.loading = false;
+              console.error(error.stack, self);
+              deferred.resolve(self.user);
             });
-            return;
-          }
-          try {
-            self.user = userDetails;
-          } catch (e) {
-            console.warn("There was a problem assigning the user. ", e);
-          }
-          self.user.authenticated = true;
-          self.dispatchEvent("authenticated");
 
-          deferred.resolve(self.user);
-        }, //end successful login
-        function(error) {
-          if (!error || !error.userFriendlyErrors) {
-            error.userFriendlyErrors = ["Unknown error."];
-          }
-          self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
-          self.error = error.userFriendlyErrors.join(" ");
-          self.loading = false;
-          deferred.reject(error);
+          }, //end successful login
+          handleFailedLogin)
+        .fail(function(error) {
+          console.error(error.stack, self);
+          handleFailedLogin(error);
         });
 
-      // Q.nextTick(function(){
-      //   deferred.reject("hi")
-      // });
+      return deferred.promise;
+    }
+  },
 
+  authenticateWithAllCorpusServers: {
+    value: function(loginDetails) {
+      var deferred = Q.defer(),
+        self = this,
+        corpusServersWhichHouseUsersCorpora = [],
+        promises = [];
+
+      if (!this.user.corpora || this.user.corpora.length === 0) {
+        Q.nextTick(function() {
+          self.bug("You don't have access to any corpora. This is strange.");
+          deferred.resolve(self.user);
+        });
+        return deferred.promise;
+      }
+
+      this.user.corpora.map(function(connection) {
+        var addThisServerIfNotAlreadyThere = function(url) {
+          var couchdbSessionUrl = url.replace(connection.dbname, "_session");
+          if (corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+            corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          }
+
+          //old logic from database.
+          // if (!self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+          //   corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          // } else if (self.dbname && connection.dbname === self.dbname && corpusServersWhichHouseUsersCorpora.indexOf(couchdbSessionUrl) === -1) {
+          //   corpusServersWhichHouseUsersCorpora.push(couchdbSessionUrl);
+          // }
+        };
+
+        if (connection.corpusUrls) {
+          connection.corpusUrls.map(addThisServerIfNotAlreadyThere);
+        } else {
+          addThisServerIfNotAlreadyThere(connection.corpusUrl);
+        }
+      });
+
+      if (corpusServersWhichHouseUsersCorpora.length < 1) {
+        this.bug("You don't have access to any corpora. This is strange.");
+      }
+      this.debug("Requesting session token for all corpora user has access to.");
+      this.user.roles = [];
+      for (var corpusUrlIndex = 0; corpusUrlIndex < corpusServersWhichHouseUsersCorpora.length; corpusUrlIndex++) {
+        promises.push(Database.prototype.login({
+          authUrl: corpusServersWhichHouseUsersCorpora[corpusUrlIndex],
+          name: this.user.username,
+          password: loginDetails.password
+        }));
+      }
+
+      Q.allSettled(promises).then(function(results) {
+        results.map(function(result) {
+          if (result.state === "fulfilled" && result.value && result.value.roles) {
+            self.user.roles = self.user.roles.concat(result.value.roles);
+          } else {
+            self.debug("Failed to login to one of the users's corpus servers ", result);
+          }
+        });
+        deferred.resolve(self.user);
+      });
+
+      // .then(function(sessionInfo) {
+      //   // self.debug(sessionInfo);
+      //   result.user.roles = sessionInfo.roles;
+      //   deferred.resolve(result.user);
+      // }, function() {
+      //   self.debug("Failed to login ");
+      //   deferred.reject("Something is wrong.");
+      // });
       return deferred.promise;
     }
   },
@@ -168,6 +274,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       var self = this,
         deferred = Q.defer();
 
+      this.loading = true;
       Database.prototype.register(options).then(function(userDetails) {
         self.debug("registration succeeeded, waiting to login ", userDetails);
 
@@ -192,11 +299,16 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
                 loopExponentialDecayLogin(options);
               }, waitTime);
             }
-          });
+          }).fail(
+            function(error) {
+              console.error(error.stack, self);
+              deferred.reject(error);
+            });
         };
         loopExponentialDecayLogin(options);
 
       }, function(error) {
+        self.loading = false;
         self.debug("registration failed ", error);
         deferred.reject(error);
       });
@@ -208,11 +320,18 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   logout: {
     value: function(options) {
       var self = this;
+      this.loading = true;
 
+      this.save();
       return Database.prototype.logout(options).then(function() {
         self.dispatchEvent("logout");
-        alert("Reloading the page");
-        window.location.reload();
+        self.loading = false;
+        self.warn("Reloading the page");
+        try {
+          window.location.reload();
+        } catch (e) {
+          self.debug("Window is undefined", e);
+        }
       });
     }
   },
@@ -248,10 +367,13 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         if (!this._user._rev) {
           overwriteOrNot = "overwrite";
         }
-        this._user.merge("self", new User(value), overwriteOrNot);
+        this._user.merge("self", value, overwriteOrNot);
       } else {
+        if (!(value instanceof User)) {
+          value = new User(value);
+        }
         this.debug("Setting the user");
-        this._user = new User(value);
+        this._user = value;
       }
 
       var self = this;
@@ -291,9 +413,100 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     value: function() {
       var self = this;
       this.todo("will this return a promise.");
-      return this.renderQuickAuthentication().then(function(userinfo) {
-        self.login(userinfo);
+      return this.renderQuickAuthentication()
+        .then(function(userinfo) {
+          self.login(userinfo);
+        })
+        .fail(function(error) {
+          console.error(error.stack, self);
+        });
+    }
+  },
+
+  newCorpus: {
+    value: function(details) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+
+        if (!details) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+
+        details.authUrl = Database.prototype.deduceAuthUrl(details.authUrl);
+
+        if (!details.username) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+        if (!details.password) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["You must enter your password to prove that that this is you."],
+            status: 412
+          });
+          return;
+        }
+        details.title = details.title || details.newCorpusName;
+        details.newCorpusName = details.title;
+
+        if (!details.title) {
+          deferred.reject({
+            details: details,
+            userFriendlyErrors: ["Please supply a title for your new corpus."],
+            status: 412
+          });
+          return;
+        }
+
+        var validateUsername = Connection.validateUsername(details.username);
+        if (validateUsername.changes.length > 0) {
+          details.username = validateUsername.identifier;
+          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          deferred.reject({
+            error: validateUsername,
+            userFriendlyErrors: validateUsername.changes,
+            status: 412
+          });
+          return;
+        }
+
+        CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: details.authUrl + "/newcorpus",
+          data: details
+        }).then(function(authserverResult) {
+            self.debug(authserverResult);
+            self.user.corpora.shift(authserverResult.corpus);
+            self.save();
+
+            deferred.resolve(authserverResult.corpus);
+          },
+          function(reason) {
+            reason = reason || {};
+            reason.details = details;
+            reason.status = reason.status || 400;
+            reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+            self.debug(reason);
+            deferred.reject(reason);
+          }).fail(
+          function(error) {
+            console.error(error.stack, self);
+            deferred.reject(error);
+          });
       });
+      return deferred.promise;
     }
   }
 

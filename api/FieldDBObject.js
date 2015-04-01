@@ -1,5 +1,4 @@
-/* globals alert, confirm, navigator, Android */
-var CORS = require("./CORS").CORS;
+/* globals alert, confirm, navigator, Android, FieldDB */
 var Diacritics = require("diacritic");
 var Q = require("q");
 var package;
@@ -79,6 +78,9 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
+  // if (json instanceof this.constructor) {
+  //   return json;
+  // }
   if (!this._fieldDBtype) {
     this._fieldDBtype = "FieldDBObject";
   }
@@ -99,14 +101,14 @@ var FieldDBObject = function FieldDBObject(json) {
       continue;
     }
     this.debug("JSON: " + member);
-    if (json[member] && this.INTERNAL_MODELS && this.INTERNAL_MODELS[member] && typeof this.INTERNAL_MODELS[member] === "function" && json[member].constructor !== this.INTERNAL_MODELS[member]) {
-      if (typeof json[member] === "string" && this.INTERNAL_MODELS[member].constructor && this.INTERNAL_MODELS[member].prototype.fieldDBtype === "ContextualizableObject") {
-        this.warn("this member " + member + " is supposed to be a ContextualizableObject but it is a string, not converting it into a ContextualizableObject", json[member]);
-        simpleModels.push(member);
-      } else {
-        this.debug("Parsing model: " + member);
-        json[member] = new this.INTERNAL_MODELS[member](json[member]);
-      }
+    if (json[member] &&
+      this.INTERNAL_MODELS &&
+      this.INTERNAL_MODELS[member] &&
+      typeof this.INTERNAL_MODELS[member] === "function" &&
+      !(json[member] instanceof this.INTERNAL_MODELS[member]) &&
+      !(this.INTERNAL_MODELS[member].compatibleWithSimpleStrings && typeof json[member] === "string")) {
+
+      json[member] = new this.INTERNAL_MODELS[member](json[member]);
 
     } else {
       simpleModels.push(member);
@@ -118,7 +120,7 @@ var FieldDBObject = function FieldDBObject(json) {
   }
   Object.apply(this, arguments);
   // if (!this._rev) {
-  if (!this.id) {
+  if (!this.id && !this._dateCreated) {
     this.dateCreated = Date.now();
   }
 
@@ -129,6 +131,9 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "fetching",
   "loaded",
   "loading",
+  "unsaved",
+  "_unsaved",
+  "selected",
   "useIdNotUnderscore",
   "decryptedMode",
   "bugMessage",
@@ -136,12 +141,33 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "perObjectDebugMode",
   "perObjectAlwaysConfirmOkay",
   "application",
+  "corpus",
+  "_corpus",
+  "db",
+  "_db",
   "contextualizer",
   "perObjectDebugMode",
-  "perObjectAlwaysConfirmOkay",
+  "whenReady",
   "useIdNotUnderscore",
-  "parent"
+  "parent",
+  "confirmMessage",
+  "bugMessage",
+  "fossil",
+  "$$hashKey"
 ];
+
+FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
+  "dateCreated",
+  "_dateCreated",
+  "_fieldDBtype",
+  "version",
+  "_version",
+  "modifiedByUser",
+  "_dateModified",
+  "_fieldDBtype",
+  "dateModified",
+  "updated_at"
+]);
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -154,19 +180,87 @@ FieldDBObject.DEFAULT_VERSION = "v" + package.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.render = function(options) {
-  this.warn("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
+  this.debug("Rendering, but the render was not injected for this " + this.fieldDBtype, options);
+};
+
+FieldDBObject.verbose = function(message, message2, message3, message4) {
+  try {
+    if (navigator && navigator.appName === "Microsoft Internet Explorer") {
+      return;
+    }
+  } catch (e) {
+    //do nothing, we are in node or some non-friendly browser.
+  }
+  if (this.verboseMode) {
+    var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+    console.log(type.toUpperCase() + " VERBOSE: " + message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
+  }
+};
+FieldDBObject.debugMode = false;
+FieldDBObject.debug = function(message, message2, message3, message4) {
+  try {
+    if (navigator && navigator.appName === "Microsoft Internet Explorer") {
+      return;
+    }
+  } catch (e) {
+    //do nothing, we are in node or some non-friendly browser.
+  }
+  if (this.debugMode) {
+    var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+    console.log(type.toUpperCase() + " DEBUG: " + message);
+
+    if (message2) {
+      console.log(message2);
+    }
+    if (message3) {
+      console.log(message3);
+    }
+    if (message4) {
+      console.log(message4);
+    }
+  }
+};
+
+FieldDBObject.todo = function(message, message2, message3, message4) {
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  console.warn(type.toUpperCase() + " TODO: " + message);
+  if (message2) {
+    console.warn(message2);
+  }
+  if (message3) {
+    console.warn(message3);
+  }
+  if (message4) {
+    console.warn(message4);
+  }
 };
 
 FieldDBObject.bug = function(message) {
   try {
     alert(message);
   } catch (e) {
-    console.warn(this.fieldDBtype.toUpperCase() + " BUG: " + message);
+    this.warn(" Couldn't tell user about a bug: " + message);
+    // console.log("Alert is not defined, this is strange.");
   }
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  //outputing a stack trace
+  console.error(type.toUpperCase() + " BUG: " + message);
 };
 
 FieldDBObject.warn = function(message, message2, message3, message4) {
-  console.warn(this.fieldDBtype.toUpperCase() + " WARN: " + message);
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  // putting out a stacktrace
+  console.error(type.toUpperCase() + " WARN: " + message);
   if (message2) {
     console.warn(message2);
   }
@@ -253,6 +347,117 @@ FieldDBObject.getHumanReadableTimestamp = function() {
   return year + "-" + month + "-" + day + "_" + hour + "." + minute;
 };
 
+FieldDBObject.guessType = function(doc) {
+  if (!doc || JSON.stringify(doc) === {}) {
+    return "FieldDBObject";
+  }
+  FieldDBObject.debug("Guessing type " + doc._id);
+  var guessedType = doc.previousFieldDBtype || doc.jsonType || doc.collection || "FieldDBObject";
+  if (doc.api && doc.api.length > 0) {
+    FieldDBObject.debug("using api" + doc.api);
+    guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
+  }
+  guessedType = guessedType.replace(/s$/, "");
+  guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
+  if (guessedType === "Datalist") {
+    guessedType = "DataList";
+  }
+  if (guessedType === "FieldDBObject") {
+    if (doc.session) {
+      guessedType = "Datum";
+    } else if (doc.datumFields && doc.sessionFields) {
+      guessedType = "Corpus";
+    } else if (doc.collection === "sessions" && doc.sessionFields) {
+      guessedType = "Session";
+    } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
+      guessedType = "Comment";
+    } else if (doc.symbol && doc.tipa !== undefined) {
+      guessedType = "UnicodeSymbol";
+    }
+  }
+
+  FieldDBObject.debug("Guessed type " + doc._id + " is a " + guessedType);
+  return guessedType;
+};
+
+FieldDBObject.convertDocIntoItsType = function(doc, clone) {
+  // this.debugMode = true;
+  var guessedType,
+    typeofAnotherObjectsProperty = Object.prototype.toString.call(doc);
+
+  if (clone) {
+    var cloneDoc;
+    if (typeof doc.clone === "function") {
+      // if (doc instanceof FieldDBObject || typeof doc.fuzzyFind === "function") {
+      // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject or Collection
+      cloneDoc = doc.clone();
+      doc = new doc.constructor(cloneDoc);
+    } else
+    // Return a clone of simple types, or a new clone of the json of this object
+    if (typeofAnotherObjectsProperty === "[object String]") {
+      return doc + "";
+    } else if (typeofAnotherObjectsProperty === "[object Number]") {
+      return doc + 0;
+    } else if (typeofAnotherObjectsProperty === "[object Date]") {
+      return new Date(doc);
+    } else if (typeofAnotherObjectsProperty === "[object Array]") {
+      return doc.concat([]);
+    } else {
+      clone = doc.toJSON ? doc.toJSON() : doc;
+      doc = new doc.constructor(clone);
+    }
+  } else {
+    // Return the doc if its a simple type
+    if (typeofAnotherObjectsProperty === "[object String]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Number]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Date]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object Array]") {
+      return doc;
+    }
+  }
+
+  if (typeof doc.debug === "function" && doc.constructor !== FieldDBObject) {
+    // if (doc instanceof FieldDBObject || typeof doc.fuzzyFind === "function") {
+    // wasnt able to make it what it should be, but it was at least some extension of FieldDBObject or Collection
+    return doc;
+  }
+
+  try {
+    guessedType = doc.fieldDBtype;
+    if (!guessedType || guessedType === "FieldDBObject") {
+      FieldDBObject.debug(" requesting guess type ");
+      guessedType = FieldDBObject.guessType(doc);
+      FieldDBObject.debug("request complete");
+    }
+    FieldDBObject.debug("Converting doc into type " + guessedType);
+
+    if (FieldDB && FieldDB[guessedType]) {
+      if (doc instanceof FieldDB[guessedType]) {
+        return doc;
+      }
+      doc = new FieldDB[guessedType](doc);
+      // FieldDBObject.warn("Converting doc into guessed type " + guessedType);
+    } else {
+      doc = new FieldDBObject(doc);
+      FieldDBObject.debug("This doc does not have a type than is known to the FieldDB system. It might display oddly ", doc);
+    }
+  } catch (e) {
+    FieldDBObject.debug("Couldn't convert this doc to its type " + guessedType + ", it will be a base FieldDBObject: " + JSON.stringify(doc));
+    FieldDBObject.debug(" error: ", e);
+    var checkPreviousTypeWithoutS = doc.previousFieldDBtype ? doc.previousFieldDBtype.replace(/s$/, "") : "";
+    if (guessedType !== "FieldDBObject" && guessedType !== checkPreviousTypeWithoutS) {
+      doc.previousFieldDBtype = doc.previousFieldDBtype || "";
+      doc.previousFieldDBtype = doc.previousFieldDBtype + guessedType;
+    }
+    doc = new FieldDBObject(doc);
+  }
+  return doc;
+};
+
+
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {
@@ -297,26 +502,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   debug: {
-    value: function(message, message2, message3, message4) {
-      try {
-        if (navigator && navigator.appName === "Microsoft Internet Explorer") {
-          return;
-        }
-      } catch (e) {
-        //do nothing, we are in node or some non-friendly browser.
-      }
+    value: function( /* message, message2, message3, message4 */ ) {
       if (this.debugMode) {
-        console.log(this.fieldDBtype.toUpperCase() + " DEBUG: " + message);
-
-        if (message2) {
-          console.log(message2);
-        }
-        if (message3) {
-          console.log(message3);
-        }
-        if (message4) {
-          console.log(message4);
-        }
+        FieldDBObject.debug.apply(this, arguments);
       }
     }
   },
@@ -340,9 +528,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
   verbose: {
-    value: function(message, message2, message3, message4) {
+    value: function( /* message, message2, message3, message4 */ ) {
       if (this.verboseMode) {
-        this.debug(message, message2, message3, message4);
+        FieldDBObject.verbose.apply(this, arguments);
       }
     }
   },
@@ -404,18 +592,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       FieldDBObject.warn.apply(this, arguments);
     }
   },
+
   todo: {
-    value: function(message, message2, message3, message4) {
-      console.warn(this.fieldDBtype.toUpperCase() + " TODO: " + message);
-      if (message2) {
-        console.warn(message2);
-      }
-      if (message3) {
-        console.warn(message3);
-      }
-      if (message4) {
-        console.warn(message4);
-      }
+    value: function( /* message, message2, message3, message4 */ ) {
+      FieldDBObject.todo.apply(this, arguments);
     }
   },
 
@@ -427,29 +607,83 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
-  save: {
-    value: function(optionalUserWhoSaved) {
-      var deferred = Q.defer(),
-        self = this;
+  ensureSetViaAppropriateType: {
+    value: function(propertyname, value, optionalInnerPropertyName) {
+      if (!propertyname) {
+        console.error("Invalid call to ensureSetViaAppropriateType", value);
+        throw new Error("Invalid call to ensureSetViaAppropriateType");
+      }
 
-      if (this.fetching) {
-        self.warn("Fetching is in process, can't save right now...");
-        Q.nextText(function() {
-          deferred.reject("Fetching is in process, can't save right now...");
-        });
+      optionalInnerPropertyName = optionalInnerPropertyName || "_" + propertyname;
+
+      if (value === this[optionalInnerPropertyName]) {
+        return this[optionalInnerPropertyName];
+      }
+      if (!value) {
+        delete this[optionalInnerPropertyName];
         return;
       }
-      if (this.saving) {
-        self.warn("Save was already in process...");
-        Q.nextText(function() {
-          deferred.reject("Fetching is in process, can't save right now...");
-        });
+
+      if (this.INTERNAL_MODELS &&
+        this.INTERNAL_MODELS[propertyname] &&
+        typeof this.INTERNAL_MODELS[propertyname] === "function" &&
+        !(value instanceof this.INTERNAL_MODELS[propertyname]) &&
+        !(this.INTERNAL_MODELS[propertyname].compatibleWithSimpleStrings && typeof value === "string")) {
+
+        this.debug("Converting this into its type.", value.constructor.toString());
+        value = new this.INTERNAL_MODELS[propertyname](value);
+
+      }
+
+      // This trims all strings in the system...
+      if (typeof value.trim === "function") {
+        value = value.trim();
+      }
+
+      this[optionalInnerPropertyName] = value;
+      return this[optionalInnerPropertyName];
+    }
+  },
+
+  unsaved: {
+    get: function() {
+      return this._unsaved;
+    },
+    set: function(value) {
+      this._unsaved = !!value;
+    }
+  },
+
+  calculateUnsaved: {
+    value: function() {
+      if (!this.fossil) {
+        this._unsaved = true;
         return;
       }
-      this.saving = true;
 
-      //update to this version
-      this.version = FieldDBObject.DEFAULT_VERSION;
+      var previous = new this.constructor(this.fossil);
+      var current = new this.constructor(this.toJSON());
+
+      current.debugMode = this.debugMode;
+      if (previous.equals(current)) {
+        this.warn("The " + this.id + " didnt actually change. Not marking as edited");
+        this._unsaved = false;
+      } else {
+        this._unsaved = true;
+      }
+      return this._unsaved;
+    }
+  },
+
+  createSaveSnapshot: {
+    value: function(selfOrSnapshot, optionalUserWhoSaved) {
+      var self = this;
+
+      selfOrSnapshot = this;
+
+      this.debug("    Running snapshot...");
+      //update to selfOrSnapshot version
+      selfOrSnapshot.version = FieldDBObject.DEFAULT_VERSION;
 
       try {
         FieldDBObject.software = FieldDBObject.software || {};
@@ -505,9 +739,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           username: "unknown"
         };
         try {
-          if (FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.connectionInfo) {
-            var connectionInfo = FieldDBObject.application.corpus.connectionInfo;
-            optionalUserWhoSaved.username = connectionInfo.userCtx.name;
+          if (this.corpus && this.corpus.connectionInfo && this.corpus.connectionInfo.userCtx) {
+            optionalUserWhoSaved.username = this.corpus.connectionInfo.userCtx.name;
+          } else if (FieldDBObject.application && FieldDBObject.application.user && FieldDBObject.application.user.username) {
+            optionalUserWhoSaved.username = optionalUserWhoSaved.username || FieldDBObject.application.user.username;
+            optionalUserWhoSaved.gravatar = optionalUserWhoSaved.gravatar || FieldDBObject.application.user.gravatar;
           }
         } catch (e) {
           this.warn("Can't get the corpus connection info to guess who saved this.", e);
@@ -523,6 +759,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       // optionalUserWhoSaved.browser = browser;
 
+      this.debug("    Calculating userWhoSaved...");
+
       var userWhoSaved = {
         username: optionalUserWhoSaved.username,
         name: optionalUserWhoSaved.name,
@@ -531,13 +769,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         gravatar: optionalUserWhoSaved.gravatar
       };
 
-      if (!this._rev) {
-        this._dateCreated = Date.now();
-        var enteredByUser = this.enteredByUser || {};
-        if (this.fields && this.fields.enteredbyuser) {
-          enteredByUser = this.fields.enteredbyuser;
-        } else if (!this.enteredByUser) {
-          this.enteredByUser = enteredByUser;
+      if (!selfOrSnapshot._rev) {
+        selfOrSnapshot._dateCreated = Date.now();
+        var enteredByUser = selfOrSnapshot.enteredByUser || {};
+        if (selfOrSnapshot.fields && selfOrSnapshot.fields.enteredbyuser) {
+          enteredByUser = selfOrSnapshot.fields.enteredbyuser;
+        } else if (!selfOrSnapshot.enteredByUser) {
+          selfOrSnapshot.enteredByUser = enteredByUser;
         }
         enteredByUser.value = userWhoSaved.name || userWhoSaved.username;
         enteredByUser.json = enteredByUser.json || {};
@@ -546,26 +784,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           enteredByUser.json.hardware = Android ? Android.deviceDetails : FieldDBObject.hardware;
         } catch (e) {
-          this.debug("Cannot detect the hardware used for this save.", e);
+          this.debug("Cannot detect the hardware used for selfOrSnapshot save.", e);
           enteredByUser.json.hardware = FieldDBObject.hardware;
         }
 
       } else {
-        this._dateModified = Date.now();
+        selfOrSnapshot._dateModified = Date.now();
 
-        var modifiedByUser = this.modifiedByUser || {};
-        if (this.fields && this.fields.modifiedbyuser) {
-          modifiedByUser = this.fields.modifiedbyuser;
-        } else if (!this.modifiedByUser) {
-          this.modifiedByUser = modifiedByUser;
+        var modifiedByUser = selfOrSnapshot.modifiedByUser || {};
+        if (selfOrSnapshot.fields && selfOrSnapshot.fields.modifiedbyuser) {
+          modifiedByUser = selfOrSnapshot.fields.modifiedbyuser;
+        } else if (!selfOrSnapshot.modifiedByUser) {
+          selfOrSnapshot.modifiedByUser = modifiedByUser;
         }
-        if (this.modifiedByUsers) {
+        if (selfOrSnapshot.modifiedByUsers) {
           modifiedByUser = {
             json: {
-              users: this.modifiedByUsers
+              users: selfOrSnapshot.modifiedByUsers
             }
           };
-          delete this.modifiedByUsers;
+          delete selfOrSnapshot.modifiedByUsers;
         }
 
         modifiedByUser.value = modifiedByUser.value ? modifiedByUser.value + ", " : "";
@@ -583,10 +821,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (FieldDBObject.software && FieldDBObject.software.location) {
         var location;
-        if (this.location) {
-          location = this.location;
-        } else if (this.fields && this.fields.location) {
-          location = this.fields.location;
+        if (selfOrSnapshot.location) {
+          location = selfOrSnapshot.location;
+        } else if (selfOrSnapshot.fields && selfOrSnapshot.fields.location) {
+          location = selfOrSnapshot.fields.location;
         }
         if (location) {
           location.json = location.json || {};
@@ -600,36 +838,133 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      this.debug("saving   ", this);
+      this.debug("    Serializing to send object to selfOrSnapshotbase...");
+      // this.debug("snapshot   ", selfOrSnapshot);
 
-      var url = this.id ? "/" + this.id : "";
-      url = this.url + url;
-      var data = this.toJSON();
-      CORS.makeCORSRequest({
-          type: this.id ? "PUT" : "POST",
-          dataType: "json",
-          url: url,
-          data: data
-        }).then(function(result) {
-            self.debug("saved ", result);
-            self.saving = false;
-            if (result.id) {
-              self.id = result.id;
-              self.rev = result.rev;
-              deferred.resolve(self);
-            } else {
-              deferred.reject(result);
-            }
-          },
-          function(reason) {
-            self.debug(reason);
-            self.saving = false;
-            deferred.reject(reason);
-          })
-        .catch(function(reason) {
+      return selfOrSnapshot.toJSON();
+
+      // return selfOrSnapshot.toJSON ? selfOrSnapshot.toJSON() : selfOrSnapshot;
+    }
+  },
+
+  save: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (this.fetching) {
+        self.warn("Fetching is in process, can't save right now...");
+        Q.nextTick(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return deferred.promise;
+      }
+      if (this.saving) {
+        self.warn("Save was already in process...");
+        Q.nextTick(function() {
+          deferred.reject("Fetching is in process, can't save right now...");
+        });
+        return deferred.promise;
+      }
+
+      if (saveEvenIfSeemsUnchanged) {
+        this.debug("Not calculating if this object has changed, assuming it needs to be saved anyway.");
+      } else {
+        self.debug("    Checking to see if item needs to be saved.", saveEvenIfSeemsUnchanged, this.unsaved);
+
+        if (!this.unsaved && !this.calculateUnsaved()) {
+          self.warn("Item hasn't really changed, no need to save...");
+          Q.nextTick(function() {
+            deferred.resolve(self);
+            return self;
+          });
+          return deferred.promise;
+        }
+      }
+      if (!this.corpus || typeof this.corpus.set !== "function") {
+        self.warn("The corpus for this doc isnt acessible, this is probably a bug.", this);
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data, database is not currently opened."]
+          });
+        });
+        return deferred.promise;
+      }
+
+      if (this.corpus.dbname !== this.dbname) {
+        this.warn("This item belongs in the " + this.dbname + "database, not in the " + this.corpus.dbname + " database.");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This item belongs in the " + self.dbname + "database, not in the " + self.corpus.dbname + " database."]
+          });
+        });
+        return deferred.promise;
+      }
+      if (optionalUrl) {
+        this.todo("Url for save was specified, but it is not being used. optionalUrl", optionalUrl);
+      }
+
+      var data = this.createSaveSnapshot();
+      self.debug("    Requesting corpus to run save...");
+      this.saving = true;
+      this.whenReady = deferred.promise;
+
+      // if (true) {
+      //   this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
+      //   Q.nextTick(function() {
+      //     self.saving = false;
+      //     deferred.resolve(self);
+      //   });
+      //   return deferred.promise;
+      // }
+
+      this.corpus.set(data).then(function(result) {
+          self.saving = false;
+          self.debug("    Save completed...");
+          self.debug("saved ", result);
+          if (!result) {
+            deferred.reject({
+              status: 400,
+              userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data."]
+            });
+            return "self";
+          }
+
+          if (!result.id) {
+            self.debug("    Rejecting promise, the id was not set by the database ..");
+            deferred.reject({
+              status: 500,
+              userFriendlyErrors: ["This application has errored. Please notify its developers: Save operation returned abnormal results."],
+              details: result
+            });
+            return self;
+          }
+
+          self.unsaved = false;
+
+          self.id = result.id;
+          self.rev = result.rev;
+
+          self.debug("    Updating fossil...");
+          self.fossil = self.toJSON();
+
+          self.debug("    Resolving promise...", self);
+          deferred.resolve(self);
+          return self;
+        },
+        function(reason) {
           self.debug(reason);
           self.saving = false;
           deferred.reject(reason);
+          return self;
+        }).fail(
+        function(error) {
+          console.error(error.stack, self);
+          deferred.reject(error);
         });
 
       return deferred.promise;
@@ -647,9 +982,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.trashed = "deleted";
       if (reason) {
         this.trashedReason = reason;
+      } else {
+        this.todo("consider using a confirm to ask for a reason for deleting the item");
       }
-      this.todo("consider using a confirm to ask for a reason for deleting the item");
-      return this.save();
+
+      return this.save(null, "forcesavesinceweneedtopersistthischange");
     }
   },
 
@@ -658,18 +995,19 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.trashed = "restored";
       if (reason) {
         this.untrashedReason = reason;
+      } else {
+        this.todo("consider using a confirm to ask for a reason for undeleting the item");
       }
-      this.todo("consider using a confirm to ask for a reason for undeleting the item");
-      return this.save();
+      return this.save(null, "forcesavesinceweneedtopersistthischange");
     }
   },
 
   saveToGit: {
-    value: function(commit) {
+    value: function(commit, saveEvenIfSeemsUnchanged) {
       var deferred = Q.defer(),
         self = this;
       Q.nextTick(function() {
-        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username");
+        self.todo("If in nodejs, write to file and do a git commit with optional user's email who modified the file and push ot a branch with that user's username", saveEvenIfSeemsUnchanged);
         self.debug("Commit to be used: ", commit);
         deferred.resolve(self);
       });
@@ -680,13 +1018,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function") {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
+        if (!anotherObject) {
+          return false;
+        }
+
         if /* use fielddb equality function first */ (this[aproperty] && typeof this[aproperty].equals === "function") {
           if (!this[aproperty].equals(anotherObject[aproperty])) {
             this.debug("  " + aproperty + ": ", this[aproperty], " not equalivalent to ", anotherObject[aproperty]);
+            if (this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         } /* then try normal equality */
@@ -699,10 +1044,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           // return true;
         } else if (anotherObject[aproperty] === undefined && (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode")) {
           this.debug(aproperty + " is missing " + this[aproperty] + " on anotherObject " + anotherObject[aproperty]);
+          if (this.debugMode) {
+            console.error("objects are not equal stactrace");
+          }
           return false;
         } else {
           if (aproperty !== "_dateCreated" && aproperty !== "perObjectDebugMode") {
             this.debug(aproperty + ": ", this[aproperty], " not equal ", anotherObject[aproperty]);
+            if (this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         }
@@ -712,6 +1063,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.dontRecurse = true;
           anotherObject.dontRecurse = true;
           if (!anotherObject.equals(this)) {
+            if (this.debugMode) {
+              console.error("objects are not equal stactrace");
+            }
             return false;
           }
         }
@@ -741,15 +1095,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       if (!anotherObject && !optionalOverwriteOrAsk) {
-        anObject = this;
-        resultObject = anObject;
-        anotherObject = callOnSelf;
+        resultObject = anObject = this;
+        anotherObject = FieldDBObject.convertDocIntoItsType(callOnSelf);
       } else if (callOnSelf === "self") {
         this.debug("Merging properties into myself. ");
         anObject = this;
         resultObject = anObject;
       } else if (callOnSelf && anotherObject) {
-        anObject = callOnSelf;
+        anObject = FieldDBObject.convertDocIntoItsType(callOnSelf);
+        anotherObject = FieldDBObject.convertDocIntoItsType(anotherObject);
         resultObject = this;
       } else {
         this.warn("Invalid call to merge, invalid arguments were provided to merge", arguments);
@@ -777,19 +1131,21 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in anObject) {
-        if (anObject.hasOwnProperty(aproperty)) {
+        if (anObject.hasOwnProperty(aproperty) && typeof anObject[aproperty] !== "function") {
           propertyList[aproperty] = true;
         }
       }
 
       for (aproperty in anotherObject) {
-        if (anotherObject.hasOwnProperty(aproperty)) {
+        if (anotherObject.hasOwnProperty(aproperty) && typeof anotherObject[aproperty] !== "function") {
           propertyList[aproperty] = true;
         }
       }
+
       this.debug(" Merging properties: ", propertyList);
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
+
         self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
           .then(function() {
             if (apropertylocal === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
@@ -803,16 +1159,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
           }, function() {
             resultObject[apropertylocal] = anObject[apropertylocal];
+          }).fail(function(error) {
+            console.error(error.stack, self);
           });
       };
 
       for (aproperty in propertyList) {
 
-        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function" || aproperty === "dateCreated" || aproperty === "_fieldDBtype" || FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) > -1) {
+        if (typeof anObject[aproperty] === "function" || typeof anotherObject[aproperty] === "function") {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
-        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+        if (this.debugMode) {
+          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        }
 
         // if the result is missing the property, clone it from anObject or anotherObject
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
@@ -826,18 +1186,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
-            if (typeof anotherObject[aproperty] !== "string" && typeof anotherObject[aproperty].constructor === "function") {
-              json = anotherObject[aproperty].toJSON ? anotherObject[aproperty].toJSON() : anotherObject[aproperty];
-              resultObject[aproperty] = new anotherObject[aproperty].constructor(json);
-              this.debug(" " + aproperty + " resultObject will have anotherObject's Cloned contents because it was empty");
-            } else {
-              resultObject[aproperty] = anotherObject[aproperty];
-              this.debug(" " + aproperty + " resultObject will have anotherObject's contents because it was empty");
-            }
+            this.debug("Using a constructor");
+            resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty], "clone");
           }
           // dont continue, instead let the iffs run
         }
-        this.debug("  Merging ---" + aproperty + "--- \n   :::" + resultObject[aproperty] + ":::\n   :::" + anObject[aproperty] + ":::\n   :::" + anotherObject[aproperty] + ":::");
+        if (this.debugMode) {
+          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        }
 
         /* jshint eqeqeq:false */
         if (anObject[aproperty] == anotherObject[aproperty]) {
@@ -870,7 +1226,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           continue;
         }
 
-        if (anObject[aproperty] && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
+        if ((anObject[aproperty] !== undefined || anObject[aproperty] !== null) && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
           targetPropertyIsEmpty = true;
           this.debug(aproperty + " target is empty, taking the old value");
           resultObject[aproperty] = anObject[aproperty];
@@ -909,15 +1265,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         overwrite = optionalOverwriteOrAsk;
         this.debug("Found conflict for " + aproperty + " Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
-        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
           handleAsyncConfirmMerge(this, aproperty);
         }
-        if (overwrite) {
+        if (overwrite || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
           if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
             // resultObject._dbname = this.dbname;
             this.warn(" Keeping _dbname of " + resultObject.dbname);
           } else {
-            this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+            if (FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+              this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+            }
             this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
 
             resultObject[aproperty] = anotherObject[aproperty];
@@ -936,35 +1294,60 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var deferred = Q.defer(),
         self = this;
 
-      if (!this.id) {
+      if (!this.corpus || typeof this.corpus.get !== "function" || !this._id) {
         Q.nextTick(function() {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           deferred.reject({
-            error: "Cannot fetch if there is no id"
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data which has no id, or the if database is not currently opened."]
           });
         });
         return deferred.promise;
       }
-      if (!optionalUrl) {
-        optionalUrl = this.url + "/" + this.id;
-      }
 
-      this.fetching = true;
-      CORS.makeCORSRequest({
-        type: "GET",
-        dataType: "json",
-        url: optionalUrl
-      }).then(function(result) {
-          self.fetching = false;
-          self.loaded = true;
-          self.merge("self", result, "overwrite");
-          deferred.resolve(self);
-        },
-        function(reason) {
-          self.fetching = false;
-          self.debug(reason);
-          deferred.reject(reason);
-        });
+      this.todo("Should probably call save before fetch to create a snapshot of the item regardless of whether the save is completeable, ");
+      var oldRev = this.rev;
+
+      this.fetching = this.loading = true;
+      this.whenReady = self.corpus.get(self.id, optionalUrl).then(function(result) {
+        self.fetching = self.loading = false;
+        if (!result) {
+          deferred.reject({
+            status: 400,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data url."]
+          });
+          return self;
+        }
+        self.loaded = true;
+
+        // If this had no revision number before, and it does now, then this is a good fossil point
+        if (!oldRev && (result._rev || result.rev)) {
+          self.warn(self.id + " was probabbly a placeholder (didnt have .rev before fetch, but now it does) which is now filled in, calling merge with overwrite from server.");
+
+          self.merge("self", FieldDBObject.convertDocIntoItsType(result), "overwrite");
+          // Setting the fossil causes
+          // A: the merge to count as something which needs to be seaved
+          // B: the user's previous changes prior to fetch might get lost
+          self.fossil = self.toJSON();
+          self.unsaved = false;
+        } else {
+          self.warn("Cant tell if this was a placeholder, calling merge and asking user if there are merge conflicts.", result);
+          self.merge("self", result);
+          self.debug("After merge ", self.modifiedByUser);
+        }
+
+        deferred.resolve(self);
+        return self;
+      }, function(reason) {
+        self.fetching = self.loading = false;
+        self.loaded = false;
+        self.debug(reason);
+        deferred.reject(reason);
+        return self;
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
 
       return deferred.promise;
     }
@@ -985,6 +1368,51 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   application: {
     get: function() {
       return FieldDBObject.application;
+    }
+  },
+
+  corpus: {
+    get: function() {
+      var db = null;
+      // this.debugMode = true;
+      if (this.resumeAuthenticationSession && typeof this.resumeAuthenticationSession === "function") {
+        db = this;
+        this.debug("this " + this._id + " has the functions of a corpus, using it.", db);
+      } else if (this._corpus) {
+        db = this._corpus;
+        this.debug("this " + this._id + " has a _corpus hard coded inside it, using it.", db);
+      } else if (FieldDBObject.application && FieldDBObject.application._corpus) {
+        db = FieldDBObject.application._corpus;
+        this.debug("this " + this._id + " is running in the context where FieldDBObject.application._corpus is defined, using it.", db);
+      } else {
+
+        try {
+          if (FieldDB && FieldDB["Database"]) {
+            db = FieldDB["Database"].prototype;
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .", db);
+          }
+        } catch (e) {
+          var message = e ? e.message : " unknown error in getting the corpus";
+          if (message !== "FieldDB is not defined") {
+            this.warn(this._id + "Cant get the corpus, cant find the Database class.", e);
+            if (e) {
+              this.warn("  stack trace" + e.stack);
+            }
+          }
+        }
+      }
+      if (!db) {
+        this.warn("Operations that need a database wont work for the " + this._id + " object");
+      }
+
+      return db;
+    },
+    set: function(value) {
+      if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {
+        this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
+        return;
+      }
+      this._corpus = value;
     }
   },
 
@@ -1040,8 +1468,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (value === this._dbname) {
         return;
       }
-      if (this._dbname && this._dbname !== "default") {
-        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of a corpus, you must create a new object first.");
+      if (this._dbname && this._dbname !== "default" && this.rev) {
+        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
       }
       if (!value) {
         delete this._dbname;
@@ -1056,12 +1484,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   pouchname: {
     get: function() {
-      this.debug("pouchname is deprecated, use dbname instead.");
+      this.debug("Pouchname is deprecated, use dbname instead.");
       return this.dbname;
     },
     set: function(value) {
       this.debug("Pouchname is deprecated, please use dbname instead.");
       this.dbname = value;
+    }
+  },
+
+  couchConnection: {
+    get: function() {
+      console.error("CouchConnection is deprecated, use connection instead");
+      return this.connection;
+    },
+    set: function(value) {
+      // console.error("CouchConnection is deprecated, use connection instead");
+      this.connection = value;
     }
   },
 
@@ -1083,6 +1522,36 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  timestamp: {
+    get: function() {
+      return this._timestamp || this._dateCreated;
+    },
+    set: function(value) {
+      if (value === this._timestamp) {
+        return;
+      }
+      if (!value) {
+        // delete this._timestamp;
+        return;
+      }
+      if (value.replace) {
+        try {
+          value = value.replace(/["\\]/g, "");
+          value = new Date(value);
+          value = value.getTime();
+        } catch (e) {
+          this.warn("Upgraded timestamp" + value);
+        }
+      }
+      this._timestamp = value;
+
+      // Use timestamp as date created if there was none, or the timestamp is older.
+      if (!this._dateCreated || this._dateCreated > value) {
+        this._dateCreated = value;
+      }
+    }
+  },
+
   dateCreated: {
     get: function() {
       return this._dateCreated || FieldDBObject.DEFAULT_DATE;
@@ -1092,14 +1561,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (!value) {
-        delete this._dateCreated;
+        // delete this._dateCreated;
         return;
       }
       if (value.replace) {
         try {
           value = value.replace(/["\\]/g, "");
           value = new Date(value);
-          /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
           this.warn("Upgraded dateCreated" + value);
@@ -1125,7 +1593,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           value = value.replace(/["\\]/g, "");
           value = new Date(value);
-          /* Use date modified as a timestamp if it isnt one already */
           value = value.getTime();
         } catch (e) {
           this.warn("Upgraded dateModified" + value);
@@ -1133,6 +1600,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       this._dateModified = value;
     }
+  },
+
+  /**
+   * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
+   */
+  showDiffs: function(oldrevision, newrevision) {
+
+    this.todo("We haven't implemented the 'diff' tool yet" +
+      " (ie, showing the changes, letting you undo changes etc)." +
+      " We will do it eventually, when it becomes a priority. " +
+      "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
+      "You can vote for it in our issue tracker</a>.  " +
+      "We use the " +
+      "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
   },
 
   comments: {
@@ -1165,87 +1646,99 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      var json = {
-          fieldDBtype: this.fieldDBtype
-        },
-        aproperty,
-        underscorelessProperty;
+      try {
+        var json = {
+            fieldDBtype: this.fieldDBtype
+          },
+          aproperty,
+          underscorelessProperty;
 
-      if (this.fetching) {
-        this.warn("Cannot get json while object is fetching itself", this);
-        // return;
-        // throw "Cannot get json while object is fetching itself";
-      }
-      /* this object has been updated to this version */
-      this.version = this.version;
-      /* force id to be set if possible */
-      // this.id = this.id;
+        if (this.fetching) {
+          this.warn("Cannot get json while " + this.id + " is fetching itself");
+          this.debug(" this is the object", this);
+          // return;
+          // throw "Cannot get json while object is fetching itself";
+        }
+        /* this object has been updated to this version */
+        this.version = this.version;
+        /* force id to be set if possible */
+        // this.id = this.id;
 
-      if (this.useIdNotUnderscore) {
-        json.id = this.id;
-      }
+        if (this.useIdNotUnderscore) {
+          json.id = this.id;
+        }
 
-      for (aproperty in this) {
-        if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
-          underscorelessProperty = aproperty.replace(/^_/, "");
-          if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
-            underscorelessProperty = "_" + underscorelessProperty;
-          }
-          if (!removeEmptyAttributes || (removeEmptyAttributes && !this.isEmpty(aproperty))) {
-            if (this[aproperty] && typeof this[aproperty].toJSON === "function") {
-              json[underscorelessProperty] = this[aproperty].toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
-            } else {
-              json[underscorelessProperty] = this[aproperty];
+        for (aproperty in this) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+            underscorelessProperty = aproperty.replace(/^_/, "");
+            if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
+              underscorelessProperty = "_" + underscorelessProperty;
+            }
+            if (!removeEmptyAttributes || (removeEmptyAttributes && !this.isEmpty(aproperty))) {
+              if (this[aproperty] && typeof this[aproperty].toJSON === "function") {
+                json[underscorelessProperty] = this[aproperty].toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+              } else {
+                json[underscorelessProperty] = this[aproperty];
+              }
             }
           }
         }
-      }
 
-      /* if the caller requests a complete object include the default for all defauls by calling get on them */
-      if (includeEvenEmptyAttributes) {
-        for (aproperty in this.INTERNAL_MODELS) {
-          if (!json[aproperty] && this.INTERNAL_MODELS) {
-            if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
-              json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
-            } else {
-              json[aproperty] = this.INTERNAL_MODELS[aproperty];
+        /* if the caller requests a complete object include the default for all defauls by calling get on them */
+        if (includeEvenEmptyAttributes) {
+          for (aproperty in this.INTERNAL_MODELS) {
+            if (!json[aproperty] && this.INTERNAL_MODELS) {
+              if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
+                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+              } else {
+                json[aproperty] = this.INTERNAL_MODELS[aproperty];
+              }
             }
           }
         }
-      }
 
-      if (!json._id) {
-        delete json._id;
-      }
-      if (this.useIdNotUnderscore) {
-        delete json._id;
-      }
-
-      if (!json._rev) {
-        delete json._rev;
-      }
-      if (json.dbname) {
-        json.pouchname = json.dbname;
-        this.debug("Serializing pouchname for backward compatability until prototype can handle dbname");
-      }
-
-      for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
-        if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
-          delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+        if (!json._id) {
+          delete json._id;
         }
-      }
+        if (this.useIdNotUnderscore) {
+          delete json._id;
+        }
 
-      if (this.collection !== "private_corpora") {
-        delete json.confidential;
-        delete json.confidentialEncrypter;
-      } else {
-        this.warn("serializing confidential in this object " + this._collection);
-      }
-      if (this.api) {
-        json.api = this.api;
-      }
+        if (!json._rev) {
+          delete json._rev;
+        }
+        if (json.dbname) {
+          json.pouchname = json.dbname;
+          this.debug("Serializing Pouchname for backward compatability until prototype can handle dbname");
+        }
 
-      return json;
+        for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
+          if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
+            delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+          }
+        }
+
+        if (this.collection !== "private_corpora") {
+          delete json.confidential;
+          delete json.confidentialEncrypter;
+        } else {
+          this.warn("serializing confidential in this object " + this._collection);
+        }
+        if (this.api) {
+          json.api = this.api;
+        }
+
+        if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
+          delete json.previousFieldDBtype;
+        }
+
+        return json;
+
+      } catch (e) {
+        console.warn(e);
+        console.error(e.stack);
+        this.bug("Unable to serialze " + this.id + ". Please report this.");
+      }
     }
   },
 
@@ -1272,10 +1765,27 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
-      if (includeEvenEmptyAttributes) {
-        this.warn(includeEvenEmptyAttributes + " TODO includeEvenEmptyAttributes is not used ");
+      var json = {},
+        aproperty,
+        underscorelessProperty;
+      try {
+        json = JSON.parse(JSON.stringify(this.toJSON(includeEvenEmptyAttributes)));
+      } catch (e) {
+        if (e) {
+          console.warn(e);
+          console.warn(e.stack);
+          console.warn(e.message);
+          console.warn(this);
+          // throw e;
+        }
       }
-      var json = JSON.parse(JSON.stringify(this.toJSON()));
+      // Use clone on internal properties which have a clone function
+      for (aproperty in json) {
+        underscorelessProperty = aproperty.replace(/^_/, "");
+        if (this[aproperty] && typeof this[aproperty].clone === "function") {
+          json[underscorelessProperty] = JSON.parse(JSON.stringify(this[aproperty].clone(includeEvenEmptyAttributes)));
+        }
+      }
 
       var relatedData;
       if (json.datumFields && json.datumFields.relatedData) {
@@ -1285,12 +1795,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       } else {
         json.relatedData = relatedData = [];
       }
-      var source = json._id;
-      if (json._rev) {
-        source = source + "?rev=" + json._rev;
+      var source = this.id;
+      if (this.rev) {
+        source = source + "?rev=" + this.rev;
       } else {
         if (this.parent && this.parent._rev) {
-          source = this.parent._id + "?rev=" + this.parent._rev;
+          source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
         }
       }
       relatedData.push({
@@ -1302,6 +1812,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json._id;
       delete json._rev;
       delete json.parent;
+      delete json.dbname;
+      delete json.pouchname;
 
       return json;
     }
@@ -1380,3 +1892,4 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 });
 
 exports.FieldDBObject = FieldDBObject;
+exports.Document = FieldDBObject;

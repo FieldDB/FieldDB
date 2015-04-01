@@ -1,6 +1,6 @@
 function(doc) {
   try {
-    if (doc.fieldDBtype !== "SubExperimentDataList" || !doc.results) {
+    if (doc.fieldDBtype !== "SubExperimentDataList" || !doc.results || !doc.relatedData || doc.relatedData.length === 0) {
       return;
     }
     var totalTestScore = 0;

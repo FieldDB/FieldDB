@@ -1,4 +1,6 @@
+/* globals FieldDB */
 'use strict';
+
 
 /**
  * @ngdoc overview
@@ -22,11 +24,34 @@ angular
   ])
   .config(function($routeProvider) {
 
+    var fieldDBApp = new FieldDB.App({
+      authentication: {
+        user: new FieldDB.User({
+          authenticated: false
+        })
+      },
+      contextualizer: new FieldDB.Contextualizer().loadDefaults(),
+      online: true,
+      apiURL: "https://localhost:3183",
+      offlineCouchURL: "https://localhost:6984",
+      brand: "Example",
+      brandLowerCase: "example",
+      website: "http://example.org",
+      faq: "http://app.example.org/#/faq",
+      basePathname: window.location.origin + "/#",
+    });
+    if (window.location.pathname.indexOf("android_asset") > -1) {
+      fieldDBApp.basePathname = window.location.pathname;
+    }
+
+    fieldDBApp.authentication.dispatchEvent("appready");
+
     $routeProvider.when('/corpora_list', {
-      templateUrl: 'views/main.html'
+      templateUrl: 'views/corpora_list_and_modals.html'
+    }).when('/welcome', {
+      templateUrl: 'views/welcome.html'
     }).when('/settings', {
       templateUrl: 'views/settings.html',
-      controller: 'SpreadsheetStyleDataEntrySettingsController'
     }).when('/corpussettings', {
       templateUrl: 'views/corpussettings.html'
     }).when('/register', {
@@ -34,19 +59,15 @@ angular
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
-      // templateUrl: 'views/compacttemplate.html'
-      redirectTo: '/spreadsheet/fulltemplate'
-    }).when('/spreadsheet/fulltemplate', {
-      templateUrl: 'views/fulltemplate.html'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/yalefieldmethodsspring2014template', {
-      // templateUrl: 'views/yalefieldmethodsspring2014template.html'
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/mcgillfieldmethodsfall2014template', {
-      // templateUrl: 'views/mcgillfieldmethodsfall2014template.html'
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
-      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
-      redirectTo: '/spreadsheet/fulltemplate'
+      redirectTo: '/spreadsheet'
+    }).when('/spreadsheet', {
+      templateUrl: 'views/data_entry.html'
     }).otherwise({
       redirectTo: '/corpora_list'
     });

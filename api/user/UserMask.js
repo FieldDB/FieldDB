@@ -43,7 +43,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   },
 
   buildGravatar: {
-    value: function(email) {
+    value: function(emailOrOtherString) {
       var existingGravatar = this._gravatar;
       if (existingGravatar.indexOf("gravatar.com") > -1) {
         existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/", "");
@@ -52,8 +52,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         existingGravatar = "";
       }
       if (!existingGravatar) {
-        if (email) {
-          this._gravatar = MD5(email);
+        if (emailOrOtherString) {
+          this._gravatar = MD5(emailOrOtherString);
         } else {
           this._gravatar = "0df69960706112e38332395a4f2e7542";
         }
@@ -90,6 +90,19 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         value = "";
       }
       this._username = this._id = value.trim();
+    }
+  },
+
+  userMask: {
+    get: function() {
+      return {
+        username: this.username,
+        gravatar: this.gravatar,
+        name: this.name
+      };
+    },
+    set: function(value) {
+      this.debug("users masks cant be set.", value);
     }
   },
 

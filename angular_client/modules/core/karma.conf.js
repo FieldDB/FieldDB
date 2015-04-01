@@ -59,6 +59,8 @@ module.exports = function(config) {
     // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
     logLevel: config.LOG_DISABLE,
 
+    // https://groups.google.com/forum/#!topic/karma-users/B-E7nLphNHQ
+    // browserNoActivityTimeout: 60000,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,

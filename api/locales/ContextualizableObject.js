@@ -15,22 +15,19 @@ var ContextualizableObject = function ContextualizableObject(json) {
   // if (!this._fieldDBtype) {
   //   this._fieldDBtype = "Activities";
   // }
+  // this.debugMode = true;
   this.debug("Constructing ContextualizableObject ", json);
   if (json && typeof json === "string") {
-    if (!ContextualizableObject.updateAllToContextualizableObjects) {
+    if (ContextualizableObject.compatibleWithSimpleStrings) {
       // Dont localize this, return what you received to be backward compatible
-      console.warn("ContextualizableObject: should not converting this deprecated string in to a ContextualizableObject " + json);
-      // this.protoype = Object.create(String.prototype);
-      String.apply(this, arguments);
-      // String.call(json);
-      // this.prototype = String.prototype;
-      // this.__proto__ = String.call(json);
-      // json = new String(json);
-      console.warn("string should not be an object: " + this);
-      // this.toString = function() {
-      //   return json;
-      // }
-      return;
+
+      // http://stackoverflow.com/questions/1978049/what-values-can-a-constructor-return-to-avoid-returning-this
+      /* jshint ignore:start  */
+      return new String(json);
+      /* jshint ignore:end  */
+
+      // Can also throw the string and catch it and use the original value...
+      // throw json;
     }
     var stringAsKey = "locale_" + json.replace(/[^a-zA-Z0-9-]/g, "_");
     var value = json;
@@ -61,7 +58,7 @@ var ContextualizableObject = function ContextualizableObject(json) {
 
 var forcedebug = false;
 
-ContextualizableObject.updateAllToContextualizableObjects = false;
+ContextualizableObject.compatibleWithSimpleStrings = true;
 ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends ContextualizableObject.prototype */ {
   constructor: {
     value: ContextualizableObject
@@ -199,8 +196,11 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         aproperty,
         underscorelessProperty;
 
-      if (ContextualizableObject.updateAllToContextualizableObjects && this.originalString) {
+      // this.debugMode = true;
+      if (!ContextualizableObject.compatibleWithSimpleStrings && this.originalString) {
         return this.originalString;
+      } else {
+        this.debug("Original string is not defined, returning an object. ", ContextualizableObject.compatibleWithSimpleStrings, this.originalString);
       }
 
       for (aproperty in this) {

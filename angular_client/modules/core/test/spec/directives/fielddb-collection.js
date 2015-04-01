@@ -89,12 +89,14 @@ describe("Directive: fielddb-collection", function() {
         id: "two",
         fieldDBtype: "UserMask"
       }]);
-      scope.collection2 = new FieldDB.Collection([{
-        firstname: "Anony",
-        lastname: "Mouse",
-        id: "three",
-        fieldDBtype: "Participant"
-      }]);
+      var team = new FieldDB.Team({
+        firstname: "CLaC",
+        lastname: "Lab",
+        fieldDBtype: "Team"
+      });
+      team.debug("team", team);
+      expect(team.id).toEqual("team");
+      scope.collection2 = new FieldDB.Collection([team]);
       compileFunction = $compile(el);
       // bring html from templateCache
       scope.$digest();
