@@ -1,127 +1,186 @@
-<br />
-<br />
+<p>&nbsp;</p>
+<div class="settings_section_header">
 	<h3>{{contextualize('locale_corpus_settings')}}</h3>
-<br />
-<div ng-hide="loginInfo==undefined" class="form-horizontal">
-	<div class="settings_section_header">
-		<h2>{{contextualize('locale_create_new_corpus')}}</h2>
-	</div>
-	<div class="clearDiv">&nbsp;</div>
-	<form ng-submit="createNewCorpus(newCorpusInfo)">
-    <div class="settingsItems">
-  		<input type="text" ng-model='newCorpusInfo.title'
-  			placeholder="New corpus name">
-  		&nbsp;
-      <button class="btn btn-primary"
-  			ng-disabled="application.corpus.saving">{{contextualize('locale_create_button')}}</button>&nbsp;
-        <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading"/>
-  	</div>
-  <form>
 </div>
+<div ng-show="application.authentication.user.authenticated">
 
-<hr />
+  <div class="settingsSection">
+    <div class="lead">{{contextualize('locale_create_new_corpus')}}</div>
 
-<div class="settingsItems" ng-show="adminPermissions">
-	{{contextualize('locale_not_admin_message')}}  <b>{{application.corpus.title}}</b>
-</div>
+    <form class="form-horizontal" ng-submit="createNewCorpus(newCorpusInfo)">
+      <div class="form-group">
+        <label for="newCorpusTitleCorpusSettingsPage" class="col-sm-2 control-label">New Corpus Title:</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" id="newCorpusTitleCorpusSettingsPage" ng-model='newCorpusInfo.title' placeholder="What would you like your new corpus to be about?">
+        </div>
+        <button class="btn btn-primary col-sm-1" ng-disabled="application.corpus.saving">
+          {{contextualize('locale_create_button')}}
+          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="creatingNewCorpus"/>
+        </button>
+      </div>
+    </form>
+  </div>
 
-<div >
+  <hr />
 
-  <div>
-    <div class="settings_section_header">
-      <h2>
+  <div ng-show="application.corpus && application.corpus.rev">
+
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')===-1">
+      {{contextualize('locale_not_admin_message')}}  <b> {{application.corpus.title}}</b>
+    </div>
+
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+      <div class="lead">
         {{contextualize('locale_details_of')}} <b>{{application.corpus.title}}</b>
-      </h2>
+      </div>
+
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="corpusTitleSettingsPage" class="col-sm-2 control-label">Title</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="corpusTitleSettingsPage" placeholder="A title for this corpus" ng-model="application.corpus.title"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="corpusDescriptionSettingsPage" class="col-sm-2 control-label">Description</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="corpusDescriptionSettingsPage" placeholder="A description of this corpus (you can use WikiText formatting). The description can be as long as you wish." ng-model="application.corpus.description"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary" ng-click="updateCorpusDetails(application.corpus)" ng-disabled="application.corpus.loading">Save
+              <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving"/>
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-    <div class="clearDiv">&nbsp;</div>
-    <div class="settingsItems row">
-      <label>Title:</label>
-      <textarea ng-model="application.corpus.title"></textarea>
 
-      <label>Description:</label>
-      <textarea class="fielddb-large-textarea" ng-model="application.corpus.description"></textarea>
-      <button class="btn btn-primary"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="application.corpus.saving">Save</button>
-        <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving">
+    <hr />
+
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+      <div class="lead">
+        {{contextualize('locale_add_existing_user_message')}}
+        <b>{{application.corpus.title}}</b>
+      </div>
+
+      <form >
+        <i>
+          {{contextualize('locale_only_add_registered_users_message')}}
+        </i>
+        <br />
+        <input class="form-control" id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify"/>
+        <datalist id="users">
+          <option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
+        </datalist>
+
+        <div class="form-horizontal">
+          <font size="3">
+            <input class="form-control" type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">{{contextualize('locale_admin_radio')}}&nbsp;&nbsp;&nbsp;
+            <input class="form-control" type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_write_radio')}}&nbsp;&nbsp;&nbsp;
+            <input class="form-control" type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_comment_only_radio')}}&nbsp;&nbsp;&nbsp;
+            <input class="form-control" type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_only_radio')}}&nbsp;&nbsp;&nbsp;
+            <input class="form-control" type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_write_only_radio')}}<br />
+          </font>
+        </div>
+
+        <button type="submit" class="btn btn-primary" ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">
+          {{contextualize('locale_add_button')}}
+          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading"/>
+        </button>
+      </form>
+
     </div>
 
-  </div>
 
-  <div>
-		<div class="settings_section_header">
-			<h2>
-				{{contextualize('locale_add_existing_user_message')}} <b>{{application.corpus.title}}</b>
-			</h2>
-		</div>
-		<div class="clearDiv">&nbsp;</div>
-		<div class="settingsItems">
-			<i>{{contextualize('locale_only_add_registered_users_message')}}</i><br />
-			<input id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify">
-				<datalist id="users">
-  				<option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
-  			</datalist>
-			<br />
-			<div class="form-horizontal">
-				<font size="3">
-				<input type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">{{contextualize('locale_admin_radio')}}&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_write_radio')}}&nbsp;&nbsp;&nbsp;
-        <input type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_comment_only_radio')}}&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_only_radio')}}&nbsp;&nbsp;&nbsp;
-				<input type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_write_only_radio')}}<br />
-			</font>
-			</div>
-			<br />
-			<button class="btn btn-primary"
-				ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">
-        {{contextualize('locale_add_button')}}
-      </button>&nbsp;
-      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading">
-		</div>
-	</div>
-	<hr />
+    <hr />
 
-	<div>
-    <ng-include src="'views/permissions.html'"></ng-include>
-	</div>
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+      <ng-include src="'views/permissions.html'"></ng-include>
+    </div>
 
-  <div>
-    <div class="settings_section_header">
-      <h2>
+
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+
+      <div class="lead">
         {{contextualize('locale_fields_in')}} <b>{{application.corpus.title}}</b>
-      </h2>
+      </div>
+
+
+      <form>
+        <label>
+          {{contextualize('locale_number_columns')}}
+        </label>
+        <select ng-model="application.corpus.prefs.preferedSpreadsheetShape.columns">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option> <!-- TODO css for these <option>3</option> <option>4</option> -->
+        </select>
+
+        <label>
+          Number of Fields per column:
+        </label>
+        <input class="form-control" type="number" ng-model="application.corpus.prefs.preferedSpreadsheetShape.rows"/>
+
+        <button class="btn btn-primary"ng-click="updateCorpusDetails(corpus)"ng-class="{'pulsing': application.corpus.saving}"ng-disabled="application.corpus.saving">
+          {{contextualize('locale_save_button')}}
+          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.saving"/>
+        </button>
+
+        <div data-fielddb-collection json='application.corpus.datumFields'></div>
+        <button class="btn btn-info" ng-click="application.corpus.newDatumField(addedDatumField)" ng-disabled="loading">
+          {{contextualize('locale_add_field_button')}}
+        </button>
+
+        <button class="btn btn-primary"  ng-class="{'pulsing': application.corpus.saving}"ng-click="updateCorpusDetails(application.corpus)" ng-disabled="application.corpus.saving">
+          {{contextualize('locale_save_button')}}
+          <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving"/>
+        </button>
+
+      </form>
     </div>
 
-    <br />
-    {{contextualize('locale_number_columns')}}
-    <select ng-model="application.corpus.prefs.preferedSpreadsheetShape.columns">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-    <!-- TODO css for these <option>3</option>
-      <option>4</option> -->
-    </select>
-    Number of Fields per column:
-    <input type="number" ng-model="application.corpus.prefs.preferedSpreadsheetShape.rows"/>
+    <hr/>
 
-    <div class="clearDiv">&nbsp;</div>
-    <div class="settingsItems row">
-      <button class="btn btn-primary"
-        ng-click="updateCorpusDetails(corpus)"
-        ng-class="{'pulsing': application.corpus.saving}"
-        ng-disabled="application.corpus.saving">
-        {{contextualize('locale_save_button')}}
-      </button>
-      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.saving"/>
-      <div data-fielddb-collection json='application.corpus.datumFields'></div>
-      <button class="btn btn-info"
-        ng-click="application.corpus.newDatumField(addedDatumField)" ng-disabled="loading">{{contextualize('locale_add_field_button')}}
-      </button>
-      <button class="btn btn-primary"
-        ng-class="{'pulsing': application.corpus.saving}"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="application.corpus.saving">{{contextualize('locale_save_button')}}</button>
-      <img ng-src="images/loading-spinner.gif" class="gravatar-small"  ng-show="application.corpus.saving"/>
+    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
 
+
+      <div class="lead">{{contextualize('locale_templates')}}</div>
+      <h3> {{contextualize('locale_full_template')}}
+        <small> {{contextualize('locale_default_template')}} {{application.corpus.title}} </small>
+      </h3>
+
+      <div class="row ">
+
+        <div class="span1" title="{{application.corpus.datumFields.collection[0].help}}">
+          {{contextualize('locale_'+application.corpus.datumFields.collection[0].id)}}
+        </div>
+        <div class="span5">
+          <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
+            {{contextualize('locale_'+corpusField.id)}}
+          </div>
+        </div>
+
+        <div class="span5" ng-show="fieldsInColumns.second">
+          <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
+            {{contextualize('locale_'+corpusField.id)}}
+          </div>
+        </div>
+
+        <div class="span5" ng-show="fieldsInColumns.third">
+          <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
+            {{contextualize('locale_'+corpusField.id)}}
+          </div>
+        </div>
+
+        <div class="span1">
+          {{contextualize('locale_audio_and_comments')}}
+        </div>
+
+      </div>
     </div>
 
   </div>
+
 </div>
