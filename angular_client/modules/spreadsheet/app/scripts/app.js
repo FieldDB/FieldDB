@@ -1,4 +1,4 @@
-/* globals FieldDB */
+/* globals FieldDB, alert */
 'use strict';
 
 
@@ -24,27 +24,50 @@ angular
   ])
   .config(function($routeProvider) {
 
-    var fieldDBApp = new FieldDB.App({
-      authentication: {
-        user: new FieldDB.User({
-          authenticated: false
-        })
-      },
-      contextualizer: new FieldDB.Contextualizer().loadDefaults(),
-      online: true,
-      apiURL: "https://localhost:3183",
-      offlineCouchURL: "https://localhost:6984",
-      brand: "Example",
-      brandLowerCase: "example",
-      website: "http://example.org",
-      faq: "http://app.example.org/#/faq",
-      basePathname: window.location.origin + "/#",
-    });
-    if (window.location.pathname.indexOf("android_asset") > -1) {
-      fieldDBApp.basePathname = window.location.pathname;
+    var fieldDBAppSettings;
+
+    if (!FieldDB) {
+      alert("Unable to load the app. Please notifiy us of this error. ");
     }
 
-    fieldDBApp.authentication.dispatchEvent("appready");
+    fieldDBAppSettings = {
+      online: true,
+      brand: 'Example',
+      brandLowerCase: 'example',
+      website: 'http://example.org',
+      faq: 'http://app.example.org/#/faq',
+      tagline: 'A Free Tool for Creating and Maintaining a Shared Database For Communities, Linguists and Language Learners',
+      // basePathname: window.location.origin + '/#',
+      basePathname: window.location.origin + '/',
+      whiteListCORS: [
+        // Allow same origin resource loads.
+        'self',
+        // Allow loading from outer domain.
+        'https://*.example.org/**',
+        'http://*.example.org/**'
+      ]
+    };
+
+    console.log("Ensuring FieldDB app is ready. ");
+
+    if (!FieldDB.FieldDBObject.application) {
+      console.log("    Creating a app ");
+      FieldDB.FieldDBObject.application = new FieldDB.App(fieldDBAppSettings);
+    } else {
+      console.log("    An application is already available, it might be a Montage application, or a fielddb app.", FieldDB.FieldDBObject.application);
+      for (var property in fieldDBAppSettings) {
+        if (!fieldDBAppSettings.hasOwnProperty(property)) {
+          continue;
+        }
+        FieldDB.FieldDBObject.application[property] = fieldDBAppSettings[property];
+      }
+    }
+
+    if (window.location.pathname.indexOf("android_asset") > -1) {
+      FieldDB.FieldDBObject.application.basePathname = window.location.pathname;
+    }
+
+    FieldDB.FieldDBObject.application.authentication.dispatchEvent("appready");
 
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'
