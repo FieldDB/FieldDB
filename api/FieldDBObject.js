@@ -1187,7 +1187,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
             this.debug("Using a constructor");
-            resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty], "clone");
+            this.todo(" use clone only if not merging self.");
+            if (callOnSelf === "self") {
+              resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty]);
+            } else {
+              resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty], "clone");
+            }
           }
           // dont continue, instead let the iffs run
         }
