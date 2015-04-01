@@ -93,8 +93,8 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
-              {{getSavedState().text}}
+            <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
+              {{everythingSavedStatus.text}}
             </button>
             &nbsp;
             <button class="btn btn-warning" ng-click="logout()">
@@ -259,8 +259,8 @@
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
-            <i ng-class="getSavedState().icon">
+          <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
+            <i ng-class="everythingSavedStatus.icon">
             </i>
           </button>
           &nbsp;
