@@ -41,7 +41,7 @@
       <form>
         <select ng-show="application.sessionsList.docs.length>0" ng-model="application.corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
         </select>
-        <button  ng-show="application.corpus.currentSession" type="submit" ng-click="showDataEntry()" class="btn btn-primary">
+        <button  type="submit" ng-click="showDataEntry()" class="btn btn-primary">
           {{contextualize('locale_go_button')}}
         </button>&nbsp;
         <button class="btn btn-info" type='button'  ng-click="showCreateNewSessionDropdown=!showCreateNewSessionDropdown">

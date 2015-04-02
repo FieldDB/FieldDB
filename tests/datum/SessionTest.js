@@ -366,7 +366,11 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.datalist.docs.length).toEqual(3);
       expect(session.datalist.docs._collection).toBeDefined();
       expect(session.datalist.docs._collection[0].id).toEqual("one1");
-      expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("FieldDBObject");
+      if (session.datalist.docs._collection[0].fieldDBtype === "FieldDBObject") {
+        expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("FieldDBObject");
+      } else {
+        expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("Datum");
+      }
 
       expect(session.docs).toBeDefined();
       expect(session.docs.length).toEqual(3);

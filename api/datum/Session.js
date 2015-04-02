@@ -953,7 +953,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
-      var attributesNotToJsonify = ["_docs", "_docIds", "_datalist", "docs", "docIds", "datalist"];
+      var attributesNotToJsonify = ["_docs", "_docIds", "_datalist", "docs", "docIds", "datalist", "whenReindexedFromApi"];
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments, attributesNotToJsonify);
 
       // Dont keep docids in a session, this would cause the datum to have sessions iwth data lists, of themselves. which is very heavy. instead sessions docs alwasy come from a reindinxing operation on the db, and only if the session is not just a stub.
