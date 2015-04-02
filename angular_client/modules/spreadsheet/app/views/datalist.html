@@ -29,12 +29,11 @@ Please show me something!
 
 <p ng-show="datalist.description">{{datalist.description.default}}</p>
 
-<!--
 <div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
   <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a item's number to re-order it</div>
   <div class="well"
   ng-class="{'col-md-12': datalist.showDocCheckboxes}"
-  ng-repeat="item in datalist.docsNotExisting._collection track by $index"
+  ng-repeat="item in datalist.docs._collection track by $index"
   drag-hover-class="drop-zone-instructions-can-reorder-here"
   ui-on-Drop="onDrop($event, $data, $index, datalist.docs._collection)">
     <div ng-class="{'col-md-1': datalist.showDocCheckboxes || datalist.showDocPosition}">
@@ -60,5 +59,4 @@ Please show me something!
   {{datalist.warnMessage}}
   {{datalist.docs.warnMessage}}
 </blockquote>
--->
 

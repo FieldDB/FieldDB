@@ -66,14 +66,21 @@ angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
             }
           } else {
             // element.html("{{doc.fieldDBtype}} Unable to display this document. {{doc | json}}");
-            if (scope && scope.doc && !scope.doc.rev && scope.doc.fetch) {
-              console.log("TODO fetch the doc details and refresh the render to the right template if necessary");
-              scope.doc.fetch().then(function(result){
-                console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...", result);
-                // scope.doc.parent.add(FieldDB.FieldDBObject.convertDocIntoItsType(result));
-                scope.$digest();
-              });
-            }
+            // if (scope && scope.doc && !scope.doc.rev && scope.doc.fetch) {
+            //   console.log("TODO fetch the doc details and refresh the render to the right template if necessary");
+            //   scope.doc.fetch().then(function(result){
+            //     console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...", result);
+            //     // scope.doc.parent.add(FieldDB.FieldDBObject.convertDocIntoItsType(result));
+            //     scope.$digest();
+            //   });
+            // }
+          }
+          if(scope.doc.loaded === false && !scope.doc.rev && typeof scope.doc.fetch === "function"){
+            scope.doc.fetch().then(function(result){
+              console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...", result);
+              // scope.doc.parent.add(FieldDB.FieldDBObject.convertDocIntoItsType(result));
+              scope.$digest();
+            });
           }
           // console.log("Using html: " + element.html());
 

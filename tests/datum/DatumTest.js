@@ -8,6 +8,7 @@ describe("Test Datum", function() {
 
     var datum = new Datum();
     expect(datum).toBeDefined();
+    expect(datum.fields).toBeUndefined();
   });
 
   describe("popular fields", function() {
