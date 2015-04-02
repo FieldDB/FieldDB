@@ -48,7 +48,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
     var fetchDatalistDocsIfEmpty = function() {
 
-      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
+      if (!$scope.corpus || !$scope.datalist || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         if (fetchDatalistDocsExponentialDecay >= Infinity) {
           console.log(" Giving up on getting a real corpus. Already at " + fetchDatalistDocsExponentialDecay + ".");

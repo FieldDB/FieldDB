@@ -474,8 +474,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               // }));
             }
             // docToSave.tempId = docToSave.id = FieldDBObject.uuidGenerator();
-            docToSave.tempId = FieldDBObject.uuidGenerator();
             if (docToSave) {
+              docToSave.tempId = FieldDBObject.uuidGenerator();
               docToSave.dbname = self.corpus.dbname;
               self.datalist.add(docToSave);
             }

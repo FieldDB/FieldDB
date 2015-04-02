@@ -72,8 +72,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       comments: Comments,
       docs: DocumentCollection,
       title: ContextualizableObject,
-      description: ContextualizableObject,
-      item: FieldDBObject
+      description: ContextualizableObject
+        // item: FieldDBObject
     }
   },
 
@@ -118,11 +118,26 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   add: {
     value: function(value) {
+      if (value && Object.prototype.toString.call(value) === "[object Array]") {
+        var self = this;
+        for (var itemIndex in value) {
+          value[itemIndex] = self.add(value[itemIndex]);
+        }
+        return value;
+      }
+
       if (!this.docs) {
         this.debug("creating the datalist docs ", value);
         this.docs = [];
       } else {
         this.debug("adding to existing datalist docs ", value);
+      }
+      //Item of the datalist trumps the collections' item type
+      if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && !(value instanceof this.INTERNAL_MODELS.item)) {
+        value = new this.INTERNAL_MODELS.item(value);
+      } else {
+        this.debug("Setting the type of this new item to Datum since it didnt have a type before, and there is no default item for this datalist.");
+        value.fieldDBtype = value.fieldDBtype || "Datum";
       }
       return this.docs.add(value);
     }
@@ -279,44 +294,46 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.fetching = this.loading = true;
       this.whenReindexedFromApi = deferred.promise;
       this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
-          self.fetching = self.loading = true;
+          self.fetching = self.loading = false;
           self.warn("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
-          if (generatedDatalist) {
-            generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
-            if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
-              // If the data list was empty, assign the docIds which will populate it with placeholders
-              if (!self.docs) {
-                self.docs = [];
-              }
-
-              self.debug("Iterating through the docids to make sure they are in the list.");
-              // If the data list doesn't have this id, add a placeholder
-              generatedDatalist.docIds.map(function(docPrimaryKey) {
-                self.debug("Looking at " + docPrimaryKey);
-                if (!self._docs[docPrimaryKey]) {
-                  self.debug("converting " + docPrimaryKey + " into a placeholder");
-                  var docPlaceholder = new self.INTERNAL_MODELS.item({
-                    dbname: self.dbname,
-                    loaded: false
-                  });
-                  docPlaceholder[self.primaryKey] = docPrimaryKey;
-                  self.debug("adding " + docPrimaryKey + " into the docs");
-                  self._docs.add(docPlaceholder);
-                }
-              });
-              // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
-              if (self.length !== generatedDatalist.docIds.length) {
-                self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
-              }
-              delete generatedDatalist.docIds;
-            }
-            delete generatedDatalist.title;
-            delete generatedDatalist.description;
-            // self.merge("self", generatedDatalist);
-            self.render();
-          } else {
+          if (!generatedDatalist) {
             self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
+            return;
           }
+          generatedDatalist.docIds = generatedDatalist.docIds || generatedDatalist.datumIds;
+          if (generatedDatalist.docIds && generatedDatalist.docIds.length > 0) {
+            // If the data list was empty, assign the docIds which will populate it with placeholders
+            if (!self.docs) {
+              self.docs = [];
+            }
+
+            self.debug("Iterating through the docids to make sure they are in the list.");
+            // If the data list doesn't have this id, add a placeholder
+            generatedDatalist.docIds.map(function(docPrimaryKey) {
+              self.debug("Looking at " + docPrimaryKey);
+              if (!self._docs[docPrimaryKey]) {
+                self.debug("converting " + docPrimaryKey + " into a placeholder");
+                var docPlaceholder = {
+                  dbname: self.dbname,
+                  loaded: false
+                };
+                docPlaceholder[self.primaryKey] = docPrimaryKey;
+                self.debug("adding " + docPrimaryKey + " into the docs");
+                self.add(docPlaceholder);
+              }
+            });
+            // If the generatedDatalist indicates this doc is (no longer) in this session, remove it?
+            if (self.length !== generatedDatalist.docIds.length) {
+              self.todo("Not removing items whcih the user currently has in this session which the server doesnt know about.");
+            }
+            delete generatedDatalist.docIds;
+          }
+          delete generatedDatalist.title;
+          delete generatedDatalist.description;
+          // self.merge("self", generatedDatalist);
+          self.render();
+
+
           return self;
         }, unableToFetchCurrentDataAffiliatedWithThisDataList)
         .fail(function(error) {
@@ -381,10 +398,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           throw new Error("This is a very odd set of docIds");
         }
         value.map(function(docPrimaryKey) {
-          var docPlaceholder = new self.INTERNAL_MODELS.item({
+          var docPlaceholder = {
             dbname: self.dbname,
             loaded: false
-          });
+          };
           docPlaceholder[self.primaryKey] = docPrimaryKey;
           self.add(docPlaceholder);
         });
