@@ -359,7 +359,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
       // expect(typeof scope.deleteComment).toBeUndefined();
       // expect(typeof scope.saveChanges).toBeUndefined();
 
-      expect(typeof scope.getSavedState).toBe('function');
+      // expect(typeof scope.getSavedState).toBeUndefined();
       // expect(typeof scope.newRecordHasBeenEditedButtonClass).toBeUndefined();
 
       expect(typeof window.onbeforeunload).toBe('function');

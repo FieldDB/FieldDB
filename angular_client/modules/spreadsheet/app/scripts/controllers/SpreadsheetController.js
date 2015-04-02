@@ -17,6 +17,86 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http);
   }
 
+
+  $scope.everythingSavedStatus = {
+    state: "",
+    class: "btn btn-inverse",
+    icon: "",
+    text: ""
+  };
+
+  var isEverythingSaved = function() {
+    var updatedEverythingSavedStatus;
+
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs ||
+
+      !$rootScope.application.corpus.activityConnection ||
+      !$rootScope.application.corpus.activityConnection.docs ||
+
+      !$rootScope.application.authentication ||
+      !$rootScope.application.authentication.user ||
+      !$rootScope.application.authentication.user.activityConnection ||
+      !$rootScope.application.authentication.user.activityConnection.docs) {
+
+      updatedEverythingSavedStatus = {
+        state: "Saved",
+        class: "btn",
+        icon: "fa whiteicon fa-folder",
+        text: $rootScope.contextualize("locale_Saved")
+      };
+
+    } else {
+
+      // TODO decide what to do with the new datum
+      // $rootScope.application.corpus.currentSession.newDatum.unsaved
+
+      if ($rootScope.application.corpus.currentSession.docs.unsaved === false &&
+        $rootScope.application.corpus.activityConnection.docs.unsaved === false &&
+        $rootScope.application.authentication.user.activityConnection.docs.unsaved === false) {
+
+        updatedEverythingSavedStatus = {
+          state: "Saved",
+          class: "btn btn-success",
+          icon: "fa whiteicon fa-folder",
+          text: $rootScope.contextualize("locale_Saved")
+        };
+      } else if ($rootScope.application.corpus.currentSession.docs.unsaved ||
+        $rootScope.application.corpus.activityConnection.docs.unsaved ||
+        $rootScope.application.authentication.user.activityConnection.docs.unsaved) {
+
+        updatedEverythingSavedStatus = {
+          state: "Save",
+          class: "btn btn-danger",
+          icon: "fa whiteicon fa-save",
+          text: $rootScope.contextualize("locale_Save")
+        };
+      } else if ($rootScope.application.corpus.currentSession.docs.saving ||
+        $rootScope.application.corpus.activityConnection.docs.saving ||
+        $rootScope.application.authentication.user.activityConnection.docs.saving) {
+
+        updatedEverythingSavedStatus = {
+          state: "Saving",
+          class: "pulsing",
+          icon: "fa whiteicon fa-folder-open",
+          text: $rootScope.contextualize("locale_Saving")
+        };
+      }
+
+    }
+
+
+    for (var atrib in updatedEverythingSavedStatus) {
+      if (updatedEverythingSavedStatus.hasOwnProperty(atrib) && updatedEverythingSavedStatus[atrib] !== $scope.everythingSavedStatus[atrib]) {
+        $scope.everythingSavedStatus[atrib] = updatedEverythingSavedStatus[atrib];
+      }
+    }
+    return updatedEverythingSavedStatus.state === "Saved";
+  };
+
   var reRouteUser = function(nextRoute) {
     if (window.location.hash.indexOf(nextRoute) === window.location.hash.length - nextRoute.length) {
       return;
@@ -77,7 +157,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
   }
 
-  $rootScope.appVersion = "2.49.1.10.53ss";
+  $rootScope.appVersion = "2.49.01.11.56ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -109,7 +189,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
-    // reRouteUser("welcome");
+    reRouteUser("welcome");
   };
 
   var processServerContactError = function(err) {
@@ -316,67 +396,82 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.navigateVerifySaved = function(itemToDisplay) {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
-      $rootScope.notificationMessage = "Please save changes before continuing.";
-      $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
-      $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
-      $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.newDatum.unsaved) {
-      $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
-      $rootScope.openNotification();
-    } else {
 
-      // $scope.appReloaded = true;
+    // isEverythingSaved();
 
-      $rootScope.loading = false;
 
-      $scope.activeMenu = itemToDisplay;
+    // if ($scope.everythingSavedStatus.state === "Save") {
+    //   $rootScope.notificationMessage = "Please save changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
 
-      switch (itemToDisplay) {
-        case "settings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("settings");
-          break;
-        case "corpusSettings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("corpussettings");
-          break;
-        case "home":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("corpora_list");
-          break;
-        case "searchMenu":
-          $scope.changeActiveSubMenu(itemToDisplay);
-          $scope.searching = true;
-          $scope.activeDatumIndex = null;
-          reRouteUser("spreadsheet");
-          break;
-        case "faq":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("faq");
-          break;
-        case "none":
-          $scope.dataentry = true;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("spreadsheet");
-          break;
-        case "register":
-          reRouteUser("register");
-          break;
-        default:
-          reRouteUser("spreadsheet");
-          $scope.changeActiveSubMenu(itemToDisplay);
-      }
+    // } else if ($scope.everythingSavedStatus.state === "Saving") {
+    //   $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+    //   $rootScope.openNotification();
+    //   return;
+
+    // } else if ($rootScope.application &&
+    //   $rootScope.application.corpus &&
+    //   $rootScope.application.corpus.currentSession &&
+    //   $rootScope.application.corpus.currentSession.newDatum &&
+    //   $rootScope.application.corpus.currentSession.newDatum.unsaved) {
+
+    //   $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
+    // }
+
+
+
+    // $scope.appReloaded = true;
+
+    // $rootScope.loading = false;
+
+    $scope.activeMenu = itemToDisplay;
+
+    switch (itemToDisplay) {
+      case "settings":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("settings");
+        break;
+      case "corpusSettings":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("corpussettings");
+        break;
+      case "home":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("corpora_list");
+        break;
+      case "searchMenu":
+        $scope.changeActiveSubMenu(itemToDisplay);
+        $scope.searching = true;
+        $scope.activeDatumIndex = null;
+        reRouteUser("spreadsheet");
+        break;
+      case "faq":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("faq");
+        break;
+      case "none":
+        $scope.dataentry = true;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("spreadsheet");
+        break;
+      case "register":
+        reRouteUser("register");
+        break;
+      default:
+        reRouteUser("spreadsheet");
+        $scope.changeActiveSubMenu(itemToDisplay);
     }
   };
 
@@ -519,7 +614,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
       return;
     }
-    $rootScope.clickSuccess = true;
     $rootScope.loginInfo = $rootScope.loginInfo || {};
     $rootScope.loginInfo.username = loginDetails.username.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
@@ -553,7 +647,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openWelcomeNotificationDeprecated();
       return;
     }
-    $scope.corpora = $scope.corpora || new FieldDB.Collection();
+    $scope.corporaCacheToReduceRedownloading = $scope.corporaCacheToReduceRedownloading || new FieldDB.Collection();
 
     // Update saved state in Preferences
     updateAndOverwritePreferencesToCurrentVersion();
@@ -562,6 +656,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.connection);
     // } else {
     // }
+    if (window.location.hash.indexOf("welcome") > -1) {
+      reRouteUser("corpora_list");
+    }
+
     $scope.documentReady = true;
     $rootScope.loading = false;
     try {
@@ -593,6 +691,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo.authUrl = $rootScope.application.connection.authUrl;
 
     $rootScope.application.authentication.login($rootScope.loginInfo).then(function() {
+      $rootScope.loading = false;
       $scope.loginUserFromScratchIsRunning = false;
       $scope.addActivity([{
         verb: "logged in",
@@ -606,6 +705,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }, function(error) {
       $scope.loginUserFromScratchIsRunning = false;
       processServerContactError(error);
+    }).fail(function(error) {
+      console.log(" error logging in  ", error);
+      $scope.loginUserFromScratchIsRunning = false;
+      processServerContactError(error);
     });
   };
 
@@ -616,6 +719,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
+    $rootScope.loading = false;
+
     $scope.updateAvailableFieldsInColumns();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
@@ -640,15 +745,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.application.corpus && $rootScope.application.corpus.dbname !== selectedConnection.dbname) {
       console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedConnection.dbname);
     }
-    if ($scope.corpora && $scope.corpora[selectedConnection.dbname]) {
-      $rootScope.application.corpus = $scope.corpora[selectedConnection.dbname];
+    if ($scope.corporaCacheToReduceRedownloading && $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname]) {
+      $rootScope.application.corpus = $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname];
       return;
     }
 
     $rootScope.application.corpus = new FieldDB.Corpus();
     $rootScope.application.corpus.loadCorpusByDBname(selectedConnection.dbname).then(function(results) {
       console.log("loaded the corpus", results);
-      $scope.corpora.add($rootScope.application.corpus);
+      $scope.corporaCacheToReduceRedownloading.add($rootScope.application.corpus);
       selectedConnection.parent = $rootScope.application.corpus;
 
       $scope.addActivity([{
@@ -673,7 +778,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+  $rootScope.$watch('application.corpus.dbname', function(newValue, oldValue) {
     if (!$rootScope.application.corpus || !$rootScope.application.corpus.datumFields || !$rootScope.application.corpus._rev) {
       console.log("the corpus changed but it wasn't ready yet");
       return;
@@ -685,8 +790,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadCorpusFieldsAndPreferences();
   });
 
-  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
-    if (!$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
+  $rootScope.$watch('application.corpus.currentSession', function(newValue, oldValue) {
+    if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
       return;
     }
 
@@ -832,19 +937,30 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.reloadPage = function() {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
+
+    isEverythingSaved();
+
+    if ($scope.everythingSavedStatus.state === "Save") {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
+      return;
+    } else if ($scope.everythingSavedStatus.state === "Saving") {
       $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
       $rootScope.openNotification();
-    } else {
-      reRouteUser("");
-      window.location.reload();
+      return;
     }
+
+    reRouteUser("");
+    window.location.reload();
   };
 
   $scope.saveChanges = function() {
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs) {
+      return;
+    }
 
     var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
 
@@ -1051,7 +1167,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     if (newScopeData.length > 0) {
       $scope.allData = newScopeData;
-      if (!$rootScope.application.authentication.user || $rootScope.application.authentication.user.prefs || $rootScope.application.authentication.user.prefs.numVisibleDatum) {
+      if (!$rootScope.application.authentication.user ||
+        $rootScope.application.authentication.user.prefs ||
+        $rootScope.application.authentication.user.prefs.numVisibleDatum) {
+
         console.warn("the user isnt loaded, shouldnt be loading any data.");
         return;
       }
@@ -1068,12 +1187,28 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.selectAll = function() {
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs ||
+      !$rootScope.application.corpus.currentSession.docs.map) {
+      return;
+    }
+
     $rootScope.application.corpus.currentSession.docs.map(function(datum) {
       datum.selected = true;
     });
   };
 
   $scope.exportResults = function(size) {
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs ||
+      !$rootScope.application.corpus.currentSession.docs.map) {
+      return;
+    }
+
     var results = [];
     $rootScope.application.corpus.currentSession.docs.map(function(datum) {
       if (datum.selected) {
@@ -1173,7 +1308,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               function(reason) {
                 console.warn("There was an error saving the activity. ", $scope.activities[index], reason);
                 $rootScope.application.bug("There was an error saving the activity. ");
-                $rootScope.application.corpus.currentSession.docs.unsaved = true;
+                // $rootScope.application.corpus.currentSession.docs.unsaved = true;
               });
         }
       };
@@ -1228,7 +1363,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    $rootScope.loading = true;
+
+    $scope.creatingNewCorpus = true;
     var dataToPost = {};
     dataToPost.username = $rootScope.application.authentication.user.username.trim();
     dataToPost.password = $rootScope.loginInfo.password.trim();
@@ -1236,6 +1372,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $rootScope.application.authentication.newCorpus(dataToPost)
       .then(function(response) {
+      $scope.creatingNewCorpus = false;
 
         // Add new corpus to scope
         var newConnection = {};
@@ -1528,13 +1665,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
 
-  $rootScope.$watch('currentPage', function(newValue, oldValue) {
-    if (newValue !== oldValue) {
-      $scope.loadPaginatedData();
-    } else {
-      console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
-    }
-  });
+  // $rootScope.$watch('currentPage', function(newValue, oldValue) {
+  //   if (newValue !== oldValue) {
+  //     $scope.loadPaginatedData();
+  //   } else {
+  //     console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
+  //   }
+  // });
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
@@ -1544,46 +1681,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.getSavedState = function() {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved === false &&
-      $rootScope.application.corpus.activityConnection.docs.unsaved === false &&
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved === false) {
-
-      return {
-        state: "Saved",
-        class: "btn btn-success",
-        icon: "fa whiteicon fa-folder",
-        text: $rootScope.contextualize("locale_Saved")
-      };
-    } else if ($rootScope.application.corpus.currentSession.docs.unsaved ||
-      $rootScope.application.corpus.activityConnection.docs.unsaved ||
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved) {
-
-      return {
-        state: "Save",
-        class: "btn btn-danger",
-        icon: "fa whiteicon fa-save",
-        text: $rootScope.contextualize("locale_Save")
-      };
-    } else if ($rootScope.application.corpus.currentSession.docs.saving ||
-      $rootScope.application.corpus.activityConnection.docs.saving ||
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.saving) {
-
-      return {
-        state: "Saving",
-        class: "pulsing",
-        icon: "fa whiteicon fa-folder-open",
-        text: $rootScope.contextualize("locale_Saving")
-      };
-    } else {
-      return {
-        state: "Saved",
-        class: "btn",
-        icon: "fa whiteicon fa-folder",
-        text: $rootScope.contextualize("locale_Saved")
-      };
-    }
-  };
 
   $scope.contactUs = function() {
     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
@@ -1718,7 +1815,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.application && $rootScope.application.authentication && $rootScope.application.authentication.user && typeof $rootScope.application.authentication.user.save === "function") {
       $rootScope.application.authentication.user.save();
     }
-    if ($rootScope.application.corpus.currentSession.docs.unsaved || $rootScope.application.corpus.currentSession.newDatum.unsaved) {
+    if (!isEverythingSaved()) {
       return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
     } else {
       return;

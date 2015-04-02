@@ -790,7 +790,7 @@
         "description": "search resutl showing as ... in export modal "
     },
     "locale_number_columns": {
-        "message": "Number of Columns: ",
+        "message": "Number of Columns",
         "description": "number of columns settings"
     },
     "locale_utterance": {

@@ -1,81 +1,29 @@
-<br />
-<br />
-<div>
+<p>&nbsp;</p>
+<div class="settings_section_header">
   <h3>{{contextualize('locale_user_interface_settings')}}</h3>
-  <br />
-
-  <!-- Number of records to display -->
-  <div class="form-horizontal">
-    <div class="settings_section_header">
-      <h2>{{contextualize('locale_records_to_display')}}</h2>
-    </div>
-    <div class="clearDiv">&nbsp;</div>
-    <div class="settingsItems">
-      <select ng-model="application.authentication.user.prefs.numVisibleDatum">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="25" selected>25</option>
-        <option value="50">50</option>
-        <option value="all">
-          {{contextualize('locale_all_dropdown')}}
-        </option>
-      </select>
-      &nbsp;
-  </div>
 </div>
+<!-- Number of records to display -->
+<div class="settingsSection">
+  <div class="lead">{{contextualize('locale_records_to_display')}}</div>
+
+  <select ng-model="application.authentication.user.prefs.numVisibleDatum">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="25" selected>25</option>
+    <option value="50">50</option>
+    <option value="all">
+      {{contextualize('locale_all_dropdown')}}
+    </option>
+  </select>
+</div>
+
 <hr />
 
 <!-- Language of user interface -->
-<div class="form-horizontal">
-  <div class="settings_section_header">
-    <h2>Interface Language</h2>
-  </div>
-  <div class="clearDiv">&nbsp;</div>
-  <div class="settingsItems">
-    <span data-fielddb-locales fielddb-show-locale-key="nativeName" fielddb-full-view="true"></span>
-  </div>
-</div>
-<hr />
+<form class="settingsSection">
+  <div class="lead">Interface Language</div>
+  <span data-fielddb-locales fielddb-show-locale-key="nativeName" fielddb-full-view="true" class="form-inline">
+  </span>
+</form>
 
-<div class="settings_section_header">
-  <h2>{{contextualize('locale_templates')}}</h2>
-</div>
-<div class="clearDiv">&nbsp;</div>
-<div class="settingsItems">
-  <!-- Full TEMPLATE -->
-  <h3>
-    <span ><b>✓</b></span> {{contextualize('locale_full_template')}}
-    <small> {{contextualize('locale_default_template')}} {{application.corpus.title}}</small>
-  </h3>
-  <div class="row settingsTemplate">
-
-    <div class="span1" title="{{contextualize('locale_judgement')}}">
-      *#?
-    </div>
-    <div class="span5">
-      <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-    <div class="span5" ng-show="fieldsInColumns.second">
-      <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-    <div class="span5" ng-show="fieldsInColumns.third">
-      <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-<!-- <input class="span5" type="text" disabled="disabled"
-  placeholder="Tags"></textarea> -->
-  <!-- <span class="span4" rows="3">Comments</span> -->
-  <div class="span1">
-    {{contextualize('locale_audio_and_comments')}}
-  </div>
-
-</div>
 

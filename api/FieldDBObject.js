@@ -126,47 +126,48 @@ var FieldDBObject = function FieldDBObject(json) {
 
 };
 FieldDBObject.internalAttributesToNotJSONify = [
-  "temp",
-  "saving",
+  "$$hashKey",
+  "_corpus",
+  "_db",
+  "_unsaved",
+  "_parent",
+  "application",
+  "bugMessage",
+  "confirmMessage",
+  "contextualizer",
+  "corpus",
+  "db",
+  "decryptedMode",
   "fetching",
+  "fossil",
   "loaded",
   "loading",
-  "unsaved",
-  "_unsaved",
-  "selected",
-  "useIdNotUnderscore",
-  "decryptedMode",
-  "bugMessage",
-  "warnMessage",
-  "perObjectDebugMode",
-  "perObjectAlwaysConfirmOkay",
-  "application",
-  "corpus",
-  "_corpus",
-  "db",
-  "_db",
-  "contextualizer",
-  "perObjectDebugMode",
-  "whenReady",
-  "useIdNotUnderscore",
   "parent",
-  "confirmMessage",
-  "bugMessage",
-  "fossil",
-  "$$hashKey"
+  "perObjectAlwaysConfirmOkay",
+  "perObjectDebugMode",
+  "saving",
+  "selected",
+  "temp",
+  "unsaved",
+  "useIdNotUnderscore",
+  "warnMessage",
+  "whenReady"
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
-  "dateCreated",
   "_dateCreated",
-  "_fieldDBtype",
-  "version",
-  "_version",
-  "modifiedByUser",
   "_dateModified",
   "_fieldDBtype",
+  "_version",
+  "appVersionWhenCreated",
+  "authServerVersionWhenCreated",
+  "created_at",
+  "dateCreated",
   "dateModified",
-  "updated_at"
+  "modifiedByUser",
+  "roles",
+  "updated_at",
+  "version",
 ]);
 
 FieldDBObject.software = {};
@@ -394,7 +395,9 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
       doc = new doc.constructor(cloneDoc);
     } else
     // Return a clone of simple types, or a new clone of the json of this object
-    if (typeofAnotherObjectsProperty === "[object String]") {
+    if (typeofAnotherObjectsProperty === "[object Boolean]") {
+      return !!doc;
+    } else if (typeofAnotherObjectsProperty === "[object String]") {
       return doc + "";
     } else if (typeofAnotherObjectsProperty === "[object Number]") {
       return doc + 0;
@@ -408,7 +411,9 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
     }
   } else {
     // Return the doc if its a simple type
-    if (typeofAnotherObjectsProperty === "[object String]") {
+    if (typeofAnotherObjectsProperty === "[object Boolean]") {
+      return doc;
+    } else if (typeofAnotherObjectsProperty === "[object String]") {
       return doc;
     } else if (typeofAnotherObjectsProperty === "[object Number]") {
       return doc;
@@ -909,18 +914,31 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       var data = this.createSaveSnapshot();
+
+      if (!data) {
+        this.warn(" Can't save " + this.id + " right now. The JSON isnt ready.");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["Can't save " + this.id + " right now. Please wait."]
+          });
+        });
+        return deferred.promise;
+      }
+
       self.debug("    Requesting corpus to run save...");
       this.saving = true;
       this.whenReady = deferred.promise;
 
-      // if (true) {
-      //   this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
-      //   Q.nextTick(function() {
-      //     self.saving = false;
-      //     deferred.resolve(self);
-      //   });
-      //   return deferred.promise;
-      // }
+      if (true) {
+        this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.resolve(self);
+        });
+        return deferred.promise;
+      }
 
       this.corpus.set(data).then(function(result) {
           self.saving = false;
@@ -1131,13 +1149,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       for (aproperty in anObject) {
-        if (anObject.hasOwnProperty(aproperty) && typeof anObject[aproperty] !== "function") {
+        if (anObject.hasOwnProperty(aproperty) &&
+          typeof anObject[aproperty] !== "function" &&
+          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
           propertyList[aproperty] = true;
         }
       }
 
       for (aproperty in anotherObject) {
-        if (anotherObject.hasOwnProperty(aproperty) && typeof anotherObject[aproperty] !== "function") {
+        if (anotherObject.hasOwnProperty(aproperty) &&
+          typeof anotherObject[aproperty] !== "function" &&
+          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
           propertyList[aproperty] = true;
         }
       }
@@ -1182,7 +1204,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               resultObject[aproperty] = new anObject[aproperty].constructor(json);
               this.debug(" " + aproperty + " resultObject will have anObject's Cloned contents because it was empty");
             } else {
-              resultObject[aproperty] = anObject[aproperty];
+              /* jshint eqeqeq:false */
+              if (resultObject[aproperty] != anObject[aproperty]) {
+                resultObject[aproperty] = anObject[aproperty];
+              }
               this.debug(" " + aproperty + " resultObject will have anObject's contents because it was empty");
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
@@ -1213,14 +1238,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         // if (anObject[aproperty] && typeof anObject[aproperty].equals === "function" && anObject[aproperty].equals(anotherObject[aproperty])) {
         //   this.debug(aproperty + " were equivalent or had no conflict.");
         //   if (!anObject[aproperty].equals(resultObject[aproperty])) {
-        //     resultObject[aproperty] = anObject[aproperty];
+        //     if(resultObject[aproperty] != anObject[aproperty]){resultObject[aproperty] = anObject[aproperty];}
         //   }
         //   continue;
         // }
 
         if ((anotherObject[aproperty] === undefined || anotherObject[aproperty] === null) && resultObject[aproperty] != anObject[aproperty]) {
           this.debug(aproperty + " was missing in new object, using the original");
-          resultObject[aproperty] = anObject[aproperty];
+          if (resultObject[aproperty] != anObject[aproperty]) {
+            resultObject[aproperty] = anObject[aproperty];
+          }
           continue;
         }
 
@@ -1234,7 +1261,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if ((anObject[aproperty] !== undefined || anObject[aproperty] !== null) && (anotherObject[aproperty] === undefined || anotherObject[aproperty] === null || anotherObject[aproperty] === [] || anotherObject[aproperty].length === 0 || anotherObject[aproperty] === {})) {
           targetPropertyIsEmpty = true;
           this.debug(aproperty + " target is empty, taking the old value");
-          resultObject[aproperty] = anObject[aproperty];
+          if (resultObject[aproperty] != anObject[aproperty]) {
+            resultObject[aproperty] = anObject[aproperty];
+          }
           continue;
         }
 
@@ -1244,12 +1273,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           resultObject[aproperty] = anObject[aproperty].concat([]);
 
           // only add the ones that were missing (dont remove any. merge wont remove stuff, only add.)
-          /* jshint loopfunc:true */
-          anotherObject[aproperty].map(function(item) {
-            if (resultObject[aproperty].indexOf(item) === -1) {
-              resultObject[aproperty].push(item);
-            }
-          });
+          try {
+            /* jshint loopfunc:true */
+            anotherObject[aproperty].map(function(item) {
+              if (resultObject[aproperty].indexOf(item) === -1) {
+                resultObject[aproperty].push(item);
+              }
+            });
+          } catch (e) {
+            console.warn("problem merging this array " + aproperty, e);
+          }
           this.debug("  added members of anotherObject " + aproperty + " to anObject ", resultObject[aproperty]);
           continue;
         }
@@ -1262,9 +1295,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             localCallOnSelf = anObject[aproperty];
           }
           this.debug("Requesting recursive merge of internal property " + aproperty + " using method: " + localCallOnSelf);
-          var result = resultObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
-          this.debug("after internal merge ", result);
-          this.debug("after internal merge ", resultObject[aproperty]);
+          try {
+            var result = resultObject[aproperty].merge(localCallOnSelf, anotherObject[aproperty], optionalOverwriteOrAsk);
+            this.debug("after internal merge ", result);
+            this.debug("after internal merge ", resultObject[aproperty]);
+          } catch (e) {
+            console.warn("problem merging this " + aproperty, e);
+          }
           continue;
         }
 
@@ -1286,7 +1323,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             resultObject[aproperty] = anotherObject[aproperty];
           }
         } else {
-          resultObject[aproperty] = anObject[aproperty];
+          if (resultObject[aproperty] != anObject[aproperty]) {
+            resultObject[aproperty] = anObject[aproperty];
+          }
         }
       }
 
@@ -1743,6 +1782,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         console.warn(e);
         console.error(e.stack);
         this.bug("Unable to serialze " + this.id + ". Please report this.");
+        return null;
       }
     }
   },
@@ -1792,26 +1832,28 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
 
-      var relatedData;
-      if (json.datumFields && json.datumFields.relatedData) {
-        relatedData = json.datumFields.relatedData.json.relatedData || [];
-      } else if (json.relatedData) {
-        relatedData = json.relatedData;
-      } else {
-        json.relatedData = relatedData = [];
-      }
       var source = this.id;
-      if (this.rev) {
-        source = source + "?rev=" + this.rev;
-      } else {
-        if (this.parent && this.parent._rev) {
-          source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
+      if (this.id && this.rev) {
+        var relatedData;
+        if (json.datumFields && json.datumFields.relatedData) {
+          relatedData = json.datumFields.relatedData.json.relatedData || [];
+        } else if (json.relatedData) {
+          relatedData = json.relatedData;
+        } else {
+          json.relatedData = relatedData = [];
         }
+        if (this.rev) {
+          source = source + "?rev=" + this.rev;
+        } else {
+          if (this.parent && this.parent._rev) {
+            source = "parent" + this.parent._id + "?rev=" + this.parent._rev;
+          }
+        }
+        relatedData.push({
+          relation: "clonedFrom",
+          URI: source
+        });
       }
-      relatedData.push({
-        URI: source,
-        relation: "clonedFrom"
-      });
 
       /* Clear the current object's info which we shouldnt clone */
       delete json._id;

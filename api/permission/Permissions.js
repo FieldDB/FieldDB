@@ -719,7 +719,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
 
       if (!this.parent) {
         Q.nextTick(function() {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           deferred.reject({
             error: "Cannot fetch if the permissions are not attached to a corpus"
           });
@@ -729,7 +729,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
 
       if (!this.application || !this.application.authentication || !this.application.authentication.user || !this.application.authentication.user.username) {
         Q.nextTick(function() {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           deferred.reject({
             error: "Cannot fetch if the permissions are not in an application."
           });
@@ -740,7 +740,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       if (this.loaded) {
         this.warn("not fetching permissions, they are fresh.");
         Q.nextTick(function() {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           deferred.resolve(self);
         });
         return deferred.promise;
@@ -752,20 +752,20 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       };
       dataToPost.connection = dataToPost.couchConnection = dataToPost.connection;
 
-      this.fetching = true;
+      this.fetching = this.loading = true;
       CORS.makeCORSRequest({
         type: "POST",
         data: dataToPost,
         dataType: "json",
         url: this.parent.connection.authUrl + "/corpusteam"
       }).then(function(result) {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           self.loaded = true;
           self.populate(result.users);
           deferred.resolve(self);
         },
         function(reason) {
-          self.fetching = false;
+          self.fetching = self.loading = false;
           self.debug(reason);
           deferred.reject(reason);
         }).fail(

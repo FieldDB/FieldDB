@@ -1,6 +1,6 @@
 <div class="row-fluid document_not_ready_spinner" ng-hide="documentReady">
   <div class="span4 offset4 pagination-centered">
-    <img ng-src="images/loading-spinner.gif" width="75" />
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small"/>
   </div>
 </div>
 <div id="hideOnLoadDeprecated">
@@ -8,7 +8,7 @@
     <div class="menubar mainMenubar" ng-cloak>
       <span class="menuTitle">
         <a ng-click="navigateVerifySaved('home')">
-          <img ng-src="images/icon48_dev.png" border="0" />
+          <img ng-src="images/icon48_dev.png" class="gravatar-small" />
         </a>
       </span>
       <span ng-show="data.length" ng-class="{active_menu_class: activeMenu=='none'}">
@@ -51,7 +51,7 @@
                   {{contextualize('locale_corpus')}}
                 </a>
               </li>
-              <li ng-show="application.corpus.dbname">
+              <li >
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -81,7 +81,7 @@
         <div class="rightMenuItemsDiv">
           <div ng-show="application.corpus">
             <a class="floatLeft" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this {{application.corpus.dbname}}'s webpage">
-              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0" class="gravatar-small">
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
@@ -93,8 +93,8 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
-              {{getSavedState().text}}
+            <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
+              {{everythingSavedStatus.text}}
             </button>
             &nbsp;
             <button class="btn btn-warning" ng-click="logout()">
@@ -103,7 +103,7 @@
               {{contextualize('locale_logout')}}
             </button>
             <a href="{{application.website}}/{{application.authentication.user.username}}" target="_blank" title="Visit your share page">
-              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0">
+              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0" class="gravatar-small">
             </a>
           </div>
         </div>
@@ -190,7 +190,7 @@
     <div class="menubar mainMenubar" ng-cloak>
       <span class="menuTitle">
         <a ng-click="navigateVerifySaved('home')">
-          <img ng-src="images/icon48_dev.png" border="0" />
+          <img ng-src="images/icon48_dev.png" class="gravatar-small"/>
         </a>
       </span>
       <span ng-show="data.length" ng-class="{active_menu_class: activeMenu=='none'}">
@@ -228,7 +228,7 @@
                   </i>
                 </a>
               </li>
-              <li ng-show="application.corpus.dbname">
+              <li>
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -254,13 +254,13 @@
       <span class="smallMenuBarInfo" ng-show="application.authentication.user.authenticated">
         <span class=" smallMenuBarInfoItem" ng-show="application.corpus">
           <a class="" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this corpus' webpage">
-            <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+            <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0" class="gravatar-small">
           </a>
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
-            <i ng-class="getSavedState().icon">
+          <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
+            <i ng-class="everythingSavedStatus.icon">
             </i>
           </button>
           &nbsp;
@@ -269,7 +269,7 @@
             </i>
           </button>
           <a href="{{application.website}}/{{application.authentication.user.username}}" target="_blank" title="Visit your share page">
-            <img ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0">
+            <img ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0" class="gravatar-small">
           </a>
         </span>
       </span>

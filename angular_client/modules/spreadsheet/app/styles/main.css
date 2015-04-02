@@ -25,14 +25,17 @@ body {
     display: none;
   }
 
+  .menuitem {
+    line-height: 1em;
+  }
   .menubar {
-    height: 50px;
+    height: 4em;
   }
   .subMenubar {
-    top: 50px;
+    top: 4em;
   }
   .mainBody {
-    top: 50px;
+    top: 4em;
     padding-bottom: 25px;
   }
   .mainBodySearching {
@@ -47,14 +50,17 @@ body {
   .smallMenuBar {
     display: inline;
   }
+  .menuitem {
+    line-height: 1em;
+  }
   .menubar {
-    height: 60px;
+    height: 3em;
   }
   .subMenubar {
-    top: 60px;
+    top: 3em;
   }
   .mainBody {
-    top: 60px;
+    top: 3em;
     padding-bottom: 25px;
   }
   .mainBodySearching {
@@ -98,7 +104,7 @@ body {
 }
 
 .menuitem {
-  line-height: 50px;
+  line-height: 3em;
 }
 
 .menubar span a {
@@ -268,11 +274,11 @@ span ul {
 #login_screen {
   text-align: center;
 }
-
+/*
 span, div, ul, li {
   border: 1px solid black !important;
 }
-
+*/
 .mainPageDiv {
   background-color: #F0F5FF;
   border-radius: 10px;
@@ -297,11 +303,12 @@ span, div, ul, li {
   text-align: left;
 }
 
-.settingsTemplate {
+.settingsSection {
   background-color: #F0F5FF;
   border-radius: 10px;
   border: 1px solid #102E37;
-  margin: 5px;
+  padding: 15px;
+  margin: 15px;
 }
 
 .settings_section_header {
