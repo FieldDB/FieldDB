@@ -557,7 +557,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
   describe("serialization", function() {
 
     it("should serialize v1.22 sessions", function() {
-      var session = new Session(sample_1_22_datum[0].session);
+      var session = new Session(JSON.parse(JSON.stringify(sample_1_22_datum[0].session)));
 
       var sessionJson = session.toJSON();
       expect(sessionJson._id).toBeDefined();
@@ -582,7 +582,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
 
     it("should load v1.22 session", function() {
-      var session = new Session(sample_1_22_datum[0].session);
+      var session = new Session(JSON.parse(JSON.stringify(sample_1_22_datum[0].session)));
       expect(session).toBeDefined();
       expect(session.fields).toBeDefined();
       expect(session.fields.length).toEqual(7);
