@@ -102,6 +102,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     window.location.assign("#/" + nextRoute);
+    if(nextRoute === "spreadsheet"){
+      $scope.dataentry = true;
+    }
 
     // try {
     //   if (!$scope.$$phase) {

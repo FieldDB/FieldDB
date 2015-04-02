@@ -1,15 +1,11 @@
-<div class="row" ng-hide="application.corpus.currentSession.id">
-  <div class="span12 pagination-centered">
-    <h2 ng-bind-html="contextualize('locale_select_session_message')">
-    </h2>
-  </div>
+<div class="centered" ng-show="!application.corpus || !application.corpus.currentSession.id">
+  <h2 ng-bind-html="contextualize('locale_select_session_message')">
+  </h2>
 </div>
-<div class="row" ng-show="application.corpus.loading || application.corpus.currentSession.loading">
-  <div class="span12 pagination-centered">
-    <img ng-src="images/loading-spinner.gif" />
-  </div>
+<div class="centered" ng-show="application.corpus.loading || application.corpus.currentSession.loading">
+  <img ng-src="images/loading-spinner.gif" />
 </div>
-<div class="row" ng-hide="application.corpus.currentSession.length">
-  <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
-  </div>
+<div class="centered" ng-show="application.corpus.currentSession.length===0">
+  <h2 ng-bind-html="contextualize('locale_no_data_message')">
+  </h2>
 </div>
