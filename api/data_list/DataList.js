@@ -97,9 +97,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
   docs: {
     get: function() {
-      if (this._docs && this._docs.primaryKey !== this.primaryKey) {
-        this._docs.primaryKey = this.primaryKey;
-      }
+      // if (this._docs && this._docs.primaryKey !== this.primaryKey) {
+      //   this._docs.primaryKey = this.primaryKey;
+      // }
       return this._docs;
     },
     set: function(value) {
@@ -107,8 +107,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.ensureSetViaAppropriateType("docs", value);
 
       if (this._docs) {
+        var previousPrimaryKey = this._docs.primaryKey;
         delete this._docIds;
-        this._docs.primaryKey = this.primaryKey;
+        if (previousPrimaryKey) {
+          this._docs.primaryKey = previousPrimaryKey;
+        }
       }
     }
   },
@@ -292,7 +295,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
                 self.debug("Looking at " + docPrimaryKey);
                 if (!self._docs[docPrimaryKey]) {
                   self.debug("converting " + docPrimaryKey + " into a placeholder");
-                  var docPlaceholder =  new self.INTERNAL_MODELS.item({
+                  var docPlaceholder = new self.INTERNAL_MODELS.item({
                     dbname: self.dbname,
                     loaded: false
                   });
@@ -345,7 +348,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       return "id";
     },
     set: function(value) {
-      if (this.docs && this.docs.primaryKey) {
+      if (this.docs && this.docs.primaryKey && this.docs.primaryKey !== value) {
         this.docs.primaryKey = value;
       }
     }

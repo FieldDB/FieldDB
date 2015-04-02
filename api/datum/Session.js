@@ -725,7 +725,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
   },
 
   initializeDatalist: {
-    value: function() {
+    value: function(datalistJson) {
 
       // this.ensureSetViaAppropriateType("datalist", {
       //   dbname: this.dbname
@@ -734,18 +734,23 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
       this.debug(" initializeDatalist ", this._datalist);
       if (this._datalist && typeof this._datalist.reindexFromApi === "function" && this._datalist.docIds && this._datalist.docIds.length > 0) {
+        if (datalistJson) {
+          this.todo("the caller asked for a speciific data list to be created, ignoring it. ");
+        }
         this.debug("Datalist is alredy ready.");
         return;
       }
-
-      this._datalist = new DataList({
-        title: {
-          default: "All data in " + this.goal
-        },
-        dbname: this.dbname,
-        docs: [],
-        debugMode: true
-      });
+      if (!datalistJson) {
+        datalistJson = {
+          title: {
+            default: "All data in " + this.goal
+          },
+          dbname: this.dbname,
+          docs: [],
+          debugMode: true
+        };
+      }
+      this._datalist = new DataList(datalistJson);
       if (this.id) {
         var api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
         this._datalist.api = api;
