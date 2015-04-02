@@ -10,13 +10,17 @@
     <form class="form-horizontal" ng-submit="createNewCorpus(newCorpusInfo)">
       <div class="form-group">
         <label for="newCorpusTitleCorpusSettingsPage" class="col-sm-2 control-label">New Corpus Title:</label>
-        <div class="col-sm-8">
+        <div class="col-sm-10">
           <input type="text" class="form-control" id="newCorpusTitleCorpusSettingsPage" ng-model='newCorpusInfo.title' placeholder="What would you like your new corpus to be about?">
         </div>
-        <button class="btn btn-primary col-sm-1" ng-disabled="application.corpus.saving">
-          {{contextualize('locale_create_button')}}
-          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="creatingNewCorpus"/>
-        </button>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button class="btn btn-primary col-sm-1" ng-disabled="application.corpus.saving">
+            {{contextualize('locale_create_button')}}
+            <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="creatingNewCorpus"/>
+          </button>
+        </div>
       </div>
     </form>
   </div>
@@ -25,11 +29,11 @@
 
   <div ng-show="application.corpus && application.corpus.rev">
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')===-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')===-1">
       {{contextualize('locale_not_admin_message')}}  <b> {{application.corpus.title}}</b>
     </div>
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
       <div class="lead">
         {{contextualize('locale_details_of')}} <b>{{application.corpus.title}}</b>
       </div>
@@ -59,7 +63,7 @@
 
     <hr />
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
       <div class="lead">
         {{contextualize('locale_add_existing_user_message')}}
         <b>{{application.corpus.title}}</b>
@@ -85,23 +89,22 @@
           </font>
         </div>
 
-        <button type="submit" class="btn btn-primary" ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="loading">
+        <button type="submit" class="btn btn-primary" ng-click="updateUserRoles(newUserRoleInfo)" ng-disabled="application.corpus.permissions.loading">
           {{contextualize('locale_add_button')}}
-          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="loading"/>
+          <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.permissions.loading"/>
         </button>
       </form>
-
     </div>
 
 
     <hr />
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
       <ng-include src="'views/permissions.html'"></ng-include>
     </div>
 
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
 
       <div class="lead">
         {{contextualize('locale_fields_in')}} <b>{{application.corpus.title}}</b>
@@ -110,25 +113,22 @@
 
       <form>
         <label>
-          {{contextualize('locale_number_columns')}}
+          {{contextualize('locale_number_columns')}}: {{application.corpus.prefs.preferedSpreadsheetShape.columns}}
         </label>
-        <select ng-model="application.corpus.prefs.preferedSpreadsheetShape.columns">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option> <!-- TODO css for these <option>3</option> <option>4</option> -->
-        </select>
+        <input class="form-control" type="range" min="1" max="3" ng-model="application.corpus.prefs.preferedSpreadsheetShape.columns"/>
 
         <label>
-          Number of Fields per column:
+          Number of Fields per column: {{application.corpus.prefs.preferedSpreadsheetShape.rows}}
         </label>
-        <input class="form-control" type="number" ng-model="application.corpus.prefs.preferedSpreadsheetShape.rows"/>
+        <input class="form-control" type="range" min="1" max="20" ng-model="application.corpus.prefs.preferedSpreadsheetShape.rows"/>
 
-        <button class="btn btn-primary"ng-click="updateCorpusDetails(corpus)"ng-class="{'pulsing': application.corpus.saving}"ng-disabled="application.corpus.saving">
+        <button class="btn btn-primary" ng-click="updateCorpusDetails(corpus)" ng-class="{'pulsing': application.corpus.saving}" ng-disabled="application.corpus.saving">
           {{contextualize('locale_save_button')}}
           <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.saving"/>
         </button>
 
-        <div data-fielddb-collection json='application.corpus.datumFields'></div>
+        <div data-fielddb-collection json="application.corpus.datumFields" corpus="application.corpus"></div>
+
         <button class="btn btn-info" ng-click="application.corpus.newDatumField(addedDatumField)" ng-disabled="loading">
           {{contextualize('locale_add_field_button')}}
         </button>
@@ -143,7 +143,7 @@
 
     <hr/>
 
-    <div class="settingsItems" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
+    <div class="settingsSection" ng-show="application.authentication.user.roles.indexOf(application.corpus.dbname+'_admin')>-1">
 
 
       <div class="lead">{{contextualize('locale_templates')}}</div>
