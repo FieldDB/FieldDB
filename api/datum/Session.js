@@ -717,10 +717,13 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 
   length: {
     get: function() {
-      return this._datalist.length || 0;
+      if (this._datalist) {
+        return this._datalist.length || 0;
+      }
+      return 0
     },
-    set: function(value) {
-      this._datalist.length = value;
+    set: function() {
+      // this._datalist.length = value;
     }
   },
 

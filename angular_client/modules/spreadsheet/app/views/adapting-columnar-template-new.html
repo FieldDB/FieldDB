@@ -1,17 +1,17 @@
-<form class="row-fluid" ng-submit="createRecord(newDatum, $event)" >
+<form class="row-fluid" ng-submit="createRecord(application.corpus.currentSession.newDatum, $event)" >
   <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2" >
     <input
     type="text"
-    ng-model="datum.fields._collection[0].value"
+    ng-model="application.corpus.currentSession.newDatum.fields._collection[0].value"
     placeholder="*#?"
-    title="{{datum.fields._collection[0].help}}" />
-    <button class="btn pull-right" ng-class="{'btn-primary': !corpus.currentSession.newDatum.unsaved, 'btn-danger': corpus.currentSession.newDatum.unsaved}" type="submit" ng-disabled="!corpus.currentSession.newDatum.unsaved">
+    title="{{application.corpus.currentSession.newDatum.fields._collection[0].help}}" />
+    <button class="btn pull-right" ng-class="{'btn-primary': application.corpus.currentSession.newDatum.unsaved, 'btn-danger': !application.corpus.currentSession.newDatum.unsaved==false}" type="submit" ng-disabled="application.corpus.currentSession.newDatum.unsaved">
       <i class="fa whiteicon fa-plus">
       </i>
       {{contextualize('locale_create_new_button')}}
     </button>
     <span class="pull-right">
-      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="application.corpus.currentSession.newDatum.loading" />
     </span>
   </div>
 

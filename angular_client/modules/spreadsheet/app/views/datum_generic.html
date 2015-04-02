@@ -1,0 +1,5 @@
+<div data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode" ng-dblclick="datum.editingMode=application.authentication.user.roles.indexOf(application.corpus.dbname+'_writer')==-1 ? true : false">
+</div>
+
+<div title="editingMode : {{datum.editingMode}}" class="row-fluid" data-spreadsheet-adapting-columnar-template-read ng-hide="datum.editingMode || application.authentication.user.roles.indexOf(application.corpus.dbname+'_reader')==-1" ng-dblclick="datum.editingMode=application.authentication.user.roles.indexOf(application.corpus.dbname+'_writer')==-1 ? false : true">
+</div>

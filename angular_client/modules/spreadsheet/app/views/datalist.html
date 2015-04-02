@@ -1,59 +1,23 @@
-
-<!--<div class="spreadsheet-row" data-spreadsheet-no-data-to-display ></div>
+<div class="spreadsheet-row" data-spreadsheet-no-data-to-display></div>
 
 <div
 class="container-fluid"
 ng-class="{selectedRow: activeDatumIndex==$index, unselectedGreyRow: activeDatumIndex!=$index}"
 ng-repeat="datum in datalist.docs._collection track by $index "
-ng-hide="loading || readPermissions==false">
+ fielddb-id="{{datum.id}}" data-fielddb-doc json="datum" corpus="corpus">
 
 
-  <div fielddb-id="{{datum.id}}" data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode">
-
-  <div class="row-fluid" data-spreadsheet-adapting-columnar-template-read ng-hide="datum.editingMode" ng-dblclick="datum.editingMode=writePermissions ? true : false">
-  </div>
 </div>
-
+<!--
 <div
 class="container-fluid"
 data-spreadsheet-adapting-columnar-template-new >
 </div>
-
+-->
+<!--
 <div data-spreadsheet-pagination > </div>
 -->
 
-Please show me something!
-  Directive scope Corpus type fieldDBtype {{corpus.fieldDBtype}}
-
-<h1 ng-show="datalist.title">{{datalist.title.default}}</h1>
-
-<p ng-show="datalist.description">{{datalist.description.default}}</p>
-
-<div class="row" ng-class="{'drop-zone': datalist.docsAreReorderable}" >
-  <div class="lead topRow" ng-show="datalist.docsAreReorderable">Drag and drop a item's number to re-order it</div>
-  <div class="well"
-  ng-class="{'col-md-12': datalist.showDocCheckboxes}"
-  ng-repeat="item in datalist.docs._collection track by $index"
-  drag-hover-class="drop-zone-instructions-can-reorder-here"
-  ui-on-Drop="onDrop($event, $data, $index, datalist.docs._collection)">
-    <div ng-class="{'col-md-1': datalist.showDocCheckboxes || datalist.showDocPosition}">
-      <span><input type="checkbox" ng-show="datalist.showDocCheckboxes"/></span>
-      <span
-        class="badge badge-info"
-        ng-show="datalist.showDocPosition"
-        title="Position in list"
-        ui-draggable="true"
-        drag="item"
-        on-drop-success="dropSuccessHandler($event, $index, datalist.docs._collection)">
-        N. {{$index +1}}
-      </span>
-      <span ng-click="removeItemFromList(item)"><i class="fa fa-times-circle"></i></span>
-    </div>
-    <div  ng-class="{'col-md-10': datalist.showDocCheckboxes}" data-fielddb-doc json="item" corpus="corpus">
-    </div>
-  </div>
-</div>
-<div ng-show="canAddNewItemsToDataList()"><i class="fa fa-plus-circle"></i> Add </div>
 
 <blockquote ng-show="datalist.debugMode" class="status">
   {{datalist.warnMessage}}
