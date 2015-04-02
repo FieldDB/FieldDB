@@ -1,13 +1,13 @@
-<h1>Data entry ({{application.corpus.currentSession.length}})</h1>
+<div data-spreadsheet-no-data-to-display></div>
+
 <div class="spreadsheet-row" data-fielddb-datalist json="application.corpus.currentSession.datalist" corpus="application.corpus"></div>
 
-<pre  >
+<pre ng-show="application.corpus.currentSession.datalist.debugMode">
   Root scope Application Corpus type fieldDBtype {{application.corpus.fieldDBtype }}
-
   {{application.corpus.currentSession.docs }}
 </pre>
 
-<pre >
+<pre ng-show="application.corpus.debugMode">
   {{application.corpus.fieldsInColumns | json}}
 </pre>
 

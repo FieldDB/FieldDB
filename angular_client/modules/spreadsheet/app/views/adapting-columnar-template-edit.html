@@ -5,9 +5,9 @@
     ng-blur="markAsEdited(datum.utterance, datum)"
     class="span2"
     type="text"
-    ng-model="datum['judgement']"
-    placeholder=""
-    title="{{judgementHelpText}}" />
+    ng-model="datum[corpus.datumFields.collection[0].id]"
+    placeholder="*#?"
+    title="{{corpus.datumFields.collection[0].help}}" />
   </div>
   <div class="{{corpus.fieldsInColumns.columnWidthClass}}">
 
