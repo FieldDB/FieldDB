@@ -927,6 +927,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return this;
       }
       this.debug("  setting the _session.datalist", value.docs.primaryKey);
+      delete this._session._datalist;
       this._session.initializeDatalist(value);
       return this;
     }
