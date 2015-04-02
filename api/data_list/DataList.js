@@ -104,12 +104,15 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     },
     set: function(value) {
       this.debug("creating the " + this.id + " datalist's docs");
+      var previousPrimaryKey ;
+      if (this._docs) {
+         previousPrimaryKey = this._docs.primaryKey;
+      }
       this.ensureSetViaAppropriateType("docs", value);
 
       if (this._docs) {
-        var previousPrimaryKey = this._docs.primaryKey;
         delete this._docIds;
-        if (previousPrimaryKey) {
+        if (previousPrimaryKey && previousPrimaryKey !== this._docs.primaryKey) {
           this._docs.primaryKey = previousPrimaryKey;
         }
       }
@@ -226,10 +229,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       results = results.map(function(doc) {
         // prevent recursion a bit
         if (self.api !== "datalists") {
-          doc.api = self.api;
+          // doc.api = self.api;
         }
         doc.confidential = self.confidential;
-        doc.url = self.url;
+        // doc.url = self.url;
         doc = FieldDBObject.convertDocIntoItsType(doc);
         if (doc.fieldDBtype && doc.fieldDBtype === "Datum") {
           guessedType = "Datum";
