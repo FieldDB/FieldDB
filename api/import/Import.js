@@ -95,7 +95,7 @@ var Import = function Import(options) {
     // decryptedMode: true,
     // debugMode: true
   };
-  this.session = new Session(sessionOptions);
+  this.session = sessionOptions;
   this.session.goal = "Goal from file import";
 };
 
@@ -847,11 +847,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (self.importType === "audioVideo") {
           self.debug("not doing any save for an audio video import");
         } else {
-          builtDoc.id = builtDoc.anonymousCode || Date.now();
-          builtDoc.url = self.corpus.url;
+          self.bug("test the save on the new docs from import");
+          if (self.importType === "participant") {
+            builtDoc.id = builtDoc.anonymousCode || Date.now();
+          }
+          builtDoc.session = self.session;
           self.debug(" saving", builtDoc.id);
           self.progress.total++;
-          self.datalist.docs.add(builtDoc);
+          // self.datalist.docs.add(builtDoc);
 
           var promise = builtDoc.save();
 
@@ -865,6 +868,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             console.error(error.stack, self);
             deferred.reject(error);
           });
+
           savePromises.push(promise);
         }
       });
@@ -923,7 +927,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return this;
       }
       this.debug("  setting the _session.datalist", value.docs.primaryKey);
-      this._session.datalist = value;
+      this._session.initializeDatalist(value);
       return this;
     }
   },
@@ -946,11 +950,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return;
       }
       value.datalist.docs.primaryKey = "tempId";
-      this.debug("  setting the _session", value.datalist.docs.primaryKey);
+      var datalist = value.datalist;
+
+      this.debug("  setting the _session", value);
       if (!(value instanceof Session)) {
         value = new Session(value);
       }
+      this.debug("  setting the _session's datalist", datalist);
+
       this._session = value;
+      // this._session.initializeDatalist(datalist);
+      this.datalist = datalist;
+
       return;
     }
   },
