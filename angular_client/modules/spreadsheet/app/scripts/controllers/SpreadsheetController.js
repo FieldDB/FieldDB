@@ -397,35 +397,35 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.navigateVerifySaved = function(itemToDisplay) {
 
-    isEverythingSaved();
+    // isEverythingSaved();
 
 
-    if ($scope.everythingSavedStatus.state === "Save") {
-      $rootScope.notificationMessage = "Please save changes before continuing.";
-      $rootScope.openNotification();
-      return;
+    // if ($scope.everythingSavedStatus.state === "Save") {
+    //   $rootScope.notificationMessage = "Please save changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
 
-    } else if ($scope.everythingSavedStatus.state === "Saving") {
-      $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
-      $rootScope.openNotification();
-      return;
+    // } else if ($scope.everythingSavedStatus.state === "Saving") {
+    //   $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+    //   $rootScope.openNotification();
+    //   return;
 
-    } else if ($rootScope.application &&
-      $rootScope.application.corpus &&
-      $rootScope.application.corpus.currentSession &&
-      $rootScope.application.corpus.currentSession.newDatum &&
-      $rootScope.application.corpus.currentSession.newDatum.unsaved) {
+    // } else if ($rootScope.application &&
+    //   $rootScope.application.corpus &&
+    //   $rootScope.application.corpus.currentSession &&
+    //   $rootScope.application.corpus.currentSession.newDatum &&
+    //   $rootScope.application.corpus.currentSession.newDatum.unsaved) {
 
-      $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
-      $rootScope.openNotification();
-      return;
-    }
+    //   $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
+    // }
 
 
 
     // $scope.appReloaded = true;
 
-    $rootScope.loading = false;
+    // $rootScope.loading = false;
 
     $scope.activeMenu = itemToDisplay;
 
@@ -778,7 +778,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+  $rootScope.$watch('application.corpus.dbname', function(newValue, oldValue) {
     if (!$rootScope.application.corpus || !$rootScope.application.corpus.datumFields || !$rootScope.application.corpus._rev) {
       console.log("the corpus changed but it wasn't ready yet");
       return;
@@ -790,8 +790,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadCorpusFieldsAndPreferences();
   });
 
-  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
-    if (!$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
+  $rootScope.$watch('application.corpus.currentSession', function(newValue, oldValue) {
+    if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
       return;
     }
 
@@ -1665,13 +1665,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
 
-  $rootScope.$watch('currentPage', function(newValue, oldValue) {
-    if (newValue !== oldValue) {
-      $scope.loadPaginatedData();
-    } else {
-      console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
-    }
-  });
+  // $rootScope.$watch('currentPage', function(newValue, oldValue) {
+  //   if (newValue !== oldValue) {
+  //     $scope.loadPaginatedData();
+  //   } else {
+  //     console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
+  //   }
+  // });
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
