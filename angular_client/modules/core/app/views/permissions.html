@@ -1,10 +1,13 @@
 <h2>
   {{contextualize('locale_users_with_access_message')}} {{application.corpus.title}}
 </h2>
-<ul class="unstyled">
+<ul class="list-unstyled">
+  <li ng-show="application.corpus.permissions.loading">
+    <img src="images/spinner-small.gif"/>
+  </li>
   <li ng-repeat="permission in application.corpus.permissions._collection">
     <h3>{{permission.id}}</h3>
-    <ul class="unstyled">
+    <ul class="list-unstyled">
       <li ng-repeat="user in permission.users._collection">
         <img class="gravatar-large" ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" />
         <span ng-click="removeAccessFromUser(user.username, ['permission'])">
