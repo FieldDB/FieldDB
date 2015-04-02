@@ -9,14 +9,39 @@
     placeholder=""
     title="{{judgementHelpText}}" />
   </div>
-  <div class="{{fieldSpanWidthClassName}}">
-    TODO
+  <div class="{{corpus.fieldsInColumns.columnWidthClass}}">
+
+    <input class="spreadsheet-row"
+       ng-repeat="corpusField in corpus.fieldsInColumns.first track by $index"
+      ng-hide="corpusField.showToUserTypes == 'readonly'"
+      placeholder="{{corpusField.label}}"
+      title="{{corpusField.help}}"
+      ng-model="datum.fields[corpusField.id].value"
+      />
+
+
   </div>
-  <div ng-show="application.corpus.fieldsInColumns.second.length > 0" class="{{fieldSpanWidthClassName}}" >
-    TODO
+  <div ng-show="corpus.fieldsInColumns.second.length > 0" class="{{corpus.fieldsInColumns.columnWidthClass}}" >
+
+    <input class="spreadsheet-row"
+       ng-repeat="corpusField in corpus.fieldsInColumns.second track by $index"
+      ng-hide="corpusField.showToUserTypes == 'readonly'"
+      placeholder="{{corpusField.label}}"
+      title="{{corpusField.help}}"
+      ng-model="datum.fields[corpusField.id].value"
+      />
+
   </div>
-  <div ng-show="application.corpus.fieldsInColumns.third.length > 0" class="{{fieldSpanWidthClassName}}" columnlabel="third">
-    TODO
+  <div ng-show="corpus.fieldsInColumns.third.length > 0" class="{{corpus.fieldsInColumns.columnWidthClass}}" columnlabel="third">
+
+    <input class="spreadsheet-row"
+       ng-repeat="corpusField in corpus.fieldsInColumns.third track by $index"
+      ng-hide="corpusField.showToUserTypes == 'readonly'"
+      placeholder="{{corpusField.label}}"
+      title="{{corpusField.help}}"
+      ng-model="datum.fields[corpusField.id].value"
+      />
+
   </div>
   <div class="span2 entered_modified_info">
     <span ng-show="searching">
