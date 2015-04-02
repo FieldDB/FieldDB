@@ -914,6 +914,19 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
 
       var data = this.createSaveSnapshot();
+
+      if (!data) {
+        this.warn(" Can't save " + this.id + " right now. The JSON isnt ready.");
+        Q.nextTick(function() {
+          self.saving = false;
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["Can't save " + this.id + " right now. Please wait."]
+          });
+        });
+        return deferred.promise;
+      }
+
       self.debug("    Requesting corpus to run save...");
       this.saving = true;
       this.whenReady = deferred.promise;
@@ -1764,6 +1777,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         console.warn(e);
         console.error(e.stack);
         this.bug("Unable to serialze " + this.id + ". Please report this.");
+        return null;
       }
     }
   },

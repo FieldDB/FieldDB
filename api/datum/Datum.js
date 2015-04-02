@@ -153,7 +153,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return this._fields;
     },
     set: function(value) {
-       if (value && !value.confidential && this.confidential) {
+      if (value && !value.confidential && this.confidential) {
         value.confidential = this.confidential;
       }
       this.ensureSetViaAppropriateType("fields", value);
@@ -1436,6 +1436,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      if (!json) {
+        this.warn("Not returning json right now.");
+        return;
+      }
 
       this.debug("saving fields as the deprecated datumFields");
       json.datumFields = json.fields;
