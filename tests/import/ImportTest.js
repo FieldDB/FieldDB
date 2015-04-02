@@ -14,7 +14,9 @@ describe("api/import/Import", function() {
     });
 
     it("should be able to instantiate an object", function() {
-      var importer = new Import();
+      var importer = new Import({
+        // debugMode: true
+      });
       expect(importer).toBeDefined();
     });
 
@@ -81,7 +83,15 @@ describe("api/import/Import", function() {
           // debugMode: true
         }
       };
-      expect(importer.session.datalist.primaryKey).not.toEqual("someotherprimarykey");
+      expect(importer.datalist).toBe(importer.session.datalist);
+      expect(importer.session.datalist.fieldDBtype).toEqual("DataList");
+
+      expect(importer.session.datalist._docs).toBeDefined();
+      expect(importer.session.datalist.docs).toBeDefined();
+      expect(importer.session.datalist.docs.fieldDBtype).toEqual("DocumentCollection");
+
+      expect(importer.session.datalist.docs.primaryKey).not.toEqual("someotherprimarykey");
+      expect(importer.session.datalist.docs.primaryKey).toEqual("tempId");
       expect(importer.session.datalist.primaryKey).toEqual("tempId");
 
       //Session can only be overwritten by valid sessions (with a datalist that has the primary key of tempId )
@@ -153,7 +163,7 @@ describe("api/import/Import", function() {
           default: "Imported Data"
         },
         docs: {
-          id: "tempdatalist",
+          id: "anothertempdatalist",
           collection: [],
           primaryKey: "tempId"
         },
@@ -161,7 +171,8 @@ describe("api/import/Import", function() {
         // decryptedMode: true,
         // debugMode: true
       };
-      expect(importer.datalist.dateCreated).not.toEqual(datalistCreatedDateIndicatesItDidntChange);
+      expect(importer.datalist.id).not.toEqual("tempdatalist");
+      // expect(importer.datalist.dateCreated).not.toEqual(datalistCreatedDateIndicatesItDidntChange);
     });
 
     it("should be able to ask the corpus to create a datum", function() {
