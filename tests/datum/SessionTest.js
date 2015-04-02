@@ -118,15 +118,21 @@ describe("Session: as a linguist I often collect data in an elicitation session"
     var session;
     beforeEach(function() {
       session = new Session({
-        docIds: ["thefirstdocinthissession"]
+        // id: "sessionabc",
+        docIds: ["thefirstdocinthissession"],
+        // debugMode: true
       });
+      // session.initializeDatalist();
     });
 
     it("should reply to requests for docs", function() {
       expect(session.datalist.docs).toBeDefined();
+      // expect(session.datalist.docs).toEqual(" ");
+      expect(session.datalist.docs.thefirstdocinthissession).toBeDefined();
       expect(session.datalist.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
 
-      expect(session.docs).toBeDefined();
+      // expect(session.datalist.docs).toEqual(" ");
+      expect(session.docs.thefirstdocinthissession).toBeDefined();
       expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
     });
 
@@ -215,10 +221,11 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   describe("DataList should not be overridden in the test suite.", function() {
 
-    it("should have a datalist synchronously", function() {
+    it("should have a datalist synchronously if the session has docIds or docs", function() {
       var session = new Session({
         docIds: ["adocatsessionconstruction"]
       });
+      // session.initializeDatalist();
       expect(session).toBeDefined();
 
       expect(session.docs).toBeDefined();
@@ -230,6 +237,30 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   describe("as a data list ", function() {
 
+    it("should NOT have a datalist synchronously if the session has no docIds or docs", function() {
+      var session = new Session({
+        // docIds: ["adocatsessionconstruction"]
+      });
+      // session.initializeDatalist();
+      expect(session).toBeDefined();
+
+      expect(session.docs).toBeUndefined();
+      expect(session.docIds).toEqual([]);
+      expect(session.datalist).toBeUndefined();
+    });
+
+    it("should be able to force a datalist if calls initializeDatalist", function() {
+      var session = new Session({
+        // docIds: ["adocatsessionconstruction"]
+      });
+      session.initializeDatalist();
+      expect(session).toBeDefined();
+
+      expect(session.docs).toBeDefined();
+      expect(session.docIds).toEqual([]);
+      expect(session.datalist).toBeDefined();
+    });
+
     it("should have docs if set via docIds durring construction", function() {
       var session = new Session({
         docIds: ["thefirstdocinthissession"]
@@ -238,58 +269,90 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
       expect(session.docs).toBeDefined();
       expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
+
+      var sessionJson = session.toJSON();
+      expect(sessionJson.docIds).toBeUndefined();
+      expect(sessionJson.docs).toBeUndefined();
+      expect(sessionJson.datalist).toBeUndefined();
     });
 
-    it("should have docs if set via docIds after construction", function() {
-      var session = new Session();
-      session.docIds = ["thefirstdocinthissession"];
+    it("should not serialize docs, datalist or docIds", function() {
+      var session = new Session({
+        docIds: ["thefirstdocinthissession"]
+      });
       expect(session).toBeDefined();
 
       expect(session.docs).toBeDefined();
       expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
+
+      var sessionJson = session.toJSON();
+      expect(sessionJson.docIds).toBeUndefined();
+      expect(sessionJson.docs).toBeUndefined();
+      expect(sessionJson.datalist).toBeUndefined();
     });
 
-    it("should have docs if set via docs after construction", function() {
+    //TODO why accept datalist to be creatd from docis on the session? seems like we only need toa dd to a session.
+    it("should have asychronously have docs if set via docIds after construction", function(done) {
+      var session = new Session();
+      session.docIds = ["thefirstdocinthissession"];
+
+      expect(session.docs).toBeDefined();
+
+      expect(session.whenReindexedFromApi).toBeDefined();
+      session.whenReindexedFromApi.done(function() {
+        expect(session.docs.thefirstdocinthissession).toBeDefined();
+        expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
+        done();
+      });
+    }, specIsRunningTooLong);
+
+    //TODO why accept datalist to be creatd from docis on the session? seems like we only need toa dd to a session.
+    it("should have docs if set via docs after construction", function(done) {
       var session = new Session();
       session.docs = [{
         id: "thefirstdocinthissession"
       }];
-      expect(session).toBeDefined();
 
-      expect(session.docs).toBeDefined();
-      expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
-    });
+      expect(session.whenReindexedFromApi).toBeDefined();
+      session.whenReindexedFromApi.done(function() {
+        expect(session.docs.thefirstdocinthissession).toBeDefined();
+        expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
+        done();
+      });
+    }, specIsRunningTooLong);
 
-    it("should have docs if docs are added after construction", function(done) {
-      var session = new Session();
+    it("should have docs, if docs are added after construction", function(done) {
+      var session = new Session({
+        // debugMode: true
+      });
       session.add([{
         id: "thefirstdocinthissession"
       }]);
 
+      expect(session.docs).toBeDefined();
+      expect(session.docIds).toEqual([]);
+      expect(session.datalist).toBeDefined();
+      expect(session.datalist.title).toBeDefined();
+      expect(session.datalist.title.default).toEqual("All data in ");
+
+      expect(session.docs.thefirstdocinthissession).toBeUndefined();
+
+      expect(session.whenReindexedFromApi).toBeDefined();
       session.whenReindexedFromApi.then(function() {
-        expect(session).toBeDefined();
 
-        expect(session.datalist).toBeDefined();
-
-        expect(session.datalist.docs).toBeDefined();
-        expect(session.docs).toBeDefined();
-
-        // expect(session.docs).toBeDefined();
-        // expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
+        expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
 
       }).done(done);
     }, specIsRunningTooLong);
 
 
-    it("should provide a list of datum ids after datalist", function() {
+    it("should be able to set title and docIds on the datalist after construction", function() {
       var session = new Session({
         id: "asessionwhichisreal"
       });
-      session.datalist = {
-        // debugMode: true,
-        title: "List of data in this session",
-        docIds: ["one1", "two", "three"]
-      };
+      session.initializeDatalist();
+      session.datalist.title = "List of data in this session";
+      session.datalist.docIds = ["one1", "two", "three"];
 
       expect(session.datalist.docIds).toBeDefined();
       expect(session.datalist.docIds.length).toEqual(3);
@@ -310,7 +373,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docs._collection[0].id).toEqual("one1");
     });
 
-    it("should support a list of datum ids upon creation", function() {
+    it("should not support a datalist of datum ids upon creation", function() {
       var session = new Session({
         id: "asessionwhichisreal",
         datalist: {
@@ -319,132 +382,40 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         }
       });
 
-      expect(session.docIds).toBeDefined();
-      expect(session.docIds.length).toEqual(3);
-      expect(session.docIds[0]).toEqual("1");
+      expect(session.datalist).toBeUndefined();
+      expect(session.docIds).toEqual([]);
     });
 
-    it("should support a list of datum ids upon creation", function() {
+    it("should support a add datum in the right order when data list exists", function(done) {
       var session = new Session({
         // debugMode: true,
         id: "asessionwhichisreal",
-        docIds: ["0", "two", "three"]
       });
-      expect(session).toBeDefined();
+      session.docIds = ["One", "two", "three"];
 
-      expect(session.docIds).toBeDefined();
-      expect(session.docIds.length).toEqual(3);
-      expect(session.docIds[0]).toEqual("0");
-    });
+      expect(session.docIds).toEqual([]);
 
-    it("should support a list of datum ids upon creation", function(done) {
-      var session = new Session({
-        // debugMode: true,
-        id: "asessionwhichisreal",
-        docIds: ["01"]
-      });
-      expect(session).toBeDefined();
-
-      expect(session.docIds).toBeDefined();
-      expect(session.docIds.length).toEqual(1);
-      expect(session.docIds[0]).toEqual("01");
-
-
-      session.whenReindexedFromApi.then(function() {
-
-        expect(session.datalist.docIds).toBeDefined();
-        expect(session.datalist.docIds.length).toEqual(1);
-        expect(session.datalist.docIds[0]).toEqual("01");
-
-        expect(session.docIds).toBeDefined();
-        expect(session.docIds.length).toEqual(1);
-        expect(session.docIds[0]).toEqual("01");
-
-        expect(session.datalist.docs).toBeDefined();
-        expect(session.datalist.docs.length).toEqual(1);
-        expect(session.datalist.docs._collection[0].id).toEqual("01");
-
-      }).done(done);
-
-    }, specIsRunningTooLong);
-
-
-    it("should support a add datum when data list exists", function(done) {
-      var session = new Session({
-        // debugMode: true,
-        id: "asessionwhichisreal",
-        datalist: {
-          title: "List of data in this session",
-          docIds: ["One", "two", "three"],
-        }
-      });
-      expect(session).toBeDefined();
-
-      expect(session.datalist.docIds).toBeDefined();
-      expect(session.datalist.docIds.length).toEqual(3);
-      expect(session.datalist.docIds[0]).toEqual("One");
-
-      expect(session.docIds).toBeDefined();
-      expect(session.docIds.length).toEqual(3);
-      expect(session.docIds[0]).toEqual("One");
-
-      expect(session.docs).toBeDefined();
-      expect(session.docs.length).toEqual(3);
-      expect(session.docs._collection).toBeDefined();
-      expect(session.docs._collection[0].id).toEqual("One");
-
-      session.add({
+      var addedDatum = session.add({
         id: "adatumafterdatlistexists"
       });
 
-      expect(session.datalist.docs).toBeDefined();
-      expect(session.datalist.docs.length).toEqual(4);
-      expect(session.docs._collection).toBeDefined();
-      expect(session.docs._collection[0].id).toEqual("One");
+      expect(addedDatum).toBeDefined();
+      expect(addedDatum.id).toEqual("adatumafterdatlistexists");
 
       session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(4);
         expect(session.datalist.docIds[0]).toEqual("One");
+        expect(session.datalist.docIds[1]).toEqual("two");
+        expect(session.datalist.docIds[2]).toEqual("three");
+        expect(session.datalist.docIds[3]).toEqual("adatumafterdatlistexists");
 
         expect(session.docIds).toBeDefined();
         expect(session.docIds.length).toEqual(4);
         expect(session.docIds[0]).toEqual("One");
+        expect(session.docIds[3]).toEqual("adatumafterdatlistexists");
 
-
-      }).done(done);
-
-    }, specIsRunningTooLong);
-
-
-    it("should support adding ids before the datalist docs exist", function(done) {
-      var session = new Session({
-        // debugMode: true,
-        id: "asessionwhichisreal"
-      });
-      expect(session.datalist).toBeDefined();
-      expect(session.datalist.docIds).toBeDefined();
-      expect(session.datalist.docs).toBeDefined();
-
-      session.datalist = {};
-      expect(session.datalist).toBeDefined();
-      expect(session.datalist.docIds).toBeDefined();
-
-      session.docIds = ["anidthatshouldbethere", "evenifthedocsisntready"];
-      expect(session.docIds).toEqual(["anidthatshouldbethere", "evenifthedocsisntready"]);
-      expect(session._docIds).toBeUndefined();
-
-      expect(session.docs).toBeDefined();
-      expect(session.docs.anidthatshouldbethere.id).toEqual("anidthatshouldbethere");
-      expect(session.docs.evenifthedocsisntready.id).toEqual("evenifthedocsisntready");
-
-      expect(session.whenReindexedFromApi).toBeDefined();
-
-      session.whenReindexedFromApi.then(function() {
-        expect(session.docs).toBeDefined();
-        expect(session.docs.anidthatshouldbethere.id).toEqual("anidthatshouldbethere");
-        expect(session.docs.evenifthedocsisntready.id).toEqual("evenifthedocsisntready");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -459,9 +430,9 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       session.add({
         id: "anothersimulidatum"
       });
-      expect(session.docIds).toEqual(["anothersimulidatum"]);
-      expect(session.whenReindexedFromApi).toBeDefined();
 
+      expect(session.docIds).toEqual([]);
+      expect(session.whenReindexedFromApi).toBeDefined();
       session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
@@ -477,46 +448,89 @@ describe("Session: as a linguist I often collect data in an elicitation session"
     }, specIsRunningTooLong);
 
 
-    it("should support a few add events before the datalist exists", function(done) {
+    it("should have doc order jumbled if multiple adds are called before the datalist exists", function(done) {
       var session = new Session({
         id: "asessionwhichisreal"
       });
       expect(session.docIds).toEqual([]);
 
       session.add({
-        id: "anothersimulidatum"
+        id: "the first one"
       });
-      expect(session.docIds).toEqual(["anothersimulidatum"]);
+      expect(session.docIds).toEqual([]);
       expect(session.whenReindexedFromApi).toBeDefined();
 
       session.add({
-        id: "yetanothersimulidatum"
+        id: "will be"
+      });
+
+      session.add({
+        id: "last"
+      });
+
+      session.add({
+        id: "because the datalist wasnt ready"
       });
 
       session.whenReindexedFromApi.then(function() {
 
         expect(session.datalist.docIds).toBeDefined();
-        expect(session.datalist.docIds.length).toEqual(2);
-        expect(session.datalist.docIds[0]).toEqual("anothersimulidatum");
-        expect(session.datalist.docIds[1]).toEqual("yetanothersimulidatum");
+        expect(session.datalist.docIds.length).toEqual(4);
+        expect(session.datalist.docIds[0]).toEqual("will be");
+        expect(session.datalist.docIds[1]).toEqual("last");
+        expect(session.datalist.docIds[2]).toEqual("because the datalist wasnt ready");
+        expect(session.datalist.docIds[3]).toEqual("the first one");
 
         expect(session.docIds).toBeDefined();
-        expect(session.docIds.length).toEqual(2);
-        expect(session.docIds[0]).toEqual("anothersimulidatum");
-        expect(session.docIds[1]).toEqual("yetanothersimulidatum");
+        expect(session.docIds.length).toEqual(4);
+        expect(session.docIds).toEqual(["will be", "last", "because the datalist wasnt ready", "the first one"]);
+
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should will have add events in the right order if client ensures datalist exists", function(done) {
+      var session = new Session({
+        id: "asessionwhichisreal"
+      });
+      session.initializeDatalist();
+
+      session.add({
+        id: "the first one"
+      });
+      expect(session.docIds).toEqual(["the first one"]);
+      expect(session.whenReindexedFromApi).toBeDefined();
+
+      session.add({
+        id: "the second one"
+      });
+
+      session.add({
+        id: "the last one"
+      });
+
+      session.whenReindexedFromApi.then(function() {
+
+        expect(session.datalist.docIds).toBeDefined();
+        expect(session.datalist.docIds.length).toEqual(3);
+        expect(session.datalist.docIds[0]).toEqual("the first one");
+        expect(session.datalist.docIds[1]).toEqual("the second one");
+        expect(session.datalist.docIds[2]).toEqual("the last one");
+        expect(session.datalist.docIds).toEqual(["the first one", "the second one", "the last one"]);
+
+        expect(session.docIds).toBeDefined();
+        expect(session.docIds.length).toEqual(3);
 
       }).done(done);
 
     }, specIsRunningTooLong);
 
 
-    it("should serialize an ordered list of datum which are in the session", function(done) {
+    it("should not serialize an ordered list of datum which are in the session", function() {
       var session = new Session({
         id: "asessionwhichisreal",
-        docIds: ["thedocthatwasserialized", "andaotherdocthatwasserialized"]
+        docIds: ["thedocthatwasthereinthebeginning", "andaotherdocthatwasthereinthebeginning"]
       });
-      var serialized = session.toJSON();
-      expect(serialized.docIds).toEqual(["thedocthatwasserialized", "andaotherdocthatwasserialized"]);
 
       session.add({
         id: "yetanother"
@@ -526,40 +540,44 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docIds).toBeDefined();
       expect(session.docs.length).toEqual(3);
       expect(session.docIds.length).toEqual(3);
-      expect(session.docIds[0]).toEqual("thedocthatwasserialized");
-      expect(session.docIds[1]).toEqual("andaotherdocthatwasserialized");
+      expect(session.docIds[0]).toEqual("thedocthatwasthereinthebeginning");
+      expect(session.docIds[1]).toEqual("andaotherdocthatwasthereinthebeginning");
       expect(session.docIds[2]).toEqual("yetanother");
 
-      serialized = session.toJSON();
-      expect(serialized.docIds).toBeDefined();
-      expect(serialized.docIds.length).toEqual(3);
-      expect(serialized.docIds[0]).toEqual("thedocthatwasserialized");
-      expect(serialized.docIds[1]).toEqual("andaotherdocthatwasserialized");
-      expect(serialized.docIds[2]).toEqual("yetanother");
+      var serialized = session.toJSON();
+      expect(serialized.docIds).toBeUndefined();
+      expect(serialized.docs).toBeUndefined();
+      expect(serialized.datalist).toBeUndefined();
 
-      session.whenReindexedFromApi.then(function() {
-
-        expect(session.docs).toBeDefined();
-        expect(session.docIds).toBeDefined();
-        expect(session.docs.length).toEqual(3);
-        expect(session.docIds.length).toEqual(3);
-        expect(session.docIds[0]).toEqual("thedocthatwasserialized");
-        expect(session.docIds[1]).toEqual("andaotherdocthatwasserialized");
-        expect(session.docIds[2]).toEqual("yetanother");
-
-        serialized = session.toJSON();
-        expect(serialized.docIds).toBeDefined();
-        expect(serialized.docIds.length).toEqual(3);
-        expect(serialized.docIds[0]).toEqual("thedocthatwasserialized");
-        expect(serialized.docIds[1]).toEqual("andaotherdocthatwasserialized");
-        expect(serialized.docIds[2]).toEqual("yetanother");
-      }).done(done);
-
-    }, specIsRunningTooLong);
+    });
 
   });
 
 
+  describe("serialization", function() {
+
+    it("should serialize v1.22 sessions", function() {
+      var session = new Session(sample_1_22_datum[0].session);
+
+      var sessionJson = session.toJSON();
+      expect(sessionJson._id).toBeDefined();
+      expect(sessionJson._rev).toBeDefined();
+      expect(sessionJson.dbname).toBeDefined();
+      expect(sessionJson.dateCreated).toBeDefined();
+      expect(sessionJson.fields).toBeDefined();
+      expect(sessionJson.fields.length).toEqual(7);
+      expect(sessionJson.comments).toBeDefined();
+      expect(sessionJson.comments.length).toEqual(0);
+
+      expect(sessionJson.pouchname).toBeDefined();
+      expect(sessionJson.sessionFields).toBeUndefined();
+
+      expect(sessionJson.docIds).toBeUndefined();
+      expect(sessionJson.docs).toBeUndefined();
+      expect(sessionJson.datalist).toBeUndefined();
+    });
+
+  });
   describe("Backward compatability with v1.22", function() {
 
 

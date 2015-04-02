@@ -21,7 +21,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.everythingSavedStatus = {
     state: "",
     class: "btn btn-inverse",
-    icon: "",
+    icon: "fa whiteicon fa-folder",
     text: ""
   };
 
@@ -794,6 +794,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
       return;
     }
+    $rootScope.application.corpus.currentSession.initializeDatalist();
 
     console.log("corpus.currentSession changed", oldValue);
 
