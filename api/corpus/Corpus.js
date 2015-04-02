@@ -147,6 +147,15 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  corpus: {
+    get: function() {
+      return this;
+    },
+    set: function() {
+      // do nothing
+    }
+  },
+
   publicSelf: {
     get: function() {
       console.error("publicSelf is deprecated, use corpusMask instead");

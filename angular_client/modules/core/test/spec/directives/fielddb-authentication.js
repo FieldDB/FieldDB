@@ -109,8 +109,8 @@ describe("Directive: fielddb-authentication", function() {
             promiseResult = promisedUser;
             promisHasCompleted = true;
           });
-        } else if (previousClientSideLogin.user.fetchingPromise) {
-          previousClientSideLogin.user.fetchingPromise.then(function(promisedUser) {
+        } else if (previousClientSideLogin.user.whenReady) {
+          previousClientSideLogin.user.whenReady.then(function(promisedUser) {
             promiseResult = promisedUser;
             promisHasCompleted = true;
           });

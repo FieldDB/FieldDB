@@ -46,6 +46,20 @@ UnicodeSymbol.prototype = Object.create(FieldDBObject.prototype, /** @lends Unic
       }
       this._symbol = value.trim();
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      delete json.dateCreated;
+      delete json.dateModified;
+      delete json.version;
+
+      this.debug(json);
+      return json;
+    }
   }
 
 });
