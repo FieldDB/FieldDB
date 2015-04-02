@@ -128,6 +128,9 @@ var FieldDBObject = function FieldDBObject(json) {
 FieldDBObject.internalAttributesToNotJSONify = [
   "$$hashKey",
   "_corpus",
+  "_datalist",
+  "currentSession",
+  "currentDoc",
   "_db",
   "_unsaved",
   "_parent",
@@ -145,6 +148,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "parent",
   "perObjectAlwaysConfirmOkay",
   "perObjectDebugMode",
+  "newDatum",
   "saving",
   "selected",
   "temp",
@@ -931,14 +935,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.saving = true;
       this.whenReady = deferred.promise;
 
-      if (true) {
-        this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
-        Q.nextTick(function() {
-          self.saving = false;
-          deferred.resolve(self);
-        });
-        return deferred.promise;
-      }
+      // if (true) {
+      //   this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
+      //   Q.nextTick(function() {
+      //     self.saving = false;
+      //     deferred.resolve(self);
+      //   });
+      //   return deferred.promise;
+      // }
 
       this.corpus.set(data).then(function(result) {
           self.saving = false;
@@ -1689,7 +1693,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   },
 
   toJSON: {
-    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       try {
         var json = {
             fieldDBtype: this.fieldDBtype
@@ -1712,8 +1716,13 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           json.id = this.id;
         }
 
+        if(!attributesToIgnore){
+          attributesToIgnore = [];
+        }
+        attributesToIgnore = attributesToIgnore.concat(FieldDBObject.internalAttributesToNotJSONify);
+
         for (aproperty in this) {
-          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && attributesToIgnore.indexOf(aproperty) === -1) {
             underscorelessProperty = aproperty.replace(/^_/, "");
             if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
               underscorelessProperty = "_" + underscorelessProperty;
