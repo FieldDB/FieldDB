@@ -393,6 +393,13 @@ a.delete_button {
   right: 15px;
 }
 
+
+.spreadsheet-expandedData {
+    right-border: 1px solid #102E37;
+    /*text-align: center;*/
+}
+
+
 .expandedData {
     border: 2px solid #102E37;
     background-color: #F0F5FF;

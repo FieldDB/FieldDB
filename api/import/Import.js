@@ -1,4 +1,5 @@
 /* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
+var FieldDBImage = require("./../image/Image").Image;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -1705,11 +1706,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                   self.debug(results.files[fileIndex]);
                   var instructions = results.files[fileIndex].textGridInfo;
                   if (results.files[fileIndex].textGridStatus >= 500) {
-                    instructions = " Please report this error to us at support@lingsync.org ";
+                    instructions = " Please report this error.";
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
-                  results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
-                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].filename = results.files[fileIndex].name;
+                  if (results.files[fileIndex].type && (results.files[fileIndex].type.indexOf("audio") > -1 || results.files[fileIndex].type.indexOf("video") > -1)) {
+                    results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
+                  }
+                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].filename;
                   results.files[fileIndex].description = results.files[fileIndex].description || "File from import";
                   self.addAudioVideoFile(results.files[fileIndex]);
                 } else {
@@ -1845,18 +1849,28 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addAudioVideoFile: {
     value: function(details) {
-      if (!this.audioVideo) {
-        this.audioVideo = new AudioVideos();
+      if (!details) {
+        this.warn("No details were provided to add be added to any file collection.");
+        return;
       }
-      var audioVideo = new AudioVideo(details);
-      this.audioVideo.add(audioVideo);
+      var fileCollection = "relatedData";
+      if (details.type.indexOf("image") > -1) {
+        fileCollection = "images";
+        details = new FieldDBImage(details);
+      } else if (details.type.indexOf("audio") > -1 || details.type.indexOf("video") > -1) {
+        fileCollection = "audioVideo";
+      }
+      if (!this[fileCollection]) {
+        this[fileCollection] = new AudioVideos();
+      }
+      this[fileCollection].add(details);
       if (this.parent) {
-        if (!this.parent.audioVideo) {
-          this.parent.audioVideo = new AudioVideos();
-        } else if (Object.prototype.toString.call(this.parent.audioVideo) === "[object Array]") {
-          this.parent.audioVideo = new AudioVideos(this.parent.audioVideo);
+        if (!this.parent[fileCollection]) {
+          this.parent[fileCollection] = new AudioVideos();
+        } else if (Object.prototype.toString.call(this.parent[fileCollection]) === "[object Array]") {
+          this.parent[fileCollection] = new AudioVideos(this.parent[fileCollection]);
         }
-        this.parent.audioVideo.add(audioVideo);
+        this.parent[fileCollection].add(details);
         this.parent.saved = "no";
         this.render();
         // this.asCSV = [];

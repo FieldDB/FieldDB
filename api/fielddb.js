@@ -26,6 +26,7 @@
   var DataList = require("./data_list/DataList").DataList;
   var SubExperimentDataList = require("./data_list/SubExperimentDataList").SubExperimentDataList;
   var ExperimentDataList = require("./data_list/ExperimentDataList").ExperimentDataList;
+  var FieldDBImage = require("./image/Image").Image;
   var AudioVideo = require("./audio_video/AudioVideo").AudioVideo;
   var AudioVideos = require("./audio_video/AudioVideos").AudioVideos;
   var AudioVideoRecorder = require("./audio_video/AudioVideoRecorder").AudioVideoRecorder;
@@ -90,6 +91,8 @@
   FieldDB["ExperimentDataList"] = ExperimentDataList;
   FieldDB.AudioVideo = AudioVideo;
   FieldDB["AudioVideo"] = AudioVideo;
+  FieldDB.Image = FieldDBImage;
+  FieldDB["Image"] = FieldDBImage;
   FieldDB.AudioVideos = AudioVideos;
   FieldDB["AudioVideos"] = AudioVideos;
   FieldDB.AudioVideoRecorder = AudioVideoRecorder;
