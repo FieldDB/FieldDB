@@ -528,9 +528,44 @@ describe("Data List", function() {
   });
 
   describe("actions on items", function() {
+    var list;
+    beforeEach(function() {
+      list = new DataList({
+        docs: [new FieldDBObject({
+          "_id": "docone",
+          "datumFields": [],
+          "session": {},
+          "audioVideo": [{
+            "URL": "http://youtube.com/iwoamoiemqo32"
+          }, {
+            "URL": "http://soundcloud.com/iwoa/moiemqo32"
+          }, {
+            "URL": "http://localhost:3184/example/oiemqo32"
+          }]
+        }), new FieldDBObject({
+          "_id": "doctwo",
+          "datumFields": [],
+          "session": {}
+        }), new FieldDBObject({
+          "_id": "docthree",
+          "datumFields": [],
+          "session": {},
+          "audioVideo": []
+        })]
+      });
+    });
 
     it("should show filtered results of users corpus (search)", function() {
-      expect(true).toBeTruthy();
+      // pretend we ran search
+      list.docs.collection[1].highlightedMatches = "this <span class='highlighted'>matches</span> some search <span class='highlight'>result</span>";
+      list.docs.collection[2].highlightedMatches = "this <span class='highlighted'>matches</span> some other <span class='highlight'>result</span>";
+
+      // select the itesm with matches
+      var selected = list.select("highlightedMatches");
+      expect(selected).toEqual(["doctwo", "docthree"]);
+      expect(list.docs.docone.selected).toEqual(false);
+      expect(list.docs.doctwo.selected).toEqual(true);
+      expect(list.docs.docthree.selected).toEqual(true);
     });
 
     it("should show LaTeX'ed datum", function() {
@@ -544,7 +579,7 @@ describe("Data List", function() {
     });
 
     it("should discover audio on datum", function(done) {
-      var list = new DataList({
+      list = new DataList({
         docs: [new FieldDBObject({
           "_id": "docone",
           "datumFields": [],
