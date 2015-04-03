@@ -13,6 +13,8 @@ var DatumTags = require("./DatumTags").DatumTags;
 var Images = require("./../image/Images").Images;
 var Session = require("./Session").Session;
 
+var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
+
 /**
  * @class The Datum widget is the place where all linguistic data is
  *        entered; one at a time.
@@ -279,16 +281,25 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   addFile: {
     value: function(newFileDetails) {
+      if (!newFileDetails) {
+        this.warn("A null file was requested to be added to this datum", newFileDetails);
+        return;
+      }
+      newFileDetails.type = newFileDetails.type || "";
       if (newFileDetails.type.indexOf("audio") === 0) {
+        this.audioVideo = this.audioVideo || [];
         this.audioVideo.add(newFileDetails);
       } else if (newFileDetails.type.indexOf("video") === 0) {
+        this.audioVideo = this.audioVideo || [];
         this.audioVideo.add(newFileDetails);
       } else if (newFileDetails.type.indexOf("image") === 0) {
+        this.images = this.images || [];
         this.images.add(newFileDetails);
       } else {
         var regularizedJSON = new AudioVideo(newFileDetails).toJSON();
         this.addRelatedData(regularizedJSON);
       }
+      this.unsaved = true;
     }
   },
 
@@ -356,6 +367,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return hasImages;
     },
     set: function() {}
+  },
+
+  relatedData: {
+    get: function() {
+      if (this.fields && !this.fields.relatedData) {
+        this.fields.add(new DatumField(DEFAULT_CORPUS_MODEL.datumFields[10]));
+      }
+      this.fields.relatedData.json = this.fields.relatedData.json || {};
+      this.fields.relatedData.json.relatedData = this.fields.relatedData.json.relatedData || [];
+      return this.fields.relatedData.json.relatedData;
+    },
+    set: function() {
+      // if (this.fields && this.fields.relatedData) {
+      //   // this.fields.debugMode = true;
+      // } else {
+      //   return;
+      // }
+      // // this.fields.relatedData.json = this.fields.relatedData.json || {};
+      // // this.fields.relatedData.json.relatedData = value;
+    }
   },
 
   // The couchdb-connector is capable of mapping the url scheme

@@ -1865,13 +1865,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this[fileCollection].add(details);
       if (this.parent) {
-        if (!this.parent[fileCollection]) {
-          this.parent[fileCollection] = new AudioVideos();
-        } else if (Object.prototype.toString.call(this.parent[fileCollection]) === "[object Array]") {
-          this.parent[fileCollection] = new AudioVideos(this.parent[fileCollection]);
-        }
-        this.parent[fileCollection].add(details);
-        this.parent.saved = "no";
+        this.parent.addFile(details);
         this.render();
         // this.asCSV = [];
       }
