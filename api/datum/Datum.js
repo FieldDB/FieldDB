@@ -371,6 +371,9 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
   relatedData: {
     get: function() {
+      if (!this.fields) {
+        return;
+      }
       if (this.fields && !this.fields.relatedData) {
         this.fields.add(new DatumField(DEFAULT_CORPUS_MODEL.datumFields[10]));
       }
@@ -544,7 +547,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           return this.highlightedMatches;
         }
         delete this.highlightedMatches;
-        return ;
+        return;
       }
 
 
@@ -660,7 +663,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           this.debug("This datum matches ", conditionalHighlightedMatches);
           return conditionalHighlightedMatches;
         }
-        this.debug("This datum doesnt match ",queryTokens);
+        this.debug("This datum doesnt match ", queryTokens);
 
       }
       return highlightedMatches;
