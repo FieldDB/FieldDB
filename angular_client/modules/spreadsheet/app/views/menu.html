@@ -1,346 +1,141 @@
-<div class="row-fluid document_not_ready_spinner" ng-hide="documentReady" title="Admin: {{adminPermissions}} , Writer: {{writePermissions}}, Reader: {{readPermissions}}, Commenter : {{commentPermissions}}">
-  <div class="span4 offset4 pagination-centered">
-    <img ng-src="images/loading-spinner.gif" class="gravatar-small"/>
-  </div>
-</div>
-<div id="hideOnLoadDeprecated">
-  <div class="largeMenuBar">
-    <div class="menubar mainMenubar" ng-cloak>
-      <span class="menuTitle">
-        <a ng-click="navigateVerifySaved('home')">
-          <img ng-src="images/icon48_dev.png" class="gravatar-small" />
-        </a>
-      </span>
-      <span ng-show="data.length" ng-class="{active_menu_class: activeMenu=='none'}">
-        <a class="menuitem" ng-click="loadDataEntryScreen();">
-          <i class="fa whiteicon fa-list">
-          </i>
-          {{contextualize('locale_data_entry')}}
-        </a>
-      </span>
-      |
-      <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
-          <i class="fa whiteicon fa-search">
-          </i>
-          {{contextualize('locale_search')}}
-        </a>
-      </span>
-      |
-      <span ng-show="dataentry" ng-class="{active_menu_class: activeMenu=='editSession'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
-          <i class="fa whiteicon fa-calendar">
-          </i>
-          {{contextualize('locale_session')}}
-        </a>
-      </span>
-      |
-      <span ng-show="application.authentication.user.authenticated" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
-        <ul class="dropdown_nav">
-          <li>
-            <a class="menuitem">
-              <i class="fa whiteicon fa-cogs">
-              </i>
-              {{contextualize("locale_settings")}}
-            </a>
-            <ul>
-              <li>
-                <a ng-click="navigateVerifySaved('corpusSettings')">
-                  <i class="fa whiteicon fa-cloud">
-                  </i>
-                  {{contextualize('locale_corpus')}}
-                </a>
-              </li>
-              <li >
-                <a ng-click="navigateVerifySaved('settings');">
-                  <i class="fa whiteicon fa-cogs">
-                  </i>
-                  {{contextualize('locale_user_interface')}}
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </span>
-      |
-      <span ng-class="{active_menu_class: activeMenu=='faq'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
-          <i class="fa whiteicon fa-question-circle">
-          </i>
-          {{contextualize('locale_faq')}}
-        </a>
-      </span>
-      |
-      <span ng-show="data.length" ng-hide="dataentry==false">
-        <input type="checkbox" ng-model="useAutoGlosser">
-        <i class="fa whiteicon fa-bar-chart-o">
-        </i>
-        {{contextualize('locale_glosser')}}
-      </span>
-      <span class="rightMenuItems" ng-show="application.authentication.user.authenticated">
-        <div class="rightMenuItemsDiv">
-          <div ng-show="application.corpus">
-            <a class="floatLeft" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this {{application.corpus.dbname}}'s webpage">
-              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0" class="gravatar-small">
-            </a>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{application.basePathname}}/corpora_list">
+        <img ng-src="images/icon48_dev.png" class="gravatar-small"/>
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            <i class="fa whiteicon fa-cogs">
+            </i>
+            {{contextualize("locale_settings")}}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="{{application.basePathname}}/corpussettings">
+                <i class="fa fa-cloud"> </i>
+                {{contextualize('locale_corpus')}}
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/settings">
+                <i class="fa fa-cogs"> </i>
+                {{contextualize('locale_user_interface')}}
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li ng-show="show.showSearchSubMenu" ng-click="show.showSearchSubMenu=false">
+          <a href="">
+            <i class="fa whiteicon fa-list">
+            </i>
+            {{contextualize('locale_data_entry')}}
+          </a>
+        </li>
+
+        <li ng-show="!show.showSearchSubMenu && show.showDataEntryPage" ng-click="show.showSearchSubMenu=true">
+          <a href="">
+            <i class="fa whiteicon fa-search">
+            </i>
+            {{contextualize('locale_search_text_box')}}&nbsp;
+          </a>
+        </li>
+
+        <form ng-show="show.showSearchSubMenu" class="navbar-form navbar-left" role="search" >
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" ng-model='searchTerm'>
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="runSearch(searchTerm)">
+            <i class="fa fa-spin">
+            </i>
+            {{contextualize('locale_go_button')}}&nbsp;
+          </button>
+          <button class="btn btn-primary" ng-click="application.corpus.currentSession.datalist.select('highlightedMatches')">
+            {{contextualize('locale_select_all_button')}}
+          </button>
+          <button class="btn btn-primary" ng-click="exportResults();">
+            {{contextualize('locale_export_button')}}
+          </button>
+          <button class="btn btn-warning" ng-click="clearSearch()">
+            {{contextualize('locale_clear_results_button')}}
+          </button>
+          <span ng-show="searchHistory" class="form-group whiteicon">
+            {{searchHistory}}
+          </span>
+        </form>
+
+
+        <li ng-show="!show.showSearchSubMenu && show.showDataEntryPage">
+          <a href="{{application.basePathname}}/corpora_list">
+            <i class="fa whiteicon fa-calendar">
+            </i>
+            {{contextualize('locale_change_session')}}
+          </a>
+        </li>
+
+        <li ng-hide="show.showSearchSubMenu">
+          <a href="{{application.basePathname}}/faq">
+            <i class="fa whiteicon fa-question-circle">
+            </i>
+            {{contextualize('locale_faq')}}
+          </a>
+        </li>
+
+        <li ng-show="!show.showSearchSubMenu && show.showDataEntryPage" ng-click="useAutoGlosser=!useAutoGlosser">
+          <a href="">
+            <input type="checkbox" ng-model="useAutoGlosser">
+            <i class="fa whiteicon fa-bar-chart-o">
+            </i>
+            {{contextualize('locale_glosser')}}
+          </a>
+        </li>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-show="application.corpus.rev && !show.showSearchSubMenu">
+          <a href="{{application.website}}/{{application.corpus.team.username}}/{{application.corpus.titleAsUrl}}/{{application.corpus.dbname}}" target="_blank" title="Visit this {{application.corpus.dbname}}'s webpage">
+            <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0" class="floatLeft gravatar-small">
             <i class="fa whiteicon fa-calendar">
             </i>
             {{application.corpus.currentSession.dateAndGoalSnippet | limitTo:40}}
-            <br />
+            <br/>
             <i class="fa whiteicon fa-cloud">
             </i>
             {{application.corpus.title}}
-          </div>
-          <div>
-            &nbsp;
-            <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false && (writePermissions || commentPermissions)">
-              {{everythingSavedStatus.text}}
-            </button>
-            &nbsp;
-            <button class="btn btn-warning" ng-click="logout()">
+          </a>
+        </li>
+        <li>
+          <form class="navbar-form" >
+            <a ng-hide="application.authentication.user.authenticated" href="{{application.basePathname}}/register" class="btn btn-primary">
+              {{contextualize('locale_registration')}}
+            </a>
+            <a href="{{application.website}}/{{application.authentication.user.username}}" target="_blank" title="Visit your share page">
+              <img ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0" class="gravatar-small">
+            </a>
+            <button ng-show="application.authentication.user.authenticated" class="btn btn-warning" ng-click="logout()">
               <i class="fa whiteicon fa-arrow-right">
               </i>
               {{contextualize('locale_logout')}}
             </button>
-            <a href="{{application.website}}/{{application.authentication.user.username}}" target="_blank" title="Visit your share page">
-              <img ng-show="application.corpus.team.gravatar" ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0" class="gravatar-small">
-            </a>
-          </div>
-        </div>
-        <div class="clearDiv">
-        </div>
-      </span>
-      <span ng-hide="application.authentication.user.authenticated">
-        <div class="rightMenuItemsDiv">
-          <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
-            {{contextualize('locale_registration')}}
-          </button>
-        </div>
-      </span>
-    </div>
-    <div class="subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
-      <div class="form-horizontal">
-        <span>
-          <i class="fa whiteicon fa-calendar">
-          </i>
-          {{contextualize('locale_change_session')}}
-        </span>
-        <select ng-model="application.corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
-        </select>
-
-        &nbsp;&nbsp;
-        <span ng-show="application.corpus.currentSession.id">
-          <button ng-show="writePermissions" class="btn btn-success" ng-click=";showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" >
-            {{contextualize('locale_edit_session_info_button')}}
-          </button>
-          &nbsp;&nbsp;
-        </span>
-        <span>
-          <button ng-show="writePermissions" class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly">
-            <i class="fa whiteicon fa-trash-o">
-            </i>
-            {{contextualize('locale_delete_session')}}
-          </button>
-          &nbsp;&nbsp;
-        </span>
-        <button ng-show="writePermissions" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly">
-          <i class="fa whiteicon fa-plus">
-          </i>
-          {{contextualize('locale_create_new_elicitation_session_button')}}
-        </button>
-      </div>
-      <div class="subSubMenubar"ng-show="showEditSessionDetailsDropdown && application.corpus.currentSession.id"ng-cloak>
-        <ng-include src="'views/session_edit.html'"></ng-model>
-      </div>
-    </div>
-    <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-      <form class="form-horizontal">
-        <i class="fa whiteicon fa-search">
-        </i>
-        {{contextualize('locale_search_text_box')}}&nbsp;
-        <input type="text" class="input-medium search-query" ng-model='searchTerm'>
-        &nbsp;
-        <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
-          {{contextualize('locale_go_button')}}
-        </button>
-        &nbsp;
-        <button class="btn btn-primary" ng-click="selectAll();">
-          {{contextualize('locale_select_all_button')}}
-        </button>
-        &nbsp;
-        <button class="btn btn-primary" ng-click="exportResults();">
-          {{contextualize('locale_export_button')}}
-        </button>
-        &nbsp;
-        <button class="btn btn-warning" ng-click="clearSearch()">
-          {{contextualize('locale_clear_results_button')}}
-        </button>
-        &nbsp;
-        <span>
-          {{searchHistory}}
-        </span>
-      </form>
-    </div>
-  </div>
-
-
-
-
-  <div class="smallMenuBar">
-    <div class="menubar mainMenubar" ng-cloak>
-      <span class="menuTitle">
-        <a ng-click="navigateVerifySaved('home')">
-          <img ng-src="images/icon48_dev.png" class="gravatar-small"/>
-        </a>
-      </span>
-      <span ng-show="data.length" ng-class="{active_menu_class: activeMenu=='none'}">
-        <a class="menuitem" ng-click="loadDataEntryScreen()">
-          <i class="fa whiteicon fa-list">
-          </i>
-        </a>
-      </span>
-      |
-      <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
-          <i class="fa whiteicon fa-search">
-          </i>
-        </a>
-      </span>
-      |
-      <span ng-show="dataentry" ng-class="{active_menu_class: activeMenu=='editSession'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
-          <i class="fa whiteicon fa-calendar">
-          </i>
-        </a>
-      </span>
-      |
-      <span ng-show="application.authentication.user.authenticated" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}">
-        <ul class="small_dropdown_nav navitem">
-          <li>
-            <a class="menuitem" href="#">
-              <i class="fa whiteicon fa-cogs">
-              </i>
-            </a>
-            <ul>
-              <li>
-                <a ng-click="navigateVerifySaved('corpusSettings')">
-                  <i class="fa whiteicon fa-cloud">
-                  </i>
-                </a>
-              </li>
-              <li>
-                <a ng-click="navigateVerifySaved('settings');">
-                  <i class="fa whiteicon fa-cogs">
-                  </i>
-                </a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </span>
-      |
-      <span ng-class="{active_menu_class: activeMenu=='faq'}">
-        <a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
-          <i class="fa whiteicon fa-question-circle">
-          </i>
-        </a>
-      </span>
-      |
-      <span ng-show="data.length" ng-hide="dataentry==false">
-        <input type="checkbox" ng-model="useAutoGlosser">
-        <i class="fa whiteicon fa-bar-chart-o">
-        </i>
-      </span>
-      <span class="smallMenuBarInfo" ng-show="application.authentication.user.authenticated">
-        <span class=" smallMenuBarInfoItem" ng-show="application.corpus">
-          <a class="" href="{{application.website}}/{{application.corpus.dbname.replace('-','/')}}/{{application.corpus.dbname}}" target="_blank" title="Visit this corpus' webpage">
-            <img ng-src="https://secure.gravatar.com/avatar/{{application.corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0" class="gravatar-small">
-          </a>
-        </span>
-        <span class="smallMenuBarInfoItem">
-          &nbsp;
-          <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="dataentry && loading==false">
-            <i ng-class="everythingSavedStatus.icon">
-            </i>
-          </button>
-          &nbsp;
-          <button class="btn btn-warning" ng-click="logout()">
-            <i class="fa whiteicon fa-arrow-right">
-            </i>
-          </button>
-          <a href="{{application.website}}/{{application.authentication.user.username}}" target="_blank" title="Visit your share page">
-            <img ng-src="https://secure.gravatar.com/avatar/{{application.authentication.user.gravatar}}?s=30&amp;d=identicon" border="0" class="gravatar-small">
-          </a>
-        </span>
-      </span>
-      <span ng-hide="application.authentication.user.authenticated">
-        <span>
-          <button ng-click="navigateVerifySaved('register');" class="btn btn-primary">
-            {{contextualize('locale_registration')}}
-          </button>
-        </span>
-      </span>
-    </div>
-    <div class="subMenubar" ng-show="activeSubMenu=='editSession'" ng-cloak>
-      <span>
-        {{contextualize('locale_change_session')}}
-      </span>
-      <select ng-model="application.corpus.currentSession" ng-options="session.dateAndGoalSnippet for session in application.sessionsList.docs._collection">
-        </select>
-      &nbsp;&nbsp;
-      <span ng-show="application.corpus.currentSession.id">
-        <button class="btn btn-success" ng-click="showEditSessionDetailsDropdown=!showEditSessionDetailsDropdown;showCreateNewSessionDropdown=false" ng-disabled="readOnly">
-          <i class="fa whiteicon fa-pencil">
-          </i>
-          {{contextualize('locale_edit_session_info_button')}}
-        </button>
-        &nbsp;&nbsp;
-      </span>
-      <span>
-        <button class="btn btn-danger" ng-click="deleteSession()" ng-disabled="readOnly">
-          <i class="fa whiteicon fa-trash-o">
-          </i>
-          {{contextualize('locale_delete_session')}}
-        </button>
-        &nbsp;&nbsp;
-      </span>
-      <button ng-show="writePermissions" class="btn btn-primary" ng-click="changeViewToNewSession()" ng-disabled="readOnly">
-        <i class="fa whiteicon fa-plus">
-        </i>
-        {{contextualize('locale_create_new_session')}}
-      </button>
-      <div class="subSubMenubar" ng-show="showEditSessionDetailsDropdown && application.corpus.currentSession.id" ng-cloak>
-        <ng-include src="'views/session_edit.html'"></ng-include>
-      </div>
-    </div>
-    <div class="subMenubar" ng-show="activeSubMenu=='searchMenu'">
-      <form class="form-search">
-        <span>
-          <i class="fa whiteicon fa-search">
-          </i>
-          {{contextualize('locale_search_text_box')}}&nbsp;
-          <input type="text" class="input-medium search-query" ng-model='searchTerm'>
-          &nbsp;
-          <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
-            {{contextualize('locale_go_button')}}
-          </button>
-          &nbsp;
-          <button class="btn btn-primary" ng-click="selectAll();">
-            {{contextualize('locale_select_all_button')}}
-          </button>
-          &nbsp;
-          <button class="btn btn-primary" ng-click="exportResults();">
-            {{contextualize('locale_export_button')}}
-          </button>
-        </span>
-        &nbsp;
-        <button class="btn btn-warning" ng-click="clearSearch()">
-          {{contextualize('locale_clear_results_button')}}
-        </button>
-        <span>
-          {{searchHistory}}
-        </span>
-      </form>
-    </span>
-  </div>
-</div>
+          </form>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
