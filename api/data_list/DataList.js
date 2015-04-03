@@ -104,9 +104,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     },
     set: function(value) {
       this.debug("creating the " + this.id + " datalist's docs");
-      var previousPrimaryKey ;
+      var previousPrimaryKey;
       if (this._docs) {
-         previousPrimaryKey = this._docs.primaryKey;
+        previousPrimaryKey = this._docs.primaryKey;
       }
       this.ensureSetViaAppropriateType("docs", value);
 
@@ -490,13 +490,40 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
-  applyFunctionToAllIds: {
-    value: function(datumIdsToApplyFunction, functionToApply, functionArguments) {
-      if (!datumIdsToApplyFunction) {
-        datumIdsToApplyFunction = this.docIds;
+  select: {
+    value: function(attributeToTriggerSelection) {
+
+      if (!this.docs || !this.docs.collection || typeof this.docs.collection.map !== "function") {
+        return [];
       }
-      if (datumIdsToApplyFunction.length === 0) {
-        datumIdsToApplyFunction = this.docIds;
+
+      var selected = [],
+      self = this;
+      this.docs.collection.map(function(item) {
+        if (!attributeToTriggerSelection && item.selected) {
+          item.selected = true;
+          selected.push(item[self.primaryKey]);
+          return;
+        }
+        if (attributeToTriggerSelection && item[attributeToTriggerSelection]) {
+          item.selected = true;
+          selected.push(item[self.primaryKey]);
+          return;
+        }
+        item.selected = false;
+      });
+      this.debug("Selected ", selected);
+      return selected;
+    }
+  },
+
+  applyFunctionToAllIds: {
+    value: function(docIdsToApplyFunction, functionToApply, functionArguments) {
+      if (!docIdsToApplyFunction) {
+        docIdsToApplyFunction = this.docIds;
+      }
+      if (docIdsToApplyFunction.length === 0) {
+        docIdsToApplyFunction = this.select();
       }
       if (!functionToApply) {
         functionToApply = "latexitDataList";
@@ -506,8 +533,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
 
       var self = this;
-      this.debug("DATA LIST datumIdsToApplyFunction " + JSON.stringify(datumIdsToApplyFunction));
-      datumIdsToApplyFunction.map(function(id) {
+      this.debug("DATA LIST docIdsToApplyFunction " + JSON.stringify(docIdsToApplyFunction));
+      docIdsToApplyFunction.map(function(id) {
         var doc = self.docs[id];
         if (doc) {
           doc[functionToApply].apply(doc, functionArguments);

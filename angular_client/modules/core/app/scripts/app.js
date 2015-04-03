@@ -48,7 +48,7 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
     }
   }
 
-  fieldDBApp.whiteListCORS.concat([
+  fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
