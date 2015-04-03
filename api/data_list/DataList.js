@@ -498,7 +498,12 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       }
 
       var selected = [],
-      self = this;
+        self = this;
+
+      if (attributeToTriggerSelection && attributeToTriggerSelection === "all") {
+        attributeToTriggerSelection = this.primaryKey;
+      }
+
       this.docs.collection.map(function(item) {
         if (!attributeToTriggerSelection && item.selected) {
           item.selected = true;
