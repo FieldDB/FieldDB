@@ -1,5 +1,7 @@
-<div ng-bind-html="datum.highlightedMatches" >
+<div ng-show="datum.highlightedMatches" ng-bind-html="datum.highlightedMatches" >
 </div>
+
+<input type="checkbox" ng-model="datum.selected" />
 
 <div data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode" ng-dblclick="datum.editingMode=false" ng-click="datalist.activeItem=$index">
 </div>
