@@ -504,79 +504,53 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     }
   },
-  searchByQueryString: {
-    value: function(queryString, callback) {
-      var self = this;
+  search: {
+    value: function(queryString, limitToOptionalFields) {
       try {
         //http://support.google.com/analytics/bin/answer.py?hl=en&answer=1012264
         window.pageTracker._trackPageview("/search_results.php?q=" + queryString);
       } catch (e) {
-        self.debug("Search Analytics not working.");
+        this.debug("Search Analytics not working.");
       }
 
       // Process the given query string into tokens
-      var queryTokens = self.processQueryString(queryString);
+      var queryTokens = this.processQueryString(queryString);
       var doGrossKeywordMatch = false;
       if (queryString.indexOf(":") === -1) {
         doGrossKeywordMatch = true;
         queryString = queryString.toLowerCase().replace(/\s/g, "");
       }
 
-      if (OPrime.isBackboneCouchDBApp()) {
-
-        // run a custom map reduce
-        //        var mapFunction = function(doc) {
-        //          if(doc.collection !== "datums"){
-        //            return;
-        //          }
-        //          var fields  = doc.fields;
-        //          var result = {};
-        //          for(var f in fields){
-        //            if(fields[f].label === "gloss"){
-        //              result.gloss = fields[f].value;
-        //            }else if(fields[f].label === "morphemes"){
-        //              result.morphemes = fields[f].value;
-        //            }else if(fields[f].label === "judgement"){
-        //              result.judgement = fields[f].value;
-        //            }
-        //          }
-        //          emit( result,  doc._id );
-        //        };
-        //        $.couch.db(this.dbname).query(mapFunction, "_count", "javascript", {
-        //use the get_datum_fields view
-        //        self.bug("TODO test search in chrome extension");
-        $.couch.db(self.dbname).view("pages/get_datum_fields", {
-          success: function(response) {
-            self.debug("Got " + response.length + "datums to check for the search query locally client side.");
-            var matchIds = [];
-            //            console.log(response);
-            for (var i in response.rows) {
-              var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
-              // If the row's datum matches the given query string
-              if (thisDatumIsIn) {
-                // Keep its datum's ID, which is the value
-                matchIds.push(response.rows[i].value);
-              }
+      if (true) {
+        var accessAsObject = this.accessAsObject;
+        // If the caller asked for only certain fields, search only those.
+        if (limitToOptionalFields) {
+          this.debug("Reducing fields to the fields requested by the user", limitToOptionalFields);
+          for (var fieldlabel in limitToOptionalFields) {
+            if (!limitToOptionalFields.hasOwnProperty(fieldlabel) || !limitToOptionalFields[fieldlabel]) {
+              continue;
             }
+            limitToOptionalFields[fieldlabel] = accessAsObject[fieldlabel];
+          }
+        } else {
+          limitToOptionalFields = accessAsObject;
+        }
 
-            if (typeof callback === "function") {
-              //callback with the unique members of the array
-              callback(_.unique(matchIds));
-              //              callback(matchIds); //loosing my this in SearchEditView
-            }
-          },
-          error: function(status) {
-            console.log("Error quering datum", status);
-          },
-          reduce: false
-        });
-
-        return;
+        var highlightedMatchesInHTML = this.highlightMatches(limitToOptionalFields, queryString, doGrossKeywordMatch, queryTokens);
+        // If the row's datum matches the given query string
+        if (highlightedMatchesInHTML && highlightedMatchesInHTML.length > 0) {
+          // Keep its datum's ID, which is the value
+          this.highlightedMatches = highlightedMatchesInHTML; // ["TODO showing the matched with a window of 20 char before and after."];
+          return this.highlightedMatches;
+        }
+        delete this.highlightedMatches;
+        return ;
       }
 
 
 
       try {
+        var self = this;
         self.pouch(function(err, db) {
           db.query("pages/get_datum_fields", {
             reduce: false
@@ -587,7 +561,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
               // Go through all the rows of results
               for (var i in response.rows) {
-                var thisDatumIsIn = self.isThisMapReduceResultInTheSearchResults(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
+                var thisDatumIsIn = self.highlightMatches(response.rows[i], queryString, doGrossKeywordMatch, queryTokens);
                 // If the row's datum matches the given query string
                 if (thisDatumIsIn) {
                   // Keep its datum's ID, which is the value
@@ -613,11 +587,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
                 window.appView.searchEditView.search(previousquery);
               });
             }
-            if (typeof callback === "function") {
-              //callback with the unique members of the array
-              callback(_.unique(matchIds));
-              //                callback(matchIds); //loosing my this in SearchEditView
-            }
+
           });
         });
       } catch (e) {
@@ -625,41 +595,75 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     }
   },
-  isThisMapReduceResultInTheSearchResults: {
-    value: function(keyValuePair, queryString, doGrossKeywordMatch, queryTokens) {
+  highlightMatches: {
+    value: function(simpleObject, queryString, doGrossKeywordMatch, queryTokens) {
+      var fieldlabel,
+        highlightedmatch;
 
 
-      var thisDatumIsIn = false;
+      this.debug("Highlighting matches for ", simpleObject, queryString, doGrossKeywordMatch, queryTokens);
+      var highlightedMatches = [];
       // If the query string is null, include all datumIds
       if (queryString.trim() === "") {
-        thisDatumIsIn = true;
+        this.debug("user searched for nothing, which means we will include this item.");
+        highlightedMatches = [" "];
       } else if (doGrossKeywordMatch) {
-        if (JSON.stringify(keyValuePair.key).toLowerCase().replace(/\s/g, "").search(queryString) > -1) {
-          thisDatumIsIn = true;
+        this.debug("user searched for GrossKeywordMatch of " + queryString);
+
+        for (fieldlabel in simpleObject) {
+          if (!simpleObject.hasOwnProperty(fieldlabel) || !simpleObject[fieldlabel]) {
+            continue;
+          }
+          highlightedmatch = this.highlight(simpleObject[fieldlabel], queryString);
+          if (highlightedmatch.indexOf("<span") > -1) {
+            highlightedMatches.push(highlightedmatch);
+          }
         }
+        return highlightedMatches;
       } else {
 
-        // Determine if this datum matches the first search criteria
-        thisDatumIsIn = this.matchesSingleCriteria(keyValuePair.key, queryTokens[0]);
 
+        var conditionalHighlightedMatches = [];
+        this.debug(" Searching through ", queryTokens);
+
+        // Determine if this datum matches the first search criteria
+        highlightedmatch = this.matchesSingleCriteria(simpleObject, queryTokens[0]);
+        if (highlightedmatch && highlightedmatch.indexOf("<span") > -1) {
+          this.debug("      Found one match  " + highlightedmatch);
+
+          conditionalHighlightedMatches.push(highlightedmatch);
+        }
         // Progressively determine whether the datum still matches based on
         // subsequent search criteria
         for (var j = 1; j < queryTokens.length; j += 2) {
           if (queryTokens[j] === "AND") {
-            // Short circuit: if it's already false then it continues to be false
-            if (!thisDatumIsIn) {
-              break;
+            // Do an intersection, if this fails, exit early.
+            highlightedmatch = this.matchesSingleCriteria(simpleObject, queryTokens[j + 1]);
+            if (highlightedmatch && highlightedmatch.indexOf("<span") > -1) {
+              this.debug("       Passed intersection match  " + highlightedmatch);
+              conditionalHighlightedMatches.push(highlightedmatch);
+            } else {
+              this.debug("       Failed the Intersection match " + highlightedmatch);
+              return;
             }
-
-            // Do an intersection
-            thisDatumIsIn = thisDatumIsIn && this.matchesSingleCriteria(keyValuePair.key, queryTokens[j + 1]);
           } else {
             // Do a union
-            thisDatumIsIn = thisDatumIsIn || this.matchesSingleCriteria(keyValuePair.key, queryTokens[j + 1]);
+            highlightedmatch = this.matchesSingleCriteria(simpleObject, queryTokens[j + 1]);
+            if (highlightedmatch && highlightedmatch.indexOf("<span") > -1) {
+              this.debug("      Found another match  ", highlightedmatch);
+              conditionalHighlightedMatches.push(highlightedmatch);
+            }
           }
         }
+
+        if (conditionalHighlightedMatches && conditionalHighlightedMatches.length > 0) {
+          this.debug("This datum matches ", conditionalHighlightedMatches);
+          return conditionalHighlightedMatches;
+        }
+        this.debug("This datum doesnt match ",queryTokens);
+
       }
-      return thisDatumIsIn;
+      return highlightedMatches;
     }
   },
   /**
@@ -686,23 +690,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         negate = true;
       }
       var value = criteria.substring(delimiterIndex + 1);
+
+      this.debug("    Looking at label:" + label + ": value :" + value + ": in :" + objectToSearchThrough[label]);
       /* handle the fact that "" means grammatical, so if user asks for  specifically, give only the ones wiht empty judgemnt */
       if (label === "judgement" && value.toLowerCase() === "grammatical") {
         if (!objectToSearchThrough[label]) {
-          return true;
+          return this.highlight("Grammatical", "Grammatical");
         }
       }
-      //      if(!label || !value){
-      //        return false;
-      //      }
 
-      var searchResult = objectToSearchThrough[label] && (objectToSearchThrough[label].toLowerCase().search(value.toLowerCase()) >= 0);
+      var searchResult = objectToSearchThrough[label];
+      searchResult = this.highlight(searchResult, value);
 
 
       if (negate) {
-        searchResult = !searchResult;
+        if (searchResult.indexOf("<span") > -1) {
+          searchResult = "";
+        } else {
+          searchResult = this.highlight(searchResult, searchResult);
+        }
       }
-
 
       return searchResult;
     }
@@ -720,8 +727,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   processQueryString: {
     value: function(queryString) {
+      if (!queryString) {
+        return;
+      }
+      queryString = queryString + "";
+      queryString = queryString.replace(/\&\&/g, " AND ").replace(/\|\|/g, " OR ");
+      this.debug("    Normalized  query string, " + queryString);
+
       // Split on spaces
-      var queryArray = queryString.split(" ");
+      var queryArray = queryString.split(/ +/);
 
       // Create an array of tokens out of the query string where each token is
       // either a search criteria or an operator (AND or OR).
@@ -744,6 +758,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
       queryTokens.push(currentString);
 
+      this.debug("    Tokenized query string, ", queryTokens);
       return queryTokens;
     }
   },
@@ -1015,8 +1030,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       }
       /*throughout this next section, print frequent fields and infrequent ones differently
-    frequent fields get latex'd as items in a description and infrequent ones are the same,
-    but commented out.*/
+      frequent fields get latex'd as items in a description and infrequent ones are the same,
+      but commented out.*/
       if (fields && (fields.length > 0)) {
         var numInfrequent = 0;
         for (var field in fields) {

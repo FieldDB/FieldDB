@@ -380,6 +380,81 @@ describe("Test Datum", function() {
 
   });
 
+  describe("Highlighted search results", function() {
+
+    it("should match regular expressions", function() {
+      var datum = new Datum(sample_1_22_datum[0]);
+      var result = datum.search("a[mn]i");
+      expect(result).toBeDefined();
+      expect(datum.highlightedMatches).toEqual(["Jaunpa much'asq<span class='highlight'>ami</span> k<span class='highlight'>ani</span>."]);
+
+      result = datum.search("not in this datum anywhere");
+      expect(result).toBeUndefined();
+      expect(datum.highlightedMatches).toBeUndefined();
+    });
+
+    it("should return null results", function() {
+      var datum = new Datum(sample_1_22_datum[0]);
+      var result = datum.search("not in this datum anywhere");
+      expect(result).toBeUndefined();
+      expect(datum.highlightedMatches).toBeUndefined();
+    });
+
+    it("should permit fieldlabel:value search", function() {
+      var datum = new Datum(sample_1_22_datum[0]);
+      datum.debugMode = true;
+
+      var result = datum.search("utterance:much' && gloss:pass AND gloss:gen");
+      expect(result).toBeDefined();
+      expect(datum.highlightedMatches).toEqual([
+        "Jaunpa <span class='highlight'>much'</span>asqami kani.",
+        "Juan.gen kiss.<span class='highlight'>pass</span>.? be.1SG.",
+        "Juan.<span class='highlight'>gen</span> kiss.pass.? be.1SG."
+      ]);
+
+      result = datum.search("gloss:gen OR gloss:pss ");
+      expect(result).toBeDefined();
+      expect(datum.highlightedMatches).toEqual(["Juan.<span class='highlight'>gen</span> kiss.pass.? be.1SG."]);
+
+
+      result = datum.search("utterance:much' && gloss:pss AND gloss:gen");
+      expect(result).toBeUndefined();
+      expect(datum.highlightedMatches).toBeUndefined();
+
+      result = datum.search("gloss:pss OR gloss:gen");
+      expect(result).toBeDefined();
+      expect(datum.highlightedMatches).toEqual(["Juan.<span class='highlight'>gen</span> kiss.pass.? be.1SG."]);
+
+    });
+
+
+    it("should allow callers to specify which fields to search", function() {
+      var datum = new Datum(sample_1_22_datum[0]);
+
+      var result = datum.search("much'", {
+        utterance: "true",
+        gloss: "true"
+      });
+      expect(result).toBeDefined();
+      expect(result).toBe(datum.highlightedMatches);
+      expect(datum.highlightedMatches).toEqual(["Jaunpa <span class='highlight'>much'</span>asqami kani."]);
+
+      result = datum.search("a", {
+        utterance: "true",
+        gloss: "true"
+      });
+      expect(result).toBeDefined();
+      expect(result).toBe(datum.highlightedMatches);
+      expect(datum.highlightedMatches).toEqual([
+        "J<span class='highlight'>a</span>unp<span class='highlight'>a</span> much'<span class='highlight'>a</span>sq<span class='highlight'>a</span>mi k<span class='highlight'>a</span>ni.",
+        "Ju<span class='highlight'>a</span>n.gen kiss.p<span class='highlight'>a</span>ss.? be.1SG."
+      ]);
+
+    });
+
+
+  });
+
   describe("Backward compatability with v1.22", function() {
 
     it("should load v1.22 datum", function() {
