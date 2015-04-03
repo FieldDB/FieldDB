@@ -1441,9 +1441,9 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         return;
       }
 
-      this.debug("saving fields as the deprecated datumFields");
-      json.datumFields = json.fields;
-      delete json.fields;
+      // this.debug("saving fields as the deprecated datumFields");
+      // json.datumFields = json.fields;
+      // delete json.fields;
 
       this.debug(json);
       return json;

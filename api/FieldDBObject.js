@@ -150,6 +150,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "perObjectDebugMode",
   "newDatum",
   "saving",
+  "saved",
   "selected",
   "temp",
   "unsaved",

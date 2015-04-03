@@ -98,7 +98,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
         $scope.parent.audioVideo = $scope.parent.audioVideo || [];
         $scope.parent.images = $scope.parent.images || [];
         $scope.parent.relatedData = $scope.parent.relatedData || [];
-        $scope.parent.markAsNeedsToBeSaved();
+        $scope.parent.unsaved = true;
         if (!newAudioFile.filename) {
           console.warn("Filename not specified.");
           return;
@@ -114,6 +114,8 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
             $scope.parent.render();
           }, function(error) {
             console.log(error);
+            $scope.parent.bug(error.userFriendlyErrors.join());
+            // todo download the file locally.
             $scope.parent.render();
           });
         }
