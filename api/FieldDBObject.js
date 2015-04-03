@@ -141,6 +141,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "corpus",
   "db",
   "decryptedMode",
+  "fieldsInColumns",
   "fetching",
   "fossil",
   "loaded",
@@ -936,7 +937,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.saving = true;
       this.whenReady = deferred.promise;
 
-      if (true) {
+      if (!confirm("save this?")) {
         this.warn("Pretending we saved, so we can see if load production models works, without affecting them ");
         Q.nextTick(function() {
           self.saving = false;
