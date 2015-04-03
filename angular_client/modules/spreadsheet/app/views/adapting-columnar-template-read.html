@@ -35,12 +35,17 @@
 
 <div class="{{corpus.fieldsInColumns.detailsWidthClass}}">
   <span class="pull-right">
-    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
-    <i  class="fa fa-download" ng-click="datum.fetch()">
-    </i>
+
     <i ng-show="datum.hasAudio" class="fa fa-microphone" title="Listen">
     </i>
+    <i ng-show="datum.hasImages" class="fa fa-camera">
+    </i>
+    <i ng-show="datum.hasRelatedData" class="fa fa-link">
+    </i>
     <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
+    <i  class="fa fa-refresh" ng-click="datum.fetch()">
+    </i>
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
   </span>
   <div title="Date entered">
     <i class="fa fa-clock-o">

@@ -1,4 +1,4 @@
-<form ng-submit="markAsEdited(datum.utterance, datum, $event);">
+<form ng-submit="markAsEdited(datum.utterance, datum, $event);" class="container-fluid">
   <div class="span1" >
     <!-- todo try ng-change to reduce edits which are not edits -->
     <input
@@ -11,46 +11,40 @@
   </div>
   <div class="{{corpus.fieldsInColumns.columnWidthClass}}">
 
-    <input class="spreadsheet-row"
-       ng-repeat="corpusField in corpus.fieldsInColumns.first track by $index"
-      ng-hide="corpusField.showToUserTypes == 'readonly'"
-      placeholder="{{corpusField.label}}"
-      title="{{corpusField.help}}"
-      ng-model="datum.fields[corpusField.id].value"
-      />
+    <input class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    ng-repeat="corpusField in corpus.fieldsInColumns.first track by $index"
+    ng-hide="corpusField.showToUserTypes == 'readonly'"
+    placeholder="{{corpusField.label}}"
+    title="{{corpusField.help}}"
+    ng-model="datum.fields[corpusField.id].value"
+    />
 
 
   </div>
   <div ng-show="corpus.fieldsInColumns.second.length > 0" class="{{corpus.fieldsInColumns.columnWidthClass}}" >
 
-    <input class="spreadsheet-row"
-       ng-repeat="corpusField in corpus.fieldsInColumns.second track by $index"
-      ng-hide="corpusField.showToUserTypes == 'readonly'"
-      placeholder="{{corpusField.label}}"
-      title="{{corpusField.help}}"
-      ng-model="datum.fields[corpusField.id].value"
-      />
+    <input class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    ng-repeat="corpusField in corpus.fieldsInColumns.second track by $index"
+    ng-hide="corpusField.showToUserTypes == 'readonly'"
+    placeholder="{{corpusField.label}}"
+    title="{{corpusField.help}}"
+    ng-model="datum.fields[corpusField.id].value"
+    />
 
   </div>
   <div ng-show="corpus.fieldsInColumns.third.length > 0" class="{{corpus.fieldsInColumns.columnWidthClass}}" columnlabel="third">
 
-    <input class="spreadsheet-row"
-       ng-repeat="corpusField in corpus.fieldsInColumns.third track by $index"
-      ng-hide="corpusField.showToUserTypes == 'readonly'"
-      placeholder="{{corpusField.label}}"
-      title="{{corpusField.help}}"
-      ng-model="datum.fields[corpusField.id].value"
-      />
+    <input class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    ng-repeat="corpusField in corpus.fieldsInColumns.third track by $index"
+    ng-hide="corpusField.showToUserTypes == 'readonly'"
+    placeholder="{{corpusField.label}}"
+    title="{{corpusField.help}}"
+    ng-model="datum.fields[corpusField.id].value"
+    />
 
   </div>
-  <div class="span2 entered_modified_info">
-    <span ng-show="searching">
-      <button class="btn btn-primary" ng-click="selectNone()">
-        {{contextualize('locale_done_button')}}
-      </button>
-      <br />
-      <br />
-    </span>
+  <div class="{{corpus.fieldsInColumns.detailsWidthClass}}">
+
     <span title="{{contextualize('locale_date_entered')}} {{datum.dateEntered | fielddbPrettyDate}}">
       <i class="fa whiteicon fa-clock-o">
       </i>
@@ -71,64 +65,65 @@
       <img ng-src="https://secure.gravatar.com/avatar/{{modifiedByUser.gravatar}}?s=15&d=identicon" title="{{modifiedByUser.username}} at {{modifiedByUser.timestamp | fielddbPrettyDate}}" />
       &nbsp;
     </span>
-    <div class="expandCollapseButton">
+    <div class="pull-right">
+      <button  class="btn btn-danger" type="button" ng-click="deleteRecord(datum)" ng-show="datum.expandedViewMode">
+        <i class="fa fa-trash-o">
+        </i>
+        {{contextualize('locale_delete_this_record_button')}}
+      </button>
       <i ng-show="datum.hasAudio" class="fa whiteicon fa-microphone">
       </i>
       <i ng-show="datum.hasImages" class="fa whiteicon fa-camera">
       </i>
       <i ng-show="datum.hasRelatedData" class="fa whiteicon fa-link">
       </i>
-      <i ng-show="datum.comments.length >
-        0" class="fa whiteicon fa-comment">
+      <i ng-show="datum.comments.length > 0" class="fa whiteicon fa-comment">
       </i>
-      <i class="fa whiteicon" ng-class="{'fa-list': !expandCollapse, 'fa-th-list': expandCollapse}" ng-click="triggerExpandCollapse()">
+      <i class="fa whiteicon fa-refresh" ng-click="datum.fetch()">
+      </i>
+      <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
+      <i class="fa whiteicon" ng-class="{'fa-list': !datum.expandedViewMode, 'fa-th-list': datum.expandedViewMode}" ng-click="datum.expandedViewMode=datum.expandedViewMode?false:true">
       </i>
     </div>
   </div>
 </form>
-<div class="row" ng-show="expandCollapse && !datum.id">
-  <div class="span10 offset1 pagination-centered">
-    <b>
-      {{contextualize('locale_must_save_changes_message')}}
-    </b>
-  </div>
-</div>
-<div class="container-fluid" ng-show="expandCollapse && datum.id">
-  <div class="row" >
-    <div class="span5 expandedDataComments">
-      <div class="expandedDataInner">
-        <ul class="list-unstyled">
-          <li ng-repeat="comment in datum.comments">
-            <a ng-click="deleteComment(comment, datum)" class=" delete_button" >
-              <i class="fa fa-times-circle">
-              </i>
-            </a>
-            <img title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon"/>
-            &nbsp;
-            <i class="fa fa-clock-o">
-            </i>
-            {{comment.timestamp | fielddbPrettyDate}}
-            <i class="fa fa-comment">
-            </i>
-            {{comment.text}}
-          </li>
-        </ul>
-        <button ng-show="commentPermissions" class="btn btn-primary" ng-click="addComment(datum);" >
-          <i class="fa whiteicon fa-comment">
-          </i>
-          {{contextualize('locale_add_comment_button')}}
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="row expandedData">
-    <div class=" expandedDataInner">
+<div class="container-fluid" ng-show="datum.expandedViewMode && datalist.activeItem==$index">
+
+  <div class="spreadsheet-expandedData col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div fielddb-audio-video-recorder parent="datum"></div>
     </div>
   </div>
-  <div class="row" >
-    <div class="span11">
-      <table>
+
+  <div class="spreadsheet-expandedData col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <ul ng-show="datum.hasComments" class="list-unstyled">
+        <li ng-repeat="comment in datum.comments">
+          <a ng-click="deleteComment(comment, datum)" class=" delete_button" >
+            <i class="fa fa-times-circle">
+            </i>
+          </a>
+          <img title="{{comment.username}}" ng-src="https://secure.gravatar.com/avatar/{{comment.gravatar}}?s=15&d=identicon"/>
+          &nbsp;
+          <i class="fa fa-clock-o">
+          </i>
+          {{comment.timestamp | fielddbPrettyDate}}
+          <i class="fa fa-comment">
+          </i>
+          {{comment.text}}
+        </li>
+      </ul>
+      <button ng-show="commentPermissions" class="btn btn-primary" ng-click="addComment(datum);" >
+        <i class="fa whiteicon fa-comment">
+        </i>
+        {{contextualize('locale_add_comment_button')}}
+      </button>
+    </div>
+  </div>
+
+  <div ng-show="datum.hasImages||datum.hasAudio||datum.hasRelatedData" class="spreadsheet-expandedData col-xs-12 col-sm-12 col-md-6 col-lg-6" >
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <table >
         <tr ng-repeat="image in datum.images track by $index" ng-hide="image.trashed == 'deleted'">
           <td>
             <span class="form-horizontal">
@@ -137,7 +132,7 @@
                 </i>
               </a>
               <a href="{{image.URL}}" target="_blank">
-                <img class="span6" ng-src="{{image.URL}}"/>
+                <img class="" ng-src="{{image.URL}}"/>
               </a>
             </span>
           </td>
@@ -204,12 +199,7 @@
           </td>
         </tr>
       </table>
-      <hr />
-      <button  class="btn btn-inverse" type="button" ng-click="deleteRecord(datum)" >
-        <i class="fa fa-trash-o">
-        </i>
-        {{contextualize('locale_delete_this_record_button')}}
-      </button>
+
     </div>
   </div>
 </div>

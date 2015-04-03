@@ -1,4 +1,4 @@
-<div data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode" ng-dblclick="datum.editingMode=false">
+<div data-spreadsheet-adapting-columnar-template-edit ng-show="datum.editingMode" ng-dblclick="datum.editingMode=false" ng-click="datalist.activeItem=$index">
 </div>
 
 <div title="Admin: {{adminPermissions}}, Writer: {{writePermissions}}, Reader: {{readPermissions}}, Commenter : {{commentPermissions}},  EditingMode: {{datum.editingMode}} Roles: {{application.authentication.user.roles}} " class="row-fluid" data-spreadsheet-adapting-columnar-template-read ng-hide="datum.editingMode || application.authentication.user.roles.indexOf(application.corpus.dbname+'_reader')==-1" ng-dblclick="datum.editingMode=true">
