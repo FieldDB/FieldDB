@@ -483,8 +483,8 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   it('should set some view control variables', function() {
     expect(scope.authenticated).toBeFalsy();
     expect(scope.developer).toBeUndefined();
-    expect(scope.dataentry).toBeFalsy();
-    expect(scope.searching).toBeFalsy();
+    expect(scope.showDataEntryPage).toBeFalsy();
+    expect(scope.showSearchSubMenu).toBeFalsy();
 
     expect(typeof scope.triggerExpandCollapse).toBe('function');
     // expect(typeof scope.setDataEntryFocusOn).toBe('function');
@@ -494,11 +494,11 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   });
 
   it('should set some session control variables', function() {
-    expect(scope.activeSubMenu).toEqual('none');
-    expect(scope.activeSessionID).toBeUndefined();
-    expect(scope.currentSessionName).toBeUndefined();
-    expect(scope.showCreateSessionDiv).toBeFalsy();
-    expect(scope.editSessionDetails).toBeFalsy();
+    expect(rootScope.show.activeSubMenu).toBeUndefined();
+    expect(rootScope.show.activeSessionID).toBeUndefined();
+    expect(rootScope.show.currentSessionName).toBeUndefined();
+    expect(rootScope.show.showCreateSessionDiv).toBeFalsy();
+    expect(rootScope.show.editSessionDetails).toBeFalsy();
     expect(scope.createNewSessionDropdown).toBeFalsy();
   });
 

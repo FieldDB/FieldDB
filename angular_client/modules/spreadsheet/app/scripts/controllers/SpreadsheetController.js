@@ -17,7 +17,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http);
   }
 
-
   $scope.everythingSavedStatus = {
     state: "",
     class: "btn btn-inverse",
@@ -102,8 +101,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
     window.location.assign("#/" + nextRoute);
-    if(nextRoute === "spreadsheet"){
-      $scope.dataentry = true;
+    if (nextRoute === "spreadsheet") {
+      $rootScope.show.showDataEntryPage = true;
     }
 
     // try {
@@ -220,6 +219,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   document.addEventListener("notauthenticated", function() {
+    $rootScope.clickSuccess = true;
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
     }
@@ -376,22 +376,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.currentPage = $rootScope.currentPage || 0;
   $scope.reverse = true;
   // $scope.activeDatumIndex = 'newEntry';
-  $scope.dataentry = false;
-  $scope.searching = false;
-  $rootScope.activeSubMenu = 'none';
-  $scope.showCreateNewSessionDropdown = false;
-  $scope.showEditSessionDetailsDropdown = false;
-  $scope.currentDate = new Date();
+
+  $rootScope.show = {
+    showDataEntryPage: false,
+    showSearchSubMenu: false,
+    activeSubMenu: 'none',
+    showCreateNewSessionDropdown: false,
+    showEditSessionDetailsDropdown: false
+  };
+
   $scope.activities = [];
 
   $scope.changeActiveSubMenu = function(subMenu) {
-    if ($rootScope.activeSubMenu === subMenu) {
-      $rootScope.activeSubMenu = 'none';
-    } else if (subMenu === 'none' && $scope.searching === true) {
-      return;
-    } else {
-      $rootScope.activeSubMenu = subMenu;
-    }
+    $rootScope.show.activeSubMenu = subMenu;
   };
 
   $scope.showDataEntry = function() {
@@ -434,38 +431,38 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     switch (itemToDisplay) {
       case "settings":
-        $scope.dataentry = false;
-        $scope.searching = false;
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
         $scope.changeActiveSubMenu('none');
         reRouteUser("settings");
         break;
       case "corpusSettings":
-        $scope.dataentry = false;
-        $scope.searching = false;
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
         $scope.changeActiveSubMenu('none');
         reRouteUser("corpussettings");
         break;
       case "home":
-        $scope.dataentry = false;
-        $scope.searching = false;
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
         $scope.changeActiveSubMenu('none');
         reRouteUser("corpora_list");
         break;
       case "searchMenu":
         $scope.changeActiveSubMenu(itemToDisplay);
-        $scope.searching = true;
+        $rootScope.show.showSearchSubMenu = true;
         $scope.activeDatumIndex = null;
         reRouteUser("spreadsheet");
         break;
       case "faq":
-        $scope.dataentry = false;
-        $scope.searching = false;
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
         $scope.changeActiveSubMenu('none');
         reRouteUser("faq");
         break;
       case "none":
-        $scope.dataentry = true;
-        $scope.searching = false;
+        $rootScope.show.showDataEntryPage = true;
+        $rootScope.show.showSearchSubMenu = false;
         $scope.changeActiveSubMenu('none');
         reRouteUser("spreadsheet");
         break;
@@ -646,6 +643,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   document.addEventListener("authenticated", function() {
+    $rootScope.clickSuccess = true;
+
     if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.rev) {
       $rootScope.openWelcomeNotificationDeprecated();
       return;
@@ -814,12 +813,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       reRouteUser("spreadsheet");
     }
-    $scope.dataentry = true;
+    $rootScope.show.showDataEntryPage = true;
   });
 
   $scope.changeViewToNewSession = function() {
-    $scope.showCreateNewSessionDropdown = true;
-    $scope.showEditSessionDetailsDropdown = false;
+    $rootScope.show.showCreateNewSessionDropdown = true;
+    $rootScope.show.showEditSessionDetailsDropdown = false;
     $scope.changeActiveSubMenu("none");
     reRouteUser("corpora_list");
   };
@@ -915,7 +914,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loading = true;
     newSession.user = $rootScope.application.authentication.user.userMask;
     newSession.save().then(function() {
-
+      $rootScope.show.showCreateNewSessionDropdown = false;
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "added",
@@ -934,7 +933,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
 
       $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.add(newSession);
-      $scope.dataentry = true;
+      $rootScope.show.showDataEntryPage = true;
       $rootScope.loading = false;
       reRouteUser("spreadsheet");
     });
@@ -1040,7 +1039,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadDataEntryScreen = function() {
-    $scope.dataentry = true;
+    $rootScope.show.showDataEntryPage = true;
     $scope.navigateVerifySaved('none');
   };
 
@@ -1084,124 +1083,84 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $scope.runSearch = function(searchTerm) {
+  var lastSearch = Date.now();
+  $scope.runSearch = function(searchTermPassedIn) {
+    $scope.searchTerm = searchTermPassedIn;
+    // if ($rootScope.show.showSearchSubMenu) {
+    //   $rootScope.show.showSearchSubMenu = false;
+    //   return;
+    // }
+    if ((Date.now() - lastSearch) < 1000) {
+      return;
+    }
+    $rootScope.show.showSearchSubMenu = true;
+    lastSearch = Date.now();
+    if (!$scope.searchTerm) {
+      $rootScope.application.bug("Please enter something to search for.");
+      return;
+    }
+    if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession) {
+      $rootScope.application.bug("Please select an elicitation session to search through.");
+      return;
+    }
+
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
-    var fieldsInScope = {};
+    var fieldsTheUserCanSee = {};
     var mapFieldsToTrue = function(datumField) {
-      fieldsInScope[datumField.id] = true;
+      fieldsTheUserCanSee[datumField.id] = true;
     };
     for (var column in $rootScope.application.corpus.fieldsInColumns) {
-      if ($rootScope.application.corpus.fieldsInColumns.hasOwnProperty(column)) {
+      if ($rootScope.application.corpus.fieldsInColumns.hasOwnProperty(column) &&
+        $rootScope.application.corpus.fieldsInColumns[column] &&
+        $rootScope.application.corpus.fieldsInColumns[column].length > 0 &&
+        typeof $rootScope.application.corpus.fieldsInColumns[column].map === "function") {
         $rootScope.application.corpus.fieldsInColumns[column].map(mapFieldsToTrue);
       }
     }
-    fieldsInScope.judgement = true;
+    fieldsTheUserCanSee.judgement = true;
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
 
-    fieldsInScope.comments = true;
+    fieldsTheUserCanSee.comments = true;
 
-    fieldsInScope.dateModified = true;
-    // fieldsInScope.lastModifiedBy = true;
+    fieldsTheUserCanSee.dateModified = true;
+    // fieldsTheUserCanSee.lastModifiedBy = true;
 
     if ($scope.searchHistory) {
-      $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
+      $scope.searchHistory = $scope.searchHistory + " AND " + $scope.searchTerm;
     } else {
-      $scope.searchHistory = searchTerm;
+      $scope.searchHistory = $scope.searchTerm;
     }
-    // Converting searchTerm to string to allow for integer searching
-    searchTerm = searchTerm.toString().toLowerCase();
-    var newScopeData = [];
+    // Converting searchTerm to string to allow for integer showSearchSubMenu
 
-    var thisDatumIsIN = function(spreadsheetDatum) {
-      var dataString;
+    var results = [];
+    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
+      var result = datum.search($scope.searchHistory, fieldsTheUserCanSee);
+      if (result) {
+        results.push(result);
+      }
+    });
 
-      for (var fieldkey in spreadsheetDatum) {
-        // Limit search to visible data
-        if (spreadsheetDatum[fieldkey] && fieldsInScope[fieldkey] === true) {
-          if (fieldkey === "datumTags") {
-            dataString = JSON.stringify(spreadsheetDatum.datumTags);
-            dataString = dataString.toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          } else if (fieldkey === "comments") {
-            for (var j in spreadsheetDatum.comments) {
-              for (var commentKey in spreadsheetDatum.comments[j]) {
-                dataString = spreadsheetDatum.comments[j][commentKey].toString();
-                if (dataString.indexOf(searchTerm) > -1) {
-                  return true;
-                }
-              }
-            }
-          } else if (fieldkey === "dateModified") {
-            //remove alpha characters from the date so users can search dates too, but not show everysearch result if the user is looking for "t" #1657
-            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          } else {
-            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    };
-
-    // if (!$rootScope.application.corpus.currentSession.id) {
-    // Search allData in scope
-    for (var i in $scope.allData) {
-      // Determine if record should be included in session search
-      var searchTarget = false;
-      if (!$rootScope.application.corpus.currentSession.id) {
-        searchTarget = true;
-      } else if ($scope.allData[i].session._id === $rootScope.application.corpus.currentSession.id) {
-        searchTarget = true;
-      }
-      if (searchTarget === true) {
-        if (thisDatumIsIN($scope.allData[i])) {
-          newScopeData.push($scope.allData[i]);
-        }
-      }
-    }
-
-    if (newScopeData.length > 0) {
-      $scope.allData = newScopeData;
-      if (!$rootScope.application.authentication.user ||
-        $rootScope.application.authentication.user.prefs ||
-        $rootScope.application.authentication.user.prefs.numVisibleDatum) {
-
-        console.warn("the user isnt loaded, shouldnt be loading any data.");
-        return;
-      }
-      var resultSize = $rootScope.application.authentication.user.prefs.numVisibleDatum;
-      if (resultSize === "all") {
-        resultSize = $scope.allData.length;
-      }
-      $scope.data = $scope.allData.slice(
-        0, resultSize);
+    if (!results || results.length === 0) {
+      //TODO show no results.
+      $rootScope.show.showNoSearchResulsMessage = true;
     } else {
-      $rootScope.notificationMessage = "No records matched your search.";
-      $rootScope.openNotification();
+      $rootScope.show.showNoSearchResulsMessage = false;
     }
+
   };
 
   $scope.selectAll = function() {
     if (!$rootScope.application ||
       !$rootScope.application.corpus ||
       !$rootScope.application.corpus.currentSession ||
-      !$rootScope.application.corpus.currentSession.docs ||
-      !$rootScope.application.corpus.currentSession.docs.map) {
+      !$rootScope.application.corpus.currentSession.datalist ) {
       return;
     }
 
-    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
-      datum.selected = true;
-    });
+    $rootScope.application.corpus.currentSession.datalist.select('all');
+
   };
 
   $scope.exportResults = function(size) {
@@ -1215,7 +1174,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     var results = [];
     $rootScope.application.corpus.currentSession.docs.map(function(datum) {
-      if (datum.selected) {
+      if (datum.highlight) {
         results.push(datum);
       }
     });
@@ -1376,7 +1335,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $rootScope.application.authentication.newCorpus(dataToPost)
       .then(function(response) {
-      $scope.creatingNewCorpus = false;
+        $scope.creatingNewCorpus = false;
 
         // Add new corpus to scope
         var newConnection = {};

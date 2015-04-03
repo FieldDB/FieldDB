@@ -1,3 +1,8 @@
+<div class="centered" ng-show="show.showSearchSubMenu && show.showNoSearchResulsMessage">
+  <h2 ng-bind-html="contextualize('locale_search_result_modal') + ' 0'">
+  </h2>
+</div>
+
 <div class="centered" ng-show="!application.corpus || !application.corpus.currentSession.id">
   <h2 ng-bind-html="contextualize('locale_select_session_message')">
   </h2>
