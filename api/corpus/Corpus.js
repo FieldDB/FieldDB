@@ -1206,7 +1206,30 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       //      alert("TODO contact server to change the public private of the corpus");
       throw new Error(" I dont know how change this corpus' public/private setting ");
     }
+  },
+
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+
+      if (!json) {
+        this.warn("Not returning json right now.");
+        return;
+      }
+      json.team = this.team;
+      // this.debug("saving fields as the deprecated datumFields");
+      // json.datumFields = json.fields;
+      // delete json.fields;
+
+      this.debug(json);
+      return json;
+    }
   }
+
+
 });
 
 exports.Corpus = Corpus;

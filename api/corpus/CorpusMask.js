@@ -256,6 +256,16 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
    */
   team: {
     get: function() {
+      if (!this._team) {
+        this.team = {
+          gravatar: "",
+          username: ""
+        };
+        if (this.dbname) {
+          this._team.gravatar = this._team.gravatar || this._team.buildGravatar(this.dbname);
+          this._team.username = this._team.username || this.dbname.split("-")[0];
+        }
+      }
       return this._team;
     },
     set: function(value) {
