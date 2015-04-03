@@ -11,6 +11,11 @@
 angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateEdit', function() {
   var controller = function($scope, $rootScope) {
 
+    $scope.adminPermissions = $rootScope.adminPermissions;
+    $scope.readPermissions = $rootScope.readPermissions;
+    $scope.writePermissions = $rootScope.writePermissions;
+    $scope.commentPermissions = $rootScope.commentPermissions;
+
     $scope.markAsNotSaved = function(datum) {
       datum.unsaved = true;
       $rootScope.application.corpus.currentSession.docs.unsaved = true;
@@ -69,7 +74,7 @@ angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateE
       if (!datum.comments) {
         datum.comments = [];
       }
-      datum.comments.push(comment);
+      datum.comments.add(comment);
       datum.unsaved = true;
       // $rootScope.application.corpus.currentSession.docs.unsaved = true;
       datum.dateModified = JSON.parse(JSON.stringify(new Date()));
@@ -95,7 +100,7 @@ angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateE
         indirectobject: indirectObjectString,
         teamOrPersonal: "team"
       }]);
-
+      datum.hasComments = true;
     };
 
     $scope.deleteComment = function(comment, datum) {
@@ -122,7 +127,7 @@ angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateE
     $scope.deleteRecord = function(datum) {
       var r;
       if (!datum.id) {
-        r = confirm("This datum has never been saved, If you delete it you wont be able to recover it. Are you sure you want to delete it?");
+        r = confirm("This datum has never been saved. If you delete it you won't be able to recover it. Are you sure you want to delete it?");
         if (!r) {
           return;
         }
@@ -136,7 +141,7 @@ angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateE
       }
       var reason;
       while (!reason) {
-        reason = prompt("Why are you putting this in the trash?");
+        reason = prompt("Please add a short explaination of why are you putting this in the trash?");
       }
 
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
