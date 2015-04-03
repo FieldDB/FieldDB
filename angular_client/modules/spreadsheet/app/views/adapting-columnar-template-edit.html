@@ -124,7 +124,7 @@
   <div ng-show="datum.hasImages||datum.hasAudio||datum.hasRelatedData" class="spreadsheet-expandedData col-xs-12 col-sm-12 col-md-6 col-lg-6" >
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <table >
-        <tr ng-repeat="image in datum.images track by $index" ng-hide="image.trashed == 'deleted'">
+        <tr ng-repeat="image in datum.images.collection track by $index" ng-hide="image.trashed == 'deleted'">
           <td>
             <span class="form-horizontal">
               <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(image, datum)">
