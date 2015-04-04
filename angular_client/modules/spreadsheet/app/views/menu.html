@@ -40,7 +40,7 @@
           </ul>
         </li>
 
-        <li ng-show="show.showSearchSubMenu" ng-click="show.showSearchSubMenu=false">
+        <li ng-show="show.showSearchSubMenu" ng-click="show.showSearchSubMenu=false;application.corpus.currentSession.datalist.showDocCheckboxes=false;">
           <a href="">
             <i class="fa whiteicon fa-list">
             </i>
@@ -48,7 +48,7 @@
           </a>
         </li>
 
-        <li ng-show="!show.showSearchSubMenu && show.showDataEntryPage" ng-click="show.showSearchSubMenu=true">
+        <li ng-show="!show.showSearchSubMenu && show.showDataEntryPage" ng-click="show.showSearchSubMenu=true;application.corpus.currentSession.datalist.showDocCheckboxes=true;">
           <a href="">
             <i class="fa whiteicon fa-search">
             </i>
@@ -122,6 +122,11 @@
         </li>
         <li>
           <form class="navbar-form" >
+            <button ng-class="everythingSavedStatus.class" ng-click="saveChanges();" ng-show="show.showDataEntryPage && (writePermissions || commentPermissions)">
+              <i ng-class="everythingSavedStatus.icon">
+              </i>
+              {{everythingSavedStatus.text}}
+            </button>
             <a ng-hide="application.authentication.user.authenticated" href="{{application.basePathname}}/register" class="btn btn-primary">
               {{contextualize('locale_registration')}}
             </a>

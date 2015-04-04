@@ -1,6 +1,8 @@
 <form ng-submit="markAsEdited(datum.utterance, datum, $event);" class="container-fluid">
   <div class="span1" >
     <!-- todo try ng-change to reduce edits which are not edits -->
+    N. {{$index +1}}
+    <input type="checkbox" ng-show="corpus.currentSession.datalist.showDocCheckboxes" ng-model="datum.selected"/>
     <input
     ng-blur="markAsEdited(datum.utterance, datum)"
     class="span2"
@@ -8,6 +10,7 @@
     ng-model="datum[corpus.datumFields.collection[0].id]"
     placeholder="*#?"
     title="{{corpus.datumFields.collection[0].help}}" />
+
   </div>
   <div class="{{corpus.fieldsInColumns.columnWidthClass}}">
 
