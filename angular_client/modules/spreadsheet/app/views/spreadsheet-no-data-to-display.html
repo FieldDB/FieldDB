@@ -1,15 +1,16 @@
-<div class="row" ng-hide="application.corpus.currentSession.id">
-  <div class="span12 pagination-centered">
-    <h2 ng-bind-html="contextualize('locale_select_session_message')">
-    </h2>
-  </div>
+<div class="centered" ng-show="show.showSearchSubMenu && show.showNoSearchResulsMessage">
+  <h2 ng-bind-html="contextualize('locale_search_result_modal') + ' 0'">
+  </h2>
 </div>
-<div class="row" ng-show="application.corpus.loading || application.currentSession.loading">
-  <div class="span12 pagination-centered">
-    <img ng-src="images/loading-spinner.gif" />
-  </div>
+
+<div class="centered" ng-show="application.corpus.rev && !application.corpus.currentSession.id">
+  <h2 ng-bind-html="contextualize('locale_select_session_message')">
+  </h2>
 </div>
-<div class="row" ng-hide="application.corpus.currentSession.length">
-  <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
-  </div>
+<div class="centered" ng-show="application.corpus.loading || application.corpus.currentSession.loading">
+  <img ng-src="images/loading-spinner.gif" class="gravatar-large"/>
+</div>
+<div class="centered" ng-show="!application.corpus || !application.corpus.rev || !application.authentication.user.corpora || !application.authentication.user.authenticated ">
+  <h2 ng-bind-html="contextualize('locale_no_data_message')">
+  </h2>
 </div>

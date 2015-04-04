@@ -5,35 +5,6 @@ console.log("Declaring the SpreadsheetStyleDataEntryServices.");
 angular.module('spreadsheetApp')
   .factory('Data', function($http, $rootScope) {
 
-    var getDocFromCouchDB = function(DB, UUID) {
-      if (true) {
-        console.warn("getDocFromCouchDB is deprecated",DB, UUID);
-      }
-    };
-
-    var saveCouchDoc = function(DB, newRecord) {
-      if (true) {
-        console.warn("saveCouchDoc is deprecated", DB, newRecord);
-      }
-    };
-
-    var getBlankDataTemplateFromCorpus = function(fieldsType) {
-      if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated", fieldsType);
-      }
-    };
-
-    var datumFields = function(DB) {
-      if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated", DB);
-      }
-    };
-
-    var sessions = function(DB) {
-      if (true) {
-        console.warn("getBlankDataTemplateFromCorpus is deprecated", DB);
-      }
-    };
 
     var glosser = function(DB) {
       if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
@@ -173,73 +144,6 @@ angular.module('spreadsheetApp')
       return promise;
     };
 
-    // var saveSpreadsheetDatum = function(spreadsheetDatumToBeSaved) {
-    //   var deferred = Q.defer();
-
-    //   Q.nextTick(function() {
-    //     // spreadsheetDatumToBeSaved.timestamp = Date.now();
-    //     // spreadsheetDatumToBeSaved.dateModified = JSON.parse(JSON.stringify(new Date())); //These were done in the edit functions because the data might get saved an hour after it was modified... or more...
-    //     var convertAndSaveAsFieldDBDatum = function(fieldDBDatumDocOrTemplate) {
-    //       var fieldDBDatum;
-    //       try {
-    //         fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
-    //       } catch (e) {
-    //         deferred.reject("Error saving datum: " + JSON.stringify(e));
-    //         return;
-    //       }
-    //       saveCouchDoc(fieldDBDatum.dbname, fieldDBDatum).then(function(response) {
-    //         console.log(response);
-    //         if (response.status >= 400) {
-    //           deferred.reject("Error saving datum " + response.status);
-    //           return;
-    //         }
-    //         if (!spreadsheetDatumToBeSaved.id) {
-    //           spreadsheetDatumToBeSaved.id = response.data.id;
-    //           spreadsheetDatumToBeSaved.rev = response.data.rev;
-    //         }
-    //         deferred.resolve(spreadsheetDatumToBeSaved);
-    //       }, function(e) {
-    //         var reason = "Error saving datum. Maybe you're offline?";
-    //         if (e.data && e.data.reason) {
-    //           reason = e.data.reason;
-    //         } else if (e.status) {
-    //           reason = "Error saving datum: " + e.status;
-    //         }
-    //         console.log(reason, fieldDBDatum, e);
-    //         deferred.reject(reason);
-    //       });
-    //     };
-
-    //     if (spreadsheetDatumToBeSaved.id) {
-    //       getDocFromCouchDB(spreadsheetDatumToBeSaved.dbname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
-    //         var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
-    //         if (e.data && e.data.reason) {
-    //           if (e.data.reason === "missing") {
-    //             e.data.reason = e.data.reason + " Please report this.";
-    //           }
-    //           reason = e.data.reason;
-    //         } else if (e.status) {
-    //           reason = "Error getting the most recent version of the datum: " + e.status;
-    //         }
-    //         console.log(reason, spreadsheetDatumToBeSaved, e);
-    //         deferred.reject(reason);
-    //       });
-    //     } else {
-    //       convertAndSaveAsFieldDBDatum(getBlankDataTemplateFromCorpus("datumFields"));
-    //     }
-
-    //   });
-    //   return deferred.promise;
-    // };
-
-    var blankDatumTemplate = function() {
-      return getBlankDataTemplateFromCorpus("datumFields");
-    };
-
-    var blankSessionTemplate = function() {
-      return getBlankDataTemplateFromCorpus("sessionFields");
-    };
-
     var blankActivityTemplate = function() {
       var promise = $http
         .get('data/blank_activity_template.json').then(
@@ -247,28 +151,6 @@ angular.module('spreadsheetApp')
             return response.data;
           });
       return promise;
-    };
-
-    var removeRecord = function(DB, UUID, rev) {
-      if (!FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.connection) {
-        console.log("Sever code is undefined");
-        window.location.assign("#/corpora_list");
-        return;
-      }
-      console.log("You cannot delete items from the corpus.", rev);
-      return;
-
-      // var config = {
-      //   method: "DELETE",
-      //   url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/" + UUID + "?rev=" + rev,
-      //   withCredentials: true
-      // };
-
-      // console.log("Contacting the DB to delete record. " + config.url);
-      // var promise = $http(config).then(function(response) {
-      //   return response;
-      // });
-      // return promise;
     };
 
     var forgotPassword = function(forgotPasswordInfo) {
@@ -313,19 +195,11 @@ angular.module('spreadsheetApp')
 
 
     return {
-      async: getDocFromCouchDB,
-      datumFields: datumFields,
-      sessions: sessions,
       glosser: glosser,
       lexicon: lexicon,
       updateroles: updateroles,
       removeroles: removeroles,
-      saveCouchDoc: saveCouchDoc,
-      // saveSpreadsheetDatum: saveSpreadsheetDatum,
-      blankDatumTemplate: blankDatumTemplate,
-      blankSessionTemplate: blankSessionTemplate,
       blankActivityTemplate: blankActivityTemplate,
-      removeRecord: removeRecord,
       forgotPassword: forgotPassword,
       changePassword: changePassword
     };

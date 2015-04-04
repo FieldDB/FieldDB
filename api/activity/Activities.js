@@ -326,8 +326,6 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
     }
   },
 
-
-
   save: {
     value: function() {
       var deferred = Q.defer(),

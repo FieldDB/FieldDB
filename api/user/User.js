@@ -278,8 +278,15 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
       // TODO not including the corpuses, instead include corpora
-      json.corpora = this.corpora;
+      if (this.corpora && typeof this.corpora.toJSON === "function") {
+        json.corpora = this.corpora.toJSON();
+      } else {
+        json.corpora = this.corpora;
+      }
       delete json.corpuses;
+
+      delete json.connection;
+      delete json.authentication;
 
       // TODO deprecated
       json.datalists = this.datalists;
@@ -357,7 +364,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         self = this,
         deferred = Q.defer();
 
-      this.fetchingPromise = deferred.promise;
+      this.whenReady = deferred.promise;
 
       Q.nextTick(function() {
         deferred.resolve(self);

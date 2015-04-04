@@ -108,11 +108,11 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       if (value === this._type) {
         return;
       }
-      this.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
-      if (this.filename) {
+      if (this.filename && !this.checksum) {
+        this.warn("type cannot be set, it is automatically determined from the filename. Not using: " + value);
         value = this.guessType(this.filename);
-        this._type = value;
       }
+      this._type = value;
     }
   },
 

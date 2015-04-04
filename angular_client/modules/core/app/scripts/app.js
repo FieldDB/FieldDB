@@ -26,7 +26,7 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     fieldDBApp = FieldDB.FieldDBObject.application;
   } else {
-    fieldDBApp = new FieldDB.PsycholinguisticsApp({
+    fieldDBApp = new FieldDB.App({
       authentication: {
         user: new FieldDB.User({
           authenticated: false
@@ -48,7 +48,7 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
     }
   }
 
-  fieldDBApp.whiteListCORS.concat([
+  fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",

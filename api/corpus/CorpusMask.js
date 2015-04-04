@@ -256,6 +256,18 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
    */
   team: {
     get: function() {
+      if (!this._team) {
+        this.team = {
+          gravatar: "",
+          username: "",
+          _id: "team"
+        };
+        if (this.dbname) {
+          this._team.gravatar = this._team.gravatar || this.gravatar || this._team.buildGravatar(this.dbname);
+          this._team.username = this._team.username || this.dbname.split("-")[0];
+        }
+        this._team.fetch();
+      }
       return this._team;
     },
     set: function(value) {
@@ -266,6 +278,12 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   activityConnection: {
     get: function() {
       this.debug("getting activityConnection");
+      if (!this._activityConnection && this.rev && this._connection) {
+        this.warn("This corpus is missing its activity connection for some reason.");
+        var copy = this._connection.toJSON();
+        copy.dbname = copy.dbname + "-activity_feed";
+        this.activityConnection = copy;
+      }
       if (this._activityConnection && this._activityConnection.parent !== this) {
         this._activityConnection.parent = this;
       }

@@ -108,12 +108,7 @@ describe("Data List", function() {
       });
       expect(datalist.docs.primaryKey).toEqual("tempId");
       expect(datalist.docIds).toEqual(["one"]);
-      expect(datalist.docs.one.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "one",
-        dateCreated: datalist.docs.one.dateCreated,
-        version: datalist.version
-      });
+      expect(datalist.docs.one.tempId).toEqual("one");
     });
 
     it("should be able to empty docs", function() {
@@ -187,6 +182,7 @@ describe("Data List", function() {
       expect(list.datumIds.length).toEqual(9);
       expect(list.docs["924726BF-FAE7-4472-BD99-A13FCB5FEEFF"]._id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
 
+      // expect(list.docs.INTERNAL_MODELS.item.toString()).toEqual();
       var additions = list.add([{
         _id: "5EB57DXE-5D97-428E-A9C7-377DEEC02A10"
       }, {
@@ -225,15 +221,19 @@ describe("Data List", function() {
 
       var bottomItem = list.pop();
       expect(bottomItem.id).toEqual("F60C2FX6-20FB-4B2B-BB3A-448B0784DBE0");
-      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+      if (bottomItem.fieldDBtype === "FieldDBObject") {
+        expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+      } else {
+        expect(bottomItem.fieldDBtype).toEqual("Datum");
+      }
 
       bottomItem = list.pop();
       expect(bottomItem.id).toEqual("5EB57DXE-5D97-428E-A9C7-377DEEC02A10");
-      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+      expect(bottomItem.fieldDBtype).toBeDefined();
 
       bottomItem = list.pop();
       expect(bottomItem.id).toEqual("924726BF-FAE7-4472-BD99-A13FCB5FEEFF");
-      expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
+      expect(bottomItem.fieldDBtype).toBeDefined();
 
       additions = list.unshift({
         id: "yetanotheritem",
@@ -319,13 +319,9 @@ describe("Data List", function() {
       });
       expect(datalist.docs.primaryKey).toEqual("tempId");
       expect(datalist.docIds).toEqual(["tempone"]);
-      expect(datalist.docs.tempone.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "tempone",
-        dateCreated: datalist.docs.tempone.dateCreated,
-        version: datalist.version
-      });
+      expect(datalist.docs.tempone.tempId).toEqual("tempone");
 
+      // datalist.docs.debugMode = true;
       var additions = datalist.add([{
         tempId: "temptwo",
         some: "content"
@@ -340,28 +336,14 @@ describe("Data List", function() {
 
       expect(datalist.docs.primaryKey).toEqual("tempId");
       expect(datalist.docIds).toEqual(["tempone", "temptwo", "tempthree", "tempfour"]);
-      expect(datalist.docs.tempone.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "tempone",
-        dateCreated: datalist.docs.tempone.dateCreated,
-        version: datalist.version
-      });
-      expect(datalist.docs.temptwo).toBeDefined();
-      expect(datalist.docs.temptwo.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "temptwo",
-        some: "content",
-        dateCreated: datalist.docs.temptwo.dateCreated,
-        version: datalist.version
-      });
+      expect(datalist.docs.tempone.tempId).toEqual("tempone");
 
-      expect(datalist.docs.tempthree.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "tempthree",
-        num: 1,
-        dateCreated: datalist.docs.tempthree.dateCreated,
-        version: datalist.version
-      });
+      expect(datalist.docs.temptwo).toBeDefined();
+      expect(datalist.docs.temptwo.tempId).toEqual("temptwo");
+      expect(datalist.docs.temptwo.some).toEqual("content");
+
+      expect(datalist.docs.tempthree.tempId).toEqual("tempthree");
+      expect(datalist.docs.tempthree.num).toEqual(1);
 
     });
   });
@@ -390,14 +372,10 @@ describe("Data List", function() {
       expect(datalist.docs.primaryKey).toEqual("tempId");
       expect(datalist.docIds).toEqual(["tempone", "temptwo", "tempthree", "tempfour"]);
 
-      expect(datalist.docs.tempfour.toJSON()).toEqual({
-        fieldDBtype: "FieldDBObject",
-        tempId: "tempfour",
-        _rev: "1-456",
-        some: "other content",
-        dateCreated: datalist.docs.tempfour.dateCreated,
-        version: datalist.version
-      });
+      expect(datalist.docs.tempfour.tempId).toEqual("tempfour");
+      expect(datalist.docs.tempfour._rev).toEqual("1-456");
+      expect(datalist.docs.tempfour.some).toEqual("other content");
+
 
       additions = datalist.add([{
         tempId: "tempthree",
@@ -437,7 +415,11 @@ describe("Data List", function() {
       expect(list.docs.length).toEqual(9);
       expect(list.docs.indexOf("ED5A2292-659E-4B27-A352-9DBC5065207E")).toEqual(7);
       expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].id).toEqual("ED5A2292-659E-4B27-A352-9DBC5065207E");
-      expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("FieldDBObject");
+      if (list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype === "FieldDBObject") {
+        expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("FieldDBObject");
+      } else {
+        expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("Datum");
+      }
     });
 
   });
@@ -546,9 +528,44 @@ describe("Data List", function() {
   });
 
   describe("actions on items", function() {
+    var list;
+    beforeEach(function() {
+      list = new DataList({
+        docs: [new FieldDBObject({
+          "_id": "docone",
+          "datumFields": [],
+          "session": {},
+          "audioVideo": [{
+            "URL": "http://youtube.com/iwoamoiemqo32"
+          }, {
+            "URL": "http://soundcloud.com/iwoa/moiemqo32"
+          }, {
+            "URL": "http://localhost:3184/example/oiemqo32"
+          }]
+        }), new FieldDBObject({
+          "_id": "doctwo",
+          "datumFields": [],
+          "session": {}
+        }), new FieldDBObject({
+          "_id": "docthree",
+          "datumFields": [],
+          "session": {},
+          "audioVideo": []
+        })]
+      });
+    });
 
     it("should show filtered results of users corpus (search)", function() {
-      expect(true).toBeTruthy();
+      // pretend we ran search
+      list.docs.collection[1].highlightedMatches = "this <span class='highlighted'>matches</span> some search <span class='highlight'>result</span>";
+      list.docs.collection[2].highlightedMatches = "this <span class='highlighted'>matches</span> some other <span class='highlight'>result</span>";
+
+      // select the itesm with matches
+      var selected = list.select("highlightedMatches");
+      expect(selected).toEqual(["doctwo", "docthree"]);
+      expect(list.docs.docone.selected).toEqual(false);
+      expect(list.docs.doctwo.selected).toEqual(true);
+      expect(list.docs.docthree.selected).toEqual(true);
     });
 
     it("should show LaTeX'ed datum", function() {
@@ -562,7 +579,7 @@ describe("Data List", function() {
     });
 
     it("should discover audio on datum", function(done) {
-      var list = new DataList({
+      list = new DataList({
         docs: [new FieldDBObject({
           "_id": "docone",
           "datumFields": [],

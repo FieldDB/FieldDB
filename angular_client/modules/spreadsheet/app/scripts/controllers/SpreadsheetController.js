@@ -17,11 +17,111 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http);
   }
 
+
+  $timeout(function() {
+
+    console.log(" TODOS This spreadsheet app re-write is not complete. There are more things which ahve not been tested:");
+    console.log("        * save activities");
+    console.log("        * audit save of datum");
+    console.log("        * audit save of sessions");
+    console.log("        * audit save of corpus ");
+    console.log("        * audit save of corpus team");
+    console.log("        * audit save of corpus mask");
+    console.log("        * test save of sessions");
+    console.log("        * test new session");
+    console.log("        * test new corpus");
+    console.log("        * force modals to show (we are using bootsrap 3 but angular ui uses bootstrap2)");
+
+  }, 1000);
+
+
+  $scope.everythingSavedStatus = {
+    state: "",
+    class: "btn btn-inverse",
+    icon: "fa whiteicon fa-folder",
+    text: ""
+  };
+
+  var isEverythingSaved = function() {
+    var updatedEverythingSavedStatus;
+
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs ||
+
+      !$rootScope.application.corpus.activityConnection ||
+      !$rootScope.application.corpus.activityConnection.docs ||
+
+      !$rootScope.application.authentication ||
+      !$rootScope.application.authentication.user ||
+      !$rootScope.application.authentication.user.activityConnection ||
+      !$rootScope.application.authentication.user.activityConnection.docs) {
+
+      updatedEverythingSavedStatus = {
+        state: "Saved",
+        class: "btn",
+        icon: "fa whiteicon fa-folder",
+        text: $rootScope.contextualize("locale_Saved")
+      };
+
+    } else {
+
+      // TODO decide what to do with the new datum
+      // $rootScope.application.corpus.currentSession.newDatum.unsaved
+
+      if ($rootScope.application.corpus.currentSession.docs.unsaved === false &&
+        $rootScope.application.corpus.activityConnection.docs.unsaved === false &&
+        $rootScope.application.authentication.user.activityConnection.docs.unsaved === false) {
+
+        updatedEverythingSavedStatus = {
+          state: "Saved",
+          class: "btn btn-success",
+          icon: "fa whiteicon fa-folder",
+          text: $rootScope.contextualize("locale_Saved")
+        };
+      } else if ($rootScope.application.corpus.currentSession.docs.unsaved ||
+        $rootScope.application.corpus.activityConnection.docs.unsaved ||
+        $rootScope.application.authentication.user.activityConnection.docs.unsaved) {
+
+        updatedEverythingSavedStatus = {
+          state: "Save",
+          class: "btn btn-danger",
+          icon: "fa whiteicon fa-save",
+          text: $rootScope.contextualize("locale_Save")
+        };
+      } else if ($rootScope.application.corpus.currentSession.docs.saving ||
+        $rootScope.application.corpus.activityConnection.docs.saving ||
+        $rootScope.application.authentication.user.activityConnection.docs.saving) {
+
+        updatedEverythingSavedStatus = {
+          state: "Saving",
+          class: "pulsing",
+          icon: "fa whiteicon fa-folder-open",
+          text: $rootScope.contextualize("locale_Saving")
+        };
+      }
+
+    }
+
+
+    for (var atrib in updatedEverythingSavedStatus) {
+      if (updatedEverythingSavedStatus.hasOwnProperty(atrib) && updatedEverythingSavedStatus[atrib] !== $scope.everythingSavedStatus[atrib]) {
+        $scope.everythingSavedStatus[atrib] = updatedEverythingSavedStatus[atrib];
+      }
+    }
+    return updatedEverythingSavedStatus.state === "Saved";
+  };
+
   var reRouteUser = function(nextRoute) {
     if (window.location.hash.indexOf(nextRoute) === window.location.hash.length - nextRoute.length) {
       return;
     }
     window.location.assign("#/" + nextRoute);
+    if (nextRoute === "spreadsheet") {
+      $rootScope.show.showDataEntryPage = true;
+    }
 
     // try {
     //   if (!$scope.$$phase) {
@@ -77,7 +177,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
   }
 
-  $rootScope.appVersion = "2.49.1.10.53ss";
+  $rootScope.appVersion = "2.50.4.17.54ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -109,7 +209,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
-    // reRouteUser("welcome");
+    reRouteUser("welcome");
   };
 
   var processServerContactError = function(err) {
@@ -137,6 +237,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   document.addEventListener("notauthenticated", function() {
+    $rootScope.clickSuccess = true;
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
     }
@@ -196,48 +297,49 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
 
-    var preferedSpreadsheetShape = $rootScope.application.corpus.prefs.preferedSpreadsheetShape;
-
-    if (preferedSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
-      preferedSpreadsheetShape.rows = preferedSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / preferedSpreadsheetShape.columns);
-    }
     if ($rootScope.application.corpus.datumFields.indexOf("syntacticTreeLatex") < 6) {
       $rootScope.application.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
     }
 
-    if (preferedSpreadsheetShape.columns === 1) {
+    $rootScope.application.corpus.prefs.preferedSpreadsheetShape = $rootScope.application.corpus.prefs.preferedSpreadsheetShape;
+
+    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
+      $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows = $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / $rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns);
+    }
+
+    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 1) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = [];
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-8 col-lg-8";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-3 col-lg-3";
-    } else if (preferedSpreadsheetShape.columns === 2) {
+    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 2) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows + 1,
-        preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-6 col-md-5 col-lg-5";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-2 col-lg-2";
-    } else if (preferedSpreadsheetShape.columns === 3) {
+    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 3) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows + 1,
-        preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows * 2 + 1,
-        preferedSpreadsheetShape.rows * 3 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 3 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-4 col-lg-4";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-12 col-lg-12";
@@ -293,22 +395,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $rootScope.currentPage = $rootScope.currentPage || 0;
   $scope.reverse = true;
   // $scope.activeDatumIndex = 'newEntry';
-  $scope.dataentry = false;
-  $scope.searching = false;
-  $rootScope.activeSubMenu = 'none';
-  $scope.showCreateNewSessionDropdown = false;
-  $scope.showEditSessionDetailsDropdown = false;
-  $scope.currentDate = new Date();
+
+  $rootScope.show = {
+    showDataEntryPage: false,
+    showSearchSubMenu: false,
+    activeSubMenu: 'none',
+    showCreateNewSessionDropdown: false,
+    showEditSessionDetailsDropdown: false
+  };
+
   $scope.activities = [];
 
   $scope.changeActiveSubMenu = function(subMenu) {
-    if ($rootScope.activeSubMenu === subMenu) {
-      $rootScope.activeSubMenu = 'none';
-    } else if (subMenu === 'none' && $scope.searching === true) {
-      return;
-    } else {
-      $rootScope.activeSubMenu = subMenu;
-    }
+    $rootScope.show.activeSubMenu = subMenu;
   };
 
   $scope.showDataEntry = function() {
@@ -316,67 +415,82 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.navigateVerifySaved = function(itemToDisplay) {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
-      $rootScope.notificationMessage = "Please save changes before continuing.";
-      $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
-      $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
-      $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.newDatum.unsaved) {
-      $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
-      $rootScope.openNotification();
-    } else {
 
-      // $scope.appReloaded = true;
+    // isEverythingSaved();
 
-      $rootScope.loading = false;
 
-      $scope.activeMenu = itemToDisplay;
+    // if ($scope.everythingSavedStatus.state === "Save") {
+    //   $rootScope.notificationMessage = "Please save changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
 
-      switch (itemToDisplay) {
-        case "settings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("settings");
-          break;
-        case "corpusSettings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("corpussettings");
-          break;
-        case "home":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("corpora_list");
-          break;
-        case "searchMenu":
-          $scope.changeActiveSubMenu(itemToDisplay);
-          $scope.searching = true;
-          $scope.activeDatumIndex = null;
-          reRouteUser("spreadsheet");
-          break;
-        case "faq":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("faq");
-          break;
-        case "none":
-          $scope.dataentry = true;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          reRouteUser("spreadsheet");
-          break;
-        case "register":
-          reRouteUser("register");
-          break;
-        default:
-          reRouteUser("spreadsheet");
-          $scope.changeActiveSubMenu(itemToDisplay);
-      }
+    // } else if ($scope.everythingSavedStatus.state === "Saving") {
+    //   $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
+    //   $rootScope.openNotification();
+    //   return;
+
+    // } else if ($rootScope.application &&
+    //   $rootScope.application.corpus &&
+    //   $rootScope.application.corpus.currentSession &&
+    //   $rootScope.application.corpus.currentSession.newDatum &&
+    //   $rootScope.application.corpus.currentSession.newDatum.unsaved) {
+
+    //   $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
+    //   $rootScope.openNotification();
+    //   return;
+    // }
+
+
+
+    // $scope.appReloaded = true;
+
+    // $rootScope.loading = false;
+
+    $scope.activeMenu = itemToDisplay;
+
+    switch (itemToDisplay) {
+      case "settings":
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("settings");
+        break;
+      case "corpusSettings":
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("corpussettings");
+        break;
+      case "home":
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("corpora_list");
+        break;
+      case "searchMenu":
+        $scope.changeActiveSubMenu(itemToDisplay);
+        $rootScope.show.showSearchSubMenu = true;
+        $scope.activeDatumIndex = null;
+        reRouteUser("spreadsheet");
+        break;
+      case "faq":
+        $rootScope.show.showDataEntryPage = false;
+        $rootScope.show.showSearchSubMenu = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("faq");
+        break;
+      case "none":
+        $rootScope.show.showDataEntryPage = true;
+        $rootScope.show.showSearchSubMenu = false;
+        $scope.changeActiveSubMenu('none');
+        reRouteUser("spreadsheet");
+        break;
+      case "register":
+        reRouteUser("register");
+        break;
+      default:
+        reRouteUser("spreadsheet");
+        $scope.changeActiveSubMenu(itemToDisplay);
     }
   };
 
@@ -440,13 +554,41 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // });
 
       /* Set the current session either form the user's last page load or to be the most recent session */
-      if (!$rootScope.application.corpus.currentSession && $rootScope.application.sessionsList.docs && $rootScope.application.sessionsList.docs._collection && $rootScope.application.sessionsList.docs._collection.length > 0) {
-        $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs._collection[$rootScope.application.sessionsList.docs.length - 1];
-        $scope.currentSessionWasNotSetByAHuman = true;
+      if (!$rootScope.application.corpus.currentSession &&
+        $rootScope.application.sessionsList.docs &&
+        $rootScope.application.sessionsList.docs._collection &&
+        $rootScope.application.sessionsList.docs._collection.length > 0) {
+
+        // If the user has had this dashboard open, choose their most recent session.
+        if ($rootScope.application.authentication.user.mostRecentIds &&
+          $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] &&
+          $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid &&
+          $rootScope.application.sessionsList.docs[$rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid]) {
+
+          $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs[$rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid];
+        } else {
+          // If the user has not this dashboard open, choose the most recent session.
+          $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs._collection[$rootScope.application.sessionsList.docs.length - 1];
+          $scope.currentSessionWasNotSetByAHuman = true;
+        }
       }
       $scope.newSession = $rootScope.application.corpus.newSession();
       $scope.documentReady = true;
       $rootScope.application.corpus.loading = $rootScope.loading = false;
+
+      /* display the selected session */
+      // if (window.location.hash.indexOf("corpora_list") > -1) {
+      if (window.location.hash.indexOf("spreadsheet") > -1) {
+        // reRouteUser("corpora_list");
+        try {
+          if (!$scope.$$phase) {
+            $scope.$apply(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("Rendering after loading sessions generated probably a digest erorr");
+        }
+      }
+
     }, function(error) {
       $rootScope.application.corpus.loading = $rootScope.loading = false;
       processServerContactError(error);
@@ -519,7 +661,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.openNotification();
       return;
     }
-    $rootScope.clickSuccess = true;
     $rootScope.loginInfo = $rootScope.loginInfo || {};
     $rootScope.loginInfo.username = loginDetails.username.trim().toLowerCase().replace(/[^0-9a-z]/g, "");
     $rootScope.loginInfo.password = loginDetails.password;
@@ -549,19 +690,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   document.addEventListener("authenticated", function() {
+    $rootScope.clickSuccess = true;
+
     if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.rev) {
       $rootScope.openWelcomeNotificationDeprecated();
       return;
     }
-    $scope.corpora = $scope.corpora || new FieldDB.Collection();
+    $scope.corporaCacheToReduceRedownloading = $scope.corporaCacheToReduceRedownloading || new FieldDB.Collection();
 
     // Update saved state in Preferences
     updateAndOverwritePreferencesToCurrentVersion();
 
-    // if ($rootScope.application.authentication.user.mostRecentIds && $rootScope.application.authentication.user.mostRecentIds.connection && $rootScope.application.authentication.user.mostRecentIds.connection.dbname) {
-    //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.connection);
-    // } else {
-    // }
+    if (!$rootScope.application.corpus.id &&
+      $rootScope.application.authentication.user.mostRecentIds.dbname &&
+      $rootScope.application.authentication.user.corpora &&
+      $rootScope.application.authentication.user.corpora[$rootScope.application.authentication.user.mostRecentIds.dbname]) {
+
+      $scope.selectCorpus($rootScope.application.authentication.user.corpora[$rootScope.application.authentication.user.mostRecentIds.dbname]);
+
+    }
+    if (window.location.hash.indexOf("welcome") > -1) {
+      reRouteUser("corpora_list");
+    }
+
     $scope.documentReady = true;
     $rootScope.loading = false;
     try {
@@ -593,6 +744,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loginInfo.authUrl = $rootScope.application.connection.authUrl;
 
     $rootScope.application.authentication.login($rootScope.loginInfo).then(function() {
+      $rootScope.loading = false;
       $scope.loginUserFromScratchIsRunning = false;
       $scope.addActivity([{
         verb: "logged in",
@@ -606,6 +758,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }, function(error) {
       $scope.loginUserFromScratchIsRunning = false;
       processServerContactError(error);
+    }).fail(function(error) {
+      console.log(" error logging in  ", error);
+      $scope.loginUserFromScratchIsRunning = false;
+      processServerContactError(error);
     });
   };
 
@@ -616,6 +772,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadCorpusFieldsAndPreferences = function() {
+    $rootScope.loading = false;
+
     $scope.updateAvailableFieldsInColumns();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
@@ -632,7 +790,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         dbname: selectedConnection
       };
     }
-    selectedConnection.dbname = selectedConnection.dbname || selectedConnection.dbname;
+    selectedConnection.dbname = selectedConnection.dbname || selectedConnection.pouchname;
     if (!selectedConnection.dbname) {
       console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedConnection);
       return;
@@ -640,17 +798,24 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.application.corpus && $rootScope.application.corpus.dbname !== selectedConnection.dbname) {
       console.warn("The corpus already existed, and it was not the same as this one, removing it to use this one " + selectedConnection.dbname);
     }
-    if ($scope.corpora && $scope.corpora[selectedConnection.dbname]) {
-      $rootScope.application.corpus = $scope.corpora[selectedConnection.dbname];
+    if ($scope.corporaCacheToReduceRedownloading && $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname]) {
+      $rootScope.application.corpus = $scope.corporaCacheToReduceRedownloading[selectedConnection.dbname];
       return;
     }
 
     $rootScope.application.corpus = new FieldDB.Corpus();
     $rootScope.application.corpus.loadCorpusByDBname(selectedConnection.dbname).then(function(results) {
       console.log("loaded the corpus", results);
-      $scope.corpora.add($rootScope.application.corpus);
+      $scope.corporaCacheToReduceRedownloading.add($rootScope.application.corpus);
       selectedConnection.parent = $rootScope.application.corpus;
+      if ($rootScope.application.authentication.user.mostRecentIds.dbname !== $rootScope.application.corpus.dbname) {
+        $rootScope.application.authentication.user.mostRecentIds = {
+          dbname: $rootScope.application.corpus.dbname,
+        };
+      }
+      $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] = $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] || {};
 
+      //TODO choose session too.
       $scope.addActivity([{
         verb: "opened ",
         verbicon: "icon-eye",
@@ -673,7 +838,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $rootScope.$watch('corpus.dbname', function(newValue, oldValue) {
+  $rootScope.$watch('application.corpus.dbname', function(newValue, oldValue) {
     if (!$rootScope.application.corpus || !$rootScope.application.corpus.datumFields || !$rootScope.application.corpus._rev) {
       console.log("the corpus changed but it wasn't ready yet");
       return;
@@ -685,10 +850,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadCorpusFieldsAndPreferences();
   });
 
-  $rootScope.$watch('corpus.currentSession', function(newValue, oldValue) {
-    if (!$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
+  $rootScope.$watch('application.corpus.currentSession', function(newValue, oldValue) {
+    if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession || !$rootScope.application.corpus.currentSession.goal) {
       return;
     }
+    $rootScope.application.corpus.currentSession.initializeDatalist();
 
     console.log("corpus.currentSession changed", oldValue);
 
@@ -698,19 +864,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.application.corpus.currentSession.newDatum.fossil = $rootScope.application.corpus.currentSession.newDatum.toJSON();
     }
 
-    $rootScope.application.authentication.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
+    $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid = $rootScope.application.corpus.currentSession.id;
 
     if ($scope.currentSessionWasNotSetByAHuman) {
       $scope.currentSessionWasNotSetByAHuman = false;
     } else {
       reRouteUser("spreadsheet");
     }
-    $scope.dataentry = true;
+    $rootScope.show.showDataEntryPage = true;
   });
 
   $scope.changeViewToNewSession = function() {
-    $scope.showCreateNewSessionDropdown = true;
-    $scope.showEditSessionDetailsDropdown = false;
+    $rootScope.show.showCreateNewSessionDropdown = true;
+    $rootScope.show.showEditSessionDetailsDropdown = false;
     $scope.changeActiveSubMenu("none");
     reRouteUser("corpora_list");
   };
@@ -806,7 +972,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loading = true;
     newSession.user = $rootScope.application.authentication.user.userMask;
     newSession.save().then(function() {
-
+      $rootScope.show.showCreateNewSessionDropdown = false;
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
       $scope.addActivity([{
         verb: "added",
@@ -825,26 +991,37 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
 
       $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.add(newSession);
-      $scope.dataentry = true;
+      $rootScope.show.showDataEntryPage = true;
       $rootScope.loading = false;
       reRouteUser("spreadsheet");
     });
   };
 
   $scope.reloadPage = function() {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved) {
+
+    isEverythingSaved();
+
+    if ($scope.everythingSavedStatus.state === "Save") {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-    } else if ($rootScope.application.corpus.currentSession.docs.saving) {
+      return;
+    } else if ($scope.everythingSavedStatus.state === "Saving") {
       $rootScope.notificationMessage = "Changes are currently being saved.\nYou may refresh the data once this operation is done.";
       $rootScope.openNotification();
-    } else {
-      reRouteUser("");
-      window.location.reload();
+      return;
     }
+
+    reRouteUser("");
+    window.location.reload();
   };
 
   $scope.saveChanges = function() {
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs) {
+      return;
+    }
 
     var indirectObjectString = "in <a href='#corpus/" + $rootScope.application.corpus.dbname + "'>" + $rootScope.application.corpus.title + "</a>";
 
@@ -920,13 +1097,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.loadDataEntryScreen = function() {
-    $scope.dataentry = true;
+    $rootScope.show.showDataEntryPage = true;
     $scope.navigateVerifySaved('none');
   };
 
   $scope.clearSearch = function() {
-    $scope.searchTerm = '';
-    $scope.searchHistory = null;
+    $scope.searchTerm = "";
+    $scope.searchHistory = "";
   };
 
   if (FieldDB && FieldDB.DatumField) {
@@ -964,119 +1141,96 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  $scope.runSearch = function(searchTerm) {
+  var lastSearch = Date.now();
+  $scope.searchTerm = "";
+  $scope.runSearch = function(searchTermPassedIn) {
+    console.log("Why isnt search term updated by the time we call this function?", $scope.searchTerm, searchTermPassedIn);
+    $scope.searchTerm = searchTermPassedIn;
+    if ((Date.now() - lastSearch) < 1000) {
+      return;
+    }
+    $rootScope.show.showSearchSubMenu = true;
+    lastSearch = Date.now();
+    if (!$scope.searchTerm) {
+      $rootScope.application.bug("Please enter something to search for.");
+      return;
+    }
+    if (!$rootScope.application || !$rootScope.application.corpus || !$rootScope.application.corpus.currentSession) {
+      $rootScope.application.bug("Please select an elicitation session to search through.");
+      return;
+    }
+
     // Create object from fields displayed in scope to later be able to
     // notify user if search result is from a hidden field
-    var fieldsInScope = {};
+    var fieldsTheUserCanSee = {};
     var mapFieldsToTrue = function(datumField) {
-      fieldsInScope[datumField.id] = true;
+      fieldsTheUserCanSee[datumField.id] = true;
     };
     for (var column in $rootScope.application.corpus.fieldsInColumns) {
-      if ($rootScope.application.corpus.fieldsInColumns.hasOwnProperty(column)) {
+      if ($rootScope.application.corpus.fieldsInColumns.hasOwnProperty(column) &&
+        $rootScope.application.corpus.fieldsInColumns[column] &&
+        $rootScope.application.corpus.fieldsInColumns[column].length > 0 &&
+        typeof $rootScope.application.corpus.fieldsInColumns[column].map === "function") {
         $rootScope.application.corpus.fieldsInColumns[column].map(mapFieldsToTrue);
       }
     }
-    fieldsInScope.judgement = true;
+    fieldsTheUserCanSee.judgement = true;
 
     /* make the datumtags and comments always true since its only the compact view that doesnt show them? */
 
-    fieldsInScope.comments = true;
+    fieldsTheUserCanSee.comments = true;
 
-    fieldsInScope.dateModified = true;
-    // fieldsInScope.lastModifiedBy = true;
+    fieldsTheUserCanSee.dateModified = true;
+    // fieldsTheUserCanSee.lastModifiedBy = true;
 
     if ($scope.searchHistory) {
-      $scope.searchHistory = $scope.searchHistory + " > " + searchTerm;
+      $scope.searchHistory = $scope.searchHistory + ", " + $scope.searchTerm;
     } else {
-      $scope.searchHistory = searchTerm;
+      $scope.searchHistory = $scope.searchTerm;
     }
-    // Converting searchTerm to string to allow for integer searching
-    searchTerm = searchTerm.toString().toLowerCase();
-    var newScopeData = [];
+    // Converting searchTerm to string to allow for integer showSearchSubMenu
 
-    var thisDatumIsIN = function(spreadsheetDatum) {
-      var dataString;
+    var results = [];
+    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
+      var result = datum.search(searchTermPassedIn, fieldsTheUserCanSee);
+      if (result) {
+        results.push(result);
+      }
+    });
 
-      for (var fieldkey in spreadsheetDatum) {
-        // Limit search to visible data
-        if (spreadsheetDatum[fieldkey] && fieldsInScope[fieldkey] === true) {
-          if (fieldkey === "datumTags") {
-            dataString = JSON.stringify(spreadsheetDatum.datumTags);
-            dataString = dataString.toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          } else if (fieldkey === "comments") {
-            for (var j in spreadsheetDatum.comments) {
-              for (var commentKey in spreadsheetDatum.comments[j]) {
-                dataString = spreadsheetDatum.comments[j][commentKey].toString();
-                if (dataString.indexOf(searchTerm) > -1) {
-                  return true;
-                }
-              }
-            }
-          } else if (fieldkey === "dateModified") {
-            //remove alpha characters from the date so users can search dates too, but not show everysearch result if the user is looking for "t" #1657
-            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          } else {
-            dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    };
-
-    // if (!$rootScope.application.corpus.currentSession.id) {
-    // Search allData in scope
-    for (var i in $scope.allData) {
-      // Determine if record should be included in session search
-      var searchTarget = false;
-      if (!$rootScope.application.corpus.currentSession.id) {
-        searchTarget = true;
-      } else if ($scope.allData[i].session._id === $rootScope.application.corpus.currentSession.id) {
-        searchTarget = true;
-      }
-      if (searchTarget === true) {
-        if (thisDatumIsIN($scope.allData[i])) {
-          newScopeData.push($scope.allData[i]);
-        }
-      }
-    }
-
-    if (newScopeData.length > 0) {
-      $scope.allData = newScopeData;
-      if (!$rootScope.application.authentication.user || $rootScope.application.authentication.user.prefs || $rootScope.application.authentication.user.prefs.numVisibleDatum) {
-        console.warn("the user isnt loaded, shouldnt be loading any data.");
-        return;
-      }
-      var resultSize = $rootScope.application.authentication.user.prefs.numVisibleDatum;
-      if (resultSize === "all") {
-        resultSize = $scope.allData.length;
-      }
-      $scope.data = $scope.allData.slice(
-        0, resultSize);
+    if (!results || results.length === 0) {
+      //TODO show no results.
+      $rootScope.show.showNoSearchResulsMessage = true;
     } else {
-      $rootScope.notificationMessage = "No records matched your search.";
-      $rootScope.openNotification();
+      $rootScope.show.showNoSearchResulsMessage = false;
     }
+
   };
 
   $scope.selectAll = function() {
-    $rootScope.application.corpus.currentSession.docs.map(function(datum) {
-      datum.selected = true;
-    });
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.datalist) {
+      return;
+    }
+
+    $rootScope.application.corpus.currentSession.datalist.select('all');
+
   };
 
   $scope.exportResults = function(size) {
+    if (!$rootScope.application ||
+      !$rootScope.application.corpus ||
+      !$rootScope.application.corpus.currentSession ||
+      !$rootScope.application.corpus.currentSession.docs ||
+      !$rootScope.application.corpus.currentSession.docs.map) {
+      return;
+    }
+
     var results = [];
     $rootScope.application.corpus.currentSession.docs.map(function(datum) {
-      if (datum.selected) {
+      if (datum.highlight) {
         results.push(datum);
       }
     });
@@ -1173,7 +1327,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               function(reason) {
                 console.warn("There was an error saving the activity. ", $scope.activities[index], reason);
                 $rootScope.application.bug("There was an error saving the activity. ");
-                $rootScope.application.corpus.currentSession.docs.unsaved = true;
+                // $rootScope.application.corpus.currentSession.docs.unsaved = true;
               });
         }
       };
@@ -1228,7 +1382,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    $rootScope.loading = true;
+
+    $scope.creatingNewCorpus = true;
     var dataToPost = {};
     dataToPost.username = $rootScope.application.authentication.user.username.trim();
     dataToPost.password = $rootScope.loginInfo.password.trim();
@@ -1236,6 +1391,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $rootScope.application.authentication.newCorpus(dataToPost)
       .then(function(response) {
+        $scope.creatingNewCorpus = false;
 
         // Add new corpus to scope
         var newConnection = {};
@@ -1528,13 +1684,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.currentPage = $rootScope.currentPage - 1;
   };
 
-  $rootScope.$watch('currentPage', function(newValue, oldValue) {
-    if (newValue !== oldValue) {
-      $scope.loadPaginatedData();
-    } else {
-      console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
-    }
-  });
+  // $rootScope.$watch('currentPage', function(newValue, oldValue) {
+  //   if (newValue !== oldValue) {
+  //     $scope.loadPaginatedData();
+  //   } else {
+  //     console.warn("currentPage changed, but is the same as before, not paginating data.", newValue, oldValue);
+  //   }
+  // });
 
   $scope.triggerExpandCollapse = function() {
     if ($scope.expandCollapse === true) {
@@ -1544,46 +1700,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.getSavedState = function() {
-    if ($rootScope.application.corpus.currentSession.docs.unsaved === false &&
-      $rootScope.application.corpus.activityConnection.docs.unsaved === false &&
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved === false) {
-
-      return {
-        state: "Saved",
-        class: "btn btn-success",
-        icon: "fa whiteicon fa-folder",
-        text: $rootScope.contextualize("locale_Saved")
-      };
-    } else if ($rootScope.application.corpus.currentSession.docs.unsaved ||
-      $rootScope.application.corpus.activityConnection.docs.unsaved ||
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.unsaved) {
-
-      return {
-        state: "Save",
-        class: "btn btn-danger",
-        icon: "fa whiteicon fa-save",
-        text: $rootScope.contextualize("locale_Save")
-      };
-    } else if ($rootScope.application.corpus.currentSession.docs.saving ||
-      $rootScope.application.corpus.activityConnection.docs.saving ||
-      $rootScope.application.authentication.user.activityConnection.currentSession.docs.saving) {
-
-      return {
-        state: "Saving",
-        class: "pulsing",
-        icon: "fa whiteicon fa-folder-open",
-        text: $rootScope.contextualize("locale_Saving")
-      };
-    } else {
-      return {
-        state: "Saved",
-        class: "btn",
-        icon: "fa whiteicon fa-folder",
-        text: $rootScope.contextualize("locale_Saved")
-      };
-    }
-  };
 
   $scope.contactUs = function() {
     window.open("https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform");
@@ -1718,7 +1834,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.application && $rootScope.application.authentication && $rootScope.application.authentication.user && typeof $rootScope.application.authentication.user.save === "function") {
       $rootScope.application.authentication.user.save();
     }
-    if ($rootScope.application.corpus.currentSession.docs.unsaved || $rootScope.application.corpus.currentSession.newDatum.unsaved) {
+    if (!isEverythingSaved()) {
       return "You currently have unsaved changes!\n\nIf you wish to save these changes, cancel and then save before reloading or closing this app.\n\nOtherwise, any unsaved changes will be abandoned.";
     } else {
       return;

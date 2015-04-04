@@ -359,7 +359,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
       // expect(typeof scope.deleteComment).toBeUndefined();
       // expect(typeof scope.saveChanges).toBeUndefined();
 
-      expect(typeof scope.getSavedState).toBe('function');
+      // expect(typeof scope.getSavedState).toBeUndefined();
       // expect(typeof scope.newRecordHasBeenEditedButtonClass).toBeUndefined();
 
       expect(typeof window.onbeforeunload).toBe('function');
@@ -483,8 +483,8 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   it('should set some view control variables', function() {
     expect(scope.authenticated).toBeFalsy();
     expect(scope.developer).toBeUndefined();
-    expect(scope.dataentry).toBeFalsy();
-    expect(scope.searching).toBeFalsy();
+    expect(scope.showDataEntryPage).toBeFalsy();
+    expect(scope.showSearchSubMenu).toBeFalsy();
 
     expect(typeof scope.triggerExpandCollapse).toBe('function');
     // expect(typeof scope.setDataEntryFocusOn).toBe('function');
@@ -494,17 +494,17 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   });
 
   it('should set some session control variables', function() {
-    expect(scope.activeSubMenu).toEqual('none');
-    expect(scope.activeSessionID).toBeUndefined();
-    expect(scope.currentSessionName).toBeUndefined();
-    expect(scope.showCreateSessionDiv).toBeFalsy();
-    expect(scope.editSessionDetails).toBeFalsy();
+    expect(rootScope.show.activeSubMenu).toEqual('none');
+    expect(rootScope.show.activeSessionID).toBeUndefined();
+    expect(rootScope.show.currentSessionName).toBeUndefined();
+    expect(rootScope.show.showCreateSessionDiv).toBeFalsy();
+    expect(rootScope.show.editSessionDetails).toBeFalsy();
     expect(scope.createNewSessionDropdown).toBeFalsy();
   });
 
   it('should initialize some variables', function() {
-    expect(scope.currentDate).toBeDefined();
-    expect(scope.activities).toBeDefined();
+    expect(scope.currentDate).toBeUndefined();
+    expect(scope.activities).toEqual([]);
     expect(scope.corpusSelected).toBeUndefined();
     expect(scope.newDatum).toBeUndefined();
     expect(scope.newFieldDatum).toBeUndefined();

@@ -48,7 +48,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
     var fetchDatalistDocsIfEmpty = function() {
 
-      if (!$scope.corpus || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
+      if (!$scope.corpus || !$scope.datalist || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
         fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
         if (fetchDatalistDocsExponentialDecay >= Infinity) {
           console.log(" Giving up on getting a real corpus. Already at " + fetchDatalistDocsExponentialDecay + ".");
@@ -98,7 +98,7 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
         console.log("downloaded docs", results);
         $scope.datalist.confidential = $scope.corpus.confidential;
         $scope.datalist.populate(results.map(function(doc) {
-          doc.url = $scope.corpus.url;
+          // doc.url = $scope.corpus.url;
           return doc;
         }));
 
@@ -136,7 +136,48 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
 
     };
 
-    fetchDatalistDocsIfEmpty();
+
+    var askDocsToFetchThemSelves = function() {
+
+      if (!$scope.corpus || !$scope.datalist || !$scope.corpus.confidential || !$scope.corpus.confidential.secretkey || !$scope.corpus.fetchCollection) {
+        fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay * 2;
+        if (fetchDatalistDocsExponentialDecay >= Infinity) {
+          console.log(" Giving up on getting a real corpus. Already at " + fetchDatalistDocsExponentialDecay + ".");
+          return;
+        }
+        $timeout(function() {
+          if ($scope.datalist && $scope.datalist.docs && $scope.datalist.docs.length > 0) {
+            return;
+          } else {
+            askDocsToFetchThemSelves();
+          }
+        }, fetchDatalistDocsExponentialDecay);
+        console.log(" No real corpus is available, waiting another " + fetchDatalistDocsExponentialDecay + " until trying to fetch docs again.");
+        if ($scope.datalist) {
+          $scope.datalist.fetchDatalistDocsExponentialDecay = fetchDatalistDocsExponentialDecay;
+        }
+        return;
+      }
+      if ($scope.datalist.docs && $scope.datalist.docs.length && $scope.datalist.docs.length >= 0) {
+        $scope.datalist.docs.map(function(doc) {
+          if (doc && typeof doc.fetch === "function") {
+            doc.fetch().done(function() {
+              try {
+                if (!$scope.$$phase) {
+                  $scope.$digest(); //$digest or $apply
+                }
+              } catch (e) {
+                console.log("problem running angular render", e);
+              }
+            });
+          }
+        });
+      }
+
+
+    };
+
+    // askDocsToFetchThemSelves();
 
     $scope.undo = function() {
       var type = $scope.datalist.fieldDBtype;

@@ -137,6 +137,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    */
   corpusMask: {
     get: function() {
+      if (!this._corpusMask) {
+        this.corpusMask = {
+          "id": "corpus"
+        };
+        this.corpusMask.fetch();
+      }
       return this._corpusMask;
     },
     set: function(value) {
@@ -144,6 +150,15 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         return;
       }
       this._corpusMask = value;
+    }
+  },
+
+  corpus: {
+    get: function() {
+      return this;
+    },
+    set: function() {
+      // do nothing
     }
   },
 
@@ -1197,7 +1212,31 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       //      alert("TODO contact server to change the public private of the corpus");
       throw new Error(" I dont know how change this corpus' public/private setting ");
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var attributesNotToJsonify = ["gravatar", "OLAC_export_connections", "url"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
+
+      if (!json) {
+        this.warn("Not returning json right now.");
+        return;
+      }
+      if (this.team && typeof this.team.toJSON === "function") {
+        json.team = this.team.toJSON();
+      }
+      if (this.activityConnection && typeof this.activityConnection.toJSON === "function") {
+        json.activityConnection = this.activityConnection.toJSON();
+      }
+
+      this.debug(json);
+      return json;
+    }
   }
+
+
 });
 
 exports.Corpus = Corpus;

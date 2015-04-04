@@ -167,7 +167,7 @@ Collection.prototype = Object.create(Object.prototype, {
       return this._collection;
     },
     set: function(value) {
-      if (value === this._collection) {
+      if (value === this._collection || value === [] && this._collection === []) {
         return;
       }
       if (!value || value.length === 0) {
@@ -175,8 +175,8 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (Object.prototype.toString.call(value) !== "[object Array]") {
-        console.error("Cannot set collection to an object, only an array");
-        return;
+        console.error("Cannot set collection to an object, only an array", value);
+        throw new Error("Cannot set collection to an object, only an array");
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
