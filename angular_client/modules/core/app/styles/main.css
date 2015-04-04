@@ -345,3 +345,7 @@ progress {
 .full-width {
   width: 100%;
 }
+
+.highlight {
+  background-color: yellow;
+}

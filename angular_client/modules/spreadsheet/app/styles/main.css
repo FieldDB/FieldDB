@@ -17,50 +17,6 @@ body {
 .whiteicon{
   color: white;
 }
-@media only screen and (min-width : 1101px) {
-  .largeMenuBar {
-    display: inline;
-  }
-  .smallMenuBar {
-    display: none;
-  }
-
-  .menubar {
-    height: 50px;
-  }
-  .subMenubar {
-    top: 50px;
-  }
-  .mainBody {
-    top: 50px;
-    padding-bottom: 25px;
-  }
-  .mainBodySearching {
-    top: 125px;
-  }
-}
-
-@media only screen and (max-width : 1100px) {
-  .largeMenuBar {
-    display: none;
-  }
-  .smallMenuBar {
-    display: inline;
-  }
-  .menubar {
-    height: 60px;
-  }
-  .subMenubar {
-    top: 60px;
-  }
-  .mainBody {
-    top: 60px;
-    padding-bottom: 25px;
-  }
-  .mainBodySearching {
-    top: 125px;
-  }
-}
 
 .loading_trouble_message {
   position: fixed;
@@ -76,66 +32,6 @@ body {
   font-size: .8em;
 }
 
-.menubar {
-  background-color: #102E37;
-  border: 1px solid #102E37;
-  background: #102E37;
-  position: fixed;
-  left: 0;
-  right: 0;
-  margin-left: 0;
-  margin-right: 0;
-  z-index: 100;
-  padding-left: 10px;
-}
-
-.menubar span {
-  padding: 0;
-  text-align: center;
-  border-radius: 5px;
-  display: inline;
-  color: #FFFFFF;
-}
-
-.menuitem {
-  line-height: 50px;
-}
-
-.menubar span a {
-  text-decoration: none;
-  color: #FFFFFF;
-  text-transform: uppercase;
-  font-size: .95em;
-  font-weight: 900;
-  background: #102E37;
-  transition: color 700ms;
-  -moz-transition: color 700ms; /* Firefox 4 */
-  -webkit-transition: color 700ms; /* Safari and Chrome */
-  -o-transition: color 700ms; /* Opera */
-}
-
-.menubar a:hover {
-  color: #6D8CA0;
-  text-shadow: 0 0 10px #6D8CA0;
-}
-
-.active_menu_class a {
-  color: #6D8CA0 !important;
-}
-
-.menuTitle {
-  font-size: 1.3em;
-  float: left;
-}
-
-.smallMenuBarInfo {
-  color: #FFFFFF;
-}
-
-.smallMenuBarInfoItem {
-  padding: 10px;
-}
-
 .floatLeft {
   float: left;
 }
@@ -144,135 +40,25 @@ body {
   float: right;
 }
 
-.rightMenuItems {
-  float: right;
-}
-
-.rightMenuItemsDiv {
-  float: right;
-  margin-top: 5px;
-  margin-right: 5px;
-}
-
-.rightMenuItemsDiv div {
-  display: inline-block;
-  vertical-align: top;
-  text-align: left;
-}
 
 .clearDiv {
   clear: both;
 }
 
-.mainMenubar {
-  top: 0;
-}
-
-.subMenubar {
-  background-color: #102E37;
-  border: 1px solid #102E37;
-  background: #102E37;
-  color: #FFFFFF;
-  left: 0;
-  right: 0;
-  position: fixed;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 10px;
-  z-index: 99;
-}
-
-.subSubMenubar {
-  /*  top: 80; */
-  background-color: #102E37;
-  border: 1px solid #102E37;
-  background: #102E37;
-  left: 0;
-  right: 0;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 10px;
-  z-index: 98;
-}
 
 span ul {
   display: inline;
 }
 
-.dropdown_nav,.dropdown_nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  z-index: 1000;
-}
-
-.dropdown_nav a {
-  display: block;
-}
-
-.dropdown_nav li {
-  float: left;
-  width: 10em;
-}
-
-.dropdown_nav li ul {
-  position: absolute;
-  width: 10em;
-  left: -999em;
-}
-
-.dropdown_nav li:hover ul {
-  left: auto;
-}
-
-
-.small_dropdown_nav,.small_dropdown_nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  z-index: 1000;
-}
-
-.small_dropdown_nav a {
-  display: block;
-}
-
-.small_dropdown_nav li {
-  float: left;
-  width: 2em;
-}
-
-.small_dropdown_nav li ul {
-  position: absolute;
-  width: 2em;
-  left: -999em;
-}
-
-.small_dropdown_nav li:hover ul {
-  left: auto;
-}
-
-
-.mainBody {
-  margin-bottom: 10px;
-  position: relative;
-  z-index: 1;
-}
-
-.mainBodySearching {
-  margin-bottom: 10px;
-  position: relative;
-  z-index: 1;
-}
 
 #login_screen {
   text-align: center;
 }
-
+/*
 span, div, ul, li {
   border: 1px solid black !important;
 }
-
+*/
 .mainPageDiv {
   background-color: #F0F5FF;
   border-radius: 10px;
@@ -297,11 +83,12 @@ span, div, ul, li {
   text-align: left;
 }
 
-.settingsTemplate {
+.settingsSection {
   background-color: #F0F5FF;
   border-radius: 10px;
   border: 1px solid #102E37;
-  margin: 5px;
+  padding: 15px;
+  margin: 15px;
 }
 
 .settings_section_header {
@@ -348,26 +135,32 @@ a.delete_button {
 .selectedRow {
   background-color: #6D8CA0;
   border: 2px solid;
+  padding: 10px;
 }
 
 .unselectedRow:nth-child(odd) {
   background-color: #F1F0FF;
+  padding: 10px;
 }
 
 .unselectedRow {
   background-color: #FCFCFC;
+  padding: 10px;
 }
 
 .unselectedNewRow {
   background-color: #5D5E5E;
+  padding: 10px;
 }
 
 .unselectedGreyRow:nth-child(odd) {
   background-color: #F1F0F1;
+  padding: 10px;
 }
 
 .unselectedGreyRow {
   background-color: #FCFCFC;
+  padding: 10px;
 }
 
 .relativePosition {
@@ -385,6 +178,13 @@ a.delete_button {
   bottom: 10px;
   right: 15px;
 }
+
+
+.spreadsheet-expandedData {
+    right-border: 1px solid #102E37;
+    /*text-align: center;*/
+}
+
 
 .expandedData {
     border: 2px solid #102E37;

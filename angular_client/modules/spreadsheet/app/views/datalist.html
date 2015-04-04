@@ -1,0 +1,31 @@
+
+<div
+class="container-fluid"
+ng-class="{'selectedRow': datalist.activeItem==$index, 'unselectedGreyRow': datalist.activeItem!=$index}"
+ng-repeat="datum in datalist.docs._collection track by $index "
+fielddb-id="{{datum.id}}"
+data-fielddb-doc
+json="datum"
+corpus="corpus"
+ng-click="datalist.activeItem=$index;datum.editingMode=true">
+
+</div>
+
+<div
+class="container-fluid"
+ng-class="{'selectedRow': datalist.activeItem==$index, 'unselectedNewRow': datalist.activeItem!=$index}"
+data-spreadsheet-adapting-columnar-template-new
+ng-click="datalist.activeItem=$index"
+ng-show="corpus && corpus.rev"
+>
+</div>
+<!--
+<div data-spreadsheet-pagination > </div>
+
+
+<blockquote ng-show="datalist.debugMode" class="status">
+  {{datalist.warnMessage}}
+  {{datalist.docs.warnMessage}}
+</blockquote>
+-->
+

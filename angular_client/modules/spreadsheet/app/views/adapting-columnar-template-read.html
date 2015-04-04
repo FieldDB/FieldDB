@@ -1,9 +1,9 @@
 <div ng-class="col-md-1" title="{{datum.fields._collection[0].help}}"  ng-show="corpus.currentSession.datalist.showDocCheckboxes || corpus.currentSession.datalist.showDocPosition || datum.fields._collection[0].value">
-  <input type="checkbox" ng-show="corpus.currentSession.datalist.showDocCheckboxes"/>
+  <input type="checkbox" ng-show="corpus.currentSession.datalist.showDocCheckboxes" ng-model="datum.selected"/>
   <span class="badge badge-info"
   ng-show="corpus.currentSession.datalist.showDocPosition"
   title="Position in Elicitation Session/Transcript">
-  N. <!-- {{$index +1}} -->
+  N. {{$index +1}}
 </span>
 {{datum.fields._collection[0].value | neverEmpty}}
 </div>
@@ -35,12 +35,17 @@
 
 <div class="{{corpus.fieldsInColumns.detailsWidthClass}}">
   <span class="pull-right">
-    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
-    <i  class="fa fa-download" ng-click="datum.fetch()">
-    </i>
+
     <i ng-show="datum.hasAudio" class="fa fa-microphone" title="Listen">
     </i>
+    <i ng-show="datum.hasImages" class="fa fa-camera">
+    </i>
+    <i ng-show="datum.hasRelatedData" class="fa fa-link">
+    </i>
     <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
+    <i  class="fa fa-refresh hide" hidden ng-click="datum.fetch()">
+    </i>
+    <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
   </span>
   <div title="Date entered">
     <i class="fa fa-clock-o">

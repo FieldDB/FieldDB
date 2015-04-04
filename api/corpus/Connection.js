@@ -473,6 +473,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
       delete json.dateCreated;
       delete json.dateModified;
+      delete json.database;
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.pouchname = json.dbname = this.dbname || "";

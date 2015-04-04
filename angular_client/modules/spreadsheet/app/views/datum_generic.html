@@ -1,0 +1,16 @@
+<div ng-hide="show.showSearchSubMenu && !datum.highlightedMatches" id="{{datum.id}}" title="Item number {{$index}}">
+
+  <div ng-show="show.showSearchSubMenu && datum.highlightedMatches" ng-bind-html="datum.highlightedMatches" >
+  </div>
+
+  <div data-spreadsheet-adapting-columnar-template-edit ng-show="writePermissions && datum.editingMode && datalist.activeItem==$index">
+  </div>
+
+  <div title="Show {{show}} Admin: {{adminPermissions}}, Writer: {{writePermissions}}, Reader: {{readPermissions}}, Commenter : {{commentPermissions}},  EditingMode: {{datum.editingMode}} Roles: {{application.authentication.user.roles}} " class="row-fluid" data-spreadsheet-adapting-columnar-template-read ng-show="readPermissions && !datum.editingMode">
+  </div>
+
+</div>
+
+
+
+

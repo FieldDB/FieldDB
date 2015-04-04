@@ -1,4 +1,5 @@
 /* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
+var FieldDBImage = require("./../image/Image").Image;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
@@ -95,7 +96,7 @@ var Import = function Import(options) {
     // decryptedMode: true,
     // debugMode: true
   };
-  this.session = new Session(sessionOptions);
+  this.session = sessionOptions;
   this.session.goal = "Goal from file import";
 };
 
@@ -474,8 +475,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               // }));
             }
             // docToSave.tempId = docToSave.id = FieldDBObject.uuidGenerator();
-            docToSave.tempId = FieldDBObject.uuidGenerator();
             if (docToSave) {
+              docToSave.tempId = FieldDBObject.uuidGenerator();
               docToSave.dbname = self.corpus.dbname;
               self.datalist.add(docToSave);
             }
@@ -847,11 +848,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         if (self.importType === "audioVideo") {
           self.debug("not doing any save for an audio video import");
         } else {
-          builtDoc.id = builtDoc.anonymousCode || Date.now();
-          builtDoc.url = self.corpus.url;
+          self.bug("test the save on the new docs from import");
+          if (self.importType === "participant") {
+            builtDoc.id = builtDoc.anonymousCode || Date.now();
+          }
+          builtDoc.session = self.session;
           self.debug(" saving", builtDoc.id);
           self.progress.total++;
-          self.datalist.docs.add(builtDoc);
+          // self.datalist.docs.add(builtDoc);
 
           var promise = builtDoc.save();
 
@@ -865,6 +869,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             console.error(error.stack, self);
             deferred.reject(error);
           });
+
           savePromises.push(promise);
         }
       });
@@ -923,7 +928,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return this;
       }
       this.debug("  setting the _session.datalist", value.docs.primaryKey);
-      this._session.datalist = value;
+      delete this._session._datalist;
+      this._session.initializeDatalist(value);
       return this;
     }
   },
@@ -946,11 +952,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return;
       }
       value.datalist.docs.primaryKey = "tempId";
-      this.debug("  setting the _session", value.datalist.docs.primaryKey);
+      var datalist = value.datalist;
+
+      this.debug("  setting the _session", value);
       if (!(value instanceof Session)) {
         value = new Session(value);
       }
+      this.debug("  setting the _session's datalist", datalist);
+
       this._session = value;
+      // this._session.initializeDatalist(datalist);
+      this.datalist = datalist;
+
       return;
     }
   },
@@ -1693,11 +1706,14 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                   self.debug(results.files[fileIndex]);
                   var instructions = results.files[fileIndex].textGridInfo;
                   if (results.files[fileIndex].textGridStatus >= 500) {
-                    instructions = " Please report this error to us at support@lingsync.org ";
+                    instructions = " Please report this error.";
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. " + instructions);
-                  results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
-                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].fileBaseName + ".mp3";
+                  results.files[fileIndex].filename = results.files[fileIndex].name;
+                  if (results.files[fileIndex].type && (results.files[fileIndex].type.indexOf("audio") > -1 || results.files[fileIndex].type.indexOf("video") > -1)) {
+                    results.files[fileIndex].filename = results.files[fileIndex].fileBaseName + ".mp3";
+                  }
+                  results.files[fileIndex].URL = new AudioVideo().BASE_SPEECH_URL + "/" + self.corpus.dbname + "/" + results.files[fileIndex].filename;
                   results.files[fileIndex].description = results.files[fileIndex].description || "File from import";
                   self.addAudioVideoFile(results.files[fileIndex]);
                 } else {
@@ -1833,19 +1849,23 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addAudioVideoFile: {
     value: function(details) {
-      if (!this.audioVideo) {
-        this.audioVideo = new AudioVideos();
+      if (!details) {
+        this.warn("No details were provided to add be added to any file collection.");
+        return;
       }
-      var audioVideo = new AudioVideo(details);
-      this.audioVideo.add(audioVideo);
+      var fileCollection = "relatedData";
+      if (details.type.indexOf("image") > -1) {
+        fileCollection = "images";
+        details = new FieldDBImage(details);
+      } else if (details.type.indexOf("audio") > -1 || details.type.indexOf("video") > -1) {
+        fileCollection = "audioVideo";
+      }
+      if (!this[fileCollection]) {
+        this[fileCollection] = new AudioVideos();
+      }
+      this[fileCollection].add(details);
       if (this.parent) {
-        if (!this.parent.audioVideo) {
-          this.parent.audioVideo = new AudioVideos();
-        } else if (Object.prototype.toString.call(this.parent.audioVideo) === "[object Array]") {
-          this.parent.audioVideo = new AudioVideos(this.parent.audioVideo);
-        }
-        this.parent.audioVideo.add(audioVideo);
-        this.parent.saved = "no";
+        this.parent.addFile(details);
         this.render();
         // this.asCSV = [];
       }

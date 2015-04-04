@@ -72,7 +72,7 @@
     "description": "submenu button under Séance"
   },
   "locale_goal_textbox": {
-    "message": "Objectif:",
+    "message": "Objectif",
     "description": "title for session info textbox. Goal of the session, e.g. 'verify tenses in embedded clauses'"
   },
   "locale_consultants_textbox": {
@@ -80,15 +80,15 @@
     "description": "title for session info textbox. Consultant(s)' code(s) or name(s)"
   },
   "locale_user_textbox": {
-    "message": "Utilisateur:",
+    "message": "Utilisateur",
     "description": "title for session info textbox. Enter the name(s) of those who did the elicitation. If unspecified, the name of the user who enter the data will appear as default."
   },
   "locale_language_textbox": {
-    "message": "Langue:",
+    "message": "Langue",
     "description": "title for session info textbox. The object language, e.g. Mi'gmaq"
   },
   "locale_dialect_textbox": {
-    "message": "Dialecte:",
+    "message": "Dialecte",
     "description": "title for session info textbox. The dialect of the object language, e.g. Listuguj"
   },
   "locale_date_elicited_textbox": {
@@ -112,7 +112,7 @@
     "description": "button"
   },
   "locale_search_text_box": {
-    "message": "Recherche:",
+    "message": "Recherche",
     "description": "title for serach textbox. Enter search text."
   },
   "locale_go_button": {
@@ -136,7 +136,7 @@
     "description": "modal header in Export Search Results Modal"
   },
   "locale_tags_modal": {
-    "message": "Étiquettes:",
+    "message": "Étiquettes",
     "description": "title indicating Tags field in Export Saecr Results Modal"
   },
   "locale_close_button": {
@@ -163,7 +163,7 @@
     "description": "modal header in Confirm Password Modal"
   },
   "locale_password_textbox": {
-    "message": "Mot de passe:",
+    "message": "Mot de passe",
     "description": "title for password textbox"
   },
   "locale_continue_button": {
@@ -195,7 +195,7 @@
     "description": "create and save message in full, mcgill, yale templates"
   },
   "locale_new_audio_file": {
-    "message": "Nouveau fichier audio:",
+    "message": "Nouveau fichier audio",
     "description": ""
   },
   "locale_select_session_message": {
@@ -219,15 +219,15 @@
     "description": "button"
   },
   "locale_entered": {
-    "message": "Entré par:",
+    "message": "Entré par",
     "description": "title for indicating the date when the datum is entered"
   },
   "locale_last_edit": {
-    "message": "Dernière modification:",
+    "message": "Dernière modification",
     "description": "title for indicating the date of the most recent edit of the datum"
   },
   "locale_edited": {
-    "message": "Modifié par:",
+    "message": "Modifié par",
     "description": "title for indicating the users who edited the datum"
   },
   "locale_must_save_changes_message": {
@@ -363,11 +363,11 @@
     "description": "title indicating the corpus to which the new session blongs"
   },
   "locale_date_entered": {
-    "message": "Date de saisie:",
+    "message": "Date de saisie",
     "description": ""
   },
   "locale_date_modified": {
-    "message": "Date de modification:",
+    "message": "Date de modification",
     "description": ""
   },
   "locale_create_access_new_session_button": {
@@ -403,7 +403,7 @@
     "description": "appears when user clicks the logo after selecting a corpus"
   },
   "locale_selected_corpus": {
-    "message": "Corpus sélectionné:",
+    "message": "Corpus sélectionné",
     "description": "appears when user clicks the logo after selectig a corpus, indicating which corpus they are in currently"
   },
   "locale_select_different_corpus_button": {
@@ -423,7 +423,7 @@
     "description": "title for Password Change page"
   },
   "locale_old_password": {
-    "message": "Ancien mot de passe:",
+    "message": "Ancien mot de passe",
     "description": "label for Old Password textbox "
   },
   "locale_new_password": {
@@ -499,7 +499,7 @@
     "description": "title for the FAQ oage"
   },
   "locale_tips": {
-    "message": "Astuces:",
+    "message": "Astuces",
     "description": "title for the Tips list"
   },
   "locale_tutorial_link": {
