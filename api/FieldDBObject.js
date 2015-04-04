@@ -1345,6 +1345,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var deferred = Q.defer(),
         self = this;
 
+
+      if (this.fetching && this.whenReady) {
+        self.warn("Fetching is in process, don't need to fetch right now...");
+        return this.whenReady;
+      }
+
       if (!this.corpus || typeof this.corpus.get !== "function" || !this._id) {
         Q.nextTick(function() {
           self.fetching = self.loading = false;
@@ -1360,7 +1366,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var oldRev = this.rev;
 
       this.fetching = this.loading = true;
-      this.whenReady = self.corpus.get(self.id, optionalUrl).then(function(result) {
+      this.whenReady = deferred.promise;
+      self.corpus.get(self.id, optionalUrl).then(function(result) {
         self.fetching = self.loading = false;
         if (!result) {
           deferred.reject({
