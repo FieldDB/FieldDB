@@ -494,7 +494,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   });
 
   it('should set some session control variables', function() {
-    expect(rootScope.show.activeSubMenu).toBeUndefined();
+    expect(rootScope.show.activeSubMenu).toEqual('none');
     expect(rootScope.show.activeSessionID).toBeUndefined();
     expect(rootScope.show.currentSessionName).toBeUndefined();
     expect(rootScope.show.showCreateSessionDiv).toBeFalsy();
@@ -503,8 +503,8 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   });
 
   it('should initialize some variables', function() {
-    expect(scope.currentDate).toBeDefined();
-    expect(scope.activities).toBeDefined();
+    expect(scope.currentDate).toBeUndefined();
+    expect(scope.activities).toEqual([]);
     expect(scope.corpusSelected).toBeUndefined();
     expect(scope.newDatum).toBeUndefined();
     expect(scope.newFieldDatum).toBeUndefined();
