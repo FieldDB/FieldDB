@@ -536,13 +536,37 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       // });
 
       /* Set the current session either form the user's last page load or to be the most recent session */
-      if (!$rootScope.application.corpus.currentSession && $rootScope.application.sessionsList.docs && $rootScope.application.sessionsList.docs._collection && $rootScope.application.sessionsList.docs._collection.length > 0) {
-        $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs._collection[$rootScope.application.sessionsList.docs.length - 1];
-        $scope.currentSessionWasNotSetByAHuman = true;
+      if (!$rootScope.application.corpus.currentSession &&
+        $rootScope.application.sessionsList.docs &&
+        $rootScope.application.sessionsList.docs._collection &&
+        $rootScope.application.sessionsList.docs._collection.length > 0) {
+
+        // If the user has had this dashboard open, choose their most recent session.
+        if ($rootScope.application.authentication.user.mostRecentIds &&
+          $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] &&
+          $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid &&
+          $rootScope.application.sessionsList.docs[$rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid]) {
+
+          $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs[$rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid];
+        } else {
+          // If the user has not this dashboard open, choose the most recent session.
+          $rootScope.application.corpus.currentSession = $rootScope.application.sessionsList.docs._collection[$rootScope.application.sessionsList.docs.length - 1];
+          $scope.currentSessionWasNotSetByAHuman = true;
+        }
       }
       $scope.newSession = $rootScope.application.corpus.newSession();
       $scope.documentReady = true;
       $rootScope.application.corpus.loading = $rootScope.loading = false;
+
+      try {
+        if (!$scope.$$phase) {
+          $scope.$apply(); //$digest or $apply
+        }
+      } catch (e) {
+        console.warn("Rendering after loading sessions generated probably a digest erorr");
+      }
+
+
     }, function(error) {
       $rootScope.application.corpus.loading = $rootScope.loading = false;
       processServerContactError(error);
@@ -655,10 +679,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // Update saved state in Preferences
     updateAndOverwritePreferencesToCurrentVersion();
 
-    // if ($rootScope.application.authentication.user.mostRecentIds && $rootScope.application.authentication.user.mostRecentIds.connection && $rootScope.application.authentication.user.mostRecentIds.connection.dbname) {
-    //   $scope.selectCorpus($rootScope.application.authentication.user.mostRecentIds.connection);
-    // } else {
-    // }
+    if (!$rootScope.application.corpus.id &&
+      $rootScope.application.authentication.user.mostRecentIds.dbname &&
+      $rootScope.application.authentication.user.corpora &&
+      $rootScope.application.authentication.user.corpora[$rootScope.application.authentication.user.mostRecentIds.dbname]) {
+
+      $scope.selectCorpus($rootScope.application.authentication.user.corpora[$rootScope.application.authentication.user.mostRecentIds.dbname]);
+
+    }
     if (window.location.hash.indexOf("welcome") > -1) {
       reRouteUser("corpora_list");
     }
@@ -740,7 +768,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         dbname: selectedConnection
       };
     }
-    selectedConnection.dbname = selectedConnection.dbname || selectedConnection.dbname;
+    selectedConnection.dbname = selectedConnection.dbname || selectedConnection.pouchname;
     if (!selectedConnection.dbname) {
       console.warn("Somethign went wrong, the user selected a corpus connection that had no db info", selectedConnection);
       return;
@@ -758,7 +786,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.log("loaded the corpus", results);
       $scope.corporaCacheToReduceRedownloading.add($rootScope.application.corpus);
       selectedConnection.parent = $rootScope.application.corpus;
+      if ($rootScope.application.authentication.user.mostRecentIds.dbname !== $rootScope.application.corpus.dbname) {
+        $rootScope.application.authentication.user.mostRecentIds = {
+          dbname: $rootScope.application.corpus.dbname,
+        };
+      }
+      $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] = $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname] || {};
 
+      //TODO choose session too.
       $scope.addActivity([{
         verb: "opened ",
         verbicon: "icon-eye",
@@ -807,7 +842,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.application.corpus.currentSession.newDatum.fossil = $rootScope.application.corpus.currentSession.newDatum.toJSON();
     }
 
-    $rootScope.application.authentication.user.mostRecentIds.sessionid = $rootScope.application.corpus.currentSession.id;
+    $rootScope.application.authentication.user.mostRecentIds[$rootScope.application.corpus.dbname].sessionid = $rootScope.application.corpus.currentSession.id;
 
     if ($scope.currentSessionWasNotSetByAHuman) {
       $scope.currentSessionWasNotSetByAHuman = false;
@@ -1129,7 +1164,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($scope.searchHistory) {
       $scope.searchHistory = $scope.searchHistory + ", " + $scope.searchTerm;
     } else {
-    $scope.searchHistory = $scope.searchTerm;
+      $scope.searchHistory = $scope.searchTerm;
     }
     // Converting searchTerm to string to allow for integer showSearchSubMenu
 
