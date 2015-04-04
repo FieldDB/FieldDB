@@ -15,6 +15,7 @@ angular.module('spreadsheetApp').directive('spreadsheetAdaptingColumnarTemplateE
     $scope.readPermissions = $rootScope.readPermissions;
     $scope.writePermissions = $rootScope.writePermissions;
     $scope.commentPermissions = $rootScope.commentPermissions;
+    $scope.show = $rootScope.show;
 
     $scope.markAsNotSaved = function(datum) {
       datum.unsaved = true;

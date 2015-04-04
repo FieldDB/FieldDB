@@ -3,14 +3,14 @@
   </h2>
 </div>
 
-<div class="centered" ng-show="!application.corpus || !application.corpus.currentSession.id">
+<div class="centered" ng-show="application.corpus.rev && !application.corpus.currentSession.id">
   <h2 ng-bind-html="contextualize('locale_select_session_message')">
   </h2>
 </div>
 <div class="centered" ng-show="application.corpus.loading || application.corpus.currentSession.loading">
-  <img ng-src="images/loading-spinner.gif" />
+  <img ng-src="images/loading-spinner.gif" class="gravatar-large"/>
 </div>
-<div class="centered" ng-show="application.corpus.currentSession.length===0">
+<div class="centered" ng-show="!application.corpus || !application.corpus.rev || !application.authentication.user.corpora || !application.authentication.user.authenticated ">
   <h2 ng-bind-html="contextualize('locale_no_data_message')">
   </h2>
 </div>

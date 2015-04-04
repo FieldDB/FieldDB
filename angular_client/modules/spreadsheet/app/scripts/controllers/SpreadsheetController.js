@@ -558,14 +558,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.documentReady = true;
       $rootScope.application.corpus.loading = $rootScope.loading = false;
 
-      try {
-        if (!$scope.$$phase) {
-          $scope.$apply(); //$digest or $apply
+      /* display the selected session */
+      // if (window.location.hash.indexOf("corpora_list") > -1) {
+      if (window.location.hash.indexOf("spreadsheet") > -1) {
+        // reRouteUser("corpora_list");
+        try {
+          if (!$scope.$$phase) {
+            $scope.$apply(); //$digest or $apply
+          }
+        } catch (e) {
+          console.warn("Rendering after loading sessions generated probably a digest erorr");
         }
-      } catch (e) {
-        console.warn("Rendering after loading sessions generated probably a digest erorr");
       }
-
 
     }, function(error) {
       $rootScope.application.corpus.loading = $rootScope.loading = false;
