@@ -135,26 +135,32 @@ a.delete_button {
 .selectedRow {
   background-color: #6D8CA0;
   border: 2px solid;
+  padding: 10px;
 }
 
 .unselectedRow:nth-child(odd) {
   background-color: #F1F0FF;
+  padding: 10px;
 }
 
 .unselectedRow {
   background-color: #FCFCFC;
+  padding: 10px;
 }
 
 .unselectedNewRow {
   background-color: #5D5E5E;
+  padding: 10px;
 }
 
 .unselectedGreyRow:nth-child(odd) {
   background-color: #F1F0F1;
+  padding: 10px;
 }
 
 .unselectedGreyRow {
   background-color: #FCFCFC;
+  padding: 10px;
 }
 
 .relativePosition {
