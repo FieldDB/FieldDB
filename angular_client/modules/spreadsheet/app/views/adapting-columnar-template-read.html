@@ -43,7 +43,7 @@
     <i ng-show="datum.hasRelatedData" class="fa fa-link">
     </i>
     <i ng-show="datum.comments.length > 0" class="fa fa-comment"> </i>
-    <i  class="fa fa-refresh" ng-click="datum.fetch()">
+    <i  class="fa fa-refresh hide" hidden ng-click="datum.fetch()">
     </i>
     <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
   </span>

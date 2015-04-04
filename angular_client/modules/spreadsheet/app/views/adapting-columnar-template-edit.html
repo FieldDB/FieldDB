@@ -79,7 +79,7 @@
       </i>
       <i ng-show="datum.comments.length > 0" class="fa whiteicon fa-comment">
       </i>
-      <i class="fa whiteicon fa-refresh" ng-click="datum.fetch()">
+      <i class="fa whiteicon fa-refresh hide" hidden ng-click="datum.fetch()">
       </i>
       <img ng-src="images/loading-spinner.gif" class="gravatar-small" ng-show="datum.loading" />
       <i class="fa whiteicon" ng-class="{'fa-list': !datum.expandedViewMode, 'fa-th-list': datum.expandedViewMode}" ng-click="datum.expandedViewMode=datum.expandedViewMode?false:true">
