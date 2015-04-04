@@ -17,6 +17,24 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.log($scope, $rootScope, $resource, $filter, $document, Data, md5, $timeout, $modal, $log, $http);
   }
 
+
+  $timeout(function() {
+
+    console.log(" TODOS This spreadsheet app re-write is not complete. There are more things which ahve not been tested:");
+    console.log("        * save activities");
+    console.log("        * audit save of datum");
+    console.log("        * audit save of sessions");
+    console.log("        * audit save of corpus ");
+    console.log("        * audit save of corpus team");
+    console.log("        * audit save of corpus mask");
+    console.log("        * test save of sessions");
+    console.log("        * test new session");
+    console.log("        * test new corpus");
+    console.log("        * force modals to show (we are using bootsrap 3 but angular ui uses bootstrap2)");
+
+  }, 1000);
+
+
   $scope.everythingSavedStatus = {
     state: "",
     class: "btn btn-inverse",
@@ -159,7 +177,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
   }
 
-  $rootScope.appVersion = "2.49.01.11.56ss";
+  $rootScope.appVersion = "2.50.04.17.54ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
