@@ -5,7 +5,7 @@
     ng-model="application.corpus.currentSession.newDatum.fields._collection[0].value"
     placeholder="*#?"
     title="{{application.corpus.currentSession.newDatum.fields._collection[0].help}}" />
-    <button class="btn pull-right" ng-class="{'btn-primary': application.corpus.currentSession.newDatum.unsaved, 'btn-danger': !application.corpus.currentSession.newDatum.unsaved==false}" type="submit" ng-disabled="application.corpus.currentSession.newDatum.unsaved">
+    <button class="btn pull-right" ng-class="{'btn-primary': !application.corpus.currentSession.newDatum.unsaved, 'btn-danger': application.corpus.currentSession.newDatum.unsaved}" type="submit" ng-disabled="!application.corpus.currentSession.newDatum.unsaved">
       <i class="fa whiteicon fa-plus">
       </i>
       {{contextualize('locale_create_new_button')}}
