@@ -137,6 +137,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    */
   corpusMask: {
     get: function() {
+      if (!this._corpusMask) {
+        this.corpusMask = {
+          "id": "corpus"
+        };
+        this.corpusMask.fetch();
+      }
       return this._corpusMask;
     },
     set: function(value) {
@@ -1208,21 +1214,22 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
-
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
-
-      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      var attributesNotToJsonify = ["gravatar", "OLAC_export_connections", "url"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
 
       if (!json) {
         this.warn("Not returning json right now.");
         return;
       }
-      json.team = this.team;
-      // this.debug("saving fields as the deprecated datumFields");
-      // json.datumFields = json.fields;
-      // delete json.fields;
+      if (this.team && typeof this.team.toJSON === "function") {
+        json.team = this.team.toJSON();
+      }
+      if (this.activityConnection && typeof this.activityConnection.toJSON === "function") {
+        json.activityConnection = this.activityConnection.toJSON();
+      }
 
       this.debug(json);
       return json;
