@@ -279,48 +279,49 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
 
-    var preferedSpreadsheetShape = $rootScope.application.corpus.prefs.preferedSpreadsheetShape;
-
-    if (preferedSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
-      preferedSpreadsheetShape.rows = preferedSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / preferedSpreadsheetShape.columns);
-    }
     if ($rootScope.application.corpus.datumFields.indexOf("syntacticTreeLatex") < 6) {
       $rootScope.application.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
     }
 
-    if (preferedSpreadsheetShape.columns === 1) {
+    $rootScope.application.corpus.prefs.preferedSpreadsheetShape = $rootScope.application.corpus.prefs.preferedSpreadsheetShape;
+
+    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
+      $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows = $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / $rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns);
+    }
+
+    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 1) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = [];
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-8 col-lg-8";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-3 col-lg-3";
-    } else if (preferedSpreadsheetShape.columns === 2) {
+    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 2) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows + 1,
-        preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-6 col-md-5 col-lg-5";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-2 col-lg-2";
-    } else if (preferedSpreadsheetShape.columns === 3) {
+    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 3) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows + 1,
-        preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = $rootScope.application.corpus.datumFields._collection.slice(
-        preferedSpreadsheetShape.rows * 2 + 1,
-        preferedSpreadsheetShape.rows * 3 + 1
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1,
+        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 3 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-4 col-lg-4";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-12 col-lg-12";
@@ -1044,8 +1045,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.clearSearch = function() {
-    $scope.searchTerm = '';
-    $scope.searchHistory = null;
+    $scope.searchTerm = "";
+    $scope.searchHistory = "";
   };
 
   if (FieldDB && FieldDB.DatumField) {
@@ -1084,12 +1085,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   var lastSearch = Date.now();
+  $scope.searchTerm = "";
   $scope.runSearch = function(searchTermPassedIn) {
+    console.log("Why isnt search term updated by the time we call this function?", $scope.searchTerm, searchTermPassedIn);
     $scope.searchTerm = searchTermPassedIn;
-    // if ($rootScope.show.showSearchSubMenu) {
-    //   $rootScope.show.showSearchSubMenu = false;
-    //   return;
-    // }
     if ((Date.now() - lastSearch) < 1000) {
       return;
     }
@@ -1128,15 +1127,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // fieldsTheUserCanSee.lastModifiedBy = true;
 
     if ($scope.searchHistory) {
-      $scope.searchHistory = $scope.searchHistory + " AND " + $scope.searchTerm;
+      $scope.searchHistory = $scope.searchHistory + ", " + $scope.searchTerm;
     } else {
-      $scope.searchHistory = $scope.searchTerm;
+    $scope.searchHistory = $scope.searchTerm;
     }
     // Converting searchTerm to string to allow for integer showSearchSubMenu
 
     var results = [];
     $rootScope.application.corpus.currentSession.docs.map(function(datum) {
-      var result = datum.search($scope.searchHistory, fieldsTheUserCanSee);
+      var result = datum.search(searchTermPassedIn, fieldsTheUserCanSee);
       if (result) {
         results.push(result);
       }
@@ -1155,7 +1154,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!$rootScope.application ||
       !$rootScope.application.corpus ||
       !$rootScope.application.corpus.currentSession ||
-      !$rootScope.application.corpus.currentSession.datalist ) {
+      !$rootScope.application.corpus.currentSession.datalist) {
       return;
     }
 
