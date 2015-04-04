@@ -1553,7 +1553,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   couchConnection: {
     get: function() {
-      console.error("CouchConnection is deprecated, use connection instead");
+      console.error("CouchConnection is deprecated, use connection instead " + this.id);
       return this.connection;
     },
     set: function(value) {
