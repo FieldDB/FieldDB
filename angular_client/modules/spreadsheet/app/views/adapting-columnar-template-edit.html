@@ -70,7 +70,7 @@
     <div class="span5 expandedDataComments">
       <div class="expandedDataInner">
         <ul class="unstyled">
-          <li ng-repeat="comment in datum.comments">
+          <li ng-repeat="comment in datum.comments.collection">
             <a ng-click="deleteComment(comment, datum)" class=" delete_button" >
               <i class="fa fa-times-circle">
               </i>
@@ -101,7 +101,7 @@
   <div class="row" >
     <div class="span11">
       <table>
-        <tr ng-repeat="image in datum.images track by $index" ng-hide="image.trashed == 'deleted'">
+        <tr ng-repeat="image in datum.images.collection track by $index" ng-hide="image.trashed == 'deleted'">
           <td>
             <span class="form-horizontal">
               <a  class="delete_button btn btn-danger floatLeft" ng-click="flagAsDeleted(image, datum)">
