@@ -47,6 +47,9 @@ angular
     }).when('/spreadsheet/mcgillfieldmethodsspring2014template', {
       // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
       redirectTo: '/spreadsheet/fulltemplate'
+    }).when('/spreadsheet', {
+      // templateUrl: 'views/mcgillfieldmethodsspring2014template.html'
+      redirectTo: '/spreadsheet/fulltemplate'
     }).otherwise({
       redirectTo: '/corpora_list'
     });
