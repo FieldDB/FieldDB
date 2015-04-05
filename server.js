@@ -226,7 +226,7 @@ function getData(res, user, corpus) {
   getUser(user)
     .then(function(result) {
     userdetails = result;
-    return getRequestedCorpus(result.corpuses, corpus, user);
+    return getRequestedCorpus(result.corpora, corpus, user);
   })
     .then(function(result) {
     var ghash = md5(userdetails.email);
@@ -329,8 +329,11 @@ function getUser(userId) {
       if (!result) {
         df.resolve({});
       } else {
-        for (pouch in result.corpuses) {
-          result.corpuses[pouch].phash = md5(result.corpuses[pouch].pouchname);
+        result.corpora = result.corpora || result.corpuses;
+        delete result.corpuses;
+        console.log(new Date() + " getting the user, their current corpora", result.corpora);
+        for (pouch in result.corpora) {
+          result.corpora[pouch].phash = md5(result.corpora[pouch].pouchname);
         }
         result.firstname =  result.firstname || "";
         result.lastname =  result.lastname || "";
