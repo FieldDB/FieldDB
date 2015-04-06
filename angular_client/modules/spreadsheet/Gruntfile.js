@@ -270,16 +270,16 @@ module.exports = function(grunt) {
     //   }
     // },
 
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // svgmin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.app %>/images',
+    //       src: '{,*/}*.svg',
+    //       dest: '<%= yeoman.dist %>/images'
+    //     }]
+    //   }
+    // },
 
     ngtemplates: {
       app: {
@@ -380,7 +380,7 @@ module.exports = function(grunt) {
       dist: [
         'copy:styles',
         // 'imagemin',
-        'svgmin'
+        // 'svgmin'
       ]
     },
 
