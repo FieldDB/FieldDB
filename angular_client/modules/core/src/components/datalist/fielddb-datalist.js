@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbDatalist
+ * @name fielddbAngular.directive:fielddbDatalist
  * @description
  * # fielddbDatalist
  */
-angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
+angular.module("fielddbAngular").directive("fielddbDatalist", function() {
 
 
   var controller = function($scope, $timeout) {
@@ -204,11 +204,11 @@ angular.module("fielddbAngularApp").directive("fielddbDatalist", function() {
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
       if (attrs.view === "SubExperimentDataList") {
-        return "views/sub-experiment-datalist.html";
+        return "collection/experiment/sub-experiment-datalist.html";
       } else if (attrs.view === "Lesson") {
-        return "views/datalist.html";
+        return "collection/datalist/datalist.html";
       } else {
-        return "views/datalist.html";
+        return "collection/datalist/datalist.html";
       }
     },
     restrict: "A",

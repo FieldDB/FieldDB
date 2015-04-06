@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbUser
+ * @name fielddbAngular.directive:fielddbUser
  * @description
  * # fielddbUser
  */
-angular.module("fielddbAngularApp").directive("fielddbUser", function() {
+angular.module("fielddbAngular").directive("fielddbUser", function() {
 
 
   var controller = function($scope) {
@@ -29,13 +29,13 @@ angular.module("fielddbAngularApp").directive("fielddbUser", function() {
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
       if (attrs.view === "User") {
-        return "views/user-page.html";
+        return "components/user/user-page.html";
       } else if (attrs.view === "UserMask") {
-        return "views/user.html";
+        return "components/user/user.html";
       } else if (attrs.view === "Participant") {
-        return "views/participant.html";
+        return "components/user/participant.html";
       } else {
-        return "views/user.html";
+        return "components/user/user.html";
       }
     },
     restrict: "A",

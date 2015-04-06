@@ -1,31 +1,52 @@
+/* globals console */
+
 "use strict";
 var debugMode = false;
 
 describe("Controller: FieldDBController", function() {
 
   // load the controller's module
-  beforeEach(module("fielddbAngularApp", "views/corpus-page.html", "views/import-page.html"));
+  beforeEach(module("fielddbAngular"));
 
-  var FieldDBController,
-    scope;
+  var scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
-    FieldDBController = $controller("FieldDBController", {
-      $scope: scope
-    });
   }));
 
-  it("should attach a server connection to the scope", function() {
+  it("should attach a server connection to the scope", inject(function($controller) {
+    expect(scope.application).toBeUndefined();
+
+    $controller("FieldDBController", {
+      $scope: scope
+    });
+
+    expect(angular.isObject(scope.application)).toBeTruthy();
+    // expect(scope.application).toBe(true);
     expect(scope.application.online).toBe(true);
-  });
+
+  }));
+
+  it("should display a list of components which can be used", inject(function($controller) {
+    expect(FieldDB).toBeDefined();
+
+    $controller("FieldDBController", {
+      $scope: scope
+    });
+
+    expect(scope.FieldDBComponents).toBeDefined();
+    expect(scope.FieldDBComponents.User).toEqual({
+      fieldDBtype: "User",
+      url: "http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/User.html"
+    });
+  }));
 });
 
 
 // http://stackoverflow.com/questions/15990102/angularjs-route-unit-testing
 xdescribe("FieldDBController Routes", function() {
-  beforeEach(module("fielddbAngularApp"));
+  beforeEach(module("fielddbAngular"));
 
   var FieldDBController,
     scope;
@@ -42,7 +63,7 @@ xdescribe("FieldDBController Routes", function() {
     inject(function($route, $location, $rootScope, $httpBackend) {
       expect($route.current).toBeUndefined();
 
-      $httpBackend.expectGET("views/corpus-page.html").respond(200);
+      $httpBackend.expectGET("components/corpus/corpus-page.html").respond(200);
       $location.path("/lingllama/community_corpus");
       $rootScope.$digest();
       if (debugMode) {
@@ -50,7 +71,7 @@ xdescribe("FieldDBController Routes", function() {
       }
 
       expect($route.current).toBeDefined();
-      expect($route.current.templateUrl).toBe("views/corpus-page.html");
+      expect($route.current.templateUrl).toBe("components/corpus/corpus-page.html");
       expect($route.current.controller).toBe("FieldDBController");
 
     });
@@ -61,12 +82,12 @@ xdescribe("FieldDBController Routes", function() {
     inject(function($route, $location, $rootScope, $httpBackend) {
       expect($route.current).toBeUndefined();
 
-      $httpBackend.expectGET("views/import-page.html").respond(200);
+      $httpBackend.expectGET("components/import/import-page.html").respond(200);
       $location.path("/community/georgian/import");
       $rootScope.$digest();
 
       expect($location.path()).toBe("/community/georgian/import/data");
-      expect($route.current.templateUrl).toEqual("views/import-page.html");
+      expect($route.current.templateUrl).toEqual("components/import/import-page.html");
       expect($route.current.controller).toBe("FieldDBController");
     });
   });

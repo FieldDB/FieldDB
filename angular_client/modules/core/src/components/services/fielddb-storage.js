@@ -3,7 +3,7 @@
 xdescribe("Service: fielddbStorage", function () {
 
   // load the service"s module
-  beforeEach(module("fielddbAngularApp"));
+  beforeEach(module("fielddbAngular"));
 
   // instantiate service
   var fielddbStorage;

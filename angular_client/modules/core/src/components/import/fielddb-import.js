@@ -3,13 +3,13 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbImport
+ * @name fielddbAngular.directive:fielddbImport
  * @description
  *
  * uses drag and drop from https://github.com/codef0rmer/angular-dragdrop example: https://stackoverflow.com/questions/18679645/angularjs-drag-and-drop-plugin-drop-issue
  * # fielddbImport
  */
-angular.module("fielddbAngularApp").directive("fielddbImport", function() {
+angular.module("fielddbAngular").directive("fielddbImport", function() {
   var rootScope;
   var controller = function($scope, $upload, $rootScope) {
     rootScope = $rootScope;
@@ -200,7 +200,7 @@ angular.module("fielddbAngularApp").directive("fielddbImport", function() {
   controller.$inject = ["$scope", "$upload", "$rootScope"];
 
   var directiveDefinitionObject = {
-    templateUrl: "views/import.html",
+    templateUrl: "components/import/import.html",
     restrict: "A",
     transclude: false,
     scope: {

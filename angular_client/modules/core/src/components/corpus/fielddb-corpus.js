@@ -1,9 +1,9 @@
 "use strict";
 
-angular.module("fielddbAngularApp").directive("fielddbCorpus", function() {
+angular.module("fielddbAngular").directive("fielddbCorpus", function() {
 
   var directiveDefinitionObject = {
-    templateUrl: "views/corpus.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "collection/corpus/corpus.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     scope: {

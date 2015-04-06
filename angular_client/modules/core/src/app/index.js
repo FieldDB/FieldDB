@@ -1,3 +1,4 @@
+/* globals console, window */
 "use strict";
 // var angularFieldDB = angular.module("FieldDB", []);
 // for (var modelName in FieldDB) {
@@ -9,18 +10,15 @@
 //       return FieldDB[modelName];
 //     });
 // }
-var fielddbAngulaModule = angular.module("fielddbAngularApp", [
+angular.module("fielddbAngular", [
   "ngAnimate",
   "ngCookies",
-  "ngResource",
-  "ngRoute",
-  "ngSanitize",
   "ngTouch",
-  "angularFileUpload",
-  "contenteditable",
-  "ang-drag-drop"
-]).config(function($routeProvider, $sceDelegateProvider) {
-  // console.log($routeProvider);
+  "ngSanitize",
+  "ui.router",
+  "ui.bootstrap"
+]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
+  console.log($urlRouterProvider);
 
   var fieldDBApp;
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -48,7 +46,12 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
     }
   }
 
+  FieldDB.FieldDBObject.bug = function(message) {
+    console.warn(message);
+  };
+
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
+    "http://opensourcefieldlinguistics.github.io/**",
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
@@ -68,8 +71,18 @@ var fielddbAngulaModule = angular.module("fielddbAngularApp", [
   // FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.example.org";
   // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.example.org";
 
+  $stateProvider
+    .state("home", {
+      url: "/",
+      templateUrl: "app/main/main.html",
+      controller: "FieldDBController"
+    });
+
+  $urlRouterProvider.otherwise("/");
+
 });
-console.log("Loaded fielddbAngulaModule", fielddbAngulaModule);
+
+console.log("Loaded fielddbAngular module");
 // fielddbAngulaModule.run(["$route", "$rootScope", "$location",
 //   function($route, $rootScope, $location) {
 //     var original = $location.path;

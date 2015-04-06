@@ -36,7 +36,7 @@ In your app load the `script.js` and optionally:
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'fielddbAngularApp'
+    'fielddbAngular'
   ])
   .config(function($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode(true);

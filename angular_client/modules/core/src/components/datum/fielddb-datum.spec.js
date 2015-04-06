@@ -2,10 +2,19 @@
 "use strict";
 var debugMode = false;
 
-describe("Directive: fielddb-datum", function() {
+xdescribe("Directive: fielddb-datum", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/datum.html", "views/session.html", "views/session_list_item.html", "views/datum_list_item.html", "views/datum_igt.html", "views/datum_spreadsheet.html", "views/datum_language_lesson.html", "views/datum_stimulus.html", "views/datum_generic.html"));
+  beforeEach(module("fielddbAngular",
+    "components/datum/datum.html",
+    "components/session/session.html",
+    "components/session/session_list_item.html",
+    "components/datum/datum_list_item.html",
+    "components/datum/datum_igt.html",
+    "components/datum/datum_spreadsheet.html",
+    "components/datum/datum_language_lesson.html",
+    "components/datum/datum_stimulus.html",
+    "components/datum/datum_generic.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
@@ -58,11 +67,11 @@ describe("Directive: fielddb-datum", function() {
 
     inject(function() {
       compileFunction(scope); // <== the html {{}} are bound
-      try{
+      try {
         if (!scope.$$phase) {
           scope.$digest(); // <== digest to get the render to show the bound values
         }
-      }catch(e){
+      } catch (e) {
         console.log("error digesting scope");
       }
       if (debugMode) {

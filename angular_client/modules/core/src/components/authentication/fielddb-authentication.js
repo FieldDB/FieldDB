@@ -3,11 +3,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbAuthentication
+ * @name fielddbAngular.directive:fielddbAuthentication
  * @description
  * # fielddbAuthentication
  */
-angular.module("fielddbAngularApp").directive("fielddbAuthentication", function() {
+angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
 
   var controller = function($scope, $rootScope) {
     /* initialize or confirm scope is prepared */
@@ -86,7 +86,7 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: "views/authentication.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "components/authentication/authentication.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     // scope: {

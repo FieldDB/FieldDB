@@ -3,14 +3,14 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbAudioVideoRecorder
+ * @name fielddbAngular.directive:fielddbAudioVideoRecorder
  * @description
  * # fielddbAudioVideoRecorder
  */
-angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", function() {
+angular.module("fielddbAngular").directive("fielddbAudioVideoRecorder", function() {
 
   return {
-    templateUrl: "views/audio-video-recorder.html",
+    templateUrl: "components/audio-video/audio-video-recorder.html",
     restrict: "A",
     transclude: false,
     scope: {
@@ -41,17 +41,17 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
       }
 
-      var onAudioFail = function(e) {
-        if (e === "Already running") {
+      var onAudioFail = function(error) {
+        if (error === "Already running") {
           return;
         }
-        $scope.datum.warn("Audio peripheralsCheck failed", e);
+        $scope.datum.warn("Audio peripheralsCheck failed", error);
         try {
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
           }
-        } catch (e) {
-          console.warn("Rendering generated an erorr", e);
+        } catch (err) {
+          console.warn("Rendering generated an erorr", err);
         }
       };
       var onAudioSuccess = function(s) {

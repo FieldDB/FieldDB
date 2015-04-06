@@ -2,15 +2,15 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbDatumField
+ * @name fielddbAngular.directive:fielddbDatumField
  * @description
  * # fielddbDatumField
  */
 
-angular.module("fielddbAngularApp").directive("fielddbDatumField", function() {
+angular.module("fielddbAngular").directive("fielddbDatumField", function() {
 
   var directiveDefinitionObject = {
-    templateUrl: "views/datum-field.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "components/datum/datum-field.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     scope: {

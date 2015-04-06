@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbSession
+ * @name fielddbAngular.directive:fielddbSession
  * @description
  * # fielddbSession
  */
-angular.module("fielddbAngularApp").directive("fielddbSession", function() {
+angular.module("fielddbAngular").directive("fielddbSession", function() {
   return {
-    templateUrl: "views/session.html",
+    templateUrl: "components/session/session.html",
     restrict: "A",
     transclude: false,
     scope: {

@@ -1,9 +1,9 @@
 "use strict";
 
-describe("Filter: fielddbShortDate", function() {
+xdescribe("Filter: fielddbShortDate", function() {
 
   // load the filter"s module
-  beforeEach(module("fielddbAngularApp"));
+  beforeEach(module("fielddbAngular"));
   var expectedDate = new Date("2014-07-14T14:39:10.916Z");
   var expectedFormattedDate = expectedDate.toLocaleDateString();
 

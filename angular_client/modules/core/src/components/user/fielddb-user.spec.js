@@ -3,14 +3,17 @@
 "use strict";
 var debugMode = false;
 
-describe("Directive: fielddb-user", function() {
+xdescribe("Directive: fielddb-user", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html",  "views/participant.html"));
+  beforeEach(module("fielddbAngular",
+    "components/user/user.html",
+    "components/user/user-page.html",
+    "components/user/participant.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
-    el = angular.element("<div data-fielddb-user view='Team' json='team'></div>"+
+    el = angular.element("<div data-fielddb-user view='Team' json='team'></div>" +
       " <div data-fielddb-user view='User'  json='user1'></div>" +
       " <div data-fielddb-user view='Participant' json='user2'></div>");
     scope = $rootScope.$new();

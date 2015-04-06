@@ -5,10 +5,10 @@ localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
   iso: "ka"
 }));
 
-describe("Directive: fielddb-locales", function() {
+xdescribe("Directive: fielddb-locales", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/locales.html"));
+  beforeEach(module("fielddbAngular", "components/locales/locales.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-describe("Directive: fielddb-contenteditable", function() {
+xdescribe("Directive: fielddb-contenteditable", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

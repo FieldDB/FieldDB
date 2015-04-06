@@ -4,11 +4,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbLocales
+ * @name fielddbAngular.directive:fielddbLocales
  * @description
  * # fielddbLocales
  */
-angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
+angular.module("fielddbAngular").directive("fielddbLocales", function() {
   var debugMode = false;
   var controller = function($scope, $timeout) {
 
@@ -39,7 +39,7 @@ angular.module("fielddbAngularApp").directive("fielddbLocales", function() {
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: "views/locales.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "components/locales/locales.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     // scope: {

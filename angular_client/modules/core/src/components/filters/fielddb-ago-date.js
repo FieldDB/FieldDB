@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc filter
- * @name fielddbAngularApp.filter:fielddbAgoDate
+ * @name fielddbAngular.filter:fielddbAgoDate
  * @function
  * @description
  *
@@ -21,9 +21,9 @@
  * JSON.stringify(new Date())
  *
  * # fielddbAgoDate
- * Filter in the fielddbAngularApp.
+ * Filter in the fielddbAngular.
  */
-angular.module("fielddbAngularApp").filter("fielddbAgoDate", function() {
+angular.module("fielddbAngular").filter("fielddbAgoDate", function() {
   return function(input) {
     if (!input) {
       return "--";

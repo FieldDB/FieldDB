@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbDatum
+ * @name fielddbAngular.directive:fielddbDatum
  * @description
  * # fielddbDatum
  */
-angular.module("fielddbAngularApp").directive("fielddbDatum", function() {
+angular.module("fielddbAngular").directive("fielddbDatum", function() {
   return {
-    templateUrl: "views/datum_generic.html",
+    templateUrl: "components/datum/datum_generic.html",
     restrict: "A",
     transclude: false,
     scope: {
