@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-describe("Directive: fielddb-search", function() {
+xdescribe("Directive: fielddb-search", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/search.html"));
+  beforeEach(module("fielddbAngular", "components/search/search.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

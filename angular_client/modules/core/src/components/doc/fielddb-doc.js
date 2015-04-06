@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbDoc
+ * @name fielddbAngular.directive:fielddbDoc
  * @description
  * # fielddbDoc
  */
-angular.module("fielddbAngularApp").directive("fielddbDoc", function($compile) {
+angular.module("fielddbAngular").directive("fielddbDoc", function($compile) {
   var templates = {
     UserMask: "<div data-fielddb-user view='UserMask' json='doc' corpus='corpus'></div>",
     User: "<div data-fielddb-user view='User' json='doc' corpus='corpus'></div>",

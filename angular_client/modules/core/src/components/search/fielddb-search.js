@@ -1,11 +1,11 @@
 "use strict";
 
-angular.module("fielddbAngularApp").directive("fielddbSearch", function() {
+angular.module("fielddbAngular").directive("fielddbSearch", function() {
   var search = {};
   search.sortBy = "dateCreated";
   search.fields = ["utterance", "translation"];
   return {
-    templateUrl: "views/search.html",
+    templateUrl: "components/search/search.html",
     restrict: "A",
     transclude: false,
     scope: true,

@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc filter
- * @name fielddbAngularApp.filter:fielddbVisiblyEmpty
+ * @name fielddbAngular.filter:fielddbVisiblyEmpty
  * @function
  * @description
  * # fielddbVisiblyEmpty
- * Filter in the fielddbAngularApp.
+ * Filter in the fielddbAngular.
  */
-angular.module("fielddbAngularApp").filter("fielddbVisiblyEmpty", function() {
+angular.module("fielddbAngular").filter("fielddbVisiblyEmpty", function() {
   return function(input) {
     if (input.trim) {
       input = input.trim();

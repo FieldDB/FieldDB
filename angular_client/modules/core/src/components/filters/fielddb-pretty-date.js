@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc filter
- * @name fielddbAngularApp.filter:fielddbPrettyDate
+ * @name fielddbAngular.filter:fielddbPrettyDate
  * @function
  * @description Converts any date format (json format, timestamp etc) into something nicer (for the locale, with hour and minutes)
  * # fielddbPrettyDate
- * Filter in the fielddbAngularApp.
+ * Filter in the fielddbAngular.
  */
-angular.module("fielddbAngularApp").filter("fielddbPrettyDate", function() {
+angular.module("fielddbAngular").filter("fielddbPrettyDate", function() {
   return function(input) {
     if (!input) {
       return "--";

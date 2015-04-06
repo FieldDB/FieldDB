@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc filter
- * @name fielddbAngularApp.filter:fielddbShortDate
+ * @name fielddbAngular.filter:fielddbShortDate
  * @function
  * @description
  * # fielddbShortDate
- * Filter in the fielddbAngularApp.
+ * Filter in the fielddbAngular.
  */
-angular.module("fielddbAngularApp").filter("fielddbShortDate", function() {
+angular.module("fielddbAngular").filter("fielddbShortDate", function() {
   return function(input) {
     if (!input) {
       return "--";

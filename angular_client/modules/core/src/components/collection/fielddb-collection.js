@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc directive
- * @name fielddbAngularApp.directive:fielddbCollection
+ * @name fielddbAngular.directive:fielddbCollection
  * @description
  * # fielddbCollection
  */
-angular.module("fielddbAngularApp").directive("fielddbCollection", function() {
+angular.module("fielddbAngular").directive("fielddbCollection", function() {
 
 
   var controller = function($scope) {
@@ -60,7 +60,7 @@ angular.module("fielddbAngularApp").directive("fielddbCollection", function() {
 
   var directiveDefinitionObject = {
     templateUrl: function() {
-      return "views/collection.html";
+      return "components/collection/collection.html";
     },
     restrict: "A",
     transclude: false,

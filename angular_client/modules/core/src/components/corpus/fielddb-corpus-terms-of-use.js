@@ -1,8 +1,8 @@
 "use strict";
 
-angular.module("fielddbAngularApp").directive("fielddbCorpusTermsOfUse", function() {
+angular.module("fielddbAngular").directive("fielddbCorpusTermsOfUse", function() {
   return {
-    templateUrl: "views/terms-of-use.html",
+    templateUrl: "collection/corpus/terms-of-use.html",
     restrict: "A",
     transclude: false,
     scope: {

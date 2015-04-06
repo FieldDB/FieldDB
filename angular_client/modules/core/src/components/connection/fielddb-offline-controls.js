@@ -1,8 +1,8 @@
 "use strict";
 
-angular.module("fielddbAngularApp").directive("fielddbOfflineControls", function() {
+angular.module("fielddbAngular").directive("fielddbOfflineControls", function() {
   return {
-    templateUrl: "views/offline-controls.html",
+    templateUrl: "collection/connection/offline-controls.html",
     restrict: "A",
     transclude: false,
     scope: {

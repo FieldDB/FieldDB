@@ -2,10 +2,10 @@
 "use strict";
 var debugMode = false;
 
-describe("Directive: fielddb-datum-field", function() {
+xdescribe("Directive: fielddb-datum-field", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/datum-field.html"));
+  beforeEach(module("fielddbAngular", "components/datum/datum-field.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

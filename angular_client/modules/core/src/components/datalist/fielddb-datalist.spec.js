@@ -1,14 +1,17 @@
-/*globals FieldDB, runs, waitsFor */
+/*globals FieldDB, runs, waitsFor, setTimeout */
 
 "use strict";
 var debugMode = false;
 var specIsRunningTooLong = 500000;
-describe("Directive: fielddb-datalist", function() {
+xdescribe("Directive: fielddb-datalist", function() {
 
-  describe("multiple lists of datalists", function() {
+  xdescribe("multiple lists of datalists", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/participant.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngular",
+      "components/user/user.html",
+      "components/user/participant.html",
+      "components/datalist/datalist.html"));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
@@ -63,10 +66,14 @@ describe("Directive: fielddb-datalist", function() {
   });
 
 
-  describe("mocked fetchCollection", function() {
+  xdescribe("mocked fetchCollection", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html", "views/participant.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngular",
+      "components/user/user.html",
+      "components/user/user-page.html",
+      "components/user/participant.html",
+      "components/datalist/datalist.html"));
     var el, scope, compileFunction;
 
     beforeEach(inject(function($rootScope, $compile) {
@@ -147,10 +154,14 @@ describe("Directive: fielddb-datalist", function() {
   });
 
 
-  describe("mocked http fetch of corpus datalist", function() {
+  xdescribe("mocked http fetch of corpus datalist", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/user-page.html", "views/participant.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngular",
+      "components/user/user.html",
+      "components/user/user-page.html",
+      "components/user/participant.html",
+      "components/datalist/datalist.html"));
     var el, scope, compileFunction, httpBackend, http;
 
     beforeEach(inject(function($rootScope, $compile, $controller, $httpBackend, $http) {
@@ -266,10 +277,13 @@ describe("Directive: fielddb-datalist", function() {
     });
 
   });
-  describe("mocked fetch of corpus datalist", function() {
+  xdescribe("mocked fetch of corpus datalist", function() {
 
     // load the directive's module and the template
-    beforeEach(module("fielddbAngularApp", "views/user.html", "views/participant.html", "views/datalist.html"));
+    beforeEach(module("fielddbAngular",
+      "components/user/user.html",
+      "components/user/participant.html",
+      "components/datalist/datalist.html"));
     var el, scope, compileFunction, timeout;
 
     beforeEach(inject(function($rootScope, $compile, $timeout) {

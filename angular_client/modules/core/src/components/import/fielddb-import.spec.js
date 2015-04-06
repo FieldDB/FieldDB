@@ -4,7 +4,7 @@ var debugMode = false;
 xdescribe("Directive: fielddb-import", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngularApp", "views/import.html"));
+  beforeEach(module("fielddbAngular", "components/import/import.html"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
