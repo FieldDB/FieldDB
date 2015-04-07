@@ -21,6 +21,7 @@
   "globals": {
     "angular": false,
     "FieldDB": false,
+    "console": false,
     // Angular Mocks
     "inject": false,
     "module": false,
