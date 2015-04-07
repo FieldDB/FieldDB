@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-doc", function() {
+describe("Directive: fielddb-doc", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "components/user/user.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

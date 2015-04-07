@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-corpus-terms-of-use", function() {
+describe("Directive: fielddb-corpus-terms-of-use", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "collection/corpus/terms-of-use.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

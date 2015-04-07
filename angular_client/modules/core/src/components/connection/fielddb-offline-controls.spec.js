@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-offline-controls", function() {
+describe("Directive: fielddb-offline-controls", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "collection/connection/offline-controls.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

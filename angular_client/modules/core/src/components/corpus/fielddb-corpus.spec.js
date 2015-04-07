@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-corpus", function() {
+describe("Directive: fielddb-corpus", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "collection/corpus/corpus.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

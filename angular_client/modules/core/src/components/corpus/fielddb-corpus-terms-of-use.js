@@ -2,7 +2,7 @@
 
 angular.module("fielddbAngular").directive("fielddbCorpusTermsOfUse", function() {
   return {
-    templateUrl: "collection/corpus/terms-of-use.html",
+    templateUrl: "components/corpus/terms-of-use.html",
     restrict: "A",
     transclude: false,
     scope: {

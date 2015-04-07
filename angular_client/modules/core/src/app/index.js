@@ -20,7 +20,6 @@ angular.module("fielddbAngular", [
   "angularFileUpload",
   "contenteditable"
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
-  console.log($urlRouterProvider);
 
   var fieldDBApp;
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -46,6 +45,9 @@ angular.module("fielddbAngular", [
     if (window.location.pathname.indexOf("android_asset") > -1) {
       fieldDBApp.basePathname = window.location.pathname;
     }
+  }
+  if (FieldDB.debugMode) {
+    console.log($urlRouterProvider);
   }
 
   FieldDB.FieldDBObject.bug = function(message) {

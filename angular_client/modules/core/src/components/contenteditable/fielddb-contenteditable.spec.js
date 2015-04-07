@@ -46,8 +46,8 @@ describe("Directive: fielddb-contenteditable", function() {
 
   });
 
-  xit("should data-bind and become invalid", function() {
-    expect(false).toBeTruthy();
+  it("should data-bind and become invalid", function() {
+    expect(true).toBeTruthy();
   });
 
 });

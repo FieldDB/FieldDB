@@ -2,19 +2,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-datum", function() {
+describe("Directive: fielddb-datum", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular",
-    "components/datum/datum.html",
-    "components/session/session.html",
-    "components/session/session_list_item.html",
-    "components/datum/datum_list_item.html",
-    "components/datum/datum_igt.html",
-    "components/datum/datum_spreadsheet.html",
-    "components/datum/datum_language_lesson.html",
-    "components/datum/datum_stimulus.html",
-    "components/datum/datum_generic.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
