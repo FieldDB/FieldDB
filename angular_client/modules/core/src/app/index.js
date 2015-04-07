@@ -49,6 +49,9 @@ angular.module("fielddbAngular", [
   FieldDB.FieldDBObject.bug = function(message) {
     console.warn(message);
   };
+  FieldDB.FieldDBObject.warn = function(message) {
+    console.warn(message);
+  };
 
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
     "http://opensourcefieldlinguistics.github.io/**",
