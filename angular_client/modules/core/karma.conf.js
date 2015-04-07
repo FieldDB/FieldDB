@@ -27,7 +27,7 @@ module.exports = function(config) {
 
     ngHtml2JsPreprocessor: {
       stripPrefix: 'src/',
-      moduleName: 'gulpAngular'
+      moduleName: 'fielddbAngular'
     },
 
 
