@@ -5,10 +5,10 @@ localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
   iso: "ka"
 }));
 
-xdescribe("Directive: fielddb-locales", function() {
+describe("Directive: fielddb-locales", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "components/locales/locales.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
@@ -36,7 +36,8 @@ xdescribe("Directive: fielddb-locales", function() {
         console.log("post link", el.html());
         console.log("scope locales ", scope.application.locales);
       }
-      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine ng-valid");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-valid");
     });
   });
 
@@ -49,7 +50,8 @@ xdescribe("Directive: fielddb-locales", function() {
         console.log("post link", el.html());
         console.log("scope locales ", scope.application.locales);
       }
-      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine ng-valid");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-pristine");
+      expect(angular.element(el.find("select")[0]).attr("class")).toContain("ng-valid");
     });
   });
 

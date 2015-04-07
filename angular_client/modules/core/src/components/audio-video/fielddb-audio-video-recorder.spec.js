@@ -57,13 +57,13 @@ describe("Directive: fielddb-audio-video-recorder", function() {
     });
   });
 
-  xit("should make attach recorders to every element marked RecordMP3js-recorder", function() {
+  it("should make attach recorders to every element marked RecordMP3js-recorder", function() {
 
     inject(function() {
 
       // FieldDB.AudioVideoRecorder.Recorder.initRecorder();
-      // var firstAudioRecorder = angular.element(angular.element(el[0]).find("p")[0]);
-      // expect(firstAudioRecorder.innerHTML).toEqual(" ");
+      var firstAudioRecorder = angular.element(angular.element(el[0]).find("p"))[0];
+      expect(firstAudioRecorder.innerHTML).toEqual("");
     });
 
   });

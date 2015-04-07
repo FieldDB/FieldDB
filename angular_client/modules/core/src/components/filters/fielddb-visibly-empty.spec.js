@@ -1,6 +1,6 @@
 "use strict";
 
-xdescribe("Filter: fielddbVisiblyEmpty", function() {
+describe("Filter: fielddbVisiblyEmpty", function() {
 
   // load the filter"s module
   beforeEach(module("fielddbAngular"));

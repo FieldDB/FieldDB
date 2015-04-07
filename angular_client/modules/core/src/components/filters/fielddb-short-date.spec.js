@@ -1,6 +1,6 @@
 "use strict";
 
-xdescribe("Filter: fielddbShortDate", function() {
+describe("Filter: fielddbShortDate", function() {
 
   // load the filter"s module
   beforeEach(module("fielddbAngular"));

@@ -1,6 +1,6 @@
 "use strict";
 
-xdescribe("Filter: fielddbPrettyDate", function() {
+describe("Filter: fielddbPrettyDate", function() {
 
   // load the filter"s module
   beforeEach(module("fielddbAngular"));
@@ -43,7 +43,7 @@ xdescribe("Filter: fielddbPrettyDate", function() {
     expect(fielddbPrettyDate(inputDate)).toBe(expectedFormattedDate);
   });
 
-  xdescribe("edge cases", function() {
+  describe("edge cases", function() {
 
     it("should show N/A if the date is 2000-09-06T16:31:30.988Z", function() {
       var inputDate = new Date("2000-09-06T16:31:30.988Z");

@@ -2,12 +2,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-session", function() {
+describe("Directive: fielddb-session", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular",
-    "components/session/session.html",
-    "components/session/session_list_item.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {

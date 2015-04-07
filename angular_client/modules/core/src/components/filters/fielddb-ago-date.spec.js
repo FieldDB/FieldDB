@@ -1,6 +1,6 @@
 "use strict";
 
-xdescribe("Filter: fielddbAgoDate", function() {
+describe("Filter: fielddbAgoDate", function() {
   var oneminute = 60000;
   var onehour = 3600000;
   var sixhours = 21600000;
@@ -16,7 +16,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
     fielddbAgoDate = $filter("fielddbAgoDate");
   }));
 
-  xdescribe("today", function() {
+  describe("today", function() {
 
     it("should detect in the past 2 minutes is just now", function() {
       var inputDate = Date.now() - oneminute;
@@ -76,7 +76,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
 
   });
 
-  xdescribe("yesterday", function() {
+  describe("yesterday", function() {
 
     it("should detect yesterday", function() {
       var inputDate = Date.now() - oneday;
@@ -101,7 +101,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
 
   });
 
-  xdescribe("recent past", function() {
+  describe("recent past", function() {
 
     it("should detect 2 days", function() {
       var inputDate = Date.now() - oneday * 2;
@@ -150,7 +150,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
 
   });
 
-  xdescribe("in the past year and a half", function() {
+  describe("in the past year and a half", function() {
 
     it("should detect 8 weeks ago is 2 months ago", function() {
       var inputDate = Date.now() - oneweek * 8;
@@ -179,7 +179,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
 
   });
 
-  xdescribe("over a year and a half ago", function() {
+  describe("over a year and a half ago", function() {
 
     it("should detect 18 months ago is 1.5 years ago", function() {
       var inputDate = Date.now() - onemonth * 18;
@@ -213,7 +213,7 @@ xdescribe("Filter: fielddbAgoDate", function() {
 
   });
 
-  xdescribe("diverse inputs", function() {
+  describe("diverse inputs", function() {
     var inputDate = JSON.stringify(new Date(Date.now() - onemonth * 2));
 
     it("should convert json dates with escaped quotes into ago", function() {

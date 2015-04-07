@@ -265,7 +265,7 @@ describe("Directive: fielddb-authentication", function() {
       }).fail(function(errorLoggingOut) {
         console.log("errorLoggingOut", errorLoggingOut);
         expect(errorLoggingOut).toBeFalsy();
-      });
+      }).done(done);
 
     }, function(errorFetching) {
       console.log("fail", errorFetching);
@@ -273,7 +273,7 @@ describe("Directive: fielddb-authentication", function() {
     }).fail(function(errorFetching) {
       console.log("errorFetching", errorFetching);
       expect(errorFetching).toBeFalsy();
-    }).done(done);
+    });
 
   }, specIsRunningTooLong);
 
