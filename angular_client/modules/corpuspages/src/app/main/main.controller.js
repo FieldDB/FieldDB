@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-angular.module('fielddbCorpusPagesApp').controller('FieldDBCorpusPagesController',
+angular.module("fielddbCorpusPagesApp").controller("FieldDBCorpusPagesController",
   function() {
 
   });

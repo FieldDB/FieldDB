@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 
-describe('Controller: FieldDBCorpusPagesController', function () {
+describe("Controller: FieldDBCorpusPagesController", function () {
   var scope;
 
-  beforeEach(module('fielddbCorpusPagesApp'));
+  beforeEach(module("fielddbCorpusPagesApp"));
 
   beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
   }));
 
-  it('should define more than 5 awesome things', inject(function($controller) {
+  it("should define more than 5 awesome things", inject(function($controller) {
     expect(scope.awesomeThings).toBeUndefined();
 
-    $controller('FieldDBCorpusPagesController', {
+    $controller("FieldDBCorpusPagesController", {
       $scope: scope
     });
 
