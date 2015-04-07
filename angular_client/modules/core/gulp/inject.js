@@ -15,6 +15,7 @@ module.exports = function(options) {
 
     var injectScripts = gulp.src([
       options.src + '/{app,components}/**/*.js',
+      // options.src + '/.tmp/partials/templateCacheHtml.js',
       '!' + options.src + '/{app,components}/**/*.spec.js',
       '!' + options.src + '/{app,components}/**/*.mock.js'
     ])

@@ -17,7 +17,10 @@ angular.module("fielddbAngular", [
   "ngSanitize",
   "ui.router",
   "ui.bootstrap"
-]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
+]).run(["$templateCache", function($templateCache) {
+  window.templates = $templateCache;
+  console.log("Here is the templateCache ", $templateCache);
+}]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
   console.log($urlRouterProvider);
 
   var fieldDBApp;

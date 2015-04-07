@@ -29,6 +29,7 @@ module.exports = function(options) {
 
     var srcFiles = [
       options.src + '/{app,components}/**/*.js'
+      // options.src + '/.tmp/partials/templateCacheHtml.js'
     ].concat(specFiles.map(function(file) {
       return '!' + file;
     }));
