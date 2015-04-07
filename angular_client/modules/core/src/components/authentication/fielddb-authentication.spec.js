@@ -1,4 +1,4 @@
-/* globals FieldDB, runs, waitsFor, localStorage, setTimeout */
+/* globals FieldDB, localStorage, setTimeout */
 "use strict";
 var debugMode = false;
 var specIsRunningTooLong = 5000;
@@ -8,9 +8,7 @@ localStorage.clear();
 describe("Directive: fielddb-authentication", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular",
-    "components/authentication/authentication.html",
-    "components/locales/locales.html"));
+  beforeEach(module("fielddbAngular"));
 
   var el,
     scope,
@@ -59,7 +57,7 @@ describe("Directive: fielddb-authentication", function() {
     });
   });
 
-  xit("should show logout button if someone is logged in", function() {
+  it("should show logout button if someone is logged in", function() {
 
     inject(function() {
       scope.application.authentication.user.authenticated = true;
@@ -75,76 +73,35 @@ describe("Directive: fielddb-authentication", function() {
     });
   });
 
-  xit("should be able to use encryption for client side user storage in karma in phantom js", function() {
-    var promiseResult,
-      promisHasCompleted,
-      previousClientSideLogin;
+  it("should be able to use encryption for client side user storage in karma in phantom js", function(done) {
 
-    runs(function() {
-
-      previousClientSideLogin = new FieldDB.Authentication({
-        // debugMode: true
-      });
-      expect(previousClientSideLogin).toBeDefined();
-      console.log("trying to set the user");
-      previousClientSideLogin.user = {
-        _id: "jenkins",
-        username: "jenkins",
-        debugMode: true
-      };
-      expect(previousClientSideLogin.user.fieldDBtype).toEqual("User");
-      expect(previousClientSideLogin.userMask).toBeUndefined();
-
-      previousClientSideLogin.user = {
-        _rev: "2-need_a_rev_to_cause_save",
-        username: "jenkins",
-        anotherfield: "hi",
-        researchInterest: "Test automation",
-        prefs: {
-          numVisibleDatum: 2
-        }
-      };
-
-      setTimeout(function() {
-
-        if (previousClientSideLogin.user.savingPromise) {
-          previousClientSideLogin.user.savingPromise.then(function(promisedUser) {
-            promiseResult = promisedUser;
-            promisHasCompleted = true;
-          });
-        } else if (previousClientSideLogin.user.whenReady) {
-          previousClientSideLogin.user.whenReady.then(function(promisedUser) {
-            promiseResult = promisedUser;
-            promisHasCompleted = true;
-          });
-        } else if (previousClientSideLogin.resumingSessionPromise) {
-          previousClientSideLogin.resumingSessionPromise.then(function(promisedUser) {
-            promiseResult = promisedUser;
-            promisHasCompleted = true;
-          });
-        } else {
-          setTimeout(function() {
-            promiseResult = {
-              error: "no promises were run"
-            };
-            promisHasCompleted = true;
-          }, 100);
-        }
-
-      }, 100);
+    var previousClientSideLogin = new FieldDB.Authentication({
+      // debugMode: true
     });
+    expect(previousClientSideLogin).toBeDefined();
+    console.log("trying to set the user");
+    previousClientSideLogin.user = {
+      _id: "jenkins",
+      username: "jenkins",
+      debugMode: true
+    };
+    expect(previousClientSideLogin.user.fieldDBtype).toEqual("User");
+    expect(previousClientSideLogin.userMask).toBeUndefined();
 
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
+    previousClientSideLogin.user = {
+      _rev: "2-need_a_rev_to_cause_save",
+      username: "jenkins",
+      anotherfield: "hi",
+      researchInterest: "Test automation",
+      prefs: {
+        numVisibleDatum: 2
+      }
+    };
+    expect(previousClientSideLogin).toBeDefined();
+    expect(previousClientSideLogin.user).toBeDefined();
+    expect(previousClientSideLogin.user.researchInterest).toContain("Test automation");
 
-    runs(function() {
-      // expect(promiseResult.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-
-      expect(previousClientSideLogin).toBeDefined();
-      expect(previousClientSideLogin.user).toBeDefined();
-      expect(previousClientSideLogin.user.researchInterest).toContain("Test automation");
-
+    var whatWeExpect = function() {
       /* should be saved */
       var clientSideUserKey = localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C");
       expect(clientSideUserKey).toBeDefined();
@@ -154,203 +111,170 @@ describe("Directive: fielddb-authentication", function() {
       expect(clientSideUser).toBeDefined();
       expect(clientSideUser).toContain("confidential");
 
-    });
+    };
+
+
+    if (previousClientSideLogin.user.savingPromise) {
+      console.log("savingPromise");
+      previousClientSideLogin.user.savingPromise.then(function(promisedUser) {
+        whatWeExpect(promisedUser);
+      }, function(error) {
+        console.log("Error running auth test", error);
+        expect(false).toBeTruthy();
+      }).done(done);
+    } else if (previousClientSideLogin.user.whenReady) {
+      console.log("whenReady");
+
+      previousClientSideLogin.user.whenReady.then(function(promisedUser) {
+        whatWeExpect(promisedUser);
+      }, function(error) {
+        console.log("Error running auth test", error);
+        expect(false).toBeTruthy();
+      }).done(done);
+    } else if (previousClientSideLogin.resumingSessionPromise) {
+      console.log("resumingSessionPromise");
+      previousClientSideLogin.resumingSessionPromise.then(function(promisedUser) {
+        whatWeExpect(promisedUser);
+      }, function(error) {
+        console.log("Error running auth test", error);
+        expect(false).toBeTruthy();
+      }).done(done);
+    } else {
+      console.log("Nothing happened. ");
+      expect(false).toBeTruthy();
+      done();
+    }
+
+
   }, specIsRunningTooLong);
 
-  xit("should run async tests", function() {
-    var promiseResult,
-      promisHasCompleted;
+  it("should run async tests", function(done) {
+    var promiseResult;
 
-    runs(function() {
-      setTimeout(function() {
-        promiseResult = "ran async";
-        promisHasCompleted = true;
-      }, 500);
-    });
-
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
-
-    runs(function() {
+    setTimeout(function() {
+      promiseResult = "ran async";
       expect(promiseResult).toEqual("ran async");
-    });
+      done();
+    }, 500);
+
   }, specIsRunningTooLong);
 
 
-  xit("should register users", function() {
-    var promiseResult,
-      promisHasCompleted;
+  it("should register users", function(done) {
 
-    runs(function() {
-      compileFunction(scope); // <== the html {{}} are bound
-      scope.application.authentication.debugMode = true;
+    compileFunction(scope); // <== the html {{}} are bound
+    scope.application.authentication.debugMode = true;
 
-      expect(rootScope.register).toBeDefined();
-      rootScope.register({
-        username: "testangularcoreregister",
-        password: "test",
-        confirmPassword: "tes"
-      }).then(function(resultScope) {
-        promiseResult = resultScope;
-        promisHasCompleted = true;
-      }, function(resultScope) {
-        promiseResult = resultScope;
-        promisHasCompleted = true;
-      }).fail(function(error) {
-        console.log("error", error);
-        promiseResult = {};
-        promisHasCompleted = true;
-      });
-      setTimeout(function() {
-        promiseResult = {
-          error: "no register promise ran."
-        };
-        promisHasCompleted = true;
-      }, 2000);
-    });
+    expect(rootScope.register).toBeDefined();
+    rootScope.register({
+      username: "testangularcoreregister",
+      password: "test",
+      confirmPassword: "tes"
+    }).then(function(resultScope) {
+      expect(resultScope).toBeDefined();
+      expect(resultScope.application).toBeDefined();
+      expect(resultScope.application.authentication).toEqual(scope.application.authentication);
+      if (resultScope.application.authentication.error.indexOf("offline") === -1) {
+        expect(resultScope.application.authentication.error).toEqual("Passwords don't match, please double check your password.");
+      }
+    }, function(error) {
+      expect(error).toBeFalsy();
+    }).fail(function(error) {
+      console.log("error", error);
+      expect(error).toBeFalsy();
+    }).done(done);
 
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
+  }, specIsRunningTooLong);
 
-    runs(function() {
-      expect(promiseResult).toBeDefined();
-      expect(promiseResult.application).toBeDefined();
-      expect(promiseResult.application.authentication).toEqual(scope.application.authentication);
-      if (promiseResult.application.authentication.error.indexOf("offline") === -1) {
-        expect(promiseResult.application.authentication.error).toEqual("Passwords don't match, please double check your password.");
+  it("should login users", function(done) {
+    //https://egghead.io/lessons/angularjs-unit-testing-directive-scope
+    compileFunction(scope); // <== the html {{}} are bound
+    expect(el.scope().login).toBeDefined();
+    el.scope().login({
+      username: "jenkins",
+      password: "phoneme"
+    }).then(function(resultScope) {
+      console.log("success");
+      expect(resultScope).toEqual(scope);
+      expect(resultScope.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
+    }, function(error) {
+      console.log("fail", error);
+      expect(error).toBeFalsy();
+    }).fail(function(error) {
+      console.log("error", error);
+      expect(error).toBeFalsy();
+    }).done(done);
+
+  }, specIsRunningTooLong);
+
+  it("should indirectly cause the user to be saved locally by setting the user ", function(done) {
+
+    var anotherAuthLoad = new FieldDB.Authentication({
+      user: {
+        username: "jenkins"
       }
     });
+    expect(anotherAuthLoad.user.researchInterest).toEqual("");
 
-  }, specIsRunningTooLong);
+    expect(anotherAuthLoad.user.warnMessage).toContain("Refusing to save a user doc which is incomplete");
+    anotherAuthLoad.user.warnMessage = "";
 
-  xit("should login users", function() {
-    var promiseResult, promisHasCompleted;
+    // user has default prefs for now
+    expect(anotherAuthLoad.user.prefs).toBeUndefined();
+    expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
-    runs(function() {
-      //https://egghead.io/lessons/angularjs-unit-testing-directive-scope
-      compileFunction(scope); // <== the html {{}} are bound
-      expect(el.scope().login).toBeDefined();
-      el.scope().login({
-        username: "jenkins",
-        password: "phoneme"
-      }).then(function(resultScope) {
-        console.log("success");
-        promiseResult = resultScope;
-        promisHasCompleted = true;
-      }, function(resultScope) {
-        console.log("fail", resultScope);
-        promiseResult = resultScope;
-        promisHasCompleted = true;
-      }).fail(function(error) {
-        console.log("error", error);
-        promiseResult = {};
-        promisHasCompleted = true;
-      });
+    anotherAuthLoad.user.fetch().then(function(userFetchResult) {
 
-    });
-
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
-
-    runs(function() {
-      expect(promiseResult).toEqual(scope);
-      expect(promiseResult.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
-    });
-
-  }, specIsRunningTooLong);
-
-  xit("should indirectly cause the user to be saved locally by setting the user ", function() {
-    var promiseResult,
-      promisHasCompleted,
-      anotherAuthLoad;
-
-    runs(function() {
-      anotherAuthLoad = new FieldDB.Authentication({
-        user: {
-          username: "jenkins"
-        }
-      });
-      expect(anotherAuthLoad.user.researchInterest).toEqual("");
-
-      expect(anotherAuthLoad.user.warnMessage).toContain("Refusing to save a user doc which is incomplete");
-      anotherAuthLoad.user.warnMessage = "";
-
-      // user has default prefs for now
-      expect(anotherAuthLoad.user.prefs).toBeUndefined();
-      expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
-
-      anotherAuthLoad.user.fetch().then(function(userFetchResult) {
-        promiseResult = userFetchResult;
-        promisHasCompleted = true;
-      }, function(userFetchResult) {
-        promiseResult = userFetchResult;
-        promisHasCompleted = true;
-      }).fail(function(error) {
-        console.error("error fetching user from locally cached version", error);
-        promiseResult = {};
-        promisHasCompleted = true;
-      });
-    });
-
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
-
-    runs(function() {
-      expect(promiseResult).toEqual(anotherAuthLoad.user);
+      expect(userFetchResult).toEqual(anotherAuthLoad.user);
       expect(anotherAuthLoad.user.researchInterest).toContain("Test automation");
       // expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(22);
       expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
-    });
+
+    }, function(error) {
+      console.log("fail", error);
+      expect(error).toBeFalsy();
+    }).fail(function(error) {
+      console.log("error", error);
+      expect(error).toBeFalsy();
+    }).done(done);
+
   }, specIsRunningTooLong);
 
 
-  xit("should logout users", function() {
-    var promiseResult,
-      promisHasCompleted;
+  it("should logout users", function(done) {
+    compileFunction(scope); // <== the html {{}} are bound
+    expect(el.scope().logout).toBeDefined();
 
-    runs(function() {
-      compileFunction(scope); // <== the html {{}} are bound
-      expect(el.scope().logout).toBeDefined();
+    scope.application.authentication.user = {
+      username: "jenkins"
+    };
 
-      scope.application.authentication.user = {
-        username: "jenkins"
-      };
+    scope.application.authentication.user.fetch().then(function(resultOfFetch) {
+      console.log(resultOfFetch);
+      // expect(scope.application.authentication.user).toEqual(" ");
+      expect(scope.application.authentication.user.researchInterest).toContain("Test automation");
+      expect(scope.application.authentication.user.username).toEqual("jenkins");
 
-      scope.application.authentication.user.fetch().then(function(resultOfFetch) {
-        console.log(resultOfFetch);
-        // expect(scope.application.authentication.user).toEqual(" ");
-        expect(scope.application.authentication.user.researchInterest).toContain("Test automation");
-        expect(scope.application.authentication.user.username).toEqual("jenkins");
 
-        el.scope().logout().then(function(resultScope) {
-          promiseResult = resultScope;
-          promisHasCompleted = true;
-        }, function(resultScope) {
-
-          promiseResult = resultScope;
-          promisHasCompleted = true;
-        });
-
-      }, function(errorOfFetch) {
-        promiseResult = errorOfFetch;
-        promisHasCompleted = true;
+      el.scope().logout().then(function(resultScope) {
+        expect(resultScope.application.authentication).toEqual(scope.application.authentication);
+        expect(resultScope.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
+      }, function(errorLoggingOut) {
+        console.log("fail", errorLoggingOut);
+        expect(errorLoggingOut).toBeFalsy();
+      }).fail(function(errorLoggingOut) {
+        console.log("errorLoggingOut", errorLoggingOut);
+        expect(errorLoggingOut).toBeFalsy();
       });
-    });
 
-    waitsFor(function() {
-      return promisHasCompleted;
-    }, "waiting for the promsie to be done", specIsRunningTooLong - 200);
+    }, function(errorFetching) {
+      console.log("fail", errorFetching);
+      expect(errorFetching).toBeFalsy();
+    }).fail(function(errorFetching) {
+      console.log("errorFetching", errorFetching);
+      expect(errorFetching).toBeFalsy();
+    }).done(done);
 
-    runs(function() {
-      expect(promiseResult.application.authentication).toEqual(scope.application.authentication);
-      expect(promiseResult.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
-    });
   }, specIsRunningTooLong);
-
-
 
 });
