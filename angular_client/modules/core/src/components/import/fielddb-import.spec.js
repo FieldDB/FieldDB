@@ -1,10 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-import", function() {
+describe("Directive: fielddb-import", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular", "components/import/import.html"));
+  beforeEach(module("fielddbAngular"));
   var el, scope, compileFunction;
 
   beforeEach(inject(function($rootScope, $compile) {
@@ -37,7 +37,7 @@ xdescribe("Directive: fielddb-import", function() {
         console.log("post link", el.html());
         console.log("scope import ", scope.importDetails);
       }
-      expect(el.find("h1").text().trim()).toEqual("Community Corpus");
+      expect(el.find("h1").text().trim()).toEqual("Importer des liste(s) de classe (.csv)");
     });
   });
 });

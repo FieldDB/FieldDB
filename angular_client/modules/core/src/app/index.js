@@ -16,7 +16,9 @@ angular.module("fielddbAngular", [
   "ngTouch",
   "ngSanitize",
   "ui.router",
-  "ui.bootstrap"
+  "ui.bootstrap",
+  "angularFileUpload",
+  "contenteditable"
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
   console.log($urlRouterProvider);
 

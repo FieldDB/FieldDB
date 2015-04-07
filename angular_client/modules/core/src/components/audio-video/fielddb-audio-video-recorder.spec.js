@@ -1,14 +1,10 @@
 "use strict";
 var debugMode = false;
 
-xdescribe("Directive: fielddb-audio-video-recorder", function() {
+describe("Directive: fielddb-audio-video-recorder", function() {
 
   // load the directive's module and the template
-  beforeEach(module("fielddbAngular",
-    "components/audio-video/audio-video-recorder.html",
-    "components/import/import.html",
-    "components/datalist/datalist.html",
-    "components/session/session.html"));
+  beforeEach(module("fielddbAngular"));
 
   var el, scope, compileFunction;
 
