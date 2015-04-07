@@ -29,23 +29,21 @@
     "angular-md5": "~0.0.5",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
-    "bootstrap": "~2.3.2",
     "underscore": "~1.6.0",
     "q": "1.0.1",
     "font-awesome": "~4.2.0",
-    "angular-bootstrap": "0.8.0",
     "recordmp3js": "0.5.0",
     "sjcl": "~1.0.0",
-    "autofill-event": "~1.0.0"
+    "autofill-event": "~1.0.0",
+    "angular-resource": "~1.3.15",
+    "angular-route": "~1.3.15"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.26",
-    "angular-scenario": "1.2.26"
+    "angular-mocks": "1.3.15",
+    "angular-scenario": "1.3.15"
   },
   "appPath": "app",
   "resolutions": {
-    "bootstrap": "~2.3.2",
-    "jquery": "~2.1.1",
     "font-awesome": "~4.2.0"
   }
 }

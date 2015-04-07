@@ -70,9 +70,9 @@ angular.module("fielddbAngular", [
 
   $sceDelegateProvider.resourceUrlWhitelist(fieldDBApp.whiteListCORS);
 
-  // if (window.location.hash.indexOf("#") > -1) {
-  //   fieldDBApp.basePathname = window.location.pathname + "#";
-  // }
+  if (window.location.hash.indexOf("#") > -1) {
+    fieldDBApp.basePathname = window.location.pathname + "#";
+  }
 
   // FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.example.org";
   // FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.example.org";

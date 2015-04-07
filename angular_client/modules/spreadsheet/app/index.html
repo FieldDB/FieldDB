@@ -12,7 +12,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/recordmp3js/css/style.css" />
     <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/vendor.css" />
-    <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/main.css" />
+    <link rel="stylesheet" href="bower_components/fielddb-angular/dist/styles/fielddb-angular.css" />
     <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -57,16 +57,15 @@
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/fielddb-angular/dist/scripts/vendor.js"></script>
-    <script src="bower_components/fielddb-angular/dist/scripts/scripts.js"></script>
-    <script src="bower_components/fielddb-angular/dist/scripts/templates.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/fielddb-angular/dist/scripts/fielddb-angular.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/fielddb-glosser/fielddb-glosser.js"></script>
 
     <script src="bower_components/angular-md5/angular-md5.js"></script>
     <script src="bower_components/q/q.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/sjcl/sjcl.js"></script>
     <script src="bower_components/autofill-event/src/autofill-event.js"></script>
 
@@ -74,8 +73,8 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/private_services.js"></script>
         <script src="scripts/app.js"></script>
+        <script src="scripts/private_services.js"></script>
         <script src="scripts/services.js"></script>
         <script src="scripts/filters.js"></script>
         <script src="scripts/controllers/SpreadsheetController.js"></script>
