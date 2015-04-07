@@ -7,7 +7,7 @@ module.exports = function(config) {
   var configuration = {
 
     plugins: [
-      // 'karma-chrome-launcher',
+      'karma-chrome-launcher',
       // 'karma-firefox-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
@@ -45,7 +45,7 @@ module.exports = function(config) {
     // // browserNoActivityTimeout: 60000,
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // Start these browsers, currently available:
@@ -56,8 +56,9 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
+    browsers: ['Chrome'],
     // browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'Safari'],
-    browsers: ['PhantomJS'],
+    // browsers: ['PhantomJS'],
 
 
 
