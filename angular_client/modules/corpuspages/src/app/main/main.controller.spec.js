@@ -1,22 +1,21 @@
 'use strict';
 
 describe('Controller: FieldDBCorpusPagesController', function () {
+  var scope;
 
-  // load the controller's module
-  beforeEach(module('corpuspagesApp'));
+  beforeEach(module('fielddbCorpusPagesApp'));
 
-  var FieldDBCorpusPagesController,
-    scope;
-
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function($rootScope) {
     scope = $rootScope.$new();
-    FieldDBCorpusPagesController = $controller('FieldDBCorpusPagesController', {
-      $scope: scope
-    });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
-  });
+  it('should define more than 5 awesome things', inject(function($controller) {
+    expect(scope.awesomeThings).toBeUndefined();
+
+    $controller('FieldDBCorpusPagesController', {
+      $scope: scope
+    });
+
+    expect(scope).toBeDefined();
+  }));
 });
