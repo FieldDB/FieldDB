@@ -11,10 +11,10 @@
     "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
   },
   "main": [
-    "dist/styles/main.css",
+    "dist/styles/vendor.css",
+    "dist/styles/fielddb-angular.css",
     "dist/scripts/vendor.js",
-    "dist/scripts/scripts.js",
-    "dist/scripts/templates.js"
+    "dist/scripts/fielddb-angular.js"
   ],
   "dependencies": {
     "angular-animate": "~1.3.4",
