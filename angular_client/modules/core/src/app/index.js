@@ -20,6 +20,7 @@ angular.module("fielddbAngular", [
   "angularFileUpload",
   "contenteditable"
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
+  console.log("Loaded fielddbAngular module ", $stateProvider);
 
   var fieldDBApp;
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -78,14 +79,14 @@ angular.module("fielddbAngular", [
   // FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.example.org";
   // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.example.org";
 
-  $stateProvider
-    .state("home", {
-      url: "/",
-      templateUrl: "app/main/main.html",
-      controller: "FieldDBController"
-    });
+  // $stateProvider
+  //   .state("home", {
+  //     url: "/",
+  //     templateUrl: "app/main/main.html",
+  //     controller: "FieldDBController"
+  //   });
 
-  $urlRouterProvider.otherwise("/");
+  // $urlRouterProvider.otherwise("/");
 
 });
 
