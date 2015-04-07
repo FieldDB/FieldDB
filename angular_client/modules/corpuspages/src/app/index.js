@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module("fielddbCorpusPagesApp", [
-  "ngAnimate",
+  // "ngAnimate",
   "ngCookies",
   "ngTouch",
   "ngSanitize",
@@ -9,7 +9,7 @@ angular.module("fielddbCorpusPagesApp", [
   "ui.bootstrap",
   // "fielddbAngular"
 ]).config(function($locationProvider, $stateProvider, $urlRouterProvider) {
-  // $locationProvider.html5Mode(true);
+  $locationProvider.html5Mode(true);
 
   $stateProvider
     .state("home", {
