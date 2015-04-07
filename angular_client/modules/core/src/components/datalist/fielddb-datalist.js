@@ -204,11 +204,11 @@ angular.module("fielddbAngular").directive("fielddbDatalist", function() {
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
       if (attrs.view === "SubExperimentDataList") {
-        return "collection/experiment/sub-experiment-datalist.html";
+        return "components/experiment/sub-experiment-datalist.html";
       } else if (attrs.view === "Lesson") {
-        return "collection/datalist/datalist.html";
+        return "components/datalist/datalist.html";
       } else {
-        return "collection/datalist/datalist.html";
+        return "components/datalist/datalist.html";
       }
     },
     restrict: "A",
