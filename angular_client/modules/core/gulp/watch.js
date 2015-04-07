@@ -28,14 +28,6 @@ module.exports = function(options) {
       }
     });
 
-    // gulp.watch(options.src + '/{app,components}/**/*spec.js', function(event) {
-    //   if(isOnlyChange(event)) {
-    //     gulp.start('unit-tests');
-    //   } else {
-    //     gulp.start('inject');
-    //   }
-    // });
-
     gulp.watch(options.src + '/{app,components}/**/*.html', function(event) {
       browserSync.reload(event.path);
     });
