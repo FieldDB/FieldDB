@@ -17,8 +17,8 @@ angular.module("fielddbAngular", [
   "ngSanitize",
   "ui.router",
   "ui.bootstrap",
-  "angularFileUpload",
-  "contenteditable"
+  "angularFileUpload"
+  // "contenteditable"
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
   console.log("Loaded fielddbAngular module ", $stateProvider);
 
