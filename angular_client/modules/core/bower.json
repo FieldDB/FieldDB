@@ -15,26 +15,26 @@
     "dist/scripts/fielddb-angular.js"
   ],
   "dependencies": {
-    "angular-animate": "~1.3.4",
-    "angular-cookies": "~1.3.4",
-    "angular-touch": "~1.3.4",
-    "angular-sanitize": "~1.3.4",
-    "jquery": "~2.1.1",
+    "angular": "1.3.15",
+    "angular-animate": "1.3.15",
+    "angular-bootstrap": "~0.12.0",
+    "angular-contenteditable": "~0.3.7",
+    "angular-cookies": "1.3.15",
+    "angular-sanitize": "1.3.15",
+    "angular-touch": "1.3.15",
     "angular-ui-router": "~0.2.13",
     "bootstrap": "~3.3.1",
-    "angular-bootstrap": "~0.12.0",
-    "angular": "~1.3.4",
-    "fielddb": "~2.45.3",
-    "ng-file-upload": "~3.2.4",
-    "angular-contenteditable": "~0.3.7"
+    "fielddb": "^2.45.3",
+    "jquery": "~2.1.1",
+    "ng-file-upload": "~3.2.4"
   },
   "devDependencies": {
-    "angular-mocks": "~1.3.4"
+    "angular-mocks": "1.3.15"
   },
   "license": "Apache 2.0",
   "ignore": [],
   "resolutions": {
     "jquery": "~2.1.1",
-    "angular": "~1.3.4"
+    "angular": "1.3.15"
   }
 }
