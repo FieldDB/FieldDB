@@ -2,12 +2,12 @@
 
 angular.module("fielddbCorpusPagesApp", [
   // "ngAnimate",
-  "ngCookies",
-  "ngTouch",
-  "ngSanitize",
-  "ui.router",
-  "ui.bootstrap",
-  // "fielddbAngular"
+  // "ngCookies",
+  // "ngTouch",
+  // "ngSanitize",
+  // "ui.router",
+  // "ui.bootstrap",
+  "fielddbAngular"
 ]).config(function($locationProvider, $stateProvider, $urlRouterProvider) {
   $locationProvider.html5Mode(true);
 
