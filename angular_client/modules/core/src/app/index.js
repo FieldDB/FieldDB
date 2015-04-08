@@ -11,7 +11,7 @@
 //     });
 // }
 angular.module("fielddbAngular", [
-  "ngAnimate",
+  // "ngAnimate",
   "ngCookies",
   "ngTouch",
   "ngSanitize",
@@ -58,6 +58,7 @@ angular.module("fielddbAngular", [
     console.warn(message);
   };
 
+  fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS || [];
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
     "http://opensourcefieldlinguistics.github.io/**",
     "https://youtube.com/**",
