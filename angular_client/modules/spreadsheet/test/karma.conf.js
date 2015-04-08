@@ -20,9 +20,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'bower_components/fielddb-angular/dist/scripts/vendor.js',
-      'bower_components/fielddb-angular/dist/scripts/scripts.js',
-      'bower_components/fielddb-angular/dist/scripts/templates.js',
+      'bower_components/fielddb-angular/dist/scripts/fielddb-angular.js',
 
+      'bower_components/angular-resource/angular-resource.js',
+      'bower_components/angular-route/angular-route.js',
       'bower_components/d3/d3.js',
       'bower_components/jquery/dist/jquery.js',
       'bower_components/underscore/underscore.js',
