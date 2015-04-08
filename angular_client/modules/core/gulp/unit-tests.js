@@ -48,7 +48,14 @@ module.exports = function(options) {
       karma.server.start({
         configFile: __dirname + '/../karma.conf.js',
         files: files,
-        singleRun: singleRun
+        singleRun: singleRun,
+        browsers: ['PhantomJS'],
+        autowatch: false,
+        plugins: [
+          'karma-phantomjs-launcher',
+          'karma-jasmine',
+          'karma-ng-html2js-preprocessor'
+        ]
       }, done);
     });
   }
