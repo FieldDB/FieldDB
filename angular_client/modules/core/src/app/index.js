@@ -20,7 +20,6 @@ angular.module("fielddbAngular", [
   "angularFileUpload"
   // "contenteditable"
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
-  console.log("Loaded fielddbAngular module ", $stateProvider);
 
   var fieldDBApp;
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -48,7 +47,8 @@ angular.module("fielddbAngular", [
     }
   }
   if (FieldDB.debugMode) {
-    console.log($urlRouterProvider);
+    console.log("Loaded fielddbAngular module ");
+    console.log($urlRouterProvider, $stateProvider);
   }
 
   FieldDB.FieldDBObject.bug = function(message) {
