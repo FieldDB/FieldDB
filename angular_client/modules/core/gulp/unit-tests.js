@@ -43,12 +43,12 @@ module.exports = function(options) {
       }));
   }
 
-  function runTests (singleRun, done) {
+  function runTests(done) {
     listFiles(function(files) {
       karma.server.start({
         configFile: __dirname + '/../karma.conf.js',
         files: files,
-        singleRun: singleRun,
+        singleRun: true,
         browsers: ['PhantomJS'],
         autowatch: false,
         plugins: [
@@ -60,10 +60,21 @@ module.exports = function(options) {
     });
   }
 
+  function watchTests(done) {
+    listFiles(function(files) {
+      karma.server.start({
+        configFile: __dirname + '/../karma.conf.js',
+        files: files,
+        singleRun: false
+      }, done);
+    });
+  }
+
   gulp.task('test', ['scripts'], function(done) {
     runTests(true, done);
   });
+
   gulp.task('test:watch', ['watch'], function(done) {
-    runTests(false, done);
+    watchTests(false, done);
   });
 };
