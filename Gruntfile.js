@@ -225,6 +225,11 @@ module.exports = function(grunt) {
           return "bash scripts/build_fielddb_angular_core.sh";
         }
       },
+      buildCorpusPagesAngular: {
+        cmd: function() {
+          return "bash scripts/build_corpuspages_angular.sh";
+        }
+      },
       buildSpreadsheetAngular: {
         cmd: function() {
           return "bash scripts/build_spreadsheet_angular.sh";
@@ -261,7 +266,8 @@ module.exports = function(grunt) {
   grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
+  grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesAngular"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular", "spreadsheet-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular", "corpuspages-angular", "spreadsheet-angular"]);
 
 };
