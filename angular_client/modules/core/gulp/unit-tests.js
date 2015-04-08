@@ -84,7 +84,7 @@ module.exports = function(options) {
   }
 
   function watchTests(done) {
-    listFiles("compiled", function(files) {
+    listFiles("src", function(files) {
       karma.server.start({
         configFile: __dirname + "/../karma.conf.js",
         files: files,
