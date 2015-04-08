@@ -13,16 +13,15 @@ rm bower_components/fielddb/fielddb.js;
 ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.js;
 # ln -s $CURRENTDIR/fielddb.min.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.min.js;
 ls -al $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/
-gulp {
+gulp && {
   echo "Gulp was sucessfull";
-  gulp test {
-    echo "Gulp test was sucessfull";
-    exit 0
-  } || {
-    echo "gulp failed";
-    exit 8
-  }
-
+  # gulp test && {
+  #   echo "Gulp test was sucessfull";
+  #   exit 0
+  # } || {
+  #   echo "gulp failed";
+  #   exit 8
+  # }
 } || {
   echo "gulp failed";
   exit 8

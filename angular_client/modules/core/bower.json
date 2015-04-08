@@ -11,6 +11,8 @@
     "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
   },
   "main": [
+    "dist/styles/vendor.css",
+    "dist/scripts/vendor.js",
     "dist/styles/fielddb-angular.css",
     "dist/scripts/fielddb-angular.js"
   ],

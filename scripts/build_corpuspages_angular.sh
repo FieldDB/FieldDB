@@ -23,17 +23,16 @@ ln -s $CURRENTDIR/angular_client/modules/core/dist $CURRENTDIR/angular_client/mo
 ls -al $CURRENTDIR/angular_client/modules/corpuspages/bower_components
 ls -al $CURRENTDIR/angular_client/modules/corpuspages/bower_components/fielddb-angular/
 
-gulp {
+gulp && {
   echo "Gulp was sucessfull";
 
-  gulp test {
-    echo "Gulp test was sucessfull";
-    exit 0
-  } || {
-    echo "gulp failed";
-    exit 8
-  }
-
+  # gulp test && {
+  #   echo "Gulp test was sucessfull";
+  #   exit 0
+  # } || {
+  #   echo "gulp failed";
+  #   exit 8
+  # }
 } || {
   echo "gulp failed";
   exit 8
