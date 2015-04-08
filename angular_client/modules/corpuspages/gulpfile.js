@@ -25,7 +25,7 @@ wrench.readdirSyncRecursive('./gulp').filter(function(file) {
   require('./gulp/' + file)(options);
 });
 
-gulp.task('default', ['clean'], function () {
-    gulp.start('build');
-    gulp.start('test');
+gulp.task('default', ['clean'], function() {
+  gulp.start('build');
+  // gulp.start('test');
 });
