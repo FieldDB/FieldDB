@@ -25,13 +25,14 @@ wrench.readdirSyncRecursive('./gulp').filter(function(file) {
   require('./gulp/' + file)(options);
 });
 
-gulp.task('default', ['clean'], function() {
-  // gulp.start('test:src');
-  gulp.start('build');
-  // gulp.start('test:dist');
-});
+// gulp.task('default', ['clean'], function() {
+//   // gulp.start('test:src');
+//   gulp.start('build');
+//   // gulp.start('test:dist');
+// });
 
 // gulp.task('default', ['build','test:src']);
+gulp.task('default', ['build']);
 
 
 // gulp.task('default', function() {
