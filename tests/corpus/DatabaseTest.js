@@ -43,6 +43,19 @@ describe("Database", function() {
       }).done(done);
     }, specIsRunningTooLong);
 
+    it("should be able to find urls of previous revisions", function(done) {
+      var db = new Database({
+        dbname: "lingallama-communitycorpus"
+      });
+
+      db.fetchRevisions("123abc").then(function(resultingdocument) {
+        expect(false).toBeTruthy();
+        expect(resultingdocument.rev).toBeDefined();
+      }, function(error) {
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }).done(done);
+    }, specIsRunningTooLong);
+
     it("should throw an error if remove is requested", function() {
       var db = new Database({
         dbname: "lingallama-communitycorpus"
