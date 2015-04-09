@@ -8,13 +8,21 @@ cd angular_client/modules/core &&
 npm install || exit 1;
 bower install || exit 1;
 echo "Using local fielddb commonjs";
-rm app/bower_components/fielddb/fielddb.js;
-ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/app/bower_components/fielddb/fielddb.js;
-ls -al $CURRENTDIR/angular_client/modules/core/app/bower_components/fielddb/
-grunt && {
-  echo "Grunt was sucessfull";
-  exit 0
+rm bower_components/fielddb/fielddb.js;
+# rm bower_components/fielddb/fielddb.min.js;
+ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.js;
+# ln -s $CURRENTDIR/fielddb.min.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.min.js;
+ls -al $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/
+gulp && {
+  echo "Gulp was sucessfull";
+  # gulp test && {
+  #   echo "Gulp test was sucessfull";
+  #   exit 0
+  # } || {
+  #   echo "gulp failed";
+  #   exit 8
+  # }
 } || {
-  echo "grunt failed";
+  echo "gulp failed";
   exit 8
 }

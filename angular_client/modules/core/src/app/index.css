@@ -1,0 +1,366 @@
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+.thumbnail {
+  height: 200px;
+}
+
+.thumbnail img.pull-right {
+  width: 50px;
+}
+
+
+.topcoat-switch {
+  position: relative;
+  display: inline-block;
+  padding: 0 1.25rem;
+  border-radius: 6px;
+  border: 1px solid #a5a8a8;
+  overflow: hidden;
+  width: 10rem;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.topcoat-switch__input {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0.1)";
+  filter: alpha(opacity=0.1);
+  opacity: 0.001;
+}
+
+.topcoat-switch__toggle,.button {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding-box;
+  background-clip: padding-box;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topcoat-switch__toggle {
+  line-height: 3rem;
+  height: 3rem;
+  width: 2rem;
+  border-radius: 5px;
+  color: #454545;
+  text-shadow: 0 1px #fff;
+  background-color: #e5e9e8;
+  border: 1px solid #a5a8a8;
+  margin-left: -1.3rem;
+  margin-bottom:-1px;
+  margin-top:-1px;
+
+  -webkit-box-shadow: inset 0 1px #fff;
+  box-shadow: inset 0 1px #fff;
+
+  -webkit-transition: margin-left 0.05s ease-in-out;
+  -moz-transition: margin-left 0.05s ease-in-out;
+  -o-transition: margin-left 0.05s ease-in-out;
+  -ms-transition: margin-left 0.05s ease-in-out;
+  transition: margin-left 0.05s ease-in-out;
+}
+
+.topcoat-switch__input:checked + .topcoat-switch__toggle {
+  margin-left: 6.5rem;
+}
+
+.topcoat-switch__toggle:before,
+.topcoat-switch__toggle:after {
+  position: absolute;
+
+  width: 9rem;
+  z-index: -1;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.topcoat-switch__toggle:before {
+  content: 'ONLINE';
+  color: #0083e8;
+  background-color: #e0f0fa;
+  border-radius: 0;
+  top: -1px;
+  right: 1rem;
+  padding-left: 1.5rem;
+}
+
+.topcoat-switch__toggle:after {
+  content: 'OFFLINE';
+  background-color: #d3d7d7;
+  top: -1px;
+  left: 1rem;
+  padding-left: 2rem;
+}
+
+/* FieldDB styles */
+
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 999px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.gravatar-small {
+  height: 2em;
+}
+
+.gravatar-medium {
+  height: 4em;
+}
+
+.gravatar-large {
+  height: 8em;
+}
+
+.copyright, .terms, .license{
+  opacity: .5;
+}
+
+.interlinear-gloss-tuple {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: top;
+  /* necessary for when utteranceArray/morphemeArray/glossArray have different lengths */
+}
+
+.fielddb-large-textarea {
+  width: 100%;
+  height: 15em;
+}
+
+.halfopacity {
+  opacity: 0.5;
+}
+
+.drop-zone {
+  border: dashed;
+  border-color: #1E90FF;
+}
+
+.drop-zone-can-drop-now {
+  border-color: #000;
+  background: #999 !important;
+}
+
+.drop-zone-instructions-can-reorder-here:before {
+  content: 'Drop here to re-order before this item';
+  display: block;
+  color: white;
+  font-size: x-large;
+  font-weight: 800;
+}
+
+/* http://html5demos.com/drag */
+/* Prevent the text contents of draggable elements from being selectable. */
+*
+[draggable=true] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  cursor: move;
+  user-select: none;
+}
+
+.draggable-being-dragged {
+  /*background-color: rgba(238, 238, 238, 0.5);*/
+  opacity: 0.5;
+  /* padding: 1em; */
+  /*border: dashed #333 2px;*/
+  /*color: #000;*/
+}
+
+progress {
+  width: 100%;
+}
+
+.datum-tag {
+  padding: 1px 9px 2px !important;
+  -webkit-border-radius: 9px !important;
+  -moz-border-radius: 9px !important;
+  border-radius: 9px !important;
+  border-color: #3A87AD !important;
+  font-size: .85em !important;
+  font-weight: bold !important;
+  line-height: 1em !important;
+  color: white !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+  white-space: nowrap !important;
+  vertical-align: baseline !important;
+  background-color: #3A87AD !important;
+  text-align: center;
+}
+
+.word-wrap {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.datum-translation {
+  font-style: italic;
+}
+
+.scrollable {
+  overflow: auto !important;
+  height: 25em !important;
+  width: 100%;
+}
+
+.ng-invalid {
+  border: 1px solid red;
+}
+
+.centered {
+  text-align: center;
+}
+
+.Spreadsheet-selectedRow {
+  background-color: #6D8CA0;
+  border: 2px solid;
+}
+
+.Spreadsheet-selectedRow input{
+  width: 100%;
+}
+
+.Spreadsheet-unselectedRow:nth-child(odd) {
+  background-color: #F1F0FF;
+}
+
+.Spreadsheet-unselectedRow {
+  background-color: #FCFCFC;
+}
+
+.Spreadsheet-unselectedNewRow {
+  background-color: #5D5E5E;
+}
+
+.Spreadsheet-unselectedGreyRow:nth-child(odd) {
+  background-color: #F1F0F1;
+}
+
+.Spreadsheet-unselectedGreyRow {
+  background-color: #FCFCFC;
+}
+
+.Spreadsheet-expandCollapseButton {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.Spreadsheet-expandedData {
+  border: 2px solid #102E37;
+  background-color: #F0F5FF;
+  min-height: 35px;
+  border-radius: 15px;
+  /*text-align: center;*/
+}
+
+.Spreadsheet-expandedDataInner {
+  padding: 10px;
+}
+
+.Spreadsheet-expandedDataComments {
+  border: 2px solid #102E37;
+  background-color: #F0F5FF;
+  min-height: 35px;
+  border-radius: 15px;
+}
+
+.Spreadsheet-expandedData form {
+  margin: 0;
+  padding: 0;
+}
+
+.glossTuple {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: top;
+  /*necessary for when utteranceArray/morphemeArray/glossArray have different lengths*/
+}
+
+.whiteicon{
+  color: white;
+}
+
+/*
+  Allow angular.js to be loaded in body, hiding cloaked elements until
+  templates compile.  The !important is important given that there may be
+  other selectors that are more specific or come later and might alter display.
+ */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+.description {
+  width: 100%;
+}
+
+.help-text {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.highlight {
+  background-color: yellow;
+}

@@ -35,7 +35,7 @@ module.exports = function(grunt) {
       //   tasks: ['wiredep']
       // },
       vendor: {
-        files: ['bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
+        files: ['app/bower_components/fielddb-angular/dist/scripts/{,*/}*.js'],
         tasks: ['build'],
         options: {
           livereload: '<%= connect.options.livereload %>'
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         tasks: ['newer:jshint:test', 'karma:unit']
       },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css', 'bower_components/fielddb-angular/dist/styles/main.css'],
+        files: ['<%= yeoman.app %>/styles/{,*/}*.css', 'app/bower_components/fielddb-angular/dist/styles/main.css'],
         tasks: ['newer:copy:styles', 'autoprefixer']
       },
       gruntfile: {
@@ -92,10 +92,10 @@ module.exports = function(grunt) {
           middleware: function(connect) {
             return [
               connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
+              // connect().use(
+              //   '/bower_components',
+              //   connect.static('./bower_components')
+              // ),
               connect.static(appConfig.app)
             ];
           }
@@ -108,10 +108,10 @@ module.exports = function(grunt) {
             return [
               connect.static('.tmp'),
               connect.static('test'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
+              // connect().use(
+              //   '/bower_components',
+              //   connect.static('./bower_components')
+              // ),
               connect.static(appConfig.app)
             ];
           }
@@ -270,16 +270,16 @@ module.exports = function(grunt) {
     //   }
     // },
 
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
-      }
-    },
+    // svgmin: {
+    //   dist: {
+    //     files: [{
+    //       expand: true,
+    //       cwd: '<%= yeoman.app %>/images',
+    //       src: '{,*/}*.svg',
+    //       dest: '<%= yeoman.dist %>/images'
+    //     }]
+    //   }
+    // },
 
     ngtemplates: {
       app: {
@@ -343,8 +343,8 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '',
           dest: '<%= yeoman.dist %>',
-          // src: ['bower_components/recordmp3js/js/*.js','bower_components/recordmp3js/css/fonts/icomoon.woff']
-          src: ['bower_components/recordmp3js/js/*.js']
+          // src: ['app/bower_components/recordmp3js/js/*.js','app/bower_components/recordmp3js/css/fonts/icomoon.woff']
+          src: ['app/bower_components/recordmp3js/js/*.js']
         }, {
           expand: true,
           cwd: '.tmp/images',
@@ -352,7 +352,7 @@ module.exports = function(grunt) {
           src: ['generated/*']
         }, {
           expand: true,
-          cwd: 'bower_components/bootstrap/dist',
+          cwd: 'app/bower_components/bootstrap/dist',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
@@ -380,7 +380,7 @@ module.exports = function(grunt) {
       dist: [
         'copy:styles',
         // 'imagemin',
-        'svgmin'
+        // 'svgmin'
       ]
     },
 

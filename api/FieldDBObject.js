@@ -267,7 +267,7 @@ FieldDBObject.bug = function(message) {
 FieldDBObject.warn = function(message, message2, message3, message4) {
   var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
   // putting out a stacktrace
-  console.error(type.toUpperCase() + " WARN: " + message);
+  console.warn(type.toUpperCase() + " WARN: " + message);
   if (message2) {
     console.warn(message2);
   }
