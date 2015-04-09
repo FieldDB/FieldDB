@@ -189,6 +189,53 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  fetchRevisions: {
+    value: function(id, optionalUrl) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!id) {
+        Q.nextTick(function() {
+          deferred.resolve(self._revisions || []);
+        });
+        return deferred.promise;
+      }
+
+      optionalUrl = optionalUrl || this.url;
+
+      CORS.makeCORSRequest({
+        method: "GET",
+        url: optionalUrl + "/" + id + "?revs_info=true"
+      }).then(function(couchdbResponse) {
+        var revisions = [];
+
+        couchdbResponse._revs_info.map(function(revisionInfo) {
+          if (revisionInfo.status === "available") {
+            revisions.push(optionalUrl + "/" + id + "?rev=\"" + revisionInfo.rev + "\"");
+          }
+        });
+
+        deferred.resolve(revisions);
+
+      }, function(reason) {
+        if (!reason) {
+          reason = {
+            status: 400,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."]
+          };
+        }
+        reason.details = value;
+        self.debug(reason);
+        deferred.reject(reason);
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   delete: {
     value: function(options) {
       return this.remove(options);
@@ -441,7 +488,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
     }
   },
-
 
   getCouchUrl: {
     value: function() {

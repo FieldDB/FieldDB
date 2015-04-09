@@ -1340,6 +1340,55 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  fetchRevisions: {
+    value: function(optionalUrl) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!this._id) {
+        Q.nextTick(function() {
+          self.warn("This hasn't been saved before, so there are no previous revisisons to show you.");
+          deferred.resolve(self._revisions);
+        });
+        return deferred.promise;
+      }
+
+      if (!this.corpus || typeof this.corpus.fetchRevisions !== "function") {
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data if the database is not currently opened."]
+          });
+        });
+        return deferred.promise;
+      }
+
+      self.corpus.fetchRevisions(this.id, optionalUrl).then(function(revisions) {
+        if (!self._revisions) {
+          self._revisions = revisions;
+        } else {
+          revisions.map(function(revision) {
+            if (self._revisions.indexOf(revision) === -1) {
+              self._revisions.push(revision);
+            }
+          });
+        }
+        self.debug("This " + self.id + " has " + self._revisions.length + " previous revisions");
+        deferred.resolve(self._revisions);
+      }, function(reason) {
+        self.warn("Unable to update list of revisions currently.");
+        self.debug(reason);
+        deferred.reject(reason);
+        return self;
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   fetch: {
     value: function(optionalUrl) {
       var deferred = Q.defer(),
