@@ -11,7 +11,8 @@ describe("FieldDBObject", function() {
     }
     mockDatabase = {
       get: mockDatabase.get,
-      set: mockDatabase.set
+      set: mockDatabase.set,
+      fetchRevisions: mockDatabase.fetchRevisions
     };
   });
 
@@ -954,6 +955,75 @@ describe("FieldDBObject", function() {
       expect(object.untrashedReason).toEqual("I deleted this by mistake");
 
     }, specIsRunningTooLong);
+
+    describe("undo", function() {
+
+      it("should not get previous revisions if it hasnt been saved.", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions,
+            url: "https://example.uni.edu/some/path/too/testinguser-firstcorpus"
+          }
+        });
+        expect(object.corpus).toBeDefined();
+        expect(object.corpus.fetchRevisions).toBeDefined();
+        expect(typeof object.corpus.fetchRevisions).toEqual("function");
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toBeUndefined();
+          expect(object._revisions).toBeUndefined();
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+      it("should return previous revisions if it has no id but it has revisions", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          some: "other document from anotehr server or from another app which has reviisions jsons but no id in this database.",
+          _revisions: ["https://localhost:6984/lingallama-communitycorpus/1234490ej0a9ak3q?rev=\"4-23iwoai3jr\""],
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions
+          }
+        });
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toEqual(["https://localhost:6984/lingallama-communitycorpus/1234490ej0a9ak3q?rev=\"4-23iwoai3jr\""]);
+          expect(object._revisions).toBeDefined();
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+
+      it("should get previous revisions if it has been saved.", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          _id: "1234490ej0a9ak3q",
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions,
+            url: "https://example.uni.edu/some/path/too/testinguser-firstcorpus"
+          }
+        });
+        expect(object.corpus).toBeDefined();
+        expect(object.corpus.fetchRevisions).toBeDefined();
+        expect(typeof object.corpus.fetchRevisions).toEqual("function");
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toEqual([
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"3-825cb35de44c433bfb2df415563a19de\"",
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"2-7051cbe5c8faecd085a3fa619e6e6337\"",
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"1-967a00dff5e02add41819138abb3284d\""
+          ]);
+          expect(object._revisions).toBeDefined();
+          expect(object._revisions.length).toEqual(3);
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+    });
 
   });
 
