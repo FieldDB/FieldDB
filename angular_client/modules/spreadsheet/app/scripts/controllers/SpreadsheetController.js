@@ -347,15 +347,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   var updateAndOverwritePreferencesToCurrentVersion = function() {
-    $scope.scopePreferences = $scope.scopePreferences || localStorage.getItem('SpreadsheetPreferences') || JSON.stringify(defaultPreferences);
-    var prefsWereString;
-    try {
-      prefsWereString = JSON.parse($scope.scopePreferences);
-    } catch (e) {
-      console.warn("cant set $scope.scopePreferences, might have already been an object", e);
-    }
-    if (prefsWereString) {
-      $scope.scopePreferences = prefsWereString;
+
+    if (!$scope.scopePreferences) {
+      var prefsAsString = localStorage.getItem('SpreadsheetPreferences') || JSON.stringify(defaultPreferences);
+      try {
+        prefsAsString = JSON.parse(prefsAsString);
+      } catch (e) {
+        console.warn("cant set $scope.scopePreferences, might have already been an object", e);
+      }
+      $scope.scopePreferences = prefsAsString;
     }
 
     /** Prior to 1.37 wipe personalization and use current defaults */
@@ -371,11 +371,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     var year = pieces[0],
       week = pieces[1];
     if (year < 2 || week < 47) {
-      $scope.scopePreferences = JSON.stringify(defaultPreferences);
+      $scope.scopePreferences = JSON.parse(JSON.stringify(defaultPreferences));
       console.log("ignoring users preferences.");
     }
 
-    $scope.scopePreferences.savedState = $scope.scopePreferences.savedState || {};
+    if ($scope.scopePreferences && !$scope.scopePreferences.savedState) {
+      $scope.scopePreferences.savedState = {};
+    }
+
     if ($rootScope.application.authentication.user &&
       $rootScope.application.authentication.user.username &&
       $rootScope.loginInfo &&

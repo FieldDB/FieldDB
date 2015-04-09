@@ -19,22 +19,32 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/fielddb-angular/dist/scripts/vendor.js',
-      'bower_components/fielddb-angular/dist/scripts/scripts.js',
-      'bower_components/fielddb-angular/dist/scripts/templates.js',
+      'app/bower_components/jquery/dist/jquery.js',
+      'app/bower_components/angular/angular.js',
+      'app/bower_components/angular-animate/angular-animate.js',
+      'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'app/bower_components/angular-contenteditable/angular-contenteditable.js',
+      'app/bower_components/angular-cookies/angular-cookies.js',
+      'app/bower_components/angular-sanitize/angular-sanitize.js',
+      'app/bower_components/angular-touch/angular-touch.js',
+      'app/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'app/bower_components/fielddb/fielddb.js',
+      'app/bower_components/ng-file-upload/angular-file-upload.js',
 
-      'bower_components/d3/d3.js',
-      'bower_components/jquery/dist/jquery.js',
-      'bower_components/underscore/underscore.js',
-      'bower_components/q/q.js',
-      'bower_components/sjcl/sjcl.js',
+      'app/bower_components/fielddb-angular/dist/scripts/fielddb-angular.js',
+      'app/bower_components/fielddb-glosser/fielddb-glosser.js',
 
-      'bower_components/fielddb-glosser/fielddb-glosser.js',
-      'bower_components/angular-md5/angular-md5.js',
-      'bower_components/angular-bootstrap/ui-bootstrap.js',
-      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'app/bower_components/angular-resource/angular-resource.js',
+      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/d3/d3.js',
+      'app/bower_components/underscore/underscore.js',
+      'app/bower_components/q/q.js',
+      'app/bower_components/sjcl/sjcl.js',
 
-      'bower_components/angular-mocks/angular-mocks.js',
+      'app/bower_components/angular-md5/angular-md5.js',
+      'app/bower_components/angular-bootstrap/ui-bootstrap.js',
+
+      'app/bower_components/angular-mocks/angular-mocks.js',
       'app/scripts/**/*.js',
       // 'test/mock/**/*.js',
       'test/spec/**/*.js',
@@ -44,8 +54,8 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-        //location of templates
-        'app/views/**/*.html': 'html2js'
+      //location of templates
+      'app/views/**/*.html': 'html2js'
     },
 
     // list of files / patterns to exclude

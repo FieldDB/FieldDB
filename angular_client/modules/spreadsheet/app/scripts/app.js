@@ -19,7 +19,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'angular-md5',
-    'fielddbAngularApp',
+    'fielddbAngular',
+    'ui.router',
     'ui.bootstrap'
   ])
   .config(function($routeProvider) {
@@ -52,6 +53,7 @@ angular
 
     if (!FieldDB.FieldDBObject.application) {
       console.log("    Creating a app ");
+      fieldDBAppSettings.authentication = {};
       FieldDB.FieldDBObject.application = new FieldDB.App(fieldDBAppSettings);
     } else {
       console.log("    An application is already available, it might be a Montage application, or a fielddb app.", FieldDB.FieldDBObject.application);
@@ -68,6 +70,54 @@ angular
     }
 
     FieldDB.FieldDBObject.application.authentication.dispatchEvent("appready");
+
+    // $stateProvider
+    //   .state("home", {
+    //     url: "/",
+    //     templateUrl: "views/corpora_list_and_modals.html"
+    //     // controller: "FieldDBController"
+    //   });
+
+    // $stateProvider
+    // .state('corpora_list', {
+    //   url: "/corpora_list",
+    //   // controller: "",
+    //   templateUrl: 'views/corpora_list_and_modals.html'
+    // }).state('welcome', {
+    //   url: "/welcome",
+    //   // controller: "",
+    //   templateUrl: 'views/welcome.html'
+    // }).state('settings', {
+    //   url: "/settings",
+    //   // controller: "",
+    //   templateUrl: 'views/settings.html',
+    // }).state('corpussettings', {
+    //   url: "/corpussettings",
+    //   // controller: "",
+    //   templateUrl: 'views/corpussettings.html'
+    // }).state('register', {
+    //   url: "/register",
+    //   // controller: "",
+    //   templateUrl: 'views/register.html'
+    // }).state('faq', {
+    //   url: "/faq",
+    //   // controller: "",
+    //   templateUrl: 'views/faq.html'
+    // }).state('/spreadsheet/compacttemplate', {
+    //   redirectTo: '/spreadsheet'
+    // }).state('/spreadsheet/yalefieldmethodsspring2014template', {
+    //   redirectTo: '/spreadsheet'
+    // }).state('/spreadsheet/mcgillfieldmethodsfall2014template', {
+    //   redirectTo: '/spreadsheet'
+    // }).state('/spreadsheet/mcgillfieldmethodsspring2014template', {
+    //   redirectTo: '/spreadsheet'
+    // }).state('/spreadsheet', {
+    //   url: "/spreadsheet",
+    //   // controller: "",
+    //   templateUrl: 'views/data_entry.html'
+    // });
+
+    // $urlRouterProvider.otherwise('/corpora_list');
 
     $routeProvider.when('/corpora_list', {
       templateUrl: 'views/corpora_list_and_modals.html'

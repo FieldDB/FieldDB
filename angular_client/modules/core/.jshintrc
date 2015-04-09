@@ -1,7 +1,5 @@
 {
-  "node": true,
-  "browser": true,
-  "esnext": true,
+  "globalstrict": true,
   "bitwise": true,
   "camelcase": true,
   "curly": true,
@@ -18,8 +16,24 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "white": true,
+  "validthis": true,
   "globals": {
     "angular": false,
-    "FieldDB": false
+    "FieldDB": false,
+    "console": false,
+    // Angular Mocks
+    "inject": false,
+    "module": false,
+    // JASMINE
+    "describe": false,
+    "xdescribe": false,
+    "it": false,
+    "xit": false,
+    "before": false,
+    "beforeEach": false,
+    "after": false,
+    "afterEach": false,
+    "expect": false
   }
 }

@@ -189,6 +189,7 @@ describe("api/import/Import", function() {
         dbname: "testingimport-datastructures",
         corpus: new Corpus(Corpus.prototype.defaults)
       });
+      /* jshint elision:true */
       importer.asCSV = [
         ["field1", "field2", "field3", "", "field5", "field6", ],
         [],
