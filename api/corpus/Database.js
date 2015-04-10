@@ -573,7 +573,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             } else {
               authOrCorpusServerResult = authOrCorpusServerResult || {};
               authOrCorpusServerResult.userFriendlyErrors = authOrCorpusServerResult.userFriendlyErrors || [" Unknown response from server, please report this."];
-              deferred.reject(authOrCorpusServerResult.userFriendlyErrors.join(" "));
+              deferred.reject(authOrCorpusServerResult);
             }
           },
           function(reason) {
