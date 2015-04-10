@@ -191,6 +191,16 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  fetch: {
+    value: function(optionalUrl) {
+      if (!this.id && this.dbname) {
+        return this.loadCorpusByDBname(this.dbname);
+      } else {
+        return FieldDBObject.prototype.fetch.apply(this, arguments);
+      }
+    }
+  },
+
   loadCorpusByDBname: {
     value: function(dbname) {
       if (!dbname) {
