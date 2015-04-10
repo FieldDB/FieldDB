@@ -2,7 +2,10 @@
 var node_cryptojs = require("node-cryptojs-aes");
 var CryptoJS = node_cryptojs.CryptoJS;
 
-var CryptoEncoding = require("crypto-js/enc-utf8");
+//>> Error: Error: ENOENT, no such file or directory '$HOME/dative/.tmp/scripts/core.js'
+// var forcingCoreToLoadForRequireJS = require("node-cryptojs-aes/lib/core");
+
+var CryptoEncoding =  {};// require("crypto-js/enc-utf8");
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 try {
