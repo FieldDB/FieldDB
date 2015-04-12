@@ -208,7 +208,7 @@ describe("CorpusMask ", function() {
     it("should be able to figure out a corpus url", function() {
       var connection = new Connection(Connection.defaultConnection(null, URL));
       connection.dbname = "jenkins-firstcorpus";
-      expect(connection.corpusUrls).toBeUndefined();
+      expect(connection.corpusUrls).toEqual([]);
       expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
       expect(connection.corpusUrls).toEqual(["https://localhost:6984/jenkins-firstcorpus"]);
 
@@ -247,13 +247,18 @@ describe("CorpusMask ", function() {
         path: "",
         serverLabel: "localhost",
         authUrls: ["https://localhost:3183"],
-        // corpusUrls: ["https://localhost:6984"],
+        websiteUrls: ["https://localhost:3182"],
         userFriendlyServerName: "Localhost",
         version: connection.version,
-        dbname: "",
-        pouchname: "",
-        title: "",
+        corpusid: "",
         titleAsUrl: "",
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        title: ""
       });
     });
 

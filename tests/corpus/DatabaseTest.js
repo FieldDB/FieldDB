@@ -1,5 +1,6 @@
 /* globals localStorage */
 var Database = require("../../api/corpus/Database").Database;
+Database.URLParser = require("url");
 
 var specIsRunningTooLong = 5000;
 
@@ -127,48 +128,51 @@ describe("Database", function() {
         protocol: "https://",
         domain: "localhost",
         port: "6984",
-        dbname: "",
         path: "",
         serverLabel: "localhost",
         authUrls: ["https://localhost:3183"],
+        websiteUrls: ["https://localhost:3182"],
         userFriendlyServerName: "Localhost",
         version: connection.version,
-        pouchname: "",
-        title: "",
+        corpusid: "",
         titleAsUrl: "",
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        title: ""
       });
     });
 
 
-    it("should be able to get a extrapolate  a connection", function() {
+    it("should be able to extrapolate a connection", function() {
       var db = new Database();
       db.url = "https://corpus.lingsync.org";
-      expect(db.toJSON()).toEqual({
-        fieldDBtype: "Database",
-        dateCreated: db.dateCreated,
-        connection: {
-          fieldDBtype: "Connection",
-          protocol: "https://",
-          domain: "corpus.lingsync.org",
-          port: "443",
-          path: "",
-          serverLabel: "production",
-          authUrls: ["https://auth.lingsync.org"],
-          userFriendlyServerName: "LingSync.org",
-          version: db.version,
-          corpusUrls: ["https://corpus.lingsync.org"],
-          corpusid: "",
-          titleAsUrl: "",
-          dbname: "",
-          pouchname: "",
-          clientUrls: [],
-          lexiconUrls: [],
-          searchUrls: [],
-          audioUrls: [],
-          activityUrls: [],
-          title: ""
-        },
-        version: db.version
+      expect(db.toJSON().connection).toEqual({
+        fieldDBtype: "Connection",
+        protocol: "https://",
+        domain: "corpus.lingsync.org",
+        port: "443",
+        path: "",
+        serverLabel: "production",
+        brandLowerCase: "lingsync",
+        authUrls: ["https://auth.lingsync.org"],
+        websiteUrls: ["http://lingsync.org"],
+        userFriendlyServerName: "LingSync.org",
+        version: db.version,
+        clientUrls: [],
+        corpusUrls: ["https://corpus.lingsync.org"],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        corpusid: "",
+        titleAsUrl: "",
+        dbname: "",
+        pouchname: "",
+        title: ""
       });
     });
 
@@ -290,18 +294,9 @@ describe("Database", function() {
       }).then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.details.connection).toEqual({
-          fieldDBtype: "Connection",
-          protocol: "https://",
-          domain: "localhost",
-          port: "6984",
-          path: "",
-          serverLabel: "localhost",
-          authUrls: ["https://localhost:3183"],
-          userFriendlyServerName: "Localhost",
-          version: db.version,
-        });
-        expect(error.details.authUrl).toBeDefined();
+        expect(error.details.authUrl).toEqual("https://localhost:3183");
+        expect(error.details.connection.userFriendlyServerName).toEqual("Localhost");
+        expect(error.details.connection.serverLabel).toEqual("localhost");
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
@@ -324,9 +319,17 @@ describe("Database", function() {
           port: "3222",
           path: "some/virtual/host",
           serverLabel: "miauniversity",
+          brandLowerCase: "miauniversity",
           authUrls: ["https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"],
           userFriendlyServerName: "miauniversity.edu",
           version: db.version,
+          corpusid: "",
+          clientUrls: [],
+          corpusUrls: [],
+          lexiconUrls: [],
+          searchUrls: [],
+          audioUrls: [],
+          activityUrls: []
         });
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
@@ -338,23 +341,10 @@ describe("Database", function() {
       db.register().then(function() {
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error.details).toEqual({
-          username: "anonymouseuser123",
-          password: "testtest",
-          confirmPassword: "testtest",
-          authUrl: "https://localhost:3183",
-          connection: {
-            fieldDBtype: "Connection",
-            protocol: "https://",
-            domain: "localhost",
-            port: "6984",
-            path: "",
-            serverLabel: "localhost",
-            authUrls: ["https://localhost:3183"],
-            userFriendlyServerName: "Localhost",
-            version: db.version
-          }
-        });
+        expect(error.details.username).toEqual("anonymouseuser123");
+        expect(error.details.authUrl).toEqual("https://auth.lingsync.org");
+        expect(error.details.connection.serverLabel).toEqual("production");
+        expect(error.details.connection.brand).toEqual("LingSync.org");
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
       }).done(done);
     }, specIsRunningTooLong);
