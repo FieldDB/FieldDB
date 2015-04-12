@@ -196,6 +196,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       if (!this.id && this.dbname) {
         return this.loadCorpusByDBname(this.dbname);
       } else {
+        if (optionalUrl) {
+          this.warn("Using a custom url to fetch this Corpus." + optionalUrl);
+        }
         return FieldDBObject.prototype.fetch.apply(this, arguments);
       }
     }
