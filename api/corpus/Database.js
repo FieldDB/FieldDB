@@ -8,6 +8,11 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var Connection = require("./Connection").Connection;
 
 var Database = function Database(options) {
+  // Let the URLParser be injected
+  if (Database.URLParser && !Connection.URLParser) {
+    Connection.URLParser = Database.URLParser;
+  }
+
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Database";
   }
@@ -650,8 +655,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           details = {
             username: self.dbname.split("-")[0],
             password: "testtest",
-            confirmPassword: "testtest"
+            confirmPassword: "testtest",
+            connection: new Connection(Connection.knownConnections.production)
           };
+          details.authUrl = details.connection.authUrl;
         }
 
         if (!details) {
@@ -725,10 +732,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete details.connection.corpusUrl;
         }
 
-        if (self.application && self.application.brandLowerCase) {
+        if (!details.appbrand && self.application && self.application.brandLowerCase) {
           details.appbrand = self.application.brandLowerCase;
-          details.appVersionWhenCreated = self.application.version;
         }
+        details.appVersionWhenCreated = self.version;
 
         CORS.makeCORSRequest({
           type: "POST",
