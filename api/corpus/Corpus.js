@@ -220,8 +220,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         var tryAgainInCaseThereWasALag = function(reason) {
           self.debug(reason);
           if (self.runningloadCorpusByDBname) {
-            self.warn("Error finding a corpus in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org ");
-            self.bug("Error finding corpus details in " + self.dbname + " database. This database will not function normally. Please notify us at support@lingsync.org  ");
+            self.warn("Error finding a corpus in " + self.dbname + " database. This database will not function normally. Please report this.");
+            self.bug("Error finding corpus details in " + self.dbname + " database. This database will not function normally. Please report this.");
             deferred.reject(reason);
             return;
           }
@@ -1094,7 +1094,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -1113,7 +1113,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -1203,7 +1203,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *

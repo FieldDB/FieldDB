@@ -580,7 +580,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
                * Its possible that the corpus has no search views, create them and then try searching again.
                */
               window.appView.toastUser("Initializing your search functions for the first time." +
-                " Search in LingSync is pretty powerful, " +
+                " Search is pretty powerful, " +
                 " in fact if you're the power user type you can write your " +
                 "own data extracting/filtering/visualization queries using " +
                 " <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>", "alert-success", "Search:");

@@ -472,7 +472,7 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
           "corpusid": "89bc4d7dcc2b1fc9a7bb0f4f4743e705",
           "datalistid": "89bc4d7dcc2b1fc9a7bb0f4f474432b4",
           "sessionid": "89bc4d7dcc2b1fc9a7bb0f4f474415e4",
-          "corpusUrl": "https://corpusdev.lingsync.org/lingllama-communitycorpus",
+          "corpusUrl": "https://corpusdev.example.org/lingllama-communitycorpus",
           "connection": {
             "protocol": "https://",
             "domain": "corpusdev.fielddb.org",
