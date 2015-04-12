@@ -760,6 +760,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     get: function() {
       return !this.isAndroidApp && !this.isChromeApp;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var attributesNotToJsonify = ["corpus", "authentication"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
+
+      this.debug(json);
+      return json;
+    }
   }
 
 
