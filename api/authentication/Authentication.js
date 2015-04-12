@@ -508,7 +508,20 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       });
       return deferred.promise;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var attributesNotToJsonify = ["resumingSessionPromise"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
+
+      this.debug(json);
+      return json;
+    }
   }
+
 
 });
 
