@@ -144,6 +144,7 @@ CORS.makeCORSRequest = function(options) {
           };
         }
       }
+      response.status = response.status || xhr.status;
       if (response.reason && !response.userFriendlyErrors) {
         response.userFriendlyErrors = [response.reason];
       }

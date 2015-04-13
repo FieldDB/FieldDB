@@ -128,6 +128,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       lexiconUrls: FieldDBObject.DEFAULT_ARRAY,
       searchUrls: FieldDBObject.DEFAULT_ARRAY,
       audioUrls: FieldDBObject.DEFAULT_ARRAY,
+      websiteUrls: FieldDBObject.DEFAULT_ARRAY,
       activityUrls: FieldDBObject.DEFAULT_ARRAY
     }
   },

@@ -33,83 +33,87 @@ describe("CorpusMask ", function() {
     it("should have unknown defaults if not loaded from the server", function() {
       var corpus = new CorpusMask(CorpusMask.defaults);
       corpus.dbname = "lingllama-communitycorpus";
-      // delete corpus.prefs;
+
       var corpusJson = corpus.toJSON("complete");
-      expect(corpusJson).toEqual({
-        fieldDBtype: "CorpusMask",
-        dbname: "lingllama-communitycorpus",
-        version: corpus.version,
-        dateCreated: 0,
-        dateModified: 0,
-        comments: [],
-        sessions: [],
-        datalists: [],
-        title: "",
-        titleAsUrl: "",
-        description: "",
-        termsOfUse: {},
-        license: {},
-        copyright: "",
-        connection: corpusJson.connection,
-        activityConnection: corpusJson.activityConnection,
-        publicCorpus: "",
-        validationStati: [],
-        tags: [],
-        fields: [],
-        datumFields: [],
-        participantFields: [],
-        speakerFields: [],
-        conversationFields: [],
-        sessionFields: [],
-        prefs: corpusJson.prefs,
-        team: {},
-        permissions: [],
-        pouchname: "lingllama-communitycorpus",
-        api: "corpora"
-      });
-      expect(corpusJson.connection).toEqual({
-        fieldDBtype: "Connection",
-        dateCreated: corpusJson.connection.dateCreated,
-        version: corpus.version,
-        corpusid: "",
-        titleAsUrl: "",
-        dbname: "",
-        pouchname: "",
-        protocol: "",
-        domain: "",
-        port: "",
-        path: "",
-        userFriendlyServerName: "",
-        authUrls: [],
-        clientUrls: [],
-        corpusUrls: [],
-        lexiconUrls: [],
-        searchUrls: [],
-        audioUrls: [],
-        activityUrls: [],
-        title: "",
-      });
-      expect(corpusJson.activityConnection).toEqual({
-        fieldDBtype: "Connection",
-        version: corpus.version,
-        corpusid: "",
-        titleAsUrl: "",
-        dbname: "",
-        pouchname: "",
-        protocol: "",
-        domain: "",
-        port: "",
-        path: "",
-        userFriendlyServerName: "",
-        authUrls: [],
-        clientUrls: [],
-        corpusUrls: [],
-        lexiconUrls: [],
-        searchUrls: [],
-        audioUrls: [],
-        activityUrls: [],
-        title: ""
-      });
+      expect(corpusJson.fieldDBtype).toEqual("CorpusMask");
+      expect(corpusJson.dbname).toEqual("lingllama-communitycorpus");
+      expect(corpusJson.version).toEqual(corpus.version);
+      expect(corpusJson.dateCreated).toEqual(0);
+      expect(corpusJson.dateModified).toEqual(0);
+      expect(corpusJson.comments).toEqual([]);
+      expect(corpusJson.sessions).toEqual([]);
+      expect(corpusJson.datalists).toEqual([]);
+      expect(corpusJson.title).toEqual("");
+      expect(corpusJson.titleAsUrl).toEqual("");
+      expect(corpusJson.description).toEqual("");
+      expect(corpusJson.termsOfUse).toEqual({});
+      expect(corpusJson.license).toEqual({});
+      expect(corpusJson.copyright).toEqual("");
+      // expect(corpusJson.connection).toEqual(corpusJson.connection);
+      // expect(corpusJson.activityConnection).toEqual(corpusJson.activityConnection);
+      expect(corpusJson.publicCorpus).toEqual("");
+      expect(corpusJson.validationStati).toEqual([]);
+      expect(corpusJson.tags).toEqual([]);
+      expect(corpusJson.fields).toEqual([]);
+      expect(corpusJson.datumFields).toEqual([]);
+      expect(corpusJson.participantFields).toEqual([]);
+      expect(corpusJson.speakerFields).toEqual([]);
+      expect(corpusJson.conversationFields).toEqual([]);
+      expect(corpusJson.sessionFields).toEqual([]);
+      expect(corpusJson.prefs).toEqual(corpusJson.prefs);
+      expect(corpusJson.team).toEqual({});
+      expect(corpusJson.permissions).toEqual([]);
+      expect(corpusJson.pouchname).toEqual("lingllama-communitycorpus");
+      expect(corpusJson.api).toEqual("corpora");
+      expect(corpusJson.team).toEqual({});
+      expect(corpusJson.team).toEqual({});
+
+      expect(corpusJson.connection.fieldDBtype).toEqual("Connection");
+      expect(corpusJson.connection.dateCreated).toEqual(corpusJson.connection.dateCreated);
+      expect(corpusJson.connection.version).toEqual(corpus.version);
+      expect(corpusJson.connection.corpusid).toEqual("");
+      expect(corpusJson.connection.titleAsUrl).toEqual("");
+      expect(corpusJson.connection.dbname).toEqual("");
+      expect(corpusJson.connection.pouchname).toEqual("");
+      expect(corpusJson.connection.protocol).toEqual("");
+      expect(corpusJson.connection.domain).toEqual("");
+      expect(corpusJson.connection.port).toEqual("");
+      expect(corpusJson.connection.path).toEqual("");
+      expect(corpusJson.connection.userFriendlyServerName).toEqual("");
+      expect(corpusJson.connection.authUrls).toEqual([]);
+      expect(corpusJson.connection.clientUrls).toEqual([]);
+      expect(corpusJson.connection.corpusUrls).toEqual([]);
+      expect(corpusJson.connection.clientUrls).toEqual([]);
+      expect(corpusJson.connection.lexiconUrls).toEqual([]);
+      expect(corpusJson.connection.searchUrls).toEqual([]);
+      expect(corpusJson.connection.audioUrls).toEqual([]);
+      expect(corpusJson.connection.activityUrls).toEqual([]);
+      // expect(corpusJson.connection.websiteUrls).toEqual([]);
+      expect(corpusJson.connection.title).toEqual("");
+
+
+      expect(corpusJson.activityConnection.fieldDBtype).toEqual("Connection");
+      expect(corpusJson.activityConnection.dateCreated).toEqual(corpusJson.activityConnection.dateCreated);
+      expect(corpusJson.activityConnection.version).toEqual(corpus.version);
+      expect(corpusJson.activityConnection.corpusid).toEqual("");
+      expect(corpusJson.activityConnection.titleAsUrl).toEqual("");
+      expect(corpusJson.activityConnection.dbname).toEqual("");
+      expect(corpusJson.activityConnection.pouchname).toEqual("");
+      expect(corpusJson.activityConnection.protocol).toEqual("");
+      expect(corpusJson.activityConnection.domain).toEqual("");
+      expect(corpusJson.activityConnection.port).toEqual("");
+      expect(corpusJson.activityConnection.path).toEqual("");
+      expect(corpusJson.activityConnection.userFriendlyServerName).toEqual("");
+      expect(corpusJson.activityConnection.authUrls).toEqual([]);
+      expect(corpusJson.activityConnection.clientUrls).toEqual([]);
+      expect(corpusJson.activityConnection.corpusUrls).toEqual([]);
+      expect(corpusJson.activityConnection.clientUrls).toEqual([]);
+      expect(corpusJson.activityConnection.lexiconUrls).toEqual([]);
+      expect(corpusJson.activityConnection.searchUrls).toEqual([]);
+      expect(corpusJson.activityConnection.audioUrls).toEqual([]);
+      expect(corpusJson.activityConnection.activityUrls).toEqual([]);
+      // expect(corpusJson.activityConnection.websiteUrls).toEqual([]);
+      expect(corpusJson.activityConnection.title).toEqual("");
 
     });
 

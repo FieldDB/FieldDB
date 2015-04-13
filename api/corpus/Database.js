@@ -169,11 +169,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         data: value,
         url: this.url
       }).then(function(result) {
-        if (result._rev) {
-          value.rev = result._rev;
+        if (!result || !result.ok) {
+          result.status = result.status || 400;
+          result.userFriendlyErrors = result.userFriendlyErrors || ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."];
+          deferred.reject(result);
+          return;
+        }
+        if (result.rev) {
+          value.rev = result.rev;
         }
         if (!value._id) {
-          value.id = result._id;
+          value.id = result.id;
         }
         deferred.resolve(value);
       }, function(reason) {
@@ -249,7 +255,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   remove: {
     value: function(options) {
       this.bug("Deleting data is not permitted.", options);
-      throw "Deleting data is not permitted.";
+      throw new Error("Deleting data is not permitted.");
     }
   },
 
@@ -429,8 +435,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         } else {
           deferred.reject({
             error: sessionInfo,
-            userFriendlyErrors: ["Please log in"],
-            status: 409
+            userFriendlyErrors: ["Please login."],
+            status: 401
           });
         }
       }, function(reason) {
@@ -516,6 +522,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
 
         var usernameField = "name";
+        if (!details.authUrl && details.name) {
+          details.authUrl = self.BASE_DB_URL + "/_session";
+        }
         details.authUrl = self.deduceAuthUrl(details.authUrl);
         if (details.authUrl.indexOf("/_session") === -1 && details.authUrl.indexOf("/login") === -1) {
           details.authUrl = details.authUrl + "/login";
@@ -604,6 +613,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         optionalUrl = this.couchSessionUrl;
       }
 
+      if (!optionalUrl || optionalUrl.indexOf("/_session") === -1 || optionalUrl.lastIndexOf("/_session") !== optionalUrl.length - ("/_session").length) {
+        Q.nextTick(function() {
+          deferred.reject({
+            userFriendlyErrors: ["You cannot log out of " + optionalUrl + " using this application."],
+            status: 412
+          });
+        });
+        return deferred.promise;
+      }
+
       CORS.makeCORSRequest({
         type: "DELETE",
         dataType: "json",
@@ -617,12 +636,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }, function(reason) {
         reason = reason || {};
-        reason.status = reason.status || 400;
-        reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
         self.debug(reason);
         deferred.reject(reason);
       }).fail(function(error) {
         console.error(error.stack, self);
+        error.status = error.status || 400;
+        error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 8912."];
         deferred.reject(error);
       });
       return deferred.promise;
@@ -713,6 +732,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
+            details: details,
             userFriendlyErrors: validateUsername.changes,
             status: 412
           });
@@ -749,7 +769,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             deferred.reject({
               error: result,
               status: 500,
-              userFriendlyErrors: ["Unknown error. Please report this 2391."]
+              details: details,
+              userFriendlyErrors: result.userFriendlyErrors || ["Unknown error. Please report this 2391."]
             });
             return;
           }
@@ -764,14 +785,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           // });
         }, function(reason) {
           reason = reason || {};
-          reason.details = details;
-          reason.status = reason.status || 400;
-          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this 9038."];
+          reason.details = reason.details || details;
           self.debug(reason);
           deferred.reject(reason);
         }).fail(function(error) {
           console.error(error.stack, self);
           error.status = error.status || 400;
+          error.details = error.details || details;
           error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 1289128."];
           deferred.reject(error);
         });
