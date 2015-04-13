@@ -365,9 +365,11 @@ describe("Activities", function() {
       });
       expect(activity).toBeDefined();
       expect(activity.dbname).toEqual(activityFeed.dbname);
-      expect(activity.user).toEqual({
-        _fieldDBtype: "UserMask",
-        _username: "unknown"
+      expect(activity.user.toJSON()).toEqual({
+        fieldDBtype: "UserMask",
+        username: "unknown",
+        version: activity.user.version,
+        api: activity.user.api
       });
       expect(activity.verb).toEqual("logged in");
 
