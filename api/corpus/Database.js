@@ -766,11 +766,13 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           reason = reason || {};
           reason.details = details;
           reason.status = reason.status || 400;
-          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this 9038."];
           self.debug(reason);
           deferred.reject(reason);
         }).fail(function(error) {
           console.error(error.stack, self);
+          error.status = error.status || 400;
+          error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 1289128."];
           deferred.reject(error);
         });
 
