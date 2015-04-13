@@ -151,9 +151,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.loading = false;
         if (!error || !error.userFriendlyErrors) {
           error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
-          self.dispatch("authenticate:mustconfirmidentity");
+          self.dispatchEvent("authenticate:mustconfirmidentity");
         } else {
-          self.dispatch("authenticate:fail");
+          self.dispatchEvent("authenticate:fail");
         }
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
@@ -166,7 +166,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
             if (!userDetails) {
               self.loading = false;
-              self.dispatch("authenticate:mustconfirmidentity");
+              self.dispatchEvent("authenticate:mustconfirmidentity");
               deferred.reject({
                 error: userDetails,
                 status: 500,
