@@ -31,8 +31,9 @@ var Authentication = function Authentication(options) {
   var self = this;
 
   this.loading = true;
-  this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
-
+  var deferred = new Q.defer();
+  this.resumingSessionPromise = deferred.promise;
+  Database.prototype.resumeAuthenticationSession().then(function(user) {
     CORS.application = FieldDBObject.application;
 
     self.loading = false;
@@ -42,9 +43,13 @@ var Authentication = function Authentication(options) {
     if (self.user._rev) {
       self.user.authenticated = true;
       self.dispatchEvent("authenticate:success");
+      deferred.resolve(self.user);
     } else {
       self.user.authenticated = false;
       self.dispatchEvent("authenticate:mustconfirmidentity");
+      deferred.reject({
+        userFriendlyErrors: ["Please login."]
+      });
     }
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
@@ -71,10 +76,12 @@ var Authentication = function Authentication(options) {
       self.dispatchEvent("authenticate:mustconfirmidentity");
     }
     self.render();
-
+    deferred.reject(error);
     return error;
   }).fail(function(error) {
     console.error(error.stack, self);
+    deferred.reject(error);
+    return error;
   });
 
   FieldDBObject.apply(this, arguments);
@@ -155,6 +162,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         } else {
           self.dispatchEvent("authenticate:fail");
         }
+        error.details = loginDetails;
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
         deferred.reject(error);
@@ -168,7 +176,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               self.loading = false;
               self.dispatchEvent("authenticate:mustconfirmidentity");
               deferred.reject({
-                error: userDetails,
+                details: loginDetails,
                 status: 500,
                 userFriendlyErrors: ["Unknown error. Please report this 2391."]
               });
@@ -299,6 +307,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
           }, function(error) {
             waitTime = waitTime * 2;
+            error.status = error.status || 500;
+            error.details = options;
             if (waitTime > 60 * 1000) {
               deferred.reject(error);
             } else {

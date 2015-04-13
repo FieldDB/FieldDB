@@ -1,8 +1,15 @@
+/* globals localStorage */
 var Authentication = require("./../../api/authentication/Authentication").Authentication;
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
 describe("Authentication ", function() {
+
+  beforeEach(function() {
+    try {
+      localStorage.clear();
+    } catch (e) {}
+  });
 
   it("should load", function() {
     expect(Authentication).toBeDefined();
@@ -20,10 +27,14 @@ describe("Authentication ", function() {
         auth.debug("Done authentication");
         expect(result).toBeDefined();
         expect(result).toEqual(" ");
-      }, function(result) {
+      }, function(error) {
         auth.debug("Failed authentication");
-        expect(result).toBeDefined();
-        expect(result.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toBeDefined();
+        if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        }
       }).done(done);
     } catch (e) {
       expect(e).toEqual(" ");
@@ -48,7 +59,11 @@ describe("Authentication ", function() {
       }, function(error) {
         auth.debug("Failed creating new corpus");
         expect(error).toBeDefined();
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        }
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -107,10 +122,15 @@ describe("Authentication ", function() {
 
       expect(auth.resumingSessionPromise).toBeDefined();
       auth.resumingSessionPromise.then(function(result) {
-        expect(result.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        expect(auth.user).toBeUndefined();
+        expect(result).toBe(auth.user);
+        expect(auth.user).toBeDefined();
       }, function(error) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        expect(error).toBeDefined();
+        if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["Please login."]);
+        }
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -134,9 +154,14 @@ describe("Authentication ", function() {
       expect(auth.user.researchInterest).toContain("Phonemes");
 
       /* should be saved */
-      expect(auth.user.constructor.prototype.temp).toBeDefined();
-      expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toBeDefined();
-      expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toContain("confidential");
+      if (auth.user.constructor.prototype.temp) {
+        expect(auth.user.constructor.prototype.temp).toBeDefined();
+        expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toBeDefined();
+        expect(auth.user.constructor.prototype.temp[auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"]).toContain("confidential");
+      } else {
+        expect(localStorage.getItem(localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir")).toBeDefined();
+        expect(localStorage.getItem(localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir")).toContain("confidential");
+      }
 
       var anotherAuthLoad = new Authentication({
         user: {
@@ -145,14 +170,18 @@ describe("Authentication ", function() {
       });
       expect(anotherAuthLoad.user.warnMessage).toContain("Refusing to save a user doc which is incomplete");
       anotherAuthLoad.user.warnMessage = "";
-      expect(anotherAuthLoad.user.constructor.prototype.temp)
-        .toEqual(auth.user.constructor.prototype.temp);
-      expect(anotherAuthLoad.user.constructor.prototype.temp[
-          anotherAuthLoad.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
-        ])
-        .toEqual(auth.user.constructor.prototype.temp[
-          auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
-        ]);
+      if (auth.user.constructor.prototype.temp) {
+        expect(anotherAuthLoad.user.constructor.prototype.temp)
+          .toEqual(auth.user.constructor.prototype.temp);
+        expect(anotherAuthLoad.user.constructor.prototype.temp[
+            anotherAuthLoad.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
+          ])
+          .toEqual(auth.user.constructor.prototype.temp[
+            auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
+          ]);
+      } else {
+        console.log("Not using temp objects to persist user details");
+      }
       // user has default prefs for now
       expect(anotherAuthLoad.user.prefs).toBeUndefined();
       expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
@@ -184,7 +213,11 @@ describe("Authentication ", function() {
     }, function(error) {
       auth.debug("Failed registering");
       expect(error).toBeDefined();
-      expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      } else {
+        expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+      }
     }).done(done);
 
   }, specIsRunningTooLong);
@@ -194,18 +227,53 @@ describe("Authentication ", function() {
     expect(true).toBeTruthy();
   });
 
-  it("should not authenticate if login good username bad password", function() {
-    //          var authenticated = u.login("lingllama", "hypothesis");
-    //          expect(!authenticated).toBeTruthy();
-  });
+  it("should not authenticate if login good username bad password", function(done) {
+    var auth = new Authentication();
+    try {
+      auth.login({
+        username: "lingllama",
+        password: "hypothesis"
+      }).then(function(result) {
+        auth.debug("Done authentication");
+        expect(result).toBeDefined();
+        expect(result).toEqual(" ");
+      }, function(error) {
+        auth.debug("Failed authentication");
+        expect(error).toBeDefined();
+        if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        }
+      }).done(done);
+    } catch (e) {
+      expect(e).toEqual(" ");
+    }
 
-  it("should not authenticate if login bad username any password", function() {
-    //          var authenticated = u.login("sapri", "phoneme");
-    //          expect(!authenticated).toBeTruthy();
-  });
+  }, specIsRunningTooLong);
 
-  it("should authenticate if login good username good password", function() {
-    //          var authenticated = u.login("lingllama", "phoneme");
-    //          expect(authenticated).toBeTruthy();
-  });
+  it("should not authenticate if login bad username any password", function(done) {
+    var auth = new Authentication();
+    try {
+      auth.login({
+        username: "sapri",
+        password: "phoneme"
+      }).then(function(result) {
+        auth.debug("Done authentication");
+        expect(result).toBeDefined();
+        expect(result).toEqual(" ");
+      }, function(error) {
+        auth.debug("Failed authentication");
+        expect(error).toBeDefined();
+        if (error.userFriendlyErrors === ["CORS not supported, your browser is unable to contact the database."]) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        }
+      }).done(done);
+    } catch (e) {
+      expect(e).toEqual(" ");
+    }
+  }, specIsRunningTooLong);
+
 });
