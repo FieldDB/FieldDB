@@ -238,15 +238,16 @@ describe("Authentication ", function() {
     }, function(error) {
       auth.debug("Failed registering");
       expect(error).toBeDefined();
-      if (error.userFriendlyErrors[0] === "Username already exists, try a different username.") {
-        expect(error.status).toEqual(409);
-        expect(error.userFriendlyErrors).toEqual(["Username already exists, try a different username."]);
-      } else if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-        expect(error.status).toEqual(400);
+      if (error.status === 500) {
+        expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+      } else if (error.status === 409) {
+        expect(error.userFriendlyErrors).toEqual(["Username jenkins already exists, try a different username."]);
+      } else if (error.status === 400) {
         expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-      } else {
-        expect(error.status).toEqual(0);
+      } else if (error.status === 0) {
         expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+      } else {
+        expect(false).toBeTruthy();
       }
     }).done(done);
 
@@ -264,7 +265,9 @@ describe("Authentication ", function() {
       }, function(error) {
         auth.debug("Failed authentication");
         expect(error).toBeDefined();
-        expect(auth.user.authenticated).toEqual(false);
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
         if (error.userFriendlyErrors[0] === "Username or password is invalid. Please try again.") {
           expect(error.status).toEqual(401);
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
@@ -292,7 +295,9 @@ describe("Authentication ", function() {
         expect(true).toBeFalsy();
       }, function(error) {
         auth.debug("Failed authentication");
-        expect(auth.user.authenticated).toEqual(false);
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
         expect(error).toBeDefined();
         if (error.userFriendlyErrors[0] === "Username or password is invalid. Please try again.") {
           expect(error.status).toEqual(401);
@@ -322,17 +327,20 @@ describe("Authentication ", function() {
         expect(true).toBeFalsy();
       }, function(error) {
         auth.debug("Failed authentication");
-        expect(auth.user.authenticated).toEqual(false);
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
         expect(error).toBeDefined();
-        if (error.userFriendlyErrors[0] === "Username or password is invalid. Please try again.") {
-          expect(error.status).toEqual(401);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+        } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
+        } else if (error.status === 400) {
           expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else {
-          expect(error.status).toEqual(0);
+        } else if (error.status === 0) {
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        } else {
+          expect(false).toBeTruthy();
         }
       }).done(done);
     } catch (e) {

@@ -41,7 +41,7 @@ describe("Corpus", function() {
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+      }).toThrow(new Error("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first."));
     });
 
     it("should be able to build a corpus by calling defaults", function() {
