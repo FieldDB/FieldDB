@@ -507,9 +507,17 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           data: details
         }).then(function(authserverResult) {
             self.debug(authserverResult);
-            self.user.corpora.shift(authserverResult.corpus);
-            self.save();
-
+            if (authserverResult.corpus) {
+              self.user.corpora.shift(authserverResult.corpus);
+              self.save();
+            } else {
+              if (authserverResult.status > 0 && authserverResult.status < 400 && self.user.corpora && typeof self.user.corpora.find === "function") {
+                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusName).identifier, "fuzzy");
+                if (authserverResult.corpus && authserverResult.corpus.length > 0) {
+                  authserverResult.corpus = authserverResult.corpus[0];
+                }
+              }
+            }
             deferred.resolve(authserverResult.corpus);
           },
           function(reason) {
