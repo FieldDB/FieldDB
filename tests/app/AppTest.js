@@ -1,3 +1,4 @@
+/* globals navigator */
 var App = require("../../api/app/App").App;
 var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
@@ -30,8 +31,20 @@ describe("App", function() {
       app.contextualizer = {};
 
       expect(app).toBeDefined();
-      expect(app.contextualizer.currentLocale.iso).toEqual("en");
+
+      // Set locale to user's prefered locale by default
+      expect(app.contextualizer.currentLocale.iso).toBeDefined();
+      try {
+        if (navigator.languages[0].indexOf(app.contextualizer.currentLocale.iso) === -1) {
+          expect(app.contextualizer.currentLocale.iso).toEqual(navigator.languages[0]);
+        }
+      } catch (e) {
+        expect(app.contextualizer.currentLocale.iso).toEqual("en");
+      }
+
+      app.contextualizer.currentLocale.iso = "en";
       expect(app.contextualize("locale_Username")).toEqual("Username:");
+
       app.contextualizer.currentLocale.iso = "es";
       expect(app.contextualize("locale_Username")).toEqual("Usuario:");
     });
@@ -84,17 +97,22 @@ describe("App", function() {
       expect(app.warnMessage).toContain("Route params are undefined, not loading anything");
 
       processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus"
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus"
       });
       expect(processingPromise).toBeDefined();
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
     }, specIsRunningTooLong);
 
     it("should be able to load an import dashboard based on routeParams", function(done) {
@@ -102,8 +120,8 @@ describe("App", function() {
         // debugMode: true
       });
       var processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus",
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus",
         importType: "participants"
       });
       expect(processingPromise).toBeDefined();
@@ -111,10 +129,15 @@ describe("App", function() {
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
         expect(app.warnMessage).toContain("An app of type App has become automagically available to all fielddb objects");
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -123,8 +146,8 @@ describe("App", function() {
         // debugMode: true
       });
       var processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus",
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus",
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
       expect(processingPromise).toBeDefined();
@@ -132,10 +155,15 @@ describe("App", function() {
       // console.log(processingPromise);
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -145,7 +173,7 @@ describe("App", function() {
       });
 
       var processingPromise = app.processRouteParams({
-        team: "lingllama"
+        team: "nottestinguserexistsonlyrouteparams"
       });
       expect(processingPromise).toBeUndefined();
 
