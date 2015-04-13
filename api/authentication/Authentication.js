@@ -94,11 +94,16 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   },
 
   dispatchEvent: {
-    value: function(eventChannelName) {
+    value: function(eventChannelName, reason) {
       try {
-        var event = document.createEvent("Event");
-        event.initEvent(eventChannelName, true, true);
-        document.dispatchEvent(event);
+        if (this.eventDispatcher && typeof this.eventDispatcher.trigger === "function") {
+          this.eventDispatcher.trigger(eventChannelName, reason);
+        } else {
+          this.eventDispatcher = this.eventDispatcher || document;
+          var event = this.eventDispatcher.createEvent("Event");
+          event.initEvent(eventChannelName, true, true);
+          this.eventDispatcher.dispatchEvent(event);
+        }
       } catch (e) {
         this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.");
         this.debug(" error ", e);
@@ -518,7 +523,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
 
-      var attributesNotToJsonify = ["resumingSessionPromise"];
+      var attributesNotToJsonify = ["resumingSessionPromise", "eventDispatcher"];
       var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
 
       this.debug(json);
