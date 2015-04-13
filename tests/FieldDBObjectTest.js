@@ -1,3 +1,4 @@
+/* globals localStorage, FieldDB */
 var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
@@ -14,6 +15,9 @@ describe("FieldDBObject", function() {
       set: mockDatabase.set,
       fetchRevisions: mockDatabase.fetchRevisions
     };
+    try {
+      localStorage.clear();
+    } catch (e) {}
   });
 
   describe("construction", function() {
@@ -97,15 +101,7 @@ describe("FieldDBObject", function() {
         collection: "somethingnotinthesystem"
       };
       mysteryObject = FieldDBObject.convertDocIntoItsType(mysteryObject);
-      if (mysteryObject.previousFieldDBtype) {
-        expect(mysteryObject).toEqual({
-          _fieldDBtype: "FieldDBObject",
-          _id: "2389jr9rj490",
-          collection: "somethingnotinthesystem",
-          previousFieldDBtype: "Somethingnotinthesystem"
-        });
-      }
-
+      expect(mysteryObject.fieldDBtype).toEqual("FieldDBObject");
     });
 
     it("should be mark the previous type if it cant guess its type", function() {
@@ -116,7 +112,7 @@ describe("FieldDBObject", function() {
         "gravatar": "weoaeoriaew"
       };
       wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
-      if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.fieldDBtype !== "Comment") {
+      if (!FieldDB) {
         expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
           _fieldDBtype: "FieldDBObject",
           text: "How to do something",
@@ -126,6 +122,9 @@ describe("FieldDBObject", function() {
           previousFieldDBtype: "Comment",
           _dateCreated: wasACommentButFieldDBIsUndefinedInNPMRequireContexts.timestamp
         });
+      } else {
+        expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts.fieldDBtype).toEqual("Comment");
+        expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts.previousFieldDBtype).toBeUndefined();
       }
     });
 
@@ -475,13 +474,17 @@ describe("FieldDBObject", function() {
 
 
       expect(snapshot.enteredByUser.value).toEqual("unknown");
-      expect(snapshot.enteredByUser.json.user).toEqual({
-        name: "",
-        username: "unknown"
-      });
-      expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+      expect(snapshot.enteredByUser.json.user.name).toEqual("");
+      expect(snapshot.enteredByUser.json.user.username).toEqual("unknown");
       console.log("hardware", snapshot.enteredByUser.json.hardware);
-      expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+      if (snapshot.enteredByUser.json.software.appVersion === "PhantomJS unknown") {
+        expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+        expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+      } else {
+        expect(snapshot.enteredByUser.json.software.appVersion).toBeDefined();
+        expect(snapshot.enteredByUser.json.software.appVersion).toContain("Safari");
+        expect(snapshot.enteredByUser.json.hardware.cpus).toBeUndefined();
+      }
 
 
       expect(object.fieldDBtype).toEqual("FieldDBObject");
@@ -644,9 +647,9 @@ describe("FieldDBObject", function() {
         expect(object.modifiedByUser.users).toBeUndefined();
         expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
         expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
-        expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+        expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
         // console.log("hardware", object.modifiedByUser.json.hardware);
-        expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+        expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
 
       }, function(error) {
@@ -659,9 +662,9 @@ describe("FieldDBObject", function() {
       expect(object.modifiedByUser.users).toBeUndefined();
       expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
       expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
-      expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+      expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
       // console.log("hardware", object.modifiedByUser.json.hardware);
-      expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+      expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
     }, specIsRunningTooLong);
 
@@ -685,7 +688,7 @@ describe("FieldDBObject", function() {
         expect(result).toBe(object);
         expect(object.id).toEqual("2839aj983aja");
         expect(object.rev).toBeDefined();
-        expect(object.modifiedByUser).toEqual({
+        expect(object.modifiedByUser.equals({
           _fieldDBtype: "FieldDBObject",
           label: "modifiedByUser",
           value: "inuktitutcleaningbot",
@@ -705,7 +708,7 @@ describe("FieldDBObject", function() {
           userchooseable: "disabled",
           _dateCreated: object.modifiedByUser.dateCreated,
           _version: object.version
-        });
+        })).toBeTruthy();
 
         // this was a placeholder because it had no rev, so we should now have a fossil
         expect(object.fossil).toBeDefined();
@@ -1049,13 +1052,13 @@ describe("FieldDBObject", function() {
       FieldDBObject.render = oldRender;
     });
 
-    xit("should accept a render function for each object", function() {
+    it("should accept a render function for each object", function() {
       var app = new FieldDBObject();
       app.render = function() {
         this.warn("I rendered.");
       };
       app.render();
-      expect(app.warnMessage).toEqual("I rendered");
+      expect(app.warnMessage).toEqual("I rendered.");
     });
   });
 
@@ -1075,21 +1078,23 @@ describe("FieldDBObject", function() {
       console.log(" Done debugMode testing");
 
       buggy.warn("This will print a warning with an object also", buggy);
-      buggy.bug("This will print an warning in Nodejs");
+      buggy.bug("This will print an warning in Nodejs\n And show an alert in a browser.");
       buggy.todo("This will print a todo", buggy);
       expect(buggy.toJSON().warnMessage).toBeUndefined();
-      expect(buggy.toJSON().bugMesssage).toBeUndefined();
+      expect(buggy.bugMessage).toBeDefined();
+      expect(buggy.bugMessage).toContain("And show an alert in a browser.");
+      expect(buggy.toJSON().bugMessage).toBeUndefined();
       expect(buggy.toJSON().todoMessage).toBeUndefined();
     });
 
     it("should not bug about the same message if it has already been bugged and not cleared", function() {
       var buggy = new FieldDBObject();
       expect(buggy.bugMessage).toBeUndefined();
-      buggy.bug("This is a problem, please report this.");
-      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
-      buggy.bug("This is a problem, please report this.");
-      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
-      expect(buggy.warnMessage).toContain("Not repeating bug message: This is a problem, please report this");
+      buggy.bug("This is simulating a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is simulating a problem, please report this.");
+      buggy.bug("This is simulating a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is simulating a problem, please report this.");
+      expect(buggy.warnMessage).toContain("Not repeating bug message: This is simulating a problem, please report this");
     });
 
     it("should be possible for client apps to override the bug function", function() {
@@ -1169,8 +1174,7 @@ describe("FieldDBObject", function() {
         expect(results.response).toEqual(true);
         expect(true).toBeTruthy();
       }, function(results) {
-        expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
-        expect(results.response).toEqual(true);
+        console.log("This confirm should never be rejected, ", results);
         expect(false).toBeTruthy();
       }).done(done);
       expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");

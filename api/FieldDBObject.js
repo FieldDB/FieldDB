@@ -289,13 +289,13 @@ FieldDBObject.confirm = function(message, optionalLocale) {
     if (self.alwaysConfirmOkay) {
       console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
       response = self.alwaysConfirmOkay;
-    }
-
-    try {
-      response = confirm(message);
-    } catch (e) {
-      console.warn(self.fieldDBtype.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
-      response = self.alwaysConfirmOkay;
+    } else {
+      try {
+        response = confirm(message);
+      } catch (e) {
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
+        response = self.alwaysConfirmOkay;
+      }
     }
 
     if (response) {
@@ -612,6 +612,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   render: {
     configurable: true,
+    writable: true,
     value: function(options) {
       this.debug("Calling render with options", options);
       FieldDBObject.render.apply(this, arguments);
