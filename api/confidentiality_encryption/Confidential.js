@@ -191,6 +191,12 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
 
       if (!this.whenReady) {
         this.whenReady = deferred.promise;
+        if (!self.application || !self.application.authentication || typeof self.application.authentication.confirmIdentity !== "function") {
+          /* if we are not in an application, the datapipelines can attempt to decyrpt data if they have the right key */
+          if (!this.alwaysReplyToPrompt) {
+            this.alwaysReplyToPrompt = this.secretkey;
+          }
+        }
         this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
           if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
             self.application.authentication.confirmIdentity({
