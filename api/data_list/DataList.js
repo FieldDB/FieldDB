@@ -279,9 +279,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         return deferred.promise;
       }
 
-      Q.nextTick(function() {
-        deferred.resolve(self);
-      });
+      // Q.nextTick(function() {
+      //   deferred.resolve(self);
+      // });
 
 
       var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
@@ -336,11 +336,12 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           // self.merge("self", generatedDatalist);
           self.render();
 
-
-          return self;
+          deferred.resolve(self);
+          // return self;
         }, unableToFetchCurrentDataAffiliatedWithThisDataList)
         .fail(function(error) {
           console.error(error.stack, self);
+          deferred.reject(error);
         });
 
       return deferred.promise;
@@ -457,32 +458,20 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         self.debug("DATA LIST datumIdsToGetAudioVideo " + JSON.stringify(datumIdsToGetAudioVideo));
         datumIdsToGetAudioVideo.map(function(id) {
           var doc = self.docs[id];
-          if (doc) {
-            if (doc.audioVideo) {
-              doc.audioVideo.map(function(audioVideoFile) {
-                audioVideoFiles.push(audioVideoFile.URL);
-              });
-            }
-          } else {
-            var obj = FieldDBObject.convertDocIntoItsType({
-              dbname: self.dbname,
-              id: id,
-              fieldDBtype: "Datum"
-            });
-            this.todo("This " + doc.fieldDBtype + " might no longer be a datum, will this affect the ability to find the audioVideo?", doc);
-            obj.fetch().then(function(results) {
-              self.debug("Fetched datum to get audio file", results);
-              if (doc.audioVideo) {
-                obj.audioVideo.map(function(audioVideoFile) {
-                  audioVideoFiles.push(audioVideoFile.URL);
-                });
-              }
-            }).fail(function(error) {
-              console.error(error.stack, self);
-              deferred.reject(error);
-            });
+          if (!doc) {
+            return;
           }
+          var audioVideo = doc.audioVideo || doc._audioVideo;
+          if (!audioVideo || typeof audioVideo.map !== "function") {
+            return;
+          }
+          audioVideo.map(function(audioVideoFile) {
+            if (audioVideoFile && audioVideoFile.URL) {
+              audioVideoFiles.push(audioVideoFile.URL);
+            }
+          });
         });
+
         deferred.resolve(audioVideoFiles);
 
       });
