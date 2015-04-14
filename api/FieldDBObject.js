@@ -1,4 +1,4 @@
-/* globals alert, confirm, navigator, Android, FieldDB */
+/* globals alert, confirm, prompt, navigator, Android, FieldDB */
 var Diacritics = require("diacritic");
 var Q = require("q");
 var package;
@@ -150,6 +150,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "parent",
   "perObjectAlwaysConfirmOkay",
   "perObjectDebugMode",
+  "promptMessage",
   "newDatum",
   "saving",
   "saved",
@@ -278,6 +279,45 @@ FieldDBObject.warn = function(message, message2, message3, message4) {
   if (message4) {
     console.warn(message4);
   }
+};
+
+FieldDBObject.prompt = function(message, optionalLocale) {
+  var deferred = Q.defer(),
+    self = this;
+
+  Q.nextTick(function() {
+    var response;
+
+    if (self.alwaysReplyToPrompt) {
+      console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably reply " + self.alwaysReplyToPrompt + " and it wasnt worth asking.");
+      response = self.alwaysReplyToPrompt;
+    } else {
+      try {
+        response = prompt(message);
+      } catch (e) {
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysReplyToPrompt);
+        response = self.alwaysReplyToPrompt;
+      }
+    }
+    if (response !== null && response !== undefined && typeof response.trim === "function") {
+      response = response.trim();
+    }
+    if (response) {
+      deferred.resolve({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    } else {
+      deferred.reject({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    }
+
+  });
+  return deferred.promise;
 };
 
 FieldDBObject.confirm = function(message, optionalLocale) {
@@ -579,6 +619,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       this.perObjectAlwaysConfirmOkay = value;
+    }
+  },
+  prompt: {
+    value: function(message) {
+      if (this.promptMessage) {
+        this.promptMessage += "\n";
+      } else {
+        this.promptMessage = "";
+      }
+      this.promptMessage = this.promptMessage + message;
+
+      return FieldDBObject.prompt.apply(this, arguments);
     }
   },
   confirm: {

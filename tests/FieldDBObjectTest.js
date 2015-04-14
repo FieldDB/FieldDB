@@ -1191,6 +1191,46 @@ describe("FieldDBObject", function() {
     }, specIsRunningTooLong);
   });
 
+  describe("prompting", function() {
+    it("should be able to show a prompt UI and wait asyncronously false case", function(done) {
+
+      var objectToDelete = new FieldDBObject();
+      objectToDelete.alwaysReplyToPrompt = "I created this item by mistake";
+      expect(objectToDelete.alwaysReplyToPrompt).toBeTruthy();
+      objectToDelete.alwaysReplyToPrompt = "";
+      expect(objectToDelete.alwaysReplyToPrompt).toBeFalsy();
+
+      objectToDelete.prompt("Why do you want to delete this item?").then(function(results) {
+        expect(results).toBeDefined();
+        expect(results.message).toEqual(" ");
+        expect(objectToDelete.promptMessage).toEqual("Why do you want to delete this item?");
+        expect(results.response).toEqual(false);
+        expect(true).toBeFalsy();
+      }, function(results) {
+        expect(results.message).toEqual("Why do you want to delete this item?");
+        expect(results.response).toBeFalsy();
+        expect(objectToDelete.promptMessage).toEqual("Why do you want to delete this item?");
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should be able to show a prompt UI and wait asyncronously true case", function(done) {
+
+      var objectWhichNeedsToConfirmUsersIdentity = new FieldDBObject();
+      objectWhichNeedsToConfirmUsersIdentity.alwaysReplyToPrompt = "phoneme";
+      expect(objectWhichNeedsToConfirmUsersIdentity.alwaysReplyToPrompt).toBeTruthy();
+      objectWhichNeedsToConfirmUsersIdentity.prompt("We need to make sure its you. Please enter your password.").then(function(results) {
+        expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
+        expect(results.response).toEqual("phoneme");
+      }, function(results) {
+        console.log("This prompt should never be rejected, ", results);
+        expect(false).toBeTruthy();
+      }).done(done);
+      expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
+
+    }, specIsRunningTooLong);
+  });
+
 
   describe("merging", function() {
     var aBaseObject;
