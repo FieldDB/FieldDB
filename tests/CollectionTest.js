@@ -1,10 +1,18 @@
+/* globals FieldDB*/
+
 "use strict";
+var Collection;
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    Collection = FieldDB.Collection;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+Collection = Collection || require("../api/Collection").Collection;
+FieldDBObject = FieldDBObject || require("../api/FieldDBObject").FieldDBObject;
 
-var Collection = require("../api/Collection").Collection;
-var DocumentCollection = require("../api/datum/DocumentCollection").DocumentCollection;
-var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
-
 var specIsRunningTooLong = 5000;
 
 /*
@@ -434,7 +442,7 @@ describe("lib/Collection", function() {
       //   }
       // });
 
-      var customizedWithTempId = new DocumentCollection({
+      var customizedWithTempId = new Collection({
         // debugMode: true,
         collection: [],
         primaryKey: "tempId"
