@@ -465,7 +465,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
       try {
         connectionInfo = new Confidential({
-          secretkey: "connectionInfo"
+          secretkey: "connectionInfo",
+          decryptedMode: true
         }).decrypt(connectionInfo);
       } catch (e) {
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);

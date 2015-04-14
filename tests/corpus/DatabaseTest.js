@@ -1,6 +1,15 @@
+"use strict";
 /* globals localStorage */
-var Database = require("../../api/corpus/Database").Database;
-Database.URLParser = require("url");
+var Database;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Database = FieldDB.Database;
+  }
+} catch (e) {
+  Database = require("./../../api/corpus/Database").Database;
+  Database.URLParser = require("url");
+}
 
 var specIsRunningTooLong = 5000;
 

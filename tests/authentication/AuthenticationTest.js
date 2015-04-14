@@ -287,19 +287,21 @@ describe("Authentication ", function() {
         if (auth.user) {
           expect(auth.user.authenticated).toEqual(false);
         }
-        if (error.userFriendlyErrors[0] === "Username or password is invalid. Please try again.") {
-          expect(error.status).toEqual(401);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors).toEqual([" "]);
+        } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
+        } else if (error.status === 400) {
           expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else {
-          expect(error.status).toEqual(0);
+        } else if (error.status === 0) {
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        } else {
+          expect(false).toBeTruthy();
         }
       }).done(done);
     } catch (e) {
       expect(e).toEqual(" ");
+      done();
     }
   }, specIsRunningTooLong);
 
@@ -318,19 +320,21 @@ describe("Authentication ", function() {
           expect(auth.user.authenticated).toEqual(false);
         }
         expect(error).toBeDefined();
-        if (error.userFriendlyErrors[0] === "Username or password is invalid. Please try again.") {
-          expect(error.status).toEqual(401);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors).toEqual([" "]);
+        } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
+        } else if (error.status === 400) {
           expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else {
-          expect(error.status).toEqual(0);
+        } else if (error.status === 0) {
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        } else {
+          expect(false).toBeTruthy();
         }
       }).done(done);
     } catch (e) {
       expect(e).toEqual(" ");
+      done();
     }
 
   }, specIsRunningTooLong);
@@ -351,7 +355,7 @@ describe("Authentication ", function() {
         }
         expect(error).toBeDefined();
         if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+          expect(error.userFriendlyErrors).toEqual([" "]);
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
         } else if (error.status === 400) {
@@ -364,6 +368,7 @@ describe("Authentication ", function() {
       }).done(done);
     } catch (e) {
       expect(e).toEqual(" ");
+      done();
     }
   }, specIsRunningTooLong);
 
