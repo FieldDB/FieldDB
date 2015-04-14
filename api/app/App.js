@@ -239,30 +239,69 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   },
 
   enterDecryptedMode: {
-    value: function(loginDetails) {
+    value: function() {
       var deferred = Q.defer(),
         self = this;
 
-      Q.nextTick(function() {
-        if (this.corpus && typeof this.corpus.login === "function") {
-          this.corpus.login(loginDetails).then(function() {
-
-            self.decryptedMode = true;
+      this.whenDecryptionReady = deferred.promise;
+      this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
+        if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
+          self.application.authentication.confirmIdentity({
+            password: promptDetails.password
+          }).then(function(confirmation) {
+            self.debug("Confirmed the user's identity", confirmation);
+            self._decryptedMode = true;
             deferred.resolve(true);
-
           }, function(error) {
-            deferred.reject(error);
+            self.debug("Unable to confirm the user's identity", error);
+            self._decryptedMode = false;
+            deferred.resolve(false);
           }).fail(function(error) {
-            console.error(error.stack, self);
-            deferred.reject(error);
+            self.debug("Error while confirming the user's identity", error);
+            self._decryptedMode = false;
+            deferred.resolve(false);
           });
         } else {
-          deferred.reject("User is not authenticated. Please log in.");
+          self.warn("Not running in an application, but was able to simuli-prompt the user.");
+          self._decryptedMode = true;
+          deferred.resolve(true);
         }
+      }, function(error) {
+        self.debug("Unable to prompt the user, the data will always be encrypted", error);
+        self._decryptedMode = false;
+        deferred.reject(false);
+      }).fail(function(error) {
+        self.debug("Error while prompting the user, the data will always be encrypted", error);
+        self._decryptedMode = false;
+        deferred.reject(false);
       });
-      return deferred.promise;
     }
   },
+
+  decryptedMode: {
+    get: function() {
+      if (this._decryptedMode !== undefined) {
+        return this._decryptedMode;
+      }
+      if (!this.whenDecryptionReady) {
+        this.enterDecryptedMode();
+      }
+    },
+    set: function(value) {
+      if (value === this._decryptedMode) {
+        return;
+      }
+      if (value) {
+        this.warn("Cant set decryptedMode manually to true. ");
+        if (!this.whenDecryptionReady) {
+          this.enterDecryptedMode();
+        }
+        return;
+      }
+      this._decryptedMode = value;
+    }
+  },
+
 
   fetch: {
     value: function() {
