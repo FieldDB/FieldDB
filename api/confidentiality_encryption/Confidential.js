@@ -7,6 +7,7 @@
 
 // var CryptoEncoding =  {};// require("crypto-js/enc-utf8");
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
+var Q = require("q");
 var CryptoJS = require("./Crypto_AES").CryptoJS;
 var CryptoEncoding = CryptoJS.enc.Utf8;
 
@@ -73,10 +74,6 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
     value: Confidential
   },
 
-  // decryptedMode: {
-  //   value: false
-  // },
-
   /**
    * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
    * encoding so that it looks like a string, and can be saved as a string in
@@ -122,40 +119,33 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
    */
   decrypt: {
     value: function(encrypted) {
-      var result = encrypted;
-      if (this.decryptedMode === undefined) {
-        var self = this;
-        this.turnOnDecryptedMode(function() {
-          encrypted = encrypted.replace("confidential:", "");
-          // decode base64
-          encrypted = window.atob(encrypted);
-          self.verbose("Decrypting after turning on decrypted mode " + encrypted, self.secretkey);
-          result = CryptoJS.AES.decrypt(encrypted, self.secretkey.toString("base64")).toString(CryptoEncoding);
-          try {
-            if ((result.indexOf("{") === 0 && result.indexOf("}") === result.length - 1) || (result.indexOf("[") === 0 && result.indexOf("]") === result.length - 1)) {
-              result = JSON.parse(result);
-              self.debug("Decrypting an object");
-            }
-          } catch (e) {
-            self.verbose("Decrypting a non-object");
-          }
-          return result;
-        });
-      } else {
+      var result = encrypted,
+        self = this;
+
+      var decryptWhenReady = function(confirmedDecryptedMode) {
+        self.decryptedMode = confirmedDecryptedMode;
         encrypted = encrypted.replace("confidential:", "");
         // decode base64
         encrypted = window.atob(encrypted);
-        this.verbose("Decrypting " + encrypted, this.secretkey.toString("base64"));
-        result = CryptoJS.AES.decrypt(encrypted, this.secretkey.toString("base64")).toString(CryptoEncoding);
+        self.verbose("Decrypting " + encrypted, self.secretkey.toString("base64"));
+        result = CryptoJS.AES.decrypt(encrypted, self.secretkey.toString("base64")).toString(CryptoEncoding);
         try {
           if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
             result = JSON.parse(result);
-            this.debug("Decrypting an object");
+            self.debug("Decrypting an object");
           }
         } catch (e) {
-          this.verbose("Decrypting a non-object");
+          self.verbose("Decrypting a non-object");
         }
         return result;
+      };
+
+      if (!this.decryptedMode) {
+        this.whenReady.then(decryptWhenReady, function() {
+          self.warn("Not decrypting. You have not proven your identity.");
+        });
+      } else {
+        return decryptWhenReady(this.decryptedMode);
       }
     }
   },
@@ -171,7 +161,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       if (value === this._secretkey) {
         return;
       }
-      if (this._secretkey && this._secretkey.length >2) {
+      if (this._secretkey && this._secretkey.length > 2) {
         throw new Error("Confidential key cant be changed once it was created. Please create another Confidential encrypter if you wish to change the key.");
       }
       if (!value) {
@@ -190,12 +180,60 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
     }
   },
 
-  turnOnDecryptedMode: {
-    value: function(callback) {
-      this.decryptedMode = false;
-      if (callback) {
-        callback();
+  decryptedMode: {
+    get: function() {
+      if (this._decryptedMode !== undefined) {
+        return this._decryptedMode;
       }
+
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!this.whenReady) {
+        this.whenReady = deferred.promise;
+        this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
+          if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
+            self.application.authentication.confirmIdentity({
+              password: promptDetails.password
+            }).then(function(confirmation) {
+              self.debug("Confirmed the user's identity", confirmation);
+              self._decryptedMode = true;
+              deferred.resolve(true);
+            }, function(error) {
+              self.debug("Unable to confirm the user's identity", error);
+              self._decryptedMode = false;
+              deferred.resolve(false);
+            }).fail(function(error) {
+              self.debug("Error while confirming the user's identity", error);
+              self._decryptedMode = false;
+              deferred.resolve(false);
+            });
+          } else {
+            self.warn("Not running in an application, but was able to simuli-prompt the user.");
+            self._decryptedMode = true;
+            deferred.resolve(true);
+          }
+        }, function(error) {
+          self.debug("Unable to prompt the user, the data will always be encrypted", error);
+          self._decryptedMode = false;
+          deferred.reject(false);
+        }).fail(function(error) {
+          self.debug("Error while prompting the user, the data will always be encrypted", error);
+          self._decryptedMode = false;
+          deferred.reject(false);
+        });
+      }
+
+    },
+    set: function(value) {
+      if (value === this._decryptedMode) {
+        return;
+      }
+      if (value) {
+        this.warn("Cant set decryptedMode manually to true. ", this.decryptedMode);
+        return;
+      }
+      this._decryptedMode = value;
     }
   }
 
