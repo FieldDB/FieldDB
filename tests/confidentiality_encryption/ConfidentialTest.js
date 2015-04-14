@@ -1,10 +1,19 @@
-var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
+"use strict";
+
+var Confidential;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Confidential = FieldDB.Confidential;
+  }
+} catch (e) {}
+Confidential = Confidential || require("./../../api/confidentiality_encryption/Confidential").Confidential;
+
 var atob = atob || require("atob");
 var btoa = btoa || require("btoa");
 var SAMPLE_COMPLEX_OBJECT = require("./../../api/corpus/corpus.json");
 
 describe("Confidential: as a language consultant I want to be able to give data and have my data remain confidential", function() {
-
 
   it("should be able to use btoa and atob", function() {
     var message = "this is a sample confidential translation";

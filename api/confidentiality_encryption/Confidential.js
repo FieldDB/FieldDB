@@ -73,9 +73,9 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
     value: Confidential
   },
 
-  decryptedMode: {
-    value: false
-  },
+  // decryptedMode: {
+  //   value: false
+  // },
 
   /**
    * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64

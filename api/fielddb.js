@@ -48,6 +48,9 @@
   var Comments = require("./comment/Comments").Comments;
   FieldDB.Comments = Comments;
   FieldDB["Comments"] = Comments;
+  var Confidential = require("./confidentiality_encryption/Confidential").Confidential;
+  FieldDB.Confidential = Confidential;
+  FieldDB["Confidential"] = Confidential;
   var Connection = require("./corpus/Connection").Connection;
   FieldDB.Connection = Connection;
   FieldDB["Connection"] = Connection;
