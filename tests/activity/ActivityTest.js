@@ -1,9 +1,21 @@
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
-var Activity = require("../../api/activity/Activity").Activity;
-var Activities = require("../../api/activity/Activities").Activities;
+"use strict";
+var Activity;
+var Activities;
+var Connection;
+try {
+  /* globals FieldDB*/
+  if (FieldDB) {
+    Activity = FieldDB.Activity;
+    Activities = FieldDB.Activities;
+    Connection = FieldDB.Connection;
+  }
+} catch (e) {}
+Activity = Activity || require("./../../api/activity/Activity").Activity;
+Activities = Activities || require("./../../api/activity/Activities").Activities;
+Connection = Connection || require("./../../api/corpus/Connection").Connection;
+
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 var specIsRunningTooLong = 5000;
-
 
 describe("Activities", function() {
 
@@ -35,7 +47,7 @@ describe("Activities", function() {
       activityFeed.parent = {
         fieldDBtype: "LanguageLearningCorpus",
         dbname: "community-georgian",
-        connection: new FieldDBObject({
+        connection: new Connection({
           protocol: "https://",
           domain: "localhost",
           port: "6984",
@@ -67,7 +79,7 @@ describe("Activities", function() {
       activityFeed.parent = {
         fieldDBtype: "User",
         username: "jenkins",
-        connection: new FieldDBObject({
+        connection: new Connection({
           protocol: "https://",
           domain: "localhost",
           port: "6984",
