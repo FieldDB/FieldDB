@@ -29,10 +29,10 @@ module.exports = function(grunt) {
       },
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
-        src: ["tests/**/*Test.js"],
+        src: ["tests/data_list/*.js"],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
-          // external: ["api/**/*.js"],
+          external: ["api/**/*.js"],
           // ignore: ["./node_modules/underscore/underscore.js"],
         }
       },
@@ -216,7 +216,7 @@ module.exports = function(grunt) {
       },
       test: {
         files: "<%= jshint.test.src %>",
-        tasks: ["newer:jshint:test", "newer:jasmine_node:dev"]
+        tasks: ["newer:jshint:test", "newer:browserify:test", "newer:jasmine_node:dev"]
       },
     },
     exec: {

@@ -101,7 +101,7 @@ var mockDatabase = {
       if (collectionUrl === "comments") {
         deferred.resolve({
           collection: collectionUrl,
-          title: "A generated datalist",
+          title: "A generated list of comments",
           description: "something here",
           docIds: ["abc", "123", "kweo", "654"]
         });

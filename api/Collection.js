@@ -314,6 +314,7 @@ Collection.prototype = Object.create(Object.prototype, {
           this.INTERNAL_MODELS.item &&
           typeof this.INTERNAL_MODELS.item === "function" &&
           !(value instanceof this.INTERNAL_MODELS.item) &&
+          // value.constructor.toString().substring(9, 22) !== "FieldDBObject" &&
           !(this.INTERNAL_MODELS.item.compatibleWithSimpleStrings && typeof value === "string")) {
 
           // this.debug("adding a internamodel ", value);
@@ -321,7 +322,7 @@ Collection.prototype = Object.create(Object.prototype, {
           this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value.constructor.toString());
           if (typeof value.toJSON === "function") {
             this.debug(" why defereincing this?");
-            value = value.toJSON();
+            // value = value.toJSON();
           }
           value = new this.INTERNAL_MODELS.item(value);
           // } else {

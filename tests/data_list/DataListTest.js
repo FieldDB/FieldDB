@@ -1,14 +1,33 @@
-/* globals spyOn */
+/* globals spyOn , FieldDB */
 
-var DataList = require("./../../api/data_list/DataList").DataList;
-var Datum = require("./../../api/datum/Datum").Datum;
-var SubExperimentDataList = require("./../../api/data_list/SubExperimentDataList").SubExperimentDataList;
-var ExperimentDataList = require("./../../api/data_list/ExperimentDataList").ExperimentDataList;
-var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
-var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
-var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
+var DataList;
+var Datum;
+var SubExperimentDataList;
+var ExperimentDataList;
+var Contextualizer;
+var ContextualizableObject;
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    DataList = FieldDB.DataList;
+    Datum = FieldDB.Datum;
+    SubExperimentDataList = FieldDB.SubExperimentDataList;
+    ExperimentDataList = FieldDB.ExperimentDataList;
+    Contextualizer = FieldDB.Contextualizer;
+    ContextualizableObject = FieldDB.ContextualizableObject;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+
+DataList = DataList || require("./../../api/data_list/DataList").DataList;
+Datum = Datum || require("./../../api/datum/Datum").Datum;
+SubExperimentDataList = SubExperimentDataList || require("./../../api/data_list/SubExperimentDataList").SubExperimentDataList;
+ExperimentDataList = ExperimentDataList || require("./../../api/data_list/ExperimentDataList").ExperimentDataList;
+Contextualizer = Contextualizer || require("./../../api/locales/Contextualizer").Contextualizer;
+ContextualizableObject = ContextualizableObject || require("./../../api/locales/ContextualizableObject").ContextualizableObject;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
-
 var specIsRunningTooLong = 5000;
 var SAMPLE_DATALIST_MODEL = require("../../sample_data/datalist_v1.22.1.json")[0];
 
@@ -490,8 +509,12 @@ describe("Data List", function() {
       expect(listToSave.comments).toBeDefined();
 
       expect(listToSave.comments[0].text).toContain("an example of how you can");
-      expect(listToSave.comments[0].previousFieldDBtype).toBeUndefined();
-      expect(listToSave.comments[0].fieldDBtype).toEqual("Comment");
+      if (listToSave.comments[0].fieldDBtype === "FieldDBObject") {
+        expect(listToSave.comments[0].previousFieldDBtype).toEqual("Comment");
+      } else {
+        expect(listToSave.comments[0].previousFieldDBtype).toBeUndefined();
+        expect(listToSave.comments[0].fieldDBtype).toEqual("Comment");
+      }
       expect(listToSave.comments[0].text).toEqual(list.comments.collection[0].text);
       expect(listToSave.comments[0].username).toEqual(list.comments.collection[0].username);
       expect(listToSave.comments[0].gravatar).toEqual(list.comments.collection[0].gravatar);
@@ -580,7 +603,7 @@ describe("Data List", function() {
 
     it("should discover audio on datum", function(done) {
       list = new DataList({
-        docs: [new FieldDBObject({
+        docs: [{
           "_id": "docone",
           "datumFields": [],
           "session": {},
@@ -591,16 +614,16 @@ describe("Data List", function() {
           }, {
             "URL": "http://localhost:3184/example/oiemqo32"
           }]
-        }), new FieldDBObject({
+        }, {
           "_id": "doctwo",
           "datumFields": [],
           "session": {}
-        }), new FieldDBObject({
+        }, {
           "_id": "docthree",
           "datumFields": [],
           "session": {},
           "audioVideo": []
-        })]
+        }]
       });
       // list.debugMode = true;
       list.getAllAudioAndVideoFiles().then(function(urls) {
@@ -617,40 +640,58 @@ describe("Data List", function() {
       //  expect(dl.copyDatum()).toContain("");
     });
 
-    it("should star datum", function() {
+    it("should apply a function to certain ids", function() {
       var dl = new DataList({
-        docs: [new FieldDBObject({
+        docs: [{
           "_id": "docOne",
           "datumFields": [],
           "session": {},
           "star": function(value) {
             this._star = value;
           }
-        }), new FieldDBObject({
+        }, {
           "_id": "doctwo",
           "datumFields": [],
           "session": {},
           "star": function(value) {
             this._star = value;
           }
-        }), new FieldDBObject({
+        }, {
           "_id": "docthree",
           "datumFields": [],
           "session": {},
           "star": function(value) {
             this._star = value;
           }
-        })]
+        }]
       });
 
       expect(dl.applyFunctionToAllIds).toBeDefined();
+      expect(dl.docs.docOne.id).toEqual("docOne");
+      if (dl.docs.docOne.fieldDBtype === "Datum") {
+        expect(dl.docs.docOne.fieldDBtype).toEqual("Datum");
+        expect(dl.docs.doctwo.fieldDBtype).toEqual("Datum");
+      } else {
+        expect(dl.docs.docOne.fieldDBtype).toEqual("FieldDBObject");
+        expect(dl.docs.doctwo.fieldDBtype).toEqual("FieldDBObject");
+      }
+      expect(typeof dl.docs.docOne.save).toEqual("function");
+      expect(typeof dl.docs.docOne.star).toEqual("function");
 
-      spyOn(dl.docs.doctwo, "star");
+      expect(typeof dl.docs.doctwo.save).toEqual("function");
+      expect(typeof dl.docs.doctwo.star).toEqual("function");
+
+      /* cant spy on property descriptors unless they are configurable or writeable */
+      spyOn(dl.docs.docOne, "star");
+
+      // dl.docs.docOne.star("on");
       expect(dl.docs.docOne.id).toEqual("docOne");
       dl.applyFunctionToAllIds(["doctwo",
         "docOne"
       ], "star", ["on"]);
-      expect(dl.docs.doctwo.star).toHaveBeenCalledWith("on");
+
+      // expect(dl.docs.docOne._star).toEqual("on");
+      expect(dl.docs.docOne.star).toHaveBeenCalledWith("on");
 
     });
   });

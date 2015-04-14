@@ -78,9 +78,10 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
-  // if (json instanceof this.constructor) {
-  //   return json;
-  // }
+  if (json && (json instanceof this.constructor || json.constructor.toString() === this.constructor.toString())) {
+    json.warn("This was already the right type, not converting it.");
+    return json;
+  }
   if (!this._fieldDBtype) {
     this._fieldDBtype = "FieldDBObject";
   }
