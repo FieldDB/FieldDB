@@ -50,7 +50,7 @@ describe("Authentication ", function() {
       }
     }).done(done);
 
-  }, specIsRunningTooLong*2);
+  }, specIsRunningTooLong * 2);
 
   describe("create corpora for users", function() {
 
@@ -148,7 +148,7 @@ describe("Authentication ", function() {
       expect(auth).toBeDefined();
     });
 
-    it("should try to up the user locally upon app load", function(done) {
+    it("should try to look up the user locally upon app load", function(done) {
       var auth = new Authentication();
       expect(auth).toBeDefined();
 
@@ -167,7 +167,8 @@ describe("Authentication ", function() {
         } else if (error.status === 0) {
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toBeFalsy();
+          expect(error.status).toBeTruthy();
         }
       }).done(done);
 
@@ -236,140 +237,228 @@ describe("Authentication ", function() {
 
     }, specIsRunningTooLong);
 
+
+    it("should be able to confirm a users identity offline", function(done) {
+      var auth = new Authentication({
+        user: {
+          rev: "11-b56759be3f9f76762c64bb80dd95d23",
+          username: "auserwhoknowstheirpassword",
+          salt: "$2a$10$UsUudKMbgfBQzn5SDYWyFe",
+          hash: "$2a$10$UsUudKMbgfBQzn5SDYWyFe/b47olanTrn.T4txLY/7hD08eJqrQxa",
+          lastSyncWithServer: Date.now()
+        }
+      });
+      auth.user.authenticated = true;
+
+      auth.confirmIdentity({
+        password: "phoneme"
+      }).then(function(confirmation) {
+        expect(confirmation).toBeDefined();
+        expect(confirmation.info).toBeDefined();
+        expect(confirmation.info[0]).toEqual("Verified");
+      }, function(error) {
+        console.log(error);
+        expect(false).toBeTruthy();
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should be reject a users identity offline", function(done) {
+      var auth = new Authentication({
+        user: {
+          rev: "11-b56759be3f9f76762c64bb80dd95d23",
+          username: "aforgetfuluser",
+          salt: "$2a$10$UsUudKMbgfBQzn5SDYWyFe",
+          hash: "$2a$10$UsUudKMbgfBQzn5SDYWyFe/b47olanTrn.T4txLY/7hD08eJqrQxa",
+          lastSyncWithServer: Date.now()
+        }
+      });
+      auth.user.authenticated = true;
+
+      auth.confirmIdentity({
+        password: "wrongpassword"
+      }).then(function(confirmation) {
+        expect(confirmation).toBeDefined();
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toBeDefined();
+        expect(error.userFriendlyErrors[0]).toEqual("Sorry, this doesn't appear to be you.");
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should be detect an invalid user", function(done) {
+      var auth = new Authentication({
+        user: {
+          rev: "11-b56759be3f9f76762c64bb80dd95d23",
+          username: "abrokendownloadeduser",
+          salt: "$2a$10$UsUudKMbgfBQzn5SDYWyFe",
+          hash: "$2a$10$UsUudKMbgfBQzn5SDYWyFe/biaoejo3iD08eJqrQxa",
+          lastSyncWithServer: Date.now()
+        }
+      });
+      auth.user.authenticated = true;
+
+      auth.confirmIdentity({
+        password: "phoneme"
+      }).then(function(confirmation) {
+        expect(confirmation).toBeDefined();
+        expect(false).toBeTruthy();
+      }, function(error) {
+        expect(error).toBeDefined();
+        expect(error.userFriendlyErrors).toBeDefined();
+        expect(error.userFriendlyErrors[0]).toEqual("This app has errored while trying to confirm your identity. Please report this 2892346.");
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
   });
 
-  it("should be able to register a user", function(done) {
-    var auth = new Authentication();
-    expect(auth).toBeDefined();
+  describe("Server interaction", function() {
 
-    auth.register({
-      username: "jenkins",
-      password: "phoneme",
-      confirmPassword: "phoneme",
-      researchInterest: "Automated testing :)"
-    }).then(function(result) {
-      auth.debug("Done registering");
-      expect(result).toBeDefined();
-      expect(result).toEqual(auth.user);
-      expect(auth.user.username).toEqual("jenkins");
-      expect(auth.user.researchInterest).toEqual("Automated testing :)");
-      expect(auth.user.rev).toContain("1-");
-    }, function(error) {
-      auth.debug("Failed registering");
-      expect(error).toBeDefined();
-      if (error.status === 500) {
-        expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
-      } else if (error.status === 409) {
-        expect(error.userFriendlyErrors).toEqual(["Username jenkins already exists, try a different username."]);
-      } else if (error.status === 400) {
-        expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-      } else if (error.status === 0) {
-        expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-      } else {
-        expect(false).toBeTruthy();
+    it("should be able to register a user", function(done) {
+      var auth = new Authentication();
+      expect(auth).toBeDefined();
+
+      auth.register({
+        username: "jenkins",
+        password: "phoneme",
+        confirmPassword: "phoneme",
+        researchInterest: "Automated testing :)"
+      }).then(function(result) {
+        auth.debug("Done registering");
+        expect(result).toBeDefined();
+        expect(result).toEqual(auth.user);
+        expect(auth.user.username).toEqual("jenkins");
+        expect(auth.user.researchInterest).toEqual("Automated testing :)");
+        expect(auth.user.rev).toContain("1-");
+      }, function(error) {
+        auth.debug("Failed registering");
+        expect(error).toBeDefined();
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+        } else if (error.status === 409) {
+          expect(error.userFriendlyErrors).toEqual(["Username jenkins already exists, try a different username."]);
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+
+    it("should not log the user in if the server replies not-authenticated", function(done) {
+      var auth = new Authentication();
+      try {
+        auth.login({
+          username: "lingllama",
+          password: "hypothesis"
+        }).then(function() {
+          expect(true).toBeFalsy();
+        }, function(error) {
+          auth.debug("Failed authentication");
+          expect(error).toBeDefined();
+          if (auth.user) {
+            expect(auth.user.authenticated).toEqual(false);
+          }
+          if (error.status === 500) {
+            expect(error.userFriendlyErrors).toEqual([" "]);
+          } else if (error.status === 401) {
+            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+          } else if (error.status === 400) {
+            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+          } else if (error.status === 0) {
+            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          } else {
+            expect(false).toBeTruthy();
+          }
+        }).done(done);
+      } catch (e) {
+        expect(e).toEqual(" ");
+        done();
       }
-    }).done(done);
+    }, specIsRunningTooLong);
 
-  }, specIsRunningTooLong);
+    it("should not authenticate if login good username bad password", function(done) {
+      var auth = new Authentication();
+      try {
+        auth.login({
+          username: "lingllama",
+          password: "hypothesis"
+        }).then(function() {
+          auth.debug("Done authentication");
+          expect(true).toBeFalsy();
+        }, function(error) {
+          auth.debug("Failed authentication");
+          if (auth.user) {
+            expect(auth.user.authenticated).toEqual(false);
+          }
+          expect(error).toBeDefined();
+          if (error.status === 500) {
+            expect(error.userFriendlyErrors).toEqual([" "]);
+          } else if (error.status === 401) {
+            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+          } else if (error.status === 400) {
+            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+          } else if (error.status === 0) {
+            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          } else {
+            expect(false).toBeTruthy();
+          }
+        }).done(done);
+      } catch (e) {
+        expect(e).toEqual(" ");
+        done();
+      }
 
+    }, specIsRunningTooLong);
 
-  it("should not log the user in if the server replies not-authenticated", function(done) {
-    var auth = new Authentication();
-    try {
-      auth.login({
-        username: "lingllama",
-        password: "hypothesis"
-      }).then(function() {
-        expect(true).toBeFalsy();
-      }, function(error) {
-        auth.debug("Failed authentication");
-        expect(error).toBeDefined();
-        if (auth.user) {
-          expect(auth.user.authenticated).toEqual(false);
-        }
-        if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual([" "]);
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-        } else {
-          expect(false).toBeTruthy();
-        }
-      }).done(done);
-    } catch (e) {
-      expect(e).toEqual(" ");
-      done();
-    }
-  }, specIsRunningTooLong);
+    it("should not authenticate if login bad username any password", function(done) {
+      var auth = new Authentication();
+      try {
+        auth.login({
+          username: "sapri",
+          password: "phoneme"
+        }).then(function() {
+          auth.debug("Done authentication");
+          expect(true).toBeFalsy();
+        }, function(error) {
+          auth.debug("Failed authentication");
+          if (auth.user) {
+            expect(auth.user.authenticated).toEqual(false);
+          }
+          expect(error).toBeDefined();
+          if (error.status === 500) {
+            expect(error.userFriendlyErrors).toEqual([" "]);
+          } else if (error.status === 401) {
+            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+          } else if (error.status === 400) {
+            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+          } else if (error.status === 0) {
+            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          } else {
+            expect(false).toBeTruthy();
+          }
+        }).done(done);
+      } catch (e) {
+        expect(e).toEqual(" ");
+        done();
+      }
+    }, specIsRunningTooLong);
 
-  it("should not authenticate if login good username bad password", function(done) {
-    var auth = new Authentication();
-    try {
-      auth.login({
-        username: "lingllama",
-        password: "hypothesis"
-      }).then(function() {
-        auth.debug("Done authentication");
-        expect(true).toBeFalsy();
-      }, function(error) {
-        auth.debug("Failed authentication");
-        if (auth.user) {
-          expect(auth.user.authenticated).toEqual(false);
-        }
-        expect(error).toBeDefined();
-        if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual([" "]);
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-        } else {
-          expect(false).toBeTruthy();
-        }
-      }).done(done);
-    } catch (e) {
-      expect(e).toEqual(" ");
-      done();
-    }
-
-  }, specIsRunningTooLong);
-
-  it("should not authenticate if login bad username any password", function(done) {
-    var auth = new Authentication();
-    try {
-      auth.login({
-        username: "sapri",
-        password: "phoneme"
-      }).then(function() {
-        auth.debug("Done authentication");
-        expect(true).toBeFalsy();
-      }, function(error) {
-        auth.debug("Failed authentication");
-        if (auth.user) {
-          expect(auth.user.authenticated).toEqual(false);
-        }
-        expect(error).toBeDefined();
-        if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual([" "]);
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-        } else {
-          expect(false).toBeTruthy();
-        }
-      }).done(done);
-    } catch (e) {
-      expect(e).toEqual(" ");
-      done();
-    }
-  }, specIsRunningTooLong);
+  });
 
 });

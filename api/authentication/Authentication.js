@@ -8,6 +8,10 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
 var CORS = require("./../CORS").CORS;
+// var MD5 = require("MD5");
+var bcrypt = require("bcrypt-nodejs");
+// console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
+
 /**
  * @class The Authentication Model handles login and logout and
  *        authentication locally or remotely. *
@@ -48,6 +52,7 @@ var Authentication = function Authentication(options) {
       self.user.authenticated = false;
       self.dispatchEvent("authenticate:mustconfirmidentity");
       deferred.reject({
+        status: 401,
         userFriendlyErrors: ["Please login."]
       });
     }
@@ -209,6 +214,53 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           console.error(error.stack, self);
           handleFailedLogin(error);
         });
+
+      return deferred.promise;
+    }
+  },
+
+  confirmIdentity: {
+    value: function(loginDetails) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!loginDetails || !loginDetails.password) {
+        Q.nextTick(function() {
+          deferred.reject("You must enter your password to confirm your identity.");
+        });
+        return deferred.promise;
+      }
+
+      if (!this.user.username ||
+        !this.user.authenticated ||
+        !this.user.lastSyncWithServer ||
+        !this.user.hash ||
+        !this.user.salt) {
+        Q.nextTick(function() {
+          deferred.reject("You must login first.");
+        });
+        return deferred.promise;
+      }
+
+      try {
+        bcrypt.compare(loginDetails.password, self.user.hash, function(err, confirmed) {
+          if (confirmed) {
+            loginDetails.info = ["Verified"];
+            deferred.resolve(loginDetails);
+          } else {
+            loginDetails.error = err;
+            if (err) {
+              loginDetails.userFriendlyErrors = ["This app has errored while trying to confirm your identity. Please report this 2892346."];
+            } else {
+              loginDetails.userFriendlyErrors = ["Sorry, this doesn't appear to be you."];
+            }
+            deferred.reject(loginDetails);
+          }
+        });
+      } catch (e) {
+        loginDetails.userFriendlyErrors = ["This app has errored while trying to confirm your identity. Please report this 289234."];
+        deferred.reject(loginDetails);
+      }
 
       return deferred.promise;
     }
