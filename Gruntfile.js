@@ -27,12 +27,23 @@ module.exports = function(grunt) {
           basedir: "./"
         }
       },
+      // srcForTest: {
+      //   src: ["tests/fieldb_jasmine_injector.js"],
+      //   dest: "dist/<%= pkg.name %>_injected.js",
+      //   options: {
+      //     banner: "<%= banner %>",
+      //     ignore: [],
+      //     shim: {},
+      //     basedir: "./"
+      //   }
+      // },
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
-        src: ["tests/data_list/*.js"],
+        src: ["tests/FieldDBObjectTest.js"],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
           external: ["api/**/*.js"],
+          basedir: "./api/"
           // ignore: ["./node_modules/underscore/underscore.js"],
         }
       },

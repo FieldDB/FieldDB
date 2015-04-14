@@ -52,6 +52,7 @@
   var Consultant = require("./user/Consultant").Consultant;
   var Participant = require("./user/Participant").Participant;
   var Contextualizer = require("./locales/Contextualizer").Contextualizer;
+  var ContextualizableObject = require("./locales/ContextualizableObject").ContextualizableObject;
   var Corpus = require("./corpus/Corpus").Corpus;
   var Connection = require("./corpus/Connection").Connection;
   var Corpora = require("./corpus/Corpora").Corpora;
@@ -141,6 +142,8 @@
   FieldDB["Participant"] = Participant;
   FieldDB.Contextualizer = Contextualizer;
   FieldDB["Contextualizer"] = Contextualizer;
+  FieldDB.ContextualizableObject = ContextualizableObject;
+  FieldDB["ContextualizableObject"] = ContextualizableObject;
   FieldDB.Corpus = Corpus;
   FieldDB["Corpus"] = Corpus;
   FieldDB.CorpusMask = CorpusMask;

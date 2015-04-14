@@ -1,5 +1,13 @@
-/* globals localStorage, FieldDB */
-var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
+/* globals localStorage, FieldDB*/
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+FieldDBObject = FieldDBObject || require("./../api/FieldDBObject").FieldDBObject;
+
+
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
 
@@ -112,7 +120,7 @@ describe("FieldDBObject", function() {
         "gravatar": "weoaeoriaew"
       };
       wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
-      if (!FieldDB) {
+      if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.previousFieldDBtype) {
         expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
           _fieldDBtype: "FieldDBObject",
           text: "How to do something",
@@ -1285,7 +1293,9 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalString).toEqual("easy model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
       expect(aBaseObject.externalArray).toEqual(["four", "two"]);
-      expect(aBaseObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(aBaseObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal");
       expect(aBaseObject.externalObject.internalTrue).toEqual(true);
@@ -1294,15 +1304,17 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalObject.internalNumber).toEqual(1);
       expect(aBaseObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aBaseObject.externalObject.missingInOriginal).toBeUndefined();
-      expect(aBaseObject.externalObject.warnMessage).toBeUndefined();
-
-
+      if (aBaseObject.warnMessage) {
+        expect(aBaseObject.externalObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
       // Make sure atriviallyDifferentObject is as it was
       expect(atriviallyDifferentObject).not.toBe(aBaseObject);
       expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
       expect(atriviallyDifferentObject.externalEqualString).toEqual("merging");
       expect(atriviallyDifferentObject.externalArray).toEqual(["one", "two", "three"]);
-      expect(atriviallyDifferentObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(atriviallyDifferentObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
 
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
       expect(atriviallyDifferentObject.externalObject.internalTrue).toEqual(true);
@@ -1311,7 +1323,9 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject.externalObject.internalNumber).toEqual(2);
       expect(atriviallyDifferentObject.externalObject.missingInTarget).toBeUndefined("i'm a old property");
       expect(atriviallyDifferentObject.externalObject.missingInOriginal).toEqual("i'm a new property");
-      expect(atriviallyDifferentObject.externalObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(atriviallyDifferentObject.externalObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
     });
 
     it("should be able to ask the user asynchronously what to do if overwrite is not specified false case", function(done) {
