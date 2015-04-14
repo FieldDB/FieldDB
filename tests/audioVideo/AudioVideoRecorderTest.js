@@ -1,4 +1,14 @@
-var AudioVideoRecorder = require("./../../api/audio_video/AudioVideoRecorder").AudioVideoRecorder;
+"use strict";
+
+var AudioVideoRecorder;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    AudioVideoRecorder = FieldDB.AudioVideoRecorder;
+  }
+} catch (e) {}
+AudioVideoRecorder = AudioVideoRecorder || require("./../../api/audio_video/AudioVideoRecorder").AudioVideoRecorder;
+
 
 describe("Test AudioVideoRecorder", function() {
   it("should load", function() {
