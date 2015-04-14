@@ -17,7 +17,7 @@ describe("Authentication ", function() {
 
   beforeEach(function() {
     try {
-      localStorage.clear();
+      // localStorage.clear();
     } catch (e) {}
   });
 
@@ -38,7 +38,7 @@ describe("Authentication ", function() {
       expect(result).toBeDefined();
       expect(result).toEqual(auth.user);
       expect(auth.user.username).toEqual("jenkins");
-      // expect(auth.user._rev).toEqual(" ");
+      expect(auth.user._rev).toBeDefined();
       expect(auth.user.researchInterest).toEqual("Automated testing :)");
     }, function(error) {
       auth.debug("Failed authentication");
@@ -50,7 +50,7 @@ describe("Authentication ", function() {
       }
     }).done(done);
 
-  }, specIsRunningTooLong);
+  }, specIsRunningTooLong*2);
 
   describe("create corpora for users", function() {
 
@@ -208,25 +208,28 @@ describe("Authentication ", function() {
       });
       expect(anotherAuthLoad.user.warnMessage).toContain("Refusing to save a user doc which is incomplete");
       anotherAuthLoad.user.warnMessage = "";
-      if (auth.user.constructor.prototype.temp) {
-        expect(anotherAuthLoad.user.constructor.prototype.temp)
-          .toEqual(auth.user.constructor.prototype.temp);
-        expect(anotherAuthLoad.user.constructor.prototype.temp[
-            anotherAuthLoad.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
-          ])
-          .toEqual(auth.user.constructor.prototype.temp[
-            auth.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
-          ]);
-      } else {
-        console.log("Not using temp objects to persist user details");
-      }
+
       // user has default prefs for now
       expect(anotherAuthLoad.user.prefs).toBeUndefined();
       expect(anotherAuthLoad.user.fieldDBtype).toEqual("User");
 
       anotherAuthLoad.user.fetch().then(function() {
+        if (anotherAuthLoad.user.constructor.prototype.temp) {
+          expect(anotherAuthLoad.user.constructor.prototype.temp)
+            .toEqual(anotherAuthLoad.user.constructor.prototype.temp);
+          expect(anotherAuthLoad.user.constructor.prototype.temp[
+              anotherAuthLoad.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
+            ])
+            .toEqual(anotherAuthLoad.user.constructor.prototype.temp[
+              anotherAuthLoad.user.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C + "sapir"
+            ]);
+        } else {
+          expect(localStorage.getItem(localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir")).toBeDefined();
+          expect(localStorage.getItem(localStorage.getItem("X09qKvcQn8DnANzGdrZFqCRUutIi2C") + "sapir")).toContain("confidential");
+        }
         expect(anotherAuthLoad.user.researchInterest).toContain("Phonemes");
         // user has their own prefs now
+        expect(anotherAuthLoad.user.prefs).toBeDefined();
         expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(20);
         expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
       }).done(done);

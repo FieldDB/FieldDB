@@ -139,7 +139,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       //if the same user is re-authenticating, include their details to sync to the server.
       tempUser.fetch();
-      if (tempUser._rev && tempUser.username !== "public") {
+      if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
         dataToPost.syncDetails = "true";
         dataToPost.syncUserDetails = tempUser.toJSON();
         tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
@@ -185,6 +185,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
             try {
               self.user = userDetails;
+              self.user.lastSyncWithServer = Date.now();
             } catch (e) {
               console.warn("There was a problem assigning the user. ", e);
             }
