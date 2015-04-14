@@ -1,5 +1,15 @@
 /* globals localStorage */
-var Authentication = require("./../../api/authentication/Authentication").Authentication;
+"use strict";
+
+var Authentication;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Authentication = FieldDB.Authentication;
+  }
+} catch (e) {}
+Authentication = Authentication || require("./../../api/authentication/Authentication").Authentication;
+
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
@@ -138,7 +148,7 @@ describe("Authentication ", function() {
       expect(auth).toBeDefined();
     });
 
-    it("should look up the user locally if the app is offline", function(done) {
+    it("should try to up the user locally upon app load", function(done) {
       var auth = new Authentication();
       expect(auth).toBeDefined();
 
@@ -148,10 +158,16 @@ describe("Authentication ", function() {
         expect(auth.user).toBeDefined();
       }, function(error) {
         expect(error).toBeDefined();
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else {
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+        } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Please login."]);
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        } else {
+          expect(false).toBeTruthy();
         }
       }).done(done);
 
