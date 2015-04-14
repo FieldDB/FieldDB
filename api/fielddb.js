@@ -84,6 +84,9 @@
   var DatumField = require("./datum/DatumField").DatumField;
   FieldDB.DatumField = DatumField;
   FieldDB["DatumField"] = DatumField;
+  var DatumFields = require("./datum/DatumFields").DatumFields;
+  FieldDB.DatumFields = DatumFields;
+  FieldDB["DatumFields"] = DatumFields;
   var ExperimentDataList = require("./data_list/ExperimentDataList").ExperimentDataList;
   FieldDB.ExperimentDataList = ExperimentDataList;
   FieldDB["ExperimentDataList"] = ExperimentDataList;

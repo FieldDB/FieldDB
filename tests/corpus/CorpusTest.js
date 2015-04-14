@@ -1,7 +1,18 @@
-var Corpus = require("../../api/corpus/Corpus").Corpus;
-var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
-var DatumFields = require("../../api/datum/DatumFields").DatumFields;
+"use strict";
+var Corpus;
+var DatumFields;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Corpus = FieldDB.Corpus;
+    DatumFields = FieldDB.DatumFields;
+  }
+} catch (e) {}
 
+Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+DatumFields = DatumFields || require("./../../api/datum/DatumFields").DatumFields;
+
+var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
 describe("Corpus", function() {

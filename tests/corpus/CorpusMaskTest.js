@@ -1,10 +1,26 @@
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
-var CorpusMask = require("../../api/corpus/CorpusMask").CorpusMask;
-var Connection = require("../../api/corpus/Connection").Connection;
-var Corpora = require("../../api/corpus/Corpora").Corpora;
-var URL = require("url");
+"use strict";
+var CorpusMask;
+var Connection;
+var Corpora;
+var FieldDBObject;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    CorpusMask = FieldDB.CorpusMask;
+    Connection = FieldDB.Connection;
+    Corpora = FieldDB.Corpora;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {
+  Connection = require("./../../api/corpus/Connection").Connection;
+  Connection.URLParser = require("url");
+}
 
-Connection.URLParser = require("url");
+CorpusMask = CorpusMask || require("./../../api/corpus/CorpusMask").CorpusMask;
+Connection = Connection || require("./../../api/corpus/Connection").Connection;
+Corpora = Corpora || require("./../../api/corpus/Corpora").Corpora;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
 
 describe("CorpusMask ", function() {
 
@@ -172,7 +188,7 @@ describe("CorpusMask ", function() {
   describe("corpus collections", function() {
 
     it("should be able to set an auth url", function() {
-      var connection = new Connection(Connection.defaultConnection(null, URL));
+      var connection = new Connection(Connection.defaultConnection());
       expect(connection.authUrls).toEqual(["https://localhost:3183"]);
       expect(connection.authUrl).toEqual("https://localhost:3183");
 
@@ -210,7 +226,7 @@ describe("CorpusMask ", function() {
     });
 
     it("should be able to figure out a corpus url", function() {
-      var connection = new Connection(Connection.defaultConnection(null, URL));
+      var connection = new Connection(Connection.defaultConnection());
       connection.dbname = "jenkins-firstcorpus";
       expect(connection.corpusUrls).toEqual([]);
       expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
@@ -242,7 +258,7 @@ describe("CorpusMask ", function() {
     });
 
     it("should be able to get a default connection", function() {
-      var connection = Connection.defaultConnection(null, URL);
+      var connection = Connection.defaultConnection();
       expect(connection).toEqual({
         fieldDBtype: "Connection",
         protocol: "https://",
