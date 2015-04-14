@@ -1099,13 +1099,17 @@ Collection.prototype = Object.create(Object.prototype, {
 
   decryptedMode: {
     get: function() {
-      return;
+      if (this.application) {
+        return this.application.decryptedMode;
+      }
+      // if not running in an app, dont need to demonstrate a mask the data if its decryptable
+      return this._decryptedMode;
     },
     set: function(value) {
-      if (this._collection) {
-        if (this._collection.map === undefined) {
-          this.warn("This collection isn't an array, this is odd", this);
-        }
+      if (this.application) {
+        this.application.decryptedMode = value;
+      } else {
+        this._decryptedMode = value;
         this._collection.map(function(item) {
           item.decryptedMode = value;
         });

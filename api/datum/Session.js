@@ -488,18 +488,6 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     }
   },
 
-  decryptedMode: {
-    get: function() {
-      return this._decryptedMode;
-    },
-    set: function(value) {
-      this._decryptedMode = value;
-      if (this._fields) {
-        this._fields.decryptedMode = value;
-      }
-    }
-  },
-
   docIds: {
     get: function() {
       if (this._datalist && this._datalist.docIds) {

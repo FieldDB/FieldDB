@@ -668,10 +668,14 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (this.application) {
         return this.application.decryptedMode;
       }
+      // if not running in an app, dont need to demonstrate a mask the data if its decryptable
+      return this._decryptedMode;
     },
     set: function(value) {
       if (this.application) {
         this.application.decryptedMode = value;
+      } else {
+        this._decryptedMode = value;
       }
     }
   },

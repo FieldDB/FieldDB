@@ -428,7 +428,6 @@ describe("lib/Collection", function() {
       //             primaryKey: "tempId"
       //           },
       //           // confidential: self.corpus.confidential,
-      //           // decryptedMode: true
       //         });
       //       }
       //       return this._datalist;

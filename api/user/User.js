@@ -402,8 +402,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       self.debug("userKey is " + userKey);
       self.debug("user encrypted is " + encryptedUserPreferences);
       decryptedUser = new Confidential({
-        secretkey: userKey,
-        decryptedMode: true
+        secretkey: userKey
       }).decrypt(encryptedUserPreferences);
 
       self.debug(" Opening user prefs from previous session on self device", decryptedUser);

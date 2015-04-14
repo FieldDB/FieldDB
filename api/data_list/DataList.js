@@ -425,16 +425,6 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
-  decryptedMode: {
-    get: function() {
-      return this.decryptedMode;
-    },
-    set: function(value) {
-      this.decryptedMode = value;
-      this.docs.decryptedMode = value;
-    }
-  },
-
   icon: {
     get: function() {
       return "thumb-tack";
