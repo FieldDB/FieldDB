@@ -7,7 +7,6 @@
 
 // var CryptoEncoding =  {};// require("crypto-js/enc-utf8");
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Q = require("q");
 var CryptoJS = require("./Crypto_AES").CryptoJS;
 var CryptoEncoding = CryptoJS.enc.Utf8;
 
@@ -119,34 +118,22 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
    */
   decrypt: {
     value: function(encrypted) {
-      var result = encrypted,
-        self = this;
+      var result = encrypted;
 
-      var decryptWhenReady = function(confirmedDecryptedMode) {
-        self.decryptedMode = confirmedDecryptedMode;
-        encrypted = encrypted.replace("confidential:", "");
-        // decode base64
-        encrypted = window.atob(encrypted);
-        self.verbose("Decrypting " + encrypted, self.secretkey.toString("base64"));
-        result = CryptoJS.AES.decrypt(encrypted, self.secretkey.toString("base64")).toString(CryptoEncoding);
-        try {
-          if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
-            result = JSON.parse(result);
-            self.debug("Decrypting an object");
-          }
-        } catch (e) {
-          self.verbose("Decrypting a non-object");
+      encrypted = encrypted.replace("confidential:", "");
+      // decode base64
+      encrypted = window.atob(encrypted);
+      this.verbose("Decrypting " + encrypted, this.secretkey.toString("base64"));
+      result = CryptoJS.AES.decrypt(encrypted, this.secretkey.toString("base64")).toString(CryptoEncoding);
+      try {
+        if ((result[0] === "{" && result[result.length - 1] === "}") || (result[0] === "[" && result[result.length - 1] === "]")) {
+          result = JSON.parse(result);
+          this.debug("Decrypting an object");
         }
-        return result;
-      };
-
-      if (!this.decryptedMode) {
-        this.whenReady.then(decryptWhenReady, function() {
-          self.warn("Not decrypting. You have not proven your identity.");
-        });
-      } else {
-        return decryptWhenReady(this.decryptedMode);
+      } catch (e) {
+        this.verbose("Decrypting a non-object");
       }
+      return result;
     }
   },
 
@@ -178,71 +165,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       }
       return this;
     }
-  },
-
-  decryptedMode: {
-    get: function() {
-      if (this._decryptedMode !== undefined) {
-        return this._decryptedMode;
-      }
-
-      var deferred = Q.defer(),
-        self = this;
-
-      if (!this.whenReady) {
-        this.whenReady = deferred.promise;
-        if (!self.application || !self.application.authentication || typeof self.application.authentication.confirmIdentity !== "function") {
-          /* if we are not in an application, the datapipelines can attempt to decyrpt data if they have the right key */
-          if (!this.alwaysReplyToPrompt) {
-            this.alwaysReplyToPrompt = this.secretkey;
-          }
-        }
-        this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
-          if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
-            self.application.authentication.confirmIdentity({
-              password: promptDetails.password
-            }).then(function(confirmation) {
-              self.debug("Confirmed the user's identity", confirmation);
-              self._decryptedMode = true;
-              deferred.resolve(true);
-            }, function(error) {
-              self.debug("Unable to confirm the user's identity", error);
-              self._decryptedMode = false;
-              deferred.resolve(false);
-            }).fail(function(error) {
-              self.debug("Error while confirming the user's identity", error);
-              self._decryptedMode = false;
-              deferred.resolve(false);
-            });
-          } else {
-            self.warn("Not running in an application, but was able to simuli-prompt the user.");
-            self._decryptedMode = true;
-            deferred.resolve(true);
-          }
-        }, function(error) {
-          self.debug("Unable to prompt the user, the data will always be encrypted", error);
-          self._decryptedMode = false;
-          deferred.reject(false);
-        }).fail(function(error) {
-          self.debug("Error while prompting the user, the data will always be encrypted", error);
-          self._decryptedMode = false;
-          deferred.reject(false);
-        });
-      }
-
-    },
-    set: function(value) {
-      if (value === this._decryptedMode) {
-        return;
-      }
-      if (value) {
-        this.warn("Cant set decryptedMode manually to true. ", this.decryptedMode);
-        return;
-      }
-      this._decryptedMode = value;
-    }
   }
-
 
 });
 
