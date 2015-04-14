@@ -79,7 +79,6 @@ describe("api/import/Import", function() {
             primaryKey: "someotherprimarykey"
           },
           // confidential: self.corpus.confidential,
-          // decryptedMode: true,
           // debugMode: true
         }
       };
@@ -108,7 +107,6 @@ describe("api/import/Import", function() {
             primaryKey: "tempId"
           },
           // confidential: self.corpus.confidential,
-          // decryptedMode: true,
           // debugMode: true
         }
       };
@@ -168,7 +166,6 @@ describe("api/import/Import", function() {
           primaryKey: "tempId"
         },
         // confidential: self.corpus.confidential,
-        // decryptedMode: true,
         // debugMode: true
       };
       expect(importer.datalist.id).not.toEqual("tempdatalist");

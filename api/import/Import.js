@@ -93,7 +93,6 @@ var Import = function Import(options) {
       primaryKey: "tempId"
     },
     // confidential: self.corpus.confidential,
-    // decryptedMode: true,
     // debugMode: true
   };
   this.session = sessionOptions;
