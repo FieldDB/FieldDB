@@ -82,9 +82,9 @@ var FieldDBObject = function FieldDBObject(json) {
     json.warn("This was already the right type, not converting it.");
     return json;
   }
-  if (!this._fieldDBtype) {
-    this._fieldDBtype = "FieldDBObject";
-  }
+  // if (!this._fieldDBtype) {
+  //   this._fieldDBtype = "FieldDBObject";
+  // }
   if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
@@ -479,7 +479,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   fieldDBtype: {
     configurable: true,
     get: function() {
-      return this._fieldDBtype;
+      return this._fieldDBtype || "FieldDBObject";
     },
     set: function(value) {
       if (value !== this.fieldDBtype) {
@@ -1842,6 +1842,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           json.api = this.api;
         }
 
+        json.fieldDBtype = this.fieldDBtype;
         if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
           delete json.previousFieldDBtype;
         }

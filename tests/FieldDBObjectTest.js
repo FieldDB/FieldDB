@@ -123,7 +123,7 @@ describe("FieldDBObject", function() {
       wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
       if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.previousFieldDBtype) {
         expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
-          _fieldDBtype: "FieldDBObject",
+          // _fieldDBtype: "FieldDBObject",
           text: "How to do something",
           username: "lingllama",
           _timestamp: 1348670525349,
