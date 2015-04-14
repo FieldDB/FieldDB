@@ -14,6 +14,7 @@
 (function(exports) {
   "use strict";
   var Activity = require("./activity/Activity").Activity;
+  var Activities = require("./activity/Activities").Activities;
   var App = require("./app/App").App;
   var Authentication = require("./authentication/Authentication").Authentication;
   var PsycholinguisticsApp = require("./app/PsycholinguisticsApp").PsycholinguisticsApp;
@@ -68,6 +69,8 @@
 
   FieldDB.Activity = Activity;
   FieldDB["Activity"] = Activity;
+  FieldDB.Activities = Activities;
+  FieldDB["Activities"] = Activities;
   FieldDB.App = App;
   FieldDB["App"] = App;
   FieldDB.PsycholinguisticsApp = PsycholinguisticsApp;

@@ -1,3 +1,4 @@
+"use strict";
 /* globals localStorage, FieldDB*/
 var FieldDBObject;
 try {
