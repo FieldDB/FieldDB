@@ -663,6 +663,62 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  decryptedMode: {
+    get: function() {
+      if (this._decryptedMode !== undefined) {
+        return this._decryptedMode;
+      }
+
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!this.whenDecryptionReady) {
+        this.whenDecryptionReady = deferred.promise;
+        this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
+          if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
+            self.application.authentication.confirmIdentity({
+              password: promptDetails.password
+            }).then(function(confirmation) {
+              self.debug("Confirmed the user's identity", confirmation);
+              self._decryptedMode = true;
+              deferred.resolve(true);
+            }, function(error) {
+              self.debug("Unable to confirm the user's identity", error);
+              self._decryptedMode = false;
+              deferred.resolve(false);
+            }).fail(function(error) {
+              self.debug("Error while confirming the user's identity", error);
+              self._decryptedMode = false;
+              deferred.resolve(false);
+            });
+          } else {
+            self.warn("Not running in an application, but was able to simuli-prompt the user.");
+            self._decryptedMode = true;
+            deferred.resolve(true);
+          }
+        }, function(error) {
+          self.debug("Unable to prompt the user, the data will always be encrypted", error);
+          self._decryptedMode = false;
+          deferred.reject(false);
+        }).fail(function(error) {
+          self.debug("Error while prompting the user, the data will always be encrypted", error);
+          self._decryptedMode = false;
+          deferred.reject(false);
+        });
+      }
+    },
+    set: function(value) {
+      if (value === this._decryptedMode) {
+        return;
+      }
+      if (value) {
+        this.warn("Cant set decryptedMode manually to true. ", this.decryptedMode);
+        return;
+      }
+      this._decryptedMode = value;
+    }
+  },
+
   render: {
     configurable: true,
     writable: true,
