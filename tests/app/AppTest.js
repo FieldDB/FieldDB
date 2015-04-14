@@ -1,6 +1,18 @@
-/* globals navigator */
-var App = require("../../api/app/App").App;
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
+"use strict";
+/* globals navigator, FieldDB */
+
+var App;
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    App = FieldDB.App;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+App = App || require("./../../api/app/App").App;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
+
 var specIsRunningTooLong = 5000;
 
 describe("App", function() {
