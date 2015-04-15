@@ -404,6 +404,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         throw new Error("This is a very odd set of docIds " + value);
       }
       var self = this;
+      if (!this._docs || !this._docs.add || typeof this._docs.add !== "function") {
+        this.docs = [];
+      }
       value.map(function(docPrimaryKey) {
         self.debug("Looking at " + docPrimaryKey);
         if (self._docs && !self._docs[docPrimaryKey]) {
@@ -417,12 +420,6 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
           self.add(docPlaceholder);
         }
       });
-      if (!this._docs || this._docs.length < value.length) {
-        this.tempDocIds = value;
-      }
-      //   delete self._docIds;
-      //   value = null;
-      // // }
     }
   },
 
