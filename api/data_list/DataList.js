@@ -290,7 +290,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
 
       var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
         self.fetching = self.loading = false;
-        self.warn(" problem fetching the data list", err);
+        self.warn(" problem fetching the data list");
+        self.debug("err", err);
         self.docs = self.docs || [];
         deferred.reject(err);
         // return self;

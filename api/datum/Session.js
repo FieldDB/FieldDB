@@ -714,7 +714,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       return this._datalist;
     },
     set: function(value) {
-      this.warn("Cant set the datalist on a session", this._datalist, value);
+      this.debug("Cant set the datalist on a session", this._datalist, value);
       // this.ensureSetViaAppropriateType("datalist", value);
     }
   },
