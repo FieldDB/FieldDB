@@ -446,26 +446,28 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
-        expect(error.details.connection).toEqual({
-          fieldDBtype: "Connection",
-          protocol: "https://",
-          domain: "auth.linguistics.miauniversity.edu",
-          port: "3222",
-          path: "some/virtual/host",
-          serverLabel: "miauniversity",
-          brandLowerCase: "miauniversity",
-          authUrls: ["https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"],
-          userFriendlyServerName: "miauniversity.edu",
-          version: db.version,
-          corpusid: "",
-          clientUrls: [],
-          corpusUrls: [],
-          lexiconUrls: [],
-          searchUrls: [],
-          audioUrls: [],
-          websiteUrls: [],
-          activityUrls: []
-        });
+        if (error.details.connection && error.details.connection.serverLabel !== "localhost") {
+          expect(error.details.connection).toEqual({
+            fieldDBtype: "Connection",
+            protocol: "https://",
+            domain: "auth.linguistics.miauniversity.edu",
+            port: "3222",
+            path: "some/virtual/host",
+            serverLabel: "miauniversity",
+            brandLowerCase: "miauniversity",
+            authUrls: ["https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"],
+            userFriendlyServerName: "miauniversity.edu",
+            version: db.version,
+            corpusid: "",
+            clientUrls: [],
+            corpusUrls: [],
+            lexiconUrls: [],
+            searchUrls: [],
+            audioUrls: [],
+            websiteUrls: [],
+            activityUrls: []
+          });
+        }
         if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
         } else if (error.status === 400) {
