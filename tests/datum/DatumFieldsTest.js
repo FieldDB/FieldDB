@@ -1,10 +1,24 @@
 "use strict";
-var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
-var Confidential = require("./../../api/confidentiality_encryption/Confidential").Confidential;
-var DatumField = require("./../../api/datum/DatumField").DatumField;
-var DatumFields = require("./../../api/datum/DatumFields").DatumFields;
-var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
+var DatumField;
+var DatumFields;
+var FieldDBObject;
+var Confidential;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    DatumField = FieldDB.DatumField;
+    DatumFields = FieldDB.DatumFields;
+    FieldDBObject = FieldDB.FieldDBObject;
+    Confidential = FieldDB.Confidential;
+  }
+} catch (e) {}
 
+DatumField = DatumField || require("./../../api/datum/DatumField").DatumField;
+DatumFields = DatumFields || require("./../../api/datum/DatumFields").DatumFields;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+Confidential = Confidential || require("./../../api/confidentiality_encryption/Confidential").Confidential;
+
+var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
 var sampleDatumFields = function() {
   return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
 };
@@ -151,7 +165,7 @@ describe("lib/DatumFields", function() {
     });
 
     it("should be able to find items by any attribute", function() {
-      collection.debug("find help"+JSON.stringify(collection._collection));
+      collection.debug("find help" + JSON.stringify(collection._collection));
       expect(collection.find("helpLinguists", "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas")[0].id).toEqual(sampleDatumFields()[1].id);
     });
 
@@ -323,10 +337,14 @@ describe("lib/DatumFields", function() {
       // field.debugMode = true;
       // field.repairMissingEncryption = true;
       field.confidential = new Confidential({
-        secretkey: "5e65e603-8d4e-4aea-9d68-64da15b081d5"
+        secretkey: "5e65e603-8d4e-4aea-9d68-64da15b081d5",
       });
       expect(field.value).toBe("xxxx-xx xxxx-xxx-xx-x-xx");
       field.decryptedMode = true;
+
+      if (!field.decryptedMode) {
+        expect(field.value).toBe("xxxx-xx xxxx-xxx-xx-x-xx");
+      }
       expect(field.value).toBe("noqa-ta tusu-nay-wa-n-mi");
 
       field.value = "noqa-ta tusu-nay-wan-mi ";
@@ -338,6 +356,8 @@ describe("lib/DatumFields", function() {
       expect(field.value).toBe("xxxx-xx xxxx-xxx-xxx-xx");
       expect(field.warnMessage).toContain("User is not able to change the value xxxx-xx xxxx-xxx-xxx-xx of Morphemes, it is encrypted and the user isn't in decryptedMode.");
       field.debug(field.toJSON());
+
+
     });
 
   });
