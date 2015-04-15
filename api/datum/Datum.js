@@ -188,6 +188,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         this.warn("this datum is missing a session, this is stange");
       }
 
+      obj.comments = this.comments.map(function(comment) {
+        return comment.text;
+      }).join("; ");
+      obj.audioVideo = this.audioVideo.map(function(audioVideo) {
+        return audioVideo.filename;
+      }).join("; ");
+      obj.images = this.images.map(function(image) {
+        return image.filename;
+      }).join("; ");
       return obj;
     }
   },
@@ -969,10 +978,21 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function(showInExportModal) {
       this.debug(showInExportModal);
       //corpus's most frequent fields
-      var frequentFields = window.app.corpus.frequentFields;
+      var frequentFields;
+      if (this.application && this.application.corpus && this.application.corpus.frequentFields) {
+        frequentFields = this.application.corpus.frequentFields;
+      } else {
+        frequentFields = this.fields.map(function(field) {
+          return field.id
+        });
+      }
       //this datum/datalist's datumfields and their names
-      var fields = _.pluck(this.fields.toJSON(), "mask");
-      var fieldLabels = _.pluck(this.fields.toJSON(), "label");
+      var fields = this.fields.map(function(field) {
+        return field.value;
+      });
+      var fieldLabels = this.fields.map(function(field) {
+        return field.id;
+      });
       //setting up for IGT case...
       var judgementIndex = -1;
       var judgement = "";
@@ -984,7 +1004,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var gloss = "";
       var translationIndex = -1;
       var translation = "";
-      var result = "\n \\begin{exe} \n \\ex \[";
+      var result = "\n\\begin{exe} \n  \\ex \[";
 
       //IGT case:
       if (this.datumIsInterlinearGlossText()) {
@@ -1021,7 +1041,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         }
         //print the main IGT, escaping special latex chars
         /* ignore unnecessary escapement */
-        result = result + this.escapeLatexChars(judgement) + "\]\{" + this.escapeLatexChars(utterance) + "\n \\gll " + this.escapeLatexChars(morphemes) + "\\\\" + "\n " + this.escapeLatexChars(gloss) + "\\\\" + "\n \\trans " + this.escapeLatexChars(translation) + "\}" +
+        result = result + this.escapeLatexChars(judgement) + "\]\{" + this.escapeLatexChars(utterance) +
+          "\n  \\gll " + this.escapeLatexChars(morphemes) + "\\\\" +
+          "\n  " + this.escapeLatexChars(gloss) + "\\\\" +
+          "\n  \\trans " + this.escapeLatexChars(translation) + "\}" +
           "\n\\label\{\}";
       }
       //remove any empty fields from our arrays
@@ -1044,26 +1067,26 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           numInfrequent++;
         }
         if (numInfrequent !== fieldLabels.length) {
-          result = result + "\n \\begin\{description\}";
+          result = result + "\n  \\begin\{description\}";
         } else {
-          result = result + "\n% \\begin\{description\}";
+          result = result + "\n%  \\begin\{description\}";
         }
         for (field in fields) {
           if (fields[field] && (frequentFields.indexOf(fieldLabels[field]) >= 0)) {
-            result = result + "\n \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field]) + "\}\] " + this.escapeLatexChars(fields[field]);
+            result = result + "\n    \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field]) + "\}\] " + this.escapeLatexChars(fields[field]);
           } else if (fields[field]) {
             /* If as a field that is designed for LaTex dont excape the LaTeX characters */
             if (fieldLabels[field].toLowerCase().indexOf("latex") > -1) {
               result = result + "\n " + fields[field];
             } else {
-              result = result + "\n% \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field]) + "\}\] " + this.escapeLatexChars(fields[field]);
+              result = result + "\n%    \\item\[\\sc\{" + this.escapeLatexChars(fieldLabels[field]) + "\}\] " + this.escapeLatexChars(fields[field]);
             }
           }
         }
         if (numInfrequent !== fieldLabels.length) {
-          result = result + "\n \\end\{description\}";
+          result = result + "\n  \\end\{description\}";
         } else {
-          result = result + "\n% \\end\{description\}";
+          result = result + "\n%  \\end\{description\}";
         }
 
       }
@@ -1078,7 +1101,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function(showInExportModal) {
       //this version prints new data as well as previously shown latex'd data (best for datalists)
       var result = this.laTeXiT(showInExportModal);
-      if (showInExportModal !== null) {
+      if (showInExportModal) {
         $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
         $("#export-text-area").val($("#export-text-area").val() + result);
       }
@@ -1090,7 +1113,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     value: function(showInExportModal) {
       //this version prints new data and deletes previously shown latex'd data (best for datums)
       var result = this.laTeXiT(showInExportModal);
-      if (showInExportModal !== null) {
+      if (showInExportModal) {
         $("#export-type-description").html(" as <a href='http://latex.informatik.uni-halle.de/latex-online/latex.php?spw=2&id=562739_bL74l6X0OjXf' target='_blank'>LaTeX (GB4E)</a>");
         var latexDocument =
           "\\documentclass[12pt]{article} \n" +
@@ -1131,8 +1154,11 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   datumIsInterlinearGlossText: {
     value: function(fieldLabels) {
       if (!fieldLabels) {
-        fieldLabels = _.pluck(this.fields.toJSON(), "label");
+        fieldLabels = this.fields.map(function(field) {
+          return field.id;
+        });
       }
+
       var utteranceOrMorphemes = false;
       var gloss = false;
       var trans = false;
@@ -1162,9 +1188,11 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
   exportAsPlainText: {
     value: function(showInExportModal) {
       // var header = _.pluck(this.fields.toJSON(), "label") || [];
-      var fields = _.pluck(this.fields.toJSON(), "mask") || [];
+      var fields = this.fields.map(function(field) {
+        return field.value;
+      });
       var result = fields.join("\n");
-      if (showInExportModal !== null) {
+      if (showInExportModal) {
         $("#export-type-description").html(" as text (Word)");
         $("#export-text-area").val(
           $("#export-text-area").val() + result
@@ -1179,25 +1207,39 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    */
   exportAsCSV: {
     value: function(showInExportModal, orderedFields, printheaderonly) {
+      var asFlatObject = this.accessAsObject,
+        header = orderedFields || [],
+        columns = [];
 
-      var header = _.pluck(this.fields.toJSON(), "label") || [];
-      var fields = _.pluck(this.fields.toJSON(), "mask") || [];
-      var result = fields.join(",") + "\n";
+      if (orderedFields) {
+        columns = orderedFields.map(function(fieldid) {
+          return asFlatObject[fieldid] || "";
+        });
+      } else {
+        for (var fieldlabel in asFlatObject) {
+          header.push(fieldlabel);
+          columns.push(asFlatObject[fieldlabel]);
+        }
+      }
+      if (printheaderonly) {
+        columns = header;
+      }
+      var result = columns.map(function(cell) {
+        return "\"" + cell.replace(/"/g, "\\\"") + "\"";
+      }).join(",") + "\n";
 
       //      if (orderedFields === null) {
       //        orderedFields = ["judgement","utterance","morphemes","gloss","translation"];
       //      }
-      //      judgement = this.fields.where({label: "judgement"})[0].get("mask");
-      //      morphemes = this.fields.where({label: "morphemes"})[0].get("mask");
-      //      utterance= this.fields.where({label: "utterance"})[0].get("mask");
-      //      gloss = this.fields.where({label: "gloss"})[0].get("mask");
-      //      translation= this.fields.where({label: "translation"})[0].get("mask");
+      //      judgement = this.columns.where({label: "judgement"})[0].get("mask");
+      //      morphemes = this.columns.where({label: "morphemes"})[0].get("mask");
+      //      utterance= this.columns.where({label: "utterance"})[0].get("mask");
+      //      gloss = this.columns.where({label: "gloss"})[0].get("mask");
+      //      translation= this.columns.where({label: "translation"})[0].get("mask");
       //      var resultarray =  [judgement,utterance,morphemes,gloss,translation];
       //      var result = '"' + resultarray.join('","') + '"\n';
-      if (printheaderonly) {
-        result = header.join(",") + "\n";
-      }
-      if (showInExportModal !== null) {
+
+      if (showInExportModal) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
         $("#export-text-area").val(
           $("#export-text-area").val() + result);
