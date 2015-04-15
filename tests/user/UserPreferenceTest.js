@@ -1,4 +1,14 @@
-var UserPreference = require("../../api/user/UserPreference").UserPreference;
+"use strict";
+var UserPreference;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    UserPreference = FieldDB.UserPreference;
+  }
+} catch (e) {}
+
+UserPreference = UserPreference || require("./../../api/user/UserPreference").UserPreference;
+
 var SAMPLE_USER = require("../../api/user/user.json");
 
 describe("Test UserPreference", function() {

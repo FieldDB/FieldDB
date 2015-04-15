@@ -1,6 +1,16 @@
-var Consultant = require("../../api/user/Consultant").Consultant;
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
+"use strict";
+var Consultant;
+var FieldDBObject;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Consultant = FieldDB.Consultant;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
 
+Consultant = Consultant || require("./../../api/user/Consultant").Consultant;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
 
 describe("as an Consultant, I want to set up my Consultant info", function() {
   var mockcorpus;
