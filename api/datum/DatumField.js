@@ -66,7 +66,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         ComputationalLinguists: "Put your team's data entry conventions here (if any)...",
         helpDevelopers: "Put your team's data entry conventions here (if any)..."
       };
-    }
+    },
+    set: function() {}
   },
 
   // Internal models: used by the parse function
