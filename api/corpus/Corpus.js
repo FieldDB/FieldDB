@@ -112,6 +112,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     },
     set: function(value) {
       this.ensureSetViaAppropriateType("confidential", value);
+      return this._confidential;
     }
   },
 

@@ -195,6 +195,101 @@ describe("App", function() {
     });
 
   });
+
+  describe("Demonstrating encrypted data", function() {
+    var app;
+    beforeEach(function() {
+      app = new App({
+        authentication: {
+          user: {
+            rev: "11-b56759be3f9f76762c64bb80dd95d23",
+            username: "auserwhoknowstheirpassword",
+            salt: "$2a$10$UsUudKMbgfBQzn5SDYWyFe",
+            hash: "$2a$10$UsUudKMbgfBQzn5SDYWyFe/b47olanTrn.T4txLY/7hD08eJqrQxa",
+            lastSyncWithServer: Date.now()
+          }
+        },
+        corpus: {
+          _id: "12345",
+          confidential: {
+            secretkey: "abc123"
+          }
+        }
+      });
+      // Simulate login
+      app.authentication.user.authenticated = true;
+
+      app.participantsList.add({
+        fieldDBtype: "Participant",
+        _id: "migm740610ea",
+        _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
+        fields: [{
+          _id: "lastname",
+          shouldBeEncrypted: true,
+          encrypted: true,
+          defaultfield: true,
+          encryptedValue: "confidential:VTJGc2RHVmtYMS9QTXluTC9qbHFSWTRrbVZyb0c5b1pjRDN1ZTY5Q291MD0=",
+          mask: "xxxxxxx",
+          value: "xxxxxxx"
+        }],
+        dateCreated: 1407516364440,
+        version: "v2.0.1",
+        dateModified: 1407516364460
+      });
+
+      expect(app.participantsList.docs).toBeDefined();
+      expect(app.participantsList.docs.migm740610ea).toBeDefined();
+    });
+
+    it("should mask data which is encrypted", function() {
+      expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+    });
+
+    it("should prompt user to confirm their identity to enter into unmasked mode showing encrypted data", function(done) {
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "phoneme";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function() {
+        FieldDBObject.application = app;
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("rkvadze");
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should show mask if user enters the wrong password", function(done) {
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "iforgotmypassword";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function(response) {
+        expect(response).toEqual("Shouldnt return positive");
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(false);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      }, function() {
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(false);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should show mask if the wrong key is being used to decrypt", function(done) {
+      app.corpus.confidential = {
+        secretkey: "tryinganotherkey"
+      };
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "phoneme";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function() {
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(true);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+        expect(app.decryptedMode).toEqual(false);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+  });
 });
 
 

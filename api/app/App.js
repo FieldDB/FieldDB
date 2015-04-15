@@ -190,6 +190,15 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     }
   },
 
+  application: {
+    get: function() {
+      return this;
+    },
+    set: function(value) {
+      this.warn("This is the application, the application cant be set on it.", value);
+    }
+  },
+
   corpus: {
     get: function() {
       if (this._corpus) {
@@ -247,7 +256,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
         if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
           self.application.authentication.confirmIdentity({
-            password: promptDetails.password
+            password: promptDetails.response
           }).then(function(confirmation) {
             self.debug("Confirmed the user's identity", confirmation);
             self._decryptedMode = true;
@@ -255,11 +264,11 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           }, function(error) {
             self.debug("Unable to confirm the user's identity", error);
             self._decryptedMode = false;
-            deferred.resolve(false);
+            deferred.reject(false);
           }).fail(function(error) {
             self.debug("Error while confirming the user's identity", error);
             self._decryptedMode = false;
-            deferred.resolve(false);
+            deferred.reject(false);
           });
         } else {
           self.warn("Not running in an application, but was able to simuli-prompt the user.");
@@ -275,6 +284,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         self._decryptedMode = false;
         deferred.reject(false);
       });
+      return this.whenDecryptionReady;
     }
   },
 
