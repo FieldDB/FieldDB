@@ -8,6 +8,11 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var Connection = require("./Connection").Connection;
 
 var Database = function Database(options) {
+  // Let the URLParser be injected
+  if (Database.URLParser && !Connection.URLParser) {
+    Connection.URLParser = Database.URLParser;
+  }
+
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Database";
   }
@@ -103,6 +108,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }
       this.warn("Using an unlikely url, as if this app was running in a website where the databse is.");
+      return "";
     },
     set: function(value) {
       this.debug("Setting url  ", value);
@@ -164,11 +170,17 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         data: value,
         url: this.url
       }).then(function(result) {
-        if (result._rev) {
-          value.rev = result._rev;
+        if (!result || !result.ok) {
+          result.status = result.status || 400;
+          result.userFriendlyErrors = result.userFriendlyErrors || ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."];
+          deferred.reject(result);
+          return;
+        }
+        if (result.rev) {
+          value.rev = result.rev;
         }
         if (!value._id) {
-          value.id = result._id;
+          value.id = result.id;
         }
         deferred.resolve(value);
       }, function(reason) {
@@ -189,6 +201,52 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  fetchRevisions: {
+    value: function(id, optionalUrl) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!id) {
+        Q.nextTick(function() {
+          deferred.resolve(self._revisions || []);
+        });
+        return deferred.promise;
+      }
+
+      optionalUrl = optionalUrl || this.url;
+
+      CORS.makeCORSRequest({
+        method: "GET",
+        url: optionalUrl + "/" + id + "?revs_info=true"
+      }).then(function(couchdbResponse) {
+        var revisions = [];
+
+        couchdbResponse._revs_info.map(function(revisionInfo) {
+          if (revisionInfo.status === "available") {
+            revisions.push(optionalUrl + "/" + id + "?rev=\"" + revisionInfo.rev + "\"");
+          }
+        });
+
+        deferred.resolve(revisions);
+
+      }, function(reason) {
+        if (!reason) {
+          reason = {
+            status: 400,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."]
+          };
+        }
+        self.debug(reason);
+        deferred.reject(reason);
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   delete: {
     value: function(options) {
       return this.remove(options);
@@ -198,7 +256,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   remove: {
     value: function(options) {
       this.bug("Deleting data is not permitted.", options);
-      throw "Deleting data is not permitted.";
+      throw new Error("Deleting data is not permitted.");
     }
   },
 
@@ -229,9 +287,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       } else {
         key = "";
       }
-
+      var originalCollectionUrl = collectionUrl;
       var cantLogIn = function(reason) {
         self.debug(reason);
+        if (reason.status === 404) {
+          if (originalCollectionUrl === collectionUrl) {
+            reason.userFriendlyErrors = ["The server didn't know about the collection " + collectionUrl + "you requested. Please try another url."];
+          } else {
+            reason.userFriendlyErrors = ["The application was unable to request the " + collectionUrl + " collection. Please report this 290323."];
+          }
+        }
         deferred.reject(reason);
         // self.register().then(function() {
         //   self.fetchCollection(collectionUrl).then(function(documents) {
@@ -378,8 +443,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         } else {
           deferred.reject({
             error: sessionInfo,
-            userFriendlyErrors: ["Please log in"],
-            status: 409
+            userFriendlyErrors: ["Please login."],
+            status: 401
           });
         }
       }, function(reason) {
@@ -408,7 +473,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       }
       try {
         connectionInfo = new Confidential({
-          secretkey: "connectionInfo"
+          secretkey: "connectionInfo",
         }).decrypt(connectionInfo);
       } catch (e) {
         this.warn("unable to read the connectionInfo info, ", e, this._connectionInfo);
@@ -442,7 +507,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
-
   getCouchUrl: {
     value: function() {
       return this.corpusUrl;
@@ -466,6 +530,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
 
         var usernameField = "name";
+        if (!details.authUrl && details.name) {
+          details.authUrl = self.BASE_DB_URL + "/_session";
+        }
         details.authUrl = self.deduceAuthUrl(details.authUrl);
         if (details.authUrl.indexOf("/_session") === -1 && details.authUrl.indexOf("/login") === -1) {
           details.authUrl = details.authUrl + "/login";
@@ -527,7 +594,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             } else {
               authOrCorpusServerResult = authOrCorpusServerResult || {};
               authOrCorpusServerResult.userFriendlyErrors = authOrCorpusServerResult.userFriendlyErrors || [" Unknown response from server, please report this."];
-              deferred.reject(authOrCorpusServerResult.userFriendlyErrors.join(" "));
+              deferred.reject(authOrCorpusServerResult);
             }
           },
           function(reason) {
@@ -554,6 +621,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         optionalUrl = this.couchSessionUrl;
       }
 
+      if (!optionalUrl || optionalUrl.indexOf("/_session") === -1 || optionalUrl.lastIndexOf("/_session") !== optionalUrl.length - ("/_session").length) {
+        Q.nextTick(function() {
+          deferred.reject({
+            userFriendlyErrors: ["You cannot log out of " + optionalUrl + " using this application."],
+            status: 412
+          });
+        });
+        return deferred.promise;
+      }
+
       CORS.makeCORSRequest({
         type: "DELETE",
         dataType: "json",
@@ -567,12 +644,12 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }, function(reason) {
         reason = reason || {};
-        reason.status = reason.status || 400;
-        reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
         self.debug(reason);
         deferred.reject(reason);
       }).fail(function(error) {
         console.error(error.stack, self);
+        error.status = error.status || 400;
+        error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 8912."];
         deferred.reject(error);
       });
       return deferred.promise;
@@ -605,8 +682,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           details = {
             username: self.dbname.split("-")[0],
             password: "testtest",
-            confirmPassword: "testtest"
+            confirmPassword: "testtest",
+            connection: new Connection(Connection.knownConnections.production)
           };
+          details.authUrl = details.connection.authUrl;
         }
 
         if (!details) {
@@ -661,6 +740,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
+            details: details,
             userFriendlyErrors: validateUsername.changes,
             status: 412
           });
@@ -680,10 +760,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           delete details.connection.corpusUrl;
         }
 
-        if (self.application && self.application.brandLowerCase) {
+        if (!details.appbrand && self.application && self.application.brandLowerCase) {
           details.appbrand = self.application.brandLowerCase;
-          details.appVersionWhenCreated = self.application.version;
         }
+        details.appVersionWhenCreated = self.version;
 
         CORS.makeCORSRequest({
           type: "POST",
@@ -697,7 +777,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             deferred.reject({
               error: result,
               status: 500,
-              userFriendlyErrors: ["Unknown error. Please report this 2391."]
+              details: details,
+              userFriendlyErrors: result.userFriendlyErrors || ["Unknown error. Please report this 2391."]
             });
             return;
           }
@@ -712,13 +793,14 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           // });
         }, function(reason) {
           reason = reason || {};
-          reason.details = details;
-          reason.status = reason.status || 400;
-          reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
+          reason.details = reason.details || details;
           self.debug(reason);
           deferred.reject(reason);
         }).fail(function(error) {
           console.error(error.stack, self);
+          error.status = error.status || 400;
+          error.details = error.details || details;
+          error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 1289128."];
           deferred.reject(error);
         });
 

@@ -43,8 +43,8 @@
     "userchooseable": "disabled"
   }, {
     "label": "translation",
-    "value": "`I was kissed by John.â",
-    "mask": "`I was kissed by John.â",
+    "value": "I was kissed by John.",
+    "mask": "I was kissed by John.",
     "encrypted": "",
     "shouldBeEncrypted": "checked",
     "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",

@@ -2,7 +2,6 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var DatumFields = require("./DatumFields").DatumFields;
 var DataList = require("./../data_list/DataList").DataList;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Q = require("q");
 
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 /**
@@ -236,7 +235,8 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         fields: DEFAULT_CORPUS_MODEL.sessionFields
       };
       return JSON.parse(JSON.stringify(doc));
-    }
+    },
+    set: function() {}
   },
 
   confidentiality: {
@@ -488,67 +488,16 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
     }
   },
 
-  decryptedMode: {
-    get: function() {
-      return this._decryptedMode;
-    },
-    set: function(value) {
-      this._decryptedMode = value;
-      if (this._fields) {
-        this._fields.decryptedMode = value;
-      }
-    }
-  },
-
   docIds: {
     get: function() {
       if (this._datalist && this._datalist.docIds) {
         return this._datalist.docIds;
       }
-      return this._docIds || [];
+      // return FieldDBObject.DEFAULT_COLLECTION;
     },
     set: function(value) {
-      if (!value || value.length === 0) {
-        this.debug("cant clear the docids of a session like this.");
-        return;
-      }
       if (!this._datalist) {
         this.initializeDatalist();
-
-        var self = this;
-
-        // this.debugMode = true;
-        this._docIds = value;
-        // Q.nextTick(function() {
-        if (!self.whenReindexedFromApi) {
-          self.warn("This should never happen. we asked the datalist to be created.");
-          return;
-        }
-        self.whenReindexedFromApi.done(function() {
-          self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
-          if (self._docIds && self._docIds.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
-            self.warn("  making sure " + self._docIds.length + " items are in the list of data.");
-            var docId;
-            for (var docidIndex = self._docIds.length - 1; docidIndex >= 0; docidIndex--) {
-              docId = self._docIds[docidIndex];
-              // If this doc isnt in the list, put it on the top, in the same order as it was in teh _docIds
-              if (!self._datalist._docs[docId]) {
-                self.warn("Adding " + docId + " to the list. ");
-                self._datalist._docs.unshift({
-                  id: docId,
-                  fieldDBtype: "Datum",
-                  loaded: false
-                });
-              }
-            }
-            delete self._docIds;
-          } else {
-            self.debug("  saw no reason to add doc ids to the datalist docs ", self._docids, self._datalist);
-          }
-        });
-        // });
-
-        return;
       }
       this._datalist.docIds = value;
     }
@@ -561,44 +510,38 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
     },
     set: function(value) {
-
       if (!value || value.length === 0) {
-        this.debug("cant clear the docs of a session like this.");
+        this.warn("cant clear the docs of a session like this.", value);
         return;
       }
 
-      if (!this._datalist || !this._datalist.docs || typeof this._datalist.docs.add !== "function") {
+      if (!this.whenReindexedFromApi) {
         this.initializeDatalist();
+      }
 
-        this._tempDocs = value;
-        var self = this;
-        // Q.nextTick(function() {
-        if (!self.whenReindexedFromApi) {
-          self.bug("This should never happen.");
-          return;
-        }
-        self.whenReindexedFromApi.done(function() {
-          self.warn("  Checking to see if we should add docids after datalist exists", self._docIds);
-          if (self._tempDocs && self._tempDocs.length > 0 && self._datalist && self._datalist._docs && typeof self._datalist._docs.add === "function") {
-            self.warn("  making sure " + self._tempDocs.length + " items are in the list of data.");
-            self._tempDocs.map(function(tempDoc) {
-              if (!self._datalist._docs[tempDoc.id]) {
-                self.warn("Adding " + tempDoc + " to the list. ");
-                self._datalist._docs.add(tempDoc);
-              }
-            });
-            delete self._tempDocs;
+      var self = this,
+        docPrimaryKey;
+
+      this.whenReindexedFromApi.fail(function(error) {
+        console.log(error.stack);
+      }).done(function() {
+
+        self.warn("  making sure " + value.length + " items are in the list of data.");
+        value.map(function(tempDoc) {
+          docPrimaryKey = tempDoc[self._datalist.primaryKey];
+          if (!docPrimaryKey) {
+            self.warn("This doc has no primary key, trying to add it anyway.", tempDoc);
+            self._datalist._docs.add(tempDoc);
           } else {
-            self.debug("  saw no reason to add doc ids to the datalist docs ", self._tempDocs, self._datalist);
+            if (!self._datalist._docs[docPrimaryKey]) {
+              self.warn("Adding " + tempDoc + " to the list. ");
+              self._datalist._docs.add(tempDoc);
+            }
           }
         });
 
-        // });
+      });
 
-        return;
-      }
-      this.todo(" test this, adding docs to existing docs, instead of reseting it.");
-      this._datalist.docs.add(value);
     }
   },
 
@@ -688,30 +631,22 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (!value) {
         return;
       }
+
       this.debug("Adding to the " + this.id + " session", value);
-      if (!this._datalist || !this._datalist._docs || typeof !this._datalist._docs.add === "function") {
-        this.initializeDatalist();
-
-        // this.debugMode = true;
-        if (!this.whenReindexedFromApi) {
-          console.error("The whenReindexedFromApi is not defined!" + this.id, this);
-          return;
-        }
-
-        var self = this;
-        this.whenReindexedFromApi.done(function() {
-          self.warn("Adding to session's data list", value);
-          if (!self._datalist || !self._datalist._docs || typeof !self._datalist._docs.add === "function") {
-            console.error("The datalist is still not operational on this session " + self.id, self);
-            return;
-          }
-          self._datalist.docs.add(value);
-          return self._datalist;
-        });
-        return;
+      if (this._datalist && this._datalist.docs && typeof this._datalist.docs.add === "function") {
+        return this._datalist.docs.add(value);
       }
-      return this._datalist.add(value);
 
+      if (!this.whenReindexedFromApi) {
+        this.initializeDatalist();
+      }
+
+      var self = this;
+      this.whenReindexedFromApi.fail(function(error) {
+        console.log(error.stack);
+      }).done(function() {
+        self._datalist.docs.add(value);
+      });
     }
   },
 
@@ -722,27 +657,22 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       }
       return 0;
     },
-    set: function() {
-      // this._datalist.length = value;
+    set: function(value) {
+      this.warn("Cant set the lenght of a session. It's automatically determined by the number of items in its data list.", value);
     }
   },
 
   initializeDatalist: {
     value: function(datalistJson) {
-
-      // this.ensureSetViaAppropriateType("datalist", {
-      //   dbname: this.dbname
-      //     // docs: []
-      // });
-
       this.debug(" initializeDatalist ", this._datalist);
-      if (this._datalist && typeof this._datalist.reindexFromApi === "function" && this._datalist.docIds && this._datalist.docIds.length > 0) {
+      if (this._datalist && this._datalist.whenReindexedFromApi) {
         if (datalistJson) {
           this.todo("the caller asked for a speciific data list to be created, ignoring it. ");
         }
-        this.debug("Datalist is alredy ready.");
+        this.debug("Datalist is already ready.");
         return;
       }
+
       if (!datalistJson) {
         datalistJson = {
           title: {
@@ -754,31 +684,27 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         };
       }
       this._datalist = new DataList(datalistJson);
-      if (this.id) {
-        var api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
-        this._datalist.api = api;
-        this.debug("Using reindexFromApi on datalists instead");
-        // this.fetching = this.loading = true;
-        if (typeof this._datalist.reindexFromApi !== "function") {
-          this.warn("THis dataalist isnt real  throwing error... ", this, this._datalist);
-          throw new Error("this DataList isnt real.");
-        }
-        this.whenReindexedFromApi = this._datalist.reindexFromApi();
-      } else {
-        this.debug(" Resolving whenReindexedFromApi in the next tick. " + this.id);
-        var self = this,
-          deferred = Q.defer();
 
-        deferred.resolve(self._datalist);
-        this.whenReindexedFromApi = deferred.promise;
+      if (this.id) {
+        this._datalist.api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
       }
 
-
-      // var self = this;
-      // this.whenReindexedFromApi.done(function() {
-      //   self.fetching = self.loading = false;
-      // });
+      this.debug("Asking the datalist to check for changes in the database.");
+      if (typeof this._datalist.reindexFromApi !== "function") {
+        this.warn("This datalist isnt real,  throwing error... ", this, this._datalist);
+        throw new Error("this DataList isnt real.");
+      }
+      this._datalist.reindexFromApi();
     }
+  },
+
+  whenReindexedFromApi: {
+    get: function() {
+      if (this._datalist && this._datalist.whenReindexedFromApi) {
+        return this._datalist.whenReindexedFromApi;
+      }
+    },
+    set: function() {}
   },
 
   datalist: {

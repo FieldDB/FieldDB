@@ -135,12 +135,16 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
         if (updatePromiseOrSyncrhonousConfirmed !== true) {
           self.todo("Test async updatePromiseOrSyncrhonousConfirmed");
           Q.nextTick(function() {
-            var updated = self.contextualizer.contextualize(for_context);
-            if ((!updated || updated === for_context) && self.data) {
-              self.data[for_context] = self.data[for_context] || {
-                message: ""
-              };
-              self.data[for_context].message = locale_string;
+            if (self.contextualizer) {
+              var updated = self.contextualizer.contextualize(for_context);
+              if ((!updated || updated === for_context) && self.data) {
+                self.data[for_context] = self.data[for_context] || {
+                  message: ""
+                };
+                self.data[for_context].message = locale_string;
+              }
+            } else {
+              console.warn("This is strange, i lost my contextualizer...", self);
             }
           });
         }

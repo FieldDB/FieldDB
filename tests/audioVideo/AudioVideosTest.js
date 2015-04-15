@@ -1,5 +1,17 @@
-var AudioVideo = require("./../../api/audio_video/AudioVideo").AudioVideo;
-var AudioVideos = require("./../../api/audio_video/AudioVideos").AudioVideos;
+"use strict";
+
+var AudioVideo;
+var AudioVideos;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    AudioVideo = FieldDB.AudioVideo;
+    AudioVideos = FieldDB.AudioVideos;
+  }
+} catch (e) {}
+AudioVideo = AudioVideo || require("./../../api/audio_video/AudioVideo").AudioVideo;
+AudioVideos = AudioVideos || require("./../../api/audio_video/AudioVideos").AudioVideos;
+
 
 describe("Test AudioVideo", function() {
   it("should load", function() {

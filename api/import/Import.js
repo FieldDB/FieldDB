@@ -93,7 +93,6 @@ var Import = function Import(options) {
       primaryKey: "tempId"
     },
     // confidential: self.corpus.confidential,
-    // decryptedMode: true,
     // debugMode: true
   };
   this.session = sessionOptions;
@@ -131,7 +130,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         asFieldMatrix: [],
         asCSV: []
       };
-    }
+    },
+    set: function() {}
   },
 
   INTERNAL_MODELS: {
@@ -150,13 +150,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return false;
       }
       return this.asCSV && this.asCSV.length > 0;
-    }
+    },
+    set: function() {}
   },
 
   showImportThirdStep: {
     get: function() {
       return this.datalist && this.datalist.docs && this.datalist.docs.length > 0;
-    }
+    },
+    set: function() {}
   },
 
   addFileUri: {
@@ -1728,7 +1730,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               }
             } else {
               self.debug(results);
-              var message = "Upload might have failed to complete processing on your file(s). Please report this error to us at support@lingsync.org ";
+              var message = "Upload might have failed to complete processing on your file(s). Please report this error.";
               self.status = message + ": " + JSON.stringify(results);
               deferred.reject(message);
 
@@ -1743,7 +1745,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             } else {
               var message = "Error contacting the server. ";
               if (response.status >= 500) {
-                message = message + " Please report this error to us at support@lingsync.org ";
+                message = message + " Please report this error.";
               } else if (response.status === 413) {
                 message = message + " Your file is too big for upload, please try using FFMpeg to convert it to an mp3 for upload (you can still use your original video/audio in the app when the utterance chunking is done on an mp3.) ";
               } else {
@@ -1825,7 +1827,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         } else {
           var message = "Error contacting the server. ";
           if (response.status >= 500) {
-            message = message + " Please report this error to us at support@lingsync.org ";
+            message = message + " Please report this error.";
           } else {
             message = message + " Are you offline? If you are online and you still recieve this error, please report it to us: ";
           }

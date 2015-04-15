@@ -114,7 +114,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
       }
 
-      this.warn("SETTING LOCALE FROM " + this._currentLocale + " to ", value, this.data);
+      this.debug("SETTING LOCALE FROM " + this._currentLocale + " to ", value, this.data);
       this._currentLocale = value;
     }
   },
@@ -257,17 +257,25 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       }
 
       var keepTrying = true;
-      if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][result] && this.data[optionalLocaleForThisCall][result].message !== undefined && this.data[optionalLocaleForThisCall][result].message) {
+      if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][result] && this.data[optionalLocaleForThisCall][result].message !== undefined) {
         result = this.data[optionalLocaleForThisCall][result].message;
-        this.debug("Resolving localization using requested language: ", result);
+        this.debug("Resolving requested contextualization using requested language: ", result);
+        keepTrying = false;
+      } else if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][result] && this.data[this.defaultLocale.iso][result].message !== undefined) {
+        result = this.data[this.defaultLocale.iso][result].message;
+        this.debug("Resolving requested contextualization using default language: ", result);
         keepTrying = false;
       } else {
-        if (typeof message === "object" && message.default) {
-          if (this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][message.default] && this.data[optionalLocaleForThisCall][message.default].message !== undefined && this.data[optionalLocaleForThisCall][message.default].message) {
+        if (typeof message === "object") {
+          if (message[result] && this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][message[result]] && this.data[optionalLocaleForThisCall][message[result]].message !== undefined && this.data[optionalLocaleForThisCall][message[result]].message) {
+            result = this.data[optionalLocaleForThisCall][message[result]].message;
+            this.debug("Resolving localization using requested contextualization: ", message[result]);
+            keepTrying = false;
+          } else if (message.default && this.data[optionalLocaleForThisCall] && this.data[optionalLocaleForThisCall][message.default] && this.data[optionalLocaleForThisCall][message.default].message !== undefined && this.data[optionalLocaleForThisCall][message.default].message) {
             result = this.data[optionalLocaleForThisCall][message.default].message;
             this.debug("Resolving localization using default contextualization: ", message.default);
             keepTrying = false;
-          } else if (this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][message.default] && this.data[this.defaultLocale.iso][message.default].message !== undefined && this.data[this.defaultLocale.iso][message.default].message) {
+          } else if (message.default && this.data[this.defaultLocale.iso] && this.data[this.defaultLocale.iso][message.default] && this.data[this.defaultLocale.iso][message.default].message !== undefined && this.data[this.defaultLocale.iso][message.default].message) {
             result = this.data[this.defaultLocale.iso][message.default].message;
             this.debug("Resolving localization using default contextualization and default locale: ", message.default);
             keepTrying = false;
@@ -302,6 +310,9 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         verb = "create ";
 
       this.whenReadys = this.whenReadys || [];
+
+      this.todo("Test async updateContextualization");
+      this.whenReadys.push(deferred.promise);
 
       this.data[this.currentLocale.iso] = this.data[this.currentLocale.iso] || {};
       if (this.data[this.currentLocale.iso][key] && this.data[this.currentLocale.iso][key].message === value) {
@@ -341,8 +352,6 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         return deferred.promise;
       }
 
-      this.todo("Test async updateContextualization");
-      this.whenReadys.push(deferred.promise);
 
       self.debug("     Running asynchonosuly. ", key, value);
       this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value)

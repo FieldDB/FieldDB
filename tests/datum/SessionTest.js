@@ -1,6 +1,23 @@
-var FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
-var Session = require("./../../api/datum/Session").Session;
-var DataList = require("./../../api/data_list/DataList").DataList;
+"use strict";
+var Datum;
+var Session;
+// var DataList;
+var FieldDBObject;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Datum = FieldDB.Datum;
+    Session = FieldDB.Session;
+    // DataList = FieldDB.DataList;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+
+Datum = Datum || require("./../../api/datum/Datum").Datum;
+Session = Session || require("./../../api/datum/Session").Session;
+// DataList = DataList || require("./../../api/data_list/DataList").DataList;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
@@ -12,12 +29,13 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       FieldDBObject.application = null;
     }
 
-    if (!DataList) {
-      throw ("DataList has become undefined in this area.");
-    }
+    // if (!DataList) {
+    //   throw ("DataList has become undefined in this area.");
+    // }
     // mockDatabase = {
     //   get: mockDatabase.get,
-    //   set: mockDatabase.set
+    //   set: mockDatabase.set,
+    //   fetchCollection: mockDatabase.fetchCollection
     // };
   });
 
@@ -245,7 +263,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session).toBeDefined();
 
       expect(session.docs).toBeUndefined();
-      expect(session.docIds).toEqual([]);
+      expect(session.docIds).toBeUndefined();
       expect(session.datalist).toBeUndefined();
     });
 
@@ -254,26 +272,24 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         // docIds: ["adocatsessionconstruction"]
       });
       session.initializeDatalist();
-      expect(session).toBeDefined();
 
       expect(session.docs).toBeDefined();
+      expect(session.docs.length).toEqual(0);
+
       expect(session.docIds).toEqual([]);
+      expect(session.docIds.length).toEqual(0);
+
       expect(session.datalist).toBeDefined();
+      expect(session.datalist.length).toEqual(0);
     });
 
     it("should have docs if set via docIds durring construction", function() {
       var session = new Session({
         docIds: ["thefirstdocinthissession"]
       });
-      expect(session).toBeDefined();
 
       expect(session.docs).toBeDefined();
       expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
-
-      var sessionJson = session.toJSON();
-      expect(sessionJson.docIds).toBeUndefined();
-      expect(sessionJson.docs).toBeUndefined();
-      expect(sessionJson.datalist).toBeUndefined();
     });
 
     it("should not serialize docs, datalist or docIds", function() {
@@ -286,35 +302,79 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
 
       var sessionJson = session.toJSON();
-      expect(sessionJson.docIds).toBeUndefined();
       expect(sessionJson.docs).toBeUndefined();
+      expect(sessionJson.docIds).toBeUndefined();
       expect(sessionJson.datalist).toBeUndefined();
     });
 
-    //TODO why accept datalist to be creatd from docis on the session? seems like we only need toa dd to a session.
+    //TODO why accept datalist to be created from docis on the session? seems like we only need to add to a session.
     it("should have asychronously have docs if set via docIds after construction", function(done) {
       var session = new Session();
       session.docIds = ["thefirstdocinthissession"];
 
+      expect(session.datalist).toBeDefined();
       expect(session.docs).toBeDefined();
-
       expect(session.whenReindexedFromApi).toBeDefined();
-      session.whenReindexedFromApi.done(function() {
+
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toBe(session.datalist);
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
         expect(session.docs.thefirstdocinthissession).toBeDefined();
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
         done();
       });
     }, specIsRunningTooLong);
 
-    //TODO why accept datalist to be creatd from docis on the session? seems like we only need toa dd to a session.
+    //TODO why accept datalist to be created from docis on the session? seems like we only need to add to a session.
     it("should have docs if set via docs after construction", function(done) {
       var session = new Session();
       session.docs = [{
         id: "thefirstdocinthissession"
       }];
 
+      expect(session.datalist).toBeDefined();
+      expect(session.docs).toBeDefined();
       expect(session.whenReindexedFromApi).toBeDefined();
-      session.whenReindexedFromApi.done(function() {
+
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toBe(session.datalist);
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
         expect(session.docs.thefirstdocinthissession).toBeDefined();
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
         done();
@@ -338,11 +398,31 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(session.docs.thefirstdocinthissession).toBeUndefined();
 
       expect(session.whenReindexedFromApi).toBeDefined();
-      session.whenReindexedFromApi.then(function() {
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toBe(session.datalist);
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
 
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
-
-      }).done(done);
+        done();
+      });
     }, specIsRunningTooLong);
 
 
@@ -387,7 +467,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       });
 
       expect(session.datalist).toBeUndefined();
-      expect(session.docIds).toEqual([]);
+      expect(session.docIds).toBeUndefined();
     });
 
     it("should support a add datum in the right order when data list exists", function(done) {
@@ -397,7 +477,10 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       });
       session.docIds = ["One", "two", "three"];
 
-      expect(session.docIds).toEqual([]);
+      expect(session.docIds).toEqual(["One", "two", "three"]);
+      expect(session.datalist._docIds).toEqual(["One", "two", "three"]);
+      // expect(session.datalist.docs).toEqual(" ");
+      // expect(session.datalist.tempDocIds).toEqual(["One", "two", "three"]);
 
       var addedDatum = session.add({
         id: "adatumafterdatlistexists"
@@ -406,7 +489,28 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       expect(addedDatum).toBeDefined();
       expect(addedDatum.id).toEqual("adatumafterdatlistexists");
 
-      session.whenReindexedFromApi.then(function() {
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toEqual(" ");
+        expect(true).toBeFalsy();
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(4);
@@ -419,8 +523,8 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(session.docIds.length).toEqual(4);
         expect(session.docIds[0]).toEqual("One");
         expect(session.docIds[3]).toEqual("adatumafterdatlistexists");
-
-      }).done(done);
+        done();
+      });
 
     }, specIsRunningTooLong);
 
@@ -429,15 +533,35 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       var session = new Session({
         id: "asessionwhichisreal"
       });
-      expect(session.docIds).toEqual([]);
+      expect(session.docIds).toBeUndefined();
 
       session.add({
         id: "anothersimulidatum"
       });
 
-      expect(session.docIds).toEqual([]);
       expect(session.whenReindexedFromApi).toBeDefined();
-      session.whenReindexedFromApi.then(function() {
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toEqual(" ");
+        expect(true).toBeFalsy();
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(1);
@@ -446,8 +570,8 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(session.docIds).toBeDefined();
         expect(session.docIds.length).toEqual(1);
         expect(session.docIds[0]).toEqual("anothersimulidatum");
-
-      }).done(done);
+        done();
+      });
 
     }, specIsRunningTooLong);
 
@@ -456,12 +580,11 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       var session = new Session({
         id: "asessionwhichisreal"
       });
-      expect(session.docIds).toEqual([]);
+      expect(session.docIds).toBeUndefined();
 
       session.add({
         id: "the first one"
       });
-      expect(session.docIds).toEqual([]);
       expect(session.whenReindexedFromApi).toBeDefined();
 
       session.add({
@@ -476,7 +599,28 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         id: "because the datalist wasnt ready"
       });
 
-      session.whenReindexedFromApi.then(function() {
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toEqual(" ");
+        expect(true).toBeFalsy();
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(4);
@@ -488,8 +632,8 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(session.docIds).toBeDefined();
         expect(session.docIds.length).toEqual(4);
         expect(session.docIds).toEqual(["will be", "last", "because the datalist wasnt ready", "the first one"]);
-
-      }).done(done);
+        done();
+      });
 
     }, specIsRunningTooLong);
 
@@ -513,7 +657,28 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         id: "the last one"
       });
 
-      session.whenReindexedFromApi.then(function() {
+      session.whenReindexedFromApi.then(function(resultingdatalist) {
+        expect(resultingdatalist).toEqual(" ");
+        expect(true).toBeFalsy();
+      }, function(error) {
+        // console.log(error);
+        if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
+        } else if (error.status === 412) {
+          expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
+        } else if (error.status === 404) {
+          expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
+        } else if (error.status === 400) {
+          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        } else if (error.status === 0) {
+          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
+        } else {
+          expect(false).toBeTruthy();
+        }
+      }).fail(function(error) {
+        console.log(error.stack);
+        expect(false).toBeTruthy();
+      }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
         expect(session.datalist.docIds.length).toEqual(3);
@@ -524,8 +689,8 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
         expect(session.docIds).toBeDefined();
         expect(session.docIds.length).toEqual(3);
-
-      }).done(done);
+        done();
+      });
 
     }, specIsRunningTooLong);
 

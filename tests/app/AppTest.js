@@ -1,5 +1,18 @@
-var App = require("../../api/app/App").App;
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
+"use strict";
+/* globals navigator, FieldDB */
+
+var App;
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    App = FieldDB.App;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+App = App || require("./../../api/app/App").App;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
+
 var specIsRunningTooLong = 5000;
 
 describe("App", function() {
@@ -30,8 +43,20 @@ describe("App", function() {
       app.contextualizer = {};
 
       expect(app).toBeDefined();
-      expect(app.contextualizer.currentLocale.iso).toEqual("en");
+
+      // Set locale to user's prefered locale by default
+      expect(app.contextualizer.currentLocale.iso).toBeDefined();
+      try {
+        if (navigator.languages[0].indexOf(app.contextualizer.currentLocale.iso) === -1) {
+          expect(app.contextualizer.currentLocale.iso).toEqual(navigator.languages[0]);
+        }
+      } catch (e) {
+        expect(app.contextualizer.currentLocale.iso).toEqual("en");
+      }
+
+      app.contextualizer.currentLocale.iso = "en";
       expect(app.contextualize("locale_Username")).toEqual("Username:");
+
       app.contextualizer.currentLocale.iso = "es";
       expect(app.contextualize("locale_Username")).toEqual("Usuario:");
     });
@@ -84,17 +109,22 @@ describe("App", function() {
       expect(app.warnMessage).toContain("Route params are undefined, not loading anything");
 
       processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus"
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus"
       });
       expect(processingPromise).toBeDefined();
 
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
     }, specIsRunningTooLong);
 
     it("should be able to load an import dashboard based on routeParams", function(done) {
@@ -102,8 +132,8 @@ describe("App", function() {
         // debugMode: true
       });
       var processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus",
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus",
         importType: "participants"
       });
       expect(processingPromise).toBeDefined();
@@ -111,10 +141,15 @@ describe("App", function() {
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
         expect(app.warnMessage).toContain("An app of type App has become automagically available to all fielddb objects");
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -123,8 +158,8 @@ describe("App", function() {
         // debugMode: true
       });
       var processingPromise = app.processRouteParams({
-        team: "lingllama",
-        corpusidentifier: "community-_corpus",
+        team: "nottestinguserexistsonlyrouteparams",
+        corpusidentifier: "firstcorpus",
         searchQuery: "morphemes:naya OR gloss:des OR gloss:IMP"
       });
       expect(processingPromise).toBeDefined();
@@ -132,10 +167,15 @@ describe("App", function() {
       // console.log(processingPromise);
       processingPromise.then(function(result) {
         expect(result).toEqual(app);
+      }, function(reason) {
+        expect(reason).toEqual(" ");
+      }).fail(function(error) {
+        console.error(error.stack);
+        expect(error).toEqual(" ");
       }).done(done);
 
-      expect(app.currentCorpusDashboard).toEqual("lingllama/community-_corpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("lingllama-community-_corpus");
+      expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
+      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -145,7 +185,7 @@ describe("App", function() {
       });
 
       var processingPromise = app.processRouteParams({
-        team: "lingllama"
+        team: "nottestinguserexistsonlyrouteparams"
       });
       expect(processingPromise).toBeUndefined();
 
@@ -153,6 +193,101 @@ describe("App", function() {
       expect(app.currentCorpusDashboardDBname).toBeUndefined();
 
     });
+
+  });
+
+  describe("Demonstrating encrypted data", function() {
+    var app;
+    beforeEach(function() {
+      app = new App({
+        authentication: {
+          user: {
+            rev: "11-b56759be3f9f76762c64bb80dd95d23",
+            username: "auserwhoknowstheirpassword",
+            salt: "$2a$10$UsUudKMbgfBQzn5SDYWyFe",
+            hash: "$2a$10$UsUudKMbgfBQzn5SDYWyFe/b47olanTrn.T4txLY/7hD08eJqrQxa",
+            lastSyncWithServer: Date.now()
+          }
+        },
+        corpus: {
+          _id: "12345",
+          confidential: {
+            secretkey: "abc123"
+          }
+        }
+      });
+      // Simulate login
+      app.authentication.user.authenticated = true;
+
+      app.participantsList.add({
+        fieldDBtype: "Participant",
+        _id: "migm740610ea",
+        _rev: "1-66d7dcf2ec5756f96705e4c190efbf7b",
+        fields: [{
+          _id: "lastname",
+          shouldBeEncrypted: true,
+          encrypted: true,
+          defaultfield: true,
+          encryptedValue: "confidential:VTJGc2RHVmtYMS9QTXluTC9qbHFSWTRrbVZyb0c5b1pjRDN1ZTY5Q291MD0=",
+          mask: "xxxxxxx",
+          value: "xxxxxxx"
+        }],
+        dateCreated: 1407516364440,
+        version: "v2.0.1",
+        dateModified: 1407516364460
+      });
+
+      expect(app.participantsList.docs).toBeDefined();
+      expect(app.participantsList.docs.migm740610ea).toBeDefined();
+    });
+
+    it("should mask data which is encrypted", function() {
+      expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+    });
+
+    it("should prompt user to confirm their identity to enter into unmasked mode showing encrypted data", function(done) {
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "phoneme";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function() {
+        FieldDBObject.application = app;
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("rkvadze");
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should show mask if user enters the wrong password", function(done) {
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "iforgotmypassword";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function(response) {
+        expect(response).toEqual("Shouldnt return positive");
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(false);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      }, function() {
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(false);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should show mask if the wrong key is being used to decrypt", function(done) {
+      app.corpus.confidential = {
+        secretkey: "tryinganotherkey"
+      };
+      app.participantsList.docs.migm740610ea.fields.confidential = app.corpus.confidential;
+      app.alwaysReplyToPrompt = "phoneme";
+      FieldDBObject.application = app;
+      app.enterDecryptedMode().then(function() {
+        FieldDBObject.application = app;
+        expect(app.decryptedMode).toEqual(true);
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+        expect(app.decryptedMode).toEqual(false);
+      }).done(done);
+    }, specIsRunningTooLong);
+
 
   });
 });

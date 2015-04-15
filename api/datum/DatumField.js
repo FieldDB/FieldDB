@@ -66,7 +66,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         ComputationalLinguists: "Put your team's data entry conventions here (if any)...",
         helpDevelopers: "Put your team's data entry conventions here (if any)..."
       };
-    }
+    },
+    set: function() {}
   },
 
   // Internal models: used by the parse function
@@ -365,6 +366,11 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
                 return this.mask;
               }
               var decryptedValue = this.confidential.decrypt(this._encryptedValue);
+              if (!decryptedValue) {
+                this.warn("Encryption key is the wrong key, showing the user the mask instead.");
+                this.decryptedMode = false;
+                return this.mask;
+              }
               if (this.type && this.type.indexOf("number") > -1) {
                 var tryAsNumber = Number(decryptedValue);
                 if (!isNaN(tryAsNumber)) {

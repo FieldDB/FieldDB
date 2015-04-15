@@ -1,5 +1,15 @@
+"use strict";
 /* globals localStorage */
-var User = require("../../api/user/User").User;
+var User;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    User = FieldDB.User;
+  }
+} catch (e) {}
+
+User = User || require("./../../api/user/User").User;
+
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 
 describe("User ", function() {
@@ -122,6 +132,7 @@ describe("User ", function() {
           lexiconUrls: [],
           searchUrls: [],
           audioUrls: [],
+          websiteUrls: [],
           activityUrls: [],
           title: "",
         },

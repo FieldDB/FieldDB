@@ -1,6 +1,6 @@
 {
   "name": "FieldDB Localhost",
-  "version": "2.50.4",
+  "version": "2.51.15",
   "description": "Local development version",
   "app": {
     "launch": {

@@ -22,7 +22,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
       $scope.application.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
     }, false);
 
-    document.addEventListener("notauthenticated", function(e) {
+    document.addEventListener("authenticate:fail", function(e) {
       console.log(e);
       $scope.application.warn("user isn't able to see anything, show them the welcome page");
       // $scope.application.authentication.error = "";

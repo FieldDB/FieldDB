@@ -1,5 +1,16 @@
-var Image = require("./../../api/image/Image").Image;
-var Images = require("./../../api/image/Images").Images;
+"use strict";
+
+var Image;
+var Images;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Image = FieldDB.Image;
+    Images = FieldDB.Images;
+  }
+} catch (e) {}
+Image = Image || require("./../../api/image/Image").Image;
+Images = Images || require("./../../api/image/Images").Images;
 
 describe("Test Images", function() {
   it("should load", function() {

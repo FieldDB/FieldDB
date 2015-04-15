@@ -27,13 +27,46 @@ module.exports = function(grunt) {
           basedir: "./"
         }
       },
+      // srcForTest: {
+      //   src: ["tests/fieldb_jasmine_injector.js"],
+      //   dest: "dist/<%= pkg.name %>_injected.js",
+      //   options: {
+      //     banner: "<%= banner %>",
+      //     ignore: [],
+      //     shim: {},
+      //     basedir: "./"
+      //   }
+      // },
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
-        src: ["tests/**/*Test.js"],
+        src: [
+         "tests/**/*Test.js",
+          // "tests/FieldDBObjectTest.js",
+          // "tests/CollectionTest.js",
+          // "tests/activity/*.js",
+          // "tests/app/*.js",
+          // "tests/audio_video/*.js",
+          // "tests/authentication/*.js",
+          // "tests/comment/*.js",
+          // "tests/confidentiality_encryption/*.js",
+          // "tests/corpus/*Test.js",
+          // "tests/data_list/*.js",
+          // "tests/datum/*.js",
+          // "tests/export/*.js",
+          // "tests/hotkey/*.js",
+          // "tests/image/*.js",
+          // "tests/import/*.js",
+          // "tests/insert_unicode/*.js",
+          // "tests/locales/*.js",
+          // "tests/permission/*.js",
+          // "tests/search/*.js",
+          // "tests/user/UserTest.js",
+        ],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
-          // external: ["api/**/*.js"],
-          // ignore: ["./node_modules/underscore/underscore.js"],
+          external: ["api/**/*.js"],
+          basedir: "./api/"
+            // ignore: ["./node_modules/underscore/underscore.js"],
         }
       },
     },
@@ -216,7 +249,7 @@ module.exports = function(grunt) {
       },
       test: {
         files: "<%= jshint.test.src %>",
-        tasks: ["newer:jshint:test", "newer:jasmine_node:dev"]
+        tasks: ["newer:jshint:test", "newer:browserify:test", "newer:jasmine_node:dev"]
       },
     },
     exec: {
@@ -268,6 +301,6 @@ module.exports = function(grunt) {
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesAngular"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular", "corpuspages-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "jasmine", "uglify", "docs", "fielddb-angular", "corpuspages-angular"]);
 
 };

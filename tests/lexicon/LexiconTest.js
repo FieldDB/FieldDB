@@ -1,4 +1,9 @@
 describe("Lexicon: as a user I want to search for anything, even things that don't exist", function() {
+
+  it("should load", function() {
+    expect("See lexion repo for lexicon tests").toBeTruthy();
+  });
+
   it("should be able to build morphemes from a text file of segmented morphemes", function() {
     expect(true).toBeTruthy();
   });
