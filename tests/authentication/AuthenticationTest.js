@@ -366,7 +366,8 @@ describe("Authentication ", function() {
         auth.login({
           username: "lingllama",
           password: "hypothesis"
-        }).then(function() {
+        }).then(function(response) {
+          console.error("should not land in the sucess area. ", response);
           expect(true).toBeFalsy();
         }, function(error) {
           auth.debug("Failed authentication");
@@ -398,8 +399,9 @@ describe("Authentication ", function() {
         auth.login({
           username: "lingllama",
           password: "hypothesis"
-        }).then(function() {
+        }).then(function(response) {
           auth.debug("Done authentication");
+          console.error("should not land in the sucess area. ", response);
           expect(true).toBeFalsy();
         }, function(error) {
           auth.debug("Failed authentication");
@@ -432,8 +434,9 @@ describe("Authentication ", function() {
         auth.login({
           username: "sapri",
           password: "phoneme"
-        }).then(function() {
+        }).then(function(response) {
           auth.debug("Done authentication");
+          console.error("should not land in the sucess area. ", response);
           expect(true).toBeFalsy();
         }, function(error) {
           auth.debug("Failed authentication");
