@@ -114,7 +114,11 @@ var FieldDBObject = function FieldDBObject(json) {
     } else {
       simpleModels.push(member);
     }
-    this[member] = json[member];
+    try {
+      this[member] = json[member];
+    } catch (e) {
+      console.log(e.stack);
+    }
   }
   if (simpleModels.length > 0) {
     this.debug("simpleModels", simpleModels.join(", "));
@@ -1546,7 +1550,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   application: {
     get: function() {
       return FieldDBObject.application;
-    }
+    },
+    set: function() {}
   },
 
   corpus: {
@@ -1784,15 +1789,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   /**
    * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
    */
-  showDiffs: function(oldrevision, newrevision) {
-
-    this.todo("We haven't implemented the 'diff' tool yet" +
-      " (ie, showing the changes, letting you undo changes etc)." +
-      " We will do it eventually, when it becomes a priority. " +
-      "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
-      "You can vote for it in our issue tracker</a>.  " +
-      "We use the " +
-      "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
+  showDiffs: {
+    value: function(oldrevision, newrevision) {
+      this.todo("We haven't implemented the 'diff' tool yet" +
+        " (ie, showing the changes, letting you undo changes etc)." +
+        " We will do it eventually, when it becomes a priority. " +
+        "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
+        "You can vote for it in our issue tracker</a>.  " +
+        "We use the " +
+        "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
+    }
   },
 
   comments: {
@@ -2012,7 +2018,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (this.application && this.application.contextualizer) {
         return this.application.contextualizer;
       }
-    }
+    },
+    set: function() {}
   },
 
   /**

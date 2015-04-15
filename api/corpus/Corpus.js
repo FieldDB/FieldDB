@@ -103,7 +103,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         }
       }
       return new Date(timestamp);
-    }
+    },
+    set: function() {}
   },
 
   confidential: {
@@ -345,7 +346,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var corpusTemplate = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
       corpusTemplate.confidential.secretKey = FieldDBObject.uuidGenerator();
       return corpusTemplate;
-    }
+    },
+    set: function() {}
   },
 
   defaults_psycholinguistics: {
@@ -362,7 +364,8 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
 
       return JSON.parse(JSON.stringify(doc));
-    }
+    },
+    set: function() {}
   },
 
   /**

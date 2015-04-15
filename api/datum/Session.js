@@ -235,7 +235,8 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
         fields: DEFAULT_CORPUS_MODEL.sessionFields
       };
       return JSON.parse(JSON.stringify(doc));
-    }
+    },
+    set: function() {}
   },
 
   confidentiality: {
@@ -702,7 +703,8 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       if (this._datalist && this._datalist.whenReindexedFromApi) {
         return this._datalist.whenReindexedFromApi;
       }
-    }
+    },
+    set: function() {}
   },
 
   datalist: {

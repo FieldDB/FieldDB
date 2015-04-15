@@ -130,7 +130,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         asFieldMatrix: [],
         asCSV: []
       };
-    }
+    },
+    set: function() {}
   },
 
   INTERNAL_MODELS: {
@@ -149,13 +150,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return false;
       }
       return this.asCSV && this.asCSV.length > 0;
-    }
+    },
+    set: function() {}
   },
 
   showImportThirdStep: {
     get: function() {
       return this.datalist && this.datalist.docs && this.datalist.docs.length > 0;
-    }
+    },
+    set: function() {}
   },
 
   addFileUri: {
