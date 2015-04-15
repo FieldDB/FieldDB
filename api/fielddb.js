@@ -105,6 +105,9 @@
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   FieldDB.FieldDatabase = FieldDatabase;
   FieldDB["FieldDatabase"] = FieldDatabase;
+  var HotKeys = require("./hotkey/HotKeys").HotKeys;
+  FieldDB.HotKeys = HotKeys;
+  FieldDB["HotKeys"] = HotKeys;
   var Import = require("./import/Import").Import;
   FieldDB.Import = Import;
   FieldDB["Import"] = Import;
