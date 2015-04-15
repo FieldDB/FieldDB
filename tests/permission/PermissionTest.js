@@ -1,4 +1,14 @@
-var Permissions = require("./../../api/permission/Permissions").Permissions;
+"use strict";
+var Permissions;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Permissions = FieldDB.Permissions;
+  }
+} catch (e) {}
+
+Permissions = Permissions || require("./../../api/permission/Permissions").Permissions;
+
 var SAMPLE_v1_PERMISSIONS_SYSTEMS = require("./../../sample_data/permissions_v1.22.1.json");
 describe("Permission Tests", function() {
   describe("construction", function() {
