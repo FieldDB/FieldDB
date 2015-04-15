@@ -1,10 +1,10 @@
 /* globals runs, waitsFor */
 
-var AudioService = AudioService || require("../../api/audio_video/AudioService");
-var Database = Database || require("../../api/corpus/Database").Database;
 
 var runCORSTests = function(whichServer) {
 
+  var AudioService = AudioService || require("../../api/audio_video/AudioService");
+  var Database = Database || require("../../api/corpus/Database").Database;
   var corpusServerUrl;
 
   var serverURL = "https://audiodev.lingsync.org";
