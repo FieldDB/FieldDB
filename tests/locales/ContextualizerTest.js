@@ -1,6 +1,23 @@
-var Contextualizer = require("./../../api/locales/Contextualizer").Contextualizer;
-var ContextualizableObject = require("./../../api/locales/ContextualizableObject").ContextualizableObject;
-var FieldDBObject = require("./../../api/FieldDBObject").FieldDBObject;
+"use strict";
+/* globals navigator, localStorage */
+
+var Contextualizer;
+var ContextualizableObject;
+var FieldDBObject;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Contextualizer = FieldDB.Contextualizer;
+    ContextualizableObject = FieldDB.ContextualizableObject;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+
+Contextualizer = Contextualizer || require("./../../api/locales/Contextualizer").Contextualizer;
+ContextualizableObject = ContextualizableObject || require("./../../api/locales/ContextualizableObject").ContextualizableObject;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
+
+
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 var Q = require("q");
 
@@ -31,6 +48,10 @@ describe("Contextualizer", function() {
       set: mockDatabase.set
     };
     ContextualizableObject.compatibleWithSimpleStrings = true;
+
+    try {
+      localStorage.clear();
+    } catch (e) {}
   });
 
   describe("construction", function() {
@@ -43,7 +64,21 @@ describe("Contextualizer", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer).toBeDefined();
       expect(contextualizer.defaultLocale.iso).toEqual("en");
-      expect(contextualizer.currentLocale.iso).toEqual("en");
+      expect(contextualizer.currentContext).toEqual("default");
+    });
+
+    it("should set the locale to the user's prefered locale by default", function() {
+      var contextualizer = new Contextualizer();
+      expect(contextualizer).toBeDefined();
+      expect(contextualizer.defaultLocale.iso).toEqual("en");
+
+      try {
+        if (navigator.languages[0].indexOf(contextualizer.currentLocale.iso) === -1) {
+          expect(contextualizer.currentLocale.iso).toEqual(navigator.languages[0]);
+        }
+      } catch (e) {
+        expect(contextualizer.currentLocale.iso).toEqual(contextualizer.defaultLocale.iso);
+      }
       expect(contextualizer.currentContext).toEqual("default");
     });
 
@@ -67,13 +102,6 @@ describe("Contextualizer", function() {
       expect(contextualizer.data.en).toBeDefined();
       expect(contextualizer.data.es).toBeDefined();
       expect(contextualizer.contextualize("locale_Username")).toEqual("Username:");
-    });
-
-    it("should use the default locale if none are specified", function() {
-      var defaultApp = new Contextualizer();
-      expect(defaultApp.currentLocale).toEqual({
-        iso: "en"
-      });
     });
 
     it("should use the user specified locale", function() {
@@ -135,14 +163,21 @@ describe("Contextualizer", function() {
           "message": "Practice"
         }
       });
+      contextualizer.addMessagesToContextualizedStrings("fr", {
+        "locale_practice": {
+          "message": "Pratique"
+        }
+      });
+      contextualizer.currentLocale = "fr";
     });
 
     it("should localize strings using the current locale", function() {
-      expect(contextualizer.localize("locale_practice")).toEqual("Practice");
+      expect(contextualizer.localize("locale_practice")).toEqual("Pratique");
     });
     it("should contextualize strings using the current locale", function() {
-      expect(contextualizer.contextualize("locale_practice")).toEqual("Practice");
+      expect(contextualizer.contextualize("locale_practice")).toEqual("Pratique");
     });
+
     it("should localize strings using a specific local", function() {
       expect(contextualizer.localize("locale_practice", "ka")).toEqual("პრაკთიკა");
     });
@@ -371,6 +406,7 @@ describe("Contextualizer", function() {
       expect(contextualizer.contextualize(datalist.instructions)).toEqual("The child should touch or point to the image corresponding to what they hear.");
 
       contextualizer.currentContext = "child";
+      expect(contextualizer.currentContext).toEqual("child");
       expect(contextualizer.contextualize(datalist.title)).toEqual("Practice");
       expect(contextualizer.contextualize(datalist.description)).toEqual("In this game, you will help the mouse eat all the cheese!");
       expect(contextualizer.contextualize(datalist.instructions)).toEqual("Choose the right picture to help the mouse eat the cheese.");
@@ -527,7 +563,7 @@ describe("Contextualizer", function() {
         expect(containingObject.title.toJSON).toBeUndefined();
       });
 
-      it("should update a string to the default of a contextualizable object if compatibleWithSimpleStrings is true", function(done) {
+      it("should update a string to the default of a contextualizable object if compatibleWithSimpleStrings is false", function(done) {
         ContextualizableObject.compatibleWithSimpleStrings = false;
         var onlyAString = new ContextualizableObject("Import datalist");
         expect(onlyAString.data).toEqual({
@@ -539,43 +575,49 @@ describe("Contextualizer", function() {
           }
         });
         expect(contextualizer.alwaysConfirmOkay).toBeTruthy();
+        expect(contextualizer.whenReadys).toBeDefined();
 
-        setTimeout(function() {
-          expect(contextualizer.data.en.locale_Import_datalist).toBeDefined();
-          expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Import datalist");
+        Q.allSettled(contextualizer.whenReadys).then(function(resolvedPromises) {
+          expect(resolvedPromises).toBeDefined();
+          expect(resolvedPromises[0].value).toBeDefined();
+          expect(resolvedPromises[0].value).toEqual("Import datalist");
+
+          expect(contextualizer.data[contextualizer.currentLocale.iso].locale_Import_datalist).toBeDefined();
+          expect(contextualizer.data[contextualizer.currentLocale.iso].locale_Import_datalist.message).toEqual("Import datalist");
           expect(onlyAString.originalString).toEqual("Import datalist");
           expect(onlyAString.default).toEqual("Import datalist");
           onlyAString.default = "Imported datalist";
 
-          setTimeout(function() {
-            expect(onlyAString.default).toEqual("Imported datalist");
-            expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
-            expect(contextualizer.data.en.locale_Import_datalist.message).toEqual("Imported datalist");
+          expect(onlyAString.default).toEqual("Imported datalist");
+          expect(contextualizer.contextualize("locale_Import_datalist")).toEqual("Imported datalist");
+          expect(contextualizer.data[contextualizer.currentLocale.iso].locale_Import_datalist.message).toEqual("Imported datalist");
 
-            expect(ContextualizableObject.compatibleWithSimpleStrings).toEqual(false);
-            expect(onlyAString.toJSON()).toEqual("Imported datalist");
-            ContextualizableObject.compatibleWithSimpleStrings = true;
-            expect(onlyAString.toJSON()).toEqual({
-              default: "locale_Import_datalist",
-              locale_Import_datalist: "Imported datalist"
-            });
+          expect(ContextualizableObject.compatibleWithSimpleStrings).toEqual(false);
+          expect(onlyAString.toJSON()).toEqual("Imported datalist");
+          ContextualizableObject.compatibleWithSimpleStrings = true;
+          expect(onlyAString.toJSON()).toEqual({
+            default: "locale_Import_datalist",
+            locale_Import_datalist: "Imported datalist"
+          });
 
-            var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
-            expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
-            expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported datalist");
-            contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again datalist";
+          var contextualizedObjectFromASerializedContextualizedObjectWhichWasAString = new ContextualizableObject(onlyAString.toJSON());
+          expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.originalString).toBeUndefined();
+          expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported datalist");
+          contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default = "Imported again datalist";
 
-            setTimeout(function() {
-              expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again datalist");
-              expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
-                default: "locale_Import_datalist",
-                locale_Import_datalist: "Imported again datalist"
-              });
-              done();
-            }, 100);
+          expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.default).toEqual("Imported again datalist");
+          expect(contextualizedObjectFromASerializedContextualizedObjectWhichWasAString.toJSON()).toEqual({
+            default: "locale_Import_datalist",
+            locale_Import_datalist: "Imported again datalist"
+          });
 
-          }, 100);
-        }, 100);
+
+        }, function(reason) {
+          expect(reason).toEqual(" ");
+        }).fail(function(error) {
+          console.error(error.stack);
+          expect(error).toEqual(" ");
+        }).done(done);
 
 
 
