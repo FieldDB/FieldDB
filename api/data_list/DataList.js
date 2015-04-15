@@ -259,11 +259,14 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       var self = this,
         deferred = Q.defer();
 
-
+      this.whenReindexedFromApi = deferred.promise;
       if (!this.api) {
-        this.debug("Not reindexing from the database, this has no api.");
+        this.debug("Not reindexing this datalist from the database, its not connected to an api.");
         Q.nextTick(function() {
-          deferred.resolve(self);
+          deferred.reject({
+            status: 412,
+            userFriendlyErrors: ["This datalist doesn't need to be re-indexed. 29834."]
+          });
         });
         return deferred.promise;
       }
@@ -272,9 +275,11 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         self.fetching = self.loading = false;
         self.warn("This datalist has no corpus, it doesnt know how to find out which data are in it.");
         Q.nextTick(function() {
-          self.docIds = self.docIds || self._docIds;
           self.docs = self.docs || [];
-          deferred.resolve(self);
+          deferred.reject({
+            status: 412,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified."]
+          });
         });
         return deferred.promise;
       }
@@ -283,19 +288,15 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       //   deferred.resolve(self);
       // });
 
-
       var unableToFetchCurrentDataAffiliatedWithThisDataList = function(err) {
         self.fetching = self.loading = false;
         self.warn(" problem fetching the data list", err);
         self.docs = self.docs || [];
-        self.docIds = self.docIds || self._docIds;
         deferred.reject(err);
         // return self;
       };
 
-
       this.fetching = this.loading = true;
-      this.whenReindexedFromApi = deferred.promise;
       this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
           self.fetching = self.loading = false;
           self.warn("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
@@ -342,6 +343,9 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         .fail(function(error) {
           console.error(error.stack, self);
           deferred.reject(error);
+        })
+        .done(function() {
+          console.log("Done data list reindex if possible", self.docs.length);
         });
 
       return deferred.promise;
@@ -391,26 +395,34 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       if (value === this._docIds) {
         return;
       }
-      if (!value) {
-        delete this._docIds;
+      if (!value || value === []) {
+        // delete this._docIds;
         return;
       }
-      if (!this.docs || this.docs.length === 0) {
-        var self = this;
-        if (typeof value.map !== "function") {
-          console.error(" trying to set docIds of datalist to something that isnt an array.", value);
-          throw new Error("This is a very odd set of docIds");
-        }
-        value.map(function(docPrimaryKey) {
+      if (typeof value.map !== "function") {
+        console.error(" trying to set docIds of datalist to something that isnt an array.", value);
+        throw new Error("This is a very odd set of docIds " + value);
+      }
+      var self = this;
+      value.map(function(docPrimaryKey) {
+        self.debug("Looking at " + docPrimaryKey);
+        if (self._docs && !self._docs[docPrimaryKey]) {
+          self.debug("converting " + docPrimaryKey + " into a placeholder");
           var docPlaceholder = {
             dbname: self.dbname,
             loaded: false
           };
           docPlaceholder[self.primaryKey] = docPrimaryKey;
+          self.debug("adding " + docPrimaryKey + " into the docs");
           self.add(docPlaceholder);
-        });
+        }
+      });
+      if (!this._docs || this._docs.length < value.length) {
+        this.tempDocIds = value;
       }
-      this._docIds = value;
+      //   delete self._docIds;
+      //   value = null;
+      // // }
     }
   },
 

@@ -108,6 +108,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }
       this.warn("Using an unlikely url, as if this app was running in a website where the databse is.");
+      return "";
     },
     set: function(value) {
       this.debug("Setting url  ", value);
@@ -286,9 +287,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       } else {
         key = "";
       }
-
+      var originalCollectionUrl = collectionUrl;
       var cantLogIn = function(reason) {
         self.debug(reason);
+        if (reason.status === 404) {
+          if (originalCollectionUrl === collectionUrl) {
+            reason.userFriendlyErrors = ["The server didn't know about the collection " + collectionUrl + "you requested. Please try another url."];
+          } else {
+            reason.userFriendlyErrors = ["The application was unable to request the " + collectionUrl + " collection. Please report this 290323."];
+          }
+        }
         deferred.reject(reason);
         // self.register().then(function() {
         //   self.fetchCollection(collectionUrl).then(function(documents) {
