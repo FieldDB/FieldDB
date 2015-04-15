@@ -1,4 +1,14 @@
-var Datum = require("./../../api/datum/Datum").Datum;
+"use strict";
+var Datum;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Datum = FieldDB.Datum;
+  }
+} catch (e) {}
+
+Datum = Datum || require("./../../api/datum/Datum").Datum;
+
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
 
