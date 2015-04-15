@@ -97,8 +97,8 @@
   FieldDB.FieldDBConnection = FieldDBConnection;
   FieldDB["FieldDBConnection"] = FieldDBConnection;
   var FieldDBImage = require("./image/Image").Image;
-  FieldDB.FieldDBImage = FieldDBImage;
-  FieldDB["FieldDBImage"] = FieldDBImage;
+  FieldDB.Image = FieldDBImage;
+  FieldDB["Image"] = FieldDBImage;
   var FieldDBObject = require("./FieldDBObject").FieldDBObject;
   FieldDB.FieldDBObject = FieldDBObject;
   FieldDB["FieldDBObject"] = FieldDBObject;
@@ -108,6 +108,9 @@
   var HotKeys = require("./hotkey/HotKeys").HotKeys;
   FieldDB.HotKeys = HotKeys;
   FieldDB["HotKeys"] = HotKeys;
+  var Images = require("./image/Images").Images;
+  FieldDB.Images = Images;
+  FieldDB["Images"] = Images;
   var Import = require("./import/Import").Import;
   FieldDB.Import = Import;
   FieldDB["Import"] = Import;
