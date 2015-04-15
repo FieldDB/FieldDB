@@ -1567,7 +1567,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           if (FieldDB && FieldDB["Database"]) {
             db = FieldDB["Database"].prototype;
-            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .", db);
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            this.debug(" the database", db);
           }
         } catch (e) {
           var message = e ? e.message : " unknown error in getting the corpus";

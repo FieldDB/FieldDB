@@ -319,7 +319,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       session.whenReindexedFromApi.then(function(resultingdatalist) {
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -357,7 +357,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       session.whenReindexedFromApi.then(function(resultingdatalist) {
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -401,7 +401,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       session.whenReindexedFromApi.then(function(resultingdatalist) {
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -493,7 +493,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toEqual(" ");
         expect(true).toBeFalsy();
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -544,7 +544,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toEqual(" ");
         expect(true).toBeFalsy();
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -603,7 +603,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toEqual(" ");
         expect(true).toBeFalsy();
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
@@ -661,7 +661,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toEqual(" ");
         expect(true).toBeFalsy();
       }, function(error) {
-        console.log(error);
+        // console.log(error);
         if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
