@@ -177,7 +177,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
   }
 
-  $rootScope.appVersion = "2.50.4.17.54ss";
+  $rootScope.appVersion = "2.51.15.23.58ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -236,7 +236,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   };
 
-  document.addEventListener("notauthenticated", function() {
+  document.addEventListener("authenticate:fail", function() {
     $rootScope.clickSuccess = true;
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
@@ -692,7 +692,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  document.addEventListener("authenticated", function() {
+  document.addEventListener("authenticate:success", function() {
     $rootScope.clickSuccess = true;
 
     if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.rev) {
