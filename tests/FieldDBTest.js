@@ -1,6 +1,16 @@
 "use strict";
 
-var FieldDB = require("../api/fielddb.js").FieldDB;
+/* jshint ignore:start  */
+try {
+  if (FieldDB) {
+    console.log("FieldDB is ready.");
+  }
+} catch (e) {
+  FieldDB = require("../api/fielddb.js").FieldDB;
+}
+
+
+
 /**
  <pre>
   ======== A Handy Little Jasmine Reference ========
@@ -68,3 +78,6 @@ describe("api/FieldDB.js", function() {
   });
 
 });
+
+/* jshint ignore:end  */
+
