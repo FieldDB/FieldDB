@@ -1,6 +1,16 @@
-var Consultant = require("../../api/user/Consultant").Consultant;
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
+"use strict";
+var Consultant;
+var FieldDBObject;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Consultant = FieldDB.Consultant;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
 
+Consultant = Consultant || require("./../../api/user/Consultant").Consultant;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
 
 describe("as an Consultant, I want to set up my Consultant info", function() {
   var mockcorpus;
@@ -257,15 +267,20 @@ describe("as an Consultant, I want to set up my Consultant info", function() {
       expect(consultant.fields.username._encryptedValue).toContain("confidential:");
     });
 
-    it("should display username if in decryptedMode", function() {
+    it("should display username if the app is in decryptedMode", function() {
       var consultant = new Consultant({
         confidential: mockcorpus.confidential,
         fields: Consultant.prototype.defaults.fields
       });
       consultant.username = "tilohash";
       consultant.decryptedMode = true;
-      expect(consultant.username).toEqual("tilohash");
-      expect(consultant.fields.username.value).toEqual("tilohash");
+      if (consultant.application && consultant.application.decryptedMode) {
+        expect(consultant.username).toEqual("tilohash");
+        expect(consultant.fields.username.value).toEqual("tilohash");
+      } else {
+        expect(consultant.username).toEqual("xxxxxxxx");
+        expect(consultant.fields.username.value).toEqual("xxxxxxxx");
+      }
     });
 
 

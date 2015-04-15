@@ -1,14 +1,16 @@
 /* globals runs, waitsFor */
 
-var CouchDBConnection = require("../../api/corpus/Database").CouchDBConnection;
-var FieldDBConnection = require("../../api/corpus/Database").FieldDBConnection;
-var CORS = require("../../api/CORSNode").CORS;
-
-var user = {
-  username: "lingllama",
-  password: "phoneme"
-};
 var runCORSTests = function(whichServer) {
+
+  var CouchDBConnection = require("../../api/corpus/Database").CouchDBConnection;
+  var FieldDBConnection = require("../../api/corpus/Database").FieldDBConnection;
+  var CORS = require("../../api/CORSNode").CORS;
+
+  var user = {
+    username: "lingllama",
+    password: "phoneme"
+  };
+
   console.log("Running on target " + whichServer);
   /*
    * Declare an object and its functions which will be in scope

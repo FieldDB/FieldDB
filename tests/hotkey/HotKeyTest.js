@@ -1,4 +1,13 @@
-var HotKeys = require("../../api/hotkey/HotKeys").HotKeys;
+"use strict";
+var HotKeys;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    HotKeys = FieldDB.HotKeys;
+  }
+} catch (e) {}
+
+HotKeys = HotKeys || require("./../../api/hotkey/HotKeys").HotKeys;
 
 describe("HotKey: as a user I want to use keyboard shortcuts for frequent actions", function() {
   it("should load", function() {

@@ -64,6 +64,36 @@ var mockDatabase = {
     });
     return deferred.promise;
   },
+  fetchRevisions: function(id, optionalUrl) {
+    var deferred = Q.defer();
+    optionalUrl = optionalUrl || this.url || "https://corpus.example.org/anexampleuser-firstcorpus";
+    Q.nextTick(function() {
+      var mockCouchDBResponse = {
+        _id: id,
+        _rev: "3-825cb35de44c433bfb2df415563a19de",
+        _revs_info: [{
+          rev: "3-825cb35de44c433bfb2df415563a19de",
+          status: "available"
+        }, {
+          rev: "2-7051cbe5c8faecd085a3fa619e6e6337",
+          status: "available"
+        }, {
+          rev: "1-967a00dff5e02add41819138abb3284d",
+          status: "available"
+        }]
+      };
+      var revisions = [];
+
+      mockCouchDBResponse._revs_info.map(function(revisionInfo) {
+        if (revisionInfo.status === "available") {
+          revisions.push(optionalUrl + "/" + id + "?rev=\"" + revisionInfo.rev + "\"");
+        }
+      });
+
+      deferred.resolve(revisions);
+    });
+    return deferred.promise;
+  },
   fetchCollection: function(collectionUrl) {
     console.log("Mocking database fetchCollection(collectionUrl) ", collectionUrl);
     var deferred = Q.defer();
@@ -71,7 +101,7 @@ var mockDatabase = {
       if (collectionUrl === "comments") {
         deferred.resolve({
           collection: collectionUrl,
-          title: "A generated datalist",
+          title: "A generated list of comments",
           description: "something here",
           docIds: ["abc", "123", "kweo", "654"]
         });

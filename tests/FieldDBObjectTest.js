@@ -1,4 +1,14 @@
-var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
+"use strict";
+/* globals localStorage, FieldDB*/
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+FieldDBObject = FieldDBObject || require("./../api/FieldDBObject").FieldDBObject;
+
+
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
 
@@ -11,8 +21,12 @@ describe("FieldDBObject", function() {
     }
     mockDatabase = {
       get: mockDatabase.get,
-      set: mockDatabase.set
+      set: mockDatabase.set,
+      fetchRevisions: mockDatabase.fetchRevisions
     };
+    try {
+      localStorage.clear();
+    } catch (e) {}
   });
 
   describe("construction", function() {
@@ -96,15 +110,7 @@ describe("FieldDBObject", function() {
         collection: "somethingnotinthesystem"
       };
       mysteryObject = FieldDBObject.convertDocIntoItsType(mysteryObject);
-      if (mysteryObject.previousFieldDBtype) {
-        expect(mysteryObject).toEqual({
-          _fieldDBtype: "FieldDBObject",
-          _id: "2389jr9rj490",
-          collection: "somethingnotinthesystem",
-          previousFieldDBtype: "Somethingnotinthesystem"
-        });
-      }
-
+      expect(mysteryObject.fieldDBtype).toEqual("FieldDBObject");
     });
 
     it("should be mark the previous type if it cant guess its type", function() {
@@ -115,9 +121,9 @@ describe("FieldDBObject", function() {
         "gravatar": "weoaeoriaew"
       };
       wasACommentButFieldDBIsUndefinedInNPMRequireContexts = FieldDBObject.convertDocIntoItsType(wasACommentButFieldDBIsUndefinedInNPMRequireContexts);
-      if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.fieldDBtype !== "Comment") {
+      if (wasACommentButFieldDBIsUndefinedInNPMRequireContexts.previousFieldDBtype) {
         expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts).toEqual({
-          _fieldDBtype: "FieldDBObject",
+          // _fieldDBtype: "FieldDBObject",
           text: "How to do something",
           username: "lingllama",
           _timestamp: 1348670525349,
@@ -125,6 +131,9 @@ describe("FieldDBObject", function() {
           previousFieldDBtype: "Comment",
           _dateCreated: wasACommentButFieldDBIsUndefinedInNPMRequireContexts.timestamp
         });
+      } else {
+        expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts.fieldDBtype).toEqual("Comment");
+        expect(wasACommentButFieldDBIsUndefinedInNPMRequireContexts.previousFieldDBtype).toBeUndefined();
       }
     });
 
@@ -358,7 +367,7 @@ describe("FieldDBObject", function() {
         expect(object.title).toEqual("Community corpus");
         // return object;
       }, function(error) {
-        console.log(error);
+        object.debug(error);
         expect(false).toBeTruthy();
         // return object;
       }).done(done);
@@ -474,13 +483,17 @@ describe("FieldDBObject", function() {
 
 
       expect(snapshot.enteredByUser.value).toEqual("unknown");
-      expect(snapshot.enteredByUser.json.user).toEqual({
-        name: "",
-        username: "unknown"
-      });
-      expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+      expect(snapshot.enteredByUser.json.user.name).toEqual("");
+      expect(snapshot.enteredByUser.json.user.username).toEqual("unknown");
       console.log("hardware", snapshot.enteredByUser.json.hardware);
-      expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+      if (snapshot.enteredByUser.json.software.appVersion === "PhantomJS unknown") {
+        expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
+        expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
+      } else {
+        expect(snapshot.enteredByUser.json.software.appVersion).toBeDefined();
+        expect(snapshot.enteredByUser.json.software.appVersion).toContain("Safari");
+        expect(snapshot.enteredByUser.json.hardware.cpus).toBeUndefined();
+      }
 
 
       expect(object.fieldDBtype).toEqual("FieldDBObject");
@@ -589,7 +602,7 @@ describe("FieldDBObject", function() {
         expect(object.fossil).toBeDefined();
 
       }, function(error) {
-        console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
       }).done(done);
 
@@ -643,9 +656,9 @@ describe("FieldDBObject", function() {
         expect(object.modifiedByUser.users).toBeUndefined();
         expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
         expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
-        expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+        expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
         // console.log("hardware", object.modifiedByUser.json.hardware);
-        expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+        expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
 
       }, function(error) {
@@ -658,9 +671,9 @@ describe("FieldDBObject", function() {
       expect(object.modifiedByUser.users).toBeUndefined();
       expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
       expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
-      expect(object.modifiedByUser.json.users[1].software.appVersion).toEqual("PhantomJS unknown");
+      expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
       // console.log("hardware", object.modifiedByUser.json.hardware);
-      expect(object.modifiedByUser.json.users[1].hardware.cpus).toBeGreaterThan(1);
+      expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
     }, specIsRunningTooLong);
 
@@ -684,7 +697,7 @@ describe("FieldDBObject", function() {
         expect(result).toBe(object);
         expect(object.id).toEqual("2839aj983aja");
         expect(object.rev).toBeDefined();
-        expect(object.modifiedByUser).toEqual({
+        expect(object.modifiedByUser.equals({
           _fieldDBtype: "FieldDBObject",
           label: "modifiedByUser",
           value: "inuktitutcleaningbot",
@@ -704,7 +717,7 @@ describe("FieldDBObject", function() {
           userchooseable: "disabled",
           _dateCreated: object.modifiedByUser.dateCreated,
           _version: object.version
-        });
+        })).toBeTruthy();
 
         // this was a placeholder because it had no rev, so we should now have a fossil
         expect(object.fossil).toBeDefined();
@@ -719,7 +732,7 @@ describe("FieldDBObject", function() {
           expect(object.rev).toEqual(oldRev);
           return object;
         }, function(error) {
-          console.log(error);
+          object.debug(error);
           expect(false).toBeTruthy();
           return object;
         });
@@ -790,7 +803,7 @@ describe("FieldDBObject", function() {
         expect(object.unsaved).toEqual(true);
 
       }, function(error) {
-        console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
         return object;
       }).done(done);
@@ -832,7 +845,7 @@ describe("FieldDBObject", function() {
         expect(object.enteredByUser).toBeDefined();
         expect(object.enteredByUser.value).toEqual("teammatetiger");
       }, function(error) {
-        console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
         return object;
       }).done(done);
@@ -955,6 +968,75 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
 
+    describe("undo", function() {
+
+      it("should not get previous revisions if it hasnt been saved.", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions,
+            url: "https://example.uni.edu/some/path/too/testinguser-firstcorpus"
+          }
+        });
+        expect(object.corpus).toBeDefined();
+        expect(object.corpus.fetchRevisions).toBeDefined();
+        expect(typeof object.corpus.fetchRevisions).toEqual("function");
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toBeUndefined();
+          expect(object._revisions).toBeUndefined();
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+      it("should return previous revisions if it has no id but it has revisions", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          some: "other document from anotehr server or from another app which has reviisions jsons but no id in this database.",
+          _revisions: ["https://localhost:6984/lingallama-communitycorpus/1234490ej0a9ak3q?rev=\"4-23iwoai3jr\""],
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions
+          }
+        });
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toEqual(["https://localhost:6984/lingallama-communitycorpus/1234490ej0a9ak3q?rev=\"4-23iwoai3jr\""]);
+          expect(object._revisions).toBeDefined();
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+
+      it("should get previous revisions if it has been saved.", function(done) {
+        var object = new FieldDBObject({
+          dbname: "lingallama-communitycorpus",
+          _id: "1234490ej0a9ak3q",
+          corpus: {
+            fetchRevisions: mockDatabase.fetchRevisions,
+            url: "https://example.uni.edu/some/path/too/testinguser-firstcorpus"
+          }
+        });
+        expect(object.corpus).toBeDefined();
+        expect(object.corpus.fetchRevisions).toBeDefined();
+        expect(typeof object.corpus.fetchRevisions).toEqual("function");
+        object.fetchRevisions().then(function(revisions) {
+          expect(revisions).toEqual([
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"3-825cb35de44c433bfb2df415563a19de\"",
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"2-7051cbe5c8faecd085a3fa619e6e6337\"",
+            "https://example.uni.edu/some/path/too/testinguser-firstcorpus/1234490ej0a9ak3q?rev=\"1-967a00dff5e02add41819138abb3284d\""
+          ]);
+          expect(object._revisions).toBeDefined();
+          expect(object._revisions.length).toEqual(3);
+        }, function(error) {
+          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }).done(done);
+
+      }, specIsRunningTooLong);
+
+    });
+
   });
 
   describe("render", function() {
@@ -979,13 +1061,13 @@ describe("FieldDBObject", function() {
       FieldDBObject.render = oldRender;
     });
 
-    xit("should accept a render function for each object", function() {
+    it("should accept a render function for each object", function() {
       var app = new FieldDBObject();
       app.render = function() {
         this.warn("I rendered.");
       };
       app.render();
-      expect(app.warnMessage).toEqual("I rendered");
+      expect(app.warnMessage).toEqual("I rendered.");
     });
   });
 
@@ -1005,21 +1087,23 @@ describe("FieldDBObject", function() {
       console.log(" Done debugMode testing");
 
       buggy.warn("This will print a warning with an object also", buggy);
-      buggy.bug("This will print an warning in Nodejs");
+      buggy.bug("This will print an warning in Nodejs\n And show an alert in a browser.");
       buggy.todo("This will print a todo", buggy);
       expect(buggy.toJSON().warnMessage).toBeUndefined();
-      expect(buggy.toJSON().bugMesssage).toBeUndefined();
+      expect(buggy.bugMessage).toBeDefined();
+      expect(buggy.bugMessage).toContain("And show an alert in a browser.");
+      expect(buggy.toJSON().bugMessage).toBeUndefined();
       expect(buggy.toJSON().todoMessage).toBeUndefined();
     });
 
     it("should not bug about the same message if it has already been bugged and not cleared", function() {
       var buggy = new FieldDBObject();
       expect(buggy.bugMessage).toBeUndefined();
-      buggy.bug("This is a problem, please report this.");
-      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
-      buggy.bug("This is a problem, please report this.");
-      expect(buggy.bugMessage).toEqual("This is a problem, please report this.");
-      expect(buggy.warnMessage).toContain("Not repeating bug message: This is a problem, please report this");
+      buggy.bug("This is simulating a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is simulating a problem, please report this.");
+      buggy.bug("This is simulating a problem, please report this.");
+      expect(buggy.bugMessage).toEqual("This is simulating a problem, please report this.");
+      expect(buggy.warnMessage).toContain("Not repeating bug message: This is simulating a problem, please report this");
     });
 
     it("should be possible for client apps to override the bug function", function() {
@@ -1099,11 +1183,50 @@ describe("FieldDBObject", function() {
         expect(results.response).toEqual(true);
         expect(true).toBeTruthy();
       }, function(results) {
-        expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
-        expect(results.response).toEqual(true);
+        lessRiskyObject.debug("This confirm should never be rejected, ", results);
         expect(false).toBeTruthy();
       }).done(done);
       expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
+
+    }, specIsRunningTooLong);
+  });
+
+  describe("prompting", function() {
+    it("should be able to show a prompt UI and wait asyncronously false case", function(done) {
+
+      var objectToDelete = new FieldDBObject();
+      objectToDelete.alwaysReplyToPrompt = "I created this item by mistake";
+      expect(objectToDelete.alwaysReplyToPrompt).toBeTruthy();
+      objectToDelete.alwaysReplyToPrompt = "";
+      expect(objectToDelete.alwaysReplyToPrompt).toBeFalsy();
+
+      objectToDelete.prompt("Why do you want to delete this item?").then(function(results) {
+        expect(results).toBeDefined();
+        expect(results.message).toEqual(" ");
+        expect(objectToDelete.promptMessage).toEqual("Why do you want to delete this item?");
+        expect(results.response).toEqual(false);
+        expect(true).toBeFalsy();
+      }, function(results) {
+        expect(results.message).toEqual("Why do you want to delete this item?");
+        expect(results.response).toBeFalsy();
+        expect(objectToDelete.promptMessage).toEqual("Why do you want to delete this item?");
+      }).done(done);
+
+    }, specIsRunningTooLong);
+
+    it("should be able to show a prompt UI and wait asyncronously true case", function(done) {
+
+      var objectWhichNeedsToConfirmUsersIdentity = new FieldDBObject();
+      objectWhichNeedsToConfirmUsersIdentity.alwaysReplyToPrompt = "phoneme";
+      expect(objectWhichNeedsToConfirmUsersIdentity.alwaysReplyToPrompt).toBeTruthy();
+      objectWhichNeedsToConfirmUsersIdentity.prompt("We need to make sure its you. Please enter your password.").then(function(results) {
+        expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
+        expect(results.response).toEqual("phoneme");
+      }, function(results) {
+        objectWhichNeedsToConfirmUsersIdentity.debug("This prompt should never be rejected, ", results);
+        expect(false).toBeTruthy();
+      }).done(done);
+      expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
 
     }, specIsRunningTooLong);
   });
@@ -1211,7 +1334,9 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalString).toEqual("easy model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
       expect(aBaseObject.externalArray).toEqual(["four", "two"]);
-      expect(aBaseObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(aBaseObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal");
       expect(aBaseObject.externalObject.internalTrue).toEqual(true);
@@ -1220,15 +1345,17 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalObject.internalNumber).toEqual(1);
       expect(aBaseObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aBaseObject.externalObject.missingInOriginal).toBeUndefined();
-      expect(aBaseObject.externalObject.warnMessage).toBeUndefined();
-
-
+      if (aBaseObject.warnMessage) {
+        expect(aBaseObject.externalObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
       // Make sure atriviallyDifferentObject is as it was
       expect(atriviallyDifferentObject).not.toBe(aBaseObject);
       expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
       expect(atriviallyDifferentObject.externalEqualString).toEqual("merging");
       expect(atriviallyDifferentObject.externalArray).toEqual(["one", "two", "three"]);
-      expect(atriviallyDifferentObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(atriviallyDifferentObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
 
       expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
       expect(atriviallyDifferentObject.externalObject.internalTrue).toEqual(true);
@@ -1237,7 +1364,9 @@ describe("FieldDBObject", function() {
       expect(atriviallyDifferentObject.externalObject.internalNumber).toEqual(2);
       expect(atriviallyDifferentObject.externalObject.missingInTarget).toBeUndefined("i'm a old property");
       expect(atriviallyDifferentObject.externalObject.missingInOriginal).toEqual("i'm a new property");
-      expect(atriviallyDifferentObject.externalObject.warnMessage).toBeUndefined();
+      if (aBaseObject.warnMessage) {
+        expect(atriviallyDifferentObject.externalObject.warnMessage).toEqual("This was already the right type, not converting it.");
+      }
     });
 
     it("should be able to ask the user asynchronously what to do if overwrite is not specified false case", function(done) {

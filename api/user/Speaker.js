@@ -408,18 +408,6 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
     }
   },
 
-  decryptedMode: {
-    get: function() {
-      return this._decryptedMode;
-    },
-    set: function(value) {
-      this._decryptedMode = value;
-      if (this._fields) {
-        this._fields.decryptedMode = value;
-      }
-    }
-  },
-
   languageOne: {
     get: function() {
       return this.getLanguageNumber(0);

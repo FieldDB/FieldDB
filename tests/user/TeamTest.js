@@ -1,4 +1,14 @@
-var Team = require("./../../api/user/Team").Team;
+"use strict";
+var Team;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Team = FieldDB.Team;
+  }
+} catch (e) {}
+
+Team = Team || require("./../../api/user/Team").Team;
+
 describe("as a Team I want to set up my team name", function() {
   it("should set default team subtitle", function() {
     var team = new Team();

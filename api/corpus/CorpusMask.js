@@ -266,7 +266,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
           this._team.gravatar = this._team.gravatar || this.gravatar || this._team.buildGravatar(this.dbname);
           this._team.username = this._team.username || this.dbname.split("-")[0];
         }
-        this._team.fetch();
+        if (this.id && this.rev) {
+          this._team.fetch();
+        }
       }
       return this._team;
     },

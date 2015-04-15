@@ -46,7 +46,7 @@ var AudioService = function(url, user, connection, datumid) {
       dictionary: {
         dialect: "AmericanEnglish",
         file: null,
-        url: "https://www.lingsync.org/dictionaries/AmericanEnglish.txt"
+        url: "https://api.example.org/elanguages/english/AmericanEnglish/dictionary.txt"
       }
     };
     var that = this;
@@ -85,7 +85,7 @@ var AudioService = function(url, user, connection, datumid) {
       dictionary: {
         dialect: "AmericanEnglish",
         file: null,
-        url: "https://www.lingsync.org/dictionaries/english.txt"
+        url: "https://api.example.org/elanguages/english/dictionary.txt"
       }
     };
 

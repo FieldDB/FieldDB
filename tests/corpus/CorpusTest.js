@@ -1,7 +1,18 @@
-var Corpus = require("../../api/corpus/Corpus").Corpus;
-var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
-var DatumFields = require("../../api/datum/DatumFields").DatumFields;
+"use strict";
+var Corpus;
+var DatumFields;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Corpus = FieldDB.Corpus;
+    DatumFields = FieldDB.DatumFields;
+  }
+} catch (e) {}
 
+Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+DatumFields = DatumFields || require("./../../api/datum/DatumFields").DatumFields;
+
+var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
 describe("Corpus", function() {
@@ -41,7 +52,7 @@ describe("Corpus", function() {
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+      }).toThrow(new Error("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first."));
     });
 
     it("should be able to build a corpus by calling defaults", function() {

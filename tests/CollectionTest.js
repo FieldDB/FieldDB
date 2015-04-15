@@ -1,10 +1,18 @@
+/* globals FieldDB*/
+
 "use strict";
+var Collection;
+var FieldDBObject;
+try {
+  if (FieldDB) {
+    Collection = FieldDB.Collection;
+    FieldDBObject = FieldDB.FieldDBObject;
+  }
+} catch (e) {}
+Collection = Collection || require("../api/Collection").Collection;
+FieldDBObject = FieldDBObject || require("../api/FieldDBObject").FieldDBObject;
 
-var Collection = require("../api/Collection").Collection;
-var DocumentCollection = require("../api/datum/DocumentCollection").DocumentCollection;
-var FieldDBObject = require("../api/FieldDBObject").FieldDBObject;
 var DEFAULT_DATUM_VALIDATION_STATI = require("./../api/datum/validation-status.json");
-
 var specIsRunningTooLong = 5000;
 
 /*
@@ -257,16 +265,21 @@ describe("lib/Collection", function() {
         validationStatus: "CheckedBySeberina",
         color: "green"
       });
-      expect(collection.find(/^Checked*/).map(function(item) {
+      expect(collection.length).toEqual(8);
+      // expect(collection).toEqual();
+
+      var checkedStati = collection.find(/^Checked/).map(function(item) {
         return {
           validationStatus: item.validationStatus,
           color: item.color,
           default: item.default
         };
-      })).toEqual([useDefaults()[0], {
-        validationStatus: "CheckedBySeberina",
-        color: "green"
-      }]);
+      });
+      expect(checkedStati.length).toEqual(2);
+      expect(checkedStati[0].validationStatus).toEqual("Checked*");
+      expect(checkedStati[0].color).toEqual("green");
+      expect(checkedStati[1].validationStatus).toEqual("CheckedBySeberina");
+      expect(checkedStati[1].color).toEqual("green");
     });
 
     it("should be able to find items by any attribute", function() {
@@ -338,16 +351,16 @@ describe("lib/Collection", function() {
       expect(collection.checked).not.toEqual(newcollection.checked);
     });
 
-    it("should be able to clone a collection run convertToDocType and still be a collection", function(){
+    it("should be able to clone a collection run convertToDocType and still be a collection", function() {
       var corpora = new Collection([{
         id: "first item"
-      },{
+      }, {
         id: "second item"
-      },{
+      }, {
         id: "third item"
-      },{
+      }, {
         id: "fourth item"
-      },{
+      }, {
         id: "fifth item"
       }]);
 
@@ -415,7 +428,6 @@ describe("lib/Collection", function() {
       //             primaryKey: "tempId"
       //           },
       //           // confidential: self.corpus.confidential,
-      //           // decryptedMode: true
       //         });
       //       }
       //       return this._datalist;
@@ -429,7 +441,7 @@ describe("lib/Collection", function() {
       //   }
       // });
 
-      var customizedWithTempId = new DocumentCollection({
+      var customizedWithTempId = new Collection({
         // debugMode: true,
         collection: [],
         primaryKey: "tempId"
@@ -1091,25 +1103,32 @@ describe("lib/Collection", function() {
     });
 
     it("should be able to request confirmation for merging two collections into a third collection", function(done) {
-      var result = aBaseCollection.merge("self", atriviallyDifferentCollection);
       expect(aBaseCollection.alwaysConfirmOkay).toBeFalsy();
       expect(atriviallyDifferentCollection.alwaysConfirmOkay).toBeFalsy();
+      var result = aBaseCollection.merge("self", atriviallyDifferentCollection);
 
       expect(result).toBeDefined();
       expect(result).toBe(aBaseCollection);
+
       expect(aBaseCollection._collection.length).toEqual(8);
       expect(aBaseCollection.willbeoverwritten.confirmMessage).toContain("I found a conflict for internalObject, Do you want to overwrite it from {\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
       // "I found a conflict for willbeoverwritten, Do you want to overwrite it from {\"id\":\"willBeOverwritten\",\"missingInNew\":\"this isnt a FieldDBObject so it will be undefined after merge.\"} -> {\"id\":\"willBeOverwritten\",\"missingInOriginal\":\"this isnt a FieldDBObject so it will be fully overwritten.\"}");
       expect(aBaseCollection.conflictingcontents).toEqual(aBaseCollection._collection[6]);
       setTimeout(function() {
         expect(aBaseCollection.conflictingcontents.conflicting).toEqual("in first collection");
+        try {
+          if (typeof alert === "function") {
+            console.log("dont know which response it was that user/browser confirmed merge of conflicting contents");
+          }
+        } catch (e) {
+          expect(aBaseCollection.robin.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal is different\"");
+        }
         done();
-      }, 10);
+      }, 100);
       expect(aBaseCollection._collection.map(function(item) {
         return item.id;
       })).toEqual(["penguin", "cuckoo", "robin", "cardinal", "onlyinTarget", "willBeOverwritten", "conflictingContents", "onlyinNew"]);
       expect(aBaseCollection.conflictingcontents.confirmMessage).toContain("I found a conflict for conflicting, Do you want to overwrite it from \"in first collection\" -> \"in second collection\"");
-      expect(aBaseCollection.robin.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal is different\"");
     }, specIsRunningTooLong);
   });
 });

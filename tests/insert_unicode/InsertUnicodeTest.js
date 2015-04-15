@@ -1,4 +1,14 @@
-var UnicodeSymbols = require("../../api/unicode/UnicodeSymbols").UnicodeSymbols;
+"use strict";
+var UnicodeSymbols;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    UnicodeSymbols = FieldDB.UnicodeSymbols;
+  }
+} catch (e) {}
+
+UnicodeSymbols = UnicodeSymbols || require("./../../api/unicode/UnicodeSymbols").UnicodeSymbols;
+
 var SAMPLE_USER = require("../../api/user/user.json");
 
 describe("UnicodeSymbol: as a User I want to use my favourite symbols", function() {

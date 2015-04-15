@@ -1,4 +1,4 @@
-/* globals alert, confirm, navigator, Android, FieldDB */
+/* globals alert, confirm, prompt, navigator, Android, FieldDB */
 var Diacritics = require("diacritic");
 var Q = require("q");
 var package;
@@ -78,12 +78,13 @@ try {
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
-  // if (json instanceof this.constructor) {
-  //   return json;
-  // }
-  if (!this._fieldDBtype) {
-    this._fieldDBtype = "FieldDBObject";
+  if (json && (json instanceof this.constructor || json.constructor.toString() === this.constructor.toString())) {
+    json.warn("This was already the right type, not converting it.");
+    return json;
   }
+  // if (!this._fieldDBtype) {
+  //   this._fieldDBtype = "FieldDBObject";
+  // }
   if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
@@ -113,7 +114,11 @@ var FieldDBObject = function FieldDBObject(json) {
     } else {
       simpleModels.push(member);
     }
-    this[member] = json[member];
+    try {
+      this[member] = json[member];
+    } catch (e) {
+      console.log(e.stack);
+    }
   }
   if (simpleModels.length > 0) {
     this.debug("simpleModels", simpleModels.join(", "));
@@ -149,6 +154,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "parent",
   "perObjectAlwaysConfirmOkay",
   "perObjectDebugMode",
+  "promptMessage",
   "newDatum",
   "saving",
   "saved",
@@ -279,6 +285,45 @@ FieldDBObject.warn = function(message, message2, message3, message4) {
   }
 };
 
+FieldDBObject.prompt = function(message, optionalLocale) {
+  var deferred = Q.defer(),
+    self = this;
+
+  Q.nextTick(function() {
+    var response;
+
+    if (self.alwaysReplyToPrompt) {
+      console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably reply " + self.alwaysReplyToPrompt + " and it wasnt worth asking.");
+      response = self.alwaysReplyToPrompt;
+    } else {
+      try {
+        response = prompt(message);
+      } catch (e) {
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysReplyToPrompt);
+        response = self.alwaysReplyToPrompt;
+      }
+    }
+    if (response !== null && response !== undefined && typeof response.trim === "function") {
+      response = response.trim();
+    }
+    if (response) {
+      deferred.resolve({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    } else {
+      deferred.reject({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: response
+      });
+    }
+
+  });
+  return deferred.promise;
+};
+
 FieldDBObject.confirm = function(message, optionalLocale) {
   var deferred = Q.defer(),
     self = this;
@@ -289,13 +334,13 @@ FieldDBObject.confirm = function(message, optionalLocale) {
     if (self.alwaysConfirmOkay) {
       console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably yes and it wasnt worth asking.");
       response = self.alwaysConfirmOkay;
-    }
-
-    try {
-      response = confirm(message);
-    } catch (e) {
-      console.warn(self.fieldDBtype.toUpperCase() + " ASKING USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
-      response = self.alwaysConfirmOkay;
+    } else {
+      try {
+        response = confirm(message);
+      } catch (e) {
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysConfirmOkay);
+        response = self.alwaysConfirmOkay;
+      }
     }
 
     if (response) {
@@ -478,7 +523,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   fieldDBtype: {
     configurable: true,
     get: function() {
-      return this._fieldDBtype;
+      return this._fieldDBtype || "FieldDBObject";
     },
     set: function(value) {
       if (value !== this.fieldDBtype) {
@@ -580,6 +625,18 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.perObjectAlwaysConfirmOkay = value;
     }
   },
+  prompt: {
+    value: function(message) {
+      if (this.promptMessage) {
+        this.promptMessage += "\n";
+      } else {
+        this.promptMessage = "";
+      }
+      this.promptMessage = this.promptMessage + message;
+
+      return FieldDBObject.prompt.apply(this, arguments);
+    }
+  },
   confirm: {
     value: function(message) {
       if (this.confirmMessage) {
@@ -610,8 +667,26 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  decryptedMode: {
+    get: function() {
+      if (this.application) {
+        return this.application.decryptedMode;
+      }
+      // if not running in an app, dont need to demonstrate a mask the data if its decryptable
+      return this._decryptedMode;
+    },
+    set: function(value) {
+      if (this.application) {
+        this.application.decryptedMode = value;
+      } else {
+        this._decryptedMode = value;
+      }
+    }
+  },
+
   render: {
     configurable: true,
+    writable: true,
     value: function(options) {
       this.debug("Calling render with options", options);
       FieldDBObject.render.apply(this, arguments);
@@ -1340,6 +1415,55 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
     }
   },
 
+  fetchRevisions: {
+    value: function(optionalUrl) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!this._id) {
+        Q.nextTick(function() {
+          self.warn("This hasn't been saved before, so there are no previous revisisons to show you.");
+          deferred.resolve(self._revisions);
+        });
+        return deferred.promise;
+      }
+
+      if (!this.corpus || typeof this.corpus.fetchRevisions !== "function") {
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 406,
+            userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot fetch data if the database is not currently opened."]
+          });
+        });
+        return deferred.promise;
+      }
+
+      self.corpus.fetchRevisions(this.id, optionalUrl).then(function(revisions) {
+        if (!self._revisions) {
+          self._revisions = revisions;
+        } else {
+          revisions.map(function(revision) {
+            if (self._revisions.indexOf(revision) === -1) {
+              self._revisions.push(revision);
+            }
+          });
+        }
+        self.debug("This " + self.id + " has " + self._revisions.length + " previous revisions");
+        deferred.resolve(self._revisions);
+      }, function(reason) {
+        self.warn("Unable to update list of revisions currently.");
+        self.debug(reason);
+        deferred.reject(reason);
+        return self;
+      }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   fetch: {
     value: function(optionalUrl) {
       var deferred = Q.defer(),
@@ -1426,7 +1550,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   application: {
     get: function() {
       return FieldDBObject.application;
-    }
+    },
+    set: function() {}
   },
 
   corpus: {
@@ -1447,7 +1572,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         try {
           if (FieldDB && FieldDB["Database"]) {
             db = FieldDB["Database"].prototype;
-            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .", db);
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            this.debug(" the database", db);
           }
         } catch (e) {
           var message = e ? e.message : " unknown error in getting the corpus";
@@ -1663,15 +1789,16 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   /**
    * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
    */
-  showDiffs: function(oldrevision, newrevision) {
-
-    this.todo("We haven't implemented the 'diff' tool yet" +
-      " (ie, showing the changes, letting you undo changes etc)." +
-      " We will do it eventually, when it becomes a priority. " +
-      "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
-      "You can vote for it in our issue tracker</a>.  " +
-      "We use the " +
-      "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
+  showDiffs: {
+    value: function(oldrevision, newrevision) {
+      this.todo("We haven't implemented the 'diff' tool yet" +
+        " (ie, showing the changes, letting you undo changes etc)." +
+        " We will do it eventually, when it becomes a priority. " +
+        "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
+        "You can vote for it in our issue tracker</a>.  " +
+        "We use the " +
+        "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");
+    }
   },
 
   comments: {
@@ -1791,6 +1918,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           json.api = this.api;
         }
 
+        json.fieldDBtype = this.fieldDBtype;
         if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
           delete json.previousFieldDBtype;
         }
@@ -1890,7 +2018,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       if (this.application && this.application.contextualizer) {
         return this.application.contextualizer;
       }
-    }
+    },
+    set: function() {}
   },
 
   /**

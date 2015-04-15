@@ -8,6 +8,10 @@ var Confidential = require("./../confidentiality_encryption/Confidential").Confi
 var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
 var CORS = require("./../CORS").CORS;
+// var MD5 = require("MD5");
+var bcrypt = require("bcrypt-nodejs");
+// console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
+
 /**
  * @class The Authentication Model handles login and logout and
  *        authentication locally or remotely. *
@@ -30,11 +34,10 @@ var Authentication = function Authentication(options) {
 
   var self = this;
 
-
-
   this.loading = true;
-  this.resumingSessionPromise = Database.prototype.resumeAuthenticationSession().then(function(user) {
-
+  var deferred = new Q.defer();
+  this.resumingSessionPromise = deferred.promise;
+  Database.prototype.resumeAuthenticationSession().then(function(user) {
     CORS.application = FieldDBObject.application;
 
     self.loading = false;
@@ -43,10 +46,15 @@ var Authentication = function Authentication(options) {
     self.user.fetch();
     if (self.user._rev) {
       self.user.authenticated = true;
-      self.dispatchEvent("authenticated");
+      self.dispatchEvent("authenticate:success");
+      deferred.resolve(self.user);
     } else {
       self.user.authenticated = false;
-      self.dispatchEvent("notauthenticated");
+      self.dispatchEvent("authenticate:mustconfirmidentity");
+      deferred.reject({
+        status: 401,
+        userFriendlyErrors: ["Please login."]
+      });
     }
 
     // if (sessionInfo.ok && sessionInfo.userCtx.name) {
@@ -65,16 +73,20 @@ var Authentication = function Authentication(options) {
   }, function(error) {
     self.loading = false;
     self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
-    if (error.status !== 409) {
+    if (error.status === 409) {
+      self.dispatchEvent("authenticate:mustconfirmidentity");
+    } else {
       // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
       self.error = error.userFriendlyErrors.join(" ");
+      self.dispatchEvent("authenticate:mustconfirmidentity");
     }
-    self.dispatchEvent("notauthenticated");
     self.render();
-
+    deferred.reject(error);
     return error;
   }).fail(function(error) {
     console.error(error.stack, self);
+    deferred.reject(error);
+    return error;
   });
 
   FieldDBObject.apply(this, arguments);
@@ -94,11 +106,16 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
   },
 
   dispatchEvent: {
-    value: function(eventChannelName) {
+    value: function(eventChannelName, reason) {
       try {
-        var event = document.createEvent("Event");
-        event.initEvent(eventChannelName, true, true);
-        document.dispatchEvent(event);
+        if (this.eventDispatcher && typeof this.eventDispatcher.trigger === "function") {
+          this.eventDispatcher.trigger(eventChannelName, reason);
+        } else {
+          this.eventDispatcher = this.eventDispatcher || document;
+          var event = this.eventDispatcher.createEvent("Event");
+          event.initEvent(eventChannelName, true, true);
+          this.eventDispatcher.dispatchEvent(event);
+        }
       } catch (e) {
         this.warn("Cant dispatch event " + eventChannelName + " the document element isn't available.");
         this.debug(" error ", e);
@@ -127,7 +144,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       //if the same user is re-authenticating, include their details to sync to the server.
       tempUser.fetch();
-      if (tempUser._rev && tempUser.username !== "public") {
+      if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
         dataToPost.syncDetails = "true";
         dataToPost.syncUserDetails = tempUser.toJSON();
         tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
@@ -146,7 +163,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.loading = false;
         if (!error || !error.userFriendlyErrors) {
           error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
+          self.dispatchEvent("authenticate:mustconfirmidentity");
+        } else {
+          self.dispatchEvent("authenticate:fail");
         }
+        error.details = loginDetails;
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
         deferred.reject(error);
@@ -158,8 +179,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
             if (!userDetails) {
               self.loading = false;
+              self.dispatchEvent("authenticate:mustconfirmidentity");
               deferred.reject({
-                error: userDetails,
+                details: loginDetails,
                 status: 500,
                 userFriendlyErrors: ["Unknown error. Please report this 2391."]
               });
@@ -168,13 +190,14 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
             try {
               self.user = userDetails;
+              self.user.lastSyncWithServer = Date.now();
             } catch (e) {
               console.warn("There was a problem assigning the user. ", e);
             }
             self.authenticateWithAllCorpusServers(loginDetails).then(function() {
               self.loading = false;
               self.user.authenticated = true;
-              self.dispatchEvent("authenticated");
+              self.dispatchEvent("authenticate:success");
               deferred.resolve(self.user);
             }, function() {
               self.loading = false;
@@ -191,6 +214,53 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           console.error(error.stack, self);
           handleFailedLogin(error);
         });
+
+      return deferred.promise;
+    }
+  },
+
+  confirmIdentity: {
+    value: function(loginDetails) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (!loginDetails || !loginDetails.password) {
+        Q.nextTick(function() {
+          deferred.reject("You must enter your password to confirm your identity.");
+        });
+        return deferred.promise;
+      }
+
+      if (!this.user.username ||
+        !this.user.authenticated ||
+        !this.user.lastSyncWithServer ||
+        !this.user.hash ||
+        !this.user.salt) {
+        Q.nextTick(function() {
+          deferred.reject("You must login first.");
+        });
+        return deferred.promise;
+      }
+
+      try {
+        bcrypt.compare(loginDetails.password, self.user.hash, function(err, confirmed) {
+          if (confirmed) {
+            loginDetails.info = ["Verified"];
+            deferred.resolve(loginDetails);
+          } else {
+            loginDetails.error = err;
+            if (err) {
+              loginDetails.userFriendlyErrors = ["This app has errored while trying to confirm your identity. Please report this 2892346."];
+            } else {
+              loginDetails.userFriendlyErrors = ["Sorry, this doesn't appear to be you."];
+            }
+            deferred.reject(loginDetails);
+          }
+        });
+      } catch (e) {
+        loginDetails.userFriendlyErrors = ["This app has errored while trying to confirm your identity. Please report this 289234."];
+        deferred.reject(loginDetails);
+      }
 
       return deferred.promise;
     }
@@ -290,6 +360,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
           }, function(error) {
             waitTime = waitTime * 2;
+            error.status = error.status || 500;
+            error.details = options;
             if (waitTime > 60 * 1000) {
               deferred.reject(error);
             } else {
@@ -488,9 +560,17 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           data: details
         }).then(function(authserverResult) {
             self.debug(authserverResult);
-            self.user.corpora.shift(authserverResult.corpus);
-            self.save();
-
+            if (authserverResult.corpus) {
+              self.user.corpora.shift(authserverResult.corpus);
+              self.save();
+            } else {
+              if (authserverResult.status > 0 && authserverResult.status < 400 && self.user.corpora && typeof self.user.corpora.find === "function") {
+                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusName).identifier, "fuzzy");
+                if (authserverResult.corpus && authserverResult.corpus.length > 0) {
+                  authserverResult.corpus = authserverResult.corpus[0];
+                }
+              }
+            }
             deferred.resolve(authserverResult.corpus);
           },
           function(reason) {
@@ -508,7 +588,20 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       });
       return deferred.promise;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var attributesNotToJsonify = ["resumingSessionPromise", "eventDispatcher"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
+
+      this.debug(json);
+      return json;
+    }
   }
+
 
 });
 

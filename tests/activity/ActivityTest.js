@@ -1,9 +1,21 @@
-var FieldDBObject = require("../../api/FieldDBObject").FieldDBObject;
-var Activity = require("../../api/activity/Activity").Activity;
-var Activities = require("../../api/activity/Activities").Activities;
+"use strict";
+var Activity;
+var Activities;
+var Connection;
+try {
+  /* globals FieldDB*/
+  if (FieldDB) {
+    Activity = FieldDB.Activity;
+    Activities = FieldDB.Activities;
+    Connection = FieldDB.Connection;
+  }
+} catch (e) {}
+Activity = Activity || require("./../../api/activity/Activity").Activity;
+Activities = Activities || require("./../../api/activity/Activities").Activities;
+Connection = Connection || require("./../../api/corpus/Connection").Connection;
+
 var mockDatabase = require("./../corpus/DatabaseMock").mockDatabase;
 var specIsRunningTooLong = 5000;
-
 
 describe("Activities", function() {
 
@@ -35,7 +47,7 @@ describe("Activities", function() {
       activityFeed.parent = {
         fieldDBtype: "LanguageLearningCorpus",
         dbname: "community-georgian",
-        connection: new FieldDBObject({
+        connection: new Connection({
           protocol: "https://",
           domain: "localhost",
           port: "6984",
@@ -67,7 +79,7 @@ describe("Activities", function() {
       activityFeed.parent = {
         fieldDBtype: "User",
         username: "jenkins",
-        connection: new FieldDBObject({
+        connection: new Connection({
           protocol: "https://",
           domain: "localhost",
           port: "6984",
@@ -365,9 +377,11 @@ describe("Activities", function() {
       });
       expect(activity).toBeDefined();
       expect(activity.dbname).toEqual(activityFeed.dbname);
-      expect(activity.user).toEqual({
-        _fieldDBtype: "UserMask",
-        _username: "unknown"
+      expect(activity.user.toJSON()).toEqual({
+        fieldDBtype: "UserMask",
+        username: "unknown",
+        version: activity.user.version,
+        api: activity.user.api
       });
       expect(activity.verb).toEqual("logged in");
 
@@ -421,50 +435,50 @@ describe("Activities", function() {
 
   });
 
-describe(
-  "As a user, I want to make my activity private.",
-  function() {
-    it(
-      "should display a settings that allows a logged in user to make their activities private.",
-      function() {
+  describe(
+    "As a user, I want to make my activity private.",
+    function() {
+      it(
+        "should display a settings that allows a logged in user to make their activities private.",
+        function() {
+          expect(true).toBeTruthy();
+        });
+    });
+
+  describe(
+    "As a team member, I want to able to delete team activities.",
+    function() {
+      it("should be able to delete one activity.", function() {
         expect(true).toBeTruthy();
       });
-  });
-
-describe(
-  "As a team member, I want to able to delete team activities.",
-  function() {
-    it("should be able to delete one activity.", function() {
-      expect(true).toBeTruthy();
-    });
-  });
-
-describe(
-  "As a user, I want to  be about see my activity even when I'm offline.",
-  function() {
-    it("should display a user's up to date activity when offline.", function() {
-      expect(true).toBeTruthy();
     });
 
-    it("should notify user when team data is out of date/stale.", function() {
-      expect(true).toBeTruthy();
-    });
-  });
-
-describe(
-  "As a user, I want to learn how to use the system by see how my teammates are using it.",
-  function() {
-
-    it("should have colorful icons to display verbs.", function() {
-      var activity = new Activity({
-        verb: "modified"
+  describe(
+    "As a user, I want to  be about see my activity even when I'm offline.",
+    function() {
+      it("should display a user's up to date activity when offline.", function() {
+        expect(true).toBeTruthy();
       });
-      expect(activity.verbicon).toEqual(Activity.prototype.defaults.verb.modify.verbicon);
+
+      it("should notify user when team data is out of date/stale.", function() {
+        expect(true).toBeTruthy();
+      });
     });
 
-    it("should have clickable activity feed items, which show the changed set.", function() {
-      expect(true).toBeTruthy();
+  describe(
+    "As a user, I want to learn how to use the system by see how my teammates are using it.",
+    function() {
+
+      it("should have colorful icons to display verbs.", function() {
+        var activity = new Activity({
+          verb: "modified"
+        });
+        expect(activity.verbicon).toEqual(Activity.prototype.defaults.verb.modify.verbicon);
+      });
+
+      it("should have clickable activity feed items, which show the changed set.", function() {
+        expect(true).toBeTruthy();
+      });
     });
-  });
 
 });
