@@ -383,8 +383,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       if (!this.fields) {
         return;
       }
-      if (this.fields && !this.fields.relatedData) {
-        this.fields.add(new DatumField(DEFAULT_CORPUS_MODEL.datumFields[10]));
+      if (this.fields && !this.fields.relatedData && DEFAULT_CORPUS_MODEL && DEFAULT_CORPUS_MODEL.datumFields && DEFAULT_CORPUS_MODEL.datumFields.length >= 10) {
+        this.fields.add(DEFAULT_CORPUS_MODEL.datumFields[10]);
       }
       this.fields.relatedData.json = this.fields.relatedData.json || {};
       this.fields.relatedData.json.relatedData = this.fields.relatedData.json.relatedData || [];
