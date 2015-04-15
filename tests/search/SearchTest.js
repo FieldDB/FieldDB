@@ -1,4 +1,13 @@
-var Search = require("./../../api/search/Search").Search;
+"use strict";
+var Search;
+try {
+  /* globals FieldDB */
+  if (FieldDB) {
+    Search = FieldDB.Search;
+  }
+} catch (e) {}
+
+Search = Search || require("./../../api/search/Search").Search;
 
 describe("Search: as a user I want my data at my finger tips", function() {
   it("should be load", function() {
