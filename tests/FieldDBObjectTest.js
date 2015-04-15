@@ -367,7 +367,7 @@ describe("FieldDBObject", function() {
         expect(object.title).toEqual("Community corpus");
         // return object;
       }, function(error) {
-        // console.log(error);
+        object.debug(error);
         expect(false).toBeTruthy();
         // return object;
       }).done(done);
@@ -602,7 +602,7 @@ describe("FieldDBObject", function() {
         expect(object.fossil).toBeDefined();
 
       }, function(error) {
-        // console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
       }).done(done);
 
@@ -732,7 +732,7 @@ describe("FieldDBObject", function() {
           expect(object.rev).toEqual(oldRev);
           return object;
         }, function(error) {
-          // console.log(error);
+          object.debug(error);
           expect(false).toBeTruthy();
           return object;
         });
@@ -803,7 +803,7 @@ describe("FieldDBObject", function() {
         expect(object.unsaved).toEqual(true);
 
       }, function(error) {
-        // console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
         return object;
       }).done(done);
@@ -845,7 +845,7 @@ describe("FieldDBObject", function() {
         expect(object.enteredByUser).toBeDefined();
         expect(object.enteredByUser.value).toEqual("teammatetiger");
       }, function(error) {
-        // console.log(error);
+        object.debug(error);
         expect(true).toBeFalsy();
         return object;
       }).done(done);
@@ -1183,7 +1183,7 @@ describe("FieldDBObject", function() {
         expect(results.response).toEqual(true);
         expect(true).toBeTruthy();
       }, function(results) {
-        // console.log("This confirm should never be rejected, ", results);
+        lessRiskyObject.debug("This confirm should never be rejected, ", results);
         expect(false).toBeTruthy();
       }).done(done);
       expect(lessRiskyObject.confirmMessage).toEqual("Do you want to do this?");
@@ -1223,7 +1223,7 @@ describe("FieldDBObject", function() {
         expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
         expect(results.response).toEqual("phoneme");
       }, function(results) {
-        // console.log("This prompt should never be rejected, ", results);
+        objectWhichNeedsToConfirmUsersIdentity.debug("This prompt should never be rejected, ", results);
         expect(false).toBeTruthy();
       }).done(done);
       expect(objectWhichNeedsToConfirmUsersIdentity.promptMessage).toEqual("We need to make sure its you. Please enter your password.");
