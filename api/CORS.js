@@ -133,15 +133,15 @@ CORS.makeCORSRequest = function(options) {
         if (e && e.message === "Unexpected token o") {
           self.debug("response was json", e);
         } else {
+          response = {
+            userFriendlyErrors: xhr.statusText,
+            error: response
+          };
           if (xhr.status >= 500) {
             self.bug("There was a serious error on the server. It replied in plain text.", response);
+            response.userFriendlyErrors = ["There was a problem contacting the server, please report this 2382"];
           }
-          response = {
-            error: xhr.statusText,
-            status: xhr.status,
-            // statusText: xhr.statusText,
-            userFriendlyErrors: ["There was a problem contacting the server, please report this 2382"]
-          };
+          response.status = xhr.status;
         }
       }
       response.status = response.status || xhr.status;
