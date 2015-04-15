@@ -198,7 +198,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         return image.filename;
       }).join("; ");
       return obj;
-    }
+    },
+    set: function() {}
   },
 
   igt: {
