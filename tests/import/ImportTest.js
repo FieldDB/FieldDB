@@ -1,6 +1,20 @@
-var Import = require("./../../api/import/Import").Import;
-var Participant = require("./../../api/user/Participant").Participant;
-var Corpus = require("./../../api/corpus/Corpus").Corpus;
+/* globals FieldDB */
+
+var Import;
+var Participant;
+var Corpus;
+try {
+  if (FieldDB) {
+    Import = FieldDB.Import;
+    Participant = FieldDB.Participant;
+    Corpus = FieldDB.Corpus;
+  }
+} catch (e) {}
+
+Import = Import || require("./../../api/import/Import").Import;
+Participant = Participant || require("./../../api/user/Participant").Participant;
+Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+
 var Q = require("q");
 var fs = require("fs");
 
@@ -330,105 +344,15 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
-    var corpus,
-      importer,
-      localUri = "./sample_data/orthography.txt",
-      remoteUri = "https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt";
+  if (fs && typeof fs.readFile === "function") {
 
-    var defaultOptions = {
-      uri: localUri,
-      readOptions: {
-        readFileFunction: function(callback) {
-          fs.readFile(localUri, "utf8", callback);
-        }
-      },
-      preprocessOptions: {
-        writePreprocessedFileFunction: function(filename, body, callback) {
-          fs.writeFile(filename, body, "utf8", callback);
-        },
-        transliterate: true,
-        joinLines: true,
-      },
-      importOptions: {
-        dryRun: true,
-        fromPreprocessedFile: true
-      }
-    };
+    describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+      var corpus,
+        importer,
+        localUri = "./sample_data/orthography.txt",
+        remoteUri = "https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt";
 
-    beforeEach(function() {
-      var dbname = "testingbatchimport-rawtext";
-      corpus = new Corpus(Corpus.prototype.defaults);
-      corpus.dbname = dbname;
-      corpus.language = {
-        "ethnologueUrl": "",
-        "wikipediaUrl": "",
-        "iso": "ka",
-        "locale": "",
-        "englishName": "",
-        "nativeName": "",
-        "alternateNames": ""
-      };
-      importer = new Import({
-        dbname: dbname,
-        corpus: corpus
-      });
-    });
-
-    it("should accept a read function and a read hook", function(done) {
-      importer
-        .readUri(defaultOptions)
-        .then(function(result) {
-          importer.debug("after read file", result);
-          expect(result).toBeDefined();
-          expect(result.rawText.substring(0, 20)).toEqual("Noqata qan qaparinay");
-        })
-        .then(done, done);
-    }, specIsRunningTooLong);
-
-
-    xit("should read a uri if no a read function is defined", function(done) {
-      importer.debugMode = true;
-      importer
-        .readUri({
-          uri: remoteUri
-        })
-        .then(function(result) {
-          importer.debug("after read file", result);
-          expect(result.datum.datumFields.orthography).toBeDefined();
-        }).then(done, done);
-    }, specIsRunningTooLong);
-
-    it("should provide a preprocess hook", function(done) {
-      expect(importer.preprocess).toBeDefined();
-      defaultOptions.rawText = "placeholder text ";
-      importer
-        .preprocess(defaultOptions)
-        .then(function(result) {
-          importer.debug("after preprocess file");
-          expect(result.datum.datumFields.utterance).toBeDefined();
-          expect(result.preprocessedUrl).toEqual("./sample_data/orthography_preprocessed.json");
-
-          if (result.datum.datumFields.orthography.value !== result.rawText.trim()) {
-            expect(result.datum.datumFields.originalText.value)
-              .toEqual(result.rawText.trim());
-          } else {
-            expect(result.datum.datumFields.orthography.value)
-              .toEqual(result.rawText.trim());
-          }
-        })
-        .then(done, done);
-
-    }, specIsRunningTooLong);
-
-    it("should provide a import hook", function() {
-      expect(importer.import).toBeDefined();
-    });
-
-
-    xit("should be able to import from a uri", function(done) {
-
-      importer.addFileUri({
+      var defaultOptions = {
         uri: localUri,
         readOptions: {
           readFileFunction: function(callback) {
@@ -445,33 +369,127 @@ describe("api/import/Import", function() {
         importOptions: {
           dryRun: true,
           fromPreprocessedFile: true
-        },
-        next: function() {
-          importer.debug("Next middle ware placeholder");
         }
-      }).then(function(result) {
-        importer.debug("after add file", result);
-        expect(result).toBeDefined();
-        expect(result.rawText).toBeDefined();
-      }).then(done, done);
+      };
 
-    }, specIsRunningTooLong);
-
-    describe("lib/Import", function() {
-
-      it("should be able to pause an import", function() {
-        var importer = new Import();
-        expect(importer.pause).toBeDefined();
+      beforeEach(function() {
+        var dbname = "testingbatchimport-rawtext";
+        corpus = new Corpus(Corpus.prototype.defaults);
+        corpus.dbname = dbname;
+        corpus.language = {
+          "ethnologueUrl": "",
+          "wikipediaUrl": "",
+          "iso": "ka",
+          "locale": "",
+          "englishName": "",
+          "nativeName": "",
+          "alternateNames": ""
+        };
+        importer = new Import({
+          dbname: dbname,
+          corpus: corpus
+        });
       });
 
-      it("should be able to resume an import with minimal duplication of effort", function() {
-        var importer = new Import();
-        expect(importer.resume).toBeDefined();
+      it("should accept a read function and a read hook", function(done) {
+        importer
+          .readUri(defaultOptions)
+          .then(function(result) {
+            importer.debug("after read file", result);
+            expect(result).toBeDefined();
+            expect(result.rawText.substring(0, 20)).toEqual("Noqata qan qaparinay");
+          })
+          .then(done, done);
+      }, specIsRunningTooLong);
+
+
+      xit("should read a uri if no a read function is defined", function(done) {
+        importer.debugMode = true;
+        importer
+          .readUri({
+            uri: remoteUri
+          })
+          .then(function(result) {
+            importer.debug("after read file", result);
+            expect(result.datum.datumFields.orthography).toBeDefined();
+          }).then(done, done);
+      }, specIsRunningTooLong);
+
+      it("should provide a preprocess hook", function(done) {
+        expect(importer.preprocess).toBeDefined();
+        defaultOptions.rawText = "placeholder text ";
+        importer
+          .preprocess(defaultOptions)
+          .then(function(result) {
+            importer.debug("after preprocess file");
+            expect(result.datum.datumFields.utterance).toBeDefined();
+            expect(result.preprocessedUrl).toEqual("./sample_data/orthography_preprocessed.json");
+
+            if (result.datum.datumFields.orthography.value !== result.rawText.trim()) {
+              expect(result.datum.datumFields.originalText.value)
+                .toEqual(result.rawText.trim());
+            } else {
+              expect(result.datum.datumFields.orthography.value)
+                .toEqual(result.rawText.trim());
+            }
+          })
+          .then(done, done);
+
+      }, specIsRunningTooLong);
+
+      it("should provide a import hook", function() {
+        expect(importer.import).toBeDefined();
+      });
+
+
+      xit("should be able to import from a uri", function(done) {
+
+        importer.addFileUri({
+          uri: localUri,
+          readOptions: {
+            readFileFunction: function(callback) {
+              fs.readFile(localUri, "utf8", callback);
+            }
+          },
+          preprocessOptions: {
+            writePreprocessedFileFunction: function(filename, body, callback) {
+              fs.writeFile(filename, body, "utf8", callback);
+            },
+            transliterate: true,
+            joinLines: true,
+          },
+          importOptions: {
+            dryRun: true,
+            fromPreprocessedFile: true
+          },
+          next: function() {
+            importer.debug("Next middle ware placeholder");
+          }
+        }).then(function(result) {
+          importer.debug("after add file", result);
+          expect(result).toBeDefined();
+          expect(result.rawText).toBeDefined();
+        }).then(done, done);
+
+      }, specIsRunningTooLong);
+
+      describe("lib/Import", function() {
+
+        it("should be able to pause an import", function() {
+          var importer = new Import();
+          expect(importer.pause).toBeDefined();
+        });
+
+        it("should be able to resume an import with minimal duplication of effort", function() {
+          var importer = new Import();
+          expect(importer.resume).toBeDefined();
+        });
+
       });
 
     });
 
-  });
+  }
 
   describe("Build fields using fields in the corpus", function() {
     var importer;
@@ -538,49 +556,55 @@ describe("api/import/Import", function() {
       });
     });
 
-    it("should read multiple files using an optionally injected read function", function(done) {
-      expect(importer).toBeDefined();
-      importer.readFiles({
-        readOptions: {
-          readFileFunction: function(options) {
-            importer.debug("Reading file", options);
-            var thisFileDeferred = Q.defer();
-            Q.nextTick(function() {
-              fs.readFile(options.file, {
-                encoding: "utf8"
-              }, function(err, data) {
-                importer.debug("Finished reading this file", err, data);
-                if (err) {
-                  thisFileDeferred.reject(err);
-                } else {
-                  importer.debug("options", options);
-                  options.rawText = data;
-                  importer.rawText = importer.rawText + data;
-                  thisFileDeferred.resolve(options);
-                }
+    if (fs && typeof fs.readFile === "function") {
+
+      it("should read multiple files using an optionally injected read function", function(done) {
+        expect(importer).toBeDefined();
+
+        importer.readFiles({
+          readOptions: {
+            readFileFunction: function(options) {
+              importer.debug("Reading file", options);
+              var thisFileDeferred = Q.defer();
+              Q.nextTick(function() {
+                fs.readFile(options.file, {
+                  encoding: "utf8"
+                }, function(err, data) {
+                  importer.debug("Finished reading this file", err, data);
+                  if (err) {
+                    thisFileDeferred.reject(err);
+                  } else {
+                    importer.debug("options", options);
+                    options.rawText = data;
+                    importer.rawText = importer.rawText + data;
+                    thisFileDeferred.resolve(options);
+                  }
+                });
               });
-            });
-            return thisFileDeferred.promise;
+              return thisFileDeferred.promise;
+            }
           }
-        }
-      }).then(function(success) {
-        importer.debug("success", success);
+        }).then(function(success) {
+          importer.debug("success", success);
 
-        expect(importer.status).toEqual("undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a");
-        expect(importer.fileDetails).toEqual([{
-          name: "sample_data/students.csv"
-        }, {
-          name: "sample_data/students2.csv"
-        }]);
+          expect(importer.status).toEqual("undefined; sample_data/students.csv n/a -  bytes, last modified: n/a; sample_data/students2.csv n/a -  bytes, last modified: n/a");
+          expect(importer.fileDetails).toEqual([{
+            name: "sample_data/students.csv"
+          }, {
+            name: "sample_data/students2.csv"
+          }]);
 
-        // Ensure that the files are truely read by counting the length and the number of commas
-        expect(importer.rawText.length).toEqual(1006);
-        expect(importer.rawText.match(/,/g).length).toEqual(88);
+          // Ensure that the files are truely read by counting the length and the number of commas
+          expect(importer.rawText.length).toEqual(1006);
+          expect(importer.rawText.match(/,/g).length).toEqual(88);
 
-      }, function(options) {
-        expect(options).toEqual("It should not error");
-      }).then(done, done);
-    }, specIsRunningTooLong);
+        }, function(options) {
+          expect(options).toEqual("It should not error");
+        }).then(done, done);
+
+      }, specIsRunningTooLong);
+    }
+
 
   });
 
@@ -618,188 +642,191 @@ describe("api/import/Import", function() {
 
     }, specIsRunningTooLong);
 
-
-    it("should refuse to import participants if the corpus confidential is not ready", function(done) {
-      var importer = new Import({
-        rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
-        importType: "participants"
-      });
-
-      importer.convertMatrixIntoDataList().then(function() {
-        expect(false).toBeTruthy();
-      }, function(reason) {
-        expect(reason.userFriendlyErrors).toEqual([
-          "Cannot create encrypted participants at this time",
-          "Corpus's encrypter isn't available right now, maybe the app is still loading?"
-        ]);
-      }).done(done);
-    }, specIsRunningTooLong);
+    if (fs && typeof fs.readFile === "function") {
 
 
-    it("should not refuse to import participants if the corpus confidential is ready", function(done) {
-      var importer = new Import({
-        corpus: corpus,
-        rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
-        importType: "participants"
-      });
+      it("should refuse to import participants if the corpus confidential is not ready", function(done) {
+        var importer = new Import({
+          rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
+          importType: "participants"
+        });
 
-      // Step 0: make sure the corpus can encrypt participant details
-      expect(importer.corpus).toBeDefined();
-      expect(importer.corpus.confidential).toBeDefined();
-      expect(importer.corpus.confidential.encrypt).toBeDefined();
-      expect(importer.corpus.confidential.secretkey).toEqual("abc123");
-
-      expect(importer.rawText).toBeDefined();
-
-      importer.convertMatrixIntoDataList().then(function() {
-        expect(false).toBeTruthy();
-      }, function(reason) {
-        importer.debug(reason);
-        expect(reason.userFriendlyErrors).toEqual(["There was nothing to import. Are you sure you ran step 1?"]);
-        expect(importer.datalist.docs).toBeDefined();
-        expect(importer.datalist.docs.length).toEqual(0);
-
-      }).done(done);
-    }, specIsRunningTooLong);
+        importer.convertMatrixIntoDataList().then(function() {
+          expect(false).toBeTruthy();
+        }, function(reason) {
+          expect(reason.userFriendlyErrors).toEqual([
+            "Cannot create encrypted participants at this time",
+            "Corpus's encrypter isn't available right now, maybe the app is still loading?"
+          ]);
+        }).done(done);
+      }, specIsRunningTooLong);
 
 
-    it("should process csv participants", function(done) {
-      corpus.dbname = "testingcorpusinimport-firstcorpus";
-      var importer = new Import({
-        corpus: corpus,
-        rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
-        importType: "participants",
-        dbname: "testingcorpusinimport-firstcorpus"
-      });
+      it("should not refuse to import participants if the corpus confidential is ready", function(done) {
+        var importer = new Import({
+          corpus: corpus,
+          rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
+          importType: "participants"
+        });
 
-      // Step 1: import CSV
-      // importer.debugMode = true;
-      importer.importCSV(importer.rawText, importer);
-      expect(importer.extractedHeaderObjects).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
-      expect(importer.asCSV.length).toEqual(17);
-      expect(importer.asFieldMatrix.length).toEqual(17);
-      expect(importer.asFieldMatrix[1].map(function(obj) {
-        return obj.value;
-      })).toEqual(["alxd645210ki", 210, "Damiane", "Alexandre", "2010-02-02"]);
-      expect(importer.showImportSecondStep).toBeTruthy();
+        // Step 0: make sure the corpus can encrypt participant details
+        expect(importer.corpus).toBeDefined();
+        expect(importer.corpus.confidential).toBeDefined();
+        expect(importer.corpus.confidential.encrypt).toBeDefined();
+        expect(importer.corpus.confidential.secretkey).toEqual("abc123");
 
+        expect(importer.rawText).toBeDefined();
 
-      // Step 2: build participants
-      // importer.debugMode = true;
-      importer.convertMatrixIntoDataList().then(function(results) {
+        importer.convertMatrixIntoDataList().then(function() {
+          expect(false).toBeTruthy();
+        }, function(reason) {
+          importer.debug(reason);
+          expect(reason.userFriendlyErrors).toEqual(["There was nothing to import. Are you sure you ran step 1?"]);
+          expect(importer.datalist.docs).toBeDefined();
+          expect(importer.datalist.docs.length).toEqual(0);
 
-        expect(importer.extractedHeaderObjects.map(function(field) {
-          return field.labelExperimenters;
-        })).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
-        expect(importer.extractedHeaderObjects.length).toEqual(5);
-
-        expect(importer.extractedHeaderObjects.map(function(item) {
-          return item.id;
-        })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
-
-        expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
-        expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
-        expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
-        expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
-        expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
-
-        expect(importer.datalist.docs).toBeDefined();
-        expect(importer.datalist.docs._collection[1]).toBeDefined();
-        // expect(importer.datalist.docs._collection[1]).toEqual();
-        // importer.datalist.docs._collection[1].debugMode = true;
-        // expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
-
-        /* make sure that the doc is a participant */
-        expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
-        expect(importer.datalist.docs._collection[1].fieldDBtype).toEqual("Participant");
-        expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
-        expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
-        expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
-        expect(importer.datalist.docs._collection[1].api).toEqual("participants");
-        expect(importer.datalist.docs._collection[1].fields).toBeDefined();
-        expect(importer.datalist.docs._collection[1].fields.fieldDBtype).toEqual("DatumFields");
-        expect(importer.datalist.docs._collection[1].fields.toJSON().map(function(field) {
-          return field.id;
-        })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
+        }).done(done);
+      }, specIsRunningTooLong);
 
 
+      it("should process csv participants", function(done) {
+        corpus.dbname = "testingcorpusinimport-firstcorpus";
+        var importer = new Import({
+          corpus: corpus,
+          rawText: fs.readFileSync("sample_data/students.csv", "utf8"),
+          importType: "participants",
+          dbname: "testingcorpusinimport-firstcorpus"
+        });
+
+        // Step 1: import CSV
+        // importer.debugMode = true;
+        importer.importCSV(importer.rawText, importer);
+        expect(importer.extractedHeaderObjects).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+        expect(importer.asCSV.length).toEqual(17);
+        expect(importer.asFieldMatrix.length).toEqual(17);
         expect(importer.asFieldMatrix[1].map(function(obj) {
           return obj.value;
-        })).toEqual(["alxd645210ki", "xxx", "xxxxxxx", "xxxxxxxxx", "xxxx-xx-xx"]);
+        })).toEqual(["alxd645210ki", 210, "Damiane", "Alexandre", "2010-02-02"]);
+        expect(importer.showImportSecondStep).toBeTruthy();
 
 
-        // importer.datalist.docs.map(function(doc) {
-        // //   importer.debug(doc.fields.map(function(field) {
-        // //     var obj = {}
-        // //     obj[field.id] = field.value;
-        // //     return obj;
-        // //   }))
-        // // })
+        // Step 2: build participants
+        // importer.debugMode = true;
+        importer.convertMatrixIntoDataList().then(function(results) {
 
-        // importer.datalist.docs.shift();
-        expect(importer.datalist.docs._collection[1].lastname).toEqual("xxxxxxxxx");
+          expect(importer.extractedHeaderObjects.map(function(field) {
+            return field.labelExperimenters;
+          })).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+          expect(importer.extractedHeaderObjects.length).toEqual(5);
 
-        importer.datalist.docs._collection[1].fields.decryptedMode = true;
-        expect(importer.datalist.docs._collection[1].fields.firstname.value).toEqual("Damiane");
-        expect(importer.datalist.docs._collection[1].fields.firstname.mask).toEqual("xxxxxxx");
+          expect(importer.extractedHeaderObjects.map(function(item) {
+            return item.id;
+          })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
 
-        importer.datalist.docs._collection[2].fields.decryptedMode = true;
-        expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Ariane");
-        expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
+          expect(importer.extractedHeaderObjects[0].id).toEqual("anonymousCode");
+          expect(importer.extractedHeaderObjects[1].id).toEqual("courseNumber");
+          expect(importer.extractedHeaderObjects[2].id).toEqual("firstname");
+          expect(importer.extractedHeaderObjects[3].id).toEqual("lastname");
+          expect(importer.extractedHeaderObjects[4].id).toEqual("dateOfBirth");
 
-        importer.datalist.docs._collection[3].fields.decryptedMode = true;
-        expect(importer.datalist.docs._collection[3].fields.firstname.value).toEqual("Michel");
-        expect(importer.datalist.docs._collection[3].fields.firstname.mask).toEqual("xxxxxx");
+          expect(importer.datalist.docs).toBeDefined();
+          expect(importer.datalist.docs._collection[1]).toBeDefined();
+          // expect(importer.datalist.docs._collection[1]).toEqual();
+          // importer.datalist.docs._collection[1].debugMode = true;
+          // expect(importer.datalist.docs._collection[1].debugMode).toBeTruthy();
 
-        expect(importer.progress.total).toEqual(16);
-        expect(importer.progress.completed).toEqual(16);
-
-        expect(results.length).toEqual(16);
-
-        expect(importer.datalist).toBeDefined();
-        expect(importer.datalist.title.default).toEqual("Imported Data");
-        expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
-        expect(importer.datalist.docs.length).toEqual(16);
-        expect(importer.showImportThirdStep).toBeTruthy();
-
-      }).then(done, done);
-
-    }, specIsRunningTooLong);
+          /* make sure that the doc is a participant */
+          expect(importer.datalist.docs._collection[1] instanceof Object).toBeTruthy();
+          expect(importer.datalist.docs._collection[1].fieldDBtype).toEqual("Participant");
+          expect(importer.datalist.docs._collection[1] instanceof Participant).toBeTruthy();
+          expect(importer.datalist.docs._collection[1]._fields).toBeDefined();
+          expect(importer.datalist.docs._collection[1]._fields.length).toEqual(5);
+          expect(importer.datalist.docs._collection[1].api).toEqual("participants");
+          expect(importer.datalist.docs._collection[1].fields).toBeDefined();
+          expect(importer.datalist.docs._collection[1].fields.fieldDBtype).toEqual("DatumFields");
+          expect(importer.datalist.docs._collection[1].fields.toJSON().map(function(field) {
+            return field.id;
+          })).toEqual(["anonymousCode", "courseNumber", "firstname", "lastname", "dateOfBirth"]);
 
 
-    it("should process csv participants which were created in a French edition of Microsoft Excel", function(done) {
-      var importer = new Import({
-        corpus: corpus,
-        rawText: fs.readFileSync("sample_data/students_point_vergule_msexcelfr.csv", "utf8"),
-        importType: "participants"
-      });
+          expect(importer.asFieldMatrix[1].map(function(obj) {
+            return obj.value;
+          })).toEqual(["alxd645210ki", "xxx", "xxxxxxx", "xxxxxxxxx", "xxxx-xx-xx"]);
 
-      // Step 1: import CSV
-      importer.importCSV(importer.rawText, importer);
-      expect(importer.extractedHeaderObjects).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
-      expect(importer.asCSV.length).toEqual(7);
-      expect(importer.showImportSecondStep).toBeTruthy();
 
-      // Step 2: build participants
-      // importer.debugMode = true;
-      importer.convertMatrixIntoDataList().then(function(results) {
+          // importer.datalist.docs.map(function(doc) {
+          // //   importer.debug(doc.fields.map(function(field) {
+          // //     var obj = {}
+          // //     obj[field.id] = field.value;
+          // //     return obj;
+          // //   }))
+          // // })
 
-        expect(importer.datalist.docs._collection[2].fields).toBeDefined();
-        importer.datalist.docs._collection[2].fields.decryptedMode = true;
-        expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Prénom");
-        expect(importer.datalist.docs._collection[2].fields.firstname.labelFieldLinguists).toEqual("Prénom");
-        expect(importer.datalist.docs._collection[2].fields.firstname.labelExperimenters).toEqual("Prénom");
-        expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Amelie");
-        expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
+          // importer.datalist.docs.shift();
+          expect(importer.datalist.docs._collection[1].lastname).toEqual("xxxxxxxxx");
 
-        expect(results.length).toEqual(6);
+          importer.datalist.docs._collection[1].fields.decryptedMode = true;
+          expect(importer.datalist.docs._collection[1].fields.firstname.value).toEqual("Damiane");
+          expect(importer.datalist.docs._collection[1].fields.firstname.mask).toEqual("xxxxxxx");
 
-      }, function(error) {
-        expect(error).toEqual(" ");
-      }).then(done, done);
+          importer.datalist.docs._collection[2].fields.decryptedMode = true;
+          expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Ariane");
+          expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
 
-    }, specIsRunningTooLong);
+          importer.datalist.docs._collection[3].fields.decryptedMode = true;
+          expect(importer.datalist.docs._collection[3].fields.firstname.value).toEqual("Michel");
+          expect(importer.datalist.docs._collection[3].fields.firstname.mask).toEqual("xxxxxx");
 
+          expect(importer.progress.total).toEqual(16);
+          expect(importer.progress.completed).toEqual(16);
+
+          expect(results.length).toEqual(16);
+
+          expect(importer.datalist).toBeDefined();
+          expect(importer.datalist.title.default).toEqual("Imported Data");
+          expect(importer.datalist.description).toEqual("This is the data list which results from the import of these file(s).");
+          expect(importer.datalist.docs.length).toEqual(16);
+          expect(importer.showImportThirdStep).toBeTruthy();
+
+        }).then(done, done);
+
+      }, specIsRunningTooLong);
+
+
+      it("should process csv participants which were created in a French edition of Microsoft Excel", function(done) {
+        var importer = new Import({
+          corpus: corpus,
+          rawText: fs.readFileSync("sample_data/students_point_vergule_msexcelfr.csv", "utf8"),
+          importType: "participants"
+        });
+
+        // Step 1: import CSV
+        importer.importCSV(importer.rawText, importer);
+        expect(importer.extractedHeaderObjects).toEqual(["Code Permanent", "N° section", "Prénom", "Nom de famille", "Date de naissance"]);
+        expect(importer.asCSV.length).toEqual(7);
+        expect(importer.showImportSecondStep).toBeTruthy();
+
+        // Step 2: build participants
+        // importer.debugMode = true;
+        importer.convertMatrixIntoDataList().then(function(results) {
+
+          expect(importer.datalist.docs._collection[2].fields).toBeDefined();
+          importer.datalist.docs._collection[2].fields.decryptedMode = true;
+          expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Prénom");
+          expect(importer.datalist.docs._collection[2].fields.firstname.labelFieldLinguists).toEqual("Prénom");
+          expect(importer.datalist.docs._collection[2].fields.firstname.labelExperimenters).toEqual("Prénom");
+          expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Amelie");
+          expect(importer.datalist.docs._collection[2].fields.firstname.mask).toEqual("xxxxxx");
+
+          expect(results.length).toEqual(6);
+
+        }, function(error) {
+          expect(error).toEqual(" ");
+        }).then(done, done);
+
+      }, specIsRunningTooLong);
+
+    }
 
     xit("should read a file when in a browser", function(done) {
       var importer = new Import();
@@ -842,72 +869,74 @@ describe("api/import/Import", function() {
       });
     });
 
-    it("should read IGT files and convert them into a table", function(done) {
-      expect(importer).toBeDefined();
-      importer.readFiles({
-        readOptions: {
-          readFileFunction: function(options) {
-            importer.debug("Reading file", options);
-            var thisFileDeferred = Q.defer();
-            Q.nextTick(function() {
-              fs.readFile(options.file, {
-                encoding: "utf8"
-              }, function(err, data) {
-                importer.debug("Finished reading this file", err, data);
-                if (err) {
-                  thisFileDeferred.reject(err);
-                } else {
-                  importer.debug("options", options);
-                  options.rawText = data;
-                  importer.rawText = importer.rawText + data;
-                  thisFileDeferred.resolve(options);
-                }
+    if (fs && typeof fs.readFile === "function") {
+
+      it("should read IGT files and convert them into a table", function(done) {
+        expect(importer).toBeDefined();
+        importer.readFiles({
+          readOptions: {
+            readFileFunction: function(options) {
+              importer.debug("Reading file", options);
+              var thisFileDeferred = Q.defer();
+              Q.nextTick(function() {
+                fs.readFile(options.file, {
+                  encoding: "utf8"
+                }, function(err, data) {
+                  importer.debug("Finished reading this file", err, data);
+                  if (err) {
+                    thisFileDeferred.reject(err);
+                  } else {
+                    importer.debug("options", options);
+                    options.rawText = data;
+                    importer.rawText = importer.rawText + data;
+                    thisFileDeferred.resolve(options);
+                  }
+                });
               });
-            });
-            return thisFileDeferred.promise;
+              return thisFileDeferred.promise;
+            }
           }
-        }
-      }).then(function(success) {
-        importer.debug("success", success);
+        }).then(function(success) {
+          importer.debug("success", success);
 
-        expect(importer.status).toEqual("undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a");
-        expect(importer.fileDetails).toEqual([{
-          name: "sample_data/sample_filemaker.csv"
-        }, {
-          name: "sample_data/sample_filemaker.csv"
-        }]);
+          expect(importer.status).toEqual("undefined; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a; sample_data/sample_filemaker.csv n/a -  bytes, last modified: n/a");
+          expect(importer.fileDetails).toEqual([{
+            name: "sample_data/sample_filemaker.csv"
+          }, {
+            name: "sample_data/sample_filemaker.csv"
+          }]);
 
-        // Ensure that the files are truely read by counting the length and the number of commas
-        expect(importer.rawText.length).toEqual(25324);
-        expect(importer.rawText.match(/,/g).length).toEqual(1330);
+          // Ensure that the files are truely read by counting the length and the number of commas
+          expect(importer.rawText.length).toEqual(25324);
+          expect(importer.rawText.match(/,/g).length).toEqual(1330);
 
-        // Ensure the data is read into CSV format
-        importer.guessFormatAndPreviewImport();
-        expect(importer.asCSV.length).toEqual(147);
-        expect(importer.asCSV[4].map(function(obj) {
-          return obj.value || "";
-        })).toEqual(["5/7/2010", "*Payta suwanayan monikita", "Pay-ta suwa-naya-n moniki-ta", "he-ACC steal.naya.3SG little animal-ACC", "He feels like stealing the little animal", "", "", "Impulsative", "Seberina", "Cusco Quechua"]);
+          // Ensure the data is read into CSV format
+          importer.guessFormatAndPreviewImport();
+          expect(importer.asCSV.length).toEqual(147);
+          expect(importer.asCSV[4].map(function(obj) {
+            return obj.value || "";
+          })).toEqual(["5/7/2010", "*Payta suwanayan monikita", "Pay-ta suwa-naya-n moniki-ta", "he-ACC steal.naya.3SG little animal-ACC", "He feels like stealing the little animal", "", "", "Impulsative", "Seberina", "Cusco Quechua"]);
 
-        // Build data
-        expect(importer.extractedHeaderObjects).toEqual(["Date Elicited", "utterance", "morphemes", "gloss", "translation", "comments", "", "tags", "CheckedWithConsultant", "source/publication", "a.field-with*dangerous characters (for import)"]);
-        importer.convertMatrixIntoDataList().then(function() {
-          var headers = importer.extractedHeaderObjects;
-          importer.debug(JSON.stringify(headers));
-          expect(headers[0].id).toEqual("dateElicited");
-          expect(headers[8].id).toEqual("validationStatus");
-          expect(headers[9].id).toEqual("sourcePublication");
-          expect(headers[10].id).toEqual("aFieldWithDangerousCharactersForImport");
-          //TODO finish IGT import later
+          // Build data
+          expect(importer.extractedHeaderObjects).toEqual(["Date Elicited", "utterance", "morphemes", "gloss", "translation", "comments", "", "tags", "CheckedWithConsultant", "source/publication", "a.field-with*dangerous characters (for import)"]);
+          importer.convertMatrixIntoDataList().then(function() {
+            var headers = importer.extractedHeaderObjects;
+            importer.debug(JSON.stringify(headers));
+            expect(headers[0].id).toEqual("dateElicited");
+            expect(headers[8].id).toEqual("validationStatus");
+            expect(headers[9].id).toEqual("sourcePublication");
+            expect(headers[10].id).toEqual("aFieldWithDangerousCharactersForImport");
+            //TODO finish IGT import later
 
-        });
-
-
-      }, function(options) {
-        expect(options).toEqual("It should not error");
-      }).then(done, done);
-    }, specIsRunningTooLong);
+          });
 
 
+        }, function(options) {
+          expect(options).toEqual("It should not error");
+        }).then(done, done);
+      }, specIsRunningTooLong);
+
+    }
   });
 
 
