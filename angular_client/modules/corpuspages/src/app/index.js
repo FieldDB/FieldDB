@@ -9,16 +9,14 @@ angular.module("fielddbCorpusPagesApp", [
   // "ui.bootstrap",
   "fielddbAngular"
 ]).config(function($locationProvider, $stateProvider, $urlRouterProvider) {
+
+  var fieldDBApp = FieldDB.FieldDBObject.application;
+
+  /* https://docs.angularjs.org/error/$location/nobase */
+  fieldDBApp.basePathname = "/";
+
   $locationProvider.html5Mode(true);
 
-  $stateProvider
-    .state("home", {
-      url: "/",
-      templateUrl: "app/main/main.html",
-      controller: "FieldDBCorpusPagesController"
-    });
-
-  $urlRouterProvider.otherwise("/");
 
   // if (FieldDB && FieldDB.Router) {
   //   for (var when in FieldDB.Router.routes) {
