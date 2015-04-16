@@ -1,4 +1,4 @@
-/* globals console, window, document */
+/* globals console, window */
 
 "use strict";
 
@@ -15,23 +15,6 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
       //   console.warn("Rendering generated probably a digest erorr");
       // }
     };
-
-
-    document.addEventListener("logout", function(e) {
-      console.log(e);
-      $scope.application.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
-    }, false);
-
-    document.addEventListener("authenticate:fail", function(e) {
-      console.log(e);
-      $scope.application.warn("user isn't able to see anything, show them the welcome page");
-      // $scope.application.authentication.error = "";
-      $scope.$apply(function() {
-        console.log("  Redirecting the user to the welcome page");
-        //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
-        // $location.path("/welcome", false);
-      });
-    }, false);
 
   } else {
     console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
@@ -58,13 +41,12 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     username: "",
     password: ""
   };
-  $scope.application.debug($scope.application);
+
   if ($stateParams) {
     $scope.application.processRouteParams($stateParams);
   }
   // FieldDB.FieldDBConnection.connect();
 
-  console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 
   $scope.FieldDBComponents = {};
   for (var klass in FieldDB) {
@@ -77,5 +59,5 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     };
   }
 
-
+  console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });

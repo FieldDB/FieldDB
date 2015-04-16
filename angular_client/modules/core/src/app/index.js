@@ -1,4 +1,4 @@
-/* globals console, window */
+/* globals console, window, document */
 "use strict";
 // var angularFieldDB = angular.module("FieldDB", []);
 // for (var modelName in FieldDB) {
@@ -59,6 +59,18 @@ angular.module("fielddbAngular", [
     console.warn(message);
   };
 
+  /* Add Event listeners */
+  document.addEventListener("logout", function() {
+    fieldDBApp.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
+  }, false);
+  document.addEventListener("authenticate:fail", function() {
+    fieldDBApp.warn("user isn't able to see anything, show them the welcome page");
+    // fieldDBApp.authentication.error = "";
+    console.log("  Redirecting the user to the welcome page");
+    //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
+    // $location.path("/welcome", false);
+  }, false);
+
   /* Set up white list of urls where resources (such as images, audio, video or other primary data)
   can be displayed in the app */
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS || [];
@@ -85,10 +97,10 @@ angular.module("fielddbAngular", [
   /* Add some default Routes/States which the app knows how to render */
   $stateProvider
     .state("home", {
-      url: "",
+      url: fieldDBApp.basePathname,
       templateUrl: "app/main/main.html"
     });
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise(fieldDBApp.basePathname);
 
 });
 
