@@ -198,8 +198,8 @@ module.exports = function(grunt) {
       },
       test: {
         options: {
-          jshintrc: "tests/.jshintrc",
-          ignores: ["tests/libs/**/*js"]
+          jshintrc: "tests/.jshintrc"
+          // ignores: ["tests/libs/**/*js"]
         },
         src: [
           "tests/FieldDBTest.js",
@@ -258,12 +258,12 @@ module.exports = function(grunt) {
           return "bash scripts/build_fielddb_angular_core.sh";
         }
       },
-      buildCorpusPagesAngular: {
+      buildCorpusPagesApp: {
         cmd: function() {
           return "bash scripts/build_corpuspages_angular.sh";
         }
       },
-      buildSpreadsheetAngular: {
+      buildSpreadsheetApp: {
         cmd: function() {
           return "bash scripts/build_spreadsheet_angular.sh";
         }
@@ -299,8 +299,8 @@ module.exports = function(grunt) {
   grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
-  grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesAngular"]);
-  grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
+  grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesApp"]);
+  grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetApp"]);
   grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "jasmine", "uglify", "docs", "fielddb-angular", "corpuspages-angular"]);
 
 };
