@@ -66,6 +66,13 @@ echo "... setting version on fielddb-angular npm"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/core/package.json  > output
 mv output angular_client/modules/core/package.json
 
+echo "... setting version on fielddb-corpus-pages-app bower"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/corpuspages/bower.json  > output
+mv output angular_client/modules/corpuspages/bower.json
+echo "... setting version on fielddb-corpus-pages-app npm"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/corpuspages/package.json  > output
+mv output angular_client/modules/corpuspages/package.json
+
 echo "... setting version on fielddb-spreadsheet bower"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/spreadsheet/bower.json  > output
 mv output angular_client/modules/spreadsheet/bower.json
@@ -73,7 +80,7 @@ echo "... setting version on fielddb-spreadsheet npm"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' angular_client/modules/spreadsheet/package.json  > output
 mv output angular_client/modules/spreadsheet/package.json
 
-echo "... setting version on fielddb-spreadsheet npm"
+echo "... setting version on fielddb-spreadsheet controller"
 sed 's/appVersion = "[^,]*ss"/appVersion = "'$version'ss"/' angular_client/modules/spreadsheet/app/scripts/controllers/SpreadsheetController.js  > output
 mv output angular_client/modules/spreadsheet/app/scripts/controllers/SpreadsheetController.js
 
