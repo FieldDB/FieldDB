@@ -42,19 +42,16 @@ angular.module("fielddbAngular", [
       // basePathname: window.location.origin + "/#", //might be necessary for apache
       basePathname: "/#",
     });
-
-    if (window.location.pathname.indexOf("android_asset") > -1) {
-      fieldDBApp.basePathname = window.location.pathname;
-    }
   }
+
   fieldDBApp.knownConnections = FieldDB.Connection.knownConnections;
-  fieldDBApp.activeConnection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
+  fieldDBApp.currentConnection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
 
-  if (FieldDB.debugMode) {
-    console.log("Loaded fielddbAngular module ");
-    console.log($urlRouterProvider, $stateProvider);
-  }
 
+  fieldDBApp.debug("Loaded fielddbAngular module ");
+  fieldDBApp.debug($urlRouterProvider, $stateProvider);
+
+  /* Overriding bug and warn messages to use angular UI components */
   FieldDB.FieldDBObject.bug = function(message) {
     console.warn(message);
   };
@@ -62,6 +59,8 @@ angular.module("fielddbAngular", [
     console.warn(message);
   };
 
+  /* Set up white list of urls where resources (such as images, audio, video or other primary data)
+  can be displayed in the app */
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS || [];
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
     "http://opensourcefieldlinguistics.github.io/**",
@@ -73,24 +72,22 @@ angular.module("fielddbAngular", [
     "https://localhost:3184/**",
     "https://localhost/**"
   ]);
-
   $sceDelegateProvider.resourceUrlWhitelist(fieldDBApp.whiteListCORS);
 
+  /* Set up the base path of the app, needed for running in Android assets and/or running in HTML5 mode */
+  if (window.location.pathname.indexOf("android_asset") > -1) {
+    fieldDBApp.basePathname = window.location.pathname;
+  }
   if (window.location.hash.indexOf("#") > -1) {
     fieldDBApp.basePathname = window.location.pathname + "#";
   }
 
-  // FieldDB.Database.prototype.BASE_DB_URL = "https://corpusdev.example.org";
-  // FieldDB.Database.prototype.BASE_AUTH_URL = "https://authdev.example.org";
-  // FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speechdev.example.org";
-
+  /* Add some default Routes/States which the app knows how to render */
   $stateProvider
     .state("home", {
-      url: "/",
-      templateUrl: "app/main/main.html",
-      controller: "FieldDBController"
+      url: "",
+      templateUrl: "app/main/main.html"
     });
-
   $urlRouterProvider.otherwise("/");
 
 });
