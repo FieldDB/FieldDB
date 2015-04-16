@@ -1,60 +1,38 @@
-<nav class="navbar navbar-static-top navbar-inverse" ng-controller="NavbarCtrl">
+<nav class="navbar navbar-static-top navbar-inverse" ng-controller="NavbarCtrl" role="navigation">
   <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="https://github.com/Swiip/generator-gulp-angular">
-        <span class="glyphicon glyphicon-home"></span> Gulp Angular
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ng-href="{{application.website}}" target="_blank">
+        {{application.brand}}
       </a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
       <ul class="nav navbar-nav">
-        <li class="active"><a ng-href="#">Home</a></li>
-        <li><a ng-href="#">About</a></li>
-        <li><a ng-href="#">Contact</a></li>
+        <li class="active">
+          <a ng-href="">
+            Public URLS: places to share your data
+          </a>
+        </li>
+        <li>
+          <a ng-href="http://emeld.org/school/what.html" target="_blank">
+            EMELD Data Discoverability Best Practices
+          </a>
+        </li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li>Current date: {{ date | date:'yyyy-MM-dd' }}</li>
+        <a class="btn btn-primary btn-small" target="_blank" href="http://app.lingsync.org">
+          Open LingSync App
+        </a>
       </ul>
     </div>
   </div>
 </nav>
 
-<nav class="navbar navbar-default navbar-fixed-top  navbar-inverse" role="navigation">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="http://lingsync.org">
-            LingSync
-          </a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="active">
-              <a href="#">
-               Public URLS: places to share your data
-             </a>
-           </li>
-           <li>
-            <a href="http://emeld.org/school/what.html">
-              EMELD Data Discoverability Best Practices
-            </a>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-         <li>
-          <a class="btn btn-primary btn-small" target="_blank" href="http://app.lingsync.org">
-            Open LingSync App
-          </a>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-    </nav>
