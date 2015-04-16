@@ -622,7 +622,7 @@ Connection.knownConnections = {
 };
 Connection.knownConnections.production = Connection.knownConnections.lingsync;
 
-Connection.defaultConnection = function(optionalHREF) {
+Connection.defaultConnection = function(optionalHREF, passAsReference) {
   /*
    * If its a couch app, it can only contact databases on its same origin, so
    * modify the domain to be that origin. the chrome extension can contact any
@@ -738,9 +738,12 @@ Connection.defaultConnection = function(optionalHREF) {
         authUrls: [optionalHREF],
         userFriendlyServerName: domainName
       };
+      Connection.knownConnections[connection.serverLabel] = connection;
     }
   }
-  connection = new Connection(connection).clone();
+  if (!passAsReference) {
+    connection = new Connection(connection).clone();
+  }
   return connection;
 };
 
