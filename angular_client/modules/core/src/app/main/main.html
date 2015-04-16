@@ -1,31 +1,38 @@
-<div class="container">
+<div ng-include="'components/navbar/navbar.html'"></div>
 
-  <div ng-include="'components/navbar/navbar.html'"></div>
+<div class="jumbotron text-center">
+  <h1>FieldDB-Angular</h1>
+  <p class="lead">
+    Re-usable Angular Components for FieldDB: an offline/online field database which adapts to its user's terminology and I-Language
+  </p>
+  <p>
+    <a class="btn btn-lg btn-success" ng-href="http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/App.html" target="_blank">View JS Docs
+    </a>
+  </p>
+  <p>
+    Nested views demo
+    <a ui-sref=".fieldlinguist" class="btn btn-primary">Field linguist</a>
+    <a ui-sref=".languageclass" class="btn btn-danger">Language class</a>
+  </p>
+</div>
 
-  <div class="jumbotron text-center">
-    <h1>FieldDB-Angular</h1>
-    <p class="lead">
-      Re-usable Angular Components for FieldDB: an offline/online field database which adapts to its user's terminology and I-Language
-    </p>
-    <p><a class="btn btn-lg btn-success" ng-href="http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/App.html" target="_blank">View JS Docs</a></p>
-  </div>
+<div ui-view></div>
 
-  <div class="row">
-    <div class="col-sm-6 col-md-4" ng-repeat="fieldDBModel in FieldDBComponents | orderBy:'length'">
-      <div class="thumbnail">
-        <div class="caption">
-          <h3>{{fieldDBModel.fieldDBtype}}</h3>
+<div class="row">
+  <div class="col-sm-6 col-md-4" ng-repeat="fieldDBModel in FieldDBComponents | orderBy:'length'">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3>{{fieldDBModel.fieldDBtype}}</h3>
           <!-- <iframe ng-src="{{fieldDBModel.url}}">
-          </iframe> -->
-        </div>
+        </iframe> -->
       </div>
     </div>
   </div>
-
-  <hr>
-
-  <div class="footer">
-    <p>With ♥ from <a href="https://twitter.com/LingSync">@LingSync</a></p>
-  </div>
-
 </div>
+
+<hr>
+
+<div class="footer">
+  <p>With ♥ from <a href="https://twitter.com/LingSync">@LingSync</a></p>
+</div>
+
