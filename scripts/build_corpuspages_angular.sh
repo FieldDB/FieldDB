@@ -10,9 +10,9 @@ bower install || exit 1;
 
 echo "Using local fielddb commonjs";
 rm bower_components/fielddb/fielddb.js;
-# rm bower_components/fielddb/fielddb.min.js;
+rm bower_components/fielddb/fielddb.min.js;
 ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.js;
-# ln -s $CURRENTDIR/fielddb.min.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.min.js;
+ln -s $CURRENTDIR/fielddb.min.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.min.js;
 ls -al $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/
 
 echo "Using local fielddb angular";
