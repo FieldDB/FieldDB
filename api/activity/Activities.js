@@ -60,7 +60,6 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
 
   INTERNAL_MODELS: {
     value: {
-      item: Activity,
       connection: Connection,
       comments: Comments,
       docs: ActivityCollection,
