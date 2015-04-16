@@ -25,7 +25,7 @@ module.exports = function(options) {
       'bower_components/fielddb/fielddb.js'
     ], function(event) {
       if (isOnlyChange(event)) {
-        gulp.start('scripts');
+        gulp.start('build');
       } else {
         gulp.start('inject');
       }
