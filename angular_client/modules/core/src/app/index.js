@@ -39,7 +39,8 @@ angular.module("fielddbAngular", [
       brandLowerCase: "example",
       website: "http://example.org",
       faq: "http://app.example.org/#/faq",
-      basePathname: window.location.origin + "/#",
+      // basePathname: window.location.origin + "/#", //might be necessary for apache
+      basePathname: "/#",
     });
 
     if (window.location.pathname.indexOf("android_asset") > -1) {
