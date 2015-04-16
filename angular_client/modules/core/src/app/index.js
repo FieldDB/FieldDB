@@ -11,7 +11,7 @@
 //     });
 // }
 angular.module("fielddbAngular", [
-  // "ngAnimate",
+  "ngAnimate",
   "ngCookies",
   "ngTouch",
   "ngSanitize",
@@ -19,7 +19,7 @@ angular.module("fielddbAngular", [
   "ui.bootstrap",
   "angularFileUpload",
   "contenteditable"
-]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider) {
+]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
   var fieldDBApp;
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -40,7 +40,7 @@ angular.module("fielddbAngular", [
       website: "http://example.org",
       faq: "http://app.example.org/#/faq",
       // basePathname: window.location.origin + "/#", //might be necessary for apache
-      basePathname: "/#",
+      basePathname: "/",
     });
   }
 
@@ -75,10 +75,10 @@ angular.module("fielddbAngular", [
   can be displayed in the app */
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS || [];
   fieldDBApp.whiteListCORS = fieldDBApp.whiteListCORS.concat([
-    "http://opensourcefieldlinguistics.github.io/**",
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
+    "http://opensourcefieldlinguistics.github.io/**",
     "http://*.example.org/**",
     "https://*.example.org/**",
     "https://localhost:3184/**",
@@ -93,15 +93,37 @@ angular.module("fielddbAngular", [
   if (window.location.hash.indexOf("#") > -1) {
     fieldDBApp.basePathname = window.location.pathname + "#";
   }
+  $locationProvider.html5Mode(true);
 
   /* Add some default Routes/States which the app knows how to render */
-  $stateProvider
-    .state("home", {
-      url: fieldDBApp.basePathname,
-      templateUrl: "app/main/main.html"
-    });
-  $urlRouterProvider.otherwise(fieldDBApp.basePathname);
+  $urlRouterProvider.otherwise("/corpus");
 
+  $stateProvider
+  // HOME STATES AND NESTED VIEWS ========================================
+    .state("corpus", {
+      url: "/corpus",
+      templateUrl: "app/main/main.html"
+    })
+    // nested list with custom controller
+    .state("corpus.fieldlinguist", {
+      url: "/fieldlinguist",
+      templateUrl: "components/user/consultants-page.html",
+      controller: function($scope) {
+        $scope.dogs = ["Place", "holders", "for controller"];
+      }
+    })
+    // nested list with just some random string data
+    .state("corpus.languageclass", {
+      url: "/languageclass",
+      templateUrl: "components/user/participants-page.html"
+    })
+    // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
+    .state("about", {
+      url: "/about",
+      templateUrl: "components/corpus/corpus-page.html"
+    });
+
+  fieldDBApp.debug("Loaded Angular FieldDB Components ", $stateProvider, $urlRouterProvider, fieldDBApp);
 });
 
 console.log("Loaded fielddbAngular module");

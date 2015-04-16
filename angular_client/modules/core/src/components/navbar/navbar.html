@@ -1,16 +1,23 @@
 <nav class="navbar navbar-static-top navbar-inverse" ng-controller="NavbarCtrl">
   <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" href="https://github.com/OpenSourceFieldlinguistics/FieldDB">
-        <span class="glyphicon glyphicon-home"></span> FieldDB
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fielddb-navbar-mobile-menu">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ng-href="{{application.website}}" target="_blank">
+        {{application.brand}}
       </a>
     </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+    <div class="collapse navbar-collapse" id="fielddb-navbar-mobile-menu">
       <ul class="nav navbar-nav">
-        <li class="active"><a ng-href="#">Home</a></li>
-        <li><a ng-href="#">About</a></li>
-        <li><a ng-href="#">Contact</a></li>
+        <li class="active"><a ui-sref="/home">Home</a></li>
+        <li><a ui-sref="/about">About</a></li>
+        <li><a ui-sref="/contact">Contact</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
