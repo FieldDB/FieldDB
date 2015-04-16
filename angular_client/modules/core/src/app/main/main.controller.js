@@ -7,13 +7,13 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
     FieldDB.FieldDBObject.render = function() {
-      try {
-        if (!$scope.$$phase) {
-          $scope.$apply(); //$digest or $apply
-        }
-      } catch (e) {
-        console.warn("Rendering generated probably a digest erorr");
-      }
+      // try {
+      //   if (!$scope.$$phase) {
+      //     $scope.$apply(); //$digest or $apply
+      //   }
+      // } catch (e) {
+      //   console.warn("Rendering generated probably a digest erorr");
+      // }
     };
 
 
