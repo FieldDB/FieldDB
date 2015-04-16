@@ -1,5 +1,5 @@
 "use strict";
-
+/* globals FieldDB */
 angular.module("fielddbCorpusPagesApp", [
   // "ngAnimate",
   // "ngCookies",
@@ -17,6 +17,7 @@ angular.module("fielddbCorpusPagesApp", [
 
   $locationProvider.html5Mode(true);
 
+  fieldDBApp.debug("Loaded Corpus pages, ", $stateProvider, $urlRouterProvider, fieldDBApp);
 
   // if (FieldDB && FieldDB.Router) {
   //   for (var when in FieldDB.Router.routes) {
