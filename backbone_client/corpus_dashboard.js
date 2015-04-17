@@ -246,9 +246,9 @@ window.app = new App({filledWithDefaults: true});
 //      return;
 //    }else{
 //      if (OPrime.debugMode) OPrime.debug("Loading app from localStorage");
-//      var couchConnection = appjson.couchConnection;
-//      var dbname = couchConnection.dbname;
-//      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){
+//      var connection = appjson.connection;
+//      var dbname = connection.dbname;
+//      if(connection == "undefined" || connection == undefined || connection ==  null){
 ////        alert("We can't accurately guess which corpus to load. Please login and it should fix the problem.");
 //        loadFreshApp();
 //        return;
@@ -271,7 +271,7 @@ window.app = new App({filledWithDefaults: true});
 //            }else{
 //              a.createAppBackboneObjects(dbname, function(){
 //                window.startApp(a, function(){
-//                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(couchConnection, appjson);
+//                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(connection, appjson);
 //                });
 //              });
 //            }

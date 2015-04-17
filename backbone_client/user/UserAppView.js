@@ -237,10 +237,10 @@ define(
                         .syncUserWithServer(
                             function() {
                               var corpusConnection = self.model.get("corpus")
-                                  .get("couchConnection");
+                                  .get("connection");
                               if (self.model.get("authentication").get(
                                   "userPrivate").get("corpora").dbname != "default"
-                                  && app.get("corpus").get("couchConnection").dbname == "default") {
+                                  && app.get("corpus").get("connection").dbname == "default") {
                                 corpusConnection = self.model.get(
                                     "authentication").get("userPrivate").get(
                                     "corpora")[0];

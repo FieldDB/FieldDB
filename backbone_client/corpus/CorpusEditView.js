@@ -247,7 +247,7 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
-      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+      var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
 
@@ -506,20 +506,20 @@ define([
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }else{
-        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
+        var newdbname = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
         var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
-        if(pouches.indexOf(newPouchName) != -1){
+        if(pouches.indexOf(newdbname) != -1){
           alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
           this.$el.find(".corpus-title-input").val("");
           return;
         }
 
-        this.model.get("couchConnection").dbname = newPouchName;
-        this.model.set("dbname", newPouchName);
-        this.model.get("publicSelf").set("dbname", newPouchName);
-        this.model.get("team").set("dbname", newPouchName);
-        this.$el.find(".new-corpus-dbname").html(newPouchName);
+        this.model.get("connection").dbname = newdbname;
+        this.model.set("dbname", newdbname);
+        this.model.get("publicSelf").set("dbname", newdbname);
+        this.model.get("team").set("dbname", newdbname);
+        this.$el.find(".new-corpus-dbname").html(newdbname);
       }
 
     },

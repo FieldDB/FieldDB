@@ -195,7 +195,7 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
-      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+      var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       // jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
       jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/lexicon_create_tuples?group=true";

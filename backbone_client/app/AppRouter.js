@@ -83,12 +83,12 @@ define([
      * Shows the differences between revisions of two couchdb docs, TODO not working yet but someday when it becomes a priority..
      */
     showDiffs : function(oldrevision, newrevision){
-      var couchConnection = window.app.get("corpus").get("couchConnection");
-      var couchDatabaseUrl = couchConnection.protocol+couchConnection.domain;
-      if(couchConnection.port != null){
-        couchDatabaseUrl = couchDatabaseUrl+":"+couchConnection.port;
+      var connection = window.app.get("corpus").get("connection");
+      var couchDatabaseUrl = connection.protocol+connection.domain;
+      if(connection.port != null){
+        couchDatabaseUrl = couchDatabaseUrl+":"+connection.port;
       }
-      couchDatabaseUrl = couchDatabaseUrl + couchConnection.path +"/_utils/database.html?"+ couchConnection.dbname;
+      couchDatabaseUrl = couchDatabaseUrl + connection.path +"/_utils/database.html?"+ connection.dbname;
 
 
       window.appView.toastUser("We haven't implemented the 'diff' tool yet" +
@@ -446,7 +446,7 @@ define([
      */
     showAllDataInSession : function(dbname, id, goal) {
       /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
-      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("couchConnection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("connection")) +'/_design/pages/_view/get_datums_by_session_id?key="'+id+'"';
 
 //    this.hideEverything();
 //    $("#dashboard-view").show();

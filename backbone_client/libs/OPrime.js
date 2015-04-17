@@ -24,22 +24,22 @@ OPrime.touchUrl = "http://localhost:8128/";
  */
 OPrime.pouchUrl = "idb://";
 
-OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
-  if (!couchConnection) {
-    couchConnection = OPrime.defaultCouchConnection();
-    if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
+OPrime.getCouchUrl = function(connection, couchdbcommand) {
+  if (!connection) {
+    connection = OPrime.defaultConnection();
+    if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
   }
 
-  var couchurl = couchConnection.protocol + couchConnection.domain;
-  if (couchConnection.port && couchConnection.port != "443" && couchConnection.port != "80") {
-    couchurl = couchurl + ":" + couchConnection.port;
+  var couchurl = connection.protocol + connection.domain;
+  if (connection.port && connection.port != "443" && connection.port != "80") {
+    couchurl = couchurl + ":" + connection.port;
   }
-  if(!couchConnection.path){
-    couchConnection.path = "";
+  if(!connection.path){
+    connection.path = "";
   }
-  couchurl = couchurl + couchConnection.path;
+  couchurl = couchurl + connection.path;
   if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + couchConnection.dbname;
+    couchurl = couchurl + "/" + connection.dbname;
   } else {
     couchurl = couchurl + couchdbcommand;
   }

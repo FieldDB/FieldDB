@@ -115,12 +115,12 @@ require.config({
 require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
   try {
     var pieces = window.location.pathname.replace(/^\//, "").split("/");
-    var pouchName = pieces[0];
+    var dbname = pieces[0];
     // Handle McGill server which runs out of a virtual directory
-    if (pouchName == "corpus") {
-      pouchName = pieces[1];
+    if (dbname == "corpus") {
+      dbname = pieces[1];
     }
-    Backbone.couch_connector.config.db_name = pouchName;
+    Backbone.couch_connector.config.db_name = dbname;
   } catch (e) {
     if (OPrime.debugMode)
       OPrime.debug("Couldn't set the databse name off of the url.");

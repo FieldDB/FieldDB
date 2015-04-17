@@ -214,14 +214,14 @@ define([
           corpusid : c.id,
           datalistid : c.datalists.models[0].id,
           sessionid : c.sessions.models[0].id,
-          couchConnection : c.get("couchConnection")
+          connection : c.get("connection")
         };
         console.log("mostRecentIds", mostRecentIds);
         window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
         window.app.get("authentication").saveAndInterConnectInApp(function(){
           var optionalCouchAppPath= "";
-          if(c.get("couchConnection").dbname){
-             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("couchConnection").dbname);
+          if(c.get("connection").dbname){
+             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("connection").dbname);
           }
           window.location.replace(optionalCouchAppPath+"corpus.html");
           return;
@@ -230,7 +230,7 @@ define([
     bringCorpusToThisDevice : function(corpus, callback) {
       for (var x in window.app.get("authentication").get("userPrivate").get("corpora")){
         if(window.app.get("authentication").get("userPrivate").get("corpora")[x].dbname == corpus.get("dbname")){
-          corpus.set("couchConnection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
+          corpus.set("connection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
           window.app.set("corpus",corpus);
           window.app.get("authentication").staleAuthentication = true;
           window.app.get("authentication").syncUserWithServer(function(){
@@ -247,9 +247,9 @@ define([
        * not where the user currently is.
        */
       if (OPrime.isCouchApp()) {
-        var corpusPouchName = dbname;
-        if (window.location.pathname.indexOf(corpusPouchName) == -1) {
-          if (corpusPouchName != "public-firstcorpus") {
+        var corpusdbname = dbname;
+        if (window.location.pathname.indexOf(corpusdbname) == -1) {
+          if (corpusdbname != "public-firstcorpus") {
             var username = "";
             try {
               username = window.app.get("authentication").get("userPrivate").get("username") || "";
@@ -260,7 +260,7 @@ define([
               // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusPouchName);
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusdbname);
           window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+dbname);
           return;
         }

@@ -435,7 +435,7 @@ var MAINTAINENCE = {
         "title": "Private Corpus",
         "titleAsUrl": "private_corpus",
         "description": "The details of this corpus are not public.",
-        "couchConnection": {
+        "connection": {
           "protocol": "https://",
           "domain": "corpus.example.org",
           "port": "443",
@@ -555,7 +555,7 @@ var MAINTAINENCE = {
             var database = $.couch.db(dbname);
 
             var saveCorpusDoc = function(corpusDoc, localdbname) {
-              corpusDoc.couchConnection.dbname = localdbname;
+              corpusDoc.connection.dbname = localdbname;
               corpusDoc.dbname = localdbname;
               console.log("This is what we would save: ", corpusDoc);
               // database.saveDoc(corpusDoc, {
@@ -580,7 +580,7 @@ var MAINTAINENCE = {
                     // corpusid = "";
                   }
                   console.log("Opened Corpus id " + corpusid);
-                  corpusDoc.couchConnection.corpusid = corpusid;
+                  corpusDoc.connection.corpusid = corpusid;
                   corpusDoc.corpusid = corpusid;
 
                   if (!corpusDoc.terms) {
@@ -614,17 +614,17 @@ var MAINTAINENCE = {
             database.openDoc("corpus", {
               success: function(results) {
                 var doUpdate = false;
-                if (results && results.couchConnection && results.couchConnection.corpusid) {
-                  console.log(results.couchConnection.corpusid + " is the corpusid for " + dbname);
+                if (results && results.connection && results.connection.corpusid) {
+                  console.log(results.connection.corpusid + " is the corpusid for " + dbname);
                 }
-                if (results && results.couchConnection && results.couchConnection.corpusid && results.terms && results.license && results.copyright) {
+                if (results && results.connection && results.connection.corpusid && results.terms && results.license && results.copyright) {
                   console.log("This corpus is pretty modern. " + dbname);
                   return;
                 }
-                if (results && results.couchConnection && !results.couchConnection.corpusid) {
+                if (results && results.connection && !results.connection.corpusid) {
                   console.log("This corpus is missing a corpusid that can happen if its only been opened in the spreadsheet app. but htey need the corpusid to use the offline app..." + dbname);
-                  // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.couchConnection);
-                  // results.couchConnection = {
+                  // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.connection);
+                  // results.connection = {
                   //     "protocol": "https://",
                   //     "domain": "corpus.example.org",
                   //     "port": "443",
@@ -639,8 +639,8 @@ var MAINTAINENCE = {
                   doUpdate = true;
                 }
 
-                if (results && !results.couchConnection) {
-                  results.couchConnection = {
+                if (results && !results.connection) {
+                  results.connection = {
                     "protocol": "https://",
                     "domain": "corpus.example.org",
                     "port": "443",
@@ -696,7 +696,7 @@ var MAINTAINENCE = {
 
             database.openDoc("corpus", {
               success: function(results) {
-                console.log("Corpus doc " + dbname, results.couchConnection);
+                console.log("Corpus doc " + dbname, results.connection);
               },
               error: function(error) {
                 console.log("Error getting a corpus doc " + dbname, error);
@@ -2012,15 +2012,15 @@ var MAINTAINENCE = {
                   };
                 } else if (sourceDB === "new_corpus_activity_feed" || sourceDB === "new_corpus") {
                   // console.log("Creating a new_corpus_activity_feed/new_corpus security doc");
-                  var corpusPouchName = dbname.replace("-activity_feed", "");
+                  var corpusdbname = dbname.replace("-activity_feed", "");
                   securitydoc = {
                     "admins": {
                       "names": [],
-                      "roles": [corpusPouchName + "_admin", "fielddbadmin"]
+                      "roles": [corpusdbname + "_admin", "fielddbadmin"]
                     },
                     "members": {
                       "names": [],
-                      "roles": [corpusPouchName + "_reader", corpusPouchName + "_writer", corpusPouchName + "_commenter"]
+                      "roles": [corpusdbname + "_reader", corpusdbname + "_writer", corpusdbname + "_commenter"]
                     }
                   };
                 }

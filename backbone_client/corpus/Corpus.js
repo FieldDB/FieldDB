@@ -108,22 +108,22 @@ define([
       }
       this.bind("change:publicCorpus", this.changeCorpusPublicPrivate, this);
 
-//      var couchConnection = this.get("couchConnection");
-//      if(!couchConnection){
-//        couchConnection = JSON.parse(localStorage.getItem("mostRecentCouchConnection"));
-//        if(!localStorage.getItem("mostRecentCouchConnection")){
+//      var connection = this.get("connection");
+//      if(!connection){
+//        connection = JSON.parse(localStorage.getItem("mostRecentConnection"));
+//        if(!localStorage.getItem("mostRecentConnection")){
 //          alert("Bug, need to take you back to the users page.");
 //        }
-//        this.set("couchConnection", couchConnection);
+//        this.set("connection", connection);
 //      }
 //      this.pouch = Backbone.sync
 //      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-//        + couchConnection.dbname : OPrime.pouchUrl
-//        + couchConnection.dbname);
+//        + connection.dbname : OPrime.pouchUrl
+//        + connection.dbname);
 
     },
-    loadOrCreateCorpusByPouchName : function(couchConnection, sucessloadingorCreatingcallback){
-      var couchurl = OPrime.getCouchUrl(couchConnection);
+    loadOrCreateCorpusBydbname : function(connection, sucessloadingorCreatingcallback){
+      var couchurl = OPrime.getCouchUrl(connection);
       var queryUrl = couchurl + "/_design/pages/_view/private_corpora";
 
       var errorfunction = function(response) {
@@ -143,7 +143,7 @@ define([
       //   }
       //   corpusself.islooping = true;
       //   OPrime.bug("Trying to download this corpus to this device one more time..." + xhr.reason);
-      //   corpusself.loadOrCreateCorpusByPouchName(couchConnection, sucessloadingorCreatingcallback);
+      //   corpusself.loadOrCreateCorpusBydbname(connection, sucessloadingorCreatingcallback);
       // };
 
       var corpusself = this;
@@ -156,9 +156,9 @@ define([
           errorfunction("No corpus doc! this corpus is broken.");
         }
         var model = serverResults.rows[0].value;
-        couchConnection.corpusid = model._id;
+        connection.corpusid = model._id;
         // appids.corpusid = model._id;
-        model.couchConnection = couchConnection;
+        model.connection = connection;
         // corpusself.set(corpusself.parse(model));
 
         if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
@@ -199,7 +199,7 @@ define([
         }, error: function(model, xhr, options){
           if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
           corpusself.get("publicSelf").fillWithDefaults();
-          corpusself.get("publicSelf").set("couchConnection", corpusself.get("couchConnection"));
+          corpusself.get("publicSelf").set("connection", corpusself.get("connection"));
           corpusself.get("publicSelf").set("dbname", corpusself.get("dbname"));
         }});
       }catch(e){
@@ -214,7 +214,7 @@ define([
       if(!this.get("publicSelf")){
         this.set("publicSelf", new CorpusMask({
           "filledWithDefaults" : true,
-          "couchConnection" : this.get("couchConnection"),
+          "connection" : this.get("connection"),
           "dbname" : this.get("dbname")
         }));
       }
@@ -452,19 +452,19 @@ define([
       }
 
       /* Use the couch connection defined by this app. */
-      if (originalModel.couchConnection) {
-        tmp = originalModel.couchConnection;
-        originalModel.couchConnection = OPrime.defaultCouchConnection();
-        originalModel.couchConnection.corpusid = tmp.corpusid;
-        originalModel.couchConnection.dbname = tmp.dbname;
-        originalModel.couchConnection.title = tmp.title;
-        originalModel.couchConnection.description = tmp.description;
-        originalModel.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      if (originalModel.connection) {
+        tmp = originalModel.connection;
+        originalModel.connection = OPrime.defaultConnection();
+        originalModel.connection.corpusid = tmp.corpusid;
+        originalModel.connection.dbname = tmp.dbname;
+        originalModel.connection.title = tmp.title;
+        originalModel.connection.description = tmp.description;
+        originalModel.connection.titleAsUrl = tmp.titleAsUrl;
       } else {
         // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
-        originalModel.couchConnection = OPrime.defaultCouchConnection();
-        originalModel.couchConnection.corpusid = originalModel._id;
-        originalModel.couchConnection.dbname = originalModel.dbname;
+        originalModel.connection = OPrime.defaultConnection();
+        originalModel.connection.corpusid = originalModel._id;
+        originalModel.connection.dbname = originalModel.dbname;
       }
 
       // some versions of the FieldBD common js in the spreadsheet removed the confidential?
@@ -661,7 +661,7 @@ define([
 //      conversationFields : DatumFields,
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
-//      couchConnection : JSON.parse(localStorage.getItem("mostRecentCouchConnection")) || OPrime.defaultCouchConnection()
+//      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || OPrime.defaultConnection()
     },
 
     // Internal models: used by the parse function
@@ -768,7 +768,7 @@ define([
       attributes.description = "Copy of: "+this.get("description");
 //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.dbname = this.get("dbname")+"copy";
-      attributes.couchConnection.dbname = this.get("dbname")+"copy";
+      attributes.connection.dbname = this.get("dbname")+"copy";
       attributes.dataLists = [];
       attributes.sessions = [];
       attributes.comments = [];
@@ -810,7 +810,7 @@ define([
       attributes.title = this.get("title")+ " copy";
       attributes.titleAsUrl = this.get("titleAsUrl")+"Copy";
       attributes.dbname = this.get("dbname")+"copy";
-      attributes.couchConnection.dbname = this.get("dbname")+"copy";
+      attributes.connection.dbname = this.get("dbname")+"copy";
       attributes.publicSelf = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
 
@@ -821,21 +821,21 @@ define([
 
 //    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
     lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
-    prepareANewPouch : function(couchConnection, callback) {
-      if (!couchConnection || couchConnection == undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
+    prepareANewPouch : function(connection, callback) {
+      if (!connection || connection == undefined) {
+        console.log("App.changePouch connection must be supplied.");
         return;
       } else {
-        console.log("prepareANewPouch setting couchConnection: ", couchConnection);
+        console.log("prepareANewPouch setting connection: ", connection);
       }
 //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-//      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
+//      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"),"");
 
       if(OPrime.isChromeApp()){
-        Backbone.couch_connector.config.base_url = window.app.getCouchUrl(couchConnection,"");
-        Backbone.couch_connector.config.db_name = couchConnection.dbname;
+        Backbone.couch_connector.config.base_url = window.app.getCouchUrl(connection,"");
+        Backbone.couch_connector.config.db_name = connection.dbname;
       }else{
-        Backbone.couch_connector.config.db_name = couchConnection.dbname;
+        Backbone.couch_connector.config.db_name = connection.dbname;
       }
 
       if(typeof callback == "function"){
@@ -849,11 +849,11 @@ define([
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.dbname);
+        // + connection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.dbname : OPrime.pouchUrl
-            + couchConnection.dbname);
+            + connection.dbname : OPrime.pouchUrl
+            + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -861,7 +861,7 @@ define([
     },
     'createCorpus': function(dataToPost) {
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
-      dataToPost.authUrl = OPrime.defaultCouchConnection().authUrl;
+      dataToPost.authUrl = OPrime.defaultConnection().authUrl;
       dataToPost.newCorpusName = this.get("title");
 
       var functionForError = function(err){
@@ -894,9 +894,9 @@ define([
              * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
              */
             var potentialdbname = response.corpus.dbname;
-            var couchConnection =OPrime.defaultCouchConnection();
-            couchConnection.dbname =potentialdbname;
-            var nextCorpusUrl = OPrime.getCouchUrl(couchConnection)+ "/_design/pages/_view/private_corpora";
+            var connection =OPrime.defaultConnection();
+            connection.dbname =potentialdbname;
+            var nextCorpusUrl = OPrime.getCouchUrl(connection)+ "/_design/pages/_view/private_corpora";
 
             OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl , function() {
               //              OPrime.bug("Attempting to save the new corpus in its database.");
@@ -944,16 +944,16 @@ define([
       var newModel = false;
 
       /* Upgrade chrome app user corpora's to v1.38+ */
-      var oldCouchConnection = this.get("couchConnection");
-      if(oldCouchConnection){
-        if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-          oldCouchConnection.domain  = "corpus.lingsync.org";
-          oldCouchConnection.port = "";
-          this.set("couchConnection", oldCouchConnection);
+      var oldConnection = this.get("connection");
+      if(oldConnection){
+        if(oldConnection.domain == "ifielddevs.iriscouch.com"){
+          oldConnection.domain  = "corpus.lingsync.org";
+          oldConnection.port = "";
+          this.set("connection", oldConnection);
         }
-        if(oldCouchConnection.domain == "orpusdev.lingsync.org"){
-          oldCouchConnection.domain  = "corpus.lingsync.org";
-          this.set("couchConnection", oldCouchConnection);
+        if(oldConnection.domain == "orpusdev.lingsync.org"){
+          oldConnection.domain  = "corpus.lingsync.org";
+          this.set("connection", oldConnection);
         }
       }
 
@@ -961,9 +961,9 @@ define([
         alert("This is a strange situation...The app is trying to create a corpus.");
         return;
       }else{
-        this.get("couchConnection").corpusid = this.id;
-        if(!this.get("couchConnection").path){
-          this.get("couchConnection").path = "";
+        this.get("connection").corpusid = this.id;
+        if(!this.get("connection").path){
+          this.get("connection").path = "";
         }
       }
       var oldrev = this.get("_rev");
@@ -1067,14 +1067,14 @@ define([
                     contextmask : "",
                     teamOrPersonal : "team"
                   });
-            model.get("couchConnection").corpusid = model.id;
+            model.get("connection").corpusid = model.id;
             //make sure the corpus is updated in the history of the user
             var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
-            var oldconnection = pouches.indexOf(model.get("couchConnection").dbname);
+            var oldconnection = pouches.indexOf(model.get("connection").dbname);
             if(oldconnection != -1){
               window.app.get("authentication").get("userPrivate").get("corpora").splice(oldconnection, 1);
             }
-            window.app.get("authentication").get("userPrivate").get("corpora").unshift(model.get("couchConnection"));
+            window.app.get("authentication").get("userPrivate").get("corpora").unshift(model.get("connection"));
 
             if(newModel){
 
@@ -1305,7 +1305,7 @@ define([
         return;
       }
       var corpusself = this;
-      if(!this.get("couchConnection")){
+      if(!this.get("connection")){
         return;
       }
       if(OPrime.isBackboneCouchDBApp()){
@@ -1371,7 +1371,7 @@ define([
         window.app.set("corpus", this);
       }
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
-      window.app.get("authentication").get("userPrivate").get("mostRecentIds").couchConnection = this.get("couchConnection");
+      window.app.get("authentication").get("userPrivate").get("mostRecentIds").connection = this.get("connection");
       window.app.get("authentication").saveAndInterConnectInApp();
 
       //If there is no view, we are done.
@@ -1441,7 +1441,7 @@ define([
       }
       var glosserURL = this.get("glosserURL");
       if (!glosserURL) {
-        var couchurl = OPrime.getCouchUrl(this.get("couchConnection"));
+        var couchurl = OPrime.getCouchUrl(this.get("connection"));
         glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
       }
       Glosser.downloadPrecedenceRules(dbname, glosserURL, callback);
@@ -1486,10 +1486,10 @@ define([
           }
           return;
         }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
+        var connection = this.get("connection");
+        var couchurl = OPrime.getCouchUrl(connection);
         if(!dbname){
-          dbname = couchConnection.dbname;
+          dbname = connection.dbname;
           /* if the user has overriden the frequent fields, use their preferences */
           if(this.get("frequentDatumFields")){
             if(typeof callback == "function"){
@@ -1584,10 +1584,10 @@ define([
           }
           return;
         }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
+        var connection = this.get("connection");
+        var couchurl = OPrime.getCouchUrl(connection);
         if(!dbname){
-          dbname = couchConnection.dbname;
+          dbname = connection.dbname;
           /* if the user has overriden the frequent fields, use their preferences */
           if(this.get("frequentDatumValidationStates")){
             if(typeof callback == "function"){
@@ -1657,10 +1657,10 @@ define([
           }
           return;
         }
-        var couchConnection = this.get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
+        var connection = this.get("connection");
+        var couchurl = OPrime.getCouchUrl(connection);
         if(!dbname){
-          dbname = couchConnection.dbname;
+          dbname = connection.dbname;
           /* if the user has overriden the frequent fields, use their preferences */
           if(this.get("frequentDatumTags")){
             if(typeof callback == "function"){
