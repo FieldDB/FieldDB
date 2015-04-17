@@ -58,6 +58,8 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
       url: "http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/" + klass + ".html"
     };
   }
+  $scope.application.currentCorpusDashboard = "/lingllama/comunity_corpus";
+  $scope.FieldDBComponents.Activity.route = $scope.application.currentCorpusDashboard + "/activityfeed/123";
 
   console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });
