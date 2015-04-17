@@ -107,7 +107,7 @@ var MAINTAINENCE = {
    */
   mergeSessions: function() {
 
-    var pouchname = "default";
+    var dbname = "default";
     var corpustitle = "Default";
     var corpusid = "123";
     var name = "sessionmergingbot";
@@ -122,7 +122,7 @@ var MAINTAINENCE = {
     var mergeIntoSession = {
       _id: "b0f1bbcfdd6bf0bf38197a986f481e44",
       _rev: "1-b646e5c7fcfb1f5935403250c623f627",
-      pouchname: "default",
+      dbname: "default",
       sessionFields: [{
         label: "goal",
         value: "Transcription",
@@ -187,8 +187,8 @@ var MAINTAINENCE = {
       lastModifiedBy: "default"
     };
 
-    var database = $.couch.db(pouchname);
-    var activities = $.couch.db(pouchname + "-activity_feed");
+    var database = $.couch.db(dbname);
+    var activities = $.couch.db(dbname + "-activity_feed");
     var count = 0;
     database.allDocs({
       success: function(result) {
@@ -439,7 +439,7 @@ var MAINTAINENCE = {
           "protocol": "https://",
           "domain": "corpus.example.org",
           "port": "443",
-          "pouchname": "default",
+          "dbname": "default",
           "path": "",
           "corpusid": ""
         },
@@ -452,7 +452,7 @@ var MAINTAINENCE = {
           "link": "http://creativecommons.org/licenses/by-sa/3.0/"
         },
         "copyright": "Default: Add names of the copyright holders of the corpus.",
-        "pouchname": "",
+        "dbname": "",
         "datumFields": [{
           "label": "judgement",
           "value": "",
@@ -555,8 +555,8 @@ var MAINTAINENCE = {
             var database = $.couch.db(dbname);
 
             var saveCorpusDoc = function(corpusDoc, localdbname) {
-              corpusDoc.couchConnection.pouchname = localdbname;
-              corpusDoc.pouchname = localdbname;
+              corpusDoc.couchConnection.dbname = localdbname;
+              corpusDoc.dbname = localdbname;
               console.log("This is what we would save: ", corpusDoc);
               // database.saveDoc(corpusDoc, {
               //     success: function(serverResults) {
@@ -628,7 +628,7 @@ var MAINTAINENCE = {
                   //     "protocol": "https://",
                   //     "domain": "corpus.example.org",
                   //     "port": "443",
-                  //     "pouchname": dbname,
+                  //     "dbname": dbname,
                   //     "path": "",
                   //     "corpusid": ""
                   // };
@@ -644,7 +644,7 @@ var MAINTAINENCE = {
                     "protocol": "https://",
                     "domain": "corpus.example.org",
                     "port": "443",
-                    "pouchname": dbname,
+                    "dbname": dbname,
                     "path": "",
                     "corpusid": ""
                   };
@@ -1506,8 +1506,8 @@ var MAINTAINENCE = {
         for (var couchdatum in data) {
           database.openDoc(data[couchdatum].id, {
             success: function(originalDoc) {
-              console.log(originalDoc.pouchname);
-              originalDoc.pouchname = targetdatabase;
+              console.log(originalDoc.dbname);
+              originalDoc.dbname = targetdatabase;
               database.saveDoc(originalDoc, {
                 success: function(serverResults) {
                   console.log("updated " + originalDoc._id);
@@ -1545,8 +1545,8 @@ var MAINTAINENCE = {
           var localDatabase = $.couch.db(targetdatabase);
           localDatabase.openDoc(data[couchdatum].id, {
             success: function(originalDoc) {
-              if (originalDoc.pouchname) {
-                originalDoc.pouchname = remoteTargetDatabase;
+              if (originalDoc.dbname) {
+                originalDoc.dbname = remoteTargetDatabase;
               }
               $.couch.urlPrefix = "https://corpus.example.org";
               var remoteDatabase = $.couch.db(remoteTargetDatabase);
@@ -2143,15 +2143,15 @@ var MAINTAINENCE = {
           // if (activity.timestamp < lastPosition) {
           // return;
           // }
-          var pouchname = activity.pouchname;
-          // console.log(pouchname);
-          delete activity.pouchname;
-          // console.log(pouchname);
-          // if (!pouchname) {
+          var dbname = activity.dbname;
+          // console.log(dbname);
+          delete activity.dbname;
+          // console.log(dbname);
+          // if (!dbname) {
           //   console.log(row);
           // }
           // return;
-          var activityDB = $.couch.db(pouchname);
+          var activityDB = $.couch.db(dbname);
           activity.originalId = activity._id + "";
           activity.originalRev = activity._rev + "";
 
@@ -2179,7 +2179,7 @@ var MAINTAINENCE = {
           delete activity._rev;
           activityDB.saveDoc(activity, {
             success: function(serverResults) {
-              console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
+              console.log("saved activity for " + dbname, JSON.stringify(serverResults));
               if (activity.teamOrPersonal === "personal") {
                 activity._id = activity.originalId;
                 activity._rev = activity.originalRev;
@@ -2416,8 +2416,8 @@ var MAINTAINENCE = {
     /*
     Verify corpus doc
      */
-    var targetpouchname = "speechrecognition-kartuli-activity_feed";
-    var targetdatabase = $.couch.db(targetpouchname);
+    var targetdbname = "speechrecognition-kartuli-activity_feed";
+    var targetdatabase = $.couch.db(targetdbname);
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
@@ -2442,11 +2442,11 @@ var MAINTAINENCE = {
               result.rows.map(function(row) {
                 database.openDoc(row.id, {
                   success: function(originalDoc) {
-                    console.log(originalDoc.pouchname);
+                    console.log(originalDoc.dbname);
                     if (!originalDoc.teamOrPersonal) {
                       return;
                     }
-                    originalDoc.pouchname = targetpouchname;
+                    originalDoc.dbname = targetdbname;
                     targetdatabase.saveDoc(originalDoc, {
                       success: function(serverResults) {
                         console.log("saved activity in central activities " + originalDoc._id);

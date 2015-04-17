@@ -2,18 +2,18 @@
 
 /**
 */
-var Bot = function(pouchname, corpusid, corpustitle){
-	if(!pouchname || !corpusid ||!corpustitle){
+var Bot = function(dbname, corpusid, corpustitle){
+	if(!dbname || !corpusid ||!corpustitle){
 		throw("You must create this bot with a database name, a corpus id and a corpus title. ");
 	}
 	var stopAt = 10;
-	
-	var activities = $.couch.db(pouchname+"-activity_feed");
-	var database = $.couch.db(pouchname);
+
+	var activities = $.couch.db(dbname+"-activity_feed");
+	var database = $.couch.db(dbname);
 
 	var name = "inuktitutcleaningbot";
 	var gravatar = "968b8e7fb72b5ffe2915256c28a9414c";
-	
+
 	var cleaningFunction = function(datum, saveFunction){
 		if(!datum.collection || datum.collection !== "datums"){
 			console.log("This isnt a datum.");
@@ -45,23 +45,23 @@ var Bot = function(pouchname, corpusid, corpustitle){
 				changes.push("Flagged as "+ datum.datumFields[field].value);
 			}
 		}
-		
+
 		var timestamp = Date.now();
 		/* Record this event in the comments */
 		var changeDescription = changes.join(", ");
 		datum.comments.push({
-			"text": changeDescription, 
+			"text": changeDescription,
 			"username": name,
-			"timestamp": timestamp, 
-			"gravatar": gravatar, 
+			"timestamp": timestamp,
+			"gravatar": gravatar,
 			"timestampModified": timestamp
 		});
-		
+
 
 		if (typeof saveFunction == "function") {
 			saveFunction(datum, changeDescription);
 		}
-		
+
 	};
 
 	var saveDocBackToCouchDB = function(cleanedDoc, directobjectMessage){
@@ -130,7 +130,7 @@ return {
 				    		error: function(error){
 				    			console.log("Error opening your docs ", error);
 				    		}
-				    	}); 
+				    	});
 				    }
 				},
 				error: function(error){

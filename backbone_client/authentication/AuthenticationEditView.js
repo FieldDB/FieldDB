@@ -457,15 +457,15 @@ define([
       dataToPost.authUrl = OPrime.getAuthUrl();
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
       dataToPost.appVersionWhenCreated = this.appVersion;
-      //Send a pouchname to create
+      //Send a dbname to create
       var corpusConnection = OPrime.defaultCouchConnection();
-      corpusConnection.pouchname = "firstcorpus";
+      corpusConnection.dbname = "firstcorpus";
       dataToPost.corpora = [corpusConnection];
       dataToPost.mostRecentIds = {};
       dataToPost.mostRecentIds.couchConnection = JSON.parse(JSON.stringify(corpusConnection));
-      dataToPost.mostRecentIds.couchConnection.pouchname = dataToPost.username+"-"+dataToPost.mostRecentIds.couchConnection.pouchname;
+      dataToPost.mostRecentIds.couchConnection.dbname = dataToPost.username+"-"+dataToPost.mostRecentIds.couchConnection.dbname;
       var activityConnection = OPrime.defaultCouchConnection();
-      activityConnection.pouchname = dataToPost.username+"-activity_feed";
+      activityConnection.dbname = dataToPost.username+"-activity_feed";
       dataToPost.activityCouchConnection = activityConnection;
       var u = new UserMask();
       dataToPost.gravatar = u.getGravatar(dataToPost.email);
@@ -524,11 +524,11 @@ define([
             /*
              * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
              */
-            var potentialpouchname = serverResults.user.corpora[0].pouchname;
-            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouchname);
+            var potentialdbname = serverResults.user.corpora[0].dbname;
+            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
 
             var couchConnection = OPrime.defaultCouchConnection();
-            couchConnection.pouchname = potentialpouchname;
+            couchConnection.dbname = potentialdbname;
             var nextCorpusUrl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/private_corpora";
 
             window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
@@ -536,7 +536,7 @@ define([
 
                 if (OPrime.isBackboneCouchDBApp()) {
                   try {
-                    Backbone.couch_connector.config.db_name = potentialpouchname;
+                    Backbone.couch_connector.config.db_name = potentialdbname;
                   } catch (e) {
                     OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
                   }
@@ -551,7 +551,7 @@ define([
                     username: dataToPost.username
                   }),
                   "couchConnection": couchConnection,
-                  "pouchname": couchConnection.pouchname,
+                  "dbname": couchConnection.dbname,
                   "dateOfLastDatumModifiedToCheckForOldSession": JSON.stringify(new Date())
                 });
 
@@ -574,7 +574,7 @@ define([
                         var sucessorfailcallbackforcorpusmask = function() {
                           $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                           window.setTimeout(function() {
-                            window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialpouchname + "/" + model.id);
+                            window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
                           }, 1000);
                         };
                         model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
@@ -677,7 +677,7 @@ define([
            */
           var potentialpouch = serverResults.user.username + "-firstcorpus";
           if (serverResults.user && serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection) {
-            potentialpouch = serverResults.user.mostRecentIds.couchConnection.pouchname;
+            potentialpouch = serverResults.user.mostRecentIds.couchConnection.dbname;
           }
           if (!serverResults.user.mostRecentIds || !serverResults.user.mostRecentIds.couchConnection) {
             serverResults.user.mostRecentIds = {

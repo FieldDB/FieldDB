@@ -37,7 +37,7 @@ define([
         if (!jsonToRender.URL) {
           jsonToRender.URL = jsonToRender.filename;
           if (jsonToRender.URL.indexOf("://") === -1) {
-            jsonToRender.URL = OPrime.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + jsonToRender.filename;
+            jsonToRender.URL = OPrime.audioUrl + "/" + window.app.get("corpus").get("dbname") + "/" + jsonToRender.filename;
           }
         }
         $(this.el).html(this.template(jsonToRender));

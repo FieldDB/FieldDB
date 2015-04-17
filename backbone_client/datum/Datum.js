@@ -436,7 +436,7 @@ define([
                   userchooseable: "",
                   links: similarDatumIds.map(function(id) {
                     return {
-                      URI: "/" + self.get("pouchname") + "/" + id,
+                      URI: "/" + self.get("dbname") + "/" + id,
                       relation: "similarTo"
                     }
                   }),
@@ -540,7 +540,7 @@ define([
           //          }
           //          emit( result,  doc._id );
           //        };
-          //        $.couch.db(this.get("pouchname")).query(mapFunction, "_count", "javascript", {
+          //        $.couch.db(this.get("dbname")).query(mapFunction, "_count", "javascript", {
           //use the get_datum_fields view
           //        alert("TODO test search in chrome extension");
           var afterDownload = function(response) {
@@ -570,7 +570,7 @@ define([
             delete window.get_search_fields_chronological;
           }
           if (!window.get_search_fields_chronological) {
-            $.couch.db(self.get("pouchname")).view("pages/get_search_fields_chronological", {
+            $.couch.db(self.get("dbname")).view("pages/get_search_fields_chronological", {
               success: afterDownload,
               error: function(status) {
                 console.log("Error quering datum", status);
@@ -821,7 +821,7 @@ define([
             if (audioVideo && audioVideo.get("URL")) {
               sourceurl = audioVideo.get("URL");
             } else {
-              sourceurl = OPrime.audioUrl + this.get("pouchname") + "/" + this.getAudioFileName();
+              sourceurl = OPrime.audioUrl + this.get("dbname") + "/" + this.getAudioFileName();
             }
             console.log(sourceurl);
             $(document.getElementsByName(this.get("_id"))).parent().find(".audio_video_ul").append('<li><audio id="' + audioElementId + '" src="' + sourceurl + '"  controls="" preload=""  /></li>');
@@ -859,7 +859,7 @@ define([
           datumTags: new DatumTags(this.get("datumTags").toJSON(), {
             parse: true
           }),
-          pouchname: this.get("pouchname"),
+          dbname: this.get("dbname"),
           session: this.get("session"),
           _attachments: this.get("_attachments")
         });
@@ -962,7 +962,7 @@ define([
             window.app.addActivity({
               verb: "deleted",
               verbicon: "icon-trash",
-              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobject: "<a href='#corpus/" + self.get("dbname") + "/datum/" + self.id + "'>a datum</a> ",
               directobjecticon: "icon-list",
               indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
               teamOrPersonal: "team",
@@ -973,7 +973,7 @@ define([
             window.app.addActivity({
               verb: "deleted",
               verbicon: "icon-trash",
-              directobject: "<a href='#corpus/" + self.get("pouchname") + "/datum/" + self.id + "'>a datum</a> ",
+              directobject: "<a href='#corpus/" + self.get("dbname") + "/datum/" + self.id + "'>a datum</a> ",
               directobjecticon: "icon-list",
               indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
               teamOrPersonal: "personal",
@@ -1352,7 +1352,7 @@ define([
           comments: _.pluck(this.get("comments").toJSON(), "text"),
           audioVideo: _.pluck(this.get("audioVideo").toJSON(), "URL"),
           images: _.pluck(this.get("images").toJSON(), "URL")
-          // dbname: this.get("pouchname")
+          // dbname: this.get("dbname")
         };
         var helpConventions = {};
         var asDatumFields = this.get("datumFields").toJSON().concat(this.get("session").get("sessionFields").toJSON());
@@ -1535,7 +1535,7 @@ define([
         OPrime.debug("This activity was roughly ", timeSpentDetails);
 
         //protect against users moving datums from one corpus to another on purpose or accidentially
-        if (window.app.get("corpus").get("pouchname") != this.get("pouchname")) {
+        if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
           if (typeof failurecallback == "function") {
             failurecallback();
           } else {
@@ -1553,7 +1553,7 @@ define([
         // Store the current Session, the current corpus, and the current date
         // in the Datum
         this.set({
-          "pouchname": window.app.get("corpus").get("pouchname"),
+          "dbname": window.app.get("corpus").get("dbname"),
           "dateModified": JSON.stringify(new Date()),
           "timestamp": Date.now(),
           "jsonType": "Datum"
@@ -1596,7 +1596,7 @@ define([
               window.app.addActivity({
                 verb: "<a href='" + differences + "'>" + verb + "</a> ",
                 verbicon: verbicon,
-                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobject: "<a href='#corpus/" + model.get("dbname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
                 directobjecticon: "icon-list",
                 indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
                 teamOrPersonal: "team",
@@ -1607,7 +1607,7 @@ define([
               window.app.addActivity({
                 verb: "<a href='" + differences + "'>" + verb + "</a> ",
                 verbicon: verbicon,
-                directobject: "<a href='#corpus/" + model.get("pouchname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
+                directobject: "<a href='#corpus/" + model.get("dbname") + "/datum/" + model.id + "'>" + utterance + "</a> ",
                 directobjecticon: "icon-list",
                 indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
                 teamOrPersonal: "personal",
@@ -1718,7 +1718,7 @@ define([
        */
       setAsCurrentDatum: function(successcallback, failurecallback) {
         console.warn("Using deprected method setAsCurrentDatum.");
-        //      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
+        //      if( window.app.get("corpus").get("dbname") != this.get("dbname") ){
         //        if (typeof failurecallback == "function") {
         //          failurecallback();
         //        }else{

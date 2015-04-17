@@ -1,4 +1,4 @@
-define([ 
+define([
     "backbone", "handlebars"
 ], function(Backbone, Handlebars) {
 var PaginatedUpdatingCollectionView = Backbone.View.extend(
@@ -6,11 +6,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
 {
   /**
    * @class This class is used to insert models into the data list which happens in import and in normal use for the default datums collection..
-   * 
+   *
    * @description
-   * 
+   *
    * @property {Collection<Object>} datumCollection A multi-page collection which is shown in the paginated view.
-   * 
+   *
    * @extends Backbone.Model
    * @constructs
    */
@@ -35,7 +35,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       this.collection.bind('add', this.addChildView);
       this.collection.bind('unshift', this.addChildView);
       this.collection.bind('remove', this.removeChildView);
-      
+
       try{
         this.perPage = app.get("authentication").get("userPrivate").get("prefs").get("numberOfItemsInPaginatedViews");
         this.currentVisibleEnd = this.perPage - 1;
@@ -43,13 +43,13 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("there was a problem getting the number of items per page for the user, using default of 12.");
       }
-      
+
     },
-    
+
     tagName: "ul",
-    
+
     paginationControlTemplate : Handlebars.templates.paging_footer,
-   
+
 
     /**
      * Events that the view is listening to and their handlers.
@@ -61,7 +61,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
 //      'click a.nextinfinitepagination' : 'nextResultPage',
 //      'click .howmanyperpagination a' : 'changeCount',
     },
-    
+
     addChildView : function(model, collection, options) {
       if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION add: " , this._childViews.length);
 
@@ -69,18 +69,18 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       if(this.collection.indexOf(model) > this.currentVisibleEnd){
         return;
       }
-      
+
       this.filledBasedOnModels = true;
       var childView = new this._childViewConstructor({
         tagName : this._childViewTagName,
         className : this._childViewClass,
         model : model
       });
-      
+
       if (this._childViewFormat) {
         childView.format = this._childViewFormat;
       }
-      
+
       //Add to top by default
       if(options == undefined || options == null){
         options = {};
@@ -88,9 +88,9 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       // Add to the top of the list
       if (options.index == 0) {
-        
+
         var positionInChildViews = -1;
-        for (var x in this._childViews){ 
+        for (var x in this._childViews){
           if(model.cid){
             if(this._childViews[x].model.cid == model.cid){
               positionInChildViews = x;
@@ -102,7 +102,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
             }
           }
         }
-        
+
         if( positionInChildViews == -1 ){
           this._childViews.unshift(childView);
           if (this._rendered) {
@@ -111,11 +111,11 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         }else{
           //dont add it?
         }
-  
+
       // Add to the bottom of the list
       } else {
         var positionInChildViews = -1;
-        for (var x in this._childViews){ 
+        for (var x in this._childViews){
           if(model.cid){
             if(this._childViews[x].model.cid == model.cid){
               positionInChildViews = x;
@@ -135,12 +135,12 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         }else{
           //dont add it?
         }
-  
+
       }
       if(this._childViews.length > this.currentVisibleEnd + 1){
         this.removeChildView(this._childViews[this.currentVisibleEnd + 1].model);
       }
-      
+
     },
 
     removeChildView : function(model) {
@@ -189,7 +189,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
      */
     renderFirstPage : function() {
 //      this.clearChildViews(); //The addChildView wont add it if it is already there, so we dont need to clear it.
-      
+
       for (var i = 0; i < this.currentVisibleEnd; i++) {
         if (this.collection.models[i]) {
           this.addChildView(this.collection.models[i], this.collection, {index: i});
@@ -200,7 +200,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       this.el = htmlElement;
       this.render();
     },
-   
+
     filledBasedOnIds: false,
     filledBasedOnModels : false,
     /**
@@ -218,9 +218,9 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       for (var id in objectIds) {
         var obj = new Model();
-        obj.set("pouchname", app.get("corpus").get("pouchname"));
+        obj.set("dbname", app.get("corpus").get("dbname"));
         // obj.set("session", new Model({
-        //   pouchname: app.get("corpus").get("pouchname")
+        //   dbname: app.get("corpus").get("dbname")
         // }));
         obj.id = objectIds[id];
         self.collection.add(obj);
@@ -264,7 +264,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         paginatedSelf.changeCount(e, paginatedSelf);
       });
       this.el.parent().find(".pagination-control").empty();
-      
+
       // Put in new footer and bind events again
       var jsonToRender = this.getPaginationInfo();
       jsonToRender.locale_More = Locale.get("locale_More");
@@ -292,7 +292,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /**
      * Based on the number of items per page and the current page, calculate the current
      * pagination info.
-     * 
+     *
      * @return {Object} JSON to be sent to the footerTemplate.
      */
     getPaginationInfo : function() {
@@ -311,7 +311,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
 
     /**
      * Change the number of items per page.
-     * 
+     *
      * @param {Object} e The event that triggered this method.
      */
     changeCount : function(e, self) {
@@ -332,7 +332,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         self.clearChildViews();
         self.render();
       }
-      //If the user is trying to see more, render. 
+      //If the user is trying to see more, render.
       if( self.perPage > previousVisibleEnd ){
         self.nextResultPage(null, self);
       }
@@ -341,7 +341,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
 
     /**
      * Add one page worth of child views from the collection.
-     * 
+     *
      * @param {Object} e The event that triggered this method.
      */
     nextResultPage : function(e, self) {
@@ -357,7 +357,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         // return;
       }
       self.currentVisibleEnd = self.currentVisibleEnd + self.perPage;
-      // Determine the range of indexes into the model's datumIds array that are 
+      // Determine the range of indexes into the model's datumIds array that are
       // on the page to be displayed
 
       // Add a ChildView for each one that is not visible
@@ -370,24 +370,24 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       self.renderUpdatedPaginationControl();
     },
     /**
-     * 
+     *
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
       if (OPrime.debugMode) OPrime.debug("DESTROYING PAGINATEDUPDATINGCOLLECTIONVIEW  VIEW "+ this.format);
-      
+
       this.collection.each(this.removeChildView);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
-      $(this.el).removeData().unbind(); 
+      $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//      this.remove();  
+//      this.remove();
 //      Backbone.View.prototype.remove.call(this);
       }
-    
+
   });
   return PaginatedUpdatingCollectionView;
 });

@@ -130,7 +130,7 @@ define( [
           data.append(i, file);
         });
         data.append("token", "testinguploadtoken");
-        data.append("pouchname", this.model.get("pouchname"));
+        data.append("dbname", this.model.get("dbname"));
         data.append("username", window.app.get("authentication").get("userPrivate").get("username"));
         data.append("returnTextGrid", true);
         this.model.get("audioVideo").reset();
@@ -160,7 +160,7 @@ define( [
                   }
                   messages.push("Generating the textgrid for " + results.files[fileIndex].fileBaseName + " seems to have failed. "+instructions);
                 } else {
-                  self.model.addAudioVideoFile(OPrime.audioUrl + "/" + self.model.get("pouchname") + "/" + results.files[fileIndex].fileBaseName + '.mp3');
+                  self.model.addAudioVideoFile(OPrime.audioUrl + "/" + self.model.get("dbname") + "/" + results.files[fileIndex].fileBaseName + '.mp3');
                   self.model.downloadTextGrid(results.files[fileIndex]);
                 }
               }
@@ -519,7 +519,7 @@ define( [
 
       this.dataListView = new DataListEditView({
         model : new DataList({
-          "pouchname" : window.app.get("corpus").get("pouchname"),
+          "dbname" : window.app.get("corpus").get("dbname"),
           "title" : "Data from "+filename,
           "description": descript,
           "audioVideo": this.model.get("audioVideo")
@@ -649,7 +649,7 @@ define( [
       for (a in array) {
         var d = new Datum({
           filledWithDefaults : true,
-          pouchname : window.app.get("corpus").get("pouchname")
+          dbname : window.app.get("corpus").get("dbname")
         });
         //copy the corpus's datum fields and empty them.
         var datumfields = app.get("corpus").get("datumFields").toJSON();
@@ -814,7 +814,7 @@ define( [
             }
             audioVideo.set("filename", value);
             audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
-            audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("pouchname") + "/" + value);
+            audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("dbname") + "/" + value);
             audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
             audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
           } else if (index == "startTime") {
@@ -867,7 +867,7 @@ define( [
       var thatdatum = this.model.get("datumArray")[d];
       thatdatum.set({
         "session" : this.model.get("session"),
-        "pouchname" : window.app.get("corpus").get("pouchname"),
+        "dbname" : window.app.get("corpus").get("dbname"),
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
@@ -901,7 +901,7 @@ define( [
       }
       thatdatum.set({
         "session" : this.model.get("session"),
-        "pouchname" : window.app.get("corpus").get("pouchname"),
+        "dbname" : window.app.get("corpus").get("dbname"),
         "dateEntered" : JSON.stringify(new Date()),
         "dateModified" : JSON.stringify(new Date())
       });
@@ -1000,7 +1000,7 @@ define( [
           $(".import-progress").attr("max", parseInt($(".import-progress").attr("max")) + parseInt(self.model.get("datumArray").length));
 
 //          var dl = new DataList({
-//            "pouchname" : window.app.get("corpus").get("pouchname"),
+//            "dbname" : window.app.get("corpus").get("dbname"),
 //            "title" : self.dataListView.model.get("title"),
 //            "description": self.dataListView.model.get("description")
 //          });
@@ -1069,7 +1069,7 @@ define( [
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
           sessionFields : window.app.get("corpus").get("sessionFields").clone(),
-          "pouchname" : window.app.get("corpus").get("pouchname"),
+          "dbname" : window.app.get("corpus").get("dbname"),
         }));
 
         var filemodified = JSON.stringify(new Date());

@@ -25,7 +25,7 @@ OPrime.defaultCouchConnection = function() {
     protocol: "https://",
     domain: "localhost",
     port: "6984",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     authUrl: "https://localhost:3183",
     userFriendlyServerName: "Localhost"

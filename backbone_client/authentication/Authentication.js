@@ -119,8 +119,8 @@ define([
             /* if on android, turn on replication. */
             var db = dataToPost.username + "-firstcorpus";
             var dbServer = serverResults.user.corpora[0].domain;
-            if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.pouchname) {
-              db = serverResults.user.mostRecentIds.couchConnection.pouchname;
+            if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.couchConnection && serverResults.user.mostRecentIds.couchConnection.dbname) {
+              db = serverResults.user.mostRecentIds.couchConnection.dbname;
               dbServer = serverResults.user.mostRecentIds.couchConnection.domain;
             }
             Android.setCredentialsAndReplicate(db, username, password, dbServer);
@@ -181,7 +181,7 @@ define([
         serverResults.user.publicSelf.authUrl = serverResults.user.authUrl;
         serverResults.user.publicSelf.id = serverResults.user._id; //this will end up as an attribute
         serverResults.user.publicSelf._id = serverResults.user._id; //this will end up as an attribute
-//        serverResults.user.publicSelf.pouchname = serverResults.user.corpora[0].pouchname;
+//        serverResults.user.publicSelf.dbname = serverResults.user.corpora[0].dbname;
       }
 
 
@@ -199,7 +199,7 @@ define([
           window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.","alert-success","Added to corpus!");
         }
         for(var x in serverResults.user.newCorpusConnections){
-          if(_.pluck(serverResults.user.corpora,"pouchname").indexOf(serverResults.user.newCorpusConnections[x].pouchname) == -1){
+          if(_.pluck(serverResults.user.corpora,"dbname").indexOf(serverResults.user.newCorpusConnections[x].dbname) == -1){
             serverResults.user.corpora.push(serverResults.user.newCorpusConnections[x]);
           }
         }
@@ -416,7 +416,7 @@ define([
           } else if (serverResults.users != null) {
             if (typeof successcallback == "function") {
               serverResults.users.timestamp = Date.now();
-              localStorage.setItem(dataToPost.pouchname + "Permissions", JSON.stringify(serverResults.users));
+              localStorage.setItem(dataToPost.dbname + "Permissions", JSON.stringify(serverResults.users));
               successcallback(serverResults.users);
             }
           }

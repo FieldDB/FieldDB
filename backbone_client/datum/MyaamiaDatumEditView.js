@@ -432,7 +432,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("dbname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "team",
             context : " via Offline App."
           });
@@ -443,7 +443,7 @@ define([
             verbicon: "icon-comment",
             directobjecticon : "",
             directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("pouchname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
+            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("dbname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
             teamOrPersonal : "personal",
             context : " via Offline App."
           });
@@ -519,7 +519,7 @@ define([
       var utteranceLine = $(e.currentTarget).val();
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("dbname"));
       }
       if (utteranceLine) {
         var morphemesLine = Glosser.morphemefinder(utteranceLine);
@@ -559,7 +559,7 @@ define([
     morphemesBlur : function(e){
       if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
         //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("pouchname"));
+        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("dbname"));
       }
       this.guessGlosses($(e.currentTarget).val());
       this.needsSave = true;

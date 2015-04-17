@@ -2,20 +2,20 @@
 
 /**
 */
-var Bot = function(pouchname, corpusid, corpustitle){
-	if(!pouchname || !corpusid ||!corpustitle){
+var Bot = function(dbname, corpusid, corpustitle){
+	if(!dbname || !corpusid ||!corpustitle){
 		throw("You must create this bot with a database name, a corpus id and a corpus title. ");
 	}
 	var stopAt = 10;
-	
-	var activities = $.couch.db(pouchname+"-activity_feed");
-	var database = $.couch.db(pouchname);
+
+	var activities = $.couch.db(dbname+"-activity_feed");
+	var database = $.couch.db(dbname);
 
 	var name = "inuktituttransliterationbot";
 	var gravatar = "968b8e7fb72b5ffe2915256c28a9414c";
-	
+
 	/*
-	use a small part of underscore 
+	use a small part of underscore
 	*/
 	var  nativeMap  = Array.prototype.map;
 	var _ = {};
@@ -34,12 +34,12 @@ var Bot = function(pouchname, corpusid, corpustitle){
 	};
 
 	/*
-	TODO generalize this to work on more langauges and bidirectionally. 
-	currently this function is a quick and dirty transliterator prototype for 
+	TODO generalize this to work on more langauges and bidirectionally.
+	currently this function is a quick and dirty transliterator prototype for
 	inuktitut written by  one of the interns for javascript practice, it sucessfully
 	transliterates from syllabics to romanized.
-	it wouldnt work for multiple langauges but it currently has more coverage 
-	than benoit's transliterator which is currently down. 
+	it wouldnt work for multiple langauges but it currently has more coverage
+	than benoit's transliterator which is currently down.
 	*/
 	var transliterateInuktitut = function(userInputString) {
 
@@ -114,7 +114,7 @@ var Bot = function(pouchname, corpusid, corpustitle){
 			if (syllabicsOrthographyFieldIndex > -1) {
 				syllabicsField = datum.datumFields[syllabicsOrthographyFieldIndex];
 			}
-		} 
+		}
 
 		/* if we have syllabicsOrthography too, don't modify it, just tell the user we arent saving their utterance line. */
 		if (syllabicsField) {
@@ -136,18 +136,18 @@ var Bot = function(pouchname, corpusid, corpustitle){
 		var timestamp = Date.now();
 		/* Record this event in the comments */
 		datum.comments.push({
-			"text": "Transliterated from: " + utteranceField.value + " to: " + transliterized, 
+			"text": "Transliterated from: " + utteranceField.value + " to: " + transliterized,
 			"username": name,
-			"timestamp": timestamp, 
-			"gravatar": gravatar, 
+			"timestamp": timestamp,
+			"gravatar": gravatar,
 			"timestampModified": timestamp
 		});
 		utteranceField.value = transliterized;
 		utteranceField.mask = transliterized;
 		utteranceField.help = "This field is the common writing system for most Inuktitut speakers and may contain transliteration errors, see "+ syllabicsField.label + " for the original orthography of the data source.";
-		
+
 		console.log("Transliterated: " + utteranceField.value);
-		
+
 		/* clean other things */
 		// var notesFieldIndex = fieldLabels.indexOf("notes");
 		// var dialectFieldIndex = fieldLabels.indexOf("dialect");
@@ -198,7 +198,7 @@ var Bot = function(pouchname, corpusid, corpustitle){
 		if (typeof saveFunction == "function") {
 			saveFunction(datum, transliterized);
 		}
-		
+
 	};
 
 	var saveDocBackToCouchDB = function(modifiedDoc, directobject){
@@ -261,7 +261,7 @@ return {
 				    			// console.log(originalDoc._rev);
 				    			var id = originalDoc._id;
 				    			var oldrev= originalDoc._rev;
-				    			
+
 				    			/* transliterate the utterance line into romanized, then save the data back to the db */
 				    			transliterateUtterancesIntoRomanized(originalDoc, saveDocBackToCouchDB);
 
@@ -269,7 +269,7 @@ return {
 				    		error: function(error){
 				    			console.log("Error opening your docs ", error);
 				    		}
-				    	}); 
+				    	});
 				    }
 				},
 				error: function(error){
