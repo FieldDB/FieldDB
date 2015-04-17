@@ -96,16 +96,19 @@ angular.module("fielddbAngular", [
   $locationProvider.html5Mode(true);
 
   /* Add some default Routes/States which the app knows how to render */
-  $urlRouterProvider.otherwise("/corpus");
-
+  if (FieldDB.Router.otherwise) {
+    $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
+  } else {
+    $urlRouterProvider.otherwise("#");
+  }
   $stateProvider
   // HOME STATES AND NESTED VIEWS ========================================
-    .state("corpus", {
-      url: "/corpus",
+    .state("home", {
+      url: "/",
       templateUrl: "app/main/main.html"
     })
     // nested list with custom controller
-    .state("corpus.fieldlinguist", {
+    .state("home.fieldlinguist", {
       url: "/fieldlinguist",
       templateUrl: "components/user/consultants-page.html",
       controller: function($scope) {
@@ -113,7 +116,7 @@ angular.module("fielddbAngular", [
       }
     })
     // nested list with just some random string data
-    .state("corpus.languageclass", {
+    .state("home.languageclass", {
       url: "/languageclass",
       templateUrl: "components/user/participants-page.html"
     })
@@ -122,6 +125,16 @@ angular.module("fielddbAngular", [
       url: "/about",
       templateUrl: "components/corpus/corpus-page.html"
     });
+
+  for (var route in FieldDB.Router.routes) {
+    $stateProvider.state(FieldDB.Router.routes[route].path.replace("/", ""), {
+      url: FieldDB.Router.routes[route].path,
+      templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
+      controller: function($stateParams) {
+        console.log("Loading ", $stateParams);
+      }
+    });
+  }
 
   fieldDBApp.debug("Loaded Angular FieldDB Components ", $stateProvider, $urlRouterProvider, fieldDBApp);
 });

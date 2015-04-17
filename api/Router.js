@@ -4,14 +4,14 @@ Router.routes = Router.routes || [];
 Router.routes.push({
   path: "/faq",
   angularRoute: {
-    templateUrl: "views/faq.html",
+    templateUrl: "components/help/faq.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/import/:importType",
   angularRoute: {
-    templateUrl: "views/import-page.html",
+    templateUrl: "components/import/import-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
@@ -24,77 +24,91 @@ Router.routes.push({
 Router.routes.push({
   path: "/:team/:corpusidentifier/reports/:reportType",
   angularRoute: {
-    templateUrl: "views/reports-page.html",
+    templateUrl: "components/experiment/reports-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/speakers/:speakerType",
   angularRoute: {
-    templateUrl: "views/speakers-page.html",
+    templateUrl: "components/user/speakers-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/participants",
   angularRoute: {
-    templateUrl: "views/participants-page.html",
+    templateUrl: "components/user/participants-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/consultants",
   angularRoute: {
-    templateUrl: "views/consultants-page.html",
+    templateUrl: "components/user/consultants-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/sessions",
   angularRoute: {
-    templateUrl: "views/sessions-page.html",
+    templateUrl: "components/session/sessions-page.html",
+    controller: "OverrideYourControllerHere"
+  }
+});
+Router.routes.push({
+  path: "/:team/:corpusidentifier/activityfeed",
+  angularRoute: {
+    templateUrl: "components/activity/activityfeed-page.html",
+    controller: "OverrideYourControllerHere"
+  }
+});
+Router.routes.push({
+  path: "/:team/:corpusidentifier/activityfeed/:activityTypeOrItem",
+  angularRoute: {
+    templateUrl: "components/activity/activity-list-item.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/datalists",
   angularRoute: {
-    templateUrl: "views/datalists-page.html",
+    templateUrl: "components/datalist/datalists-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/data",
   angularRoute: {
-    templateUrl: "views/all-data-page.html",
+    templateUrl: "components/datalist/all-data-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/search/:searchQuery",
   angularRoute: {
-    templateUrl: "views/search-page.html",
+    templateUrl: "components/search/search-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier/:docid",
   angularRoute: {
-    templateUrl: "views/data-page.html",
+    templateUrl: "components/doc/data-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team/:corpusidentifier",
   angularRoute: {
-    templateUrl: "views/corpus-page.html",
+    templateUrl: "components/corpus/corpus-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
 Router.routes.push({
   path: "/:team",
   angularRoute: {
-    templateUrl: "views/team-page.html",
+    templateUrl: "components/user/team-page.html",
     controller: "OverrideYourControllerHere"
   }
 });
