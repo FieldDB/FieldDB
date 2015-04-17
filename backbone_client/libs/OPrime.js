@@ -39,7 +39,7 @@ OPrime.getCouchUrl = function(couchConnection, couchdbcommand) {
   }
   couchurl = couchurl + couchConnection.path;
   if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + couchConnection.pouchname;
+    couchurl = couchurl + "/" + couchConnection.dbname;
   } else {
     couchurl = couchurl + couchdbcommand;
   }

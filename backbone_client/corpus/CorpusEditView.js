@@ -71,7 +71,7 @@ define([
       this.changeViewsOfInternalModels();
 
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:pouchname', function(){
+      this.model.bind('change:dbname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
@@ -508,18 +508,18 @@ define([
       }else{
         var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "pouchname");
+        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
         if(pouches.indexOf(newPouchName) != -1){
           alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
           this.$el.find(".corpus-title-input").val("");
           return;
         }
 
-        this.model.get("couchConnection").pouchname = newPouchName;
-        this.model.set("pouchname", newPouchName);
-        this.model.get("publicSelf").set("pouchname", newPouchName);
-        this.model.get("team").set("pouchname", newPouchName);
-        this.$el.find(".new-corpus-pouchname").html(newPouchName);
+        this.model.get("couchConnection").dbname = newPouchName;
+        this.model.set("dbname", newPouchName);
+        this.model.get("publicSelf").set("dbname", newPouchName);
+        this.model.get("team").set("dbname", newPouchName);
+        this.$el.find(".new-corpus-dbname").html(newPouchName);
       }
 
     },
@@ -623,7 +623,7 @@ define([
           $(e.target).parent().parent().hide();
         }
       }
-//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//      app.router.showEmbeddedDatum(this.get("dbname"), "new");
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },

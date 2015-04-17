@@ -56,7 +56,7 @@ define([
 
         var corpuse = new CorpusMask({
           title : "",
-          pouchname : couchConnection.pouchname
+          dbname : couchConnection.dbname
         });
         corpuse.corpusid = couchConnection.corpusid;
         self.unshift(corpuse);
@@ -82,7 +82,7 @@ define([
 //            if (OPrime.debugMode) OPrime.debug("Got error back from the server about this corpus: ", data);
 //            var corpuse = new CorpusMask({
 //                  title : "We need to make sure you're you before showing you the latest details (click the sync button).",
-//                  pouchname : arrayOfCorpora[thisc].pouchname
+//                  dbname : arrayOfCorpora[thisc].dbname
 //                });
 //            corpuse.corpusid = arrayOfCorpora[thisc].corpusid;
 //            self.unshift(corpuse);

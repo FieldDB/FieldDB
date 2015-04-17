@@ -227,7 +227,7 @@ define([
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
             comments : new Comments(),
-            pouchname : window.app.get("corpus").get("pouchname"),
+            dbname : window.app.get("corpus").get("dbname"),
             sessionFields : window.app.get("currentSession").get("sessionFields").clone()
           })
         });
@@ -618,9 +618,9 @@ define([
       }
       try{
         jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
-        jsonToRender.pouchname = this.model.get("couchConnection").pouchname;
+        jsonToRender.dbname = this.model.get("couchConnection").dbname;
       }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Problem setting the username or pouchname of the app.");
+        if (OPrime.debugMode) OPrime.debug("Problem setting the username or dbname of the app.");
       }
 
       /* Render the users prefered dashboard layout */

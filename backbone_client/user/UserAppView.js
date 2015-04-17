@@ -239,8 +239,8 @@ define(
                               var corpusConnection = self.model.get("corpus")
                                   .get("couchConnection");
                               if (self.model.get("authentication").get(
-                                  "userPrivate").get("corpora").pouchname != "default"
-                                  && app.get("corpus").get("couchConnection").pouchname == "default") {
+                                  "userPrivate").get("corpora").dbname != "default"
+                                  && app.get("corpus").get("couchConnection").dbname == "default") {
                                 corpusConnection = self.model.get(
                                     "authentication").get("userPrivate").get(
                                     "corpora")[0];

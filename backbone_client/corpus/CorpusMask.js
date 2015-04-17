@@ -335,38 +335,38 @@ define([
 
     },
     /**
-     * This function takes in a pouchname, which could be different
+     * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      *
-     * @param pouchname
+     * @param dbname
      * @param callback
      */
-    buildMorphologicalAnalyzerFromTeamServer : function(pouchname, callback){
-      if(!pouchname){
-        this.get("pouchname");
+    buildMorphologicalAnalyzerFromTeamServer : function(dbname, callback){
+      if(!dbname){
+        this.get("dbname");
       }
       if(!callback){
         callback = null;
       }
-      // Glosser.downloadPrecedenceRules(pouchname, callback);
+      // Glosser.downloadPrecedenceRules(dbname, callback);
     },
     /**
-     * This function takes in a pouchname, which could be different
+     * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more/better monolingual data.
      *
-     * @param pouchname
+     * @param dbname
      * @param callback
      */
-    buildLexiconFromTeamServer : function(pouchname, callback){
-      if(!pouchname){
-        this.get("pouchname");
+    buildLexiconFromTeamServer : function(dbname, callback){
+      if(!dbname){
+        this.get("dbname");
       }
       if(!callback){
         callback = null;
       }
-      // this.lexicon.buildLexiconFromCouch(pouchname,callback);
+      // this.lexicon.buildLexiconFromCouch(dbname,callback);
     }
   });
 

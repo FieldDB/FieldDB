@@ -37,7 +37,7 @@ OPrime.defaultCouchConnection = function() {
     protocol : "https://",
     domain : "localhost",
     port : "6984",
-    pouchname : "default",
+    dbname : "default",
     path : "",
     authUrl : "https://localhost:3183",
     userFriendlyServerName : "Localhost"
@@ -46,7 +46,7 @@ OPrime.defaultCouchConnection = function() {
     protocol : "https://",
     domain : "corpusdev.lingsync.org",
     port : "443",
-    pouchname : "default",
+    dbname : "default",
     path : "",
     authUrl : "https://authdev.lingsync.org",
     userFriendlyServerName : "LingSync Beta"
@@ -55,7 +55,7 @@ OPrime.defaultCouchConnection = function() {
     protocol : "https://",
     domain : "corpus.lingsync.org",
     port : "443",
-    pouchname : "default",
+    dbname : "default",
     path : "",
     authUrl : "https://auth.lingsync.org",
     userFriendlyServerName : "LingSync.org"
@@ -64,7 +64,7 @@ OPrime.defaultCouchConnection = function() {
     protocol : "https://",
     domain : "prosody.linguistics.mcgill.ca",
     port : "443",
-    pouchname : "default",
+    dbname : "default",
     path : "/corpus",
     authUrl : "https://prosody.linguistics.mcgill.ca/auth",
     userFriendlyServerName : "McGill ProsodyLab"
@@ -73,7 +73,7 @@ OPrime.defaultCouchConnection = function() {
       protocol : "https://",
       domain : "corpusdev.lingsync.org",
       port : "443",
-      pouchname : "default",
+      dbname : "default",
       path : "",
       authUrl : "https://authdev.lingsync.org",
       userFriendlyServerName : "LingSync Myaamia"
@@ -224,7 +224,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
     }
   }
   //TODO add Production when it can support 1.38+ ocmdknddgpmjngkhcbcofoogkommjfoj
-  
+
   return mostLikelyAuthUrl;
 };
 

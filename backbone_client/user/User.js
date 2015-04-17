@@ -65,7 +65,7 @@ define([
         tmp = originalModel.corpora[corpusIndex];
         originalModel.corpora[corpusIndex] = OPrime.defaultCouchConnection();
         originalModel.corpora[corpusIndex].corpusid = tmp.corpusid;
-        originalModel.corpora[corpusIndex].pouchname = tmp.pouchname;
+        originalModel.corpora[corpusIndex].dbname = tmp.dbname;
         originalModel.corpora[corpusIndex].title = tmp.title;
         originalModel.corpora[corpusIndex].description = tmp.description;
         originalModel.corpora[corpusIndex].titleAsUrl = tmp.titleAsUrl;
@@ -74,7 +74,7 @@ define([
         tmp = originalModel.mostRecentIds.couchConnection;
         originalModel.mostRecentIds.couchConnection = OPrime.defaultCouchConnection();
         originalModel.mostRecentIds.couchConnection.corpusid = tmp.corpusid;
-        originalModel.mostRecentIds.couchConnection.pouchname = tmp.pouchname;
+        originalModel.mostRecentIds.couchConnection.dbname = tmp.dbname;
         originalModel.mostRecentIds.couchConnection.title = tmp.title;
         originalModel.mostRecentIds.couchConnection.description = tmp.description;
         originalModel.mostRecentIds.couchConnection.titleAsUrl = tmp.titleAsUrl;
@@ -82,7 +82,7 @@ define([
       if (originalModel.activityCouchConnection) {
         tmp = originalModel.activityCouchConnection;
         originalModel.activityCouchConnection = OPrime.defaultCouchConnection();
-        originalModel.activityCouchConnection.pouchname = tmp.pouchname;
+        originalModel.activityCouchConnection.dbname = tmp.dbname;
       }
 
       var couchConnection = originalModel.mostRecentIds.couchConnection;
@@ -173,22 +173,22 @@ define([
       for (var role in roles) {
         var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
         thisCouchConnection.corpusid = "";
-        thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-        thisCouchConnection.title = thisCouchConnection.pouchname;
+        thisCouchConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+        thisCouchConnection.title = thisCouchConnection.dbname;
         if (thisCouchConnection.title.length > 30) {
           thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
         }
         if (thisCouchConnection.title.length > 30) {
           thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
         }
-        thisCouchConnection.id = thisCouchConnection.pouchname;
-        if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
+        thisCouchConnection.id = thisCouchConnection.dbname;
+        if (thisCouchConnection.dbname.length > 4 && thisCouchConnection.dbname.split("-").length === 2) {
           if (corpora.where({
-            "pouchname": thisCouchConnection.pouchname
+            "dbname": thisCouchConnection.dbname
           }).length === 0) {
             corpora.push(new CorpusMask(thisCouchConnection));
           } else {
-            OPrime.debug(thisCouchConnection.pouchname + " Already known");
+            OPrime.debug(thisCouchConnection.dbname + " Already known");
           }
         }
       }
