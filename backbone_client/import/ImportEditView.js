@@ -967,8 +967,8 @@ define( [
       $(".approve-save").html("Finished");
 
       /* ask the corpus to update its frequent datum fields given the new datum */
-      var couchConnection = window.app.get("corpus").get("couchConnection");
-      var couchurl = OPrime.getCouchUrl(couchConnection) + "/_design/pages/_view/get_frequent_fields?group=true";
+      var connection = window.app.get("corpus").get("connection");
+      var couchurl = OPrime.getCouchUrl(connection) + "/_design/pages/_view/get_frequent_fields?group=true";
       window.app.get("corpus").getFrequentDatumFields(couchurl);
       /* might have added new datum states, so save the corpus */
       window.app.get("corpus").saveAndInterConnectInApp();

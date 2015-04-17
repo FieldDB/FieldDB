@@ -63,34 +63,34 @@ define([
       }
       for (var corpusIndex = 0; corpusIndex < originalModel.corpora.length; corpusIndex++) {
         tmp = originalModel.corpora[corpusIndex];
-        originalModel.corpora[corpusIndex] = OPrime.defaultCouchConnection();
+        originalModel.corpora[corpusIndex] = OPrime.defaultConnection();
         originalModel.corpora[corpusIndex].corpusid = tmp.corpusid;
         originalModel.corpora[corpusIndex].dbname = tmp.dbname;
         originalModel.corpora[corpusIndex].title = tmp.title;
         originalModel.corpora[corpusIndex].description = tmp.description;
         originalModel.corpora[corpusIndex].titleAsUrl = tmp.titleAsUrl;
       }
-      if (originalModel.mostRecentIds && originalModel.mostRecentIds.couchConnection) {
-        tmp = originalModel.mostRecentIds.couchConnection;
-        originalModel.mostRecentIds.couchConnection = OPrime.defaultCouchConnection();
-        originalModel.mostRecentIds.couchConnection.corpusid = tmp.corpusid;
-        originalModel.mostRecentIds.couchConnection.dbname = tmp.dbname;
-        originalModel.mostRecentIds.couchConnection.title = tmp.title;
-        originalModel.mostRecentIds.couchConnection.description = tmp.description;
-        originalModel.mostRecentIds.couchConnection.titleAsUrl = tmp.titleAsUrl;
+      if (originalModel.mostRecentIds && originalModel.mostRecentIds.connection) {
+        tmp = originalModel.mostRecentIds.connection;
+        originalModel.mostRecentIds.connection = OPrime.defaultConnection();
+        originalModel.mostRecentIds.connection.corpusid = tmp.corpusid;
+        originalModel.mostRecentIds.connection.dbname = tmp.dbname;
+        originalModel.mostRecentIds.connection.title = tmp.title;
+        originalModel.mostRecentIds.connection.description = tmp.description;
+        originalModel.mostRecentIds.connection.titleAsUrl = tmp.titleAsUrl;
       }
-      if (originalModel.activityCouchConnection) {
-        tmp = originalModel.activityCouchConnection;
-        originalModel.activityCouchConnection = OPrime.defaultCouchConnection();
-        originalModel.activityCouchConnection.dbname = tmp.dbname;
+      if (originalModel.activityConnection) {
+        tmp = originalModel.activityConnection;
+        originalModel.activityConnection = OPrime.defaultConnection();
+        originalModel.activityConnection.dbname = tmp.dbname;
       }
 
-      var couchConnection = originalModel.mostRecentIds.couchConnection;
-      if (!couchConnection) {
-        couchConnection = originalModel.corpora[0];
-        originalModel.mostRecentIds.couchConnection = couchConnection;
+      var connection = originalModel.mostRecentIds.connection;
+      if (!connection) {
+        connection = originalModel.corpora[0];
+        originalModel.mostRecentIds.connection = connection;
       }
-      if (!couchConnection) {
+      if (!connection) {
         if (window.location.pathname.indexOf("user.html") === -1) {
           OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
           window.location.replace("user.html");
@@ -101,13 +101,13 @@ define([
       }
 
       /* Upgrade chrome app user corpora's to v1.38+ */
-      if(couchConnection && couchConnection.domain == "ifielddevs.iriscouch.com"){
-        couchConnection.domain  = "corpus.lingsync.org";
-        couchConnection.port = "";
+      if(connection && connection.domain == "ifielddevs.iriscouch.com"){
+        connection.domain  = "corpus.lingsync.org";
+        connection.port = "";
       }
       /* Upgrade chrome app user corpora's to v1.90+ */
-      if(couchConnection && couchConnection.domain == "corpusdev.lingsync.org"){
-        couchConnection.domain  = "corpus.lingsync.org";
+      if(connection && connection.domain == "corpusdev.lingsync.org"){
+        connection.domain  = "corpus.lingsync.org";
       }
 
       return this.originalParse(originalModel);
@@ -161,34 +161,34 @@ define([
       }
     },
 
-    updateListOfCorpora: function(roles, couchConnectionInscope){
+    updateListOfCorpora: function(roles, connectionInscope){
       var corpora =  new Corpuses();
       var username = this.get("username");
       if(username == "public"){
         return;
       }
-      if(!couchConnectionInscope){
-        couchConnectionInscope = window.app.get("couchConnection");
+      if(!connectionInscope){
+        connectionInscope = window.app.get("connection");
       }
       for (var role in roles) {
-        var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
-        thisCouchConnection.corpusid = "";
-        thisCouchConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-        thisCouchConnection.title = thisCouchConnection.dbname;
-        if (thisCouchConnection.title.length > 30) {
-          thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+        var thisConnection = JSON.parse(JSON.stringify(connectionInscope));
+        thisConnection.corpusid = "";
+        thisConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+        thisConnection.title = thisConnection.dbname;
+        if (thisConnection.title.length > 30) {
+          thisConnection.title = thisConnection.title.replace(username + "-", "");
         }
-        if (thisCouchConnection.title.length > 30) {
-          thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+        if (thisConnection.title.length > 30) {
+          thisConnection.title = thisConnection.title.substring(0, 10) + "..." + thisConnection.title.substring(thisConnection.title.length - 15, thisConnection.title.length - 1);
         }
-        thisCouchConnection.id = thisCouchConnection.dbname;
-        if (thisCouchConnection.dbname.length > 4 && thisCouchConnection.dbname.split("-").length === 2) {
+        thisConnection.id = thisConnection.dbname;
+        if (thisConnection.dbname.length > 4 && thisConnection.dbname.split("-").length === 2) {
           if (corpora.where({
-            "dbname": thisCouchConnection.dbname
+            "dbname": thisConnection.dbname
           }).length === 0) {
-            corpora.push(new CorpusMask(thisCouchConnection));
+            corpora.push(new CorpusMask(thisConnection));
           } else {
-            OPrime.debug(thisCouchConnection.dbname + " Already known");
+            OPrime.debug(thisConnection.dbname + " Already known");
           }
         }
       }

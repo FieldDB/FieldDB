@@ -32,7 +32,7 @@ OPrime.chromeClientUrl = function(){
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-OPrime.defaultCouchConnection = function() {
+OPrime.defaultConnection = function() {
   var localhost = {
     protocol : "https://",
     domain : "localhost",
@@ -127,7 +127,7 @@ OPrime.defaultCouchConnection = function() {
   return connection;
 };
 OPrime.getAuthUrl = function(userFriendlyServerName) {
-  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var makingSureDefaultAuthIsSet = OPrime.defaultConnection();
   var authUrl = userFriendlyServerName;
   if (authUrl.indexOf("LingSync.org") >= 0) {
     alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
@@ -178,11 +178,11 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
         OPrime
             .bug("We don't know which corpus server to use, so we will just let the user do what they are trying to do.");
       } else {
-        var couchConnection = OPrime.defaultCouchConnection();
+        var connection = OPrime.defaultConnection();
         OPrime
             .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
-        couchConnection = OPrime.servers[appropriateserver];
-        window.location.replace(OPrime.getCouchUrl(couchConnection, "")
+        connection = OPrime.servers[appropriateserver];
+        window.location.replace(OPrime.getCouchUrl(connection, "")
             + "/public-firstcorpus/_design/pages/corpus.html");
       }
     } else {
@@ -197,7 +197,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   if (!mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "LingSync.org";
   }
-  var makingSureDefaultAuthIsSet = OPrime.defaultCouchConnection();
+  var makingSureDefaultAuthIsSet = OPrime.defaultConnection();
   var authUrl = OPrime.authUrl;
   if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";

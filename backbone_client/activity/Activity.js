@@ -28,7 +28,7 @@ define([
           authUrl: user.authUrl
         });
         //        if(!this.get("dbname")) {
-//          this.set("dbname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").dbname);
+//          this.set("dbname", window.app.get("authentication").get("userPrivate").get("activityConnection").dbname);
 //        }
       }
       if(!this.get("timestamp")){
@@ -73,7 +73,7 @@ define([
       if(!dbname){
         if( this.get("teamOrPersonal") == "personal"){
           if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
-            dbname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").dbname;
+            dbname = window.app.get("authentication").get("userPrivate").get("activityConnection").dbname;
             this.set("dbname", dbname);
           }else{
             alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
@@ -81,7 +81,7 @@ define([
           }
         }else{
           try{
-            dbname = window.app.get("currentCorpusTeamActivityFeed").get("couchConnection").dbname;
+            dbname = window.app.get("currentCorpusTeamActivityFeed").get("connection").dbname;
             this.set("dbname", dbname);
           }catch(e){
             alert("Bug in setting the pouch for this activity, i can only save activities for the current corpus team.");

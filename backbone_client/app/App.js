@@ -133,7 +133,7 @@ define([
             if (OPrime.debugMode) OPrime.debug("Creating backbone objects");
             $(".spinner-status")
             .html("Building dashboard objects...");
-            appself.createAppBackboneObjects(appself.get("couchConnection").dbname, function() {
+            appself.createAppBackboneObjects(appself.get("connection").dbname, function() {
 
               /*
                * If you know the user, load their most recent
@@ -175,30 +175,30 @@ define([
     /*
      * This will be the only time the app should open the pouch.
      */
-    changePouch : function(couchConnection, callback) {
-      if (!couchConnection || couchConnection == undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
+    changePouch : function(connection, callback) {
+      if (!connection || connection == undefined) {
+        console.log("App.changePouch connection must be supplied.");
         return;
       } else {
-        console.log("App.changePouch setting couchConnection: ", couchConnection);
-        this.set("couchConnection", couchConnection);
+        console.log("App.changePouch setting connection: ", connection);
+        this.set("connection", connection);
       }
 //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"),"");
 
       if(OPrime.isChromeApp()){
-        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
-        Backbone.couch_connector.config.db_name = couchConnection.dbname;
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(connection,"");
+        Backbone.couch_connector.config.db_name = connection.dbname;
       }else{
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
         try{
           var pieces = window.location.pathname.replace(/^\//,"").split("/");
-          var pouchName = pieces[0];
+          var dbname = pieces[0];
           //Handle McGill server which runs out of a virtual directory
-          if(pouchName == "corpus"){
-            pouchName = pieces[1];
+          if(dbname == "corpus"){
+            dbname = pieces[1];
           }
-          Backbone.couch_connector.config.db_name = pouchName;
+          Backbone.couch_connector.config.db_name = dbname;
         }catch(e){
           OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
@@ -215,11 +215,11 @@ define([
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.dbname);
+        // + connection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.dbname : OPrime.pouchUrl
-            + couchConnection.dbname);
+            + connection.dbname : OPrime.pouchUrl
+            + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -345,19 +345,19 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username,
+    logUserIntoTheirCorpusServer : function(connection, username,
         password, succescallback, failurecallback) {
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
+      if (connection == null || connection == undefined) {
+        connection = this.get("connection");
       }
-      if (couchConnection == null || couchConnection == undefined) {
+      if (connection == null || connection == undefined) {
         alert("Bug: i couldnt log you into your couch database.");
       }
 
       /* if on android, turn on replication and don't get a session token */
       if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.dbname,
-            username, password, couchConnection.domain);
+        Android.setCredentialsAndReplicate(connection.dbname,
+            username, password, connection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +
         "since this is touchdb on android which has no idea of tokens.");
@@ -367,14 +367,14 @@ define([
         return;
       }
 
-      var couchurl = this.getCouchUrl(couchConnection, "/_session");
+      var couchurl = this.getCouchUrl(connection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchurl);
 
       var appself = this;
-      var couchConnectionInscope = couchConnection;
+      var connectionInscope = connection;
       $.couch.login({
         name: username,
         password: password,
@@ -386,24 +386,24 @@ define([
           // var corpora =  window.app.get("corporaUserHasAccessTo")  || new Corpuses();
           // var roles = serverResults.roles;
           // for (var role in roles) {
-          //   var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
-          //   thisCouchConnection.corpusid = "";
-          //   thisCouchConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-          //   thisCouchConnection.title = thisCouchConnection.dbname;
-          //   if (thisCouchConnection.title.length > 30) {
-          //     thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
+          //   var thisConnection = JSON.parse(JSON.stringify(connectionInscope));
+          //   thisConnection.corpusid = "";
+          //   thisConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+          //   thisConnection.title = thisConnection.dbname;
+          //   if (thisConnection.title.length > 30) {
+          //     thisConnection.title = thisConnection.title.replace(username + "-", "");
           //   }
-          //   if (thisCouchConnection.title.length > 30) {
-          //     thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
+          //   if (thisConnection.title.length > 30) {
+          //     thisConnection.title = thisConnection.title.substring(0, 10) + "..." + thisConnection.title.substring(thisConnection.title.length - 15, thisConnection.title.length - 1);
           //   }
-          //   thisCouchConnection.id = thisCouchConnection.dbname;
-          //   if (thisCouchConnection.dbname.length > 4 && thisCouchConnection.dbname.split("-").length === 2) {
+          //   thisConnection.id = thisConnection.dbname;
+          //   if (thisConnection.dbname.length > 4 && thisConnection.dbname.split("-").length === 2) {
           //     if (corpora.where({
-          //       "dbname": thisCouchConnection.dbname
+          //       "dbname": thisConnection.dbname
           //     }).length === 0) {
-          //       corpora.push(new CorpusMask(thisCouchConnection));
+          //       corpora.push(new CorpusMask(thisConnection));
           //     } else {
-          //       console.log(thisCouchConnection.dbname + " Already known");
+          //       console.log(thisConnection.dbname + " Already known");
           //     }
           //   }
           // }
@@ -478,17 +478,17 @@ define([
         }
       });
     },
-    getCouchUrl : function(couchConnection, couchdbcommand) {
-      if(!couchConnection){
-        couchConnection = this.get("couchConnection");
-        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
+    getCouchUrl : function(connection, couchdbcommand) {
+      if(!connection){
+        connection = this.get("connection");
+        if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
       }else{
-        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+        if (OPrime.debugMode) OPrime.debug("Using the connection passed in,",connection,this.get("connection"));
       }
-      if(!couchConnection){
+      if(!connection){
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
       }
-      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+      return OPrime.getCouchUrl(connection, couchdbcommand);
     },
     /**
      * Synchronize to server and from database.
@@ -536,7 +536,7 @@ define([
     /**
      * Pull down corpus to offline pouch, if its there.
      */
-    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+    replicateOnlyFromCorpus : function(connection, successcallback, failurecallback) {
       var self = this;
 
       if(!self.pouch){
@@ -600,7 +600,7 @@ define([
             success();
           } else {
             if (OPrime.debugMode) OPrime.debug('Database replicating'
-                + JSON.stringify(couchConnection));
+                + JSON.stringify(connection));
           }
 
         }
@@ -632,7 +632,7 @@ define([
             succes();
           } else {
             if (OPrime.debugMode) OPrime.debug('Database replicating'
-                + JSON.stringify(couchConnection));
+                + JSON.stringify(connection));
           }
 
         }
@@ -649,9 +649,9 @@ define([
        * not where the user currently is.
        */
       if(OPrime.isCouchApp()){
-        var corpusPouchName = appids.couchConnection.dbname;
-        if(window.location.href.indexOf(corpusPouchName) == -1){
-          if(corpusPouchName != "public-firstcorpus"){
+        var corpusdbname = appids.connection.dbname;
+        if(window.location.href.indexOf(corpusdbname) == -1){
+          if(corpusdbname != "public-firstcorpus"){
             var username = "";
             try{
               username = window.app.get("authentication").get("userPrivate").get("username") || "";
@@ -663,7 +663,7 @@ define([
             }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-          window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusPouchName);
+          window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusdbname);
 
 //        window.app.get("authentication").syncUserWithServer(function(){
 //        window.location.replace(optionalCouchAppPath+"corpus.html");
@@ -675,16 +675,16 @@ define([
       if (Backbone.couch_connector.config.db_name == "default") {
         OPrime.bug("The app doesn't know which database its in. This is a problem.");
       }
-      var couchConnection = appids.couchConnection;
-      this.set("couchConnection", couchConnection);
+      var connection = appids.connection;
+      this.set("connection", connection);
 
       var corpusid = appids.corpusid;
       if(!corpusid){
-        corpusid = couchConnection.corpusid;
+        corpusid = connection.corpusid;
       }
       var c = new Corpus({
-        "dbname" : couchConnection.dbname,
-        "couchConnection" : couchConnection
+        "dbname" : connection.dbname,
+        "connection" : connection
       });
       var selfapp = this;
       if(!corpusid){
@@ -692,7 +692,7 @@ define([
           corpusid = this.get("corpus").id;
         }else{
           $(".spinner-status").html("Opening/Creating Corpus...");
-          this.get("corpus").loadOrCreateCorpusByPouchName(couchConnection, function(){
+          this.get("corpus").loadOrCreateCorpusBydbname(connection, function(){
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
             selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
 //          window.app.stopSpinner();
@@ -706,17 +706,17 @@ define([
 //            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
             /* Upgrade chrome app user corpora's to v1.38+ */
-            var oldCouchConnection = corpusModel.get("couchConnection");
-            if(oldCouchConnection){
-              oldCouchConnection.corpusid = corpusModel._id;
-              if(oldCouchConnection.domain == "ifielddevs.iriscouch.com"){
-                oldCouchConnection.domain  = "corpus.lingsync.org";
-                oldCouchConnection.port = "";
+            var oldConnection = corpusModel.get("connection");
+            if(oldConnection){
+              oldConnection.corpusid = corpusModel._id;
+              if(oldConnection.domain == "ifielddevs.iriscouch.com"){
+                oldConnection.domain  = "corpus.lingsync.org";
+                oldConnection.port = "";
               }
-              if(oldCouchConnection.domain == "corpusdev.lingsync.org"){
-                oldCouchConnection.domain  = "corpus.lingsync.org";
+              if(oldConnection.domain == "corpusdev.lingsync.org"){
+                oldConnection.domain  = "corpus.lingsync.org";
               }
-              corpusModel.set("couchConnection", oldCouchConnection);
+              corpusModel.set("connection", oldConnection);
             }
 
             $(".spinner-status").html("Opened Corpus...");
@@ -732,7 +732,7 @@ define([
               c.fetchPublicSelf();
 
               var dl = new DataList({
-                "dbname" : couchConnection.dbname
+                "dbname" : connection.dbname
               });
               dl.id = appids.datalistid;
                 dl.fetch({
@@ -745,7 +745,7 @@ define([
                       $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
 
                       var s = new Session({
-                        "dbname" : couchConnection.dbname
+                        "dbname" : connection.dbname
                       });
                       s.id = appids.sessionid;
                       var afterLoadingSession = function(loadedSession){
@@ -826,7 +826,7 @@ define([
               window.app.get("authentication").syncUserWithServer(function(){
                 if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
                 self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
-              }, couchConnection.dbname);
+              }, connection.dbname);
 //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
 //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
             }else{
@@ -838,7 +838,7 @@ define([
                 window.app.get("authentication").syncUserWithServer(function(){
                   console.log("Trying to reload the app after a session token has timed out, or the users account was moved to another server in v1.90");
                   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
-                }, couchConnection.dbname);
+                }, connection.dbname);
               }
             }
           }
@@ -935,13 +935,13 @@ define([
       if (OPrime.debugMode) OPrime.debug("Saving activity: ", bareActivityObject);
       var backboneActivity = new Activity(bareActivityObject);
 
-      var couchConnection = this.get("couchConnection");
-      var activitydb = couchConnection.dbname + "-activity_feed";
+      var connection = this.get("connection");
+      var activitydb = connection.dbname + "-activity_feed";
       if (bareActivityObject.teamOrPersonal != "team") {
         activitydb = this.get("authentication").get("userPrivate").get("username") + "-activity_feed";
         backboneActivity.attributes.user.gravatar= this.get("authentication").get("userPrivate").get("gravatar");
       }
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/" + activitydb);
+      var couchurl = OPrime.getCouchUrl(connection, "/" + activitydb);
 
       FieldDB.CORS.makeCORSRequest({
         type: 'POST',

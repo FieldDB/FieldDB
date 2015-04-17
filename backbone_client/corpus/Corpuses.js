@@ -52,13 +52,13 @@ define([
       this.reset();
       var self = this;
       for(c in arrayOfCorpora){
-        var couchConnection = arrayOfCorpora[c];
+        var connection = arrayOfCorpora[c];
 
         var corpuse = new CorpusMask({
           title : "",
-          dbname : couchConnection.dbname
+          dbname : connection.dbname
         });
-        corpuse.corpusid = couchConnection.corpusid;
+        corpuse.corpusid = connection.corpusid;
         self.unshift(corpuse);
 
 
@@ -68,7 +68,7 @@ define([
          * we expect to be the normal case, therefore not usefull to
          * show it.
          */
-//        var couchurl = OPrime.getCouchUrl(couchConnection) +"/corpus";
+//        var couchurl = OPrime.getCouchUrl(connection) +"/corpus";
 //        $.ajax({
 //          type : 'GET',
 //          url : couchurl ,

@@ -37,8 +37,8 @@ define([
        */
       buildLexiconFromCouch: function(dbname, callback) {
         var self = this;
-        var couchConnection = app.get("corpus").get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
+        var connection = app.get("corpus").get("connection");
+        var couchurl = OPrime.getCouchUrl(connection);
         if (localStorage.getItem(dbname + "lexiconResults")) {
           if (typeof callback == "function") {
             callback();

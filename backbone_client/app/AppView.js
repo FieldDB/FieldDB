@@ -618,7 +618,7 @@ define([
       }
       try{
         jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
-        jsonToRender.dbname = this.model.get("couchConnection").dbname;
+        jsonToRender.dbname = this.model.get("connection").dbname;
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Problem setting the username or dbname of the app.");
       }
