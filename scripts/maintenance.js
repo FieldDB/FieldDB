@@ -854,14 +854,14 @@ var MAINTAINENCE = {
               // return;
               console.log("deploying to a beta tester");
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              // return;
+              return;
               console.log("deploying to a phophlo user");
             } else {
               if (dbname.indexOf("anonymous") > -1) {
-                // return;
+                return;
                 console.log("deploying to anonymous users");
               } else {
-                // return; //deploy to only beta testers and/or phophlo users
+                return; //deploy to only beta testers and/or phophlo users
                 // console.log("deploying to normal users");
               }
             }
