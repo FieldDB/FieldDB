@@ -145,7 +145,7 @@ define([
           type: 'GET',
           url: OPrime.getCouchUrl(connection, "/_session")
         }).then(function(serverResults) {
-          if (self.model && self.model.updateListOfCorpora) {
+          if (self.model && serverResults.userCtx.name && self.model.updateListOfCorpora && self.model.get("username") === serverResults.userCtx.name) {
             self.model.updateListOfCorpora(serverResults.userCtx.roles);
             self.changeViewsOfInternalModels();
           }

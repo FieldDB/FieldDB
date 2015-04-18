@@ -429,6 +429,10 @@ define([
         return this.originalParse(originalModel);
       }
       var x;
+      originalModel.datumFields = originalModel.datumFields || [];
+      originalModel.dbname = originalModel.dbname || originalModel.pouchname;
+      originalModel.connection = originalModel.connection || originalModel.couchConnection;
+
       /* clean the datum fields for search */
       for (x in originalModel.datumFields) {
         originalModel.datumFields[x].mask = "";
@@ -453,16 +457,14 @@ define([
 
       /* Use the couch connection defined by this app. */
       if (originalModel.connection) {
-        tmp = originalModel.connection;
-        originalModel.connection = OPrime.defaultConnection();
-        originalModel.connection.corpusid = tmp.corpusid;
-        originalModel.connection.dbname = tmp.dbname;
-        originalModel.connection.title = tmp.title;
-        originalModel.connection.description = tmp.description;
-        originalModel.connection.titleAsUrl = tmp.titleAsUrl;
+        originalModel.connection = new FieldDB.Connection(originalModel.connection);
+        var normalizedConnection = OPrime.defaultConnection();
+        normalizedConnection.dbname = originalModel.connection.dbname;
+        originalModel.connection.merge("self", normalizedConnection, "overwrite");
+        originalModel.connection = originalModel.connection.toJSON();
       } else {
         // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = OPrime.defaultConnection();
+        originalModel.connection = new FieldDB.Connection(OPrime.defaultConnection()).toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }

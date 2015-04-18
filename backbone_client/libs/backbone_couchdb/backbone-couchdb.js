@@ -28,6 +28,17 @@ define([
       }
     }
 
+    // Upgrade data structure to 2.40+
+    if (response.pouchname) {
+      response.dbname = response.dbname || response.pouchname;
+      delete response.pouchname;
+    }
+    if (response.couchConnection) {
+      response.connection = response.connection || response.couchConnection;
+      response.connection = new FieldDB.Connection(response.connection).toJSON();
+      delete response.couchConnection;
+    }
+
 //    // adjust rev
 //    if (response.rev) {
 //      response._rev = response.rev;
