@@ -1071,6 +1071,9 @@ define([
                   });
             model.get("connection").corpusid = model.id;
             //make sure the corpus is updated in the history of the user
+            if (!window.app.get("authentication").get("userPrivate").get("corpora")) {
+              window.app.get("authentication").get("userPrivate").set("corpora", []);
+            }
             var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
             var oldconnection = pouches.indexOf(model.get("connection").dbname);
             if(oldconnection != -1){

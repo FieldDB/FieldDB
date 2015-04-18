@@ -162,6 +162,10 @@ define([
       if (username == "public") {
         return;
       }
+      if(this.currentlyCalculatingRoles && this.currentlyCalculatingRoles.length === roles.length){
+        return;
+      }
+      this.currentlyCalculatingRoles = roles;
 
       var corpora = this.get("corpora");
       if (corpora) {
@@ -178,11 +182,11 @@ define([
         if (dbname && !corpora[dbname] && dbname !== "public-firstcorpus") {
           newconnection = new FieldDB.Connection(OPrime.defaultConnection());
           newconnection.dbname = dbname;
-          if (newconnection.title.length > 30) {
+          if (newconnection.title && newconnection.title.length > 30) {
             newconnection.title = newconnection.title.replace(username + "-", "");
           }
-          if (newconnection.title.length > 30) {
-            newconnection.title = newconnection.title.substring(0, 10) + "..." + newconnection.title.substring(thisConnection.title.length - 15, thisConnection.title.length - 1);
+          if (newconnection.title && newconnection.title.length > 30) {
+            newconnection.title = newconnection.title.substring(0, 10) + "..." + newconnection.title.substring(newconnection.title.length - 15, newconnection.title.length - 1);
           }
           newconnection.id = newconnection.dbname;
           corpora.add(newconnection.toJSON());
@@ -190,9 +194,11 @@ define([
           OPrime.debug(dbname + " Already known");
         }
       }
-      corpora = new Corpuses(corpora.toJSON());
+      // corpora = new Corpuses(corpora.toJSON());
+      corpora = corpora.toJSON();
+      this.set("corpora", corpora);
       window.app.set("corporaUserHasAccessTo", corpora);
-      localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora.toJSON()));
+      localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora));
     }
 
   });
