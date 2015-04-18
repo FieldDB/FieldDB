@@ -72,7 +72,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
         }
         if (changeThisRecord === true) {
           $rootScope.loading = true;
-          Data.async($rootScope.corpus.pouchname, UUID)
+          Data.async($rootScope.corpus.dbname, UUID)
             .then(
               function(editedRecord) {
                 // Edit record with updated tag data
@@ -85,7 +85,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
                   editRecordWithUpdatedTagData(k);
                 }
                 // Save edited record
-                Data.saveEditedCouchDoc($rootScope.corpus.pouchname, UUID, editedRecord, editedRecord._rev)
+                Data.saveEditedCouchDoc($rootScope.corpus.dbname, UUID, editedRecord, editedRecord._rev)
                   .then(
                     function() {
                       console.log("Changed " + oldTag + " to " + newTag + " in " + UUID);
@@ -138,7 +138,7 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
 
   // Get all tags
   $scope.getTags = function() {
-    Data.async($rootScope.corpus.pouchname)
+    Data.async($rootScope.corpus.dbname)
       .then(
         function(dataFromServer) {
           var tags = {};
