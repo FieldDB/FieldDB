@@ -21,7 +21,7 @@
     "secretkey": ""
   },
   "publicCorpus": "Private",
-  "api": "private_corpuses",
+  "api": "private_corpora",
   "comments": [],
   "validationStati": [{
     "validationStatus": "Checked*",

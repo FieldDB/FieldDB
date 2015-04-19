@@ -53,7 +53,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.45.03.15.23ss";
+  $rootScope.appVersion = "2.45.04ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -2306,6 +2306,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         document.getElementById("userToModifyInput").value = "";
         $rootScope.loading = false;
         $scope.loadUsersAndRoles();
+        try {
+          if (!$scope.$$phase) {
+            $scope.$digest(); //$digest or $apply
+          }
+        } catch(e){
+          console.log("Problem trying to cause a render after updating roles");
+        }
       }, function(error) {
         console.warn(error);
         $rootScope.loading = false;
