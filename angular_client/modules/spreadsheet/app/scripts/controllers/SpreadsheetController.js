@@ -18,6 +18,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   }
   $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = null;
 
+  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+    FieldDB.FieldDBObject.application.alwaysReplyToPrompt = "notpromptinguserforpasswordtheywillremaininencryptedmode";
+  }
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application && $rootScope.contextualize) {
     if ($rootScope.contextualize("locale_faq") === "FAQ") {
@@ -82,6 +85,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
+  if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+    FieldDB.FieldDBObject.bug = function(message) {
+      $rootScope.notificationMessage = message;
+      $rootScope.openNotification();
+    };
+  }
   // Functions to open/close welcome notification modal
   $rootScope.openWelcomeNotificationDeprecated = function() {
     // $scope.welcomeNotificationShouldBeOpen = false; //never show this damn modal.
@@ -564,7 +573,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.editSessionDetails = false;
   $scope.createNewSessionDropdown = false;
   $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
-  $scope.activities = [];
+  $scope.activities = {};
   $rootScope.corpusSelected = false;
   $scope.newFieldData = {};
   $rootScope.newRecordHasBeenEdited = false;
@@ -1036,14 +1045,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         if (!selectedCorpus.datumFields) {
           $rootScope.corpus = new FieldDB.Corpus();
-          $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpus.dbname).then(function(results) {
+          FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
+          $rootScope.corpus.loadCorpusByDBname(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
             $scope.selectCorpus($rootScope.corpus);
-          }, function(error){
-            $rootScope.corpus.bug("Cant load corpus " + selectCorpus.dbname);
+          }, function(error) {
+            $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
             console.log(error);
-          }).fail(function(error){
-            $rootScope.corpus.bug("Cant load corpus " + selectCorpus.dbname);
+          }).fail(function(error) {
+            $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
             console.log(error);
           });
           return;
@@ -1502,19 +1512,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         return;
       } else {
         console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        console.warn("@hisakonog turning on debugmode for equality look below here.");
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        current.debugMode = true;
-        current.debugMode = true;
-        previous.equals(current);
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
-        console.warn("@hisakonog look in the above text for what attribute is not equal on the unchanged datum, we can add it to the list of attributes to ignore.");
-        console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        // console.warn("@hisakonog turning on debugmode for equality look below here.");
+        // console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        // current.debugMode = true;
+        // current.debugMode = true;
+        // previous.equals(current);
+        // console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
+        // console.warn("@hisakonog look in the above text for what attribute is not equal on the unchanged datum, we can add it to the list of attributes to ignore.");
+        // console.warn("+++++++++++++++++++++++++++++++++++++++++++++++++");
         // datum.saved = "no";
       }
     }
 
-    var utterance = "Datum";
+    var utterance = datum.utterance || "Datum";
     for (var key in fieldData) {
       if (key === "datumTags" && typeof fieldData.datumTags === 'string') {
         var newDatumFields = fieldData.datumTags.split(",");
@@ -2008,7 +2018,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           newActivityObject.dateModified = JSON.parse(JSON.stringify(new Date())); //TODO #1109 eventually remove date modified?
           newActivityObject.timestamp = Date.now();
 
-          $scope.activities.push(newActivityObject);
+          var uniqueid = newActivityObject.user.username + newActivityObject.verb + newActivityObject.directobject + newActivityObject.teamOrPersonal;
+          $scope.activities[uniqueid] = newActivityObject;
 
         }
         if (uploadnow) {
@@ -2019,7 +2030,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.uploadActivities = function() {
     // Save activities
-    if ($scope.activities.length > 0) {
+    if ($scope.activities) {
       var doSomethingDifferent = function(index) {
         if ($scope.activities[index]) {
           var activitydb;
@@ -2044,8 +2055,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               });
         }
       };
-      for (var i = 0; i < $scope.activities.length; i++) {
-        doSomethingDifferent(i);
+      for (var activityuniqueid in $scope.activities) {
+        if ($scope.activities.hasOwnProperty(activityuniqueid)) {
+          doSomethingDifferent(activityuniqueid);
+        }
       }
     }
   };
@@ -2316,7 +2329,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
           }
-        } catch(e){
+        } catch (e) {
           console.log("Problem trying to cause a render after updating roles");
         }
       }, function(error) {
@@ -2646,7 +2659,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.loginUser(auth);
         // Upgrade to v92 where corpus info is not saved in the prefs, only the pouchbame
         if ($scope.scopePreferences.savedState.DB) {
-          $scope.scopePreferences.savedState.mostRecentCorpusDBname = $scope.scopePreferences.savedState.DB.dbname ||$scope.scopePreferences.savedState.DB.pouchname;
+          $scope.scopePreferences.savedState.mostRecentCorpusDBname = $scope.scopePreferences.savedState.DB.dbname || $scope.scopePreferences.savedState.DB.pouchname;
           delete $scope.scopePreferences.savedState.DB;
         }
         if ($scope.scopePreferences.savedState.mostRecentCorpusDBname) {
