@@ -5,7 +5,7 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
-    if (doc.collection == "datalists" || doc.datumIds) {
+    if (doc.fieldDBtype === "DataList" || doc.collection == "datalists" || doc.datumIds) {
       var dateModified = doc.dateModified;
       if (dateModified) {
         try {
