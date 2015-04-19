@@ -1564,7 +1564,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $rootScope.currentPage = 0;
     // $rootScope.editsHaveBeenMade = true;
 
-    var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-pushpin'></i> " + $rootScope.corpus.title + "</a>";
+    var indirectObjectString = "on <a href='#data/" + datum.id + "'><i class='icon-cloud'></i> " + $rootScope.corpus.title + "</a>";
     // Update activity feed
     $scope.addActivity([{
       verb: "commented",
