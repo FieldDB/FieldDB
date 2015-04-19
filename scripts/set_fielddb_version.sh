@@ -20,19 +20,19 @@ let WEEK_DIFF=`expr $todayTimestamp - $BIRTHDAY_TIMESTAMP`/60/60/24/7 || exit 4;
 if [ "$WEEK_DIFF" -gt 208 ]
   then
   YEAR_DIFF=4
-  WEEK_DIFF=`expr $WEEK_DIFF - 208`
-elif [ "$WEEK_DIFF" -gt 156 ]
+  WEEK_DIFF=`expr $WEEK_DIFF - 209`
+elif [ "$WEEK_DIFF" -gt 155 ]
   then
   YEAR_DIFF=3
   WEEK_DIFF=`expr $WEEK_DIFF - 156`
 elif [ "$WEEK_DIFF" -gt 104 ]
   then
   YEAR_DIFF=2
-  WEEK_DIFF=`expr $WEEK_DIFF - 104`
+  WEEK_DIFF=`expr $WEEK_DIFF - 105`
 elif [ "$WEEK_DIFF" -gt 52 ]
   then
   YEAR_DIFF=1
-  WEEK_DIFF=`expr $WEEK_DIFF - 52`
+  WEEK_DIFF=`expr $WEEK_DIFF - 53`
 else
   YEAR_DIFF=0
 fi
