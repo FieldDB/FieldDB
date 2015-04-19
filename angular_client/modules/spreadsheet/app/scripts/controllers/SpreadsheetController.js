@@ -1050,11 +1050,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             console.log("loaded the corpus", results);
             $scope.selectCorpus($rootScope.corpus);
           }, function(error) {
-            $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
-            console.log(error);
+            // $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
+            console.error(error);
           }).fail(function(error) {
-            $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
-            console.log(error);
+            // $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
+            console.error(error);
           });
           return;
         } else {
@@ -1113,7 +1113,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (activeSessionIDToSwitchTo === 'none' || activeSessionIDToSwitchTo === undefined) {
       $scope.activeSessionID = undefined;
       $scope.fullCurrentSession = undefined;
-      $scope.editSessionInfo = undefined;
+      // $scope.editSessionInfo = undefined;
     } else {
       $scope.activeSessionID = activeSessionIDToSwitchTo;
       for (var i in $scope.sessions) {
@@ -1121,16 +1121,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $scope.fullCurrentSession = $scope.sessions[i];
 
           // Set up object to make session editing easier
-          var editSessionInfo = {};
-          editSessionInfo._id = $scope.fullCurrentSession._id;
-          editSessionInfo._rev = $scope.fullCurrentSession._rev;
-          for (var k in $scope.fullCurrentSession.sessionFields) {
-            editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
-            if ($scope.fullCurrentSession.sessionFields[k].label === "goal") {
-              $scope.currentSessionName = $scope.fullCurrentSession.sessionFields[k].mask;
-            }
-          }
-          $scope.editSessionInfo = editSessionInfo;
+          // var editSessionInfo = {};
+          // editSessionInfo._id = $scope.fullCurrentSession._id;
+          // editSessionInfo._rev = $scope.fullCurrentSession._rev;
+          // for (var k in $scope.fullCurrentSession.sessionFields) {
+          //   editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
+          //   if ($scope.fullCurrentSession.sessionFields[k].label === "goal") {
+          //     $scope.currentSessionName = $scope.fullCurrentSession.sessionFields[k].mask;
+          //   }
+          // }
+          // $scope.editSessionInfo = editSessionInfo;
         }
       }
     }
@@ -1174,17 +1174,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (r === true) {
       $scope.editSessionDetails = false;
       $rootScope.loading = true;
-      var newSession = $scope.fullCurrentSession;
-      for (var i in newSession.sessionFields) {
-        for (var key in editSessionInfo) {
-          if (newSession.sessionFields[i].id === key) {
-            newSession.sessionFields[i].value = editSessionInfo[key];
-            newSession.sessionFields[i].mask = editSessionInfo[key];
-          }
-        }
-      }
+      // var newSession = new FieldDB.Session($scope.fullCurrentSession);
+      // for (var key in editSessionInfo) {
+      //   if (key && editSessionInfo.hasOwnProperty(key) && key !== "undefined") {
+      //     newSession[key] = editSessionInfo[key];
+      //   }
+      // }
       // Save session record
-      Data.saveCouchDoc($rootScope.corpus.dbname, newSession)
+      Data.saveCouchDoc($rootScope.corpus.dbname, $scope.fullCurrentSession.toJSON())
         .then(function() {
           var directobject = $scope.currentSessionName || "an elicitation session";
           var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
@@ -1192,25 +1189,25 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
+            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
           }, {
             verb: "modified",
             verbicon: "icon-pencil",
             directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + newSession._id + "'>" + directobject + "</a> ",
+            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
             indirectobject: indirectObjectString,
             teamOrPersonal: "team"
           }], "uploadnow");
 
-          var doSomething = function(index) {
-            if (scopeDataToEdit[index].session._id === newSession._id) {
+          var updateAllDatumInThisSessionWithUpdatedSessionInfo = function(index) {
+            if (scopeDataToEdit[index].session._id === $scope.fullCurrentSession._id) {
               Data.async($rootScope.corpus.dbname, scopeDataToEdit[index].id)
                 .then(function(editedRecord) {
                     // Edit record with updated session info
                     // and save
-                    editedRecord.session = newSession;
+                    editedRecord.session = $scope.fullCurrentSession.toJSON();
                     Data.saveCouchDoc($rootScope.corpus.dbname, editedRecord)
                       .then(function() {
                         $rootScope.loading = false;
@@ -1224,7 +1221,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           // Update all records tied to this session
           for (var i in scopeDataToEdit) {
             $rootScope.loading = true;
-            doSomething(i);
+            updateAllDatumInThisSessionWithUpdatedSessionInfo(i);
           }
           $scope.loadData($scope.activeSessionID);
         });

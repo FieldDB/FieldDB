@@ -153,7 +153,7 @@
         </button>
       </div>
       <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSessionID!=undefined"ng-cloak>
-        <form ng-model='editSessionInfo'>
+        <form ng-model='fullCurrentSession'>
           <table cellpadding="5px">
             <tr>
               <td>
@@ -162,7 +162,7 @@
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
               <td>
                 <i class="fa whiteicon fa-user">
@@ -170,7 +170,7 @@
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
+                <input class="span3" type="text" ng-model="fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
               </td>
               <td>
                 <i class="fa whiteicon fa-user">
@@ -178,7 +178,7 @@
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
+                <input class="span3" type="text" ng-model="fullCurrentSession.user" placeholder="{{fullCurrentSession.user}}" disabled>
               </td>
             </tr>
             <tr>
@@ -186,25 +186,25 @@
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="fullCurrentSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="fullCurrentSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
+          <button class="btn" ng-click="editSession(fullCurrentSession, data);">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
@@ -233,7 +233,7 @@
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
+                <input class="span3" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
               </td>
               <td>
                 <i class="fa whiteicon fa-user">
@@ -447,26 +447,26 @@
         {{contextualize('locale_create_new_session')}}
       </button>
       <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
-        <form ng-model='editSessionInfo'>
+        <form ng-model='fullCurrentSession'>
           <table cellpadding="5px">
             <tr>
               <td>
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
               <td>
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
+                <input class="span3" type="text" ng-model="fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
               </td>
               <td>
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
+                <input class="span3" type="text" ng-model="fullCurrentSession.user" placeholder="{{fullCurrentSession.user}}" disabled>
               </td>
             </tr>
             <tr>
@@ -474,25 +474,25 @@
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="fullCurrentSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="fullCurrentSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="text" ng-model="fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
+          <button class="btn" ng-click="editSession(fullCurrentSession, data);">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
@@ -521,7 +521,7 @@
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
+                <input class="span3" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
               </td>
               <td>
                 <i class="fa whiteicon fa-user">
