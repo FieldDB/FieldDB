@@ -93,7 +93,7 @@ describe("Directive: fielddb-collection", function() {
         firstname: "Anony",
         lastname: "Mouse",
         id: "three",
-        fieldDBtype: "Participant"
+        fieldDBtype: "UserMask"
       }]);
       compileFunction = $compile(el);
       // bring html from templateCache
