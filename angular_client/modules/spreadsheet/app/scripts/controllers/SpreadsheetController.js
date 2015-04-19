@@ -673,24 +673,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           scopeSessions.push(response[k].value);
         }
         scopeSessions.push({
-          title: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
+          dateAndGoalSnippet: $rootScope.contextualize('locale_view_all_sessions_dropdown') || "All",
           _id: "none"
         });
 
         for (var i in scopeSessions) {
           if (scopeSessions[i]._id !== "none") {
-            scopeSessions[i].title = "";
-            for (var j in scopeSessions[i].sessionFields) {
-              if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "goal") {
-                if (scopeSessions[i].sessionFields[j].mask) {
-                  scopeSessions[i].title = scopeSessions[i].title + " " + scopeSessions[i].sessionFields[j].mask.substr(0, 20);
-                }
-              } else if (scopeSessions[i].sessionFields[j].label.toLowerCase() === "dateelicited") {
-                if (scopeSessions[i].sessionFields[j].mask) {
-                  scopeSessions[i].title = scopeSessions[i].sessionFields[j].mask.substr(0, 20) + " " + scopeSessions[i].title;
-                }
-              }
-            }
+            scopeSessions[i] = new FieldDB.Session(scopeSessions[i]);
           }
         }
         $scope.sessions = scopeSessions;
@@ -1076,6 +1065,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
     $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
+    $scope.newSession = $rootScope.corpus.newSession();
     $scope.loadSessions();
     $scope.loadUsersAndRoles();
 
@@ -1145,26 +1135,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($scope.activeSessionID === undefined) {
       return "All Sessions";
     } else {
-      var sessionTitle;
-      if (debugging) {
-        console.log(sessionTitle);
-      }
-      for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === $scope.activeSessionID) {
-          for (var j in $scope.sessions[i].sessionFields) {
-            if ($scope.sessions[i].sessionFields[j].id === "goal") {
-              if ($scope.sessions[i].sessionFields[j].mask) {
-                $scope.currentSessionName = $scope.sessions[i].sessionFields[j].mask;
-                return $scope.sessions[i].sessionFields[j].mask.substr(0,
-                  20);
-              } else {
-                $scope.currentSessionName = $scope.sessions[i].sessionFields[j].value;
-                return $scope.sessions[i].sessionFields[j].value.substr(0,
-                  20);
-              }
-            }
-          }
-        }
+      if ($scope.fullCurrentSession) {
+        return $scope.fullCurrentSession.dateAndGoalSnippet || $scope.fullCurrentSession.title;
       }
     }
   };
@@ -1283,41 +1255,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.createNewSession = function(newSession) {
+  $scope.createNewSession = function(newSessionRecord) {
     $rootScope.loading = true;
     // Get blank template to build new record
-    var newSessionRecord = Data.blankSessionTemplate();
-    newSessionRecord.dbname = $rootScope.corpus.dbname;
-    newSessionRecord.dateCreated = JSON.parse(JSON.stringify(new Date()));
-    newSessionRecord.dateModified = JSON.parse(JSON.stringify(new Date()));
-    newSessionRecord.lastModifiedBy = $rootScope.user.username;
-    for (var key in newSession) {
-      for (var i in newSessionRecord.sessionFields) {
-        if (newSessionRecord.sessionFields[i].id === "user") {
-          newSessionRecord.sessionFields[i].value = $rootScope.user.username;
-          newSessionRecord.sessionFields[i].mask = $rootScope.user.username;
-        }
-        if (newSessionRecord.sessionFields[i].id === "dateSEntered" || newSessionRecord.sessionFields[i].id === "dateSessionEntered") {
-          newSessionRecord.sessionFields[i].value = new Date().toString();
-          newSessionRecord.sessionFields[i].mask = new Date().toString();
-        }
-        if (key === newSessionRecord.sessionFields[i].id) {
-          newSessionRecord.sessionFields[i].value = newSession[key];
-          newSessionRecord.sessionFields[i].mask = newSession[key];
-        }
-      }
-    }
-    Data.saveCouchDoc($rootScope.corpus.dbname, newSessionRecord)
+    Data.saveCouchDoc($rootScope.corpus.dbname, newSessionRecord.toJSON())
       .then(function(savedRecord) {
 
         newSessionRecord._id = savedRecord.data.id;
         newSessionRecord._rev = savedRecord.data.rev;
-        for (var i in newSessionRecord.sessionFields) {
-          if (newSessionRecord.sessionFields[i].id === "goal") {
-            newSessionRecord.title = newSessionRecord.sessionFields[i].mask.substr(0, 20);
-          }
-        }
-        var directobject = newSessionRecord.title || "an elicitation session";
+        var directobject = newSessionRecord.dateAndGoalSnippet || "an elicitation session";
         var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
         $scope.addActivity([{
           verb: "added",
@@ -1814,7 +1760,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.updateCorpusDetails = function(corpus) {
     console.log("Saving corpus details, corpus passed in", corpus);
-    $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.dbname;
+    // $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.dbname;
     $rootScope.corpus.save($rootScope.user).then(function(result) {
       console.log("Saved corpus details ", result);
       $scope.overrideTemplateSetting();
@@ -1836,7 +1782,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       }], "uploadnow");
     }, function(reason) {
       console.log("Error saving corpus details.", reason);
-      alert("Error saving corpus details.");
+      $rootScope.corpus.saving = false;
+      $rootScope.corpus.bug("Error saving corpus details.");
     });
   };
 

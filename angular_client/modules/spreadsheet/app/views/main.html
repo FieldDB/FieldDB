@@ -32,7 +32,7 @@
     <br>
     <div class="form-horizontal">
       <form ng-submit="selectSession(fullCurrentSession._id)">
-        <select ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
+        <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
         <button type="submit"
         class="btn btn-primary">{{contextualize('locale_go_button')}}
@@ -53,7 +53,7 @@
           <i>{{corpus.title}}
           </i>
         </h3>
-        <form ng-model="newSession">
+        <form >
           <table class="newSessionTable" align='center'>
             <tr>
               <td>{{contextualize('locale_goal_textbox')}}
@@ -62,13 +62,13 @@
                 <input type="text" placeholder="Collecting examples of animacy agreement" ng-model='newSession.goal'>
               </td>
             </tr>
-            <tr>
+           <!--  <tr>
               <td>{{contextualize('locale_consultants_textbox')}}
               </td>
               <td>
                 <input type="text" placeholder="ME,EV,FE" ng-model='newSession.consultants'>
               </td>
-            </tr>
+            </tr> -->
             <tr>
               <td>{{contextualize('locale_language_textbox')}}
               </td>
