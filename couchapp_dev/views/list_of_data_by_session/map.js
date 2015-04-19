@@ -6,7 +6,7 @@ function(doc) {
     return;
   }
   var debugMode = false;
-  if (doc.collection === "datums" || (doc.datumFields && doc.session && doc.session._id)) {
+  if (doc.fieldDBtype === "Datum" || doc.collection === "datums" || (doc.datumFields && doc.session && doc.session._id)) {
     var dateEntered = doc.dateEntered;
     if (dateEntered) {
       try {
