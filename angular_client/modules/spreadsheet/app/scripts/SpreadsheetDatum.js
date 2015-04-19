@@ -6,7 +6,8 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   var j,
     fieldKeyName = "label";
 
-  spreadsheetDatum.dbname = fieldDBDatum.dbname || fieldDBDatum.pouchname;
+  fieldDBDatum.dbname = fieldDBDatum.dbname || fieldDBDatum.pouchname;
+  spreadsheetDatum.dbname = fieldDBDatum.dbname;
   spreadsheetDatum.id = fieldDBDatum._id;
   spreadsheetDatum.rev = fieldDBDatum._rev;
 
@@ -174,8 +175,10 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   var key,
     hasModifiedByUser,
     spreadsheetKeyWasInDatumFields,
-    fieldKeyName = "label",
     i;
+  if (!(fieldDBDatum instanceof FieldDB.Datum)) {
+    fieldDBDatum = new FieldDB.Datum(fieldDBDatum);
+  }
 
   if (fieldDBDatum._id && fieldDBDatum.dbname !== spreadsheetDatum.dbname) {
     throw ("This record belongs to another corpus.");
@@ -185,33 +188,31 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     spreadsheetKeyWasInDatumFields = false;
 
     /* find the datum field that corresponds to this key in the spreadsheetDatum */
-    for (i = 0; i < fieldDBDatum.datumFields.length; i++) {
-      if (fieldDBDatum.datumFields[i].id) {
-        fieldKeyName = "id";
-      }
-      if (fieldDBDatum.datumFields[i][fieldKeyName] === key) {
+    for (i = 0; i < fieldDBDatum.datumFields.collection.length; i++) {
+
+      if (fieldDBDatum.datumFields.collection[i].id === key) {
         spreadsheetKeyWasInDatumFields = true;
         // Check for (existing) modifiedByUser field in original record and update correctly
         if (key === "modifiedByUser") {
           hasModifiedByUser = true;
-          fieldDBDatum.datumFields[i].users = spreadsheetDatum.modifiedByUser.users;
-          // fieldDBDatum.datumFields[i].mask = spreadsheetDatum.modifiedByUser.users; /TODO
-          // fieldDBDatum.datumFields[i].value = spreadsheetDatum.modifiedByUser.users; /TODO
-          fieldDBDatum.datumFields[i].readonly = true;
+          fieldDBDatum.datumFields.collection[i].users = spreadsheetDatum.modifiedByUser.users;
+          // fieldDBDatum.datumFields.collection[i].mask = spreadsheetDatum.modifiedByUser.users; /TODO
+          // fieldDBDatum.datumFields.collection[i].value = spreadsheetDatum.modifiedByUser.users; /TODO
+          fieldDBDatum.datumFields.collection[i].readonly = true;
         } else if (key === "enteredByUser") {
-          fieldDBDatum.datumFields[i].user = spreadsheetDatum.enteredByUser;
-          fieldDBDatum.datumFields[i].mask = spreadsheetDatum.enteredByUser.username;
-          fieldDBDatum.datumFields[i].value = spreadsheetDatum.enteredByUser.username;
-          fieldDBDatum.datumFields[i].readonly = true;
+          fieldDBDatum.datumFields.collection[i].user = spreadsheetDatum.enteredByUser;
+          fieldDBDatum.datumFields.collection[i].mask = spreadsheetDatum.enteredByUser.username;
+          fieldDBDatum.datumFields.collection[i].value = spreadsheetDatum.enteredByUser.username;
+          fieldDBDatum.datumFields.collection[i].readonly = true;
         } else if (key === "comments") {
           //dont put the comments into the comments datum field if their corpus has one...
-          if (typeof fieldDBDatum.datumFields[i].value !== "string") {
-            fieldDBDatum.datumFields[i].value = "";
-            fieldDBDatum.datumFields[i].mask = "";
+          if (typeof fieldDBDatum.datumFields.collection[i].value !== "string") {
+            fieldDBDatum.datumFields.collection[i].value = "";
+            fieldDBDatum.datumFields.collection[i].mask = "";
           }
         } else {
-          fieldDBDatum.datumFields[i].value = spreadsheetDatum[key];
-          fieldDBDatum.datumFields[i].mask = spreadsheetDatum[key];
+          fieldDBDatum.datumFields.collection[i].value = spreadsheetDatum[key];
+          fieldDBDatum.datumFields.collection[i].mask = spreadsheetDatum[key];
         }
       }
     }
@@ -219,7 +220,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     /* If the key isnt empty, and it wasnt in the existing datum fields, and its not a spreadsheet internal thing, create a datum field */
     if (spreadsheetDatum[key] !== undefined && !spreadsheetKeyWasInDatumFields && key !== "hasAudio" && key !== "hasImages" && key !== "hasRelatedData" && key !== "markAsNeedsToBeSaved" && key !== "saved" && key !== "fossil" && key !== "checked" && key !== "session" && key !== "dbname" && key !== "$$hashKey" && key !== "audioVideo" && key !== "images" && key !== "relatedData" && key !== "comments" && key !== "sessionID" && key !== "modifiedByUser" && key !== "enteredByUser" && key !== "id" && key !== "rev" && key !== "dateEntered" && key !== "datumTags" && key !== "timestamp" && key !== "dateModified" && key !== "lastModifiedBy") {
 
-      fieldDBDatum.datumFields.push({
+      fieldDBDatum.datumFields.collection.push({
         "label": key,
         "value": spreadsheetDatum[key] || "",
         "mask": spreadsheetDatum[key] || "",
@@ -247,7 +248,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
       "readonly": true,
       "userchooseable": "disabled"
     };
-    fieldDBDatum.datumFields.push(modifiedByUserField);
+    fieldDBDatum.datumFields.collection.push(modifiedByUserField);
   }
 
   // Save date info
@@ -277,8 +278,8 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   }
   // Save relatedData TODO what if someone else modified it? need to merge the info...
   if (spreadsheetDatum.relatedData && spreadsheetDatum.relatedData.length > 0) {
-    fieldDBDatum.datumFields.map(function(datumField) {
-      if (datumField[fieldKeyName] === "relatedData") {
+    fieldDBDatum.datumFields.collection.map(function(datumField) {
+      if (datumField.id === "relatedData") {
         datumField.json = spreadsheetDatum.relatedData;
         datumField.value = spreadsheetDatum.relatedData.map(function(json) {
           return json.filename;
@@ -297,7 +298,7 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
     delete fieldDBDatum.attachmentInfo;
   }
 
-  return fieldDBDatum;
+  return fieldDBDatum.toJSON();
 };
 console.log("Loaded the SpreadsheetDatum.");
 

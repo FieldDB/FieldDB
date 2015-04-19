@@ -19,9 +19,11 @@ angular.module('spreadsheetApp')
       } else if (input === "2000-09-06T16:31:30.988Z") {
         return "N/A";
       } else {
-        var newDate = input.replace(/\"/g, "");
-        var d = new Date(newDate);
-        var t = new Date(newDate);
+        if (typeof input.replace === "function") {
+          input = input.replace(/\"/g, "");
+        }
+        var d = new Date(input);
+        var t = new Date(input);
         var minutes = t.getMinutes();
         if (minutes < 10) {
           minutes = "0" + minutes;
@@ -55,8 +57,10 @@ angular.module('spreadsheetApp')
       } else if (input === "2000-09-06T16:31:30.988Z") {
         return "N/A";
       } else {
-        var newDate = input.replace(/\"/g, "");
-        var d = new Date(newDate);
+        if (typeof input.replace === "function") {
+          input = input.replace(/\"/g, "");
+        }
+        var d = new Date(input);
         return d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
       }
     };
