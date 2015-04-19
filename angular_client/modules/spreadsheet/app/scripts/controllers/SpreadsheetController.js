@@ -901,7 +901,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             }
             // Use map-reduce to get corpus details
 
-            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpora")
+            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/corpus_title_description")
               .then(function(response) {
                 var corpus = {};
                 if (response.rows && response.rows[0]) {
@@ -1039,6 +1039,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.corpus.loadOrCreateCorpusByPouchName(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
             $scope.selectCorpus($rootScope.corpus);
+          }, function(error){
+            $rootScope.corpus.bug("Cant load corpus " + selectCorpus.dbname);
+            console.log(error);
+          }).fail(function(error){
+            $rootScope.corpus.bug("Cant load corpus " + selectCorpus.dbname);
+            console.log(error);
           });
           return;
         } else {
