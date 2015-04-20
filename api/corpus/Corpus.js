@@ -451,7 +451,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         dbname: this.dbname,
         fields: sessionFields,
         confidential: this.confidential,
-        url: this.url
+        // url: this.url
       });
 
       for (var field in options) {
