@@ -143,15 +143,12 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         this.corpusMask = {
           "id": "corpus"
         };
-        this.corpusMask.fetch();
+        // this.corpusMask.fetch();
       }
       return this._corpusMask;
     },
     set: function(value) {
-      if (value === this._corpusMask) {
-        return;
-      }
-      this._corpusMask = value;
+      this.ensureSetViaAppropriateType("corpusMask", value);
     }
   },
 
