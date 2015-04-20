@@ -155,7 +155,7 @@
 </div>
 </div>
 <div class="subSubMenubar ng-hide" ng-show="createNewSessionDropdown==true">
-<form ng-model="newSessionInfo" class="ng-pristine ng-valid">
+<form ng-model="newSession" class="ng-pristine ng-valid">
 <table cellpadding="5px">
 <tbody>
 <tr>
@@ -163,40 +163,40 @@
 <i class="fa whiteicon fa-calendar">
 </i> Goal:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.goal" placeholder="Collecting examples of animacy agreement">
 </td>
 <td class="ng-binding">
 <i class="fa whiteicon fa-user">
 </i> Consultants:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
 </td>
 <td class="ng-binding">
 <i class="fa whiteicon fa-user">
 </i> User:</td>
 <td>
-<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.user" placeholder="">
+<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.user" placeholder="">
 </td>
 </tr>
 <tr>
 <td class="ng-binding">Language:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.language" placeholder="Language">
 </td>
 <td class="ng-binding">Dialect:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.dialect" placeholder="Dialect">
 </td>
 <td class="ng-binding">Date Elicited:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="date" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+<input class="span3 ng-pristine ng-valid" type="date" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
 </td>
 </tr>
 </tbody>
 </table>
 </form>
 <div>
-<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSession);createNewSessionDropdown=false;navigateVerifySaved('none')">
 <i class="fa whiteicon fa-save">
 </i> Create Session</button> &nbsp; <button class="btn ng-binding" ng-click="createNewSessionDropdown=false">Cancel</button>
 </div>
@@ -341,7 +341,7 @@
 </div>
 </div>
 <div class="subSubMenubar ng-hide" ng-show="createNewSessionDropdown==true">
-<form ng-model="newSessionInfo" class="ng-pristine ng-valid">
+<form ng-model="newSession" class="ng-pristine ng-valid">
 <table cellpadding="5px">
 <tbody>
 <tr>
@@ -349,40 +349,40 @@
 <i class="fa whiteicon fa-calendar">
 </i> Goal:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.goal" placeholder="Collecting examples of animacy agreement">
 </td>
 <td class="ng-binding">
 <i class="fa whiteicon fa-group">
 </i> Consultants</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
 </td>
 <td class="ng-binding">
 <i class="fa whiteicon fa-user">
 </i> User:</td>
 <td>
-<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.user" placeholder="">
+<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.user" placeholder="">
 </td>
 </tr>
 <tr>
 <td class="ng-binding">Language:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.language" placeholder="Language">
 </td>
 <td class="ng-binding">Dialect:</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.dialect" placeholder="Dialect">
 </td>
 <td class="ng-binding">Date Elicited</td>
 <td>
-<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
 </td>
 </tr>
 </tbody>
 </table>
 </form>
 <div>
-<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSession);createNewSessionDropdown=false;navigateVerifySaved('none')">
 <i class="fa whiteicon fa-save">
 </i> Create Session</button> &nbsp; <button class="btn ng-binding" ng-click="createNewSessionDropdown=false">Cancel</button>
 </div>

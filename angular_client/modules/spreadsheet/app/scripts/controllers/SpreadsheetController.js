@@ -1284,6 +1284,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.sessions.push(newSessionRecord);
         $scope.dataentry = true;
         $scope.selectSession(savedRecord.data.id);
+        $scope.newSession = $rootScope.corpus.newSession();
         window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       });
     $rootScope.loading = false;
