@@ -209,8 +209,9 @@ describe("Activities", function() {
       expect(activityFeed.incompleteActivitesStockPile.length).toEqual(1);
       expect(activityFeed.incompleteActivitesStockPile[0]).toBeDefined();
       expect(activityFeed.incompleteActivitesStockPile[0].activity).toBeDefined();
+      expect(activityFeed.incompleteActivitesStockPile[0].activity.indirectobject).toEqual("this doesnt matter, its not part of the subcategorization of activity :)");
       expect(activityFeed.incompleteActivitesStockPile[0].errorMessage).toBeDefined();
-      expect(activityFeed.incompleteActivitesStockPile[0].errorMessage).toEqual("The primary key `whenWhatWho` is undefined on this object, it cannot be added! Type: Activity");
+      expect(activityFeed.incompleteActivitesStockPile[0].errorMessage).toEqual("Activity was not added.");
     });
 
     it("should accept bare activities to add to the feed", function() {
