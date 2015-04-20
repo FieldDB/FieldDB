@@ -1,3 +1,37 @@
+# client side code
+angular_client
+backbone_client
+bower.json
+bower_components
+fielddb.js
+fielddb.min.js
+manifest.json
+
+
+# Map reduces
+couchapp_activities
+couchapp_cleaning
+couchapp_dev
+couchapp_export
+couchapp_learnx
+couchapp_lexicon
+couchapp_minified
+
+
+Gruntfile.js
+build
+dist
+docs
+raw
+
+node_modules
+npm-debug.log
+output
+scripts
+test-reports
+
+
+
 caml2012.pdf
 
 #ignore compiled handlebars
