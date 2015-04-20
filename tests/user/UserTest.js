@@ -138,6 +138,7 @@ describe("User ", function() {
         },
         authUrl: "",
         corpora: [],
+        newCorpora: [],
         sessionHistory: [],
         datalistHistory: [],
         datalists: [],
