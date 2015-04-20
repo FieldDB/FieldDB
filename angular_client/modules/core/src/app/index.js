@@ -11,7 +11,7 @@
 //     });
 // }
 angular.module("fielddbAngular", [
-  "ngAnimate",
+  // "ngAnimate",
   "ngCookies",
   "ngTouch",
   "ngSanitize",
