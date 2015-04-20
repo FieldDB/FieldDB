@@ -160,15 +160,7 @@
     "description": "",
     "filledWithDefaults": true
   },
-  "newCorpora": [{
-    "protocol": "",
-    "domain": "",
-    "port": "",
-    "dbname": "",
-    "path": "",
-    "authUrl": "",
-    "userFriendlyServerName": ""
-  }],
+  "newCorpora": [],
   "roles": [],
   "authenticated": true,
   "accessibleDBS": []
