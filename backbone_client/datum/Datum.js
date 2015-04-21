@@ -236,11 +236,11 @@ define([
         }
 
         OPrime.debug("Edit this function to update datum to the latest schema.");
-
+        originalModel.datumFields = originalModel.datumFields || originalModel.fields || [];
         var x;
         /* make sure the fields have a label */
         for (x in originalModel.datumFields) {
-          originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
+          originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
         }
         if(!originalModel.session){
           originalModel.session = {
