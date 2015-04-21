@@ -6,7 +6,7 @@ block content
       .span3
         p.text-center
           a(href="/#{user.username}") 
-            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{ghash}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{user.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
         div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
           if user.username
             h1= user.subtitle
@@ -37,10 +37,10 @@ block content
           .span4
         .row-fluid
           .span12
-            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
         .row-fluid
           .span11.offset1
-            - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+            - var pouchname = corpora[0].pouchname.toString()
             form.form-inline#searchCorpus(action='http://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
@@ -64,9 +64,9 @@ block content
     hr
     footer
       - var year = (new Date()).getFullYear()
-      p © #{corpora[0].corpusinfo.copyright} #{year} 
+      p © #{corpora[0].copyright} #{year} 
         
-      - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+      - var pouchname = corpora[0].pouchname.toString()
       .tabbable
         ul.nav.nav-tabs
           li.active
@@ -75,10 +75,10 @@ block content
             a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
         .tab-content
           .tab-pane.active#terms
-            p #{corpora[0].corpusinfo.termsOfUse.humanReadable}
+            p #{corpora[0].termsOfUse.humanReadable}
             span License: 
-            a(href="#{corpora[0].corpusinfo.license.link}", rel="license", title="#{corpora[0].corpusinfo.license.title}") #{corpora[0].corpusinfo.license.title}
-            p #{corpora[0].corpusinfo.license.humanReadable}
+            a(href="#{corpora[0].license.link}", rel="license", title="#{corpora[0].license.title}") #{corpora[0].license.title}
+            p #{corpora[0].license.humanReadable}
             img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
           .tab-pane#emeldtermsreccomendations
             ul
