@@ -52,7 +52,7 @@ mixin showJson(myJsonObject, level)
             | &nbsp;(empty)
           else
             mixin showJson(value, level)
-        else if key == 'pouchname'
+        else if key == 'dbname'
           p(style='margin:0') #{key}: 
             a(href= value) #{value}
         else

@@ -1,9 +1,9 @@
-function reindex(pouchname) {
+function reindex(dbname) {
 
   $('#innerProgressBar').width(0).html('&nbsp;');
   $('#progressBar').css('display', 'inline-block');
   $('#progressBar').show();
-  var url = 'http://localhost:3185/train/lexicon/' + pouchname;
+  var url = 'http://localhost:3185/train/lexicon/' + dbname;
   var checks = 0;
 
   $.post(url, JSON.stringify({})).done(function(response) {
@@ -18,7 +18,7 @@ function reindex(pouchname) {
     for (var i = 0; i < total; i++) {
       (function(index) {
 
-        var url = 'http://searchdev.lingsync.org/' + pouchname + '/datums/' + response.rows[index].id;
+        var url = 'http://searchdev.lingsync.org/' + dbname + '/datums/' + response.rows[index].id;
         var data = response.rows[index].key;
 
         $.post(url, JSON.stringify(data)).done(function(response2) {

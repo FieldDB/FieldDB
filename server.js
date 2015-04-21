@@ -7,6 +7,7 @@ var fs = require('fs');
 var util = require('util');
 
 var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
+deploy_target = "devserver";
 var node_config = require("./lib/nodeconfig_" + deploy_target);
 var couch_keys = require("./lib/couchkeys_" + deploy_target);
 
@@ -52,10 +53,10 @@ app.configure(function() {
  * Routes
  */
 
-app.get('/activity/:pouchname', function(req, res) {
+app.get('/activity/:dbname', function(req, res) {
 
-  var pouchname = req.params.pouchname + '-activity_feed';
-  var activitydb = nano.db.use(pouchname);
+  var dbname = req.params.dbname + '-activity_feed';
+  var activitydb = nano.db.use(dbname);
   var data = {
     'rows': [{
       'key': {
@@ -158,9 +159,9 @@ app.get('/activity/:pouchname', function(req, res) {
 
 var processCorpusPageParams = function(req, res) {
 
-  var pouchname = req.params.pouchname;
+  var dbname = req.params.dbname;
 
-  getCorpusFromPouchname(pouchname)
+  getCorpusFromDbname(dbname)
     .then(function(result) {
       result.corpus.copyright = result.corpus.copyright || result.team.username;
       if (result.corpus.copyright.indexOf("Add names of the copyright holders") > -1) {
@@ -204,8 +205,8 @@ var processCorpusPageParams = function(req, res) {
       res.render('corpus', data);
     })
     .fail(function(error) {
-      console.log(new Date() + " there was a problem getCorpusFromPouchname in route /db/:pouchname" + error);
-      if (pouchname.indexOf("public") > -1) {
+      console.log(new Date() + " there was a problem getCorpusFromDbname in route /db/:dbname" + error);
+      if (dbname.indexOf("public") > -1) {
         res.redirect("404.html");
       } else {
         res.redirect('/public');
@@ -215,11 +216,11 @@ var processCorpusPageParams = function(req, res) {
 
 };
 
-app.get('/db/:pouchname', processCorpusPageParams);
+app.get('/db/:dbname', processCorpusPageParams);
 
-app.get('/:user/:corpus/:pouchname', processCorpusPageParams);
+app.get('/:user/:corpus/:dbname', processCorpusPageParams);
 
-app.get('/:user/:pouchname', processCorpusPageParams);
+app.get('/:user/:dbname', processCorpusPageParams);
 
 app.get('/:user', function(req, res) {
 
@@ -281,7 +282,7 @@ var getData = function getData(res, user, corpus) {
         user: usersMask
       };
       var template = corpus ? 'corpus' : 'user';
-      console.log("rendering the data", util.inspect(data));
+      //console.log("rendering the data", util.inspect(data));
       res.render(template, data);
     })
     .fail(function(error) {
@@ -292,7 +293,7 @@ var getData = function getData(res, user, corpus) {
         return;
       }
       if (error && error.message === "missing" && user !== "public") {
-        console.log(" user " + user + "was missing, redirecting to the public user");
+        console.log(new Date() + " user " + user + "was missing, redirecting to the public user");
         res.redirect("/public)")
         return;
       }
@@ -306,52 +307,52 @@ var getData = function getData(res, user, corpus) {
 
 };
 
-function getCorpusFromPouchname(pouchname) {
-  pouchname = sanitizeAgainstInjection(pouchname);
-  if (!pouchname) {
+function getCorpusFromDbname(dbname) {
+  dbname = sanitizeAgainstInjection(dbname);
+  if (!dbname) {
     res.status(404);
     res.redirect("404.html")
     return;
   }
 
   var df = Q.defer();
-  var corpusdb = nano.db.use(pouchname);
+  var corpusdb = nano.db.use(dbname);
   var result = {};
 
   corpusdb.get('corpus', function(error, corpus) {
     if (error) {
-      console.log(" corpus was missing " + pouchname);
+      console.log(new Date() + " corpus was missing " + dbname);
       df.reject(new Error(error));
     } else {
       if (!corpus) {
-        console.log(" corpus was empty " + pouchname);
+        console.log(new Date() + " corpus was empty " + dbname);
         df.resolve({});
       } else {
-        console.log(" using commonjs for corpusmask " + pouchname);
+        //console.log(" using commonjs for corpusmask " + dbname);
 
         corpus = new CorpusMask(corpus);
-        // corpus.gravatar = corpus.gravatar || md5(pouchname);
+        // corpus.gravatar = corpus.gravatar || md5(dbname);
         result.corpus = corpus;
-        console.log("Gettign team");
+        //console.log("Gettign team");
         corpusdb.get('team', function(error, team) {
           if (error) {
-            console.log(" team was missing " + pouchname);
+            console.log(new Date() + " team was missing " + dbname);
             df.reject(new Error(error));
           } else {
             if (!team) {
-              console.log(" team was empty " + pouchname);
+              console.log(new Date() + " team was empty " + dbname);
 
               result.team = {};
               df.resolve(result);
             } else {
-              console.log(" Using commonjs team ", pouchname);
+              //console.log(" Using commonjs team ", dbname);
 
               team = new Team(team);
               // if (!team.gravatar || team.gravatar.indexOf("anonymousbydefault") > -1) {
               //   if (team.email) {
               //     team.gravatar = md5(team.email);
               //   } else {
-              //     team.gravatar = md5(pouchname);
+              //     team.gravatar = md5(dbname);
               //   }
               // }
               // team.subtitle = team.subtitle || team.firstname + ' ' + team.lastname;
@@ -383,18 +384,18 @@ var getUser = function getUser(userId) {
 
   usersdb.get(userId, function(error, result) {
     if (error) {
-      console.log(" user was missing " + userId);
+      console.log(new Date() + " user was missing " + userId, error);
       df.reject(new Error(error));
     } else {
       if (!result) {
-        console.log(" user was empty " + userId);
+        console.log(new Date() + " user was empty " + userId, error);
         df.resolve({});
       } else {
 
-        console.log(" using commonjs user " + userId);
+        //console.log(" using commonjs user " + userId);
 
         result = new User(result);
-        // console.log("Showing the users public mask ", result.version);
+        // //console.log("Showing the users public mask ", result.version);
         if (!result.userMask) {
           result.userMask = {};
         }
@@ -402,8 +403,8 @@ var getUser = function getUser(userId) {
         // result.corpora = result.corpora || result.corpuses;
         // delete result.corpuses;
         console.log(new Date() + " getting the user " + userId + " their current corpora ", result.corpora.length);
-        // for (pouch in result.corpora) {
-        //   result.corpora[pouch].gravatar = md5(result.corpora[pouch].pouchname);
+        // for (database in result.corpora) {
+        //   result.corpora[database].gravatar = md5(result.corpora[database].dbname);
         // }
         // result.firstname = result.firstname || "";
         // result.lastname = result.lastname || "";
@@ -415,7 +416,7 @@ var getUser = function getUser(userId) {
             result.userMask.startYear = " " + year + " - ";
           }
         }
-        console.log("Calculating users start year for the copyright statement" + result.dateCreated + " startYear" + result.userMask.startYear);
+        //console.log("Calculating users start year for the copyright statement" + result.dateCreated + " startYear" + result.userMask.startYear);
         df.resolve(result.userMask);
       }
     }
@@ -425,10 +426,10 @@ var getUser = function getUser(userId) {
 
 };
 
-var getCorpus = function getCorpus(pouchId, titleAsUrl, corpusid) {
+var getCorpus = function getCorpus(dbname, titleAsUrl, corpusid) {
 
-  pouchId = sanitizeAgainstInjection(pouchId);
-  if (!pouchId) {
+  dbname = sanitizeAgainstInjection(dbname);
+  if (!dbname) {
     res.status(404);
     res.redirect("404.html")
     return;
@@ -440,7 +441,7 @@ var getCorpus = function getCorpus(pouchId, titleAsUrl, corpusid) {
     return;
   }
   corpusid = sanitizeAgainstInjection(corpusid);
-  console.log("The corpus id" + corpusid);
+  //console.log("The corpus id" + corpusid);
   if (corpusid === false) {
     res.status(404);
     res.redirect("404.html")
@@ -448,24 +449,24 @@ var getCorpus = function getCorpus(pouchId, titleAsUrl, corpusid) {
   }
 
   var df = Q.defer();
-  var corpusdb = nano.db.use(pouchId);
+  var corpusdb = nano.db.use(dbname);
   var doc = corpusid;
   var showPublicVersion = true;
   if (showPublicVersion) {
     doc = 'corpus';
   }
-  console.log("Getting corpus public mask");
+  //console.log("Getting corpus public mask");
   corpusdb.get(doc, function(error, result) {
     if (error) {
-      console.log(new Date() + " there was a problem getting corpusdb" + error);
+      console.log(new Date() + " there was a problem getting corpusdb", error);
       df.reject(new Error(error));
     } else {
       if (!result) {
-        console.log('No result');
+        console.log(new Date() + 'No result', result);
         df.reject(new Error('No result'));
       } else {
         result = new CorpusMask(result);
-        console.log(' Recieved result corpus mask');
+        //console.log(" Recieved result corpus mask");
         df.resolve(result);
       }
     }
@@ -481,29 +482,32 @@ function getRequestedCorpus(corporaCollection, titleAsUrl, corpusowner) {
   var resultingPromises = [];
 
   corporaCollection.map(function(connection) {
-    resultingPromises.push(getCorpus(connection.pouchname, titleAsUrl, connection.corpusid))
+    resultingPromises.push(getCorpus(connection.dbname, titleAsUrl, connection.corpusid))
   });
 
-  console.log("Requested corpus masks " + resultingPromises.length);
+  //console.log("Requested corpus masks " + resultingPromises.length);
   Q.allSettled(resultingPromises)
     .then(function(results) {
 
       results = results.map(function(result) {
         if (result.state === 'fulfilled') {
-          console.log(" Got back a corpus mask for " + result.value.dbname);
+          //console.log(" Got back a corpus mask for " + result.value.dbname);
           if (!result.value.connection) {
             result.value.connection = corporaCollection[result.value.dbname];
           }
           // corporaCollection[value.dbname] = value;
           // corporaCollection[value.dbname] 
           // // var value = new CorpusMask(result.value);
-          // result.value.connection.gravatar = result.value.connection.gravatar || md5(result.value.pouchname)
-          result.value.corpuspage = corpusowner + '/' + result.value.titleAsUrl + '/' + result.value.pouchname;
+          // result.value.connection.gravatar = result.value.connection.gravatar || md5(result.value.dbname)
+          result.value.corpuspage = corpusowner + '/' + result.value.titleAsUrl + '/' + result.value.dbname;
           return result.value
         } else {
+          console.log(new Date() + " One of the corpora had no corpus document." + corpusowner)
           return new CorpusMask({
             corpuspage: corpusowner + '/Unknown/' + corpusowner + '-firstcorpus',
             title: 'Unknown',
+            dbname: corpusowner + '-firstcorpus',
+            connection: corporaCollection[corpusowner + '-firstcorpus'],
             gravatar: "",
             description: 'Private corpus'
           });
@@ -511,7 +515,7 @@ function getRequestedCorpus(corporaCollection, titleAsUrl, corpusowner) {
       });
 
       // for (corpus in corporaCollection) {
-      //   console.log("Processing corpus", corporaCollection[corpus]);
+      //   //console.log("Processing corpus", corporaCollection[corpus]);
       //   corporaCollection[corpus] = new CorpusMask({
       //     connection: corporaCollection[corpus]
       //   });
@@ -519,25 +523,25 @@ function getRequestedCorpus(corporaCollection, titleAsUrl, corpusowner) {
       //   // {
       //   //   corpuspage: corpusowner + '/Unknown/' + corpusowner + '-firstcorpus',
       //   //   title: 'Unknown',
-      //   //   gravatar: md5(corporaCollection[corpus].pouchname),
+      //   //   gravatar: md5(corporaCollection[corpus].dbname),
       //   //   description: 'Private corpus'
       //   // };
 
       // }
       df.resolve(results);
     }).done(function() {
-      console.log("done promises");
+      //console.log("done promises");
     });
 
   return df.promise;
 
 }
 
-console.log("process.env.NODE_DEPLOY_TARGET " + process.env.NODE_DEPLOY_TARGET);
+//console.log("process.env.NODE_DEPLOY_TARGET " + process.env.NODE_DEPLOY_TARGET);
 
-if (true || process.env.NODE_DEPLOY_TARGET === "production") {
+if (process.env.NODE_DEPLOY_TARGET === "production") {
   app.listen(node_config.port);
-  console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
+  //console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
 } else {
   // config.httpsOptions.key = FileSystem.readFileSync(config.httpsOptions.key);
   // config.httpsOptions.cert = FileSystem.readFileSync(config.httpsOptions.cert);
@@ -546,6 +550,6 @@ if (true || process.env.NODE_DEPLOY_TARGET === "production") {
 
   https.createServer(node_config.httpsOptions, app).listen(node_config.port);
   // https.createServer(config.httpsOptions, AuthWebService).listen(node_config.port, function() {
-  console.log("Listening on https port %d", node_config.port);
+  //console.log("Listening on https port %d", node_config.port);
   // });
 }
