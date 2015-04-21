@@ -897,7 +897,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (!corpusIdentifierToRetrieve) {
               return;
             }
-            if (corpusIdentifierToRetrieve && $rootScope.corpus.dbname) {
+            if (corpusIdentifierToRetrieve && $rootScope.corpus && $rootScope.corpus.dbname) {
               if (!corporaAlreadyIn[$rootScope.corpus.dbname]) {
                 $scope.corpora.push($rootScope.corpus);
                 corporaAlreadyIn[$rootScope.corpus.dbname] = true;
@@ -1757,12 +1757,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadData($scope.activeSessionID);
   };
   if (FieldDB && FieldDB.DatumField) {
-    $scope.addedDatumField = new FieldDB.DatumField({
+    $rootScope.addedDatumField = new FieldDB.DatumField({
       id: Date.now(),
       label: "New Field " + Date.now()
     });
   } else {
-    $scope.addedDatumField = {
+    $rootScope.addedDatumField = {
       id: Date.now(),
       label: "New Field " + Date.now()
     };
