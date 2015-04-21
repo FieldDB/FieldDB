@@ -897,9 +897,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (!corpusIdentifierToRetrieve) {
               return;
             }
+            if (corpusIdentifierToRetrieve && $rootScope.corpus.dbname) {
+              if (!corporaAlreadyIn[$rootScope.corpus.dbname]) {
+                $scope.corpora.push($rootScope.corpus);
+                corporaAlreadyIn[$rootScope.corpus.dbname] = true;
+              }
+              return;
+            }
             // Use map-reduce to get corpus details
 
-            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/corpus_title_description")
+            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/public_corpora")
               .then(function(response) {
                 var corpus = {};
                 if (response.rows && response.rows[0]) {
@@ -1051,7 +1058,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
       }
     }
-    $rootScope.corpus = $scope.corpus = selectedCorpus;
+    if ($rootScope.corpus !== selectedCorpus) {
+      $rootScope.corpus = selectedCorpus;
+    }
 
     $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
 
