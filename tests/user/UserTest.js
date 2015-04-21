@@ -37,6 +37,7 @@ describe("User ", function() {
 
       expect(u.toJSON()).toEqual({
         fieldDBtype: "User",
+        _id: "bill",
         username: "bill",
         gravatar: "67890954367898765",
         firstname: "",
@@ -218,6 +219,14 @@ describe("User ", function() {
       expect(user.corpora.length).toEqual(2);
     });
 
+    it("should serialize username as id", function() {
+      var user = new User({
+        username: "jumbo"
+      }).toJSON();
+      expect(user.username).toBeDefined();
+      expect(user._id).toEqual("jumbo");
+      expect(user._id).toEqual(user.username);
+    });
 
   });
 

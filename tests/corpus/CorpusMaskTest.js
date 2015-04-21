@@ -77,12 +77,23 @@ describe("CorpusMask ", function() {
       expect(corpusJson.conversationFields).toEqual([]);
       expect(corpusJson.sessionFields).toEqual([]);
       expect(corpusJson.prefs).toEqual(corpusJson.prefs);
-      expect(corpusJson.team).toEqual({});
       expect(corpusJson.permissions).toEqual([]);
       expect(corpusJson.pouchname).toEqual("lingllama-communitycorpus");
       expect(corpusJson.api).toEqual("corpora");
-      expect(corpusJson.team).toEqual({});
-      expect(corpusJson.team).toEqual({});
+      expect(corpusJson.team).toEqual({
+        fieldDBtype: "Team",
+        _id: "team",
+        username: "",
+        firstname: "",
+        lastname: "",
+        gravatar: "",
+        researchInterest: "",
+        affiliation: "",
+        description: "",
+        fields: [],
+        version: corpusJson.team.version,
+        api: "users"
+      });
 
       expect(corpusJson.connection.fieldDBtype).toEqual("Connection");
       expect(corpusJson.connection.dateCreated).toEqual(corpusJson.connection.dateCreated);
@@ -181,6 +192,15 @@ describe("CorpusMask ", function() {
       expect(corpus.sessionFields.location.labelNonLinguists).toEqual("Location");
       expect(corpus.speakerFields.length).toEqual(1);
       expect(corpus.speakerFields.anonymouscode.labelNonLinguists).toEqual("Anonymous Code");
+
+    });
+
+    describe("serialization", function() {
+
+      it("should serialize the id as corpus", function() {
+        var corpus = new CorpusMask().toJSON();
+        expect(corpus._id).toEqual("corpus");
+      });
 
     });
   });

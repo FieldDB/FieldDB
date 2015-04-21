@@ -1851,6 +1851,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         if (this.useIdNotUnderscore) {
           json.id = this.id;
+        } else {
+          json._id = this.id;
         }
 
         if (!attributesToIgnore) {
