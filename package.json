@@ -2,11 +2,12 @@
   "name": "FieldDBWebServer",
   "version": "2.49.29",
   "dependencies": {
-    "express": "3.3.7",
-    "forever": "latest",
-    "nano": "~3.3.8",
-    "jade": "~0.31.2",
     "MD5": "~1.0.3",
+    "express": "3.3.7",
+    "fielddb": "^3.0.21",
+    "forever": "latest",
+    "jade": "~0.31.2",
+    "nano": "~3.3.8",
     "q": "~0.9.6"
   }
 }
