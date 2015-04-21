@@ -1653,7 +1653,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (this._dbname && this._dbname !== "default" && this.rev) {
-        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus to " + value + ", you must create a clone of the object first.");
       }
       if (!value) {
         delete this._dbname;
@@ -1738,6 +1738,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateCreated: {
     get: function() {
+      if (this.created_at) {
+        this.dateCreated = this.created_at;
+      }
       return this._dateCreated || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
@@ -1763,6 +1766,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateModified: {
     get: function() {
+      if (!this._dateModified && this.updated_at) {
+        this.dateModified = this.updated_at;
+      }
       return this._dateModified || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
