@@ -87,9 +87,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     set: function(value) {
       if (value) {
         value.parent = this;
-        if (!value.confidential && this.confidential) {
-          value.confidential = this.confidential;
-        }
+        // if (!value.confidential && this.confidential) {
+        //   value.confidential = this.confidential;
+        // }
       }
       this.ensureSetViaAppropriateType("connection", value);
       if (this._connection && this._connection.dbname && this._connection.dbname !== "default" && !this.dbname) {
