@@ -190,17 +190,17 @@ define([
     fetchPublicSelf : function(){
       try{
         var corpusself = this;
-        if(!this.get("publicSelf")){
-          this.set("publicSelf", new CorpusMask());
+        if(!this.get("corpusMask")){
+          this.set("corpusMask", new CorpusMask());
         }
-        this.get("publicSelf").id = "corpus";
-        this.get("publicSelf").fetch({sucess: function(model, response, options){
+        this.get("corpusMask").id = "corpus";
+        this.get("corpusMask").fetch({sucess: function(model, response, options){
           if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
         }, error: function(model, xhr, options){
           if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-          corpusself.get("publicSelf").fillWithDefaults();
-          corpusself.get("publicSelf").set("connection", corpusself.get("connection"));
-          corpusself.get("publicSelf").set("dbname", corpusself.get("dbname"));
+          corpusself.get("corpusMask").fillWithDefaults();
+          corpusself.get("corpusMask").set("connection", corpusself.get("connection"));
+          corpusself.get("corpusMask").set("dbname", corpusself.get("dbname"));
         }});
       }catch(e){
         OPrime.bug("");
@@ -211,8 +211,8 @@ define([
         this.set("confidential", new Confidential({filledWithDefaults : true}) );
       }
 
-      if(!this.get("publicSelf")){
-        this.set("publicSelf", new CorpusMask({
+      if(!this.get("corpusMask")){
+        this.set("corpusMask", new CorpusMask({
           "filledWithDefaults" : true,
           "connection" : this.get("connection"),
           "dbname" : this.get("dbname")
@@ -432,6 +432,7 @@ define([
       originalModel.datumFields = originalModel.datumFields || [];
       originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       originalModel.connection = originalModel.connection || originalModel.couchConnection;
+      originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
 
       /* clean the datum fields for search */
       for (x in originalModel.datumFields) {
@@ -677,7 +678,7 @@ define([
       searchFields : DatumFields,
 //      sessions : Sessions,
 //      dataLists : DataLists,
-      publicSelf : CorpusMask,
+      corpusMask : CorpusMask,
       comments: Comments,
       team: UserMask
     },
@@ -774,7 +775,7 @@ define([
       attributes.dataLists = [];
       attributes.sessions = [];
       attributes.comments = [];
-      attributes.publicSelf = {filledWithDefaults: true};
+      attributes.corpusMask = {filledWithDefaults: true};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
       //clear out search terms from the new corpus's datum fields
       /* use default datum fields if this is going to based on teh users' first practice corpus */
@@ -813,7 +814,7 @@ define([
       attributes.titleAsUrl = this.get("titleAsUrl")+"Copy";
       attributes.dbname = this.get("dbname")+"copy";
       attributes.connection.dbname = this.get("dbname")+"copy";
-      attributes.publicSelf = {};
+      attributes.corpusMask = {};
       attributes.team = window.app.get("authentication").get("userPublic").toJSON();
 
       window.appView.corpusNewModalView.model = new Corpus();
@@ -997,9 +998,9 @@ define([
 //              differences = "";
 //            }
             //save the corpus mask too
-            var publicSelfMode = model.get("publicSelf");
-            publicSelfMode.set("corpusid", model.id);
-            publicSelfMode.saveAndInterConnectInApp();
+            var corpusMaskMode = model.get("corpusMask");
+            corpusMaskMode.set("corpusid", model.id);
+            corpusMaskMode.saveAndInterConnectInApp();
 
             if(window.appView){
               window.appView.toastUser("Sucessfully saved corpus: "+ title,"alert-success","Saved!");

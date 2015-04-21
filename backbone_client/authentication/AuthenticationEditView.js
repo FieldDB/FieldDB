@@ -562,7 +562,7 @@ define([
                   window.functionToSaveNewCorpus = function() {
                     newCorpusToBeSaved.save(null, {
                       success: function(model, response) {
-                        model.get("publicSelf").set("corpusid", model.id);
+                        model.get("corpusMask").set("corpusid", model.id);
                         auth.get("userPrivate").set("mostRecentIds", {});
                         auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
                         model.get("connection").corpusid = model.id;
@@ -577,7 +577,7 @@ define([
                             window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
                           }, 1000);
                         };
-                        model.get("publicSelf").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                        model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
 
                       },
                       error: function(e, f, g) {
