@@ -622,13 +622,19 @@ Connection.knownConnections = {
 };
 Connection.knownConnections.production = Connection.knownConnections.lingsync;
 
-Connection.defaultConnection = function(optionalHREF) {
+Connection.defaultConnection = function(optionalHREF, passAsReference) {
   /*
    * If its a couch app, it can only contact databases on its same origin, so
    * modify the domain to be that origin. the chrome extension can contact any
    * authorized server that is authorized in the chrome app's manifest
    */
   var connection;
+  var otherwise = "production";
+  try {
+    otherwise = process.env.NODE_DEPLOY_TARGET || "localhost";
+  } catch (e) {
+    // not running in node environment.
+  }
 
   /* Ensuring at least the localhost connection is known */
   if (!Connection.knownConnections) {
@@ -663,7 +669,9 @@ Connection.defaultConnection = function(optionalHREF) {
     }
   }
 
-  if (optionalHREF.indexOf("_design/pages") > -1) {
+  if (Connection.knownConnections[optionalHREF]) {
+    connection = Connection.knownConnections[optionalHREF];
+  } else if (optionalHREF.indexOf("_design/pages") > -1) {
     if (optionalHREF.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = Connection.knownConnections.beta;
     } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
@@ -691,7 +699,7 @@ Connection.defaultConnection = function(optionalHREF) {
     } else if (optionalHREF.indexOf("lingsync") >= 0) {
       connection = Connection.knownConnections.production;
     } else if (optionalHREF.indexOf("localhost") >= 0) {
-      connection = Connection.knownConnections.localhost;
+      connection = Connection.knownConnections[otherwise];
     }
   }
 
@@ -719,8 +727,8 @@ Connection.defaultConnection = function(optionalHREF) {
       // console.log(connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
-      console.warn("There was no way to deduce the HREF, probably we are in Node. Using localhost instead. ", optionalHREF);
-      connection = Connection.knownConnections.localhost;
+      console.warn("There was no way to deduce the HREF, probably we are in Node. Using " + otherwise + " instead. ", optionalHREF);
+      connection = Connection.knownConnections[otherwise];
     } else {
       var domainName = connectionUrlObject.hostname.split(".");
       while (domainName.length > 2) {
@@ -738,9 +746,12 @@ Connection.defaultConnection = function(optionalHREF) {
         authUrls: [optionalHREF],
         userFriendlyServerName: domainName
       };
+      Connection.knownConnections[connection.serverLabel] = connection;
     }
   }
-  connection = new Connection(connection).clone();
+  if (!passAsReference) {
+    connection = new Connection(connection).clone();
+  }
   return connection;
 };
 

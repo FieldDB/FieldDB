@@ -112,11 +112,11 @@ require(
         }
       };
 
-      window.backupPouch = function(pouchname) {
+      window.backupPouch = function(dbname) {
         /* Ignore pouches that don't need to be replicated */
-        pouchname = pouchname.replace(/_id/g,"");
+        dbname = dbname.replace(/_id/g,"");
 
-        if (window.databasesThatDontNeedReplication.indexOf(pouchname) >= 0) {
+        if (window.databasesThatDontNeedReplication.indexOf(dbname) >= 0) {
           /* Go to the next pouch */
           window.currentPouch++;
           if (window.currentPouch < window.pouches.length) {
@@ -124,13 +124,13 @@ require(
           }
         }
         try{
-        pouchnameid = pouchname + "_id";
-        Pouch.replicate('idb://' + pouchnameid,
-            'https://corpusdev.lingsync.org/' + pouchname, {
+        dbnameid = dbname + "_id";
+        Pouch.replicate('idb://' + dbnameid,
+            'https://corpusdev.lingsync.org/' + dbname, {
               complete : function() {
                 $("#dashboard_loading_spinner").append(
-                    "<h2>Finished backing up " + pouchname + " to "
-                        + "https://corpusdev.lingsync.org/" + pouchname
+                    "<h2>Finished backing up " + dbname + " to "
+                        + "https://corpusdev.lingsync.org/" + dbname
                         + "</h2>");
                  /* Go to the next pouch */
                   window.currentPouch++;
@@ -142,8 +142,8 @@ require(
               },
               onChange : function(change) {
                 $("#dashboard_loading_spinner").append(
-                    "<div>Backing up " + pouchname + " to "
-                        + "https://corpusdev.lingsync.org/" + pouchname
+                    "<div>Backing up " + dbname + " to "
+                        + "https://corpusdev.lingsync.org/" + dbname
                         + " Change:  " + JSON.stringify(change) + '</div>');
               },
               onSuccess : function(info) {
@@ -151,14 +151,14 @@ require(
               }
 
             }, function(err, changes) {
-              console.log("Backing up " + pouchname + " to "
-                  + 'https://corpusdev.lingsync.org/' + pouchname, err,
+              console.log("Backing up " + dbname + " to "
+                  + 'https://corpusdev.lingsync.org/' + dbname, err,
                   changes);
               if (!err) {
-                window.actuallyReplicatedPouches.push(pouchname);
+                window.actuallyReplicatedPouches.push(dbname);
                 $("#dashboard_loading_spinner").append(
-                    "<h2>Finished backing up " + pouchname + " to "
-                        + "https://corpusdev.lingsync.org/" + pouchname
+                    "<h2>Finished backing up " + dbname + " to "
+                        + "https://corpusdev.lingsync.org/" + dbname
                         + "</h2>");
                 $("#dashboard_loading_spinner").append(
                     "<small>Changes " + JSON.stringify(changes) + "</small>");

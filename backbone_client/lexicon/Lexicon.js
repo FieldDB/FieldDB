@@ -32,14 +32,14 @@ define([
        * Overwrite/build the lexicon from the corpus server if it is there, saves
        * the results to local storage so they can be reused offline.
        *
-       * @param pouchname
+       * @param dbname
        * @param callback
        */
-      buildLexiconFromCouch: function(pouchname, callback) {
+      buildLexiconFromCouch: function(dbname, callback) {
         var self = this;
-        var couchConnection = app.get("corpus").get("couchConnection");
-        var couchurl = OPrime.getCouchUrl(couchConnection);
-        if (localStorage.getItem(pouchname + "lexiconResults")) {
+        var connection = app.get("corpus").get("connection");
+        var couchurl = OPrime.getCouchUrl(connection);
+        if (localStorage.getItem(dbname + "lexiconResults")) {
           if (typeof callback == "function") {
             callback();
           }
@@ -49,7 +49,7 @@ define([
           type: 'GET',
           url: couchurl + "/_design/pages/_view/lexicon_create_tuples?group=true"
         }).then(function(results) {
-          if (localStorage.getItem(pouchname + "lexiconResults")) {
+          if (localStorage.getItem(dbname + "lexiconResults")) {
             if (typeof callback == "function") {
               callback();
             }
@@ -79,12 +79,12 @@ define([
           for (var key in sortedLexicon) {
             sortedLexicon[key].sort(sorter);
           }
-          localStorage.setItem(pouchname + "lexiconResults", JSON.stringify(sortedLexicon));
+          localStorage.setItem(dbname + "lexiconResults", JSON.stringify(sortedLexicon));
 
           // if (! self.get("lexiconNodes")){
           //   self.set("lexiconNodes", new LexiconNodes());
           // }
-          // localStorage.setItem(pouchname+"lexiconResults", JSON.stringify(results));
+          // localStorage.setItem(dbname+"lexiconResults", JSON.stringify(results));
           // var lexiconTriples = results.rows;
           // for (triple in lexiconTriples) {
           //   self.get("lexiconNodes").add(new LexiconNode({
@@ -104,11 +104,11 @@ define([
        *
        * Overwrite/build the lexicon from local storage if it is there.
        *
-       * @param pouchname
+       * @param dbname
        * @param callback
        */
-      buildLexiconFromLocalStorage: function(pouchname, callback) {
-        // var results = localStorage.getItem(pouchname+"lexiconResults");
+      buildLexiconFromLocalStorage: function(dbname, callback) {
+        // var results = localStorage.getItem(dbname+"lexiconResults");
         // if(!results){
         //   return;
         // }

@@ -299,7 +299,7 @@ define([
         this.set("dateCreated",JSON.stringify(new Date()));
       }
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
+      if(window.app.get("corpus").get("dbname") != this.get("dbname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -395,7 +395,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentSession : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
+      if( window.app.get("corpus").get("dbname") != this.get("dbname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{

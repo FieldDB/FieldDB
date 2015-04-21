@@ -55,42 +55,48 @@ define([
     },
     originalParse : Backbone.Model.prototype.parse,
     parse: function(originalModel) {
-      var tmp;
+      var tmp,
+      normalizedConnection;
+
+      /* upgrade to 2.40+ data structures */
       originalModel.corpora = originalModel.corpora || originalModel.corpuses;
+      delete originalModel.corpuses;
+
       var corporaUserHasAccessTo = localStorage.getItem(originalModel.username + "corporaUserHasAccessTo");
-      if(corporaUserHasAccessTo){
-        originalModel.corpora = JSON.parse(corporaUserHasAccessTo);
-      }
-      for (var corpusIndex = 0; corpusIndex < originalModel.corpora.length; corpusIndex++) {
-        tmp = originalModel.corpora[corpusIndex];
-        originalModel.corpora[corpusIndex] = OPrime.defaultCouchConnection();
-        originalModel.corpora[corpusIndex].corpusid = tmp.corpusid;
-        originalModel.corpora[corpusIndex].pouchname = tmp.pouchname;
-        originalModel.corpora[corpusIndex].title = tmp.title;
-        originalModel.corpora[corpusIndex].description = tmp.description;
-        originalModel.corpora[corpusIndex].titleAsUrl = tmp.titleAsUrl;
-      }
-      if (originalModel.mostRecentIds && originalModel.mostRecentIds.couchConnection) {
-        tmp = originalModel.mostRecentIds.couchConnection;
-        originalModel.mostRecentIds.couchConnection = OPrime.defaultCouchConnection();
-        originalModel.mostRecentIds.couchConnection.corpusid = tmp.corpusid;
-        originalModel.mostRecentIds.couchConnection.pouchname = tmp.pouchname;
-        originalModel.mostRecentIds.couchConnection.title = tmp.title;
-        originalModel.mostRecentIds.couchConnection.description = tmp.description;
-        originalModel.mostRecentIds.couchConnection.titleAsUrl = tmp.titleAsUrl;
-      }
-      if (originalModel.activityCouchConnection) {
-        tmp = originalModel.activityCouchConnection;
-        originalModel.activityCouchConnection = OPrime.defaultCouchConnection();
-        originalModel.activityCouchConnection.pouchname = tmp.pouchname;
+      if (corporaUserHasAccessTo && corporaUserHasAccessTo.indexOf("[") === 0) {
+        corporaUserHasAccessTo = JSON.parse(corporaUserHasAccessTo);
+        corporaUserHasAccessTo = new FieldDB.Corpora(corporaUserHasAccessTo);
+        corporaUserHasAccessTo.add(originalModel.corpora);
+        corporaUserHasAccessTo.remove("public-firstcorpus");
+        originalModel.corpora = corporaUserHasAccessTo.toJSON();
       }
 
-      var couchConnection = originalModel.mostRecentIds.couchConnection;
-      if (!couchConnection) {
-        couchConnection = originalModel.corpora[0];
-        originalModel.mostRecentIds.couchConnection = couchConnection;
+      originalModel.authUrl = OPrime.getAuthUrl(originalModel.authUrl);
+      originalModel.activityConnection = originalModel.activityConnection || originalModel.activityCouchConnection;
+      delete originalModel.activityCouchConnection;
+      if (originalModel.activityConnection) {
+        originalModel.activityConnection = new FieldDB.Connection(originalModel.activityConnection);
+        normalizedConnection = OPrime.defaultConnection();
+        normalizedConnection.dbname = originalModel.activityConnection.dbname;
+        originalModel.activityConnection.merge("self", normalizedConnection, "overwrite");
+        originalModel.activityConnection = originalModel.activityConnection.toJSON()
       }
-      if (!couchConnection) {
+
+      if (originalModel.mostRecentIds ) {
+        originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection || originalModel.mostRecentIds.couchConnection;
+        originalModel.mostRecentIds.connection = new FieldDB.Connection(originalModel.mostRecentIds.connection);
+        normalizedConnection = OPrime.defaultConnection();
+        normalizedConnection.dbname = originalModel.mostRecentIds.connection.dbname;
+        originalModel.mostRecentIds.connection.merge("self", normalizedConnection, "overwrite");
+        originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection.toJSON();
+        delete originalModel.mostRecentIds.couchConnection;
+      }
+      var connection = originalModel.mostRecentIds.connection;
+      if (!connection) {
+        connection = originalModel.corpora[0];
+        originalModel.mostRecentIds.connection = connection;
+      }
+      if (!connection) {
         if (window.location.pathname.indexOf("user.html") === -1) {
           OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
           window.location.replace("user.html");
@@ -98,16 +104,6 @@ define([
         } else {
           alert("There was an error loading your user, please report this");
         }
-      }
-
-      /* Upgrade chrome app user corpora's to v1.38+ */
-      if(couchConnection && couchConnection.domain == "ifielddevs.iriscouch.com"){
-        couchConnection.domain  = "corpus.lingsync.org";
-        couchConnection.port = "";
-      }
-      /* Upgrade chrome app user corpora's to v1.90+ */
-      if(couchConnection && couchConnection.domain == "corpusdev.lingsync.org"){
-        couchConnection.domain  = "corpus.lingsync.org";
       }
 
       return this.originalParse(originalModel);
@@ -161,39 +157,48 @@ define([
       }
     },
 
-    updateListOfCorpora: function(roles, couchConnectionInscope){
-      var corpora =  new Corpuses();
+    updateListOfCorpora: function(roles, connectionInscope){
       var username = this.get("username");
-      if(username == "public"){
+      if (username == "public") {
         return;
       }
-      if(!couchConnectionInscope){
-        couchConnectionInscope = window.app.get("couchConnection");
+      if(this.currentlyCalculatingRoles && this.currentlyCalculatingRoles.length === roles.length){
+        return;
       }
+      this.currentlyCalculatingRoles = roles;
+
+      var corpora = this.get("corpora");
+      if (corpora) {
+        if (corpora.toJSON) {
+          corpora = corpora.toJSON();
+        }
+        corpora = new FieldDB.Corpora(corpora);
+      } else {
+        corpora = new FieldDB.Corpora();
+      }
+
       for (var role in roles) {
-        var thisCouchConnection = JSON.parse(JSON.stringify(couchConnectionInscope));
-        thisCouchConnection.corpusid = "";
-        thisCouchConnection.pouchname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-        thisCouchConnection.title = thisCouchConnection.pouchname;
-        if (thisCouchConnection.title.length > 30) {
-          thisCouchConnection.title = thisCouchConnection.title.replace(username + "-", "");
-        }
-        if (thisCouchConnection.title.length > 30) {
-          thisCouchConnection.title = thisCouchConnection.title.substring(0, 10) + "..." + thisCouchConnection.title.substring(thisCouchConnection.title.length - 15, thisCouchConnection.title.length - 1);
-        }
-        thisCouchConnection.id = thisCouchConnection.pouchname;
-        if (thisCouchConnection.pouchname.length > 4 && thisCouchConnection.pouchname.split("-").length === 2) {
-          if (corpora.where({
-            "pouchname": thisCouchConnection.pouchname
-          }).length === 0) {
-            corpora.push(new CorpusMask(thisCouchConnection));
-          } else {
-            OPrime.debug(thisCouchConnection.pouchname + " Already known");
+        var dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+        if (dbname && !corpora[dbname] && dbname !== "public-firstcorpus") {
+          newconnection = new FieldDB.Connection(OPrime.defaultConnection());
+          newconnection.dbname = dbname;
+          if (newconnection.title && newconnection.title.length > 30) {
+            newconnection.title = newconnection.title.replace(username + "-", "");
           }
+          if (newconnection.title && newconnection.title.length > 30) {
+            newconnection.title = newconnection.title.substring(0, 10) + "..." + newconnection.title.substring(newconnection.title.length - 15, newconnection.title.length - 1);
+          }
+          newconnection.id = newconnection.dbname;
+          corpora.add(newconnection.toJSON());
+        } else {
+          OPrime.debug(dbname + " Already known");
         }
       }
+      // corpora = new Corpuses(corpora.toJSON());
+      corpora = corpora.toJSON();
+      this.set("corpora", corpora);
       window.app.set("corporaUserHasAccessTo", corpora);
-      localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora.toJSON()));
+      localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora));
     }
 
   });

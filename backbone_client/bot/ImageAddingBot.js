@@ -16,15 +16,15 @@ Array.prototype.getUnique = function() {
   return a;
 };
 
-var Bot = function(pouchname, corpusid, corpustitle, optionalDataListForReviewBeforeRunning) {
-  if (!pouchname || !corpusid || !corpustitle) {
+var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBeforeRunning) {
+  if (!dbname || !corpusid || !corpustitle) {
     throw ("You must create this bot with a database name, a corpus id and a corpus title. ");
   }
   var stopAt = 100;
 
 
-  var activities = $.couch.db(pouchname + "-activity_feed");
-  var database = $.couch.db(pouchname);
+  var activities = $.couch.db(dbname + "-activity_feed");
+  var database = $.couch.db(dbname);
 
   var name = "imageaddingbot";
   var gravatar = "968b8e7fb72b5ffe2915256c28a9414c";

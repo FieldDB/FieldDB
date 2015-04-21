@@ -20,12 +20,12 @@ OPrime.chromeClientUrl = function() {
  * login to any server, and register on the corpus server which matches its
  * origin.
  */
-OPrime.defaultCouchConnection = function() {
+OPrime.defaultConnection = function() {
   var localhost = {
     protocol: "https://",
     domain: "localhost",
     port: "6984",
-    pouchname: "default",
+    dbname: "default",
     path: "",
     authUrl: "https://localhost:3183",
     userFriendlyServerName: "Localhost"

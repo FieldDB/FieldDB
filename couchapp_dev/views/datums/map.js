@@ -6,7 +6,7 @@ function(doc) {
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
-    if (doc.collection == "datums" || (doc.datumFields && doc.session)) {
+    if (doc.fieldDBtype === "Datum" || doc.collection == "datums" || (doc.datumFields && doc.session)) {
       var dateModified = doc.dateModified;
       if (dateModified) {
         try {

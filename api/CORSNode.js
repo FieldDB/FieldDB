@@ -34,7 +34,7 @@ CORS.makeCORSRequest = function(options) {
   urlObject.method = options.method;
 
   var httpOrHttps = http;
-  if (urlObject.protocol == "https://") {
+  if (urlObject.protocol === "https://") {
     httpOrHttps = https;
   }
   delete urlObject.protocol;

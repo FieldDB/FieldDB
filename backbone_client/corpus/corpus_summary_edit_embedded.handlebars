@@ -27,8 +27,8 @@
         <li><a href="#import"  >{{locale_Import_Data}}</a></li>
         <li><a href="{{exportAllDatumURL}}" target="_blank">{{locale_Export_Data}}</a></li>
         <li><a href="{{exportWordListURL}}" target="_blank">Word List</a></li>
-        <li><a href="#corpus/{{pouchname}}/alldata">{{locale_All_Data}}</a></li>
-        
+        <li><a href="#corpus/{{dbname}}/alldata">{{locale_All_Data}}</a></li>
+
       </ul>
     </div>
     <!-- /Corpus Menu - Identical for all Corpus Handlebars -->
@@ -36,7 +36,7 @@
 </div>
 
 <div class="corpus-description">
-	<label>{{locale_Title}}</label> <i class="icon-cloud"></i> 
+	<label>{{locale_Title}}</label> <i class="icon-cloud"></i>
 	<!-- <a href = "http://lingsync.org/{{username}}/{{titleAsUrl}}" target = "_blank"><small><i class=" icon-link"></i></small></a> -->
 	<textarea class="corpus-title-input save-corpus-blur">{{title}}</textarea>
 	<label>{{locale_Description}}</label>

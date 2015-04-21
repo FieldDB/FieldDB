@@ -1,6 +1,6 @@
-define([ 
-    "backbone", 
-    "handlebars", 
+define([
+    "backbone",
+    "handlebars",
     "data_list/DataList",
     "data_list/DataListEditView",
     "datum/Datum",
@@ -12,8 +12,8 @@ define([
     "app/PaginatedUpdatingCollectionView",
     "OPrime"
 ], function(
-    Backbone, 
-    Handlebars, 
+    Backbone,
+    Handlebars,
     DataList,
     DataListEditView,
     Datum,
@@ -30,29 +30,29 @@ define([
     /**
      * @class Search View handles the render of the global search in the corner,
      *        and the advanced power search, as well as their events.
-     * 
-     * @property {String} format Valid values are "fullscreen", "top", or "centreWell" 
-     * 
+     *
+     * @property {String} format Valid values are "fullscreen", "top", or "centreWell"
+     *
      * @description Starts the Search.
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("SEARCH init: " + this.el);
-      
+
       this.newTempDataList();
       this.changeViewsOfInternalModels();
       this.userSetSearchToBlank = false;
 
       this.model.bind('change', this.render, this);
     },
-    
+
     /**
      * The underlying model of the SearchEditView is a Search.
      */
     model : Search,
-    
+
     /**
      * Events that the SearchEditView is listening to and their handlers.
      */
@@ -75,7 +75,7 @@ define([
 ////          e.stopPropagation();
 ////        }
 //        var code = e.keyCode || e.which;
-//        
+//
 //        // code == 13 is the enter key
 //        if (code == 13) {
 //          this.searchTop();
@@ -83,22 +83,22 @@ define([
 ////        return false;
 //      }
     },
-    
+
     /**
      * The Handlebars template rendered as the embedded AdvancedSearchView.
      */
     embeddedTemplate : Handlebars.templates.search_advanced_edit_embedded,
-    
+
     /**
      * The Handlebars template rendered as the fullscreen AdvancedSearchView.
      */
     fullscreenTemplate : Handlebars.templates.search_advanced_edit_embedded,
-    
+
     /**
      * The Handlebars template rendered as the TopSearchView.
      */
     topTemplate : Handlebars.templates.search_top,
-   
+
     /**
      * Renders the SearchEditView.
      */
@@ -114,7 +114,7 @@ define([
       jsonToRender.locale_OR = Locale.get("locale_OR");
       jsonToRender.locale_Advanced_Search_Tooltip = Locale.get("locale_Advanced_Search_Tooltip");
       jsonToRender.locale_advanced_search_explanation = Locale.get("locale_advanced_search_explanation");
-      
+
       //this.setElement($("#search-top"));
       var searchKeywords = this.model.get("searchKeywords");
       if (!searchKeywords && !this.userSetSearchToBlank) {
@@ -127,30 +127,30 @@ define([
         }
       }
       jsonToRender.searchKeywords = searchKeywords;
-      
+
       if (this.format == "fullscreen") {
         // Display the SearchView
         this.setElement($("#search-fullscreen"));
-        $(this.el).html(this.fullscreenTemplate(jsonToRender));        
+        $(this.el).html(this.fullscreenTemplate(jsonToRender));
       } else if (this.format == "centreWell") {
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
-      } 
+      }
       $("#search-top").html(this.topTemplate(jsonToRender));
-      
-      
+
+
 //      $(this.el).find(".judgement").find("input").val("grammatical");
       this.advancedSearchDatumView.el = this.$('.advanced_search_datum');
       this.advancedSearchDatumView.render();
-      
+
       this.advancedSearchSessionView.el = this.$('.advanced_search_session');
       this.advancedSearchSessionView.render();
 
 
-      
+
       try{
-        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
+        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("dbname"));
       }catch(e){
         window.appView.toastUser("There was a problem loading your corpus visualization.");
       }
@@ -176,7 +176,7 @@ define([
           delete this.searchPaginatedDataListDatumsView.collection;
           delete this.searchPaginatedDataListDatumsView; //tell garbage collecter we arent using it
         }
-        
+
         /*
          * This holds the ordered datums of the temp search data list
          */
@@ -186,8 +186,8 @@ define([
           childViewTagName     : "li",
           childViewFormat      : "latex",
           childViewClass       : "row span12"
-        }); 
-        
+        });
+
         // Scrub this better pouch it was still saving it as a revision.
         if(this.searchDataListView){
           this.searchDataListView.destroy_view();
@@ -196,7 +196,7 @@ define([
           delete this.searchDataListView.model; //tell the garbage collector we are done.
 //          delete this.searchDataListView;
         }
-        
+
 //        var attributes = JSON.parse(JSON.stringify(new DataList({datumIds: []})));
 //        // Clear the current data list's backbone info and info which we shouldnt clone
 //        attributes._id = undefined;
@@ -204,30 +204,30 @@ define([
 //        attributes.comments = undefined;
 //        attributes.title = self.model.get("title")+ " copy";
 //        attributes.description = "Copy of: "+self.model.get("description");
-//        attributes.pouchname = app.get("corpus").get("pouchname");
+//        attributes.dbname = app.get("corpus").get("dbname");
 //        attributes.datumIds = [];
-        
-        
+
+
         this.searchDataListView = new DataListEditView({
 //          model : new DataList(attributes),
           model : new DataList({
             filledWithDefaults: true,
-            "pouchname" : window.app.get("corpus").get("pouchname"),
+            "dbname" : window.app.get("corpus").get("dbname"),
             "title" : "Temporary Search Results",
             "description":"You can use search to create data lists for handouts."
           }),
-        }); 
+        });
         this.searchDataListView.format = "search-minimized";
-        
+
         if(typeof callback == "function"){
           callback();
         }
 //      }
     },
     changeViewsOfInternalModels : function(){
-      
+
       //TODO, why clone? with clones they are never up to date with what is in the corpus.
-      //put "grammatical" to search by default for only grammatical forms. 
+      //put "grammatical" to search by default for only grammatical forms.
       // window.app.get("corpus").get("datumFields").where({label: "judgement"})[0].set("mask","grammatical");
       this.advancedSearchDatumView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("datumFields"),
@@ -235,14 +235,14 @@ define([
         childViewTagName     : 'tr',
         childViewFormat      : "search"
       });
-      
+
       this.advancedSearchSessionView = new UpdatingCollectionView({
         collection           : window.app.get("corpus").get("sessionFields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : 'tr',
         childViewFormat      : "search"
       });
-      
+
     },
     /**
      * Perform a search that finds the union of all the criteria.
@@ -250,17 +250,17 @@ define([
     searchUnion : function() {
       if (OPrime.debugMode) OPrime.debug("In searchUnion");
       window.scrollTo(0,0);
-      
+
       // Create a query string from the search criteria
       var queryString = this.getQueryString("union");
-      
+
       // Update the search box
       this.model.set("searchKeywords", queryString);
-      
+
       // Start the search
       this.search(queryString);
     },
-    
+
     /**
      * Perform a search that finds the intersection of all the criteria.
      */
@@ -270,32 +270,32 @@ define([
 
       // Create a query string from the search criteria
       var queryString = this.getQueryString("intersection");
-      
+
       // Update the search box
       this.model.set("searchKeywords", queryString);
-      
+
       // Start the search
       this.search(queryString);
     },
-    
+
     /**
      * Perform a search.
      */
     searchTop : function() {
       if (OPrime.debugMode) OPrime.debug("Will search for " + $("#search_box").val());
       this.model.set("searchKeywords", $("#search_box").val());
-      
+
       if($("#search_box").val() == ""){
         this.userSetSearchToBlank = true;
       }else{
         this.userSetSearchToBlank = false;
       }
-            // Search for Datum that match the search criteria      
+            // Search for Datum that match the search criteria
       this.search($("#search_box").val());
-      
+
     },
-    
-    
+
+
     /**
      * Create a string representation of the search criteria. Each
      * Object's key is the datum field's label and its value is the datum
@@ -305,14 +305,14 @@ define([
      *    gloss : "searchForThisGloss",
      *    translation : "searchForThisTranslation"
      *  }
-     * 
+     *
      * @return {Object} The created query object.
      */
-    getQueryString : function(type) {      
+    getQueryString : function(type) {
       // All the search fields related to Datum
       var datumFieldsViews = this.advancedSearchDatumView.collection;
       var sessionFieldsView = this.advancedSearchSessionView.collection;
-      
+
       // Get all the search criteria
       var searchCriteria = [];
       datumFieldsViews.each(function(datumField) {
@@ -327,7 +327,7 @@ define([
           searchCriteria.push(sessionField.get("label") + ":" + value);
         }
       });
-      
+
       // Update the search box with the search string corresponding to the
       // current search criteria
       var queryString = "";
@@ -336,24 +336,24 @@ define([
       } else if (type == "intersection") {
         queryString = searchCriteria.join(" AND ");
       }
-      
+
       if (OPrime.debugMode) OPrime.debug("Searching for " + queryString);
       return queryString;
     },
-    
+
     /**
      * Perform a search that finds either the union or the intersection or all
      * the criteria.
-     * 
+     *
      * @param queryString {String} The string representing the query.
      */
     search : function(queryString, callback) {
       this.model.saveKeyword(queryString);
-      // Search for Datum that match the search criteria      
+      // Search for Datum that match the search criteria
       var searchself = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).searchByQueryString(queryString
+      (new Datum({"dbname": app.get("corpus").get("dbname")})).searchByQueryString(queryString
           , function(datumIds){
-        
+
         //this will take in datumIds from its caller
         // Create a new temporary data list in search datalist on the LeftSide
 //        if(searchself.format != "top"){
@@ -365,10 +365,10 @@ define([
               , $("#search_box").val()
               + " ");
           searchself.searchDataListView.model.set("description"
-              ,  "This is the result of searching for : " 
+              ,  "This is the result of searching for : "
               + $("#search_box").val()
-              + " In " 
-              + window.app.get("corpus").get("title") 
+              + " In "
+              + window.app.get("corpus").get("title")
               + " on "+ new Date() );
           searchself.searchDataListView.format = "search";
           searchself.searchDataListView.render();
@@ -377,7 +377,7 @@ define([
           // Add search results to the data list
           searchself.searchPaginatedDataListDatumsView.fillWithIds(datumIds, Datum);
           searchself.searchDataListView.model.set("datumIds", datumIds); //TODO do we want to put them into the data list yet, or do that when we save?
-          
+
           // show the number of hits
           var datumCount = datumIds.length;
           $("#searchDatumCount").html(datumCount);
@@ -389,7 +389,7 @@ define([
         });
       });
     },
-    
+
     /**
      * Initialize the sample Search.
      */
@@ -398,7 +398,7 @@ define([
         searchKeywords : "naya"
       });
     },
-      
+
     resizeSmall : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice
@@ -408,7 +408,7 @@ define([
 //      this.render(); this is done in the router
       window.app.router.showEmbeddedSearch();
     },
-    
+
     resizeFullscreen : function(e){
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from running same command twice.
@@ -419,7 +419,7 @@ define([
       window.app.router.showFullscreenSearch();
     },
     /**
-     * 
+     *
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
@@ -427,10 +427,10 @@ define([
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
-      $(this.el).removeData().unbind(); 
+      $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//      this.remove();  
+//      this.remove();
 //      Backbone.View.prototype.remove.call(this);
       }
   });

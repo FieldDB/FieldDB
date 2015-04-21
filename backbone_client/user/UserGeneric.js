@@ -60,7 +60,7 @@ define([
     },
 
     addCurrentCorpusToUser : function(){
-      var cc = window.app.get("corpus").get("couchConnection");
+      var cc = window.app.get("corpus").get("connection");
       if(window.app.get("corpus").id != undefined){
         cc.corpusid =  window.app.get("corpus").id;
         this.get("corpora").push(cc);

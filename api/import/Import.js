@@ -1676,13 +1676,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.rawText = self.rawText.trim();
           self.render();
         }
+        if (!self.dbname && self.parent && self.parent.dbname) {
+          self.dbname = self.parent.dbname;
+        }
 
         // data.append("files", files);
-        data.append("token", self.uploadtoken);
+        data.append("token", self.uploadtoken || "uploadingfromspreadsheet");
         data.append("pouchname", self.dbname);
         data.append("dbname", self.dbname);
-        data.append("username", self.username);
-        data.append("returnTextGrid", self.returnTextGrid);
+        data.append("username", self.application.authentication.user.username);
+        data.append("returnTextGrid", self.returnTextGrid || true);
 
         self.audioVideo = null;
         // this.model.audioVideo.reset();
@@ -1867,7 +1870,13 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this[fileCollection].add(details);
       if (this.parent) {
-        this.parent.addFile(details);
+        if (typeof this.parent.addFile === "function") {
+          this.parent.addFile(details);
+        } else if (this.parent.audioVideo && this.parent.audioVideo.push === "function") {
+          this.parent.audioVideo.push(details);
+        } else {
+          this.bug("There was a problem attaching this file. Please report this.");
+        }
         this.render();
         // this.asCSV = [];
       }

@@ -1,8 +1,8 @@
-define([ 
+define([
     "backbone",
-    "user/UserMask" 
+    "user/UserMask"
 ], function(
-    Backbone, 
+    Backbone,
     UserMask
 ) {
   var Activity = Backbone.Model.extend(
@@ -13,7 +13,7 @@ define([
      *        session, i.e. it might say "Edward LingLlama added 30 datums in Na
      *        Dene Corpus" This is so that users can see their history and teams
      *        can view teammate's contributions.
-     * 
+     *
      * @extends Backbone.Model
      * @constructs
      */
@@ -27,8 +27,8 @@ define([
           gravatar: user.gravatar,
           authUrl: user.authUrl
         });
-        //        if(!this.get("pouchname")) {
-//          this.set("pouchname", window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname);
+        //        if(!this.get("dbname")) {
+//          this.set("dbname", window.app.get("authentication").get("userPrivate").get("activityConnection").dbname);
 //        }
       }
       if(!this.get("timestamp")){
@@ -49,12 +49,12 @@ define([
     /**
      * backbone-couchdb adaptor set up
      */
-    
+
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
     url : "/activities",
-    
+
     defaults : {
 //      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
 //      verb : "added",
@@ -64,25 +64,25 @@ define([
 //      link: "https:/www.fieldlinguist.com"
 //      timestamp: timestamp
     },
-    
+
     // Internal models: used by the parse function
     model : {
       user : UserMask
     },
-    changePouch : function(pouchname, callback) {
-      if(!pouchname){
+    changePouch : function(dbname, callback) {
+      if(!dbname){
         if( this.get("teamOrPersonal") == "personal"){
           if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
-            pouchname = window.app.get("authentication").get("userPrivate").get("activityCouchConnection").pouchname;
-            this.set("pouchname", pouchname);
+            dbname = window.app.get("authentication").get("userPrivate").get("activityConnection").dbname;
+            this.set("dbname", dbname);
           }else{
             alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
             return;
           }
         }else{
           try{
-            pouchname = window.app.get("currentCorpusTeamActivityFeed").get("couchConnection").pouchname;
-            this.set("pouchname", pouchname);
+            dbname = window.app.get("currentCorpusTeamActivityFeed").get("connection").dbname;
+            this.set("dbname", dbname);
           }catch(e){
             alert("Bug in setting the pouch for this activity, i can only save activities for the current corpus team.");
             return;
@@ -90,17 +90,17 @@ define([
 
         }
       }
-      
-      
+
+
       if(OPrime.isBackboneCouchDBApp()){
         if(typeof callback == "function"){
           callback();
         }
         return;
       }
-      
+
       if(this.pouch == undefined){
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + pouchname : OPrime.pouchUrl + pouchname);
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
       }
       if(typeof callback == "function"){
         callback();
@@ -110,11 +110,11 @@ define([
      * Accepts two functions to call back when save is successful or
      * fails. If the fail callback is not overridden it will alert
      * failure to the user.
-     * 
+     *
      * - Adds the Activity to the corpus if it is in the right corpus, and wasnt already there
      * - Adds the Activity to the user if it wasn't already there
-     * - Adds an activity to the logged in user with diff in what the user changed. 
-     * 
+     * - Adds an activity to the logged in user with diff in what the user changed.
+     *
      * @param successcallback
      * @param failurecallback
      */
@@ -147,11 +147,11 @@ define([
           }
         });
       });
-      
+
     }
-    
+
   });
-   
+
 
   return Activity;
 });

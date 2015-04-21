@@ -177,10 +177,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
         if (result.rev) {
-          value.rev = result.rev;
+          value.rev = value._rev = result.rev;
         }
-        if (!value._id) {
-          value.id = result.id;
+        if (result.id) {
+          value.id = value._id = result.id;
         }
         deferred.resolve(value);
       }, function(reason) {

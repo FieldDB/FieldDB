@@ -139,13 +139,13 @@ define([
         this.corporaReadView.el = $(this.el).find('.corpora');
         this.corporaReadView.render();
 
-        var couchConnection = window.app.get("couchConnection");
+        var connection = window.app.get("connection");
         var self = this;
         FieldDB.CORS.makeCORSRequest({
           type: 'GET',
-          url: OPrime.getCouchUrl(couchConnection, "/_session")
+          url: OPrime.getCouchUrl(connection, "/_session")
         }).then(function(serverResults) {
-          if (self.model && self.model.updateListOfCorpora) {
+          if (self.model && serverResults.userCtx.name && self.model.updateListOfCorpora && self.model.get("username") === serverResults.userCtx.name) {
             self.model.updateListOfCorpora(serverResults.userCtx.roles);
             self.changeViewsOfInternalModels();
           }
