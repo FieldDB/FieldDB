@@ -1,12 +1,12 @@
-var https = require('https'),
-  express = require('express'),
-  app = express(),
-  Q = require('q'),
-  md5 = require('MD5'),
-  fs = require('fs'),
-  util = require('util'),
-  node_config = require("./lib/nodeconfig_devserver"),
-  couch_keys = require("./lib/couchkeys_devserver");
+var https = require('https');
+var express = require('express');
+var app = express();
+var Q = require('q');
+var md5 = require('MD5');
+var fs = require('fs');
+var util = require('util');
+var node_config = require("./lib/nodeconfig_devserver");
+var couch_keys = require("./lib/couchkeys_devserver");
 
 //read in the specified filenames as the security key and certificate
 
