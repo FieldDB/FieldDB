@@ -60,7 +60,6 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
 
   INTERNAL_MODELS: {
     value: {
-      item: Activity,
       connection: Connection,
       comments: Comments,
       docs: ActivityCollection,
@@ -297,32 +296,42 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       }
 
       activity.parent = this;
+      var addedActivity;
       try {
-        var addedActivity = DataList.prototype.add.apply(this, [activity]);
+        addedActivity = DataList.prototype.add.apply(this, [activity]);
+      } catch (e) {
+        this.warn("Error adding this activity", e);
+        var message = e ? e.message : " Error adding this activity.";
+        if (e) {
+          console.error(e.stack);
+        }
+        this.warn(message);
+        activity.errorMessage = message;
+      }
+
+      if (addedActivity) {
         if (this._database) {
           addedActivity.corpus = this._database;
         }
         if (!addedActivity.rev) {
-          addedActivity.debug("This activity "+addedActivity.directobject+" has no evidence of having been saved before, makeing its fossil empty to trigger save.");
+          addedActivity.debug("This activity " + addedActivity.directobject + " has no evidence of having been saved before, makeing its fossil empty to trigger save.");
           addedActivity.unsaved = true;
           addedActivity.fossil = {};
           addedActivity.debug("This activity", addedActivity);
         }
         return addedActivity;
-      } catch (e) {
-        this.warn("Error adding this activity, it was not complete enough", e);
-        var message = e ? e.message : " Error adding this activity, it was not complete enough";
-        if (e) {
-          console.error(e.stack);
-        }
-        this.warn(message);
+      }
+
+      if (!addedActivity) {
         this.incompleteActivitesStockPile = this.incompleteActivitesStockPile || [];
+        delete activity.parent;
         this.incompleteActivitesStockPile.push({
           activity: activity,
-          errorMessage: message
+          errorMessage: activity.errorMessage || "Activity was not added."
         });
         return undefined;
       }
+
     }
   },
 

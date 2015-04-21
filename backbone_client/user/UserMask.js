@@ -1,3 +1,4 @@
+
 define([
     "backbone", "CryptoJS"
 ], function(
@@ -85,8 +86,8 @@ define([
       var self = this;
 
         if(OPrime.isBackboneCouchDBApp()){
-          if(self.get("pouchname")){
-            self.unset("pouchname");
+          if(self.get("dbname")){
+            self.unset("dbname");
           }
           self.save(null, {
             success : function(model, response) {

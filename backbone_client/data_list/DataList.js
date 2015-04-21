@@ -117,7 +117,7 @@ define([
 
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToGetAudioVideo " +JSON.stringify(datumIdsToGetAudioVideo));
       for(var id in datumIdsToGetAudioVideo){
-        var obj = new Datum({pouchname: app.get("corpus").get("pouchname")});
+        var obj = new Datum({dbname: app.get("corpus").get("dbname")});
         obj.id  = datumIdsToGetAudioVideo[id];
         var thisobjid = id;
           obj.fetch({
@@ -160,7 +160,7 @@ define([
             window.app.addActivity({
               verb: "deleted",
               verbicon: "icon-trash",
-              directobject: "<a href='#corpus/" + self.get("pouchname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
+              directobject: "<a href='#corpus/" + self.get("dbname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
               directobjecticon: "icon-list",
               indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
               teamOrPersonal: "team",
@@ -170,7 +170,7 @@ define([
             window.app.addActivity({
               verb: "deleted",
               verbicon: "icon-trash",
-              directobject: "<a href='#corpus/" + self.get("pouchname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
+              directobject: "<a href='#corpus/" + self.get("dbname") + "/data/" + self.id + "'>" + totalCount + " datum in " + self.get('title') + "</a>",
               directobjecticon: "icon-list",
               indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
               teamOrPersonal: "personal",
@@ -317,7 +317,7 @@ define([
       }
 
       //protect against users moving dataLists from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("pouchname") != this.get("pouchname")){
+      if(window.app.get("corpus").get("dbname") != this.get("dbname")){
         if(typeof failurecallback == "function"){
           failurecallback();
         }else{
@@ -416,7 +416,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentDataList : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("pouchname") != this.get("pouchname") ){
+      if( window.app.get("corpus").get("dbname") != this.get("dbname") ){
         if (typeof failurecallback == "function") {
           failurecallback();
         }else{

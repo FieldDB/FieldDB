@@ -63,8 +63,8 @@ define([
       if (OPrime.debugMode) OPrime.debug("CORPUS READ init: " );
       this.changeViewsOfInternalModels();
 
-   // If the model's pouchname changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:pouchname', function(){
+   // If the model's dbname changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:dbname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
@@ -181,10 +181,10 @@ define([
       window.appView.currentCorpusReadView.destroy_view();
 
       // Build the lexicon
-      this.model.buildLexiconFromTeamServer(this.model.get("pouchname"));
+      this.model.buildLexiconFromTeamServer(this.model.get("dbname"));
 
       // Get the corpus' current precedence rules
-      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("pouchname"));
+      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("dbname"));
 
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
@@ -195,7 +195,7 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
-      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+      var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       // jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
       jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/lexicon_create_tuples?group=true";
@@ -296,7 +296,7 @@ define([
 //        this.permissionsView.render();
 
         try{
-          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("pouchname"));
+          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("dbname"));
         }catch(e){
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
@@ -436,7 +436,7 @@ define([
           $(e.target).parent().parent().hide();
         }
       }
-//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//      app.router.showEmbeddedDatum(this.get("dbname"), "new");
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },

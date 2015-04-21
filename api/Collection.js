@@ -175,8 +175,9 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (Object.prototype.toString.call(value) !== "[object Array]") {
-        console.error("Cannot set collection to an object, only an array", value);
-        throw new Error("Cannot set collection to an object, only an array");
+        this.bug("Cannot set collection to an object, only an array", value);
+        return;
+        // throw new Error("Cannot set collection to an object, only an array");
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
@@ -338,8 +339,9 @@ Collection.prototype = Object.create(Object.prototype, {
         }
         searchingFor = this.getSanitizedDotNotationKey(value);
         if (!searchingFor) {
-          this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-          throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
+          this.bug("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+          return;
+          // throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
         }
         this.debug("adding " + searchingFor);
 
@@ -433,8 +435,9 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        this.warn("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
-        throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
+        this.bug("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
+        return;
+        // throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {

@@ -52,13 +52,13 @@ define([
       this.reset();
       var self = this;
       for(c in arrayOfCorpora){
-        var couchConnection = arrayOfCorpora[c];
+        var connection = arrayOfCorpora[c];
 
         var corpuse = new CorpusMask({
           title : "",
-          pouchname : couchConnection.pouchname
+          dbname : connection.dbname
         });
-        corpuse.corpusid = couchConnection.corpusid;
+        corpuse.corpusid = connection.corpusid;
         self.unshift(corpuse);
 
 
@@ -68,7 +68,7 @@ define([
          * we expect to be the normal case, therefore not usefull to
          * show it.
          */
-//        var couchurl = OPrime.getCouchUrl(couchConnection) +"/corpus";
+//        var couchurl = OPrime.getCouchUrl(connection) +"/corpus";
 //        $.ajax({
 //          type : 'GET',
 //          url : couchurl ,
@@ -82,7 +82,7 @@ define([
 //            if (OPrime.debugMode) OPrime.debug("Got error back from the server about this corpus: ", data);
 //            var corpuse = new CorpusMask({
 //                  title : "We need to make sure you're you before showing you the latest details (click the sync button).",
-//                  pouchname : arrayOfCorpora[thisc].pouchname
+//                  dbname : arrayOfCorpora[thisc].dbname
 //                });
 //            corpuse.corpusid = arrayOfCorpora[thisc].corpusid;
 //            self.unshift(corpuse);

@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
         src: [
-         "tests/**/*Test.js",
+          "tests/**/*Test.js",
           // "tests/FieldDBObjectTest.js",
           // "tests/CollectionTest.js",
           // "tests/activity/*.js",
@@ -131,100 +131,35 @@ module.exports = function(grunt) {
       },
       lib: {
         options: {
-          jshintrc: ".jshintrc"
+          jshintrc: ".jshintrc",
+          ignores: [
+            "api/app/AppRouter.js",
+            "api/bot/CleaningBot.js",
+            "api/bot/InuktitutSyllabicsTransliteratorBot.js",
+            "api/confidentiality_encryption/Crypto_AES.js",
+            "api/conversation/Conversation.js",
+            "api/conversation/Conversations.js",
+            "api/data_list/DataLists.js",
+            "api/datum/Sessions.js",
+            "api/glosser/Tree.js",
+            "api/lessons_corpus/Exercise.js",
+            "api/lexicon/LexiconNodes.js",
+            "api/user/Consultants.js",
+            "api/user/ReportBot.js",
+            "api/user/UserApp.js",
+            "api/user/UserRouter.js"
+          ]
         },
+
         src: [
-          "api/fielddb.js",
-          "api/FieldDBObject.js",
-          "api/Collection.js",
-          "api/CORS.js",
-          "api/activity/Activites.js",
-          "api/activity/Activity.js",
-          "api/app/App.js",
-          "api/audio_video/AudioPlayer.js",
-          "api/audio_video/AudioVideo.js",
-          "api/audio_video/AudioVideoRecorder.js",
-          "api/audio_video/AudioVideos.js",
-          "api/audio_video/HTML5Audio.js",
-          "api/authentication/Authentication.js",
-          "api/comment/Comment.js",
-          "api/comment/Comments.js",
-          "api/confidentiality_encryption/Confidential.js",
-          "api/corpus/Corpus.js",
-          "api/corpus/CorpusConnection.js",
-          // "api/corpus/Corpuses.js",
-          "api/corpus/CorpusMask.js",
-          "api/corpus/Database.js",
-          "api/corpus/PsycholinguisticsDatabase.js",
-          "api/data_list/DataList.js",
-          // "api/data_list/DataLists.js",
-          "api/data_list/SubExperimentDataList.js",
-          "api/datum/Datum.js",
-          "api/datum/DatumField.js",
-          "api/datum/DatumFields.js",
-          "api/datum/DatumState.js",
-          "api/datum/DatumStates.js",
-          "api/datum/DatumTag.js",
-          "api/datum/DatumTags.js",
-          "api/datum/Document.js",
-          "api/datum/DocumentCollection.js",
-          "api/datum/Response.js",
-          "api/datum/Session.js",
-          // "api/datum/Session.js",
-          "api/datum/Stimulus.js",
-          "api/export/Export.js",
-          "api/hotkey/HotKey.js",
-          "api/hotkey/HotKeys.js",
-          "api/image/Image.js",
-          "api/image/Images.js",
-          "api/import/Import.js",
-          "api/locales/ContextualizableObject.js",
-          "api/locales/Contextualizer.js",
-          "api/locales/ELanguages.js",
-          "api/permission/Permission.js",
-          "api/permission/Permissions.js",
-          "api/search/Search.js",
-          "api/unicode/UnicodeSymbol.js",
-          "api/unicode/UnicodeSymbols.js",
-          "api/user/Consultant.js",
-          "api/user/Participant.js",
-          "api/user/Speaker.js",
-          "api/user/Team.js",
-          "api/user/User.js",
-          "api/user/UserMask.js",
-          "api/user/UserPreference.js",
-          "api/user/Users.js",
+          "api/**/*.js"
         ]
       },
       test: {
         options: {
-          jshintrc: "tests/.jshintrc",
-          ignores: ["tests/libs/**/*js"]
         },
         src: [
-          "tests/FieldDBTest.js",
-          "tests/FieldDBObjectTest.js",
-          "tests/CollectionTest.js",
-          "tests/activity/*.js",
-          "tests/app/*.js",
-          "tests/audioVideo/*.js",
-          "tests/authentication/*.js",
-          "tests/comment/*.js",
-          "tests/confidentiality_encryption/*.js",
-          "tests/corpus/*.js",
-          "tests/data_list/*.js",
-          "tests/datum/*.js",
-          "tests/export/*.js",
-          "tests/glosser/*.js",
-          "tests/hotkey/*.js",
-          "tests/image/*.js",
-          "tests/import/*.js",
-          "tests/insert_unicode/*.js",
-          "tests/lexicon/*.js",
-          "tests/locales/*.js",
-          "tests/permission/*.js",
-          "tests/search/*.js",
-          "tests/user/*.js"
+          "tests/**/*.js"
         ]
       },
     },
@@ -258,12 +193,12 @@ module.exports = function(grunt) {
           return "bash scripts/build_fielddb_angular_core.sh";
         }
       },
-      buildCorpusPagesAngular: {
+      buildCorpusPagesApp: {
         cmd: function() {
           return "bash scripts/build_corpuspages_angular.sh";
         }
       },
-      buildSpreadsheetAngular: {
+      buildSpreadsheetApp: {
         cmd: function() {
           return "bash scripts/build_spreadsheet_angular.sh";
         }
@@ -299,8 +234,8 @@ module.exports = function(grunt) {
   grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
-  grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesAngular"]);
-  grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetAngular"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "jasmine", "uglify", "docs", "fielddb-angular", "corpuspages-angular"]);
+  grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesApp"]);
+  grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetApp"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify",  "uglify", "docs", "fielddb-angular"]);
 
 };

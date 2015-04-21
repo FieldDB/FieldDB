@@ -107,7 +107,7 @@ var MAINTAINENCE = {
    */
   mergeSessions: function() {
 
-    var pouchname = "default";
+    var dbname = "default";
     var corpustitle = "Default";
     var corpusid = "123";
     var name = "sessionmergingbot";
@@ -122,7 +122,7 @@ var MAINTAINENCE = {
     var mergeIntoSession = {
       _id: "b0f1bbcfdd6bf0bf38197a986f481e44",
       _rev: "1-b646e5c7fcfb1f5935403250c623f627",
-      pouchname: "default",
+      dbname: "default",
       sessionFields: [{
         label: "goal",
         value: "Transcription",
@@ -187,8 +187,8 @@ var MAINTAINENCE = {
       lastModifiedBy: "default"
     };
 
-    var database = $.couch.db(pouchname);
-    var activities = $.couch.db(pouchname + "-activity_feed");
+    var database = $.couch.db(dbname);
+    var activities = $.couch.db(dbname + "-activity_feed");
     var count = 0;
     database.allDocs({
       success: function(result) {
@@ -435,11 +435,11 @@ var MAINTAINENCE = {
         "title": "Private Corpus",
         "titleAsUrl": "private_corpus",
         "description": "The details of this corpus are not public.",
-        "couchConnection": {
+        "connection": {
           "protocol": "https://",
           "domain": "corpus.example.org",
           "port": "443",
-          "pouchname": "default",
+          "dbname": "default",
           "path": "",
           "corpusid": ""
         },
@@ -452,7 +452,7 @@ var MAINTAINENCE = {
           "link": "http://creativecommons.org/licenses/by-sa/3.0/"
         },
         "copyright": "Default: Add names of the copyright holders of the corpus.",
-        "pouchname": "",
+        "dbname": "",
         "datumFields": [{
           "label": "judgement",
           "value": "",
@@ -555,8 +555,8 @@ var MAINTAINENCE = {
             var database = $.couch.db(dbname);
 
             var saveCorpusDoc = function(corpusDoc, localdbname) {
-              corpusDoc.couchConnection.pouchname = localdbname;
-              corpusDoc.pouchname = localdbname;
+              corpusDoc.connection.dbname = localdbname;
+              corpusDoc.dbname = localdbname;
               console.log("This is what we would save: ", corpusDoc);
               // database.saveDoc(corpusDoc, {
               //     success: function(serverResults) {
@@ -580,7 +580,7 @@ var MAINTAINENCE = {
                     // corpusid = "";
                   }
                   console.log("Opened Corpus id " + corpusid);
-                  corpusDoc.couchConnection.corpusid = corpusid;
+                  corpusDoc.connection.corpusid = corpusid;
                   corpusDoc.corpusid = corpusid;
 
                   if (!corpusDoc.terms) {
@@ -614,21 +614,21 @@ var MAINTAINENCE = {
             database.openDoc("corpus", {
               success: function(results) {
                 var doUpdate = false;
-                if (results && results.couchConnection && results.couchConnection.corpusid) {
-                  console.log(results.couchConnection.corpusid + " is the corpusid for " + dbname);
+                if (results && results.connection && results.connection.corpusid) {
+                  console.log(results.connection.corpusid + " is the corpusid for " + dbname);
                 }
-                if (results && results.couchConnection && results.couchConnection.corpusid && results.terms && results.license && results.copyright) {
+                if (results && results.connection && results.connection.corpusid && results.terms && results.license && results.copyright) {
                   console.log("This corpus is pretty modern. " + dbname);
                   return;
                 }
-                if (results && results.couchConnection && !results.couchConnection.corpusid) {
+                if (results && results.connection && !results.connection.corpusid) {
                   console.log("This corpus is missing a corpusid that can happen if its only been opened in the spreadsheet app. but htey need the corpusid to use the offline app..." + dbname);
-                  // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.couchConnection);
-                  // results.couchConnection = {
+                  // console.log("This was the couchconnection before we removed its corpusid and checked its terms of use ", results.connection);
+                  // results.connection = {
                   //     "protocol": "https://",
                   //     "domain": "corpus.example.org",
                   //     "port": "443",
-                  //     "pouchname": dbname,
+                  //     "dbname": dbname,
                   //     "path": "",
                   //     "corpusid": ""
                   // };
@@ -639,12 +639,12 @@ var MAINTAINENCE = {
                   doUpdate = true;
                 }
 
-                if (results && !results.couchConnection) {
-                  results.couchConnection = {
+                if (results && !results.connection) {
+                  results.connection = {
                     "protocol": "https://",
                     "domain": "corpus.example.org",
                     "port": "443",
-                    "pouchname": dbname,
+                    "dbname": dbname,
                     "path": "",
                     "corpusid": ""
                   };
@@ -696,7 +696,7 @@ var MAINTAINENCE = {
 
             database.openDoc("corpus", {
               success: function(results) {
-                console.log("Corpus doc " + dbname, results.couchConnection);
+                console.log("Corpus doc " + dbname, results.connection);
               },
               error: function(error) {
                 console.log("Error getting a corpus doc " + dbname, error);
@@ -850,18 +850,18 @@ var MAINTAINENCE = {
               console.log(dbname + "  is not a corpus or activity feed ");
               return;
             }
-            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("jenkins") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
               // return;
               console.log("deploying to a beta tester");
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              // return;
+              return;
               console.log("deploying to a phophlo user");
             } else {
               if (dbname.indexOf("anonymous") > -1) {
-                // return;
+                return;
                 console.log("deploying to anonymous users");
               } else {
-                // return; //deploy to only beta testers and/or phophlo users
+                return; //deploy to only beta testers and/or phophlo users
                 // console.log("deploying to normal users");
               }
             }
@@ -1506,8 +1506,8 @@ var MAINTAINENCE = {
         for (var couchdatum in data) {
           database.openDoc(data[couchdatum].id, {
             success: function(originalDoc) {
-              console.log(originalDoc.pouchname);
-              originalDoc.pouchname = targetdatabase;
+              console.log(originalDoc.dbname);
+              originalDoc.dbname = targetdatabase;
               database.saveDoc(originalDoc, {
                 success: function(serverResults) {
                   console.log("updated " + originalDoc._id);
@@ -1545,8 +1545,8 @@ var MAINTAINENCE = {
           var localDatabase = $.couch.db(targetdatabase);
           localDatabase.openDoc(data[couchdatum].id, {
             success: function(originalDoc) {
-              if (originalDoc.pouchname) {
-                originalDoc.pouchname = remoteTargetDatabase;
+              if (originalDoc.dbname) {
+                originalDoc.dbname = remoteTargetDatabase;
               }
               $.couch.urlPrefix = "https://corpus.example.org";
               var remoteDatabase = $.couch.db(remoteTargetDatabase);
@@ -2012,15 +2012,15 @@ var MAINTAINENCE = {
                   };
                 } else if (sourceDB === "new_corpus_activity_feed" || sourceDB === "new_corpus") {
                   // console.log("Creating a new_corpus_activity_feed/new_corpus security doc");
-                  var corpusPouchName = dbname.replace("-activity_feed", "");
+                  var corpusdbname = dbname.replace("-activity_feed", "");
                   securitydoc = {
                     "admins": {
                       "names": [],
-                      "roles": [corpusPouchName + "_admin", "fielddbadmin"]
+                      "roles": [corpusdbname + "_admin", "fielddbadmin"]
                     },
                     "members": {
                       "names": [],
-                      "roles": [corpusPouchName + "_reader", corpusPouchName + "_writer", corpusPouchName + "_commenter"]
+                      "roles": [corpusdbname + "_reader", corpusdbname + "_writer", corpusdbname + "_commenter"]
                     }
                   };
                 }
@@ -2143,15 +2143,15 @@ var MAINTAINENCE = {
           // if (activity.timestamp < lastPosition) {
           // return;
           // }
-          var pouchname = activity.pouchname;
-          // console.log(pouchname);
-          delete activity.pouchname;
-          // console.log(pouchname);
-          // if (!pouchname) {
+          var dbname = activity.dbname;
+          // console.log(dbname);
+          delete activity.dbname;
+          // console.log(dbname);
+          // if (!dbname) {
           //   console.log(row);
           // }
           // return;
-          var activityDB = $.couch.db(pouchname);
+          var activityDB = $.couch.db(dbname);
           activity.originalId = activity._id + "";
           activity.originalRev = activity._rev + "";
 
@@ -2179,7 +2179,7 @@ var MAINTAINENCE = {
           delete activity._rev;
           activityDB.saveDoc(activity, {
             success: function(serverResults) {
-              console.log("saved activity for " + pouchname, JSON.stringify(serverResults));
+              console.log("saved activity for " + dbname, JSON.stringify(serverResults));
               if (activity.teamOrPersonal === "personal") {
                 activity._id = activity.originalId;
                 activity._rev = activity.originalRev;
@@ -2416,8 +2416,8 @@ var MAINTAINENCE = {
     /*
     Verify corpus doc
      */
-    var targetpouchname = "speechrecognition-kartuli-activity_feed";
-    var targetdatabase = $.couch.db(targetpouchname);
+    var targetdbname = "speechrecognition-kartuli-activity_feed";
+    var targetdatabase = $.couch.db(targetdbname);
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
@@ -2442,11 +2442,11 @@ var MAINTAINENCE = {
               result.rows.map(function(row) {
                 database.openDoc(row.id, {
                   success: function(originalDoc) {
-                    console.log(originalDoc.pouchname);
+                    console.log(originalDoc.dbname);
                     if (!originalDoc.teamOrPersonal) {
                       return;
                     }
-                    originalDoc.pouchname = targetpouchname;
+                    originalDoc.dbname = targetdbname;
                     targetdatabase.saveDoc(originalDoc, {
                       success: function(serverResults) {
                         console.log("saved activity in central activities " + originalDoc._id);

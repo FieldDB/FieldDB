@@ -71,7 +71,7 @@ define([
       this.changeViewsOfInternalModels();
 
       // If the model's title changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:pouchname', function(){
+      this.model.bind('change:dbname', function(){
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
@@ -247,7 +247,7 @@ define([
       var jsonToRender = this.model.toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
-      var couchurl = OPrime.getCouchUrl(this.model.get("couchConnection"));
+      var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/pages/_view/datums";
       jsonToRender.exportWordListURL = couchurl + "/_design/pages/_list/asCSV/word_list?group=true";
 
@@ -506,20 +506,20 @@ define([
       if(this.model.id){
         window.appView.addUnsavedDoc(this.model.id);
       }else{
-        var newPouchName = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
+        var newdbname = this.model.get("team").get("username") +"-"+ newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g,"_");
 
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "pouchname");
-        if(pouches.indexOf(newPouchName) != -1){
+        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
+        if(pouches.indexOf(newdbname) != -1){
           alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
           this.$el.find(".corpus-title-input").val("");
           return;
         }
 
-        this.model.get("couchConnection").pouchname = newPouchName;
-        this.model.set("pouchname", newPouchName);
-        this.model.get("publicSelf").set("pouchname", newPouchName);
-        this.model.get("team").set("pouchname", newPouchName);
-        this.$el.find(".new-corpus-pouchname").html(newPouchName);
+        this.model.get("connection").dbname = newdbname;
+        this.model.set("dbname", newdbname);
+        this.model.get("publicSelf").set("dbname", newdbname);
+        this.model.get("team").set("dbname", newdbname);
+        this.$el.find(".new-corpus-dbname").html(newdbname);
       }
 
     },
@@ -623,7 +623,7 @@ define([
           $(e.target).parent().parent().hide();
         }
       }
-//      app.router.showEmbeddedDatum(this.get("pouchname"), "new");
+//      app.router.showEmbeddedDatum(this.get("dbname"), "new");
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM EDIT CORPUS VIEW.");
     },

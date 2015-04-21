@@ -1,5 +1,5 @@
 define([
-    "backbone", 
+    "backbone",
     "handlebars",
     "datum/Datum",
     "datum/Datums",
@@ -19,9 +19,9 @@ define([
     /**
      * @class The area where Datum appear. The number of datum that appear
      * is in UserPreference.
-     * 
+     *
      * @property {String} format Valid values are "centreWell" or "fullscreen".
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
@@ -34,47 +34,47 @@ define([
         childViewClass       : "well",
         childViewFormat      : "well"
       });
-      
+
       // Listen for changes in the number of Datum to display
       app.get("authentication").get("userPrivate").get("prefs").bind("change:numVisibleDatum", this.updateDatums, this); //we might have to bind this in the other direction since the user's preferences are craeted later than the datum container.
     },
-    
+
     model : Datums,
-    
+
     events : {
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeFullscreen",
       "click .icon-edit" : "showEditable"
     },
-    
+
     templateEmbedded : Handlebars.templates.datum_container_read_embedded,
-    
+
     templateFullscreen : Handlebars.templates.datum_container_read_fullscreen,
-    
+
     render : function() {
-      
-      var jsonToRender = this.model.toJSON(); 
+
+      var jsonToRender = this.model.toJSON();
       jsonToRender.locale_Data_Entry_Area = Locale.get("locale_Data_Entry_Area");
-      jsonToRender.locale_Edit_Datum = Locale.get("locale_Edit_Datum");             
+      jsonToRender.locale_Edit_Datum = Locale.get("locale_Edit_Datum");
       jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
 
       // Display the DatumContainerReadView
       if (this.format == "centreWell") {
-        this.setElement($("#datums-embedded"));        
+        this.setElement($("#datums-embedded"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
       } else if (this.format == "fullscreen") {
         this.setElement($("#datum-container-fullscreen"));
         $(this.el).html(this.templateFullscreen(jsonToRender));
       }
-      
+
       // Display the DatumFieldsView
       this.datumsView.el = this.$(".datum-embedded-ul");
       this.datumsView.render();
 
       return this;
     },
-    
+
     resizeSmall : function(e) {
       if(e){
         e.stopPropagation();
@@ -83,7 +83,7 @@ define([
 //      window.app.router.showReadonlyDatums("centreWell");
       window.location.href = "#render/true";
     },
-    
+
     resizeFullscreen : function(e) {
       if(e){
         e.stopPropagation();
@@ -91,7 +91,7 @@ define([
       }
       window.app.router.showReadonlyDatums("fullscreen");
     },
-    
+
     showEditable : function(e) {
       if(e){
         e.stopPropagation();
@@ -99,20 +99,20 @@ define([
       }
       window.app.router.showEditableDatums(this.format);
     },
-    
+
     showMostRecentDatum : function() {
       var nextNumberOfDatum = app.get("authentication").get("userPrivate").get("prefs").get("numVisibleDatum");
-        
+
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({"pouchname": app.get("corpus").get("pouchname")})).getMostRecentIdsByDate(nextNumberOfDatum ,function(rows) {
+      (new Datum({"dbname": app.get("corpus").get("dbname")})).getMostRecentIdsByDate(nextNumberOfDatum ,function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
           // Remove all currently displayed Datums
           for (var i = 0; i < self.model.length; i++) {
             self.model.pop();
           }
-            
+
           // Add a single, blank Datum
 //          self.newDatum();
         } else {
@@ -123,7 +123,7 @@ define([
               if(self.model.length >= nextNumberOfDatum){
                 return;
               }
-              
+
               // Add the next most recent Datum from the Corpus to the bottom of the stack, if there is one
               if (rows[rows.length - i - 1]) {
                 var m = rows[rows.length - i - 1];
@@ -152,6 +152,6 @@ define([
       });
     }
   });
-  
+
   return DatumContainerReadView;
 });

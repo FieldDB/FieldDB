@@ -165,8 +165,8 @@ require([
       return;
     }else{
       if (OPrime.debugMode) OPrime.debug("Loading app from localStorage");
-      var couchConnection = appjson.couchConnection;
-      if(couchConnection == "undefined" || couchConnection == undefined || couchConnection ==  null){
+      var connection = appjson.connection;
+      if(connection == "undefined" || connection == undefined || connection ==  null){
 //        alert("We can't accurately guess which corpus to load.");
         document.location.href='user.html';
         return;

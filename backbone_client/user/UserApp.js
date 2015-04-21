@@ -123,45 +123,45 @@ define([
     stopSpinner : function(){
       $('#dashboard_loading_spinner').html("");
     },
-    getCouchUrl : function(couchConnection, couchdbcommand) {
-      if(!couchConnection){
-        couchConnection = this.get("couchConnection");
-        if (OPrime.debugMode) OPrime.debug("Using the apps ccouchConnection", couchConnection);
+    getCouchUrl : function(connection, couchdbcommand) {
+      if(!connection){
+        connection = this.get("connection");
+        if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
       }else{
-        if (OPrime.debugMode) OPrime.debug("Using the couchConnection passed in,",couchConnection,this.get("couchConnection"));
+        if (OPrime.debugMode) OPrime.debug("Using the connection passed in,",connection,this.get("connection"));
       }
-      if(!couchConnection){
+      if(!connection){
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
       }
-      return OPrime.getCouchUrl(couchConnection, couchdbcommand);
+      return OPrime.getCouchUrl(connection, couchdbcommand);
     },
     /*
      * This will be the only time the app should open the pouch.
      */
-    changePouch : function(couchConnection, callback) {
-      if (!couchConnection || couchConnection == undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
+    changePouch : function(connection, callback) {
+      if (!connection || connection == undefined) {
+        console.log("App.changePouch connection must be supplied.");
         return;
       } else {
-        console.log("App.changePouch setting couchConnection: ", couchConnection);
-        this.set("couchConnection", couchConnection);
+        console.log("App.changePouch setting connection: ", connection);
+        this.set("connection", connection);
       }
 //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("couchConnection"),"");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"),"");
 
       if(OPrime.isChromeApp()){
-        Backbone.couch_connector.config.base_url = this.getCouchUrl(couchConnection,"");
-        Backbone.couch_connector.config.db_name = couchConnection.pouchname;
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(connection,"");
+        Backbone.couch_connector.config.db_name = connection.dbname;
       }else{
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
         try{
           var pieces = window.location.pathname.replace(/^\//,"").split("/");
-          var pouchName = pieces[0];
+          var dbname = pieces[0];
           //Handle McGill server which runs out of a virtual directory
-          if(pouchName == "corpus"){
-            pouchName = pieces[1];
+          if(dbname == "corpus"){
+            dbname = pieces[1];
           }
-          Backbone.couch_connector.config.db_name = pouchName;
+          Backbone.couch_connector.config.db_name = dbname;
         }catch(e){
           OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
@@ -175,11 +175,11 @@ define([
       alert("TODO set/validate that the the pouch connection");
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
+        // + connection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
+            + connection.dbname : OPrime.pouchUrl
+            + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -188,13 +188,13 @@ define([
     /*
      * This will be the only time the app should open the pouch.
      */
-    changePouchDeprecated : function(couchConnection, callback) {
-      if (!couchConnection || couchConnection == undefined) {
-        console.log("App.changePouch couchConnection must be supplied.");
+    changePouchDeprecated : function(connection, callback) {
+      if (!connection || connection == undefined) {
+        console.log("App.changePouch connection must be supplied.");
         return;
       } else {
-        console.log("App.changePouch setting couchConnection: ", couchConnection);
-        this.set("couchConnection", couchConnection);
+        console.log("App.changePouch setting connection: ", connection);
+        this.set("connection", connection);
       }
 
       if(OPrime.isBackboneCouchDBApp()){
@@ -206,11 +206,11 @@ define([
 
       if (this.pouch == undefined) {
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + couchConnection.pouchname);
+        // + connection.dbname);
         this.pouch = Backbone.sync
         .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + couchConnection.pouchname : OPrime.pouchUrl
-            + couchConnection.pouchname);
+            + connection.dbname : OPrime.pouchUrl
+            + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -250,19 +250,19 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(couchConnection, username,
+    logUserIntoTheirCorpusServer : function(connection, username,
         password, succescallback, failurecallback) {
-      if (couchConnection == null || couchConnection == undefined) {
-        couchConnection = this.get("couchConnection");
+      if (connection == null || connection == undefined) {
+        connection = this.get("connection");
       }
-      if (couchConnection == null || couchConnection == undefined) {
+      if (connection == null || connection == undefined) {
         alert("Bug: I couldnt log you into your couch database.");
       }
 
       /* if on android, turn on replication and don't get a session token */
       if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
-            username, password, couchConnection.domain);
+        Android.setCredentialsAndReplicate(connection.dbname,
+            username, password, connection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +
         "since this is touchdb on android which has no idea of tokens.");
@@ -272,11 +272,11 @@ define([
         return;
       }
 
-      var couchurl = this.getCouchUrl(couchConnection, "/_session");
+      var couchurl = this.getCouchUrl(connection, "/_session");
       var corpusloginparams = {};
       corpusloginparams.name = username;
       corpusloginparams.password = password;
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", couchConnection, couchurl);
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchurl);
 
       var appself = this;
       $.couch.login({
@@ -357,7 +357,7 @@ define([
     /**
      * Pull down corpus to offline pouch, if its there.
      */
-    replicateOnlyFromCorpus : function(couchConnection, successcallback, failurecallback) {
+    replicateOnlyFromCorpus : function(connection, successcallback, failurecallback) {
       var self = this;
 
       if(!self.pouch){
@@ -410,15 +410,15 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServerDeprecated : function(couchConnection, username, password, succescallback, failurecallback) {
-      if(couchConnection == null || couchConnection == undefined){
-        couchConnection = this.get("couchConnection");
+    logUserIntoTheirCorpusServerDeprecated : function(connection, username, password, succescallback, failurecallback) {
+      if(connection == null || connection == undefined){
+        connection = this.get("connection");
       }
 
       /* if on android, turn on replication and dont get a session token */
       if(OPrime.isTouchDBApp()){
-        Android.setCredentialsAndReplicate(couchConnection.pouchname,
-            username, password, couchConnection.domain);
+        Android.setCredentialsAndReplicate(connection.dbname,
+            username, password, connection.domain);
         OPrime
         .debug("Not getting a session token from the users corpus server " +
             "since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
@@ -428,7 +428,7 @@ define([
         return;
       }
 
-      var couchurl = OPrime.getCouchUrl(couchConnection, "/_session");
+      var couchurl = OPrime.getCouchUrl(connection, "/_session");
 
       var corpusloginparams = {};
       corpusloginparams.name = username;

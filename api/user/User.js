@@ -66,6 +66,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
       corpora: Corpora,
+      newCorpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
       datalistHistory: FieldDBObject.DEFAULT_ARRAY
     }
@@ -200,6 +201,16 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     },
     set: function(value) {
       this.ensureSetViaAppropriateType("corpora", value);
+    }
+  },
+
+  newCorpusConnections: {
+    configurable: true,
+    get: function() {
+      return this.newCorpora;
+    },
+    set: function(value) {
+      this.newCorpora = value;
     }
   },
 
