@@ -897,7 +897,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (!corpusIdentifierToRetrieve) {
               return;
             }
-            if (corpusIdentifierToRetrieve && $rootScope.corpus && $rootScope.corpus.dbname) {
+            if ($rootScope.corpus && corpusIdentifierToRetrieve === $rootScope.corpus.dbname) {
               if (!corporaAlreadyIn[$rootScope.corpus.dbname]) {
                 $scope.corpora.push($rootScope.corpus);
                 corporaAlreadyIn[$rootScope.corpus.dbname] = true;
@@ -909,8 +909,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/public_corpora")
               .then(function(response) {
                 var corpus = {};
-                if (response.rows && response.rows[0]) {
-                  response.rows[0].dbname = response.rows[0].dbname || response.rows[0].pouchname;
+                if (response.rows && response.rows[0] && response.rows[0].value) {
+                  response.rows[0].value.dbname = response.rows[0].value.dbname || response.rows[0].value.pouchname;
                 }
                 if (response.rows.length > 1) {
                   response.rows.map(function(row) {
