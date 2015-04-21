@@ -159,7 +159,7 @@ define([
       if (originalModel.ok) {
         return this.originalParse.apply(this, [originalModel]);
       }
-      originalModel.sessionFields = originalModel.sessionFields || [];
+      originalModel.sessionFields = originalModel.sessionFields || originalModel.fields || [];
       OPrime.debug("Edit this function to update session to the latest schema.");
 
       if(window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
