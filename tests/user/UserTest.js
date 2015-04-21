@@ -69,6 +69,21 @@ describe("User ", function() {
       expect(u.prefs.preferedDashboardType).toEqual("");
     });
 
+    it("should upgrade the old dates from back in the mongoose days", function() {
+      var u = new User({
+        "created_at": "2012-09-26T12:39:27.795Z",
+        "updated_at": "2015-03-04T10:31:52.793Z"
+      });
+      expect(u.created_at).toEqual("2012-09-26T12:39:27.795Z");
+      expect(u.dateCreated).toBeDefined();
+      expect(u.dateCreated).toEqual(1348663167795);
+
+      expect(u.updated_at).toEqual("2015-03-04T10:31:52.793Z");
+      expect(u.dateModified).toBeDefined();
+      expect(u.dateModified).toEqual(1425465112793);
+      // expect(u.warnMessages).toEqual(" ");
+    });
+
   });
 
   describe("resume where user left off", function() {
@@ -113,6 +128,20 @@ describe("User ", function() {
           version: u.version,
           hotkeys: [],
           unicodes: []
+        },
+        userMask: {
+          fieldDBtype: "UserMask",
+          username: "",
+          dateCreated: result.userMask.dateCreated,
+          version: result.userMask.version,
+          firstname: "",
+          lastname: "",
+          gravatar: "",
+          researchInterest: "",
+          affiliation: "",
+          description: "",
+          fields: [],
+          api: "users"
         },
         mostRecentIds: {},
         activityConnection: {
