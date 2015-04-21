@@ -5,8 +5,10 @@ var Q = require('q');
 // var md5 = require('MD5');
 var fs = require('fs');
 var util = require('util');
-var node_config = require("./lib/nodeconfig_local");
-var couch_keys = require("./lib/couchkeys_local");
+
+var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
+var node_config = require("./lib/nodeconfig_" + deploy_target);
+var couch_keys = require("./lib/couchkeys_" + deploy_target);
 
 var User = require("fielddb/api/user/User").User;
 var Team = require("fielddb/api/user/Team").Team;
@@ -161,9 +163,15 @@ var processCorpusPageParams = function(req, res) {
   getCorpusFromPouchname(pouchname)
     .then(function(result) {
       result.corpus.copyright = result.corpus.copyright || result.team.username;
-      // if (result.corpus.copyright.indexOf("Add names of the copyright holders") > -1) {
-      //   result.corpus.copyright = result.team.username;
-      // }
+      if (result.corpus.copyright.indexOf("Add names of the copyright holders") > -1) {
+        result.corpus.copyright = result.team.username;
+      }
+      if (result.corpus.dateCreated) {
+        year = new Date(result.corpus.dateCreated).getFullYear();
+        if (year < new Date().getFullYear()) {
+          result.corpus.copyright = result.corpus.copyright + " " + year + " - ";
+        }
+      }
       // var defaultLicense = {
       //   title: "Creative Commons Attribution-ShareAlike (CC BY-SA).",
       //   humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
@@ -190,7 +198,7 @@ var processCorpusPageParams = function(req, res) {
 
       var data = {
         corpora: [result.corpus],
-        ghash: result.team.gravatar,
+        // ghash: result.team.gravatar,
         user: result.team
       };
       res.render('corpus', data);
@@ -400,6 +408,14 @@ var getUser = function getUser(userId) {
         // result.firstname = result.firstname || "";
         // result.lastname = result.lastname || "";
         // result.subtitle = result.subtitle || result.firstname + ' ' + result.lastname;
+        // 
+        if (result.dateCreated) {
+          year = new Date(result.dateCreated).getFullYear();
+          if (year < new Date().getFullYear()) {
+            result.userMask.startYear = " " + year + " - ";
+          }
+        }
+        console.log("Calculating users start year for the copyright statement" + result.dateCreated + " startYear" + result.userMask.startYear);
         df.resolve(result.userMask);
       }
     }

@@ -9,7 +9,7 @@ block content
             img.img-polaroid(src='https://secure.gravatar.com/avatar/#{user.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
         div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
           if user.username
-            h1= user.subtitle
+            h1= user.name
             p= user.username
           else
             h2.text-center Sorry! User does not exist.
