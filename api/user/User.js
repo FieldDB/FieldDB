@@ -258,6 +258,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     set: function(value) {
       if (value && typeof value === "object") {
         value.username = this.username;
+        value.gravatar = value.gravatar || this.gravatar;
         value.researchInterest = value.researchInterest || "No public information available";
         value.description = value.description || "No public information available";
         value.affiliation = value.affiliation || "No public information available";

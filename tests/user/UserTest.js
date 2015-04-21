@@ -338,4 +338,54 @@ describe("User ", function() {
 
   });
 
+
+  describe("User's profile page", function() {
+
+    it("should not have a user mask if noe was in thier user", function() {
+      expect(SAMPLE_USERS[0].userMask).toBeUndefined();
+      expect(SAMPLE_USERS[0].publicSelf).toBeUndefined();
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      expect(user.userMask).toBeUndefined();
+    });
+
+    it("should say no info is available if the user hasnt edited it yet", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {};
+      }
+
+      expect(user.userMask).toBeDefined();
+      expect(user.userMask.username).toEqual("sapir");
+      expect(user.userMask.gravatar).toEqual(user.gravatar);
+      expect(user.userMask.researchInterest).toEqual("No public information available");
+      expect(user.userMask.description).toEqual("No public information available");
+      expect(user.userMask.affiliation).toEqual("No public information available");
+      expect(user.userMask.name).toEqual(user.userMask.username);
+    });
+
+    it("should have the same gravatar as the user, if they haven't customized it", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {};
+      }
+
+      expect(user.userMask.gravatar).toEqual(user.gravatar);
+    });
+
+    it("should have the same gravatar as the user, if they haven't customized it", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {
+          gravatar: "someothergravatarfortheirpublicpage"
+        };
+      }
+
+      expect(user.userMask.gravatar).not.toEqual(user.gravatar);
+      expect(user.userMask.gravatar).toEqual("someothergravatarfortheirpublicpage");
+    });
+
+
+  });
+
+
 });
