@@ -52,7 +52,7 @@ mixin showJson(myJsonObject, level)
             | &nbsp;(empty)
           else
             mixin showJson(value, level)
-        else if key == 'pouchname'
+        else if key == 'dbname'
           p(style='margin:0') #{key}: 
             a(href= value) #{value}
         else
@@ -60,21 +60,21 @@ mixin showJson(myJsonObject, level)
 
 mixin renderCorporaList(myJsonObject)
   each c in myJsonObject
-    - var url = '/' + c.corpusinfo.url
+    - var url = '/' + c.corpuspage
     .media(style='margin-bottom:40px')
       a(href="#{url}").pull-left
-        img(src='https://secure.gravatar.com/avatar/#{c.corpusinfo.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+        img(src='https://secure.gravatar.com/avatar/#{c.connection.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
       .media-body
         h4.media-heading
-          a(href="#{url}")= c.corpusinfo.title
-        - var text = c.corpusinfo.description
+          a(href="#{url}")= c.title
+        - var text = c.description
         p= text.length > 200 ? text.substr(0,200) + '…' : text
 
 mixin renderCorpus(myJsonObject)
   each c in myJsonObject
-    h1.media-heading #{c.corpusinfo.title}
+    h1.media-heading #{c.title}
     .media(style='margin-bottom:40px')
       a(href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html").pull-right
-        img(src='https://secure.gravatar.com/avatar/#{c.corpusinfo.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+        img(src='https://secure.gravatar.com/avatar/#{c.connection.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
       .media-body
-        div= c.corpusinfo.description
+        div= c.description

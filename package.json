@@ -1,12 +1,17 @@
 {
   "name": "FieldDBWebServer",
-  "version": "2.49.29",
+  "version": "3.0.21",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git"
+  },
   "dependencies": {
-    "express": "3.3.7",
-    "forever": "latest",
-    "nano": "~3.3.8",
-    "jade": "~0.31.2",
     "MD5": "~1.0.3",
+    "express": "3.3.7",
+    "fielddb": "3.0.21",
+    "forever": "latest",
+    "jade": "~0.31.2",
+    "nano": "6.1.2",
     "q": "~0.9.6"
   }
 }

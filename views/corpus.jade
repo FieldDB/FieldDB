@@ -6,10 +6,10 @@ block content
       .span3
         p.text-center
           a(href="/#{user.username}") 
-            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{ghash}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{user.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
         div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
           if user.username
-            h1= user.subtitle
+            h1= user.name
             p= user.username
           else
             h2.text-center Sorry! User does not exist.
@@ -37,18 +37,18 @@ block content
           .span4
         .row-fluid
           .span12
-            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].corpusinfo.pouchname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].dbname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
         .row-fluid
           .span11.offset1
-            - var pouchname = corpora[0].corpusinfo.pouchname.toString()
-            form.form-inline#searchCorpus(action='http://localhost:3185/search/#{pouchname}', method='POST', enctype='application/json', style='display:inline-block')
+            - var dbname = corpora[0].dbname.toString()
+            form.form-inline#searchCorpus(action='http://localhost:3185/search/#{dbname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
               button.btn.btn-small.btn-success(type='submit', id='corpus_search')
                 i.icon-search.icon-white(style='margin-top:2px')
                 | &nbsp;Search…
             | &nbsp;&nbsp;
-            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{pouchname}\')')
+            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{dbname}\')')
               i.icon-refresh.icon-white(style='margin-top:2px')
               | &nbsp;Rebuild search lexicon
             | &nbsp;&nbsp;
@@ -64,21 +64,21 @@ block content
     hr
     footer
       - var year = (new Date()).getFullYear()
-      p © #{corpora[0].corpusinfo.copyright} #{year} 
+      p © #{corpora[0].copyright} #{year} 
         
-      - var pouchname = corpora[0].corpusinfo.pouchname.toString()
+      - var dbname = corpora[0].dbname.toString()
       .tabbable
         ul.nav.nav-tabs
           li.active
-            a(href="#terms", data-toggle="tab") Terms of Use for #{pouchname}
+            a(href="#terms", data-toggle="tab") Terms of Use for #{dbname}
           li
             a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
         .tab-content
           .tab-pane.active#terms
-            p #{corpora[0].corpusinfo.termsOfUse.humanReadable}
+            p #{corpora[0].termsOfUse.humanReadable}
             span License: 
-            a(href="#{corpora[0].corpusinfo.license.link}", rel="license", title="#{corpora[0].corpusinfo.license.title}") #{corpora[0].corpusinfo.license.title}
-            p #{corpora[0].corpusinfo.license.humanReadable}
+            a(href="#{corpora[0].license.link}", rel="license", title="#{corpora[0].license.title}") #{corpora[0].license.title}
+            p #{corpora[0].license.humanReadable}
             img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
           .tab-pane#emeldtermsreccomendations
             ul
