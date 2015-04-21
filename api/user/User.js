@@ -65,6 +65,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
       activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
+      userMask: UserMask,
       corpora: Corpora,
       newCorpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
@@ -246,6 +247,31 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
         }
       }
+    }
+  },
+
+  userMask: {
+    get: function() {
+      this.debug("getting userMask");
+      return this._userMask;
+    },
+    set: function(value) {
+      if (value && typeof value === "object") {
+        value.username = this.username;
+        value.researchInterest = value.researchInterest || "No public information available";
+        value.description = value.description || "No public information available";
+        value.affiliation = value.affiliation || "No public information available";
+      }
+      this.ensureSetViaAppropriateType("userMask", value);
+    }
+  },
+
+  publicSelf: {
+    get: function() {
+      return this.userMask;
+    },
+    set: function(value) {
+      this.userMask = value;
     }
   },
 

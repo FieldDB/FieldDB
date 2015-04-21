@@ -60,6 +60,7 @@ define([
 
       /* upgrade to 2.40+ data structures */
       originalModel.corpora = originalModel.corpora || originalModel.corpuses;
+      originalModel.userMask = originalModel.userMask || originalModel.publicSelf;
       delete originalModel.corpuses;
 
       var corporaUserHasAccessTo = localStorage.getItem(originalModel.username + "corporaUserHasAccessTo");

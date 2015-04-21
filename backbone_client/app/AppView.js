@@ -142,7 +142,7 @@ define([
       });
       this.currentCorpusReadView.format = "leftSide";
 
-      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( this.model.get("corpus").get("publicSelf") );
+      this.setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask( this.model.get("corpus").get("corpusMask") );
 
       //Only create a new corpusmodalview if it wasnt already created TODO this might have sideeffects
       if(! this.corpusNewModalView){
