@@ -11,7 +11,7 @@
 //     });
 // }
 angular.module("fielddbAngular", [
-  // "ngAnimate",
+  "ngAnimate",
   "ngCookies",
   "ngTouch",
   "ngSanitize",
@@ -50,6 +50,7 @@ angular.module("fielddbAngular", [
 
   fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
+  fieldDBApp.debugMode = true;
 
   /* Overriding bug and warn messages to use angular UI components */
   FieldDB.FieldDBObject.bug = function(message) {
@@ -103,12 +104,12 @@ angular.module("fielddbAngular", [
   }
   $stateProvider
   // HOME STATES AND NESTED VIEWS ========================================
-    .state("home", {
+    .state("dashboard", {
       url: "/",
       templateUrl: "app/main/main.html"
     })
     // nested list with custom controller
-    .state("home.fieldlinguist", {
+    .state("dashboard.fieldlinguist", {
       url: "/fieldlinguist",
       templateUrl: "components/user/consultants-page.html",
       controller: function($scope) {
@@ -116,7 +117,7 @@ angular.module("fielddbAngular", [
       }
     })
     // nested list with just some random string data
-    .state("home.languageclass", {
+    .state("dashboard.languageclass", {
       url: "/languageclass",
       templateUrl: "components/user/participants-page.html"
     })
@@ -126,13 +127,33 @@ angular.module("fielddbAngular", [
       templateUrl: "components/corpus/corpus-page.html"
     });
 
-  for (var route in FieldDB.Router.routes) {
-    $stateProvider.state(FieldDB.Router.routes[route].path.replace("/", ""), {
-      url: FieldDB.Router.routes[route].path,
-      templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
-      controller: function($stateParams) {
-        console.log("Loading ", $stateParams);
+  var passStateParamsController = function($stateParams) {
+    console.log("Loading ", $stateParams);
+    var paramsChanged = false;
+    if (!fieldDBApp.routeParams) {
+      paramsChanged = true;
+    } else {
+      for (var param in $stateParams) {
+        if ($stateParams.hasOwnProperty(param) && fieldDBApp.routeParams[param] !== $stateParams[param]) {
+          paramsChanged = true;
+        }
       }
+    }
+
+    if (paramsChanged) {
+      fieldDBApp.processRouteParams($stateParams);
+      fieldDBApp.debug(fieldDBApp.routeParams);
+    }
+  };
+  var state;
+  for (var route in FieldDB.Router.routes) {
+    state = FieldDB.Router.routes[route].path.replace("/", "");
+    fieldDBApp.debug("Adding state  " + state);
+    $stateProvider.state(state, {
+      url: FieldDB.Router.routes[route].path,
+      parent: "dashboard",
+      templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
+      controller: passStateParamsController
     });
   }
 
