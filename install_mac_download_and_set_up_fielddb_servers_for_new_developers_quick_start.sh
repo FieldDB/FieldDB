@@ -36,8 +36,8 @@ git --version || {
   exit 1;
 }
 
-ls /Applications/SmartGitHg.app/Contents/MacOS/SmartGit || {
-  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+ls /Applications/SmartGit.app/Contents/MacOS/SmartGit || {
+  echo 'You dont have SmartGit installed. We use SmartGit to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
   echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
   echo ''
   echo ''
@@ -60,35 +60,50 @@ echo 'alias sublime="open -a /Applications/Sublime\ Text.app/ ."'  >> $HOME/.bas
 # We need node to be able to modify the code, anyone who is running this script should have that too.
 node --version || {
   echo 'You dont have Node.js installed yet. We use Node and NPM (Node Package Manager) to install dependancies and make it easier for you to build the code.' ;
-  echo 'Please install it, Opening... http://nodejs.org';
-  echo ''
-  echo ''
-  sleep 3
-  open -a Google\ Chrome http://nodejs.org;
-  exit 1;
+  read -p "Do you want me to automatically install Node for you using Homebrew? (using homebrew is the best method to install ndoe on Mac, it makes it so you dont need to use sudo to install global packages." -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+     then {
+      brew install node;
+      echo "Please review the above log for errors and then re-run this script when you're sure node is ready."
+    }
+  else {
+    echo ''
+    echo ''
+    echo 'Please install it from the website, Opening... http://nodejs.org';
+    sleep 3
+    open -a Google\ Chrome http://nodejs.org;
+  }
+fi
+exit 1;
 }
 
 
-echo " Installing grunt, browserify, jasmine-node, jshint, bower and other development dependancies"
+echo " Installing grunt, gulp, browserify, jasmine-node, jshint, bower and other development dependancies which are used to work on the project"
 which grunt || {
   echo "Installing grunt globally (required to build and manage modules) "
-  sudo npm install -g grunt-cli
-  sudo chown -R `whoami` ~/.npm
+  npm install -g grunt-cli
+}
+which gulp || {
+  echo "Installing gulp globally (required to build and manage modules) "
+  npm install -g gulp
 }
 which jasmine-node || {
   echo "Installing jasmine-node globally (required to run our test suites) "
-  sudo npm install -g git://github.com/kacperus/jasmine-node.git
-  sudo chown -R `whoami` ~/.npm
+  npm install -g git://github.com/kacperus/jasmine-node.git
 }
 which jshint || {
   echo "Installing jshint globally (required to make sure your code is well-formed) "
-  sudo npm install -g jshint
-  sudo chown -R `whoami` ~/.npm
+  npm install -g jshint
 }
 which bower || {
   echo "Installing bower globally (required to install client side dependancies for many modules) "
-  sudo npm install -g bower
-  sudo chown -R `whoami` ~/.npm
+  npm install -g bower
+}
+which phantomjs || {
+  echo "Installing phantomjs globally (required to run browser tests, website scrapers, server side render, and other fun headless things you will probably like to do) "
+  npm install -g phantomjs
+  # echo "export PHANTOMJS_BIN=`which phantomjs`" >> $HOME/.bash_profile # this is done automatically by npm install -g
+  # source $HOME/.bash_profile
 }
 
 
@@ -402,7 +417,7 @@ curl http://localhost:5984 || {
   ls /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB || {
     read -p "Do you want me to automatically download and attempt to set up CouchDB (with CORS and HTTPS) for you?" -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
-    then {
+      then {
       # set up couchdb
       cd $FIELDDB_HOME
       mkdir couchdb
@@ -412,9 +427,9 @@ curl http://localhost:5984 || {
       mv Apache\ CouchDB.app /Applications/Apache\ CouchDB.app
       echo "Setting up CouchDB with CORS support and HTTPS"
       /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &
-      }
-    fi
-  }
+    }
+  fi
+}
 }
 
 erica --version || {
@@ -428,7 +443,7 @@ erica --version || {
   echo ""
   echo "If you want to deploy FieldDB clients to CouchDBs you should use erica. "
   read -p "Do you want me to download Erica and set it up for you?" -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
+  if [[ $REPLY =~ ^[Yy]$ ]]
     then {
      cd $FIELDDB_HOME
      mkdir couchdb
@@ -441,11 +456,11 @@ erica --version || {
       brew --version || {
         echo "You have to install Brew (its useful if you are really going to use this mac as a dev computer,  since you already have Xcode we figure you probably want it) "
         read -p "Do you want me to download Brew and set it up for you?" -n 1 -r
-          if [[ $REPLY =~ ^[Yy]$ ]]
+        if [[ $REPLY =~ ^[Yy]$ ]]
           then {
             ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
-           }
-          fi
+          }
+        fi
       }
       # install Rebar, which will install erlang, after that erica will build...
       brew install erlang-src && brew install rebar
@@ -454,18 +469,18 @@ erica --version || {
         exit 1
       }
 
+    }
+    read -p "Do you want me to install erica globally for you? (sudo make install)" -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]
+     then {
+       sudo make install
      }
-     read -p "Do you want me to install erica globally for you? (sudo make install)" -n 1 -r
-          if [[ $REPLY =~ ^[Yy]$ ]]
-           then {
-             sudo make install
-           }
-           else {
-              alias erica="$FIELDDB_HOME/couchdb/erica/erica"
-           }
-          fi
-   }
-    fi
+   else {
+    alias erica="$FIELDDB_HOME/couchdb/erica/erica"
+  }
+fi
+}
+fi
 }
 
 
@@ -475,8 +490,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 
     which pm2 || {
       echo "Installing pm2 globally (required to keep web services on if they fail) "
-      sudo npm install -g pm2
-      sudo chown -R `whoami` ~/.npm
+      npm install -g pm2
+      
     }
 
     echo "Setting up fielddb logs to be in /usr/local/var "
@@ -526,17 +541,17 @@ git checkout master
 
 grunt --version || {
   echo "If you want to run the tests, you should have grunt installed globally. "
-  read -p "Do you want me to install Grunt globally for you? (sudo npm install -g grunt-cli)" -n 1 -r
-       if [[ $REPLY =~ ^[Yy]$ ]]
-        then {
-          echo ""
-          sudo npm install -g grunt-cli
-        }
-        else {
-          echo ""
-          exit 1;
-        }
-       fi
+  read -p "Do you want me to install Grunt globally for you?  npm install -g grunt-cli)" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+  then {
+    echo ""
+    npm install -g grunt-cli
+  }
+else {
+  echo ""
+  exit 1;
+}
+fi
 }
 
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
