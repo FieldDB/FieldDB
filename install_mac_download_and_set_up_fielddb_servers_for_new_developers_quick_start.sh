@@ -46,16 +46,16 @@ ls /Applications/SmartGitHg.app/Contents/MacOS/SmartGit || {
   # exit 1;
 }
 
-ls /Applications/Sublime\ Text\ 2.app/Contents/MacOS/Sublime\ Text\ 2 || {
+ls /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text || {
   echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshint to make sure your javascript is well formed. ' ;
-  echo 'Please install it, Opening... http://www.sublimetext.com/2';
+  echo 'Please install it, Opening... http://www.sublimetext.com/3';
   echo ''
   echo ''
   sleep 3
-  open -a Google\ Chrome http://www.sublimetext.com/2;
+  open -a Google\ Chrome http://www.sublimetext.com;
   exit 1;
 }
-echo 'alias sublime="open -a /Applications/Sublime\ Text\ 2.app/ ."'  >> $HOME/.bash_profile
+echo 'alias sublime="open -a /Applications/Sublime\ Text.app/ ."'  >> $HOME/.bash_profile
 
 # We need node to be able to modify the code, anyone who is running this script should have that too.
 node --version || {
