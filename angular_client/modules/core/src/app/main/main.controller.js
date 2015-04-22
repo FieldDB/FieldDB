@@ -2,7 +2,7 @@
 
 "use strict";
 
-angular.module("fielddbAngular").controller("FieldDBController", function($scope, $stateParams, $rootScope) {
+angular.module("fielddbAngular").controller("FieldDBController", function($scope, $rootScope) {
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
@@ -42,9 +42,6 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     password: ""
   };
 
-  if ($stateParams) {
-    $scope.application.processRouteParams($stateParams);
-  }
   // FieldDB.FieldDBConnection.connect();
 
 
@@ -58,8 +55,8 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
       url: "http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/" + klass + ".html"
     };
   }
-  $scope.application.currentCorpusDashboard = "/lingllama/comunity_corpus";
-  $scope.FieldDBComponents.Activity.route = $scope.application.currentCorpusDashboard + "/activityfeed/123";
+  $scope.application.currentCorpusDashboard = ":team/:corpusidentifier/import/:importType";
+  $scope.FieldDBComponents.Activity.route = $scope.application.currentCorpusDashboard ;//+ "/activityfeed/123";
 
   console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });
