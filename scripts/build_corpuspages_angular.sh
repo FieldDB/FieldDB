@@ -8,6 +8,20 @@ cd angular_client/modules/corpuspages &&
 npm install || exit 1;
 bower install || exit 1;
 
+# ls app/bower_components/fielddb-angular || {
+#   ln -s $FIELDDB_HOME/FieldDB/angular_client/modules/core app/bower_components/fielddb-angular
+# }
+# ls app/bower_components/fielddb-lexicon-angular || {
+#   ln -s $FIELDDB_HOME/FieldDBLexicon app/bower_components/fielddb-lexicon-angular
+# }
+# ls app/bower_components/fielddb-activity-feed || {
+#   ln -s $FIELDDB_HOME/FieldDBActivityFeed app/bower_components/fielddb-activity-feed
+# }
+# ls app/bower_components/fielddb || {
+#   mkdir app/bower_components/fielddb
+#   ln -s $FIELDDB_HOME/FieldDB/fielddb.js app/bower_components/fielddb/fielddb.js
+# }
+
 echo "Using local fielddb commonjs";
 rm bower_components/fielddb/fielddb.js;
 rm bower_components/fielddb/fielddb.min.js;

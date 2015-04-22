@@ -5,6 +5,11 @@ cd angular_client/modules/spreadsheet &&
 # rm -rf node_modules
 # rm -rf app/bower_components
 
+cat app/scripts/private_services.js || {
+  echo " Creating a private services file which you can use to change the servers the spreadsheet app contacts"
+  cp app/scripts/private_services_sample.js app/scripts/private_services.js
+}
+
 npm install || exit 1;
 bower install || exit 1;
 

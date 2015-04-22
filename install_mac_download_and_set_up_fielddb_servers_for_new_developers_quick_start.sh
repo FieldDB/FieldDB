@@ -105,6 +105,12 @@ which phantomjs || {
   # echo "export PHANTOMJS_BIN=`which phantomjs`" >> $HOME/.bash_profile # this is done automatically by npm install -g
   # source $HOME/.bash_profile
 }
+which karma || {
+  echo "Installing karma globally (required to run angular tests) "
+  npm install -g karma
+  npm install -g karma-phantomjs-launcher
+  npm install -g karma-chrome-launcher
+}
 
 
 # We decided not to force interns to have XCode on their macs
@@ -138,11 +144,6 @@ mkdir $FIELDDB_HOME
 mkdir $FIELDDB_HOME/logs
 cd $FIELDDB_HOME
 
-echo "Making pm2 log directory point to the logs directory"
-# mkdir /usr/local/var/log/fielddb
-# ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
-ln -s $FIELDDB_HOME/logs ~/.pm2/logs
-
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
 echo "Downloading the FieldDB core from Github."
@@ -161,6 +162,16 @@ npm install
 echo " Running jshint, tests and building core and setting up symblic links"
 grunt travis
 
+echo "What is your GitHub username (so we can set that to the origin of the repos instead of the main project)"
+echo -n "(e.g. myusernameontgithub) and press [ENTER]: "
+read github_username;
+git remote add origin git@github.com:"$github_username"/FieldDB.git;
+git remote -v
+
+git config --global user.username || {
+  git config --global user.username '"'$github_username'"'
+}
+
 echo " Generating js docs so you can browse the documentation "
 grunt docs
 echo " Opening js docs so you can browse the documentation, if you like that kind of thing "
@@ -169,17 +180,27 @@ echo ''
 sleep 3
 open -a Google\ Chrome docs/javascript/Corpus.html;
 
+echo ""
+echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/public/dev.html"
+sleep 3
+open -a Google\ Chrome $FIELDDB_HOME/FieldDBWebServer/public/dev.html;
+open -a Sublime\ Text.app $FIELDDB_HOME;
+echo ""
+echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit, or search for FieldDB on YouTube "
+
+## FieldDB Known Client-Side Apps ###################################################
+
 echo "Building the Prototype App, it was written in Backbone.js, and needs you to pre-compile your Handlebars templates before you can open it"
 echo "Preparing to compiling the Prototype's handlebars html templates so you can see the app if you load it as an unpacked chrome extension...."
-cd backbone_client
+cd backbone_client;
 echo " Installing client side dependancies (managed by Bower)"
-bower install
+bower install;
 echo " Installing build dependancies (managed by NPM)"
-npm install
+npm install;
 
 echo 'The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)'
 cd $FIELDDB_HOME/FieldDB
-./scripts/build_templates.sh
+./scripts/build_fielddb_minified.sh
 echo "If you want to get started developing or using the Offline Chrome App, you now can load it as an Chrome Extension."
 echo 'Instructions:'
 echo ' 1. visit chrome://extensions in a Chrome or Chromium browser'
@@ -191,52 +212,24 @@ echo ''
 echo ''
 echo 'Please wait, Opening instructions for you to follow ...'
 sleep 5
-open -a Sublime\ Text\ 2.app $FIELDDB_HOME;
 open http://developer.chrome.com/extensions/getstarted.html#unpacked;
 
-echo "Building the Spreadsheet App, it is written in Angular.js and needs you to bower install its dependancies before you can open it"
-cd angular_client/modules/spreadsheet
-echo " Installing client side dependancies (managed by Bower)"
-bower install
 
-echo " Creating a private services file which you can use to change the servers the spreadsheet app contacts"
-cp app/scripts/private_services_sample.js app/scripts/private_services.js
-grunt
 
 echo "Building the Core angular components, they are written in Angular.js and need you to bower install its dependancies before you can open the other components which depend on them. It also uses sym links for local files in this project instead of bower "
-cd angular_client/modules/core
-bower install
-ls app/bower_components/fielddb || {
-  mkdir app/bower_components/fielddb
-  ln -s $FIELDDB_HOME/FieldDB/fielddb.js app/bower_components/fielddb/fielddb.js
-}
+cd $FIELDDB_HOME/FieldDB
+./scripts/build_fielddb_angular_core.sh
+
+echo "Building the Spreadsheet App, it is written in Angular.js and needs you to bower install its dependancies before you can open it"
+cd $FIELDDB_HOME/FieldDB
+./scripts/build_spreadsheet_angular.sh
+
 
 echo "Building the Corpus pages app, it is written in Angular.js and needs you to bower install its dependancies before you can open it. It also uses sym links for local files in this project instead of bower (these need to be on your computer, although we will eventually move them to bower when they are stable)"
-cd angular_client/modules/corpuspages
-bower install
-ls app/bower_components/fielddb-angular || {
-  ln -s $FIELDDB_HOME/FieldDB/angular_client/modules/core app/bower_components/fielddb-angular
-}
-ls app/bower_components/fielddb-lexicon-angular || {
-  ln -s $FIELDDB_HOME/FieldDBLexicon app/bower_components/fielddb-lexicon-angular
-}
-ls app/bower_components/fielddb-activity-feed || {
-  ln -s $FIELDDB_HOME/FieldDBActivityFeed app/bower_components/fielddb-activity-feed
-}
-ls app/bower_components/fielddb || {
-  mkdir app/bower_components/fielddb
-  ln -s $FIELDDB_HOME/FieldDB/fielddb.js app/bower_components/fielddb/fielddb.js
-}
+cd $FIELDDB_HOME/FieldDB
+./scripts/build_corpuspages_angular.sh
 
-echo "What is your GitHub username (so we can set that to the origin of the repos instead of the main project)"
-echo -n "(e.g. myusernameontgithub) and press [ENTER]: "
-read github_username;
-git remote add origin git@github.com:"$github_username"/FieldDB.git;
-git remote -v
 
-git config --global user.username || {
-  git config --global user.username '"'$github_username'"'
-}
 ## FieldDB Libs/Plugins ###################################################
 
 echo ''
@@ -492,6 +485,11 @@ if [[ $REPLY =~ ^[Yy]$ ]]
       echo "Installing pm2 globally (required to keep web services on if they fail) "
       npm install -g pm2
       
+      echo "Making pm2 log directory point to the logs directory"
+      # mkdir /usr/local/var/log/fielddb
+      # ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
+      ln -s $FIELDDB_HOME/logs ~/.pm2/logs
+
     }
 
     echo "Setting up fielddb logs to be in /usr/local/var "
@@ -510,17 +508,18 @@ if [[ $REPLY =~ ^[Yy]$ ]]
     echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
 
     echo "Downloading server configs from a private repo"
+    cd $FIELDDB_HOME
     git clone username@git.example.ca:/example/FieldDBServerConfig
-    sudo cp -R FieldDBServerConfig/fielddbhome $FIELDDB_HOME
+    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/fielddbhome $FIELDDB_HOME
     sudo chown -R fielddb $FIELDDB_HOME
 
     echo "Setting up nginx"
     brew install nginx
     sudo cp -R /usr/local/etc/nginx /usr/local/etc/nginxbackup
-    sudo cp -R FieldDBServerConfig/etc/nginx /usr/local/etc/
+    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/etc/nginx /usr/local/etc/
 
     echo "Setting up plist daemons"
-    sudo cp -R FieldDBServerConfig/Library/LaunchDaemons /Library
+    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/Library/LaunchDaemons /Library
     sudo launchctl load -w /Library/LaunchDaemons/*
 
   }
@@ -529,59 +528,50 @@ else {
 }
 fi
 
+## Making sure the user has local databases for developing offline ###################################################
+curl http://localhost:5984/new_corpus || {
+  echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
+  
+  cd $FIELDDB_HOME/AuthenticationWebService
+  git fetch https://github.com/cesine/AuthenticationWebService.git installable
+  git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
+  node service.js &
+  sleep 10
+  curl -k https://localhost:3183/api/install
+  git checkout master
+  sleep 200
+
+}
+
 ## Running tests to see if everything downloaded and works ###################################################
-echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
-cd $FIELDDB_HOME/AuthenticationWebService
-git fetch https://github.com/cesine/AuthenticationWebService.git installable
-git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
-node service.js &
-sleep 10
-curl -k https://localhost:3183/api/install
-git checkout master
-
-grunt --version || {
-  echo "If you want to run the tests, you should have grunt installed globally. "
-  read -p "Do you want me to install Grunt globally for you?  npm install -g grunt-cli)" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-  then {
-    echo ""
-    npm install -g grunt-cli
-  }
-else {
-  echo ""
-  exit 1;
-}
-fi
-}
-
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
 cd $FIELDDB_HOME/FieldDBWebServer
-grunt
+node server &
+echo "Will run FieldDBWebServer tests in a moment... "
+sleep 10
+npm test
 
 echo "Testing if FieldDB AuthenticationWebService will run "
 cd $FIELDDB_HOME/AuthenticationWebService
-grunt
+node auth_service.js & 
+echo "Will run AuthenticationWebService tests in a moment... "
+sleep 10
+npm test
 
 echo "Testing if FieldDB AudioWebService will run, it should say 'Listening on 3184' "
 cd $FIELDDB_HOME/AudioWebService
+node audio-service.js & 
+echo "Will run AuthenticationWebService tests in a moment... "
+sleep 10
 npm test
 
 echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on 3185' "
 cd $FIELDDB_HOME/LexiconWebService
-grunt  || {
-  echo "All done! "
-  echo ""
-  echo ""
-  echo "All the code is downloaded. I wasn't able to run the tests to know if all the webservices are ready to use, now you can take a look in the $FIELDDB_HOME folder (if you have Sublime, I already opened it for you)."
-}
+echo "Will run LexiconWebService tests in a moment... "
+sleep 10
+npm test
 
-echo ""
-echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/public/dev.html"
-sleep 3
-open -a Google\ Chrome $FIELDDB_HOME/FieldDBWebServer/public/dev.html;
-echo ""
-echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit, or search for FieldDB on YouTube "
-
-#echo "If the above webservices succedded you should kill them now using (where xxx is the process id) $ kill xxxx "
+echo "If the above webservices succeeded you should kill them now using (where xxx is the process id) $ kill xxxx "
+ps -au $USER |grep node
 
 
