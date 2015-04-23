@@ -170,6 +170,7 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
   "_dateCreated",
   "_dateModified",
   "_fieldDBtype",
+  "_rev",
   "_version",
   "appVersionWhenCreated",
   "authServerVersionWhenCreated",
