@@ -276,7 +276,8 @@ define([
       data.user = u;
 
       /* Upgrade chrome app user's to v1.38+ */
-      if(OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
+      data.user.appVersionWhenCreated = data.user.appVersionWhenCreated || "";
+      if(data.user.appVersionWhenCreated && OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
         var birthday = data.user.appVersionWhenCreated.replace("v","").split(".");
         var year = birthday[0];
         var week = birthday[1];
