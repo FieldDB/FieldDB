@@ -255,7 +255,7 @@ describe("Authentication ", function() {
       }).then(function(confirmation) {
         expect(confirmation).toBeDefined();
         expect(confirmation.info).toBeDefined();
-        expect(confirmation.info[0]).toEqual("Verified");
+        expect(confirmation.info[0]).toEqual("Verified offline.");
       }, function(error) {
         console.log(error);
         expect(false).toBeTruthy();
