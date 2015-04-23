@@ -333,6 +333,17 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       // TODO deprecated
       json.datalists = this.datalists;
 
+      if (json.mostRecentIds) {
+        delete json.mostRecentIds.fieldDBtype;
+        delete json.mostRecentIds.version;
+        delete json.mostRecentIds.dateCreated;
+        delete json.mostRecentIds.dateModified;
+        delete json.mostRecentIds.comments;
+        if (!json.mostRecentIds.dbname) {
+          delete json.mostRecentIds.dbname;
+        }
+      }
+
       this.debug(json);
       return json;
     }
