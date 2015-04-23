@@ -406,7 +406,7 @@ describe("Data List", function() {
       }]);
 
       expect(datalist.docs.tempfour.confirmMessage).toBeDefined();
-      expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for _rev, Do you want to overwrite it from \"1-456\" -> \"2-123\"");
+      expect(datalist.docs.tempfour.confirmMessage).not.toContain("I found a conflict for _rev, Do you want to overwrite it from \"1-456\" -> \"2-123\"");
       expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for some, Do you want to overwrite it from \"other content\" -> \"other content changed\"");
       // expect(datalist.docs.tempfour.confirmMessage).toContain("I found a conflict for _dateCreated, Do you want to overwrite it from ");
 
