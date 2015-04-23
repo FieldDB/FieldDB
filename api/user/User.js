@@ -62,7 +62,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       appbrand: FieldDBObject.DEFAULT_STRING,
       fields: DatumFields,
       prefs: UserPreference,
-      mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
+      mostRecentIds: FieldDBObject,
       activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
       userMask: UserMask,
@@ -155,16 +155,20 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       if (value === this._mostRecentIds) {
         return;
       }
-      // if (!value) {
-      //   delete this._mostRecentIds;
-      //   return;
-      // } else {
-      //   if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
-      //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
-      //   }
-      // }
-      if (value && value.connection) {
-        value.connection = value.connection = new Connection(value.connection);
+      if (!value) {
+        delete this._mostRecentIds;
+        return;
+      } else {
+        if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
+          value = new this.INTERNAL_MODELS["mostRecentIds"](value);
+        }
+      }
+
+      value.connection = value.connection || value.corpusConnection || value.couchConnection;
+      delete value.corpusConnection;
+      delete value.couchConnection;
+      if (value.connection) {
+        value.connection = new Connection(value.connection);
       }
       this._mostRecentIds = value;
     }
