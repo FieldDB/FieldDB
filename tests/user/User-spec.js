@@ -338,10 +338,57 @@ describe("User ", function() {
 
   });
 
+  describe("Cache corpora connections", function() {
+
+    it("should have a list of corpora the user has access to", function() {
+      expect(SAMPLE_USERS[0].corpuses).toBeDefined();
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      expect(user.corpora).toBeDefined();
+      expect(user.corpora.length).toEqual(2);
+    });
+
+    it("should be able to get a connection from the dbname", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      var connection = user.corpora.findCorpusConnectionFromTitleAsUrl("sapir-cherokee");
+      expect(connection).toBeDefined();
+      expect(connection.dbname).toEqual("sapir-cherokee");
+    });
+
+    it("should be able to get a connection from only the title", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+
+      user.corpora["sapir-firstcorpus"].title = "Quechua Sample Data";
+      expect(user.corpora["sapir-firstcorpus"].title).toEqual("Quechua Sample Data");
+      expect(user.corpora["sapir-firstcorpus"]).toBe(user.corpora.collection[1]);
+
+      var connection = user.corpora.findCorpusConnectionFromTitleAsUrl("Quechua Sample Data");
+      expect(connection).toBeDefined();
+      expect(connection.dbname).toEqual("sapir-firstcorpus");
+    });
+
+    it("should be able to get a connection from only the title as url", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      
+      user.corpora["sapir-firstcorpus"].title = "Practice corpus";
+      expect(user.corpora["sapir-firstcorpus"].title).toEqual("Practice corpus");
+      expect(user.corpora["sapir-firstcorpus"].titleAsUrl).toEqual("practice_corpus");
+
+      var connection = user.corpora.findCorpusConnectionFromTitleAsUrl("practice_corpus");
+      expect(connection).toBeDefined();
+      expect(connection.dbname).toEqual("sapir-firstcorpus");
+    });
+
+    it("should be able to get a connection from only the corpusidentifier and team's username", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      var connection = user.corpora.findCorpusConnectionFromTitleAsUrl("cherokee", "sapir");
+      expect(connection).toBeDefined();
+      expect(connection.dbname).toEqual("sapir-cherokee");
+    });
+  });
 
   describe("User's profile page", function() {
 
-    it("should not have a user mask if noe was in thier user", function() {
+    it("should not have a user mask if not was in thier user", function() {
       expect(SAMPLE_USERS[0].userMask).toBeUndefined();
       expect(SAMPLE_USERS[0].publicSelf).toBeUndefined();
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
