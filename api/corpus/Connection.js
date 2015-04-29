@@ -289,6 +289,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         }
       }
       this._title = value;
+      this._titleAsUrl = "";
     }
   },
 
