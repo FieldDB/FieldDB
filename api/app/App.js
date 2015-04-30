@@ -3,6 +3,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Activity = require("./../activity/Activity").Activity;
 var Authentication = require("./../authentication/Authentication").Authentication;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var CorpusMask = require("./../corpus/CorpusMask").CorpusMask;
 var Database = require("./../corpus/Database").Database;
 var Connection = require("./../corpus/Connection").Connection;
 var DataList = require("./../data_list/DataList").DataList;
@@ -417,44 +418,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           searchKeywords: routeParams.searchQuery
         });
       } else if (routeParams.docid) {
-        if (this.doc && this.doc.save) {
-          this.doc.bug("Switching to another document without saving...");
+        if (this.currentDoc && this.currentDoc.save) {
+          this.currentDoc.bug("Switching to another document without saving...");
         }
-        this.doc = new FieldDBObject({
-          id: routeParams.docid
-        });
-      }
-
-      /*
-       * Letting the url determine which team is loaded
-       */
-      if (routeParams.team) {
-        routeParams.team = Connection.validateUsername(routeParams.team).identifier;
-
-        /*
-         * Letting the url determine which corpus is loaded
-         */
-        if (routeParams.corpusidentifier) {
-          routeParams.corpusidentifier = Connection.validateIdentifier(routeParams.corpusidentifier).identifier;
-          this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
-          this.currentCorpusDashboardDBname = routeParams.team + "-" + routeParams.corpusidentifier;
-          if (this.currentCorpusDashboardDBname.split("-").length < 2) {
-            this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
-            return;
-          }
-
-          // this.team.dbname = this.currentCorpusDashboardDBname;
-          if (this.corpus && this.corpus.save) {
-            this.corpus.bug("Switching to another corpus without saving...");
-          }
-          if (!this.corpus || this.currentCorpusDashboardDBname !== this.corpus.dbname) {
-            this.corpus = new Corpus({
-              dbname: this.currentCorpusDashboardDBname
-            });
-          }
-        }
-      }
-      if (routeParams.docid) {
         var tempdoc = new FieldDBObject({
           id: routeParams.docid
         }).fetch().then(function(result) {
@@ -467,31 +433,78 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       }
 
       /*
-       * Fetching models if they are not complete
+       * Letting the url determine which team is loaded
+       */
+      if (routeParams.team) {
+        routeParams.team = Connection.validateUsername(routeParams.team).identifier;
+
+        if (!routeParams.corpusidentifier) {
+          this.todo("load the user's profile..." + routeParams.team);
+        } else {
+          /*
+           * Letting the url determine which corpus is loaded
+           */
+          routeParams.corpusidentifier = Connection.validateIdentifier(routeParams.corpusidentifier).identifier;
+          this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
+          
+          var connection;
+          if (this.authentication &&
+            this.authentication.user &&
+            this.authentication.user.username &&
+            this.authentication.user.corpora &&
+            this.authentication.user.corpora.length > 0 &&
+            typeof this.authentication.user.corpora.findCorpusConnectionFromTitleAsUrl === "function") {
+
+            connection = this.authentication.user.corpora.findCorpusConnectionFromTitleAsUrl(routeParams.corpusidentifier, routeParams.team);
+            if (connection) {
+              // this.currentCorpusDashboardDBname = connection.dbname;
+              if (this.corpus && this.corpus.save && this.corpus.dbname !== connection.dbname) {
+                this.corpus.bug("Switching to another corpus without saving...");
+              }
+              this.corpus = new Corpus({
+                connection: connection,
+                dbname: connection.dbname
+              });
+            }
+          }
+          if (!connection) {
+            // this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
+            connection = Connection.defaultConnection();
+            connection.dbname = routeParams.team + "-" + routeParams.corpusidentifier;
+            this.corpus = new CorpusMask({
+              connection: connection,
+              dbname: connection.dbname
+            });
+          }
+          this.application.connection = connection;
+        }
+      }
+
+      /*
+       * Fetching corpus details if it is not complete
        */
       if (this.corpus && this.corpus.dbname && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
-        return this.corpus.loadCorpusByDBname(this.corpus.dbname).then(function(result) {
+        return this.corpus.fetch().then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
           self.status = self.corpus.status = "Loaded corpus details.";
           if (self.application.importer) {
             self.application.importer.corpus = self.corpus;
           }
-          self.render();
-
+          // self.render();
           return self;
         }, function(result) {
           self.debug("Failed to download corpus details.", result);
-
+          self.corpus.error = result.userFriendlyErrors.join(" ");
           self.status = self.corpus.status = "Failed to download corpus details. Are you sure this is the corpus you wanted to see: " + self.corpus.dbname;
           // self.loginDetails.username = self.team.username;
-          self.render();
+          // self.render();
           return self;
         }).fail(function(error) {
           console.error(error.stack, self);
         });
       } else {
-        this.debug("Not fetching corpus, its aleady here.", this.corpus);
+        this.debug("Not fetching corpus ", this.corpus);
       }
     }
   },
