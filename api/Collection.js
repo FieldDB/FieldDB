@@ -260,8 +260,8 @@ Collection.prototype = Object.create(Object.prototype, {
         results.push(this[searchingFor]);
       }
       if (fuzzy) {
-        searchingFor = new RegExp(".*" + searchingFor + ".*", "i");
         sanitzedSearchingFor = new RegExp(".*" + this.sanitizeStringForPrimaryKey(searchingFor) + ".*", "i");
+        searchingFor = new RegExp(".*" + searchingFor + ".*", "i");
         this.debug("fuzzy ", searchingFor, sanitzedSearchingFor);
       }
       // this.debug("searching for somethign with indexOf", searchingFor);
