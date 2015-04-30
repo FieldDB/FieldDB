@@ -154,6 +154,9 @@ CORS.makeCORSRequest = function(options) {
           CORS.application.authentication.dispatchEvent("unauthorized");
         }
       }
+      if (response.userFriendlyErrors[0] === "no_db_file") {
+        response.userFriendlyErrors = ["That db doesn't exist. Are you sure this is the db you wanted to open: " + options.url];
+      }
       deferred.reject(response);
       return;
     }
