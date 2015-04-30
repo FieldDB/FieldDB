@@ -82,7 +82,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   id: {
     get: function() {
-      return "corpus";
+      this._id = "corpus";
+      return this._id;
     },
     set: function(value) {
       if (value === this._id) {
