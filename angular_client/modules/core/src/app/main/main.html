@@ -9,8 +9,14 @@
   </p>
   <p>
     Nested views demo
-    <a ui-sref=".fieldlinguist" class="btn btn-primary">Field linguist</a>
-    <a ui-sref=".languageclass" class="btn btn-danger">Language class</a>
+    <a ui-sref="dashboard.team({team: 'lingllama'})" class="btn btn-primary">User Page</a>
+    <a ui-sref="dashboard.corpus({team: 'lingllama', corpusidentifier: 'community_corpus'})" class="btn btn-danger">Corpus Page</a>
+
+    <a href="/jenkins" class="btn btn-primary">Jenkins Page</a>
+    <a href="/jenkins/firstcorpus" class="btn btn-danger">Jenkin's First Corpus</a>
+    <pre ng-show="application.debugMode">
+    {{application.routeParams | json}}
+    </pre>
   </p>
 </div>
 
@@ -20,7 +26,7 @@
   <div class="col-sm-6 col-md-4" ng-repeat="fieldDBModel in FieldDBComponents | orderBy:'length'">
     <div class="thumbnail">
       <div class="caption">
-        <h3><a ui-sref="{{fieldDBModel.route}}">{{fieldDBModel.fieldDBtype}}</a></h3>
+        <h3><a href="{{fieldDBModel.route}}">{{fieldDBModel.fieldDBtype}}</a></h3>
           <!-- <iframe ng-src="{{fieldDBModel.url}}">
         </iframe> -->
       </div>

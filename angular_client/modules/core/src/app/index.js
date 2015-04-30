@@ -19,6 +19,17 @@ angular.module("fielddbAngular", [
   "ui.bootstrap",
   "angularFileUpload",
   "contenteditable"
+]).run(["$rootScope", "$state", "$stateParams",
+  function($rootScope, $state, $stateParams) {
+    // From UI-Router sample
+    // It's very handy to add references to $state and $stateParams to the $rootScope
+    // so that you can access them from any scope within your applications.For example,
+    // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
+    // to active whenever 'contacts.list' or one of its decendents is active.
+    $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
+    console.log(" state ", $state, $stateParams);
+  }
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
   var fieldDBApp;
@@ -47,12 +58,12 @@ angular.module("fielddbAngular", [
   fieldDBApp.knownConnections = FieldDB.Connection.knownConnections;
   fieldDBApp.currentConnection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
 
-
   fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
   fieldDBApp.debugMode = true;
 
-  /* Overriding bug and warn messages to use angular UI components */
+  /* Overriding bug and warn messages to use angular UI components
+   TODO use angular modal for bugs */
   FieldDB.FieldDBObject.bug = function(message) {
     console.warn(message);
   };
@@ -96,36 +107,6 @@ angular.module("fielddbAngular", [
   }
   $locationProvider.html5Mode(true);
 
-  /* Add some default Routes/States which the app knows how to render */
-  if (FieldDB.Router.otherwise) {
-    $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
-  } else {
-    $urlRouterProvider.otherwise("#");
-  }
-  $stateProvider
-  // HOME STATES AND NESTED VIEWS ========================================
-    .state("dashboard", {
-      url: "/",
-      templateUrl: "app/main/main.html"
-    })
-    // nested list with custom controller
-    .state("dashboard.fieldlinguist", {
-      url: "/fieldlinguist",
-      templateUrl: "components/user/consultants-page.html",
-      controller: function($scope) {
-        $scope.dogs = ["Place", "holders", "for controller"];
-      }
-    })
-    // nested list with just some random string data
-    .state("dashboard.languageclass", {
-      url: "/languageclass",
-      templateUrl: "components/user/participants-page.html"
-    })
-    // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-    .state("about", {
-      url: "/about",
-      templateUrl: "components/corpus/corpus-page.html"
-    });
 
   var passStateParamsController = function($stateParams) {
     console.log("Loading ", $stateParams);
@@ -145,19 +126,50 @@ angular.module("fielddbAngular", [
       fieldDBApp.debug(fieldDBApp.routeParams);
     }
   };
+  
+  /* Add some default Routes/States which the app knows how to render */
+  if (FieldDB.Router.otherwise) {
+    $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
+  } else {
+    $urlRouterProvider.otherwise(fieldDBApp.basePathname);
+  }
+  $stateProvider
+  // HOME STATES AND NESTED VIEWS ========================================
+    .state("dashboard", {
+      url: "/",
+      templateUrl: "app/main/main.html",
+      controller: passStateParamsController
+    })
+    // nested list with custom controller
+    .state("dashboard.team", {
+      url: "^/:team",
+      template: "<div>User {{application.routeParams.team}}</div>",
+      controller: passStateParamsController
+    })
+    // nested list with just some random string data
+    .state("dashboard.corpus", {
+      url: "^/:team/:corpusidentifier",
+      template: "<div>Corpus {{application.routeParams.corpusidentifier}} by {{application.routeParams.team}}</div>",
+      controller: passStateParamsController
+    })
+    // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
+    .state("faq", {
+      url: "/faq",
+      template: "<div>FAQ</div>",
+      controller: passStateParamsController
+    });
   var state;
   for (var route in FieldDB.Router.routes) {
-    state = FieldDB.Router.routes[route].path.replace("/", "");
-    fieldDBApp.debug("Adding state  " + state);
-    $stateProvider.state(state, {
-      url: FieldDB.Router.routes[route].path,
-      parent: "dashboard",
+    state = FieldDB.Router.routes[route].path.replace(/\/:?/g, ".").replace(/^\./, "").replace("team.corpusidentifier", "dashboard.corpus");
+    fieldDBApp.debug("Would add state  " + state, {
+      url: "^"+FieldDB.Router.routes[route].path,
+      // parent: "dashboard",
       templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
       controller: passStateParamsController
     });
   }
 
-  fieldDBApp.debug("Loaded Angular FieldDB Components ", $stateProvider, $urlRouterProvider, fieldDBApp);
+  fieldDBApp.debug("Loaded Angular FieldDB Components ", fieldDBApp);
 });
 
 console.log("Loaded fielddbAngular module");
