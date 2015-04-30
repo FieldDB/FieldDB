@@ -661,11 +661,11 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       if (window && window.location) {
         optionalHREF = window.location.href;
       } else {
-        connection = Connection.knownConnections.localhost;
+        connection = Connection.knownConnections[otherwise];
         optionalHREF = connection.authUrls[0];
       }
     } catch (e) {
-      connection = Connection.knownConnections.localhost;
+      connection = Connection.knownConnections[otherwise];
       optionalHREF = connection.authUrls[0];
     }
   }
