@@ -15,7 +15,7 @@ var Permissions = require("./../permission/Permissions").Permissions;
 var Q = require("q");
 
 
-var DEFAULT_CORPUS_MODEL = require("./corpus.json");
+var DEFAULT_CORPUS_MODEL = require("./corpus_mask.json");
 /**
  * @class The CorpusMask is saved as corpus in the Couch repository,
  *        it is the publicly visible version of a corpus. By default it just says "This
@@ -101,73 +101,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   defaults: {
     get: function() {
       var filteredCorpus = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
-      filteredCorpus.title = "Private Corpus";
-      filteredCorpus.description = "The details of this corpus are not public.";
-      filteredCorpus.location = {
-        latitude: 0,
-        longitude: 0,
-        accuracy: 0
-      };
-
-      var publicStates = [];
-      filteredCorpus.validationStati.map(function(state) {
-        if (state.validationStatus === "Checked*") {
-          publicStates.push(state);
-        } else if (state.validationStatus === "Published*") {
-          publicStates.push(state);
-        } else if (state.validationStatus === "ApprovedLanguageLearningContent*") {
-          publicStates.push(state);
-        }
-      });
-      filteredCorpus.validationStati = publicStates;
-
-      var publicableTags = [];
-      filteredCorpus.tags.map(function() {
-        // none
-      });
-      filteredCorpus.tags = publicableTags;
-
-      var publicableDatumFields = [];
-      filteredCorpus.datumFields.map(function(field) {
-        if (field.id === "judgement") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "orthography") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "utterance") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "morphemes") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "gloss") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "translation") {
-          publicableDatumFields.push(field);
-        }
-      });
-      filteredCorpus.datumFields = publicableDatumFields;
-
-      var publicableSessionFields = [];
-      filteredCorpus.sessionFields.map(function(field) {
-        if (field.id === "dialect") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "register") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "language") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "location") {
-          publicableSessionFields.push(field);
-        }
-      });
-      filteredCorpus.sessionFields = publicableSessionFields;
-
-      var publicableSpeakerFields = [];
-      filteredCorpus.speakerFields.map(function(field) {
-        if (field.id === "anonymousCode") {
-          publicableSpeakerFields.push(field);
-        }
-      });
-      filteredCorpus.speakerFields = publicableSpeakerFields;
-
-
       return filteredCorpus;
     }
   },

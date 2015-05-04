@@ -243,9 +243,10 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       }
 
       try {
+        loginDetails.password = (loginDetails.password + "").trim();
         bcrypt.compare(loginDetails.password, self.user.hash, function(err, confirmed) {
           if (confirmed) {
-            loginDetails.info = ["Verified"];
+            loginDetails.info = ["Verified offline."];
             deferred.resolve(loginDetails);
           } else {
             loginDetails.error = err;

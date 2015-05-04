@@ -170,7 +170,7 @@ define([
             });
       }else{
         //It is the public self
-        window.app.get("authentication").get("userPrivate").set("publicSelf", this.model);
+        window.app.get("authentication").get("userPrivate").set("userMask", this.model);
         this.model.saveAndInterConnectInApp(function(){
           window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         });

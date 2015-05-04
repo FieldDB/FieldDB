@@ -87,7 +87,7 @@ module.exports = function(grunt) {
           //   match: ".",
           //   matchall: false,
           //   extensions: "js",
-          specNameMatcher: "Test",
+          // specNameMatcher: "Test",
           projectRoot: "api",
           //   requirejs: false,
           forceExit: true,
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
       travis: {
         options: {
           specFolders: ["tests"],
-          specNameMatcher: "Test",
+          // specNameMatcher: "Test",
           projectRoot: "api",
           forceExit: true,
           isVerbose: false,

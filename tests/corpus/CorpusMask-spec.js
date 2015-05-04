@@ -77,12 +77,23 @@ describe("CorpusMask ", function() {
       expect(corpusJson.conversationFields).toEqual([]);
       expect(corpusJson.sessionFields).toEqual([]);
       expect(corpusJson.prefs).toEqual(corpusJson.prefs);
-      expect(corpusJson.team).toEqual({});
       expect(corpusJson.permissions).toEqual([]);
       expect(corpusJson.pouchname).toEqual("lingllama-communitycorpus");
       expect(corpusJson.api).toEqual("corpora");
-      expect(corpusJson.team).toEqual({});
-      expect(corpusJson.team).toEqual({});
+      expect(corpusJson.team).toEqual({
+        fieldDBtype: "Team",
+        _id: "team",
+        username: "",
+        firstname: "",
+        lastname: "",
+        gravatar: "",
+        researchInterest: "",
+        affiliation: "",
+        description: "",
+        fields: [],
+        version: corpusJson.team.version,
+        api: "users"
+      });
 
       expect(corpusJson.connection.fieldDBtype).toEqual("Connection");
       expect(corpusJson.connection.dateCreated).toEqual(corpusJson.connection.dateCreated);
@@ -139,11 +150,6 @@ describe("CorpusMask ", function() {
       expect(corpus.title).toEqual("Private Corpus");
       expect(corpus.titleAsUrl).toEqual("private_corpus");
       expect(corpus.description).toEqual("The details of this corpus are not public.");
-      expect(corpus.location).toEqual({
-        latitude: 0,
-        longitude: 0,
-        accuracy: 0
-      });
 
       expect(corpus.dbname).toEqual("jenkins-anothercorpus");
       expect(corpus.connection.parent).toBeDefined();
@@ -166,21 +172,31 @@ describe("CorpusMask ", function() {
       expect(corpus.validationStati.checked.color).toEqual("green");
       expect(corpus.validationStati.published.color).toEqual("blue");
       expect(corpus.validationStati.approvedlanguagelearningcontent.color).toEqual("green");
-      expect(corpus.tags.length).toEqual(0);
+      expect(corpus.tags.length).toEqual(1);
       expect(corpus.comments.length).toEqual(0);
-      expect(corpus.datumFields.length).toEqual(6);
+      expect(corpus.datumFields.length).toEqual(7);
       expect(corpus.datumFields.judgement.labelNonLinguists).toEqual("Not-a-normal-thing-to-say");
-      expect(corpus.datumFields.orthography.labelNonLinguists).toEqual("Written");
-      expect(corpus.datumFields.utterance.labelNonLinguists).toEqual("International Phonetic Alphabet (IPA)");
-      expect(corpus.datumFields.morphemes.labelNonLinguists).toEqual("Segmentation");
-      expect(corpus.datumFields.translation.labelNonLinguists).toEqual("English");
-      expect(corpus.sessionFields.length).toEqual(4);
+      expect(corpus.datumFields.gloss.labelNonLinguists).toEqual("Word-for-word Translation");
+      expect(corpus.datumFields.syntacticCategory.labelNonLinguists).toEqual("Morpho-Syntactic Category");
+      expect(corpus.datumFields.relateddata.labelNonLinguists).toEqual("Linked to");
+      expect(corpus.datumFields.tags.labelNonLinguists).toEqual("Tags");
+      expect(corpus.datumFields.validationstatus.labelNonLinguists).toEqual("Data validity/verification Status");
+      expect(corpus.datumFields.syntactictreelatex.labelNonLinguists).toEqual("Syntactic Tree/Constituency (LaTeX)");
+      expect(corpus.sessionFields.length).toEqual(5);
       expect(corpus.sessionFields.dialect.labelNonLinguists).toEqual("Dialect");
       expect(corpus.sessionFields.register.labelNonLinguists).toEqual("Social Register");
       expect(corpus.sessionFields.language.labelNonLinguists).toEqual("Language Name");
-      expect(corpus.sessionFields.location.labelNonLinguists).toEqual("Location");
       expect(corpus.speakerFields.length).toEqual(1);
       expect(corpus.speakerFields.anonymouscode.labelNonLinguists).toEqual("Anonymous Code");
+
+    });
+
+    describe("serialization", function() {
+
+      it("should serialize the id as corpus", function() {
+        var corpus = new CorpusMask().toJSON();
+        expect(corpus._id).toEqual("corpus");
+      });
 
     });
   });

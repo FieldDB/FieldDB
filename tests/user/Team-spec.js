@@ -20,6 +20,24 @@ describe("as a Team I want to set up my team name", function() {
     team.username = "elingllama";
     expect(team.id).toEqual("team");
   });
+
+  it("should serialize team id", function() {
+    var teamToBeSaved = new Team({
+      username: "elingllama"
+    }).toJSON();
+
+    expect(teamToBeSaved.username).toEqual("elingllama");
+    expect(teamToBeSaved._id).toEqual("team");
+    expect(teamToBeSaved.id).toBeUndefined();
+
+    expect(teamToBeSaved).toEqual({
+      fieldDBtype: "Team",
+      _id: "team",
+      username: "elingllama",
+      version: teamToBeSaved.version,
+      api: "users"
+    });
+  });
 });
 
 

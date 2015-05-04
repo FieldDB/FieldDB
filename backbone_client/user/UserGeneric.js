@@ -56,7 +56,7 @@ define([
       prefs : UserPreference,
       permissions : Permission, //TODO this needs to become plural
       hotkeys : HotKey, //TODO this needs to become plural
-      publicSelf : UserMask
+      userMask : UserMask
     },
 
     addCurrentCorpusToUser : function(){
