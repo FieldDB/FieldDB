@@ -172,9 +172,22 @@ describe("FieldDBObject", function() {
       var resultingJSON = penguin.toJSON();
       expect(resultingJSON.body).toBe(body);
       expect(resultingJSON._id).toEqual("firstPenguin");
+      expect(resultingJSON.id).toBeUndefined();
       expect(resultingJSON._rev).toEqual("2-123");
+      expect(resultingJSON.rev).toBeUndefined();
     });
 
+    it("should not add an id if there was none", function() {
+      var resultingJSON = new FieldDBObject({
+        some: "attrib"
+      }).toJSON();
+      expect(resultingJSON.some).toEqual("attrib");
+
+      expect(resultingJSON._id).toBeUndefined();
+      expect(resultingJSON.id).toBeUndefined();
+      expect(resultingJSON._rev).toBeUndefined();
+      expect(resultingJSON.rev).toBeUndefined();
+    });
 
     it("should not introduce attributes that weren't in the original JSON", function() {
       var resultingJSON = penguin.toJSON();
@@ -229,120 +242,147 @@ describe("FieldDBObject", function() {
         comments: []
       });
     });
+  });
 
-    describe("cloning and minimal pairs", function() {
+  describe("cloning and minimal pairs", function() {
+    var penguin;
+    var body = [{
+      wings: "flightless"
+    }, {
+      feet: "good-for-walking"
+    }];
 
-      it("should not clone id and rev", function() {
-        expect(penguin.rev).toEqual("2-123");
-        var babypenguin = penguin.clone();
-        expect(penguin.rev).toEqual("2-123");
-        expect(babypenguin.rev).toBeUndefined();
+    beforeEach(function() {
+      penguin = new FieldDBObject({
+        body: body,
+        _id: "firstPenguin",
+        _rev: "2-123"
       });
+    });
 
-      it("should clone objects deeply", function() {
-        expect(penguin.body).toBe(body);
-        var babypenguin = penguin.clone();
+    it("should not clone id and rev", function() {
+      expect(penguin.rev).toEqual("2-123");
+      var babypenguin = penguin.clone();
+      expect(penguin.rev).toEqual("2-123");
+      expect(babypenguin.rev).toBeUndefined();
+    });
 
-        expect(babypenguin.body).not.toBe(body);
-        expect(babypenguin.body).toEqual(body);
+    it("should clone objects deeply", function() {
+      expect(penguin.body).toBe(body);
+      var babypenguin = penguin.clone();
 
-        penguin.body.beak = "yellow";
-        expect(penguin.body.beak).toEqual("yellow");
-        expect(babypenguin.body.beak).toBeUndefined();
-      });
+      expect(babypenguin.body).not.toBe(body);
+      expect(babypenguin.body).toEqual(body);
+
+      penguin.body.beak = "yellow";
+      expect(penguin.body.beak).toEqual("yellow");
+      expect(babypenguin.body.beak).toBeUndefined();
+    });
 
 
-      it("should clone objects recursively", function() {
-        var datumTypeThing = new FieldDBObject({
-          _id: "82u398jaeoiajwo3a",
-          _rev: "8-ojqa3ja0eios09k3aw",
-          utterance: "noqata tusunaywanmi",
-          translation: "I feel like dancing",
-          sessionTypeThing: new FieldDBObject({
-            _id: "9a0j0ejoi32jo",
-            _rev: "29-903jaoijoiw3ajow",
-            page: "34",
-            publisher: "MITWPL",
-            speakerTypeThing: new FieldDBObject({
-              _id: "yuioiuni98y932",
-              _rev: "3-i3orj0jw203j",
-              fields: []
-            })
+    it("should clone objects recursively", function() {
+      var datumTypeThing = new FieldDBObject({
+        _id: "82u398jaeoiajwo3a",
+        _rev: "8-ojqa3ja0eios09k3aw",
+        utterance: "noqata tusunaywanmi",
+        translation: "I feel like dancing",
+        sessionTypeThing: new FieldDBObject({
+          _id: "9a0j0ejoi32jo",
+          _rev: "29-903jaoijoiw3ajow",
+          page: "34",
+          publisher: "MITWPL",
+          speakerTypeThing: new FieldDBObject({
+            _id: "yuioiuni98y932",
+            _rev: "3-i3orj0jw203j",
+            fields: []
           })
-        });
+        })
+      });
 
-        var clonedParentForMinimalPairs = datumTypeThing.clone();
-        expect(clonedParentForMinimalPairs).toEqual({
+      var clonedParentForMinimalPairs = datumTypeThing.clone();
+      expect(clonedParentForMinimalPairs).toEqual({
+        fieldDBtype: "FieldDBObject",
+        utterance: "noqata tusunaywanmi",
+        translation: "I feel like dancing",
+        sessionTypeThing: {
           fieldDBtype: "FieldDBObject",
-          utterance: "noqata tusunaywanmi",
-          translation: "I feel like dancing",
-          sessionTypeThing: {
+          page: "34",
+          publisher: "MITWPL",
+          speakerTypeThing: {
             fieldDBtype: "FieldDBObject",
-            page: "34",
-            publisher: "MITWPL",
-            speakerTypeThing: {
-              fieldDBtype: "FieldDBObject",
-              fields: [],
-              version: datumTypeThing.version,
-              relatedData: [{
-                URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
-                relation: "clonedFrom"
-              }]
-            },
+            fields: [],
             version: datumTypeThing.version,
             relatedData: [{
-              URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
+              URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
               relation: "clonedFrom"
             }]
           },
           version: datumTypeThing.version,
           relatedData: [{
-            URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
+            URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
             relation: "clonedFrom"
           }]
-        });
-
-      });
-
-      it("should not effect clone if original object is changed", function() {
-        var adatum = new FieldDBObject({
-          "tags": "apositive",
-          fields: [new FieldDBObject({
-            id: "judgement",
-            value: "#"
-          }), new FieldDBObject({
-            id: "utterance",
-            value: "noqata tusunayawanmi"
-          })]
-        });
-        var aminimalPair = adatum.clone();
-
-        aminimalPair.fields[1].value = "noqata tusunayami";
-        aminimalPair.fields[0].value = "*";
-
-        expect(adatum.fields[0].value).toEqual("#");
-        expect(aminimalPair.fields[0].value).toEqual("*");
-
-        adatum.fields[1].value = "noqata tusunayawaanmi";
-
-        expect(adatum.fields[1].value).toEqual("noqata tusunayawaanmi");
-        expect(aminimalPair.fields[1].value).toEqual("noqata tusunayami");
-      });
-
-      it("should add a new linked data to the original", function() {
-        var babypenguin = penguin.clone();
-
-        expect(babypenguin.relatedData).toEqual([{
-          URI: "firstPenguin?rev=2-123",
+        },
+        version: datumTypeThing.version,
+        relatedData: [{
+          URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
           relation: "clonedFrom"
-        }]);
+        }]
       });
 
     });
+
+    it("should not effect clone if original object is changed", function() {
+      var adatum = new FieldDBObject({
+        "tags": "apositive",
+        fields: [new FieldDBObject({
+          id: "judgement",
+          value: "#"
+        }), new FieldDBObject({
+          id: "utterance",
+          value: "noqata tusunayawanmi"
+        })]
+      });
+      var aminimalPair = adatum.clone();
+
+      aminimalPair.fields[1].value = "noqata tusunayami";
+      aminimalPair.fields[0].value = "*";
+
+      expect(adatum.fields[0].value).toEqual("#");
+      expect(aminimalPair.fields[0].value).toEqual("*");
+
+      adatum.fields[1].value = "noqata tusunayawaanmi";
+
+      expect(adatum.fields[1].value).toEqual("noqata tusunayawaanmi");
+      expect(aminimalPair.fields[1].value).toEqual("noqata tusunayami");
+    });
+
+    it("should add a new linked data to the original", function() {
+      var babypenguin = penguin.clone();
+
+      expect(babypenguin.relatedData).toEqual([{
+        URI: "firstPenguin?rev=2-123",
+        relation: "clonedFrom"
+      }]);
+    });
+
   });
 
   describe("persisance", function() {
+    var penguin;
+    var body = [{
+      wings: "flightless"
+    }, {
+      feet: "good-for-walking"
+    }];
 
+    beforeEach(function() {
+      penguin = new FieldDBObject({
+        body: body,
+        _id: "firstPenguin",
+        _rev: "2-123"
+      });
+    });
 
     it("should be able to return a promise for an item from the database", function(done) {
       var object = new FieldDBObject({

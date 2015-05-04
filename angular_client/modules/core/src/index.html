@@ -28,12 +28,27 @@
     <![endif]-->
     <div ng-include="'components/navbar/navbar.html'"></div>
 
+    <div class="scrollable">
+     <div class="debugging-switch">
+         <input type="checkbox" name="debugging-switch" class="debugging-switch-checkbox" id="mydebugging-switch" ng-model="application.debugMode">
+         <label class="debugging-switch-label" for="mydebugging-switch">
+             <span class="debugging-switch-inner"></span>
+             <span class="debugging-switch-switch"></span>
+         </label>
+     </div>
+    
+    <p ng-show="application.debugMode">
+      <pre >{{application.routeParams}}</pre>
+      <pre ng-show="application.warnMessages">{{application.warnMessages}}</pre>
+      <pre ng-show="application.bugMessages">{{application.bugMessages}}</pre>
+    </p>
+    </div>
     <div ui-view></div>
 
     <hr>
 
     <div class="footer">
-      <p>With ♥ from <a href="https://twitter.com/LingSync">@LingSync</a></p>
+      <p>With ♥ from <a href="https://twitter.com/LingSync">@LingSync</a> <p>
     </div>
 
     <!-- Google Analytics: change UA-35422317-1 to be your site's ID. -->

@@ -170,18 +170,18 @@ define([
 
       // Over write the public copy with any (new) username/gravatar
       // info
-      if (serverResults.user.publicSelf == null) {
+      if (serverResults.user.userMask == null) {
         // if the user hasnt already specified their public self, then
         // put in a username and gravatar,however they can add more
         // details like their affiliation, name, research interests
         // etc.
-        serverResults.user.publicSelf = {};
-        serverResults.user.publicSelf.username = serverResults.user.username;
-        serverResults.user.publicSelf.gravatar = serverResults.user.gravatar;
-        serverResults.user.publicSelf.authUrl = serverResults.user.authUrl;
-        serverResults.user.publicSelf.id = serverResults.user._id; //this will end up as an attribute
-        serverResults.user.publicSelf._id = serverResults.user._id; //this will end up as an attribute
-//        serverResults.user.publicSelf.dbname = serverResults.user.corpora[0].dbname;
+        serverResults.user.userMask = {};
+        serverResults.user.userMask.username = serverResults.user.username;
+        serverResults.user.userMask.gravatar = serverResults.user.gravatar;
+        serverResults.user.userMask.authUrl = serverResults.user.authUrl;
+        serverResults.user.userMask.id = serverResults.user._id; //this will end up as an attribute
+        serverResults.user.userMask._id = serverResults.user._id; //this will end up as an attribute
+//        serverResults.user.userMask.dbname = serverResults.user.corpora[0].dbname;
       }
 
 
@@ -208,7 +208,7 @@ define([
 
       u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
 
-      this.set("userPublic", this.get("userPrivate").get("publicSelf"));
+      this.set("userPublic", this.get("userPrivate").get("userMask"));
       this.get("userPublic")._id = serverResults.user._id;
       this.get("userPublic").id = serverResults.user.id;
       this.get("userPublic").set("_id", serverResults.user._id);
@@ -276,7 +276,8 @@ define([
       data.user = u;
 
       /* Upgrade chrome app user's to v1.38+ */
-      if(OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
+      data.user.appVersionWhenCreated = data.user.appVersionWhenCreated || "";
+      if(data.user.appVersionWhenCreated && OPrime.isChromeApp() && !localStorage.getItem(data.user.username+"lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama"){
         var birthday = data.user.appVersionWhenCreated.replace("v","").split(".");
         var year = birthday[0];
         var week = birthday[1];

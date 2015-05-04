@@ -517,7 +517,7 @@ define([
 
         this.model.get("connection").dbname = newdbname;
         this.model.set("dbname", newdbname);
-        this.model.get("publicSelf").set("dbname", newdbname);
+        this.model.get("corpusMask").set("dbname", newdbname);
         this.model.get("team").set("dbname", newdbname);
         this.$el.find(".new-corpus-dbname").html(newdbname);
       }

@@ -660,6 +660,14 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         delete json.dateCreated;
       }
 
+      if (this.user) {
+        json.user = {
+          username: this.user.username,
+          gravatar: this.user.gravatar,
+          name: this.user.name
+        };
+      }
+
       this.debug(json);
       return json;
     }

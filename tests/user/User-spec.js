@@ -37,6 +37,7 @@ describe("User ", function() {
 
       expect(u.toJSON()).toEqual({
         fieldDBtype: "User",
+        _id: "bill",
         username: "bill",
         gravatar: "67890954367898765",
         firstname: "",
@@ -66,6 +67,21 @@ describe("User ", function() {
       u.prefs = u.defaults.prefs;
       expect(u.prefs).toBeDefined();
       expect(u.prefs.preferedDashboardType).toEqual("");
+    });
+
+    it("should upgrade the old dates from back in the mongoose days", function() {
+      var u = new User({
+        "created_at": "2012-09-26T12:39:27.795Z",
+        "updated_at": "2015-03-04T10:31:52.793Z"
+      });
+      expect(u.created_at).toEqual("2012-09-26T12:39:27.795Z");
+      expect(u.dateCreated).toBeDefined();
+      expect(u.dateCreated).toEqual(1348663167795);
+
+      expect(u.updated_at).toEqual("2015-03-04T10:31:52.793Z");
+      expect(u.dateModified).toBeDefined();
+      expect(u.dateModified).toEqual(1425465112793);
+      // expect(u.warnMessages).toEqual(" ");
     });
 
   });
@@ -112,6 +128,20 @@ describe("User ", function() {
           version: u.version,
           hotkeys: [],
           unicodes: []
+        },
+        userMask: {
+          fieldDBtype: "UserMask",
+          username: "",
+          dateCreated: result.userMask.dateCreated,
+          version: result.userMask.version,
+          firstname: "",
+          lastname: "",
+          gravatar: "",
+          researchInterest: "",
+          affiliation: "",
+          description: "",
+          fields: [],
+          api: "users"
         },
         mostRecentIds: {},
         activityConnection: {
@@ -218,6 +248,14 @@ describe("User ", function() {
       expect(user.corpora.length).toEqual(2);
     });
 
+    it("should serialize username as id", function() {
+      var user = new User({
+        username: "jumbo"
+      }).toJSON();
+      expect(user.username).toBeDefined();
+      expect(user._id).toEqual("jumbo");
+      expect(user._id).toEqual(user.username);
+    });
 
   });
 
@@ -299,5 +337,55 @@ describe("User ", function() {
     });
 
   });
+
+
+  describe("User's profile page", function() {
+
+    it("should not have a user mask if noe was in thier user", function() {
+      expect(SAMPLE_USERS[0].userMask).toBeUndefined();
+      expect(SAMPLE_USERS[0].publicSelf).toBeUndefined();
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      expect(user.userMask).toBeUndefined();
+    });
+
+    it("should say no info is available if the user hasnt edited it yet", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {};
+      }
+
+      expect(user.userMask).toBeDefined();
+      expect(user.userMask.username).toEqual("sapir");
+      expect(user.userMask.gravatar).toEqual(user.gravatar);
+      expect(user.userMask.researchInterest).toEqual("No public information available");
+      expect(user.userMask.description).toEqual("No public information available");
+      expect(user.userMask.affiliation).toEqual("No public information available");
+      expect(user.userMask.name).toEqual(user.userMask.username);
+    });
+
+    it("should have the same gravatar as the user, if they haven't customized it", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {};
+      }
+
+      expect(user.userMask.gravatar).toEqual(user.gravatar);
+    });
+
+    it("should have the same gravatar as the user, if they haven't customized it", function() {
+      var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
+      if (!user.userMask) {
+        user.userMask = {
+          gravatar: "someothergravatarfortheirpublicpage"
+        };
+      }
+
+      expect(user.userMask.gravatar).not.toEqual(user.gravatar);
+      expect(user.userMask.gravatar).toEqual("someothergravatarfortheirpublicpage");
+    });
+
+
+  });
+
 
 });

@@ -62,9 +62,10 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       appbrand: FieldDBObject.DEFAULT_STRING,
       fields: DatumFields,
       prefs: UserPreference,
-      mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
+      mostRecentIds: FieldDBObject,
       activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
+      userMask: UserMask,
       corpora: Corpora,
       newCorpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
@@ -154,16 +155,20 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       if (value === this._mostRecentIds) {
         return;
       }
-      // if (!value) {
-      //   delete this._mostRecentIds;
-      //   return;
-      // } else {
-      //   if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
-      //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
-      //   }
-      // }
-      if (value && value.connection) {
-        value.connection = value.connection = new Connection(value.connection);
+      if (!value) {
+        delete this._mostRecentIds;
+        return;
+      } else {
+        if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
+          value = new this.INTERNAL_MODELS["mostRecentIds"](value);
+        }
+      }
+
+      value.connection = value.connection || value.corpusConnection || value.couchConnection;
+      delete value.corpusConnection;
+      delete value.couchConnection;
+      if (value.connection) {
+        value.connection = new Connection(value.connection);
       }
       this._mostRecentIds = value;
     }
@@ -249,6 +254,32 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  userMask: {
+    get: function() {
+      this.debug("getting userMask");
+      return this._userMask;
+    },
+    set: function(value) {
+      if (value && typeof value === "object") {
+        value.username = this.username;
+        value.gravatar = value.gravatar || this.gravatar;
+        value.researchInterest = value.researchInterest || "No public information available";
+        value.description = value.description || "No public information available";
+        value.affiliation = value.affiliation || "No public information available";
+      }
+      this.ensureSetViaAppropriateType("userMask", value);
+    }
+  },
+
+  publicSelf: {
+    get: function() {
+      return this.userMask;
+    },
+    set: function(value) {
+      this.userMask = value;
+    }
+  },
+
   activityConnection: {
     get: function() {
       this.debug("getting activityConnection");
@@ -301,6 +332,17 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
       // TODO deprecated
       json.datalists = this.datalists;
+
+      if (json.mostRecentIds) {
+        delete json.mostRecentIds.fieldDBtype;
+        delete json.mostRecentIds.version;
+        delete json.mostRecentIds.dateCreated;
+        delete json.mostRecentIds.dateModified;
+        delete json.mostRecentIds.comments;
+        if (!json.mostRecentIds.dbname) {
+          delete json.mostRecentIds.dbname;
+        }
+      }
 
       this.debug(json);
       return json;

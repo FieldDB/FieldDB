@@ -52,7 +52,7 @@ describe("Corpus", function() {
       corpus.dbname = "testingdefaultcorpuscreation-kartuli";
       expect(function() {
         corpus.dbname = "adiffernetuser-kartuli";
-      }).toThrow(new Error("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus, you must create a clone of the object first."));
+      }).toThrow(new Error("This is the testingdefaultcorpuscreation-kartuli. You cannot change the dbname of an object in this corpus to adiffernetuser-kartuli, you must create a clone of the object first."));
     });
 
     it("should be able to build a corpus by calling defaults", function() {
@@ -348,7 +348,20 @@ describe("Corpus", function() {
     it("should serialize v1.22.1 to a standard json", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       var serialization = corpus.toJSON();
-      expect(serialization.team).toEqual({});
+      expect(serialization.team).toEqual({
+        fieldDBtype: "Team",
+        _id: "team",
+        username: "",
+        firstname: "",
+        lastname: "",
+        gravatar: "",
+        researchInterest: "",
+        affiliation: "",
+        description: "",
+        fields: [],
+        version: serialization.team.version,
+        api: "users"
+      });
     });
 
     it("should serialize v2.30.x to a standard json", function() {
