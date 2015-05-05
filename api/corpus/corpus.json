@@ -95,23 +95,6 @@
     "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
     "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
-    "id": "orthography",
-    "labelFieldLinguists": "Orthography",
-    "labelNonLinguists": "Written",
-    "labelTranslators": "Orthography",
-    "type": "IGT, parallelText",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "writingSystem": {
-        "id": "",
-        "referenceLink": ""
-      }
-    },
-    "help": "What was said/written using the alphabet/writing system of the language.",
-    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
-  }, {
     "id": "utterance",
     "labelFieldLinguists": "Transcription",
     "labelNonLinguists": "International Phonetic Alphabet (IPA)",
@@ -128,20 +111,6 @@
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
     "helpLinguists": "Unparsed utterance in the language, in orthography or romanized or IPA transcription (what ever is commonly used for linguistic examples of this language.) Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
-  }, {
-    "id": "allomorphs",
-    "labelFieldLinguists": "Allomorphs",
-    "labelNonLinguists": "",
-    "labelTranslators": "Prefixe-s-root-suffixe-s",
-    "type": "IGT",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "linguist",
-    "defaultfield": true,
-    "json": {
-      "alternates": []
-    },
-    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
   }, {
     "id": "morphemes",
     "labelFieldLinguists": "Morphemes",
@@ -176,25 +145,6 @@
     },
     "help": "Translation for each prefix, root and suffix in the words",
     "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
-  }, {
-    "id": "syntacticCategory",
-    "labelFieldLinguists": "Morpho-Syntactic Category",
-    "labelNonLinguists": "",
-    "labelTranslators": "Part of Speech",
-    "type": "IGT",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "machine, linguist",
-    "defaultfield": true,
-    "json": {
-      "alternates": [],
-      "conventions": {
-        "id": "",
-        "tagSet": [],
-        "referenceLink": ""
-      }
-    },
-    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
-    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
   }, {
     "id": "translation",
     "labelFieldLinguists": "Translation",
@@ -250,6 +200,56 @@
     },
     "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formattable.",
     "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formattable."
+  }, {
+    "id": "orthography",
+    "labelFieldLinguists": "Orthography",
+    "labelNonLinguists": "Written",
+    "labelTranslators": "Orthography",
+    "type": "IGT, parallelText",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      }
+    },
+    "help": "What was said/written using the alphabet/writing system of the language.",
+    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
+  }, {
+    "id": "allomorphs",
+    "labelFieldLinguists": "Allomorphs",
+    "labelNonLinguists": "",
+    "labelTranslators": "Prefixe-s-root-suffixe-s",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": []
+    },
+    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
+    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+  }, {
+    "id": "syntacticCategory",
+    "labelFieldLinguists": "Morpho-Syntactic Category",
+    "labelNonLinguists": "",
+    "labelTranslators": "Part of Speech",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine, linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
   }, {
     "id": "relatedData",
     "labelFieldLinguists": "Related Data",
