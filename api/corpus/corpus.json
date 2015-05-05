@@ -127,7 +127,7 @@
       }
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
-    "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
+    "helpLinguists": "Unparsed utterance in the language, in orthography or romanized or IPA transcription (what ever is commonly used for linguistic examples of this language.) Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
   }, {
     "id": "allomorphs",
     "labelFieldLinguists": "Allomorphs",
@@ -233,8 +233,8 @@
     "json": {
       "tags": []
     },
-    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
+    "help": "Linguistic/social context when this can be said.",
+    "helpLinguists": "Linguistic/social context when this can be said, or when it is semantically/pragmatically felicitous etc."
   }, {
     "id": "documentation",
     "labelFieldLinguists": "Discussion for Handouts",
@@ -248,8 +248,8 @@
       "wiki": "",
       "latex": ""
     },
-    "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
+    "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formattable.",
+    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formattable."
   }, {
     "id": "relatedData",
     "labelFieldLinguists": "Related Data",
@@ -292,8 +292,8 @@
     "json": {
       "tags": []
     },
-    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
-    "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
+    "help": "Tags about data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+    "helpLinguists": "Any number of tags of data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
   }, {
     "id": "enteredByUser",
     "labelFieldLinguists": "Imported/Entered By",
@@ -309,8 +309,8 @@
       "hardware": {},
       "software": {}
     },
-    "help": "The user who originally entered the datum",
-    "helpLinguists": "The user who originally entered the datum"
+    "help": "The user who originally entered this.",
+    "helpLinguists": "The user who originally entered this."
   }, {
     "id": "modifiedByUser",
     "labelFieldLinguists": "Modified By",
@@ -324,8 +324,8 @@
     "json": {
       "users": []
     },
-    "help": "An array of users who modified the datum",
-    "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
+    "help": "An array of users who modified this",
+    "helpLinguists": "An array of users who modified this, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
   }, {
     "id": "syntacticTreeLatex",
     "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
