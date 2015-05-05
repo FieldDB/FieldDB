@@ -187,7 +187,7 @@
     "helpLinguists": "Linguistic/social context when this can be said, or when it is semantically/pragmatically felicitous etc."
   }, {
     "id": "documentation",
-    "labelFieldLinguists": "Discussion for Handouts",
+    "labelFieldLinguists": "Discussion",
     "labelNonLinguists": "Additional Documentation",
     "labelTranslators": "Documentation",
     "type": "wiki, LaTeX",
