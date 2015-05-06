@@ -152,589 +152,537 @@
     "secondKey": "",
     "description": ""
   }
-},
-{
-   "_id": "linus",
-   "_rev": "767-03873768d8dd7988a1f92de913ef68e6",
-   "jsonType": "user",
-   "username": "linus",
-   "email": "linus@example.org",
-   "corpuses": [
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "computatio..._entry_tutoria",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "computatio____entry_tutoria"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-firstcorpus",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-firstcorpus",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-firstcorpus"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-inuktitut",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-inuktitut",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-inuktitut"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-myaamia",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-myaamia",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-myaamia"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-testingupgradingaudio",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-testingupgradingaudio",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-testingupgradingaudio"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-urdu",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-urdu",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-urdu"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "afriend-firstcorpus",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "afriend-firstcorpus",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "afriend-firstcorpus"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "afriend-afriend_mrpcopy",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "afriend-afriend_mrpcopy",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "afriend-afriend_mrpcopy"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "afriend-mi_gmaq_dictionaries",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "afriend-mi_gmaq_dictionaries",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "afriend-mi_gmaq_dictionaries"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "xianli-myaamia_sample",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "xianli-myaamia_sample",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "xianli-myaamia_sample"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "bellebrown-sanskrit",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "bellebrown-sanskrit",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "bellebrown-sanskrit"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "testingharvardimport-firstcorpus",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "testinghar...ort-firstcorpu",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "testinghar___ort-firstcorpu"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "testingharvardimport-hjcopypaste",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "testinghar...ort-hjcopypast",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "testinghar___ort-hjcopypast"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-georgian",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-georgian",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-georgian"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "community-georgian",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "community-georgian",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "community-georgian"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "community-migmaq",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "community-migmaq",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "community-migmaq"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "elisekm-eti3_data_tutorial",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "elisekm-eti3_data_tutorial",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "elisekm-eti3_data_tutorial"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "testingpermissions-firstcorpus",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "testingpermissions-firstcorpus",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "testingpermissions-firstcorpus"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "speechrecognition-kartuli",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "speechrecognition-kartuli",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "speechrecognition-kartuli"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "sails-canadian_english",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "sails-canadian_english",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "sails-canadian_english"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "lingllama-communitycorpus",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "lingllama-communitycorpus",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "lingllama-communitycorpus"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "jessica-tibetan",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "jessica-tibetan",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "jessica-tibetan"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "anotheruser-scottish_gaelic",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "anotheruser-scottish_gaelic",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "anotheruser-scottish_gaelic"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "marquisalx-phophlo",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "marquisalx-phophlo",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "marquisalx-phophlo"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-thai",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "",
-           "title": "linus-thai",
-           "description": "The details of this corpus are not public.",
-           "titleAsUrl": "linus-thai"
-       }
-   ],
-   "activityCouchConnection": {
-       "protocol": "https://",
-       "domain": "ifielddevs.iriscouch.com",
-       "port": "443",
-       "pouchname": "linus-activity_feed"
-   },
-   "gravatar": "226b903027c34e84f97161ff7f3db1ae",
-   "appVersionWhenCreated": "1.22",
-   "authUrl": "https://authdev.example.org",
-   "salt": "$2a$10$BfgpbaU0UexWAJBiHBXnGu",
-   "hash": "$2a$10$BfgpbaU0UexWAJBiHBXnGus0G3OT2wQdqC2Jl1qdWxpF8IPZ2zgXS",
-   "created_at": "2012-09-26T12:39:27.795Z",
-   "updated_at": "2015-03-04T10:31:52.793Z",
-   "researchInterest": " \n       \n       \n       \n       \n       \n       \n      ",
-   "affiliation": " \n       \n       \n       \n       \n       \n       \n      ",
-   "description": " \n       \n       \n       \n       \n       \n       \n      ",
-   "subtitle": "",
-   "dataLists": [
-       "e345fb6a237768d7d216e04153c3059b",
-       "e345fb6a237768d7d216e04153aa8700",
-       "19f9d2670c5a176e2835508e75377d23",
-       "3328d6a49281e117e859adddcd00590f",
-       "4f868ba9a79e57479ddbe4f62a0c8ef5",
-       "4f868ba9a79e57479ddbe4f62a0a4379",
-       "4f868ba9a79e57479ddbe4f62a0a1ee9",
-       "4f868ba9a79e57479ddbe4f62a0960fa",
-       "4f868ba9a79e57479ddbe4f62a094bab",
-       "4f868ba9a79e57479ddbe4f62a0927ad",
-       "4e06b60e129dff5c7bb4bb2349981f16",
-       "4e06b60e129dff5c7bb4bb234990b834",
-       "5d85164bb2c4177b4669978c6e6dbbe6",
-       "5d85164bb2c4177b4669978c6e6bec0c",
-       "8ebb43383b94ab3abede878ee7004fa8",
-       "c8d6d695bbf7819de87f30843474adf3",
-       "c8d6d695bbf7819de87f308434742ff9",
-       "723a8b707e579087aa36c2e33865f74e",
-       "d3bf748b16ac4054680f27a640389a89",
-       "d3bf748b16ac4054680f27a6401bbe49",
-       "d3bf748b16ac4054680f27a6401567c3",
-       "d3bf748b16ac4054680f27a6400e3450",
-       "256eb89b50b2d801d748be4b12566def",
-       "c561c6a8c687f26e9de36f855440cf64",
-       "6d9ddd3f1e07fe7e38249760979e6825",
-       "6d9ddd3f1e07fe7e3824976097919687",
-       "6d9ddd3f1e07fe7e3824976097860c4c",
-       "6321e7b149a48602cfaf8fa1490122c6",
-       "ea8ee1e63a9aa3de608228fef81b7678",
-       "38b751d2a58a13f04a201ac9f994770e",
-       "38b751d2a58a13f04a201ac9f9946bc1",
-       "38b751d2a58a13f04a201ac9f99450e6",
-       "38b751d2a58a13f04a201ac9f9940daf",
-       "38b751d2a58a13f04a201ac9f991dc97",
-       "38b751d2a58a13f04a201ac9f990de32",
-       "38b751d2a58a13f04a201ac9f9908498",
-       "38b751d2a58a13f04a201ac9f901a892",
-       "38b751d2a58a13f04a201ac9f9015827",
-       "AB86D794-3E27-48C6-87C1-09B070733BF7",
-       "F24DDCE7-B389-4D06-97B0-634B056791DC",
-       "68859018-A138-423D-909D-D00EDCB75872",
-       "2613848F-9D63-47EC-AA1A-A9DD742C3D56"
-   ],
-   "prefs": {
-       "skin": "user/skins/llama_wool.jpg",
-       "numVisibleDatum": "1",
-       "transparentDashboard": "false",
-       "alwaysRandomizeSkin": "true",
-       "numberOfItemsInPaginatedViews": 10,
-       "unicodes": [
-           {
-               "symbol": "ɔ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ɛ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ɣ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ɥ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ɦ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ɫ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ʃ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ʒ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "ʔ",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "λ ",
-               "tipa": "lambda",
-               "useCount": "0"
-           },
-           {
-               "symbol": "α ",
-               "tipa": "alpha",
-               "useCount": "0"
-           },
-           {
-               "symbol": "β ",
-               "tipa": "\beta",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∀",
-               "tipa": "\forall",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∃",
-               "tipa": "exists",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∄",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∅",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∈",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∉",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∋",
-               "tipa": "",
-               "useCount": "0"
-           },
-           {
-               "symbol": "∌",
-               "tipa": "",
-               "useCount": "0"
-           }
-       ],
-       "preferedDashboardLayout": "layoutAllTheData",
-       "showNewDatumAtTopOrBottomOfDataEntryArea": "top"
-   },
-   "mostRecentIds": {
-       "corpusid": "723a8b707e579087aa36c2e33865ebef",
-       "datalistid": "e345fb6a237768d7d216e04153aa8700",
-       "sessionid": "e345fb6a237768d7d216e04153c2fa34",
-       "couchConnection": {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "linus-georgian",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org",
-           "corpusid": "723a8b707e579087aa36c2e33865ebef"
-       }
-   },
-   "firstname": "",
-   "lastname": "",
-   "sessionHistory": [
-       "e345fb6a237768d7d216e04153c2fa34",
-       "e345fb6a237768d7d216e04153aa7a74",
-       "723a8b707e579087aa36c2e338ef310e",
-       "4e06b60e129dff5c7bb4bb234990b4ba",
-       "2307d02a5765bd0783a89124cae05fdd",
-       "4bae76605f8adbdabf9dc3d3e564f179",
-       "4bae76605f8adbdabf9dc3d3e55ea6ac",
-       "c8d6d695bbf7819de87f30843474abbf",
-       "c8d6d695bbf7819de87f308434742dd7",
-       "c8d6d695bbf7819de87f30843473f474",
-       "723a8b707e579087aa36c2e33865f83f",
-       "d3bf748b16ac4054680f27a6401ba94a",
-       "d3bf748b16ac4054680f27a640154a4f",
-       "d3bf748b16ac4054680f27a6400e1147",
-       "256eb89b50b2d801d748be4b12567cad",
-       "c561c6a8c687f26e9de36f855440d48d",
-       "ea8ee1e63a9aa3de608228fef8008fb5",
-       "6d9ddd3f1e07fe7e3824976097861673",
-       "6321e7b149a48602cfaf8fa149012cf0",
-       "ea8ee1e63a9aa3de608228fef80b1aae",
-       "38b751d2a58a13f04a201ac9f9018f99",
-       "89bc4d7dcc2b1fc9a7bb0f4f4773ea75",
-       "4C2CD545-9182-4746-9087-938824AF4FB4",
-       "981423C0-318A-4967-925F-5EAE3618D68B",
-       "9C99FD90-9A2F-4AB8-8373-83275F1978CD",
-       "A0FAC134-9746-4C7A-9094-839AB0236C83"
-   ],
-   "hotkeys": {
-       "firstKey": "",
-       "secondKey": "",
-       "description": ""
-   },
-   "newCorpusConnections": [
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "anotheruser-scottish_gaelic",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "anotheruser-scottish_gaelic",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org"
-       },
-       {
-           "protocol": "https://",
-           "domain": "corpus.example.org",
-           "port": "443",
-           "pouchname": "anotheruser-scottish_gaelic",
-           "path": "",
-           "authUrl": "https://auth.example.org",
-           "userFriendlyServerName": "Example.org"
-       }
-   ]
+}, {
+  "_id": "linus",
+  "_rev": "767-03873768d8dd7988a1f92de913ef68e6",
+  "jsonType": "user",
+  "username": "linus",
+  "email": "linus@example.org",
+  "corpuses": [{
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "computationalfieldworkshop-group_data_entry_tutorial",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "computatio..._entry_tutoria",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "computatio____entry_tutoria"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-firstcorpus",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-firstcorpus",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-firstcorpus"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-inuktitut",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-inuktitut",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-inuktitut"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-myaamia",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-myaamia",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-myaamia"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-testingupgradingaudio",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-testingupgradingaudio",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-testingupgradingaudio"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-urdu",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-urdu",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-urdu"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "afriend-firstcorpus",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "afriend-firstcorpus",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "afriend-firstcorpus"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "afriend-afriend_mrpcopy",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "afriend-afriend_mrpcopy",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "afriend-afriend_mrpcopy"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "afriend-mi_gmaq_dictionaries",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "afriend-mi_gmaq_dictionaries",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "afriend-mi_gmaq_dictionaries"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "xianli-myaamia_sample",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "xianli-myaamia_sample",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "xianli-myaamia_sample"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "bellebrown-sanskrit",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "bellebrown-sanskrit",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "bellebrown-sanskrit"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "testingharvardimport-firstcorpus",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "testinghar...ort-firstcorpu",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "testinghar___ort-firstcorpu"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "testingharvardimport-hjcopypaste",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "testinghar...ort-hjcopypast",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "testinghar___ort-hjcopypast"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-georgian",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-georgian",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-georgian"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "community-georgian",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "community-georgian",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "community-georgian"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "community-migmaq",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "community-migmaq",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "community-migmaq"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "elisekm-eti3_data_tutorial",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "elisekm-eti3_data_tutorial",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "elisekm-eti3_data_tutorial"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "testingpermissions-firstcorpus",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "testingpermissions-firstcorpus",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "testingpermissions-firstcorpus"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "speechrecognition-kartuli",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "speechrecognition-kartuli",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "speechrecognition-kartuli"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "sails-canadian_english",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "sails-canadian_english",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "sails-canadian_english"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "lingllama-communitycorpus",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "lingllama-communitycorpus",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "lingllama-communitycorpus"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "jessica-tibetan",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "jessica-tibetan",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "jessica-tibetan"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "anotheruser-scottish_gaelic",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "anotheruser-scottish_gaelic",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "anotheruser-scottish_gaelic"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "marquisalx-phophlo",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "marquisalx-phophlo",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "marquisalx-phophlo"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "linus-thai",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org",
+    "corpusid": "",
+    "title": "linus-thai",
+    "description": "The details of this corpus are not public.",
+    "titleAsUrl": "linus-thai"
+  }],
+  "activityCouchConnection": {
+    "protocol": "https://",
+    "domain": "ifielddevs.iriscouch.com",
+    "port": "443",
+    "pouchname": "linus-activity_feed"
+  },
+  "gravatar": "226b903027c34e84f97161ff7f3db1ae",
+  "appVersionWhenCreated": "1.22",
+  "authUrl": "https://authdev.example.org",
+  "salt": "$2a$10$BfgpbaU0UexWAJBiHBXnGu",
+  "hash": "$2a$10$BfgpbaU0UexWAJBiHBXnGus0G3OT2wQdqC2Jl1qdWxpF8IPZ2zgXS",
+  "created_at": "2012-09-26T12:39:27.795Z",
+  "updated_at": "2015-03-04T10:31:52.793Z",
+  "researchInterest": " \n       \n       \n       \n       \n       \n       \n      ",
+  "affiliation": " \n       \n       \n       \n       \n       \n       \n      ",
+  "description": " \n       \n       \n       \n       \n       \n       \n      ",
+  "subtitle": "",
+  "dataLists": [
+    "e345fb6a237768d7d216e04153c3059b",
+    "e345fb6a237768d7d216e04153aa8700",
+    "19f9d2670c5a176e2835508e75377d23",
+    "3328d6a49281e117e859adddcd00590f",
+    "4f868ba9a79e57479ddbe4f62a0c8ef5",
+    "4f868ba9a79e57479ddbe4f62a0a4379",
+    "4f868ba9a79e57479ddbe4f62a0a1ee9",
+    "4f868ba9a79e57479ddbe4f62a0960fa",
+    "4f868ba9a79e57479ddbe4f62a094bab",
+    "4f868ba9a79e57479ddbe4f62a0927ad",
+    "4e06b60e129dff5c7bb4bb2349981f16",
+    "4e06b60e129dff5c7bb4bb234990b834",
+    "5d85164bb2c4177b4669978c6e6dbbe6",
+    "5d85164bb2c4177b4669978c6e6bec0c",
+    "8ebb43383b94ab3abede878ee7004fa8",
+    "c8d6d695bbf7819de87f30843474adf3",
+    "c8d6d695bbf7819de87f308434742ff9",
+    "723a8b707e579087aa36c2e33865f74e",
+    "d3bf748b16ac4054680f27a640389a89",
+    "d3bf748b16ac4054680f27a6401bbe49",
+    "d3bf748b16ac4054680f27a6401567c3",
+    "d3bf748b16ac4054680f27a6400e3450",
+    "256eb89b50b2d801d748be4b12566def",
+    "c561c6a8c687f26e9de36f855440cf64",
+    "6d9ddd3f1e07fe7e38249760979e6825",
+    "6d9ddd3f1e07fe7e3824976097919687",
+    "6d9ddd3f1e07fe7e3824976097860c4c",
+    "6321e7b149a48602cfaf8fa1490122c6",
+    "ea8ee1e63a9aa3de608228fef81b7678",
+    "38b751d2a58a13f04a201ac9f994770e",
+    "38b751d2a58a13f04a201ac9f9946bc1",
+    "38b751d2a58a13f04a201ac9f99450e6",
+    "38b751d2a58a13f04a201ac9f9940daf",
+    "38b751d2a58a13f04a201ac9f991dc97",
+    "38b751d2a58a13f04a201ac9f990de32",
+    "38b751d2a58a13f04a201ac9f9908498",
+    "38b751d2a58a13f04a201ac9f901a892",
+    "38b751d2a58a13f04a201ac9f9015827",
+    "AB86D794-3E27-48C6-87C1-09B070733BF7",
+    "F24DDCE7-B389-4D06-97B0-634B056791DC",
+    "68859018-A138-423D-909D-D00EDCB75872",
+    "2613848F-9D63-47EC-AA1A-A9DD742C3D56"
+  ],
+  "prefs": {
+    "skin": "user/skins/llama_wool.jpg",
+    "numVisibleDatum": "1",
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": 10,
+    "unicodes": [{
+      "symbol": "ɔ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɛ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɣ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɥ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɦ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ɫ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʃ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʒ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "ʔ",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "λ ",
+      "tipa": "lambda",
+      "useCount": "0"
+    }, {
+      "symbol": "α ",
+      "tipa": "alpha",
+      "useCount": "0"
+    }, {
+      "symbol": "β ",
+      "tipa": "\beta",
+      "useCount": "0"
+    }, {
+      "symbol": "∀",
+      "tipa": "\forall",
+      "useCount": "0"
+    }, {
+      "symbol": "∃",
+      "tipa": "exists",
+      "useCount": "0"
+    }, {
+      "symbol": "∄",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∅",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∈",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∉",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∋",
+      "tipa": "",
+      "useCount": "0"
+    }, {
+      "symbol": "∌",
+      "tipa": "",
+      "useCount": "0"
+    }],
+    "preferedDashboardLayout": "layoutAllTheData",
+    "showNewDatumAtTopOrBottomOfDataEntryArea": "top"
+  },
+  "mostRecentIds": {
+    "corpusid": "723a8b707e579087aa36c2e33865ebef",
+    "datalistid": "e345fb6a237768d7d216e04153aa8700",
+    "sessionid": "e345fb6a237768d7d216e04153c2fa34",
+    "couchConnection": {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "linus-georgian",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "Example.org",
+      "corpusid": "723a8b707e579087aa36c2e33865ebef"
+    }
+  },
+  "firstname": "",
+  "lastname": "",
+  "sessionHistory": [
+    "e345fb6a237768d7d216e04153c2fa34",
+    "e345fb6a237768d7d216e04153aa7a74",
+    "723a8b707e579087aa36c2e338ef310e",
+    "4e06b60e129dff5c7bb4bb234990b4ba",
+    "2307d02a5765bd0783a89124cae05fdd",
+    "4bae76605f8adbdabf9dc3d3e564f179",
+    "4bae76605f8adbdabf9dc3d3e55ea6ac",
+    "c8d6d695bbf7819de87f30843474abbf",
+    "c8d6d695bbf7819de87f308434742dd7",
+    "c8d6d695bbf7819de87f30843473f474",
+    "723a8b707e579087aa36c2e33865f83f",
+    "d3bf748b16ac4054680f27a6401ba94a",
+    "d3bf748b16ac4054680f27a640154a4f",
+    "d3bf748b16ac4054680f27a6400e1147",
+    "256eb89b50b2d801d748be4b12567cad",
+    "c561c6a8c687f26e9de36f855440d48d",
+    "ea8ee1e63a9aa3de608228fef8008fb5",
+    "6d9ddd3f1e07fe7e3824976097861673",
+    "6321e7b149a48602cfaf8fa149012cf0",
+    "ea8ee1e63a9aa3de608228fef80b1aae",
+    "38b751d2a58a13f04a201ac9f9018f99",
+    "89bc4d7dcc2b1fc9a7bb0f4f4773ea75",
+    "4C2CD545-9182-4746-9087-938824AF4FB4",
+    "981423C0-318A-4967-925F-5EAE3618D68B",
+    "9C99FD90-9A2F-4AB8-8373-83275F1978CD",
+    "A0FAC134-9746-4C7A-9094-839AB0236C83"
+  ],
+  "hotkeys": {
+    "firstKey": "",
+    "secondKey": "",
+    "description": ""
+  },
+  "newCorpusConnections": [{
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "anotheruser-scottish_gaelic",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "anotheruser-scottish_gaelic",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org"
+  }, {
+    "protocol": "https://",
+    "domain": "corpus.example.org",
+    "port": "443",
+    "pouchname": "anotheruser-scottish_gaelic",
+    "path": "",
+    "authUrl": "https://auth.example.org",
+    "userFriendlyServerName": "Example.org"
+  }]
 }]
