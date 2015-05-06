@@ -226,6 +226,12 @@ app.get('/:user', function(req, res) {
 
   var user = req.params.user;
 
+  var pageNavs = ["tutorial", "people", "contact", "home", ]
+  if (pageNavs.indexOf(user) > -1) {
+    res.redirect("/#/" + user);
+    return;
+  }
+
   getData(res, user);
 
 });
