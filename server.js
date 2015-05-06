@@ -161,8 +161,14 @@ var processCorpusPageParams = function(req, res) {
 
   var dbname = req.params.dbname;
 
-  getCorpusFromDbname(dbname)
-    .then(function(result) {
+  var promiseForCorpus = getCorpusFromDbname(dbname);
+  if (!promiseForCorpus) {
+    res.status(404);
+    res.redirect("404.html")
+    return;
+  }
+
+  promiseForCorpus.then(function(result) {
       result.corpus.copyright = result.corpus.copyright || result.team.username;
       if (result.corpus.copyright.indexOf("Add names of the copyright holders") > -1) {
         result.corpus.copyright = result.team.username;
@@ -245,14 +251,25 @@ function sanitizeAgainstInjection(id) {
     return;
   }
 
-  if (id.indexOf('.js') === id.length - 3 || id.indexOf('?') === id.length - 1 || id.indexOf('.txt') === id.length - 4 || id.indexOf('.php') === id.length - 4 || id.indexOf('html') === id.length - 4) {
+  if (id.indexOf('.js') === id.length - 3 ||
+    id.indexOf('+') > -1 ||
+    id.indexOf('?') > -1 ||
+    id.indexOf('=') > -1 ||
+    id.indexOf(',') > -1 ||
+    id.indexOf('.txt') === id.length - 4 ||
+    id.indexOf('.php') === id.length - 4 ||
+    id.indexOf('html') === id.length - 4) {
+
     console.log(new Date() + ' evil attempt on server to open ' + id + ' sending 404 instead');
     return false;
   }
 
-  id = id.toLowerCase().replace(/[^a-z0-9_-]/g, '');
-
-  return id;
+  var sanitized = id.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  if (sanitized !== id.toLowerCase()) {
+    console.log(new Date() + ' potentially evil attempt on server to open ' + id + ' sending 404 instead');
+    return false;
+  }
+  return sanitized;
 }
 
 
