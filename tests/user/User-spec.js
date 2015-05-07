@@ -66,7 +66,7 @@ describe("User ", function() {
       var u = new User();
       u.prefs = u.defaults.prefs;
       expect(u.prefs).toBeDefined();
-      expect(u.prefs.preferedDashboardType).toEqual("");
+      expect(u.prefs.preferredDashboardType).toEqual("");
     });
 
     it("should upgrade the old dates from back in the mongoose days", function() {
@@ -95,7 +95,7 @@ describe("User ", function() {
 
       // u.appbrand = "phophlo";
       expect(u.prefs.fieldDBtype).toEqual("UserPreference");
-      expect(u.prefs.preferedDashboardType).toEqual("experimenter");
+      expect(u.prefs.preferredDashboardType).toEqual("experimenter");
     });
 
   });

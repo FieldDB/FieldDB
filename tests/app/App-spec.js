@@ -44,7 +44,7 @@ describe("App", function() {
 
       expect(app).toBeDefined();
 
-      // Set locale to user's prefered locale by default
+      // Set locale to user's preferred locale by default
       expect(app.contextualizer.currentLocale.iso).toBeDefined();
       try {
         if (navigator.languages[0].indexOf(app.contextualizer.currentLocale.iso) === -1) {
