@@ -23,7 +23,7 @@ describe("Corpus", function() {
   describe("construction options", function() {
 
     it("should serialize the pouchname", function() {
-      var corpus = new Corpus(SAMPLE_v1_CORPUS_MODELS[0]);
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       expect(corpus.dbname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual("sapir-firstcorpus");
       expect(corpus.pouchname).toEqual(corpus.dbname);
@@ -67,9 +67,21 @@ describe("Corpus", function() {
   });
 
   describe("prefs", function() {
-    it("should be possible to set team preferences for a view", function() {
+    it("should have prefs but not serialize if not customized", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
-      expect(corpus.prefs).toBeUndefined();
+      expect(corpus.prefs).toBeDefined();
+
+      expect(corpus.prefs.fieldDBtype).toEqual("UserPreference");
+      expect(corpus.prefs.preferredDashboardLayout).toEqual("layoutAllTheData");
+
+      // corpus.prefs.debugMode = true;
+      var serialized = corpus.toJSON();
+      expect(serialized.prefs).toBeUndefined();
+    });
+
+    it("should be possible to customize team preferences for a view", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      expect(corpus.prefs).toBeDefined();
       corpus.preferredDashboardLayout = "layoutEverythingAtOnce";
       corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
       corpus.preferredLocale = "fr";
@@ -84,22 +96,83 @@ describe("Corpus", function() {
       expect(corpus.preferredDatumTemplate).toBeUndefined();
     });
 
-    it("should be able to reorder corpus fields for spreadsheet fields order", function() {
+    it("should have fields in default order so that the spreadsheet template looks useful for a first corpus", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(Corpus.prototype.defaults)));
+      expect(corpus.datumFields.map(function(field) {
+        return field.label;
+      }).slice(0, 7)).toEqual(["Gramaticality Judgement", "Transcription", "Morphemes", "Gloss", "Translation", "Context", "Discussion"]);
+
+      expect(corpus.prefs.preferredSpreadsheetShape.columns).toEqual(2);
+      expect(corpus.prefs.preferredSpreadsheetShape.rows).toEqual(3);
+    });
+
+    it("should be able to set the spreadsheet shape", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(Corpus.prototype.defaults)));
+
+      expect(corpus.prefs.preferredSpreadsheetShape.columns).toEqual(2);
+
+      corpus.prefs.preferredSpreadsheetShape.columns = 5;
+      expect(corpus.prefs.preferredSpreadsheetShape.columns).toEqual(5);
+    });
+
+    it("should be have an order of fields from the corpus", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
-      expect(corpus.datumFields.fieldDBtype).toEqual("DatumFields");
-      expect(corpus.prefs).toBeUndefined();
       expect(corpus.datumFields.map(function(field) {
         return field.id;
       })).toEqual(["judgement", "utterance", "morphemes", "gloss", "translation", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
+    });
 
-      corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
+    it("should be able to reorder corpus fields for spreadsheet compact template", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+
+      corpus.preferredDatumTemplate = "compacttemplate";
       expect(corpus.datumFields.map(function(field) {
         return field.id;
-      })).toEqual(["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "housekeeping", "tags", "dateElicited", "notes", "checkedWithConsultant", "dialect"]);
+      }).splice(0, 5)).toEqual(["judgement", "utterance", "morphemes", "gloss", "translation"]);
+
       expect(corpus.preferredDatumTemplate).toBeUndefined();
       expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
     });
 
+    it("should be able to reorder corpus fields for spreadsheet fulltemplate", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      corpus.preferredDatumTemplate = "fulltemplate";
+      expect(corpus.datumFields.map(function(field) {
+        return field.label;
+      }).splice(0, 7)).toEqual(["Judgement", "Utterance", "Morphemes", "Gloss", "Translation", "Context", "Documentation"]);
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+      expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
+    });
+
+    it("should be able to reorder corpus fields for spreadsheet mcgillfieldmethodsspring2014template", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      corpus.preferredDatumTemplate = "mcgillfieldmethodsspring2014template";
+      expect(corpus.datumFields.map(function(field) {
+        return field.label;
+      })).toEqual(["Judgement", "Utterance", "Morphemes", "Gloss", "Translation", "ValidationStatus", "Tags", "DateElicited", "Notes", "CheckedWithConsultant", "Dialect"]);
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+      expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
+    });
+
+    it("should be able to reorder corpus fields for spreadsheet mcgillfieldmethodsfall2014template", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      corpus.preferredDatumTemplate = "mcgillfieldmethodsfall2014template";
+      expect(corpus.datumFields.map(function(field) {
+        return field.label;
+      }).splice(0, 7)).toEqual(["Judgement", "Utterance", "Morphemes", "Gloss", "Translation", "Phonetic", "Notes"]);
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+      expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
+    });
+
+    it("should be able to reorder corpus fields for spreadsheet yalefieldmethodsspring2014template", function() {
+      var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
+      corpus.preferredDatumTemplate = "yalefieldmethodsspring2014template";
+      expect(corpus.datumFields.map(function(field) {
+        return field.label;
+      }).splice(0, 9)).toEqual(["Judgement", "Orthography", "Utterance", "Morphemes", "Gloss", "Translation", "Spanish", "Housekeeping", "Tags"]);
+      expect(corpus.preferredDatumTemplate).toBeUndefined();
+      expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
+    });
 
 
   });
@@ -351,14 +424,14 @@ describe("Corpus", function() {
       expect(serialization.team).toEqual({
         fieldDBtype: "Team",
         _id: "team",
-        username: "",
-        firstname: "",
-        lastname: "",
-        gravatar: "",
-        researchInterest: "",
-        affiliation: "",
-        description: "",
-        fields: [],
+        // username: "",
+        // firstname: "",
+        // lastname: "",
+        // gravatar: "",
+        // researchInterest: "",
+        // affiliation: "",
+        // description: "",
+        // fields: [],
         version: serialization.team.version,
         api: "users"
       });
