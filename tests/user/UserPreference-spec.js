@@ -72,7 +72,7 @@ describe("UserPreference", function() {
         debugMode: true
       });
       var serialized = prefs.toJSON();
-      expect(serialized).toBeUndefined();
+      expect(serialized).toEqual({});
 
       expect(prefs.preferredSpreadsheetShape.rows).toEqual(3);
       prefs.preferredSpreadsheetShape.rows = 4;
