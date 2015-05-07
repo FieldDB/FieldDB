@@ -56,7 +56,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     };
   }
   // $scope.application.currentCorpusDashboard = ":team/:corpusidentifier/import/:importType";
-  $scope.FieldDBComponents.Activity.route = "/lingllama/community_corpus/activityfeed";//+ "/activityfeed/123";
+  $scope.FieldDBComponents.Activity.route = "/lingllama/communitycorpus/activityfeed";//+ "/activityfeed/123";
 
   console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });
