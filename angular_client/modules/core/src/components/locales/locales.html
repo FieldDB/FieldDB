@@ -4,7 +4,7 @@
 <label ng-show="showFullView">Change the user interface language:</label>
 <select class=" btn btn-inverse" ng-model="locales.currentLocale" ng-options="locale[localeKeyToShow] for locale in locales.availableLanguages._collection" ng-change="persistUsersChosenLocale(locales.currentLocale)">
 </select>
-<select class="hide btn btn-default" ng-model="application.authentication.user.prefs.preferedDashboardType" title="Which kind of dashboard defaults would you like to use view this corpus?">
+<select class="hide btn btn-default" ng-model="application.authentication.user.prefs.preferredDashboardType" title="Which kind of dashboard defaults would you like to use view this corpus?">
   <option value="experimenterNormalUser">Experiment Administrator (basic)</option>
   <option value="psychoLinguistPowerUser">Psycho Linguist (advanced)</option>
   <option value="fieldLinguistNormalUser">Field Linguist (basic)</option>

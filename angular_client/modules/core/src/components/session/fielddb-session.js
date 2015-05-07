@@ -30,7 +30,7 @@ angular.module("fielddbAngular").directive("fielddbSession", function() {
         // Only values which would be interesting for this user
         var prefs = $rootScope.application.prefs;
         // console.log(prefs);
-        var userType = prefs.preferedDashboardType || "experimenterNormalUser";
+        var userType = prefs.preferredDashboardType || "experimenterNormalUser";
         if (!field.showToUserTypes) {
           return true;
         }

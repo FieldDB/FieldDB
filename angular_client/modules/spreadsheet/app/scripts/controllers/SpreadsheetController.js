@@ -301,45 +301,45 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.application.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
     }
 
-    $rootScope.application.corpus.prefs.preferedSpreadsheetShape = $rootScope.application.corpus.prefs.preferedSpreadsheetShape;
+    $rootScope.application.corpus.prefs.preferredSpreadsheetShape = $rootScope.application.corpus.prefs.preferredSpreadsheetShape;
 
-    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
-      $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows = $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / $rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns);
+    if ($rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows > $rootScope.application.corpus.datumFields._collection.length - 1) {
+      $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows = $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows || Math.ceil($rootScope.application.corpus.datumFields._collection.length / $rootScope.application.corpus.prefs.preferredSpreadsheetShape.columns);
     }
 
-    if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 1) {
+    if ($rootScope.application.corpus.prefs.preferredSpreadsheetShape.columns === 1) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = [];
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-8 col-lg-8";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-3 col-lg-3";
-    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 2) {
+    } else if ($rootScope.application.corpus.prefs.preferredSpreadsheetShape.columns === 2) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = [];
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-6 col-md-5 col-lg-5";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-2 col-lg-2";
-    } else if ($rootScope.application.corpus.prefs.preferedSpreadsheetShape.columns === 3) {
+    } else if ($rootScope.application.corpus.prefs.preferredSpreadsheetShape.columns === 3) {
       $rootScope.application.corpus.fieldsInColumns.first = $rootScope.application.corpus.datumFields._collection.slice(
         1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows + 1
       );
       $rootScope.application.corpus.fieldsInColumns.second = $rootScope.application.corpus.datumFields._collection.slice(
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows + 1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows + 1,
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.third = $rootScope.application.corpus.datumFields._collection.slice(
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 2 + 1,
-        $rootScope.application.corpus.prefs.preferedSpreadsheetShape.rows * 3 + 1
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1,
+        $rootScope.application.corpus.prefs.preferredSpreadsheetShape.rows * 3 + 1
       );
       $rootScope.application.corpus.fieldsInColumns.columnWidthClass = "col-xs-12 col-sm-12 col-md-4 col-lg-4";
       $rootScope.application.corpus.fieldsInColumns.detailsWidthClass = "col-xs-12 col-sm-12 col-md-12 col-lg-12";
