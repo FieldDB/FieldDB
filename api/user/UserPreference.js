@@ -43,7 +43,8 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
           columns: 2,
           rows: 3
         },
-        hotkeys: []
+        hotkeys: [],
+        unicodes: []
       };
     }
   },
@@ -328,23 +329,25 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       }
       this.debug("JSON before removing items which match defaults", json);
 
-      for (var pref in this.defaults) {
-        if (!this.defaults.hasOwnProperty(pref)) {
-          continue;
+      if (!includeEvenEmptyAttributes) {
+        for (var pref in this.defaults) {
+          if (!this.defaults.hasOwnProperty(pref)) {
+            continue;
+          }
+          if (new FieldDBObject(json[pref]).equals(this.defaults[pref]) || (Object.prototype.toString.call(json[pref]) === "[object Array]" && json[pref].length === 0)) {
+            this.debug("removing pref which is set to a default " + pref);
+            delete json[pref];
+          }
         }
-        if (new FieldDBObject(json[pref]).equals(this.defaults[pref])) {
-          this.debug("removing pref which is set to a default " + pref);
-          delete json[pref];
-        }
+
+        // if (json.preferredSpreadsheetShape && json.preferredSpreadsheetShape.columns === this.defaults.preferredSpreadsheetShape.columns && json.preferredSpreadsheetShape.rows === this.defaults.preferredSpreadsheetShape.rows) {
+        //   delete json.preferredSpreadsheetShape;
+        // }
       }
 
-      // if (json.preferredSpreadsheetShape && json.preferredSpreadsheetShape.columns === this.defaults.preferredSpreadsheetShape.columns && json.preferredSpreadsheetShape.rows === this.defaults.preferredSpreadsheetShape.rows) {
-      //   delete json.preferredSpreadsheetShape;
-      // }
       if (JSON.stringify(json) === "{}") {
-        return;
+        return {};
       }
-
       json.fieldDBtype = this.fieldDBtype;
       json.version = this.version;
       json.dateCreated = this.dateCreated;
