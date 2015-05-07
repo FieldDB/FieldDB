@@ -32,13 +32,13 @@ describe("UserPreference", function() {
     var prefs = new UserPreference();
 
     it("should contain dashboard preferences", function() {
-      expect(prefs.preferedDashboardType).toEqual("fieldlinguistNormalUser");
-      expect(prefs.preferedDashboardLayout).toEqual("layoutAllTheData");
+      expect(prefs.preferredDashboardType).toEqual("fieldlinguistNormalUser");
+      expect(prefs.preferredDashboardLayout).toEqual("layoutAllTheData");
     });
 
     it("should contain spreadsheet preferences", function() {
-      expect(prefs.preferedSpreadsheetShape.columns).toEqual(2);
-      expect(prefs.preferedSpreadsheetShape.rows).toEqual(3);
+      expect(prefs.preferredSpreadsheetShape.columns).toEqual(2);
+      expect(prefs.preferredSpreadsheetShape.rows).toEqual(3);
     });
 
     it("should contain unicode preferences", function() {
@@ -74,13 +74,13 @@ describe("UserPreference", function() {
       var serialized = prefs.toJSON();
       expect(serialized).toBeUndefined();
 
-      expect(prefs.preferedSpreadsheetShape.rows).toEqual(3);
-      prefs.preferedSpreadsheetShape.rows = 4;
-      expect(prefs.preferedSpreadsheetShape.rows).toEqual(4);
+      expect(prefs.preferredSpreadsheetShape.rows).toEqual(3);
+      prefs.preferredSpreadsheetShape.rows = 4;
+      expect(prefs.preferredSpreadsheetShape.rows).toEqual(4);
 
       serialized = prefs.toJSON();
       expect(serialized).toEqual({
-        preferedSpreadsheetShape: {
+        preferredSpreadsheetShape: {
           columns: 2,
           rows: 4
         },
@@ -89,12 +89,12 @@ describe("UserPreference", function() {
         dateCreated: serialized.dateCreated
       });
 
-      expect(prefs.preferedDashboardLayout).toEqual("layoutAllTheData");
-      prefs.preferedDashboardLayout = "layoutJustEntering";
-      expect(prefs.preferedDashboardLayout).toEqual("layoutJustEntering");
+      expect(prefs.preferredDashboardLayout).toEqual("layoutAllTheData");
+      prefs.preferredDashboardLayout = "layoutJustEntering";
+      expect(prefs.preferredDashboardLayout).toEqual("layoutJustEntering");
 
       serialized = prefs.toJSON();
-      expect(serialized.preferedDashboardLayout).toEqual("layoutJustEntering");
+      expect(serialized.preferredDashboardLayout).toEqual("layoutJustEntering");
     });
 
   });

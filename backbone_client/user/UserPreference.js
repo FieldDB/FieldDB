@@ -55,8 +55,18 @@ define([
     internalModels : {
       unicodes : InsertUnicodes
     },
+
+    originalParse : Backbone.Model.prototype.parse,
+    parse: function(originalModel) {
+      if (originalModel) {
+        if (originalModel.preferedDashboardLayout) {
+          originalModel.preferredDashboardLayout = originalModel.preferedDashboardLayout;
+        }
+      }
+      return this.originalParse(originalModel);
+    },
+
     saveAndInterConnectInApp : function(callback){
-      
       if(typeof callback == "function"){
         callback();
       }

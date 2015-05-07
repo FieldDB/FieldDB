@@ -85,35 +85,35 @@ define([
       /*
        * TODO add these classes to the buttons them selves
        */
-      "click .set-prefered-dashboard-layoutJustEntering" :function(e){
+      "click .set-preferred-dashboard-layoutJustEntering" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
         this.setPreferedDashboardTemplate("layoutJustEntering");
       },
-      "click .set-prefered-dashboard-layoutAllTheData" :function(e){
+      "click .set-preferred-dashboard-layoutAllTheData" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
         this.setPreferedDashboardTemplate("layoutAllTheData");
       },
-      "click .set-prefered-dashboard-layoutWhatsHappening" :function(e){
+      "click .set-preferred-dashboard-layoutWhatsHappening" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
         this.setPreferedDashboardTemplate("layoutWhatsHappening");
       },
-      "click .set-prefered-dashboard-layoutCompareDataLists" :function(e){
+      "click .set-preferred-dashboard-layoutCompareDataLists" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
         }
         this.setPreferedDashboardTemplate("layoutCompareDataLists");
       },
-      "click .set-prefered-dashboard-layoutEverythingAtOnce" :function(e){
+      "click .set-preferred-dashboard-layoutEverythingAtOnce" :function(e){
         if(e){
           e.stopPropagation();
           e.preventDefault();
@@ -204,15 +204,15 @@ define([
          * TODO add these classes to the buttons them selves 
          */
         var templatesThatAreNotActive = "layoutJustEntering,layoutAllTheData,layoutWhatsHappening,layoutCompareDataLists,templateFile".split(",");
-        var activeTemplate = this.model.get("preferedDashboardLayout");
+        var activeTemplate = this.model.get("preferredDashboardLayout");
         var activeTemplateIndex = templatesThatAreNotActive.indexOf(activeTemplate);
         if(activeTemplateIndex >= 0){
           templatesThatAreNotActive.splice(activeTemplateIndex, 1);
         }else{
-          this.model.set("preferedDashboardLayout", "default");
+          this.model.set("preferredDashboardLayout", "default");
         }
         for(var template in templatesThatAreNotActive){
-          $(this.el).find('.set-prefered-dashboard-'+templatesThatAreNotActive[template]);//.addClass("halfopacity");
+          $(this.el).find('.set-preferred-dashboard-'+templatesThatAreNotActive[template]);//.addClass("halfopacity");
         }
         
         if (this.model.get("skin") == "") {
@@ -348,16 +348,16 @@ define([
       headtg.replaceChild(newlink, oldlink);
     },
     
-    setPreferedDashboardTemplate : function(preferedTemplate){
-      this.model.set("preferedDashboardLayout", preferedTemplate);
+    setPreferedDashboardTemplate : function(preferredTemplate){
+      this.model.set("preferredDashboardLayout", preferredTemplate);
       if (confirm("Would you like to load this new dashboard layout now?")) {
         window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
           window.location.replace("corpus.html");
         });
       }
     }, 
-    setShowDatumAtTopOrBottomOfDataEntryArea : function(preferedLocation){
-      this.model.set("showNewDatumAtTopOrBottomOfDataEntryArea", preferedLocation);
+    setShowDatumAtTopOrBottomOfDataEntryArea : function(preferredLocation){
+      this.model.set("showNewDatumAtTopOrBottomOfDataEntryArea", preferredLocation);
       if (confirm("Would you like to load this new dashboard layout now?")) {
         window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
           window.location.replace("corpus.html");

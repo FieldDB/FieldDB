@@ -67,7 +67,7 @@ describe("Contextualizer", function() {
       expect(contextualizer.currentContext).toEqual("default");
     });
 
-    it("should set the locale to the user's prefered locale by default", function() {
+    it("should set the locale to the user's preferred locale by default", function() {
       var contextualizer = new Contextualizer();
       expect(contextualizer).toBeDefined();
       expect(contextualizer.defaultLocale.iso).toEqual("en");

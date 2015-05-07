@@ -623,8 +623,8 @@ define([
         if (OPrime.debugMode) OPrime.debug("Problem setting the username or dbname of the app.");
       }
 
-      /* Render the users prefered dashboard layout */
-      this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferedDashboardLayout") || "default";
+      /* Render the users preferred dashboard layout */
+      this.format = this.model.get("authentication").get("userPrivate").get("prefs").get("preferredDashboardLayout") || "default";
       var username = "";
       try{
         username = window.app.get("authentication").get("userPrivate").get("username") || "";

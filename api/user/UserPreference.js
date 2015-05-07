@@ -21,8 +21,8 @@ var UserPreference = function UserPreference(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-UserPreference.preferedDashboardLayouts = ["layoutAllTheData", "layoutJustEntering", "layoutWhatsHappening", "layoutCompareDataLists"];
-UserPreference.preferedDashboardTypes = ["fieldlinguistNormalUser", "fieldlinguistPowerUser"];
+UserPreference.preferredDashboardLayouts = ["layoutAllTheData", "layoutJustEntering", "layoutWhatsHappening", "layoutCompareDataLists"];
+UserPreference.preferredDashboardTypes = ["fieldlinguistNormalUser", "fieldlinguistPowerUser"];
 
 UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends UserPreference.prototype */ {
   constructor: {
@@ -36,9 +36,9 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       transparentDashboard: false,
       alwaysRandomizeSkin: true,
       numberOfItemsInPaginatedViews: 10,
-      preferedDashboardLayout: UserPreference.preferedDashboardLayouts[0],
-      preferedDashboardType: UserPreference.preferedDashboardTypes[0],
-      preferedSpreadsheetShape: {
+      preferredDashboardLayout: UserPreference.preferredDashboardLayouts[0],
+      preferredDashboardType: UserPreference.preferredDashboardTypes[0],
+      preferredSpreadsheetShape: {
         columns: 2,
         rows: 3
       },
@@ -109,59 +109,92 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
 
   preferedDashboardType: {
     get: function() {
-      return this._preferedDashboardType || this.defaults.preferedDashboardType;
+      this.warn("preferedDashboardType is deprecated use preferredDashboardType instead");
+      return this.preferredDashboardType;
     },
     set: function(value) {
-      this.debug("setting _preferedDashboardType from " + value);
-      if (value === this._preferedDashboardType) {
+      this.warn("preferedDashboardType is deprecated use preferredDashboardType instead");
+      this.preferredDashboardType = value;
+    }
+  },
+
+  preferredDashboardType: {
+    get: function() {
+      return this._preferredDashboardType || this.defaults.preferredDashboardType;
+    },
+    set: function(value) {
+      this.debug("setting _preferredDashboardType from " + value);
+      if (value === this._preferredDashboardType) {
         return;
       }
       if (!value) {
-        delete this._preferedDashboardType;
+        delete this._preferredDashboardType;
         return;
       }
       if (value.trim) {
         value = value.trim();
       }
-      this._preferedDashboardType = value;
+      this._preferredDashboardType = value;
     }
   },
 
   preferedDashboardLayout: {
     get: function() {
-      return this._preferedDashboardLayout || this.defaults.preferedDashboardLayout;
+      this.warn("preferedDashboardLayout is deprecated use preferredDashboardLayout instead");
+      return this.preferredDashboardLayout;
+    },
+    set: function(value) {
+      this.warn("preferedDashboardType is deprecated use preferredDashboardLayout instead");
+      this.preferredDashboardLayout = value;
+    }
+  },
+
+  preferredDashboardLayout: {
+    get: function() {
+      return this._preferredDashboardLayout || this.defaults.preferredDashboardLayout;
     },
     set: function(value) {
 
-      if (value === this._preferedDashboardLayout) {
+      if (value === this._preferredDashboardLayout) {
         return;
       }
       if (!value) {
-        delete this._preferedDashboardLayout;
+        delete this._preferredDashboardLayout;
         return;
       }
       // Guess which kind of user this is
-      if (!this.preferedDashboardType) {
-        if (this._preferedDashboardLayout === "layoutAllTheData" || this._preferedDashboardLayout === "layoutJustEntering" || this._preferedDashboardLayout === "layoutWhatsHappening") {
-          this.preferedDashboardType = "fieldlinguistNormalUser";
-        } else if (this._preferedDashboardLayout === "layoutCompareDataLists" || this._preferedDashboardLayout === "layoutEverythingAtOnce") {
-          this.preferedDashboardType = "fieldlinguistPowerUser";
+      if (!this.preferredDashboardType) {
+        if (this._preferredDashboardLayout === "layoutAllTheData" || this._preferredDashboardLayout === "layoutJustEntering" || this._preferredDashboardLayout === "layoutWhatsHappening") {
+          this.preferredDashboardType = "fieldlinguistNormalUser";
+        } else if (this._preferredDashboardLayout === "layoutCompareDataLists" || this._preferredDashboardLayout === "layoutEverythingAtOnce") {
+          this.preferredDashboardType = "fieldlinguistPowerUser";
         }
       }
 
-      this._preferedDashboardLayout = value;
+      this._preferredDashboardLayout = value;
     }
   },
 
   preferedSpreadsheetShape: {
     get: function() {
-      if (!this._preferedSpreadsheetShape) {
-        this._preferedSpreadsheetShape = JSON.parse(JSON.stringify(this.defaults.preferedSpreadsheetShape));
-      }
-      return this._preferedSpreadsheetShape;
+      this.warn("preferedSpreadsheetShape is deprecated use preferredSpreadsheetShape instead");
+      return this.preferredSpreadsheetShape;
     },
     set: function(value) {
-      this._preferedSpreadsheetShape = value;
+      this.warn("preferedDashboardType is deprecated use preferredSpreadsheetShape instead");
+      this.preferredSpreadsheetShape = value;
+    }
+  },
+
+  preferredSpreadsheetShape: {
+    get: function() {
+      if (!this._preferredSpreadsheetShape) {
+        this._preferredSpreadsheetShape = JSON.parse(JSON.stringify(this.defaults.preferredSpreadsheetShape));
+      }
+      return this._preferredSpreadsheetShape;
+    },
+    set: function(value) {
+      this._preferredSpreadsheetShape = value;
     }
   },
 
@@ -250,6 +283,17 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
     }
   },
 
+  preferedLocale: {
+    get: function() {
+      this.warn("preferedLocale is deprecated use preferredLocale instead");
+      return this.preferredLocale;
+    },
+    set: function(value) {
+      this.warn("preferedDashboardType is deprecated use preferredLocale instead");
+      this.preferredLocale = value;
+    }
+  },
+
   preferredLocale: {
     get: function() {
       return this._preferredLocale;
@@ -283,14 +327,17 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       this.debug("JSON before removing items which match defaults", json);
 
       for (var pref in this.defaults) {
-        if (this.defaults.hasOwnProperty(pref) && json[pref] === this.defaults[pref]) {
+        if (!this.defaults.hasOwnProperty(pref)) {
+          continue;
+        }
+        if (json[pref] === this.defaults[pref]) {
           this.debug("removing pref which is set to a default " + pref);
           delete json[pref];
         }
       }
 
-      // if (json.preferedSpreadsheetShape && json.preferedSpreadsheetShape.columns === this.defaults.preferedSpreadsheetShape.columns && json.preferedSpreadsheetShape.rows === this.defaults.preferedSpreadsheetShape.rows) {
-      //   delete json.preferedSpreadsheetShape;
+      // if (json.preferredSpreadsheetShape && json.preferredSpreadsheetShape.columns === this.defaults.preferredSpreadsheetShape.columns && json.preferredSpreadsheetShape.rows === this.defaults.preferredSpreadsheetShape.rows) {
+      //   delete json.preferredSpreadsheetShape;
       // }
       if (JSON.stringify(json) === "{}") {
         return;
