@@ -66,7 +66,7 @@ describe("User ", function() {
       var u = new User();
       u.prefs = u.defaults.prefs;
       expect(u.prefs).toBeDefined();
-      expect(u.prefs.preferredDashboardType).toEqual("");
+      expect(u.prefs.preferredDashboardType).toEqual("fieldlinguistNormalUser");
     });
 
     it("should upgrade the old dates from back in the mongoose days", function() {
