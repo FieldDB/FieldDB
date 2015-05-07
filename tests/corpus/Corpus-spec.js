@@ -76,7 +76,7 @@ describe("Corpus", function() {
 
       // corpus.prefs.debugMode = true;
       var serialized = corpus.toJSON();
-      expect(serialized.prefs).toBeUndefined();
+      expect(serialized.prefs).toEqual({});
     });
 
     it("should be possible to customize team preferences for a view", function() {
