@@ -140,6 +140,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "_unsaved",
   "_parent",
   "application",
+  "debugMessages",
   "bugMessage",
   "confirmMessage",
   "contextualizer",
