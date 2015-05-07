@@ -221,7 +221,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
   appbrand: {
     get: function() {
-      if (this.prefs && !this.prefs.preferredDashboardType) {
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
           this.debug(" setting preferredDashboardType from user " + this._appbrand);
 
@@ -244,7 +244,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         this._appbrand = value;
       }
       this.debug(" setting preferredDashboardType from user " + this._appbrand);
-      if (this.prefs && !this.prefs.preferredDashboardType) {
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
           this.prefs._preferredDashboardType = "experimenter";
           this.debug(" it is now " + this.prefs.preferredDashboardType);
