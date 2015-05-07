@@ -30,19 +30,21 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
   },
 
   defaults: {
-    value: {
-      skin: "",
-      numVisibleDatum: 2, //Use two as default so users can see minimal pairs
-      transparentDashboard: false,
-      alwaysRandomizeSkin: true,
-      numberOfItemsInPaginatedViews: 10,
-      preferredDashboardLayout: UserPreference.preferredDashboardLayouts[0],
-      preferredDashboardType: UserPreference.preferredDashboardTypes[0],
-      preferredSpreadsheetShape: {
-        columns: 2,
-        rows: 3
-      },
-      hotkeys: []
+    get: function() {
+      return {
+        skin: "",
+        numVisibleDatum: 2, //Use two as default so users can see minimal pairs
+        transparentDashboard: false,
+        alwaysRandomizeSkin: true,
+        numberOfItemsInPaginatedViews: 10,
+        preferredDashboardLayout: "layoutAllTheData",
+        preferredDashboardType: "fieldlinguistNormalUser",
+        preferredSpreadsheetShape: {
+          columns: 2,
+          rows: 3
+        },
+        hotkeys: []
+      };
     }
   },
 
@@ -330,7 +332,7 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
         if (!this.defaults.hasOwnProperty(pref)) {
           continue;
         }
-        if (json[pref] === this.defaults[pref]) {
+        if (new FieldDBObject(json[pref]).equals(this.defaults[pref])) {
           this.debug("removing pref which is set to a default " + pref);
           delete json[pref];
         }
