@@ -1,0 +1,638 @@
+<!doctype html>
+<html class="no-js ng-scope" ng-app="spreadsheetApp" ng-controller="FieldDBController">
+<head>
+<style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}.ng-hide-add-active,.ng-hide-remove{display:block!important;}</style>
+    <meta charset="utf-8">
+    <title>
+</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/vendor.css">
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body id="app" ng-controller="SpreadsheetStyleDataEntryController" class="ng-scope">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <!-- ngInclude: undefined -->
+<ng-include src="'views/menu.html'" scope="" onload="" class="ng-scope">
+<div class="row-fluid document_not_ready_spinner ng-scope ng-hide" ng-hide="documentReady==true">
+<div class="span4 offset4 pagination-centered">
+<img src="images/loading-spinner.gif" width="75">
+</div>
+</div>
+<div id="hideOnLoadDeprecated" class="ng-scope">
+<div class="largeMenuBar">
+<div class="menubar mainMenubar">
+<span class="menuTitle">
+<a ng-click="navigateVerifySaved('home')" class="">
+<img src="images/icon48_dev.png" border="0">
+</a>
+</span> <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}" class="ng-hide">
+<a class="menuitem ng-binding" ng-click="loadDataEntryScreen();">
+<i class="fa whiteicon fa-list">
+</i> Data Entry</a>
+</span> | <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}" class="ng-hide">
+<a class="menuitem ng-binding" ng-click="navigateVerifySaved('searchMenu');">
+<i class="fa whiteicon fa-search">
+</i> Search</a>
+</span> | <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}" class="ng-hide">
+<a class="menuitem ng-binding" ng-click="navigateVerifySaved('editSession')">
+<i class="fa whiteicon fa-calendar">
+</i> Session</a>
+</span> | <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}" class="ng-hide">
+<ul class="dropdown_nav">
+<li>
+<a class="menuitem ng-binding">
+<i class="fa whiteicon fa-cogs">
+</i> პარამეტრები</a>
+<ul>
+<li>
+<a ng-click="navigateVerifySaved('corpusSettings')" class="ng-binding">
+<i class="fa whiteicon fa-cloud">
+</i> Corpus</a>
+</li>
+<li ng-hide="corpus.dbname==undefined" class="ng-hide">
+<a ng-click="navigateVerifySaved('settings');" class="ng-binding">
+<i class="fa whiteicon fa-cogs">
+</i> User Interface</a>
+</li>
+</ul>
+</li>
+</ul>
+</span> | <span ng-class="{active_menu_class: activeMenu=='faq'}">
+<a class="menuitem ng-binding" ng-click="navigateVerifySaved('faq');clickSuccess=true;"> </a>
+</span> | <span ng-hide="data==undefined" class="ng-binding ng-hide">
+<input type="checkbox" ng-model="useAutoGlosser" class="ng-pristine ng-valid"> <i class="fa whiteicon fa-bar-chart-o">
+</i> Semi-auto Glosser</span> <span class="rightMenuItems ng-hide" ng-show="authenticated==true">
+<div class="rightMenuItemsDiv">
+<div ng-hide="corpus==undefined" class="ng-binding ng-hide">
+<a class="floatLeft" href="http://lingsync.org//" target="_blank" title="Visit this 's webpage">
+<img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/?s=30&amp;d=retro&amp;r=pg" border="0" src="https://secure.gravatar.com/avatar/?s=30&amp;d=retro&amp;r=pg" class="ng-hide">
+</a> <i class="fa whiteicon fa-calendar">
+</i> All Sessions<br>
+<i class="fa whiteicon fa-cloud">
+</i> </div>
+<div>&nbsp; <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true &amp;&amp; loading==false &amp;&amp; (writePermissions==true || commentPermissions==true)" class="ng-binding pulsing ng-hide">Saving</button> &nbsp; <button class="btn btn-warning ng-binding" ng-click="logOut()">
+<i class="fa whiteicon fa-arrow-right">
+</i> Log out</button> <a href="http://lingsync.org/" target="_blank" title="Visit your share page">
+<img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/?s=30&amp;d=identicon" border="0" src="https://secure.gravatar.com/avatar/?s=30&amp;d=identicon" class="ng-hide">
+</a>
+</div>
+</div>
+<div class="clearDiv">
+</div>
+</span> <span ng-hide="authenticated" class="">
+<div class="rightMenuItemsDiv">
+</div>
+</span>
+</div>
+<div class="subMenubar ng-hide" ng-show="activeSubMenu=='editSession'">
+<div class="form-horizontal">
+<span class="ng-binding">
+<i class="fa whiteicon fa-calendar">
+</i> Change Session</span>
+<select class="span3 ng-pristine ng-valid" ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
+<option value="?" selected="selected">
+</option>
+</select>&nbsp; <button class="btn btn-primary ng-binding" ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">Activate Session</button> &nbsp;&nbsp; <span ng-hide="activeSessionID==undefined" class="ng-hide">
+<button ng-show="writePermissions==true" class="btn btn-success ng-binding ng-hide" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false">Edit Session Info</button> &nbsp;&nbsp;</span> <span ng-show="(data | filter: activeSessionID).length==0" class="ng-hide">
+<button ng-show="writePermissions==true" class="btn btn-danger ng-binding ng-hide" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+<i class="fa whiteicon fa-trash-o">
+</i> Delete Session</button> &nbsp;&nbsp;</span> <button ng-show="writePermissions==true" class="btn btn-primary ng-binding ng-hide" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+<i class="fa whiteicon fa-plus">
+</i> Create New Elicitation Session</button>
+</div>
+<div class="subSubMenubar ng-hide" ng-show="editSessionDetails==true &amp;&amp; activeSessionID!=undefined">
+<form ng-model="scope.fullCurrentSession" class="ng-pristine ng-valid">
+<table cellpadding="5px">
+<tbody>
+<tr>
+<td class="ng-binding">
+<i class="fa whiteicon fa-calendar">
+</i> Goal:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-user">
+</i> Consultants</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE" ng-hide="true">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-user">
+</i> User:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.user" placeholder="" disabled="">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Language:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.language" placeholder="Language">
+</td>
+<td class="ng-binding">Dialect:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.dialect" placeholder="Dialect">
+</td>
+<td class="ng-binding">Date Elicited</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="date" ng-model="scope.fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<div>
+<button class="btn ng-binding" ng-click="editSession(scope.fullCurrentSession, data);">
+<i class="fa whiteicon fa-save">
+</i> Save Changes</button> &nbsp; <button class="btn ng-binding" ng-click="editSessionDetails=false">Cancel</button>
+</div>
+</div>
+<div class="subSubMenubar ng-hide" ng-show="createNewSessionDropdown==true">
+<form ng-model="newSessionInfo" class="ng-pristine ng-valid">
+<table cellpadding="5px">
+<tbody>
+<tr>
+<td class="ng-binding">
+<i class="fa whiteicon fa-calendar">
+</i> Goal:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-user">
+</i> Consultants:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-user">
+</i> User:</td>
+<td>
+<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.user" placeholder="">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Language:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+</td>
+<td class="ng-binding">Dialect:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+</td>
+<td class="ng-binding">Date Elicited:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="date" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<div>
+<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+<i class="fa whiteicon fa-save">
+</i> Create Session</button> &nbsp; <button class="btn ng-binding" ng-click="createNewSessionDropdown=false">Cancel</button>
+</div>
+</div>
+</div>
+<div class="subMenubar ng-hide" ng-show="activeSubMenu=='searchMenu'">
+<form class="form-horizontal ng-binding ng-pristine ng-valid">
+<i class="fa whiteicon fa-search">
+</i> Search:&nbsp; <input type="text" class="input-medium search-query ng-pristine ng-valid" ng-model="searchTerm"> &nbsp; <button class="btn btn-primary ng-binding" ng-click="runSearch(searchTerm);">Go</button> &nbsp; <button class="btn btn-primary ng-binding" ng-click="selectAll();">Select All</button> &nbsp; <button class="btn btn-primary ng-binding" ng-click="exportResults();">Export</button> &nbsp; <button class="btn btn-warning ng-binding" ng-click="clearSearch()">Clear Results</button> &nbsp; <span class="ng-binding">
+</span>
+</form>
+</div>
+</div>
+<div class="smallMenuBar">
+<div class="menubar mainMenubar">
+<span class="menuTitle">
+<a ng-click="navigateVerifySaved('home')">
+<img src="images/icon48_dev.png" border="0">
+</a>
+</span> <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='none'}" class="ng-hide">
+<a class="menuitem" ng-click="loadDataEntryScreen()">
+<i class="fa whiteicon fa-list">
+</i>
+</a>
+</span> | <span ng-hide="dataentry==false" ng-class="{active_menu_class: activeMenu=='searchMenu'}" class="ng-hide">
+<a class="menuitem" ng-click="navigateVerifySaved('searchMenu');">
+<i class="fa whiteicon fa-search">
+</i>
+</a>
+</span> | <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}" class="ng-hide">
+<a class="menuitem" ng-click="navigateVerifySaved('editSession')">
+<i class="fa whiteicon fa-calendar">
+</i>
+</a>
+</span> | <span ng-show="authenticated==true" ng-class="{active_menu_class: activeMenu=='corpusSettings' || activeMenu=='settings'}" class="ng-hide">
+<ul class="small_dropdown_nav navitem">
+<li>
+<a class="menuitem" href="#">
+<i class="fa whiteicon fa-cogs">
+</i>
+</a>
+<ul>
+<li>
+<a ng-click="navigateVerifySaved('corpusSettings')">
+<i class="fa whiteicon fa-cloud">
+</i>
+</a>
+</li>
+<li ng-hide="corpus.dbname==undefined" class="ng-hide">
+<a ng-click="navigateVerifySaved('settings');">
+<i class="fa whiteicon fa-cogs">
+</i>
+</a>
+</li>
+</ul>
+</li>
+</ul>
+</span> | <span ng-class="{active_menu_class: activeMenu=='faq'}">
+<a class="menuitem" ng-click="navigateVerifySaved('faq');clickSuccess=true;">
+</a>
+</span> | <span ng-hide="data==undefined" class="ng-hide">
+<input type="checkbox" ng-model="useAutoGlosser" class="ng-pristine ng-valid"> <i class="fa whiteicon fa-bar-chart-o">
+</i>
+</span> <span class="smallMenuBarInfo ng-hide" ng-show="authenticated==true">
+<span class="smallMenuBarInfoItem ng-hide" ng-hide="corpus==undefined">
+<a class="" href="http://lingsync.org//" target="_blank" title="Visit this corpus' webpage">
+<img ng-src="https://secure.gravatar.com/avatar/?s=30&amp;d=retro&amp;r=pg" border="0" src="https://secure.gravatar.com/avatar/?s=30&amp;d=retro&amp;r=pg">
+</a>
+</span> <span class="smallMenuBarInfoItem">&nbsp; <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true &amp;&amp; loading==false" class="pulsing ng-hide">
+<i ng-class="getSavedState().icon" class="fa whiteicon fa-folder-open">
+</i>
+</button> &nbsp; <button class="btn btn-warning" ng-click="logOut()">
+<i class="fa whiteicon fa-arrow-right">
+</i>
+</button> <a href="http://lingsync.org/" target="_blank" title="Visit your share page">
+<img ng-src="https://secure.gravatar.com/avatar/?s=30&amp;d=identicon" border="0" src="https://secure.gravatar.com/avatar/?s=30&amp;d=identicon">
+</a>
+</span>
+</span> <span ng-hide="authenticated" class="">
+<span>
+</span>
+</span>
+</div>
+<div class="subMenubar ng-hide" ng-show="activeSubMenu=='editSession'">
+<span class="ng-binding">Change Session</span>
+<select class="span3 ng-pristine ng-valid" ng-model="activeSessionIDToSwitchTo">
+<option value="? undefined:undefined ?">
+</option>
+<option value="none">All sessions</option>
+<!-- ngRepeat: session in sessions | orderBy:'dateCreated' -->
+</select>
+<button class="btn btn-primary ng-binding" ng-click="selectSession(activeSessionIDToSwitchTo);navigateVerifySaved('none')">
+<i class="fa whiteicon fa-calendar">
+</i> Activate Session</button> &nbsp;&nbsp; <span ng-hide="activeSessionID==undefined" class="ng-hide">
+<button class="btn btn-success ng-binding" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+<i class="fa whiteicon fa-pencil">
+</i> Edit Session Info</button> &nbsp;&nbsp;</span> <span ng-show="(data | filter: activeSessionID).length==0" class="ng-hide">
+<button class="btn btn-danger ng-binding" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+<i class="fa whiteicon fa-trash-o">
+</i> Delete Session</button> &nbsp;&nbsp;</span> <button class="btn btn-primary ng-binding" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+<i class="fa whiteicon fa-plus">
+</i> Create New Session</button>
+<div class="subSubMenubar ng-hide" ng-show="editSessionDetails==true &amp;&amp; activeSessionID!=undefined">
+<form ng-model="scope.fullCurrentSession" class="ng-pristine ng-valid">
+<table cellpadding="5px">
+<tbody>
+<tr>
+<td class="ng-binding">Goal:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
+</td>
+<td class="ng-binding">Consultants</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
+</td>
+<td class="ng-binding">User:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.user" placeholder="" disabled="">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Language:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.language" placeholder="Language">
+</td>
+<td class="ng-binding">Dialect:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.dialect" placeholder="Dialect">
+</td>
+<td class="ng-binding">Date Elicited</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="scope.fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<div>
+<button class="btn ng-binding" ng-click="editSession(scope.fullCurrentSession, data);">
+<i class="fa whiteicon fa-save">
+</i> Save Changes</button> &nbsp; <button class="btn ng-binding" ng-click="editSessionDetails=false">Cancel</button>
+</div>
+</div>
+<div class="subSubMenubar ng-hide" ng-show="createNewSessionDropdown==true">
+<form ng-model="newSessionInfo" class="ng-pristine ng-valid">
+<table cellpadding="5px">
+<tbody>
+<tr>
+<td class="ng-binding">
+<i class="fa whiteicon fa-calendar">
+</i> Goal:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-group">
+</i> Consultants</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.consultants" ng-hide="true" placeholder="ME,EV,FE">
+</td>
+<td class="ng-binding">
+<i class="fa whiteicon fa-user">
+</i> User:</td>
+<td>
+<input disabled="" class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.user" placeholder="">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Language:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+</td>
+<td class="ng-binding">Dialect:</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+</td>
+<td class="ng-binding">Date Elicited</td>
+<td>
+<input class="span3 ng-pristine ng-valid" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<div>
+<button class="btn btn-primary ng-binding" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+<i class="fa whiteicon fa-save">
+</i> Create Session</button> &nbsp; <button class="btn ng-binding" ng-click="createNewSessionDropdown=false">Cancel</button>
+</div>
+</div>
+</div>
+<div class="subMenubar ng-hide" ng-show="activeSubMenu=='searchMenu'">
+<form class="form-search ng-pristine ng-valid">
+<span class="ng-binding">
+<i class="fa whiteicon fa-search">
+</i> Search:&nbsp; <input type="text" class="input-medium search-query ng-pristine ng-valid" ng-model="searchTerm"> &nbsp; <button class="btn btn-primary ng-binding" ng-click="runSearch(searchTerm);">Go</button> &nbsp; <button class="btn btn-primary ng-binding" ng-click="selectAll();">Select All</button> &nbsp; <button class="btn btn-primary ng-binding" ng-click="exportResults();">Export</button>
+</span> &nbsp; <button class="btn btn-warning ng-binding" ng-click="clearSearch()">Clear Results</button> <span class="ng-binding">
+</span>
+</form>
+</div>
+</div>
+</div>
+</ng-include>
+    <div ng-class="mainBodyClass()" ng-click="changeActiveSubMenu('none');" ng-show="documentReady==true" class="mainBody">
+      <!-- ngView: undefined -->
+<ng-view class="ng-scope">
+<br class="ng-scope">
+<br class="ng-scope">
+<div id="login_screen" ng-show="documentReady==true" class="ng-scope">
+<div ng-show="notChrome" class="ng-hide">
+<h3 class="ng-binding">THIS SITE WAS DEVELOPED FOR CHROME.</h3>
+<p class="ng-binding">It may not work as expected if you are using another browser:  <br>
+<a href="http://chrome.google.com">
+<button class="btn btn-info ng-binding">Get Chrome</button>
+</a> <a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
+<button class="btn btn-success ng-binding">This browser works fine</button>
+</a>
+</p>
+</div>
+<img src="images/logo.png">
+<br>
+
+
+
+
+      <p>Is under for scheduled maintenance today Friday February 27 2015
+        </p>
+<ul class="unstyled">
+          <li>Start time 3:00am EST
+          </li>
+          <li>End time 8:00am EST
+          </li>
+        </ul>
+      <p>
+</p>
+
+
+      <img class="failwhale" src="http://www.yiyinglu.com/failwhale/images/failwhale.gif">
+
+
+
+
+      <br>
+<div ng-show="sessions!=undefined" class="mainPageDiv ng-hide">
+<span ng-show="corpus.title!=undefined" class="ng-binding ng-hide">
+<img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/.jpg?s=30&amp;d=retro&amp;r=pg" alt="" src="https://secure.gravatar.com/avatar/.jpg?s=30&amp;d=retro&amp;r=pg" class="ng-hide">  loaded.<br>
+<i class="fa fa-calendar">
+</i>Select a session and click Go, or create a new session.</span>
+<br>
+<div class="form-horizontal">
+<form ng-submit="selectSession(fullCurrentSession._id)" class="ng-pristine ng-valid">
+<select ng-model="fullCurrentSession" ng-options="session.title for session in sessions" class="ng-pristine ng-valid">
+<option value="?" selected="selected">
+</option>
+</select>
+<button type="submit" class="btn btn-primary ng-binding">Go</button>&nbsp; <button class="btn btn-info ng-binding" type="button" ng-click="showCreateSessionDiv=!showCreateSessionDiv">
+<i class="fa whiteicon fa-plus">
+</i> New Session...</button>
+</form>
+</div>
+<div class="newSessionDiv">
+<div ng-show="showCreateSessionDiv==true" class="ng-hide">
+<br>
+<h3 class="ng-binding">
+<i class="fa fa-calendar">
+</i> New session for <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/.jpg?s=30&amp;d=retro&amp;r=pg" alt="" src="https://secure.gravatar.com/avatar/.jpg?s=30&amp;d=retro&amp;r=pg" class="ng-hide"> <i class="ng-binding">
+</i>
+</h3>
+<form ng-model="newSession" class="ng-pristine ng-valid">
+<table class="newSessionTable" align="center">
+<tbody>
+<tr>
+<td class="ng-binding">Goal:</td>
+<td>
+<input type="text" placeholder="Collecting examples of animacy agreement" ng-model="newSession.goal" class="ng-pristine ng-valid">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Consultants</td>
+<td>
+<input type="text" placeholder="ME,EV,FE" ng-model="newSession.consultants" ng-hide="true" class="ng-pristine ng-valid">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Language:</td>
+<td>
+<input type="text" placeholder="Language" ng-model="newSession.language" class="ng-pristine ng-valid">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Dialect:</td>
+<td>
+<input type="text" placeholder="Dialect" ng-model="newSession.dialect" class="ng-pristine ng-valid">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Date Elicited</td>
+<td>
+<input type="date" placeholder="Weds 2012-08-01" ng-model="newSession.dateElicited" class="ng-pristine ng-valid">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">User:</td>
+<td class="ng-binding">
+</td>
+</tr>
+<tr>
+<td class="ng-binding">Date Entered:</td>
+<td class="ng-binding">27-2-2015</td>
+</tr>
+</tbody>
+</table>
+<button class="btn btn-success ng-binding" ng-click="createNewSession(newSession);showCreateSessionDiv=false">
+<i class="fa whiteicon fa-save">
+</i> Create and Access New Session</button>
+</form>
+</div>
+</div>
+</div>
+<br>
+<br>
+<br>
+<div class="mainPageDiv ng-hide" ng-show="showForgotPassword==true">
+<p class="ng-binding">Forgot Password</p>
+<br>
+<form ng-submit="forgotPasswordSubmit()" class="ng-pristine ng-valid">
+<input placeholder="Email" type="email" ng-model="forgotPasswordInfo.email" class="ng-pristine ng-valid ng-valid-email">
+<br>
+<button class="btn btn-primary ng-binding" ng-disabled="loading==true">Forgot Password</button>&nbsp; <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()" style="visibility: hidden;">
+</form>
+</div>
+<br>
+<div class="mainPageDiv ng-hide" ng-show="showResetPassword==true">
+<p class="ng-binding">Password Change</p>
+<br>
+<form ng-submit="changePasswordSubmit()" class="ng-pristine ng-valid">
+<label class="ng-binding">Old Password:</label>
+<input type="password" ng-model="resetPasswordInfo.password" class="ng-pristine ng-valid">
+<br>
+<label class="ng-binding">New Password</label>
+<input type="password" ng-model="resetPasswordInfo.newpassword" class="ng-pristine ng-valid">
+<br>
+<label class="ng-binding">Confirm new password</label>
+<input type="password" ng-model="resetPasswordInfo.confirmpassword" class="ng-pristine ng-valid">
+<br>
+<button class="btn btn-primary ng-binding" ng-disabled="loading==true">Change Password</button>&nbsp; <img src="images/spinner-small-maindiv.gif" ng-style="hiddenOnLoading()" style="visibility: hidden;">
+</form>
+</div>
+</div>
+</ng-view>
+    </div>
+
+<div class="well ">
+      <p class="lead">While you wait you could enjoy some of our <a href="https://www.youtube.com/playlist?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT">YouTube Tutorials</a>, or if you might like some of the papers by the LingSync team.</p>
+
+
+        <ul class="task-list">
+        <li> Dunham, J., A. Bale and J. Coon Feb 28 2015. "LingSync: web-based software for language documentation."
+        ICLDC 4. <a href="http://icldc4.weebly.com/uploads/2/4/9/6/24963413/icldc4_papers_12_11_14.pdf">abstract</a>
+        </li>
+        <li>Dunham, J. Jan 8 2015. "LingSync." LSA 2015. <a href="http://www.linguisticsociety.org/system/files/abstracts/Lingsync.pdf">abstract</a>, <a href="http://jrwdunham.com/files/lsa-lingsync-tutorial-1-what-why.pdf">slides1</a>, <a href="http://jrwdunham.com/files/lsa-lingsync-tutorial-2-how.pdf">slides2</a>, <a href="http://jrwdunham.com/files/lsa-lingsync-tutorial-3-hands-on.pdf">slides3</a>, <a href="http://jrwdunham.com/files/lsa-lingsync-tutorial-4-in-development.pdf">slides4</a>, <a href="https://www.youtube.com/watch?v=eYThTB9gB0o">video1</a>, <a href="https://www.youtube.com/watch?v=eYThTB9gB0o">video2</a>, <a href="https://www.youtube.com/watch?v=R8VmRx6UcCU">video3</a>, <a href="https://www.youtube.com/watch?v=gKAHmomPAQc">video4</a>, <a href="https://www.youtube.com/watch?v=85XZS_feHBE">video5</a>
+        </li>
+        <li>Bale, A., J. Coon and M. Wagner. Jan 8 2015. "LingSync and ProsodyLab-Aligner: Tools for Linguistic Fieldwork and Experimentation", LSA Workshop 2015. <a href="http://www.linguisticsociety.org/system/files/abstracts/Lingsync.pdf">abstract</a>
+        </li>
+        <li>Little, C-R. Nov 21 2014. "LingSync Fieldwork Software Demo." Cornell Language Documentation Lab.</li>
+        <li>Dunham, J. Nov 10 2014. "LingSync Tutorial." LRC I’d Like to Know More About ... Workshop. UCalgary. <a href="http://www.ucalgary.ca/events/calendar/lrc-id-know-more-about-workshop">blurb</a>
+        </li>
+        <li>Dunham, J and E. McClay. September 12 2014. "LingSync Tutorial." UBC. <a href="https://www.lingsync.org/slides/why_lingsync.pdf">slides</a>
+        </li>
+        <li>Cook, G., E. Chkhikvadze. August 20 2014. Recognizing Speech on Android: ანდროიდის ქართველი მომხმარებლებისთვის სიტყვის ამოცნობის სისტემის შექმნა. Android Montreal.  <a href="https://docs.google.com/presentation/d/1Dg9CbS54yD2WIztUC3pdvM1H25TfyOyEmMO_zn12lLk/edit">slides</a>, <a href="http://youtu.be/XNIS0hTzGIA">video</a>, <a href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.speech.kartuli">installer</a>
+        </li>
+        <li>Dunham, J, G. Cook, and J. Horner. June 26 2014 "LingSync &amp; the Online Linguistic Database: New models for the collection and management of data for language communities, linguists and language learners." ComputEl: The use of computational methods in the study of endangered languages, 52nd Annual Meeting of the Association for Computational Linguistics. <a href="http://acl2014.org/acl2014/W14-22/W14-22-2014.pdf">paper</a>, <a href="http://youtu.be/EpnAYnfPT_Y">video</a>, <a href="https://www.lingsync.org/slides/computel_2014_slides.pdf">slides</a>
+        </li>
+        <li>Dunham, J and E. McClay. May 8 2014. "LingSync Tutorial." Presentation at Exploring the Interfaces (ETI) 3. McGill University, Montreal, QC. <a href="http://youtu.be/dwKUxd8jUuE?t=8m18s">video</a>, <a href="https://www.lingsync.org/slides/why_lingsync.pdf">slides</a>
+        </li>
+        <li>Bielig, L. Nov 22, 2013. "Linguistic Corpus-building for Low-Resource Languages: an Inuktitut case study." ms McGill, University. <a href="https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/docs/SupplementingFieldWorkWithCorpora.tex">tex</a>
+        </li>
+        <li>McClay, E., H. Noguchi, E. Olson, C. Little, A. Bale, J. Coon &amp; G. Cook. Oct 3, 2013. “Using technology to bridge gaps between speakers, learners, and linguists.”  Electronic poster and demo at the annual Foundation for Endangered Languages Conference, Ottawa, ON. <a href="http://migmaq.org/wp-content/uploads/2013/10/FEL_slideshow.pdf">slides</a>
+        </li>
+        <li>McClay, E., H. Noguchi, E. Olson, C. Little, A. Bale, J. Coon &amp; G. Cook. June 3, 2013. “Using technology to bridge gaps between speakers, learners, and linguists.” Poster presented at the Special Session on Indigenous Languages at the annual Canadian Linguistic Association conference, Victoria, BC. <a href="http://homes.chass.utoronto.ca/%7Ecla-acl/ACL-resumes-2013-CLA-abstracts.pdf">abstract</a>
+        </li>
+        <li>Bielig, L., J. Horner, C. Little, T. Skinner. May 28, 2013. "Plugging into LingSync." Presentation at Computational Field Workshop, McGill University, Montreal, QC.
+
+        <ul class="task-list">
+        <li>L. Bielig: <a href="https://github.com/louisa-bielig/FieldDB/blob/e34b72933ff63b628279d212363ca15fd77feea6/backbone_client/glosser/Tree.js">Bare Phrase Structure Tree Generation</a>, </li>
+        <li>J. Horner: <a href="https://github.com/OpenSourceFieldlinguistics/AudioWebService/blob/a3942ffd612fecb3a5727d922642f44cbb9806a3/service.js">Prosody Lab Aligner WebService</a>, </li>
+        <li>C. Little: <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/commit/55b7705a6a40adcf9c79f849feecae1279df10c6">Automating Data Cleaning</a>,</li>
+        <li>T. Skinner: <a href="https://docs.google.com/presentation/d/1GMRRvA9WLM--DiWyiWj6zlv3m4Cc4a3jcpPZDmi6Zmk/edit?usp=sharing">Collaborative Field Methods</a>.</li>
+        </ul>
+        </li>
+        <li>Noguchi, H., G. McCulloch, G. Cook. May 27, 2013. "Why LingSync." Presentation at Computational Field Workshop, McGill University, Montreal, QC. <a href="https://docs.google.com/presentation/d/1KQaq4jbGM9roakDNPuj_jxWPL5v0NXJNBWaLJpqDzHc/edit#slide=id.p">slides</a>.</li>
+        <li>Manyakina, Y. Feb 20, 2013. "LingSync: an on/offline database app for field linguistics." Brown Bag Presentation at Stony Brook University.</li>
+        <li>Deering, T., G. Cook. Oct 9, 2012. "Taking Javascript into the field: a case study." Presentation at JSMontreal. <a href="https://www.lingsync.org/slides/shells/onstage.html#https://www.lingsync.org/slides/offline_databases.html">slides</a>, <a href="http://youtu.be/p8VjsvXC-tU">video</a>.</li>
+        <li>McClay, E. "Language Learning App: Learn Mi'gmaq prototype". Oct 5, 2012.  <a href="https://drive.google.com/file/d/0BxNNj2I3GhQ5UnhoVE1vaFBDS0U/edit?usp=sharing">whitepaper</a>, <a href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons">prototype</a>.</li>
+        <li>Cathcart, M.E., G. Cook, T. Deering, Y. Manyakina, G. McCulloch, H. Noguchi. Aug 1, 2012.  "LingSync: A Free Tool For Creating And Maintaining A Shared  Database For Communities, Linguists, And Language Learners. " Proceedings of FAMLi 2: Formal Approaches to Mayan Linguistics. MITWPL 74.  <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/CAML/caml2012.pdf?raw=true">prepress paper</a>,  <a href="http://mitwpl.mit.edu/catalog/mwpl74/">publisher</a>
+        </li>
+        <li>Cathcart, M.E., G. Cook, T. Deering, Y. Manyakina, G. McCulloch, H. Noguchi. Aug 1, 2012.  "iCampo: Un aplicación de colección de datos lingüísticos." MITWPL 74. Presentation at Corpus Approaches to Mayan Languages Workshop, Patzun, Guatemala. <a href="http://www.youtube.com/watch?v=eRTHu-5KvSQ&amp;feature=share&amp;list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT&amp;index=15">demostración</a>
+        </li>
+        <li>LingSync WhitePaper <a href="https://github.com/OpenSourceFieldlinguistics/FieldDB/blob/master/docs/WhitePaper.pdf?raw=true">whitepaper</a>
+        </li>
+        </ul>
+    </div>
+
+
+    <div class="loading_trouble_message" ng-hide="clickSuccess==true">
+    </div>
+    <div class="loading_trouble_message"  ng-hide="allData.length>0"  class="clearCacheMessage">
+          LingSync.org is moving to bigger and better servers on Friday February 27 and Saturday February 28 2015. <br/>
+          During this time the app will be slower than usual.
+        </div>
+
+
+        <!-- Google Analytics: change UA-35422317-1 to be your site's ID -->
+         <script>
+           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+           ga('create','UA-35422317-1','auto');
+           ga('set', 'page', 'spreadsheet' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+           ga('send', 'pageview');
+        </script>
+
+
+    <!--[if lt IE 9]>
+    <script src="scripts/oldieshim.js">
+</script>
+    <![endif]-->
+
+
+
+<div id="descriptionExtDiv" style="position: absolute; opacity: 0.8; padding: 10px; border-radius: 10px; z-index: 9999; display: none; color: white; border: 1px solid white; background-color: black;">
+</div>
+
+
+
+</body>
+</html>

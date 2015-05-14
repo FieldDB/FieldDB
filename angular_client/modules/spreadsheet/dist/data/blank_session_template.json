@@ -1,0 +1,64 @@
+{
+  "pouchname": "default",
+  "sessionFields": [{
+    "label": "goal",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This describes the goals of the session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "consultants",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dialect",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "language",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the langauge (or language family) if you would like to use it.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateElicited",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session took place.",
+    "userchooseable": "disabled"
+  }, {
+    "label": "user",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
+    "userchooseable": "disabled"
+  }, {
+    "label": "dateSEntered",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "This is the date in which the session was entered.",
+    "userchooseable": "disabled"
+  }],
+  "comments": [],
+  "collection": "sessions",
+  "dateCreated": "",
+  "dateModified": ""
+}

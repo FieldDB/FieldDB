@@ -1,0 +1,735 @@
+{
+  "locale_settings": {
+    "message": "Paramètres",
+    "description": "appears in Top menu bar"
+  },
+  "locale_corpus": {
+    "message": "Corpus",
+    "description": "dropdown option under Settings"
+  },
+  "locale_user_interface": {
+    "message": "Interface utilisateur",
+    "description": "dropdown option under Settings"
+  },
+  "locale_data_entry": {
+    "message": "Saisie de données",
+    "description": "appears in Top menu bar"
+  },
+  "locale_search": {
+    "message": "Recherche",
+    "description": "appears in Top menu bar"
+  },
+  "locale_session": {
+    "message": "Séance",
+    "description": "appears in Top menu bar"
+  },
+  "locale_faq": {
+    "message": "FAQ",
+    "description": "appears in Top navgation bar"
+  },
+  "locale_glosser": {
+    "message": "Glosage sémi-automatisé",
+    "description": "appears in Top menu bar"
+  },
+  "locale_logout": {
+    "message": "Déconnexion",
+    "description": "button in Top menu bar"
+  },
+  "locale_registration": {
+    "message": "Inscription",
+    "description": "button in Top menu bar, opens Register page"
+  },
+  "locale_register": {
+    "message": "S’inscrire",
+    "description": "button in Top menu bar, opens Register page"
+  },
+  "locale_change_session": {
+    "message": "Changer la Séance",
+    "description": "submenu under Séance"
+  },
+  "locale_choose_session": {
+    "message": "Choisir la session...",
+    "description": "dropdown submenu under Séance"
+  },
+  "locale_all_sessions": {
+    "message": "Toutes les séances",
+    "description": "option in ChooseSéance dropdown"
+  },
+  "locale_activate_session_button": {
+    "message": "Activer cette séance",
+    "description": "submenu button under Séance"
+  },
+  "locale_edit_session_info_button": {
+    "message": "Modifier les métadonnées de la séance",
+    "description": "submenu button under session"
+  },
+  "locale_delete_session": {
+    "message": "Supprimer Séance",
+    "description": ""
+  },
+  "locale_create_new_elicitation_session_button": {
+    "message": "Créer une nouvelle séance d'élicitation",
+    "description": "submenu button under Séance"
+  },
+  "locale_goal_textbox": {
+    "message": "Objectif:",
+    "description": "title for session info textbox. Goal of the session, e.g. 'verify tenses in embedded clauses'"
+  },
+  "locale_consultants_textbox": {
+    "message": "Consultants",
+    "description": "title for session info textbox. Consultant(s)' code(s) or name(s)"
+  },
+  "locale_user_textbox": {
+    "message": "Utilisateur:",
+    "description": "title for session info textbox. Enter the name(s) of those who did the elicitation. If unspecified, the name of the user who enter the data will appear as default."
+  },
+  "locale_language_textbox": {
+    "message": "Langue:",
+    "description": "title for session info textbox. The object language, e.g. Mi'gmaq"
+  },
+  "locale_dialect_textbox": {
+    "message": "Dialecte:",
+    "description": "title for session info textbox. The dialect of the object language, e.g. Listuguj"
+  },
+  "locale_date_elicited_textbox": {
+    "message": "Date de élicitation",
+    "description": "title for session info textbox. The date of the elicitation session."
+  },
+  "locale_save_changes_button": {
+    "message": "Sauvegarder les modifications",
+    "description": "button"
+  },
+  "locale_cancel_button": {
+    "message": "Annuler",
+    "description": "button"
+  },
+  "locale_create_session_button": {
+    "message": "Créer une nouvelle séance",
+    "description": "button in Séance submenu"
+  },
+  "locale_create_new_session": {
+    "message": "Créer une nouvelle Séance",
+    "description": "button"
+  },
+  "locale_search_text_box": {
+    "message": "Recherche:",
+    "description": "title for serach textbox. Enter search text."
+  },
+  "locale_go_button": {
+    "message": "Lancer",
+    "description": "button in Search submenu, top page after login, choose session after a corpus is loaded"
+  },
+  "locale_select_all_button": {
+    "message": "Tout sélectionner",
+    "description": "button in Search submenu"
+  },
+  "locale_export_button": {
+    "message": "Exporter",
+    "description": "button in Search submenu. Export selected datums to plain text."
+  },
+  "locale_clear_results_button": {
+    "message": "Réinitialiser",
+    "description": "button in Search submenu. Clear all search results."
+  },
+  "locale_search_result_modal": {
+    "message": "Résultats de la recherche",
+    "description": "modal header in Export Search Results Modal"
+  },
+  "locale_tags_modal": {
+    "message": "Étiquettes:",
+    "description": "title indicating Tags field in Export Saecr Results Modal"
+  },
+  "locale_close_button": {
+    "message": "Fermer",
+    "description": "button"
+  },
+  "locale_choose_files": {
+    "message": "Ajouter un(des) fichier(s)",
+    "description": "button to choose files for import audio/video/text etc"
+  },
+  "locale_Drag_and_Drop_Placeholder" : {
+    "message" : "Vous pouvez glisser-déposer, copier-coller, ou taper vos données ici, ou bien utiliser le bouton ci-dessus pour ajouter un fichier."
+  },
+  "locale_notification_modal": {
+    "message": "Notification",
+    "description": "modal header in Generic Notification Modal"
+  },
+  "locale_OK_button": {
+    "message": "OK",
+    "description": "button in Generic Notification Modal"
+  },
+  "locale_confirm_password_modal": {
+    "message": "Nous devons nous assurer que c'est bien vous...",
+    "description": "modal header in Confirm Password Modal"
+  },
+  "locale_password_textbox": {
+    "message": "Mot de passe:",
+    "description": "title for password textbox"
+  },
+  "locale_continue_button": {
+    "message": "Continuer",
+    "description": "button in COnfirm Password Modal"
+  },
+  "locale_welcome_modal": {
+    "message": "Bienvenue à LingSync!",
+    "description": "modal header in Welcome Notification Modal, loaded in absence of saved state in preferences."
+  },
+  "locale_clear_cache_message": {
+    "message": "Si vous rencontrez des difficultés pour visionner cette page, vous pouvez avoir besoin de vider le cache de votre navigateur.",
+    "description": "message appears on the bottom of the login page"
+  },
+  "locale_create_button": {
+    "message": "Créer",
+    "description": "button"
+  },
+  "locale_add_file_button": {
+    "message": "Ajouter (des) fichier(s)",
+    "description": "button"
+  },
+  "locale_create_then_save_compact": {
+    "message": "Cliquez sur «Créer» puis <i class=\"fa whiteicon fa-save\"></i> «Enregistrer» pour avoir accès a la vue agrandie",
+    "description": "create and save message in compact tamplate"
+  },
+  "locale_create_then_save_message": {
+    "message": "Cliquez sur «Créer» puis <i class=\"fa whiteicon fa-save\"></i> «Enregistrer» pour avoir accès a la vue agrandie",
+    "description": "create and save message in full, mcgill, yale templates"
+  },
+  "locale_new_audio_file": {
+    "message": "Nouveau fichier audio:",
+    "description": ""
+  },
+  "locale_select_session_message": {
+    "message": "Se il vous plaît, sélectionnez <i class=\"fa fa-calendar\"></i> une session avant d'entrer des données",
+    "description": "message appears under top menu bar if no session is selected"
+  },
+  "locale_read_only_message": {
+    "message": "Vous avez accès en lecture seulement à ce  <i class=\"fa whiteicon fa-cloud\"> </i> corpus.",
+    "description": "message appears under top menu bar and warns read only user"
+  },
+  "locale_write_only_message": {
+    "message": "Vous avez accès en écriture seulement à ce  <i class=\"fa whiteicon fa-cloud\"> </i> corpus.",
+    "description": "Person List Bio Header"
+  },
+  "locale_no_data_message": {
+    "message": "Aucune donnée à afficher. Se il vous plaît cliquer sur le bouton <img src=\"images/icon16_dev.png\" border=\"0 \" /> et connectez-vous.",
+    "description": ""
+  },
+  "locale_done_button": {
+    "message": "Fini",
+    "description": "button"
+  },
+  "locale_entered": {
+    "message": "Entré par:",
+    "description": "title for indicating the date when the datum is entered"
+  },
+  "locale_last_edit": {
+    "message": "Dernière modification:",
+    "description": "title for indicating the date of the most recent edit of the datum"
+  },
+  "locale_edited": {
+    "message": "Modifié par:",
+    "description": "title for indicating the users who edited the datum"
+  },
+  "locale_must_save_changes_message": {
+    "message": "You must 'Save' your changes to have access to the audio, comment, and delete features of this record.",
+    "description": ""
+  },
+  "locale_add_comment_button": {
+    "message": "Ajouter un commentaire",
+    "description": "button"
+  },
+  "locale_upload_files_button": {
+    "message": "Télécharger (des) fichier(s)",
+    "description": "button to upload audio/video files"
+  },
+  "locale_save_description_button": {
+    "message": "Sauvegarde la description",
+    "description": "button to save description of the audio/video files"
+  },
+  "locale_delete_this_record_button": {
+    "message": "Supprimer cet élément",
+    "description": "button to delete the datum"
+  },
+  "locale_Edit_button": {
+    "message": "Modifier",
+    "description": "edit button"
+  },
+  "locale_create_new_button": {
+    "message": "Créer",
+    "description": "button"
+  },
+  "locale_corpus_settings": {
+    "message": "Paramètres de corpus",
+    "description": "title for the Corpus Settings page"
+  },
+  "locale_create_new_corpus": {
+    "message": "Créer un nouveau corpus",
+    "description": "title for create new corpus div"
+  },
+  "locale_details_of": {
+    "message": "Metadonnées de ",
+    "description": "header for editing corpus metadata"
+  },
+  "locale_not_admin_message": {
+    "message": "Vous n'êtes pas un admin pour ce corpus. Se il vous plaît contacter un admin si vous souhaitez modifier l'accès des utilisateurs à ce corpus.",
+    "description": "warning message for non-admin users in corpus settings. Do double curly brackets embedded inside double curly brackets work?"
+  },
+  "locale_add_existing_user_message": {
+    "message": "Ajouter un utilisateur existant à ",
+    "description": "title for adding existing user div"
+  },
+  "locale_only_add_registered_users_message": {
+    "message": "*Vous ne pouvez ajouter que les utilisateurs déjà enregistrés sur le même serveur",
+    "description": "warning about adding users. Do double curly brackets inside double curly brackets work?"
+  },
+  "locale_admin_radio": {
+    "message": "Administrer",
+    "description": "admin radio button"
+  },
+  "locale_read_write_radio": {
+    "message": "Lecture / écriture",
+    "description": "read/write radio button"
+  },
+  "locale_read_only_radio": {
+    "message": "Lecture seulement",
+    "description": "read-only radio button"
+  },
+  "locale_read_comment_only_radio": {
+    "message": "Lecture et commentaires seulement",
+    "description": "read and comment only radio button"
+  },
+  "locale_write_only_radio": {
+    "message": "Modifier seulement",
+    "description": "write-only radio button"
+  },
+  "locale_add_button": {
+    "message": "Ajouter",
+    "description": "add button"
+  },
+  "locale_users_with_access_message": {
+    "message": "Les utilisateurs ayant accès à",
+    "description": "over-arching title for lists of users with different access types"
+  },
+  "locale_admins": {
+    "message": "Administrer",
+    "description": "title for the admin list"
+  },
+  "locale_readers": {
+    "message": "Lecture",
+    "description": "title for the reader list"
+  },
+  "locale_writers": {
+    "message": "Modifier",
+    "description": "title for the writer list"
+  },
+  "locale_for_chrome_message": {
+    "message": "CE SITE A ÉTÉ DÉVELOPPÉ POUR CHROME.",
+    "description": "warning if user's browser isn't chrome"
+  },
+  "locale_other_browser_message": {
+    "message": "Il peut ne pas fonctionner comme prévu si vous utilisez un autre navigateur: ",
+    "description": "warning if user's browser isn't chrome"
+  },
+  "locale_get_chrome_button": {
+    "message": "Télécharger Chrome",
+    "description": "button opens chrome download page"
+  },
+  "locale_browser_works_button": {
+    "message": "Ce navigateur semble bien fonctionner",
+    "description": "button opens Contact Us/Bug Report form"
+  },
+  "locale_loaded": {
+    "message": "chargé.",
+    "description": "message indicating which corpus is loaded"
+  },
+  "locale_select_create_session": {
+    "message": "Sélectionnez une session et cliquez sur Ouvrir, ou créer une nouvelle session.",
+    "description": "message askig users to select or create a session before loading datums"
+  },
+  "locale_choose_existing_session_dropdown": {
+    "message": "Choisissez une séance existante...",
+    "description": "dropdown header"
+  },
+  "locale_view_all_sessions_dropdown": {
+    "message": "Voir toutes les séances",
+    "description": "option in choose a session dropdown"
+  },
+  "locale_new_session_button": {
+    "message": "Nouvelle séance...",
+    "description": "new session button opens a box to enter new session info"
+  },
+  "locale_new_session_for": {
+    "message": "Nouvelle séance à fin de",
+    "description": "title indicating the corpus to which the new session blongs"
+  },
+  "locale_date_entered": {
+    "message": "Date de saisie:",
+    "description": ""
+  },
+  "locale_date_modified": {
+    "message": "Date de modification:",
+    "description": ""
+  },
+  "locale_create_access_new_session_button": {
+    "message": "Créer et Accéder à la nouvelle séance",
+    "description": "button"
+  },
+  "locale_select_server_message": {
+    "message": "Sélectionnez le Server et connectez-vous",
+    "description": "log in message"
+  },
+  "locale_login_button": {
+    "message": "Connexion",
+    "description": "button"
+  },
+  "locale_corpora": {
+    "message": "Corpora",
+    "description": "title for the list of corpora"
+  },
+  "locale_access": {
+    "message": "Accéder à",
+    "description": "title followed by te name of a corpus"
+  },
+  "locale_access_lingllama": {
+    "message": "Accéder à LingLlama's Community Corpus",
+    "description": "end of the corpora list, openes lingllama's quechua corpus for users to explore the app"
+  },
+  "locale_access_lingllama_footnote": {
+    "message": "(Vous pouvez naviguer dans ce corpus de voir ce que l'application ressemble avec une échantillon de données)",
+    "description": "for users to explore the app"
+  },
+  "locale_logged_in_as": {
+    "message": "Connecté(e) en tant que ",
+    "description": "appears when user clicks the logo after selecting a corpus"
+  },
+  "locale_selected_corpus": {
+    "message": "Corpus sélectionné:",
+    "description": "appears when user clicks the logo after selectig a corpus, indicating which corpus they are in currently"
+  },
+  "locale_select_different_corpus_button": {
+    "message": "Sélectionnez un autre corpus",
+    "description": "button opens the corpora list"
+  },
+  "locale_contact_us_button": {
+    "message": "Contactez-Nous",
+    "description": "bottom of the main page, opens Contact Us/Bug Report form"
+  },
+  "locale_reset_password_button_1": {
+    "message": "Modifier votre mot de passe...",
+    "description": "button opens password change page"
+  },
+  "locale_password_reset": {
+    "message": "Modification de mot de passe",
+    "description": "title for Password Change page"
+  },
+  "locale_old_password": {
+    "message": "Ancien mot de passe:",
+    "description": "label for Old Password textbox "
+  },
+  "locale_new_password": {
+    "message": "Nouveau mot de passe",
+    "description": "label for New Password textbox"
+  },
+  "locale_confirm_new_password": {
+    "message": "Confirmez le mot de passe",
+    "description": "label for Confirm new password textbox"
+  },
+  "locale_reset_password_button_2": {
+    "message": "Modifier",
+    "description": "button to contact the server to reset password, different from reset_password_button_1. see #426"
+  },
+  "locale_server": {
+    "message": "Serveur",
+    "description": "title for the server dropbox on Register page"
+  },
+  "locale_data_shared_message": {
+    "message": "*Les données peuvent être partagées entre les utilisateurs sur n’importe quel serveur",
+    "description": ""
+  },
+  "locale_username_warnig_message": {
+    "message": "*Le nom d'utilisateur ne peut contenir que des lettres minuscules (a-z) et des chiffres",
+    "description": "footnote for registering username"
+  },
+  "locale_user_interface_settings": {
+    "message": "Paramètres de l'interface utilisateur",
+    "description": "title for the User Interface Settings page"
+  },
+  "locale_records_to_display": {
+    "message": "Nombre d'éléments à afficher par page",
+    "description": "title for number of data to display setting"
+  },
+  "locale_all_dropdown": {
+    "message": "Tout",
+    "description": "option in number of records to display dropdown"
+  },
+  "locale_templates": {
+    "message": "Gabarits",
+    "description": "title for template setting"
+  },
+  "locale_interface_language": {
+    "message": "Langue pour l'interface utilisateur",
+    "description": "title for ui locales setting"
+  },
+  "locale_full_template": {
+    "message": "Gabarit Standard",
+    "description": "title for full template in template setting"
+  },
+  "locale_default_template": {
+    "message": "Gabarit par défaut pour",
+    "description": "footnote notifying the default template for the corpus"
+  },
+  "locale_empty_dropdown": {
+    "message": "Vide",
+    "description": "option for datum field dropdown"
+  },
+  "locale_audio_and_comments": {
+    "message": "Audio et Commentaires",
+    "description": "indicating audio and comments available in full, mcgill, yale templates"
+  },
+  "locale_activate_full_button": {
+    "message": "Sauvegarder et activer le gabarit standard",
+    "description": "button to activate full template"
+  },
+  "locale_update_button": {
+    "message": "Actualiser",
+    "description": "button"
+  },
+  "locale_frequently_asked_questions": {
+    "message": "Questions fréquentes",
+    "description": "title for the FAQ oage"
+  },
+  "locale_tips": {
+    "message": "Astuces:",
+    "description": "title for the Tips list"
+  },
+  "locale_tutorial_link": {
+    "message": "Première fois d'utilisation? Essayez notre <a href=\"http://lingsync.org/#/tutorial\">tutorial</a> à fin de se familiariser avec l'application.",
+    "description": "link to the tutorial slides, but embedding ':' seems to screw up json format?"
+  },
+  "locale_return_main": {
+    "message": "Pour revenir à la page principale à tout moment, cliquez sur le logo LingSync en haut à gauche de la page.",
+    "description": "how to return to the main page"
+  },
+  "locale_save_often": {
+    "message": "Enregistrez votre travail souvent! Modifications sont enregistrées automatiquement toutes les cinq minutes, mais ce est une bonne pratique pour sauver fréquemment.",
+    "description": "recommend to save often"
+  },
+  "locale_browser_reload": {
+    "message": "Utilisez le bouton de rechargement de votre navigateur pour annuler les modifications.",
+    "description": "how to discard changes"
+  },
+  "locale_change_settings_and_sync": {
+    "message": "Si un changement de vos paramètres ne se affiche pas immédiatement, sauvegarder vos données et cliquez sur le bouton de synchronisation (↻); ce qui devrait mettre à jour tout, et sera également garder votre auto-analyseur effectuer à son meilleur.",
+    "description": "how to make settings changes take effect"
+  },
+  "locale_create_account_question": {
+    "message": "Comment puis-je créer un compte?",
+    "description": " "
+  },
+  "locale_create_account_answer": {
+    "message": "De l'écran principal de démarrage, cliquez sur le bouton «Se inscrire» dans le coin supérieur droit et remplir le formulaire. Si vous n'êtes pas sûr de quel serveur vous devez sélectionner, vous voulez plus susceptibles de choisir 'LingSync'.",
+    "description": " "
+  },
+  "locale_create_corpus_question": {
+    "message": "Comment puis-je créer un corpus?",
+    "description": " "
+  },
+  "locale_create_corpus_answer": {
+    "message": "Après vous être connecté, survolez «Paramètres» et sélectionnez «corpus». Depuis cette page, vous pouvez ajouter un nouveau corpus.",
+    "description": " "
+  },
+  "locale_enter_data_question": {
+    "message": "Comment puis-je saisir des données?",
+    "description": " "
+  },
+  "locale_enter_data_answer": {
+    "message": "Après avoir sélectionné un corpus et une session de déclenchement (ou créé une nouvelle session), vous serez redirigé vers la page d'entrée de données. L'élément le plus haut sur cette page est l'espace pour entrer de nouveaux records. Remplissez vos données et / ou d'enregistrement / téléchargement audio et puis cliquez sur 'Créer'. Notez que votre nouveau record ne sera pas enregistré dans la base de données jusqu'à ce que vous cliquez sur le bouton 'Enregistrer' en haut à droite de l'écran!",
+    "description": " "
+  },
+  "locale_import_data_question": {
+    "message": "Comment puis-je importer des données?",
+    "description": " "
+  },
+  "locale_import_data_answer": {
+    "message": "Vous pouvez importer toute Elicitation Séance en téléchargeant un audio / vidéo (ne importe quel format fonctionne: .wav, .aiff, .mp3, .ogg, .mov, .avi, .3gp, .mp4, etc.)  <a href=\"https://www.youtube.com/watch?v=IcsdPyYEMFc&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT\">(how-to video)</a> texte ou données (csv, texte brut, TextGrid, Toolbox et plus)  <a href=\"https://www.youtube.com/watch?v=Gcc0CFhGLfI&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT\">(how-to video)</a> utilisant le  <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. Ces fonctionnalités d'importation sera déplacé vers les pages corpus d'administration quand il devient une priorité.",
+    "description": "answer contains href links which seem to screw up json message format, so I leave it empty for the moment"
+  },
+  "locale_audio_upload_limit_question": {
+    "message": "Quelle est la limite de la / taille de la vidéo audio qui puis-je télécharger",
+    "description": " "
+  },
+  "locale_audio_upload_limit_answer": {
+    "message": "Nous avons mis la limite à 1,5 Go. Si ce est trop faible pour vous, vous êtes probablement en train de faire beaucoup avec audio / vidéo et peut-être même votre ministère a un serveur que vous pouvez installer le service audio sur de sorte que vous ne avez pas à utiliser les ressources de LingSync.org. Si vous avez beaucoup de fichiers vidéo lourds (plus de 300 Mo), vous pouvez également envisager d'utiliser un ou des vidéos privées non cotées sur YouTube, SoundCloud, Google Drive ou même les serveurs de votre ministère pour héberger les fichiers en ligne.",
+    "description": " "
+  },
+  "locale_edit_record_question": {
+    "message": "Comment puis-je modifier un élément existant?",
+    "description": " "
+  },
+  "locale_edit_record_answer": {
+    "message": "Simple-cliquez sur ne importe où sur l'enregistrement que vous souhaitez modifier. Cela rendra le dossier modifiable. Faites vos changements et cliquez sur le bouton «Terminé». Notez que les changements à cette fiche ne sera pas enregistré dans la base de données jusqu'à ce que vous cliquez sur le bouton 'Enregistrer'!",
+    "description": " "
+  },
+  "locale_record_upload_comment_question": {
+    "message": "Comment puis-je enregistrer de l'audio, télécharger des fichiers audio, ou ajouter / voir les commentaires?",
+    "description": " "
+  },
+  "locale_record_upload_comment_answer": {
+    "message": "Click the expand button <i class=\"fa fa-list\"></i> on a new record or a record in edit mode to access audio and comment features. You may click the collapse button <i class=\"fa fa-th-list\"></i> to hide this section.<br /><br /> <b>Recording Audio</b><br /> To record audio, click the record button. <b>Note that you must then click the 'Allow' button on the browser dropdown at the top of the page.</b> Your audio will begin recording once you click 'Allow'. To stop recording, simply click the 'Recording' button. Your audio will then be processed. This may take a while.<br /><br /> <b>Uploading Audio</b><br /> To upload audio files, click on 'Choose files' and select one or more audio files from your hard drive. Audio files may be in .wav, .mp3, or .ogg format.<br /><br /> <b>Adding/Deleting Comments</b><br /> To add a comment, click on the 'Add a comment' link and enter your comment in the popup box. To delete a comment, click on the 'X' next to the comment. You may only delete your own comments. Comments are not editable, so to change what your comment says simply delete it and write a new one.",
+    "description": " "
+  },
+  "locale_delete_record_question": {
+    "message": "How do I delete a record or audio file?",
+    "description": " "
+  },
+  "locale_delete_record_answer": {
+    "message": "To delete a record, click the relevant record and then click the 'Delete' button. To delete an audio file, click on the 'X' next to the file. In both cases, you will be prompted to verify the deletion. Note that deleting records and files only a flag and does not result in destroying data.",
+    "description": " "
+  },
+  "locale_privacy_question": {
+    "message": "Est-ce que mes données sont privées et protégées?",
+    "description": " "
+  },
+  "locale_privacy_answer": {
+    "message": "Yes! For more on our policies with respect to your data, please see <a target=\"_blank\" href=\"https://www.lingsync.org/privacy.html\">our web site</a>.",
+    "description": " '_' underscore and ':'' colon seem to screw up json format. i kinda remember this with prototype app..."
+  },
+  "locale_export_question": {
+    "message": "Comment puis-je exporter des données?",
+    "description": " "
+  },
+  "locale_export_answer": {
+    "message": "You can export your entire database as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+    "prevMessage": "You can export your entire database as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+    "description": "links screw up the json format so i leave it empty for the moment"
+  },
+  "locale_share_session_question": {
+    "message": "Can I share just an elicitation session, not a whole corpus?",
+    "description": " "
+  },
+  "locale_share_session_answer": {
+    "message": "If you want to share a elicitation session with someone, you should <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to say which session you want to share. We will send you a web widget that accesses only data in that session and lets the user log into that widget to read (if they are allowed) and/or edit (if they are allowed) data. You must put the widget in your own website and/or WordPress blog and provide the url to the user(s). If the user does not have read access on your corpus, you can to provide us with their username(s) so we can add conditional permissions to their account. ",
+    "description": " "
+  },
+  "locale_multiple_language_question": {
+    "message": "Can I have multiple languages in one corpus?",
+    "description": " "
+  },
+  "locale_multiple_language_answer": {
+    "message": "LingSync supports multilingual corpora, as a user you can put anything you wish into a corpus (depending on what makes sense for your own research). Multilingual corpora are very useful, and very common for crosslinguistic studies of linguistic phenomen (for example a cross-linguistic study of applicatives).",
+    "description": " "
+  },
+  "locale_multiang_glosser_question": {
+    "message": "If I have multiple languages in a corpus, what would happen to the semi-automatic glosser?",
+    "description": " "
+  },
+  "locale_multilang_glosser_answer": {
+    "message": "The semi-auto glosser learns from the context where a morpheme appears, so most often a corpus will rarely have a morpheme that appears in both languages in the same context. This means that a corpora can be multilingual, and still have a reasonaly usable semi-automatic glosser.",
+    "description": " "
+  },
+  "locale_combine_corpora_question": {
+    "message": "Can I combine corpora?",
+    "description": " "
+  },
+  "locale_combine_corpora_answer": {
+    "message": "Yes, you can combine corpora. If you want to combine corpora you should <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> to tell us the names of the corpora to combine, and where to combine them to. We will verify that you have permission to do this, and do the combining and testing of the result.",
+    "description": " "
+  },
+  "locale_combine_glossers_question": {
+    "message": "Can I combine glossers and use it for multiple corpora?",
+    "description": " "
+  },
+  "locale_combine_glossers_answer": {
+    "message": "By default, each corpus has its own glosser fed by the data in that corpus. If you have many corpora that you want to feed one glosser, (for example two or more Quechua corpora), or one master corpus with a few smaller corpora which can use the master's glosser, you can <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> and tell us which corpora should feed which glosser and we will set up the glosser for you, provide you with more instructions.",
+    "description": " "
+  },
+  "locale_own_glossers_question": {
+    "message": "I have my own glosser for the language I work on, can I use it?",
+    "description": " "
+  },
+  "locale_own_glossers_answer": {
+    "message": "Yes, you can use any glosser as long as it is wrapped in a \"webservice.\" <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> and we will provide you with more instructions depending on the technology your glosser was implemented in.",
+    "description": " "
+  },
+  "locale_learn_scripting_question": {
+    "message": "I want to learn more about scripting/programming, can I help?",
+    "description": " "
+  },
+  "locale_learn_scripting_answer": {
+    "message": "Sure, we accept new \"interns\" on the team every semester. We can usually train you in things you want to learn, and find you a task to take on. <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> to introduce yourself, or join us on <a target=\"_blank\" href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues\">GitHub</a> by commenting on, or adding an item in the issue tracker if you already have an account. If you have friends in Software Engineering or related disciplines who are looking for OpenSource projects to build their portfolio, we would be happy to welcome them as well.",
+    "description": " "
+  },
+  "locale_contact_question": {
+    "message": "Contact",
+    "description": " "
+  },
+  "locale_contact_answer": {
+    "message": "For any other questions or comments, you may <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> or <a target=\"_blank\" href=\"https://www.facebook.com/LingSyncApp\">ask other users on Facebook</a>.",
+    "description": "links screw up the json format so I leave it empty for the moment"
+  },
+  "locale_delete_duplicate_tags_button": {
+    "message": "Delete Duplicate Tags",
+    "description": " "
+  },
+  "locale_save_button": {
+    "message": "Sauvegarder",
+    "description": " "
+  },
+  "locale_Save": {
+      "message": "Enregistrer",
+      "description": "button"
+  },
+  "locale_Saving": {
+      "message": "En cours",
+      "description": "button"
+  },
+  "locale_Saved": {
+      "message": "Enregistré",
+      "description": "button"
+  },
+  "locale_add_field_button": {
+    "message": "Ajouter un champ",
+    "description": " "
+  },
+  "locale_commenters": {
+    "message": "Ajouter des commentaires",
+    "description": "Title for the commenter list "
+  },
+  "locale_fields_in": {
+    "message": "Champs dans ",
+    "description": "corpus settings selection header "
+  },
+  "locale_wp_gloss": {
+    "message": "Gloss pour WordPress",
+    "description": "searh result showing as wp gloss in export modal "
+  },
+  "locale_as": {
+    "message": "En format de ",
+    "description": "search resutl showing as ... in export modal "
+  },
+  "locale_number_columns": {
+    "message": "Nombre de colonnes: ",
+    "description": "number of columns settings"
+  },
+  "locale_utterance": {
+    "message": "Énoncé"
+  },
+  "locale_morphemes": {
+    "message": "Morphèmes"
+  },
+  "locale_gloss": {
+    "message": "Glose"
+  },
+  "locale_translation": {
+    "message": "Traduction"
+  },
+  "locale_judgement": {
+    "message": "Jugement de grammaticalité"
+  },
+  "locale_tags": {
+    "message": "Étiquettes"
+  },
+  "locale_syntacticCategory": {
+    "message": "Catégorie syntactique"
+  }
+}
