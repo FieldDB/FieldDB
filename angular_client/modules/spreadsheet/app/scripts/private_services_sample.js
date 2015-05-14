@@ -2,9 +2,12 @@
 'use strict';
 console.log("Declaring the SpreadsheetPrivateServices.");
 
+FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
+FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
+FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
+
 angular.module('spreadsheetApp')
   .factory('Servers', function() {
-
 
 
     var localhost = false;
