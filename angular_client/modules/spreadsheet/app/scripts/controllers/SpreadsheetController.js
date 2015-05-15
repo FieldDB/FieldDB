@@ -743,7 +743,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $rootScope.currentPage = 0;
 
         $scope.loadAutoGlosserRules();
-        $scope.loadUsersAndRoles();
+        // $scope.loadUsersAndRoles();
 
         $scope.saved = "yes";
         $rootScope.loading = false;
@@ -905,79 +905,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               return;
             }
             // Use map-reduce to get corpus details
+            var corpus = {};
+            corpus.dbname = corpusIdentifierToRetrieve;
+            corpus.title = corpusIdentifierToRetrieve;
+            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
+            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
+            if (corpus.team && corpus.team.gravatar) {
+              corpus.gravatar = corpus.team.gravatar;
+            }
+            $scope.corpora.push(corpus);
 
-            Data.async(corpusIdentifierToRetrieve, "_design/pages/_view/private_corpora")
-              .then(function(response) {
-                var corpus = {};
-                if (response.rows && response.rows[0] && response.rows[0].value) {
-                  response.rows[0].value.dbname = response.rows[0].value.dbname || response.rows[0].value.pouchname;
-                }
-                if (response.rows.length > 1) {
-                  response.rows.map(function(row) {
-                    row.value.dbname = row.value.dbname || row.value.pouchname;
-                    if (row.value.dbname === corpusIdentifierToRetrieve) {
-                      corpus = row.value;
-                    } else {
-                      console.warn("There were multiple corpora details in this database, it is probaly one of the old offline databases prior to v1.30 or the result of merged corpora. This is not really a problem, the correct details will be used, and this corpus details will be marked as deleted. " + row.value);
-                      row.value.trashed = "deleted";
-                      Data.saveCouchDoc(corpusIdentifierToRetrieve, row.value).then(function(result) {
-                        console.log("flag as deleted succedded", result);
-                      }, function(reason) {
-                        console.warn("flag as deleted failed", reason, row.value);
-                      });
-                    }
-                  });
-                } else if (response.rows.length === 1 && response.rows[0].value && response.rows[0].value.dbname === corpusIdentifierToRetrieve) {
-                  corpus = response.rows[0].value;
-                } else {
-                  corpus.dbname = corpusIdentifierToRetrieve;
-                  corpus.title = corpusIdentifierToRetrieve;
-                  console.warn("Error finding a corpus in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org ", response, corpus);
-                  alert("Error finding corpus details in " + corpusIdentifierToRetrieve + " database. This database will not function normally. Please notify us at support@lingsync.org  " + corpusIdentifierToRetrieve);
-                  return;
-                }
-                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
-                if (corpus.team && corpus.team.gravatar && corpus.team.gravatar.indexOf("user") === -1) {
-                  corpus.gravatar = corpus.team.gravatar;
-                }
-                if (!corpus.gravatar || !corpus.gravatar.trim()) {
-                  corpus.gravatar = md5.createHash(corpus.dbname);
-                }
-                corpus.team = corpus.team || {
-                  "_id": "team",
-                  "gravatar": corpus.gravatar,
-                  "username": corpus.dbname.split("-")[0],
-                  "collection": "users",
-                  "firstname": "",
-                  "lastname": "",
-                  "subtitle": "",
-                  "email": "",
-                  "researchInterest": "No public information available",
-                  "affiliation": "No public information available",
-                  "description": "No public information available"
-                };
-                // If this is the corpus the user is looking at, update to the latest corpus details from the database.
-                if ($rootScope.corpus && $rootScope.corpus.dbname === corpus.dbname) {
-                  $scope.selectCorpus(corpus);
-                }
-                if (!corporaAlreadyIn[corpus.dbname]) {
-                  $scope.corpora.push(corpus);
-                  corporaAlreadyIn[corpus.dbname] = true;
-                }
-
-              }, function(error) {
-                var corpus = {};
-                corpus.dbname = corpusIdentifierToRetrieve;
-                corpus.title = corpusIdentifierToRetrieve;
-                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
-                corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
-                if (corpus.team && corpus.team.gravatar) {
-                  corpus.gravatar = corpus.team.gravatar;
-                }
-                console.warn("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us of this error if you are online and the connection should have succeeded.", error, corpus);
-                alert("Error finding the corpus details for " + corpusIdentifierToRetrieve + " Either this database is out of date, or the server contact failed. Please notify us support@lingsync.org about this error if you are online and the connection should have succeeded.");
-                // $scope.corpora.push(corpus);
-              });
           };
           for (var m = 0; m < scopeDBs.length; m++) {
             if (scopeDBs[m]) {
@@ -1060,6 +997,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     if ($rootScope.corpus !== selectedCorpus) {
       $rootScope.corpus = selectedCorpus;
+      $scope.users = [];
+    }
+
+    var roles = FieldDB.FieldDBObject.application.authentication.user.roles;
+    $rootScope.admin = false;
+    $rootScope.readPermissions = false;
+    $rootScope.writePermissions = false;
+    $rootScope.commentPermissions = false;
+
+    if (roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
+      $rootScope.admin = true;
+    }
+    if (roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
+      $rootScope.readPermissions = true;
+    }
+    if (roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
+      $rootScope.writePermissions = true;
+    }
+    if (roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
+      $rootScope.commentPermissions = true;
+    }
+    if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
+      $rootScope.commentPermissions = true;
     }
 
     $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
@@ -1076,7 +1036,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.newSession = $rootScope.corpus.newSession();
     $scope.loadSessions();
-    $scope.loadUsersAndRoles();
+    // $scope.loadUsersAndRoles();
 
     console.log("setting current corpus details: " + $rootScope.corpus);
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
@@ -1104,7 +1064,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.scopePreferences.savedState.sessionID = activeSessionID;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
     $scope.loadData(activeSessionID);
-    $scope.loadUsersAndRoles();
+    // $scope.loadUsersAndRoles();
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
   };
 
@@ -2124,9 +2084,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $scope.loadUsersAndRoles = function() {
+  $scope.loadCorpusTeam = function() {
     // Get all users and roles (for this corpus) from server
-
     var dataToPost = {};
 
     dataToPost.username = $rootScope.loginInfo.username;
@@ -2134,7 +2093,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.serverCode = $rootScope.serverCode;
     dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
     dataToPost.dbname = $rootScope.corpus.dbname;
-
 
     Data.getallusers(dataToPost)
       .then(function(users) {
@@ -2144,38 +2102,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             allusers: []
           };
         }
-        // for (var i in users.allusers) {
-        //   if (users.allusers[i].username === $rootScope.loginInfo.username) {
-        //     $rootScope.user.gravatar = users.allusers[i].gravatar;
-        //   }
-        // }
-
         $scope.users = users;
-
-        // Get privileges for logged in user
-        Data.async("_users", "org.couchdb.user:" + $rootScope.loginInfo.username)
-          .then(function(response) {
-            $rootScope.admin = false;
-            $rootScope.readPermissions = false;
-            $rootScope.writePermissions = false;
-            $rootScope.commentPermissions = false;
-
-            if (response.roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
-              $rootScope.admin = true;
-            }
-            if (response.roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
-              $rootScope.readPermissions = true;
-            }
-            if (response.roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
-              $rootScope.writePermissions = true;
-            }
-            if (response.roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
-              $rootScope.commentPermissions = true;
-            }
-            if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
-              $rootScope.commentPermissions = true;
-            }
-          });
       });
   };
 
@@ -2278,7 +2205,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         document.getElementById("userToModifyInput").value = "";
         $rootScope.loading = false;
-        $scope.loadUsersAndRoles();
+        $scope.loadCorpusTeam();
         try {
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
@@ -2349,6 +2276,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             teamOrPersonal: "team"
           }], "uploadnow");
 
+          $scope.loadCorpusTeam();
         });
     }
   };
