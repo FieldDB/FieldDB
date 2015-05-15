@@ -41,60 +41,6 @@
 </div>
 <hr />
 
-<div class="settings_section_header">
-  <h2>{{contextualize('locale_templates')}}</h2>
-</div>
-<div class="clearDiv">&nbsp;</div>
 <div class="settingsItems">
-  <!-- Full TEMPLATE -->
-  <h3>
-    <span ng-show="templateId=='fulltemplate'"><b>✓</b></span> {{contextualize('locale_full_template')}}
-    <small ng-show="corpus.preferredTemplate == 'fulltemplate'"> {{contextualize('locale_default_template')}} {{corpus.title}}</small>
-  </h3>
-  <div class="row settingsTemplate">
-
-    <div class="span1" title="{{contextualize('locale_judgement')}}">
-      *#?
-    </div>
-    <div class="span5">
-      <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-    <div class="span5" ng-show="fieldsInColumns.second">
-      <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-    <div class="span5" ng-show="fieldsInColumns.third">
-      <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
-        {{contextualize('locale_'+corpusField.id)}}
-      </div>
-    </div>
-
-<!-- <input class="span5" type="text" disabled="disabled"
-  placeholder="Tags"></textarea> -->
-  <!-- <span class="span4" rows="3">Comments</span> -->
-  <div class="span1">
-    {{contextualize('locale_audio_and_comments')}}
-  </div>
-
+  Data entry templates settings are determined by this Corpus' settings. See Settings &gt; Corpus Settings.
 </div>
-<br />
-{{contextualize('locale_number_columns')}}
-<select ng-model="fullTemplateDefaultNumberOfColumns">
-  <option>1</option>
-  <option>2</option>
-  <option>3</option>
-<!-- TODO css for these <option>3</option>
-  <option>4</option> -->
-</select>
-Number of Fields per column:
-<input type="number" ng-model="fullTemplateDefaultNumberOfFieldsPerColumn"/>
-<button class="btn btn-primary"
-ng-click="saveNewPreferences('fulltemplate', newFieldPreferences2, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn)">
-{{contextualize('locale_activate_full_button')}}
-</button>
-

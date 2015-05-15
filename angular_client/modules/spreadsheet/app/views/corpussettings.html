@@ -6,7 +6,6 @@
 	<div class="settings_section_header">
 		<h2>{{contextualize('locale_create_new_corpus')}}</h2>
 	</div>
-	<div class="clearDiv">&nbsp;</div>
 	<form ng-submit="createNewCorpus(newCorpusInfo)">
     <div class="settingsItems">
   		<input type="text" ng-model='newCorpusInfo.newCorpusName'
@@ -33,7 +32,6 @@
         {{contextualize('locale_details_of')}} <b>{{corpus.title}}</b>
       </h2>
     </div>
-    <div class="clearDiv">&nbsp;</div>
     <div class="settingsItems row">
       <label>Title:</label>
       <textarea ng-model="corpus.title"></textarea>
@@ -54,15 +52,16 @@
       </h2>
     </div>
     <div class="settingsItems">
-      <button class="btn btn-info" ng-click="loadCorpusTeam()">Refresh <i class="fa fa-refresh"></i></button>
-      <p class="lead">
+      <button class="btn btn-info" ng-click="loadCorpusTeam()">Refresh Team <i class="fa fa-refresh"></i></button>
+      <p class="">
           {{contextualize('locale_add_existing_user_message')}} <b>{{corpus.title}}</b>
       </p>
-      <i>{{contextualize('locale_only_add_registered_users_message')}}</i><br />
+      <br />
       <img src="images/spinner-small-mainbg.gif" ng-show="loading==true"> <input id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify">
         <datalist id="users">
           <option ng-repeat="user in users.notonteam" value={{user.username}}>{{user.username}}</option>
         </datalist>
+        <i>{{contextualize('locale_only_add_registered_users_message')}}</i>
       <br />
       <div class="form-horizontal">
         <font size="3">
@@ -78,7 +77,7 @@
         </font>
       </div>
       <hr />
-      <p class="lead">
+      <p class="">
         {{contextualize('locale_users_with_access_message')}} {{corpus.title}}
       </p>
       <div class="settingsItems row">
@@ -120,28 +119,81 @@
     </div>
 	</div>
 
-  <div>
-    <div class="settings_section_header">
-      <h2>
-        {{contextualize('locale_fields_in')}} <b>{{corpus.title}}</b>
-      </h2>
-    </div>
-    <div class="clearDiv">&nbsp;</div>
-    <div class="settingsItems row">
-      <button class="btn btn-primary"
-        ng-click="updateCorpusDetails(corpus)"
-        ng-class="{'pulsing': corpus.saving}"
-        ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
-      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
-      <div data-fielddb-collection json='corpus.datumFields'></div>
-      <button class="btn btn-info"
-        ng-click="corpus.addDatumField(addedDatumField)" ng-disabled="loading==true">{{contextualize('locale_add_field_button')}}</button>
-      <button class="btn btn-primary"
-        ng-class="{'pulsing': corpus.saving}"
-        ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
-      <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
+  <hr/>
 
+  <div class="settings_section_header">
+    <h2>{{contextualize('locale_templates')}}</h2>
+  </div>
+  <div class="clearDiv">&nbsp;</div>
+  <div class="settingsItems">
+    <!-- Full TEMPLATE -->
+    <div class="row settingsTemplate">
+
+      <div class="span1" title="{{contextualize('locale_judgement')}}">
+        *#?
+      </div>
+      <div class="span5">
+        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
+          {{contextualize('locale_'+corpusField.id)}}
+        </div>
+      </div>
+
+      <div class="span5" ng-show="fieldsInColumns.second">
+        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
+          {{contextualize('locale_'+corpusField.id)}}
+        </div>
+      </div>
+
+      <div class="span5" ng-show="fieldsInColumns.third">
+        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
+          {{contextualize('locale_'+corpusField.id)}}
+        </div>
+      </div>
+
+  <!-- <input class="span5" type="text" disabled="disabled"
+    placeholder="Tags"></textarea> -->
+    <!-- <span class="span4" rows="3">Comments</span> -->
+    <div class="span1">
+      {{contextualize('locale_audio_and_comments')}}
     </div>
 
   </div>
+  <br />
+  {{contextualize('locale_number_columns')}}
+  <select ng-model="corpus.prefs.preferredSpreadsheetShape.columns" ng-change="getAvailableFieldsInColumns()">
+    <option value=1>1</option>
+    <option value=2>2</option>
+    <option value=3>3</option>
+  <!-- TODO css for these <option>3</option>
+    <option>4</option> -->
+  </select> &nbsp;
+  Number of Fields per column: {{corpus.prefs.preferredSpreadsheetShape.rows}}
+  <input type="range" min="1" max="{{corpus.datumFields.length}}" ng-model="corpus.prefs.preferredSpreadsheetShape.rows" ng-change="getAvailableFieldsInColumns()"/>
+  <button class="btn btn-primary"
+    ng-class="{'pulsing': corpus.saving}"
+    ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
+  <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
+
+
+  <div class="settings_section_header">
+    <h2>
+      {{contextualize('locale_fields_in')}} <b>{{corpus.title}}</b>
+    </h2>
+  </div>
+  <div class="settingsItems row">
+    <button class="btn btn-primary"
+      ng-click="updateCorpusDetails(corpus)"
+      ng-class="{'pulsing': corpus.saving}"
+      ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
+    <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
+    <div data-fielddb-collection json='corpus.datumFields'></div>
+    <button class="btn btn-info"
+      ng-click="corpus.addDatumField(addedDatumField)" ng-disabled="loading==true">{{contextualize('locale_add_field_button')}}</button>
+    <button class="btn btn-primary"
+      ng-class="{'pulsing': corpus.saving}"
+      ng-click="updateCorpusDetails(corpus)" ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
+    <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
+
+  </div>
+
 </div>

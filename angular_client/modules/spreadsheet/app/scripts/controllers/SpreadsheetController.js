@@ -371,69 +371,86 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   //TODO move the default preferences somewher the SettingsController can access them. for now here is a hack for #1290
   window.defaultPreferences = defaultPreferences;
 
+  var previousPreferedSpreadsheetShape;
 
-  $rootScope.getAvailableFieldsInColumns = function(incomingFields, numberOfColumns) {
-    if (!incomingFields || !$rootScope.corpus) {
-      return {};
+  $rootScope.getAvailableFieldsInColumns = function() {
+    if (!$rootScope || !$rootScope.corpus || !$rootScope.corpus.datumFields || !$rootScope.corpus.datumFields._collection || $rootScope.corpus.datumFields._collection.length < 1) {
+      console.warn("the corpus isn't ready, not configuring the available fields in columns.");
+
+      $rootScope.fieldsInColumns = {
+        first: [],
+        second: [],
+        third: []
+      };
+      return;
     }
-    incomingFields = $rootScope.availableFieldsInCurrentCorpus;
-    if (!numberOfColumns) {
-      numberOfColumns = $rootScope.fullTemplateDefaultNumberOfColumns || 2;
-    }
-    numberOfColumns = parseInt(numberOfColumns, 10);
-    var fields = [];
-    if (incomingFields && typeof incomingFields.splice !== "function") {
-      for (var field in incomingFields) {
-        if (incomingFields.hasOwnProperty(field)) {
-          if (!incomingFields[field].hint && defaultPreferences.availableFields[incomingFields[field].label]) {
-            incomingFields[field].hint = defaultPreferences.availableFields[incomingFields[field].label].hint;
-          }
-          // add only unique fields
-          if (fields.indexOf() === -1) {
-            fields.push(incomingFields[field]);
-          }
-        }
-      }
-    } else {
-      fields = incomingFields;
-    }
+
     try {
-      $scope.judgementHelpText = $rootScope.availableFieldsInCurrentCorpus[0].help;
+      $scope.judgementHelpText = $rootScope.corpus.datumFields.judgement.help;
     } catch (e) {
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }
-    var columnHeight = $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn;
-    if ($rootScope.corpus && $rootScope.corpus.prefs && $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn) {
-      columnHeight = $rootScope.corpus.prefs.fullTemplateDefaultNumberOfFieldsPerColumn;
-    }
-    if (columnHeight > fields.length - 1) {
-      columnHeight = columnHeight || Math.ceil(fields.length / numberOfColumns);
-    }
+
     if ($rootScope.corpus.datumFields.indexOf("syntacticTreeLatex") < 6) {
       $rootScope.corpus.upgradeCorpusFieldsToMatchDatumTemplate("fulltemplate");
+    }
+    if ($rootScope.corpus.prefs.preferredSpreadsheetShape.rows && typeof $rootScope.corpus.prefs.preferredSpreadsheetShape.rows === "string") {
+      $rootScope.corpus.prefs.preferredSpreadsheetShape.rows = parseInt($rootScope.corpus.prefs.preferredSpreadsheetShape.rows, 10);
+    }
+    if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns && typeof $rootScope.corpus.prefs.preferredSpreadsheetShape.columns === "string") {
+      $rootScope.corpus.prefs.preferredSpreadsheetShape.columns = parseInt($rootScope.corpus.prefs.preferredSpreadsheetShape.columns, 10);
+    }
+
+    if (previousPreferedSpreadsheetShape && previousPreferedSpreadsheetShape.rows === $rootScope.corpus.prefs.preferredSpreadsheetShape.rows && previousPreferedSpreadsheetShape.columns === $rootScope.corpus.prefs.preferredSpreadsheetShape.columns) {
+      return;
+    }
+
+    if ($rootScope.corpus.prefs.preferredSpreadsheetShape.rows > $rootScope.corpus.datumFields._collection.length - 1) {
+      $rootScope.corpus.prefs.preferredSpreadsheetShape.rows = $rootScope.corpus.prefs.preferredSpreadsheetShape.rows || Math.ceil($rootScope.corpus.datumFields._collection.length / $rootScope.corpus.prefs.preferredSpreadsheetShape.columns);
     }
 
     var columns = {};
 
-    if (numberOfColumns === 1) {
-      columns.first = fields.slice(1, columnHeight + 1);
+    if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 1) {
+      columns.first = $rootScope.corpus.datumFields._collection.slice(
+        1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
+      );
       columns.second = [];
       columns.third = [];
       $scope.fieldSpanWidthClassName = "span10";
       $scope.columnWidthClass = "span10";
-    } else if (numberOfColumns === 2) {
-      columns.first = fields.slice(1, columnHeight + 1);
-      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
+    } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 2) {
+      columns.first = $rootScope.corpus.datumFields._collection.slice(
+        1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
+      );
+      columns.second = $rootScope.corpus.datumFields._collection.slice(
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
+      );
       columns.third = [];
+
       $scope.fieldSpanWidthClassName = "span5";
       $scope.columnWidthClass = "span5";
-    } else if (numberOfColumns === 3) {
-      columns.first = fields.slice(1, columnHeight + 1);
-      columns.second = fields.slice(columnHeight + 1, columnHeight * 2 + 1);
-      columns.third = fields.slice(columnHeight * 2 + 1, columnHeight * 3 + 1);
+    } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 3) {
+      columns.first = $rootScope.corpus.datumFields._collection.slice(
+        1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
+      );
+      columns.second = $rootScope.corpus.datumFields._collection.slice(
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
+      );
+      columns.third = $rootScope.corpus.datumFields._collection.slice(
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1,
+        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 3 + 1
+      );
       $scope.fieldSpanWidthClassName = "span3";
       $scope.columnWidthClass = "span3";
     }
+    previousPreferedSpreadsheetShape = JSON.parse(JSON.stringify($rootScope.corpus.prefs.preferredSpreadsheetShape));
+    $rootScope.fieldsInColumns = columns;
     return columns;
   };
 
@@ -443,7 +460,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       console.warn("Not using users prefered template " + templateId);
     }
     // $rootScope.fields = newFieldPreferences; //TODO doesnt seem right...
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
+    $rootScope.getAvailableFieldsInColumns();
 
     console.log("notUserInitited", notUserInitited);
     try {
@@ -455,25 +472,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.setAsDefaultCorpusTemplate = function(templateId) {
-    console.log(templateId);
-    if (!$rootScope.admin) {
-      alert("You're not an admin on this corpus, please ask an admin to set this template as default for you.");
-      return;
-    }
-    if ($rootScope.corpus.description) {
-      $rootScope.corpus.preferredTemplate = templateId;
-      Data.saveCouchDoc($rootScope.corpus.dbname, $rootScope.corpus)
-        .then(function(result) {
-          console.log("Saved corpus template preferences ", result);
-        }, function(reason) {
-          console.log("Error saving corpus template.", reason);
-          alert("Error saving corpus template.");
-        });
-    } else {
-      alert("The corpus doc was never fetched. So I cant save the preferences... Please report this if you think you should be able to save the preferences.");
-    }
-  };
+
 
   $rootScope.mcgillOnly = false;
   if (window.location.origin.indexOf("mcgill") > -1) {
@@ -1031,7 +1030,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     $scope.availableFields = $rootScope.corpus.datumFields._collection;
     $rootScope.availableFieldsInCurrentCorpus = $rootScope.corpus.datumFields._collection;
-    $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns($rootScope.availableFieldsInCurrentCorpus);
+    $rootScope.getAvailableFieldsInColumns();
     $rootScope.setTemplateUsingCorpusPreferedTemplate(selectedCorpus);
 
     $scope.newSession = $rootScope.corpus.newSession();

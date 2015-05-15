@@ -163,49 +163,6 @@ var SpreadsheetStyleDataEntrySettingsController = function($scope, $rootScope, $
   };
   // $scope.getTags();
 
-
-
-  $scope.saveNewPreferences = function(templateId, newFieldPreferences, fullTemplateDefaultNumberOfColumns, fullTemplateDefaultNumberOfFieldsPerColumn) {
-    if ($rootScope.corpus && $rootScope.corpus.preferredTemplate && $rootScope.corpus.preferredTemplate !== templateId) {
-      // window.alert("Sorry, you can't use a different template. Your team has decided to use the " + $rootScope.corpus.preferredTemplate + " for " + $rootScope.corpus.title);
-      // return;
-    }
-
-    var prefs = localStorage.getItem('SpreadsheetPreferences');
-    var Preferences = JSON.parse(prefs || "{}");
-    for (var availableField in $scope.availableFields) {
-      for (var newField in newFieldPreferences) {
-        if (newFieldPreferences[newField] === "") {
-          Preferences[templateId][newField].title = "";
-          Preferences[templateId][newField].label = "";
-        } else if ($scope.availableFields[availableField].label === newFieldPreferences[newField]) {
-          if (!Preferences[templateId]) {
-            //hack for #1290 until we refactor the app into something more MVC
-            Preferences[templateId] = window.defaultPreferences[templateId];
-          }
-          Preferences[templateId][newField].title = $scope.availableFields[availableField].title;
-          Preferences[templateId][newField].label = $scope.availableFields[availableField].label;
-        }
-      }
-    }
-    if (fullTemplateDefaultNumberOfColumns) {
-      Preferences.fullTemplateDefaultNumberOfColumns = fullTemplateDefaultNumberOfColumns;
-    }
-    if (fullTemplateDefaultNumberOfFieldsPerColumn) {
-      Preferences.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
-      $rootScope.fullTemplateDefaultNumberOfFieldsPerColumn = fullTemplateDefaultNumberOfFieldsPerColumn;
-    }
-    Preferences.userChosenTemplateId = templateId;
-    $scope.scopePreferences = Preferences;
-    $rootScope.templateId = Preferences.userChosenTemplateId;
-    $rootScope.setTemplateUsingCorpusPreferedTemplate($rootScope.corpus);
-    // $rootScope.fields = Preferences[Preferences.userChosenTemplateId];
-    // $rootScope.fieldsInColumns = $rootScope.getAvailableFieldsInColumns(Preferences[Preferences.userChosenTemplateId]);
-
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify(Preferences));
-    window.alert("Settings saved.");
-  };
-
   $scope.saveNumberOfRecordsToDisplay = function(numberOfRecordsToDisplay) {
     var Preferences = JSON.parse(localStorage.getItem('SpreadsheetPreferences'));
     if (numberOfRecordsToDisplay) {
