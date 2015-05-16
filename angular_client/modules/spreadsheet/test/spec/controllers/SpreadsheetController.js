@@ -344,7 +344,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
 
     it('should have all the old things for sessions in scope that it had before', function() {
       expect(typeof scope.selectSession).toBe('function');
-      expect(typeof scope.changeActiveSessionID).toBe('function');
+      // expect(typeof scope.changeActiveSessionID).toBe('function');
       // expect(typeof scope.getCurrentSessionName).toBe('function');
       expect(typeof scope.editSession).toBe('function');
       expect(typeof scope.deleteEmptySession).toBe('function');

@@ -683,7 +683,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
         $scope.sessions = scopeSessions;
         if (sessionID) {
-          $scope.selectSession(sessionID);
+          $scope.loadDataInCurrentSession(sessionID);
         } else {
           $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
         }
@@ -1050,9 +1050,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
+  $scope.$watch('fullCurrentSession.id', function(newValue, oldValue) {
+    console.warn('todo load this fullCurrentSession', newValue, oldValue);
+  });
 
-  $scope.selectSession = function(activeSessionID) {
-    $scope.changeActiveSessionID(activeSessionID);
+  $scope.loadDataInCurrentSession = function(activeSessionID) {
+    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+    $scope.scopePreferences.savedState.sessionID = $scope.activeSessionID;
+    $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
+    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+
     // Make sure that following variable is set (ng-model in select won't
     // assign variable until chosen)
     $scope.activeSessionIDToSwitchTo = activeSessionID;
@@ -1065,38 +1072,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.loadData(activeSessionID);
     // $scope.loadUsersAndRoles();
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
-  };
-
-  $scope.changeActiveSessionID = function(activeSessionIDToSwitchTo) {
-    if (activeSessionIDToSwitchTo === 'none' || activeSessionIDToSwitchTo === undefined) {
-      $scope.activeSessionID = undefined;
-      $scope.fullCurrentSession = undefined;
-      // $scope.editSessionInfo = undefined;
-    } else {
-      $scope.activeSessionID = activeSessionIDToSwitchTo;
-      for (var i in $scope.sessions) {
-        if ($scope.sessions[i]._id === activeSessionIDToSwitchTo) {
-          $scope.fullCurrentSession = $scope.sessions[i];
-
-          // Set up object to make session editing easier
-          // var editSessionInfo = {};
-          // editSessionInfo._id = $scope.fullCurrentSession._id;
-          // editSessionInfo._rev = $scope.fullCurrentSession._rev;
-          // for (var k in $scope.fullCurrentSession.sessionFields) {
-          //   editSessionInfo[$scope.fullCurrentSession.sessionFields[k].id] = $scope.fullCurrentSession.sessionFields[k].mask;
-          //   if ($scope.fullCurrentSession.sessionFields[k].label === "goal") {
-          //     $scope.currentSessionName = $scope.fullCurrentSession.sessionFields[k].mask;
-          //   }
-          // }
-          // $scope.editSessionInfo = editSessionInfo;
-        }
-      }
-    }
-    // Update saved state in Preferences
-    $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = $scope.activeSessionID;
-    $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
-    localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
 
   $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
@@ -1241,7 +1216,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.sessions.push(newSessionRecord);
         $scope.dataentry = true;
-        $scope.selectSession(savedRecord.data.id);
+        $scope.loadDataInCurrentSession(savedRecord.data.id);
         $scope.newSession = $rootScope.corpus.newSession();
         window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       });

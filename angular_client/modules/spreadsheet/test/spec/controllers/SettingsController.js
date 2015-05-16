@@ -34,7 +34,7 @@ describe('Controller: SpreadsheetStyleDataEntrySettingsController', function() {
       expect(typeof scope.editTagInfo).toBe('function');
       expect(typeof scope.deleteDuplicateTags).toBe('function');
       expect(typeof scope.getTags).toBe('function');
-      expect(typeof scope.saveNewPreferences).toBe('function');
+      // expect(typeof scope.saveNewPreferences).toBe('function');
       expect(typeof scope.saveNumberOfRecordsToDisplay).toBe('function');
 
     });

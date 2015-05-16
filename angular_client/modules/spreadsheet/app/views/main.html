@@ -31,7 +31,7 @@
     </span>
     <br>
     <div class="form-horizontal">
-      <form ng-submit="selectSession(fullCurrentSession._id)">
+      <form ng-submit="loadDataInCurrentSession()">
         <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
         <button type="submit"

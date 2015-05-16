@@ -128,12 +128,9 @@
         <select class="span3" ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
         &nbsp;
-        <button class="btn btn-primary" ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">
-          {{contextualize('locale_activate_session_button')}}
-        </button>
         &nbsp;&nbsp;
         <span ng-hide="activeSessionID==undefined">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(fullCurrentSession._id);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
@@ -413,14 +410,9 @@
       </span>
       <select class="span3" ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
       </select>
-      <button class="btn btn-primary" ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">
-        <i class="fa whiteicon fa-calendar">
-        </i>
-        {{contextualize('locale_activate_session_button')}}
-      </button>
       &nbsp;&nbsp;
       <span ng-hide="activeSessionID==undefined">
-        <button class="btn btn-success" ng-click="selectSession(fullCurrentSession._id);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+        <button class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
