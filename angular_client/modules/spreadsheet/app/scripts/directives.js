@@ -26,15 +26,6 @@ angular.module('spreadsheetApp')
       }
     };
   })
-  .directive('selectDropdownSession', function() {
-    return function(scope, element) {
-      scope.$watch('activeSessionID', function() {
-        if (scope.session._id === scope.activeSessionID) {
-          element[0].selected = true;
-        }
-      });
-    };
-  })
   .directive('spreadsheetCatchArrowKey', function($rootScope) {
     return function(scope, element) {
       element.bind('keyup', function(e) {
