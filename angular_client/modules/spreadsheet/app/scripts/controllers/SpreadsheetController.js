@@ -566,7 +566,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.dataentry = false;
   $scope.searching = false;
   $rootScope.activeSubMenu = 'none';
-  $scope.activeSessionID = undefined;
   $scope.currentSessionName = "All Sessions";
   $scope.showCreateSessionDiv = false;
   $scope.editSessionDetails = false;
@@ -680,11 +679,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (scopeSessions[i]._id !== "none") {
             scopeSessions[i] = new FieldDB.Session(scopeSessions[i]);
           }
+          // if a reqested session was passed use that
+          if (sessionID && sessionID === scopeSessions[i]._id) {
+            $scope.fullCurrentSession = scopeSessions[i];
+          }
         }
+
         $scope.sessions = scopeSessions;
-        if (sessionID) {
-          $scope.loadDataInCurrentSession(sessionID);
-        } else {
+
+        // if a reqested session was not passed use the second to the bottom
+        if (!sessionID) {
           $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
         }
         $scope.documentReady = true;
@@ -698,7 +702,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   // Fetch data from server and put into template scope
-  $scope.loadData = function(sessionID) {
+  $scope.loadData = function() {
+    if (!$scope.fullCurrentSession || !$scope.fullCurrentSession._id) {
+      return;
+    }
     console.warn("Clearing search terms");
     $scope.searchHistory = "";
 
@@ -712,9 +719,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             var newDatumFromServer = SpreadsheetDatum.convertFieldDBDatumIntoSpreadSheetDatum({}, dataFromServer[i].value, $rootScope.server + "/" + $rootScope.corpus.dbname + "/", $scope);
 
             // Load data from current session into scope
-            if (!sessionID || sessionID === "none") {
+            if ($scope.fullCurrentSession._id === "none") {
               scopeData.push(newDatumFromServer);
-            } else if (dataFromServer[i].value.session._id === sessionID) {
+            } else if (dataFromServer[i].value.session._id === $scope.fullCurrentSession._id) {
               scopeData.push(newDatumFromServer);
             }
           } else {
@@ -1054,23 +1061,23 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     console.warn('todo load this fullCurrentSession', newValue, oldValue);
   });
 
-  $scope.loadDataInCurrentSession = function(activeSessionID) {
+  $scope.loadDataInCurrentSession = function() {
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = $scope.activeSessionID;
+    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession._id;
     $scope.scopePreferences.savedState.sessionTitle = $scope.currentSessionName;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
     // Make sure that following variable is set (ng-model in select won't
     // assign variable until chosen)
-    $scope.activeSessionIDToSwitchTo = activeSessionID;
     $scope.dataentry = true;
 
     // Update saved state in Preferences
     $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-    $scope.scopePreferences.savedState.sessionID = activeSessionID;
+    $scope.scopePreferences.savedState.sessionID = $scope.fullCurrentSession._id;
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
-    $scope.loadData(activeSessionID);
+    $scope.loadData();
     // $scope.loadUsersAndRoles();
+    //TODO only do this if on corpora list
     window.location.assign("#/spreadsheet/" + $rootScope.templateId);
   };
 
@@ -1128,20 +1135,20 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             $rootScope.loading = true;
             updateAllDatumInThisSessionWithUpdatedSessionInfo(i);
           }
-          $scope.loadData($scope.activeSessionID);
+          $scope.loadData();
         });
     }
 
   };
 
-  $scope.deleteEmptySession = function(activeSessionID) {
+  $scope.deleteEmptySession = function() {
     if ($scope.fullCurrentSession._id === "none") {
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
       var r = confirm("Are you sure you want to put this session in the trash?");
       if (r === true) {
-        Data.async($rootScope.corpus.dbname, activeSessionID)
+        Data.async($rootScope.corpus.dbname, $scope.fullCurrentSession._id)
           .then(function(sessionToMarkAsDeleted) {
             sessionToMarkAsDeleted.trashed = "deleted";
             var rev = sessionToMarkAsDeleted._rev;
@@ -1173,12 +1180,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
                 // Remove session from scope
                 for (var i in $scope.sessions) {
-                  if ($scope.sessions[i]._id === activeSessionID) {
+                  if ($scope.sessions[i]._id === $scope.fullCurrentSession._id) {
                     $scope.sessions.splice(i, 1);
                   }
                 }
                 // Set active session to All Sessions
-                $scope.activeSessionID = undefined;
+                $scope.fullCurrentSession = $scope.sessions[$scope.sessions.length - 1];
               }, function(error) {
                 console.warn("there was an error deleting a session", error);
                 window.alert("Error deleting session.\nTry refreshing the page.");
@@ -1216,7 +1223,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.sessions.push(newSessionRecord);
         $scope.dataentry = true;
-        $scope.loadDataInCurrentSession(savedRecord.data.id);
+        $scope.fullCurrentSession = newSessionRecord;
+        $scope.loadDataInCurrentSession();
         $scope.newSession = $rootScope.corpus.newSession();
         window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       });
@@ -1341,7 +1349,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.dateModified = newSpreadsheetDatum.dateEntered;
     // newSpreadsheetDatum.lastModifiedBy = $rootScope.user.username;
     newSpreadsheetDatum.session = $scope.fullCurrentSession;
-    // newSpreadsheetDatum.sessionID = $scope.activeSessionID;
     newSpreadsheetDatum.saved = "no";
 
     // Add record to all scope data and update
@@ -1672,13 +1679,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.loadDataEntryScreen = function() {
     $scope.dataentry = true;
     $scope.navigateVerifySaved('none');
-    $scope.loadData($scope.activeSessionID);
+    $scope.loadData();
   };
 
   $scope.clearSearch = function() {
     $scope.searchTerm = '';
     $scope.searchHistory = null;
-    $scope.loadData($scope.activeSessionID);
+    $scope.loadData();
   };
   if (FieldDB && FieldDB.DatumField) {
     $rootScope.addedDatumField = new FieldDB.DatumField({
@@ -1792,14 +1799,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return false;
     };
 
-    // if (!$scope.activeSessionID) {
+    // if (!$scope.fullCurrentSession._id {
     // Search allData in scope
     for (var i in $scope.allData) {
       // Determine if record should be included in session search
       var searchTarget = false;
-      if (!$scope.activeSessionID) {
+      if ($scope.fullCurrentSession._id === "none") {
         searchTarget = true;
-      } else if ($scope.allData[i].session._id === $scope.activeSessionID) {
+      } else if ($scope.allData[i].session._id === $scope.fullCurrentSession._id) {
         searchTarget = true;
       }
       if (searchTarget === true) {
@@ -1824,9 +1831,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.selectAll = function() {
     for (var i in $scope.allData) {
-      if (!$scope.activeSessionID) {
+      if ($scope.fullCurrentSession._id === "none") {
         $scope.allData[i].checked = true;
-      } else if ($scope.allData[i].session._id === $scope.activeSessionID) {
+      } else if ($scope.allData[i].session._id === $scope.fullCurrentSession._id) {
         $scope.allData[i].checked = true;
       }
     }

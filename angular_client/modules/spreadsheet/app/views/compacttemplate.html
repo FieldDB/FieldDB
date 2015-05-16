@@ -2,7 +2,7 @@
   ng-class="{selectedRow: activeDatumIndex=='newEntry', unselectedNewRow: activeDatumIndex!='newEntry'}"
   class="relativePosition"
   ng-click="selectRow('newEntry')"
-  ng-hide="data==undefined || loading==true || activeSessionID==undefined || searching==true || readPermissions == false || currentPage!=0">
+  ng-hide="data==undefined || loading==true || fullCurrentSession._id==undefined || searching==true || readPermissions == false || currentPage!=0">
   <div class="row">
   <form ng-submit="createRecord(newFieldData);newFieldData=''"  spreadsheet-catch-focus-on-arrow-press>
     <div class="focus_box_div">
@@ -71,7 +71,7 @@
       </div>
 </div>
 
-<div class="row" ng-show="activeSessionID==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
+<div class="row" ng-show="fullCurrentSession._id==undefined && loading==false && searching==false && documentReady==true && data!=undefined">
   <div class="span12 pagination-centered">
     <h2 ng-bind-html="contextualize('locale_select_session_message')"></h2>
   </div>

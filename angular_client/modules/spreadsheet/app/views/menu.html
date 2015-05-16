@@ -129,14 +129,14 @@
         </select>
         &nbsp;
         &nbsp;&nbsp;
-        <span ng-hide="activeSessionID==undefined">
+        <span ng-hide="fullCurrentSession._id==undefined">
           <button ng-show="writePermissions==true" class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <span ng-show="(data | filter: activeSessionID).length==0">
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+        <span ng-show="(data | filter: fullCurrentSession._id).length==0">
+          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession()" ng-disabled="readOnly==true">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
@@ -149,7 +149,7 @@
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSessionID!=undefined"ng-cloak>
+      <div class="subSubMenubar"ng-show="editSessionDetails==true && fullCurrentSession._id!=undefined"ng-cloak>
         <form ng-model='fullCurrentSession'>
           <table cellpadding="5px">
             <tr>
@@ -411,7 +411,7 @@
       <select class="span3" ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
       </select>
       &nbsp;&nbsp;
-      <span ng-hide="activeSessionID==undefined">
+      <span ng-hide="fullCurrentSession._id==undefined">
         <button class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
@@ -419,8 +419,8 @@
         </button>
         &nbsp;&nbsp;
       </span>
-      <span ng-show="(data | filter: activeSessionID).length==0">
-        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+      <span ng-show="(data | filter: fullCurrentSession._id).length==0">
+        <button class="btn btn-danger" ng-click="deleteEmptySession()" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
@@ -432,7 +432,7 @@
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="editSessionDetails==true && fullCurrentSession._id!=undefined" ng-cloak>
         <form ng-model='fullCurrentSession'>
           <table cellpadding="5px">
             <tr>
