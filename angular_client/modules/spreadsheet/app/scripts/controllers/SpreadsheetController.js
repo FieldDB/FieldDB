@@ -1099,16 +1099,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
   };
 
-  $scope.getCurrentSessionName = function() {
-    if ($scope.activeSessionID === undefined) {
-      return "All Sessions";
-    } else {
-      if ($scope.fullCurrentSession) {
-        return $scope.fullCurrentSession.dateAndGoalSnippet || $scope.fullCurrentSession.title;
-      }
-    }
-  };
-
   $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
     var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
     if (r === true) {
