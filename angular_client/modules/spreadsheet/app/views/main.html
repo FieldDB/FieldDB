@@ -31,9 +31,10 @@
     </span>
     <br>
     <div class="form-horizontal">
-      <form ng-submit="loadDataInCurrentSession()">
+      <form ng-submit="loadDataEntryScreen()">
         <select ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
+        <img src="images/spinner-small-maindiv.gif" ng-show="filteringData">
         <button type="submit"
         class="btn btn-primary">{{contextualize('locale_go_button')}}
         </button>&nbsp;

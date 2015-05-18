@@ -291,7 +291,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
       expect(typeof scope.changeActiveSubMenu).toBe('function');
       expect(typeof scope.navigateVerifySaved).toBe('function');
       expect(typeof scope.loadSessions).toBe('function');
-      expect(typeof scope.loadData).toBe('function');
+      expect(typeof scope.loadDataInCurrentSessionFromServer).toBe('function');
       expect(typeof scope.loadAutoGlosserRules).toBe('function');
 
       expect(typeof scope.reloadPage).toBe('function');
