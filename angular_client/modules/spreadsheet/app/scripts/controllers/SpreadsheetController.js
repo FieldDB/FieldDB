@@ -708,6 +708,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Fetch data from server and put into template scope
   $scope.loadDataInCurrentSessionFromServer = function() {
+    if (window.location.hash.indexOf("/spreadsheet") === -1) {
+      console.log("dont need to load the data if hte user isnt on the data entry screen.");
+      return;
+    }
+
     if (!$scope.fullCurrentSession || !$scope.fullCurrentSession._id) {
       // no session...
       console.log("not re-filtering the data, there is no session specified, nore the all data session either");
@@ -1071,7 +1076,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     } else {
       $scope.loadSessions();
     }
-    
+
     // $scope.loadUsersAndRoles();
 
     console.log("setting current corpus details: " + $rootScope.corpus);
@@ -1690,8 +1695,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   $scope.loadDataEntryScreen = function() {
     $scope.dataentry = true;
-    $scope.loadDataInCurrentSessionFromServer();
     $scope.navigateVerifySaved('none');
+    $scope.loadDataInCurrentSessionFromServer();
   };
 
   $scope.clearSearch = function() {
