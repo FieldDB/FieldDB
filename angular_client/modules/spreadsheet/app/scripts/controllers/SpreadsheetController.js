@@ -652,21 +652,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         default:
           $scope.dataentry = true;
           $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
+          $scope.changeActiveSubMenu(itemToDisplay || 'none');
           window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       }
     }
   };
 
 
-  var lastSessionsFetch = {};
+  var lastSessionsFetchTimestamp = {};
   // Get sessions for dbname; select specific session on saved state load
   $scope.loadSessions = function(sessionID) {
-    if ($scope.sessions && lastSessionsFetch && lastSessionsFetch[$rootScope.corpus.dbname] && (Date.now() - lastSessionsFetch[$rootScope.corpus.dbname] < 30000)) {
+    if ($scope.sessions && lastSessionsFetchTimestamp && lastSessionsFetchTimestamp[$rootScope.corpus.dbname] && (Date.now() - lastSessionsFetchTimestamp[$rootScope.corpus.dbname] < 30000)) {
       return;
     }
 
-    lastSessionsFetch[$rootScope.corpus.dbname] = Date.now();
+    lastSessionsFetchTimestamp[$rootScope.corpus.dbname] = Date.now();
     $rootScope.loading = true;
     var scopeSessions = [];
     Data.sessions($rootScope.corpus.dbname)
@@ -692,7 +692,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.sessions = scopeSessions;
 
         // if a reqested session was not passed use the second to the bottom
-        if (!sessionID) {
+        if (!$scope.fullCurrentSession  || $scope.fullCurrentSession.dbname !== $rootScope.corpus.dbname) {
           $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
         }
         $scope.documentReady = true;
@@ -1092,6 +1092,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
+  $scope.fullCurrentSession = {};
   $scope.$watch('fullCurrentSession._id', function(newValue, oldValue) {
     if (oldValue && newValue !== oldValue) {}
     $scope.loadDataInCurrentSessionFromServer();

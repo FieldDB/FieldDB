@@ -27,7 +27,7 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
@@ -93,7 +93,7 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
+            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="data==undefined && loading==false && (writePermissions==true || commentPermissions==true)">
               {{getSavedState().text}}
             </button>
             &nbsp;
@@ -127,16 +127,18 @@
         </span>
         <select class="span3" ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
-        &nbsp;
         &nbsp;&nbsp;
-        <span ng-hide="fullCurrentSession._id==undefined">
+         <button ng-click="loadDataInCurrentSessionFromServer()" class="btn btn-primary">
+           {{contextualize('locale_go_button')}}
+         </button>&nbsp;
+        <span ng-show="writePermissions==true&&fullCurrentSession._id&&fullCurrentSession.fields">
           <button ng-show="writePermissions==true" class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <span ng-show="(data | filter: fullCurrentSession._id).length==0">
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession()" ng-disabled="readOnly==true">
+        <span ng-show="writePermissions==true&&fullCurrentSession._id&&fullCurrentSession.fields">
+          <button  class="btn btn-danger" ng-click="deleteEmptySession()">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
@@ -149,8 +151,8 @@
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="editSessionDetails==true && fullCurrentSession._id!=undefined"ng-cloak>
-        <form ng-model='fullCurrentSession'>
+      <div class="subSubMenubar" ng-show="editSessionDetails==true && fullCurrentSession._id" ng-cloak>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -201,7 +203,7 @@
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(fullCurrentSession, data);">
+          <button class="btn btn-primary" ng-click="editSession(fullCurrentSession, data);">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
@@ -213,7 +215,7 @@
         </div>
       </div>
       <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
-        <form ng-model='newSession'>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -330,7 +332,7 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
@@ -382,7 +384,7 @@
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
+          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="data==undefined && loading==false">
             <i ng-class="getSavedState().icon">
             </i>
           </button>
@@ -411,7 +413,10 @@
       <select class="span3" ng-model="fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
       </select>
       &nbsp;&nbsp;
-      <span ng-hide="fullCurrentSession._id==undefined">
+      <button ng-click="loadDataInCurrentSessionFromServer()" class="btn btn-primary">
+        {{contextualize('locale_go_button')}}
+      </button>&nbsp;
+      <span ng-show="writePermissions==true&&fullCurrentSession._id&&fullCurrentSession.fields">
         <button class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
@@ -419,8 +424,8 @@
         </button>
         &nbsp;&nbsp;
       </span>
-      <span ng-show="(data | filter: fullCurrentSession._id).length==0">
-        <button class="btn btn-danger" ng-click="deleteEmptySession()" ng-disabled="readOnly==true">
+      <span ng-show="writePermissions==true&&fullCurrentSession._id&&fullCurrentSession.fields">
+        <button class="btn btn-danger" ng-click="deleteEmptySession()">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
@@ -433,7 +438,7 @@
         {{contextualize('locale_create_new_session')}}
       </button>
       <div class="subSubMenubar" ng-show="editSessionDetails==true && fullCurrentSession._id!=undefined" ng-cloak>
-        <form ng-model='fullCurrentSession'>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -472,14 +477,14 @@
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(fullCurrentSession, data);">
-            <i class="fa whiteicon fa-save">
+          <button class="btn btn-primary" ng-click="editSession(fullCurrentSession, data);">
+            <i class="fa  fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
           </button>
@@ -490,7 +495,7 @@
         </div>
       </div>
       <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
-        <form ng-model='newSession'>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -535,7 +540,7 @@
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
