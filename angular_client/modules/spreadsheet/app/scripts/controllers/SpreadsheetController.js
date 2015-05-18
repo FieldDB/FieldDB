@@ -2674,6 +2674,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
+  $timeout(function(){
+    if(!$scope.documentReady){
+      $rootScope.notificationMessage = "The data didn't load within a reasonable time. Please try reloading the page.";
+      $rootScope.openNotification();
+    }
+  }, 10000);
 };
 SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
