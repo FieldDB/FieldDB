@@ -43,7 +43,7 @@ var debuggingMode = false;
 angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
   var controller = function($scope, $rootScope) {
-    console.log('loading controller for fielddbGlosserInput');
+    // console.log('loading controller for fielddbGlosserInput');
 
     $scope.keyListener = function($event) {
       var arrowkeys = [40, 38, 39, 37];
@@ -83,7 +83,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
   return {
     template: function(element, attrs) {
-      console.log('loading template for fielddbGlosserInput', attrs);
+      // console.log('loading template for fielddbGlosserInput', attrs);
       var templateString =
         '<input ' +
         '  ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
