@@ -1,7 +1,7 @@
 <form ng-submit="createRecord(newFieldData, $event)" >
   <div class="span1" >
     <input
-    ng-blur="markNewAsEdited()"
+    ng-blur="verifyNewEntryHasBeenEdited()"
     class="span2"
     type="text"
     ng-model="newFieldData['judgement']"

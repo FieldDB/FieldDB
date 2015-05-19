@@ -1335,6 +1335,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // }
 
   $scope.createRecord = function(onlyContentfulFields, $event) {
+    if (!$scope.verifyNewEntryHasBeenEdited()) {
+      return;
+    }
     if ($event && $event.type && $event.type === "submit" && $event.target) {
       $scope.setDataEntryFocusOn($event.target);
     }
@@ -1386,11 +1389,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $rootScope.markNewAsEdited = function() {
+  $rootScope.verifyNewEntryHasBeenEdited = function() {
     if (JSON.stringify($scope.newFieldData) === "{}") {
       return;
     }
-    $rootScope.newRecordHasBeenEdited = true;
+    $rootScope.newRecordHasBeenEdited = false;
+    for (var attribute in $scope.newFieldData) {
+      if ($scope.newFieldData.hasOwnProperty(attribute) && attribute !== "dbname" && $scope.newFieldData[attribute]) {
+        $rootScope.newRecordHasBeenEdited = true;
+      }
+    }
+
+    return $rootScope.newRecordHasBeenEdited;
   };
 
   $rootScope.markAsNotSaved = function(datum) {
