@@ -1393,6 +1393,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.markNewAsEdited = function() {
+    if (JSON.stringify($scope.newFieldData) == "{}") {
+      return;
+    }
     $rootScope.newRecordHasBeenEdited = true;
   };
 
