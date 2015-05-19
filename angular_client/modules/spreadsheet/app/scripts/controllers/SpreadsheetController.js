@@ -692,7 +692,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.sessions = scopeSessions;
 
         // if a reqested session was not passed use the second to the bottom
-        if (!$scope.fullCurrentSession  || $scope.fullCurrentSession.dbname !== $rootScope.corpus.dbname) {
+        if (!$scope.fullCurrentSession || $scope.fullCurrentSession.dbname !== $rootScope.corpus.dbname) {
           $scope.fullCurrentSession = $scope.sessions[scopeSessions.length - 2];
         }
         $scope.documentReady = true;
@@ -1148,7 +1148,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         };
         var r = false;
         if (scopeDataToEdit.length > 20) {
-          r = confirm("This session has "+scopeDataToEdit.length+ " items, do you want to also update the session information on each of the records in this session?\n\n (This could take a while.)");
+          r = confirm("This session has " + scopeDataToEdit.length + " items, do you want to also update the session information on each of the records in this session?\n\n (This could take a while.)");
         }
         if (r === true) {
           $rootScope.loading = true;
@@ -2309,7 +2309,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
-
+  
+  $scope.mockAllData = function(mocked) {
+    allData = mocked;
+  };
   $scope.loadPaginatedData = function(why) {
     console.log("Loading paginated data ", why);
     var resultSize = $rootScope.resultSize;
