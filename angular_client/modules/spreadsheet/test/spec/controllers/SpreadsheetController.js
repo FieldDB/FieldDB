@@ -497,7 +497,7 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
   it('should set some session control variables', function() {
     expect(scope.activeSubMenu).toEqual('none');
     expect(scope.showCreateSessionDiv).toBeFalsy();
-    expect(scope.editSessionDetails).toBeFalsy();
+    expect(scope.showEditSessionDetails).toBeFalsy();
     expect(scope.createNewSessionDropdown).toBeFalsy();
   });
 

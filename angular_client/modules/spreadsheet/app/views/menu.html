@@ -125,11 +125,11 @@
           </i>
           {{contextualize('locale_change_session')}}
         </span>
-        <select ng-options="session.dateAndGoalSnippet for session in sessions">
+        <select ng-model="$parent.fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
         &nbsp;&nbsp;
         <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="showEditSessionDetails=!showEditSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
@@ -142,13 +142,13 @@
           </button>
           &nbsp;&nbsp;
         </span>
-        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;showEditSessionDetails=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-plus">
           </i>
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && $parent.fullCurrentSession._id" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetails==true && $parent.fullCurrentSession._id" ng-cloak>
         <form >
           <table cellpadding="5px">
             <tr>
@@ -206,7 +206,7 @@
             {{contextualize('locale_save_changes_button')}}
           </button>
           &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
+          <button class="btn" ng-click="showEditSessionDetails=false">
             {{contextualize('locale_cancel_button')}}
           </button>
         </div>
@@ -411,7 +411,7 @@
       </select>
       &nbsp;&nbsp;
       <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
-        <button class="btn btn-success" ng-click="editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+        <button class="btn btn-success" ng-click="showEditSessionDetails=!showEditSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
@@ -426,12 +426,12 @@
         </button>
         &nbsp;&nbsp;
       </span>
-      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;showEditSessionDetails=false" ng-disabled="readOnly==true">
         <i class="fa whiteicon fa-plus">
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && $parent.fullCurrentSession._id!=undefined" ng-cloak>
+      <div class="subSubMenubar" ng-show="showEditSessionDetails==true && $parent.fullCurrentSession._id!=undefined" ng-cloak>
         <form >
           <table cellpadding="5px">
             <tr>
@@ -483,7 +483,7 @@
             {{contextualize('locale_save_changes_button')}}
           </button>
           &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
+          <button class="btn" ng-click="showEditSessionDetails=false">
             {{contextualize('locale_cancel_button')}}
           </button>
         </div>
