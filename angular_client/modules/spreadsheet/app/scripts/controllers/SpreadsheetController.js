@@ -789,11 +789,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         console.log("error loading the data", error);
         // On error loading data, reset saved state
         // Update saved state in Preferences
-        $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
-        $scope.scopePreferences.savedState = {};
-        localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+        // $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
+        // $scope.scopePreferences.savedState = {};
+        // localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
         $scope.documentReady = true;
-        $rootScope.notificationMessage = "There was a timeout loading the data. Please refresh the page and/or log in.";
+        $rootScope.notificationMessage = "There was a timeout loading the data. Please refresh the page.";
         $rootScope.openNotification();
         $rootScope.loading = false;
         $scope.filteringData = false;
