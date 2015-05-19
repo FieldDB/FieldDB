@@ -250,8 +250,8 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     SpreadsheetStyleDataEntryController = $controller('SpreadsheetStyleDataEntryController', {
       $scope: scope
     });
-    
-    scope.mockAllData([{
+
+    scope.mockAllDataInCurrentSession([{
       utterance: 'one'
     }, {
       utterance: 'two'

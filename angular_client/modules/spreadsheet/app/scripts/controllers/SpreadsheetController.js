@@ -13,7 +13,7 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
 var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
-  var allData = [];
+  var allDataInCurrentSession = [];
 
   if (debugging) {
     console.log($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http);
@@ -719,7 +719,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    if (allData && allData.length > 0 &&
+    if (allDataInCurrentSession && allDataInCurrentSession.length > 0 &&
       $scope.data && $scope.data.length > 0 &&
       $scope.scopePreferences.savedState.sessionID === $scope.fullCurrentSession._id) {
       // no change ...
@@ -768,10 +768,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         //   return 0;
         // });
 
-        allData = scopeData;
+        allDataInCurrentSession = scopeData;
         var resultSize = $rootScope.resultSize;
         if (resultSize === "all") {
-          resultSize = allData.length;
+          resultSize = allDataInCurrentSession.length;
         }
         $scope.data = scopeData.slice(0, resultSize);
         $rootScope.currentPage = 0;
@@ -1316,8 +1316,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
                 }], "uploadnow");
 
                 // Remove record from all scope data and update
-                var index = allData.indexOf(datum);
-                allData.splice(index, 1);
+                var index = allDataInCurrentSession.indexOf(datum);
+                allDataInCurrentSession.splice(index, 1);
                 $scope.loadPaginatedData();
 
                 $scope.saved = "yes";
@@ -1375,7 +1375,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     newSpreadsheetDatum.saved = "no";
 
     // Add record to all scope data and update
-    allData.push(newSpreadsheetDatum); //inserts new data at the bottom for future pagination.
+    allDataInCurrentSession.push(newSpreadsheetDatum); //inserts new data at the bottom for future pagination.
     $scope.data.push(newSpreadsheetDatum);
     // $scope.loadPaginatedData("newDatum"); //dont change pagination, just show it on this screen.
     $scope.activeDatumIndex = "newEntry";
@@ -1636,10 +1636,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         });
 
     };
-    for (var index in allData) {
+    for (var index in allDataInCurrentSession) {
       console.log(index);
-      if (allData.hasOwnProperty(index)) {
-        doSomethingElse(allData[index]);
+      if (allDataInCurrentSession.hasOwnProperty(index)) {
+        doSomethingElse(allDataInCurrentSession[index]);
       }
     }
     Q.all(saveDatumPromises).done(function(success, reason) {
@@ -1823,29 +1823,29 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
 
     // if (!$scope.fullCurrentSession._id {
-    // Search allData in scope
-    for (var i in allData) {
+    // Search allDataInCurrentSession in scope
+    for (var i in allDataInCurrentSession) {
       // Determine if record should be included in session search
       var searchTarget = false;
       if ($scope.fullCurrentSession._id === "none") {
         searchTarget = true;
-      } else if (allData[i].session._id === $scope.fullCurrentSession._id) {
+      } else if (allDataInCurrentSession[i].session._id === $scope.fullCurrentSession._id) {
         searchTarget = true;
       }
       if (searchTarget === true) {
-        if (thisDatumIsIN(allData[i])) {
-          newScopeData.push(allData[i]);
+        if (thisDatumIsIN(allDataInCurrentSession[i])) {
+          newScopeData.push(allDataInCurrentSession[i]);
         }
       }
     }
 
     if (newScopeData.length > 0) {
-      allData = newScopeData;
+      allDataInCurrentSession = newScopeData;
       var resultSize = $rootScope.resultSize;
       if (resultSize === "all") {
-        resultSize = allData.length;
+        resultSize = allDataInCurrentSession.length;
       }
-      $scope.data = allData.slice(0, resultSize);
+      $scope.data = allDataInCurrentSession.slice(0, resultSize);
     } else {
       $rootScope.notificationMessage = "No records matched your search.";
       $rootScope.openNotification();
@@ -1853,18 +1853,18 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.selectAll = function() {
-    for (var i in allData) {
+    for (var i in allDataInCurrentSession) {
       if ($scope.fullCurrentSession._id === "none") {
-        allData[i].checked = true;
-      } else if (allData[i].session._id === $scope.fullCurrentSession._id) {
-        allData[i].checked = true;
+        allDataInCurrentSession[i].checked = true;
+      } else if (allDataInCurrentSession[i].session._id === $scope.fullCurrentSession._id) {
+        allDataInCurrentSession[i].checked = true;
       }
     }
   };
 
   $scope.exportResults = function(size) {
 
-    var results = $filter('filter')(allData, {
+    var results = $filter('filter')(allDataInCurrentSession, {
       checked: true
     });
     if (results.length > 0) {
@@ -2303,27 +2303,27 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     var resultSize = $rootScope.resultSize;
     if (resultSize === "all") {
-      resultSize = allData.length;
+      resultSize = allDataInCurrentSession.length;
     }
     var numberOfPages = Math.ceil(numberOfRecords / resultSize);
     // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
   };
-  
-  $scope.mockAllData = function(mocked) {
-    allData = mocked;
+
+  $scope.mockAllDataInCurrentSession = function(mocked) {
+    allDataInCurrentSession = mocked;
   };
   $scope.loadPaginatedData = function(why) {
     console.log("Loading paginated data ", why);
     var resultSize = $rootScope.resultSize;
     if (resultSize === "all") {
-      resultSize = allData.length;
+      resultSize = allDataInCurrentSession.length;
     }
     var lastRecordOnPage = (($rootScope.currentPage + 1) * resultSize);
     var firstRecordOnPage = lastRecordOnPage - resultSize;
 
-    if (allData) {
-      $scope.data = allData.slice(firstRecordOnPage, lastRecordOnPage);
+    if (allDataInCurrentSession) {
+      $scope.data = allDataInCurrentSession.slice(firstRecordOnPage, lastRecordOnPage);
     }
   };
 
