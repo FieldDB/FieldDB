@@ -1100,62 +1100,67 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   });
 
   $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
-    var r = confirm("Are you sure you want to edit the session information?\nThis could take a while.");
-    if (r === true) {
-      $scope.editSessionDetails = false;
-      $rootScope.loading = true;
-      // var newSession = new FieldDB.Session($scope.fullCurrentSession);
-      // for (var key in editSessionInfo) {
-      //   if (key && editSessionInfo.hasOwnProperty(key) && key !== "undefined") {
-      //     newSession[key] = editSessionInfo[key];
-      //   }
-      // }
-      // Save session record
-      Data.saveCouchDoc($rootScope.corpus.dbname, $scope.fullCurrentSession.toJSON())
-        .then(function() {
-          var directobject = $scope.fullCurrentSession.dateAndGoalSnippet || "an elicitation session";
-          var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
-          $scope.addActivity([{
-            verb: "modified",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "personal"
-          }, {
-            verb: "modified",
-            verbicon: "icon-pencil",
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
-          }], "uploadnow");
+    $scope.editSessionDetails = false;
+    $rootScope.loading = true;
+    // var newSession = new FieldDB.Session($scope.fullCurrentSession);
+    // for (var key in editSessionInfo) {
+    //   if (key && editSessionInfo.hasOwnProperty(key) && key !== "undefined") {
+    //     newSession[key] = editSessionInfo[key];
+    //   }
+    // }
+    // Save session record
+    Data.saveCouchDoc($rootScope.corpus.dbname, $scope.fullCurrentSession.toJSON())
+      .then(function() {
+        var directobject = $scope.fullCurrentSession.dateAndGoalSnippet || "an elicitation session";
+        var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
+        $scope.addActivity([{
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "personal"
+        }, {
+          verb: "modified",
+          verbicon: "icon-pencil",
+          directobjecticon: "icon-calendar",
+          directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>" + directobject + "</a> ",
+          indirectobject: indirectObjectString,
+          teamOrPersonal: "team"
+        }], "uploadnow");
 
-          var updateAllDatumInThisSessionWithUpdatedSessionInfo = function(index) {
-            if (scopeDataToEdit[index].session._id === $scope.fullCurrentSession._id) {
-              Data.async($rootScope.corpus.dbname, scopeDataToEdit[index].id)
-                .then(function(editedRecord) {
-                    // Edit record with updated session info
-                    // and save
-                    editedRecord.session = $scope.fullCurrentSession.toJSON();
-                    Data.saveCouchDoc($rootScope.corpus.dbname, editedRecord)
-                      .then(function() {
-                        $rootScope.loading = false;
-                      });
-                  },
-                  function() {
-                    window.alert("There was an error accessing the record.\nTry refreshing the page");
-                  });
-            }
-          };
+        var updateAllDatumInThisSessionWithUpdatedSessionInfo = function(index) {
+          if (scopeDataToEdit[index].session._id === $scope.fullCurrentSession._id) {
+            Data.async($rootScope.corpus.dbname, scopeDataToEdit[index].id)
+              .then(function(editedRecord) {
+                  // Edit record with updated session info
+                  // and save
+                  editedRecord.session = $scope.fullCurrentSession.toJSON();
+                  Data.saveCouchDoc($rootScope.corpus.dbname, editedRecord)
+                    .then(function() {
+                      $rootScope.loading = false;
+                    });
+                },
+                function() {
+                  window.alert("There was an error accessing the record.\nTry refreshing the page");
+                });
+          }
+        };
+        var r = false;
+        if (scopeDataToEdit.length > 20) {
+          r = confirm("This session has "+scopeDataToEdit.length+ " items, do you want to also update the session information on each of the records in this session?\n\n (This could take a while.)");
+        }
+        if (r === true) {
+          $rootScope.loading = true;
           // Update all records tied to this session
           for (var i in scopeDataToEdit) {
-            $rootScope.loading = true;
             updateAllDatumInThisSessionWithUpdatedSessionInfo(i);
           }
           $scope.loadDataInCurrentSessionFromServer();
-        });
-    }
+        } else {
+          $rootScope.loading = false;
+        }
+      });
 
   };
 
@@ -2674,8 +2679,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-  $timeout(function(){
-    if(!$scope.documentReady){
+  $timeout(function() {
+    if (!$scope.documentReady) {
       $rootScope.notificationMessage = "The data didn't load within a reasonable time. Please try reloading the page.";
       $rootScope.openNotification();
     }
