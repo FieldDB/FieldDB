@@ -100,8 +100,8 @@ var convertFieldDBDatumIntoSpreadSheetDatum = function(spreadsheetDatum, fieldDB
   // upgrade to v2.0+
   spreadsheetDatum.images = fieldDBDatum.images || [];
   fieldDBDatum.datumFields.map(function(datumField) {
-    if (datumField[fieldKeyName] === "relatedData") {
-      spreadsheetDatum.relatedData = datumField.json;
+    if (datumField[fieldKeyName] === "relatedData" && datumField.json && datumField.json.relatedData) {
+      spreadsheetDatum.relatedData = datumField.json.relatedData;
     }
   });
   spreadsheetDatum.relatedData = spreadsheetDatum.relatedData || [];
@@ -280,7 +280,8 @@ var convertSpreadSheetDatumIntoFieldDBDatum = function(spreadsheetDatum, fieldDB
   if (spreadsheetDatum.relatedData && spreadsheetDatum.relatedData.length > 0) {
     fieldDBDatum.datumFields.collection.map(function(datumField) {
       if (datumField.id === "relatedData") {
-        datumField.json = spreadsheetDatum.relatedData;
+        datumField.json = datumField.json || {};
+        datumField.json.relatedData = spreadsheetDatum.relatedData;
         datumField.value = spreadsheetDatum.relatedData.map(function(json) {
           return json.filename;
         });
