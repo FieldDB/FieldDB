@@ -940,14 +940,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
               return;
             }
             // Use map-reduce to get corpus details
-            var corpus = {};
+            var corpus = {
+              team: {}
+            };
             corpus.dbname = corpusIdentifierToRetrieve;
             corpus.title = corpusIdentifierToRetrieve;
-            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
-            corpus.gravatar = corpus.gravatar || md5.createHash(corpus.dbname);
-            if (corpus.team && corpus.team.gravatar) {
-              corpus.gravatar = corpus.team.gravatar;
-            }
+            corpus.team.gravatar = corpus.team.gravatar || md5.createHash(corpus.dbname);
             $scope.corpora.push(corpus);
 
           };
