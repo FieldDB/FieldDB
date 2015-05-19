@@ -569,7 +569,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.searching = false;
   $rootScope.activeSubMenu = 'none';
   $scope.showCreateSessionDiv = false;
-  $scope.editSessionDetails = false;
+  $scope.showEditSessionDetails = false;
   $scope.createNewSessionDropdown = false;
   $scope.currentDate = JSON.parse(JSON.stringify(new Date()));
   $scope.activities = {};
@@ -1100,7 +1100,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   });
 
   $scope.editSession = function(editSessionInfo, scopeDataToEdit) {
-    $scope.editSessionDetails = false;
+    $scope.showEditSessionDetails = false;
     $rootScope.loading = true;
     // var newSession = new FieldDB.Session($scope.fullCurrentSession);
     // for (var key in editSessionInfo) {
@@ -1109,7 +1109,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     //   }
     // }
     // Save session record
-    Data.saveCouchDoc($rootScope.corpus.dbname, $scope.fullCurrentSession.toJSON())
+    $scope.fullCurrentSession.unsaved = true;
+    $scope.fullCurrentSession.save()
       .then(function() {
         var directobject = $scope.fullCurrentSession.dateAndGoalSnippet || "an elicitation session";
         var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
@@ -1169,52 +1170,45 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.notificationMessage = "You must select a session to delete.";
       $rootScope.openNotification();
     } else {
-      var r = confirm("Are you sure you want to put this session in the trash?");
-      if (r === true) {
-        Data.async($rootScope.corpus.dbname, $scope.fullCurrentSession._id)
-          .then(function(sessionToMarkAsDeleted) {
-            sessionToMarkAsDeleted.trashed = "deleted";
-            var rev = sessionToMarkAsDeleted._rev;
-            if (debugging) {
-              console.log(rev);
-            }
-            Data.saveCouchDoc($rootScope.corpus.dbname, sessionToMarkAsDeleted)
-              .then(function(response) {
-
-                if (debugging) {
-                  console.log(response);
-                }
-                var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
-                $scope.addActivity([{
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "personal"
-                }, {
-                  verb: "deleted",
-                  verbicon: "icon-trash",
-                  directobjecticon: "icon-calendar",
-                  directobject: "<a href='#session/" + sessionToMarkAsDeleted._id + "'>an elicitation session</a> ",
-                  indirectobject: indirectObjectString,
-                  teamOrPersonal: "team"
-                }], "uploadnow");
-
-                // Remove session from scope
-                for (var i in $scope.sessions) {
-                  if ($scope.sessions[i]._id === $scope.fullCurrentSession._id) {
-                    $scope.sessions.splice(i, 1);
-                  }
-                }
-                // Set active session to All Sessions
-                $scope.fullCurrentSession = $scope.sessions[$scope.sessions.length - 1];
-              }, function(error) {
-                console.warn("there was an error deleting a session", error);
-                window.alert("Error deleting session.\nTry refreshing the page.");
-              });
-          });
+      var reason = prompt("Are you sure you want to put this session in the trash?\n\nYou must add a reason in case other team members wonder why you deleted this.");
+      if (!reason || !reason.trim || !reason.trim()) {
+        $rootScope.notificationMessage = "Session was not deleted.";
+        $rootScope.openNotification();
+        return;
       }
+      $scope.showEditSessionDetails = false;
+      $scope.fullCurrentSession.trash(reason)
+        .then(function() {
+
+          var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
+          $scope.addActivity([{
+            verb: "deleted",
+            verbicon: "icon-trash",
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>an elicitation session</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "personal"
+          }, {
+            verb: "deleted",
+            verbicon: "icon-trash",
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + $scope.fullCurrentSession._id + "'>an elicitation session</a> ",
+            indirectobject: indirectObjectString,
+            teamOrPersonal: "team"
+          }], "uploadnow");
+
+          // Remove session from scope
+          for (var i in $scope.sessions) {
+            if ($scope.sessions[i]._id === $scope.fullCurrentSession._id) {
+              $scope.sessions.splice(i, 1);
+            }
+          }
+          // Set active session to All Sessions
+          $scope.fullCurrentSession = $scope.sessions[$scope.sessions.length - 1];
+        }, function(error) {
+          console.warn("there was an error a session", error);
+          window.alert("Error putting the session in the trash.\nTry refreshing the page.");
+        });
     }
   };
 
@@ -1393,7 +1387,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $rootScope.markNewAsEdited = function() {
-    if (JSON.stringify($scope.newFieldData) == "{}") {
+    if (JSON.stringify($scope.newFieldData) === "{}") {
       return;
     }
     $rootScope.newRecordHasBeenEdited = true;
