@@ -1016,6 +1016,16 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
           $rootScope.corpus.loadCorpusByDBname(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
+            if ($rootScope.corpus && $rootScope.corpus._rev) {
+              if (!$rootScope.corpus.confidential || !$rootScope.corpus.confidential.secretkey) {
+                $rootScope.corpus.previousConfidential = $rootScope.corpus.confidential;
+                $rootScope.corpus.previousConfidentialReason = "Corpus was created by a version of auth service which was missing the confidential creation. Updated at " + $rootScope.corpus._rev;
+                $rootScope.corpus.confidential = new FieldDB.Confidential();
+                $rootScope.corpus.confidential.secretkey = FieldDB.Confidential.secretKeyGenerator();
+                $rootScope.corpus.unsaved = true;
+                $rootScope.corpus.save();
+              }
+            }
             $scope.selectCorpus($rootScope.corpus);
           }, function(error) {
             // $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
