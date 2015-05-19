@@ -85,7 +85,7 @@
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
-            {{$parent.fullCurrentSession.dateAndGoalSnippet}}
+            {{$parent.fullCurrentSession.dateAndGoalSnippet | limitTo:50}}
             <br />
             <i class="fa whiteicon fa-cloud">
             </i>
