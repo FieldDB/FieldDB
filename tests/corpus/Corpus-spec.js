@@ -601,7 +601,8 @@ describe("Corpus", function() {
       var corpus = new Corpus();
       var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("lastname");
       expect(normalizedField.id).toEqual("lastname");
-      expect(normalizedField.help).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)");
+      expect(normalizedField.help).toEqual("The last name of the speaker/participant (encrypted).");
+      expect(normalizedField.helpLinguists).toEqual("The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous).");
     });
 
     it("should ignore empty fields", function() {
@@ -639,7 +640,8 @@ describe("Corpus", function() {
       var normalizedField = corpus.normalizeFieldWithExistingCorpusFields("Code Permanent");
       expect(normalizedField.id).toEqual("anonymousCode");
       expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
-      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language speakers/participants.");
+      expect(normalizedField.helpLinguists).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
     });
 
     it("should find existing non default fields", function() {
