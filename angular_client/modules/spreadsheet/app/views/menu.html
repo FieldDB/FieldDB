@@ -93,9 +93,12 @@
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="data==undefined && loading==false && (writePermissions==true || commentPermissions==true)">
-              {{getSavedState().text}}
-            </button>
+            <span ng-show="dataentry">
+              <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="!writePermissions && !commentPermissions">
+                <i ng-class="getSavedState().icon">
+                </i> {{getSavedState().text}}
+              </button>
+            </span>
             &nbsp;
             <button class="btn btn-warning" ng-click="logOut()">
               <i class="fa whiteicon fa-arrow-right">
@@ -381,10 +384,12 @@
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="data==undefined && loading==false">
-            <i ng-class="getSavedState().icon">
-            </i>
-          </button>
+          <span ng-show="dataentry">
+            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="!writePermissions && !commentPermissions">
+              <i ng-class="getSavedState().icon">
+              </i>
+            </button>
+          </span>
           &nbsp;
           <button class="btn btn-warning" ng-click="logOut()">
             <i class="fa whiteicon fa-arrow-right">
