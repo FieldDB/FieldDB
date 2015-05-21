@@ -1808,14 +1808,14 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           if (fieldkey === "datumTags") {
             dataString = JSON.stringify(spreadsheetDatum.datumTags);
             dataString = dataString.toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
+            if (dataString.search(searchTerm) > -1) {
               return true;
             }
           } else if (fieldkey === "comments") {
             for (var j in spreadsheetDatum.comments) {
               for (var commentKey in spreadsheetDatum.comments[j]) {
                 dataString = spreadsheetDatum.comments[j][commentKey].toString();
-                if (dataString.indexOf(searchTerm) > -1) {
+                if (dataString.search(searchTerm) > -1) {
                   return true;
                 }
               }
@@ -1823,12 +1823,12 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           } else if (fieldkey === "dateModified") {
             //remove alpha characters from the date so users can search dates too, but not show everysearch result if the user is looking for "t" #1657
             dataString = spreadsheetDatum[fieldkey].toString().toLowerCase().replace(/[a-z]/g, " ");
-            if (dataString.indexOf(searchTerm) > -1) {
+            if (dataString.search(searchTerm) > -1) {
               return true;
             }
           } else {
             dataString = spreadsheetDatum[fieldkey].toString().toLowerCase();
-            if (dataString.indexOf(searchTerm) > -1) {
+            if (dataString.search(searchTerm) > -1) {
               return true;
             }
           }
