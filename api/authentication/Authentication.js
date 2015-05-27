@@ -71,17 +71,25 @@ var Authentication = function Authentication(options) {
     // }
     return self.user;
   }, function(error) {
-    self.loading = false;
-    self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
-    if (error.status === 409) {
-      self.dispatchEvent("authenticate:mustconfirmidentity");
-    } else {
-      // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
-      self.error = error.userFriendlyErrors.join(" ");
-      self.dispatchEvent("authenticate:mustconfirmidentity");
-    }
-    self.render();
-    deferred.reject(error);
+    // Wait and see if a login call is coming...
+    Q.nextTick(function() {
+      if (self.loggingIn) {
+        deferred.resolve(self.user);
+        return;
+      }
+      self.loading = false;
+      self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
+      if (error.status === 401) {
+        self.dispatchEvent("authenticate:mustconfirmidentity");
+      } else {
+        // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
+        self.error = error.userFriendlyErrors.join(" ");
+        // self.dispatchEvent("authenticate:mustconfirmidentity");
+      }
+      self.render();
+      deferred.reject(error);
+    });
+
     return error;
   }).fail(function(error) {
     console.error(error.stack, self);
@@ -157,7 +165,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       this.error = "";
       this.status = "";
-      this.loading = true;
+      this.loading = this.loggingIn = true;
 
       var handleFailedLogin = function(error) {
         self.loading = false;
@@ -171,6 +179,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
         deferred.reject(error);
+        delete self.loggingIn;
       };
 
       self.resumingSessionPromise = deferred.promise;
@@ -208,9 +217,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               deferred.resolve(self.user);
             });
 
+            delete self.loggingIn;
           }, //end successful login
           handleFailedLogin)
         .fail(function(error) {
+          delete self.loggingIn;
           console.error(error.stack, self);
           handleFailedLogin(error);
         });
@@ -226,7 +237,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       if (!loginDetails || !loginDetails.password) {
         Q.nextTick(function() {
-          deferred.reject("You must enter your password to confirm your identity.");
+          deferred.reject({
+            userFriendlyErrors: ["You must enter your password to confirm your identity."]
+          });
         });
         return deferred.promise;
       }
@@ -237,7 +250,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         !this.user.hash ||
         !this.user.salt) {
         Q.nextTick(function() {
-          deferred.reject("You must login first.");
+          deferred.reject({
+            userFriendlyErrors: "You must login first."
+          });
         });
         return deferred.promise;
       }
@@ -396,15 +411,20 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.loading = true;
 
       this.save();
-      return Database.prototype.logout(options).then(function() {
+      options = options || {};
+      return Database.prototype.logout(options.url).then(function() {
         self.dispatchEvent("logout");
         self.loading = false;
-        self.warn("Reloading the page");
-        try {
-          window.location.reload();
-        } catch (e) {
-          self.debug("Window is undefined", e);
+
+        if (options && !options.letClientHandleCleanUp) {
+          self.warn("Reloading the page");
+          try {
+            window.location.reload();
+          } catch (e) {
+            self.debug("Window is undefined", e);
+          }
         }
+
       });
     }
   },

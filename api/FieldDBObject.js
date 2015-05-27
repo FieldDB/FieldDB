@@ -73,7 +73,7 @@ try {
  *           a corpus is created. It must be a file save name, and be a permitted
  *           name in CouchDB which means it is [a-z] with no uppercase letters or
  *           symbols, by convention it cannot contain -, but _ is acceptable.
-
+ 
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
@@ -140,6 +140,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "_unsaved",
   "_parent",
   "application",
+  "debugMessages",
   "bugMessage",
   "confirmMessage",
   "contextualizer",
@@ -1866,9 +1867,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           attributesToIgnore = [];
         }
         attributesToIgnore = attributesToIgnore.concat(FieldDBObject.internalAttributesToNotJSONify);
-
+        // this.debug("Ignoring for json ", attributesToIgnore);
         for (aproperty in this) {
-          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && attributesToIgnore.indexOf(aproperty) === -1) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && attributesToIgnore.indexOf(aproperty) === -1 && attributesToIgnore.indexOf(aproperty.replace(/^_/, "")) === -1) {
             underscorelessProperty = aproperty.replace(/^_/, "");
             if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
               underscorelessProperty = "_" + underscorelessProperty;
@@ -1917,7 +1918,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           }
         }
 
-        if (this.collection !== "private_corpora") {
+        if (this.collection !== "private_corpora" || this.api !== "private_corpora") {
           delete json.confidential;
           delete json.confidentialEncrypter;
         } else {
@@ -1931,7 +1932,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
           delete json.previousFieldDBtype;
         }
-
+        if (attributesToIgnore.indexOf("fieldDBtype") > -1) {
+          delete json.fieldDBtype;
+        }
         return json;
 
       } catch (e) {

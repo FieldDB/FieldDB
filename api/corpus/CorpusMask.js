@@ -82,7 +82,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   id: {
     get: function() {
-      return "corpus";
+      this._id = "corpus";
+      return this._id;
     },
     set: function(value) {
       if (value === this._id) {
@@ -435,6 +436,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   prefs: {
     get: function() {
+      if (!this._prefs && this.INTERNAL_MODELS && this.INTERNAL_MODELS.prefs && this.INTERNAL_MODELS.prefs.prototype && this.INTERNAL_MODELS.prefs.prototype.defaults) {
+        this.prefs = this.INTERNAL_MODELS.prefs.prototype.defaults;
+      }
       return this._prefs;
     },
     set: function(value) {
@@ -484,13 +488,14 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       }
       this.preferredDatumTemplateAtVersion = this.version;
       this.preferredDatumTemplate = null;
-
-      var order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+      this.prefs = this.prefs || {};
+      this.prefs.debug(" this.prefs.preferredSpreadsheetShape.rows ", this.prefs.preferredSpreadsheetShape.rows);
+      var order = ["judgement", "utterance", "morphemes", "gloss", "translation", "context", "documentation"];
       if (value === "compacttemplate") {
         order = ["judgement", "utterance", "morphemes", "gloss", "translation"];
 
       } else if (value === "fulltemplate") {
-        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "context", "documentation"];
 
       } else if (value === "mcgillfieldmethodsspring2014template") {
         order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
@@ -500,11 +505,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
       } else if (value === "yalefieldmethodsspring2014template") {
         order = ["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags"];
-
-        this.prefs.preferedSpreadsheetShape = this.prefs.preferedSpreadsheetShape;
-        this.prefs.preferedSpreadsheetShape.rows = 4;
+        this.prefs.debug("setting to yalefieldmethodsspring2014template");
+        this.prefs.preferredSpreadsheetShape = this.prefs.preferredSpreadsheetShape;
+        this.prefs.preferredSpreadsheetShape.rows = 4;
       }
-
 
       var fieldTemplate = {
         "label": "",

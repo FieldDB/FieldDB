@@ -241,4 +241,14 @@ describe("Filter: fielddbAgoDate", function() {
     });
 
   });
+
+  describe("future", function(){
+
+    it("should support any future, same as the past", function() {
+      var inputDate = new Date(Date.now() + onemonth * 2);
+      expect(fielddbAgoDate(inputDate)).toBe("in 2 months");
+    });
+
+  });
+
 });

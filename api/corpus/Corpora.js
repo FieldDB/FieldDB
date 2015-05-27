@@ -40,10 +40,28 @@ Corpora.prototype = Object.create(Collection.prototype, /** @lends Corpora.proto
     }
   },
 
-  insertNewConnectionFromObject: {
-    value: function(commentObject) {
-      commentObject.timestamp = Date.now();
-      this.add(new Connection(commentObject));
+  findCorpusConnectionFromTitleAsUrl: {
+    value: function(titleOrCorpusIdentifier, optionalOwnersUsername) {
+      var potentialMatches = this.find(titleOrCorpusIdentifier);
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the dbname: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find(optionalOwnersUsername + "-" + titleOrCorpusIdentifier);
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the owner's username: " + optionalOwnersUsername + " and the dbname: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find("title", titleOrCorpusIdentifier, "fuzzy");
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the title: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find("titleAsUrl", titleOrCorpusIdentifier, "fuzzy");
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the titleAsUrl: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
     }
   },
 
@@ -52,7 +70,6 @@ Corpora.prototype = Object.create(Collection.prototype, /** @lends Corpora.proto
       return value;
     }
   }
-
 
 });
 exports.Corpora = Corpora;

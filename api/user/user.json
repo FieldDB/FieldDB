@@ -27,7 +27,7 @@
   },
   "appbrand": "",
   "gravatar": "",
-  "appVersionWhenCreated": "1.62.2",
+  "appVersionWhenCreated": "",
   "authServerVersionWhenCreated": "",
   "authUrl": "",
   "created_at": "",
@@ -39,9 +39,9 @@
   "dataLists": [],
   "prefs": {
     "skin": "",
-    "numVisibleDatum": "10",
-    "transparentDashboard": "false",
-    "alwaysRandomizeSkin": "true",
+    "numVisibleDatum": 10,
+    "transparentDashboard": false,
+    "alwaysRandomizeSkin": true,
     "numberOfItemsInPaginatedViews": 10,
     "unicodes": [{
       "symbol": "ɔ",
@@ -132,7 +132,7 @@
       "tipa": "",
       "useCount": 0
     }],
-    "preferedDashboardLayout": "default",
+    "preferredDashboardLayout": "default",
     "showNewDatumAtTopOrBottomOfDataEntryArea": "bottom",
     "hotkeys": []
   },
@@ -154,14 +154,7 @@
   "firstname": "",
   "lastname": "",
   "sessionHistory": [],
-  "hotkeys": {
-    "firstKey": "",
-    "secondKey": "",
-    "description": "",
-    "filledWithDefaults": true
-  },
+  "hotkeys": [],
   "newCorpora": [],
-  "roles": [],
-  "authenticated": true,
-  "accessibleDBS": []
+  "roles": []
 }

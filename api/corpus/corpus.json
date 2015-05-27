@@ -92,25 +92,8 @@
     "json": {
       "grammatical": true
     },
-    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
+    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange).",
     "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
-  }, {
-    "id": "orthography",
-    "labelFieldLinguists": "Orthography",
-    "labelNonLinguists": "Written",
-    "labelTranslators": "Orthography",
-    "type": "IGT, parallelText",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "writingSystem": {
-        "id": "",
-        "referenceLink": ""
-      }
-    },
-    "help": "What was said/written using the alphabet/writing system of the language.",
-    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
   }, {
     "id": "utterance",
     "labelFieldLinguists": "Transcription",
@@ -127,21 +110,7 @@
       }
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
-    "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
-  }, {
-    "id": "allomorphs",
-    "labelFieldLinguists": "Allomorphs",
-    "labelNonLinguists": "",
-    "labelTranslators": "Prefixe-s-root-suffixe-s",
-    "type": "IGT",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "linguist",
-    "defaultfield": true,
-    "json": {
-      "alternates": []
-    },
-    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+    "helpLinguists": "Unparsed utterance in the language, in orthography or romanized or IPA transcription (what ever is commonly used for linguistic examples of this language.) Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
   }, {
     "id": "morphemes",
     "labelFieldLinguists": "Morphemes",
@@ -154,7 +123,7 @@
     "json": {
       "alternates": []
     },
-    "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
+    "help": "Words divided into prefixes, root and suffixes using a - between each eg: un-forget-able.",
     "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
   }, {
     "id": "gloss",
@@ -174,27 +143,8 @@
         "referenceLink": ""
       }
     },
-    "help": "Translation for each prefix, root and suffix in the words",
-    "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl"
-  }, {
-    "id": "syntacticCategory",
-    "labelFieldLinguists": "Morpho-Syntactic Category",
-    "labelNonLinguists": "",
-    "labelTranslators": "Part of Speech",
-    "type": "IGT",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "machine, linguist",
-    "defaultfield": true,
-    "json": {
-      "alternates": [],
-      "conventions": {
-        "id": "",
-        "tagSet": [],
-        "referenceLink": ""
-      }
-    },
-    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
-    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
+    "help": "Translation for each prefix, root and suffix in the words.",
+    "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc).  Sample entry: friend-fem-pl"
   }, {
     "id": "translation",
     "labelFieldLinguists": "Translation",
@@ -233,11 +183,11 @@
     "json": {
       "tags": []
     },
-    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
+    "help": "Linguistic/social context when this can be said.",
+    "helpLinguists": "Linguistic/social context when this can be said, or when it is semantically/pragmatically felicitous etc."
   }, {
     "id": "documentation",
-    "labelFieldLinguists": "Discussion for Handouts",
+    "labelFieldLinguists": "Discussion",
     "labelNonLinguists": "Additional Documentation",
     "labelTranslators": "Documentation",
     "type": "wiki, LaTeX",
@@ -248,8 +198,58 @@
       "wiki": "",
       "latex": ""
     },
-    "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
+    "help": "Additional discussion of this example (for handouts or for documentation).",
+    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). This can be in Wiki or LaTeX or plain text formatting"
+  }, {
+    "id": "orthography",
+    "labelFieldLinguists": "Orthography",
+    "labelNonLinguists": "Written",
+    "labelTranslators": "Orthography",
+    "type": "IGT, parallelText",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      }
+    },
+    "help": "What was said/written using the alphabet/writing system of the language.",
+    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
+  }, {
+    "id": "allomorphs",
+    "labelFieldLinguists": "Allomorphs",
+    "labelNonLinguists": "",
+    "labelTranslators": "Prefixe-s-root-suffixe-s",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": []
+    },
+    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix.",
+    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+  }, {
+    "id": "syntacticCategory",
+    "labelFieldLinguists": "Morpho-Syntactic Category",
+    "labelNonLinguists": "",
+    "labelTranslators": "Part of Speech",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine, linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "This is an optional field which can be used to help with search and data cleaning. eg: noun-thematicvowel-plural",
+    "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
   }, {
     "id": "relatedData",
     "labelFieldLinguists": "Related Data",
@@ -263,9 +263,7 @@
     "json": {
       "relatedData": []
     },
-    "help": "Related data in the database, or at any web url.",
-    "helpLinguists": "Related data in the database, or at any web url.",
-    "helpDevelopers": "Related data in the database, or at any web url."
+    "help": "Related data in the database, or at any web url."
   }, {
     "id": "tags",
     "labelFieldLinguists": "Tags",
@@ -292,8 +290,8 @@
     "json": {
       "tags": []
     },
-    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
-    "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
+    "help": "Tags about data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+    "helpLinguists": "Any number of tags of data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
   }, {
     "id": "enteredByUser",
     "labelFieldLinguists": "Imported/Entered By",
@@ -309,8 +307,8 @@
       "hardware": {},
       "software": {}
     },
-    "help": "The user who originally entered the datum",
-    "helpLinguists": "The user who originally entered the datum"
+    "help": "The user who originally entered this.",
+    "helpLinguists": "The user who originally entered this."
   }, {
     "id": "modifiedByUser",
     "labelFieldLinguists": "Modified By",
@@ -324,8 +322,8 @@
     "json": {
       "users": []
     },
-    "help": "An array of users who modified the datum",
-    "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
+    "help": "An array of users who modified this",
+    "helpLinguists": "An array of users who modified this, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
   }, {
     "id": "syntacticTreeLatex",
     "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
@@ -389,7 +387,7 @@
     },
     "help": "This is a comma seperated field of all the consultants/publications/sources who were were the source/present for this elicitation session.",
     "helpLinguists": "This is a comma seperated field of all the consultants/publications/sources who  were were the source/present for this elicitation session.",
-    "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymouse codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
+    "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymous codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
   }, {
     "id": "dialect",
     "type": "language",
@@ -542,8 +540,8 @@
     "encrypted": true,
     "showToUserTypes": "all",
     "defaultfield": true,
-    "help": "The last name of the speaker/participant (encrypted)",
-    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)"
+    "help": "The last name of the speaker/participant (encrypted).",
+    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)."
   }, {
     "id": "username",
     "labelFieldLinguists": "Username",

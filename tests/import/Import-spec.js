@@ -516,7 +516,8 @@ describe("api/import/Import", function() {
       var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
       expect(normalizedField.id).toEqual("anonymousCode");
       expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
-      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language speakers/participants.");
+      expect(normalizedField.helpLinguists).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
     });
 
   });
@@ -538,7 +539,8 @@ describe("api/import/Import", function() {
       var normalizedField = importer.normalizeImportFieldWithExistingCorpusFields("Code Permanent");
       expect(normalizedField.id).toEqual("anonymousCode");
       expect(normalizedField.labelExperimenters).toEqual("Code Permanent");
-      expect(normalizedField.help).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
+      expect(normalizedField.help).toEqual("A field to anonymously identify language speakers/participants.");
+      expect(normalizedField.helpLinguists).toEqual("A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).");
     });
 
   });

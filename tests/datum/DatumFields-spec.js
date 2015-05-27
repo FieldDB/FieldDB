@@ -19,7 +19,7 @@ FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObj
 Confidential = Confidential || require("./../../api/confidentiality_encryption/Confidential").Confidential;
 
 var DEFAULT_CORPUS_MODEL = require("./../../api/corpus/corpus.json");
-var sampleDatumFields = function() {
+var defaultDatumFields = function() {
   return JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL.datumFields));
 };
 
@@ -42,7 +42,7 @@ describe("lib/DatumFields", function() {
     beforeEach(function() {
       collection = new DatumFields({
         inverted: true,
-        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
+        collection: [defaultDatumFields()[0], defaultDatumFields()[1]]
       });
       collection.debug("beforeEach");
     });
@@ -69,11 +69,11 @@ describe("lib/DatumFields", function() {
     });
 
     it("should use the primary key for find", function() {
-      expect(collection.find("utterance")[0].id).toEqual(sampleDatumFields()[2].id);
+      expect(collection.find("utterance")[0].id).toEqual(defaultDatumFields()[1].id);
     });
 
     it("should accept inverted", function() {
-      expect(collection.collection[0].id).toEqual(sampleDatumFields()[2].id);
+      expect(collection.collection[0].id).toEqual(defaultDatumFields()[1].id);
     });
 
     it("should accept model of items to be defined", function() {
@@ -104,8 +104,8 @@ describe("lib/DatumFields", function() {
 
     it("should permit construction with just an array", function() {
       var newcollection = new DatumFields([
-        sampleDatumFields()[0],
-        sampleDatumFields()[1]
+        defaultDatumFields()[0],
+        defaultDatumFields()[1]
       ]);
       expect(newcollection.length).toEqual(2);
     });
@@ -120,8 +120,8 @@ describe("lib/DatumFields", function() {
         inverted: true
       });
 
-      collection.add(sampleDatumFields()[0]);
-      collection.add(sampleDatumFields()[2]);
+      collection.add(defaultDatumFields()[0]);
+      collection.add(defaultDatumFields()[2]);
     });
 
     it("should be able to add items", function() {
@@ -129,12 +129,12 @@ describe("lib/DatumFields", function() {
     });
 
     it("should permit push to add to the bottom", function() {
-      var addition = collection.push(sampleDatumFields()[3]);
+      var addition = collection.push(defaultDatumFields()[3]);
       expect(collection.collection[2]).toEqual(addition);
     });
 
     it("should permit unshift to add to the top", function() {
-      var addition = collection.unshift(sampleDatumFields()[4]);
+      var addition = collection.unshift(defaultDatumFields()[4]);
       expect(collection.collection[0]).toEqual(addition);
     });
 
@@ -145,7 +145,7 @@ describe("lib/DatumFields", function() {
 
     beforeEach(function() {
       collection = new DatumFields({
-        collection: sampleDatumFields()
+        collection: defaultDatumFields()
       });
       collection.utterance.value = "Noqata tusunayawanmi";
       collection.morphemes.value = "Noqa-ta tusu-naya-wa-n-mi";
@@ -166,13 +166,13 @@ describe("lib/DatumFields", function() {
 
     it("should be able to find items by any attribute", function() {
       collection.debug("find help" + JSON.stringify(collection._collection));
-      expect(collection.find("helpLinguists", "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas")[0].id).toEqual(sampleDatumFields()[1].id);
+      expect(collection.find("helpLinguists", "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas")[0].id).toEqual(defaultDatumFields()[7].id);
     });
 
     it("should accpet a RegExp to find items", function() {
       expect(collection.find("type", /(tags|parallelText)/i).map(function(item) {
         return item.labelFieldLinguists;
-      })).toEqual(["Orthography", "Transcription", "Translation", "Tags", "Data validity/verification Status"]);
+      })).toEqual(["Transcription", "Translation", "Orthography", "Tags", "Data validity/verification Status"]);
     });
 
     it("should be able to fuzzy find items by any attribute", function() {
@@ -185,7 +185,7 @@ describe("lib/DatumFields", function() {
     it("should be able to clone an existing collection", function() {
       var newbarecollection = collection.clone();
       // console.log(newbarecollection);
-      // expect(newbarecollection).toEqual(sampleDatumFields());
+      // expect(newbarecollection).toEqual(defaultDatumFields());
       var newcollection = new DatumFields(newbarecollection);
       expect(newcollection.utterance.value).toEqual(collection.utterance.value);
       expect(newcollection.utterance.mask).toEqual(collection.utterance.mask);
@@ -380,7 +380,7 @@ describe("lib/DatumFields", function() {
     beforeEach(function() {
       fields = new DatumFields({
         inverted: true,
-        collection: [sampleDatumFields()[0], sampleDatumFields()[2]]
+        collection: [defaultDatumFields()[0], defaultDatumFields()[1]]
       });
     });
 

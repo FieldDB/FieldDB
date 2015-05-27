@@ -10,6 +10,7 @@ couchapp_dev/_attachments
 couchapp_minified/views
 couchapp_minified/lists
 couchapp_minified/_attachments
+dist/
 
 spreadsheet_build_dev
 

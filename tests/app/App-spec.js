@@ -44,7 +44,7 @@ describe("App", function() {
 
       expect(app).toBeDefined();
 
-      // Set locale to user's prefered locale by default
+      // Set locale to user's preferred locale by default
       expect(app.contextualizer.currentLocale.iso).toBeDefined();
       try {
         if (navigator.languages[0].indexOf(app.contextualizer.currentLocale.iso) === -1) {
@@ -124,7 +124,7 @@ describe("App", function() {
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
+      expect(app.corpus.dbname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
     }, specIsRunningTooLong);
 
     it("should be able to load an import dashboard based on routeParams", function(done) {
@@ -149,7 +149,7 @@ describe("App", function() {
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
+      expect(app.corpus.dbname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -175,7 +175,7 @@ describe("App", function() {
       }).done(done);
 
       expect(app.currentCorpusDashboard).toEqual("nottestinguserexistsonlyrouteparams/firstcorpus");
-      expect(app.currentCorpusDashboardDBname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
+      expect(app.corpus.dbname).toEqual("nottestinguserexistsonlyrouteparams-firstcorpus");
 
     }, specIsRunningTooLong);
 
@@ -190,7 +190,7 @@ describe("App", function() {
       expect(processingPromise).toBeUndefined();
 
       expect(app.currentCorpusDashboard).toBeUndefined();
-      expect(app.currentCorpusDashboardDBname).toBeUndefined();
+      expect(app.corpus.dbname).toBeFalsy();
 
     });
 
@@ -242,7 +242,9 @@ describe("App", function() {
     });
 
     it("should mask data which is encrypted", function() {
-      expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      if (app.participantsList.docs.migm740610ea.fieldDBtype === "Participant") {
+        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+      }
     });
 
     it("should prompt user to confirm their identity to enter into unmasked mode showing encrypted data", function(done) {
@@ -251,7 +253,11 @@ describe("App", function() {
       FieldDBObject.application = app;
       app.enterDecryptedMode().then(function() {
         FieldDBObject.application = app;
-        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("rkvadze");
+        if (app.participantsList.docs.migm740610ea.fieldDBtype === "Participant") {
+          expect(app.participantsList.docs.migm740610ea.lastname).toEqual("rkvadze");
+        } else {
+          expect(app.participantsList.docs.migm740610ea.fields[0].fieldDBtype).toBeUndefined();
+        }
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -268,7 +274,9 @@ describe("App", function() {
       }, function() {
         FieldDBObject.application = app;
         expect(app.decryptedMode).toEqual(false);
-        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+        if (app.participantsList.docs.migm740610ea.fieldDBtype === "Participant") {
+          expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+        }
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -283,8 +291,10 @@ describe("App", function() {
       app.enterDecryptedMode().then(function() {
         FieldDBObject.application = app;
         expect(app.decryptedMode).toEqual(true);
-        expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
-        expect(app.decryptedMode).toEqual(false);
+        if (app.participantsList.docs.migm740610ea.fieldDBtype === "Participant") {
+          expect(app.participantsList.docs.migm740610ea.lastname).toEqual("xxxxxxx");
+          expect(app.decryptedMode).toEqual(false);
+        }
       }).done(done);
     }, specIsRunningTooLong);
 
