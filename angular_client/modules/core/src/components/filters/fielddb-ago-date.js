@@ -51,61 +51,69 @@ angular.module("fielddbAngular").filter("fielddbAgoDate", function() {
     var minuteDiff = ((greenwichdate.getTime() - input.getTime()) / 1000);
     var dayDiff = Math.floor(minuteDiff / 86400);
 
+    var prefix;
+    var suffix;
+
     if (isNaN(dayDiff) || dayDiff < 0) {
-      return "--";
+      prefix = "in ";
+      suffix = "";
+    } else {
+      prefix = "";
+      suffix = " ago";
     }
+    dayDiff = Math.abs(dayDiff);
     if (dayDiff >= 1430) {
-      return (Math.round(dayDiff / 365) + " years ago");
+      return prefix + (Math.round(dayDiff / 365) + " years" + suffix);
     }
     if (dayDiff >= 1278) {
-      return "3.5 years ago";
+      return prefix + "3.5 years" + suffix;
     }
     if (dayDiff >= 1065) {
-      return "3 years ago";
+      return prefix + "3 years" + suffix;
     }
     if (dayDiff >= 913) {
-      return "2.5 years ago";
+      return prefix + "2.5 years" + suffix;
     }
     if (dayDiff >= 730) {
-      return "2 years ago";
+      return prefix + "2 years" + suffix;
     }
     if (dayDiff >= 540) {
-      return "1.5 years ago";
+      return prefix + "1.5 years" + suffix;
     }
     if (dayDiff >= 50) {
-      return (Math.round(dayDiff / 31) + " months ago");
+      return prefix + (Math.round(dayDiff / 31) + " months" + suffix);
     }
     if (dayDiff >= 48) {
-      return "1.5 months ago";
+      return prefix + "1.5 months" + suffix;
     }
     if (dayDiff >= 40) {
-      return "1 month ago";
+      return prefix + "1 month" + suffix;
     }
     if (dayDiff >= 16) {
-      return (Math.round(dayDiff / 7) + " weeks ago").replace("1 weeks", "1 week");
+      return prefix + (Math.round(dayDiff / 7) + " weeks" + suffix).replace("1 weeks", "1 week");
     }
     if (dayDiff >= 2) {
-      return (Math.round(dayDiff / 1) + " days ago").replace("1 days", "1 day");
+      return prefix + (Math.round(dayDiff / 1) + " days" + suffix).replace("1 days", "1 day");
     }
     if (dayDiff >= 1) {
-      return "Yesterday";
+      return prefix + "Yesterday";
     }
 
     if (minuteDiff >= 5000) {
-      return (Math.floor(minuteDiff / 3600) + " hours ago").replace("1 hours", "1.5 hours");
+      return prefix + (Math.floor(minuteDiff / 3600) + " hours" + suffix).replace("1 hours", "1.5 hours");
     }
 
     if (minuteDiff >= 4000) {
-      return "1 hour ago";
+      return prefix + "1 hour" + suffix;
     }
     //  if(minuteDiff >= 7200 ){
-    //    Math.floor(minuteDiff / 3600) + " 1 hour ago";
+    //    Math.floor(minuteDiff / 3600) + " 1 hour" + suffix;
     //  }
     if (minuteDiff >= 70) {
-      return Math.floor(minuteDiff / 60) + " minutes ago";
+      return prefix + Math.floor(minuteDiff / 60) + " minutes" + suffix;
     }
     if (minuteDiff >= 120) {
-      return "1 minute ago";
+      return prefix + "1 minute" + suffix;
     }
     return "just now";
 

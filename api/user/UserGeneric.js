@@ -62,8 +62,8 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
           "numVisibleDatum": 2,
           "transparentDashboard": "false",
           "alwaysRandomizeSkin": "false",
-          "preferedDashboardLayout": "default",
-          "preferedClientApps": ["spreadsheet"],
+          "preferredDashboardLayout": "default",
+          "preferredClientApps": ["spreadsheet"],
           "numberOfItemsInPaginatedViews": 10,
           "unicodes": [{
             "symbol": "ɔ",

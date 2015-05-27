@@ -148,6 +148,10 @@ echo "... setting version on learn x "
 sed 's/android:versionName="[^,]*"/android:versionName="'$SHORT_VERSION'"/' ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml  > output
 mv output ../AndroidLanguageLearningClientForFieldDB/AndroidManifest.xml
 
+echo "... setting version on learn x "
+sed 's/android:versionName="[^,]*"/android:versionName="'$SHORT_VERSION'"/' ../../batumihome/AndroidSpeechRecognitionTrainer/AndroidManifest.xml  > output
+mv output ../../batumihome/AndroidSpeechRecognitionTrainer/AndroidManifest.xml
+
 
 echo ""
 echo "Chrome clients: "

@@ -221,11 +221,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
   appbrand: {
     get: function() {
-      if (this.prefs && !this.prefs.preferedDashboardType) {
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
-          this.debug(" setting preferedDashboardType from user " + this._appbrand);
+          this.debug(" setting preferredDashboardType from user " + this._appbrand);
 
-          this.prefs.preferedDashboardType = "experimenter";
+          this.prefs.preferredDashboardType = "experimenter";
         }
       }
       return this._appbrand || "lingsync";
@@ -243,11 +243,11 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         }
         this._appbrand = value;
       }
-      this.debug(" setting preferedDashboardType from user " + this._appbrand);
-      if (this.prefs && !this.prefs.preferedDashboardType) {
+      this.debug(" setting preferredDashboardType from user " + this._appbrand);
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
-          this.prefs._preferedDashboardType = "experimenter";
-          this.debug(" it is now " + this.prefs.preferedDashboardType);
+          this.prefs._preferredDashboardType = "experimenter";
+          this.debug(" it is now " + this.prefs.preferredDashboardType);
 
         }
       }

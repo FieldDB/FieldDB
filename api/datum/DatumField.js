@@ -540,7 +540,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   help: {
     configurable: true,
     get: function() {
-      return this._helpLinguists || this._help || "Put your team's data entry conventions here (if any)...";
+      return this._help || this._helpNonLinguists || "Put your team's data entry conventions here (if any)...";
     },
     set: function(value) {
       if (value === this._help) {
@@ -551,8 +551,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       this._help = value.trim();
-      if (!this.helpLinguists) {
-        this.helpLinguists = this._help;
+      if (!this._helpNonLinguists) {
+        this.helpNonLinguists = this._help;
       }
     }
   },
