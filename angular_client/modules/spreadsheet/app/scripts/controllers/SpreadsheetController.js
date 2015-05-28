@@ -2317,17 +2317,24 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Paginate data tables
 
-  $scope.numberOfResultPages = function(numberOfRecords) {
-    if (!numberOfRecords) {
+  $scope.numberOfResultPages = function() {
+    if (!allDataInCurrentSession || !allDataInCurrentSession.length) {
       return 0;
     }
     var resultSize = $rootScope.resultSize;
     if (resultSize === "all") {
       resultSize = allDataInCurrentSession.length;
     }
-    var numberOfPages = Math.ceil(numberOfRecords / resultSize);
+    var numberOfPages = Math.ceil(allDataInCurrentSession.length / resultSize);
     // console.log("requesting numberOfResultPages" + numberOfPages);
     return numberOfPages;
+  };
+
+  $scope.numberOfItemsInCurrentSession = function() {
+    if (!allDataInCurrentSession || !allDataInCurrentSession.length) {
+      return 0;
+    }
+    return allDataInCurrentSession.length;
   };
 
   $scope.mockAllDataInCurrentSession = function(mocked) {

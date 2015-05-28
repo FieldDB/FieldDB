@@ -303,9 +303,9 @@ describe('Controller: SpreadsheetStyleDataEntryController', function() {
     });
 
     it('should calculate numberOfResultPages', function() {
-      expect(scope.numberOfResultPages()).toBe(0);
+      expect(scope.numberOfResultPages()).toBe(4);
       expect(scope.resultSize).toBe(3);
-      expect(scope.numberOfResultPages(13)).toBe(5);
+      expect(scope.numberOfResultPages(4)).toBe(4);
 
       rootScope.resultSize = 5;
       expect(scope.numberOfResultPages(13)).toBe(3);

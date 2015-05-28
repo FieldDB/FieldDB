@@ -33,17 +33,17 @@ angular.module('spreadsheetApp')
           return;
         }
         scope.$apply(function() {
-          if (!scope.allData) {
+          if (!scope.dataentry) {
             return;
           }
           // NOTE: scope.$index represents the the scope index of the record when an arrow key is pressed
           console.log("calculating arrows and requesting numberOfResultPages");
-          var lastPage = scope.numberOfResultPages(scope.allData.length);
+          var lastPage = scope.numberOfResultPages();
           var resultSize = $rootScope.resultSize;
           if (resultSize === "all") {
-            resultSize = scope.allData.length;
+            resultSize = scope.numberOfItemsInCurrentSession();
           }
-          var scopeIndexOfLastRecordOnLastPage = resultSize - ((resultSize * lastPage) - scope.allData.length) - 1;
+          var scopeIndexOfLastRecordOnLastPage = resultSize - ((resultSize * lastPage) - scope.numberOfItemsInCurrentSession()) - 1;
           var currentRecordIsLastRecord = false;
           var currentRecordIsFirstRecordOnNonFirstPage = false;
           if ($rootScope.currentPage === (lastPage - 1) && scopeIndexOfLastRecordOnLastPage === scope.$index) {
