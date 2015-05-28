@@ -5,10 +5,13 @@
 
 <label>{{contextualize('locale_Title')}}</label>
 
+<input class="{'choose-field: datumField.userchooseable}" ng-model="datumField.labelNonLinguists"
+	type="text"  title="This field label which is shown to users of non-technical apps. It should be user-friendly and generic." />
 <input class="{'choose-field: datumField.userchooseable}" ng-model="datumField.labelFieldLinguists"
-	type="text" />
+		type="text" title="This the field label which shown to users who want to see the linguisty version of the data. It is not shown in this app, but might be used by other LingSync apps."/>
 
 
 
 <label>{{contextualize('locale_Help_Text')}}</label>
-<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}" ng-model="datumField.helpLinguists"></textarea>
+<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}" ng-model="datumField.help" title="This help text is show to users of the user-friendly apps. It should be friendly and generic and not-to-lingiusty."></textarea>
+<textarea class="help-text" placeholder="{{contextualize('locale_Help_Text_Placeholder')}}" ng-model="datumField.helpLinguists" title="This help text is shown to users who want to see the linguisty version of the data. It is not shown in this app, but might be used by other LingSync apps."></textarea>

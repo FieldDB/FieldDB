@@ -46,7 +46,7 @@ describe("Directive: fielddb-datum-field", function() {
         console.log("post link", el.html());
         console.log("scope datumField ", scope.datumField);
       }
-      expect(el.find("input")[1].value.trim()).toEqual("Discussion for Handouts");
+      expect(el.find("input")[2].value.trim()).toEqual("Discussion for Handouts");
 
     });
   });

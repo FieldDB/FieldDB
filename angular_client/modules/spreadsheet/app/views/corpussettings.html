@@ -134,19 +134,19 @@
       </div>
       <div class="span5">
         <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.id)}}
+          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.second">
         <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.id)}}
+          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.third">
         <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.id)}}
+          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
         </div>
       </div>
 
@@ -184,7 +184,15 @@
     <button class="btn btn-primary"
       ng-click="updateCorpusDetails(corpus)"
       ng-class="{'pulsing': corpus.saving}"
-      ng-disabled="corpus.saving==true">{{contextualize('locale_save_button')}}</button>
+      ng-disabled="corpus.saving==true">
+      {{contextualize('locale_save_button')}}
+    </button>
+    <button class="btn btn-info"
+      ng-click="showLinguistMode=!showLinguistMode">
+      <span ng-show="!showLinguistMode">Easy mode</span>
+      <span ng-show="showLinguistMode">Advanced mode</span>
+    </button>
+    
     <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
     <div data-fielddb-collection json='corpus.datumFields'></div>
     <button class="btn btn-info"
