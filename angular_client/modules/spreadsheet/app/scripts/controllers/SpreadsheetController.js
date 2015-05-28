@@ -565,7 +565,11 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   // $scope.activeDatumIndex = 'newEntry';
   $rootScope.authenticated = false;
   $rootScope.developer = false;
-  $scope.dataentry = false;
+  if (window.location.hash.indexOf("/spreadsheet") > -1) {
+    $scope.dataentry = true;
+  } else {
+    $scope.dataentry = false;
+  }
   $scope.searching = false;
   $rootScope.activeSubMenu = 'none';
   $scope.showCreateSessionDiv = false;
@@ -2083,7 +2087,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           $scope.corpora.push(newCorpus);
-          FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname+"_admin", newCorpus.dbname+"_writer", newCorpus.dbname+"_reader", newCorpus.dbname+"_commenter"]);
+          FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname + "_admin", newCorpus.dbname + "_writer", newCorpus.dbname + "_reader", newCorpus.dbname + "_commenter"]);
           $rootScope.loading = false;
           window.location.assign("#/");
         });
