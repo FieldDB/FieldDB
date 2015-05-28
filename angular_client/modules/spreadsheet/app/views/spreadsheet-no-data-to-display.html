@@ -8,7 +8,7 @@
     <img src="images/loading-spinner.gif" width="100px">
   </div>
 </div>
-<div class="row" ng-show="data==undefined && loading!=true">
+<div class="row" ng-show="!readPermissions || (data==undefined && loading!=true)">
   <div class="span12 pagination-centered" ng-bind-html="contextualize('locale_no_data_message')">
   </div>
 </div>

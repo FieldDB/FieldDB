@@ -58,7 +58,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "2.45.06ss";
+  $rootScope.appVersion = "3.5.27.20.24ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -2083,6 +2083,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           }], "uploadnow");
 
           $scope.corpora.push(newCorpus);
+          FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname+"_admin", newCorpus.dbname+"_writer", newCorpus.dbname+"_reader", newCorpus.dbname+"_commenter"]);
           $rootScope.loading = false;
           window.location.assign("#/");
         });
