@@ -92,7 +92,7 @@
     "json": {
       "grammatical": true
     },
-    "help": "Acceptability judgement (*,#,?  mean this sentence is strange)",
+    "help": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
     "helpLinguists": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable."
   }, {
     "id": "orthography",
@@ -109,7 +109,7 @@
         "referenceLink": ""
       }
     },
-    "help": "What was said/written using the alphabet/writing system of the language.",
+    "help": "Orthographic transcription of the utterance; without morpheme breaks.",
     "helpLinguists": "Orthographic transcription of the utterance; without morpheme breaks."
   }, {
     "id": "utterance",
@@ -126,7 +126,7 @@
         "referenceLink": ""
       }
     },
-    "help": "What was said/written in an alphabet the team is comfortable using.",
+    "help": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
     "helpLinguists": "Transcription of the utterance, without morpheme breaks and probably orthographic."
   }, {
     "id": "allomorphs",
@@ -140,7 +140,7 @@
     "json": {
       "alternates": []
     },
-    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each e.g.: prefix-prefix-root-suffix-suffix-suffix",
+    "help": "A segmentation of the utterance into morphemes in their surface realizations.",
     "helpLinguists": "A segmentation of the utterance into morphemes in their surface realizations."
   }, {
     "id": "morphemes",
@@ -154,7 +154,7 @@
     "json": {
       "alternates": []
     },
-    "help": "Words divided into prefixes, root and suffixes using a - between each e.g.: prefix-prefix-root-suffix-suffix-suffix",
+    "help": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
     "helpLinguists": "Morpheme-segmented utterance in the language, probably transcribed phonemically."
   }, {
     "id": "gloss",
@@ -174,8 +174,8 @@
         "referenceLink": ""
       }
     },
-    "help": "Translation for each prefix, root and suffix in the words",
-    "helpLinguists": "A sequence of glosses, one for each morpheme in the “morphemes” field."
+    "help": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
+    "helpLinguists": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field."
   }, {
     "id": "syntacticCategory",
     "labelFieldLinguists": "Morpho-Syntactic Category",
@@ -193,7 +193,7 @@
         "referenceLink": ""
       }
     },
-    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theoretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "help": "A sequence of categories, one for each morpheme in the “morphemes” field.",
     "helpLinguists": "A sequence of categories, one for each morpheme in the “morphemes” field."
   }, {
     "id": "translation",
@@ -219,7 +219,7 @@
         "alternateNames": ""
       }
     },
-    "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
+    "help": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
     "helpLinguists": "A translation of the utterance in the language of analysis, i.e., the metalanguage."
   }, {
     "id": "context",
@@ -278,7 +278,7 @@
     "json": {
       "tags": []
     },
-    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "help": "Tags for categorizing your data.",
     "helpLinguists": "Tags for categorizing your data."
   }, {
     "id": "validationStatus",
@@ -292,7 +292,7 @@
     "json": {
       "tags": []
     },
-    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+    "help": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
     "helpLinguists": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”."
   }, {
     "id": "enteredByUser",
@@ -338,7 +338,7 @@
     "json": {
       "alternates": []
     },
-    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+    "help": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
     "helpLinguists": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish."
   }],
   "conversationFields": [{
@@ -352,7 +352,7 @@
     "json": {
       "users": []
     },
-    "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
+    "help": "The speaker (or speakers) who produced or judged this utterance.",
     "helpLinguists": "The speaker (or speakers) who produced or judged this utterance."
   }, {
     "id": "modality",
@@ -375,7 +375,7 @@
     "labelTranslators": "Goal",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "help": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature...",
+    "help": "The goal(s) that drove the elicitation session. For example, you may have wanted to collect stories or you may have had specific data questions relevant to a larger research question.",
     "helpLinguists": "The goal(s) that drove the elicitation session. For example, you may have wanted to collect stories or you may have had specific data questions relevant to a larger research question."
   }, {
     "id": "source",
@@ -387,7 +387,7 @@
     "json": {
       "users": []
     },
-    "help": "This is a comma separated field of all the consultants/publications/sources who were were the source/present for this elicitation session.",
+    "help": "A comma-separated list of sources (e.g., textual documents) for this entry.",
     "helpLinguists": "A comma-separated list of sources (e.g., textual documents) for this entry.",
     "helpDevelopers": "This is a comma separated field of all the consultants (usernames, or anonymous codes, or publication URIs) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
   }, {
@@ -398,7 +398,7 @@
     "labelTranslators": "Dialect",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "help": "Dialect of this example (city, village, region etc)",
+    "help": "The dialect represented by the data in this session.",
     "helpLinguists": "The dialect represented by the data in this session."
   }, {
     "id": "register",
@@ -408,8 +408,8 @@
     "labelTranslators": "Social Register",
     "shouldBeEncrypted": false,
     "defaultfield": true,
-    "help": "Social register of this example (friends, children speaking with children, formal, religious, ceremonial etc)",
-    "helpLinguists": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial etc)"
+    "help": "Social register of this example (friends, children speaking with children, formal, religious, ceremonial, etc.)",
+    "helpLinguists": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial, etc.)"
   }, {
     "id": "language",
     "type": "language",
@@ -430,7 +430,7 @@
         "alternateNames": ""
       }
     },
-    "help": "This is the language name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
+    "help": "The language represented by the data in this session.",
     "helpLinguists": "The language represented by the data in this session."
   }, {
     "id": "location",
@@ -448,8 +448,8 @@
         "accuracy": 0
       }
     },
-    "help": "This is the GPS location of the elicitation session (if available)",
-    "helpLinguists": "This is the GPS location of the elicitation session (if available)"
+    "help": "The GPS location of the elicitation session (if available)",
+    "helpLinguists": "The GPS location of the elicitation session (if available)"
   }, {
     "id": "dateElicited",
     "type": "date",
@@ -465,7 +465,7 @@
         "accuracy": null
       }
     },
-    "help": "The date when the elicitation session took place, or when the datum was spoken/published.",
+    "help": "The date when the elicitation session took place, or when the data within it was spoken/published.",
     "helpLinguists": "The date when the elicitation session took place, or when the data within it was spoken/published."
   }, {
     "id": "participants",
@@ -477,7 +477,7 @@
     "json": {
       "users": []
     },
-    "help": "This is a comma separated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
+    "help": "A comma-separated list of the people who were present for this elicitation session, or of the authors/reviewers of the publication represented by this session.",
     "helpLinguists": "A comma-separated list of the people who were present for this elicitation session, or of the authors/reviewers of the publication represented by this session.",
     "helpDevelopers": "This is a comma separated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. "
   }, {
@@ -495,8 +495,8 @@
         "accuracy": null
       }
     },
-    "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especially if you usually elicit data with an audio recorder and/or a note book).",
-    "helpLinguists": "Confidentiality setting of this speaker. The default value is “anonymous”, which means that data can be associated to the speaker but the speaker cannot be identified. A value of “hidden” means data will be associated to the entire speaker population of the corpus. A value of “team” means that team members can see the consultant's identity but that users who are not team members can only see an Anonymous user. A value of “public” means the speaker has signed a consent form and has asked that his/her data be associated to his/her user account or identity."
+    "help": "The date when the elicitation session data was entered into the computer.",
+    "helpLinguists": "The date when the elicitation session data was entered into the computer."
   }, {
     "id": "device",
     "type": "device",
@@ -637,7 +637,7 @@
     "json": {
       "choices": ["generalize", "team", "anonymous", "public"]
     },
-    "help": "Confidentiality setting of this speaker. By default the speaker is anonymous which means data can be associated to one speaker, but the speaker cannot be identified) hidden means data will be associated to the entire speaker population of the corpus, team means that team members can see the consultant's identity, but the outsiders of the team can only see an anonymous user, public means the speaker has signed a consent form and has asked that his/her data to be associated his/her user account or identity.",
+    "help": "Confidentiality setting of this speaker. The default value is “anonymous”, which means that data can be associated to the speaker but the speaker cannot be identified. A value of “hidden” means data will be associated to the entire speaker population of the corpus. A value of “team” means that team members can see the consultant's identity but that users who are not team members can only see an anonymous user. A value of “public” means the speaker has signed a consent form and has asked that his/her data be associated to his/her user account or identity.",
     "helpLinguists": "Confidentiality setting of this speaker. The default value is “anonymous”, which means that data can be associated to the speaker but the speaker cannot be identified. A value of “hidden” means data will be associated to the entire speaker population of the corpus. A value of “team” means that team members can see the consultant's identity but that users who are not team members can only see an anonymous user. A value of “public” means the speaker has signed a consent form and has asked that his/her data be associated to his/her user account or identity."
   }]
 }
