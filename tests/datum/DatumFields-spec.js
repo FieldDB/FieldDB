@@ -166,7 +166,7 @@ describe("lib/DatumFields", function() {
 
     it("should be able to find items by any attribute", function() {
       collection.debug("find help" + JSON.stringify(collection._collection));
-      expect(collection.find("helpLinguists", "Orthographic transcription of the utterance; without morpheme breaks.")[0].id).toEqual(defaultDatumFields()[1].id);
+      expect(collection.find("helpLinguists", "Orthographic transcription of the utterance; without morpheme breaks.")[0].id).toEqual(defaultDatumFields()[7].id);
     });
 
     it("should accpet a RegExp to find items", function() {
