@@ -13,7 +13,7 @@ var regExpEscape = function(s) {
  * @param {Object} options Optional json initialization object
  * @property {String} primaryKey This is the optional attribute to look in the objects when doing a get or find
  * @property {Boolean} inverted This is the optional parameter for whether the collection should be inserted from the bottom or the top of the collection
-
+ 
  * @extends Object
  * @tutorial tests/CollectionTest.js
  */
@@ -521,7 +521,7 @@ Collection.prototype = Object.create(Object.prototype, {
         this.debug("removed dot notation for ", key);
         delete this[key];
       }
-
+      key = key + "";
       if (this[key.toLowerCase().replace(/_/g, "")]) {
         this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
         delete this[key.toLowerCase().replace(/_/g, "")];
@@ -548,7 +548,7 @@ Collection.prototype = Object.create(Object.prototype, {
         this.debug("removed dot notation for ", key);
         delete this[key];
       }
-
+      key = key + "";
       if (this[key.toLowerCase().replace(/_/g, "")]) {
         this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
         delete this[key.toLowerCase().replace(/_/g, "")];
@@ -598,7 +598,7 @@ Collection.prototype = Object.create(Object.prototype, {
           this.debug("removed dot notation for ", key);
           delete this[key];
         }
-
+        key = key + "";
         if (this[key.toLowerCase().replace(/_/g, "")]) {
           this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
           delete this[key.toLowerCase().replace(/_/g, "")];
