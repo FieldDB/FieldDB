@@ -2530,9 +2530,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   $scope.setDataEntryFocusOn = function(targetDatumEntryDomElement) {
     $timeout(function() {
       if (targetDatumEntryDomElement && targetDatumEntryDomElement[1]) {
-        console.log("old focus", document.activeElement);
+        // console.log("old focus", document.activeElement);
         targetDatumEntryDomElement[1].focus();
-        console.log("new focus", document.activeElement);
+        // console.log("new focus", document.activeElement);
       } else {
         console.warn("requesting focus on an element that doesnt exist.");
       }
