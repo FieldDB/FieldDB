@@ -814,7 +814,7 @@ describe("api/import/Import", function() {
 
           expect(importer.datalist.docs._collection[2].fields).toBeDefined();
           importer.datalist.docs._collection[2].fields.decryptedMode = true;
-          expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Prénom");
+          expect(importer.datalist.docs._collection[2].fields.firstname.label).toEqual("Firstname");
           expect(importer.datalist.docs._collection[2].fields.firstname.labelFieldLinguists).toEqual("Prénom");
           expect(importer.datalist.docs._collection[2].fields.firstname.labelExperimenters).toEqual("Prénom");
           expect(importer.datalist.docs._collection[2].fields.firstname.value).toEqual("Amelie");

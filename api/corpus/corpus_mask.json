@@ -36,7 +36,7 @@
   }],
   "datumFields": [{
     "id": "judgement",
-    "labelFieldLinguists": "Gramaticality Judgement",
+    "labelFieldLinguists": "Grammaticality Judgement",
     "labelExperimenters": "Naturalness",
     "labelNonLinguists": "Not-a-normal-thing-to-say",
     "labelTranslators": "Grammatical/How-normal-Is-This-Example",
