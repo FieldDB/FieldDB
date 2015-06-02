@@ -99,8 +99,8 @@ describe("Corpus", function() {
     it("should have fields in default order so that the spreadsheet template looks useful for a first corpus", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(Corpus.prototype.defaults)));
       expect(corpus.datumFields.map(function(field) {
-        return field.label;
-      }).slice(0, 7)).toEqual(["Gramaticality Judgement", "Transcription", "Morphemes", "Gloss", "Translation", "Context", "Discussion"]);
+        return field.labelFieldLinguists;
+      }).slice(0, 7)).toEqual(["Grammaticality Judgement", "Transcription", "Morphemes", "Gloss", "Translation", "Context", "Discussion"]);
 
       expect(corpus.prefs.preferredSpreadsheetShape.columns).toEqual(2);
       expect(corpus.prefs.preferredSpreadsheetShape.rows).toEqual(3);
