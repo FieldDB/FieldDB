@@ -166,7 +166,7 @@ describe("lib/DatumFields", function() {
 
     it("should be able to find items by any attribute", function() {
       collection.debug("find help" + JSON.stringify(collection._collection));
-      expect(collection.find("helpLinguists", "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas")[0].id).toEqual(defaultDatumFields()[7].id);
+      expect(collection.find("helpLinguists", "Orthographic transcription of the utterance; without morpheme breaks.")[0].id).toEqual(sampleDatumFields()[1].id);
     });
 
     it("should accpet a RegExp to find items", function() {

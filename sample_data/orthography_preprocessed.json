@@ -1,13 +1,16 @@
 {
   "fieldDBtype": "Datum",
-  "dateCreated": 1417402113654,
   "_id": "./sample_data/orthography.txt",
-  "version": "v2.30.0",
+  "dbname": "testingbatchimport-rawtext",
+  "dateCreated": 1432933544138,
+  "version": "v3.0.22",
+  "pouchname": "testingbatchimport-rawtext",
   "api": "datums",
   "datumFields": [
     {
       "fieldDBtype": "DatumField",
-      "labelFieldLinguists": "Gramaticality Judgement",
+      "id": "judgement",
+      "labelFieldLinguists": "Grammaticality Judgement",
       "labelExperimenters": "Naturalness",
       "labelNonLinguists": "Not-a-normal-thing-to-say",
       "labelTranslators": "Grammatical/How-normal-Is-This-Example",
@@ -15,13 +18,20 @@
       "shouldBeEncrypted": false,
       "showToUserTypes": "linguist",
       "defaultfield": true,
-      "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
-      "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning.",
-      "version": "v2.30.0",
-      "id": "judgement"
+      "json": {
+        "grammatical": true
+      },
+      "help": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
+      "helpLinguists": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "judgement",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "orthography",
       "labelFieldLinguists": "Orthography",
       "labelNonLinguists": "Written",
       "labelTranslators": "Orthography",
@@ -35,17 +45,19 @@
           "referenceLink": ""
         }
       },
-      "help": "What was said/written using the alphabet/writing system of the language.",
-      "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas",
-      "version": "v2.30.0",
+      "help": "Orthographic transcription of the utterance; without morpheme breaks.",
+      "helpLinguists": "Orthographic transcription of the utterance; without morpheme breaks.",
+      "version": "v3.0.22",
+      "hint": "",
       "encryptedValue": "placeholder text",
       "mask": "placeholder text",
       "value": "placeholder text",
-      "id": "orthography"
+      "label": "orthography"
     },
     {
       "fieldDBtype": "DatumField",
-      "labelFieldLinguists": "Utterance",
+      "id": "utterance",
+      "labelFieldLinguists": "Transcription",
       "labelNonLinguists": "International Phonetic Alphabet (IPA)",
       "labelTranslators": "Transliteration",
       "type": "IGT, parallelText",
@@ -58,16 +70,18 @@
           "referenceLink": ""
         }
       },
-      "help": "What was said/written in an alphabet the team is comfortable using.",
-      "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
-      "version": "v2.30.0",
+      "help": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
+      "helpLinguists": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
+      "version": "v3.0.22",
+      "hint": "",
       "encryptedValue": "placeholder text",
       "mask": "placeholder text",
       "value": "placeholder text",
-      "id": "utterance"
+      "label": "utterance"
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "allomorphs",
       "labelFieldLinguists": "Allomorphs",
       "labelTranslators": "Prefixe-s-root-suffixe-s",
       "type": "IGT",
@@ -77,13 +91,17 @@
       "json": {
         "alternates": []
       },
-      "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-      "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s",
-      "version": "v2.30.0",
-      "id": "allomorphs"
+      "help": "A segmentation of the utterance into morphemes in their surface realizations.",
+      "helpLinguists": "A segmentation of the utterance into morphemes in their surface realizations.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "allomorphs",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "morphemes",
       "labelFieldLinguists": "Morphemes",
       "labelNonLinguists": "Segmentation",
       "labelTranslators": "Prefix-z-root-suffix-z",
@@ -94,13 +112,17 @@
       "json": {
         "alternates": []
       },
-      "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-      "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
-      "version": "v2.30.0",
-      "id": "morphemes"
+      "help": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
+      "helpLinguists": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "morphemes",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "gloss",
       "labelFieldLinguists": "Gloss",
       "labelNonLinguists": "Word-for-word Translation",
       "labelTranslators": "Word-for-word Translation",
@@ -117,13 +139,17 @@
           "referenceLink": ""
         }
       },
-      "help": "Translation for each prefix, root and suffix in the words",
-      "helpLinguists": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
-      "version": "v2.30.0",
-      "id": "gloss"
+      "help": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
+      "helpLinguists": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "gloss",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "syntacticCategory",
       "labelFieldLinguists": "Morpho-Syntactic Category",
       "labelTranslators": "Part of Speech",
       "type": "IGT",
@@ -138,28 +164,50 @@
           "referenceLink": ""
         }
       },
-      "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
-      "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
-      "version": "v2.30.0",
-      "id": "syntacticCategory"
+      "help": "A sequence of categories, one for each morpheme in the “morphemes” field.",
+      "helpLinguists": "A sequence of categories, one for each morpheme in the “morphemes” field.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "syntacticCategory",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "translation",
       "labelFieldLinguists": "Translation",
       "labelNonLinguists": "English",
       "labelTranslators": "English",
-      "type": "IGT, parallelText",
+      "type": "parallelText",
       "shouldBeEncrypted": true,
       "showToUserTypes": "all",
       "defaultfield": true,
-      "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
-      "language": "",
-      "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields.",
-      "version": "v2.30.0",
-      "id": "translation"
+      "json": {
+        "writingSystem": {
+          "id": "",
+          "referenceLink": ""
+        },
+        "language": {
+          "ethnologueUrl": "",
+          "wikipediaUrl": "",
+          "iso": "",
+          "locale": "",
+          "englishName": "",
+          "nativeName": "",
+          "alternateNames": ""
+        }
+      },
+      "help": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
+      "helpLinguists": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "translation",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "context",
       "labelFieldLinguists": "Context",
       "labelNonLinguists": "Context",
       "labelTranslators": "Context",
@@ -170,13 +218,17 @@
       "json": {
         "tags": []
       },
-      "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-      "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data.",
-      "version": "v2.30.0",
-      "id": "context"
+      "help": "TODO: insert help for context here.",
+      "helpLinguists": "TODO: insert help for context here.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "context",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "documentation",
       "labelFieldLinguists": "Discussion for Handouts",
       "labelNonLinguists": "Additional Documentation",
       "labelTranslators": "Documentation",
@@ -190,11 +242,15 @@
       },
       "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
       "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-      "version": "v2.30.0",
-      "id": "documentation"
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "documentation",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "relatedData",
       "labelFieldLinguists": "Related Data",
       "labelNonLinguists": "Linked to",
       "labelTranslators": "Linked to",
@@ -204,16 +260,47 @@
       "showToUserTypes": "all",
       "defaultfield": true,
       "json": {
-        "relatedData": []
+        "relatedData": [
+          {
+            "fieldDBtype": "AudioVideo",
+            "_id": "https://localhost:3184/testingspreadsheet-firstcorpus/Peace_Corps_Thailand_Green_Book.apkg",
+            "size": 1567249,
+            "name": "Peace_Corps_Thailand_Green_Book.apkg",
+            "type": "application/octet-stream",
+            "mtime": "2015-04-03T04:56:27.267Z",
+            "fileBaseName": "Peace_Corps_Thailand_Green_Book",
+            "praatAudioExtension": ".mp3",
+            "script": "Syllables",
+            "dbname": "testingspreadsheet-firstcorpus",
+            "checksum": "35c4b5ed8c78e8458b0bf595fabddb91770767bc",
+            "uploadInfo": "new",
+            "resultInfo": "File does not contain any audio stream",
+            "resultStatus": 422,
+            "textGridStatus": 422,
+            "textGridInfo": "File “Peace_Corps_Thailand_Green_Book.apkg” contains no audio data. You can import any audio/video file which contains an audio track. Are you sure this file has an audio track?",
+            "serviceVersion": "2.49.29",
+            "filename": "Peace_Corps_Thailand_Green_Book.apkg",
+            "URL": "https://localhost:3184/testingspreadsheet-firstcorpus/Peace_Corps_Thailand_Green_Book.apkg",
+            "description": "File from import",
+            "version": "v3.0.22",
+            "pouchname": "testingspreadsheet-firstcorpus",
+            "api": "speech",
+            "relation": "associated file"
+          }
+        ]
       },
       "help": "Related data in the database, or at any web url.",
       "helpLinguists": "Related data in the database, or at any web url.",
       "helpDevelopers": "Related data in the database, or at any web url.",
-      "version": "v2.30.0",
-      "id": "relatedData"
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "relatedData",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "tags",
       "labelFieldLinguists": "Tags",
       "labelNonLinguists": "Tags",
       "labelTranslators": "Tags",
@@ -224,13 +311,17 @@
       "json": {
         "tags": []
       },
-      "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-      "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data.",
-      "version": "v2.30.0",
-      "id": "tags"
+      "help": "Tags for categorizing your data.",
+      "helpLinguists": "Tags for categorizing your data.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "tags",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "validationStatus",
       "labelFieldLinguists": "Data validity/verification Status",
       "labelNonLinguists": "Data validity/verification Status",
       "labelTranslators": "Data validity/verification Status",
@@ -241,13 +332,17 @@
       "json": {
         "tags": []
       },
-      "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
-      "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
-      "version": "v2.30.0",
-      "id": "validationStatus"
+      "help": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
+      "helpLinguists": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "validationStatus",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "enteredByUser",
       "labelFieldLinguists": "Imported/Entered By",
       "labelNonLinguists": "Entered By",
       "labelTranslators": "Imported/Entered By",
@@ -263,11 +358,15 @@
       },
       "help": "The user who originally entered the datum",
       "helpLinguists": "The user who originally entered the datum",
-      "version": "v2.30.0",
-      "id": "enteredByUser"
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "enteredByUser",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "modifiedByUser",
       "labelFieldLinguists": "Modified By",
       "labelNonLinguists": "Modified By",
       "labelTranslators": "Modified By",
@@ -281,11 +380,15 @@
       },
       "help": "An array of users who modified the datum",
       "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses.",
-      "version": "v2.30.0",
-      "id": "modifiedByUser"
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "modifiedByUser",
+      "value": "",
+      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
+      "id": "syntacticTreeLatex",
       "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
       "type": "LaTeX",
       "shouldBeEncrypted": true,
@@ -294,10 +397,13 @@
       "json": {
         "alternates": []
       },
-      "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
-      "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
-      "version": "v2.30.0",
-      "id": "syntacticTreeLatex"
+      "help": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
+      "helpLinguists": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
+      "version": "v3.0.22",
+      "hint": "",
+      "label": "syntacticTreeLatex",
+      "value": "",
+      "mask": ""
     }
   ]
 }
