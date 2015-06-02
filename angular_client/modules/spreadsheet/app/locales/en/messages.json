@@ -28,7 +28,7 @@
         "description": "appears in Top navgation bar"
     },
     "locale_glosser": {
-        "message": "Semi-auto Glosser",
+        "message": "Glosser",
         "description": "appears in Top menu bar"
     },
     "locale_logout": {
