@@ -501,7 +501,7 @@
         "description": "option in number of records to display dropdown"
     },
     "locale_templates": {
-        "message": "Templates",
+        "message": "Template",
         "description": "title for template setting"
     },
     "locale_interface_language": {
