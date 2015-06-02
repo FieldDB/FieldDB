@@ -90,8 +90,8 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         '  class="{{fieldSpanWidthClassName}}"' +
         '  type="text"' +
         '  ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
-        '  placeholder="{{corpusField.label}}"' +
-        '  title="{{corpusField.help}}"' +
+        '  placeholder="{{corpusField.labelFieldLinguists}}"' +
+        '  title="{{corpusField.helpLinguists}}"' +
         '  ng-hide="corpusField.showToUserTypes == \'readonly\'"' +
         '  ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)"' +
         '/>';

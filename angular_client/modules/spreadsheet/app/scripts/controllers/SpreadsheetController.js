@@ -388,7 +388,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     try {
-      $scope.judgementHelpText = $rootScope.corpus.datumFields.judgement.help;
+      $scope.judgementHelpText = $rootScope.corpus.datumFields.judgement.helpLinguists;
     } catch (e) {
       console.warn("couldnt get the judgemetn help text for htis corpus for hte data entry hints");
     }

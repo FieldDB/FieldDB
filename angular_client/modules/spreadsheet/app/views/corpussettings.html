@@ -134,20 +134,20 @@
         *#?
       </div>
       <div class="span5">
-        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
+        <div ng-repeat="corpusField in fieldsInColumns.first track by $index" title="{{corpusField.helpLinguists}}">
+          {{contextualize('locale_'+corpusField.labelFieldLinguists)}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.second">
-        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
+        <div ng-repeat="corpusField in fieldsInColumns.second track by $index" title="{{corpusField.helpLinguists}}">
+          {{contextualize('locale_'+corpusField.labelFieldLinguists)}}
         </div>
       </div>
 
       <div class="span5" ng-show="fieldsInColumns.third">
-        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.help}}">
-          {{contextualize('locale_'+corpusField.labelNonLinguists)}}
+        <div ng-repeat="corpusField in fieldsInColumns.third track by $index" title="{{corpusField.helpLinguists}}">
+          {{contextualize('locale_'+corpusField.labelFieldLinguists)}}
         </div>
       </div>
 
