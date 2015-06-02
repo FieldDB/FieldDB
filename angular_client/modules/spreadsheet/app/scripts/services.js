@@ -384,11 +384,11 @@ angular.module('spreadsheetApp')
             var message = "";
             if (err.status === 0) {
               message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia" || $rootScope.serverCode === "localhost") {
                 message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
-            if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+            if (err && err.status >= 300 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
               message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
@@ -397,6 +397,7 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = message;
             $rootScope.openNotification();
             $rootScope.loading = false;
+            // return response.data;
           });
       return promise;
     };

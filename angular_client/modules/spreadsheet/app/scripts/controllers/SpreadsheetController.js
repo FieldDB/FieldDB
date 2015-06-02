@@ -1033,8 +1033,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             // $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
             console.error(error);
           }).fail(function(error) {
-            // $rootScope.corpus.bug("Cant load corpus " + selectedCorpus.dbname);
-            console.error(error);
+            $rootScope.corpus.bug("There was a problem loading " + selectedCorpus.dbname + " you might need to reload the page.");
+            console.error(error.stack);
           });
           return;
         } else {
@@ -1047,26 +1047,30 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $scope.users = [];
     }
 
-    var roles = FieldDB.FieldDBObject.application.authentication.user.roles;
-    $rootScope.admin = false;
-    $rootScope.readPermissions = false;
-    $rootScope.writePermissions = false;
-    $rootScope.commentPermissions = false;
+    if (!FieldDB.FieldDBObject.application.authentication || !FieldDB.FieldDBObject.application.authentication.user || !FieldDB.FieldDBObject.application.authentication.user.roles) {
+      console.warn("There are no roles yet defined for this user, we dont know if they have access to the corpus. ");
+    } else {
+      var roles = FieldDB.FieldDBObject.application.authentication.user.roles;
+      $rootScope.admin = false;
+      $rootScope.readPermissions = false;
+      $rootScope.writePermissions = false;
+      $rootScope.commentPermissions = false;
 
-    if (roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
-      $rootScope.admin = true;
-    }
-    if (roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
-      $rootScope.readPermissions = true;
-    }
-    if (roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
-      $rootScope.writePermissions = true;
-    }
-    if (roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
-      $rootScope.commentPermissions = true;
-    }
-    if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
-      $rootScope.commentPermissions = true;
+      if (roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
+        $rootScope.admin = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
+        $rootScope.readPermissions = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
+        $rootScope.writePermissions = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
+        $rootScope.commentPermissions = true;
+      }
+      if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
+        $rootScope.commentPermissions = true;
+      }
     }
 
     $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
@@ -2067,31 +2071,34 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.serverCode = $rootScope.serverCode;
     dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
 
-    dataToPost.newCorpusName = newCorpusInfo.newCorpusName;
+    dataToPost.newCorpusTitle = newCorpusInfo.newCorpusTitle;
 
-    if (dataToPost.newCorpusName !== "") {
+    if (dataToPost.newCorpusTitle !== "") {
       // Create new corpus
       Data.createcorpus(dataToPost)
         .then(function(response) {
+          if (response && response.corpus) {
+            // Add new corpus to scope
+            var newCorpus = {};
+            newCorpus.dbname = response.corpus.dbname;
+            newCorpus.title = response.corpus.title;
+            var directObjectString = "<a href='#corpus/" + response.corpus.dbname + "'>" + response.corpus.title + "</a>";
+            $scope.addActivity([{
+              verb: "added",
+              verbicon: "icon-plus",
+              directobjecticon: "icon-cloud",
+              directobject: directObjectString,
+              indirectobject: "",
+              teamOrPersonal: "personal"
+            }], "uploadnow");
 
-          // Add new corpus to scope
-          var newCorpus = {};
-          newCorpus.dbname = response.corpus.dbname;
-          newCorpus.title = response.corpus.title;
-          var directObjectString = "<a href='#corpus/" + response.corpus.dbname + "'>" + response.corpus.title + "</a>";
-          $scope.addActivity([{
-            verb: "added",
-            verbicon: "icon-plus",
-            directobjecticon: "icon-cloud",
-            directobject: directObjectString,
-            indirectobject: "",
-            teamOrPersonal: "personal"
-          }], "uploadnow");
-
-          $scope.corpora.push(newCorpus);
-          FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname + "_admin", newCorpus.dbname + "_writer", newCorpus.dbname + "_reader", newCorpus.dbname + "_commenter"]);
-          $rootScope.loading = false;
-          window.location.assign("#/");
+            $scope.corpora.push(newCorpus);
+            FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname + "_admin", newCorpus.dbname + "_writer", newCorpus.dbname + "_reader", newCorpus.dbname + "_commenter"]);
+            $rootScope.loading = false;
+            window.location.assign("#/");
+          } else {
+            console.log("There was no corpus returned.");
+          }
         });
     } else {
       $rootScope.notificationMessage = "Please verify corpus name.";

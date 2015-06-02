@@ -8,7 +8,7 @@
 	</div>
 	<form ng-submit="createNewCorpus(newCorpusInfo)">
     <div class="settingsItems">
-  		<input type="text" ng-model='newCorpusInfo.newCorpusName'
+  		<input type="text" ng-model='newCorpusInfo.newCorpusTitle'
   			placeholder="New corpus name">
   		&nbsp;
       <button class="btn btn-primary"
@@ -82,7 +82,7 @@
         <button class="btn btn-info" ng-click="loadCorpusTeam()">Refresh Team <i class="fa fa-refresh"></i></button>
       </p>
       <div class="settingsItems row">
-          <h4>{{contextualize('locale_admins')}}</h4>
+          <h4>{{contextualize('locale_admins')}} <i class="fa fa-refresh" ng-click="loadCorpusTeam()"></i></h4>
         <div ng-repeat="user in users.admins" class="">
           <img
             ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="settingsItems row">
-          <h4>{{contextualize('locale_writers')}}</h4>
+          <h4>{{contextualize('locale_writers')}} <i class="fa fa-refresh" ng-click="loadCorpusTeam()"></i></h4>
         <div ng-repeat="user in users.writers" class="">
           <img
             ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="settingsItems row">
-          <h4>{{contextualize('locale_readers')}}</h4>
+          <h4>{{contextualize('locale_readers')}} <i class="fa fa-refresh" ng-click="loadCorpusTeam()"></i></h4>
         <div ng-repeat="user in users.readers" class="">
           <img
             ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
@@ -109,7 +109,7 @@
         </div>
       </div>
       <div class="settingsItems row">
-          <h4>{{contextualize('locale_commenters')}}</h4>
+          <h4>{{contextualize('locale_commenters')}} <i class="fa fa-refresh" ng-click="loadCorpusTeam()"></i></h4>
         <div ng-repeat="user in users.commenters" class="">
           <img
             ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon"><br />
