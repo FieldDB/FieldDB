@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 0.10
+  - 0.12
 
 # Travis supports running a real browser (Firefox) with a virtual screen. Just update your .travis.yml to set up the virtual screen like this:
 # before_script:
