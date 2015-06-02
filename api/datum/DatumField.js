@@ -103,15 +103,22 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   label: {
     get: function() {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      return this._labelFieldLinguists || this.id || FieldDBObject.DEFAULT_STRING;
+      return this._labelNonLinguists || this._labelFieldLinguists || this.id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      if (!this.labelFieldLinguists) {
+      if (!this._labelFieldLinguists) {
         if (value && value.length > 2) {
-          this.labelFieldLinguists = value[0].toUpperCase() + value.substring(1, value.length);
+          this._labelFieldLinguists = value[0].toUpperCase() + value.substring(1, value.length);
         } else {
-          this.labelFieldLinguists = value;
+          this._labelFieldLinguists = value;
+        }
+      }
+      if (!this._labelNonLinguists) {
+        if (value && value.length > 2) {
+          this._labelNonLinguists = value[0].toUpperCase() + value.substring(1, value.length);
+        } else {
+          this._labelNonLinguists = value;
         }
       }
       if (!this._id) {
