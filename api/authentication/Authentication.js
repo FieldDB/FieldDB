@@ -550,8 +550,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           });
           return;
         }
-        details.title = details.title || details.newCorpusName;
-        details.newCorpusName = details.title;
+        details.title = details.title || details.newCorpusTitle;
+        details.newCorpusTitle = details.title;
 
         if (!details.title) {
           deferred.reject({
@@ -586,7 +586,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               self.save();
             } else {
               if (authserverResult.status > 0 && authserverResult.status < 400 && self.user.corpora && typeof self.user.corpora.find === "function") {
-                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusName).identifier, "fuzzy");
+                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusTitle).identifier, "fuzzy");
                 if (authserverResult.corpus && authserverResult.corpus.length > 0) {
                   authserverResult.corpus = authserverResult.corpus[0];
                 }
