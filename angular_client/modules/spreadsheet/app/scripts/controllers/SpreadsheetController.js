@@ -1580,11 +1580,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
     var verifyCommentDelete = confirm("Are you sure you want to remove the comment '" + comment.text + "'?");
     if (verifyCommentDelete === true) {
-      for (var i in datum.comments) {
-        if (datum.comments[i] === comment) {
-          datum.comments.splice(i, 1);
-        }
-      }
+      datum.comments.remove(comment);
     }
   };
 
@@ -2490,7 +2486,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.getSavedState = function() {
-    if ($scope.saved === "yes") {
+    if ($scope.saved === "yes" || $scope.loading) {
       return {
         state: "Saved",
         class: "btn btn-success",
