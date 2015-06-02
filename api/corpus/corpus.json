@@ -315,7 +315,7 @@
       "hardware": {},
       "software": {}
     },
-    "help": "The user who originally entered this.",
+    "help": "The user who originally entered this."
   }, {
     "id": "modifiedByUser",
     "labelFieldLinguists": "Modified By",
@@ -591,9 +591,21 @@
     "showToUserTypes": "all",
     "defaultfield": true,
     "json": {
-      "choices": ["Female", "Male", "Unknown"],
-      "children": ["Girl", "Boy", "Unknown"],
-      "adult": ["Woman", "Man", "Unknown"]
+      "choices": [
+        "Female",
+        "Male",
+        "Unknown"
+      ],
+      "children": [
+        "Girl",
+        "Boy",
+        "Unknown"
+      ],
+      "adult": [
+        "Woman",
+        "Man",
+        "Unknown"
+      ]
     },
     "help": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis."
   }, {
@@ -641,7 +653,12 @@
     "showToUserTypes": "all",
     "defaultfield": true,
     "json": {
-      "choices": ["generalize", "team", "anonymous", "public"]
+      "choices": [
+        "generalize",
+        "team",
+        "anonymous",
+        "public"
+      ]
     },
     "help": "Confidentiality setting of this speaker. The default value is “anonymous”, which means that data can be associated to one speaker but the speaker cannot be identified. A value of “hidden” means data will be associated to the entire speaker population of the corpus. A value of “team” means that team members can see the consultant's identity but that viewers who are not team members can only see an anonymous user. A value of “public” means the speaker has signed a consent form and has asked that his/her data be associated to his/her user account or identity."
   }]
