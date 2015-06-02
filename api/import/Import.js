@@ -1872,7 +1872,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (this.parent) {
         if (typeof this.parent.addFile === "function") {
           this.parent.addFile(details);
-        } else if (this.parent.audioVideo && this.parent.audioVideo.push === "function") {
+        } else if (this.parent.audioVideo && typeof this.parent.audioVideo.push === "function") {
           this.parent.audioVideo.push(details);
         } else {
           this.bug("There was a problem attaching this file. Please report this.");
