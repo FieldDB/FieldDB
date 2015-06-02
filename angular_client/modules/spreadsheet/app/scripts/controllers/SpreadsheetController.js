@@ -1225,7 +1225,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.createNewSession = function(newSessionRecord) {
-    $rootScope.loading = true;
+    $rootScope.creatingNewSession = true;
     // Get blank template to build new record
     Data.saveCouchDoc($rootScope.corpus.dbname, newSessionRecord.toJSON())
       .then(function(savedRecord) {
@@ -1257,7 +1257,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         $scope.newSession = $rootScope.corpus.newSession();
         window.location.assign("#/spreadsheet/" + $rootScope.templateId);
       });
-    $rootScope.loading = false;
+    $rootScope.creatingNewSession = false;
 
   };
 
