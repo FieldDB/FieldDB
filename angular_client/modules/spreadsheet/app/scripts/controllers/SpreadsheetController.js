@@ -1725,17 +1725,23 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $scope.searchHistory = null;
     $scope.loadDataInCurrentSessionFromServer();
   };
-  if (FieldDB && FieldDB.DatumField) {
-    $rootScope.addedDatumField = new FieldDB.DatumField({
-      id: Date.now(),
-      label: "New Field " + Date.now()
-    });
-  } else {
-    $rootScope.addedDatumField = {
-      id: Date.now(),
-      label: "New Field " + Date.now()
-    };
-  }
+
+  $scope.prepareNewField = function() {
+    $timeout(function() {
+      if (FieldDB && FieldDB.DatumField) {
+        $rootScope.addedDatumField = new FieldDB.DatumField({
+          id: Date.now(),
+          label: "New Field " + Date.now()
+        });
+      } else {
+        $rootScope.addedDatumField = {
+          id: Date.now(),
+          label: "New Field " + Date.now()
+        };
+      }
+    }, 500);
+  };
+  $scope.prepareNewField();
 
   $scope.updateCorpusDetails = function(corpus) {
     console.log("Saving corpus details, corpus passed in", corpus);
