@@ -2,8 +2,8 @@
   "fieldDBtype": "Datum",
   "_id": "./sample_data/orthography.txt",
   "dbname": "testingbatchimport-rawtext",
-  "dateCreated": 1432933544138,
-  "version": "v3.0.22",
+  "dateCreated": 1433216391437,
+  "version": "v3.6.1",
   "pouchname": "testingbatchimport-rawtext",
   "api": "datums",
   "datumFields": [
@@ -21,38 +21,15 @@
       "json": {
         "grammatical": true
       },
-      "help": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
+      "help": "Acceptablity judgement (*,#,?  mean this sentence is strange).",
+      "helpNonLinguists": "Acceptablity judgement (*,#,?  mean this sentence is strange).",
       "helpLinguists": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
-      "version": "v3.0.22",
+      "helpDevelopers": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "judgement",
       "value": "",
       "mask": ""
-    },
-    {
-      "fieldDBtype": "DatumField",
-      "id": "orthography",
-      "labelFieldLinguists": "Orthography",
-      "labelNonLinguists": "Written",
-      "labelTranslators": "Orthography",
-      "type": "IGT, parallelText",
-      "shouldBeEncrypted": true,
-      "showToUserTypes": "all",
-      "defaultfield": true,
-      "json": {
-        "writingSystem": {
-          "id": "",
-          "referenceLink": ""
-        }
-      },
-      "help": "Orthographic transcription of the utterance; without morpheme breaks.",
-      "helpLinguists": "Orthographic transcription of the utterance; without morpheme breaks.",
-      "version": "v3.0.22",
-      "hint": "",
-      "encryptedValue": "placeholder text",
-      "mask": "placeholder text",
-      "value": "placeholder text",
-      "label": "orthography"
     },
     {
       "fieldDBtype": "DatumField",
@@ -70,34 +47,16 @@
           "referenceLink": ""
         }
       },
-      "help": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
+      "help": "What was said/written in an alphabet the team is comfortable using.",
+      "helpNonLinguists": "What was said/written in an alphabet the team is comfortable using.",
       "helpLinguists": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
-      "version": "v3.0.22",
+      "helpDevelopers": "Unparsed utterance in the language, in orthography or romanized or IPA transcription (what ever is commonly used for linguistic examples of this language.) Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+      "version": "v3.6.1",
       "hint": "",
       "encryptedValue": "placeholder text",
       "mask": "placeholder text",
       "value": "placeholder text",
       "label": "utterance"
-    },
-    {
-      "fieldDBtype": "DatumField",
-      "id": "allomorphs",
-      "labelFieldLinguists": "Allomorphs",
-      "labelTranslators": "Prefixe-s-root-suffixe-s",
-      "type": "IGT",
-      "shouldBeEncrypted": true,
-      "showToUserTypes": "linguist",
-      "defaultfield": true,
-      "json": {
-        "alternates": []
-      },
-      "help": "A segmentation of the utterance into morphemes in their surface realizations.",
-      "helpLinguists": "A segmentation of the utterance into morphemes in their surface realizations.",
-      "version": "v3.0.22",
-      "hint": "",
-      "label": "allomorphs",
-      "value": "",
-      "mask": ""
     },
     {
       "fieldDBtype": "DatumField",
@@ -112,9 +71,11 @@
       "json": {
         "alternates": []
       },
-      "help": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
+      "help": "Words divided into prefixes, root and suffixes using a - between each eg: un-forget-able.",
+      "helpNonLinguists": "Words divided into prefixes, root and suffixes using a - between each eg: un-forget-able.",
       "helpLinguists": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
-      "version": "v3.0.22",
+      "helpDevelopers": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+      "version": "v3.6.1",
       "hint": "",
       "label": "morphemes",
       "value": "",
@@ -139,36 +100,13 @@
           "referenceLink": ""
         }
       },
-      "help": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
+      "help": "Translation for each prefix, root and suffix in the words.",
+      "helpNonLinguists": "Translation for each prefix, root and suffix in the words.",
       "helpLinguists": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
-      "version": "v3.0.22",
+      "helpDevelopers": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc).  Sample entry: friend-fem-pl",
+      "version": "v3.6.1",
       "hint": "",
       "label": "gloss",
-      "value": "",
-      "mask": ""
-    },
-    {
-      "fieldDBtype": "DatumField",
-      "id": "syntacticCategory",
-      "labelFieldLinguists": "Morpho-Syntactic Category",
-      "labelTranslators": "Part of Speech",
-      "type": "IGT",
-      "shouldBeEncrypted": true,
-      "showToUserTypes": "machine, linguist",
-      "defaultfield": true,
-      "json": {
-        "alternates": [],
-        "conventions": {
-          "id": "",
-          "tagSet": [],
-          "referenceLink": ""
-        }
-      },
-      "help": "A sequence of categories, one for each morpheme in the “morphemes” field.",
-      "helpLinguists": "A sequence of categories, one for each morpheme in the “morphemes” field.",
-      "version": "v3.0.22",
-      "hint": "",
-      "label": "syntacticCategory",
       "value": "",
       "mask": ""
     },
@@ -197,9 +135,11 @@
           "alternateNames": ""
         }
       },
-      "help": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
+      "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
+      "helpNonLinguists": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
       "helpLinguists": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
-      "version": "v3.0.22",
+      "helpDevelopers": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "translation",
       "value": "",
@@ -218,9 +158,10 @@
       "json": {
         "tags": []
       },
-      "help": "TODO: insert help for context here.",
-      "helpLinguists": "TODO: insert help for context here.",
-      "version": "v3.0.22",
+      "help": "Linguistic/social context when this can be said.",
+      "helpNonLinguists": "Linguistic/social context when this can be said.",
+      "helpLinguists": "Linguistic/social context when this can be said, or when it is semantically/pragmatically felicitous etc.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "context",
       "value": "",
@@ -229,7 +170,7 @@
     {
       "fieldDBtype": "DatumField",
       "id": "documentation",
-      "labelFieldLinguists": "Discussion for Handouts",
+      "labelFieldLinguists": "Discussion",
       "labelNonLinguists": "Additional Documentation",
       "labelTranslators": "Documentation",
       "type": "wiki, LaTeX",
@@ -240,11 +181,88 @@
         "wiki": "",
         "latex": ""
       },
-      "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-      "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-      "version": "v3.0.22",
+      "help": "Additional discussion of this example (for handouts or for documentation).",
+      "helpNonLinguists": "Additional discussion of this example (for handouts or for documentation).",
+      "helpLinguists": "Additional discussion of this example (for handouts or for documentation). This can be in Wiki or LaTeX or plain text formatting",
+      "version": "v3.6.1",
       "hint": "",
       "label": "documentation",
+      "value": "",
+      "mask": ""
+    },
+    {
+      "fieldDBtype": "DatumField",
+      "id": "orthography",
+      "labelFieldLinguists": "Orthography",
+      "labelNonLinguists": "Written",
+      "labelTranslators": "Orthography",
+      "type": "IGT, parallelText",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "all",
+      "defaultfield": true,
+      "json": {
+        "writingSystem": {
+          "id": "",
+          "referenceLink": ""
+        }
+      },
+      "help": "What was said/written using the alphabet/writing system of the language.",
+      "helpNonLinguists": "What was said/written using the alphabet/writing system of the language.",
+      "helpLinguists": "Orthographic transcription of the utterance; without morpheme breaks.",
+      "helpDevelopers": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas",
+      "version": "v3.6.1",
+      "hint": "",
+      "encryptedValue": "placeholder text",
+      "mask": "placeholder text",
+      "value": "placeholder text",
+      "label": "orthography"
+    },
+    {
+      "fieldDBtype": "DatumField",
+      "id": "allomorphs",
+      "labelFieldLinguists": "Allomorphs",
+      "labelTranslators": "Prefixe-s-root-suffixe-s",
+      "type": "IGT",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "linguist",
+      "defaultfield": true,
+      "json": {
+        "alternates": []
+      },
+      "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix.",
+      "helpNonLinguists": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix.",
+      "helpLinguists": "A segmentation of the utterance into morphemes in their surface realizations.",
+      "helpDevelopers": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s",
+      "version": "v3.6.1",
+      "hint": "",
+      "label": "allomorphs",
+      "value": "",
+      "mask": ""
+    },
+    {
+      "fieldDBtype": "DatumField",
+      "id": "syntacticCategory",
+      "labelFieldLinguists": "Morpho-Syntactic Category",
+      "labelTranslators": "Part of Speech",
+      "type": "IGT",
+      "shouldBeEncrypted": true,
+      "showToUserTypes": "machine, linguist",
+      "defaultfield": true,
+      "json": {
+        "alternates": [],
+        "conventions": {
+          "id": "",
+          "tagSet": [],
+          "referenceLink": ""
+        }
+      },
+      "help": "This is an optional field which can be used to help with search and data cleaning. eg: noun-thematicvowel-plural",
+      "helpNonLinguists": "This is an optional field which can be used to help with search and data cleaning. eg: noun-thematicvowel-plural",
+      "helpLinguists": "A sequence of categories, one for each morpheme in the “morphemes” field.",
+      "helpDevelopers": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+      "version": "v3.6.1",
+      "hint": "",
+      "label": "syntacticCategory",
       "value": "",
       "mask": ""
     },
@@ -282,7 +300,7 @@
             "filename": "Peace_Corps_Thailand_Green_Book.apkg",
             "URL": "https://localhost:3184/testingspreadsheet-firstcorpus/Peace_Corps_Thailand_Green_Book.apkg",
             "description": "File from import",
-            "version": "v3.0.22",
+            "version": "v3.6.1",
             "pouchname": "testingspreadsheet-firstcorpus",
             "api": "speech",
             "relation": "associated file"
@@ -290,9 +308,8 @@
         ]
       },
       "help": "Related data in the database, or at any web url.",
-      "helpLinguists": "Related data in the database, or at any web url.",
-      "helpDevelopers": "Related data in the database, or at any web url.",
-      "version": "v3.0.22",
+      "helpNonLinguists": "Related data in the database, or at any web url.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "relatedData",
       "value": "",
@@ -312,8 +329,8 @@
         "tags": []
       },
       "help": "Tags for categorizing your data.",
-      "helpLinguists": "Tags for categorizing your data.",
-      "version": "v3.0.22",
+      "helpNonLinguists": "Tags for categorizing your data.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "tags",
       "value": "",
@@ -332,9 +349,11 @@
       "json": {
         "tags": []
       },
-      "help": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
+      "help": "Tags about data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+      "helpNonLinguists": "Tags about data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
       "helpLinguists": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
-      "version": "v3.0.22",
+      "helpDevelopers": "Any number of tags of data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+      "version": "v3.6.1",
       "hint": "",
       "label": "validationStatus",
       "value": "",
@@ -356,9 +375,9 @@
         "hardware": {},
         "software": {}
       },
-      "help": "The user who originally entered the datum",
-      "helpLinguists": "The user who originally entered the datum",
-      "version": "v3.0.22",
+      "help": "The user who originally entered this.",
+      "helpNonLinguists": "The user who originally entered this.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "enteredByUser",
       "value": "",
@@ -378,9 +397,10 @@
       "json": {
         "users": []
       },
-      "help": "An array of users who modified the datum",
-      "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses.",
-      "version": "v3.0.22",
+      "help": "Users who modified this",
+      "helpNonLinguists": "Users who modified this",
+      "helpDevelopers": "An array of users who modified this, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses.",
+      "version": "v3.6.1",
       "hint": "",
       "label": "modifiedByUser",
       "value": "",
@@ -397,9 +417,11 @@
       "json": {
         "alternates": []
       },
-      "help": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
+      "help": "This an optional field. If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+      "helpNonLinguists": "This an optional field. If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
       "helpLinguists": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
-      "version": "v3.0.22",
+      "helpDevelopers": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+      "version": "v3.6.1",
       "hint": "",
       "label": "syntacticTreeLatex",
       "value": "",
