@@ -283,9 +283,9 @@
         <i class="fa whiteicon fa-search">
         </i>
         {{contextualize('locale_search_text_box')}}&nbsp;
-        <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+        <input type="text" class="input-medium search-query" ng-model='$parent.searchTerm'>
         &nbsp;
-        <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+        <button class="btn btn-primary" ng-click="runSearch($parent.searchTerm);">
           {{contextualize('locale_go_button')}}
         </button>
         &nbsp;
@@ -563,9 +563,9 @@
           <i class="fa whiteicon fa-search">
           </i>
           {{contextualize('locale_search_text_box')}}&nbsp;
-          <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+          <input type="text" class="input-medium search-query" ng-model='$parent.searchTerm'>
           &nbsp;
-          <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+          <button class="btn btn-primary" ng-click="runSearch($parent.searchTerm);">
             {{contextualize('locale_go_button')}}
           </button>
           &nbsp;

@@ -723,7 +723,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       return;
     }
 
-    if (allDataInCurrentSession && allDataInCurrentSession.length > 0 &&
+    if (!$scope.searching && allDataInCurrentSession && allDataInCurrentSession.length > 0 &&
       $scope.data && $scope.data.length > 0 &&
       $scope.scopePreferences.savedState.sessionID === $scope.fullCurrentSession._id) {
       // no change ...
@@ -1721,7 +1721,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.clearSearch = function() {
-    $scope.searchTerm = '';
+    $scope.searchTerm = "";
     $scope.searchHistory = null;
     $scope.loadDataInCurrentSessionFromServer();
   };
