@@ -1870,6 +1870,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this[fileCollection].add(details);
       if (this.parent) {
+        if (typeof this.parent.markAsNeedsToBeSaved === "function") {
+          this.parent.markAsNeedsToBeSaved();
+        }
         if (typeof this.parent.addFile === "function") {
           this.parent.addFile(details);
         } else if (this.parent.audioVideo && typeof this.parent.audioVideo.push === "function") {
