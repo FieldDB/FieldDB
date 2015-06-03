@@ -1036,6 +1036,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             $rootScope.corpus.bug("There was a problem loading " + selectedCorpus.dbname + " you might need to reload the page.");
             console.error(error.stack);
           });
+          $scope.users = [];
+          previousPreferedSpreadsheetShape = null;
           return;
         } else {
           selectedCorpus = new FieldDB.Corpus(selectedCorpus);
@@ -1045,6 +1047,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($rootScope.corpus !== selectedCorpus) {
       $rootScope.corpus = selectedCorpus;
       $scope.users = [];
+      previousPreferedSpreadsheetShape = null;
     }
 
     if (!FieldDB.FieldDBObject.application.authentication || !FieldDB.FieldDBObject.application.authentication.user || !FieldDB.FieldDBObject.application.authentication.user.roles) {
@@ -1752,6 +1755,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     // $rootScope.corpus.url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.dbname;
     $rootScope.corpus.save($rootScope.user).then(function(result) {
       console.log("Saved corpus details ", result);
+      previousPreferedSpreadsheetShape = null;
+
       $scope.overrideTemplateSetting();
       var indirectObjectString = "in <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
       $scope.addActivity([{
