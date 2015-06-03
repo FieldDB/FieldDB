@@ -924,7 +924,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             if (availableDBs.hasOwnProperty(dbName)) {
 
               // Only show lingllama's grafiti corpora to lingllama, per client request
-              if (dbName.indexOf("lingllama-communitycorpus") > -1 || dbName.indexOf("public-firstcorpus") > -1) {
+              if (dbName.indexOf("lingllama-community_corpus") > -1 || dbName.indexOf("lingllama-communitycorpus") > -1 || dbName.indexOf("public-firstcorpus") > -1) {
                 continue;
               }
               scopeDBs.push(dbName);
