@@ -132,33 +132,30 @@ var FieldDBObject = function FieldDBObject(json) {
 };
 FieldDBObject.internalAttributesToNotJSONify = [
   "$$hashKey",
-  "_corpus",
-  "_datalist",
-  "currentSession",
-  "currentDoc",
-  "_db",
-  "_unsaved",
-  "_parent",
   "application",
-  "debugMessages",
   "bugMessage",
   "confirmMessage",
   "contextualizer",
   "corpus",
+  "currentDoc",
+  "currentSession",
+  "datalist",
+  "database",
   "db",
+  "debugMessages",
   "decryptedMode",
-  "fieldsInColumns",
   "fetching",
+  "fieldsInColumns",
   "fossil",
   "loaded",
   "loading",
+  "newDatum",
   "parent",
   "perObjectAlwaysConfirmOkay",
   "perObjectDebugMode",
   "promptMessage",
-  "newDatum",
-  "saving",
   "saved",
+  "saving",
   "selected",
   "temp",
   "unsaved",
@@ -168,21 +165,27 @@ FieldDBObject.internalAttributesToNotJSONify = [
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
-  "_dateCreated",
-  "_dateModified",
-  "_fieldDBtype",
-  "_rev",
-  "_version",
   "appVersionWhenCreated",
   "authServerVersionWhenCreated",
   "created_at",
   "dateCreated",
   "dateModified",
+  "fieldDBtype",
   "modifiedByUser",
+  "rev",
   "roles",
   "updated_at",
-  "version",
+  "version"
 ]);
+
+FieldDBObject.ignore = function(property, ignorelist) {
+  if(!ignorelist){
+    throw new Error("missing the list of ignores");
+  }
+  if (ignorelist.indexOf(property) > -1 || ignorelist.indexOf(property.replace(/^_/, "")) > -1) {
+    return true;
+  }
+};
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -1120,7 +1123,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
@@ -1235,7 +1238,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in anObject) {
         if (anObject.hasOwnProperty(aproperty) &&
           typeof anObject[aproperty] !== "function" &&
-          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+          !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
         }
       }
@@ -1243,7 +1246,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in anotherObject) {
         if (anotherObject.hasOwnProperty(aproperty) &&
           typeof anotherObject[aproperty] !== "function" &&
-          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+          !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
         }
       }
@@ -1391,15 +1394,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         overwrite = optionalOverwriteOrAsk;
         this.debug("Found conflict for " + aproperty + " Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
-        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           handleAsyncConfirmMerge(this, aproperty);
         }
-        if (overwrite || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
+        if (overwrite || FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
             // resultObject._dbname = this.dbname;
             this.warn(" Keeping _dbname of " + resultObject.dbname);
           } else {
-            if (FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+            if (!FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
               this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
             }
             this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
@@ -1869,7 +1872,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         attributesToIgnore = attributesToIgnore.concat(FieldDBObject.internalAttributesToNotJSONify);
         // this.debug("Ignoring for json ", attributesToIgnore);
         for (aproperty in this) {
-          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && attributesToIgnore.indexOf(aproperty) === -1 && attributesToIgnore.indexOf(aproperty.replace(/^_/, "")) === -1) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && !FieldDBObject.ignore(aproperty, attributesToIgnore)) {
             underscorelessProperty = aproperty.replace(/^_/, "");
             if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
               underscorelessProperty = "_" + underscorelessProperty;
@@ -1889,7 +1892,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           for (aproperty in this.INTERNAL_MODELS) {
             if (!json[aproperty] && this.INTERNAL_MODELS) {
               if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
-                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore);
               } else {
                 json[aproperty] = this.INTERNAL_MODELS[aproperty];
               }
@@ -1915,6 +1918,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
           if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
             delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+            delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib].replace(/^_/, "")];
           }
         }
 
