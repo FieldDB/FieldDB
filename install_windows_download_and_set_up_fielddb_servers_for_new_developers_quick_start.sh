@@ -6,118 +6,119 @@ env:FIELDDB_HOME=$HOME/fielddbhome
 # For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
 # We need git to do anything, anyone who is running this script should have git installed
-git --version || {
-  echo 'You dont have Git installed. We use Git to version the source code, and make it possible for many people to work on the code at the same time. ' ;
-  echo 'Please install it, Opening... http://git-scm.com/download/mac';
-  echo ''
-  echo ''
-  sleep 3
+# git --version || {
+#   echo 'You dont have Git installed. We use Git to version the source code, and make it possible for many people to work on the code at the same time. ' ;
+#   echo 'Please install it, Opening... http://git-scm.com/download/mac';
+#   echo ''
+#   echo ''
+#   sleep 3
   [System.Diagnostics.Process]::Start("http://git-scm.com/download/mac;")
-  exit 1;
-}
+  # exit 1;
+# }
 
-ls /Applications/SmartGit.app/Contents/MacOS/SmartGit || {
-  echo 'You dont have SmartGit installed. We use SmartGit to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
-  echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
-  echo ''
-  echo ''
-  sleep 3
+# ls /Applications/SmartGit.app/Contents/MacOS/SmartGit || {
+#   echo 'You dont have SmartGit installed. We use SmartGit to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+#   echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
+#   echo ''
+#   echo ''
+#   sleep 3
   [System.Diagnostics.Process]::Start("http://www.syntevo.com/smartgithg/;")
   # exit 1;
-}
+# }
 
-ls /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text || {
-  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshint to make sure your javascript is well formed. ' ;
-  echo 'Please install it, Opening... http://www.sublimetext.com/3';
-  echo ''
-  echo ''
-  sleep 3
+# ls /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text || {
+#   echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshint to make sure your javascript is well formed. ' ;
+#   echo 'Please install it, Opening... http://www.sublimetext.com/3';
+#   echo ''
+#   echo ''
+#   sleep 3
   [System.Diagnostics.Process]::Start("http://www.sublimetext.com;")
-  exit 1;
-}
-echo 'alias sublime="open -a /Applications/Sublime\ Text.app/ ."'  >> $HOME/.bash_profile
+#   exit 1;
+# }
+# echo 'alias sublime="open -a /Applications/Sublime\ Text.app/ ."'  >> $HOME/.bash_profile
 
 # We need node to be able to modify the code, anyone who is running this script should have that too.
-node --version || {
-  echo 'You dont have Node.js installed yet. We use Node and NPM (Node Package Manager) to install dependancies and make it easier for you to build the code.' ;
-  read -p "Do you want me to automatically install Node for you using Homebrew? (using homebrew is the best method to install ndoe on Mac, it makes it so you dont need to use sudo to install global packages." -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-     then {
-      brew install node;
-      echo "Please review the above log for errors and then re-run this script when you're sure node is ready."
-    }
-  else {
-    echo ''
-    echo ''
-    echo 'Please install it from the website, Opening... http://nodejs.org';
-    sleep 3
+# node --version || {
+#   echo 'You dont have Node.js installed yet. We use Node and NPM (Node Package Manager) to install dependancies and make it easier for you to build the code.' ;
+#   read -p "Do you want me to automatically install Node for you using Homebrew? (using homebrew is the best method to install ndoe on Mac, it makes it so you dont need to use sudo to install global packages." -n 1 -r
+#     if [[ $REPLY =~ ^[Yy]$ ]]
+#      then {
+#       brew install node;
+#       echo "Please review the above log for errors and then re-run this script when you're sure node is ready."
+#     }
+#   else {
+#     echo ''
+#     echo ''
+#     echo 'Please install it from the website, Opening... http://nodejs.org';
+#     sleep 3
     [System.Diagnostics.Process]::Start("http://nodejs.org;")
-  }
-fi
-exit 1;
-}
+#   }
+# fi
+# exit 1;
+# }
 
 
 echo " Installing grunt, gulp, browserify, jasmine-node, jshint, bower and other development dependancies which are used to work on the project"
-which grunt || {
+# which grunt || {
   echo "Installing grunt globally (required to build and manage modules) "
   npm install -g grunt-cli
-}
-which gulp || {
+# }
+# which gulp || {
   echo "Installing gulp globally (required to build and manage modules) "
   npm install -g gulp
-}
-which jasmine-node || {
+# }
+# which jasmine-node || {
   echo "Installing jasmine-node globally (required to run our test suites) "
   npm install -g git://github.com/kacperus/jasmine-node.git
-}
-which jshint || {
+# }
+# which jshint || {
   echo "Installing jshint globally (required to make sure your code is well-formed) "
   npm install -g jshint
-}
-which bower || {
+# }
+# which bower || {
   echo "Installing bower globally (required to install client side dependancies for many modules) "
   npm install -g bower
-}
-which phantomjs || {
+# }
+# which phantomjs || {
   echo "Installing phantomjs globally (required to run browser tests, website scrapers, server side render, and other fun headless things you will probably like to do) "
   npm install -g phantomjs
-  # echo "export PHANTOMJS_BIN=`which phantomjs`" >> $HOME/.bash_profile # this is done automatically by npm install -g
+  echo "export PHANTOMJS_BIN=`which phantomjs`" >> $HOME/.bash_profile # this is done automatically by npm install -g
   # source $HOME/.bash_profile
-}
-which karma || {
+# }
+# which karma || {
   echo "Installing karma globally (required to run angular tests) "
   npm install -g karma
   npm install -g karma-phantomjs-launcher
   npm install -g karma-chrome-launcher
-}
+# }
 
 
 # We decided not to force interns to have XCode on their macs
 #gcc --version || { echo 'You dont have a C++ compiler installed, please install it and other developer tools: sudo apt-get build-dep nodejs  or http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12' ; exit 1; }
 
 # In general, you should already have an ssh key set up, if not, this will help you set one up.
-cat $HOME/.ssh/id_rsa.pub  ||  {
-  echo "Enter the email you want to associate to your GitHub account"
-  echo -n "(e.g. me@gmail.com) and press [ENTER]: "
-  read email;
-  ssh-keygen -t rsa -C  '"'$email'"';
-  echo 'I created an ssh key for you so you can push code to GitHub, you need to copy this ssh key to your GitHub user preferences. ';
-  echo ''
-  echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
-  echo ''
-  echo 'Please paste it (Command+V) into your ssh keys, Opening... https://github.com/settings/ssh';
-  cat ~/.ssh/id_rsa.pub | pbcopy;
-  sleep 3
-  [System.Diagnostics.Process]::Start("https://github.com/settings/ssh;")
-  echo "Continuing with the rest of the downloads while you paste your key on github ... "
-  cat ~/.gitconfig  || {
-    git config --global user.email '"'$email'"';
-  }
-}
+# cat $HOME/.ssh/id_rsa.pub  ||  {
+#   echo "Enter the email you want to associate to your GitHub account"
+#   echo -n "(e.g. me@gmail.com) and press [ENTER]: "
+#   read email;
+#   ssh-keygen -t rsa -C  '"'$email'"';
+#   echo 'I created an ssh key for you so you can push code to GitHub, you need to copy this ssh key to your GitHub user preferences. ';
+#   echo ''
+#   echo 'I already copied it into your clipboard so you can paste it in an New Key on GitHub. ';
+#   echo ''
+#   echo 'Please paste it (Command+V) into your ssh keys, Opening... https://github.com/settings/ssh';
+#   cat ~/.ssh/id_rsa.pub | pbcopy;
+#   sleep 3
+#   [System.Diagnostics.Process]::Start("https://github.com/settings/ssh;")
+#   echo "Continuing with the rest of the downloads while you paste your key on github ... "
+#   cat ~/.gitconfig  || {
+#     git config --global user.email '"'$email'"';
+#   }
+# }
 
-echo "Making fielddb directory which will house the fielddb code, in case you need it"
-echo "export env:FIELDDB_HOME=$env:FIELDDB_HOME" >> $HOME/.bash_profile
+echo "You need to create an ENV variable to FIELDDB_HOME directory which will house the fielddb code, in case you need it"
+# echo "export env:FIELDDB_HOME=$env:FIELDDB_HOME" >> $HOME/.bash_profile
+    [System.Diagnostics.Process]::Start("http://www.computerhope.com/issues/ch000549.htm")
 
 
 mkdir $env:FIELDDB_HOME
@@ -148,6 +149,8 @@ git remote add origin git@github.com:"$github_username"/FieldDB.git;
 git remote -v
 
 git config --global user.username '"'$github_username'"'
+
+exit
 
 echo " Generating js docs so you can browse the documentation "
 grunt docs
