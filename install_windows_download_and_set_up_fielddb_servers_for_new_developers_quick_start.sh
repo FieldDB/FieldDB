@@ -21,7 +21,7 @@ fi
 
 
 #IF you want to customize the home's location, change this variable
-FIELDDB_HOME=$HOME/fielddbhome
+env:FIELDDB_HOME=$HOME/fielddbhome
 
 # For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
 
@@ -137,17 +137,17 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
 }
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
-echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bash_profile
+echo "export env:FIELDDB_HOME=$env:FIELDDB_HOME" >> $HOME/.bash_profile
 
 
-mkdir $FIELDDB_HOME
-mkdir $FIELDDB_HOME/logs
-cd $FIELDDB_HOME
+mkdir $env:FIELDDB_HOME
+mkdir $env:FIELDDB_HOME/logs
+cd $env:FIELDDB_HOME
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
 echo "Downloading the FieldDB core from Github."
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/FieldDB.git
 cd FieldDB
 
@@ -181,10 +181,10 @@ sleep 3
 open -a Google\ Chrome docs/javascript/Corpus.html;
 
 echo ""
-echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $FIELDDB_HOME/FieldDBWebServer/public/dev.html"
+echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $env:FIELDDB_HOME/FieldDBWebServer/public/dev.html"
 sleep 3
-open -a Google\ Chrome $FIELDDB_HOME/FieldDBWebServer/public/dev.html;
-open -a Sublime\ Text.app $FIELDDB_HOME;
+open -a Google\ Chrome $env:FIELDDB_HOME/FieldDBWebServer/public/dev.html;
+open -a Sublime\ Text.app $env:FIELDDB_HOME;
 echo ""
 echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit, or search for FieldDB on YouTube "
 
@@ -199,14 +199,14 @@ echo " Installing build dependancies (managed by NPM)"
 npm install;
 
 echo 'The handlebars templates have to be compiled and turned into javascript before you can run the Chrome App (as of Chrome manifest v2 you cant use any sort of Eval in your code, and templates generally require eval. So this means that before you can use the app, we now have "build step" ie, run this script if you have changed anything in the .handlebars files)'
-cd $FIELDDB_HOME/FieldDB
+cd $env:FIELDDB_HOME/FieldDB
 ./scripts/build_fielddb_minified.sh
 echo "If you want to get started developing or using the Offline Chrome App, you now can load it as an Chrome Extension."
 echo 'Instructions:'
 echo ' 1. visit chrome://extensions in a Chrome or Chromium browser'
 echo ' 2. Click on "Developer mode"  checkbox'
 echo ' 3. Click on "Load unpacked extension..." '
-echo " 4. Navigate to $FIELDDB_HOME/FieldDB/backbone_client OR $FIELDDB_HOME/FieldDB/angular_client/modules/spreadsheet"
+echo " 4. Navigate to $env:FIELDDB_HOME/FieldDB/backbone_client OR $env:FIELDDB_HOME/FieldDB/angular_client/modules/spreadsheet"
 echo " 5. Open a new tab, click on the apps section (if it is not already open) and the click on the Logo of the app to open it"
 echo ''
 echo ''
@@ -217,16 +217,16 @@ open http://developer.chrome.com/extensions/getstarted.html#unpacked;
 
 
 echo "Building the Core angular components, they are written in Angular.js and need you to bower install its dependancies before you can open the other components which depend on them. It also uses sym links for local files in this project instead of bower "
-cd $FIELDDB_HOME/FieldDB
+cd $env:FIELDDB_HOME/FieldDB
 ./scripts/build_fielddb_angular_core.sh
 
 echo "Building the Spreadsheet App, it is written in Angular.js and needs you to bower install its dependancies before you can open it"
-cd $FIELDDB_HOME/FieldDB
+cd $env:FIELDDB_HOME/FieldDB
 ./scripts/build_spreadsheet_angular.sh
 
 
 echo "Building the Corpus pages app, it is written in Angular.js and needs you to bower install its dependancies before you can open it. It also uses sym links for local files in this project instead of bower (these need to be on your computer, although we will eventually move them to bower when they are stable)"
-cd $FIELDDB_HOME/FieldDB
+cd $env:FIELDDB_HOME/FieldDB
 ./scripts/build_corpuspages_angular.sh
 
 
@@ -234,7 +234,7 @@ cd $FIELDDB_HOME/FieldDB
 
 echo ''
 echo "Downloading the PraatTextGridJS lib from Github, this is for the manipulating audio intervals in textgrid and/or json"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/PraatTextGridJS.git
 cd PraatTextGridJS
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -249,7 +249,7 @@ npm install
 
 echo ''
 echo "Downloading the Praat-Scripts lib from Github, this contains all the praat scripts the Audio web service can run. You can also use it to run/improve scripts locally"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/Praat-Scripts.git
 cd Praat-Scripts
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -264,7 +264,7 @@ npm install
 
 echo ''
 echo "Downloading the FieldDBGlosser lib from Github, this is for modifying the default glosser functionality"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/FieldDBGlosser.git
 cd FieldDBGlosser
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -286,16 +286,16 @@ npm install
 
 #echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 #echo "Downloading Node, a javascript server which is what FieldDB uses to run"
-#cd $FIELDDB_HOME
+#cd $env:FIELDDB_HOME
 #curl -O --retry 999 --retry-max-time 0 -C - http://nodejs.org/dist/v0.6.19/node-v0.6.19.tar.gz
 #tar -zxvf node-v0.6.19.tar.gz
 #cd node-v0.6.19
 #echo "Next three lines give command to compile Node"
-#./configure --prefix=$FIELDDB_HOME/node
+#./configure --prefix=$env:FIELDDB_HOME/node
 #make
 #make install
 #echo "Next line puts the Node binary directory to path and append it to profile so that it is permanently available for the user"
-#echo "export PATH=$FIELDDB_HOME/node/bin:$PATH" >> ~/.profile
+#echo "export PATH=$env:FIELDDB_HOME/node/bin:$PATH" >> ~/.profile
 #source ~/.profile
 
 
@@ -304,7 +304,7 @@ npm install
 echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Web server from Github, this is for the Public URLS and the website"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
 cd FieldDBWebServer
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -321,7 +321,7 @@ npm install
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 echo ''
 echo "Downloading the FieldDB Authentication webservice from Github, this is for validating users and creating databases"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService.git
 cd AuthenticationWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -339,7 +339,7 @@ npm install || {
 echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Audio webservice from Github, this is for extracting audio from video etc, or running Praat processes on the audio to chunk the files into utterances etc"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
 cd AudioWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -371,7 +371,7 @@ ls /Applications/Praat.app/Contents/MacOS/Praat || {
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 echo ''
 echo "Downloading the FieldDB Lexicon webservice from Github, this is for searching the databases, and some default glosser webservices"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
 cd LexiconWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -389,7 +389,7 @@ npm install
 echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Corpus webservice from Github, this is for wrapping the database server (we are currently using CouchDB) in CORS if you have to use a pre 1.3 version of CouchDB, as well as for the couchdb config files"
-cd $FIELDDB_HOME
+cd $env:FIELDDB_HOME
 git clone https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
 cd CorpusWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
@@ -412,14 +412,14 @@ curl http://localhost:5984 || {
     if [[ $REPLY =~ ^[Yy]$ ]]
       then {
       # set up couchdb
-      cd $FIELDDB_HOME
+      cd $env:FIELDDB_HOME
       mkdir couchdb
       cd couchdb
       curl -O --retry 999 --retry-max-time 0 -C - http://mirror.its.dal.ca/apache/couchdb/binary/mac/1.3.1/Apache-CouchDB-1.3.1.zip
       unzip Apache-CouchDB-1.3.1.zip
       mv Apache\ CouchDB.app /Applications/Apache\ CouchDB.app
       echo "Setting up CouchDB with CORS support and HTTPS"
-      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &
+      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $env:FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$env:FIELDDB_HOME#'$env:FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &
     }
   fi
 }
@@ -438,7 +438,7 @@ erica --version || {
   read -p "Do you want me to download Erica and set it up for you?" -n 1 -r
   if [[ $REPLY =~ ^[Yy]$ ]]
     then {
-     cd $FIELDDB_HOME
+     cd $env:FIELDDB_HOME
      mkdir couchdb
      cd couchdb
      echo ""
@@ -469,7 +469,7 @@ erica --version || {
        sudo make install
      }
    else {
-    alias erica="$FIELDDB_HOME/couchdb/erica/erica"
+    alias erica="$env:FIELDDB_HOME/couchdb/erica/erica"
   }
 fi
 }
@@ -488,7 +488,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
       echo "Making pm2 log directory point to the logs directory"
       # mkdir /usr/local/var/log/fielddb
       # ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
-      ln -s $FIELDDB_HOME/logs ~/.pm2/logs
+      ln -s $env:FIELDDB_HOME/logs ~/.pm2/logs
 
     }
 
@@ -508,18 +508,18 @@ if [[ $REPLY =~ ^[Yy]$ ]]
     echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
 
     echo "Downloading server configs from a private repo"
-    cd $FIELDDB_HOME
+    cd $env:FIELDDB_HOME
     git clone username@git.example.ca:/example/FieldDBServerConfig
-    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/fielddbhome $FIELDDB_HOME
-    sudo chown -R fielddb $FIELDDB_HOME
+    sudo cp -R $env:FIELDDB_HOME/FieldDBServerConfig/fielddbhome $env:FIELDDB_HOME
+    sudo chown -R fielddb $env:FIELDDB_HOME
 
     echo "Setting up nginx"
     brew install nginx
     sudo cp -R /usr/local/etc/nginx /usr/local/etc/nginxbackup
-    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/etc/nginx /usr/local/etc/
+    sudo cp -R $env:FIELDDB_HOME/FieldDBServerConfig/etc/nginx /usr/local/etc/
 
     echo "Setting up plist daemons"
-    sudo cp -R $FIELDDB_HOME/FieldDBServerConfig/Library/LaunchDaemons /Library
+    sudo cp -R $env:FIELDDB_HOME/FieldDBServerConfig/Library/LaunchDaemons /Library
     sudo launchctl load -w /Library/LaunchDaemons/*
 
   }
@@ -532,7 +532,7 @@ fi
 curl http://localhost:5984/new_corpus || {
   echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
   
-  cd $FIELDDB_HOME/AuthenticationWebService
+  cd $env:FIELDDB_HOME/AuthenticationWebService
   git fetch https://github.com/cesine/AuthenticationWebService.git installable
   git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
   node service.js &
@@ -545,28 +545,28 @@ curl http://localhost:5984/new_corpus || {
 
 ## Running tests to see if everything downloaded and works ###################################################
 echo "Testing if FieldDB WebServer will run, it should say 'Listening on 3182' "
-cd $FIELDDB_HOME/FieldDBWebServer
+cd $env:FIELDDB_HOME/FieldDBWebServer
 node server &
 echo "Will run FieldDBWebServer tests in a moment... "
 sleep 10
 npm test
 
 echo "Testing if FieldDB AuthenticationWebService will run "
-cd $FIELDDB_HOME/AuthenticationWebService
+cd $env:FIELDDB_HOME/AuthenticationWebService
 node auth_service.js & 
 echo "Will run AuthenticationWebService tests in a moment... "
 sleep 10
 npm test
 
 echo "Testing if FieldDB AudioWebService will run, it should say 'Listening on 3184' "
-cd $FIELDDB_HOME/AudioWebService
+cd $env:FIELDDB_HOME/AudioWebService
 node audio-service.js & 
 echo "Will run AuthenticationWebService tests in a moment... "
 sleep 10
 npm test
 
 echo "Testing if FieldDB LexiconWebService will run, it should say 'Listening on 3185' "
-cd $FIELDDB_HOME/LexiconWebService
+cd $env:FIELDDB_HOME/LexiconWebService
 echo "Will run LexiconWebService tests in a moment... "
 sleep 10
 npm test
