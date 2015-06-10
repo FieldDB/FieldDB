@@ -163,14 +163,11 @@ echo " Running jshint, tests and building core and setting up symblic links"
 grunt travis
 
 echo "What is your GitHub username (so we can set that to the origin of the repos instead of the main project)"
-echo -n "(e.g. myusernameontgithub) and press [ENTER]: "
-read github_username;
+$github_username = Read-Host  "(e.g. myusernameontgithub) and press [ENTER]: ";
 git remote add origin git@github.com:"$github_username"/FieldDB.git;
 git remote -v
 
-git config --global user.username || {
-  git config --global user.username '"'$github_username'"'
-}
+git config --global user.username '"'$github_username'"'
 
 echo " Generating js docs so you can browse the documentation "
 grunt docs
@@ -477,7 +474,7 @@ fi
 }
 
 
-read -p "Do you want to use this as a production server?" -n 1 -r
+Read-Host -p "Do you want to use this as a production server?" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
   then {
 
