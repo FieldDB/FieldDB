@@ -1,25 +1,5 @@
 #!/bin/bash
 
-# This script should run as an unpriviledged user. when it needs su privileges for dependancies that you
-# dont yet have installed, it uses sudo for that line only.
-if [ "$(whoami)" == "root" ]
-  then {
-    echo ""
-    echo ""
-    echo "Please do NOT run this script as root/sudo."
-    echo ""
-    echo "This script should run as an unpriviledged user, when it needs su privileges"
-    echo "for dependancies that you dont yet have installed, it uses sudo for that line only."
-    echo ""
-    echo "eg:"
-    echo ""
-    echo "$ bash "`basename $0`
-    echo ""
-    exit 1;
-  }
-fi
-
-
 #IF you want to customize the home's location, change this variable
 env:FIELDDB_HOME=$HOME/fielddbhome
 
@@ -32,7 +12,7 @@ git --version || {
   echo ''
   echo ''
   sleep 3
-  open -a Google\ Chrome http://git-scm.com/download/mac;
+  [System.Diagnostics.Process]::Start("http://git-scm.com/download/mac;")
   exit 1;
 }
 
@@ -42,7 +22,7 @@ ls /Applications/SmartGit.app/Contents/MacOS/SmartGit || {
   echo ''
   echo ''
   sleep 3
-  open -a Google\ Chrome http://www.syntevo.com/smartgithg/;
+  [System.Diagnostics.Process]::Start("http://www.syntevo.com/smartgithg/;")
   # exit 1;
 }
 
@@ -52,7 +32,7 @@ ls /Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text || {
   echo ''
   echo ''
   sleep 3
-  open -a Google\ Chrome http://www.sublimetext.com;
+  [System.Diagnostics.Process]::Start("http://www.sublimetext.com;")
   exit 1;
 }
 echo 'alias sublime="open -a /Applications/Sublime\ Text.app/ ."'  >> $HOME/.bash_profile
@@ -71,7 +51,7 @@ node --version || {
     echo ''
     echo 'Please install it from the website, Opening... http://nodejs.org';
     sleep 3
-    open -a Google\ Chrome http://nodejs.org;
+    [System.Diagnostics.Process]::Start("http://nodejs.org;")
   }
 fi
 exit 1;
@@ -129,7 +109,7 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
   echo 'Please paste it (Command+V) into your ssh keys, Opening... https://github.com/settings/ssh';
   cat ~/.ssh/id_rsa.pub | pbcopy;
   sleep 3
-  open -a Google\ Chrome https://github.com/settings/ssh;
+  [System.Diagnostics.Process]::Start("https://github.com/settings/ssh;")
   echo "Continuing with the rest of the downloads while you paste your key on github ... "
   cat ~/.gitconfig  || {
     git config --global user.email '"'$email'"';
@@ -175,12 +155,12 @@ echo " Opening js docs so you can browse the documentation, if you like that kin
 echo ''
 echo ''
 sleep 3
-open -a Google\ Chrome docs/javascript/Corpus.html;
+[System.Diagnostics.Process]::Start("docs/javascript/Corpus.html;")
 
 echo ""
 echo "If you're really curious about the project and how it grew, you can read at the dev blog in reverse order. Its in $env:FIELDDB_HOME/FieldDBWebServer/public/dev.html"
 sleep 3
-open -a Google\ Chrome $env:FIELDDB_HOME/FieldDBWebServer/public/dev.html;
+[System.Diagnostics.Process]::Start("$env:FIELDDB_HOME/FieldDBWebServer/public/dev.html;")
 open -a Sublime\ Text.app $env:FIELDDB_HOME;
 echo ""
 echo "If you got the code in order to could edit something specific, you could try doing a CMD+Shift+F in Sublime and looking for it the text you want to edit, or search for FieldDB on YouTube "
@@ -360,7 +340,7 @@ ls /Applications/Praat.app/Contents/MacOS/Praat || {
   echo '$ brew install ffmpeg'
   echo ''
   sleep 3
-  open -a Google\ Chrome http://www.fon.hum.uva.nl/praat/download_mac.html;
+  [System.Diagnostics.Process]::Start("http://www.fon.hum.uva.nl/praat/download_mac.html;")
   # echo "Then add an alias for it in your ~/.bash_profile like this: "
   # echo ' echo "alias praat=/Applications/Praat.app/Contents/MacOS/Praat"  >> $HOME/.bash_profile'
 }
