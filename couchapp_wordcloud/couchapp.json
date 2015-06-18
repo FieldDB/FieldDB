@@ -1,0 +1,4 @@
+{
+    "name": "WordCloud CouchApp",
+    "description": "Map reduce and lists for indexing and training word clouds for a corpus's lexicon"
+}
