@@ -879,9 +879,15 @@ var MAINTAINENCE = {
               if (dbname.indexOf("anonymous") > -1 || dbname.indexOf("community") === 0) {
                 return;
                 if (sourceDB === "new_corpus") {
-                  sourceDB = "new_learnx_corpus";
+                  if (dbname.indexOf("wordcloud") > -1 ) {
+                    sourceDB = "new_wordcloud_corpus";
+                  // } else if (dbname.indexOf("speechrec") > -1) {
+                  //   sourceDB = "new_speech_recognition_corpus";
+                  } else {
+                    sourceDB = "new_learnx_corpus";
+                  }
                 }
-                console.log("deploying to anonymous users TODO use anothe sourceDB also. " + sourceDB);
+                console.log("deploying to anonymous users TODO use another sourceDB also. " + sourceDB);
               } else {
                 return; //deploy to only beta testers and/or phophlo users
                 console.log("deploying to a normal user " + sourceDB);
