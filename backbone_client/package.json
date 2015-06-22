@@ -41,20 +41,9 @@
     "handlebars": "1.3.0",
     "requirejs": "2.1.11"
   },
-  "main": "./../scripts/build_template_databases_using_fielddb.sh",
-  "bin": {
-    "fielddb": "./../scripts/build_template_databases_using_fielddb.sh"
-  },
-  "engines": {
-    "node": "~0.8 || ~0.10"
-  },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "postinstall": "bower install"
   },
-  "license": "Apache 2.0",
-  "licenses": [
-    {
-      "type": "Apache 2.0"
-    }
-  ]
+  "license": "Apache-2.0"
 }

@@ -66,16 +66,10 @@
     "grunt-newer": "^1.1.0",
     "jasmine-node": "^1.14.5"
   },
-  "engines": {
-    "node": "~0.8 || ~0.10"
-  },
+  "main": "api/fielddb.js",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "postinstall": "bower install"
   },
-  "license": "Apache 2.0",
-  "licenses": [
-    {
-      "type": "Apache 2.0"
-    }
-  ]
+  "license": "Apache-2.0"
 }

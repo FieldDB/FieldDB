@@ -1,5 +1,5 @@
 {
-  "name": "FieldDB-Prototype",
+  "name": "fielddb-prototype",
   "version": "3.6.1",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB",
   "authors": [
@@ -21,8 +21,7 @@
   ],
   "description": "The original fielddb app",
   "main": "corpus.html",
-  "license": "Apache 2.0",
-  "private": true,
+  "license": "Apache-2.0",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -35,6 +34,6 @@
     "jquery": "2.0.0",
     "handlebars": "~1.3.0",
     "fielddb-glosser": "1.82.3",
-    "fielddb": "~2.35.0"
+    "fielddb": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb.git"
   }
 }
