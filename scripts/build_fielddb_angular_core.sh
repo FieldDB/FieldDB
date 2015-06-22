@@ -9,6 +9,7 @@ npm install || exit 1;
 
 echo "Using local fielddb commonjs";
 bower link fielddb || {
+  bower install fielddb;
   rm bower_components/fielddb/fielddb.js;
   rm bower_components/fielddb/fielddb.min.js;
   ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.js;
