@@ -287,6 +287,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       } else {
         key = "";
       }
+      limit = limit || 1000;
       var originalCollectionUrl = collectionUrl;
       var cantLogIn = function(reason) {
         self.debug(reason);
@@ -353,7 +354,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       } else {
 
         if (collectionUrl.indexOf("/") === -1) {
-          collectionUrl = self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", 1000) + key;
+          collectionUrl = self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", limit) + key;
         } else if (collectionUrl.indexOf("://") === -1) {
           collectionUrl = self.url + "/" + collectionUrl;
         } else {

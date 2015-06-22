@@ -1,13 +1,14 @@
 {
   "name": "fielddb-corpus-pages-app",
-  "version": "3.6.1",
+  "version": "3.9.22",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
   },
   "dependencies": {},
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "bower install"
   },
   "devDependencies": {
     "gulp": "~3.8.10",
@@ -52,7 +53,5 @@
     "uglify-save-license": "~0.4.1",
     "wrench": "~1.5.8"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  }
+  "license": "Apache-2.0"
 }
