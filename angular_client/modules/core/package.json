@@ -50,10 +50,9 @@
     "wiredep": "~2.2.0",
     "wrench": "~1.5.8"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  },
+  "license": "Apache-2.0",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "bower install"
   }
 }

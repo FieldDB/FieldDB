@@ -11,7 +11,6 @@ cat app/scripts/private_services.js || {
 }
 
 npm install || exit 1;
-bower install || exit 1;
 
 echo "Using local fielddb commonjs";
 rm app/bower_components/fielddb/fielddb.js;
