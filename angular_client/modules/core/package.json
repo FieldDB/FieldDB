@@ -1,6 +1,6 @@
 {
   "name": "fielddb-angular",
-  "version": "3.6.1",
+  "version": "3.9.22",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
@@ -50,10 +50,9 @@
     "wiredep": "~2.2.0",
     "wrench": "~1.5.8"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  },
+  "license": "Apache-2.0",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "bower install"
   }
 }

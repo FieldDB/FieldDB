@@ -865,7 +865,7 @@ define([
     'createCorpus': function(dataToPost) {
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
       dataToPost.authUrl = OPrime.defaultConnection().authUrl;
-      dataToPost.newCorpusName = this.get("title");
+      dataToPost.newCorpusTitle = this.get("title");
 
       var functionForError = function(err){
         console.log(JSON.stringify(err));

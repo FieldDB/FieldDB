@@ -33,8 +33,7 @@ before_install:
   - npm install -g grunt-cli
   - npm install -g bower
   - npm install -g jasmine-node
-  - npm install
-  - bower install
+
 before_script:
   # Make sure the emulator has started before running tests
 

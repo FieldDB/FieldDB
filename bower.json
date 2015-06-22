@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "3.6.1",
+  "version": "3.9.22",
   "homepage": "http://opensourcefieldlinguistics.github.io/FieldDB/",
   "bugs": {
     "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
@@ -30,7 +30,7 @@
     "Pablo Duboue <pablo.duboue@gmail.com>",
     "Oriana <oriana.kilbourn-ceron@mail.mcgill.ca>"
   ],
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "ignore": [
     "Gruntfile.js",
     "angular_client",

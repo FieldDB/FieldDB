@@ -235,7 +235,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         return;
       }
       if (value) {
-        this.dbname = value;
+        this._dbname = value;
       }
     }
   },

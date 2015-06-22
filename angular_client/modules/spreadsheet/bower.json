@@ -1,6 +1,6 @@
 {
   "name": "spreadsheet",
-  "version": "3.6.1",
+  "version": "3.9.22",
   "authors": [
     "info@fielddb.org"
   ],
@@ -11,7 +11,7 @@
     "conventions",
     "linguistics"
   ],
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "ignore": [
     "**/.*",
@@ -38,8 +38,8 @@
     "autofill-event": "~1.0.0",
     "bootstrap": "~3.3.1",
     "es5-shim": "~3.1.0",
-    "fielddb": "^2.45.3",
-    "fielddb-angular": "^2.37.9",
+    "fielddb": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb.git",
+    "fielddb-angular": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb-angular.git",
     "fielddb-glosser": "1.82.3",
     "font-awesome": "~4.2.0",
     "jquery": "~2.1.1",
