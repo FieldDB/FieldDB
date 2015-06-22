@@ -7,7 +7,7 @@ function(doc) {
       return;
     }
     if (doc.fieldDBtype === "Datum" || doc.collection == "datums" || (doc.datumFields && doc.session)) {
-      var dateModified = doc.dateModified;
+      var dateModified = doc.dateModified || doc.dateCreated;
       if (dateModified) {
         try {
           dateModified = dateModified.replace(/["\\]/g, '');
@@ -16,7 +16,7 @@ function(doc) {
           dateModified = dateModified.getTime();
         } catch (e) {
           //emit(error, null);
-        }
+        } 
       }
       //doc.fieldDBtype = "Datum";
       emit(dateModified, doc);
