@@ -66,5 +66,6 @@
   "dependencies": {},
   "devDependencies": {
     "jasmine": "~2.2.1"
-  }
+  },
+  "main": "fielddb.js"
 }
