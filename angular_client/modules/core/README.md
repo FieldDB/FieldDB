@@ -31,7 +31,6 @@ In your app load the `script.js` and optionally:
 To use the module
 * you should set the `BASE_DB_URL` and `BASE_AUTH_URL` for your FieldDB server, e.g. below
 * you should include `fielddbAngular` as a dependency in your `angular.module` declaration, e.g. below
-* you should allow CORS requests to your fielddb server, e.g.  `https://*.lingsync.org/**`
 ```javascript
   FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.lingsync.org';
   FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.lingsync.org';
@@ -46,27 +45,7 @@ To use the module
     "ui.bootstrap",
     'fielddbAngular'
   ])
-  .config(function($routeProvider, $locationProvider, $sceDelegateProvider) {
-    // $locationProvider.html5Mode(true);
-
-    $sceDelegateProvider.resourceUrlWhitelist([
-      // Allow same origin resource loads.
-      'self',
-      // Allow loading from outer domain.
-      'https://*.lingsync.org/**',
-      'http://*.yourdomain.ca/**'
-    ]);
-
-    if (FieldDB && FieldDB.Router) {
-      for (var when in FieldDB.Router.routes) {
-        FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBCorpusPagesController';
-        $routeProvider.when(FieldDB.Router.routes[when].path, FieldDB.Router.routes[when].angularRoute);
-      }
-      if (FieldDB.Router.otherwise) {
-        $routeProvider.otherwise(FieldDB.Router.otherwise);
-      }
-    }
-  });
+  
 ```
 
 ## Examples
