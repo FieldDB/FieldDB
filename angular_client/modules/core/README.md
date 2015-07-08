@@ -27,7 +27,10 @@ In your app load the `script.js` and optionally:
 <script src="bower_components/fielddb-angular/dist/scripts/fielddb-angular.js"></script>
 ```
 
-
+####Load module
+To use the module, 
+* you should include `fielddbAngular` as a dependency in your `angular.module` declaration, e.g. below
+* you should allow CORS requests to your fielddb server, e.g.  `https://*.lingsync.org/**`
 ```javascript
   angular
   .module('myAppWhichUsesFieldDB', [
