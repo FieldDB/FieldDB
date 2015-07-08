@@ -42,7 +42,7 @@ To use the module,
     "ui.bootstrap",
     'fielddbAngular'
   ])
-  .config(function($routeProvider, $locationProvider) {
+  .config(function($routeProvider, $locationProvider, $sceDelegateProvider) {
     // $locationProvider.html5Mode(true);
 
     $sceDelegateProvider.resourceUrlWhitelist([
