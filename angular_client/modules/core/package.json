@@ -53,6 +53,6 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "gulp test",
-    "postinstall": "bower install"
+    "postinstall": "bower install && bower link fielddb || exit 0;"
   }
 }
