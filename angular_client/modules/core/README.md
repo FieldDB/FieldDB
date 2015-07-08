@@ -28,10 +28,14 @@ In your app load the `script.js` and optionally:
 ```
 
 ####Load module
-To use the module, 
+To use the module
+* you should set the `BASE_DB_URL` and `BASE_AUTH_URL` for your FieldDB server, e.g. below
 * you should include `fielddbAngular` as a dependency in your `angular.module` declaration, e.g. below
 * you should allow CORS requests to your fielddb server, e.g.  `https://*.lingsync.org/**`
 ```javascript
+  FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.lingsync.org';
+	FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.lingsync.org';
+
   angular
   .module('myAppWhichUsesFieldDB', [
     'ngAnimate',
