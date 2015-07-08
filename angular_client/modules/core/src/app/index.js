@@ -128,46 +128,46 @@ angular.module("fielddbAngular", [
   };
   
   /* Add some default Routes/States which the app knows how to render */
-  if (FieldDB.Router.otherwise) {
-    $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
-  } else {
-    $urlRouterProvider.otherwise(fieldDBApp.basePathname);
-  }
-  $stateProvider
-  // HOME STATES AND NESTED VIEWS ========================================
-    .state("dashboard", {
-      url: "/",
-      templateUrl: "app/main/main.html",
-      controller: passStateParamsController
-    })
-    // nested list with custom controller
-    .state("dashboard.team", {
-      url: "^/:team",
-      template: "<div>User {{application.routeParams.team}}</div>",
-      controller: passStateParamsController
-    })
-    // nested list with just some random string data
-    .state("dashboard.corpus", {
-      url: "^/:team/:corpusidentifier",
-      template: "<div>Corpus {{application.routeParams.corpusidentifier}} by {{application.routeParams.team}}</div>",
-      controller: passStateParamsController
-    })
-    // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-    .state("faq", {
-      url: "/faq",
-      template: "<div>FAQ</div>",
-      controller: passStateParamsController
-    });
-  var state;
-  for (var route in FieldDB.Router.routes) {
-    state = FieldDB.Router.routes[route].path.replace(/\/:?/g, ".").replace(/^\./, "").replace("team.corpusidentifier", "dashboard.corpus");
-    fieldDBApp.debug("Would add state  " + state, {
-      url: "^"+FieldDB.Router.routes[route].path,
-      // parent: "dashboard",
-      templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
-      controller: passStateParamsController
-    });
-  }
+  // if (FieldDB.Router.otherwise) {
+  //   $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
+  // } else {
+  //   $urlRouterProvider.otherwise(fieldDBApp.basePathname);
+  // }
+  // $stateProvider
+  // // HOME STATES AND NESTED VIEWS ========================================
+  //   .state("dashboard", {
+  //     url: "/",
+  //     templateUrl: "app/main/main.html",
+  //     controller: passStateParamsController
+  //   })
+  //   // nested list with custom controller
+  //   .state("dashboard.team", {
+  //     url: "^/:team",
+  //     template: "<div>User {{application.routeParams.team}}</div>",
+  //     controller: passStateParamsController
+  //   })
+  //   // nested list with just some random string data
+  //   .state("dashboard.corpus", {
+  //     url: "^/:team/:corpusidentifier",
+  //     template: "<div>Corpus {{application.routeParams.corpusidentifier}} by {{application.routeParams.team}}</div>",
+  //     controller: passStateParamsController
+  //   })
+  //   // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
+  //   .state("faq", {
+  //     url: "/faq",
+  //     template: "<div>FAQ</div>",
+  //     controller: passStateParamsController
+  //   });
+  // var state;
+  // for (var route in FieldDB.Router.routes) {
+  //   state = FieldDB.Router.routes[route].path.replace(/\/:?/g, ".").replace(/^\./, "").replace("team.corpusidentifier", "dashboard.corpus");
+  //   fieldDBApp.debug("Would add state  " + state, {
+  //     url: "^"+FieldDB.Router.routes[route].path,
+  //     // parent: "dashboard",
+  //     templateUrl: FieldDB.Router.routes[route].angularRoute.templateUrl,
+  //     controller: passStateParamsController
+  //   });
+  // }
 
   fieldDBApp.debug("Loaded Angular FieldDB Components ", fieldDBApp);
 });
