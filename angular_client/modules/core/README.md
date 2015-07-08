@@ -34,7 +34,7 @@ To use the module
 * you should allow CORS requests to your fielddb server, e.g.  `https://*.lingsync.org/**`
 ```javascript
   FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.lingsync.org';
-	FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.lingsync.org';
+  FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.lingsync.org';
 
   angular
   .module('myAppWhichUsesFieldDB', [
