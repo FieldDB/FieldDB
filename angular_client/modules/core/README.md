@@ -6,9 +6,11 @@ A library of Angular components which can be reused to create new widgets or das
 
 ### In the browser
 
-Install the module with: `bower install fielddb-angular --save`
+####Easy install:
+Install the module with: `bower install fielddb-angular --save`. If you use gulp or grunt, this is all you have to do.
 
-Or, download the [production version][js], and [optional vendor libraries][vendor].
+####Manual install:
+Or, if you don't use gulp or grunt, you can download the [production version][js], and [optional vendor libraries][vendor].
 
 [js]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/fielddb-angular.js
 [vendor]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/vendor.js
