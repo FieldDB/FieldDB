@@ -6,9 +6,11 @@ A library of Angular components which can be reused to create new widgets or das
 
 ### In the browser
 
-Install the module with: `bower install fielddb-angular --save`
+####Easy install:
+Install the module with: `bower install fielddb-angular --save`. If you use gulp or grunt, this is all you have to do.
 
-Or, download the [production version][js], and [optional vendor libraries][vendor].
+####Manual install:
+Or, if you don't use gulp or grunt, you can download the [production version][js], and [optional vendor libraries][vendor].
 
 [js]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/fielddb-angular.js
 [vendor]: https://raw.github.com/OpenSourceFieldlinguistics/bower-fielddb-angular/master/dist/scripts/vendor.js
@@ -25,8 +27,14 @@ In your app load the `script.js` and optionally:
 <script src="bower_components/fielddb-angular/dist/scripts/fielddb-angular.js"></script>
 ```
 
-
+####Load module
+To use the module
+* you should set the `BASE_DB_URL` and `BASE_AUTH_URL` for your FieldDB server, e.g. below
+* you should include `fielddbAngular` as a dependency in your `angular.module` declaration, e.g. below
 ```javascript
+  FieldDB.Database.prototype.BASE_DB_URL = 'https://corpusdev.lingsync.org';
+  FieldDB.Database.prototype.BASE_AUTH_URL = 'https://authdev.lingsync.org';
+
   angular
   .module('myAppWhichUsesFieldDB', [
     'ngAnimate',
@@ -37,27 +45,7 @@ In your app load the `script.js` and optionally:
     "ui.bootstrap",
     'fielddbAngular'
   ])
-  .config(function($routeProvider, $locationProvider) {
-    // $locationProvider.html5Mode(true);
-
-    $sceDelegateProvider.resourceUrlWhitelist([
-      // Allow same origin resource loads.
-      'self',
-      // Allow loading from outer domain.
-      'https://*.lingsync.org/**',
-      'http://*.yourdomain.ca/**'
-    ]);
-
-    if (FieldDB && FieldDB.Router) {
-      for (var when in FieldDB.Router.routes) {
-        FieldDB.Router.routes[when].angularRoute.controller = 'FieldDBCorpusPagesController';
-        $routeProvider.when(FieldDB.Router.routes[when].path, FieldDB.Router.routes[when].angularRoute);
-      }
-      if (FieldDB.Router.otherwise) {
-        $routeProvider.otherwise(FieldDB.Router.otherwise);
-      }
-    }
-  });
+  
 ```
 
 ## Examples

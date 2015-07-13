@@ -8,7 +8,10 @@ function(doc) {
       return;
     }
     // Only continue if the document is a Datum
-    if (!doc.datumFields || !doc.session) {
+    if (!doc.datumFields || !doc.session || !doc.session.sessionFields) {
+      if (debug) {
+        emit("skipping", doc);
+      }
       return;
     }
 
@@ -72,28 +75,36 @@ function(doc) {
       return tokens;
     };
     var extractFieldValues = function(doc) {
+
+
+
       var datumFieldsForDatumLevelContext = {};
       var datumFieldsForWordLevelContext = {};
       var datumFieldsForMorphemeLevelContext = {};
       var key;
       var fields = doc.datumFields.concat(doc.session.sessionFields);
 
+
+
       // Extract datum level and word level tokens
       for (key = 0; key < fields.length; key++) {
         if (fields[key].label === 'judgement' || fields[key].label === 'utterance') {
           // If the Judgement or utterance contains a '*', discard the datum
           if (fields[key].mask && fields[key].mask.search(/[#*]/) >= 0) {
+            if (debug) {
+              emit("skipping", fields);
+            }
             return;
           }
         }
         // if its the gloss line, leave - and . punctuation and case sensitive
-        if(fields[key].label === 'gloss'){
-          fields[key].tokenizer = conservativeTokenizer;
+        if (fields[key].label === 'gloss') {
+          fields[key].tokenizer = aggressiveTokenizer;
         }
         if (fields[key].mask) {
           fields[key].mask = fields[key].mask.trim();
           datumFieldsForDatumLevelContext[fields[key].label] = fields[key].mask;
-          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : conservativeTokenizer);
+          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : aggressiveTokenizer);
           if (fields[key].igt) {
             extendedIGTFields.push(fields[key].label);
           }
@@ -140,6 +151,8 @@ function(doc) {
           id: doc._id
         });
       }
+
+
 
       // Now  we can  extract Morpheme Level IGT
       var morphemeLevelTuples = [];
@@ -229,6 +242,8 @@ function(doc) {
         }
       }
 
+
+
       return {
         datumLevelContext: datumFieldsForDatumLevelContext,
         // wordLevelContext: datumFieldsForWordLevelContext,
@@ -317,13 +332,13 @@ function(doc) {
                 "context": datumInContextTiers.datumLevelContext
               }, wordLevelContext);
 
-              localemit({
-                "previous": previousNode,
-                "subsequent": thisNode,
-                "relation": "follows",
-                "distance": distance,
-                "context": datumInContextTiers.datumLevelContext
-              }, wordLevelContext);
+              // localemit({
+              //   "previous": previousNode,
+              //   "subsequent": thisNode,
+              //   "relation": "follows",
+              //   "distance": distance,
+              //   "context": datumInContextTiers.datumLevelContext
+              // }, wordLevelContext);
             }
             // localemit(thisNode, doc._id);
             previousNode = thisNode;
