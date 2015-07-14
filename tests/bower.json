@@ -1,0 +1,17 @@
+{
+  "name": "tests",
+  "version": "0.0.0",
+  "authors": [
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jasmine": "~2.3.4"
+  }
+}
