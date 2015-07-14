@@ -159,7 +159,7 @@ module.exports = function(grunt) {
         options: {
         },
         src: [
-          "tests/**/*.js"
+          "tests/**/*-spec.js"
         ]
       },
     },
