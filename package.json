@@ -68,7 +68,8 @@
   },
   "main": "api/fielddb.js",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "postinstall": "bower link || exit 0"
   },
   "license": "Apache-2.0"
 }
