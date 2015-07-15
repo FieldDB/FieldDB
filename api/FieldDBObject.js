@@ -1954,8 +1954,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   addRelatedData: {
     value: function(json) {
       var relatedData;
-      if (this.datumFields && this.datumFields.relatedData) {
-        relatedData = this.datumFields.relatedData.json.relatedData || [];
+      if (this.fields && this.fields.relatedData) {
+        relatedData = this.fields.relatedData.json.relatedData || [];
       } else if (this.relatedData) {
         relatedData = this.relatedData;
       } else {
@@ -1998,8 +1998,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var source = this.id;
       if (this.id && this.rev) {
         var relatedData;
-        if (json.datumFields && json.datumFields.relatedData) {
-          relatedData = json.datumFields.relatedData.json.relatedData || [];
+        if (json.fields && json.fields.relatedData) {
+          relatedData = json.fields.relatedData.json.relatedData || [];
         } else if (json.relatedData) {
           relatedData = json.relatedData;
         } else {

@@ -38,24 +38,24 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
       console.log("This isnt a (old style) datum either.");
       return;
     }
-    if (!datum.datumFields) {
-      console.log("datum.datumFields isnt defiend, this is a strange datum", datum);
+    if (!datum.fields) {
+      console.log("datum.fields isnt defiend, this is a strange datum", datum);
       return;
     }
 
     var changes = [];
-    datum.datumFields.pop();
-    datum.datumFields.pop();
-    datum.datumFields.pop();
-    datum.datumFields.pop();
-    for (var field = datum.datumFields.length - 1; field > 0; field--) {
-      if (datum.datumFields[field].label === "utterance") {
+    datum.fields.pop();
+    datum.fields.pop();
+    datum.fields.pop();
+    datum.fields.pop();
+    for (var field = datum.fields.length - 1; field > 0; field--) {
+      if (datum.fields[field].label === "utterance") {
         var image = {
           URL: "",
           filename: "",
           caption: "A depiction of grey using a color crayon (meaning the speaker did say 'gris')."
         };
-        if (datum.datumFields[field].mask === "gʁi") {
+        if (datum.fields[field].mask === "gʁi") {
           image.filename = "gris.png";
         } else {
           image.filename = "pas_gris.png";
@@ -64,9 +64,9 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
         datum.images = datum.images || [];
         datum.images.push(image);
         changes.push(" added corresponding image " + image.filename);
-      } else if (datum.datumFields[field].label === "validationStatus") {
-        datum.datumFields[field].mask = "CheckedWithSusan";
-        datum.datumFields[field].value = "CheckedWithSusan";
+      } else if (datum.fields[field].label === "validationStatus") {
+        datum.fields[field].mask = "CheckedWithSusan";
+        datum.fields[field].value = "CheckedWithSusan";
       }
     }
 
