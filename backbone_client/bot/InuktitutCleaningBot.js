@@ -22,27 +22,27 @@ var Bot = function(dbname, corpusid, corpustitle){
 
 		var changes = [];
 		/* clean out fields that came from quechua corpus, and set the validation status to something more accurate for this corpus */
-		for (var field = datum.datumFields.length -1; field > 0; field --) {
-			// console.log("field "+datum.datumFields[field].label );
-			if(datum.datumFields[field].label === "notes" || datum.datumFields[field].label === "dateElicited" || datum.datumFields[field].label === "checkedWithConsultant" || datum.datumFields[field].label === "dialect " ){
-				var oldField = datum.datumFields.splice(field, 1);
+		for (var field = datum.fields.length -1; field > 0; field --) {
+			// console.log("field "+datum.fields[field].label );
+			if(datum.fields[field].label === "notes" || datum.fields[field].label === "dateElicited" || datum.fields[field].label === "checkedWithConsultant" || datum.fields[field].label === "dialect " ){
+				var oldField = datum.fields.splice(field, 1);
 				console.log("Removed field " + oldField[0].label);
 				changes.push("Removed "+ oldField[0].label);
 			}
-			if (datum.datumFields[field].label === "validationStatus" ) {
-				// console.log("validationStatus: "+ datum.datumFields[field].value);
-				if (datum.datumFields[field].value.indexOf("Checked") === 0 || !datum.datumFields[field].value) {
-					if (!datum.datumFields[field].value) {
-						datum.datumFields[field].value = "PublishedInWrittenDocument";
+			if (datum.fields[field].label === "validationStatus" ) {
+				// console.log("validationStatus: "+ datum.fields[field].value);
+				if (datum.fields[field].value.indexOf("Checked") === 0 || !datum.fields[field].value) {
+					if (!datum.fields[field].value) {
+						datum.fields[field].value = "PublishedInWrittenDocument";
 					}
-					datum.datumFields[field].value = datum.datumFields[field].value.replace(/^Checked/, "PublishedInWrittenDocument");
-					datum.datumFields[field].value = "ToBeCheckedWithASpeakerForNaturalness, " + datum.datumFields[field].value;
-					datum.datumFields[field].mask = datum.datumFields[field].value;
+					datum.fields[field].value = datum.fields[field].value.replace(/^Checked/, "PublishedInWrittenDocument");
+					datum.fields[field].value = "ToBeCheckedWithASpeakerForNaturalness, " + datum.fields[field].value;
+					datum.fields[field].mask = datum.fields[field].value;
 				}else{
-					datum.datumFields[field].value = "ToBeCheckedWithASpeakerForNaturalness, PublishedInWrittenDocument, " + datum.datumFields[field].value;
-					datum.datumFields[field].mask = datum.datumFields[field].value;
+					datum.fields[field].value = "ToBeCheckedWithASpeakerForNaturalness, PublishedInWrittenDocument, " + datum.fields[field].value;
+					datum.fields[field].mask = datum.fields[field].value;
 				}
-				changes.push("Flagged as "+ datum.datumFields[field].value);
+				changes.push("Flagged as "+ datum.fields[field].value);
 			}
 		}
 

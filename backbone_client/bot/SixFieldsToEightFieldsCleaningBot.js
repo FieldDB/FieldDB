@@ -46,23 +46,23 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
     var indexOfNotesField;
     var indexOfPhoneticField;
 
-    for (var field = datum.datumFields.length - 1; field >= 0; field--) {
-      if (datum.datumFields[field].label === "notes") {
+    for (var field = datum.fields.length - 1; field >= 0; field--) {
+      if (datum.fields[field].label === "notes") {
         indexOfNotesField = field;
-      } else if (datum.datumFields[field].label === "phonetic") {
+      } else if (datum.fields[field].label === "phonetic") {
         indexOfPhoneticField = field;
       }
-      if ((judgementToNotes || judgementToIPA) && datum.datumFields[field].label !== "judgement") {
+      if ((judgementToNotes || judgementToIPA) && datum.fields[field].label !== "judgement") {
         continue;
       }
-      if ((tagsToNotes || tagsToIPA) && datum.datumFields[field].label !== "tags") {
+      if ((tagsToNotes || tagsToIPA) && datum.fields[field].label !== "tags") {
         continue;
       }
-      var previousMask = datum.datumFields[field].mask;
+      var previousMask = datum.fields[field].mask;
       if (previousMask && previousMask.trim) {
         previousMask = previousMask.trim();
       }
-      var previousValue = datum.datumFields[field].value;
+      var previousValue = datum.fields[field].value;
       if (previousValue && previousValue.trim) {
         previousValue = previousValue.trim();
       }
@@ -94,9 +94,9 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
         "encrypted": ""
       };
       if (indexOfNotesField >= 0) {
-        datum.datumFields[indexOfPhoneticField] = notesField;
+        datum.fields[indexOfPhoneticField] = notesField;
       } else {
-        datum.datumFields.push(notesField);
+        datum.fields.push(notesField);
       }
     } else if (newIPA) {
       changes.push(" copied '" + newIPA +"' from " + source + " ->  phonetic IPA ");
@@ -109,9 +109,9 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
         "encrypted": ""
       };
       if (indexOfPhoneticField >= 0) {
-        datum.datumFields[indexOfPhoneticField] = phoneticField;
+        datum.fields[indexOfPhoneticField] = phoneticField;
       } else {
-        datum.datumFields.push(phoneticField);
+        datum.fields.push(phoneticField);
       }
     }
 
