@@ -467,17 +467,31 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  newDoc: {
+    value: function(options) {
+      return this.newDatum(options);
+    }
+  },
+  
   newDatum: {
     value: function(options) {
       this.debug("Creating a datum for this corpus");
       if (!this.datumFields || !this.datumFields.clone) {
         throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
       }
-      var datum = new Datum({
-        fields: new DatumFields(this.datumFields.cloneStructure()),
-        dbname: this.dbname,
-        confidential: this.confidential
-      });
+      var datum;
+      if (options instanceof Datum) {
+        datum = options;
+        datum.dbname = this.dbname;
+        datum.confidential = this.confidential;
+        datum = this.updateDatumToCorpusFields(datum);
+      } else {
+        datum = new Datum({
+          fields: new DatumFields(this.datumFields.cloneStructure()),
+          dbname: this.dbname,
+          confidential: this.confidential
+        });
+      }
       for (var field in options) {
         if (!options.hasOwnProperty(field)) {
           continue;

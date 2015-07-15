@@ -1,15 +1,18 @@
 "use strict";
 var Corpus;
+var Datum;
 var DatumFields;
 try {
   /* globals FieldDB */
   if (FieldDB) {
     Corpus = FieldDB.Corpus;
+    Datum = FieldDB.Datum;
     DatumFields = FieldDB.DatumFields;
   }
 } catch (e) {}
 
 Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+Datum = Datum || require("./../../api/datum/Datum").Datum;
 DatumFields = DatumFields || require("./../../api/datum/DatumFields").DatumFields;
 
 var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
@@ -205,6 +208,20 @@ describe("Corpus", function() {
       corpus.debug(datum.toJSON());
       expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
       expect(datum.datumFields.utterance.value).toEqual("a simple object");
+      expect(datum.datumFields.translation.value).toEqual("with translation");
+      expect(datum.datumFields.novelproperty).toBeUndefined();
+      expect(datum.novelproperty).toEqual("a field which is not known and will be a property not a full field");
+    });
+
+    it("should accept a datum instanciation for newDatum", function() {
+      var datum = corpus.newDatum(new Datum({
+        utterance: "a simple object",
+        translation: "with translation",
+        novelproperty: "a field which is not known and will be a property not a full field"
+      }));
+      corpus.debug(datum.toJSON());
+      expect(datum.datumFields.utterance.labelFieldLinguists).toEqual("Transcription");
+      // expect(datum.datumFields.utterance.value).toEqual("a simple object");
       expect(datum.datumFields.translation.value).toEqual("with translation");
       expect(datum.datumFields.novelproperty).toBeUndefined();
       expect(datum.novelproperty).toEqual("a field which is not known and will be a property not a full field");
