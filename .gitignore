@@ -1,4 +1,4 @@
-caml2012.pdf
+*.pdf
 
 #ignore compiled handlebars
 compiled_handlebars.js
