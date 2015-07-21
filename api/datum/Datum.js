@@ -1,4 +1,6 @@
 /* globals window, $, _ , OPrime*/
+"use strict";
+
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;

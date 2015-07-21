@@ -1,13 +1,15 @@
 /* globals alert, confirm, prompt, navigator, Android, FieldDB */
+"use strict";
+
 var Diacritics = require("diacritic");
 var Q = require("q");
-var package;
+var packageJson;
 try {
-  package = require("./../package.json");
+  packageJson = require("./../package.json");
 } catch (e) {
   console.log("failed to load package.json", e);
-  package = {
-    version: "2.2.0"
+  packageJson = {
+    version: "x.x.x"
   };
 }
 // var FieldDBDate = function FieldDBDate(options) {
@@ -194,7 +196,7 @@ FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
-FieldDBObject.DEFAULT_VERSION = "v" + package.version;
+FieldDBObject.DEFAULT_VERSION = "v" + packageJson.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.render = function(options) {
