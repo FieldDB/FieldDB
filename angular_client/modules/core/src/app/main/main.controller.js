@@ -2,7 +2,65 @@
 
 "use strict";
 
-angular.module("fielddbAngular").controller("FieldDBController", function($scope, $rootScope) {
+angular.module("fielddbAngular").controller("FieldDBController", function($scope, $rootScope, $modal) {
+  /* Overriding bug and warn messages to use angular UI components
+   TODO use angular modal for bugs */
+  FieldDB.FieldDBObject.bug = function(message) {
+    console.warn(message);
+    $modal.open({
+      templateUrl: "components/popup/prompt.html",
+      backdrop: false,
+      controller: function($scope, $modalInstance) {
+        $scope.modalInstance = $modalInstance;
+        $scope.message = message;
+        $scope.showCancelButton = false;
+        $scope.isBug = true;
+        console.log("$modalInstance", $modalInstance);
+      }
+    });
+  };
+   FieldDB.FieldDBObject.popup = function(message) {
+    console.warn(message);
+    $modal.open({
+      templateUrl: "components/popup/prompt.html",
+      controller: function($scope, $modalInstance) {
+        $scope.modalInstance = $modalInstance;
+        $scope.message = message;
+        $scope.showCancelButton = false;
+        $scope.isPopup = true;
+        console.log("$modalInstance", $modalInstance);
+      }
+    });
+  };
+  FieldDB.FieldDBObject.confirm = function(message) {
+    console.warn(message);
+    $modal.open({
+      templateUrl: "components/popup/prompt.html",
+      controller: function($scope, $modalInstance) {
+        $scope.modalInstance = $modalInstance;
+        $scope.message = message;
+        $scope.showCancelButton = true;
+        $scope.isConfirm = true;
+        console.log("$modalInstance", $modalInstance);
+      }
+    });
+  };
+  FieldDB.FieldDBObject.prompt = function(message) {
+    console.warn(message);
+    $modal.open({
+      templateUrl: "components/popup/prompt.html",
+      controller: function($scope, $modalInstance) {
+        $scope.modalInstance = $modalInstance;
+        $scope.message = message;
+        $scope.showCancelButton = true;
+        $scope.isPrompt = true;
+        console.log("$modalInstance", $modalInstance);
+      }
+    });
+  };
+  FieldDB.FieldDBObject.warn = function(message) {
+    console.warn(message);
+  };
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
@@ -47,7 +105,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
 
   $scope.FieldDBComponents = {};
   for (var klass in FieldDB) {
-    if(! FieldDB.hasOwnProperty(klass)){
+    if (!FieldDB.hasOwnProperty(klass)) {
       continue;
     }
     $scope.FieldDBComponents[klass] = {
@@ -56,7 +114,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     };
   }
   // $scope.application.currentCorpusDashboard = ":team/:corpusidentifier/import/:importType";
-  $scope.FieldDBComponents.Activity.route = "/lingllama/communitycorpus/activityfeed";//+ "/activityfeed/123";
+  $scope.FieldDBComponents.Activity.route = "/lingllama/communitycorpus/activityfeed"; //+ "/activityfeed/123";
 
   console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });
