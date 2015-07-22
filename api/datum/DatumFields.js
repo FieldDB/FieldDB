@@ -14,8 +14,42 @@ var DatumFields = function DatumFields(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "DatumFields";
   }
+  var originalObject;
+  if (Object.prototype.toString.call(options) !== "[object Array]" && !options.collection && !options.inverted) {
+    var fieldsObjectConvertedIntoArray = [];
+    for (var field in options) {
+      if (!options.hasOwnProperty(field)) {
+        continue;
+      }
+      fieldsObjectConvertedIntoArray.push({
+        id: field,
+        value: options[field]
+      });
+    }
+    originalObject = options;
+    options = fieldsObjectConvertedIntoArray;
+  }
+
   this.debug("Constructing DatumFields length: ", options);
   Collection.apply(this, arguments);
+
+  // Simulate that it is still an object
+  if (originalObject) {
+    for (var field in originalObject) {
+      if (!originalObject.hasOwnProperty(field)) {
+        continue;
+      }
+      this[field] = this[field].value;
+      // this.prototype[field] = {
+      //   get: function() {
+      //     return this.fields[field].value;
+      //   },
+      //   set: function(value) {
+      //     this.fields[field].value = value;
+      //   }
+      // }
+    }
+  }
 };
 
 DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFields.prototype */ {
@@ -89,10 +123,10 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
       var json = Collection.prototype.toJSON.apply(this, arguments);
-      json.map = json.map(function(field){
+      json.map = json.map(function(field) {
         field.value = "";
         field.mask = "";
-        field.encryptedValue= "";
+        field.encryptedValue = "";
         return field;
       });
       return json;
