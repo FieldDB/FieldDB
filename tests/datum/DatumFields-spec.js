@@ -51,6 +51,23 @@ describe("lib/DatumFields", function() {
       expect(collection).toBeDefined();
     });
 
+    it("should be possible to construct from an object", function() {
+      var igtWord = new DatumFields({
+        orthography: "kyoun",
+        gloss: "why"
+      })
+      expect(igtWord).toBeDefined();
+      expect(igtWord.orthography).toEqual("kyoun");
+      expect(igtWord.gloss).toEqual("why");
+      expect(igtWord.collection.length).toEqual(2);
+
+      igtWord.orthography = "kjun";
+      expect(igtWord.orthography).toEqual("kjun");
+      expect(igtWord.collection[0].value).toEqual(igtWord.orthography);
+      expect(igtWord.collection[1].value).toEqual(igtWord.gloss);
+
+    });
+
     it("should accept a primary key", function() {
       expect(collection.primaryKey).toEqual("id");
     });
