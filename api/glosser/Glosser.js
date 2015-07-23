@@ -532,12 +532,12 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    * http://alignedleft.com/tutorials/d3/binding-data
    *
    * @param  {[type]} rulesGraph [description]
-   * @param  {[type]} divElement [description]
+   * @param  {[type]} element [description]
    * @param  {[type]} dbname  [description]
    * @return {[type]}            [description]
    */
   visualizePrecedenceRelationsAsForceDirectedGraph: {
-    value: function(divElement) {
+    value: function(element) {
       var self = this;
 
       if (!this.lexicon || !this.lexicon.length) {
@@ -552,7 +552,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         prefs = this.corpus.prefs;
       }
 
-      this.lexicon.visualizeAsForceDirectedGraph(divElement, prefs);
+      this.lexicon.visualizeAsForceDirectedGraph(element, prefs);
 
       return this;
     }

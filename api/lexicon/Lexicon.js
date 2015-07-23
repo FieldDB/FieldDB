@@ -73,7 +73,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
       try {
         return FieldDB.FieldDBObject.prototype.debug.apply(this, arguments);
       } catch (e) {
-        // console.log("Not showing developer ", arguments);
+        console.log("Not showing developer ", arguments);
       }
     }
   },
@@ -664,12 +664,12 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
    * http://alignedleft.com/tutorials/d3/binding-data
    *
    * @param  {[type]} rulesGraph [description]
-   * @param  {[type]} divElement [description]
+   * @param  {[type]} element [description]
    * @param  {[type]} dbname  [description]
    * @return {[type]}            [description]
    */
   visualizeAsForceDirectedGraph: {
-    value: function(divElement, prefs) {
+    value: function(element, prefs) {
       var self = this;
       if (!prefs && this.corpus && this.corpus.prefs) {
         prefs = this.corpus.prefs;
@@ -702,21 +702,37 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         return this;
       }
 
-      var width = divElement.clientWidth,
+      var width = element.clientWidth,
         height = 600;
 
-
-      try {
-        this.d3 = this.d3 || Lexicon.d3 || window.d3;
-      } catch (e) {}
-
       if (!this.d3) {
-        this.warn("Lexicon will be unable to render a visual representation of itself. If you intended to render it, you should add d3 as a dependancy to your app.");
-        return this;
+        try {
+          this.d3 = d3;
+        } catch (e) {
+          this.warn("Lexicon will be unable to render a visual representation of itself. If you intended to render it, you should add d3 as a dependancy to your app.", this.d3);
+          return this;
+        }
       }
 
-      var tooltip = this.d3.select("body")
-        .append("div")
+      if (!element) {
+        this.warn("Lexicon will be unable to render a visual representation of itself. If you intended to render it, you should provide an element where it should be rendered.", element);
+        return this;
+      }
+      this.debug("Using element", element);
+
+      var tooltip;
+      if (!this.localDOM) {
+        try {
+          this.localDOM = document;
+        } catch (e) {
+          // this.warn("Lexicon will be unable to render a hover on the connected graph. If you intended to render it, you should provide an localDOM to the lexicon.");
+          this.warn("Lexicon will be unable to render the connected graph. If you intended to render it, you should provide an localDOM to the lexicon.");
+          return this;
+        }
+      }
+      tooltip = this.localDOM.createElement("div");
+      this.localDOM.body.appendChild(tooltip);
+      tooltip = this.d3.select(tooltip)
         .style("position", "absolute")
         .style("z-index", "10")
         .style("visibility", "hidden")
@@ -767,8 +783,18 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         .linkDistance(60)
         .charge(-400);
 
-      var svg = this.d3.select(divElement).append("svg")
-        .attr("width", width)
+
+      var svg = this.localDOM.createElement("svg");
+      if (typeof element.appendChild !== "function") {
+        this.warn("You have provided a defective element, it is unable to append elements to itself. Appending to the body of the document instead.", element);
+        // return this;
+        this.localDOM.body.appendChild(svg);
+      } else {
+        element.appendChild(svg);
+      }
+      svg = this.d3.select(svg);
+
+      svg.attr("width", width)
         .attr("height", height);
 
       // Per-type markers, as they don't inherit styles.
@@ -832,16 +858,25 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           } else {
             findNode = "Morpheme: " + object.morphemes + "<br/> Gloss: " + object.gloss + "<br/> Confidence: " + object.confidence;
           }
+          if (tooltip) {
+            return;
+          }
           return tooltip
             .style("visibility", "visible")
             .html("<div class='node_details_tooltip lexicon'>" + findNode + "</div>");
         })
         .on("mousemove", function(object) {
           /*global  event */
+          if (tooltip) {
+            return;
+          }
           return tooltip.style("top", (event.pageY - 10) + "px")
             .style("left", (event.pageX + 10) + "px");
         })
         .on("mouseout", function(object) {
+          if (tooltip) {
+            return;
+          }
           return tooltip
             .style("visibility", "hidden");
         })
@@ -890,10 +925,13 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         text.attr("transform", transform);
       };
 
-      force
-        .on("tick", tick)
-        .start();
-
+      try {
+        force
+          .on("tick", tick)
+          .start();
+      } catch (e) {
+        this.warn("The lexicon was able to start the connected graph.", e.stack);
+      }
 
       return this;
     }
