@@ -1,4 +1,20 @@
 var Glosser = require("../../api/glosser/Glosser").Glosser;
+var optionalD3;
+var virtualElement;
+var virtualDOM;
+
+try {
+	optionalD3 = require("d3");
+} catch (e) {
+	console.log("If you want to run the tests for optional d3 injection for visualization of the Glosser/Lexicon, run `npm install d3` ");
+}
+
+try {
+	virtualDOM = require('jsdom').jsdom('<html><head></head><body></body></html>');
+	virtualElement = virtualDOM.body;
+} catch (e) {
+	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom@3.0` ");
+}
 
 describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
 	var tinyLexicon = [{
@@ -82,22 +98,34 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	describe("visualization", function() {
 
-
-		it("should render if a lexicon with precedenceRelations is defined", function() {
-			var glosser = new Glosser({
-				lexicon: JSON.parse(JSON.stringify(tinyLexicon))
+		if (optionalD3) {
+			it("should accept an element", function() {
+				expect(virtualElement).toBeDefined();
 			});
-			glosser.lexicon.precedenceRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
-			expect(glosser.lexicon).toBeDefined();
-			expect(glosser.lexicon.precedenceRelations).toBeDefined();
-			expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
-			expect(glosser.render()).toEqual(glosser);
-			if (glosser.warnMessage) {
-				expect(glosser.warnMessage).not.toContain("d3");
-				expect(glosser.warnMessage).not.toContain("visualize");
-			}
-		});
+			it("should be able to use an injected d3 if a lexicon with precedenceRelations is defined", function() {
+				var glosser = new Glosser({
+					lexicon: JSON.parse(JSON.stringify(tinyLexicon))
+				});
+				glosser.lexicon.precedenceRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
+				glosser.lexicon.d3 = optionalD3;
+				glosser.lexicon.localDOM = virtualDOM;
+
+				expect(glosser.lexicon).toBeDefined();
+				expect(glosser.lexicon.precedenceRelations).toBeDefined();
+				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
+
+				expect(glosser.render(virtualElement)).toEqual(glosser);
+				if (glosser.warnMessage) {
+					expect(glosser.warnMessage).not.toContain("d3");
+					expect(glosser.warnMessage).not.toContain("visualize");
+				}
+				if (glosser.lexicon.warnMessage) {
+					expect(glosser.lexicon.warnMessage).not.toContain("d3");
+					expect(glosser.lexicon.warnMessage).not.toContain("visualize");
+				}
+			});
+		}
 
 		it("should warn about visualizing an empty lexicon", function() {
 			var glosser = new Glosser();
