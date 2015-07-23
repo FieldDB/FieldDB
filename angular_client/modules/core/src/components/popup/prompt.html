@@ -1,0 +1,16 @@
+<div>
+  <div class="modal-header">
+    <h3>{{message}}</h3>
+  </div>
+  <div class="modal-body centered">
+  <i class="fa fa-bug fa-5x red" ng-show="isBug">  </i>
+  <i class="fa fa-check-circle fa-3x" ng-show="isPopup"></i>
+  <i class="fa fa-question-circle fa-3x" ng-show="isConfirm"></i>
+  <i class="fa fa-comment-o fa-3x" ng-show="isPrompt" ></i>
+  <input ng-show="isPrompt" ng-model="userInput"/>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="modalInstance.close(userInput)">OK</button>
+    <button class="btn btn-warning" ng-click="modalInstance.dismiss()" ng-show="showCancelButton">Cancel</button> 
+  </div>
+</div>

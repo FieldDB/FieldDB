@@ -179,7 +179,7 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
 ]);
 
 FieldDBObject.ignore = function(property, ignorelist) {
-  if(!ignorelist){
+  if (!ignorelist) {
     throw new Error("missing the list of ignores");
   }
   if (ignorelist.indexOf(property) > -1 || ignorelist.indexOf(property.replace(/^_/, "")) > -1) {
@@ -261,6 +261,17 @@ FieldDBObject.todo = function(message, message2, message3, message4) {
   if (message4) {
     console.warn(message4);
   }
+};
+
+FieldDBObject.popup = function(message) {
+  try {
+    alert(message);
+  } catch (e) {
+    this.warn(" Couldn't tell user about a popup: " + message);
+    // console.log("Alert is not defined, this is strange.");
+  }
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  console.log(type.toUpperCase() + " POPUP: " + message);
 };
 
 FieldDBObject.bug = function(message) {
