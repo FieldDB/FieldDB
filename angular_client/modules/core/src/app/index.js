@@ -17,6 +17,7 @@ angular.module("fielddbAngular", [
   "ngSanitize",
   "ui.router",
   "ui.bootstrap",
+  // "ui.bootstrap.modal",
   "angularFileUpload",
   "contenteditable"
 ]).run(["$rootScope", "$state", "$stateParams",
@@ -62,14 +63,7 @@ angular.module("fielddbAngular", [
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
   fieldDBApp.debugMode = true;
 
-  /* Overriding bug and warn messages to use angular UI components
-   TODO use angular modal for bugs */
-  FieldDB.FieldDBObject.bug = function(message) {
-    console.warn(message);
-  };
-  FieldDB.FieldDBObject.warn = function(message) {
-    console.warn(message);
-  };
+  
 
   /* Add Event listeners */
   document.addEventListener("logout", function() {
