@@ -3,6 +3,12 @@ var Q = require("q");
 var BASE_LEXICON_NODE = require("../datum/Datum").Datum;
 
 
+var escapeRegexCharacters = function(regex) {
+  return regex.replace(/([()[{*+.$^\\|?])/g, "\\$1");
+};
+
+
+
 /**
  * @class Lexicon Node is key value pair with an index of related datum. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
@@ -17,6 +23,9 @@ var BASE_LEXICON_NODE = require("../datum/Datum").Datum;
  * 
  */
 var LexiconNode = function(options) {
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "LexiconNode";
+  }
   options = options || {};
 
   BASE_LEXICON_NODE.call(this);
@@ -33,7 +42,7 @@ var LexiconNode = function(options) {
   }
 };
 
-LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends LexiconNode.prototype */ {
+LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends LexiconNode.prototype */ {
   constructor: {
     value: LexiconNode
   },
@@ -111,9 +120,9 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends L
       if (!a || !a || !a[this.sortBy]) {
         return 1;
       }
-      if ((typeof(a[this.sortBy]) === 'number') && (typeof(b[this.sortBy]) === 'number')) {
+      if ((typeof(a[this.sortBy]) === "number") && (typeof(b[this.sortBy]) === "number")) {
         result = a[this.sortBy] - b[this.sortBy];
-      } else if ((typeof(a[this.sortBy]) === 'string') && (typeof(b[this.sortBy]) === 'string')) {
+      } else if ((typeof(a[this.sortBy]) === "string") && (typeof(b[this.sortBy]) === "string")) {
         if (a[this.sortBy] < b[this.sortBy]) {
           result = -1;
         } else if (a[this.sortBy] > b[this.sortBy]) {
@@ -121,7 +130,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends L
         } else {
           result = 0;
         }
-      } else if (typeof(a[this.sortBy]) === 'string') {
+      } else if (typeof(a[this.sortBy]) === "string") {
         result = 1;
       } else {
         result = -1;
@@ -160,16 +169,14 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends L
       };
       var failFunction = function(reason) {
         console.log(reason);
-        if (LocalFieldDB && LocalFieldDB.FieldDBObject && typeof LocalFieldDB.FieldDBObject.bug === "function") {
-          LocalFieldDB.FieldDBObject.bug("There was a problem saving your changes. " + reason.reason);
-        }
+        this.bug("There was a problem saving your changes. " + reason.reason);
       };
 
       for (var idIndex = 0; idIndex < this.datumids.length; idIndex++) {
         // console.log(this.datumids.length[idIndex]);
         promises[idIndex] = CORS.makeCORSRequest({
-          method: 'GET',
-          dataType: 'json',
+          method: "GET",
+          dataType: "json",
           url: this.url + "/" + this.datumids[idIndex]
         });
         promises[idIndex].then(successFunction).fail(failFunction);
@@ -190,8 +197,8 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends L
       while (this.cleanedData && this.cleanedData.length > 0) {
         var cleanedDatum = this.cleanedData.pop();
         promises.push(CORS.makeCORSRequest({
-          method: 'PUT',
-          dataType: 'json',
+          method: "PUT",
+          dataType: "json",
           data: cleanedDatum,
           url: this.url + "/" + cleanedDatum._id
         }));
@@ -219,3 +226,5 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype,  /** @lends L
     }
   }
 });
+
+exports.LexiconNode = LexiconNode;
