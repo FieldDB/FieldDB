@@ -169,7 +169,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       };
       var failFunction = function(reason) {
         console.log(reason);
-        this.bug("There was a problem saving your changes. " + reason.reason);
+        self.bug("There was a problem opening your data. " + reason.userFriendlyErrors);
       };
 
       for (var idIndex = 0; idIndex < this.datumids.length; idIndex++) {
@@ -204,6 +204,13 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
         }));
       }
       Q.allSettled(promises).then(function(results) {
+        results.map(function(result) {
+          if (result.state === "fulfilled" && result.value && result.value.ok) {
+            console.log("Your changes have been successfully saved! ", result.value);
+          } else {
+            self.bug("One of your changes was not saved " + cleanedDatum._id + " " + result.value.userFriendlyErrors.join("\n"));
+          }
+        });
         deffered.resolve(results);
         self.unsaved = true;
       });
