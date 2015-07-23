@@ -3,6 +3,7 @@
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var CORS = require("../CORS").CORS;
+var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
 
@@ -22,11 +23,7 @@ var Glosser = function Glosser(options) {
     this._fieldDBtype = "Glosser";
   }
   options = options || {};
-  try {
-    this.d3 = options.d3 || Glosser.d3 || window.d3 || {};
-  } catch (e) {
-    this.warn("Glosser will be unable to render a visual representation of itself. If you intended to render it, you should add d3 as a dependancy to your app.");
-  }
+
   this.debug("Constructing Glosser length: ", options);
   FieldDBObject.apply(this, arguments);
 };
@@ -36,8 +33,25 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     value: Glosser
   },
 
+  // Internal models: used by the parse function
+  INTERNAL_MODELS: {
+    value: {
+      lexicon: Lexicon,
+    }
+  },
+
+  lexicon: {
+    get: function() {
+      this.debug("getting lexicon");
+      return this._lexicon;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("lexicon", value);
+    }
+  },
+
   downloadPrecedenceRules: {
-    value: function(pouchname, glosserURL, callback) {
+    value: function(dbname, glosserURL, callback) {
       if (!glosserURL || glosserURL === "default") {
         if (!this.corpus) {
           throw "Glosser cant be guessed, there is no app so the URL must be defined.";
@@ -52,7 +66,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         success: function(rules) {
           // Dont need to store the actual rules, they are too big
           // try {
-          //   localStorage.setItem(pouchname + "precendenceRules", JSON.stringify(rules.rows));
+          //   localStorage.setItem(dbname + "precendenceRules", JSON.stringify(rules.rows));
           // } catch (e) {
           //   //remove other corpora's rules to make space for the most recent...
           //   for (var x in localStorage) {
@@ -63,7 +77,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           //       localStorage.removeItem(x);
           //     }
           //   }
-          //   localStorage.setItem(pouchname + "precendenceRules", JSON.stringify(rules.rows));
+          //   localStorage.setItem(dbname + "precendenceRules", JSON.stringify(rules.rows));
           // }
 
           // Reduce the rules such that rules which are found in multiple source
@@ -83,7 +97,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
           // Save the reduced precedence rules in localStorage
           try {
-            localStorage.setItem(pouchname + "reducedRules", JSON.stringify(reducedRules));
+            localStorage.setItem(dbname + "reducedRules", JSON.stringify(reducedRules));
           } catch (error) {
             //remove other corpora's rules to make space for the most recent...
             for (var x in localStorage) {
@@ -92,22 +106,23 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
               }
             }
             try {
-              localStorage.setItem(pouchname + "reducedRules", JSON.stringify(reducedRules));
+              localStorage.setItem(dbname + "reducedRules", JSON.stringify(reducedRules));
             } catch (error2) {
-              console.warn("Your lexicon is huge!", error2);
+              self.warn("Your lexicon is huge!", error2);
             }
           }
 
           self.reducedRules = reducedRules;
 
-          self.currentCorpusName = pouchname;
+          self.currentCorpusName = dbname;
           if (typeof callback === "function") {
             callback(rules.rows);
           }
           deffered.resolve(rules.rows);
         },
         error: function(e) {
-          console.log("error getting precedence rules:", e);
+          self.warn("Error getting precedence rules:", e);
+          self.bug("Error getting precedence rules:");
           deffered.reject(e);
         },
         dataType: ""
@@ -127,7 +142,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    * @return {String} The guessed morphemes line.
    */
   morphemefinder: {
-    value: function(unparsedUtterance, pouchname, justCopyDontGuessIGT) {
+    value: function(unparsedUtterance, dbname, justCopyDontGuessIGT) {
       if (!unparsedUtterance) {
         return "";
       }
@@ -136,16 +151,16 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         return unparsedUtterance;
       }
 
-      if (!pouchname) {
+      if (!dbname) {
         if (!this.application || !this.application.get("corpus")) {
           throw "Glosser can't be guessed, there is no app so the URL must be defined.";
         }
-        pouchname = this.application.get("corpus").get("couchConnection").pouchname;
+        dbname = this.application.get("corpus").get("couchConnection").dbname;
       }
 
       var potentialParse = "";
       // Get the precedence rules from localStorage
-      var rules = this.reducedRules || localStorage.getItem(pouchname + "reducedRules");
+      var rules = this.reducedRules || localStorage.getItem(dbname + "reducedRules");
 
       var parsedWords = [];
       if (rules) {
@@ -256,7 +271,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   contextSensitiveGlossFinder: {
-    value: function(fields, pouchname, justCopyDontGuessIGT) {
+    value: function(fields, dbname, justCopyDontGuessIGT) {
       var morphemesLine = fields.morphemes;
       if (!morphemesLine) {
         return "";
@@ -274,7 +289,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   simplisticGlossFinder: {
-    value: function(morphemesLine, pouchname, justCopyDontGuessIGT) {
+    value: function(morphemesLine, dbname, justCopyDontGuessIGT) {
       if (!morphemesLine) {
         return "";
       }
@@ -284,14 +299,14 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         return justQuestionMarks;
       }
 
-      if (!pouchname) {
+      if (!dbname) {
         if (!this.application || !this.application.get("corpus")) {
           throw "Glosser can't be guessed, there is no app so the URL must be defined.";
         }
-        pouchname = this.application.get("corpus").get("couchConnection").pouchname;
+        dbname = this.application.get("corpus").get("couchConnection").dbname;
       }
 
-      var lexiconNodes = localStorage.getItem(pouchname + "lexiconResults");
+      var lexiconNodes = localStorage.getItem(dbname + "lexiconResults");
       if (!lexiconNodes) {
         return "";
       }
@@ -317,7 +332,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           var gloss = "?"; // If there's no matching gloss, use question marks
           if (matchingNodes.length > 0) {
             // Take the first gloss for this morpheme
-            console.log("Glosses which match: ", matchingNodes);
+            this.debug("Glosses which match: ", matchingNodes);
             try {
               gloss = matchingNodes[0][0].gloss;
             } catch (e) {
@@ -350,9 +365,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (fields.morphemes) {
         return fields;
       }
-      fields.morphemes = this.morphemefinder(fields.utterance, fields.pouchname, justCopyDontGuessIGT);
+      fields.morphemes = this.morphemefinder(fields.utterance, fields.dbname, justCopyDontGuessIGT);
       if (!fields.gloss) {
-        fields = this.contextSensitiveGlossFinder(fields, fields.pouchname, justCopyDontGuessIGT);
+        fields = this.contextSensitiveGlossFinder(fields, fields.dbname, justCopyDontGuessIGT);
       }
       return fields;
     }
@@ -365,7 +380,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (!fields.morphemes) {
         fields.morphemes = fields.utterance;
       }
-      fields = this.contextSensitiveGlossFinder(fields, fields.pouchname, justCopyDontGuessIGT);
+      fields = this.contextSensitiveGlossFinder(fields, fields.dbname, justCopyDontGuessIGT);
       return fields;
     }
   },
@@ -402,7 +417,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           }), function(node) {
             return node.get("value");
           });
-          //      console.log(matchingNode);
+          //      self.debug(matchingNode);
           var gloss = "?"; // If there"s no matching gloss, use question marks
           if (matchingNode) {
             gloss = matchingNode.get("gloss");
@@ -417,20 +432,20 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       return glossGroups.join(" ");
     }
   },
-  
+
   /**
    * Takes as a parameters an array of rules which came from CouchDB precedence rule query.
    * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
    */
   generateForceDirectedRulesJsonForD3: {
-    value: function(rules, pouchname) {
-      if (!pouchname) {
-        pouchname = this.currentCorpusName;
+    value: function(rules, dbname) {
+      if (!dbname) {
+        dbname = this.currentCorpusName;
       }
       if (!rules) {
         rules = this.reducedRules;
         if (!rules) {
-          localStorage.getItem(pouchname + "precendenceRules");
+          localStorage.getItem(dbname + "precendenceRules");
           if (rules) {
             rules = JSON.parse(rules);
           }
@@ -511,282 +526,50 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   /*
-   * Some sample D3 from the force-html.html example
+   * Show precedes relations in a connected graph
+   * 
    * http://bl.ocks.org/mbostock/1153292
    * http://alignedleft.com/tutorials/d3/binding-data
    *
    * @param  {[type]} rulesGraph [description]
    * @param  {[type]} divElement [description]
-   * @param  {[type]} pouchname  [description]
+   * @param  {[type]} dbname  [description]
    * @return {[type]}            [description]
    */
   visualizePrecedenceRelationsAsForceDirectedGraph: {
-    value: function(lexicon, divElement, dontConnectOnWordBoundaries, confidenceRange) {
-
-      var precedenceGraph = {
-        links: [],
-        nodes: {}
-      };
+    value: function(divElement) {
       var self = this;
-      if (!this.localDocument) {
-        console.warn(" Glosser Visualization requested but the DOM was not provided to the glosser ");
-        return;
-      }
-      var localDocument = this.localDocument;
 
-      lexicon.precedenceGraph = lexicon.precedenceRelations.filter(function(relation) {
-        if (!relation.key.previous || !relation.key.subsequent) {
-          // console.log("skipping ", relation.key);
-          return;
-        }
-        if (!relation.key.previous.morphemes || !relation.key.subsequent.morphemes) {
-          // console.log("skipping ", relation.key);
-          return;
-        }
-        /* skip word boundaries if requested */
-        if (relation.key.previous.morphemes === "@" || relation.key.previous.morphemes === "_#" || relation.key.previous.morphemes === "#_" || relation.key.subsequent.morphemes === "@" || relation.key.subsequent.morphemes === "_#" || relation.key.subsequent.morphemes === "#_") {
-          if (dontConnectOnWordBoundaries) {
-            return;
-          }
-        }
-        /* make the @ more like what a linguist recognizes for  word boundaries */
-        if (relation.key.previous.morphemes === "@") {
-          relation.key.previous.morphemes = "#_";
-        }
-        if (relation.key.subsequent.morphemes === "@") {
-          relation.key.subsequent.morphemes = "_#";
-        }
-
-        // only consider immediate precedence
-        if (relation.key.distance > 1) {
-          return;
-        }
-        // only consider -> relations
-        if (relation.key.relation !== "precedes") {
-          return;
-        }
-        // only confident morphemes
-        confidenceRange = confidenceRange || {
-          min: 0,
-          max: 1
-        };
-        if (!self.isWithinConfidenceRange(relation.key.previous, confidenceRange) ||
-          !self.isWithinConfidenceRange(relation.key.subsequent, confidenceRange)) {
-          return;
-        }
-        relation.key.source = relation.key.previous;
-        relation.key.target = relation.key.subsequent;
-        precedenceGraph.links.push(relation.key);
-      });
-      lexicon.precedenceGraph = precedenceGraph;
-
-      if (!lexicon.precedenceGraph) {
-        return;
-      }
-      if (lexicon.precedenceGraph.links.length === 0) {
-        return;
+      if (!this.lexicon || !this.lexicon.length) {
+        this.warn("Cannot visualize an empty lexicon.");
+        return this;
       }
 
-      var width = divElement.clientWidth,
-        height = 600;
-
-      // Get the complete node for the links.
-      lexicon.precedenceGraph.links.map(function(link) {
-        if (!link || !link.source || !link.source.morphemes || !link.target || !link.target.morphemes) {
-          return;
-        }
-        if (!lexicon.precedenceGraph.nodes[link.source.morphemes]) {
-          lexicon.precedenceGraph.nodes[link.source.morphemes] = link.source;
-        }
-        link.source = lexicon.precedenceGraph.nodes[link.source.morphemes];
-
-        if (!lexicon.precedenceGraph.nodes[link.target.morphemes]) {
-          lexicon.precedenceGraph.nodes[link.target.morphemes] = link.target;
-        }
-        link.target = lexicon.precedenceGraph.nodes[link.target.morphemes];
-      });
-      var tooltip = this.d3.select("body")
-        .append("div")
-        .style("position", "absolute")
-        .style("z-index", "10")
-        .style("visibility", "hidden")
-        .html("");
-
-      var linkArc = function(d) {
-        var dx = d.source.x - d.target.x,
-          dy = d.source.y - d.target.y,
-          dr = Math.sqrt(dx * dx + dy * dy); //uncomment to curve the lines
-        // dr = 0;
-        return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+      var prefs = {
+        showRelations: ["preceeds"]
       };
+      if (this.corpus && this.corpus.prefs) {
+        prefs = this.corpus.prefs;
+      }
 
-      var transform = function(d) {
-        if (d.morphemes === "_#") {
-          d.x = width - 20;
-          d.y = height / 2;
-        }
-        if (d.morphemes === "#_") {
-          d.x = 20;
-          d.y = height / 2;
-        }
-        return "translate(" + d.x + "," + d.y + ")";
-      };
+      this.lexicon.visualizeAsForceDirectedGraph(divElement, prefs);
 
-      /*
-      Short morphemes will be blue, long will be red
-      */
-      var color = this.d3.scale.linear()
-        .range(["darkblue", "darkred"]) // or use hex values
-        .domain([1, 8]);
+      return this;
+    }
 
-      var lineColor = this.d3.scale.linear()
-        .range(["#FFFFF", "#FFFF00"]) // or use hex values
-        .domain([1, 8]);
+  },
 
-      // var force = this.d3.layout.force()
-      //   .charge(-120)
-      //   .linkStrength(0.2)
-      //   .linkDistance(30)
-      //   .size([width, height]);
-
-      var force = this.d3.layout.force()
-        .nodes(this.d3.values(lexicon.precedenceGraph.nodes))
-        .links(lexicon.precedenceGraph.links)
-        .size([width, height])
-        .linkStrength(0.5)
-        .linkDistance(60)
-        .charge(-400);
-
-      var svg = this.d3.select(divElement).append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-      // Per-type markers, as they don't inherit styles.
-      svg.append("defs").selectAll("marker")
-        .data(["precedes"])
-        // .data(["suit", "licensing", "resolved"])
-        .enter()
-        .append("marker")
-        .attr("id", function(d) {
-          return d;
-        })
-        .style("opacity", function(d) {
-          // return color(d.morphemes.length);
-          return 0.5;
-        })
-        .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 15)
-        .attr("refY", -1.5)
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto")
-        .append("path")
-        .attr("d", "M0,-5L10,0L0,5");
-
-      var path = svg.append("g").selectAll("path")
-        .data(force.links())
-        .enter().append("path")
-        .attr("class", function(d) {
-          return "link " + d.relation + " distance" + d.distance;
-        })
-        .attr("marker-end", function(d) {
-          return "url(#" + d.relation + ")";
-        });
-
-      var circle = svg.append("g").selectAll("circle")
-        .data(force.nodes())
-        .enter().append("circle")
-        .attr("class", "node")
-        .attr("r", 5)
-        .style("fill", function(d) {
-          if (d.morphemes === "#_") {
-            return "#00000";
-          }
-          if (d.morphemes === "_#") {
-            return "#ffffff";
-          }
-          return color(d.morphemes.length);
-          // return color(d.confidence * 10);
-        })
-        .style("opacity", function(d) {
-          // return color(d.morphemes.length);
-          return d.confidence ? d.confidence / 2 : 1;
-        })
-        .on("mouseover", function(object) {
-          var findNode = localDocument.getElementById(object.morphemes);
-          if (findNode) {
-            findNode = findNode.innerHTML + "<p>" + findNode.getAttribute("title") + "<p>";
-          } else {
-            findNode = "Morpheme: " + object.morphemes + "<br/> Gloss: " + object.gloss + "<br/> Confidence: " + object.confidence;
-          }
-          return tooltip
-            .style("visibility", "visible")
-            .html("<div class='node_details_tooltip lexicon'>" + findNode + "</div>");
-        })
-        .on("mousemove", function(object) {
-          /*global  event */
-          return tooltip.style("top", (event.pageY - 10) + "px")
-            .style("left", (event.pageX + 10) + "px");
-        })
-        .on("mouseout", function(object) {
-          return tooltip
-            .style("visibility", "hidden");
-        })
-        .on("click", function(d) {
-          /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
-          if (this.application && this.application.router) {
-            // this.application.router.showEmbeddedSearch(pouchname, "morphemes:"+d.morphemes);
-            var url = "corpus/" + lexicon.pouchname + "/search/" + "morphemes:" + d.morphemes;
-            // window.location.replace(url);
-            this.application.router.navigate(url, {
-              trigger: true
-            });
-
-          }
-        })
-        .call(force.drag);
-
-      var text = svg.append("g").selectAll("text")
-        .data(force.nodes())
-        .enter().append("text")
-        .attr("x", 8)
-        .attr("y", ".31em")
-        .style("opacity", function(d) {
-          // return color(d.morphemes.length);
-          return d.confidence ? d.confidence / 2 : 1;
-        })
-        .style("color", function(d) {
-          if (d.morphemes === "#_") {
-            return "#00000";
-          }
-          if (d.morphemes === "_#") {
-            return "#ffffff";
-          }
-          return color(d.morphemes.length);
-          // return color(d.confidence * 10);
-        })
-        .text(function(d) {
-          return d.morphemes;
-        });
-
-
-      // Use elliptical arc path segments to doubly-encode directionality.
-      var tick = function() {
-        path.attr("d", linkArc);
-        circle.attr("transform", transform);
-        text.attr("transform", transform);
-      };
-
-      force
-        .on("tick", tick)
-        .start();
-
-
+  render: {
+    value: function() {
+      return this.visualizePrecedenceRelationsAsForceDirectedGraph(arguments);
     }
   },
 
   isWithinConfidenceRange: {
     value: function(morpheme, confidenceRange) {
+      if (!confidenceRange) {
+        return true;
+      }
       return morpheme.confidence <= confidenceRange.max && morpheme.confidence >= confidenceRange.min;
     }
   }
