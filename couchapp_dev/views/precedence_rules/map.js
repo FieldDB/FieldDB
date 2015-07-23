@@ -5,23 +5,25 @@ function(doc) {
       return;
     }
     // If the document is a Datum
-    if (doc.audioVideo) {
+    if (!doc.audioVideo) {
       return;
     }
     var key,
-      fieldKeyName;
+      fieldKeyName,
+      fields = doc.fields || doc.datumFields || [];
+
     // Loop over all its DatumFields
-    for (key = 0; key < doc.datumFields.length; key++) {
+    for (key = 0; key < fields.length; key++) {
       fieldKeyName = "label";
-      if (doc.datumFields[key].id && doc.datumFields[key].id.length > 0) {
+      if (fields[key].id && fields[key].id.length > 0) {
         fieldKeyName = "id"; /* update to version 2.35+ */
       } else {
         fieldKeyName = "label";
       }
       // If the DatumField contains the Judgement
-      if (doc.datumFields[key][fieldKeyName] === "judgement") {
+      if (fields[key][fieldKeyName] === "judgement") {
         // If the Judgement contains a "*", don"t count the words in it
-        if (doc.datumFields[key].mask && doc.datumFields[key].mask.indexOf("*") >= 0) {
+        if (fields[key].mask && fields[key].mask.indexOf("*") >= 0) {
           return;
         }
         break;
@@ -49,17 +51,17 @@ function(doc) {
       }
     };
     // Loop over all its DatumFields
-    for (key in doc.datumFields) {
+    for (key in fields) {
       fieldKeyName = "label";
-      if (doc.datumFields[key].id && doc.datumFields[key].id.length > 0) {
+      if (fields[key].id && fields[key].id.length > 0) {
         fieldKeyName = "id"; /* update to version 2.35+ */
       } else {
         fieldKeyName = "label";
       }
       // If the DatumField contains the Utterance
-      if (doc.datumFields[key][fieldKeyName] === "morphemes") {
+      if (fields[key][fieldKeyName] === "morphemes") {
         // Trim whitespace
-        var morphemesLine = doc.datumFields[key].mask ? doc.datumFields[key].mask.trim() : "";
+        var morphemesLine = fields[key].mask ? fields[key].mask.trim() : "";
         // If the morphemesLine is ungrammatical, don"t count the words
         // in it
         if (morphemesLine.indexOf("*") === 0) {
@@ -93,6 +95,6 @@ function(doc) {
       }
     }
   } catch (e) {
-    //emit(e, 1);
+    //emit(e, doc);
   }
 }
