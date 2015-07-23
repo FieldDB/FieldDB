@@ -86,6 +86,15 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
       }
     }
   },
+  popup: {
+    value: function() {
+      try {
+        return FieldDB.FieldDBObject.popup.apply(this, arguments);
+      } catch (e) {
+        console.warn("Not telling user about a popup ", arguments);
+      }
+    }
+  },
   confirm: {
     value: function() {
       try {
@@ -213,8 +222,13 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
               if (saveEditToAllData) {
                 e.target.parentElement.__data__.save().then(function(result) {
                   console.log("Saving success...", result);
+                  self.popup("Saved " + changesAsStrings.join(" "));
+                }, function(reason) {
+                  console.log("Saving failed...", reason);
+                  self.bug("Save failed. " + reason.userFriendlyErrors.join(" "));
                 }).fail(function(reason) {
                   console.log("Saving failed...", reason);
+                  self.bug("Save failed. Please notify the app's developers " + e.target.parentElement.__data__.datumids.join(" "));
                 });
               }
             }
@@ -241,6 +255,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           if (e.target.jsonView.hidden) {
             var newIgt;
             try {
+              newIgt = JSON.parse(e.target.jsonView.innerHTML);
               for (var field in newIgt) {
                 if (newIgt.hasOwnProperty(field)) {
                   // e.target.__data__[field] = newIgt[field];
@@ -657,7 +672,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
     }
   },
 
-
   /*
    * Some sample D3 from the force-html.html example
    * http://bl.ocks.org/mbostock/1153292
@@ -942,7 +956,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
 
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
- *  
+ *
  * @param {[type]} options [description]
  */
 var LexiconFactory = function(options) {
