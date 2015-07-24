@@ -73,7 +73,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
       try {
         return FieldDB.FieldDBObject.prototype.debug.apply(this, arguments);
       } catch (e) {
-        console.log("Not showing developer ", arguments);
+        // console.log("Not showing developer ", arguments);
       }
     }
   },

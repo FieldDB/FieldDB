@@ -3,6 +3,7 @@
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
@@ -51,81 +52,68 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   downloadPrecedenceRules: {
-    value: function(dbname, glosserURL, callback) {
+    value: function(glosserURL) {
       if (!glosserURL || glosserURL === "default") {
         if (!this.corpus) {
-          throw "Glosser cant be guessed, there is no app so the URL must be defined.";
+          throw "Glosser can't be guessed, there is no app so the URL must be defined.";
         }
-        glosserURL = this.corpus.url + "/_design/pages/_view/precedence_rules?group=true";
+        if (this.corpus.prefs && this.corpus.prefs.glosserURL) {
+          glosserURL = this.corpus.prefs.glosserURL;
+        } else {
+          glosserURL = this.corpus.url + "/_design/pages/_view/morpheme_n_grams?group=true";
+        }
       }
       var self = this;
       var deffered = Q.defer();
+      var dbname;
+      if (this.corpus && this.corpus.dbname) {
+        dbname = this.corpus.dbname;
+      }
+
       CORS.makeCORSRequest({
         type: "GET",
-        url: glosserURL,
-        success: function(rules) {
-          // Dont need to store the actual rules, they are too big
-          // try {
-          //   localStorage.setItem(dbname + "precendenceRules", JSON.stringify(rules.rows));
-          // } catch (e) {
-          //   //remove other corpora's rules to make space for the most recent...
-          //   for (var x in localStorage) {
-          //     if(!localStorage.hasOwnProperty(x)){
-          //       continue;
-          //     }
-          //     if (x.indexOf("precendenceRules") > -1) {
-          //       localStorage.removeItem(x);
-          //     }
-          //   }
-          //   localStorage.setItem(dbname + "precendenceRules", JSON.stringify(rules.rows));
-          // }
-
+        url: glosserURL
+      }).then(function(rules) {
           // Reduce the rules such that rules which are found in multiple source
           // words are only used/included once.
-          var reducedRules = _.chain(rules.rows).groupBy(function(rule) {
-            if (rule.key.distance === 1) {
-              // upgrade to fancier context sensitive rules
-              if (rule.key.previous && rule.key.previous.morphemes) {
-                rule.key.x = rule.key.previous.morphemes;
-              }
-              if (rule.key.subsequent && rule.key.subsequent.morphemes) {
-                rule.key.y = rule.key.subsequent.morphemes;
-              }
+          self.morphemePrecedenceRelations = rules.rows.filter(function(row) {
+            if (row.key.indexOf("@-@") === -1) {
+              return true;
             }
-            return rule.key.x + "-" + rule.key.y;
-          }).value();
+          });
 
           // Save the reduced precedence rules in localStorage
-          try {
-            localStorage.setItem(dbname + "reducedRules", JSON.stringify(reducedRules));
-          } catch (error) {
-            //remove other corpora's rules to make space for the most recent...
-            for (var x in localStorage) {
-              if (x.indexOf("reducedRules") > -1) {
-                localStorage.removeItem(x);
+          if (dbname) {
+            try {
+              localStorage.setItem(dbname + "morphemePrecedenceRelations", JSON.stringify(self.morphemePrecedenceRelations));
+            } catch (error) {
+              if (error.message === "localStorage is not defined") {
+                console.warn("cannot save precedence rules for offline use");
+              } else {
+                //remove other corpora's rules to make space for the most recent...
+                for (var x in localStorage) {
+                  if (x.indexOf("self.morphemePrecedenceRelations") > -1) {
+                    localStorage.removeItem(x);
+                  }
+                }
+                try {
+                  localStorage.setItem(dbname + "self.morphemePrecedenceRelations", JSON.stringify(self.morphemePrecedenceRelations));
+                } catch (error2) {
+                  self.warn("Your lexicon is huge!", error2);
+                }
               }
             }
-            try {
-              localStorage.setItem(dbname + "reducedRules", JSON.stringify(reducedRules));
-            } catch (error2) {
-              self.warn("Your lexicon is huge!", error2);
-            }
           }
-
-          self.reducedRules = reducedRules;
-
-          self.currentCorpusName = dbname;
-          if (typeof callback === "function") {
-            callback(rules.rows);
-          }
-          deffered.resolve(rules.rows);
+          deffered.resolve(self.morphemePrecedenceRelations);
         },
-        error: function(e) {
+        function(e) {
           self.warn("Error getting precedence rules:", e);
           self.bug("Error getting precedence rules:");
           deffered.reject(e);
-        },
-        dataType: ""
+        }).fail(function(exception) {
+        self.warn("Error getting precedence rules:", exception.stack);
+        self.bug("Error getting precedence rules:");
+        deffered.reject(exception);
       });
 
       return deffered.promise;
@@ -160,7 +148,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
       var potentialParse = "";
       // Get the precedence rules from localStorage
-      var rules = this.reducedRules || localStorage.getItem(dbname + "reducedRules");
+      var rules = this.morphemePrecedenceRelations || localStorage.getItem(dbname + "morphemePrecedenceRelations");
 
       var parsedWords = [];
       if (rules) {
@@ -439,11 +427,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    */
   generateForceDirectedRulesJsonForD3: {
     value: function(rules, dbname) {
-      if (!dbname) {
-        dbname = this.currentCorpusName;
-      }
+
       if (!rules) {
-        rules = this.reducedRules;
+        rules = this.morphemePrecedenceRelations;
         if (!rules) {
           localStorage.getItem(dbname + "precendenceRules");
           if (rules) {
@@ -538,7 +524,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    */
   visualizePrecedenceRelationsAsForceDirectedGraph: {
     value: function(element) {
-      var self = this;
 
       if (!this.lexicon || !this.lexicon.length) {
         this.warn("Cannot visualize an empty lexicon.");

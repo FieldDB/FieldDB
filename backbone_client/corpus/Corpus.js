@@ -1448,7 +1448,7 @@ define([
       var glosserURL = this.get("glosserURL");
       if (!glosserURL) {
         var couchurl = OPrime.getCouchUrl(this.get("connection"));
-        glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
+        glosserURL = couchurl + "/_design/pages/_view/morpheme_n_grams?group=true";
       }
       Glosser.downloadPrecedenceRules(dbname, glosserURL, callback);
     },
