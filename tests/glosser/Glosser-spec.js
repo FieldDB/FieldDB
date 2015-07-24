@@ -1,7 +1,10 @@
 var Glosser = require("../../api/glosser/Glosser").Glosser;
+// var morpheme_n_grams = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
+
 var optionalD3;
 var virtualElement;
 var virtualDOM;
+var specIsRunningTooLong = 5000;
 
 try {
 	optionalD3 = require("d3");
@@ -75,6 +78,12 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		"value": 1
 	}];
 
+	var tinyCorpus = {
+		dbname: "jenkins-firstcorpus",
+		title: "Community Corpus",
+		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
+	};
+
 	describe("construction", function() {
 
 		it("should load", function() {
@@ -86,17 +95,101 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(glosser).toBeDefined();
 		});
 
-	});
-
-	describe("semi-automatic glossing", function() {
-
-		it("should be able to predict the gloss", function() {
-			expect("See glosser repo for tests").toBeTruthy();
+		it("should accept a corpus", function() {
+			var glosser = new Glosser({
+				corpus: tinyCorpus
+			});
+			expect(glosser).toBeDefined();
+			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 		});
 
 	});
 
-	describe("visualization", function() {
+	describe("semi-automatic glossing", function() {
+		var rows;
+		var emit = function(key, value) {
+			rows.push({
+				key: key,
+				value: value
+			})
+		};
+		beforeEach(function() {
+			rows = [];
+		});
+
+		xit("should be able to build ngrams", function() {
+			expect(emit).toBeDefined();
+
+			var doc = {
+				fields: [{
+					id: "morphemes",
+					mask: "Victor-ta tusu-naya-n"
+				}]
+			}
+			expect(doc).toBeDefined();
+			console.log("Testing ngrams");
+			morpheme_n_grams(doc, emit);
+
+			expect(rows).toBeDefined();
+			// expect(rows).toEqual();
+			expect(rows.length).toEqual(10);
+			expect(rows[4].value).toEqual("Victor-ta tusu-naya-n");
+
+		});
+
+		xit("should be able to build ngrams", function() {
+			// var rows = [];
+			expect(emit).toBeDefined();
+
+			var doc = {
+				fields: [{
+					id: "morphemes",
+					mask: "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw(paq)"
+				}]
+			}
+			expect(doc).toBeDefined();
+			console.log("Testing ngrams");
+			morpheme_n_grams(doc, emit);
+
+			expect(rows).toBeDefined();
+			expect(rows.length).toEqual(30);
+
+			var contexts = {};
+			rows.map(function(row) {
+				if (!contexts[row.value]) {
+					contexts[row.value] = 1
+				} else {
+					contexts[row.value]++;
+				}
+			});
+			expect(contexts).toEqual({
+				"Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq": 15,
+				"Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw": 15
+			});
+
+		});
+
+		it("should be able to predict the gloss", function(done) {
+			var glosser = new Glosser({
+				corpus: tinyCorpus
+			});
+			expect(glosser).toBeDefined();
+			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
+
+			glosser.downloadPrecedenceRules().then(function(results) {
+				expect(glosser.morphemePrecedenceRelations.length).toEqual(14);
+				expect(results).toEqual(glosser.morphemePrecedenceRelations);
+			}, function(reason) {
+				expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+			}).fail(function(exception) {
+				expect(exception).toEqual(" unexpected exception while processing rules");
+			}).done(done);
+
+		}, specIsRunningTooLong);
+
+	});
+
+	xdescribe("visualization", function() {
 
 		if (optionalD3) {
 			it("should accept an element", function() {

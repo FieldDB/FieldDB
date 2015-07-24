@@ -14,7 +14,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
+        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/morpheme_n_grams?group=true",
         withCredentials: true
       };
 
