@@ -2,8 +2,8 @@
 
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
-var CORS = require("../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
+// var CORS = require("../CORS").CORS;
+var CORS = require("../CORSNode").CORS;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
@@ -21,13 +21,10 @@ var MORPHEMES_N_GRAMS_MAP_REDUCE = {
   }
 };
 try {
-  var fs = require("fs");
-  var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "/map").morpheme_n_grams;
-  console.log("mapcannotbeincludedviarequire", mapcannotbeincludedviarequire);
-  var morpheme_n_grams_map_reduce_text = fs.readFileSync("couchapp_dev/views/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "/map.js", "utf8"); //.replace("function morpheme_n_grams(doc) {", "var morpheme_n_grams = function(doc, emit) {");
+  var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + morpheme_n_grams_map_reduce_text + ';');
+  eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + mapcannotbeincludedviarequire.toString() + ';');
 } catch (exception) {
   console.log("Unable to parse the map reduce ", exception.stack);
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
@@ -76,7 +73,7 @@ Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
   try {
     // ugly way to make sure references to 'emit' in map/reduce bind to the
     // above emit at run time
-    eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + morpheme_n_grams_map_reduce_text + ';');
+    eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ';');
   } catch (e) {
     console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");
   }
@@ -263,7 +260,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         if (this.corpus.prefs && this.corpus.prefs.glosserURL) {
           glosserURL = this.corpus.prefs.glosserURL;
         } else {
-          glosserURL = this.corpus.url + "/_design/pages/_view/morpheme_n_grams?group=true";
+          glosserURL = this.corpus.url + "/_design/pages/_view/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "?group=true";
         }
       }
       var self = this;
