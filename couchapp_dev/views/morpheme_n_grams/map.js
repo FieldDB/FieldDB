@@ -1,5 +1,4 @@
-var morpheme_n_grams = function(doc, emit) {
-// function(doc) {
+function morpheme_n_grams(doc) {
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
@@ -156,8 +155,11 @@ var morpheme_n_grams = function(doc, emit) {
       }
     }
   } catch (e) {
-    // emit(e, doc);
+    emit(e, doc);
   }
 };
-
-exports.morpheme_n_grams = morpheme_n_grams;
+try {
+  exports.morpheme_n_grams = morpheme_n_grams;
+} catch (e) {
+  // console.log("not in a node context")
+}
