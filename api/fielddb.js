@@ -105,6 +105,9 @@
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   FieldDB.FieldDatabase = FieldDatabase;
   FieldDB["FieldDatabase"] = FieldDatabase;
+  var Glosser = require("./glosser/Glosser").Glosser;
+  FieldDB.Glosser = Glosser;
+  FieldDB["Glosser"] = Glosser;
   var HotKeys = require("./hotkey/HotKeys").HotKeys;
   FieldDB.HotKeys = HotKeys;
   FieldDB["HotKeys"] = HotKeys;

@@ -2,12 +2,39 @@
 
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
-// var CORS = require("../CORS").CORS;
-var CORS = require("../CORSNode").CORS;
+var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
-
+// Load n grams map reduce which is used in both couchdb and in the codebase
+var MORPHEMES_N_GRAMS_MAP_REDUCE = {
+  filename: "morpheme_n_grams",
+  map: null,
+  reduce: null,
+  rows: [],
+  emit: function(key, val) {
+    this.rows.push({
+      key: key,
+      value: val
+    });
+  }
+};
+try {
+  var fs = require("fs");
+  var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "/map").morpheme_n_grams;
+  console.log("mapcannotbeincludedviarequire", mapcannotbeincludedviarequire);
+  var morpheme_n_grams_map_reduce_text = fs.readFileSync("couchapp_dev/views/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "/map.js", "utf8"); //.replace("function morpheme_n_grams(doc) {", "var morpheme_n_grams = function(doc, emit) {");
+  var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
+  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
+  eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + morpheme_n_grams_map_reduce_text + ';');
+} catch (exception) {
+  console.log("Unable to parse the map reduce ", exception.stack);
+  var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
+  MORPHEMES_N_GRAMS_MAP_REDUCE.map = function() {
+    emit("error", "unable to load map reduce");
+  };
+}
 /**
  * @class The Glosser is able to guess morpheme segmentation and/or glosses from an orthography/transcription.
  * The default Glosser (this one) uses a lexicon which is generated off of existing data in the corpus to do this.
@@ -31,6 +58,34 @@ var Glosser = function Glosser(options) {
 
 Glosser.morphemeBoundaryRegEX = /[-=]/g;
 
+/**
+ * [morpheme_n_grams_mapReduce description]
+ * @type {Function}
+ */
+Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
+  rows = rows || [];
+  if (!emit) {
+    emit = function(key, value) {
+      rows.push({
+        key: key,
+        value: value
+      });
+    };
+  }
+
+  try {
+    // ugly way to make sure references to 'emit' in map/reduce bind to the
+    // above emit at run time
+    eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + morpheme_n_grams_map_reduce_text + ';');
+  } catch (e) {
+    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");
+  }
+
+  MORPHEMES_N_GRAMS_MAP_REDUCE.map(doc);
+  return {
+    rows: rows
+  };
+};
 
 /**
  * Finds all combinations of an utterance line by looping through all 
