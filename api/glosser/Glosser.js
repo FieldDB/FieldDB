@@ -29,6 +29,154 @@ var Glosser = function Glosser(options) {
   FieldDBObject.apply(this, arguments);
 };
 
+Glosser.morphemeBoundaryRegEX = /[-=]/g;
+
+
+/**
+ * Finds all combinations of an utterance line by looping through all 
+ * possible parses of all words in the utterance line. 
+ *
+ * This results in a list of alternateMorphemeLines which can be shown to the user
+ * as a type-ahead on the utterance line. 
+ *
+ * These alternateMorphemeLines can be further filtered using other information 
+ * (likelyhood of long distance relationships between morphemes, 
+ * likelyhood of long distance relationships between glosses).
+ *
+ * http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
+ * 
+ * @param  {Object} options An object containing metadata, 
+ *                           options.columns is used to generate the combinations
+ *                           options.sort is optionally used to sort the resulting combinations
+ * @return {Object}         [description]
+ */
+Glosser.calculateAllAlternativeCombinations = function(options) {
+  var debug = function() {
+    // console.log(arguments);
+  };
+  options.alternateMorphemeLines = options.alternateMorphemeLines || [];
+  debug("Beginning with a set of alternatives " + options.alternateMorphemeLines);
+  if (options.alternateMorphemeSegmentationsByWord) {
+    options.columns = [];
+    for (var word in options.alternateMorphemeSegmentationsByWord) {
+      if (options.alternateMorphemeSegmentationsByWord.hasOwnProperty(word) && options.alternateMorphemeSegmentationsByWord[word].fullParses) {
+        options.columns.push(options.alternateMorphemeSegmentationsByWord[word].fullParses);
+      }
+    }
+  }
+  options.columns = options.columns || [];
+  var utteranceWordCount = options.columns.length - 1;
+  debug("Finding all alternative parses for ", options.columns);
+
+  var recurse = function(parseInProgress, currentColumnIndex) {
+    if (!options.columns[currentColumnIndex]) {
+      return;
+    }
+    Glosser.removeRedundantCopies(options.columns[currentColumnIndex]);
+
+    var numberOfParsesForThisWord = options.columns[currentColumnIndex].length;
+    debug(" There are " + numberOfParsesForThisWord + " alternative parses for word " + (currentColumnIndex + 1));
+
+    for (var possibleParseIndex = 0; possibleParseIndex < numberOfParsesForThisWord; possibleParseIndex++) {
+      var copyOfParseInProgress = parseInProgress.slice(0); // clone column
+      var possibleParseOfThisWord = options.columns[currentColumnIndex][possibleParseIndex];
+      copyOfParseInProgress.push(possibleParseOfThisWord);
+      if (currentColumnIndex === utteranceWordCount) {
+        // We have a full parse of all words
+        debug("  found a complete alternate", copyOfParseInProgress);
+        options.alternateMorphemeLines.push(copyOfParseInProgress.join(" "));
+      } else {
+
+        debug("\n" + copyOfParseInProgress + ":  set");
+        recurse(copyOfParseInProgress, currentColumnIndex + 1);
+      }
+    }
+  };
+  recurse([], 0);
+
+  if (typeof options.sort === "function") {
+    options.alternateMorphemeLines = options.alternateMorphemeLines.sort(options.sort);
+  }
+  Glosser.removeRedundantCopies(options.alternateMorphemeLines);
+
+  debug(options.alternateMorphemeLines);
+  return options;
+};
+
+/**
+ * If passed to a alternateMorphemeLines.map() results in a sort order where more 
+ * segmentations are listed first (on top in a typeahead).
+ *
+ * This is only useful if the user doesn't realize that the app can segment 
+ * the utterance line, and/or if the glosser's segmentations are conservative
+ * and only offer real segmentations.
+ * 
+ * @param  {String} a A string (normallly a morphemes line)
+ * @param  {String} b A string (normallly a morphemes line)
+ * @return {boolean}   If a has more segmentations than b
+ */
+Glosser.sortAlternatesByMoreSegmentation = function(a, b) {
+  var segmentationsA = 0;
+  if (a && typeof a.split === "function") {
+    segmentationsA = a.split(Glosser.morphemeBoundaryRegEX).length;
+  }
+  var segmentationsB = 0;
+  if (b && typeof b.split === "function") {
+    segmentationsB = b.split(Glosser.morphemeBoundaryRegEX).length;
+  }
+  return segmentationsB - segmentationsA;
+};
+
+/**
+ * If passed to a alternateMorphemeLines.map() results in a sort order where fewer segmentations 
+ * are listed first (on top in a typeahead). 
+ * 
+ * This is useful if the user prefers to see segmentations, but will most often 
+ * choose the utteracne line as the morphemes line and then add the segmentations
+ * themself.
+ * 
+ * @param  {String} a A string (normallly a morphemes line)
+ * @param  {String} b A string (normallly a morphemes line)
+ * @return {boolean}   If a has more segmentations than b
+ */
+Glosser.sortAlternatesByLessSegmentation = function(a, b) {
+  var segmentationsA = 0;
+  if (a && typeof a.split === "function") {
+    segmentationsA = a.split(Glosser.morphemeBoundaryRegEX).length;
+  }
+  var segmentationsB = 0;
+  if (b && typeof b.split === "function") {
+    segmentationsB = b.split(Glosser.morphemeBoundaryRegEX).length;
+  }
+  return segmentationsA - segmentationsB;
+};
+
+/**
+ * Removes redundant copies from an array 
+ * 
+ * @param  {Array} input An array to be cleaned
+ * @return {Array}       The same array after removing redundant copies
+ */
+Glosser.removeRedundantCopies = function(input) {
+  var hash = {};
+  // var copy = [];
+
+  for (var i = input.length - 1; i >= 0; --i) {
+    if (!hash.hasOwnProperty(input[i])) {
+      hash[input[i]] = true;
+      // copy.unshift(input[i]);
+    } else {
+      input.splice(i, 1);
+    }
+  }
+
+  return input;
+};
+
+Glosser.removeWordBoundaryPlaceholders = function(input) {
+  return input.replace(/-?@-?/g, " ").trim();
+};
+
 Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.prototype */ {
   constructor: {
     value: Glosser
@@ -177,36 +325,45 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    * @return {String} The guessed morphemes line.
    */
   morphemefinder: {
-    value: function(unparsedUtterance, justCopyDontGuessIGT) {
-      if (!unparsedUtterance) {
-        return "";
+    value: function(datum, justCopyDontGuessIGT) {
+      if (!datum || !datum.utterance) {
+        return datum;
       }
-      if (justCopyDontGuessIGT) {
-        return unparsedUtterance;
-      }
-
-      var potentialParse = "";
-
-      var parsedWords = [];
-      if (!this.morphemeSegmentationKnowledgeBase || !this.morphemeSegmentationKnowledgeBase.length) {
-        return unparsedUtterance;
-      }
-      // Divide the utterance line into words
-      var parseInProgress = {
-        utteranceWithExplictWordBoundaries: "@" + unparsedUtterance.trim().split(/ +/).join("@") + "@",
-        matchingRules: []
-      };
-      this.findRelevantSegmentations(parseInProgress);
-
-      this.debug(" Found matchingRules " + unparsedUtterance + " which yields " + parseInProgress.utteranceWithExplictWordBoundaries, parseInProgress.matchingRules);
-      if (this.conservative === false) {
-        console.warn(" Continuing to look harder for segmentation. Currently " + unparsedUtterance + " directly matches " + parseInProgress.utteranceWithExplictWordBoundaries);
+      // Keep the current morphemes as an alternate, and copy the utteracne into the morphemes if it was empty
+      if (datum.morphemes) {
+        datum.alternateMorphemeLines = datum.alternateMorphemeLines || [];
+        datum.alternateMorphemeLines.unshift(datum.morphemes);
+        Glosser.removeRedundantCopies(datum.alternateMorphemeLines);
       } else {
-        this.debug(" Not looking harder for segmentation. Currently " + unparsedUtterance + " directly matches " + parseInProgress.utteranceWithExplictWordBoundaries);
-        return parseInProgress.utteranceWithExplictWordBoundaries.replace(/-?@-?/g, " ").trim();
+        datum.morphemes = datum.utterance + "";
       }
 
-      this.findaAllPossibleSegmentations(parseInProgress);
+      // If the user doesnt want to guess on this call, this datum, or any glosser data, dont bother guessing segmentation
+      if (justCopyDontGuessIGT || this.justCopyDontGuessIGT || datum.justCopyDontGuessIGT) {
+        return datum;
+      }
+
+      // If there is no data, dont bother guessing segmentation
+      if (!this.morphemeSegmentationKnowledgeBase || !this.morphemeSegmentationKnowledgeBase.length) {
+        return datum;
+      }
+
+      // Divide the utterance line into words
+      datum.utteranceWithExplictWordBoundaries = "@" + datum.utterance.trim().toLocaleLowerCase().split(/ +/).join("@") + "@";
+      datum.matchingRules = [];
+      this.findRelevantSegmentationContexts(datum);
+
+      this.debug(" Found matchingRules " + datum.utterance + " which conservatively yields exact segmentation matches " + datum.utteranceWithExplictWordBoundaries, datum.matchingRules);
+      if (this.conservative === false) {
+        console.warn(" Continuing to look harder for segmentation. Currently " + datum.utterance + " directly segments as " + datum.utteranceWithExplictWordBoundaries);
+      } else {
+        this.debug(" Not looking harder for segmentation. Currently " + datum.utterance + " directly segments as " + datum.utteranceWithExplictWordBoundaries);
+        datum.morphemes = datum.utteranceWithExplictWordBoundaries.replace(/-?@-?/g, " ").trim()
+        return datum;
+      }
+
+      this.findaAllPossibleMorphemeLines(datum);
+      return datum;
     }
   },
 
@@ -215,7 +372,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    * @param  {[type]} utteranceWithExplictWordBoundaries [description]
    * @return {[type]}                                    [description]
    */
-  findRelevantSegmentations: {
+  findRelevantSegmentationContexts: {
     value: function(options) {
       if (!options.utteranceWithExplictWordBoundaries) {
         return options;
@@ -230,18 +387,18 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         if (!this.morphemeSegmentationKnowledgeBase.hasOwnProperty(segmentation) || segmentation === "length") {
           continue;
         }
-        if (originalUtteranceWithWordBoundaries.indexOf(segmentation.replace(/[-=]/g, "")) >= 0) {
+        if (originalUtteranceWithWordBoundaries.indexOf(segmentation.replace(Glosser.morphemeBoundaryRegEX, "")) >= 0) {
           this.debug("   matching rule " + originalUtteranceWithWordBoundaries + " <-" + segmentation);
           // If this has enough context then consider it a correct segmentation
-          if (segmentation.split(/[-=]/).length > 2) {
-            options.utteranceWithExplictWordBoundaries = options.utteranceWithExplictWordBoundaries.replace(segmentation.replace(/[-=]/g, ""), segmentation);
+          if (segmentation.split(Glosser.morphemeBoundaryRegEX).length > 2) {
+            options.utteranceWithExplictWordBoundaries = options.utteranceWithExplictWordBoundaries.replace(segmentation.replace(Glosser.morphemeBoundaryRegEX, ""), segmentation);
           }
 
           this.debug("      now " + options.utteranceWithExplictWordBoundaries);
           options.matchingRules.push({
             segmentation: segmentation,
             contexts: this.morphemeSegmentationKnowledgeBase[segmentation],
-            morphemes: segmentation.split(/[-=]/g)
+            morphemes: segmentation.split(Glosser.morphemeBoundaryRegEX)
           });
         } else {
           this.debug("   not matching rule " + originalUtteranceWithWordBoundaries + " |- " + segmentation);
@@ -251,27 +408,30 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     }
   },
 
-  findaAllPossibleSegmentations: {
+  findaAllPossibleMorphemeLines: {
     value: function(options) {
 
       // Attempt to find the longest template which the matching this.morphemeSegmentationKnowledgeBase can
       // generate from start to end
-      options.potentialParses = options.potentialParses || [];
+      options.alternateMorphemeLines = options.alternateMorphemeLines || [];
       options.usedRules = options.usedRules || [];
-      if (options.potentialParses.indexOf(options.utteranceWithExplictWordBoundaries) === -1) {
-        options.potentialParses.push(options.utteranceWithExplictWordBoundaries);
+
+      if (!options.utteranceWithExplictWordBoundaries) {
+        return options;
       }
+      options.utterance = options.utterance || Glosser.removeWordBoundaryPlaceholders(options.utteranceWithExplictWordBoundaries);
+      options.alternateMorphemeLines.push(options.utterance);
+      this.debug("alternateMorphemeLines " + options.alternateMorphemeLines);
+
       if (!options.matchingRules || !options.matchingRules.length) {
-        this.findRelevantSegmentations(options);
-        if (options.potentialParses.indexOf(options.utteranceWithExplictWordBoundaries) === -1) {
-          options.potentialParses.push(options.utteranceWithExplictWordBoundaries);
-        }
+        this.findRelevantSegmentationContexts(options);
+        options.alternateMorphemeLines.push(Glosser.removeWordBoundaryPlaceholders(options.utteranceWithExplictWordBoundaries));
       }
-      if (!options.potentialParsesByWord) {
-        options.potentialParsesByWord = {};
+      if (!options.alternateMorphemeSegmentationsByWord) {
+        options.alternateMorphemeSegmentationsByWord = {};
         options.utteranceWithExplictWordBoundaries.split(/-?@-?/).map(function(word) {
           if (word) {
-            options.potentialParsesByWord[word.replace(/[-=]/g, "")] = {
+            options.alternateMorphemeSegmentationsByWord[word.replace(Glosser.morphemeBoundaryRegEX, "")] = {
               fullParses: [word],
               prefixTemplates: [],
               suffixTemplates: []
@@ -283,7 +443,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       var match,
         matchIndex;
 
-      for (var word in options.potentialParsesByWord) {
+      for (var word in options.alternateMorphemeSegmentationsByWord) {
 
         this.debug("\nFinding prefixtemplate " + word);
         var prefixtemplate = ["@"];
@@ -302,9 +462,10 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
             // this morpheme matches, and the following morpheme can be found somewhere later in the word
             if (prefixtemplate[i] === match.morphemes[0] && (match.morphemes[1] === "@" || word.indexOf(match.morphemes[1]) > -1)) {
+              options.usedRules.push(match);
               if (prefixtemplate[i + 1]) { // ambiguity (two potential following morphemes)
-                this.debug("Ambiguity point for prefixes " + word + " " + prefixtemplate[i + 1], options.potentialParsesByWord[word]);
-                options.potentialParsesByWord[word].prefixTemplates.push(prefixtemplate.pop());
+                this.debug("Ambiguity point for prefixes " + word + " " + prefixtemplate[i + 1], options.alternateMorphemeSegmentationsByWord[word]);
+                options.alternateMorphemeSegmentationsByWord[word].prefixTemplates.push(prefixtemplate.pop());
                 break;
               } else {
                 prefixtemplate[i + 1] = match.morphemes[1];
@@ -319,11 +480,11 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           this.debug("Prefix matches entire word. " + prefixtemplate.join("-"));
           prefixtemplate.pop(); //remove final @
           prefixtemplate.shift(); //remove intitial @
-          options.potentialParsesByWord[word].fullParses.push(prefixtemplate.join("-"));
-          prefixtemplate = options.potentialParsesByWord[word].prefixTemplates.pop() || ["@"];
+          options.alternateMorphemeSegmentationsByWord[word].fullParses.push(prefixtemplate.join("-"));
+          prefixtemplate = options.alternateMorphemeSegmentationsByWord[word].prefixTemplates.pop() || ["@"];
           this.debug("Considering another parse " + prefixtemplate.join("-"));
         } else {
-          prefixtemplate = options.potentialParsesByWord[word].prefixTemplates.pop() || ["@"];
+          prefixtemplate = options.alternateMorphemeSegmentationsByWord[word].prefixTemplates.pop() || ["@"];
           this.debug("Considering another parse " + prefixtemplate.join("-"));
         }
 
@@ -339,18 +500,19 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
             if (suffixtemplate[ii] === undefined) {
               break;
             }
-            for (matchIndex = 0; matchIndex < options.matchingRules.length; matchIndex++) {
-              match = options.matchingRules[matchIndex];
+            for (var suffixMatchIndex = 0; suffixMatchIndex < options.matchingRules.length; suffixMatchIndex++) {
+              var suffixmatch = options.matchingRules[suffixMatchIndex];
 
               // this morpheme matches, and the following morpheme can be found somewhere later in the word
-              if (suffixtemplate[ii] === match.morphemes[1] && (match.morphemes[0] === "@" || word.indexOf(match.morphemes[0]) > -1)) {
+              if (suffixtemplate[ii] === suffixmatch.morphemes[1] && (suffixmatch.morphemes[0] === "@" || word.indexOf(suffixmatch.morphemes[0]) > -1)) {
+                options.usedRules.push(suffixmatch);
                 if (suffixtemplate[ii + 1]) { // ambiguity (two potential
                   // following morphemes)
-                  this.debug("Ambiguity point for suffixes " + word + " " + suffixtemplate[ii + 1], options.potentialParsesByWord[word]);
-                  options.potentialParsesByWord[word].suffixTemplates.push(suffixtemplate.pop());
+                  this.debug("Ambiguity point for suffixes " + word + " " + suffixtemplate[ii + 1], options.alternateMorphemeSegmentationsByWord[word]);
+                  options.alternateMorphemeSegmentationsByWord[word].suffixTemplates.push(suffixtemplate.pop());
                   break;
                 } else {
-                  suffixtemplate[ii + 1] = match.morphemes[0];
+                  suffixtemplate[ii + 1] = suffixmatch.morphemes[0];
                   this.debug("   suffixtemplate " + suffixtemplate.join("-"));
 
                 }
@@ -383,43 +545,17 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           .replace(/-$/, ""); // Remove "-" at the end of the word
         this.debug("Potential parse of " + word.replace(/@/g, "") + " is " + potentialParse);
 
-        if (options.potentialParsesByWord[word].fullParses.indexOf(potentialParse) === -1) {
-          options.potentialParsesByWord[word].fullParses.push(potentialParse);
-        }
+        options.alternateMorphemeSegmentationsByWord[word].fullParses.push(potentialParse);
 
       }
+      options.sort = Glosser.sortAlternatesByMoreSegmentation;
 
-      /*
-        x1 y1 z1
-        x1 y1 z2
-        x1 y2 z1
-        x1 y2 z2
-       */
-      options.potentialParses = [];
-      var self = this;
-      // Create options for the user
-      var copy = JSON.parse(JSON.stringify(options.potentialParsesByWord));
-      var fullParse = [];
-      for (var word in copy) {
-        this.debug(word);
-        fullParse.push(word);
-        for (var parseIndex = copy[word].fullParses.length - 1; parseIndex >= 0; parseIndex--) {
-          var parse = copy[word].fullParses[parseIndex]
-          self.debug("  " + parse);
-          fullParse.push(parse);
-          options.potentialParses.push(fullParse.join(" "));
-          copy[word].fullParses.pop();
-          fullParse.pop();
-        };
-        fullParse.pop();
-      }
+      Glosser.calculateAllAlternativeCombinations(options);
 
+      // options.alternateMorphemeLines.push(fullParse);
 
-
-      // options.potentialParses.push(fullParse);
-
-      // options.potentialParses.push(parsedWords.join(" "));
-
+      // options.alternateMorphemeLines.push(parsedWords.join(" "));
+      options.morphemes = options.alternateMorphemeLines[0];
       return options;
     }
   },
@@ -519,7 +655,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (fields.morphemes) {
         return fields;
       }
-      fields.morphemes = this.morphemefinder(fields.utterance, fields.dbname, justCopyDontGuessIGT);
+      this.morphemefinder(fields, justCopyDontGuessIGT);
       if (!fields.gloss) {
         fields = this.contextSensitiveGlossFinder(fields, fields.dbname, justCopyDontGuessIGT);
       }

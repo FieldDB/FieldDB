@@ -110,78 +110,172 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
-				debugMode: true
+				// debugMode: true
 			});
-
 			glosser.morphemeSegmentationKnowledgeBase = SAMPLE_SEGMENTATION_V3;
 			expect(glosser.morphemeSegmentationKnowledgeBase).toBeDefined();
 			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeDefined();
 			expect(glosser.morphemeSegmentationKnowledgeBase["nay-wa-ra"]).toBeDefined();
 			expect(glosser.morphemeSegmentationKnowledgeBase["@-khunan-@"]).toBeDefined();
+		});
+
+		it("should guess same segmentation if it has seen the word segmented before in another context", function() {
+			var datum = {
+				utterance: "lloqsinaywaran p\'unchawpaq"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("lloqsinaywaran p\'unchawpaq");
+			expect(datum.morphemes).toEqual("lloqsi-nay-wa-ra-n p\'unchawpaq");
+			expect(datum.gloss).toEqual("?-?-?-?-? ?");
+
+			expect(datum.utteranceWithExplictWordBoundaries).toEqual("@-lloqsi-nay-wa-ra-n-@-p\'unchawpaq-@");
+			expect(datum.alternateMorphemeLines).toBeUndefined();
+			expect(datum.matchingRules.length).toEqual(6)
+			expect(datum.matchingRules).toEqual([{
+				segmentation: "@-lloqsi-nay",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
+				morphemes: ["@", "lloqsi", "nay"]
+			}, {
+				segmentation: "lloqsi-nay-wa",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
+				morphemes: ["lloqsi", "nay", "wa"]
+			}, {
+				segmentation: "nay-wa-ra",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
+				morphemes: ["nay", "wa", "ra"]
+			}, {
+				segmentation: "wa-ra-n",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
+				morphemes: ["wa", "ra", "n"]
+			}, {
+				segmentation: "ra-n-@",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
+				morphemes: ["ra", "n", "@"]
+			}, {
+				segmentation: "@-p\'unchawpaq-@",
+				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq"],
+				morphemes: ["@", "p\'unchawpaq", "@"]
+			}]);
 
 		});
 
-		it("should guess same segmentation if it has seen the word segmented before", function() {
-			expect(glosser.guessMorphemesFromUtterance({
-				utterance: "lloqsinaywaran khunan"
-			})).toEqual({
-				utterance: "lloqsinaywaran khunan",
-				morphemes: "lloqsi-nay-wa-ra-n khunan",
-				gloss: "?-?-?-?-? ?"
-			});
-		});
-
-		it("should conservatively fill IGT if it has incomplete segmentation knowledge", function() {
-			delete glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeUndefined();
-			delete glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"]).toBeUndefined();
-
-			expect(glosser.guessMorphemesFromUtterance({
-				utterance: "lloqsinaywaran khunan"
-			})).toEqual({
-				utterance: "lloqsinaywaran khunan",
-				morphemes: "lloqsi-nay-wara-n khunan",
-				gloss: "?-?-?-? ?"
-			});
-		});
-
-		it("should conservatively fill IGT if it has incomplete segmentation knowledge", function() {
-			delete glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeUndefined();
-			delete glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"]).toBeUndefined();
-
-			delete glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"]).toBeUndefined();
-
-			expect(glosser.guessMorphemesFromUtterance({
-				utterance: "lloqsinaywaran khunan"
-			})).toEqual({
-				utterance: "lloqsinaywaran khunan",
-				morphemes: "lloqsinay-wa-ra-n khunan",
-				gloss: "?-?-?-? ?"
-			});
-		});
-
-		xit("should be possible to set conservative to false if the language is agglutinative", function() {
-			delete glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeUndefined();
-			delete glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"]).toBeUndefined();
-			delete glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"];
-			expect(glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"]).toBeUndefined();
-
-			glosser.debugMode = true;
+		it("should be possible to set conservative to false to get more alternatives", function() {
+			// glosser.debugMode = true;
 			glosser.conservative = false;
-			expect(glosser.guessMorphemesFromUtterance({
+			var datum = {
 				utterance: "lloqsinaywaran khunan"
-			})).toEqual({
-				utterance: "lloqsinaywaran khunan",
-				morphemes: "lloqsi-nay-wa-ra-n khunan",
-				gloss: "?-?-?-?-? ?"
-			});
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("lloqsinaywaran khunan");
+			expect(datum.morphemes).toEqual("lloqsi-nay-wa-ra-n khunan");
+			expect(datum.gloss).toEqual("?-?-?-?-? ?");
+
+			expect(datum.alternateMorphemeLines).toEqual(["lloqsi-nay-wa-ra-n khunan", "lloqsinaywaran khunan"]);
 		});
+
+		it("should not segment suffixes which it has seen before on a different root", function() {
+			// glosser.debugMode = true;
+			expect(glosser.morphemeSegmentationKnowledgeBase["victor-ta-@"]).toBeDefined();
+			var datumWithKnownSegmentation = {
+				utterance: "something Victorta else"
+			};
+			glosser.guessMorphemesFromUtterance(datumWithKnownSegmentation);
+
+			expect(datumWithKnownSegmentation.utterance).toEqual("something Victorta else");
+			expect(datumWithKnownSegmentation.morphemes).toEqual("something victor-ta else");
+			expect(datumWithKnownSegmentation.gloss).toEqual("? ?-? ?");
+
+			expect(glosser.morphemeSegmentationKnowledgeBase["noqa-ta-@"]).toBeUndefined();
+			var datumwithUnknownSegmentation = {
+				utterance: "something Noqata else"
+			};
+			glosser.guessMorphemesFromUtterance(datumwithUnknownSegmentation);
+
+			expect(datumwithUnknownSegmentation.utterance).toEqual("something Noqata else");
+			expect(datumwithUnknownSegmentation.morphemes).toEqual("something noqata else");
+			expect(datumwithUnknownSegmentation.morphemes).not.toEqual("something noqa-ta else");
+			expect(datumwithUnknownSegmentation.gloss).toEqual("? ? ?");
+		});
+
+		it("should segment morpheme sequences up to where it has been seen before", function() {
+			// glosser.debugMode = true;
+			var datum = {
+				utterance: "something tusuyanwaran else"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("something tusuyanwaran else");
+			expect(datum.morphemes).toEqual("something tusuyanwa-ra-n else");
+			expect(datum.gloss).toEqual("? ?-?-? ?");
+		});
+
+		it("should be possible to set conservative to false to segment words it hasnt seen before", function() {
+			// glosser.debugMode = true;
+			glosser.conservative = false;
+			var datum = {
+				utterance: "Noqata tusuyanwaran"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("Noqata tusuyanwaran");
+			expect(datum.morphemes).toEqual("noqata tusuyanwa-ra-n");
+			expect(datum.gloss).toEqual("? ?-?-?");
+
+			expect(datum.alternateMorphemeLines).toEqual(["noqata tusuyanwa-ra-n", "Noqata tusuyanwaran", "noqata tusuyanwaran"]);
+		});
+
+		it("should survive missing redundant rules", function() {
+			delete glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"]).toBeUndefined();
+
+			var datum = {
+				utterance: "lloqsinaywaran khunan"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("lloqsinaywaran khunan");
+			expect(datum.morphemes).toEqual("lloqsi-nay-wa-ra-n khunan");
+			expect(datum.alternateMorphemeLines).toBeUndefined();
+			expect(datum.gloss).toEqual("?-?-?-?-? ?");
+		});
+
+		it("should conservatively fill IGT if it has incomplete segmentation knowledge", function() {
+			delete glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeUndefined();
+			delete glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"]).toBeUndefined();
+
+			var datum = {
+				utterance: "lloqsinaywaran khunan"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("lloqsinaywaran khunan");
+			expect(datum.morphemes).toEqual("lloqsi-nay-wara-n khunan");
+			expect(datum.gloss).toEqual("?-?-?-? ?");
+		});
+
+		it("should conservatively fill IGT if it has very incomplete segmentation knowledge", function() {
+			delete glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["@-lloqsi-nay"]).toBeUndefined();
+			delete glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["wa-ra-n"]).toBeUndefined();
+			delete glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"];
+			expect(glosser.morphemeSegmentationKnowledgeBase["lloqsi-nay-wa"]).toBeUndefined();
+
+			var datum = {
+				utterance: "lloqsinaywaran khunan"
+			};
+			glosser.guessMorphemesFromUtterance(datum);
+
+			expect(datum.utterance).toEqual("lloqsinaywaran khunan");
+			expect(datum.morphemes).toEqual("lloqsinay-wa-ra-n khunan");
+			expect(datum.alternateMorphemeLines).toBeUndefined();
+			expect(datum.gloss).toEqual("?-?-?-? ?");
+		});
+
 	});
 
 	describe("semi-automatic segmentation", function() {
@@ -196,7 +290,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			rows = [];
 		});
 
-		xit("should be able to build ngrams", function() {
+		it("should be able to build ngrams", function() {
 			expect(emit).toBeDefined();
 
 			var doc = {
@@ -223,7 +317,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			var doc = {
 				fields: [{
 					id: "morphemes",
-					mask: "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw(paq)"
+					mask: "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw(paq)"
 				}]
 			};
 			expect(doc).toBeDefined();
@@ -232,7 +326,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 			expect(rows).toBeDefined();
 			expect(rows.length).toEqual(26);
-			expect(rows).toEqual(SAMPLE_SEGMENTATION_V3.rows);
+			expect(rows).toEqual(SAMPLE_SEGMENTATION_V3.rows.slice(0, 26));
 
 			var contexts = {};
 			rows.map(function(row) {
@@ -243,8 +337,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				}
 			});
 			expect(contexts).toEqual({
-				"Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq": 13,
-				"Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw": 13
+				"Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq": 13,
+				"Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw": 13
 			});
 
 		});
@@ -265,7 +359,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		});
 
-		xit("should be able to predict the gloss after downloading rules", function(done) {
+		it("should be able to predict the gloss after downloading rules", function(done) {
 			var glosser = new Glosser({
 				corpus: tinyCorpus
 			});
@@ -278,13 +372,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				// Rather than depending on server to have exact words in it, add it now to rules
 				glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
 
-				expect(glosser.guessMorphemesFromUtterance({
+				var datum = {
 					utterance: "rtyuio"
-				})).toEqual({
-					utterance: "rtyuio",
-					morphemes: "rt-yuio",
-					gloss: "?-?"
-				});
+				};
+				glosser.guessMorphemesFromUtterance(datum);
+
+				expect(datum.utterance).toEqual("rtyuio");
+				expect(datum.morphemes).toEqual("rt-yuio");
+				expect(datum.gloss).toEqual("?-?");
 
 			}, function(reason) {
 				expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
@@ -301,7 +396,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
-				debugMode: true
+				// debugMode: true
 			});
 
 			glosser.morphemeSegmentationKnowledgeBase = SAMPLE_SEGMENTATION_V3;
@@ -311,28 +406,61 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(glosser.morphemeSegmentationKnowledgeBase["@-khunan-@"]).toBeDefined();
 		});
 
-		it("should be able to print combinations", function(){
+		it("should be able to calculate combinations of segmented words", function() {
 			var options = {
-				possibilities: ["existing options which we like"],
-				columns: [["x1","x2"], ["y1","y2"], ["z1","z2", "z3", "z4"]]
+				alternateMorphemeLines: ["existing options which we like"],
+				columns: [
+					["x1", "x2"],
+					["y1", "y2"],
+					["z1", "z2", "z3", "z4"]
+				]
 			};
-			Glosser.printOutCombinatorics(options);
-			expect(options.possibilities).toEqual(" ");
+			Glosser.calculateAllAlternativeCombinations(options);
+			expect(options.alternateMorphemeLines).toEqual(["existing options which we like", "x1 y1 z1", "x1 y1 z2", "x1 y1 z3", "x1 y1 z4", "x1 y2 z1", "x1 y2 z2", "x1 y2 z3", "x1 y2 z4", "x2 y1 z1", "x2 y1 z2", "x2 y1 z3", "x2 y1 z4", "x2 y2 z1", "x2 y2 z2", "x2 y2 z3", "x2 y2 z4"]);
 		});
 
-		xit("should findRelevantSegmentations", function() {
-			glosser.debugMode = true;
+		it("should be able to sort combinations based injected sort function", function() {
+			var options = {
+				alternateMorphemeLines: ["existing options which we like", "exist-ing option-s wh-ich we like", "exist-ing option-s which we like"],
+				sort: Glosser.sortAlternatesByMoreSegmentation
+			};
+			Glosser.calculateAllAlternativeCombinations(options);
+			expect(options.alternateMorphemeLines).toEqual(["exist-ing option-s wh-ich we like", "exist-ing option-s which we like", "existing options which we like"]);
+		});
+
+		it("should be able remove redundant copies in an array without loosing their references", function() {
+			var alternateMorphemeLines = ["abcde", "abcde", "abc-de"];
+
+			var uniqueAlternates = Glosser.removeRedundantCopies(alternateMorphemeLines);
+			expect(uniqueAlternates).toBe(alternateMorphemeLines);
+			expect(uniqueAlternates).toEqual(["abcde", "abc-de"]);
+			expect(alternateMorphemeLines).toEqual(["abcde", "abc-de"]);
+		});
+
+		it("should be able to find unique combinations", function() {
+			var options = {
+				alternateMorphemeLines: ["abcde", "abcde", "abc-de"],
+				sort: Glosser.sortAlternatesByMoreSegmentation
+			};
+			Glosser.calculateAllAlternativeCombinations(options);
+			expect(options.alternateMorphemeLines).toEqual(["abc-de", "abcde"]);
+		});
+
+		it("should findRelevantSegmentationContexts", function() {
+			// glosser.debugMode = true;
 			var parseInProgress = {
 				utteranceWithExplictWordBoundaries: "@lloqsinaywaran@khunan@",
 				matchingRules: []
 			};
-			glosser.findRelevantSegmentations(parseInProgress);
+			glosser.findRelevantSegmentationContexts(parseInProgress);
 
 			expect(parseInProgress.utteranceWithExplictWordBoundaries).toEqual("@-lloqsi-nay-wa-ra-n-@-khunan-@");
-			expect(parseInProgress.matchingRules.length).toEqual(4);
+			expect(parseInProgress.matchingRules.length).toEqual(7);
+			expect(parseInProgress.utterance).toBeUndefined();
+			expect(parseInProgress.morphemes).toBeUndefined();
 		});
 
-		xit("should return multiple options if there are only bigrams", function() {
+		it("should return multiple options if there are only bigrams", function() {
 			glosser.morphemeSegmentationKnowledgeBase = {
 				"ra-n": 1,
 				"@-lloqsi": 1,
@@ -342,23 +470,27 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				"n-@": 1
 			};
 
-			glosser.debugMode = true;
+			// glosser.debugMode = true;
 			var parseInProgress = {
 				utteranceWithExplictWordBoundaries: "@lloqsinaywaran@khunan@",
 				matchingRules: []
 			};
-			glosser.findaAllPossibleSegmentations(parseInProgress);
-			expect(parseInProgress.potentialParses).toEqual("@lloqsi-naywara-n-@-khunan-@");
+			glosser.findaAllPossibleMorphemeLines(parseInProgress);
+			expect(parseInProgress.alternateMorphemeLines).toEqual(["lloqsi-naywaran khunan", "lloqsinaywaran khunan"]);
 			// expect(parseInProgress.matchingRules).toEqual(" ");
 			expect(parseInProgress.matchingRules.length).toEqual(5);
-			expect(parseInProgress.potentialParsesByWord["lloqsinaywaran"].fullParses).toEqual(["lloqsinaywaran", "lloqsi-naywaran"]);
-			expect(parseInProgress.potentialParsesByWord["khunan"].fullParses).toEqual(["khunan"]);
-			expect(parseInProgress.potentialParsesByWord).toEqual(" ");
+			expect(parseInProgress.usedRules.map(function(rule) {
+				return rule.segmentation;
+			})).toEqual(["@-lloqsi", "lloqsi-naywaran", "naywaran-@", "naywaran-@", "n-@", "n-@"]);
+			expect(parseInProgress.usedRules.length).toEqual(6);
+			expect(parseInProgress.alternateMorphemeSegmentationsByWord["lloqsinaywaran"].fullParses).toEqual(["lloqsi-naywaran", "lloqsinaywaran"]);
+			expect(parseInProgress.alternateMorphemeSegmentationsByWord["khunan"].fullParses).toEqual(["khunan"]);
+			// expect(parseInProgress.alternateMorphemeSegmentationsByWord).toEqual(" ");
 		});
 
 	});
 
-	xdescribe("visualization", function() {
+	describe("visualization", function() {
 
 		if (optionalD3) {
 			it("should accept an element", function() {

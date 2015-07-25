@@ -2413,6 +2413,14 @@
 {"key": "@-khunan-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
 {"key": "khunan-@-p'unchaw", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
 {"key": "@-p'unchaw-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
-{"key": "p'unchaw-@-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}
+{"key": "p'unchaw-@-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"},
+{"key": "@-@-victor", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "@-victor-ta", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "victor-ta-@", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "ta-@-tusu", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "@-tusu-naya", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "tusu-naya-n", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "naya-n-@", "value": "Victor-ta tusu-naya-n"}, 
+{"key": "n-@-@", "value": "Victor-ta tusu-naya-n"}
 ]}
 ]

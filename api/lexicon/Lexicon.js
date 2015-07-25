@@ -944,7 +944,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           .on("tick", tick)
           .start();
       } catch (e) {
-        this.warn("The lexicon was able to start the connected graph.", e.stack);
+        this.warn("The lexicon was able to start the connected graph. If you are in a Node.js environment, this is normal.\n", e.stack);
       }
 
       return this;
