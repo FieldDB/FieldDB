@@ -85,7 +85,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
 	};
 
-	xdescribe("construction", function() {
+	describe("construction", function() {
 
 		it("should load", function() {
 			expect(Glosser).toBeDefined();
@@ -106,7 +106,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("conservativeness", function() {
+	describe("conservativeness", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -325,7 +325,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(result.rows[4].value).toEqual("Victor-ta tusu-naya-n");
 		});
 
-		xit("should be able to count ngrams in context using a map reduce", function() {
+		it("should be able to count ngrams in context using a map reduce", function() {
 			// var rows = [];
 			var doc = {
 				fields: [{
@@ -335,14 +335,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			};
 			expect(doc).toBeDefined();
 			console.log("Testing ngrams");
-			morpheme_n_grams(doc, emit);
+			var result = Glosser.morpheme_n_grams_mapReduce(doc);
 
-			expect(rows).toBeDefined();
-			expect(rows.length).toEqual(26);
-			expect(rows).toEqual(SAMPLE_SEGMENTATION_V3.rows.slice(0, 26));
+			expect(result.rows).toBeDefined();
+			expect(result.rows.length).toEqual(26);
+			expect(result.rows).toEqual(SAMPLE_SEGMENTATION_V3.rows.slice(0, 26));
 
 			var contexts = {};
-			rows.map(function(row) {
+			result.rows.map(function(row) {
 				if (!contexts[row.value]) {
 					contexts[row.value] = 1;
 				} else {
@@ -356,7 +356,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		});
 
-		xit("should fill IGT if it has no segmentation knowledge", function() {
+		it("should fill IGT if it has no segmentation knowledge", function() {
 			var glosser = new Glosser({
 				corpus: tinyCorpus
 			});
@@ -372,7 +372,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		});
 
-		xit("should be able to predict the gloss after downloading rules", function(done) {
+		it("should be able to predict the gloss after downloading rules", function(done) {
 			var glosser = new Glosser({
 				corpus: tinyCorpus
 			});
@@ -381,6 +381,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 			glosser.downloadPrecedenceRules().then(function(results) {
 				expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
+				expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
+				// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
 				expect(results).toEqual(glosser.morphemeSegmentationKnowledgeBase);
 				// Rather than depending on server to have exact words in it, add it now to rules
 				glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
@@ -406,7 +408,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("helper methods", function() {
+	describe("helper methods", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -504,7 +506,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("visualization", function() {
+	describe("visualization", function() {
 
 		if (optionalD3) {
 			it("should accept an element", function() {
@@ -586,7 +588,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("backward compatibility", function() {
+	describe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {
 			var glosser = new Glosser();
