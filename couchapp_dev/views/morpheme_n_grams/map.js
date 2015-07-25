@@ -1,5 +1,5 @@
-// var morpheme_n_grams = function(doc, emit) {
-function(doc) {
+var morpheme_n_grams = function(doc, emit) {
+// function(doc) {
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
@@ -72,8 +72,8 @@ function(doc) {
       }
       var thisMorpheme = morphemes.shift();
       ngrams.push(thisMorpheme);
-      if (ngrams.join("-") === -1) {
-        // console.log("   itteration: " + ngrams.join("-") + " ||| " + morphemes.join("|"));
+      if (ngrams.join("-") !== "@-@-@") {
+        console.log("   itteration: " + ngrams.join("-") + " ||| " + morphemes.join("|"));
         // emit(ngrams.length, ngrams.join("-"));
         emit(ngrams.join("-"), context);
       }
@@ -87,14 +87,14 @@ function(doc) {
     var processMorphemesLine = function(morphemesLine) {
       ////OFF console.log("  processMorphemesLine ", morphemesLine);
       if (!morphemesLine) {
-        // DEBUG console.warn("    Skipping empty morphemesLine", morphemesLine);
+        console.warn("    Skipping empty morphemesLine", morphemesLine);
         return;
       }
 
       // Tokenize the morphemesLine
       var uncleanedWords = tokenize(morphemesLine);
       if (!uncleanedWords || !uncleanedWords.length) {
-        // DEBUG console.warn("    tokenizing yeilded no words", morphemesLine);
+        console.warn("    tokenizing yeilded no words", morphemesLine);
         return;
       }
       ////OFF console.log("    tokenized", uncleanedWords)
@@ -108,18 +108,18 @@ function(doc) {
           //// console.warn("   cleaned", multiplelyEncodedOptions[0]);
           words.push(multiplelyEncodedOptions[0]);
         } else {
-          // DEBUG console.warn("    one of the words was empty after cleaning", word);
+          console.warn("    one of the words was empty after cleaning", word);
         }
 
         if (multiplelyEncodedOptions.length > 1) {
-          // DEBUG console.warn("    there was 2 utterances encoded using optionality: ", morphemesLine.replace(word, multiplelyEncodedOptions[0]));
-          // DEBUG console.warn("    there was 2 utterances encoded using optionality: ", morphemesLine.replace(word, multiplelyEncodedOptions[1]));
+          console.warn("    there was 2 utterances encoded using optionality: ", morphemesLine.replace(word, multiplelyEncodedOptions[0]));
+          console.warn("    there was 2 utterances encoded using optionality: ", morphemesLine.replace(word, multiplelyEncodedOptions[1]));
           processMorphemesLine(morphemesLine.replace(word, multiplelyEncodedOptions[1]));
           morphemesLine = morphemesLine.replace(word, multiplelyEncodedOptions[0]);
         }
       });
       if (!words || !words.length) {
-        // DEBUG console.warn("    Skipping empty morphemesLine", words);
+        console.warn("    Skipping empty morphemesLine", words);
         return;
       }
       // console.log("    tokenized, cleaned", words.join(","));
@@ -149,15 +149,15 @@ function(doc) {
         // If the morphemesLine is ungrammatical, or empty don"t count the words
         // in this document
         if (!morphemesLine || morphemesLine.indexOf("*") === 0) {
-          // DEBUG console.warn("Skipping ungrammatical/empty morphemesLine", morphemesLine);
+          console.warn("Skipping ungrammatical/empty morphemesLine", morphemesLine);
           return;
         }
         processMorphemesLine(morphemesLine);
       }
     }
   } catch (e) {
-    emit(e, doc);
+    // emit(e, doc);
   }
 };
 
-// exports.morpheme_n_grams = morpheme_n_grams;
+exports.morpheme_n_grams = morpheme_n_grams;

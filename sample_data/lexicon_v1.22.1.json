@@ -2386,5 +2386,33 @@
 {"key":{"previous":{"utterance":"unari","confidence":"1","orthography":"უნარი"},"subsequent":{"morphemes":"@","confidence":1,"skippedNodes":[{"utterance":"unari","confidence":"1","orthography":"უნარი"}]},"relation":"precedes","distance":1,"context":{"utterance":"unari","translation":"The ability to","enteredByUser":"kata","orthography":"უნარი","goal":"Read the academic program prepared by KB","consultants":"KB","dateElicited":"Probably Prior to November 16 2014","id":"e345fb6a237768d7d216e04153be6423"}},"value":1},
 {"key":{"previous":{"utterance":"unari","confidence":"1","orthography":"უნარი"},"subsequent":{"morphemes":"@","confidence":1,"skippedNodes":[{"utterance":"unari","confidence":"1","orthography":"უნარი"}]},"relation":"precedes","distance":1,"context":{"utterance":"unari","translation":"The ability to","enteredByUser":"kata","orthography":"უნარი","goal":"Read the academic program prepared by KB","consultants":"KB","dateElicited":"Probably Prior to November 16 2014","id":"e345fb6a237768d7d216e04153bdb8f5"}},"value":1},
 {"key":{"previous":{"utterance":"unari","confidence":"1","orthography":"უნარი"},"subsequent":{"morphemes":"@","confidence":1,"skippedNodes":[{"utterance":"unari","confidence":"1","orthography":"უნარი"}]},"relation":"precedes","distance":1,"context":{"utterance":"tsodnis p'rakt'ik'ashi gamoqenebis unari","translation":"The ability to use knowledge in practice","enteredByUser":"kata","orthography":"ცოდნის პრაქტიკაში გამოყენების უნარი","links":"similarTo: e345fb6a237768d7d216e04153b0f17f, similarTo:e345fb6a237768d7d216e04153bd8026, similarTo:e345fb6a237768d7d216e04153be255b","goal":"Learn words which are found in syllabus in georgian","consultants":"KB","dateElicited":"Probably Prior to November 16 2014","id":"e345fb6a237768d7d216e04153c461dc"}},"value":1}
+]},
+{"rows": [
+{"key": "@-@-qaynap'unchaw", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "@-qaynap'unchaw-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "qaynap'unchaw-@-lloqsi", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "@-lloqsi-nay", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "lloqsi-nay-wa", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "nay-wa-ra", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "wa-ra-n", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "ra-n-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "n-@-khunan", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "@-khunan-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "khunan-@-p'unchawpaq", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "@-p'unchawpaq-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "p'unchawpaq-@-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq"}, 
+{"key": "@-@-qaynap'unchaw", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "@-qaynap'unchaw-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "qaynap'unchaw-@-lloqsi", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "@-lloqsi-nay", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "lloqsi-nay-wa", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "nay-wa-ra", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "wa-ra-n", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "ra-n-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "n-@-khunan", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "@-khunan-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "khunan-@-p'unchaw", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "@-p'unchaw-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}, 
+{"key": "p'unchaw-@-@", "value": "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"}
 ]}
 ]
