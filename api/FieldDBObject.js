@@ -90,6 +90,12 @@ var FieldDBObject = function FieldDBObject(json) {
   if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
+  if (json && json.api) {
+    if (json.api !== this.api) {
+      this.debug("Using " + this.api + " when the api of the incoming model was " + json.api);
+    }
+    delete json.api;
+  }
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -119,7 +125,7 @@ var FieldDBObject = function FieldDBObject(json) {
     try {
       this[member] = json[member];
     } catch (e) {
-      console.log(e.stack);
+      this.warn(e.stack);
     }
   }
   if (simpleModels.length > 0) {
