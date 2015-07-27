@@ -85,10 +85,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     },
     set: function(value) {
-      if (this.fields && this.fields.orthography) {
-        // this.fields.debugMode = true;
-      } else {
-        return;
+      if (!this.fields || !this.fields.orthography) {
+        this.addField("orthography");
       }
       this.fields.orthography.value = value;
     }
@@ -104,10 +102,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     },
     set: function(value) {
-      if (this.fields && this.fields.utterance) {
-        // this.fields.debugMode = true;
-      } else {
-        return;
+      if (!this.fields || !this.fields.utterance) {
+        this.addField("utterance");
       }
       this.fields.utterance.value = value;
     }
@@ -123,12 +119,27 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     },
     set: function(value) {
-      if (this.fields && this.fields.morphemes) {
-        // this.fields.debugMode = true;
-      } else {
-        return;
+      if (!this.fields || !this.fields.morphemes) {
+        this.addField("morphemes");
       }
       this.fields.morphemes.value = value;
+    }
+  },
+
+  allomorphs: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.allomorphs) {
+        return this.fields.allomorphs.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (!this.fields || !this.fields.allomorphs) {
+        this.addField("allomorphs");
+      }
+      this.fields.allomorphs.value = value;
     }
   },
 
@@ -142,18 +153,53 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       }
     },
     set: function(value) {
-      if (this.fields && this.fields.gloss) {
-        // this.fields.debugMode = true;
-      } else {
-        return;
+      if (!this.fields || !this.fields.gloss) {
+        this.addField("gloss");
       }
       this.fields.gloss.value = value;
+    }
+  },
+
+  syntacticCategory: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.syntacticCategory) {
+        return this.fields.syntacticCategory.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (!this.fields || !this.fields.syntacticCategory) {
+        this.addField("syntacticCategory");
+      }
+      this.fields.syntacticCategory.value = value;
+    }
+  },
+
+  translation: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.translation) {
+        return this.fields.translation.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (!this.fields || !this.fields.translation) {
+        this.addField("translation");
+      }
+      this.fields.translation.value = value;
     }
   },
 
   fields: {
     get: function() {
       this.debug("getting fields");
+      if (!this._fields && this.corpus && typeof this.corpus.updateDatumToCorpusFields === "function") {
+        this.corpus.updateDatumToCorpusFields(this);
+      }
       return this._fields;
     },
     set: function(value) {
@@ -288,6 +334,20 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     },
     set: function() {
       this.warn("Setting the igt has to be copy pasted from one of the other codebases");
+    }
+  },
+
+  addField: {
+    value: function(field) {
+      if (!this.fields) {
+        this.fields = [];
+      }
+      if (typeof field === "string") {
+        field = {
+          id: field
+        };
+      }
+      this.fields.add(field);
     }
   },
 
