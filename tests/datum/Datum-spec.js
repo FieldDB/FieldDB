@@ -11,7 +11,12 @@ Datum = Datum || require("./../../api/datum/Datum").Datum;
 
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
-
+var mockCorpus = {
+  updateDatumToCorpusFields: function(doc) {
+    doc.fields = JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields));
+    return doc;
+  }
+};
 describe("Test Datum", function() {
   it("should load", function() {
     expect(Datum).toBeDefined();
@@ -22,14 +27,15 @@ describe("Test Datum", function() {
   });
 
   describe("popular fields", function() {
+
     var datum = new Datum({
-      fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields)),
+      corpus: mockCorpus,
       session: {
         fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.sessionFields))
       }
     });
 
-    it("should get the fields from the corpus", function() {
+    it("should get the fields from the corpus if corpus is available", function() {
       expect(datum.fields.length).toEqual(16);
     });
 
@@ -113,52 +119,47 @@ describe("Test Datum", function() {
 
   });
 
-
-
   describe("IGT support", function() {
     var datum;
     beforeEach(function() {
       datum = new Datum({
-        fields: JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields))
+        corpus: mockCorpus
       });
     });
 
     it("should represent IGT data in tuples and parallel text", function() {
-      datum.fields.orthography.value = "puppies";
-      datum.fields.utterance.value = "pʌpiz";
-      datum.fields.morphemes.value = "pʌpi-z";
-      datum.fields.allomorphs.value = "pʌpi-z";
-      datum.fields.gloss.value = "puppy-pl";
+      datum.orthography = "puppies";
+      datum.utterance = "pʌpiz";
+      datum.morphemes = "pʌpi-z";
+      datum.allomorphs = "pʌpi-z";
+      datum.gloss = "puppy-pl";
 
-      datum.fields.translation.value = "Des chiens";
+      datum.translation = "Des chiens";
 
       // datum.debugMode = true;
-      expect(datum.igt).toEqual({
-        tuples: [{
-          orthography: "puppies",
-          utterance: "pʌpiz",
-          allomorphs: "pʌpi-z",
-          morphemes: "pʌpi-z",
-          gloss: "puppy-pl",
-          syntacticCategory: ""
-        }],
-        parallelText: {
-          orthography: "puppies",
-          utterance: "pʌpiz",
-          translation: "Des chiens"
-        }
-      });
+      var igtAligned = datum.igt;
+      expect(igtAligned.tuples[0].orthography).toEqual("puppies");
+      expect(igtAligned.tuples[0].utterance).toEqual("pʌpiz");
+      expect(igtAligned.tuples[0].allomorphs).toEqual("pʌpi-z");
+      expect(igtAligned.tuples[0].morphemes).toEqual("pʌpi-z");
+      expect(igtAligned.tuples[0].gloss).toEqual("puppy-pl");
+      expect(igtAligned.tuples[0].syntacticCategory).toEqual("");
+
+      expect(igtAligned.parallelText.orthography).toEqual("puppies");
+      expect(igtAligned.parallelText.utterance).toEqual("pʌpiz");
+      expect(igtAligned.parallelText.translation).toEqual("Des chiens");
+
     });
 
 
     it("should tollerate slightly unaligned IGT data", function() {
       // datum.fields.orthography.value = "this field has many words";
-      datum.fields.utterance.value = "this field has many words";
-      datum.fields.morphemes.value = "this field has fewer";
-      // datum.fields.allomorphs.value = "this field has many words";
-      datum.fields.gloss.value = "this field has many words";
+      datum.utterance = "this field has many words";
+      datum.morphemes = "this field has fewer";
+      // datum.allomorphs = "this field has many words";
+      datum.gloss = "this field has many words";
 
-      datum.fields.translation.value = "totally different word count but its okay";
+      datum.translation = "totally different word count but its okay";
 
       // datum.debugMode = true;
       var igt = datum.igt;
@@ -176,12 +177,12 @@ describe("Test Datum", function() {
 
     it("should non-lossily tollerate drastically unaligned IGT data", function() {
       // datum.fields.orthography.value = "this field has many words";
-      datum.fields.utterance.value = "this field has fewer";
-      datum.fields.morphemes.value = "this field has many more segmentations than the utterance line and will dictate the length of the tuples so they are non-lossy";
-      // datum.fields.allomorphs.value = "this field has many words";
-      datum.fields.gloss.value = "this field has many words";
+      datum.utterance = "this field has fewer";
+      datum.morphemes = "this field has many more segmentations than the utterance line and will dictate the length of the tuples so they are non-lossy";
+      // datum.allomorphs = "this field has many words";
+      datum.gloss = "this field has many words";
 
-      datum.fields.translation.value = "totally different word count but its okay";
+      datum.translation = "totally different word count but its okay";
 
       // datum.debugMode = true;
       var igt = datum.igt;
@@ -198,13 +199,13 @@ describe("Test Datum", function() {
 
 
     it("should tollerate abnormal/irregular whitespacing", function() {
-      datum.fields.orthography.value = "this\tline\tis\t\"tabbed\"";
-      datum.fields.utterance.value = "this line is spaced";
-      datum.fields.morphemes.value = " this\t\tline is\na-combo";
-      datum.fields.allomorphs.value = "this\nline\n\nis\nline-breaked";
-      datum.fields.gloss.value = "this line (has punctuation)";
+      datum.orthography = "this\tline\tis\t\"tabbed\"";
+      datum.utterance = "this line is spaced";
+      datum.morphemes = " this\t\tline is\na-combo";
+      datum.allomorphs = "this\nline\n\nis\nline-breaked";
+      datum.gloss = "this line (has punctuation)";
 
-      datum.fields.translation.value = "Des chiens";
+      datum.translation = "Des chiens";
 
       var igt = datum.igt;
       // datum.debugMode = true;
