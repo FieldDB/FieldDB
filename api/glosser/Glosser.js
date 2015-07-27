@@ -736,7 +736,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
       this.morphemefinder(fields, justCopyDontGuessIGT);
       if (!fields.gloss) {
-        fields = this.contextSensitiveGlossFinder(fields, fields.this.dbname, justCopyDontGuessIGT);
+        fields = this.contextSensitiveGlossFinder(fields, justCopyDontGuessIGT);
       }
       return fields;
     }
@@ -749,7 +749,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (!fields.morphemes) {
         fields.morphemes = fields.utterance;
       }
-      fields = this.contextSensitiveGlossFinder(fields, fields.this.dbname, justCopyDontGuessIGT);
+      fields = this.contextSensitiveGlossFinder(fields, justCopyDontGuessIGT);
       return fields;
     }
   },
@@ -895,7 +895,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    */
   visualizePrecedenceRelationsAsForceDirectedGraph: {
     value: function(options) {
-      options = options || [];
+      options = options || {};
       if (!this.lexicon || !this.lexicon.length) {
         this.warn("Cannot visualize an empty lexicon.");
         return this;
@@ -912,12 +912,11 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
       return this;
     }
-
   },
 
   render: {
-    value: function() {
-      return this.visualizePrecedenceRelationsAsForceDirectedGraph(arguments);
+    value: function(options) {
+      return this.visualizePrecedenceRelationsAsForceDirectedGraph(options);
     }
   },
 

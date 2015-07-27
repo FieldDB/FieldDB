@@ -299,7 +299,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 					value: value
 				});
 			};
-			
+
 			var result = Glosser.morpheme_n_grams_mapReduce({}, emit, rows);
 			expect(result).toBeDefined();
 			expect(result.rows).toBe(rows);
@@ -525,7 +525,9 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(glosser.lexicon.precedenceRelations).toBeDefined();
 				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
-				expect(glosser.render(virtualElement)).toEqual(glosser);
+				expect(glosser.render({
+					element: virtualElement
+				})).toEqual(glosser);
 				if (glosser.warnMessage) {
 					expect(glosser.warnMessage).not.toContain("d3");
 					expect(glosser.warnMessage).not.toContain("visualize");
