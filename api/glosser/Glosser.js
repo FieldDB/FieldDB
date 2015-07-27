@@ -2,8 +2,8 @@
 
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
-// var CORS = require("../CORS").CORS;
-var CORS = require("../CORSNode").CORS;
+var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
@@ -24,7 +24,7 @@ try {
   var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + mapcannotbeincludedviarequire.toString() + ';');
+  eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
 } catch (exception) {
   console.log("Unable to parse the map reduce ", exception.stack);
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
@@ -32,6 +32,7 @@ try {
     emit("error", "unable to load map reduce");
   };
 }
+
 /**
  * @class The Glosser is able to guess morpheme segmentation and/or glosses from an orthography/transcription.
  * The default Glosser (this one) uses a lexicon which is generated off of existing data in the corpus to do this.
@@ -73,7 +74,7 @@ Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
   try {
     // ugly way to make sure references to 'emit' in map/reduce bind to the
     // above emit at run time
-    eval('MORPHEMES_N_GRAMS_MAP_REDUCE.map = ' + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ';');
+    eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ";");
   } catch (e) {
     console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");
   }
@@ -241,6 +242,20 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     }
   },
 
+  dbname: {
+    get: function() {
+      if (this._dbname) {
+        return this._dbname;
+      }
+      if (this.corpus && this.corpus.dbname) {
+        return this.corpus.dbname;
+      }
+    },
+    set: function(value) {
+      this._dbname = value;
+    }
+  },
+
   lexicon: {
     get: function() {
       this.debug("getting lexicon");
@@ -253,9 +268,23 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   downloadPrecedenceRules: {
     value: function(glosserURL) {
+      this.warn("DEPRECATED downloadPrecedenceRules use fetch instead");
+      return this.fetch({
+        url: glosserURL
+      });
+    }
+  },
+
+  fetch: {
+    value: function(options) {
+      options = options || {};
+      var glosserURL = "";
+      if (options && options.url) {
+        glosserURL = options.url;
+      }
       if (!glosserURL || glosserURL === "default") {
-        if (!this.corpus) {
-          throw "Glosser can't be guessed, there is no app so the URL must be defined.";
+        if (!this.dbname && !options.dbname) {
+          throw "Glosser's webservice can't be guessed, there is no current corpus so the URL must be defined.";
         }
         if (this.corpus.prefs && this.corpus.prefs.glosserURL) {
           glosserURL = this.corpus.prefs.glosserURL;
@@ -265,10 +294,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
       var self = this;
       var deffered = Q.defer();
-      var dbname;
-      if (this.corpus && this.corpus.dbname) {
-        dbname = this.corpus.dbname;
-      }
 
       CORS.makeCORSRequest({
         type: "GET",
@@ -279,9 +304,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           self.morphemeSegmentationKnowledgeBase = reducedCouchDBresult;
 
           // Save the reduced precedence self.morphemeSegmentationKnowledgeBase in localStorage
-          if (dbname) {
+          if (this.dbname) {
             try {
-              localStorage.setItem(dbname + "morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
+              localStorage.setItem(this.dbname + "morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
             } catch (error) {
               if (error.message === "localStorage is not defined") {
                 console.warn("cannot save precedence self.morphemeSegmentationKnowledgeBase for offline use");
@@ -293,7 +318,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
                   }
                 }
                 try {
-                  localStorage.setItem(dbname + "self.morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
+                  localStorage.setItem(this.dbname + "self.morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
                 } catch (error2) {
                   self.warn("Your lexicon is huge!", error2);
                 }
@@ -318,9 +343,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   morphemeSegmentationKnowledgeBase: {
     get: function() {
-      if (!this._morphemeSegmentationKnowledgeBase && (!this.lastMorphemePrecedenceRelationsLookupTimestamp && Date.now() - this.lastMorphemePrecedenceRelationsLookupTimestamp > 30000) && this.corpus && this.corpus.dbname) {
+      if (!this._morphemeSegmentationKnowledgeBase && (!this.lastMorphemePrecedenceRelationsLookupTimestamp && Date.now() - this.lastMorphemePrecedenceRelationsLookupTimestamp > 30000) && this.corpus && this.corpus.this.dbname) {
         try {
-          var value = localStorage.getItme(this.corpus.dbname + "morphemeSegmentationKnowledgeBase");
+          var value = localStorage.getItme(this.corpus.this.dbname + "morphemeSegmentationKnowledgeBase");
           if (value) {
             value = JSON.parse(value);
           }
@@ -345,6 +370,8 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         var uniqueRules = {};
         var size = 0;
         value = value.map(function(row) {
+          /* TODO handle lexicon precedecne rules instead of simple condensed rules */
+
           if (row.key.indexOf("@-@") === -1) {
             // If all ready reduced, use the count as the value
             if (typeof row.value === "number") {
@@ -410,7 +437,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         console.warn(" Continuing to look harder for segmentation. Currently " + datum.utterance + " directly segments as " + datum.utteranceWithExplictWordBoundaries);
       } else {
         this.debug(" Not looking harder for segmentation. Currently " + datum.utterance + " directly segments as " + datum.utteranceWithExplictWordBoundaries);
-        datum.morphemes = datum.utteranceWithExplictWordBoundaries.replace(/-?@-?/g, " ").trim()
+        datum.morphemes = datum.utteranceWithExplictWordBoundaries.replace(/-?@-?/g, " ").trim();
         return datum;
       }
 
@@ -613,7 +640,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   contextSensitiveGlossFinder: {
-    value: function(fields, dbname, justCopyDontGuessIGT) {
+    value: function(fields, justCopyDontGuessIGT) {
       var morphemesLine = fields.morphemes;
       if (!morphemesLine) {
         return "";
@@ -631,7 +658,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   simplisticGlossFinder: {
-    value: function(morphemesLine, dbname, justCopyDontGuessIGT) {
+    value: function(morphemesLine, justCopyDontGuessIGT) {
       if (!morphemesLine) {
         return "";
       }
@@ -641,14 +668,14 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         return justQuestionMarks;
       }
 
-      if (!dbname) {
+      if (!this.dbname) {
         if (!this.application || !this.application.get("corpus")) {
           throw "Glosser can't be guessed, there is no app so the URL must be defined.";
         }
-        dbname = this.application.get("corpus").get("couchConnection").dbname;
+        this.dbname = this.application.get("corpus").get("couchConnection").this.dbname;
       }
 
-      var lexiconNodes = localStorage.getItem(dbname + "lexiconResults");
+      var lexiconNodes = localStorage.getItem(this.dbname + "lexiconResults");
       if (!lexiconNodes) {
         return "";
       }
@@ -709,7 +736,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
       this.morphemefinder(fields, justCopyDontGuessIGT);
       if (!fields.gloss) {
-        fields = this.contextSensitiveGlossFinder(fields, fields.dbname, justCopyDontGuessIGT);
+        fields = this.contextSensitiveGlossFinder(fields, fields.this.dbname, justCopyDontGuessIGT);
       }
       return fields;
     }
@@ -722,7 +749,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (!fields.morphemes) {
         fields.morphemes = fields.utterance;
       }
-      fields = this.contextSensitiveGlossFinder(fields, fields.dbname, justCopyDontGuessIGT);
+      fields = this.contextSensitiveGlossFinder(fields, fields.this.dbname, justCopyDontGuessIGT);
       return fields;
     }
   },
@@ -863,14 +890,12 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    * http://bl.ocks.org/mbostock/1153292
    * http://alignedleft.com/tutorials/d3/binding-data
    *
-   * @param  {[type]} self.morphemeSegmentationKnowledgeBaseGraph [description]
-   * @param  {[type]} element [description]
-   * @param  {[type]} dbname  [description]
-   * @return {[type]}            [description]
+   * @param  {Object} element Obligatory element where the render should go
+   * @return {Glosser}            returns itself for chaining calls
    */
   visualizePrecedenceRelationsAsForceDirectedGraph: {
-    value: function(element) {
-
+    value: function(options) {
+      options = options || [];
       if (!this.lexicon || !this.lexicon.length) {
         this.warn("Cannot visualize an empty lexicon.");
         return this;
@@ -883,7 +908,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         prefs = this.corpus.prefs;
       }
 
-      this.lexicon.visualizeAsForceDirectedGraph(element, prefs);
+      this.lexicon.visualizeAsForceDirectedGraph(options.element, prefs);
 
       return this;
     }
