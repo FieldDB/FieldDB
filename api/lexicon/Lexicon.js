@@ -11,6 +11,60 @@ var CORS = require("../CORS");
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 
+
+// Load n grams map reduce which is used in both couchdb and in the codebase
+var LEXICON_NODES_MAP_REDUCE = {
+  filename: "morphemesPrecedenceContext",
+  map: null,
+  reduce: null,
+  rows: [],
+  emit: function(key, val) {
+    this.rows.push({
+      key: key,
+      value: val
+    });
+  }
+};
+try {
+  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+  var emit = LEXICON_NODES_MAP_REDUCE.emit;
+  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
+  eval("LEXICON_NODES_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
+} catch (exception) {
+  console.log("Unable to parse the map reduce ", exception.stack);
+  var emit = LEXICON_NODES_MAP_REDUCE.emit;
+  LEXICON_NODES_MAP_REDUCE.map = function() {
+    emit("error", "unable to load map reduce");
+  };
+}
+
+// Load n grams map reduce which is used in both couchdb and in the codebase
+var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = {
+  filename: "morphemesPrecedenceContext",
+  map: null,
+  reduce: null,
+  rows: [],
+  emit: function(key, val) {
+    this.rows.push({
+      key: key,
+      value: val
+    });
+  }
+};
+try {
+  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
+  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
+  eval("LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
+} catch (exception) {
+  console.log("Unable to parse the map reduce ", exception.stack);
+  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
+  LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = function() {
+    emit("error", "unable to load map reduce");
+  };
+}
+
+
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
  *        their allomorphs and glosses. It allows the search to index
@@ -616,30 +670,74 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
     }
   },
 
+  dbname: {
+    get: function() {
+      if (this._dbname) {
+        return this._dbname;
+      }
+      if (this.corpus && this.corpus.dbname) {
+        return this.corpus.dbname;
+      }
+    },
+    set: function(value) {
+      this._dbname = value;
+    }
+  },
+
   /**
    * Overwrite/build the lexicon from the corpus server if it is there, saves
    * the results to local storage so they can be reused offline.
    *
-   * @param dbname
+   * OLD url /_design/pages/_view/lexicon_create_tuples?group=true
+   *
+   * New url _design/lexicon/_view/morphemesPrecedenceContext?group=true&limit=400
+   * 
+   * @param options
    * @param callback
    */
-  buildLexiconFromCouch: {
+  fetch: {
     value: {
-      value: function(dbname, callback) {
-        var self = this;
+      value: function(options) {
+          options = options || {};
+
+          var url = "";
+          if (options.url) {
+            url = options.url;
+          }
+
+          if (!url || url === "default") {
+            if (!this.dbname && !options.dbname) {
+              throw "Glosser's webservice can't be guessed, there is no current corpus so the URL must be defined.";
+            }
+            if (this.corpus.prefs && this.corpus.prefs.lexiconURL) {
+              url = this.corpus.prefs.lexiconURL;
+            } else {
+              url = this.corpus.url + "/_design/pages/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit="+ Lexicon.maxLexiconSiz;
+            }
+          }
+
+        var deferred = Q.defer(),
+          self = this;
 
         CORS.makeCORSRequest({
           type: "GET",
-          url: this.corpus.url + "/_design/pages/_view/lexicon_create_tuples?group=true",
+          url: url,
           success: function(results) {
             self.generatePrecedenceForceDirectedRulesJsonForD3(results.rows);
-            if (typeof callback === "function") {
-              callback();
-            }
+            deferred.resolve(result.rows));
           }, // end successful response
           dataType: ""
         });
+
+        return deferred.promise;
+
       }
+    }
+  },
+
+  buildLexiconFromCouch: {
+    value: function(dbname, callback) {
+      this.warn("DEPRECATED buildLexiconFromCouch use fetch instead.");
     }
   },
   /**
