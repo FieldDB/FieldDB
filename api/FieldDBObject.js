@@ -441,6 +441,9 @@ FieldDBObject.guessType = function(doc) {
   if (guessedType === "FieldDBObject") {
     if (doc.session) {
       guessedType = "Datum";
+      if (doc.fields && doc.fields[0] === "judgement") {
+        guessType = "LanguageDatum";
+      }
     } else if (doc.datumFields && doc.sessionFields) {
       guessedType = "Corpus";
     } else if (doc.collection === "sessions" && doc.sessionFields) {

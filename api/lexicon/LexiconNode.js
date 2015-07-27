@@ -1,6 +1,6 @@
 var CORS = require("../CORS");
 var Q = require("q");
-var BASE_LEXICON_NODE = require("../datum/Datum").Datum;
+var BASE_LEXICON_NODE = require("../datum/LanguageDatum").LanguageDatum;
 
 
 var escapeRegexCharacters = function(regex) {
@@ -17,7 +17,7 @@ var escapeRegexCharacters = function(regex) {
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
  * 
  * 
- * @extends Datum
+ * @extends LanguageDatum
  * 
  * @constructs
  * 

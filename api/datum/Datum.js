@@ -18,24 +18,8 @@ var Session = require("./Session").Session;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
 /**
- * @class The Datum widget is the place where all linguistic data is
- *        entered; one at a time.
+ * @class The Datum model which contains metadata to help validate and search data
  *
- * @property {DatumField} transcription The transcription field generally
- *           corresponds to the first line in linguistic examples that can
- *           either be written in the language's orthography or a
- *           romanization of the language. An additional field can be added
- *           if the language has a non-roman script. (This was previously called the utterance field).
- * @property {DatumField} gloss The gloss field corresponds to the gloss
- *           line in linguistic examples where the morphological details of
- *           the words are displayed.
- * @property {DatumField} translation The translation field corresponds to
- *           the third line in linguistic examples where in general an
- *           English translation. An additional field can be added if
- *           translations into other languages is needed.
- * @property {DatumField} judgement The judgement is the grammaticality
- *           judgement associated with the datum, so grammatical,
- *           ungrammatical, felicitous, unfelicitous etc.
  * @property {AudioVisual} audioVideo Datums can be associated with an audio or video
  *           file.
  * @property {Session} session The session provides details about the set of
@@ -73,125 +57,6 @@ var Datum = function Datum(options) {
 Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.prototype */ {
   constructor: {
     value: Datum
-  },
-
-  orthography: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.orthography) {
-        return this.fields.orthography.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.orthography) {
-        this.addField("orthography");
-      }
-      this.fields.orthography.value = value;
-    }
-  },
-
-  utterance: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.utterance) {
-        return this.fields.utterance.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.utterance) {
-        this.addField("utterance");
-      }
-      this.fields.utterance.value = value;
-    }
-  },
-
-  morphemes: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.morphemes) {
-        return this.fields.morphemes.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.morphemes) {
-        this.addField("morphemes");
-      }
-      this.fields.morphemes.value = value;
-    }
-  },
-
-  allomorphs: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.allomorphs) {
-        return this.fields.allomorphs.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.allomorphs) {
-        this.addField("allomorphs");
-      }
-      this.fields.allomorphs.value = value;
-    }
-  },
-
-  gloss: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.gloss) {
-        return this.fields.gloss.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.gloss) {
-        this.addField("gloss");
-      }
-      this.fields.gloss.value = value;
-    }
-  },
-
-  syntacticCategory: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.syntacticCategory) {
-        return this.fields.syntacticCategory.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.syntacticCategory) {
-        this.addField("syntacticCategory");
-      }
-      this.fields.syntacticCategory.value = value;
-    }
-  },
-
-  translation: {
-    configurable: true,
-    get: function() {
-      if (this.fields && this.fields.translation) {
-        return this.fields.translation.value;
-      } else {
-        return FieldDBObject.DEFAULT_STRING;
-      }
-    },
-    set: function(value) {
-      if (!this.fields || !this.fields.translation) {
-        this.addField("translation");
-      }
-      this.fields.translation.value = value;
-    }
   },
 
   fields: {
@@ -248,93 +113,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return obj;
     },
     set: function() {}
-  },
-
-  igt: {
-    get: function() {
-      var igtLines = {},
-        parallelText = {},
-        tuples = [],
-        feederWord,
-        fullWord,
-        lengthOfLongestIGTLineInWords,
-        igtLine,
-        cellIndex,
-        tuple;
-
-      var punctuationToRemove = /[#?!,\/\(\)\*\#]/g;
-      var whiteSpaceSplit = /[ \t\n]+/;
-      // var leipzigSplit = /[=-]+/;
-      var cleanUngrammaticalitySubstitutions = false;
-
-      this.fields.map(function(field) {
-        if (field.type && field.type.indexOf("parallelText") > -1) {
-          parallelText[field.id] = field.value;
-        }
-        if (!field.type || field.type.indexOf("IGT") === -1) {
-          return;
-        }
-
-        var chunks = field.value.replace(/#?!.,\//g, "").split(whiteSpaceSplit);
-
-        chunks = chunks.map(function(chunk) {
-          if (cleanUngrammaticalitySubstitutions) {
-            // If the token it not null or the empty string
-            if (chunk) {
-              // Replace (*_) with _
-              feederWord = chunk.replace(/\(\*[^)]*\)/g, "$1");
-              // Replace *(_) with _
-              feederWord = feederWord.replace(/\*\(([^)]*)\)/, "$1");
-              // Remove all remaining punctuation
-              fullWord = feederWord.replace(punctuationToRemove, "");
-              chunk = fullWord;
-            }
-          }
-
-          // return chunk.split(leipzigSplit);
-          return chunk;
-        });
-
-        igtLines[field.id] = chunks;
-      });
-      this.debug("Collected all the IGT lines", igtLines);
-      this.debug("Collected all the Paralel Text lines", parallelText);
-
-      // Build triples
-      lengthOfLongestIGTLineInWords = 0;
-      for (igtLine in igtLines) {
-        if (igtLines[igtLine] && igtLines[igtLine].length > lengthOfLongestIGTLineInWords) {
-          lengthOfLongestIGTLineInWords = igtLines[igtLine].length;
-        }
-      }
-
-      // for each word
-      for (cellIndex = 0; cellIndex < lengthOfLongestIGTLineInWords; cellIndex++) {
-        tuple = {};
-        // for each row of the igt
-        for (igtLine in igtLines) {
-          this.debug("working on   " + igtLine, igtLines[igtLine]);
-          if (igtLines[igtLine] && igtLines[igtLine].length > cellIndex && igtLines[igtLine][cellIndex]) {
-            tuple[igtLine] = igtLines[igtLine][cellIndex];
-          } else {
-            tuple[igtLine] = "";
-          }
-        }
-        tuples.push(tuple);
-      }
-
-      this.debug("IGT+ tuples", tuples);
-
-
-      return {
-        tuples: tuples,
-        parallelText: parallelText
-      };
-
-    },
-    set: function() {
-      this.warn("Setting the igt has to be copy pasted from one of the other codebases");
-    }
   },
 
   addField: {
@@ -1056,67 +834,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var fieldLabels = this.fields.map(function(field) {
         return field.id;
       });
-      //setting up for IGT case...
-      var judgementIndex = -1;
-      var judgement = "";
-      var utteranceIndex = -1;
-      var utterance = "";
-      var morphemesIndex = -1;
-      var morphemes = "";
-      var glossIndex = -1;
-      var gloss = "";
-      var translationIndex = -1;
-      var translation = "";
-      var result = "\n\\begin{exe} \n  \\ex \[";
 
-      //IGT case:
-      if (this.datumIsInterlinearGlossText()) {
-        /* get the key pieces of the IGT and delete them from the fields and fieldLabels arrays*/
-        judgementIndex = fieldLabels.indexOf("judgement");
-        if (judgementIndex >= 0) {
-          judgement = fields[judgementIndex];
-          fieldLabels.splice(judgementIndex, 1);
-          fields.splice(judgementIndex, 1);
-        }
-        utteranceIndex = fieldLabels.indexOf("utterance");
-        if (utteranceIndex >= 0) {
-          utterance = fields[utteranceIndex];
-          fieldLabels.splice(utteranceIndex, 1);
-          fields.splice(utteranceIndex, 1);
-        }
-        morphemesIndex = fieldLabels.indexOf("morphemes");
-        if (morphemesIndex >= 0) {
-          morphemes = fields[morphemesIndex];
-          fieldLabels.splice(morphemesIndex, 1);
-          fields.splice(morphemesIndex, 1);
-        }
-        glossIndex = fieldLabels.indexOf("gloss");
-        if (glossIndex >= 0) {
-          gloss = fields[glossIndex];
-          fieldLabels.splice(glossIndex, 1);
-          fields.splice(glossIndex, 1);
-        }
-        translationIndex = fieldLabels.indexOf("translation");
-        if (translationIndex >= 0) {
-          translation = fields[translationIndex];
-          fieldLabels.splice(translationIndex, 1);
-          fields.splice(translationIndex, 1);
-        }
-        //print the main IGT, escaping special latex chars
-        /* ignore unnecessary escapement */
-        result = result + this.escapeLatexChars(judgement) + "\]\{" + this.escapeLatexChars(utterance) +
-          "\n  \\gll " + this.escapeLatexChars(morphemes) + "\\\\" +
-          "\n  " + this.escapeLatexChars(gloss) + "\\\\" +
-          "\n  \\trans " + this.escapeLatexChars(translation) + "\}" +
-          "\n\\label\{\}";
-      }
+      var result = "\n";
+
       //remove any empty fields from our arrays
       for (var i = fields.length - 1; i >= 0; i--) {
         if (!fields[i]) {
           fields.splice(i, 1);
           fieldLabels.splice(i, 1);
         }
-
       }
       /*throughout this next section, print frequent fields and infrequent ones differently
       frequent fields get latex'd as items in a description and infrequent ones are the same,
@@ -1603,7 +1329,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       return json;
     }
   }
-
 
 });
 exports.Datum = Datum;
