@@ -1,4 +1,4 @@
-function morphemesPrecedenceContext(doc) {
+function lexiconNodes(doc) {
   var onlyErrors = false;
   var debug = false;
   var maxDistance = 1;
@@ -364,7 +364,7 @@ function morphemesPrecedenceContext(doc) {
   }
 };
 try {
-  exports.morphemesPrecedenceContext = morphemesPrecedenceContext;
+  exports.lexiconNodes = lexiconNodes;
 } catch (e) {
   // console.log("not in a node context")
 }
