@@ -81,6 +81,9 @@
   var Datum = require("./datum/Datum").Datum;
   FieldDB.Datum = Datum;
   FieldDB["Datum"] = Datum;
+  var LanguageDatum = require("./datum/LanguageDatum").LanguageDatum;
+  FieldDB.LanguageDatum = LanguageDatum;
+  FieldDB["LanguageDatum"] = LanguageDatum;
   var DatumField = require("./datum/DatumField").DatumField;
   FieldDB.DatumField = DatumField;
   FieldDB["DatumField"] = DatumField;

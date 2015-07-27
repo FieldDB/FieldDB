@@ -139,8 +139,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       if (this.INTERNAL_MODELS && this.INTERNAL_MODELS.item && !(value instanceof this.INTERNAL_MODELS.item)) {
         value = new this.INTERNAL_MODELS.item(value);
       } else {
-        this.debug("Setting the type of this new item to Datum since it didnt have a type before, and there is no default item for this datalist.");
-        value.fieldDBtype = value.fieldDBtype || "Datum";
+        this.debug("Setting the type of this new item to LanguageDatum since it didnt have a type before, and there is no default item for this datalist.");
+        value.fieldDBtype = value.fieldDBtype || "LanguageDatum";
       }
       return this.docs.add(value);
     }
@@ -234,8 +234,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         doc.confidential = self.confidential;
         // doc.url = self.url;
         doc = FieldDBObject.convertDocIntoItsType(doc);
-        if (doc.fieldDBtype && doc.fieldDBtype === "Datum") {
-          guessedType = "Datum";
+        if (doc.fieldDBtype && doc.fieldDBtype === "LanguageDatum") {
+          guessedType = "LanguageDatum";
         }
         // self.debug("adding doc", doc);
         // self.docs.add(doc); //This overwrites this doc if in the collection
@@ -246,7 +246,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       self.docs = results; //This ensures that the docs list matches what the server thinks.
       // self.docs.merge("self", results); //This overwrites this doc if in the collection
 
-      if (guessedType === "Datum") {
+      if (guessedType === "LanguageDatum") {
         self.showDocPosition = true;
         self.showDocCheckboxes = true;
         self.docsAreReorderable = true;
