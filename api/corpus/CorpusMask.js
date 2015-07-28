@@ -291,9 +291,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
-  unserializedSessions: {
-    value: null
-  },
+  // unserializedSessions: {
+  //   value: null
+  // },
   sessions: {
     get: function() {
       return this.unserializedSessions || FieldDBObject.DEFAULT_COLLECTION;
@@ -303,9 +303,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
-  unserializedDatalists: {
-    value: null
-  },
+  // unserializedDatalists: {
+  //   value: null
+  // },
   datalists: {
     get: function() {
       return this.unserializedDatalists || FieldDBObject.DEFAULT_COLLECTION;
