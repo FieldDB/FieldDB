@@ -804,7 +804,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   /**
    * Takes as a parameters an array of self.morphemeSegmentationKnowledgeBase which came from CouchDB precedence rule query.
-   * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
+   * Example Rule: {"key":{"x":"@","relation":"precedes","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
    */
   morphemeSegmentationKnowledgeBaseGraph: {
     get: function() {
@@ -902,7 +902,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
 
       var prefs = {
-        showRelations: ["preceeds"]
+        showRelations: ["precedes"]
       };
       if (this.corpus && this.corpus.prefs) {
         prefs = this.corpus.prefs;
