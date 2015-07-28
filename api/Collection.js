@@ -466,9 +466,8 @@ Collection.prototype = Object.create(Object.prototype, {
   add: {
     value: function(value) {
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
-        var self = this;
-        for (var itemIndex in value) {
-          value[itemIndex] = self.add(value[itemIndex]);
+        for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+          value[itemIndex] = this.add(value[itemIndex]);
         }
         return value;
       }
