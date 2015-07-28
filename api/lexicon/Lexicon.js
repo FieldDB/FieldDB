@@ -7,7 +7,8 @@ try {
 var Bindings = require("frb/bindings");
 var SortedSet = require("collections/sorted-set");
 var UniqueSet = require("collections/set");
-var CORS = require("../CORS");
+var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 
@@ -81,39 +82,105 @@ try {
  *
  */
 
-var Lexicon = function(values, equals, compare, getDefault) {
+var Lexicon = function(options) {
+  options = options || {};
+  var entries = [];
+  var equals;
+  var compare;
+  var getDefault = options.getDefault;
+
   if (!this.fieldDBtype) {
     this.fieldDBtype = "Lexicon";
   }
+  /* Treat the options in a fielddb way so they dont get added to the SortedSet directly */
+  if (options && (Object.prototype.toString.call(options) === "[object Array]" || options.rows)) {
+    if ((options.rows && options.rows[0] && options.rows[0].key && options.rows[0].key.relation) || options[0].relation || (options[0].key && options[0].key.relation)) {
+      this.warn("constructing a lexicon from a set of connected nodes");
+      // this.entryRelations = options;
+      var entryRelations = options.rows || options;
+      this.entryRelations = entryRelations;
+      // this.entryRelations = new UniqueSet();
+      this.references = new UniqueSet();
+      // this.updateConnectedGraph(entryRelations);
 
-  // console.log("\tConstructing Lexicon... ");
-  // SortedSet.apply(this, [values, equals, compare, getDefault]);
-  SortedSet.apply(this, Array.prototype.slice.call(arguments, 1));
-  // if (!compare) {
-  //   this.contentCompare = this.__proto__.fieldsCompare;
-  // }
-  // if (!equals) {
-  //   this.contentEquals = this.__proto__.fieldsEqual;
-  // }
-  // 
-  if (values && Object.prototype.toString.call(values) === "[object Array]") {
-    if (values[0].relation || values[0].key) {
-      console.log("constructing a lexicon from a set of connected nodes", values);
-      this.precedenceRelations = values;
     } else {
-      console.log("constructing a lexicon from nodes", values);
-      var self = this;
-      values.map(function(node) {
-        self.add(new LexiconNode(node));
-      });
+      this.debug("constructing a lexicon from nodes", options);
+      entries = options;
     }
-  } else if (values) {
-    console.log("constructing a lexicon from an object", values);
-    for (var property in values) {
-      if (values.hasOwnProperty(property)) {
-        this[property] = values[property];
+  } else if (options && typeof options === "object") {
+
+    if (options.equals && typeof options.equals === "function") {
+      equals = options.equals;
+      this.warn("using equals from options " + equals);
+      delete options.equals;
+    }
+    /* If options was an object then use the equals and compares functions (only do this if it was an object because collections is extending the prototype of Array)
+
+      TODO collections is extending the prototoype of arrays!!!!
+      TypeError: undefined is not a function
+      at Function.Array.unzip (/Users/gina/fielddbhome/FieldDB/node_modules/collections/shim-array.js:38:24)
+      at GenericCollection.zip (/Users/gina/fielddbhome/FieldDB/node_modules/collections/generic-collection.js:206:18)
+      at GenericOrder.compare (/Users/gina/fielddbhome/FieldDB/node_modules/collections/generic-order.js:39:27)
+      at null.contentCompare (/Users/gina/fielddbhome/FieldDB/node_modules/collections/shim-array.js:254:47)
+      at SortedSet.splay (/Users/gina/fielddbhome/FieldDB/node_modules/collections/sorted-set.js:377:31)
+      at SortedSet.add (/Users/gina/fielddbhome/FieldDB/node_modules/collections/sorted-set.js:71:14)
+      at Object.create.add.value [as add] (/Users/gina/fielddbhome/FieldDB/api/lexicon/Lexicon.js:621:31)
+    */
+    if (options.compare && typeof options.compare === "function") {
+      compare = options.compare;
+      this.warn("using compare from options " + compare);
+      delete options.compare;
+    }
+
+    this.debug("constructing a lexicon from an object", options);
+    for (var property in options) {
+      if (options.hasOwnProperty(property)) {
+        if (property === "collection" || property === "entries" || property === "nodes") {
+          entries = entries.concat(entries, options[property]);
+          this.debug("adding ", entries);
+        } else {
+          this[property] = options[property];
+        }
       }
     }
+  }
+
+  /** Ensure equals and compare are set to LexiconNode compare if they were not injected */
+  if (!equals || typeof equals !== "function") {
+    if (typeof Lexicon.LexiconNode.prototype.uniqueEntriesOnHeadword === "function") {
+      equals = Lexicon.LexiconNode.prototype.uniqueEntriesOnHeadword;
+      this.debug("using uniqueEntriesOnHeadword as equals for the lexicon" + equals);
+    } else {
+      this.warn("using nothing for equals" + equals);
+    }
+  }
+  if (!compare || typeof compare !== "function") {
+    if (typeof Lexicon.LexiconNode.prototype.compare === "function") {
+      compare = Lexicon.LexiconNode.prototype.compare;
+      this.debug("using LexiconNode.prototype.compare as compare for the lexicon" + compare);
+    } else {
+      this.warn("using nothing for compare" + compare);
+    }
+  }
+
+
+  this.debug("\tConstructing Lexicon... ", [], equals, compare, options.getDefault);
+  // SortedSet.apply(this, [options, equals, compare, getDefault]);
+  SortedSet.apply(this, [
+    [], equals, compare, options.getDefault
+  ]);
+
+
+  if (!this.contentCompare || this.contentCompare !== compare) {
+    this.bug(" Setting the contentCompare didnt work.");
+    this.contentCompare = compare;
+  }
+  if (this.contentEquals !== equals) {
+    this.bug(" Setting the contentCompare didnt work.");
+    this.contentEquals = equals;
+  }
+  if (entries && entries.length) {
+    this.add(entries);
   }
 };
 
@@ -127,7 +194,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
       try {
         return FieldDB.FieldDBObject.prototype.debug.apply(this, arguments);
       } catch (e) {
-        // console.log("Not showing developer ", arguments);
+        // console.log("Showing developer ", arguments);
       }
     }
   },
@@ -175,10 +242,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
     }
   },
 
-  sortBy: {
-    value: "morphemes"
-  },
-
   getLexicalEntries: {
     value: function(lexicalEntryToMatch) {
       var deffered = Q.defer(),
@@ -189,11 +252,11 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         deffered.resolve(matches);
       } else {
         this.filter(function(value, key, object, depth) {
-          console.log(key + " of " + self.length);
-          if (typeof lexicalEntryToMatch.equals === "function") {
-            if (lexicalEntryToMatch.equals(value)) {
+          this.debug(key + " of " + self.length);
+          if (typeof lexicalEntryToMatch.uniqueEntriesOnHeadword === "function") {
+            if (lexicalEntryToMatch.uniqueEntriesOnHeadword(value)) {
               matches.push(value);
-              console.log("lexicalEntryToMatch equals ", value);
+              this.debug("lexicalEntryToMatch equals ", value);
             }
           } else {
             var howWellDoesThisMatch = 0;
@@ -205,9 +268,9 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
             }
             if (howWellDoesThisMatch > 0) {
               matches.push(value);
-              console.log("lexicalEntryToMatch matches well enough ", value);
+              this.debug("lexicalEntryToMatch matches well enough ", value);
             } else {
-              console.log("lexicalEntryToMatch doesnt match ", value);
+              this.debug("lexicalEntryToMatch doesnt match ", value);
             }
           }
           if (key === self.length - 1) {
@@ -343,7 +406,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         headword.contentEditable = "true";
         headword.classList.add("headword");
         headword.setAttribute("title", "CLick to edit the headword of your lexical entry");
-        listItemView.__data__.headword = listItemView.__data__.headword || listItemView.__data__.morphemes ? listItemView.__data__.morphemes : listItemView.__data__.gloss;
 
         saveButton = self.localDOM.createElement("button");
         saveButton.classList.add("btn");
@@ -545,8 +607,82 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
   },
 
   /**
+   * Finds a node in the lexicon
+   *
+   * @param  {Object} value either an Object or Lexicon.LexiconNode
+   * @return {Array}       returns a reference to the found item(s)
+   */
+  find: {
+    value: function(value) {
+      if (!(value instanceof Lexicon.LexiconNode)) {
+        value = new Lexicon.LexiconNode(value);
+      }
+      var result = SortedSet.prototype.find.apply(this, arguments);
+      if (result) {
+        this.debug("found a matching lexial entry", result.headword);
+        return result.value;
+      } else {
+        this.debug("didnt find a matching lexial entry", value.headword);
+      }
+    }
+  },
+
+  /**
+   * Adds to the lexicon
+   *
+   * @param  {Object} value a simple object, and/or  an array of objects or items either Objects or Lexicon.LexiconNodes
+   * @return {Array}       returns a reference to the added item(s)
+   */
+  add: {
+    value: function(value) {
+      if (value && Object.prototype.toString.call(value) === "[object Array]") {
+        for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+          value[itemIndex] = this.add(value[itemIndex]);
+        }
+        return value;
+      }
+      if (!(value instanceof Lexicon.LexiconNode)) {
+        value = new Lexicon.LexiconNode(value);
+        value.parent = this;
+      }
+      SortedSet.prototype.add.apply(this, arguments);
+      return value;
+    }
+  },
+
+  /**
+   *  Adds a node to the lexicon, if an equivalent node (as defined by the equals function) 
+   *  is found, it merges the new one into the existing one.
+   *  
+   * @param  {Object} value A node or array of nodes
+   * @return {Object}       The node or array of nodes which were added
+   */
+  addOrMerge: {
+    value: function(value) {
+      if (value && Object.prototype.toString.call(value) === "[object Array]") {
+        for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+          value[itemIndex] = this.addOrMerge(value[itemIndex]);
+        }
+        return value;
+      }
+      this.debug("running addOrMerge", value);
+      var existingInLexicon = this.find(value);
+      if (existingInLexicon) {
+        this.warn("Merging a simlar entry into the existing entry in the lexicon", existingInLexicon, value);
+        existingInLexicon.merge("self", value);
+        value = existingInLexicon;
+      } else {
+        value = this.add(value);
+        this.debug("Added value " + value.headword);
+      }
+
+      return value;
+    }
+  },
+
+  /**
    * Takes as a parameters an array of this.entryRelations which came from CouchDB precedence rule query.
-   * Example Rule: {"key":{"x":"@","relation":"preceeds","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
+   * Example Rule: {"key":{"x":"@","relation":"precedes","y":"aqtu","context":"aqtu-nay-wa-n"},"value":2}
    */
   generatePrecedenceForceDirectedRulesJsonForD3: {
     value: function() {
@@ -582,88 +718,159 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         if (!entryRelation) {
           return;
         }
-        var connectionEdge = entryRelation.key || entryRelation;
-        var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous;
-        var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent;
+        try {
+          var connectionEdge = entryRelation.key || entryRelation;
+          var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous;
+          var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent;
+          var datumid = entryRelation.id || "";
+          var context = connectionEdge.context;
+          if (typeof context === "string") {
+            context = {
+              id: datumid,
+              morphemes: context
+            };
+          }
+          if (!context.id) {
+            this.warn("Cant figure out the id(s) of where this node might have come from");
+          }
 
-        connectionEdge.frequencyCount = connectionEdge.value || entryRelation.key ? entryRelation.key.count : null;
-        self.debug("Adding ", connectionEdge, " to connected graph");
+          connectionEdge.frequencyCount = connectionEdge.value || entryRelation.key ? entryRelation.key.count : null;
+          self.debug("Adding ", connectionEdge, " to connected graph");
 
-        if (!from || !to) {
-          self.warn("Missing either a `from` or `to` ", connectionEdge);
-          return;
-        }
-        if (!from.morphemes || !to.morphemes) {
-          self.warn("Missing morphemes on the nodes ", connectionEdge);
-          return;
-        }
-        /* skip word boundaries unless otherwise specified */
-        if (from.morphemes === "@" ||
-          from.morphemes === "_#" ||
-          from.morphemes === "#_" ||
-          to.morphemes === "@" ||
-          to.morphemes === "_#" ||
-          to.morphemes === "#_") {
-          if (!prefs.showGlosserAsMorphemicTemplate) {
-            self.debug("Skipping a connection involving a word boundary ", connectionEdge);
+          if (!from || !to) {
+            self.warn("Missing either a `from` or `to` ", connectionEdge);
             return;
           }
-        }
-        /* make the @ more like what a linguist recognizes for word boundaries */
-        if (from.morphemes === "@") {
-          from.morphemes = "#_";
-        }
-        if (to.morphemes === "@") {
-          to.morphemes = "_#";
-        }
 
-        // use bigrams unless otherwise specified
-        if ((!prefs.maxDistanceForContext && connectionEdge.distance > 1) ||
-          (prefs.maxDistanceForContext & connectionEdge.distance > prefs.maxDistanceForContext)) {
-          self.warn("Skipping distantly related nodes ", connectionEdge);
-          return;
+          /* skip word boundaries unless otherwise specified */
+          if (from.morphemes === "@" ||
+            from.morphemes === "_#" ||
+            from.morphemes === "#_" ||
+            to.morphemes === "@" ||
+            to.morphemes === "_#" ||
+            to.morphemes === "#_") {
+            if (!prefs.showGlosserAsMorphemicTemplate) {
+              self.debug("Skipping a connection involving a word boundary ", connectionEdge);
+              return;
+            }
+          }
+          /* make the @ more like what a linguist recognizes for word boundaries */
+          if (from.morphemes === "@") {
+            from.morphemes = "#_";
+          }
+          if (to.morphemes === "@") {
+            to.morphemes = "_#";
+          }
+
+          if (!(from instanceof Lexicon.LexiconNode)) {
+            from = new Lexicon.LexiconNode(from);
+            self.debug("Converted from into a lexicon node", from.headword);
+          }
+
+          if (!(to instanceof Lexicon.LexiconNode)) {
+            to = new Lexicon.LexiconNode(to);
+            self.debug("Converted to into a lexicon node", to.headword);
+          }
+
+          if (!from.morphemes || !to.morphemes) {
+            self.warn("Missing morphemes on the nodes, this relation cant be added to the graph ", connectionEdge);
+            return;
+          }
+
+          // use bigrams unless otherwise specified
+          if ((!prefs.maxDistanceForContext && connectionEdge.distance > 1) ||
+            (prefs.maxDistanceForContext & connectionEdge.distance > prefs.maxDistanceForContext)) {
+            self.warn("Skipping distantly related nodes ", connectionEdge.distance);
+            return;
+          }
+          // visualize only precedes connectionEdges unless otherwise specified
+          if ((!prefs.showRelations && connectionEdge.relation !== "precedes") ||
+            (prefs.showRelations && prefs.showRelations.indexOf(connectionEdge.relation) === -1)) {
+            self.debug("Skipping nodes which arent related by precedence " + connectionEdge.relation);
+            return;
+          }
+
+          if (!self.isWithinConfidenceRange(from, prefs.confidenceRange) ||
+            !self.isWithinConfidenceRange(to, prefs.confidenceRange)) {
+            self.warn("Skipping nodes which arent confident enough ", connectionEdge.confidence);
+            return;
+          }
+
+
+          // If the utterance contains the whole word, ie the context, not just the utterance of this morpheme we dont really want it
+          // delete from.utterance;
+          // delete to.utterance;
+          // delete from.orthography;
+          // delete to.orthography;
+          // 
+
+          // connectionEdge.utteranceContext = context.utterance;
+          // connectionEdge.datumid = context.id;
+
+          // // Put the previous and subsequent morphemes into the morpheme nodes
+          // // this.add(context.utterance, new Lexicon.LexiconNode({
+          // //   fields: from
+          // // }));
+          // from.datumids = [context.id];
+          // from.utteranceContext = [context.utterance];
+          // if (context.url) {
+          //   from.url = context.url;
+          // }
+
+          // // this.add(context.utterance, new Lexicon.LexiconNode({
+          // //   fields: from
+          // // }));
+          // to.datumids = [context.id];
+          // to.utteranceContext = [context.utterance];
+          // if (context.url) {
+          //   to.url = context.url;
+          // }
+          // this.references.add(context.id);
+
+          // //To avoid loops
+          // if (to.morphemes.indexOf("@") === -1) {
+          //   this.entryRelations.add(entryRelations[i].key);
+          // }
+
+          // TODO what if a similar node is here, we should merge them.
+          from = self.addOrMerge(from);
+          to = self.addOrMerge(to);
+
+          // Add the from node to the list of nodes, if it is not already there
+          if (!self.connectedGraph.nodes[from.headword]) {
+            self.connectedGraph.nodes[from.headword] = from;
+          } else {
+            self.warn(from.morphemes + " was already defined. merging with this node");
+            self.connectedGraph.nodes[from.headword].merge("self", from);
+          }
+          from = self.connectedGraph.nodes[from.headword];
+
+          // Add the to node to the list of nodes, if it is not already there
+          if (!self.connectedGraph.nodes[to.headword]) {
+            self.connectedGraph.nodes[to.headword] = to;
+          } else {
+            self.warn(to.morphemes + " was already defined. merging with this node");
+            self.connectedGraph.nodes[to.headword].merge("self", to);
+          }
+          to = self.connectedGraph.nodes[to.headword];
+
+          // Use the language of connected graphs
+          connectionEdge.from = from;
+          connectionEdge.to = to;
+
+
+          // Dont keep other names for the two nodes
+          delete connectionEdge.previous;
+          delete connectionEdge.subsequent;
+          delete connectionEdge.source;
+          delete connectionEdge.target;
+
+          self.connectedGraph[connectionEdge.relation] = self.connectedGraph[connectionEdge.relation] || [];
+          self.connectedGraph[connectionEdge.relation].push(connectionEdge);
+
+        } catch (exception) {
+          this.warn("Skipping relation because of an error"+ exception , exception.stack, entryRelation);
         }
-        // visualize only preceeds connectionEdges unless otherwise specified
-        if ((!prefs.showRelations && connectionEdge.relation !== "preceeds") ||
-          (prefs.showRelations && prefs.showRelations.indexOf(connectionEdge.relation) === -1)) {
-          self.warn("Skipping nodes which arent related by precedence ", connectionEdge);
-          return;
-        }
-
-        if (!self.isWithinConfidenceRange(from, prefs.confidenceRange) ||
-          !self.isWithinConfidenceRange(to, prefs.confidenceRange)) {
-          self.warn("Skipping nodes which arent confident enough ", connectionEdge);
-          return;
-        }
-
-        // Add the from node to the list of nodes, if it is not already there
-        var headword = from.headword || from.morphemes;
-        if (!self.connectedGraph.nodes[headword]) {
-          self.connectedGraph.nodes[headword] = from;
-        } else {
-          self.warn(headword + " was already defined. either overwrite with this, or use it for this connection edge");
-        }
-        from = self.connectedGraph.nodes[headword];
-
-        // Add the to node to the list of nodes, if it is not already there
-        headword = to.headword || to.morphemes;
-        if (!self.connectedGraph.nodes[headword]) {
-          self.connectedGraph.nodes[headword] = to;
-        }
-        to = self.connectedGraph.nodes[headword];
-
-        // Use the language of connected graphs
-        connectionEdge.from = from;
-        connectionEdge.to = to;
-
-        // Dont keep other names for the two nodes
-        delete connectionEdge.previous;
-        delete connectionEdge.subsequent;
-        delete connectionEdge.source;
-        delete connectionEdge.target;
-
-        self.connectedGraph[connectionEdge.relation] = self.connectedGraph[connectionEdge.relation] || [];
-        self.connectedGraph[connectionEdge.relation].push(connectionEdge);
       });
 
       return this.connectedGraph;
@@ -696,42 +903,46 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
    * @param callback
    */
   fetch: {
-    value: {
-      value: function(options) {
-          options = options || {};
+    value: function(options) {
+      options = options || {};
 
-          var url = "";
-          if (options.url) {
-            url = options.url;
-          }
-
-          if (!url || url === "default") {
-            if (!this.dbname && !options.dbname) {
-              throw "Glosser's webservice can't be guessed, there is no current corpus so the URL must be defined.";
-            }
-            if (this.corpus.prefs && this.corpus.prefs.lexiconURL) {
-              url = this.corpus.prefs.lexiconURL;
-            } else {
-              url = this.corpus.url + "/_design/pages/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit="+ Lexicon.maxLexiconSiz;
-            }
-          }
-
-        var deferred = Q.defer(),
-          self = this;
-
-        CORS.makeCORSRequest({
-          type: "GET",
-          url: url,
-          success: function(results) {
-            self.generatePrecedenceForceDirectedRulesJsonForD3(results.rows);
-            deferred.resolve(result.rows));
-          }, // end successful response
-          dataType: ""
-        });
-
-        return deferred.promise;
-
+      var url = "";
+      if (options.url) {
+        url = options.url;
       }
+
+      if (!url || url === "default") {
+        if (!this.dbname && !options.dbname) {
+          throw "Glosser's webservice can't be guessed, there is no current corpus so the URL must be defined.";
+        }
+        if (this.corpus.prefs && this.corpus.prefs.lexiconURL) {
+          url = this.corpus.prefs.lexiconURL;
+        } else {
+          url = this.corpus.url + "/_design/pages/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit=" + Lexicon.maxLexiconSiz;
+        }
+      }
+
+      var deferred = Q.defer(),
+        self = this;
+
+      CORS.makeCORSRequest({
+        type: "GET",
+        url: url
+      }).then(function(results) {
+          // self.generatePrecedenceForceDirectedRulesJsonForD3(results.rows);
+          results.rows.map(function(row) {
+            self.add(row);
+          });
+          deferred.resolve(results.rows);
+        },
+        function(reason) {
+          deferred.reject(reason);
+        }).fail(function(error) {
+        console.error(error.stack, self);
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
     }
   },
 
@@ -790,7 +1001,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         prefs = {};
       }
       if (!prefs.showRelations) {
-        prefs.showRelations = ["preceeds"];
+        prefs.showRelations = ["precedes"];
       }
       if (!this.connectedGraph || !this.connectedGraph.links.length || !this.connectedGraph.nodes) {
         this.updateConnectedGraph(prefs);
@@ -814,9 +1025,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         return this;
       }
 
-      var width = element.clientWidth,
-        height = 600;
-
       if (!this.d3) {
         try {
           this.d3 = d3;
@@ -831,6 +1039,9 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         return this;
       }
       this.debug("Using element", element);
+
+      var width = element.clientWidth,
+        height = 600;
 
       var tooltip;
       if (!this.localDOM) {
@@ -1042,7 +1253,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           .on("tick", tick)
           .start();
       } catch (e) {
-        this.warn("The lexicon was able to start the connected graph. If you are in a Node.js environment, this is normal.\n", e.stack);
+        this.warn("\nThe lexicon was able to start the connected graph. If you are in a Node.js environment, this is normal.", e.stack);
       }
 
       return this;
@@ -1060,50 +1271,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
 var LexiconFactory = function(options) {
   // var lex = new Lexicon(null, Lexicon.prototype.fieldsEqual, Lexicon.prototype.fieldsCompare);
   var lex = new Lexicon();
-  lex.entryRelations = new UniqueSet();
-  lex.references = new UniqueSet();
-  if (options.entryRelations && options.entryRelations.length > 0) {
-    for (var i in options.entryRelations) {
-      if (!options.entryRelations[i] || !options.entryRelations[i].key || !options.entryRelations[i].key.previous || !options.entryRelations[i].key.subsequent) {
-        console.warn("Skipping malformed lexical node", options.entryRelations[i]);
-        continue;
-      }
-      try {
-        //Add source target and value to the link
-        delete options.entryRelations[i].key.previous.utterance;
-        delete options.entryRelations[i].key.subsequent.utterance;
-        options.entryRelations[i].key.utteranceContext = options.entryRelations[i].key.context.utterance;
-        options.entryRelations[i].key.datumid = options.entryRelations[i].id;
 
-        // Put the previous and subsequent morphemes into the morpheme nodes
-        // lex.add(options.entryRelations[i].key.context.utterance, new LexiconNode({
-        //   fields: options.entryRelations[i].key.previous
-        // }));
-        options.entryRelations[i].key.previous.datumids = [options.entryRelations[i].key.context.id];
-        options.entryRelations[i].key.previous.utteranceContext = [options.entryRelations[i].key.context.utterance];
-        options.entryRelations[i].key.previous.url = options.url;
-        lex.add(new LexiconNode(options.entryRelations[i].key.previous));
-
-        // lex.add(options.entryRelations[i].key.context.utterance, new LexiconNode({
-        //   fields: options.entryRelations[i].key.previous
-        // }));
-        options.entryRelations[i].key.subsequent.datumids = [options.entryRelations[i].key.context.id];
-        options.entryRelations[i].key.subsequent.utteranceContext = [options.entryRelations[i].key.context.utterance];
-        options.entryRelations[i].key.subsequent.url = options.url;
-        lex.add(new LexiconNode(options.entryRelations[i].key.subsequent));
-        lex.references.add(options.entryRelations[i].key.context.id);
-
-        //To avoid loops
-        if (options.entryRelations[i].key.subsequent.morphemes.indexOf("@") === -1) {
-          lex.entryRelations.add(options.entryRelations[i].key);
-        }
-
-      } catch (e) {
-        console.warn(" caught an error while building a lexical node ", e.stack);
-      }
-
-    }
-  }
   if (options.orthography || options.wordFrequencies) {
     if (options.nonContentWordsArray) {
       options.userSpecifiedNonContentWords = true;
@@ -1154,7 +1322,7 @@ var LexiconFactory = function(options) {
         console.warn("Ignoring lexical entry (lexicon has reached max size " + Lexicon.maxLexiconSize + ") ", word);
         continue;
       }
-      lex.add(new LexiconNode(word));
+      lex.add(new Lexicon.LexiconNode(word));
     }
   }
 
