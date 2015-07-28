@@ -1409,7 +1409,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             this.debug("after internal merge ", result);
             this.debug("after internal merge ", resultObject[aproperty]);
           } catch (e) {
-            console.warn("problem merging this " + aproperty, e);
+            console.warn("problem merging this " + aproperty, e.stack);
           }
           continue;
         }
@@ -1613,7 +1613,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
       if (!db) {
-        this.warn("Operations that need a database wont work for the " + this._id + " object");
+        this.warn("Operations that need a corpus/database wont work for the " + this._id + " object");
       }
 
       return db;
