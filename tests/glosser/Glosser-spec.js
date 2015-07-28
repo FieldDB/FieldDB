@@ -42,7 +42,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			"utterance": "maqutmg'p",
 			"confidence": 0.9000000000000000222
 		},
-		"relation": "preceeds",
+		"relation": "precedes",
 		"distance": 1,
 		"context": {
 			"utterance": "maqutmg'p",
@@ -67,7 +67,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				"utterance": "maqutmg'p",
 				"confidence": 0.9000000000000000222
 			},
-			"relation": "preceeds",
+			"relation": "precedes",
 			"distance": 1,
 			"context": {
 				"utterance": "maqutmg'p",

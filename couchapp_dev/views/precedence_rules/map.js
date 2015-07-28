@@ -43,7 +43,7 @@ function(doc) {
       for (var morph in morphemes) {
         var rule = {};
         rule.x = previousmorph;
-        rule.relation = "preceeds";
+        rule.relation = "precedes";
         rule.y = morphemes[morph];
         rule.context = word;
         emit(rule, 1);
