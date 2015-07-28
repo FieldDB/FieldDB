@@ -9,7 +9,6 @@ try {
 
 LanguageDatum = LanguageDatum || require("./../../api/datum/LanguageDatum").LanguageDatum;
 
-var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
 var mockCorpus = {
   updateDatumToCorpusFields: function(doc) {
