@@ -1,13 +1,11 @@
 var CORS = require("../CORS");
 var Q = require("q");
 var BASE_LEXICON_NODE = require("../datum/LanguageDatum").LanguageDatum;
-
+var DEFAULT_CORPUS = require("./../../api/corpus/corpus.json");
 
 var escapeRegexCharacters = function(regex) {
   return regex.replace(/([()[{*+.$^\\|?])/g, "\\$1");
 };
-
-
 
 /**
  * @class Lexicon Node is key value pair with an index of related datum. It allows the search to index
@@ -27,8 +25,8 @@ var LexiconNode = function(options) {
     this._fieldDBtype = "LexiconNode";
   }
   options = options || {};
-
-  BASE_LEXICON_NODE.call(this);
+  // this.debugMode = true;
+  BASE_LEXICON_NODE.apply(this, arguments);
 
   if (typeof this.toJSON === "function") {
     this.fossil = this.toJSON();
@@ -46,10 +44,85 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   constructor: {
     value: LexiconNode
   },
-  equals: {
-    value: function(b) {
-      var a = this;
-      var equal = false;
+
+  api: {
+    value: "lexicalNodes"
+  },
+
+  /**
+   *  Lexical entries/Nodes unique id is composed of their morphemes and gloss.
+   *  However, the user can edit the id/headword if there really are more
+   *  than one morpheme with the exact same morphemes and gloss combo.
+   * @return {[type]} [description]
+   */
+  id: {
+    get: function() {
+      return this.headword;
+    },
+    set: function(value) {
+      this.headword = value;
+    }
+  },
+
+  headword: {
+    get: function() {
+      if (!this._id) {
+        var constructHeadwordFromMorphemesAndGloss = "";
+        if (this.morphemes) {
+          constructHeadwordFromMorphemesAndGloss = this.morphemes;
+        }
+        constructHeadwordFromMorphemesAndGloss += "|";
+        if (this.gloss) {
+          constructHeadwordFromMorphemesAndGloss += this.gloss;
+        }
+        if (constructHeadwordFromMorphemesAndGloss) {
+          this._id = constructHeadwordFromMorphemesAndGloss;
+        }
+      }
+      return this._id;
+    },
+    set: function(value) {
+      this._id = value;
+    }
+  },
+
+  corpus: {
+    get: function() {
+      if (this.parent && this.parent.corpus) {
+        return this.parent.corpus;
+      }
+      if (this._corpus) {
+        return this._corpus;
+      }
+    },
+    set: function(value) {
+      if (this.parent) {
+        return;
+      }
+      this._corpus = value;
+    }
+  },
+
+  addField: {
+    value: function(field) {
+      if (!this.fields) {
+        if (!this.corpus || !this.corpus.datumFields || !this.corpus.datumFields.length) {
+          this.fields = JSON.parse(JSON.stringify(DEFAULT_CORPUS.datumFields));
+        }
+      }
+      return BASE_LEXICON_NODE.prototype.addField.apply(this, arguments);
+    }
+  },
+
+  uniqueEntriesOnHeadword: {
+    value: function(a, b) {
+      if (a && !b && this._fieldDBtype === "LexiconNode") {
+        a = this;
+        b = a;
+      }
+      // console.log(" checking headword equality ", a.headword, b.headword);
+
+      var equal = true;
       var fieldIndex,
         field,
         tmpArray;
@@ -59,12 +132,42 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
         return equal;
       }
 
+      if (a.headword !== b.headword) {
+        // console.log(" Head words dont match " + a.headword + " vs " + b.headword)
+        equal = false;
+        return equal;
+      }
+      return equal;
+    }
+  },
+
+  equalDepreated: {
+    value: function(b) {
+      console.log(" checking equality ", this.headword, b.headword);
+
+      var a = this;
+      var equal = true;
+      var fieldIndex,
+        field,
+        tmpArray;
+
+      if (!a || !b) {
+        equal = false;
+        return equal;
+      }
+
+      if (a.headword !== b.headword) {
+        equal = false;
+        return equal;
+      }
+
+      this.debug(" checking expandedIGTFields", this.expandedIGTFields);
       for (fieldIndex in this.expandedIGTFields) {
         field = this.expandedIGTFields[fieldIndex];
         if (a.hasOwnProperty(field)) {
-          // console.log(a);
-          if (a[field] === b[field]) {
-            equal = true;
+          this.debug(field);
+          if (a[field] !== b[field]) {
+            equal = false;
           }
         }
       }
@@ -107,30 +210,36 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
     value: ["datumids", "utteranceContext"]
   },
   sortBy: {
-    value: "morphemes",
+    value: "headword",
     writable: true
   },
+
   compare: {
-    value: function(b) {
-      var a = this;
+    value: function(a, b) {
+      if (a && !b && this._fieldDBtype === "LexiconNode") {
+        a = this;
+        b = a;
+      }
       var result = 0;
+      var sortBy = a.sortBy;
+
       if (!b || !b || !b[this.sortBy]) {
         return -1;
       }
       if (!a || !a || !a[this.sortBy]) {
         return 1;
       }
-      if ((typeof(a[this.sortBy]) === "number") && (typeof(b[this.sortBy]) === "number")) {
-        result = a[this.sortBy] - b[this.sortBy];
-      } else if ((typeof(a[this.sortBy]) === "string") && (typeof(b[this.sortBy]) === "string")) {
-        if (a[this.sortBy] < b[this.sortBy]) {
+      if ((typeof(a[sortBy]) === "number") && (typeof(b[sortBy]) === "number")) {
+        result = a[sortBy] - b[sortBy];
+      } else if ((typeof(a[sortBy]) === "string") && (typeof(b[sortBy]) === "string")) {
+        if (a[sortBy] < b[sortBy]) {
           result = -1;
-        } else if (a[this.sortBy] > b[this.sortBy]) {
+        } else if (a[sortBy] > b[sortBy]) {
           result = 1;
         } else {
-          result = 0;
+          result = 0; // Same, so cannot be both in the lexicon since they are the same
         }
-      } else if (typeof(a[this.sortBy]) === "string") {
+      } else if (typeof(a[sortBy]) === "string") {
         result = 1;
       } else {
         result = -1;
@@ -138,6 +247,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       return result;
     }
   },
+
   clean: {
     value: function() {
       // console.log("Preparing datum with this lexical entry to be cleaned...");
