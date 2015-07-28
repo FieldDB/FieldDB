@@ -121,11 +121,15 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         this.fields = [];
       }
       if (typeof field === "string") {
+        // this.fields.debugMode = true;
+        if (this.fields[field]) {
+          return this.fields[field];
+        }
         field = {
           id: field
         };
       }
-      this.fields.add(field);
+      return this.fields.add(field);
     }
   },
 
