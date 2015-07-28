@@ -99,11 +99,17 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
     }
   },
 
+  /**
+   * Morphemes of the datum, if morphemes is empty it will provide the utterance
+   * or the orthography as a last resort copy
+   * 
+   * @return {[type]} [description]
+   */
   morphemes: {
     configurable: true,
     get: function() {
       if (this.fields && this.fields.morphemes) {
-        return this.fields.morphemes.value;
+        return this.fields.morphemes.value || this.utterance || this.orthography || FieldDBObject.DEFAULT_STRING;
       } else {
         return FieldDBObject.DEFAULT_STRING;
       }
