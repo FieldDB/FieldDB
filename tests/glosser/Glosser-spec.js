@@ -513,16 +513,19 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(virtualElement).toBeDefined();
 			});
 
-			it("should be able to use an injected d3 if a lexicon with precedenceRelations is defined", function() {
+			it("should be able to use an injected d3 if a lexicon with entryRelations is defined", function() {
 				var glosser = new Glosser({
 					lexicon: JSON.parse(JSON.stringify(tinyLexicon))
 				});
-				glosser.lexicon.precedenceRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
+				glosser.lexicon.entryRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
 				glosser.lexicon.d3 = optionalD3;
 				glosser.lexicon.localDOM = virtualDOM;
 
+				expect(glosser.lexicon.length).toEqual(2);
+				expect(glosser.lexicon.collection.length).toEqual(2);
+
 				expect(glosser.lexicon).toBeDefined();
-				expect(glosser.lexicon.precedenceRelations).toBeDefined();
+				expect(glosser.lexicon.entryRelations).toBeDefined();
 				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
 				expect(glosser.render({
@@ -560,7 +563,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			var glosser = new Glosser({
 				lexicon: JSON.parse(JSON.stringify(tinyLexicon))
 			});
-			glosser.lexicon.precedenceRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
+			glosser.lexicon.entryRelations = tinyPrecedenceRelationsFromCouchDBMapReduce;
 
 			expect(glosser.lexicon.d3).toBeUndefined();
 			expect(glosser.render()).toEqual(glosser);
@@ -631,7 +634,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		it("should be backward compatible with spreadsheet app", function() {
 			var glosser = new Glosser();
 
-			// .downloadPrecedenceRules(dbname, optionalUrl, function(precedenceRelations) {})
+			// .downloadPrecedenceRules(dbname, optionalUrl, function(entryRelations) {})
 			expect(typeof glosser.downloadPrecedenceRules).toEqual("function");
 
 			// .guessMorphemesFromUtterance(tempDatum, !$scope.useAutoGlosser);

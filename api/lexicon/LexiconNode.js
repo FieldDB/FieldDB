@@ -24,7 +24,6 @@ var LexiconNode = function(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "LexiconNode";
   }
-  options = options || {};
   // this.debugMode = true;
   BASE_LEXICON_NODE.apply(this, arguments);
 
@@ -83,6 +82,33 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
     },
     set: function(value) {
       this._id = value;
+    }
+  },
+
+  count: {
+    get: function() {
+      return this._count || 0;
+    },
+    set: function(value) {
+      this._count = value;
+    }
+  },
+
+  categories: {
+    get: function() {
+      return this.syntacticCategory.split(/\s+/);
+    },
+    set: function(value) {
+      this.syntacticCategory = value.join(" ");
+    }
+  },
+  
+  datumids: {
+    get: function() {
+      return this.relatedData;
+    },
+    set: function(value) {
+      this.relatedData = value;
     }
   },
 

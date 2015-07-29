@@ -1,21 +1,20 @@
 try {
   var ObservableDOM = require("frb/dom"); // add support for content editable
 } catch (e) {
-  console.warn("Warning contentEditable won't work because : \n", e, "\n\n");
+  console.warn("Warning contentEditable binding in the lexicon won't work because the document is probably not defined.");
 }
 
 var Bindings = require("frb/bindings");
-var SortedSet = require("collections/sorted-set");
-var UniqueSet = require("collections/set");
-var CORS = require("../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
+var Collection = require("../Collection").Collection;
+// var CORS = require("../CORS").CORS;
+var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
 var LEXICON_NODES_MAP_REDUCE = {
-  filename: "morphemesPrecedenceContext",
+  filename: "lexiconNodes",
   map: null,
   reduce: null,
   rows: [],
@@ -27,7 +26,7 @@ var LEXICON_NODES_MAP_REDUCE = {
   }
 };
 try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/lexiconNodes/map").lexiconNodes;
   var emit = LEXICON_NODES_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
   eval("LEXICON_NODES_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
@@ -65,7 +64,6 @@ try {
   };
 }
 
-
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
  *        their allomorphs and glosses. It allows the search to index
@@ -76,169 +74,93 @@ try {
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
  *
  *
- * @extends SortedSet
+ * @extends Collection
  *
  * @constructs
  *
  */
 
 var Lexicon = function(options) {
-  options = options || {};
-  var entries = [];
-  var equals;
-  var compare;
-  var getDefault = options.getDefault;
-
-  if (!this.fieldDBtype) {
-    this.fieldDBtype = "Lexicon";
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "Lexicon";
   }
-  /* Treat the options in a fielddb way so they dont get added to the SortedSet directly */
+  options = options || [];
+
+  /* Treat the options in a fielddb way so they dont get added to the Collection directly */
   if (options && (Object.prototype.toString.call(options) === "[object Array]" || options.rows)) {
-    if ((options.rows && options.rows[0] && options.rows[0].key && options.rows[0].key.relation) || options[0].relation || (options[0].key && options[0].key.relation)) {
-      this.warn("constructing a lexicon from a set of connected nodes");
-      // this.entryRelations = options;
-      var entryRelations = options.rows || options;
-      this.entryRelations = entryRelations;
-      // this.entryRelations = new UniqueSet();
-      this.references = new UniqueSet();
-      // this.updateConnectedGraph(entryRelations);
-
-    } else {
-      this.debug("constructing a lexicon from nodes", options);
-      entries = options;
-    }
-  } else if (options && typeof options === "object") {
-
-    if (options.equals && typeof options.equals === "function") {
-      equals = options.equals;
-      this.warn("using equals from options " + equals);
-      delete options.equals;
-    }
-    /* If options was an object then use the equals and compares functions (only do this if it was an object because collections is extending the prototype of Array)
-
-      TODO collections is extending the prototoype of arrays!!!!
-      TypeError: undefined is not a function
-      at Function.Array.unzip (/Users/gina/fielddbhome/FieldDB/node_modules/collections/shim-array.js:38:24)
-      at GenericCollection.zip (/Users/gina/fielddbhome/FieldDB/node_modules/collections/generic-collection.js:206:18)
-      at GenericOrder.compare (/Users/gina/fielddbhome/FieldDB/node_modules/collections/generic-order.js:39:27)
-      at null.contentCompare (/Users/gina/fielddbhome/FieldDB/node_modules/collections/shim-array.js:254:47)
-      at SortedSet.splay (/Users/gina/fielddbhome/FieldDB/node_modules/collections/sorted-set.js:377:31)
-      at SortedSet.add (/Users/gina/fielddbhome/FieldDB/node_modules/collections/sorted-set.js:71:14)
-      at Object.create.add.value [as add] (/Users/gina/fielddbhome/FieldDB/api/lexicon/Lexicon.js:621:31)
-    */
-    if (options.compare && typeof options.compare === "function") {
-      compare = options.compare;
-      this.warn("using compare from options " + compare);
-      delete options.compare;
-    }
-
-    this.debug("constructing a lexicon from an object", options);
-    for (var property in options) {
-      if (options.hasOwnProperty(property)) {
-        if (property === "collection" || property === "entries" || property === "nodes") {
-          entries = entries.concat(entries, options[property]);
-          this.debug("adding ", entries);
-        } else {
-          this[property] = options[property];
-        }
+    if ((options.rows && options.rows[0] && options.rows[0].key && options.rows[0].key.relation) ||
+      (options[0] &&
+        (options[0].relation || (options[0].key && options[0].key.relation))
+      )) {
+      if (options.rows) {
+        options.entryRelations = options.rows;
+      } else {
+        options = {
+          entryRelations: options
+        };
       }
-    }
-  }
-
-  /** Ensure equals and compare are set to LexiconNode compare if they were not injected */
-  if (!equals || typeof equals !== "function") {
-    if (typeof Lexicon.LexiconNode.prototype.uniqueEntriesOnHeadword === "function") {
-      equals = Lexicon.LexiconNode.prototype.uniqueEntriesOnHeadword;
-      this.debug("using uniqueEntriesOnHeadword as equals for the lexicon" + equals);
+      this.debug("constructing a lexicon from a set of connected nodes " + options.entryRelations.length);
     } else {
-      this.warn("using nothing for equals" + equals);
+      // The array passed in is the actional nodes 
+      options = {
+        collection: options
+      };
+      this.debug("constructing a lexicon from a set of nodes " + options.collection.length);
+    }
+  } else {
+    options.collection = options.collection || options.wordFrequencies || [];
+    if (options.orthography && (!options.collection || options.collection.length === 0) && typeof Lexicon.bootstrapLexicon === "function") {
+      this.warn("constructing a lexicon from an orthography");
+      Lexicon.bootstrapLexicon(options);
     }
   }
-  if (!compare || typeof compare !== "function") {
-    if (typeof Lexicon.LexiconNode.prototype.compare === "function") {
-      compare = Lexicon.LexiconNode.prototype.compare;
-      this.debug("using LexiconNode.prototype.compare as compare for the lexicon" + compare);
-    } else {
-      this.warn("using nothing for compare" + compare);
-    }
-  }
 
-
-  this.debug("\tConstructing Lexicon... ", [], equals, compare, options.getDefault);
-  // SortedSet.apply(this, [options, equals, compare, getDefault]);
-  SortedSet.apply(this, [
-    [], equals, compare, options.getDefault
-  ]);
-
-
-  if (!this.contentCompare || this.contentCompare !== compare) {
-    this.bug(" Setting the contentCompare didnt work.");
-    this.contentCompare = compare;
-  }
-  if (this.contentEquals !== equals) {
-    this.bug(" Setting the contentCompare didnt work.");
-    this.contentEquals = equals;
-  }
-  if (entries && entries.length) {
-    this.add(entries);
+  this.debug("constructing a lexicon from options ");
+  Collection.apply(this, arguments);
+  if (this.entryRelations) {
+    this.debug("constructing a graph from lexicon's relations", options);
+    this.updateConnectedGraph();
   }
 };
 
-Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.prototype */ {
+
+Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.prototype */ {
   constructor: {
     value: Lexicon
   },
 
-  debug: {
-    value: function() {
-      try {
-        return FieldDB.FieldDBObject.prototype.debug.apply(this, arguments);
-      } catch (e) {
-        // console.log("Showing developer ", arguments);
-      }
-    }
+  primaryKey: {
+    value: "headword"
   },
-  bug: {
-    value: function() {
-      try {
-        return FieldDB.FieldDBObject.prototype.bug.apply(this, arguments);
-      } catch (e) {
-        console.warn("Not telling user about a bug ", arguments);
-      }
-    }
-  },
-  popup: {
-    value: function() {
-      try {
-        return FieldDB.FieldDBObject.popup.apply(this, arguments);
-      } catch (e) {
-        console.warn("Not telling user about a popup ", arguments);
-      }
-    }
-  },
-  confirm: {
-    value: function() {
-      try {
-        return FieldDB.FieldDBObject.prototype.confirm.apply(this, arguments);
-      } catch (e) {
-        console.warn("Not asking user about ", arguments);
-      }
-    }
-  },
-  warn: {
-    value: function(message) {
 
-      try {
-        return FieldDB.FieldDBObject.prototype.warn.apply(this, arguments);
-      } catch (e) {
-        if (this.warnMessage) {
-          this.warnMessage += ";;; ";
-        } else {
-          this.warnMessage = "";
-        }
-        this.warnMessage = this.warnMessage + message;
-        console.warn("Not warning user about ", arguments);
+  INTERNAL_MODELS: {
+    value: {
+      item: LexiconNode
+    }
+  },
+
+  capitalizeFirstCharacterOfPrimaryKeys: {
+    value: false
+  },
+
+  /**
+   *  Cleans a value to become a primary key on an object (replaces punctuation with underscore)
+   *  (replaces the default Collection.sanitizeStringForPrimaryKey method which scrubs unicode from the primary keys)
+   *
+   * @param  String value the potential primary key to be cleaned
+   * @return String       the value cleaned and safe as a primary key
+   */
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      this.debug("sanitizeStringForPrimaryKey");
+      if (!value) {
+        return null;
       }
+      if (typeof value.replace !== "function") {
+        value = value + "";
+      }
+      value = value.replace(/[-""+=?./\[\]{}() ]/g, "");
+      return value;
     }
   },
 
@@ -529,12 +451,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
     }
   },
 
-  toJSON: {
-    value: function() {
-      return JSON.stringify(this.toObject(), null, 2);
-    }
-  },
-
   entryRelations: {
     get: function() {
       return this._entryRelations;
@@ -607,50 +523,6 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
   },
 
   /**
-   * Finds a node in the lexicon
-   *
-   * @param  {Object} value either an Object or Lexicon.LexiconNode
-   * @return {Array}       returns a reference to the found item(s)
-   */
-  find: {
-    value: function(value) {
-      if (!(value instanceof Lexicon.LexiconNode)) {
-        value = new Lexicon.LexiconNode(value);
-      }
-      var result = SortedSet.prototype.find.apply(this, arguments);
-      if (result) {
-        this.debug("found a matching lexial entry", result.headword);
-        return result.value;
-      } else {
-        this.debug("didnt find a matching lexial entry", value.headword);
-      }
-    }
-  },
-
-  /**
-   * Adds to the lexicon
-   *
-   * @param  {Object} value a simple object, and/or  an array of objects or items either Objects or Lexicon.LexiconNodes
-   * @return {Array}       returns a reference to the added item(s)
-   */
-  add: {
-    value: function(value) {
-      if (value && Object.prototype.toString.call(value) === "[object Array]") {
-        for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
-          value[itemIndex] = this.add(value[itemIndex]);
-        }
-        return value;
-      }
-      if (!(value instanceof Lexicon.LexiconNode)) {
-        value = new Lexicon.LexiconNode(value);
-        value.parent = this;
-      }
-      SortedSet.prototype.add.apply(this, arguments);
-      return value;
-    }
-  },
-
-  /**
    *  Adds a node to the lexicon, if an equivalent node (as defined by the equals function) 
    *  is found, it merges the new one into the existing one.
    *  
@@ -659,19 +531,27 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
    */
   addOrMerge: {
     value: function(value) {
+      if (!value) {
+        return value;
+      }
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
         for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
           value[itemIndex] = this.addOrMerge(value[itemIndex]);
         }
         return value;
       }
-      this.debug("running addOrMerge", value);
+
+      this.debug("running addOrMerge", value.headword);
       var existingInLexicon = this.find(value);
-      if (existingInLexicon) {
-        this.warn("Merging a simlar entry into the existing entry in the lexicon", existingInLexicon, value);
+      if (existingInLexicon && existingInLexicon.length) {
+        existingInLexicon = existingInLexicon[0];
+        this.debug("Merging a simlar entry into the existing entry in the lexicon " + existingInLexicon.headword + " " + value.headword);
         existingInLexicon.merge("self", value);
         value = existingInLexicon;
       } else {
+        if (!(value instanceof Lexicon.LexiconNode)) {
+          value = new Lexicon.LexiconNode(value);
+        }
         value = this.add(value);
         this.debug("Added value " + value.headword);
       }
@@ -720,8 +600,8 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         }
         try {
           var connectionEdge = entryRelation.key || entryRelation;
-          var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous;
-          var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent;
+          var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous || connectionEdge.x;
+          var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent || connectionEdge.y;
           var datumid = entryRelation.id || "";
           var context = connectionEdge.context;
           if (typeof context === "string") {
@@ -731,14 +611,24 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
             };
           }
           if (!context.id) {
-            this.warn("Cant figure out the id(s) of where this node might have come from");
+            self.debug("Cant figure out the id(s) of where this node might have come from");
+          }
+
+          if (!(from instanceof Lexicon.LexiconNode)) {
+            from = new Lexicon.LexiconNode(from);
+            self.debug("Converted from into a lexicon node", from.headword);
+          }
+
+          if (!(to instanceof Lexicon.LexiconNode)) {
+            to = new Lexicon.LexiconNode(to);
+            self.debug("Converted to into a lexicon node", to.headword);
           }
 
           connectionEdge.frequencyCount = connectionEdge.value || entryRelation.key ? entryRelation.key.count : null;
           self.debug("Adding ", connectionEdge, " to connected graph");
 
           if (!from || !to) {
-            self.warn("Missing either a `from` or `to` ", connectionEdge);
+            self.warn("Missing either a `from` or `to` ", from, to);
             return;
           }
 
@@ -762,25 +652,15 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
             to.morphemes = "_#";
           }
 
-          if (!(from instanceof Lexicon.LexiconNode)) {
-            from = new Lexicon.LexiconNode(from);
-            self.debug("Converted from into a lexicon node", from.headword);
-          }
-
-          if (!(to instanceof Lexicon.LexiconNode)) {
-            to = new Lexicon.LexiconNode(to);
-            self.debug("Converted to into a lexicon node", to.headword);
-          }
-
           if (!from.morphemes || !to.morphemes) {
-            self.warn("Missing morphemes on the nodes, this relation cant be added to the graph ", connectionEdge);
+            self.warn("Missing morphemes on the nodes, this relation cant be added to the graph ", from, to);
             return;
           }
 
           // use bigrams unless otherwise specified
           if ((!prefs.maxDistanceForContext && connectionEdge.distance > 1) ||
             (prefs.maxDistanceForContext & connectionEdge.distance > prefs.maxDistanceForContext)) {
-            self.warn("Skipping distantly related nodes ", connectionEdge.distance);
+            self.debug("Skipping distantly related nodes " + connectionEdge.distance);
             return;
           }
           // visualize only precedes connectionEdges unless otherwise specified
@@ -840,8 +720,10 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           if (!self.connectedGraph.nodes[from.headword]) {
             self.connectedGraph.nodes[from.headword] = from;
           } else {
-            self.warn(from.morphemes + " was already defined. merging with this node");
-            self.connectedGraph.nodes[from.headword].merge("self", from);
+            if (self.connectedGraph.nodes[from.headword] !== from) {
+              self.warn(from.morphemes + " was already defined. merging with this node " + from.headword);
+              self.connectedGraph.nodes[from.headword].merge("self", from);
+            }
           }
           from = self.connectedGraph.nodes[from.headword];
 
@@ -849,8 +731,10 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           if (!self.connectedGraph.nodes[to.headword]) {
             self.connectedGraph.nodes[to.headword] = to;
           } else {
-            self.warn(to.morphemes + " was already defined. merging with this node");
-            self.connectedGraph.nodes[to.headword].merge("self", to);
+            if (self.connectedGraph.nodes[to.headword] !== to) {
+              self.warn(to.morphemes + " was already defined. merging with this node");
+              self.connectedGraph.nodes[to.headword].merge("self", to);
+            }
           }
           to = self.connectedGraph.nodes[to.headword];
 
@@ -869,7 +753,7 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
           self.connectedGraph[connectionEdge.relation].push(connectionEdge);
 
         } catch (exception) {
-          this.warn("Skipping relation because of an error"+ exception , exception.stack, entryRelation);
+          self.warn("Skipping relation because of an error" + exception, exception.stack, entryRelation);
         }
       });
 
@@ -930,10 +814,8 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
         url: url
       }).then(function(results) {
           // self.generatePrecedenceForceDirectedRulesJsonForD3(results.rows);
-          results.rows.map(function(row) {
-            self.add(row);
-          });
-          deferred.resolve(results.rows);
+          self.add(results.row);
+          deferred.resolve(lexicon.collection);
         },
         function(reason) {
           deferred.reject(reason);
@@ -1264,76 +1146,46 @@ Lexicon.prototype = Object.create(SortedSet.prototype, /** @lends Lexicon.protot
 });
 
 /**
+ * [lexicon_nodes_mapReduce description]
+ * @type {Function}
+ */
+Lexicon.lexicon_nodes_mapReduce = function(doc, emit, rows) {
+  rows = rows || [];
+  if (!emit) {
+    emit = function(key, value) {
+      rows.push({
+        key: key,
+        value: value
+      });
+    };
+  }
+
+  try {
+    // ugly way to make sure references to 'emit' in map/reduce bind to the
+    // above emit at run time
+    eval("LEXICON_NODES_MAP_REDUCE.map = " + LEXICON_NODES_MAP_REDUCE.map.toString() + ";");
+  } catch (e) {
+    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for LEXICON_NODES_MAP_REDUCE");
+  }
+
+  LEXICON_NODES_MAP_REDUCE.map(doc);
+  return {
+    rows: rows
+  };
+};
+
+/**
  * Constructs a lexicon given an input of precedenceRules or an orthography
  *
  * @param {[type]} options [description]
  */
 var LexiconFactory = function(options) {
-  // var lex = new Lexicon(null, Lexicon.prototype.fieldsEqual, Lexicon.prototype.fieldsCompare);
-  var lex = new Lexicon();
-
-  if (options.orthography || options.wordFrequencies) {
-    if (options.nonContentWordsArray) {
-      options.userSpecifiedNonContentWords = true;
-      if (Object.prototype.toString.call(options.nonContentWordsArray) === "[object Array]" && options.nonContentWordsArray.length === 0) {
-        options.userSpecifiedNonContentWords = false;
-        // console.log("User sent an empty array of non content words, attempting to automatically detect them");
-      }
-      // else if (options.nonContentWordsArray.trim && !options.nonContentWordsArray.trim()) {
-      //   options.userSpecifiedNonContentWords = false;
-      // }
-    }
-    if (options.orthography && (!options.wordFrequencies || options.wordFrequencies.length === 0) && typeof Lexicon.bootstrapLexicon === "function") {
-      Lexicon.bootstrapLexicon(options);
-    }
-    options.wordFrequencies = options.wordFrequencies || [];
-
-    for (var wordIndex in options.wordFrequencies) {
-      if (!options.wordFrequencies.hasOwnProperty(wordIndex)) {
-        continue;
-      }
-      var word = options.wordFrequencies[wordIndex];
-      if (typeof word === "string") {
-        word = {
-          orthography: word
-        };
-      }
-      /* accept Datum as words */
-      if (!word && word) {
-        word = word;
-      }
-      if (!word) {
-        word = {};
-      }
-      if (word.orthography && !word.orthography) {
-        word.orthography = word.orthography;
-        delete word.orthography;
-      }
-      word.count = word.count || 0;
-      word.categories = word.categories || [];
-      word.datumids = word.datumids || word.docids || [];
-      if (options._id) {
-        word.datumids.push(options._id);
-      }
-      if (options.url) {
-        word.url = options.url;
-      }
-      if (lex.length > Lexicon.maxLexiconSize) {
-        console.warn("Ignoring lexical entry (lexicon has reached max size " + Lexicon.maxLexiconSize + ") ", word);
-        continue;
-      }
-      lex.add(new Lexicon.LexiconNode(word));
-    }
-  }
-
-  for (var property in options) {
-    if (options.hasOwnProperty(property)) {
-      lex[property] = options[property];
-    }
-  }
+  var lex = new Lexicon(options);
+  console.warn(" LexiconFactory is deprecated");
   return lex;
 };
 
+Lexicon.bootstrapLexicon = Lexicon.lexicon_nodes_mapReduce;
 Lexicon.LexiconNode = LexiconNode;
 Lexicon.LexiconFactory = LexiconFactory;
 Lexicon.maxLexiconSize = 1000;
