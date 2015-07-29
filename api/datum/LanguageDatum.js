@@ -56,8 +56,14 @@ var LanguageDatum = function LanguageDatum(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "LanguageDatum";
   }
+  if (options && typeof options === "string") {
+    this.debug("Turning LanguageDatum " + options + " to an object");
+    options = {
+      orthography: options
+    };
+  }
   this.debug("Constructing LanguageDatum: ", options);
-  Datum.apply(this, arguments);
+  Datum.apply(this, [options]);
 };
 
 LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatum.prototype */ {
