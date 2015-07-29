@@ -2,6 +2,16 @@ var Lexicon = require("../../api/lexicon/Lexicon").Lexicon;
 var LexiconNode = Lexicon.LexiconNode;
 var lexiconFactory = Lexicon.LexiconFactory;
 
+var memoryLoad;
+try {
+  memoryLoad = require("memory");
+} catch (exception) {
+  console.log("Cant automate tests for memory heap changes");
+  memoryLoad = function() {
+    return 0;
+  };
+}
+
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
 var SAMPLE_V1_LEXICON = SAMPLE_LEXICONS[0];
 var SAMPLE_V2_LEXICON = SAMPLE_LEXICONS[1];
@@ -9,7 +19,8 @@ var SAMPLE_V3_LEXICON = SAMPLE_LEXICONS[2];
 var specIsRunningTooLong = 5000;
 
 var mockCorpus = {
-  dbname: "jenkins-firstcorpus"
+  dbname: "jenkins-firstcorpus",
+  url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
 };
 var tinyPrecedenceRelations = [{
   "previous": {
@@ -73,16 +84,22 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         morphemes: "kya",
         gloss: "what"
       });
-      var which = new LexiconNode({
-        corpus: mockCorpus,
-        morphemes: "kya",
-        gloss: "which"
-      });
       expect(what).toBeDefined();
       expect(what.morphemes).toEqual("kya");
       expect(what.gloss).toEqual("what");
       expect(what.id).toEqual("kya|what");
       expect(what.headword).toEqual(what.id);
+
+      var which = new LexiconNode({
+        corpus: mockCorpus,
+        morphemes: "kya",
+        gloss: "which"
+      });
+      expect(which).toBeDefined();
+      expect(which.morphemes).toEqual("kya");
+      expect(which.gloss).toEqual("which");
+      expect(which.id).toEqual("kya|which");
+      expect(which.headword).toEqual(which.id);
     });
 
   });
@@ -108,10 +125,28 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         gloss: "two"
       }]);
       expect(lexicon).toBeDefined();
+      expect(lexicon.collection.length).toEqual(2);
       expect(lexicon.length).toEqual(2);
     });
 
     it("should accept options", function() {
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        something: "else",
+        collection: [{
+          morphemes: "one",
+          gloss: "one"
+        }, {
+          morphemes: "two",
+          gloss: "two"
+        }]
+      });
+      expect(lexicon).toBeDefined();
+      expect(lexicon.length).toEqual(2);
+      expect(lexicon.something).toEqual("else");
+    });
+
+    it("should accept an orthography and lexicon bootstraping function", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus,
         something: "else",
@@ -142,64 +177,51 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
       expect(lexicon).toBeDefined();
       expect(lexicon.length).toEqual(2);
-      expect(lexicon.root.value.parent).toEqual(lexicon);
-      expect(lexicon.root.value.corpus).toEqual(mockCorpus);
-    });
-
-    it("should accept an equality function for keeping nodes unique", function() {
-      var everythingIsEqualLexicon = new Lexicon({
-        corpus: mockCorpus,
-        collection: [{
-          morphemes: "one",
-          gloss: "one"
-        }, {
-          morphemes: "different",
-          gloss: "completely"
-        }],
-        equals: function(a, b) {
-          this.warn("custom equal")
-          return true;
-        }
-      });
-      expect(everythingIsEqualLexicon).toBeDefined();
-      expect(everythingIsEqualLexicon.length).toEqual(1);
-
-      var fromTheLexicon = everythingIsEqualLexicon.find({
-        morphemes: "one",
-        gloss: "one"
-      });
-
-      expect(fromTheLexicon.morphemes).toEqual("one");
-      expect(fromTheLexicon.id).toEqual("one|one");
-      expect(fromTheLexicon.fieldDBtype).toEqual("LexiconNode");
-
-      expect(everythingIsEqualLexicon.find({
-        morphemes: "different",
-        gloss: "completely"
-      }).morphemes).toEqual("one");
-
-      var everythingIsDifferentLexicon = new Lexicon({
-        collection: [{
-          morphemes: "one",
-          gloss: "one"
-        }, {
-          morphemes: "one",
-          gloss: "one"
-        }],
-        equals: function(a, b) {
-          this.warn("custom equal")
-          return false;
-        },
-        compare: function(a, b) {
-          this.warn("custom compare")
-          return 1;
-        }
-      });
-      expect(everythingIsDifferentLexicon.length).toEqual(2);
+      expect(lexicon.collection[0].parent).toEqual(lexicon);
+      expect(lexicon.collection[0].corpus).toEqual(mockCorpus);
     });
 
   });
 
+  describe("map reduces", function() {
+
+    it("should accept custom emit function and rows holder", function() {
+      var rows = ["some previous stuff"];
+      var emit = function(key, value) {
+        rows.push({
+          key: key,
+          value: value
+        });
+      };
+
+      var result = Lexicon.lexicon_nodes_mapReduce({
+        _id: "8h329983jr200023j20",
+        session: {
+         _id: "98jo3io2qjoiwjesoij32",
+          sessionFields: []
+        },
+        fields: [{
+          id: "utterance",
+          mask: "Qaynap'unchaw lloqsinaywaran khunan p'unchaw(paq)"
+        }, {
+          id: "morphemes",
+          mask: "qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw(paq)"
+        }, {
+          id: "gloss",
+          mask: "Yesterday go.out-DES-1OM-3SG now day.for"
+        }, {
+          id: "translation",
+          mask: "`Yesterday, I felt like going out for today.'"
+        }]
+      }, emit, rows);
+      expect(result).toBeDefined();
+      expect(result.rows).toBe(rows);
+      expect(result).toEqual({
+        rows: ["some previous stuff"]
+      });
+    });
+
+  });
 
   describe("entries", function() {
 
@@ -272,11 +294,15 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(simpleEntry.headword).toEqual("kjun|why");
       expect(simpleEntry.parent).toEqual(lexicon);
       expect(typeof lexicon.find).toEqual("function");
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["kjun|why"]);
 
       // must runfind on exact node
-      var nodeInLexicon = lexicon.find(simpleEntry);
-      expect(nodeInLexicon.morphemes).toEqual("kjun");
-      expect(nodeInLexicon.gloss).toEqual("why");
+      var nodesInLexicon = lexicon.find(simpleEntry);
+      expect(nodesInLexicon.length).toEqual(1);
+      expect(nodesInLexicon[0].morphemes).toEqual("kjun");
+      expect(nodesInLexicon[0].gloss).toEqual("why");
     });
 
     it("should be able to find multiple matching lexical entries", function() {
@@ -293,36 +319,38 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
       lexiconJson = lexicon.add(lexiconJson);
       expect(lexicon.length).toEqual(2);
-      expect(lexicon.root.value.headword).toEqual("kjjun|because");
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["kju3n|why", "kjjun|because"]);
+
+      expect(lexicon.collection[1].headword).toEqual("kjjun|because");
 
       expect(typeof lexicon.find).toEqual("function");
-
-      var nodesInLexiconFromSimpleObject = lexicon.find(lexiconJson[1]);
-      expect(nodesInLexiconFromSimpleObject).toBeDefined();
-      expect(nodesInLexiconFromSimpleObject.headword).toEqual("kjjun|because");
-      expect(nodesInLexiconFromSimpleObject.morphemes).toEqual("kjjun");
-      expect(nodesInLexiconFromSimpleObject.gloss).toEqual("because");
-
-      nodesInLexiconFromSimpleObject = lexicon.find({
+      var nodesInLexiconFromSimpleObject = lexicon.find({
         morphemes: "kjjun",
         gloss: "because",
-        debugMode: true
       });
       expect(nodesInLexiconFromSimpleObject).toBeDefined();
-      expect(nodesInLexiconFromSimpleObject.headword).toEqual("kjjun|because");
-      expect(nodesInLexiconFromSimpleObject.morphemes).toEqual("kjjun");
-      expect(nodesInLexiconFromSimpleObject.gloss).toEqual("because");
+      expect(nodesInLexiconFromSimpleObject.length).toEqual(2);
+      expect(nodesInLexiconFromSimpleObject.map(function(node) {
+        return node.id;
+      })).toEqual(["kjjun|because"]);
 
-      var nodesInLexiconFromHeadword = new Lexicon.LexiconNode({
-        headword: "kjjun|because"
-      });
-      expect(nodesInLexiconFromHeadword.headword).toEqual("kjjun|because");
-      lexicon.contentEquals = Lexicon.LexiconNode.prototype.uniqueEntriesOnHeadword;
+      expect(nodesInLexiconFromSimpleObject[0]).toBeDefined();
+      expect(nodesInLexiconFromSimpleObject[0].headword).toEqual("kjjun|because");
+      expect(nodesInLexiconFromSimpleObject[0].morphemes).toEqual("kjjun");
+      expect(nodesInLexiconFromSimpleObject[0].gloss).toEqual("because");
 
-      nodesInLexiconFromHeadword = lexicon.find(nodesInLexiconFromHeadword);
+      var nodesInLexiconFromHeadword = lexicon.find("kjjun|because");
       expect(nodesInLexiconFromHeadword).toBeDefined();
-      expect(nodesInLexiconFromHeadword.morphemes).toEqual("kjjun");
-      expect(nodesInLexiconFromHeadword.gloss).toEqual("because");
+      expect(nodesInLexiconFromSimpleObject.map(function(node) {
+        return node.id;
+      })).toEqual(["kjjun|because"]);
+
+      expect(nodesInLexiconFromSimpleObject.length).toEqual(1);
+      expect(nodesInLexiconFromSimpleObject[0]).toBeDefined();
+      expect(nodesInLexiconFromHeadword[0].morphemes).toEqual("kjjun");
+      expect(nodesInLexiconFromHeadword[0].gloss).toEqual("because");
     });
 
   });
@@ -336,12 +364,13 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.corpus.dbname).toEqual("jenkins-firstcorpus");
 
       lexicon.fetch().then(function(results) {
+        expect(results).toBe(lexicon.collection);
         expect(lexicon.length).toBeGreaterThan(0);
         expect(lexicon.length).toEqual(14);
 
 
       }, function(reason) {
-        console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS")
+        console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
         expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -367,6 +396,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(graph).toBe(lexicon.connectedGraph);
 
       expect(lexicon.entryRelations.length).toEqual(1);
+      expect(lexicon.connectedGraph).toBeDefined();
       expect(lexicon.connectedGraph.precedes.length).toEqual(1);
       expect(lexicon.connectedGraph.nodes).toBeDefined();
       // expect(lexicon.connectedGraph.nodes).toEqual(" ");
@@ -376,26 +406,25 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.connectedGraph.nodes["g|past"].confidence).toEqual(0.9);
 
       expect(lexicon.length).toEqual(2);
-      expect(lexicon.root.value).toBe(gpast);
+      expect(lexicon.collection[1]).toBe(gpast);
       expect(lexicon.find({
         morphemes: "g",
         gloss: "past"
-      })).toBe(gpast);
+      })[0]).toBe(gpast);
 
       expect(lexicon.find({
         morphemes: "g",
         gloss: "past"
-      }).confidence).toEqual(0.9);
+      })[0].confidence).toEqual(0.9);
 
-      lexicon.delete(gpast);
-      expect(lexicon.root.value).toBe(tmvti);
-      expect(lexicon.root.value.headword).toEqual("tm|vti");
-      expect(lexicon.root.value.morphemes).toEqual("tm");
-      expect(lexicon.root.value.gloss).toEqual("vti");
+      expect(lexicon.collection[0]).toBe(tmvti);
+      expect(lexicon.collection[0].headword).toEqual("tm|vti");
+      expect(lexicon.collection[0].morphemes).toEqual("tm");
+      expect(lexicon.collection[0].gloss).toEqual("vti");
 
       expect(lexicon.find({
         headword: "tm|vti"
-      })).toEqual(tmvti);
+      })[0]).toEqual(tmvti);
 
     });
 
@@ -408,7 +437,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       lexicon.updateConnectedGraph();
       expect(lexicon.entryRelations).toBeDefined();
       expect(lexicon.entryRelations.length).toEqual(447);
-      expect(lexicon.length).toEqual(56);
+      expect(lexicon.length).toEqual(45);
     });
 
   });
@@ -432,18 +461,104 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         morphemes: "one"
       });
       expect(one).toBeDefined();
-      expect(one.morphemes).toEqual("one");
-      expect(one.something).toEqual("else");
-      expect(one.another).toEqual("property");
+      expect(one[0].morphemes).toEqual("one");
+      expect(one[0].something).toEqual("else");
+      expect(one[0].another).toEqual("property");
     });
 
     it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V1_LEXICON.rows.length).toEqual(348);
       expect(SAMPLE_V1_LEXICON.rows[0].key.relation).toEqual("precedes");
 
+
+      var startingMemoryLoad = memoryLoad();
+
       var lexicon = new Lexicon(SAMPLE_V1_LEXICON);
       expect(lexicon).toBeDefined();
+      expect(lexicon.length).toEqual(84);
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["allcha|", "nay|", "ancha|", "ta|", "aqtu|", "ay|", "sunki|",
+        "chaya|", "chi|", "ku|", "hall|", "pa|", "hamu|", "hanllari|", "hay|", "ka|",
+        "ni|", "kicha|", "n|", "naya|", "kusi|", "lares|", "man|", "lla|", "llank'a|",
+        "lloqsi|", "moniki|", "much'a|", "sqa|", "chu|", "na|", "ki|", "kiku|",
+        "kunki|", "sanchis|", "sunkichis|", "wa|", "wan|", "wanchis|", "wanki|",
+        "wankichis|", "wanku|", "yki|", "nayach'a|", "noqa|", "nchis|", "yku|",
+        "obeje|", "p'aki|", "paqari|", "pay|", "kuna|", "pis|", "illa|", "pisi|",
+        "punqo|", "punyu|", "puri|", "qan|", "qapari|", "qapri|", "qawa|", "qhepa|",
+        "qoniy|", "qonqa|", "ra|", "rayqa|", "ri|", "rupha|", "y|", "sha|", "mi|",
+        "suwa|", "t'anta|", "taqsa|", "tusu|", "uhu|", "urma|", "victor|", "wana|",
+        "wanyu|", "wesq'a|", "yapaman|", "yuyaypi|"
+      ]);
       expect(lexicon.entryRelations.length).toEqual(348);
+
+      var endingMemoryLoad = memoryLoad();
+      expect(startingMemoryLoad).toEqual(2);
+      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+    });
+
+    it("should be able to build a lexicon from a couchdb map reduce", function() {
+      expect(SAMPLE_V2_LEXICON.rows.length).toEqual(1588);
+      expect(SAMPLE_V2_LEXICON.rows[0].key.relation).toEqual("follows");
+
+      var startingMemoryLoad = memoryLoad();
+
+      var lexicon = new Lexicon({
+        entryRelations: SAMPLE_V2_LEXICON,
+        corpus: {
+          prefs: {
+            maxDistanceForContext: 2
+          }
+        }
+      });
+      expect(lexicon).toBeDefined();
+      expect(lexicon.length).toEqual(42);
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["tâ|acc", "anta|", "ta|", "tâ|bread", "pa|break", "aki|door", "n|",
+        "nay|acc", "punqo|", "wa|", "erqe|child", "nay|des", "qapari|yell",
+        "sunkishis|plplom", "wesqâ|close", "a|door", "nayachâ|comb", "a|", "nay|",
+        "llankâ|des", "nayachâ|des", "pa|des", "pâ|des", "acha|", "ku|", "wesqâ|des",
+        "pâ|dressrefl", "llankâ|m", "nayachâ|m", "pa|m", "erqe|nom", "qan|nom",
+        "wanki|sgm", "pâ|om", "wesqâ|om", "llankâ|sg", "nayachâ|sg", "pa|sg", "pâ|sg",
+        "wesqâ|sg", "llankâ|work", "qan|you"
+      ]);
+      expect(lexicon.entryRelations.length).toEqual(1588);
+
+      var endingMemoryLoad = memoryLoad();
+      expect(startingMemoryLoad).toEqual(2);
+      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+    });
+
+    it("should be able to build a lexicon from a couchdb map reduce", function() {
+      expect(SAMPLE_V3_LEXICON.rows.length).toEqual(447);
+      expect(SAMPLE_V3_LEXICON.rows[0].key.relation).toEqual("precedes");
+
+      var startingMemoryLoad = memoryLoad();
+
+      var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+      expect(lexicon).toBeDefined();
+      expect(lexicon.length).toEqual(45);
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["წარმოადგენ|is", "ს|", "შეესაბამებ|relevant", "ა|", "ფ|fundamental",
+        "უნდამენტურ|", "ფ|again", "არგლები|", "ფ|f's", "ის|", "ფ|?", "სტანდარტებ|standards",
+        "რომ|?", "ლითაც|?", "რეპუტაციაფ|?", "მოპასუხე|defendant", "მთავ|important", "არ|",
+        "ლარ|payment", "თავისუფლება|freedom", "თავისუფლება|expression", "და|was", "ეკისრა|",
+        "და|established", "დგენილ|", "გამოქვეყნ|?", "და|?", "გამართლება|justify",
+        "აღმოჩნდე|required", "ასეთი|such", "ა|is", "ასავალ|asaval", "დასავალის|dasavali",
+        "сhrome|chrome", "is|", "χvala|tomorrow", "mde|until", "veb|web", "gverdze|site",
+        "sait'ze|site", "universit'et'|university", "shi|", "ebi|pl", "unihack|unihack",
+        "isa|isa"
+      ]);
+      expect(lexicon.entryRelations.length).toEqual(447);
+
+      var endingMemoryLoad = memoryLoad();
+      expect(startingMemoryLoad).toEqual(2);
+      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
   });
 
