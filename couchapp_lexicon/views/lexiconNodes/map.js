@@ -1,14 +1,18 @@
 function lexiconNodes(doc) {
   var onlyErrors = false;
-  var debug = false;
-  var maxDistance = 1;
+  var debug = true;
+  var fields;
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
       return;
     }
+
+    console.log(" lexiconNodes ", doc);
+
+    fields = doc.fields || doc.datumFields;
     // Only continue if the document is a Datum
-    if (!doc.datumFields || !doc.session || !doc.session.sessionFields) {
+    if (!fields || !doc.session || !doc.session.sessionFields) {
       if (debug) {
         emit("skipping", doc);
       }
@@ -16,7 +20,7 @@ function lexiconNodes(doc) {
     }
 
     /* =====   helper methods  ======= */
-    var extendedIGTFields = ["utterance", "orthography", "gloss", "morphemes", "allomorphs", "phonetic", "ipa"];
+    var extendedIGTFields = ["morphemes", "gloss", "allomorphs", "phonetic", "ipa", "utterance", "orthography"];
     var conservativeTokenizer = {
       delimiter: " ",
       pattern: /\s+/g,
@@ -62,11 +66,11 @@ function lexiconNodes(doc) {
       var tokens = [];
       value.replace(tokenizer.pattern, tokenizer.delimiter).trim().split(tokenizer.delimiter).map(function(token) {
         if (tokenizer.punctuationToRemoveAfterTokenization) {
-          token = token.replace(tokenizer.punctuationToRemoveAfterTokenization, '');
+          token = token.replace(tokenizer.punctuationToRemoveAfterTokenization, "");
         }
         token = token.trim();
         if (tokenizer.removeSententialPunctuation) {
-          token = token.replace(/[.,;!\“\“\"\)\]\}]$/g, '').replace(/^[\“\“\",.;\(\[\{]/g, '');
+          token = token.replace(/[.,;!\“\“\"\)\]\}]$/g, "").replace(/^[\“\“\",.;\(\[\{]/g, "");
         }
         if (token) {
           tokens.push(token);
@@ -74,71 +78,82 @@ function lexiconNodes(doc) {
       });
       return tokens;
     };
-    var extractFieldValues = function(doc) {
+    var extractDatumWithTokenizedLines = function(doc) {
+      console.log(" extracting fields from  ", doc);
 
+      var datum = {};
+      var fields = doc.fields || doc.datumFields;
 
-
-      var datumFieldsForDatumLevelContext = {};
-      var datumFieldsForWordLevelContext = {};
-      var datumFieldsForMorphemeLevelContext = {};
-      var key;
-      var fields = doc.datumFields.concat(doc.session.sessionFields);
-
-
+      var fieldKeyName = "label";
 
       // Extract datum level and word level tokens
-      for (key = 0; key < fields.length; key++) {
-        if (fields[key].label === 'judgement' || fields[key].label === 'utterance') {
+      for (var key = 0; key < fields.length; key++) {
+        if (fields[key].id && fields[key].id.length > 0) {
+          fieldKeyName = "id"; /* update to version 2.35+ */
+        } else {
+          fieldKeyName = "label";
+        }
+
+        if (fields[key][fieldKeyName] === "judgement" || fields[key][fieldKeyName] === "utterance") {
           // If the Judgement or utterance contains a '*', discard the datum
           if (fields[key].mask && fields[key].mask.search(/[#*]/) >= 0) {
             if (debug) {
-              emit("skipping", fields);
+              emit("skipping ungrammatical example" + doc._id, fields[key]);
             }
             return;
           }
         }
         // if its the gloss line, leave - and . punctuation and case sensitive
-        if (fields[key].label === 'gloss') {
-          fields[key].tokenizer = aggressiveTokenizer;
-        }
-        if (fields[key].mask) {
+        if (fields[key][fieldKeyName] === "gloss") {
           fields[key].mask = fields[key].mask.trim();
-          datumFieldsForDatumLevelContext[fields[key].label] = fields[key].mask;
-          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : aggressiveTokenizer);
+          fields[key].tokenizer = aggressiveTokenizer;
+        } else if (fields[key].mask) {
+          fields[key].mask = fields[key].mask.trim();
+          fields[key].tokenizer = aggressiveTokenizer;
           if (fields[key].igt) {
             extendedIGTFields.push(fields[key].label);
           }
         }
+        if (extendedIGTFields.indexOf(fields[key][fieldKeyName]) > -1) {
+          datum[fields[key][fieldKeyName]] = tokenize(fields[key].mask, fields[key].tokenizer);
+        }
       }
-      if (doc.comments && doc.comments.length > 0) {
-        datumFieldsForDatumLevelContext.comments = JSON.stringify(doc.comments);
-      }
-      datumFieldsForDatumLevelContext.id = doc._id;
+      console.log("fields ", fields);
+      console.log("datum ", datum);
+      console.log("extendedIGTFields ", extendedIGTFields);
+      return datum;
+    };
 
-
+    var extractLexicalEntries = function(datum) {
       // Now we can extract Word Level IGT
-      var words = datumFieldsForWordLevelContext.utterance || datumFieldsForWordLevelContext.morphemes || datumFieldsForWordLevelContext.orthography || [];
+      var words = datum.utterance || datum.morphemes || datum.orthography || [];
       var wordLevelTuples = [];
-      var word;
+      var wordIndex;
+      var fieldLabel;
       var detectIfDatumHasUnmatchedIGT = {};
-      for (word in words) {
+      console.log("words", words);
+
+      for (wordIndex = 0; wordIndex < words.length; wordIndex++) {
         // Get the corresponding item in IGT tiers
-        for (key in datumFieldsForWordLevelContext) {
-          if (datumFieldsForWordLevelContext.hasOwnProperty(key)) {
-            if (extendedIGTFields.indexOf(key) > -1) {
-              wordLevelTuples[word] = wordLevelTuples[word] || {};
-              wordLevelTuples[word][key] = datumFieldsForWordLevelContext[key][word];
-              // Detect if this datum needs cleaning
-              if (datumFieldsForWordLevelContext[key].length > words.length) {
-                detectIfDatumHasUnmatchedIGT[key] = datumFieldsForWordLevelContext[key];
-                wordLevelTuples[word]["confidence"] = 0.5;
-              } else {
-                wordLevelTuples[word]["confidence"] = 1;
-              }
+        for (fieldLabel in datum) {
+          if (!datum.hasOwnProperty(fieldLabel)) {
+            continue;
+          }
+          if (extendedIGTFields.indexOf(fieldLabel) > -1) {
+            wordLevelTuples[wordIndex] = wordLevelTuples[wordIndex] || {};
+            wordLevelTuples[wordIndex][fieldLabel] = datum[fieldLabel][wordIndex];
+            // Detect if this datum needs cleaning
+            if (datum[fieldLabel].length > words.length) {
+              detectIfDatumHasUnmatchedIGT[fieldLabel] = datum[fieldLabel];
+              wordLevelTuples[wordIndex]["confidence"] = 0.5;
+            } else {
+              wordLevelTuples[wordIndex]["confidence"] = 1;
             }
           }
         }
       }
+      console.log("wordLevelTuples", wordLevelTuples);
+
       if (Object.keys(detectIfDatumHasUnmatchedIGT).length > 0 && (debug || onlyErrors)) {
         emit({
           error: "This datum might need cleaning, one or more of the lines has more 'words' than it should for an IGT"
@@ -152,8 +167,6 @@ function lexiconNodes(doc) {
         });
       }
 
-
-
       // Now  we can  extract Morpheme Level IGT
       var morphemeLevelTuples = [];
       var wordIndex;
@@ -162,6 +175,7 @@ function lexiconNodes(doc) {
       var morphemeTupleIndex;
       var detectIfDatumHasUnmatchedUnSegmentedFields = {};
       var detectIfDatumHasUnmatchedIGTMorphemes = {};
+
       for (wordIndex in wordLevelTuples) {
         var wordIGT = wordLevelTuples[wordIndex];
         var keysWhichAreContextButNotSegmented = [];
@@ -183,6 +197,7 @@ function lexiconNodes(doc) {
         for (keyIndex in keysWhichAreContextButNotSegmented) {
           for (morphemeTupleIndex = 0; morphemeTupleIndex < morphemeTuples.length; morphemeTupleIndex++) {
             morphemeTuples[morphemeTupleIndex][keysWhichAreContextButNotSegmented[keyIndex]] = wordIGT[keysWhichAreContextButNotSegmented[keyIndex]];
+            console.log("keysWhichAreContextButNotSegmented", keysWhichAreContextButNotSegmented);
           }
         }
         // Detect if any tuples are missing fields, which could indicate mis-matching segmentation
@@ -241,125 +256,40 @@ function lexiconNodes(doc) {
           });
         }
       }
-
-
-
-      return {
-        datumLevelContext: datumFieldsForDatumLevelContext,
-        // wordLevelContext: datumFieldsForWordLevelContext,
-        // wordLevelContext: wordLevelTuples,
-        morphemeLevelContext: morphemeLevelTuples
-      };
+      console.log(morphemeLevelTuples);
+      return morphemeLevelTuples;
     };
 
-    var emitPrecedenceRules = function(datumInContextTiers, localemit) {
-      // TODO add precedence rules
-
-      var thisNode;
-      var skippedNodes;
-      var nodeIndex;
-      var previousNodeIndex;
-      var previousNode;
-      var distance;
-
-      if (!onlyErrors) {
-
-        for (previousNodeIndex = 0; previousNodeIndex < datumInContextTiers.morphemeLevelContext.length - 1; previousNodeIndex++) {
-          for (nodeIndex = previousNodeIndex + 1; nodeIndex < datumInContextTiers.morphemeLevelContext.length; nodeIndex++) {
-
-            previousNode = datumInContextTiers.morphemeLevelContext[previousNodeIndex];
-            thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-
-            skippedNodes = [];
-            while (!thisNode.morphemes) {
-              if (debug || onlyErrors) {
-                emit({
-                  error: "Skipping this relation because one of the nodes has no morphemes"
-                }, {
-                  reason: {
-                    relation: [previousNode, thisNode]
-                  },
-                  potentiallyInaccurateData: thisNode,
-                  id: doc._id
-                });
-              }
-              nodeIndex++;
-              skippedNodes.push(thisNode);
-              thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-            }
-            if (skippedNodes.length > 0) {
-              thisNode.skippedNodes = skippedNodes;
-            }
-            if (thisNode.morphemes === "@" && previousNode.morphemes === "@") {
-              previousNode = thisNode;
-              continue;
-            }
-            var wordLevelContext = "";
-            if (previousNode.utterance !== thisNode.utterance) {
-              wordLevelContext = datumInContextTiers.datumLevelContext.utterance;
-            } else {
-              wordLevelContext = previousNode.utterance || thisNode.utterance;
-            }
-            if (!wordLevelContext) {
-              if (previousNode.morphemes !== thisNode.morphemes) {
-                wordLevelContext = datumInContextTiers.datumLevelContext.morphemes;
-              } else {
-                wordLevelContext = previousNode.morphemes || thisNode.morphemes;
-              }
-            }
-            if (thisNode.morphemes === previousNode.morphemes && !wordLevelContext.match(new RegExp(thisNode.morphemes + ".*" + previousNode.morphemes))) {
-              if (debug || onlyErrors) {
-                emit({
-                  error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
-                }, {
-                  reason: {
-                    relation: [previousNode, thisNode]
-                  },
-                  potentiallyInaccurateData: [previousNode, thisNode],
-                  id: doc._id
-                });
-              }
-              previousNode = thisNode;
-              continue;
-            }
-            distance = nodeIndex - previousNodeIndex;
-            if (distance <= maxDistance) {
-              localemit({
-                "previous": previousNode,
-                "subsequent": thisNode,
-                "relation": "precedes",
-                "distance": distance,
-                "context": datumInContextTiers.datumLevelContext
-              }, wordLevelContext);
-
-              // localemit({
-              //   "previous": previousNode,
-              //   "subsequent": thisNode,
-              //   "relation": "follows",
-              //   "distance": distance,
-              //   "context": datumInContextTiers.datumLevelContext
-              // }, wordLevelContext);
-            }
-            // localemit(thisNode, doc._id);
-            previousNode = thisNode;
-
-          }
-        }
-      }
-    };
     /* =======  end helper methods  ======= */
 
-
     /* main */
-    var datum = extractFieldValues(doc);
+    var datum = extractDatumWithTokenizedLines(doc);
     if (!datum) {
       return;
     }
-    emitPrecedenceRules(datum, emit);
+    var lexicalEntries = extractLexicalEntries(datum, doc._id);
+
+    var context = datum.utterance || datum.orthography || "";
+    lexicalEntries.map(function(lexicalEntry) {
+      if (lexicalEntry.orthography) {
+        context = lexicalEntry.orthography;
+      }
+      if (lexicalEntry.utterance) {
+        context = lexicalEntry.utterance;
+      }
+      delete lexicalEntry.utterance;
+      delete lexicalEntry.orthography;
+
+      console.log(lexicalEntry);
+      emit(lexicalEntry, context);
+    });
+
+    // emitPrecedenceRules(datum, emit);
 
   } catch (e) {
     if (debug || onlyErrors) {
-      emit(e, 1);
+      console.log(e.stack);
+      emit(e || "error", 1);
     }
   }
 };
