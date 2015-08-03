@@ -1,13 +1,16 @@
 "use strict";
 var LanguageDatum;
+var LexiconNode;
 try {
   /* globals FieldDB */
   if (FieldDB) {
     LanguageDatum = FieldDB.LanguageDatum;
+    LexiconNode = FieldDB.Lexicon.LexiconNode;
   }
 } catch (e) {}
 
 LanguageDatum = LanguageDatum || require("./../../api/datum/LanguageDatum").LanguageDatum;
+LexiconNode = LexiconNode || require("./../../api/lexicon/Lexicon").Lexicon.LexiconNode;
 
 var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
 var mockCorpus = {
@@ -25,7 +28,7 @@ describe("Test LanguageDatum", function() {
     expect(datum.fields).toBeUndefined();
   });
 
-  describe("popular fields", function() {
+  xdescribe("popular fields", function() {
 
     var datum = new LanguageDatum({
       corpus: mockCorpus,
@@ -118,8 +121,41 @@ describe("Test LanguageDatum", function() {
 
 
   });
+  describe("lexical nodes should have some count or context", function() {
 
-  describe("IGT support", function() {
+
+    it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
+      var lexiconEdge = {
+        "key": {
+          "x": "noqa",
+          "relation": "precedes",
+          "y": "ta",
+          "context": "noqa-ta"
+        },
+        "value": 14
+      };
+      var lexiconNode = new LexiconNode(lexiconEdge.key.x);
+      expect(lexiconNode.orthography).toEqual("noqa");
+      expect(lexiconNode.morphemes).toEqual("noqa");
+      expect(lexiconNode.utterance).toEqual("");
+
+      lexiconNode.contexts = [{
+        URL: "",
+        morphemes: lexiconEdge.key.context,
+        count: lexiconEdge.value
+      }];
+      expect(lexiconNode.context).toBeUndefined();
+      expect(lexiconNode.contexts).toEqual([{
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 14
+      }]);
+
+    });
+
+  });
+
+  xdescribe("IGT support", function() {
     var datum;
     beforeEach(function() {
       datum = new LanguageDatum({

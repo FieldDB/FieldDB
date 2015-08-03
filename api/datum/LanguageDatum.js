@@ -75,6 +75,7 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
     configurable: true,
     get: function() {
       if (this.fields && this.fields.orthography) {
+        this.debug(" getting orthography " + this._id + " to " + this.fields.orthography.value);
         return this.fields.orthography.value;
       } else {
         return FieldDBObject.DEFAULT_STRING;
@@ -84,6 +85,7 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
       if (!this.fields || !this.fields.orthography) {
         this.addField("orthography");
       }
+      this.debug("    Setting orthography " + this._id + " to " + value);
       this.fields.orthography.value = value;
     }
   },
@@ -115,7 +117,12 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
     configurable: true,
     get: function() {
       if (this.fields && this.fields.morphemes) {
-        return this.fields.morphemes.value || this.utterance || this.orthography || FieldDBObject.DEFAULT_STRING;
+        if (this.fields.morphemes.value) {
+          return this.fields.morphemes.value;
+        }
+        var placeholder = this.utterance || this.orthography || FieldDBObject.DEFAULT_STRING;
+        this.debug("morphemes is not defined so using " + placeholder);
+        return placeholder + "";
       } else {
         return FieldDBObject.DEFAULT_STRING;
       }
