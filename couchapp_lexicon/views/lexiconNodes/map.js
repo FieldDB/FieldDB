@@ -269,7 +269,7 @@ function lexiconNodes(doc) {
     }
     var lexicalEntries = extractLexicalEntries(datum, doc._id);
 
-    var context = datum.utterance || datum.orthography || "";
+    var context = datum.context || datum.utterance || datum.orthography || "";
     lexicalEntries.map(function(lexicalEntry) {
       if (lexicalEntry.orthography) {
         context = lexicalEntry.orthography;
