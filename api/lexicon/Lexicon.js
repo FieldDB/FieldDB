@@ -522,6 +522,17 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
+  add: {
+    value: function(value) {
+      if (value && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
+        console.log("\n adding   ", value.orthography + "\n");
+        Lexicon.LexiconNode.mergeContextsIntoContexts(value);
+      }
+
+      return Collection.prototype.add.apply(this, [value]);
+    }
+  },
+
   /**
    *  Adds a node to the lexicon, if an equivalent node (as defined by the equals function) 
    *  is found, it merges the new one into the existing one.
@@ -529,19 +540,19 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * @param  {Object} value A node or array of nodes
    * @return {Object}       The node or array of nodes which were added
    */
-  addOrMerge: {
+  addOrMergeDeprecated: {
     value: function(value) {
       if (!value) {
         return value;
       }
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
         for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
-          value[itemIndex] = this.addOrMerge(value[itemIndex]);
+          value[itemIndex] = this.addOrMergeDeprecated(value[itemIndex]);
         }
         return value;
       }
 
-      this.debug("running addOrMerge", value.headword);
+      this.debug("running addOrMergeDeprecated", value.headword);
       var existingInLexicon = this.find(value);
       if (existingInLexicon && existingInLexicon.length) {
         existingInLexicon = existingInLexicon[0];
@@ -600,32 +611,52 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
         try {
           var connectionEdge = entryRelation.key || entryRelation;
+          connectionEdge.frequencyCount = entryRelation.value ? entryRelation.value : (entryRelation.key ? entryRelation.key.count : null);
+          self.debug("Adding ", connectionEdge, " to connected graph");
+
           var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous || connectionEdge.x;
           var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent || connectionEdge.y;
+
           var datumid = entryRelation.id || "";
-          var context = connectionEdge.context;
-          if (typeof context === "string") {
-            context = {
-              id: datumid,
-              morphemes: context
-            };
-          }
-          if (!context.id) {
-            self.debug("Cant figure out the id(s) of where this node might have come from");
+          if (!datumid) {
+            self.debug("Cant figure out the URL(s) of where this node might have come from");
           }
 
+          // Ensuring notes are objects
           if (!(from instanceof Lexicon.LexiconNode)) {
+            self.debug("\nCreating lexical entry from only orthography " + from);
             from = new Lexicon.LexiconNode(from);
             self.debug("Converted from into a lexicon node", from.headword);
           }
 
           if (!(to instanceof Lexicon.LexiconNode)) {
+            self.debug("\nCreating lexical entry from only orthography " + to);
             to = new Lexicon.LexiconNode(to);
             self.debug("Converted to into a lexicon node", to.headword);
           }
 
-          connectionEdge.frequencyCount = connectionEdge.value || entryRelation.key ? entryRelation.key.count : null;
-          self.debug("Adding ", connectionEdge, " to connected graph");
+          // Upgrade v1 edges
+          if (connectionEdge.context && typeof connectionEdge.context === "string") {
+            self.debug("Upgrading v1 precedence relation to node and edges");
+            var context = {
+              URL: datumid,
+              morphemes: connectionEdge.context
+            };
+            if (connectionEdge.frequencyCount) {
+              context.count = connectionEdge.frequencyCount;
+            } else {
+              console.log("Don't know how often this context appears", entryRelation.value);
+            }
+            from.contexts = [context];
+            to.contexts = [context];
+          } else {
+            console.log("This is not a v1 relation", entryRelation);
+            if (connectionEdge.frequencyCount) {
+              console.log("setting frequencyCount using edge count", connectionEdge.frequencyCount);
+              from.count += connectionEdge.frequencyCount;
+              to.count += connectionEdge.frequencyCount;
+            }
+          }
 
           if (!from || !to) {
             self.warn("Missing either a `from` or `to` ", from, to);
@@ -713,8 +744,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           // }
 
           // TODO what if a similar node is here, we should merge them.
-          from = self.addOrMerge(from);
-          to = self.addOrMerge(to);
+          from = self.add(from);
+          to = self.add(to);
 
           // Add the from node to the list of nodes, if it is not already there
           if (!self.connectedGraph.nodes[from.headword]) {
@@ -813,9 +844,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         type: "GET",
         url: url
       }).then(function(results) {
-          // self.generatePrecedenceForceDirectedRulesJsonForD3(results.rows);
-          self.add(results.row);
-          deferred.resolve(lexicon.collection);
+          if (results && results.rows && results.rows.length !== undefined) {
+            self.add(results.rows);
+            deferred.resolve(self.collection);
+          } else {
+            deferred.reject({
+              details: results,
+              userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
+            });
+          }
         },
         function(reason) {
           deferred.reject(reason);

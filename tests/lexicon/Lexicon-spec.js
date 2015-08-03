@@ -197,7 +197,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var result = Lexicon.lexicon_nodes_mapReduce({
         _id: "8h329983jr200023j20",
         session: {
-         _id: "98jo3io2qjoiwjesoij32",
+          _id: "98jo3io2qjoiwjesoij32",
           sessionFields: []
         },
         fields: [{
@@ -367,11 +367,12 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(results).toBe(lexicon.collection);
         expect(lexicon.length).toBeGreaterThan(0);
         expect(lexicon.length).toEqual(14);
-
+        expect(lexicon.collection).toEqual(" ");
 
       }, function(reason) {
         console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
         expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(reason.details).toEqual(" ");
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" unexpected exception while processing rules");
@@ -451,7 +452,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         something: "else"
       });
 
-      lexicon.addOrMerge({
+      lexicon.add({
         morphemes: "one",
         another: "property"
       });
@@ -466,6 +467,72 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(one[0].another).toEqual("property");
     });
 
+    it("should be able to automerge contexts of equivalent nodes", function() {
+      var lexicon = new Lexicon();
+
+      var one = lexicon.add({
+        morphemes: "one",
+        something: "else",
+        utterance: "one little"
+      });
+      expect(one.utterance).toEqual("");
+      expect(one.contexts).toEqual([{
+        URL: "",
+        utterance: "one little"
+      }]);
+      expect(one.count).toEqual(1);
+
+      lexicon.add({
+        morphemes: "one",
+        another: "property",
+        utterance: "another one"
+      });
+
+      expect(lexicon.length).toEqual(1);
+
+      expect(one).toBeDefined();
+      expect(one.morphemes).toEqual("one");
+      expect(one.something).toEqual("else");
+      expect(one.another).toEqual("property");
+      expect(one.contexts).toEqual([{
+        URL: "",
+        utterance: "one little"
+      }, {
+        URL: "",
+        utterance: "another one"
+      }]);
+      expect(one.count).toEqual(2);
+    });
+
+    it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
+
+      expect(SAMPLE_V1_LEXICON.rows[221].key.context).toEqual("noqa-ta");
+      expect(SAMPLE_V1_LEXICON.rows[221].value).toEqual(14);
+      expect(SAMPLE_V1_LEXICON.rows[223].key.context).toEqual("noqa-yku");
+      expect(SAMPLE_V1_LEXICON.rows[223].value).toEqual(1);
+      var lexicon = new Lexicon([SAMPLE_V1_LEXICON.rows[221], SAMPLE_V1_LEXICON.rows[223]]);
+      expect(lexicon).toBeDefined();
+      expect(lexicon.length).toEqual(3);
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["noqa|", "ta|", "yku|"]);
+      expect(lexicon.collection[0].morphemes).toEqual("noqa");
+      expect(lexicon.collection[0].utterance).toEqual("");
+      expect(lexicon.collection[0].orthography).toEqual("noqa");
+      expect(lexicon.collection[0].context).toBeUndefined();
+      expect(lexicon.collection[0].contexts).toEqual([{
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 14
+      }, {
+        URL: "",
+        morphemes: "noqa-yku",
+        count: 1
+      }]);
+      expect(lexicon.collection[0].count).toEqual(15);
+
+    });
+
     it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V1_LEXICON.rows.length).toEqual(348);
       expect(SAMPLE_V1_LEXICON.rows[0].key.relation).toEqual("precedes");
@@ -476,8 +543,17 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var lexicon = new Lexicon(SAMPLE_V1_LEXICON);
       expect(lexicon).toBeDefined();
       expect(lexicon.length).toEqual(84);
+
+      expect(lexicon.collection[0].utterance).toEqual("");
+      expect(lexicon.collection[0].morphemes).toEqual("allcha");
+      expect(lexicon.collection[0].gloss).toEqual("");
+      expect(lexicon.collection[0].allomorphs).toEqual("");
+      expect(lexicon.collection[0].orthography).toEqual("");
+      expect(lexicon.collection[0].contexts).toEqual(" ");
+      expect(lexicon.collection[0].count).toEqual(1);
+
       expect(lexicon.collection.map(function(node) {
-        return node.id;
+        return node.id + ":" + node.count;
       })).toEqual(["allcha|", "nay|", "ancha|", "ta|", "aqtu|", "ay|", "sunki|",
         "chaya|", "chi|", "ku|", "hall|", "pa|", "hamu|", "hanllari|", "hay|", "ka|",
         "ni|", "kicha|", "n|", "naya|", "kusi|", "lares|", "man|", "lla|", "llank'a|",
@@ -493,8 +569,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(348);
 
       var endingMemoryLoad = memoryLoad();
-      expect(startingMemoryLoad).toEqual(2);
-      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v1 lexicon");
+
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
@@ -527,8 +603,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(1588);
 
       var endingMemoryLoad = memoryLoad();
-      expect(startingMemoryLoad).toEqual(2);
-      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v2 lexicon");
+
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
@@ -556,8 +632,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(447);
 
       var endingMemoryLoad = memoryLoad();
-      expect(startingMemoryLoad).toEqual(2);
-      expect(endingMemoryLoad).toEqual(3);
+      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
   });
