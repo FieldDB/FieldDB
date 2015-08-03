@@ -1,22 +1,22 @@
 "use strict";
 var Export;
-var Datum;
+var LanguageDatum;
 try {
   /* globals FieldDB */
   if (FieldDB) {
     Export = FieldDB.Export;
-    Datum = FieldDB.Datum;
+    LanguageDatum = FieldDB.LanguageDatum;
   }
 } catch (e) {}
 
 Export = Export || require("./../../api/export/Export").Export;
-Datum = Datum || require("./../../api/datum/Datum").Datum;
+LanguageDatum = LanguageDatum || require("./../../api/datum/LanguageDatum").LanguageDatum;
 
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 
 describe("Export: as a user I want to export to various formats", function() {
   it("should be able to export into Latex format", function() {
-    var datum = new Datum(sample_1_22_datum[0]);
+    var datum = new LanguageDatum(sample_1_22_datum[0]);
 
     var expectedLatexOutput = "\n" +
       "\\begin{exe} \n" +
@@ -38,7 +38,7 @@ describe("Export: as a user I want to export to various formats", function() {
   });
 
   it("should be able to export into CSV format", function() {
-    var datum = new Datum(sample_1_22_datum[0]);
+    var datum = new LanguageDatum(sample_1_22_datum[0]);
     var datumCSVheader = datum.exportAsCSV(null, null, "header");
     var datumCSV = datum.exportAsCSV();
     expect(datumCSVheader).toEqual("\"judgement\",\"utterance\",\"morphemes\",\"gloss\",\"translation\",\"dateElicited\",\"notes\",\"checkedWithConsultant\",\"dialect\",\"goal\",\"consultants\",\"language\",\"user\",\"dateSEntered\",\"comments\",\"audioVideo\",\"images\"\n");
@@ -49,7 +49,7 @@ describe("Export: as a user I want to export to various formats", function() {
   });
 
   it("should be able to export into plain text format", function() {
-    var datum = new Datum(sample_1_22_datum[0]);
+    var datum = new LanguageDatum(sample_1_22_datum[0]);
     var handoutText = datum.exportAsPlainText();
     expect(handoutText).toEqual("Jaunpa much'a-sqa-mi ka-ni\nJaunpa much'asqami kani.\n\nJuan.gen kiss.pass.? be.1SG.\nI was kissed by John.\n5/21/2010\n\nLucia\nCusco Quechua");
   });
