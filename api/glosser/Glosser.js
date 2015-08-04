@@ -304,7 +304,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           self.morphemeSegmentationKnowledgeBase = reducedCouchDBresult;
 
           // Save the reduced precedence self.morphemeSegmentationKnowledgeBase in localStorage
-          if (this.dbname) {
+          if (self.dbname) {
             try {
               localStorage.setItem(this.dbname + "morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
             } catch (error) {
@@ -372,19 +372,21 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         value = value.map(function(row) {
           /* TODO handle lexicon precedecne rules instead of simple condensed rules */
 
-          if (row.key.indexOf("@-@") === -1) {
-            // If all ready reduced, use the count as the value
-            if (typeof row.value === "number") {
-              uniqueRules[row.key] = row.value;
+          if (row.key && typeof row.key.indexOf === "function" && row.key.indexOf("@-@") > -1) {
+            return;
+          }
+
+          // If all ready reduced, use the count as the value
+          if (typeof row.value === "number") {
+            uniqueRules[row.key] = row.value;
+            size++;
+          } else {
+            // If not ready reduced, add the value into an array which will serve as the count
+            if (!uniqueRules[row.key]) {
+              uniqueRules[row.key] = uniqueRules[row.key] || [];
               size++;
-            } else {
-              // If not ready reduced, add the value into an array which will serve as the count
-              if (!uniqueRules[row.key]) {
-                uniqueRules[row.key] = uniqueRules[row.key] || [];
-                size++;
-              }
-              uniqueRules[row.key].push(row.value);
             }
+            uniqueRules[row.key].push(row.value);
           }
         });
         uniqueRules.length = size;
