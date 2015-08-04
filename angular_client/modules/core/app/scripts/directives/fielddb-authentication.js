@@ -95,6 +95,9 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
 
     $scope.logout = function() {
       $scope.application.authentication.error = "";
+      if (true) {
+        return;
+      }
       if (!FieldDB || !FieldDB.Database) {
         console.warn("Authentication is handled by FieldDB, whcih is not currently loaded");
         return;

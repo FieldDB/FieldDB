@@ -1,6 +1,6 @@
 {
   "name": "spreadsheet",
-  "version": "2.45.3",
+  "version": "2.45.4",
   "authors": [
     "info@fielddb.org"
   ],
@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "fielddb-angular": "2.45.3",
-    "fielddb-glosser": "1.82.3",
+    "fielddb-glosser": "1.82.4",
     "angular-md5": "~0.0.5",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",

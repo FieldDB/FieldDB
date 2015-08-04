@@ -28,7 +28,7 @@
         "description": "appears in Top navgation bar"
     },
     "locale_glosser": {
-        "message": "Semi-auto Glosser",
+        "message": "Glosser",
         "description": "appears in Top menu bar"
     },
     "locale_logout": {
@@ -243,7 +243,7 @@
         "description": "Person List Bio Header"
     },
     "locale_no_data_message": {
-        "message": "No data to display. Please click on <img src=\"images/icon16_dev.png\" border=\"0 \" /> above and/or log in.",
+        "message": "No data to display. Please refresh the page to try again.",
         "description": ""
     },
     "locale_done_button": {
@@ -501,7 +501,7 @@
         "description": "option in number of records to display dropdown"
     },
     "locale_templates": {
-        "message": "Templates",
+        "message": "Template",
         "description": "title for template setting"
     },
     "locale_interface_language": {

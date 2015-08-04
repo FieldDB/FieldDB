@@ -10,7 +10,7 @@
   <span class="{{fieldSpanWidthClassName}}"
   ng-repeat="corpusField in fieldsInColumns.first track by $index"
   ng-hide="corpusField.showToUserTypes == 'readonly'"
-  title="{{corpusField.help}}">
+  title="{{corpusField.helpLinguists}}">
     {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
@@ -18,7 +18,7 @@
   <span class="{{fieldSpanWidthClassName}}"
     ng-repeat="corpusField in fieldsInColumns.second track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
-    title="{{corpusField.help}}">
+    title="{{corpusField.helpLinguists}}">
     {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>
@@ -26,7 +26,7 @@
   <span class="{{fieldSpanWidthClassName}}"
     ng-repeat="corpusField in fieldsInColumns.third track by $index"
     ng-hide="corpusField.showToUserTypes == 'readonly'"
-    title="{{corpusField.help}}">
+    title="{{corpusField.helpLinguists}}">
     {{datum[corpusField.id] | neverEmpty}}
   </span>
 </div>

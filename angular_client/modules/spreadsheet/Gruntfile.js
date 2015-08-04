@@ -331,6 +331,7 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             '*.html',
+            'scripts/private_services.js',
             // 'styles/*.css',
             'data/*.json',
             'locales/*/*.json',

@@ -1,0 +1,126 @@
+{
+  "datumFields": [{
+    "label": "judgement",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
+    "size": "3",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "utterance",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "morphemes",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "gloss",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled"
+  }, {
+    "label": "syntacticCategory",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "showToUserTypes": "machine",
+    "userchooseable": "disabled"
+  }, {
+    "label": "syntacticTreeLatex",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: Tree [.S NP VP ]",
+    "showToUserTypes": "machine",
+    "userchooseable": "disabled"
+  }, {
+    "label": "translation",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "checked",
+    "help": "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "tags",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "validationStatus",
+    "value": "Checked",
+    "mask": "Checked",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled"
+  }, {
+    "label": "modifiedByUser",
+    "value": "",
+    "mask": "",
+    "users": [],
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "An array of users who modified the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "userchooseable": "disabled"
+  }, {
+    "label": "enteredByUser",
+    "value": "",
+    "mask": "",
+    "encrypted": "",
+    "shouldBeEncrypted": "",
+    "help": "The user who originally entered the datum",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "userchooseable": "disabled"
+  }],
+  "pouchname": "default",
+  "session": {
+    "pouchname": "default",
+    "comments": [],
+    "_id": "",
+    "_rev": "",
+    "sessionFields": [],
+    "dateCreated": "",
+    "dateModified": "",
+    "collection": "sessions"
+  },
+  "audioVideo": [],
+  "images": [],
+  "comments": [],
+  "datumTags": [],
+  "dateEntered": "",
+  "dateModified": "",
+  "timestamp": 0,
+  "jsonType": "Datum",
+  "collection": "datums"
+}

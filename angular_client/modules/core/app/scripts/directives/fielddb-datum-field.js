@@ -22,27 +22,29 @@ angular.module("fielddbAngularApp").directive("fielddbDatumField", function() {
     //   console.log($element.html());
     // },
     link: function postLink(scope) {
-      console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      if (scope && scope.datumfield && scope.datumfield.debugMode) {
+        console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      }
       scope.contextualize = scope.$root.contextualize;
     },
     priority: 0,
     replace: false,
     controllerAs: "stringAlias"
-    // require: "siblingDirectiveName", // or // ["^parentDirectiveName", "?optionalDirectiveName", "?^optionalParent"],
-    // compile: function compile(tElement, tAttrs, transclude) {
-    //   return {
-    //     pre: function preLink(scope, iElement, iAttrs, controller) {
-    //       console.log("in preLink");
-    //     },
-    //     post: function postLink(scope, iElement, iAttrs, controller) {
-    //       console.log("in postLink");
-    //       console.log(iElement.html());
-    //       iElement.text("this is the datumField directive");
-    //     }
-    //   }
-    //   // or
-    //   // return function postLink( ... ) { ... }
-    // }
+      // require: "siblingDirectiveName", // or // ["^parentDirectiveName", "?optionalDirectiveName", "?^optionalParent"],
+      // compile: function compile(tElement, tAttrs, transclude) {
+      //   return {
+      //     pre: function preLink(scope, iElement, iAttrs, controller) {
+      //       console.log("in preLink");
+      //     },
+      //     post: function postLink(scope, iElement, iAttrs, controller) {
+      //       console.log("in postLink");
+      //       console.log(iElement.html());
+      //       iElement.text("this is the datumField directive");
+      //     }
+      //   }
+      //   // or
+      //   // return function postLink( ... ) { ... }
+      // }
   };
   return directiveDefinitionObject;
 });

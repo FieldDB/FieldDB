@@ -384,11 +384,11 @@ angular.module('spreadsheetApp')
             var message = "";
             if (err.status === 0) {
               message = "are you offline?";
-              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+              if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia" || $rootScope.serverCode === "localhost") {
                 message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
-            if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+            if (err && err.status >= 300 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
               message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
@@ -397,6 +397,7 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = message;
             $rootScope.openNotification();
             $rootScope.loading = false;
+            // return response.data;
           });
       return promise;
     };
@@ -511,7 +512,7 @@ angular.module('spreadsheetApp')
             deferred.reject("Error saving datum: " + JSON.stringify(e));
             return;
           }
-          saveCouchDoc(fieldDBDatum.pouchname, fieldDBDatum).then(function(response) {
+          saveCouchDoc(fieldDBDatum.dbname, fieldDBDatum).then(function(response) {
             console.log(response);
             if (response.status >= 400) {
               deferred.reject("Error saving datum " + response.status);
@@ -535,7 +536,7 @@ angular.module('spreadsheetApp')
         };
 
         if (spreadsheetDatumToBeSaved.id) {
-          getDocFromCouchDB(spreadsheetDatumToBeSaved.pouchname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
+          getDocFromCouchDB(spreadsheetDatumToBeSaved.dbname, spreadsheetDatumToBeSaved.id).then(convertAndSaveAsFieldDBDatum, function(e) {
             var reason = "Error getting the most recent version of the datum. Maybe you're offline?";
             if (e.data && e.data.reason) {
               if (e.data.reason === "missing") {

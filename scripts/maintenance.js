@@ -569,7 +569,7 @@ var MAINTAINENCE = {
             };
 
             var updateCorpusDoc = function(corpusDoc, localdbname) {
-              database.view("pages/private_corpuses", {
+              database.view("pages/private_corpora", {
                 success: function(privateCorpusDoc) {
                   var corpusid = "";
                   try {
@@ -840,31 +840,14 @@ var MAINTAINENCE = {
     /*
     Deploy to all users
      */
+    window.needToRetry = [];
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
+        
         for (var db in results) {
 
           (function(dbname) {
-            if (dbname.indexOf("-") === -1) {
-              console.log(dbname + "  is not a corpus or activity feed ");
-              return;
-            }
-            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-              // return;
-              console.log("deploying to a beta tester");
-            } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-              // return;
-              console.log("deploying to a phophlo user");
-            } else {
-              if (dbname.indexOf("anonymous") > -1) {
-                // return;
-                console.log("deploying to anonymous users");
-              } else {
-                return; //deploy to only beta testers and/or phophlo users
-                // console.log("deploying to normal users");
-              }
-            }
             var sourceDB = "";
             if (dbname.indexOf("activity_feed") > -1) {
               if (dbname.split("-").length >= 3) {
@@ -876,6 +859,36 @@ var MAINTAINENCE = {
               sourceDB = "new_corpus";
             }
 
+            if (dbname.indexOf("-") === -1) {
+              console.log(dbname + "  is not a corpus or activity feed ");
+              return;
+            }
+            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 ||  dbname.indexOf("jenkins") === 0 ) {
+              // return;
+              if (sourceDB === "new_corpus") {
+                sourceDB = "new_testing_corpus";
+              }
+              console.log("deploying to a beta tester " + sourceDB);
+            } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("sails-") === 0 || dbname.indexOf("tcpp-") === 0 || dbname.indexOf("tdfp-") === 0 || dbname.indexOf("tdfm-") === 0 || dbname.indexOf("experiment") > -1 || dbname.indexOf("game") > -1 || dbname.indexOf("gamify") > -1) {
+              return;
+              if (sourceDB === "new_corpus") {
+                sourceDB = "new_gamify_corpus";
+              }
+              console.log("deploying to a gamify user " + sourceDB);
+            } else {
+              if (dbname.indexOf("anonymous") > -1 || dbname.indexOf("community") === 0) {
+                return;
+                if (sourceDB === "new_corpus") {
+                  sourceDB = "new_learnx_corpus";
+                }
+                console.log("deploying to anonymous users TODO use anothe sourceDB also. " + sourceDB);
+              } else {
+                return; //deploy to only beta testers and/or phophlo users
+                console.log("deploying to a normal user " + sourceDB);
+              }
+            }
+
+
             console.log(dbname + " is a " + sourceDB);
             $.couch.replicate(sourceDB, dbname, {
               success: function(result) {
@@ -883,10 +896,10 @@ var MAINTAINENCE = {
               },
               error: function(error) {
                 console.log("Error deploying " + sourceDB + " app to db " + dbname, error);
+                window.needToRetry.push(dbname);
               }
             });
           })(results[db]);
-
         }
       },
       error: function(error) {
@@ -968,7 +981,7 @@ var MAINTAINENCE = {
       var dbname = dbnames.pop();
       var databasecategory = "errored";
 
-      if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
+      if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("sails-") === 0 || dbname.indexOf("tcpp-") === 0 || dbname.indexOf("tdfp-") === 0 || dbname.indexOf("tdfm-") === 0 || dbname.indexOf("experiment") > -1 || dbname.indexOf("game") > -1 || dbname.indexOf("gamify") > -1) {
         databasecategory = "psycholing";
 
       } else if (dbname.indexOf("anonymouskartuli") > -1) {

@@ -1,12 +1,13 @@
 <form ng-submit="createRecord(newFieldData, $event)" >
   <div class="span1" >
     <input
-    ng-blur="markNewAsEdited()"
+    ng-blur="verifyNewEntryHasBeenEdited()"
     class="span2"
     type="text"
     ng-model="newFieldData['judgement']"
     placeholder="*#?"
-    title="{{judgementHelpText}}" />
+    title="{{judgementHelpText}}"
+    tabindex="-1" />
   </div>
   <div class="{{columnWidthClass}}" fielddb-glosser-input datumornewdatum="newFieldData" columnlabel="first" spreadsheet-catch-focus-on-arrow-press>
   </div>

@@ -27,7 +27,7 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
@@ -51,7 +51,7 @@
                   {{contextualize('locale_corpus')}}
                 </a>
               </li>
-              <li ng-hide="corpus.pouchname==undefined">
+              <li ng-hide="corpus.dbname==undefined">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -80,30 +80,33 @@
       <span class="rightMenuItems" ng-show="authenticated==true">
         <div class="rightMenuItemsDiv">
           <div ng-hide="corpus==undefined">
-            <a class="floatLeft" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this {{corpus.pouchname}}'s webpage">
-              <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+            <a class="floatLeft" href="http://lingsync.org/{{corpus.dbname.replace('-','/')}}/{{corpus.dbname}}" target="_blank" title="Visit this {{corpus.dbname}}'s webpage">
+              <img ng-src="https://secure.gravatar.com/avatar/{{corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
             </a>
             <i class="fa whiteicon fa-calendar">
             </i>
-            {{getCurrentSessionName()}}
+            {{$parent.fullCurrentSession.dateAndGoalSnippet | limitTo:10}}
             <br />
             <i class="fa whiteicon fa-cloud">
             </i>
-            {{corpus.title}}
+            {{corpus.title | limitTo:10}}
           </div>
           <div>
             &nbsp;
-            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false && (writePermissions==true || commentPermissions==true)">
-              {{getSavedState().text}}
-            </button>
+            <span ng-show="dataentry">
+              <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="!writePermissions && !commentPermissions">
+                <i ng-class="getSavedState().icon">
+                </i> {{getSavedState().text}}
+              </button>
+            </span>
             &nbsp;
-            <button class="btn btn-warning" ng-click="logOut()">
+            <button class="btn btn-warning" ng-click="logOut()" tabindex="-1">
               <i class="fa whiteicon fa-arrow-right">
               </i>
               {{contextualize('locale_logout')}}
             </button>
             <a href="http://lingsync.org/{{user.username}}" target="_blank" title="Visit your share page">
-              <img ng-hide="corpus.gravatar==undefined" ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
+              <img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?s=30&amp;d=identicon" border="0">
             </a>
           </div>
         </div>
@@ -125,35 +128,31 @@
           </i>
           {{contextualize('locale_change_session')}}
         </span>
-        <select class="span3" ng-model="fullCurrentSession" ng-options="session.title for session in sessions">
+        <select ng-model="$parent.fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
         </select>
-        &nbsp;
-        <button class="btn btn-primary" ng-click="selectSession(fullCurrentSession._id);navigateVerifySaved('none')">
-          {{contextualize('locale_activate_session_button')}}
-        </button>
         &nbsp;&nbsp;
-        <span ng-hide="activeSessionID==undefined">
-          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" >
+        <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
+          <button ng-show="writePermissions==true" class="btn btn-success" ng-click="showEditSessionDetails=!showEditSessionDetails;createNewSessionDropdown=false" >
             {{contextualize('locale_edit_session_info_button')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <span ng-show="(data | filter: activeSessionID).length==0">
-          <button ng-show="writePermissions==true" class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+        <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
+          <button  class="btn btn-danger" ng-click="deleteEmptySession()">
             <i class="fa whiteicon fa-trash-o">
             </i>
             {{contextualize('locale_delete_session')}}
           </button>
           &nbsp;&nbsp;
         </span>
-        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+        <button ng-show="writePermissions==true" class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;showEditSessionDetails=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-plus">
           </i>
           {{contextualize('locale_create_new_elicitation_session_button')}}
         </button>
       </div>
-      <div class="subSubMenubar"ng-show="editSessionDetails==true && activeSessionID!=undefined"ng-cloak>
-        <form ng-model='editSessionInfo'>
+      <div class="subSubMenubar" ng-show="showEditSessionDetails==true && $parent.fullCurrentSession._id" ng-cloak>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -162,61 +161,61 @@
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
-              <td>
+              <!-- <td>
                 <i class="fa whiteicon fa-user">
                 </i>
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
+              </td> -->
+              <!-- <td>
                 <i class="fa whiteicon fa-user">
                 </i>
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
-              </td>
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.user" placeholder="{{$parent.fullCurrentSession.user}}" disabled>
+              </td> -->
             </tr>
             <tr>
               <td>
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="date" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="$parent.fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
+          <button class="btn btn-primary" ng-click="editSession($parent.fullCurrentSession, data);">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
           </button>
           &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
+          <button class="btn" ng-click="showEditSessionDetails=false">
             {{contextualize('locale_cancel_button')}}
           </button>
         </div>
       </div>
       <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
-        <form ng-model='newSessionInfo'>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -225,49 +224,49 @@
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="newSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
-              <td>
+             <!--  <td>
                 <i class="fa whiteicon fa-user">
                 </i>
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
+                <input class="span3" type="text" ng-model="newSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
+              </td> -->
+             <!--  <td>
                 <i class="fa whiteicon fa-user">
                 </i>
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
-              </td>
+                <input disabled class="span3" type="text" ng-model="newSession.user" placeholder="{{user.name}}">
+              </td> -->
             </tr>
             <tr>
               <td>
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="newSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="newSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="date" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+          <button class="btn btn-primary" ng-click="createNewSession(newSession);createNewSessionDropdown=false;navigateVerifySaved('none')">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_create_session_button')}}
@@ -284,9 +283,9 @@
         <i class="fa whiteicon fa-search">
         </i>
         {{contextualize('locale_search_text_box')}}&nbsp;
-        <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+        <input type="text" class="input-medium search-query" ng-model='$parent.searchTerm'>
         &nbsp;
-        <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+        <button class="btn btn-primary" ng-click="runSearch($parent.searchTerm);">
           {{contextualize('locale_go_button')}}
         </button>
         &nbsp;
@@ -333,7 +332,7 @@
         </a>
       </span>
       |
-      <span ng-show="dataentry==true" ng-class="{active_menu_class: activeMenu=='editSession'}">
+      <span ng-hide="data==undefined" ng-class="{active_menu_class: activeMenu=='editSession'}">
         <a class="menuitem" ng-click="navigateVerifySaved('editSession')">
           <i class="fa whiteicon fa-calendar">
           </i>
@@ -354,7 +353,7 @@
                   </i>
                 </a>
               </li>
-              <li ng-hide="corpus.pouchname==undefined">
+              <li ng-hide="corpus.dbname==undefined">
                 <a ng-click="navigateVerifySaved('settings');">
                   <i class="fa whiteicon fa-cogs">
                   </i>
@@ -379,16 +378,18 @@
       </span>
       <span class="smallMenuBarInfo" ng-show="authenticated==true">
         <span class=" smallMenuBarInfoItem" ng-hide="corpus==undefined">
-          <a class="" href="http://lingsync.org/{{corpus.pouchname.replace('-','/')}}/{{corpus.pouchname}}" target="_blank" title="Visit this corpus' webpage">
-            <img ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
+          <a class="" href="http://lingsync.org/{{corpus.dbname.replace('-','/')}}/{{corpus.dbname}}" target="_blank" title="Visit this corpus' webpage">
+            <img ng-src="https://secure.gravatar.com/avatar/{{corpus.team.gravatar}}?s=30&amp;d=retro&amp;r=pg" border="0">
           </a>
         </span>
         <span class="smallMenuBarInfoItem">
           &nbsp;
-          <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-show="dataentry==true && loading==false">
-            <i ng-class="getSavedState().icon">
-            </i>
-          </button>
+          <span ng-show="dataentry">
+            <button ng-class="getSavedState().class" ng-click="saveChanges();" ng-hide="!writePermissions && !commentPermissions">
+              <i ng-class="getSavedState().icon">
+              </i>
+            </button>
+          </span>
           &nbsp;
           <button class="btn btn-warning" ng-click="logOut()">
             <i class="fa whiteicon fa-arrow-right">
@@ -411,100 +412,89 @@
       <span>
         {{contextualize('locale_change_session')}}
       </span>
-      <select class="span3" ng-model='activeSessionIDToSwitchTo'>
-        <option value='none'>
-          All sessions
-        </option>
-        <option select-dropdown-session ng-repeat="session in sessions | orderBy:'dateCreated'" value="{{session._id}}">
-          {{session.dateCreated | shortDate}} {{session.title}}
-        </option>
+      <select class="span3" ng-model="$parent.fullCurrentSession" ng-options="session.dateAndGoalSnippet for session in sessions">
       </select>
-      <button class="btn btn-primary" ng-click="selectSession(activeSessionIDToSwitchTo);navigateVerifySaved('none')">
-        <i class="fa whiteicon fa-calendar">
-        </i>
-        {{contextualize('locale_activate_session_button')}}
-      </button>
       &nbsp;&nbsp;
-      <span ng-hide="activeSessionID==undefined">
-        <button class="btn btn-success" ng-click="selectSession(activeSessionIDToSwitchTo);editSessionDetails=!editSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
+      <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
+        <button class="btn btn-success" ng-click="showEditSessionDetails=!showEditSessionDetails;createNewSessionDropdown=false" ng-disabled="readOnly==true">
           <i class="fa whiteicon fa-pencil">
           </i>
           {{contextualize('locale_edit_session_info_button')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <span ng-show="(data | filter: activeSessionID).length==0">
-        <button class="btn btn-danger" ng-click="deleteEmptySession(activeSessionID)" ng-disabled="readOnly==true">
+      <span ng-show="writePermissions==true&&$parent.fullCurrentSession._id&&$parent.fullCurrentSession.fields">
+        <button class="btn btn-danger" ng-click="deleteEmptySession()">
           <i class="fa whiteicon fa-trash-o">
           </i>
           {{contextualize('locale_delete_session')}}
         </button>
         &nbsp;&nbsp;
       </span>
-      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;editSessionDetails=false" ng-disabled="readOnly==true">
+      <button class="btn btn-primary" ng-click="createNewSessionDropdown=!createNewSessionDropdown;showEditSessionDetails=false" ng-disabled="readOnly==true">
         <i class="fa whiteicon fa-plus">
         </i>
         {{contextualize('locale_create_new_session')}}
       </button>
-      <div class="subSubMenubar" ng-show="editSessionDetails==true && activeSessionID!=undefined" ng-cloak>
-        <form ng-model='editSessionInfo'>
+      <div class="subSubMenubar" ng-show="showEditSessionDetails==true && $parent.fullCurrentSession._id!=undefined" ng-cloak>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
-              <td>
+              <!-- <td>
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
+              </td> -->
+              <!-- <td>
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.user" placeholder="{{editSessionInfo.user}}" disabled>
-              </td>
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.user" placeholder="{{$parent.fullCurrentSession.user}}" disabled>
+              </td> -->
             </tr>
             <tr>
               <td>
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="$parent.fullCurrentSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="editSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="$parent.fullCurrentSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn" ng-click="editSession(editSessionInfo, data);">
-            <i class="fa whiteicon fa-save">
+          <button class="btn btn-primary" ng-click="editSession($parent.fullCurrentSession, data);">
+            <i class="fa  fa-save">
             </i>
             {{contextualize('locale_save_changes_button')}}
           </button>
           &nbsp;
-          <button class="btn" ng-click="editSessionDetails=false">
+          <button class="btn" ng-click="showEditSessionDetails=false">
             {{contextualize('locale_cancel_button')}}
           </button>
         </div>
       </div>
       <div class="subSubMenubar" ng-show="createNewSessionDropdown==true" ng-cloak>
-        <form ng-model='newSessionInfo'>
+        <form >
           <table cellpadding="5px">
             <tr>
               <td>
@@ -513,49 +503,49 @@
                 {{contextualize('locale_goal_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.goal" placeholder="Collecting examples of animacy agreement">
+                <input class="span3" type="text" ng-model="newSession.goal" placeholder="Collecting examples of animacy agreement">
               </td>
-              <td>
+              <!-- <td>
                 <i class="fa whiteicon fa-group">
                 </i>
                 {{contextualize('locale_consultants_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.consultants" placeholder="ME,EV,FE">
-              </td>
-              <td>
+                <input class="span3" type="text" ng-model="newSession.consultants" ng-hide="true" placeholder="ME,EV,FE">
+              </td> -->
+              <!-- <td>
                 <i class="fa whiteicon fa-user">
                 </i>
                 {{contextualize('locale_user_textbox')}}:
               </td>
               <td>
-                <input disabled class="span3" type="text" ng-model="newSessionInfo.user" placeholder="{{user.name}}">
-              </td>
+                <input disabled class="span3" type="text" ng-model="newSession.user" placeholder="{{user.name}}">
+              </td> -->
             </tr>
             <tr>
               <td>
                 {{contextualize('locale_language_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.language" placeholder="Language">
+                <input class="span3" type="text" ng-model="newSession.language" placeholder="Language">
               </td>
               <td>
                 {{contextualize('locale_dialect_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.dialect" placeholder="Dialect">
+                <input class="span3" type="text" ng-model="newSession.dialect" placeholder="Dialect">
               </td>
               <td>
                 {{contextualize('locale_date_elicited_textbox')}}:
               </td>
               <td>
-                <input class="span3" type="text" ng-model="newSessionInfo.dateElicited" placeholder="Weds 2012-08-01">
+                <input class="span3" type="date" ng-model="newSession.dateElicited" placeholder="Weds 2012-08-01">
               </td>
             </tr>
           </table>
         </form>
         <div>
-          <button class="btn btn-primary" ng-click="createNewSession(newSessionInfo);createNewSessionDropdown=false;navigateVerifySaved('none')">
+          <button class="btn btn-primary" ng-click="createNewSession(newSession);createNewSessionDropdown=false;navigateVerifySaved('none')">
             <i class="fa whiteicon fa-save">
             </i>
             {{contextualize('locale_create_session_button')}}
@@ -573,9 +563,9 @@
           <i class="fa whiteicon fa-search">
           </i>
           {{contextualize('locale_search_text_box')}}&nbsp;
-          <input type="text" class="input-medium search-query" ng-model='searchTerm'>
+          <input type="text" class="input-medium search-query" ng-model='$parent.searchTerm'>
           &nbsp;
-          <button class="btn btn-primary" ng-click="runSearch(searchTerm);">
+          <button class="btn btn-primary" ng-click="runSearch($parent.searchTerm);">
             {{contextualize('locale_go_button')}}
           </button>
           &nbsp;

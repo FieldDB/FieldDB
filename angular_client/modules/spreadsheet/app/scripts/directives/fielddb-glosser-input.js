@@ -12,26 +12,26 @@
 // var corpusSpecificGlosser;
 // /**
 //  * If the glosser & lexicon have not been created, this function makes it possible for users to specify any glosser url or lexicon url to use for downloading the precedece rules.
-//  * @param  {String} pouchname   The database for which the glosser is to be created
+//  * @param  {String} dbname   The database for which the glosser is to be created
 //  * @param  {String} optionalUrl An optional url to a couchdb map reduce which has a format similar to morphemesPrecedenceContext and is able to create tuples used by the lexicon.
 //  */
-// var initGlosserAndLexiconIfNecessary = function(pouchname, optionalUrl){
+// var initGlosserAndLexiconIfNecessary = function(dbname, optionalUrl){
 //   //If the url isnt specified, use the users lexicon on corpus server
-//   var url =  "https://corpus.lingsync.org/" + pouchname,
+//   var url =  "https://corpus.lingsync.org/" + dbname,
 //   showWordBoundaries = true;
 
 //   optionalUrl = optionalUrl ||  url + "/_design/lexicon/_view/morphemesPrecedenceContext?group=true";
 //   if (!corpusSpecificGlosser) {
 //     corpusSpecificGlosser = new Glosser({
-//       pouchname: pouchname
+//       dbname: dbname
 //     });
 //   }
 //   if (!corpusSpecificGlosser.lexicon) {
-//     corpusSpecificGlosser.downloadPrecedenceRules(pouchname, optionalUrl, function(precedenceRelations) {
+//     corpusSpecificGlosser.downloadPrecedenceRules(dbname, optionalUrl, function(precedenceRelations) {
 //       corpusSpecificGlosser.lexicon = lexiconFactory({
 //         precedenceRelations: precedenceRelations,
-//         dbname: pouchname,
-//         element: document.getElementById(pouchname+"-lexicon-viz"),
+//         dbname: dbname,
+//         element: document.getElementById(dbname+"-lexicon-viz"),
 //         dontConnectWordBoundaries: !showWordBoundaries,
 //         url: optionalUrl.replace(url, "")
 //       });
@@ -43,7 +43,7 @@ var debuggingMode = false;
 angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
   var controller = function($scope, $rootScope) {
-    console.log('loading controller for fielddbGlosserInput');
+    // console.log('loading controller for fielddbGlosserInput');
 
     $scope.keyListener = function($event) {
       var arrowkeys = [40, 38, 39, 37];
@@ -70,7 +70,7 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
         return;
       }
 
-      datumornewdatum.pouchname = $scope.corpus.pouchname;
+      datumornewdatum.dbname = $scope.corpus.dbname;
       if (fieldKey === 'utterance') {
         datumornewdatum = Glosser.guessMorphemesFromUtterance(datumornewdatum, !$scope.useAutoGlosser);
       } else if (fieldKey === 'morphemes') {
@@ -83,15 +83,15 @@ angular.module('spreadsheetApp').directive('fielddbGlosserInput', function() {
 
   return {
     template: function(element, attrs) {
-      console.log('loading template for fielddbGlosserInput', attrs);
+      // console.log('loading template for fielddbGlosserInput', attrs);
       var templateString =
         '<input ' +
         '  ng-repeat="corpusField in fieldsInColumns.' + attrs.columnlabel + ' track by $index"' +
         '  class="{{fieldSpanWidthClassName}}"' +
         '  type="text"' +
         '  ng-model="' + attrs.datumornewdatum + '[corpusField.id]"' +
-        '  placeholder="{{corpusField.label}}"' +
-        '  title="{{corpusField.help}}"' +
+        '  placeholder="{{corpusField.labelFieldLinguists}}"' +
+        '  title="{{corpusField.helpLinguists}}"' +
         '  ng-hide="corpusField.showToUserTypes == \'readonly\'"' +
         '  ng-blur="runGlosserUsingThisField(corpusField.id, ' + attrs.datumornewdatum + '[corpusField.id], ' + attrs.datumornewdatum + ', $event)"' +
         '/>';

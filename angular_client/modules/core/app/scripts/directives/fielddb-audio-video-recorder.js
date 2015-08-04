@@ -17,7 +17,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       parent: "=parent"
     },
     controller: function($scope) {
-      var debugging = true;
+      var debugging = false;
       if (debugging) {
         console.log("loading fielddbAudioVideoRecorder", $scope.parent);
       }
@@ -125,7 +125,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
     },
     link: function postLink(scope, el) {
-      console.log("keeping a reference to this element");
+      // console.log("keeping a reference to this element");
       scope.element = el;
       // if (FieldDB && FieldDB.AudioVideoRecorder && FieldDB.AudioVideoRecorder.Recorder) {
       //   FieldDB.AudioVideoRecorder.Recorder.initRecorder();
