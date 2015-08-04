@@ -972,7 +972,9 @@ Collection.prototype = Object.create(Object.prototype, {
         }
 
         if (anItem !== aCollection[idToMatch]) {
-          self.warn(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
+          // TODO why was this bug, then warn, and now showing for every context?
+          self.warn(" Looking at an anItem that should have matched the aCollection's member of " + idToMatch);
+          self.debug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
         }
 
         if (anotherItem === undefined) {
@@ -1039,7 +1041,8 @@ Collection.prototype = Object.create(Object.prototype, {
           // var resultItem = resultCollection[idToMatch];
 
           if (anotherItem !== anotherCollection[idToMatch]) {
-            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
+            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+            self.debug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
           }
 
           if (anItem === undefined) {
