@@ -722,6 +722,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   ensureSetViaAppropriateType: {
     value: function(propertyname, value, optionalInnerPropertyName) {
+      this.debug("ensureSetViaAppropriateType on " + propertyname, this.INTERNAL_MODELS);
       if (!propertyname) {
         console.error("Invalid call to ensureSetViaAppropriateType", value);
         throw new Error("Invalid call to ensureSetViaAppropriateType");
@@ -743,7 +744,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         !(value instanceof this.INTERNAL_MODELS[propertyname]) &&
         !(this.INTERNAL_MODELS[propertyname].compatibleWithSimpleStrings && typeof value === "string")) {
 
-        this.debug("Converting this into its type.", value.constructor.toString());
+        this.debug("Converting this into  type for " + propertyname, value.constructor.toString());
         value = new this.INTERNAL_MODELS[propertyname](value);
 
       }

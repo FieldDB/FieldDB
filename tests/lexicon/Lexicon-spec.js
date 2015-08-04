@@ -1,5 +1,6 @@
 var Lexicon = require("../../api/lexicon/Lexicon").Lexicon;
 var LexiconNode = Lexicon.LexiconNode;
+var Contexts = Lexicon.Contexts;
 var lexiconFactory = Lexicon.LexiconFactory;
 
 var memoryLoad;
@@ -216,8 +217,36 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       }, emit, rows);
       expect(result).toBeDefined();
       expect(result.rows).toBe(rows);
-      expect(result).toEqual({
-        rows: ["some previous stuff"]
+      expect(result.rows[0]).toEqual("some previous stuff");
+      expect(result.rows[3]).toEqual({
+        key: {
+          error: "This datum might need cleaning, one or more of the lines has more \'morphemes\' than it should for an IGT"
+        },
+        value: {
+          reason: {
+            fieldwhichHasMoreUnitsThanExpected: "unknown",
+            expectedUnits: {
+              utterance: "lloqsinaywaran",
+              confidence: 1,
+              morphemes: "lloqsi-nay-wa-ra-n",
+              gloss: "goout-des-om-sg"
+            }
+          },
+          potentiallyInaccurateData: {
+            morphemes: "wa",
+            gloss: "om",
+            confidence: 0.5
+          },
+          id: "8h329983jr200023j20"
+        }
+      });
+      expect(result.rows[10]).toEqual({
+        key: {
+          morphemes: "wa",
+          gloss: "om",
+          confidence: 0.5
+        },
+        value: "lloqsinaywaran"
       });
     });
 
@@ -250,6 +279,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         gloss: "what"
       }];
       entries = lexicon.add(entries);
+      expect(entries).toBeDefined();
+      expect(entries.length).toEqual(2);
       expect(lexicon.length).toEqual(2);
       expect(entries[0].headword).toEqual("kjun|why");
       expect(entries[1].headword).toEqual("kja|what");
@@ -291,14 +322,18 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       // Add returns what was added
       simpleEntry = lexicon.add(simpleEntry);
+      expect(lexicon.length).toEqual(1);
+      expect(lexicon.collection.length).toEqual(1);
       expect(simpleEntry.headword).toEqual("kjun|why");
-      expect(simpleEntry.parent).toEqual(lexicon);
+      // expect(simpleEntry.parent).toEqual(lexicon);
+
       expect(typeof lexicon.find).toEqual("function");
       expect(lexicon.collection.map(function(node) {
         return node.id;
       })).toEqual(["kjun|why"]);
 
-      // must runfind on exact node
+      // must run find on exact node
+      // lexicon.debugMode = true;
       var nodesInLexicon = lexicon.find(simpleEntry);
       expect(nodesInLexicon.length).toEqual(1);
       expect(nodesInLexicon[0].morphemes).toEqual("kjun");
@@ -331,7 +366,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         gloss: "because",
       });
       expect(nodesInLexiconFromSimpleObject).toBeDefined();
-      expect(nodesInLexiconFromSimpleObject.length).toEqual(2);
+      expect(nodesInLexiconFromSimpleObject.length).toEqual(1);
       expect(nodesInLexiconFromSimpleObject.map(function(node) {
         return node.id;
       })).toEqual(["kjjun|because"]);
@@ -371,8 +406,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       }, function(reason) {
         console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
-        expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+        expect(reason).toBeDefined();
+        expect(reason.userFriendlyErrors).toBeDefined();
         expect(reason.details).toEqual(" ");
+        expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" unexpected exception while processing rules");
@@ -443,6 +480,127 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
+  describe("contexts", function() {
+
+    it("should be able to count contexts", function() {
+      expect(Contexts).toBeDefined();
+      var contexts = new Contexts();
+      expect(contexts).toBeDefined();
+      contexts.add({
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 14
+      });
+      expect(contexts.collection.length).toEqual(1);
+      expect(contexts["noqa-ta"]).toEqual(contexts.collection[0]);
+      expect(contexts.length).toEqual(14);
+    });
+
+    it("should be able to add contexts", function() {
+      expect(Contexts).toBeDefined();
+      var contexts = new Contexts();
+      expect(contexts).toBeDefined();
+      contexts.add({
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 14
+      });
+      // contexts.debugMode = true;
+      console.log("\n\n");
+      contexts.add({
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 2
+      });
+      expect(contexts.collection.length).toEqual(1);
+      expect(contexts["noqa-ta"]).toEqual(contexts.collection[0]);
+      expect(contexts.length).toEqual(16);
+
+      expect(contexts.toJSON()).toEqual([{
+        morphemes: "noqa-ta",
+        count: 16,
+        URL: "",
+      }]);
+    });
+
+    it("should be able to automerge contexts of equivalent nodes", function() {
+      var lexicon = new Lexicon();
+
+      var one = lexicon.add({
+        morphemes: "one",
+        something: "else",
+        utterance: "one little"
+      });
+      expect(lexicon.collection).toBeDefined();
+      expect(lexicon.collection.length).toEqual(1);
+      expect(one).toBeDefined();
+      expect(one.utterance).toEqual("");
+      expect(one.contexts.toJSON()).toEqual([{
+        URL: "",
+        utterance: "one little"
+      }]);
+      expect(one.count).toEqual(1);
+
+      lexicon.add({
+        morphemes: "one",
+        another: "property",
+        utterance: "another one"
+      });
+
+      expect(lexicon.length).toEqual(1);
+
+      expect(one).toBeDefined();
+      expect(one.morphemes).toEqual("one");
+      expect(one.something).toEqual("else");
+      expect(one.utterance).toEqual("");
+      expect(one.another).toEqual("property");
+      expect(one.contexts.toJSON()).toEqual([{
+        URL: "",
+        utterance: "one little"
+      }, {
+        URL: "",
+        utterance: "another one"
+      }]);
+      expect(one.count).toEqual(2);
+    });
+
+    it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
+
+      expect(SAMPLE_V1_LEXICON.rows[221].key.context).toEqual("noqa-ta");
+      expect(SAMPLE_V1_LEXICON.rows[221].value).toEqual(14);
+      expect(SAMPLE_V1_LEXICON.rows[223].key.context).toEqual("noqa-yku");
+      expect(SAMPLE_V1_LEXICON.rows[223].value).toEqual(1);
+
+      var lexicon = new Lexicon([SAMPLE_V1_LEXICON.rows[221], SAMPLE_V1_LEXICON.rows[223]]);
+      expect(lexicon).toBeDefined();
+
+      expect(lexicon.length).toEqual(3);
+      expect(lexicon.collection.map(function(node) {
+        return node.id;
+      })).toEqual(["noqa|", "ta|", "yku|"]);
+
+      var noqa = lexicon.collection[0];
+      expect(noqa.fieldDBtype).toEqual("LexiconNode");
+
+      expect(noqa.morphemes).toEqual("noqa");
+      expect(noqa.utterance).toEqual("");
+      expect(noqa.orthography).toEqual("noqa");
+      expect(noqa.context).toBeUndefined();
+      expect(noqa.contexts.fieldDBtype).toEqual("Contexts");
+      expect(noqa.contexts.toJSON()).toEqual([{
+        URL: "",
+        morphemes: "noqa-ta",
+        count: 14
+      }, {
+        URL: "",
+        morphemes: "noqa-yku",
+        count: 1
+      }]);
+      expect(noqa.count).toEqual(15);
+
+    });
+  });
+
   describe("backward compatibility", function() {
     it("should be able to automerge equivalent nodes", function() {
       var lexicon = new Lexicon();
@@ -467,71 +625,6 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(one[0].another).toEqual("property");
     });
 
-    it("should be able to automerge contexts of equivalent nodes", function() {
-      var lexicon = new Lexicon();
-
-      var one = lexicon.add({
-        morphemes: "one",
-        something: "else",
-        utterance: "one little"
-      });
-      expect(one.utterance).toEqual("");
-      expect(one.contexts).toEqual([{
-        URL: "",
-        utterance: "one little"
-      }]);
-      expect(one.count).toEqual(1);
-
-      lexicon.add({
-        morphemes: "one",
-        another: "property",
-        utterance: "another one"
-      });
-
-      expect(lexicon.length).toEqual(1);
-
-      expect(one).toBeDefined();
-      expect(one.morphemes).toEqual("one");
-      expect(one.something).toEqual("else");
-      expect(one.another).toEqual("property");
-      expect(one.contexts).toEqual([{
-        URL: "",
-        utterance: "one little"
-      }, {
-        URL: "",
-        utterance: "another one"
-      }]);
-      expect(one.count).toEqual(2);
-    });
-
-    it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
-
-      expect(SAMPLE_V1_LEXICON.rows[221].key.context).toEqual("noqa-ta");
-      expect(SAMPLE_V1_LEXICON.rows[221].value).toEqual(14);
-      expect(SAMPLE_V1_LEXICON.rows[223].key.context).toEqual("noqa-yku");
-      expect(SAMPLE_V1_LEXICON.rows[223].value).toEqual(1);
-      var lexicon = new Lexicon([SAMPLE_V1_LEXICON.rows[221], SAMPLE_V1_LEXICON.rows[223]]);
-      expect(lexicon).toBeDefined();
-      expect(lexicon.length).toEqual(3);
-      expect(lexicon.collection.map(function(node) {
-        return node.id;
-      })).toEqual(["noqa|", "ta|", "yku|"]);
-      expect(lexicon.collection[0].morphemes).toEqual("noqa");
-      expect(lexicon.collection[0].utterance).toEqual("");
-      expect(lexicon.collection[0].orthography).toEqual("noqa");
-      expect(lexicon.collection[0].context).toBeUndefined();
-      expect(lexicon.collection[0].contexts).toEqual([{
-        URL: "",
-        morphemes: "noqa-ta",
-        count: 14
-      }, {
-        URL: "",
-        morphemes: "noqa-yku",
-        count: 1
-      }]);
-      expect(lexicon.collection[0].count).toEqual(15);
-
-    });
 
     it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V1_LEXICON.rows.length).toEqual(348);
@@ -553,7 +646,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.collection[0].count).toEqual(1);
 
       expect(lexicon.collection.map(function(node) {
-        return node.id + ":" + node.count;
+        return node.id; /// + ":" + node.count;
       })).toEqual(["allcha|", "nay|", "ancha|", "ta|", "aqtu|", "ay|", "sunki|",
         "chaya|", "chi|", "ku|", "hall|", "pa|", "hamu|", "hanllari|", "hay|", "ka|",
         "ni|", "kicha|", "n|", "naya|", "kusi|", "lares|", "man|", "lla|", "llank'a|",

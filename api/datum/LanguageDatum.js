@@ -128,10 +128,13 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
       }
     },
     set: function(value) {
+      this.debug("setting morphemes " + value);
       if (!this.fields || !this.fields.morphemes) {
         this.addField("morphemes");
       }
+      this.debug(" this.fields.morphemes ", this.fields.morphemes);
       this.fields.morphemes.value = value;
+      this.debug(" this.fields.morphemes.value ", this.fields.morphemes.value);
     }
   },
 

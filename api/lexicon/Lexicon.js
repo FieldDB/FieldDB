@@ -10,6 +10,7 @@ var Collection = require("../Collection").Collection;
 var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
+var Contexts = require("./Contexts").Contexts;
 
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
@@ -522,14 +523,34 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
-  add: {
-    value: function(value) {
-      if (value && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
-        console.log("\n adding   ", value.orthography + "\n");
-        Lexicon.LexiconNode.mergeContextsIntoContexts(value);
+  set: {
+    value: function(searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted) {
+      // this.debugMode = true;
+      if (originalValue && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
+        this.debug("\n adding   ", originalValue, "\n");
+        Lexicon.LexiconNode.mergeContextsIntoContexts(originalValue);
+        this.debug("done combining contexts", originalValue.contexts);
+      }
+      if (!(originalValue instanceof Lexicon.LexiconNode)) {
+        this.debug("converting into node", originalValue);
+        // originalValue.debugMode = true;
+        originalValue = new Lexicon.LexiconNode(originalValue);
+        this.debug("converting into node headword", originalValue);
+      }
+      this.debug("looking for  " + originalValue.headword + " in ", this.collection.length);
+
+      var matches = this.find(originalValue);
+      this.debug("matching lexical entries ", matches);
+      var value;
+      if (matches && matches.length) {
+        value = matches[0];
+        value.merge("self", originalValue);
+      } else {
+        value = Collection.prototype.set.apply(this, [searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted]);
+        this.debug(" finished setting lexical entry ");
       }
 
-      return Collection.prototype.add.apply(this, [value]);
+      return value;
     }
   },
 
@@ -1224,6 +1245,7 @@ var LexiconFactory = function(options) {
 
 Lexicon.bootstrapLexicon = Lexicon.lexicon_nodes_mapReduce;
 Lexicon.LexiconNode = LexiconNode;
+Lexicon.Contexts = Contexts;
 Lexicon.LexiconFactory = LexiconFactory;
 Lexicon.maxLexiconSize = 1000;
 

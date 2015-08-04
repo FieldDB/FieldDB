@@ -3,6 +3,15 @@ var Q = require("q");
 var BASE_LEXICON_NODE = require("./../datum/LanguageDatum").LanguageDatum;
 var DEFAULT_CORPUS = require("./../../api/corpus/corpus.json");
 
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
+var Contexts = require("./../lexicon/Contexts").Contexts;
+var Comments = require("./../comment/Comments").Comments;
+var DatumFields = require("./../datum/DatumFields").DatumFields;
+var DatumStates = require("./../datum/DatumStates").DatumStates;
+var DatumTags = require("./../datum/DatumTags").DatumTags;
+var Images = require("./../image/Images").Images;
+var Session = require("./../datum/Session").Session;
+
 var escapeRegexCharacters = function(regex) {
   return regex.replace(/([()[{*+.$^\\|?])/g, "\\$1");
 };
@@ -24,8 +33,8 @@ var LexiconNode = function(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "LexiconNode";
   }
-  this.debug("Declaring a LexiconNode", options);
   // this.debugMode = true;
+  this.debug("Declaring a LexiconNode", options);
   BASE_LEXICON_NODE.apply(this, arguments);
 
   if (typeof this.toJSON === "function") {
@@ -40,6 +49,8 @@ var LexiconNode = function(options) {
   }
 
   this.debug("constructed " + this.id);
+  this.debug("morphemes " + this.morphemes);
+  console.log("contexts " , this.contexts);
 };
 
 LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends LexiconNode.prototype */ {
@@ -49,6 +60,20 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
 
   api: {
     value: "lexicalNodes"
+  },
+
+  // Internal models: used by the parse function
+  INTERNAL_MODELS: {
+    value: {
+      fields: DatumFields,
+      audioVideo: AudioVideos,
+      session: Session,
+      comments: Comments,
+      contexts: Contexts,
+      datumStates: DatumStates,
+      datumTags: DatumTags,
+      images: Images
+    }
   },
 
   /**
@@ -68,6 +93,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
 
   headword: {
     get: function() {
+      this.debug(" getting headword ", this.fields ? this.fields.length : this);
       if (!this._id) {
         var constructHeadwordFromMorphemesAndGloss = "";
         if (this.morphemes) {
@@ -90,26 +116,24 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
 
   count: {
     get: function() {
-      if (this._count) {
+      if (!this._contexts || !(this._contexts instanceof Contexts)) {
         this.debug(" getting _count of " + this.id + " " + this._count);
-        return this._count;
+        return this._count || 0;
       }
-      var sum = 0;
-      if (this._contexts && typeof this._contexts.map === "function") {
-        this._contexts.map(function(context){
-          if (context.count) {
-            sum += context.count;
-          } else {
-            sum += 1;
-          }
-        });
+
+      if (this._contexts && this._contexts instanceof Contexts) {
+        this.debug(" getting number of context counts of " + this.id + " " + this._contexts.length);
+        return this._contexts.length;
       }
-      this.debug(" getting number of context counts of " + this.id + " " +sum);
-      return sum;
+      return 0;
     },
     set: function(value) {
       this.debug(" setting count of " + this.id + " " + value);
-      this._count = value;
+      if (this._contexts && this._contexts instanceof Contexts) {
+        this._contexts.length = value;
+      } else {
+        this._count = value;
+      }
     }
   },
 
@@ -134,35 +158,40 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   contexts: {
     get: function() {
       if (!this._contexts) {
-        this._contexts = [];
-        console.log("Initializing context of " + this.id);
+        this._contexts = new this.INTERNAL_MODELS["contexts"]();
+        console.log("Initializing contexts of " + this.id);
       }
       return this._contexts;
     },
     set: function(value) {
-      console.log(" setting context ", value);
-      if (!this._contexts || !this._contexts.length) {
-        this._contexts = value;
-      } else {
-        var contextIsNew = true;
-        for (var newContextIndex = 0; newContextIndex < value.length; newContextIndex++) {
-          var newContext = value[newContextIndex];
-          this._contexts.map(function(existingContext) {
-            // If any of the properties in an existing context match, we dont need to add this as a context
-            for (var attrib in existingContext) {
-              if (existingContext.hasOwnProperty(attrib) && existingContext[attrib] && existingContext[attrib].length > 2) {
-                if (existingContext[attrib] === newContext[attrib]) {
-                  console.log("this context already exists", newContext[attrib]);
-                  contextIsNew = false;
-                }
-              }
-            }
-          });
-          if (contextIsNew) {
-            this._contexts.push(newContext);
-          }
-        }
-      }
+      // this.debugMode = true;
+      this.ensureSetViaAppropriateType("contexts", value);
+      // this.debugMode = false;
+
+      console.log(" set contexts to ", this._contexts);
+      // console.log(" setting context ", value);
+      // if (!this._contexts || !this._contexts.length) {
+      //   this._contexts = value;
+      // } else {
+      //   var contextIsNew = true;
+      //   for (var newContextIndex = 0; newContextIndex < value.length; newContextIndex++) {
+      //     var newContext = value[newContextIndex];
+      //     this._contexts.map(function(existingContext) {
+      //       // If any of the properties in an existing context match, we dont need to add this as a context
+      //       for (var attrib in existingContext) {
+      //         if (existingContext.hasOwnProperty(attrib) && existingContext[attrib] && existingContext[attrib].length > 2) {
+      //           if (existingContext[attrib] === newContext[attrib]) {
+      //             console.log("this context already exists", newContext[attrib]);
+      //             contextIsNew = false;
+      //           }
+      //         }
+      //       }
+      //     });
+      //     if (contextIsNew) {
+      //       this._contexts.push(newContext);
+      //     }
+      //   }
+      // }
     }
   },
 
@@ -437,7 +466,7 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
   if (!value) {
     return;
   }
-  // console.log("Customizing merge to combine contexts into an array of overwrite them " + value.morphemes);
+  console.log("mergeContextsIntoContexts: ", value.fieldDBtype);
 
   var context = {
     URL: ""
@@ -455,51 +484,43 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
     } else {
       context.context = value.context + "";
     }
-    // console.log(" Moved context into contexts ", context);
+    console.log(" Moved context into contexts ", context);
     contextWasFound = true;
-    // value.context = "";
+    value.context = "";
     delete value.context;
   }
 
   if (value.utterance) {
     context.utterance = value.utterance + "";
-    // console.log(" Moved utterance into contexts ", context);
+    console.log(" Moved utterance into contexts ", context);
     contextWasFound = true;
-    // value.utterance = "";
+    value.utterance = "";
     delete value.utterance;
+    console.log(" Moved utterance out: ", value.utterance);
   }
 
   if (value.orthography && value.orthography !== value.morphemes) {
     context.orthography = value.orthography + "";
     console.log(" Moved orthography into contexts ", value.morphemes);
     contextWasFound = true;
-    // value.orthography = "";
+    value.orthography = "";
     delete value.orthography;
   }
 
   if (!contextWasFound) {
+    // console.log("Context was not found, not changed", value.contexts);
     return value.contexts;
   }
 
   if (!value.contexts) {
-    value.contexts = [context];
+    console.log("Initializing contexts");
+    value.contexts = new LexiconNode.prototype.INTERNAL_MODELS["contexts"]([context]);
   } else {
-    // console.log("   ensure not adding an existing context by id or other key");
-    var contextIsNew = true;
-    value.contexts.map(function(existingContext) {
-      // If any of the properties in an existing context match, we dont need to add this as a context
-      for (var attrib in existingContext) {
-        if (existingContext.hasOwnProperty(attrib) && existingContext[attrib]) {
-          if (existingContext[attrib] === context[attrib]) {
-            console.log("This context already exists", context[attrib]);
-            contextIsNew = false;
-          }
-        }
-      }
-    });
-    if (contextIsNew) {
-      value.contexts.push(context);
+    console.log("   ensure not adding an existing context by id or other key");
+    if (!(value.contexts instanceof LexiconNode.prototype.INTERNAL_MODELS["contexts"])) {
+      value.contexts = new LexiconNode.prototype.INTERNAL_MODELS["contexts"]([value.contexts]);
     }
+    value.contexts.add(context);
   }
   return value.contexts;
 };
