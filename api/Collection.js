@@ -1126,6 +1126,49 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  corpus: {
+    get: function() {
+      var db = null;
+      // this.debugMode = true;
+      if (this._corpus) {
+        db = this._corpus;
+        this.debug("this " + this._id + " has a _corpus hard coded inside it, using it.", db);
+      } else if (FieldDBObject.application && FieldDBObject.application._corpus) {
+        db = FieldDBObject.application._corpus;
+        this.debug("this " + this._id + " is running in the context where FieldDBObject.application._corpus is defined, using it.", db);
+      } else {
+
+        try {
+          if (FieldDB && FieldDB["Database"]) {
+            db = FieldDB["Database"].prototype;
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            this.debug(" the database", db);
+          }
+        } catch (e) {
+          var message = e ? e.message : " unknown error in getting the corpus";
+          if (message !== "FieldDB is not defined") {
+            this.warn(this._id + "Cant get the corpus, cant find the Database class.", e);
+            if (e) {
+              this.warn("  stack trace" + e.stack);
+            }
+          }
+        }
+      }
+      if (!db) {
+        this.warn("Operations that need a corpus/database wont work for the " + this._id + " object");
+      }
+
+      return db;
+    },
+    set: function(value) {
+      if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {
+        this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
+        return;
+      }
+      this._corpus = value;
+    }
+  },
+  
   dbname: {
     get: function() {
       return;
