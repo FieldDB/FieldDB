@@ -27,7 +27,7 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
   id: {
     get: function() {
       var id = this._id || this.URL || this.context || this.morphemes || this.utterance || this.orthography;
-      console.log("  id of context: " + id);
+      // console.log("  id of context: " + id);
       return id;
     },
     set: function(value) {
@@ -55,7 +55,7 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
         resultObject = anObject = this;
         anotherObject = FieldDBObject.convertDocIntoItsType(callOnSelf);
       } else if (callOnSelf === "self") {
-        console.log("Merging properties into myself. ");
+        // console.log("Merging properties into myself. ");
         anObject = this;
         resultObject = anObject;
       } else if (callOnSelf && anotherObject) {
@@ -65,14 +65,14 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
         this.warn("Invalid call to merge, invalid arguments were provided to merge", arguments);
         return null;
       }
-      console.log("Merging contexts", anObject, anotherObject, "into", resultObject);
+      // console.log("Merging contexts", anObject, anotherObject, "into", resultObject);
 
       for (aproperty in anObject) {
         if (!anObject.hasOwnProperty(aproperty) ||
           typeof anObject[aproperty] === "function") {
           continue;
         }
-        console.log("merging " + aproperty);
+        // console.log("merging " + aproperty);
         if (typeof anObject[aproperty] === "number") {
           resultObject[aproperty] = anObject[aproperty] + anotherObject[aproperty];
         }
@@ -137,6 +137,28 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
     }
   },
 
+
+  /**
+   *  Cleans a value to become a primary key on an object (replaces punctuation with underscore)
+   *  (replaces the default Collection.sanitizeStringForPrimaryKey method which scrubs unicode from the primary keys)
+   *
+   * @param  String value the potential primary key to be cleaned
+   * @return String       the value cleaned and safe as a primary key
+   */
+  sanitizeStringForPrimaryKey: {
+    value: function(value) {
+      this.debug("sanitizeStringForPrimaryKey");
+      if (!value) {
+        return null;
+      }
+      if (typeof value.replace !== "function") {
+        value = value + "";
+      }
+      value = value.replace(/[""+=?./\[\]{}() ]/g, "");
+      return value;
+    }
+  },
+
   // primaryKey: {
   //   get: function() {
   //     console.log(" getting primaryKey " + this._primaryKey);
@@ -191,10 +213,10 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
           context: originalValue
         };
       }
-      console.log("context count before" + originalValue.count);
+      this.debug("context count before" + originalValue.count);
       // this.debugMode = true;
       var matches = this.find(originalValue);
-      console.log("matching contexts ", matches);
+      this.debug("matching contexts ", matches);
       var value;
       if (matches && matches.length) {
         value = matches[0];

@@ -50,7 +50,7 @@ var LexiconNode = function(options) {
 
   this.debug("constructed " + this.id);
   this.debug("morphemes " + this.morphemes);
-  console.log("contexts ", this.contexts);
+  this.debug("contexts ", this.contexts);
 };
 
 LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends LexiconNode.prototype */ {
@@ -100,7 +100,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
           constructHeadwordFromMorphemesAndGloss = this.morphemes;
         }
         constructHeadwordFromMorphemesAndGloss += "|";
-        if (this.gloss) {
+        if (this.gloss && this.gloss !== "?" && this.gloss !== "??") {
           constructHeadwordFromMorphemesAndGloss += this.gloss;
         }
         if (constructHeadwordFromMorphemesAndGloss && constructHeadwordFromMorphemesAndGloss !== "|") {
@@ -160,7 +160,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
     get: function() {
       if (!this._contexts) {
         this._contexts = new this.INTERNAL_MODELS["contexts"]();
-        console.log("Initializing contexts of " + this.id);
+        this.debug("Initializing contexts of " + this.id);
       }
       return this._contexts;
     },
@@ -169,7 +169,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       this.ensureSetViaAppropriateType("contexts", value);
       // this.debugMode = false;
 
-      console.log(" set contexts to ", this._contexts);
+      this.debug(" set contexts to ", this._contexts);
       // console.log(" setting context ", value);
       // if (!this._contexts || !this._contexts.length) {
       //   this._contexts = value;
@@ -261,7 +261,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
 
   equalDepreated: {
     value: function(b) {
-      console.log(" checking equality ", this.headword, b.headword);
+      this.warn(" checking equality ", this.headword, b.headword);
 
       var a = this;
       var equal = true;
@@ -396,7 +396,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
         self.cleanedData.push(doc);
       };
       var failFunction = function(reason) {
-        console.log(reason);
+        self.warn("There was a problem opening your data.", reason);
         self.bug("There was a problem opening your data. " + reason.userFriendlyErrors);
       };
 
@@ -422,7 +422,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
         self = this,
         promises = [];
 
-      console.log("Saving cleaned datum...");
+      self.debug("Saving cleaned datum...");
       while (this.cleanedData && this.cleanedData.length > 0) {
         var cleanedDatum = this.cleanedData.pop();
         promises.push(CORS.makeCORSRequest({
@@ -435,7 +435,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       Q.allSettled(promises).then(function(results) {
         results.map(function(result) {
           if (result.state === "fulfilled" && result.value && result.value.ok) {
-            console.log("Your changes have been successfully saved! ", result.value);
+            self.debug("Your changes have been successfully saved! ", result.value);
           } else {
             self.bug("One of your changes was not saved " + cleanedDatum._id + " " + result.value.userFriendlyErrors.join("\n"));
           }
@@ -467,7 +467,7 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
   if (!value) {
     return;
   }
-  console.log("mergeContextsIntoContexts: ", value.fieldDBtype);
+  // console.log("mergeContextsIntoContexts: ", value.fieldDBtype);
 
   var context = {
     URL: ""
@@ -485,7 +485,7 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
     } else {
       context.context = value.context + "";
     }
-    console.log(" Moved context into contexts ", context);
+    // console.log(" Moved context into contexts ", context);
     contextWasFound = true;
     value.context = "";
     delete value.context;
@@ -493,16 +493,16 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
 
   if (value.utterance) {
     context.utterance = value.utterance + "";
-    console.log(" Moved utterance into contexts ", context);
+    // console.log(" Moved utterance into contexts ", context);
     contextWasFound = true;
     value.utterance = "";
     delete value.utterance;
-    console.log(" Moved utterance out: ", value.utterance);
+    // console.log(" Moved utterance out: ", value.utterance);
   }
 
   if (value.orthography && value.orthography !== value.morphemes) {
     context.orthography = value.orthography + "";
-    console.log(" Moved orthography into contexts ", value.morphemes);
+    // console.log(" Moved orthography into contexts ", value.morphemes);
     contextWasFound = true;
     value.orthography = "";
     delete value.orthography;
@@ -517,7 +517,6 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
     console.log("Initializing contexts");
     value.contexts = new LexiconNode.prototype.INTERNAL_MODELS["contexts"]([context]);
   } else {
-    console.log("   ensure not adding an existing context by id or other key");
     if (!(value.contexts instanceof LexiconNode.prototype.INTERNAL_MODELS["contexts"])) {
       value.contexts = new LexiconNode.prototype.INTERNAL_MODELS["contexts"]([value.contexts]);
     }

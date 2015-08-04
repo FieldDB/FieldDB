@@ -218,7 +218,7 @@ describe("Test Datum", function() {
 
     it("should permit fieldlabel:value search", function() {
       var datum = new Datum(sample_1_22_datum[0]);
-      datum.debugMode = true;
+      // datum.debugMode = true;
 
       var result = datum.search("utterance:much' && gloss:pass AND gloss:gen");
       expect(result).toBeDefined();

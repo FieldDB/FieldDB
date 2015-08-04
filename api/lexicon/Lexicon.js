@@ -261,13 +261,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
               var saveEditToAllData = self.confirm("Would you like to clean this lexical entry? (This will change all examples you see here to have this new information.)\n\n" + changesAsStrings.join("\n"));
               if (saveEditToAllData) {
                 e.target.parentElement.__data__.save().then(function(result) {
-                  console.log("Saving success...", result);
+                  self.debug("Saving success...", result);
                   self.popup("Saved " + changesAsStrings.join(" "));
                 }, function(reason) {
-                  console.log("Saving failed...", reason);
+                  self.warn("Saving failed...", reason);
                   self.bug("Save failed. " + reason.userFriendlyErrors.join(" "));
                 }).fail(function(reason) {
-                  console.log("Saving failed...", reason);
+                  self.warn("Saving failed...", reason);
                   self.bug("Save failed. Please notify the app's developers " + e.target.parentElement.__data__.datumids.join(" "));
                 });
               }
@@ -466,7 +466,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         var foundNgram = false;
         for (var rowIndex = 0; rowIndex < value.length; rowIndex++) {
           if (!value.hasOwnProperty(rowIndex) || !value[rowIndex]) {
-            console.log("skipping ", value[rowIndex]);
+            this.debug("skipping ", value[rowIndex]);
             continue;
           }
           var morphemes = value[rowIndex].key || value[rowIndex];
@@ -475,17 +475,17 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             morphemes = morphemes.split("-");
             var count = 1;
             var context = "";
-            if (typeof value[precedenceNGrams].value === "number") {
-              count = value[precedenceNGrams].value;
+            if (typeof value[rowIndex].value === "number") {
+              count = value[rowIndex].value;
             } else {
-              context = value[precedenceNGrams].value;
+              context = value[rowIndex].value;
               count = 0;
             }
 
             if (morphemes && morphemes.length) {
               var previousMorph = morphemes[0];
               for (var morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
-                console.log(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
+                this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
                 var relation = uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]];
                 if (relation) {
                   if (count) {
@@ -495,9 +495,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
                     relation.from.contexts.push(context);
                     relation.to.contexts.push(context);
                   }
-                  console.log(" already found " + relation.count, relation.contexts);
+                  this.debug(" already found " + relation.count, relation.contexts);
                 } else {
-                  console.log("  new ");
+                  this.debug("  new ");
                   relation = {
                     from: {
                       morphemes: previousMorph,
@@ -521,12 +521,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
               }
             } else {
-              console.log("This wasn't a precedence relation ngram", value[precedenceNGrams]);
+              this.debug("This wasn't a precedence relation ngram", value[rowIndex]);
             }
 
 
           } else {
-            console.log("not upgrading entity relations");
+            this.debug("not upgrading entity relations");
           }
 
         }
@@ -535,7 +535,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
         this.debug("uniqueNGrams", uniqueNGrams);
       } else {
-        console.log(" Setting entityRelations without upggrade or conversion", value);
+        this.debug(" Setting entityRelations without upggrade or conversion", value);
         this._entryRelations = value;
       }
     }
@@ -758,14 +758,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             if (connectionEdge.frequencyCount) {
               context.count = connectionEdge.frequencyCount;
             } else {
-              console.log("Don't know how often this context appears", entryRelation.value);
+              self.debug("Don't know how often this context appears", entryRelation.value);
             }
             from.contexts = [context];
             to.contexts = [context];
           } else {
-            console.log("This is not a v1 relation", entryRelation);
+            self.debug("This is not a v1 relation", entryRelation);
             if (connectionEdge.frequencyCount) {
-              console.log("setting frequencyCount using edge count", connectionEdge.frequencyCount);
+              self.debug("setting frequencyCount using edge count", connectionEdge.frequencyCount);
               from.count += connectionEdge.frequencyCount;
               to.count += connectionEdge.frequencyCount;
             }
