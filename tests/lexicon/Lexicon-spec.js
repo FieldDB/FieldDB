@@ -426,7 +426,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
         expect(reason).toBeDefined();
         expect(reason.userFriendlyErrors).toBeDefined();
-        expect(reason.details).toEqual(" ");
+        expect(reason.details).toBeDefined();
         expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
       }).fail(function(exception) {
         console.log(exception.stack);
