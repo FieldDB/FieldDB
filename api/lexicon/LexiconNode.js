@@ -50,7 +50,7 @@ var LexiconNode = function(options) {
 
   this.debug("constructed " + this.id);
   this.debug("morphemes " + this.morphemes);
-  console.log("contexts " , this.contexts);
+  console.log("contexts ", this.contexts);
 };
 
 LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends LexiconNode.prototype */ {
@@ -116,7 +116,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
 
   count: {
     get: function() {
-      if (!this._contexts || !(this._contexts instanceof Contexts)) {
+      if (!this._contexts || !(this._contexts instanceof Contexts) || !this._contexts.length) {
         this.debug(" getting _count of " + this.id + " " + this._count);
         return this._count || 0;
       }
@@ -129,8 +129,9 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
     },
     set: function(value) {
       this.debug(" setting count of " + this.id + " " + value);
-      if (this._contexts && this._contexts instanceof Contexts) {
-        this._contexts.length = value;
+      if (this._contexts && this._contexts instanceof Contexts && this._contexts.length) {
+        this.debug("Ignoring count " + value + ", this lexical node has contexts we can use instead." + this._contexts.length);
+        // this._contexts.length = value;
       } else {
         this._count = value;
       }
