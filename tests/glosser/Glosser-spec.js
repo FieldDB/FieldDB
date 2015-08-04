@@ -379,7 +379,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(glosser).toBeDefined();
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
-			glosser.downloadPrecedenceRules().then(function(results) {
+			glosser.fetch().then(function(results) {
 				expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
 				expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
 				// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
