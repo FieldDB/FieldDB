@@ -281,6 +281,9 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   encrypted: {
     get: function() {
+      if (this._value && this._value.indexOf("confidential:") === 0) {
+        this._encrypted = true;
+      }
       return this._encrypted || FieldDBObject.DEFAULT_FALSE;
     },
     set: function(value) {
@@ -404,7 +407,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       if (!value && this._value) {
-        var fieldCanBeEmptied = !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.decryptedMode);
+        var fieldCanBeEmptied = !this.encrypted || !this._shouldBeEncrypted || (this._shouldBeEncrypted && this.encrypted && this.decryptedMode);
         if (fieldCanBeEmptied) {
           this._value = "";
           this._mask = "";
