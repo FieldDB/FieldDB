@@ -6,12 +6,15 @@ var Context = function Context(options) {
   if (!this.fieldDBtype) {
     this.fieldDBtype = "Context";
   }
-
-  for (var member in options) {
-    if (!options.hasOwnProperty(member)) {
-      continue;
+  if (typeof options === "string") {
+    this.morphemes = options;
+  } else {
+    for (var member in options) {
+      if (!options.hasOwnProperty(member)) {
+        continue;
+      }
+      this[member] = options[member];
     }
-    this[member] = options[member];
   }
   Object.apply(this, arguments);
 };

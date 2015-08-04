@@ -17,6 +17,7 @@ var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
 var SAMPLE_V1_LEXICON = SAMPLE_LEXICONS[0];
 var SAMPLE_V2_LEXICON = SAMPLE_LEXICONS[1];
 var SAMPLE_V3_LEXICON = SAMPLE_LEXICONS[2];
+var SAMPLE_V4_LEXICON = SAMPLE_LEXICONS[3];
 var specIsRunningTooLong = 5000;
 
 var mockCorpus = {
@@ -49,7 +50,7 @@ var tinyPrecedenceRelations = [{
 
 describe("Lexicon: as a user I want to search for anything, even things that don't exist", function() {
 
-  describe("lexicon nodes", function() {
+  xdescribe("lexicon nodes", function() {
 
     it("should load", function() {
       expect(LexiconNode).toBeDefined();
@@ -105,7 +106,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  describe("construction", function() {
+  xdescribe("construction", function() {
 
     it("should load", function() {
       expect(Lexicon).toBeDefined();
@@ -184,7 +185,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  describe("map reduces", function() {
+  xdescribe("map reduces", function() {
 
     it("should accept custom emit function and rows holder", function() {
       var rows = ["some previous stuff"];
@@ -254,7 +255,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   describe("entries", function() {
 
-    it("should be able to add lexical entries", function() {
+    xit("should be able to add lexical entries", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
       });
@@ -266,7 +267,22 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.length).toEqual(1);
     });
 
-    it("should be able to add multiple lexical entries", function() {
+
+    it("should be able to add words", function() {
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        // debugMode: true
+      });
+      expect(lexicon.length).toEqual(0);
+      lexicon.add(["one", "two", "words"]);
+      expect(lexicon.length).toEqual(3);
+      expect(lexicon["one|"].morphemes).toEqual("one");
+      expect(lexicon["two|"].morphemes).toEqual("two");
+      expect(lexicon["words|"].morphemes).toEqual("words");
+    });
+
+
+    xit("should be able to add multiple lexical entries", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
       });
@@ -286,7 +302,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(entries[1].headword).toEqual("kja|what");
     });
 
-    it("should be able to push lexical entries", function() {
+    xit("should be able to push lexical entries", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
       });
@@ -298,7 +314,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.length).toEqual(1);
     });
 
-    it("should be able to unshift lexical entries", function() {
+    xit("should be able to unshift lexical entries", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
       });
@@ -310,7 +326,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.length).toEqual(1);
     });
 
-    it("should be able to find lexical entries", function() {
+    xit("should be able to find lexical entries", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
       });
@@ -340,7 +356,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(nodesInLexicon[0].gloss).toEqual("why");
     });
 
-    it("should be able to find multiple matching lexical entries", function() {
+    xit("should be able to find multiple matching lexical entries", function() {
       var lexiconJson = [{
         morphemes: "kju3n",
         gloss: "why"
@@ -389,7 +405,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
   });
-  describe("persistance", function() {
+  xdescribe("persistance", function() {
 
     it("should be able to fetch itself", function(done) {
       var lexicon = new Lexicon({
@@ -402,7 +418,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(results).toBe(lexicon.collection);
         expect(lexicon.length).toBeGreaterThan(0);
         expect(lexicon.length).toEqual(14);
-        expect(lexicon.collection).toEqual(" ");
+        expect(lexicon.collection.map(function(entry) {
+          return entry.id;
+        })).toEqual(["eight|?", "eleven|?", "five|?", "four|?", "fourteen|?", "nine|?", "one|?", "seven|?", "six|?", "ten|?", "thirteen|?", "three|?", "twelve|?", "two|?"]);
 
       }, function(reason) {
         console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
@@ -419,7 +437,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  describe("connected graph", function() {
+  xdescribe("connected graph", function() {
 
     it("should be able to build a precedence graph from relations", function() {
       var lexicon = new Lexicon({
@@ -480,7 +498,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  describe("contexts", function() {
+  xdescribe("contexts", function() {
 
     it("should be able to count contexts", function() {
       expect(Contexts).toBeDefined();
@@ -602,7 +620,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
   });
 
   describe("backward compatibility", function() {
-    it("should be able to automerge equivalent nodes", function() {
+    xit("should be able to automerge equivalent nodes", function() {
       var lexicon = new Lexicon();
 
       lexicon.add({
@@ -626,7 +644,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
 
-    it("should be able to build a lexicon from a couchdb map reduce", function() {
+    xit("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V1_LEXICON.rows.length).toEqual(348);
       expect(SAMPLE_V1_LEXICON.rows[0].key.relation).toEqual("precedes");
 
@@ -667,7 +685,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
-    it("should be able to build a lexicon from a couchdb map reduce", function() {
+    xit("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V2_LEXICON.rows.length).toEqual(1588);
       expect(SAMPLE_V2_LEXICON.rows[0].key.relation).toEqual("follows");
 
@@ -701,7 +719,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
-    it("should be able to build a lexicon from a couchdb map reduce", function() {
+    xit("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V3_LEXICON.rows.length).toEqual(447);
       expect(SAMPLE_V3_LEXICON.rows[0].key.relation).toEqual("precedes");
 
@@ -728,6 +746,48 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
+
+
+    it("should be able to build a lexicon entity relations from an ngrams couchdb map reduce", function() {
+      expect(SAMPLE_V4_LEXICON.rows.length).toEqual(34);
+      expect(SAMPLE_V4_LEXICON.rows[0].key).toEqual("@-@-qaynap'unchaw");
+      expect(SAMPLE_V4_LEXICON.rows[0].value).toEqual("Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq");
+
+      var startingMemoryLoad = memoryLoad();
+
+      // var lexicon = new Lexicon(SAMPLE_V4_LEXICON);
+
+      var lexicon = new Lexicon();
+      expect(lexicon).toBeDefined();
+      lexicon.entryRelations = SAMPLE_V4_LEXICON;
+      expect(lexicon.length).toEqual(0);
+      expect(lexicon.entryRelations.length).toEqual(36);
+      expect(lexicon.entryRelations[12].from.morphemes).toEqual("ra");
+      expect(lexicon.entryRelations[12].to.morphemes).toEqual("n");
+      expect(lexicon.entryRelations[12].relation).toEqual("precedes");
+      if (lexicon.entryRelations[12].count) {
+        expect(lexicon.entryRelations[12].count).toEqual(2);
+      } else {
+        expect(lexicon.entryRelations[12].from.contexts).toEqual(["Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq", "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"]);
+      }
+
+      lexicon.updateConnectedGraph();
+      expect(lexicon.connectedGraph).toBeDefined();
+      expect(lexicon.connectedGraph.precedes.length).toEqual(16);
+      expect(lexicon.connectedGraph.nodes).toBeDefined();
+      expect(lexicon.connectedGraph.nodes["nay|"].morphemes).toEqual("nay");
+      expect(lexicon.connectedGraph.nodes["nay|"].contexts.length).toEqual(2);
+
+      expect(lexicon.length).toEqual(13);
+      expect(lexicon["nay|"]).toBeDefined();
+      expect(lexicon.connectedGraph.nodes["nay|"]).toBe(lexicon["nay|"]);
+      expect(lexicon.connectedGraph.nodes["nay|"].morphemes).toBe(lexicon["nay|"].morphemes);
+
+      // var endingMemoryLoad = memoryLoad();
+      // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
+      // expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+    });
+
   });
 
   it("should be able to build morphemes from a text file of segmented morphemes", function() {

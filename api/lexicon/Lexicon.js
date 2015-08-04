@@ -6,8 +6,8 @@ try {
 
 var Bindings = require("frb/bindings");
 var Collection = require("../Collection").Collection;
-// var CORS = require("../CORS").CORS;
-var CORS = require("../CORSNode").CORS;
+var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;
@@ -460,7 +460,79 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (value.rows) {
         value = value.rows;
       }
-      this._entryRelations = value;
+      if (Object.prototype.toString.call(value) === "[object Array]") {
+        this._entryRelations = this._entryRelations || [];
+        var uniqueNGrams = {};
+        for (var precedenceNGrams in value) {
+          if (!value.hasOwnProperty(precedenceNGrams) || !value[precedenceNGrams]) {
+            console.log("skipping ", value[precedenceNGrams]);
+            continue;
+          }
+          var morphemes = value[precedenceNGrams].key || value[precedenceNGrams];
+          if (typeof morphemes === "string") {
+
+            morphemes = morphemes.split("-");
+            var count = 1;
+            var context = "";
+            if (typeof value[precedenceNGrams].value === "number") {
+              count = value[precedenceNGrams].value;
+            } else {
+              context = value[precedenceNGrams].value;
+              count = 0;
+            }
+
+            if (morphemes && morphemes.length) {
+              var previousMorph = morphemes[0];
+              for (var morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
+                console.log(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
+                var relation = uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]];
+                if (relation) {
+                  if (count) {
+                    relation.count += count;
+                  }
+                  if (context) {
+                    relation.from.contexts.push(context);
+                    relation.to.contexts.push(context);
+                  }
+                  console.log(" already found " + relation.count, relation.contexts);
+                } else {
+                  console.log("  new ");
+                  relation = {
+                    from: {
+                      morphemes: previousMorph,
+                    },
+                    to: {
+                      morphemes: morphemes[morphemeIndex],
+                    },
+                    relation: "precedes"
+                  };
+                  if (count) {
+                    relation.count = count;
+                  }
+                  if (context) {
+                    relation.from.contexts = [context];
+                    relation.to.contexts = [context];
+                  }
+                  uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
+                  this._entryRelations.push(relation);
+                }
+
+              }
+            } else {
+              console.log("This wasn't a precedence relation ngram", value[precedenceNGrams]);
+            }
+
+
+          } else {
+            console.log("not upgrading entity relations");
+          }
+
+        }
+        this.debug("uniqueNGrams", uniqueNGrams);
+      } else {
+        console.log(" Setting entityRelations without upggrade or conversion", value);
+        this._entryRelations = value;
+      }
     }
   },
 
@@ -525,8 +597,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
   set: {
     value: function(searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted) {
+      if (originalValue && originalValue.key) {
+        originalValue = Lexicon.convertMapReduceRowIntoLexicalEntry(originalValue);
+      }
+      if (!originalValue) {
+        return;
+      }
+
       // this.debugMode = true;
-      if (originalValue && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
+      if (originalValue && typeof originalValue !== "string" && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
         this.debug("\n adding   ", originalValue, "\n");
         Lexicon.LexiconNode.mergeContextsIntoContexts(originalValue);
         this.debug("done combining contexts", originalValue.contexts);
@@ -535,7 +614,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         this.debug("converting into node", originalValue);
         // originalValue.debugMode = true;
         originalValue = new Lexicon.LexiconNode(originalValue);
-        this.debug("converting into node headword", originalValue);
+        this.debug(" converted into node headword", originalValue.headword);
       }
       this.debug("looking for  " + originalValue.headword + " in ", this.collection.length);
 
@@ -544,6 +623,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var value;
       if (matches && matches.length) {
         value = matches[0];
+        // Average the confidences together
+        if (value.confidence && originalValue.confidence) {
+          value.confidence = originalValue.confidence = (parseFloat(value.confidence, 10) + parseFloat(originalValue.confidence, 10)) / 2;
+        }
+        // Add counts
+        if (value.count && originalValue.count) {
+          value.count = originalValue.count = parseFloat(value.count, 10) + parseFloat(originalValue.count, 10);
+        }
         value.merge("self", originalValue);
       } else {
         value = Collection.prototype.set.apply(this, [searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted]);
@@ -854,7 +941,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (this.corpus.prefs && this.corpus.prefs.lexiconURL) {
           url = this.corpus.prefs.lexiconURL;
         } else {
-          url = this.corpus.url + "/_design/pages/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit=" + Lexicon.maxLexiconSiz;
+          url = this.corpus.url + "/_design/lexicon/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit=" + Lexicon.maxLexiconSize;
         }
       }
 
@@ -1202,6 +1289,30 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   }
 
 });
+
+Lexicon.convertMapReduceRowIntoLexicalEntry = function(row) {
+  if (!row) {
+    return;
+  }
+  var node = row.key || row;
+  if (typeof node === "string") {
+    console.warn(" Lexical node skipped ", node);
+    return;
+  }
+  if (node.error) {
+    console.warn(" Lexical node indicates an error/inconsitancy in the corpus data ", node);
+    return;
+  }
+
+  if (node.morphemes === "@") {
+    console.warn(" skipping word boundary ", node);
+    return;
+  }
+
+  node.count = row.value || row.frequencyCount;
+
+  return node;
+};
 
 /**
  * [lexicon_nodes_mapReduce description]
