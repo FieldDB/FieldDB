@@ -309,7 +309,7 @@ FieldDBObject.warn = function(message, message2, message3, message4) {
   }
 };
 
-FieldDBObject.prompt = function(message, optionalLocale) {
+FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
   var deferred = Q.defer(),
     self = this;
 
@@ -321,7 +321,24 @@ FieldDBObject.prompt = function(message, optionalLocale) {
       response = self.alwaysReplyToPrompt;
     } else {
       try {
-        response = prompt(message);
+        response = prompt(message, providedInput);
+
+        // Let the user enter info, even JSON
+        if (response === "yes") {
+          response = providedInput;
+        } else {
+          if (typeof providedInput !== "string" && typeof providedInput !== "number") {
+            try {
+              var parsed = JSON.parse(response);
+              response = parsed;
+            } catch (e) {
+              FieldDB.FieldDBObject.bug("There was a problem parsing your input.").then(function() {
+                FieldDB.FieldDBObject.prompt(message, optionalLocale, providedInput);
+              });
+            }
+          }
+        }
+
       } catch (e) {
         console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysReplyToPrompt);
         response = self.alwaysReplyToPrompt;
@@ -631,6 +648,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       this.bugMessage = this.bugMessage + message;
       FieldDBObject.bug.apply(this, arguments);
+    }
+  },
+  popup: {
+    value: function(message) {
+      if (this.popupMessage) {
+        if (this.popupMessage.indexOf(message) > -1) {
+          this.warn("Not repeating popup message: " + message);
+          return;
+        }
+        this.popupMessage += ";;; ";
+      } else {
+        this.popupMessage = "";
+      }
+
+      this.popupMessage = this.popupMessage + message;
+      FieldDBObject.popup.apply(this, arguments);
     }
   },
   alwaysConfirmOkay: {
@@ -1278,16 +1311,23 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
 
-        self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
-          .then(function() {
+        var promptInputText = anotherObject[apropertylocal];
+        if (typeof promptInputText === "object") {
+          promptInputText = JSON.stringify(anotherObject[apropertylocal]);
+        }
+        var context = self.id || self._id;
+        self.prompt(context + " I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + promptInputText, null, promptInputText)
+          .then(function(reply) {
+            // Let the user enter the value they would like
+
             if (apropertylocal === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
               // resultObject._dbname = self.dbname;
               self.warn(" Keeping _dbname of " + resultObject.dbname);
             } else {
               self.warn("Async Overwriting contents of " + apropertylocal + " (this may cause disconnection in listeners)");
-              self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", anotherObject[apropertylocal]);
+              self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", reply.response);
 
-              resultObject[apropertylocal] = anotherObject[apropertylocal];
+              resultObject[apropertylocal] = reply.response;
             }
           }, function() {
             resultObject[apropertylocal] = anObject[apropertylocal];
@@ -2085,7 +2125,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.debug("sanitizeStringForPrimaryKey " + value);
         return value;
       } else if (typeof value === "number") {
-        return parseInt(value, 10);
+        return parseFloat(value, 10);
       } else {
         return null;
       }
