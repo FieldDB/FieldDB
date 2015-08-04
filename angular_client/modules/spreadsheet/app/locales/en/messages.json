@@ -290,6 +290,14 @@
         "message": "Create New",
         "description": "button"
     },
+    "locale_delete_or_leave_corpus": {
+        "message": "Remove from corpus",
+        "description": "title for delete or leave section"
+    },
+    "locale_leave_corpus_button": {
+        "message": "Leave corpus",
+        "description": "button to leave corpus"
+    },
     "locale_corpus_settings": {
         "message": "Corpus Settings",
         "description": "title for the Corpus Settings page"

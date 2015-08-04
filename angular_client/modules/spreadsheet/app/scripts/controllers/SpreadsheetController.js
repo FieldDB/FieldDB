@@ -2061,7 +2061,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   };
 
-
+  $scope.leaveCorpus = function() {
+    $scope.loadCorpusTeam().then(function() {
+      $scope.removeAccessFromUser($rootScope.user.username, ['all']).then(function(){
+        // TODO: remove this corpus from $rootScope.user.corpora
+      });
+    });
+  };
   $scope.createNewCorpus = function(newCorpusInfo) {
     if (!newCorpusInfo) {
       $rootScope.notificationMessage = "Please enter a corpus name.";
@@ -2122,7 +2128,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
     dataToPost.dbname = $rootScope.corpus.dbname;
 
-    Data.getallusers(dataToPost)
+    var promise = Data.getallusers(dataToPost)
       .then(function(users) {
         if (!users) {
           console.log("User doesn't have access to roles.");
@@ -2131,7 +2137,36 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           };
         }
         $scope.users = users;
+      }, function(err) {
+        console.warn(err);
+        var message = "";
+        if (err.status === 0) {
+          message = "are you offline?";
+          if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
+            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+          }
+        }
+        if (err && err.status >= 400 && err.data.userFriendlyErrors) {
+          message = err.data.userFriendlyErrors.join(" ");
+        } else {
+          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+        }
+
+        $rootScope.notificationMessage = message;
+        $rootScope.openNotification();
+
+        // console.log(reason);
+        // var message = "Please report this.";
+        // if (reason.status === 0) {
+        //   message = "Are you offline?";
+        // } else {
+        //   message = reason.data.userFriendlyErrors.join(" ");
+        // }
+        // $rootScope.notificationMessage = "Error updating password. " + message;
+        // $rootScope.openNotification();
       });
+
+    return promise;
   };
 
   $scope.updateUserRoles = function(newUserRoles) {
