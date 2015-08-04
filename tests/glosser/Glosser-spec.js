@@ -526,6 +526,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 				expect(glosser.lexicon).toBeDefined();
 				expect(glosser.lexicon.entryRelations).toBeDefined();
+				expect(glosser.lexicon.entryRelations.length).toEqual(1);
+				expect(glosser.lexicon.entryRelations[0]).toEqual(tinyPrecedenceRelationsFromCouchDBMapReduce[0]);
 				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
 				expect(glosser.render({
