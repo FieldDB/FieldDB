@@ -83,6 +83,7 @@ CORS.makeCORSRequest = function(options) {
     Q.nextTick(function() {
       deferred.reject({
         status: 400,
+        details: options,
         userFriendlyErrors: ["CORS not supported, your browser is unable to contact the database."]
       });
     });
