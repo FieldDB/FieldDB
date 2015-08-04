@@ -145,7 +145,7 @@ describe("Test LanguageDatum", function() {
         count: lexiconEdge.value
       }];
       expect(lexiconNode.context).toBeUndefined();
-      expect(lexiconNode.contexts).toEqual([{
+      expect(lexiconNode.contexts.toJSON()).toEqual([{
         URL: "",
         morphemes: "noqa-ta",
         count: 14
