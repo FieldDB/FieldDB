@@ -5,58 +5,157 @@
 angular.module("fielddbAngular").controller("FieldDBController", function($scope, $rootScope, $modal) {
   /* Overriding bug and warn messages to use angular UI components
    TODO use angular modal for bugs */
-  FieldDB.FieldDBObject.bug = function(message) {
+  FieldDB.FieldDBObject.bug = function(message, optionalLocale) {
+    var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
       templateUrl: "components/popup/prompt.html",
       backdrop: false,
       controller: function($scope, $modalInstance) {
-        $scope.modalInstance = $modalInstance;
+        $scope.okay = function(response) {
+          $modalInstance.dismiss();
+          deferred.resolve({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: response
+          });
+        };
+        $scope.cancel = function() {
+          $modalInstance.dismiss();
+          deferred.reject({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: null
+          });
+        };
         $scope.message = message;
         $scope.showCancelButton = false;
         $scope.isBug = true;
         console.log("$modalInstance", $modalInstance);
       }
     });
+    return deferred.promise;
   };
-   FieldDB.FieldDBObject.popup = function(message) {
+  FieldDB.FieldDBObject.popup = function(message, optionalLocale) {
+    var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
       templateUrl: "components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
-        $scope.modalInstance = $modalInstance;
+        $scope.okay = function(response) {
+          $modalInstance.dismiss();
+          deferred.resolve({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: response
+          });
+        };
+        $scope.cancel = function() {
+          $modalInstance.dismiss();
+          deferred.reject({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: null
+          });
+        };
         $scope.message = message;
         $scope.showCancelButton = false;
         $scope.isPopup = true;
         console.log("$modalInstance", $modalInstance);
       }
     });
+    return deferred.promise;
   };
-  FieldDB.FieldDBObject.confirm = function(message) {
+  FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
+    var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
       templateUrl: "components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
-        $scope.modalInstance = $modalInstance;
+        $scope.okay = function(response) {
+          $modalInstance.dismiss();
+          deferred.resolve({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: response
+          });
+        };
+        $scope.cancel = function() {
+          $modalInstance.dismiss();
+          deferred.reject({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: null
+          });
+        };
         $scope.message = message;
         $scope.showCancelButton = true;
         $scope.isConfirm = true;
         console.log("$modalInstance", $modalInstance);
       }
     });
+    return deferred.promise;
   };
-  FieldDB.FieldDBObject.prompt = function(message) {
+  FieldDB.FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
+    var deferred = FieldDB.Q.defer();
     console.warn(message);
+
     $modal.open({
       templateUrl: "components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
-        $scope.modalInstance = $modalInstance;
+        $scope.okay = function(response) {
+
+          // Let the user enter info, even JSON
+          if (response === "yes") {
+            response = providedInput;
+          } else {
+            if (typeof providedInput !== "string" && typeof providedInput !== "number") {
+              try {
+                var parsed = JSON.parse(response);
+                response = parsed;
+                console.log("Using ", parsed);
+              } catch (e) {
+                FieldDB.FieldDBObject.bug("There was a problem parsing your input.").then(function() {
+                  FieldDB.FieldDBObject.prompt(message, optionalLocale, providedInput);
+                });
+              }
+            } else if (typeof response !== "number" && parseFloat(response, 10) == response) {
+              response = parseFloat(response, 10);
+            }
+          }
+
+          $modalInstance.dismiss();
+          deferred.resolve({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: response
+          });
+        };
+        $scope.cancel = function() {
+          $modalInstance.dismiss();
+          deferred.reject({
+            message: $scope.message,
+            optionalLocale: optionalLocale,
+            response: null
+          });
+        };
         $scope.message = message;
+        $scope.userInput = providedInput || "";
+        if (message.toLowerCase().indexOf("password") > -1) {
+          $scope.inputType = "password";
+        } else if (message.toLowerCase().indexOf("date") > -1) {
+          $scope.inputType = "date";
+        } else if (message.toLowerCase().indexOf("number") > -1) {
+          $scope.inputType = "number";
+        } else {
+          $scope.inputType = "text";
+        }
         $scope.showCancelButton = true;
         $scope.isPrompt = true;
         console.log("$modalInstance", $modalInstance);
       }
     });
+    return deferred.promise;
   };
   FieldDB.FieldDBObject.warn = function(message) {
     console.warn(message);
