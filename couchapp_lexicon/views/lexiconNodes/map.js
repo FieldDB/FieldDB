@@ -8,7 +8,7 @@ function lexiconNodes(doc) {
       return;
     }
 
-    console.log(" lexiconNodes ", doc);
+    // DEBUG console.log(" lexiconNodes ", doc);
 
     fields = doc.fields || doc.datumFields;
     // Only continue if the document is a Datum
@@ -79,7 +79,7 @@ function lexiconNodes(doc) {
       return tokens;
     };
     var extractDatumWithTokenizedLines = function(doc) {
-      console.log(" extracting fields from  ", doc);
+      // DEBUG console.log(" extracting fields from  ", doc);
 
       var datum = {};
       var fields = doc.fields || doc.datumFields;
@@ -118,9 +118,9 @@ function lexiconNodes(doc) {
           datum[fields[key][fieldKeyName]] = tokenize(fields[key].mask, fields[key].tokenizer);
         }
       }
-      console.log("fields ", fields);
-      console.log("datum ", datum);
-      console.log("extendedIGTFields ", extendedIGTFields);
+      // DEBUG console.log("fields ", fields);
+      // DEBUG console.log("datum ", datum);
+      // DEBUG console.log("extendedIGTFields ", extendedIGTFields);
       return datum;
     };
 
@@ -131,7 +131,7 @@ function lexiconNodes(doc) {
       var wordIndex;
       var fieldLabel;
       var detectIfDatumHasUnmatchedIGT = {};
-      console.log("words", words);
+      // DEBUG console.log("words", words);
 
       for (wordIndex = 0; wordIndex < words.length; wordIndex++) {
         // Get the corresponding item in IGT tiers
@@ -152,7 +152,7 @@ function lexiconNodes(doc) {
           }
         }
       }
-      console.log("wordLevelTuples", wordLevelTuples);
+      // DEBUG console.log("wordLevelTuples", wordLevelTuples);
 
       if (Object.keys(detectIfDatumHasUnmatchedIGT).length > 0 && (debug || onlyErrors)) {
         emit({
@@ -197,7 +197,7 @@ function lexiconNodes(doc) {
         for (keyIndex in keysWhichAreContextButNotSegmented) {
           for (morphemeTupleIndex = 0; morphemeTupleIndex < morphemeTuples.length; morphemeTupleIndex++) {
             morphemeTuples[morphemeTupleIndex][keysWhichAreContextButNotSegmented[keyIndex]] = wordIGT[keysWhichAreContextButNotSegmented[keyIndex]];
-            console.log("keysWhichAreContextButNotSegmented", keysWhichAreContextButNotSegmented);
+            // DEBUG console.log("keysWhichAreContextButNotSegmented", keysWhichAreContextButNotSegmented);
           }
         }
         // Detect if any tuples are missing fields, which could indicate mis-matching segmentation
@@ -256,7 +256,7 @@ function lexiconNodes(doc) {
           });
         }
       }
-      console.log(morphemeLevelTuples);
+      // DEBUG console.log(morphemeLevelTuples);
       return morphemeLevelTuples;
     };
 
@@ -280,7 +280,7 @@ function lexiconNodes(doc) {
       delete lexicalEntry.utterance;
       delete lexicalEntry.orthography;
 
-      console.log(lexicalEntry);
+      // DEBUG console.log(lexicalEntry);
       emit(lexicalEntry, context);
     });
 
@@ -288,7 +288,7 @@ function lexiconNodes(doc) {
 
   } catch (e) {
     if (debug || onlyErrors) {
-      console.log(e.stack);
+      // DEBUG console.log(e.stack);
       emit(e || "error", 1);
     }
   }
@@ -296,5 +296,5 @@ function lexiconNodes(doc) {
 try {
   exports.lexiconNodes = lexiconNodes;
 } catch (e) {
-  // console.log("not in a node context")
+  //  // DEBUG console.log("not in a node context")
 }

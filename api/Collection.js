@@ -226,7 +226,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || "id";
-      this.debug("find is searchingFor", searchingFor);
+      // this.debug("find is searchingFor", searchingFor);
       if (!searchingFor) {
         return results;
       }
@@ -273,17 +273,20 @@ Collection.prototype = Object.create(Object.prototype, {
         searchingFor = new RegExp("^" + searchingFor + "$");
       }
       this.debug("searchingFor", searchingFor);
-      for (var index in this.collection) {
-        if (!this.collection.hasOwnProperty(index)) {
-          continue;
-        }
+      for (var index = 0; index < this.collection.length; index++) {
         if (searchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
-          results.push(this.collection[index]);
+          // avoid having the same entry twice
+          if (!results[0] || results[0] !== this.collection[index]) {
+            results.push(this.collection[index]);
+          }
+          this.debug("Found a match ", results);
         } else if (fuzzy && sanitzedSearchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
-          results.push(this.collection[index]);
+          if (!results[0] || results[0] !== this.collection[index]) {
+            results.push(this.collection[index]);
+          }
         }
       }
-
+      this.debug("Found total matches ", results.length);
       return results;
     }
   },
@@ -306,9 +309,9 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!searchingFor && value) {
         //previously code in the add function
 
-        this.debug("  the constructor of this before casting it ", value.constructor);
+        this.debug("  the constructor of this before casting it ");
         value = FieldDBObject.convertDocIntoItsType(value);
-        this.debug(" checking the constructor of this after casting it ", value.constructor);
+        this.debug(" checking the constructor of this after casting it ");
 
         if (value &&
           this.INTERNAL_MODELS &&
@@ -391,6 +394,10 @@ Collection.prototype = Object.create(Object.prototype, {
         this.warn("An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ", value);
       }
 
+      if (value && typeof value === "object") {
+        value.parent = this;
+      }
+
       if (optionalInverted) {
         this.collection.unshift(value);
       } else {
@@ -441,7 +448,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.");
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "...not adding it because it will be hard to find in the collection.");
         this.debug("  not adding: ", member);
         return;
       }
@@ -1003,7 +1010,7 @@ Collection.prototype = Object.create(Object.prototype, {
               overwrite = optionalOverwriteOrAsk;
               if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
                 // overwrite = self.confirm("Do you want to overwrite " + idToMatch);
-                self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
+                self.confirm(this.id + " I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
                   .then(function() {
                     self.warn("IM HERE HERE");
                     self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");

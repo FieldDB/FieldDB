@@ -129,6 +129,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
           id: field
         };
       }
+      this.debug("adding field", field);
       return this.fields.add(field);
     }
   },
