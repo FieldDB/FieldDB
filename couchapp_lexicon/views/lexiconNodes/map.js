@@ -60,6 +60,10 @@ function lexiconNodes(doc) {
         return [];
       }
       value = value + "";
+      // Use Agressive tokenizer by default
+      if (!tokenizer){
+        tokenizer = aggressiveTokenizer;
+      }
       if (tokenizer.collapseCase) {
         value = value.toLocaleLowerCase();
       }
@@ -98,7 +102,7 @@ function lexiconNodes(doc) {
           // If the Judgement or utterance contains a '*', discard the datum
           if (fields[key].mask && fields[key].mask.search(/[#*]/) >= 0) {
             if (debug) {
-              emit("skipping ungrammatical example" + doc._id, fields[key]);
+              emit("skipping ungrammatical example " + doc._id, fields[key]);
             }
             return;
           }
