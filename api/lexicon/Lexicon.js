@@ -463,12 +463,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (Object.prototype.toString.call(value) === "[object Array]") {
         this._entryRelations = this._entryRelations || [];
         var uniqueNGrams = {};
-        for (var precedenceNGrams in value) {
-          if (!value.hasOwnProperty(precedenceNGrams) || !value[precedenceNGrams]) {
-            console.log("skipping ", value[precedenceNGrams]);
+        var foundNgram = false;
+        for (var rowIndex = 0; rowIndex < value.length; rowIndex++) {
+          if (!value.hasOwnProperty(rowIndex) || !value[rowIndex]) {
+            console.log("skipping ", value[rowIndex]);
             continue;
           }
-          var morphemes = value[precedenceNGrams].key || value[precedenceNGrams];
+          var morphemes = value[rowIndex].key || value[rowIndex];
           if (typeof morphemes === "string") {
 
             morphemes = morphemes.split("-");
@@ -515,6 +516,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
                   }
                   uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
                   this._entryRelations.push(relation);
+                  foundNgram = true;
                 }
 
               }
@@ -527,6 +529,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             console.log("not upgrading entity relations");
           }
 
+        }
+        if (!foundNgram) {
+          this._entryRelations = value;
         }
         this.debug("uniqueNGrams", uniqueNGrams);
       } else {
