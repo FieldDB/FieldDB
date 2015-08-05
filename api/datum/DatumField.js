@@ -540,7 +540,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         delete this._json;
         return;
       }
-      if (value && this._shouldBeEncrypted && !this.decryptedMode) {
+      if (value && this._shouldBeEncrypted && this.encrypted && !this.decryptedMode) {
         this.debug("encrypt json also");
       }
       this._json = value;
