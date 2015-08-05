@@ -28,7 +28,7 @@ describe("Test LanguageDatum", function() {
     expect(datum.fields).toBeUndefined();
   });
 
-  xdescribe("popular fields", function() {
+  describe("popular fields", function() {
 
     var datum = new LanguageDatum({
       corpus: mockCorpus,
@@ -155,7 +155,7 @@ describe("Test LanguageDatum", function() {
 
   });
 
-  xdescribe("IGT support", function() {
+  describe("IGT support", function() {
     var datum;
     beforeEach(function() {
       datum = new LanguageDatum({
