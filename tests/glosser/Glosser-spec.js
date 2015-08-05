@@ -3,8 +3,8 @@ var Glosser = require("../../api/glosser/Glosser").Glosser;
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
 var SAMPLE_SEGMENTATION_V3 = SAMPLE_LEXICONS[3];
 var optionalD3;
-var virtualElement;
 var virtualDOM;
+var virtualElement;
 var specIsRunningTooLong = 5000;
 
 try {
