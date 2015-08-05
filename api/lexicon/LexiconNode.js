@@ -94,6 +94,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   },
 
   headword: {
+    configurable: true,
     get: function() {
       this.debug(" getting headword ", this.fields ? this.fields.length : this);
 

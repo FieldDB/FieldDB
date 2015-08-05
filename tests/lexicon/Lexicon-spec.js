@@ -2,6 +2,9 @@ var Lexicon = require("../../api/lexicon/Lexicon").Lexicon;
 var LexiconNode = Lexicon.LexiconNode;
 var Contexts = Lexicon.Contexts;
 var lexiconFactory = Lexicon.LexiconFactory;
+var optionalD3;
+var virtualDOM;
+var virtualElement;
 
 var memoryLoad;
 try {
@@ -11,6 +14,19 @@ try {
   memoryLoad = function() {
     return 0;
   };
+}
+
+try {
+  optionalD3 = require("d3");
+} catch (e) {
+  console.log("If you want to run the tests for optional d3 injection for visualization of the Glosser/Lexicon, run `npm install d3` ");
+}
+
+try {
+  virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+  virtualElement = virtualDOM.body;
+} catch (e) {
+  console.log("If you want to run the tests for render of the Lexicon, run `npm install jsdom@3.0` ");
 }
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
@@ -618,6 +634,176 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
     });
   });
+
+  describe("render ", function() {
+
+    describe("render lexical entries", function() {
+
+      it("should be able to build DOM elements with 2 way binding", function() {
+        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        expect(lexicon).toBeDefined();
+        expect(lexicon.length).toEqual(45);
+        expect(lexicon.entryRelations.length).toEqual(447);
+        lexicon.updateConnectedGraph();
+
+        expect(lexicon.connectedGraph).toBeDefined();
+        expect(lexicon.connectedGraph.nodes).toBeDefined();
+        expect(lexicon.connectedGraph.precedes).toBeDefined();
+        expect(lexicon.connectedGraph.nodes.length).toEqual(45);
+        expect(lexicon.connectedGraph.precedes.length).toEqual(56);
+
+        // need an element
+        lexicon.warnMessage = "";
+        expect(lexicon.render()).toBe(lexicon);
+        expect(lexicon.warnMessage).toBeDefined();
+        expect(lexicon.warnMessage).not.toContain("d3");
+        expect(lexicon.warnMessage).not.toContain("visualize");
+        expect(lexicon.warnMessage).toContain("should provide an element");
+
+        // need an element which can appendChild
+        lexicon.warnMessage = "";
+        expect(lexicon.render({
+          lexicalEntriesElement: {}
+        })).toBe(lexicon);
+        expect(lexicon.warnMessage).toBeDefined();
+        expect(lexicon.warnMessage).not.toContain("d3");
+        expect(lexicon.warnMessage).not.toContain("visualize");
+        expect(lexicon.warnMessage).toContain("should provide an element");
+
+
+        if (virtualDOM) {
+          lexicon.warnMessage = "";
+          expect(lexicon.render({
+            lexicalEntriesElement: virtualElement
+          })).toBe(lexicon);
+          // If in a browser, this will be okay, if in node it needs the virtualDOM
+          if (lexicon.warnMessage) {
+            expect(lexicon.warnMessage).not.toContain("d3");
+            expect(lexicon.warnMessage).not.toContain("visualize");
+            expect(lexicon.warnMessage).not.toContain("should provide an element");
+            expect(lexicon.warnMessage).toContain("unable to render the lexical entries");
+          }
+
+
+          lexicon.warnMessage = "";
+          lexicon.localDOM = virtualDOM;
+          lexicon.render({
+            lexicalEntriesElement: virtualElement
+          });
+
+          if (lexicon.warnMessage) {
+            expect(lexicon.warnMessage).not.toContain("d3");
+            expect(lexicon.warnMessage).not.toContain("visualize");
+            expect(lexicon.warnMessage).not.toContain("should provide an element");
+            expect(lexicon.warnMessage).not.toContain("unable to render the lexical entries");
+          }
+          expect(virtualElement.children).toBeDefined();
+          expect(virtualElement.children[0]).toBeDefined();
+          expect(virtualElement.children[0].children).toBeDefined();
+          expect(virtualElement.children[0].children.length).toEqual(lexicon.length);
+        }
+
+      });
+
+    });
+
+    describe("render connections between entries", function() {
+
+      it("should be able to build precedence relations as a force directed graph", function() {
+        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        expect(lexicon).toBeDefined();
+        expect(lexicon.length).toEqual(45);
+        expect(lexicon.entryRelations.length).toEqual(447);
+
+
+        // need d3
+        lexicon.warnMessage = "";
+        expect(lexicon.visualizeAsForceDirectedGraph()).toBe(lexicon);
+
+        expect(lexicon.connectedGraph).toBeDefined();
+        expect(lexicon.connectedGraph.nodes).toBeDefined();
+        expect(lexicon.connectedGraph.precedes).toBeDefined();
+        expect(lexicon.connectedGraph.nodes.length).toEqual(45);
+        expect(lexicon.connectedGraph.precedes.length).toEqual(56);
+
+        expect(lexicon.warnMessage).toBeDefined();
+        expect(lexicon.warnMessage).toContain("d3");
+
+        if (virtualDOM && optionalD3) {
+          lexicon.d3 = optionalD3;
+          lexicon.localDOM = virtualDOM;
+
+          lexicon.warnMessage = "";
+          expect(lexicon.visualizeAsForceDirectedGraph({
+            element: virtualElement
+          })).toBe(lexicon);
+          // If in a browser, this will be okay, if in node it needs the virtualDOM
+          if (lexicon.warnMessage) {
+            expect(lexicon.warnMessage).not.toContain("d3");
+            expect(lexicon.warnMessage).not.toContain("visualize");
+            expect(lexicon.warnMessage).not.toContain("should provide an element");
+          }
+
+          expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
+          expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
+          expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(3);
+          if (lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes) {
+            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.nodes.length);
+          } else {
+            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.nodes.length);
+          }
+        }
+      });
+
+    });
+
+    describe("render both entries and connections", function() {
+
+      it("should be able to build precedence relations as a force directed graph", function() {
+        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        expect(lexicon).toBeDefined();
+        expect(lexicon.length).toEqual(45);
+        expect(lexicon.entryRelations.length).toEqual(447);
+
+        if (virtualDOM && optionalD3) {
+          lexicon.d3 = optionalD3;
+          lexicon.localDOM = virtualDOM;
+
+          lexicon.warnMessage = "";
+
+          expect(lexicon.render({
+            lexicalEntriesElement: virtualElement
+          })).toBe(lexicon);
+
+          expect(lexicon.visualizeAsForceDirectedGraph({
+            element: virtualElement
+          })).toBe(lexicon);
+          // If in a browser, this will be okay, if in node it needs the virtualDOM
+          if (lexicon.warnMessage) {
+            expect(lexicon.warnMessage).not.toContain("d3");
+            expect(lexicon.warnMessage).not.toContain("visualize");
+            expect(lexicon.warnMessage).not.toContain("should provide an element");
+          }
+
+          expect(virtualElement.children).toBeDefined();
+          expect(virtualElement.children[0]).toBeDefined();
+          expect(virtualElement.children[0].children).toBeDefined();
+          expect(virtualElement.children[0].children.length).toEqual(lexicon.length);
+
+          expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
+          expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
+          if (lexicon.connectedGraph.svg[0][0].children[0].childNodes[0]._childNodes) {
+            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.nodes.length);
+          } else {
+            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.nodes.length);
+          }
+        }
+      });
+
+    });
+
+  });
+
 
   describe("backward compatibility", function() {
     it("should be able to automerge equivalent nodes", function() {

@@ -165,6 +165,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (typeof value.replace !== "function") {
         value = value + "";
       }
+      // this means ? unsure and . fusional will no distinguish between lexical entries
       value = value.replace(/[-""+=?./\[\]{}() ]/g, "");
       return value;
     }
@@ -218,7 +219,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   },
 
   render: {
-    value: function() {
+    value: function(options) {
       var lexicalEntriesElement,
         // binding,
         // bindings = [],
@@ -239,44 +240,75 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       // field,
       // classList;
 
+      options = options || {};
+      lexicalEntriesElement = options.lexicalEntriesElement || options.element || this.lexicalEntriesElement;
+      if (!lexicalEntriesElement || typeof lexicalEntriesElement.appendChild !== "function") {
+        this.warn("Lexicon will be unable to render a visual representation of its lexical entries. If you intended to render it, you should provide an element where it should be rendered.", lexicalEntriesElement);
+        return this;
+      }
+
+      this.localDOM = options.localDOM || this.localDOM;
+      if (!this.localDOM) {
+        try {
+          this.localDOM = document;
+        } catch (e) {
+          // this.warn("Lexicon will be unable to render a hover on the connected graph. If you intended to render it, you should provide an localDOM to the lexicon.");
+          this.warn("Lexicon will be unable to render the lexical entries. If you intended to render it, you should provide an localDOM to the lexicon.");
+          return this;
+        }
+      }
+
       var self = this;
-      lexicalEntriesElement = this.lexicalEntriesElement;
-      if (!lexicalEntriesElement) {
-        return;
-      }
-      if (!self.localDOM) {
-        return;
-      }
+
+      // if (!this.igtFields && this.corpus && this.corpus.datumFields && this.corpus.datumFields.length) {
+      //   this.igtFields = [];
+      //   this.corpus.datumFields.map(function(field) {
+      //     if (field && field.type && field.type === "IGT") {
+      //       this.igtFields.push(field.id);
+      //     }
+      //   });
+      // }
+
       listElement = self.localDOM.createElement("ul");
       lexicalEntriesElement.appendChild(listElement);
 
-      this.forEach(function(entry) {
+      console.log("Rendering ", this.collection.length + " entries.");
+      this.collection.map(function(entry) {
         var discussion,
           field;
 
         if (entry && entry.morphemes === "@") {
           return;
         }
+        if (entry && entry.morphemes === "_#") {
+          return;
+        }
+        if (entry && entry.morphemes === "#_") {
+          return;
+        }
+        console.log("Binding ", entry.id);
         var cleanAndSaveIfChanged = function(e) {
           e.target.parentElement.__data__.clean().then(function(proposedChanges) {
-            if (proposedChanges.length > 0) {
-              var changesAsStrings = [];
-              proposedChanges.map(function(change) {
-                changesAsStrings.push(change.before + " -> " + change.after);
+            if (!proposedChanges || !proposedChanges.length) {
+              console.warn("there were no proposed changes.");
+              return;
+            }
+            var changesAsStrings = [];
+            proposedChanges.map(function(change) {
+              changesAsStrings.push(change.before + " -> " + change.after);
+            });
+            var saveEditToAllData = self.confirm("Would you like to clean this lexical entry? (This will change all examples you see here to have this new information.)\n\n" + changesAsStrings.join("\n"));
+            if (saveEditToAllData) {
+              e.target.parentElement.__data__.save().then(function(result) {
+                self.debug("Saving success...", result);
+                self.popup("Saved " + changesAsStrings.join(" "));
+              }, function(reason) {
+                self.warn("Saving failed...", reason);
+                self.bug("Save failed. " + reason.userFriendlyErrors.join(" "));
+              }).fail(function(reason) {
+                self.warn("Saving failed...", reason);
+                self.bug("Save failed. Please notify the app's developers " + e.target.parentElement.__data__.datumids.join(" "));
               });
-              var saveEditToAllData = self.confirm("Would you like to clean this lexical entry? (This will change all examples you see here to have this new information.)\n\n" + changesAsStrings.join("\n"));
-              if (saveEditToAllData) {
-                e.target.parentElement.__data__.save().then(function(result) {
-                  self.debug("Saving success...", result);
-                  self.popup("Saved " + changesAsStrings.join(" "));
-                }, function(reason) {
-                  self.warn("Saving failed...", reason);
-                  self.bug("Save failed. " + reason.userFriendlyErrors.join(" "));
-                }).fail(function(reason) {
-                  self.warn("Saving failed...", reason);
-                  self.bug("Save failed. Please notify the app's developers " + e.target.parentElement.__data__.datumids.join(" "));
-                });
-              }
             }
           });
 
@@ -321,7 +353,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
         };
 
+        var fakeClassList = {
+          add: function() {}
+        };
+
         listItemView = self.localDOM.createElement("li");
+        if (!listItemView.classList) {
+          listItemView.classList = fakeClassList;
+        }
         listItemView.__data__ = entry;
         listItemView.style.opacity = listItemView.__data__.confidence;
         listItemView.classList.add("lexical-entry");
@@ -332,20 +371,32 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         // console.log("\tCreating Node view for " + listItemView.id);
 
         headword = self.localDOM.createElement("span");
+        if (!headword.classList) {
+          headword.classList = fakeClassList;
+        }
         headword.contentEditable = "true";
         headword.classList.add("headword");
         headword.setAttribute("title", "CLick to edit the headword of your lexical entry");
 
         saveButton = self.localDOM.createElement("button");
+        if (!saveButton.classList) {
+          saveButton.classList = fakeClassList;
+        }
         saveButton.classList.add("btn");
         saveButton.setAttribute("title", "Click here to save");
         saveButton.innerHTML = "Save ";
         saveButton.onclick = cleanAndSaveIfChanged;
 
         contexts = self.localDOM.createElement("span");
+        if (!contexts.classList) {
+          contexts.classList = fakeClassList;
+        }
         contexts.classList.add("utteranceContext");
 
         discussion = self.localDOM.createElement("span");
+        if (!discussion.classList) {
+          discussion.classList = fakeClassList;
+        }
         discussion.contentEditable = "true";
         discussion.classList.add("discussion");
         discussion.hidden = true;
@@ -366,49 +417,62 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         };
 
         for (field in listItemView.__data__) {
-          if (listItemView.__data__.hasOwnProperty(field)) {
-            if (field === "discussion" || field === "headword") {
-              continue;
+          if (!listItemView.__data__.hasOwnProperty(field) || !listItemView.__data__.hasOwnProperty(field)) {
+            continue;
+          }
+          if (field === "discussion" || field === "headword") {
+            // these get special displays.
+            continue;
+          }
+          if (typeof listItemView.__data__[field] === "object") {
+            // this isn't a string to show to the user.
+            continue;
+          }
+
+          try {
+            headword.classList.add(field + ":" + encodeURI(listItemView.__data__[field]));
+            discussion.classList.add(field + ":" + encodeURI(listItemView.__data__[field]));
+
+            fieldDTElement = self.localDOM.createElement("dt");
+            fieldLabelElement = self.localDOM.createElement("span");
+            if (!fieldLabelElement.classList) {
+              fieldLabelElement.classList = fakeClassList;
             }
-            try {
-              headword.classList.add(field + ":" + listItemView.__data__[field]);
-              discussion.classList.add(field + ":" + listItemView.__data__[field]);
+            fieldLabelElement.innerHTML = field;
+            fieldLabelElement.classList.add("fieldlabel");
+            fieldLabelElement.classList.add(field);
+            fieldLabelElement.classList.add(encodeURI(listItemView.__data__[field]));
+            fieldDTElement.appendChild(fieldLabelElement);
+            fieldList.appendChild(fieldDTElement);
 
-              fieldDTElement = self.localDOM.createElement("dt");
-              fieldLabelElement = self.localDOM.createElement("span");
-              fieldLabelElement.innerHTML = field;
-              fieldLabelElement.classList.add("fieldlabel");
-              fieldLabelElement.classList.add(field);
-              fieldLabelElement.classList.add(listItemView.__data__[field]);
-              fieldDTElement.appendChild(fieldLabelElement);
-              fieldList.appendChild(fieldDTElement);
-
-              fieldDDElement = self.localDOM.createElement("dd");
-              fieldElement = self.localDOM.createElement("span");
-              fieldElement.contentEditable = "true";
-              fieldElement.classList.add("fieldvalue");
-              fieldElement.classList.add(field);
-              fieldElement.classList.add(listItemView.__data__[field]);
-              component.fieldViews[field] = fieldElement;
-              fieldDDElement.appendChild(fieldElement);
-              fieldList.appendChild(fieldDDElement);
-
-              var viewPath = "fieldViews." + field + ".value";
-              var dataPath = "listItemView.__data__." + field;
-              var bindSet = {};
-              bindSet[viewPath] = {
-                "<-": dataPath
-              };
-              var bindTwoWay = {};
-              bindTwoWay[dataPath] = {
-                "<->": viewPath
-              };
-              Bindings.defineBindings(component, bindSet);
-              Bindings.defineBindings(component, bindTwoWay);
-
-            } catch (e) {
-              console.warn(e);
+            fieldDDElement = self.localDOM.createElement("dd");
+            fieldElement = self.localDOM.createElement("span");
+            if (!fieldElement.classList) {
+              fieldElement.classList = fakeClassList;
             }
+            fieldElement.contentEditable = "true";
+            fieldElement.classList.add("fieldvalue");
+            fieldElement.classList.add(field);
+            fieldElement.classList.add(encodeURI(listItemView.__data__[field]));
+            component.fieldViews[field] = fieldElement;
+            fieldDDElement.appendChild(fieldElement);
+            fieldList.appendChild(fieldDDElement);
+
+            var viewPath = "fieldViews." + field + ".value";
+            var dataPath = "listItemView.__data__." + field;
+            var bindSet = {};
+            bindSet[viewPath] = {
+              "<-": dataPath
+            };
+            var bindTwoWay = {};
+            bindTwoWay[dataPath] = {
+              "<->": viewPath
+            };
+            Bindings.defineBindings(component, bindSet);
+            Bindings.defineBindings(component, bindTwoWay);
+
+          } catch (e) {
+            console.warn(e.stack);
           }
         }
 
@@ -455,6 +519,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       });
 
+      return this;
     }
   },
 
@@ -707,10 +772,23 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         // find any node which has morphemes and any gloss // this combine nodes which shouldnt be combined.
         matches = this.find("morphemes", originalValue.morphemes);
         if (matches.length > 1) {
-          this.warn("found " + matches.map(function(entry) {
-            return entry.id;
-          }) + " lexical entries which has these morphemes: " + originalValue.morphemes + ". Using neither.");
-          matches = [];
+          this.debug("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes);
+          var bestmatch = -1;
+          for (var entryIndex = matches.length - 1; entryIndex >= 0; entryIndex--) {
+            if (matches[entryIndex].id === originalValue.morphemes + "|") {
+              bestmatch = entryIndex;
+              break;
+            }
+          }
+          if (bestmatch > -1) {
+            matches = [matches[bestmatch]];
+            this.debug("using the one that also has an unspecified gloss.");
+          } else {
+            this.warn("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes + ", using none of them: " + matches.map(function(entry) {
+              return entry.id;
+            }));
+            matches = [];
+          }
         } else {
           // This could have sideffects where lexicons which are being built will merge words with no gloss into words with a gloss.
           this.debug("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes);
@@ -735,7 +813,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         value.merge("self", originalValue, "overwrite");
       } else {
         value = Collection.prototype.set.apply(this, [searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted]);
-        this.debug(" finished setting lexical entry " + value.id);
+        if (value) {
+          this.debug(" finished setting lexical entry " + value.id);
+        } else {
+          this.warn("Entry wasnt added", originalValue);
+        }
       }
 
       return value;
@@ -808,7 +890,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
        * Create the JSON required by D3
        */
       this.connectedGraph = this.connectedGraph || {
-        nodes: {}
+        length: 0,
+        nodes: {},
+        links: []
       };
 
       /*
@@ -958,6 +1042,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
           // Add the from node to the list of nodes, if it is not already there
           if (!self.connectedGraph.nodes[from.headword]) {
+            self.connectedGraph.length++;
             self.connectedGraph.nodes[from.headword] = from;
           } else {
             if (self.connectedGraph.nodes[from.headword] !== from) {
@@ -969,6 +1054,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
           // Add the to node to the list of nodes, if it is not already there
           if (!self.connectedGraph.nodes[to.headword]) {
+            self.connectedGraph.length++;
             self.connectedGraph.nodes[to.headword] = to;
           } else {
             if (self.connectedGraph.nodes[to.headword] !== to) {
@@ -991,7 +1077,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
           self.connectedGraph[connectionEdge.relation] = self.connectedGraph[connectionEdge.relation] || [];
           self.connectedGraph[connectionEdge.relation].push(connectionEdge);
-
+          self.connectedGraph.links.push(connectionEdge);
         } catch (exception) {
           self.warn("Skipping relation because of an error " + exception, exception.stack, entryRelation);
         }
@@ -1074,6 +1160,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
+  fetchConnectedGraph: {
+    value: function(options) {
+
+    }
+  },
+
   buildLexiconFromCouch: {
     value: function(dbname, callback) {
       this.warn("DEPRECATED buildLexiconFromCouch use fetch instead. not using " + dbname, callback);
@@ -1131,14 +1223,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (!prefs.showRelations) {
         prefs.showRelations = ["precedes"];
       }
-      if (!this.connectedGraph || !this.connectedGraph.links.length || !this.connectedGraph.nodes) {
+      if (!this.connectedGraph || (!this.connectedGraph.links || !this.connectedGraph.links.length) || !this.connectedGraph.nodes) {
         this.updateConnectedGraph(prefs);
 
         if (!this.connectedGraph || !this.connectedGraph.nodes) {
           return this;
         }
 
-        // Include all relations which the preferences request
+        // Include only relations which the preferences request
         this.connectedGraph.links = [];
         prefs.showRelations.map(function(relation) {
           if (!relation || !self.connectedGraph[relation] || !self.connectedGraph[relation].length) {
@@ -1216,6 +1308,21 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
 
+
+      var colorByMorphemeLength = function(lexicalEntry) {
+        if (lexicalEntry.morphemes === "#_") {
+          return "#00000";
+        }
+        if (lexicalEntry.morphemes === "_#") {
+          return "#fffff";
+        }
+        if (!lexicalEntry.morphemes) {
+          console.log("this morpheme is empty ", lexicalEntry);
+          return "#ffffff";
+        }
+        return color(lexicalEntry.morphemes.length);
+        // return color(d.confidence * 10);
+      };
       // var lineColor = this.d3.scale.linear()
       //   .range(["#FFFFF", "#FFFF00"]) // or use hex values
       //   .domain([1, 8]);
@@ -1235,21 +1342,21 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .charge(-400);
 
 
-      var svg = this.localDOM.createElement("svg");
+      self.connectedGraph.svg = this.localDOM.createElement("svg");
       if (typeof element.appendChild !== "function") {
         this.warn("You have provided a defective element, it is unable to append elements to itself. Appending to the body of the document instead.", element);
         // return this;
-        this.localDOM.body.appendChild(svg);
+        this.localDOM.body.appendChild(self.connectedGraph.svg);
       } else {
-        element.appendChild(svg);
+        element.appendChild(self.connectedGraph.svg);
       }
-      svg = this.d3.select(svg);
+      self.connectedGraph.svg = this.d3.select(self.connectedGraph.svg);
 
-      svg.attr("width", width)
+      self.connectedGraph.svg.attr("width", width)
         .attr("height", height);
 
       // Per-type markers, as they don't inherit styles.
-      svg.append("defs").selectAll("marker")
+      self.connectedGraph.svg.append("defs").selectAll("marker")
         .data(["precedes"])
         // .data(["suit", "licensing", "resolved"])
         .enter()
@@ -1270,7 +1377,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .append("path")
         .attr("d", "M0,-5L10,0L0,5");
 
-      var path = svg.append("g").selectAll("path")
+      var path = self.connectedGraph.svg.append("g").selectAll("path")
         .data(force.links())
         .enter().append("path")
         .attr("class", function(d) {
@@ -1280,21 +1387,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return "url(#" + d.relation + ")";
         });
 
-      var circle = svg.append("g").selectAll("circle")
+      var circle = self.connectedGraph.svg.append("g").selectAll("circle")
         .data(force.nodes())
         .enter().append("circle")
         .attr("class", "node")
         .attr("r", 5)
-        .style("fill", function(d) {
-          if (d.morphemes === "#_") {
-            return "#00000";
-          }
-          if (d.morphemes === "_#") {
-            return "#ffffff";
-          }
-          return color(d.morphemes.length);
-          // return color(d.confidence * 10);
-        })
+        .style("fill", colorByMorphemeLength)
         .style("opacity", function(d) {
           // return color(d.morphemes.length);
           return d.confidence ? d.confidence / 2 : 1;
@@ -1345,7 +1443,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         })
         .call(force.drag);
 
-      var text = svg.append("g").selectAll("text")
+      var text = self.connectedGraph.svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
         .attr("x", 8)
@@ -1354,16 +1452,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           // return color(d.morphemes.length);
           return d.confidence ? d.confidence / 2 : 1;
         })
-        .style("color", function(d) {
-          if (d.morphemes === "#_") {
-            return "#00000";
-          }
-          if (d.morphemes === "_#") {
-            return "#ffffff";
-          }
-          return color(d.morphemes.length);
-          // return color(d.confidence * 10);
-        })
+        .style("color", colorByMorphemeLength)
         .text(function(d) {
           return d.morphemes;
         });
