@@ -474,6 +474,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var relation;
       var count;
       var context;
+
+
+      this.glossMightBeMissingFromMorphemesNGram = false;
       var shouldSkipWordBounariesUnlessSpecified = !this.corpus || !this.corpus.prefs || !this.corpus.prefs.showGlosserAsMorphemicTemplate;
       if (Object.prototype.toString.call(value) === "[object Array]") {
         this._entryRelations = this._entryRelations || [];
@@ -505,7 +508,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           for (morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
             this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
             if (shouldSkipWordBounariesUnlessSpecified && (previousMorph === "@" || morphemes[morphemeIndex] === "@")) {
-              console.log("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
+              this.debug("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
               previousMorph = morphemes[morphemeIndex];
               continue;
             }
@@ -538,6 +541,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
                 relation.from.contexts = new Lexicon.Contexts([context]);
                 relation.to.contexts = new Lexicon.Contexts([context]);
               }
+              /* make the @ more like what a linguist recognizes for word boundaries */
+              if (relation.from.morphemes === "@") {
+                relation.from.morphemes = "#_";
+              }
+              if (relation.to.morphemes === "@") {
+                relation.to.morphemes = "_#";
+              }
               uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
               this._entryRelations.push(relation);
               foundNgram = true;
@@ -548,11 +558,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         // If no ngrams were found, then this is probably an array of entry relations already
         if (!foundNgram) {
           this._entryRelations = value;
+        } else {
+          this.glossMightBeMissingFromMorphemesNGram = true;
         }
         this.debug("uniqueNGrams", uniqueNGrams);
       } else {
-        console.log(" Converting object of ngrams in to relations", value);
+        this.debug(" Converting object of ngrams in to relations", value);
         this._entryRelations = this._entryRelations || [];
+        this.glossMightBeMissingFromMorphemesNGram = true;
 
         for (ngram in value) {
           if (!value.hasOwnProperty(ngram) || !ngram || ngram === "length") {
@@ -561,9 +574,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           morphemes = ngram.split("-");
           previousMorph = morphemes[0];
           for (morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
-            console.log(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
+            this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
             if (shouldSkipWordBounariesUnlessSpecified && (previousMorph === "@" || morphemes[morphemeIndex] === "@")) {
-              console.log("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
+              this.debug("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
               previousMorph = morphemes[morphemeIndex];
               continue;
             }
@@ -585,6 +598,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             } else {
               relation.from.contexts = value[ngram];
               relation.to.contexts = value[ngram];
+            }
+            /* make the @ more like what a linguist recognizes for word boundaries */
+            if (relation.from.morphemes === "@") {
+              relation.from.morphemes = "#_";
+            }
+            if (relation.to.morphemes === "@") {
+              relation.to.morphemes = "_#";
             }
             this._entryRelations.push(relation);
           }
@@ -675,7 +695,27 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       }
       this.debug("looking for  " + originalValue.headword + " in ", this.collection.length);
 
-      var matches = this.find(originalValue);
+      var matches;
+      // expects gloss to be ? if it should have been available but was not, otherwise it assumes we are working with precedence relations.
+      if (originalValue.gloss && !this.glossMightBeMissingFromMorphemesNGram) {
+        matches = this.find(originalValue);
+      } else {
+        // find nodes where the gloss is ? or empty: doesnt work.
+        // matches = this.find("headword", originalValue.morphemes+ "|");
+        // matches = this.find({"morphemes", originalValue.morphemes, gloss: "?"});
+
+        // find any node which has morphemes and any gloss // this combine nodes which shouldnt be combined.
+        matches = this.find("morphemes", originalValue.morphemes);
+        if (matches.length > 1) {
+          this.warn("found " + matches.map(function(entry) {
+            return entry.id;
+          }) + " lexical entries which has these morphemes: " + originalValue.morphemes + ". Using neither.");
+          matches = [];
+        } else {
+          // This could have sideffects where lexicons which are being built will merge words with no gloss into words with a gloss.
+          this.debug("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes);
+        }
+      }
       this.debug("matching lexical entries ", matches);
       var value;
       if (matches && matches.length) {
@@ -688,10 +728,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (value.count && originalValue.count) {
           value.count = originalValue.count = parseFloat(value.count, 10) + parseFloat(originalValue.count, 10);
         }
-        value.merge("self", originalValue);
+        // Make id match if it was incomplete in the incoming item
+        if (value.gloss && !originalValue.gloss) {
+          originalValue.gloss = value.gloss;
+        }
+        value.merge("self", originalValue, "overwrite");
       } else {
         value = Collection.prototype.set.apply(this, [searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted]);
-        this.debug(" finished setting lexical entry ");
+        this.debug(" finished setting lexical entry " + value.id);
       }
 
       return value;
@@ -776,7 +820,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
         try {
           var connectionEdge = entryRelation.key || entryRelation;
-          connectionEdge.frequencyCount = entryRelation.value ? entryRelation.value : (entryRelation.key ? entryRelation.key.count : null);
+          connectionEdge.count = entryRelation.value ? entryRelation.value : (entryRelation.key ? entryRelation.key.count : null);
           self.debug("Adding ", connectionEdge, " to connected graph");
 
           var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous || connectionEdge.x;
@@ -807,8 +851,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
               URL: datumid,
               morphemes: connectionEdge.context
             };
-            if (connectionEdge.frequencyCount) {
-              context.count = connectionEdge.frequencyCount;
+            if (connectionEdge.count) {
+              context.count = connectionEdge.count;
             } else {
               self.debug("Don't know how often this context appears", entryRelation.value);
             }
@@ -816,10 +860,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             to.contexts = [context];
           } else {
             self.debug("This is not a v1 relation", entryRelation);
-            if (connectionEdge.frequencyCount) {
-              self.debug("setting frequencyCount using edge count", connectionEdge.frequencyCount);
-              from.count += connectionEdge.frequencyCount;
-              to.count += connectionEdge.frequencyCount;
+            if (connectionEdge.count) {
+              self.debug("setting frequencyCount using edge count", connectionEdge.count);
+              from.count += connectionEdge.count;
+              to.count += connectionEdge.count;
             }
           }
 
@@ -918,7 +962,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           } else {
             if (self.connectedGraph.nodes[from.headword] !== from) {
               self.warn(from.morphemes + " was already defined. merging with this node " + from.headword);
-              self.connectedGraph.nodes[from.headword].merge("self", from);
+              self.connectedGraph.nodes[from.headword].merge("self", from, "overwrite");
             }
           }
           from = self.connectedGraph.nodes[from.headword];
@@ -929,7 +973,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           } else {
             if (self.connectedGraph.nodes[to.headword] !== to) {
               self.warn(to.morphemes + " was already defined. merging with this node");
-              self.connectedGraph.nodes[to.headword].merge("self", to);
+              self.connectedGraph.nodes[to.headword].merge("self", to, "overwrite");
             }
           }
           to = self.connectedGraph.nodes[to.headword];
@@ -949,7 +993,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           self.connectedGraph[connectionEdge.relation].push(connectionEdge);
 
         } catch (exception) {
-          self.warn("Skipping relation because of an error" + exception, exception.stack, entryRelation);
+          self.warn("Skipping relation because of an error " + exception, exception.stack, entryRelation);
         }
       });
 
@@ -1366,7 +1410,7 @@ Lexicon.convertMapReduceRowIntoLexicalEntry = function(row) {
     return;
   }
 
-  node.count = row.value || row.frequencyCount;
+  node.count = row.value || row.count;
 
   return node;
 };
