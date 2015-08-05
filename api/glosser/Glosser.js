@@ -1,5 +1,5 @@
 "use strict";
-/* globals localStorage */ 
+/* globals localStorage */
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var CORS = require("../CORS").CORS;
@@ -298,14 +298,25 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       var self = this;
       var deffered = Q.defer();
 
+      this.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         url: glosserURL
       }).then(function(reducedCouchDBresult) {
+
+          if (!reducedCouchDBresult || !reducedCouchDBresult.rows || reducedCouchDBresult.rows.length === undefined) {
+            self.fetching = false;
+            deferred.reject({
+              details: reducedCouchDBresult,
+              userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
+            });
+            return;
+          }
+
           // Reduce the reducedCouchDBresult such that reducedCouchDBresult which are found in multiple source
           // words are only used/included once.
           self.morphemeSegmentationKnowledgeBase = reducedCouchDBresult;
-
+          self.fetching = false;
           // Save the reduced precedence self.morphemeSegmentationKnowledgeBase in localStorage
           if (self.dbname) {
             try {
@@ -321,7 +332,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
                   }
                 }
                 try {
-                  localStorage.setItem(this.dbname + "self.morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
+                  localStorage.setItem(self.dbname + "self.morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
                 } catch (error2) {
                   self.warn("Your lexicon is huge!", error2);
                 }
@@ -331,10 +342,12 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           deffered.resolve(self.morphemeSegmentationKnowledgeBase);
         },
         function(e) {
+          self.fetching = false;
           self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
           self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
           deffered.reject(e);
         }).fail(function(exception) {
+        self.fetching = false;
         self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", exception.stack);
         self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
         deffered.reject(exception);
@@ -909,11 +922,8 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       var prefs = {
         showRelations: ["precedes"]
       };
-      if (this.corpus && this.corpus.prefs) {
-        prefs = this.corpus.prefs;
-      }
 
-      this.lexicon.visualizeAsForceDirectedGraph(options.element, prefs);
+      this.lexicon.visualizeAsForceDirectedGraph(options);
 
       return this;
     }
