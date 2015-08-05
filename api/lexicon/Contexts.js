@@ -31,7 +31,21 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
       return id;
     },
     set: function(value) {
-      this._id = value;
+      if (value !== this.id) {
+        console.warn("setting id  on context " + value + ", it doesnt match the expected id." + this.id);
+        this._id = value;
+      }
+    }
+  },
+
+  equals: {
+    value: function(anotherObject) {
+      if(!anotherObject){
+        return undefined;
+      }
+      if (this.id && this.id === anotherObject.id) {
+        return true;
+      }
     }
   },
 
@@ -40,11 +54,11 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
       var anObject,
         resultObject,
         aproperty;
-        // targetPropertyIsEmpty,
-        // overwrite,
-        // localCallOnSelf,
-        // propertyList = {},
-        // json;
+      // targetPropertyIsEmpty,
+      // overwrite,
+      // localCallOnSelf,
+      // propertyList = {},
+      // json;
 
       if (arguments.length === 0) {
         this.warn("Invalid call to merge, there was no object provided to merge");
