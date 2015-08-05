@@ -39,12 +39,12 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
     value: function(callOnSelf, anotherObject, optionalOverwriteOrAsk) {
       var anObject,
         resultObject,
-        aproperty,
-        targetPropertyIsEmpty,
-        overwrite,
-        localCallOnSelf,
-        propertyList = {},
-        json;
+        aproperty;
+        // targetPropertyIsEmpty,
+        // overwrite,
+        // localCallOnSelf,
+        // propertyList = {},
+        // json;
 
       if (arguments.length === 0) {
         this.warn("Invalid call to merge, there was no object provided to merge");
@@ -89,7 +89,9 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
-      var json = FieldDBObject.prototype.toJSON.apply(this, [false, true, ["fieldDBtype", "dateCreated"]]);
+      attributesToIgnore = attributesToIgnore || [];
+      attributesToIgnore = attributesToIgnore.concat(["fieldDBtype", "dateCreated"]);
+      var json = FieldDBObject.prototype.toJSON.apply(this, [false, true, attributesToIgnore]);
       json.URL = json.URL || "";
       json._id = json._id || json.id;
       if (json._id === json.URL || json._id === json.context || json._id === json.morphemes || json._id === json.utterance || json._id === json.orthography) {
@@ -208,10 +210,10 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
         return;
       }
       if (typeof originalValue === "string") {
-        var context = {
-          URL: "",
-          context: originalValue
-        };
+        // originalValue = {
+        //   URL: "",
+        //   context: originalValue
+        // };
       }
       this.debug("context count before" + originalValue.count);
       // this.debugMode = true;
