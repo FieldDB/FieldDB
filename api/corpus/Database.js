@@ -754,14 +754,14 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           } else {
             options.connection = Connection.defaultConnection(options.authUrl);
           }
-          console.log("Setting connection ", options.connection);
+          self.debug("Setting connection ", options.connection);
           delete options.connection.dbname;
           delete options.connection.pouchname;
           delete options.connection.title;
           delete options.connection.titleAsUrl;
           delete options.connection.corpusUrl;
         } else {
-          console.log("Not setting connection");
+          self.debug("Not setting connection");
         }
 
         if (!options.appbrand && self.application && self.application.brandLowerCase) {
@@ -797,7 +797,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           // });
         }, function(reason) {
           reason = reason || {};
-          console.log("after cors connection ", reason);
+          self.debug("after cors connection ", reason);
 
           reason.details = options;
           self.debug(reason);
