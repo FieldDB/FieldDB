@@ -1,6 +1,6 @@
 {
   "name": "fielddb-corpus-pages-app",
-  "version": "3.12.15",
+  "version": "3.15.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
