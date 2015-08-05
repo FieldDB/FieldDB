@@ -1,5 +1,5 @@
 "use strict";
-
+/* globals localStorage */ 
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var CORS = require("../CORS").CORS;
@@ -22,8 +22,10 @@ var MORPHEMES_N_GRAMS_MAP_REDUCE = {
 };
 try {
   var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
+  /*jshint unused:false */
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
+  /*jslint evil: true */
   eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
 } catch (exception) {
   console.log("Unable to parse the map reduce ", exception.stack);
@@ -74,6 +76,7 @@ Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
   try {
     // ugly way to make sure references to 'emit' in map/reduce bind to the
     // above emit at run time
+    /*jslint evil: true */
     eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ";");
   } catch (e) {
     console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");

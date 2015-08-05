@@ -1,4 +1,3 @@
-/* globals window, $, _ , OPrime*/
 "use strict";
 
 var Datum = require("./Datum").Datum;

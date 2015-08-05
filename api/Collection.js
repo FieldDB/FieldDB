@@ -1,3 +1,6 @@
+"use strict";
+/* globals FieldDB */
+
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 

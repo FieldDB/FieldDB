@@ -1,5 +1,9 @@
+"use strict";
+/* globals window, localStorage, d3, document */
+
 try {
   var ObservableDOM = require("frb/dom"); // add support for content editable
+  console.log("content editable is defined", ObservableDOM);
 } catch (e) {
   console.warn("Warning contentEditable binding in the lexicon won't work because the document is probably not defined.");
 }
@@ -30,6 +34,7 @@ try {
   var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/lexiconNodes/map").lexiconNodes;
   var emit = LEXICON_NODES_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
+  /*jslint evil: true */
   eval("LEXICON_NODES_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
 } catch (exception) {
   console.log("Unable to parse the map reduce ", exception.stack);
@@ -54,6 +59,7 @@ var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = {
 };
 try {
   var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+  /*jshint unused:false */
   var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
   eval("LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
@@ -174,7 +180,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (!lexicalEntryToMatch) {
         deffered.resolve(matches);
       } else {
-        this.filter(function(value, key, object, depth) {
+        // this.filter(function(value, key, object, depth) {
+        this.filter(function(value, key) {
           this.debug(key + " of " + self.length);
           if (typeof lexicalEntryToMatch.uniqueEntriesOnHeadword === "function") {
             if (lexicalEntryToMatch.uniqueEntriesOnHeadword(value)) {
@@ -214,13 +221,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   render: {
     value: function() {
       var lexicalEntriesElement,
-        binding,
-        bindings = [],
+        // binding,
+        // bindings = [],
         listElement,
         entryvalue,
-        entrykey,
-        iterate,
-        entryIndex,
+        // entrykey,
+        // iterate,
+        // entryIndex,
         listItemView,
         fieldLabelElement,
         fieldDTElement,
@@ -229,9 +236,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         fieldList,
         headword,
         saveButton,
-        contexts,
-        field,
-        classList;
+        contexts;
+      // field,
+      // classList;
 
       var self = this;
       lexicalEntriesElement = this.lexicalEntriesElement;
@@ -252,7 +259,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return;
         }
         var cleanAndSaveIfChanged = function(e) {
-          var result = e.target.parentElement.__data__.clean().then(function(proposedChanges) {
+          e.target.parentElement.__data__.clean().then(function(proposedChanges) {
             if (proposedChanges.length > 0) {
               var changesAsStrings = [];
               proposedChanges.map(function(change) {
@@ -980,7 +987,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
   buildLexiconFromCouch: {
     value: function(dbname, callback) {
-      this.warn("DEPRECATED buildLexiconFromCouch use fetch instead.");
+      this.warn("DEPRECATED buildLexiconFromCouch use fetch instead. not using " + dbname, callback);
     }
   },
   /**
@@ -1120,9 +1127,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
 
-      var lineColor = this.d3.scale.linear()
-        .range(["#FFFFF", "#FFFF00"]) // or use hex values
-        .domain([1, 8]);
+      // var lineColor = this.d3.scale.linear()
+      //   .range(["#FFFFF", "#FFFF00"]) // or use hex values
+      //   .domain([1, 8]);
 
       // var force = this.d3.layout.force()
       //   .charge(-120)
@@ -1161,7 +1168,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .attr("id", function(d) {
           return d;
         })
-        .style("opacity", function(d) {
+        .style("opacity", function() {
           // return color(d.morphemes.length);
           return 0.5;
         })
@@ -1220,7 +1227,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             .style("visibility", "visible")
             .html("<div class='node_details_tooltip lexicon'>" + findNode + "</div>");
         })
-        .on("mousemove", function(object) {
+        .on("mousemove", function() {
           /*global  event */
           if (tooltip) {
             return;
@@ -1228,7 +1235,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return tooltip.style("top", (event.pageY - 10) + "px")
             .style("left", (event.pageX + 10) + "px");
         })
-        .on("mouseout", function(object) {
+        .on("mouseout", function() {
           if (tooltip) {
             return;
           }
