@@ -22,11 +22,11 @@ try {
 
 describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
 	var tinyLexicon = [{
-		orthography: "kjun",
+		morphemes: "kjun",
 		gloss: "why"
 	}, {
-		orthography: "nahin",
-		gloss: "not"
+		morphemes: "naya",
+		gloss: "DES"
 	}];
 
 	var tinyPrecedenceRelationsFromCouchDBMapReduce = [{
@@ -574,6 +574,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			var glosser = new Glosser({
 				lexicon: JSON.parse(JSON.stringify(tinyLexicon))
 			});
+			expect(glosser.lexicon.length).toEqual(2);
+			expect(glosser.lexicon.collection[0].id).toEqual("kjun|why");
+			expect(glosser.lexicon.collection[1].id).toEqual("naya|DES");
+			expect(glosser.lexicon["naya|DES"].morphemes).toEqual("naya");
+			expect(glosser.lexicon["naya|DES"].gloss).toEqual("DES");
+			expect(glosser.lexicon["naya|DES"].warnMessage).toBeUndefined();
+
+
 			glosser.morphemeSegmentationKnowledgeBase = SAMPLE_SEGMENTATION_V3;
 			expect(glosser.morphemeSegmentationKnowledgeBase["qaynap'unchaw-@-lloqsi"]).toEqual(["Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq", "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"]);
 
@@ -582,15 +590,36 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(glosser.lexicon.entryRelations.length).toEqual(14);
 			expect(glosser.lexicon.entryRelations[10].from.morphemes).toEqual("tusu");
 			expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
+			expect(glosser.lexicon.entryRelations[10].to.gloss).toBeUndefined();
 			expect(glosser.lexicon.entryRelations[10].relation).toEqual("precedes");
 			expect(glosser.lexicon.entryRelations[10].from.contexts).toEqual(["Victor-ta tusu-naya-n"]);
+			
+
+			glosser.lexicon.updateConnectedGraph();
+
+			//Without lexicon.add looking up inclomplete entries
+			// expect(glosser.lexicon.connectedGraph.nodes["naya"]).toBeUndefined();
+			// expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBeUndefined();
+			// expect(glosser.lexicon.connectedGraph.nodes["naya|"].gloss).toEqual("");
+			// expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
+			// expect(glosser.lexicon.entryRelations[10].to.gloss).toEqual("");
+
+			// With lexicon looking up incomplete entries
+			expect(glosser.lexicon.connectedGraph.nodes["naya"]).toBeUndefined();
+			expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBeDefined();
+			expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBe(glosser.lexicon["naya|DES"]);
+			expect(glosser.lexicon.connectedGraph.nodes["naya|"]).toBeUndefined();
+			expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
+			expect(glosser.lexicon.entryRelations[10].to.gloss).toEqual("DES");
+			expect(glosser.lexicon.entryRelations[10]).not.toBe(glosser.lexicon["naya|DES"]);
+			expect(glosser.lexicon["naya|DES"].warnMessage).toBeUndefined();
 
 			// expect(glosser.render()).toEqual(glosser);
 		});
 
 	});
 
-	xdescribe("backward compatibility", function() {
+	describe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {
 			var glosser = new Glosser();

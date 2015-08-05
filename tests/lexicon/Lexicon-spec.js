@@ -620,7 +620,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
   });
 
   describe("backward compatibility", function() {
-    xit("should be able to automerge equivalent nodes", function() {
+    it("should be able to automerge equivalent nodes", function() {
       var lexicon = new Lexicon();
 
       lexicon.add({
@@ -644,7 +644,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
 
-    xit("should be able to build a lexicon from a couchdb map reduce", function() {
+    it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V1_LEXICON.rows.length).toEqual(348);
       expect(SAMPLE_V1_LEXICON.rows[0].key.relation).toEqual("precedes");
 
@@ -689,7 +689,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
-    xit("should be able to build a lexicon from a couchdb map reduce", function() {
+    it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V2_LEXICON.rows.length).toEqual(1588);
       expect(SAMPLE_V2_LEXICON.rows[0].key.relation).toEqual("follows");
 
@@ -704,12 +704,12 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         }
       });
       expect(lexicon).toBeDefined();
-      expect(lexicon.length).toEqual(42);
+      expect(lexicon.length).toEqual(41);
       expect(lexicon.collection.map(function(node) {
         return node.id;
       })).toEqual(["tâ|acc", "anta|", "ta|", "tâ|bread", "pa|break", "aki|door", "n|",
         "nay|acc", "punqo|", "wa|", "erqe|child", "nay|des", "qapari|yell",
-        "sunkishis|plplom", "wesqâ|close", "a|door", "nayachâ|comb", "a|", "nay|",
+        "sunkishis|plplom", "wesqâ|close", "a|door", "nayachâ|comb", "nay|",
         "llankâ|des", "nayachâ|des", "pa|des", "pâ|des", "acha|", "ku|", "wesqâ|des",
         "pâ|dressrefl", "llankâ|m", "nayachâ|m", "pa|m", "erqe|nom", "qan|nom",
         "wanki|sgm", "pâ|om", "wesqâ|om", "llankâ|sg", "nayachâ|sg", "pa|sg", "pâ|sg",
@@ -723,7 +723,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
-    xit("should be able to build a lexicon from a couchdb map reduce", function() {
+    it("should be able to build a lexicon from a couchdb map reduce", function() {
       expect(SAMPLE_V3_LEXICON.rows.length).toEqual(447);
       expect(SAMPLE_V3_LEXICON.rows[0].key.relation).toEqual("precedes");
 

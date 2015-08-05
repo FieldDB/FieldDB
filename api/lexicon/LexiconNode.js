@@ -87,27 +87,35 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       return this.headword;
     },
     set: function(value) {
-      this.headword = value;
+      if (this.headword !== value) {
+        this.headword = value;
+      }
     }
   },
 
   headword: {
     get: function() {
       this.debug(" getting headword ", this.fields ? this.fields.length : this);
-      if (!this._id) {
-        var constructHeadwordFromMorphemesAndGloss = "";
-        if (this.morphemes) {
-          constructHeadwordFromMorphemesAndGloss = this.morphemes;
-        }
-        constructHeadwordFromMorphemesAndGloss += "|";
-        if (this.gloss && this.gloss !== "?" && this.gloss !== "??") {
-          constructHeadwordFromMorphemesAndGloss += this.gloss;
-        }
-        if (constructHeadwordFromMorphemesAndGloss && constructHeadwordFromMorphemesAndGloss !== "|") {
-          this._id = constructHeadwordFromMorphemesAndGloss;
-        }
+
+      // Let users customize the headword
+      if (this._id) {
+        return this._id;
       }
-      return this._id;
+
+      var constructHeadwordFromMorphemesAndGloss = "";
+      if (this.morphemes) {
+        constructHeadwordFromMorphemesAndGloss = this.morphemes;
+      }
+      constructHeadwordFromMorphemesAndGloss += "|";
+      // without this morphemes glossed as ? will be counted as another morpheme, if that morpheme has a gloss
+      if (!this.gloss || this.gloss == "?" || this.gloss == "??") {
+        // constructHeadwordFromMorphemesAndGloss += "?";
+      } else if (this.gloss) {
+        constructHeadwordFromMorphemesAndGloss += this.gloss;
+      }
+      if (constructHeadwordFromMorphemesAndGloss && constructHeadwordFromMorphemesAndGloss !== "|") {
+        return constructHeadwordFromMorphemesAndGloss;
+      }
     },
     set: function(value) {
       this._id = value;
