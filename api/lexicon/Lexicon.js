@@ -773,6 +773,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (!originalValue) {
         return;
       }
+      if (this.length > Lexicon.maxLexiconSize) {
+        this.debug("Lexicon is too big, ignoring...", originalValue);
+        return;
+      }
 
       // this.debugMode = true;
       if (originalValue && typeof originalValue !== "string" && typeof Lexicon.LexiconNode.mergeContextsIntoContexts === "function") {
@@ -1067,6 +1071,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           // TODO what if a similar node is here, we should merge them.
           source = self.add(source);
           target = self.add(target);
+
+          if (!source || !target) {
+            self.debug("Skipping relation beause one fo the two nodes was excluded from the graph (probably lexicon is too big)");
+            return;
+          }
 
           // Add the source node to the list of nodes, if it is not already there
           if (!self.connectedGraph.nodes[source.headword]) {
@@ -1373,13 +1382,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   .size([width, height]);
 
       var force = this.d3.layout.force()
-        .nodes(this.d3.values(self.connectedGraph.nodes))
+        .nodes(self.collection) // can be an object
         .links(self.connectedGraph.links)
         .size([width, height])
         .linkStrength(0.5)
         .linkDistance(60)
         .charge(-400);
-
 
       self.connectedGraph.svg = this.localDOM.createElement("svg");
       if (typeof element.appendChild !== "function") {
@@ -1420,7 +1428,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .data(force.links())
         .enter().append("path")
         .attr("class", function(d) {
-          return "link " + d.relation + " distance" + d.distance;
+          var distance = d.distance || 1;
+          return "link " + d.relation + " distance" + distance;
         })
         .attr("marker-end", function(d) {
           return "url(#" + d.relation + ")";
@@ -1591,6 +1600,6 @@ Lexicon.bootstrapLexicon = Lexicon.lexicon_nodes_mapReduce;
 Lexicon.LexiconNode = LexiconNode;
 Lexicon.Contexts = Contexts;
 Lexicon.LexiconFactory = LexiconFactory;
-Lexicon.maxLexiconSize = 1000;
+Lexicon.maxLexiconSize = 400;
 
 exports.Lexicon = Lexicon;
