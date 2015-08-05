@@ -90,9 +90,9 @@ var FieldDBObject = function FieldDBObject(json) {
   if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
-  if (json && json.api) {
+  if (json && json.api && this.api) {
     if (json.api !== this.api) {
-      this.debug("Using " + this.api + " when the api of the incoming model was " + json.api);
+      console.log("Using " + this.api + " when the api of the incoming model was " + json.api);
     }
     delete json.api;
   }
