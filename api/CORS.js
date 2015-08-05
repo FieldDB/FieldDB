@@ -158,6 +158,7 @@ CORS.makeCORSRequest = function(options) {
       if (response.userFriendlyErrors[0] === "no_db_file") {
         response.userFriendlyErrors = ["That db doesn't exist. Are you sure this is the db you wanted to open: " + options.url];
       }
+      response.details = options;
       deferred.reject(response);
       return;
     }
@@ -172,7 +173,7 @@ CORS.makeCORSRequest = function(options) {
       self.bug("There was no content in the server's response text. Please report this.");
       self.warn(e, f, g);
       e.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
-
+      e.details = options;
       deferred.reject(e);
     }
     // self.debugMode = false;
@@ -198,6 +199,7 @@ CORS.makeCORSRequest = function(options) {
     if (returnObject.status === 0) {
       returnObject.userFriendlyErrors = ["Unable to contact the server, are you sure you're not offline?"];
     }
+    returnObject.details = options;
     deferred.reject(returnObject);
   };
   try {
@@ -209,6 +211,7 @@ CORS.makeCORSRequest = function(options) {
     }
   } catch (e) {
     self.warn("Caught an exception when calling send on xhr", e);
+    e.details = options;
     deferred.reject(e);
   }
 
