@@ -569,9 +569,28 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		});
 
+
+		it("should be able morphemeSegmentationKnowledgeBase for visualizing", function() {
+			var glosser = new Glosser({
+				lexicon: JSON.parse(JSON.stringify(tinyLexicon))
+			});
+			glosser.morphemeSegmentationKnowledgeBase = SAMPLE_SEGMENTATION_V3;
+			expect(glosser.morphemeSegmentationKnowledgeBase["qaynap'unchaw-@-lloqsi"]).toEqual(["Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq", "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw"]);
+
+			// The morphemeSegmentationKnowledgeBase isnt an array, its a hasmap of ngrams by count
+			glosser.lexicon.entryRelations = glosser.morphemeSegmentationKnowledgeBase;
+			expect(glosser.lexicon.entryRelations.length).toEqual(14);
+			expect(glosser.lexicon.entryRelations[10].from.morphemes).toEqual("tusu");
+			expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
+			expect(glosser.lexicon.entryRelations[10].relation).toEqual("precedes");
+			expect(glosser.lexicon.entryRelations[10].from.contexts).toEqual(["Victor-ta tusu-naya-n"]);
+
+			// expect(glosser.render()).toEqual(glosser);
+		});
+
 	});
 
-	describe("backward compatibility", function() {
+	xdescribe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {
 			var glosser = new Glosser();

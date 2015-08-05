@@ -466,6 +466,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (value.rows) {
         value = value.rows;
       }
+
+      var previousMorph;
+      var morphemeIndex;
+      var ngram;
+      var morphemes;
+      var relation;
+      var count;
+      var context;
+      var shouldSkipWordBounariesUnlessSpecified = !this.corpus || !this.corpus.prefs || !this.corpus.prefs.showGlosserAsMorphemicTemplate;
       if (Object.prototype.toString.call(value) === "[object Array]") {
         this._entryRelations = this._entryRelations || [];
         var uniqueNGrams = {};
@@ -475,74 +484,111 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             this.debug("skipping ", value[rowIndex]);
             continue;
           }
-          var morphemes = value[rowIndex].key || value[rowIndex];
-          if (typeof morphemes === "string") {
-
-            morphemes = morphemes.split("-");
-            var count = 1;
-            var context = "";
-            if (typeof value[rowIndex].value === "number") {
-              count = value[rowIndex].value;
-            } else {
-              context = value[rowIndex].value;
-              count = 0;
-            }
-
-            if (morphemes && morphemes.length) {
-              var previousMorph = morphemes[0];
-              for (var morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
-                this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
-                var relation = uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]];
-                if (relation) {
-                  if (count) {
-                    relation.count += count;
-                  }
-                  if (context) {
-                    relation.from.contexts.push(context);
-                    relation.to.contexts.push(context);
-                  }
-                  this.debug(" already found " + relation.count, relation.contexts);
-                } else {
-                  this.debug("  new ");
-                  relation = {
-                    from: {
-                      morphemes: previousMorph,
-                    },
-                    to: {
-                      morphemes: morphemes[morphemeIndex],
-                    },
-                    relation: "precedes"
-                  };
-                  if (count) {
-                    relation.count = count;
-                  }
-                  if (context) {
-                    relation.from.contexts = [context];
-                    relation.to.contexts = [context];
-                  }
-                  uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
-                  this._entryRelations.push(relation);
-                  foundNgram = true;
-                }
-
-              }
-            } else {
-              this.debug("This wasn't a precedence relation ngram", value[rowIndex]);
-            }
-
-
-          } else {
+          morphemes = value[rowIndex].key || value[rowIndex];
+          if (typeof morphemes === "object") {
             this.debug("not upgrading entity relations");
+            continue;
+          }
+          // Convert into a string and slit on boundaries
+          morphemes = (morphemes + "").split("-");
+          count = 1;
+          context = "";
+          if (typeof value[rowIndex].value === "number") {
+            count = value[rowIndex].value;
+          } else {
+            context = value[rowIndex].value;
+            count = 0;
           }
 
+          // Loop through bigrams in the ngrams
+          previousMorph = morphemes[0];
+          for (morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
+            this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
+            if (shouldSkipWordBounariesUnlessSpecified && (previousMorph === "@" || morphemes[morphemeIndex] === "@")) {
+              console.log("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
+              previousMorph = morphemes[morphemeIndex];
+              continue;
+            }
+            // Look to see if relation was already found
+            relation = uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]];
+            if (relation) {
+              if (count) {
+                relation.count += count;
+              }
+              if (context) {
+                relation.from.contexts.add(context);
+                relation.to.contexts.add(context);
+              }
+              this.debug(" already found " + relation.count, relation.contexts);
+            } else {
+              this.debug("  new ");
+              relation = {
+                from: {
+                  morphemes: previousMorph,
+                },
+                to: {
+                  morphemes: morphemes[morphemeIndex],
+                },
+                relation: "precedes"
+              };
+              if (count) {
+                relation.count = count;
+              }
+              if (context) {
+                relation.from.contexts = new Lexicon.Contexts([context]);
+                relation.to.contexts = new Lexicon.Contexts([context]);
+              }
+              uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
+              this._entryRelations.push(relation);
+              foundNgram = true;
+            }
+            previousMorph = morphemes[morphemeIndex];
+          }
         }
+        // If no ngrams were found, then this is probably an array of entry relations already
         if (!foundNgram) {
           this._entryRelations = value;
         }
         this.debug("uniqueNGrams", uniqueNGrams);
       } else {
-        this.debug(" Setting entityRelations without upggrade or conversion", value);
-        this._entryRelations = value;
+        console.log(" Converting object of ngrams in to relations", value);
+        this._entryRelations = this._entryRelations || [];
+
+        for (ngram in value) {
+          if (!value.hasOwnProperty(ngram) || !ngram || ngram === "length") {
+            continue;
+          }
+          morphemes = ngram.split("-");
+          previousMorph = morphemes[0];
+          for (morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
+            console.log(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
+            if (shouldSkipWordBounariesUnlessSpecified && (previousMorph === "@" || morphemes[morphemeIndex] === "@")) {
+              console.log("Skipping word boundary since it makes the relations significantly smaller, and it wasnt specifically requested in the corpus preferences showGlosserAsMorphemicTemplate: " + morphemes);
+              previousMorph = morphemes[morphemeIndex];
+              continue;
+            }
+            relation = {
+              from: {
+                morphemes: previousMorph,
+              },
+              to: {
+                morphemes: morphemes[morphemeIndex],
+              },
+              relation: "precedes"
+            };
+            previousMorph = morphemes[morphemeIndex];
+            if (typeof value[ngram] === "number") {
+              relation.count = value[ngram];
+            } else if (Object.prototype.toString.call(value[ngram]) === "[object Array]") {
+              relation.from.contexts = value[ngram];
+              relation.to.contexts = value[ngram];
+            } else {
+              relation.from.contexts = value[ngram];
+              relation.to.contexts = value[ngram];
+            }
+            this._entryRelations.push(relation);
+          }
+        }
       }
     }
   },
