@@ -316,9 +316,9 @@ FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
   Q.nextTick(function() {
     var response;
 
-    if (self.alwaysReplyToPrompt) {
-      console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably reply " + self.alwaysReplyToPrompt + " and it wasnt worth asking.");
-      response = self.alwaysReplyToPrompt;
+    if (self.alwaysReplyToPrompt !== undefined) {
+      response = providedInput || self.alwaysReplyToPrompt;
+      console.warn(self.fieldDBtype.toUpperCase() + " NOT PROMPTING USER: " + message + " \nThe code decided that they would probably reply `" + response + "` and it wasnt worth prompting.");
     } else {
       try {
         response = prompt(message, providedInput);
@@ -326,7 +326,7 @@ FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
         // Let the user enter info, even JSON
         if (response === "yes") {
           response = providedInput;
-        } else {
+        } else if (response !== null) {
           if (typeof providedInput !== "string" && typeof providedInput !== "number") {
             try {
               var parsed = JSON.parse(response);
@@ -340,8 +340,8 @@ FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
         }
 
       } catch (e) {
-        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysReplyToPrompt);
-        response = self.alwaysReplyToPrompt;
+        response = null;
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO PROMPT USER: " + message + " pretending they said `" + response +"`");
       }
     }
     if (response !== null && response !== undefined && typeof response.trim === "function") {
@@ -1310,12 +1310,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.debug(" Merging properties: ", propertyList);
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
-
+        var deferred = Q.defer();
         var promptInputText = anotherObject[apropertylocal];
         if (typeof promptInputText === "object") {
           promptInputText = JSON.stringify(anotherObject[apropertylocal]);
         }
-        var context = self.id || self._id;
+        var context = self.id || self._id || "";
         self.prompt(context + " I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + promptInputText, null, promptInputText)
           .then(function(reply) {
             // Let the user enter the value they would like
@@ -1329,11 +1329,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
               resultObject[apropertylocal] = reply.response;
             }
-          }, function() {
+            deferred.resolve(reply);
+          }, function(reason) {
             resultObject[apropertylocal] = anObject[apropertylocal];
+            deferred.reject(reason);
           }).fail(function(error) {
             console.error(error.stack, self);
+            deferred.reject(error);
           });
+
+        self.confirmMergePromises = self.confirmMergePromises || [];
+        self.confirmMergePromises.push(deferred.promise);
       };
 
       for (aproperty in propertyList) {
