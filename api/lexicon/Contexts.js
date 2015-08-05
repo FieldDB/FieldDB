@@ -40,7 +40,7 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
 
   equals: {
     value: function(anotherObject) {
-      if(!anotherObject){
+      if (!anotherObject) {
         return undefined;
       }
       if (this.id && this.id === anotherObject.id) {
@@ -241,6 +241,27 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
         value = Collection.prototype.set.apply(this, [searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted]);
       }
       return value;
+    }
+  },
+
+  preview: {
+    configurable: true,
+    get: function() {
+      if (!this.collection) {
+        return ""
+      }
+      var preview = this.map(function(context) {
+        return context.id;
+      });
+      if (!preview && this.length) {
+        preview = this.length + " contexts";
+      } else {
+        preview = preview.join("; ");
+      }
+      return preview;
+    },
+    set: function() {
+      //cant set preview
     }
   }
 

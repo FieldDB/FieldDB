@@ -83,6 +83,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
    * @return {[type]} [description]
    */
   id: {
+    configurable: true,
     get: function() {
       return this.headword;
     },
@@ -124,6 +125,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   },
 
   count: {
+    configurable: true,
     get: function() {
       if (!this._contexts || !(this._contexts instanceof Contexts) || !this._contexts.length) {
         this.debug(" getting _count of " + this.id + " " + this._count);
@@ -148,6 +150,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   },
 
   categories: {
+    configurable: true,
     get: function() {
       return this.syntacticCategory.split(/\s+/);
     },
@@ -157,6 +160,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   },
 
   datumids: {
+    configurable: true,
     get: function() {
       return this._datumids || [];
     },
@@ -166,6 +170,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   },
 
   contexts: {
+    configurable: true,
     get: function() {
       if (!this._contexts) {
         this._contexts = new this.INTERNAL_MODELS["contexts"]();

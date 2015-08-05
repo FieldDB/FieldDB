@@ -236,7 +236,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         fieldList,
         headword,
         saveButton,
-        contexts;
+        contexts,
+        igtFields;
       // field,
       // classList;
 
@@ -259,15 +260,19 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       }
 
       var self = this;
-
-      // if (!this.igtFields && this.corpus && this.corpus.datumFields && this.corpus.datumFields.length) {
-      //   this.igtFields = [];
-      //   this.corpus.datumFields.map(function(field) {
-      //     if (field && field.type && field.type === "IGT") {
-      //       this.igtFields.push(field.id);
-      //     }
-      //   });
-      // }
+      igtFields = options.igtFields;
+      if (!igtFields) {
+        if (this.corpus && this.corpus.datumFields && this.corpus.datumFields.length) {
+          igtFields = [];
+          this.corpus.datumFields.map(function(field) {
+            if (field && field.type && field.type === "IGT") {
+              igtFields.push(field.id);
+            }
+          });
+        } else {
+          igtFields = Lexicon.LexiconNode.prototype.expandedIGTFields;
+        }
+      }
 
       listElement = self.localDOM.createElement("ul");
       lexicalEntriesElement.appendChild(listElement);
@@ -416,61 +421,84 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           data: entryvalue
         };
 
+        var bindFieldToView = function(lexicalEntry, attribute) {
+          if (!lexicalEntry[attribute] || typeof lexicalEntry[attribute] === "object") {
+            return;
+          }
+          headword.classList.add(attribute + ":" + encodeURI(lexicalEntry[attribute]));
+          discussion.classList.add(attribute + ":" + encodeURI(lexicalEntry[attribute]));
+
+          fieldDTElement = self.localDOM.createElement("dt");
+          fieldLabelElement = self.localDOM.createElement("span");
+          if (!fieldLabelElement.classList) {
+            fieldLabelElement.classList = fakeClassList;
+          }
+          fieldLabelElement.innerHTML = attribute;
+          fieldLabelElement.classList.add("fieldlabel");
+          fieldLabelElement.classList.add(attribute);
+          fieldLabelElement.classList.add(encodeURI(lexicalEntry[attribute]));
+          fieldDTElement.appendChild(fieldLabelElement);
+          fieldList.appendChild(fieldDTElement);
+
+          fieldDDElement = self.localDOM.createElement("dd");
+          fieldElement = self.localDOM.createElement("span");
+          if (!fieldElement.classList) {
+            fieldElement.classList = fakeClassList;
+          }
+          fieldElement.contentEditable = "true";
+          fieldElement.classList.add("fieldvalue");
+          fieldElement.classList.add(attribute);
+          fieldElement.classList.add(encodeURI(lexicalEntry[attribute]));
+          component.fieldViews[attribute] = fieldElement;
+          fieldDDElement.appendChild(fieldElement);
+          fieldList.appendChild(fieldDDElement);
+
+          var viewPath = "fieldViews." + attribute + ".value";
+          var dataPath = "listItemView.__data__." + attribute;
+          var bindSet = {};
+          bindSet[viewPath] = {
+            "<-": dataPath
+          };
+          var bindTwoWay = {};
+          bindTwoWay[dataPath] = {
+            "<->": viewPath
+          };
+          Bindings.defineBindings(component, bindSet);
+          Bindings.defineBindings(component, bindTwoWay);
+        };
+
+        // Show the user the fields they want first
+        igtFields.map(function(fieldname) {
+          try {
+            bindFieldToView(listItemView.__data__, fieldname);
+          } catch (e) {
+            console.warn(e.stack);
+          }
+        });
+
         for (field in listItemView.__data__) {
           if (!listItemView.__data__.hasOwnProperty(field) || !listItemView.__data__.hasOwnProperty(field)) {
             continue;
           }
-          if (field === "discussion" || field === "headword") {
+
+          if (field.indexOf("_") === 0) {
+            field = field.replace("_", "");
+          }
+          if (["discussion", "headword", "version", "fieldDBtype"].indexOf(field) > -1) {
             // these get special displays.
             continue;
           }
-          if (typeof listItemView.__data__[field] === "object") {
+          if (igtFields.indexOf(field) > -1) {
+            // these get special displays.
+            continue;
+          }
+          if (typeof listItemView.__data__[field] === "object" || typeof listItemView.__data__[field] === "function") {
             // this isn't a string to show to the user.
             continue;
           }
 
           try {
-            headword.classList.add(field + ":" + encodeURI(listItemView.__data__[field]));
-            discussion.classList.add(field + ":" + encodeURI(listItemView.__data__[field]));
-
-            fieldDTElement = self.localDOM.createElement("dt");
-            fieldLabelElement = self.localDOM.createElement("span");
-            if (!fieldLabelElement.classList) {
-              fieldLabelElement.classList = fakeClassList;
-            }
-            fieldLabelElement.innerHTML = field;
-            fieldLabelElement.classList.add("fieldlabel");
-            fieldLabelElement.classList.add(field);
-            fieldLabelElement.classList.add(encodeURI(listItemView.__data__[field]));
-            fieldDTElement.appendChild(fieldLabelElement);
-            fieldList.appendChild(fieldDTElement);
-
-            fieldDDElement = self.localDOM.createElement("dd");
-            fieldElement = self.localDOM.createElement("span");
-            if (!fieldElement.classList) {
-              fieldElement.classList = fakeClassList;
-            }
-            fieldElement.contentEditable = "true";
-            fieldElement.classList.add("fieldvalue");
-            fieldElement.classList.add(field);
-            fieldElement.classList.add(encodeURI(listItemView.__data__[field]));
-            component.fieldViews[field] = fieldElement;
-            fieldDDElement.appendChild(fieldElement);
-            fieldList.appendChild(fieldDDElement);
-
-            var viewPath = "fieldViews." + field + ".value";
-            var dataPath = "listItemView.__data__." + field;
-            var bindSet = {};
-            bindSet[viewPath] = {
-              "<-": dataPath
-            };
-            var bindTwoWay = {};
-            bindTwoWay[dataPath] = {
-              "<->": viewPath
-            };
-            Bindings.defineBindings(component, bindSet);
-            Bindings.defineBindings(component, bindTwoWay);
-
+            bindFieldToView(listItemView.__data__, field);
           } catch (e) {
             console.warn(e.stack);
           }
@@ -490,11 +518,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             "<-": "listItemView.__data__.discussion"
           },
           "contextsView.innerHTML": {
-            // "<-": "' '+listItemView.__data__.utteranceContext.join(',')+listItemView.__data__.utteranceContext?listItemView.__data__.utteranceContext.length : '0'"
-            "<-": "listItemView.__data__.utteranceContext.join(' ; ')"
+            // "<-": "' '+listItemView.__data__.contexts.preview+listItemView.__data__.contexts.preview?listItemView.__data__.contexts.preview.length : '0'"
+            "<-": "listItemView.__data__.contexts.preview"
           },
           "listItemView.title": {
-            "<-": "'Example: '+listItemView.__data__.utteranceContext.join(' Example: ')"
+            "<-": "'Example: '+listItemView.__data__.contexts.preview"
           },
           "listItemView.hidden": {
             "<-": "listItemView.__data__.confidence < self.localDOM.getElementById('lexiconConfidenceThreshold').value / 10"
@@ -584,17 +612,17 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
                 relation.count += count;
               }
               if (context) {
-                relation.from.contexts.add(context);
-                relation.to.contexts.add(context);
+                relation.source.contexts.add(context);
+                relation.target.contexts.add(context);
               }
               this.debug(" already found " + relation.count, relation.contexts);
             } else {
               this.debug("  new ");
               relation = {
-                from: {
+                source: {
                   morphemes: previousMorph,
                 },
-                to: {
+                target: {
                   morphemes: morphemes[morphemeIndex],
                 },
                 relation: "precedes"
@@ -603,15 +631,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
                 relation.count = count;
               }
               if (context) {
-                relation.from.contexts = new Lexicon.Contexts([context]);
-                relation.to.contexts = new Lexicon.Contexts([context]);
+                relation.source.contexts = new Lexicon.Contexts([context]);
+                relation.target.contexts = new Lexicon.Contexts([context]);
               }
               /* make the @ more like what a linguist recognizes for word boundaries */
-              if (relation.from.morphemes === "@") {
-                relation.from.morphemes = "#_";
+              if (relation.source.morphemes === "@") {
+                relation.source.morphemes = "#_";
               }
-              if (relation.to.morphemes === "@") {
-                relation.to.morphemes = "_#";
+              if (relation.target.morphemes === "@") {
+                relation.target.morphemes = "_#";
               }
               uniqueNGrams[previousMorph + "-" + morphemes[morphemeIndex]] = relation;
               this._entryRelations.push(relation);
@@ -646,10 +674,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
               continue;
             }
             relation = {
-              from: {
+              source: {
                 morphemes: previousMorph,
               },
-              to: {
+              target: {
                 morphemes: morphemes[morphemeIndex],
               },
               relation: "precedes"
@@ -658,18 +686,18 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             if (typeof value[ngram] === "number") {
               relation.count = value[ngram];
             } else if (Object.prototype.toString.call(value[ngram]) === "[object Array]") {
-              relation.from.contexts = value[ngram];
-              relation.to.contexts = value[ngram];
+              relation.source.contexts = value[ngram];
+              relation.target.contexts = value[ngram];
             } else {
-              relation.from.contexts = value[ngram];
-              relation.to.contexts = value[ngram];
+              relation.source.contexts = value[ngram];
+              relation.target.contexts = value[ngram];
             }
             /* make the @ more like what a linguist recognizes for word boundaries */
-            if (relation.from.morphemes === "@") {
-              relation.from.morphemes = "#_";
+            if (relation.source.morphemes === "@") {
+              relation.source.morphemes = "#_";
             }
-            if (relation.to.morphemes === "@") {
-              relation.to.morphemes = "_#";
+            if (relation.target.morphemes === "@") {
+              relation.target.morphemes = "_#";
             }
             this._entryRelations.push(relation);
           }
@@ -784,7 +812,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             matches = [matches[bestmatch]];
             this.debug("using the one that also has an unspecified gloss.");
           } else {
-            this.warn("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes + ", using none of them: " + matches.map(function(entry) {
+            this.warn("found " + matches.length + " lexical entries which has these morphemes: " + originalValue.morphemes + ". But using none of them because they all have glosses and this node came from a morpheme segmetnation with no gloss so we cant know which entry it refers to: " + matches.map(function(entry) {
               return entry.id;
             }));
             matches = [];
@@ -907,8 +935,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           connectionEdge.count = entryRelation.value ? entryRelation.value : (entryRelation.key ? entryRelation.key.count : null);
           self.debug("Adding ", connectionEdge, " to connected graph");
 
-          var from = connectionEdge.from || connectionEdge.source || connectionEdge.previous || connectionEdge.x;
-          var to = connectionEdge.to || connectionEdge.target || connectionEdge.subsequent || connectionEdge.y;
+          var source = connectionEdge.source || connectionEdge.from || connectionEdge.previous || connectionEdge.x;
+          var target = connectionEdge.target || connectionEdge.to || connectionEdge.subsequent || connectionEdge.y;
 
           var datumid = entryRelation.id || "";
           if (!datumid) {
@@ -916,16 +944,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
 
           // Ensuring notes are objects
-          if (!(from instanceof Lexicon.LexiconNode)) {
-            self.debug("\nCreating lexical entry from only orthography " + from);
-            from = new Lexicon.LexiconNode(from);
-            self.debug("Converted from into a lexicon node", from.headword);
+          if (!(source instanceof Lexicon.LexiconNode)) {
+            self.debug("\nCreating lexical entry from only orthography " + source);
+            source = new Lexicon.LexiconNode(source);
+            self.debug("Converted source into a lexicon node", source.headword);
           }
 
-          if (!(to instanceof Lexicon.LexiconNode)) {
-            self.debug("\nCreating lexical entry from only orthography " + to);
-            to = new Lexicon.LexiconNode(to);
-            self.debug("Converted to into a lexicon node", to.headword);
+          if (!(target instanceof Lexicon.LexiconNode)) {
+            self.debug("\nCreating lexical entry from only orthography " + target);
+            target = new Lexicon.LexiconNode(target);
+            self.debug("Converted target into a lexicon node", target.headword);
           }
 
           // Upgrade v1 edges
@@ -940,44 +968,44 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             } else {
               self.debug("Don't know how often this context appears", entryRelation.value);
             }
-            from.contexts = [context];
-            to.contexts = [context];
+            source.contexts = [context];
+            target.contexts = [context];
           } else {
             self.debug("This is not a v1 relation", entryRelation);
             if (connectionEdge.count) {
               self.debug("setting frequencyCount using edge count", connectionEdge.count);
-              from.count += connectionEdge.count;
-              to.count += connectionEdge.count;
+              source.count += connectionEdge.count;
+              target.count += connectionEdge.count;
             }
           }
 
-          if (!from || !to) {
-            self.warn("Missing either a `from` or `to` ", from, to);
+          if (!source || !target) {
+            self.warn("Missing either a `source` or `target` ", source, target);
             return;
           }
 
           /* skip word boundaries unless otherwise specified */
-          if (from.morphemes === "@" ||
-            from.morphemes === "_#" ||
-            from.morphemes === "#_" ||
-            to.morphemes === "@" ||
-            to.morphemes === "_#" ||
-            to.morphemes === "#_") {
+          if (source.morphemes === "@" ||
+            source.morphemes === "_#" ||
+            source.morphemes === "#_" ||
+            target.morphemes === "@" ||
+            target.morphemes === "_#" ||
+            target.morphemes === "#_") {
             if (!prefs.showGlosserAsMorphemicTemplate) {
               self.debug("Skipping a connection involving a word boundary ", connectionEdge);
               return;
             }
           }
           /* make the @ more like what a linguist recognizes for word boundaries */
-          if (from.morphemes === "@") {
-            from.morphemes = "#_";
+          if (source.morphemes === "@") {
+            source.morphemes = "#_";
           }
-          if (to.morphemes === "@") {
-            to.morphemes = "_#";
+          if (target.morphemes === "@") {
+            target.morphemes = "_#";
           }
 
-          if (!from.morphemes || !to.morphemes) {
-            self.warn("Missing morphemes on the nodes, this relation cant be added to the graph ", from, to);
+          if (!source.morphemes || !target.morphemes) {
+            self.warn("Missing morphemes on the nodes, this relation cant be added to the graph ", source, target);
             return;
           }
 
@@ -994,86 +1022,86 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             return;
           }
 
-          if (!self.isWithinConfidenceRange(from, prefs.confidenceRange) ||
-            !self.isWithinConfidenceRange(to, prefs.confidenceRange)) {
+          if (!self.isWithinConfidenceRange(source, prefs.confidenceRange) ||
+            !self.isWithinConfidenceRange(target, prefs.confidenceRange)) {
             self.warn("Skipping nodes which arent confident enough ", connectionEdge.confidence);
             return;
           }
 
 
           // If the utterance contains the whole word, ie the context, not just the utterance of this morpheme we dont really want it
-          // delete from.utterance;
-          // delete to.utterance;
-          // delete from.orthography;
-          // delete to.orthography;
+          // delete source.utterance;
+          // delete target.utterance;
+          // delete source.orthography;
+          // delete target.orthography;
           // 
 
-          // connectionEdge.utteranceContext = context.utterance;
+          // connectionEdge.contexts = context.utterance;
           // connectionEdge.datumid = context.id;
 
           // // Put the previous and subsequent morphemes into the morpheme nodes
           // // this.add(context.utterance, new Lexicon.LexiconNode({
-          // //   fields: from
+          // //   fields: source
           // // }));
-          // from.datumids = [context.id];
-          // from.utteranceContext = [context.utterance];
+          // source.datumids = [context.id];
+          // source.contexts = [context.utterance];
           // if (context.url) {
-          //   from.url = context.url;
+          //   source.url = context.url;
           // }
 
           // // this.add(context.utterance, new Lexicon.LexiconNode({
-          // //   fields: from
+          // //   fields: source
           // // }));
-          // to.datumids = [context.id];
-          // to.utteranceContext = [context.utterance];
+          // target.datumids = [context.id];
+          // target.contexts = [context.utterance];
           // if (context.url) {
-          //   to.url = context.url;
+          //   target.url = context.url;
           // }
           // this.references.add(context.id);
 
           // //To avoid loops
-          // if (to.morphemes.indexOf("@") === -1) {
+          // if (target.morphemes.indexOf("@") === -1) {
           //   this.entryRelations.add(entryRelations[i].key);
           // }
 
           // TODO what if a similar node is here, we should merge them.
-          from = self.add(from);
-          to = self.add(to);
+          source = self.add(source);
+          target = self.add(target);
 
-          // Add the from node to the list of nodes, if it is not already there
-          if (!self.connectedGraph.nodes[from.headword]) {
+          // Add the source node to the list of nodes, if it is not already there
+          if (!self.connectedGraph.nodes[source.headword]) {
             self.connectedGraph.length++;
-            self.connectedGraph.nodes[from.headword] = from;
+            self.connectedGraph.nodes[source.headword] = source;
           } else {
-            if (self.connectedGraph.nodes[from.headword] !== from) {
-              self.warn(from.morphemes + " was already defined. merging with this node " + from.headword);
-              self.connectedGraph.nodes[from.headword].merge("self", from, "overwrite");
+            if (self.connectedGraph.nodes[source.headword] !== source) {
+              self.warn(source.morphemes + " was already defined. merging with this node " + source.headword);
+              self.connectedGraph.nodes[source.headword].merge("self", source, "overwrite");
             }
           }
-          from = self.connectedGraph.nodes[from.headword];
+          source = self.connectedGraph.nodes[source.headword];
 
-          // Add the to node to the list of nodes, if it is not already there
-          if (!self.connectedGraph.nodes[to.headword]) {
+          // Add the target node to the list of nodes, if it is not already there
+          if (!self.connectedGraph.nodes[target.headword]) {
             self.connectedGraph.length++;
-            self.connectedGraph.nodes[to.headword] = to;
+            self.connectedGraph.nodes[target.headword] = target;
           } else {
-            if (self.connectedGraph.nodes[to.headword] !== to) {
-              self.warn(to.morphemes + " was already defined. merging with this node");
-              self.connectedGraph.nodes[to.headword].merge("self", to, "overwrite");
+            if (self.connectedGraph.nodes[target.headword] !== target) {
+              self.warn(target.morphemes + " was already defined. merging with this node");
+              self.connectedGraph.nodes[target.headword].merge("self", target, "overwrite");
             }
           }
-          to = self.connectedGraph.nodes[to.headword];
+          target = self.connectedGraph.nodes[target.headword];
 
           // Use the language of connected graphs
-          connectionEdge.from = from;
-          connectionEdge.to = to;
+          connectionEdge.source = source;
+          connectionEdge.target = target;
 
 
           // Dont keep other names for the two nodes
           delete connectionEdge.previous;
           delete connectionEdge.subsequent;
-          delete connectionEdge.source;
-          delete connectionEdge.target;
+          delete connectionEdge.from;
+          delete connectionEdge.to;
 
           self.connectedGraph[connectionEdge.relation] = self.connectedGraph[connectionEdge.relation] || [];
           self.connectedGraph[connectionEdge.relation].push(connectionEdge);
@@ -1135,6 +1163,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var deferred = Q.defer(),
         self = this;
 
+      self.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         url: url
@@ -1148,10 +1177,13 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
               userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
             });
           }
+          self.fetching = false;
         },
         function(reason) {
+          self.fetching = false;
           deferred.reject(reason);
         }).fail(function(error) {
+        self.fetching = false;
         console.error(error.stack, self);
         deferred.reject(error);
       });
@@ -1212,8 +1244,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * @return {[type]}            [description]
    */
   visualizeAsForceDirectedGraph: {
-    value: function(element, prefs) {
+    value: function(options) {
       var self = this;
+      options = options || {};
+      var element = options.element;
+      var prefs = options.prefs;
+
       if (!prefs && this.corpus && this.corpus.prefs) {
         prefs = this.corpus.prefs;
       }
@@ -1224,12 +1260,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         prefs.showRelations = ["precedes"];
       }
       if (!this.connectedGraph || (!this.connectedGraph.links || !this.connectedGraph.links.length) || !this.connectedGraph.nodes) {
+        console.log("Updating the connected graph, it wasnt ready yet. ", this.connectedGraph);
         this.updateConnectedGraph(prefs);
 
         if (!this.connectedGraph || !this.connectedGraph.nodes) {
           return this;
         }
-
         // Include only relations which the preferences request
         this.connectedGraph.links = [];
         prefs.showRelations.map(function(relation) {
@@ -1238,7 +1274,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
           self.connectedGraph.links = self.connectedGraph.links.concat(self.connectedGraph[relation]);
         });
+      } else {
+        console.log("Not updating the connected graph, it was already generated.");
       }
+
       this.debug("Displaying a connected graph of " + this.connectedGraph.links.length + " links");
 
       if (self.connectedGraph.links.length === 0) {
@@ -1470,12 +1509,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           .on("tick", tick)
           .start();
       } catch (e) {
-        this.warn("\nThe lexicon was able to start the connected graph. If you are in a Node.js environment, this is normal.", e.stack);
+        if (e.message === "TypeError: Cannot read property 'weight' of undefined") {
+          this.bug("Something is wrong with one of the links in the lexicon, it doesn't have a source or target. ", e.stack);
+        } else {
+          this.warn("\nThe lexicon was able to start the connected graph. Something was wrong. ", e.stack);
+        }
+
       }
 
       return this;
     }
-
   }
 
 });
