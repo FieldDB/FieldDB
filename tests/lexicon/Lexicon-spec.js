@@ -528,6 +528,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(contexts.collection.length).toEqual(1);
       expect(contexts["noqa-ta"]).toEqual(contexts.collection[0]);
       expect(contexts.length).toEqual(14);
+      expect(contexts.preview).toEqual("noqa-ta");
     });
 
     it("should be able to add contexts", function() {
@@ -595,6 +596,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         URL: "",
         utterance: "another one"
       }]);
+      expect(one.contexts.preview).toEqual("one little; another one");
       expect(one.count).toEqual(2);
     });
 
@@ -649,7 +651,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(lexicon.connectedGraph).toBeDefined();
         expect(lexicon.connectedGraph.nodes).toBeDefined();
         expect(lexicon.connectedGraph.precedes).toBeDefined();
-        expect(lexicon.connectedGraph.nodes.length).toEqual(45);
+        expect(lexicon.connectedGraph.length).toEqual(45);
         expect(lexicon.connectedGraph.precedes.length).toEqual(56);
 
         // need an element
@@ -723,7 +725,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(lexicon.connectedGraph).toBeDefined();
         expect(lexicon.connectedGraph.nodes).toBeDefined();
         expect(lexicon.connectedGraph.precedes).toBeDefined();
-        expect(lexicon.connectedGraph.nodes.length).toEqual(45);
+        expect(lexicon.connectedGraph.length).toEqual(45);
         expect(lexicon.connectedGraph.precedes.length).toEqual(56);
 
         expect(lexicon.warnMessage).toBeDefined();
@@ -746,11 +748,11 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
           expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
           expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
-          expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(3);
-          if (lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes) {
-            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.nodes.length);
+          expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(4);
+          if (lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes) {
+            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
           } else {
-            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.nodes.length);
+            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
           }
         }
       });
@@ -790,13 +792,14 @@ describe("Lexicon: as a user I want to search for anything, even things that don
           expect(virtualElement.children[0].children).toBeDefined();
           expect(virtualElement.children[0].children.length).toEqual(lexicon.length);
 
-          expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
-          expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
-          if (lexicon.connectedGraph.svg[0][0].children[0].childNodes[0]._childNodes) {
-            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.nodes.length);
-          } else {
-            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.nodes.length);
-          }
+          // expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
+          // expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
+          // expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(4);
+          // if (lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes) {
+          //   expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
+          // } else {
+          //   expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
+          // }
         }
       });
 
@@ -851,6 +854,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         count: 1,
         URL: ""
       }]);
+      expect(lexicon.collection[0].contexts.preview).toEqual("allcha-nay-wa-n");
       expect(lexicon.collection[0].count).toEqual(1);
 
       expect(lexicon.collection.map(function(node) {
@@ -960,20 +964,21 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.length).toEqual(0);
       expect(lexicon.entryRelations.length).toEqual(7);
       // expect(lexicon.entryRelations).toEqual(7);
-      expect(lexicon.entryRelations[3].from.morphemes).toEqual("ra");
-      expect(lexicon.entryRelations[3].to.morphemes).toEqual("n");
+      expect(lexicon.entryRelations[3].source.morphemes).toEqual("ra");
+      expect(lexicon.entryRelations[3].target.morphemes).toEqual("n");
       expect(lexicon.entryRelations[3].relation).toEqual("precedes");
       if (lexicon.entryRelations[3].count) {
         expect(lexicon.entryRelations[3].count).toEqual(2);
       } else {
-        expect(lexicon.entryRelations[3].from.contexts.length).toEqual(2);
-        expect(lexicon.entryRelations[3].from.contexts.toJSON()).toEqual([{
+        expect(lexicon.entryRelations[3].source.contexts.length).toEqual(2);
+        expect(lexicon.entryRelations[3].source.contexts.toJSON()).toEqual([{
           morphemes: "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq",
           URL: ""
         }, {
           morphemes: "Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw",
           URL: ""
         }]);
+        expect(lexicon.entryRelations[3].source.contexts.preview).toEqual("Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchawpaq; Qaynap'unchaw lloqsi-nay-wa-ra-n khunan p'unchaw");
       }
 
       lexicon.updateConnectedGraph();
