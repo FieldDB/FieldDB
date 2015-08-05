@@ -3,9 +3,6 @@
 var Datum = require("./Datum").Datum;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
-var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
-
-
 /**
  * @class The LanguageDatum widget is the place where all linguistic data is
  *        entered; one at a time.
@@ -424,6 +421,7 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
       return result;
     }
   },
+  /* jshint ignore:end */
 
   datumIsInterlinearGlossText: {
     value: function(fieldLabels) {

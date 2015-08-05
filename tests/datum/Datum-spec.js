@@ -11,12 +11,7 @@ Datum = Datum || require("./../../api/datum/Datum").Datum;
 
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var SAMPLE_CORPUS = require("./../../api/corpus/corpus.json");
-var mockCorpus = {
-  updateDatumToCorpusFields: function(doc) {
-    doc.fields = JSON.parse(JSON.stringify(SAMPLE_CORPUS.datumFields));
-    return doc;
-  }
-};
+
 describe("Test Datum", function() {
   it("should load", function() {
     expect(Datum).toBeDefined();

@@ -29,30 +29,6 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		gloss: "not"
 	}];
 
-	var tinyPrecedenceRelation = [{
-		"previous": {
-			"morphemes": "tm",
-			"gloss": "vti",
-			"utterance": "maqutmg'p",
-			"confidence": 0.9000000000000000222
-		},
-		"subsequent": {
-			"morphemes": "g",
-			"gloss": "past",
-			"utterance": "maqutmg'p",
-			"confidence": 0.9000000000000000222
-		},
-		"relation": "precedes",
-		"distance": 1,
-		"context": {
-			"utterance": "maqutmg'p",
-			"morphemes": "maqu-tm-g-'p",
-			"gloss": "eat-vti--past",
-			"id": "116ab35300200903a1c6fad4c1f2f660"
-		},
-		"count": 2
-	}];
-
 	var tinyPrecedenceRelationsFromCouchDBMapReduce = [{
 		"key": {
 			"previous": {
@@ -131,7 +107,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 			expect(datum.utteranceWithExplictWordBoundaries).toEqual("@-lloqsi-nay-wa-ra-n-@-p\'unchawpaq-@");
 			expect(datum.alternateMorphemeLines).toBeUndefined();
-			expect(datum.matchingRules.length).toEqual(6)
+			expect(datum.matchingRules.length).toEqual(6);
 			expect(datum.matchingRules).toEqual([{
 				segmentation: "@-lloqsi-nay",
 				contexts: ["Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchawpaq", "Qaynap\'unchaw lloqsi-nay-wa-ra-n khunan p\'unchaw"],
@@ -397,7 +373,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(datum.gloss).toEqual("?-?");
 
 			}, function(reason) {
-				console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS")
+				console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS");
 				expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
 			}).fail(function(exception) {
 				console.log(exception.stack);
