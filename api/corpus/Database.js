@@ -515,15 +515,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   login: {
-    value: function(details) {
+    value: function(options) {
       var deferred = Q.defer(),
         self = this;
 
       Q.nextTick(function() {
 
-        if (!details) {
+        if (!options) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["This application has errored, please contact us."],
             status: 412
           });
@@ -531,45 +531,45 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
 
         var usernameField = "name";
-        if (!details.authUrl && details.name) {
-          details.authUrl = self.BASE_DB_URL + "/_session";
+        if (!options.authUrl && options.name) {
+          options.authUrl = self.BASE_DB_URL + "/_session";
         }
-        details.authUrl = self.deduceAuthUrl(details.authUrl);
-        if (details.authUrl.indexOf("/_session") === -1 && details.authUrl.indexOf("/login") === -1) {
-          details.authUrl = details.authUrl + "/login";
+        options.authUrl = self.deduceAuthUrl(options.authUrl);
+        if (options.authUrl.indexOf("/_session") === -1 && options.authUrl.indexOf("/login") === -1) {
+          options.authUrl = options.authUrl + "/login";
           usernameField = "username";
         }
 
-        if (!details[usernameField]) {
+        if (!options[usernameField]) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please supply a username."],
             status: 412
           });
           return;
         }
 
-        if (!details.name && details.authUrl.indexOf("/_session") > -1) {
+        if (!options.name && options.authUrl.indexOf("/_session") > -1) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please supply a username."],
             status: 412
           });
           return;
         }
 
-        if (!details.password) {
+        if (!options.password) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please supply a password."],
             status: 412
           });
           return;
         }
 
-        var validateUsername = Connection.validateUsername(details[usernameField]);
+        var validateUsername = Connection.validateUsername(options[usernameField]);
         if (validateUsername.changes.length > 0) {
-          details[usernameField] = validateUsername.identifier;
+          options[usernameField] = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
@@ -582,8 +582,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: details.authUrl,
-          data: details
+          url: options.authUrl,
+          data: options
         }).then(function(authOrCorpusServerResult) {
             if (authOrCorpusServerResult && authOrCorpusServerResult.user) {
               if (authOrCorpusServerResult.info && authOrCorpusServerResult.info[0] === "Preferences saved." && self.application.authentication) {
@@ -599,7 +599,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             }
           },
           function(reason) {
-            reason.details = details;
+            reason.details = options;
             self.debug(reason);
             deferred.reject(reason);
           }).fail(
@@ -673,104 +673,107 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   },
 
   register: {
-    value: function(details) {
+    value: function(options) {
       var deferred = Q.defer(),
         self = this;
 
       Q.nextTick(function() {
 
-        if (!details && self.dbname && self.dbname.split("-").length === 2) {
-          details = {
+        if (!options && self.dbname && self.dbname.split("-").length === 2) {
+          options = {
             username: self.dbname.split("-")[0],
             password: "testtest",
             confirmPassword: "testtest",
             connection: new Connection(Connection.knownConnections.production)
           };
-          details.authUrl = details.connection.authUrl;
+          options.authUrl = options.connection.authUrl;
         }
 
-        if (!details) {
+        if (!options) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["This application has errored, please contact us."],
             status: 412
           });
           return;
         }
 
-        details.authUrl = self.deduceAuthUrl(details.authUrl);
+        options.authUrl = self.deduceAuthUrl(options.authUrl);
 
-        if (!details.username) {
+        if (!options.username) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please supply a username."],
             status: 412
           });
           return;
         }
-        if (!details.password) {
+        if (!options.password) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please supply a password."],
             status: 412
           });
           return;
         }
 
-        if (!details.confirmPassword) {
+        if (!options.confirmPassword) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Please confirm your password."],
             status: 412
           });
           return;
         }
 
-        if (details.confirmPassword !== details.password) {
+        if (options.confirmPassword !== options.password) {
           deferred.reject({
-            details: details,
+            details: options,
             userFriendlyErrors: ["Passwords don't match, please double check your password."],
             status: 412
           });
           return;
         }
 
-        var validateUsername = Connection.validateUsername(details.username);
+        var validateUsername = Connection.validateUsername(options.username);
         if (validateUsername.changes.length > 0) {
-          details.username = validateUsername.identifier;
+          options.username = validateUsername.identifier;
           self.warn(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
-            details: details,
+            details: options,
             userFriendlyErrors: validateUsername.changes,
             status: 412
           });
           return;
         }
 
-        if (!details.connection) {
+        if (!options.connection) {
           if (self.application && self.application.connection && self.application.connection.authUrl) {
-            details.connection = self.application.connection;
+            options.connection = self.application.connection;
           } else {
-            details.connection = Connection.defaultConnection(details.authUrl);
+            options.connection = Connection.defaultConnection(options.authUrl);
           }
-          delete details.connection.dbname;
-          delete details.connection.pouchname;
-          delete details.connection.title;
-          delete details.connection.titleAsUrl;
-          delete details.connection.corpusUrl;
+          console.log("Setting connection ", options.connection);
+          delete options.connection.dbname;
+          delete options.connection.pouchname;
+          delete options.connection.title;
+          delete options.connection.titleAsUrl;
+          delete options.connection.corpusUrl;
+        } else {
+          console.log("Not setting connection");
         }
 
-        if (!details.appbrand && self.application && self.application.brandLowerCase) {
-          details.appbrand = self.application.brandLowerCase;
+        if (!options.appbrand && self.application && self.application.brandLowerCase) {
+          options.appbrand = self.application.brandLowerCase;
         }
-        details.appVersionWhenCreated = self.version;
+        options.appVersionWhenCreated = self.version;
 
         CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: details.authUrl + "/register",
-          data: details
+          url: options.authUrl + "/register",
+          data: options
         }).then(function(result) {
           self.debug("registration results", result);
 
@@ -778,7 +781,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             deferred.reject({
               error: result,
               status: 500,
-              details: details,
+              details: options,
               userFriendlyErrors: result.userFriendlyErrors || ["Unknown error. Please report this 2391."]
             });
             return;
@@ -786,7 +789,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
 
           deferred.resolve(result.user);
           //dont automatically login, let the client side decide what to do.
-          // self.login(details).then(function(result) {
+          // self.login(options).then(function(result) {
           // deferred.resolve(result);
           // }, function(error) {
           //   self.debug("Failed to login ");
@@ -794,13 +797,15 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           // });
         }, function(reason) {
           reason = reason || {};
-          reason.details = reason.details || details;
+          console.log("after cors connection ", reason);
+
+          reason.details = options;
           self.debug(reason);
           deferred.reject(reason);
         }).fail(function(error) {
           console.error(error.stack, self);
           error.status = error.status || 400;
-          error.details = error.details || details;
+          error.details = options;
           error.userFriendlyErrors = error.userFriendlyErrors || ["Unknown error, please report this 1289128."];
           deferred.reject(error);
         });
