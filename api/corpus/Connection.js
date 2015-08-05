@@ -261,8 +261,9 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   title: {
     get: function() {
-      if (this.parent) {
+      if (this.parent &&  this.parent.title) {
         this._title = this.parent.title;
+        this.debug("returned this.parent.title", this.parent.id);
       }
 
       if (!this._title && this.dbname) {
