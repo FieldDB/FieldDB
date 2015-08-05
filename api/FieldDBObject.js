@@ -152,6 +152,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "db",
   "debugMessages",
   "decryptedMode",
+  "dontRecurse",
   "fetching",
   "fieldsInColumns",
   "fossil",
@@ -341,7 +342,7 @@ FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
 
       } catch (e) {
         response = null;
-        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO PROMPT USER: " + message + " pretending they said `" + response +"`");
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO PROMPT USER: " + message + " pretending they said `" + response + "`");
       }
     }
     if (response !== null && response !== undefined && typeof response.trim === "function") {
@@ -1296,6 +1297,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           typeof anObject[aproperty] !== "function" &&
           !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
+        } else {
+          this.debug("Not merging " + aproperty, "parent ", anObject.parent ? anObject.parent.length : "");
         }
       }
 
@@ -1304,10 +1307,12 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           typeof anotherObject[aproperty] !== "function" &&
           !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
+        } else {
+          this.debug("Not merging " + aproperty, "parent ", anObject.parent ? anObject.parent.length : "");
         }
       }
 
-      this.debug(" Merging properties: ", propertyList);
+      this.debug(" Merging properties: " + this.id, propertyList);
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
         var deferred = Q.defer();
@@ -1348,9 +1353,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
-        if (this.debugMode) {
-          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
-        }
+        // if (this.debugMode) {
+        this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        // }
 
         // if the result is missing the property, clone it from anObject or anotherObject
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
