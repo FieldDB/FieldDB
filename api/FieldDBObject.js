@@ -143,6 +143,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "application",
   "bugMessage",
   "confirmMessage",
+  "confirmMergePromises",
   "contextualizer",
   "corpus",
   "currentDoc",
