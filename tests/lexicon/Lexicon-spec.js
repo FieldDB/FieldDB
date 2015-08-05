@@ -686,7 +686,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var endingMemoryLoad = memoryLoad();
       // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v1 lexicon");
       console.log("memory consumption for v1 lexicon: " + endingMemoryLoad - startingMemoryLoad);
-      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      if (endingMemoryLoad > 0) {
+        expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      }
     });
 
     it("should be able to build a lexicon from a couchdb map reduce", function() {
@@ -720,7 +722,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var endingMemoryLoad = memoryLoad();
       // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v2 lexicon");
       console.log("memory consumption for v2 lexicon: " + endingMemoryLoad - startingMemoryLoad);
-      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      if (endingMemoryLoad > 0) {
+        expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      }
     });
 
     it("should be able to build a lexicon from a couchdb map reduce", function() {
@@ -749,7 +753,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var endingMemoryLoad = memoryLoad();
       // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
       console.log("memory consumption for v3 lexicon: " + endingMemoryLoad - startingMemoryLoad);
-      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      if (endingMemoryLoad > 0) {
+        expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      }
     });
 
 
