@@ -514,7 +514,7 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
   }
 
   if (!value.contexts) {
-    console.log("Initializing contexts");
+    // console.log("Initializing contexts");
     value.contexts = new LexiconNode.prototype.INTERNAL_MODELS["contexts"]([context]);
   } else {
     if (!(value.contexts instanceof LexiconNode.prototype.INTERNAL_MODELS["contexts"])) {
