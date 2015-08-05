@@ -1,4 +1,3 @@
-"use strict";
 /* globals window, localStorage, d3, document */
 
 try {
