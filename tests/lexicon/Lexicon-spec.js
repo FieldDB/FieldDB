@@ -684,8 +684,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(348);
 
       var endingMemoryLoad = memoryLoad();
-      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v1 lexicon");
-
+      // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v1 lexicon");
+      console.log("memory consumption for v1 lexicon: " + endingMemoryLoad - startingMemoryLoad);
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
@@ -718,8 +718,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(1588);
 
       var endingMemoryLoad = memoryLoad();
-      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v2 lexicon");
-
+      // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v2 lexicon");
+      console.log("memory consumption for v2 lexicon: " + endingMemoryLoad - startingMemoryLoad);
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
@@ -747,7 +747,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.entryRelations.length).toEqual(447);
 
       var endingMemoryLoad = memoryLoad();
-      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
+      // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v3 lexicon");
+      console.log("memory consumption for v3 lexicon: " + endingMemoryLoad - startingMemoryLoad);
       expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
     });
 
@@ -788,8 +789,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(lexicon.connectedGraph.nodes["nay|"].morphemes).toBe(lexicon["nay|"].morphemes);
 
       var endingMemoryLoad = memoryLoad();
-      expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v4 lexicon");
-      expect(endingMemoryLoad).toBeGreaterThan(startingMemoryLoad);
+      // expect(endingMemoryLoad - startingMemoryLoad).toEqual("memory consumption for v4 lexicon");
+      console.log("memory consumption for v4 lexicon: " + endingMemoryLoad - startingMemoryLoad);
+      expect(endingMemoryLoad).toEqual(startingMemoryLoad);
     });
 
   });
