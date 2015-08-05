@@ -243,7 +243,7 @@ describe("Data List", function() {
       if (bottomItem.fieldDBtype === "FieldDBObject") {
         expect(bottomItem.fieldDBtype).toEqual("FieldDBObject");
       } else {
-        expect(bottomItem.fieldDBtype).toEqual("Datum");
+        expect(bottomItem.fieldDBtype).toEqual("LanguageDatum");
       }
 
       bottomItem = list.pop();
@@ -437,7 +437,7 @@ describe("Data List", function() {
       if (list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype === "FieldDBObject") {
         expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("FieldDBObject");
       } else {
-        expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("Datum");
+        expect(list.docs["ED5A2292-659E-4B27-A352-9DBC5065207E"].fieldDBtype).toEqual("LanguageDatum");
       }
     });
 
