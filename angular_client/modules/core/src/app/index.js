@@ -20,8 +20,8 @@ angular.module("fielddbAngular", [
   // "ui.bootstrap.modal",
   "angularFileUpload",
   "contenteditable"
-]).run(["$rootScope", "$state", "$stateParams",
-  function($rootScope, $state, $stateParams) {
+]).run(["$rootScope", "$state", "$stateParams", "$location",
+  function($rootScope, $state, $stateParams, $location) {
     // From UI-Router sample
     // It's very handy to add references to $state and $stateParams to the $rootScope
     // so that you can access them from any scope within your applications.For example,
@@ -30,6 +30,24 @@ angular.module("fielddbAngular", [
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     console.log(" state ", $state, $stateParams);
+
+    if (FieldDB &&
+      FieldDB.FieldDBObject &&
+      FieldDB.FieldDBObject.application &&
+      FieldDB.FieldDBObject.application.router &&
+      !FieldDB.FieldDBObject.application.router.navigate) {
+
+      FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
+        // $location.url(url);
+        $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
+
+        // $scope.$apply(function() {
+        //   // $location.path($scope.application.basePathname +  "/#/welcome/", false);
+        //   window.location.replace($scope.application.basePathname + "/#/welcome");
+        // });
+      };
+    }
+
   }
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
@@ -63,7 +81,7 @@ angular.module("fielddbAngular", [
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
   fieldDBApp.debugMode = true;
 
-  
+
 
   /* Add Event listeners */
   document.addEventListener("logout", function() {
@@ -120,7 +138,7 @@ angular.module("fielddbAngular", [
       fieldDBApp.debug(fieldDBApp.routeParams);
     }
   };
-  
+
   /* Add some default Routes/States which the app knows how to render */
   // if (FieldDB.Router.otherwise) {
   //   $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);
