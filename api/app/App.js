@@ -425,8 +425,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         };
       } else if (routeParams.searchQuery) {
         this.search = this.search || new Search({
-          searchKeywords: routeParams.searchQuery
+          searchQuery: routeParams.searchQuery
         });
+        this.search.search(routeParams.searchQuery);
       } else if (routeParams.docid) {
         if (this.currentDoc && this.currentDoc.save) {
           this.currentDoc.bug("Switching to another document without saving...");
