@@ -498,6 +498,13 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         headword: "tm|vti"
       })[0]).toEqual(tmvti);
 
+      // lexicon.updateAvailableLexicalRelations();
+      expect(lexicon.availableLexicalRelations).toBeDefined();
+      expect(lexicon.availableLexicalRelations.length).toEqual(7);
+      expect(lexicon.availableLexicalRelations[0]).toBeDefined();
+      expect(lexicon.availableLexicalRelations[0].name).toEqual("Precedes");
+      expect(lexicon.availableLexicalRelations[0].count).toEqual(lexicon.connectedGraph.precedes.length);
+
     });
 
     it("should be able to build a connected graph from a v3.x couchdb map reduce", function() {
