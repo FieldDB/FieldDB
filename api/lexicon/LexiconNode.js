@@ -100,8 +100,8 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       this.debug(" getting headword ", this.fields ? this.fields.length : this);
 
       // Let users customize the headword
-      if (this._id) {
-        return this._id;
+      if (this._headword) {
+        return this._headword;
       }
 
       var constructHeadwordFromMorphemesAndGloss = "";
@@ -120,7 +120,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       }
     },
     set: function(value) {
-      this._id = value;
+      this._headword = this._id = value;
     }
   },
 
