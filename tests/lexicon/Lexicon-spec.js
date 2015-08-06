@@ -733,7 +733,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(lexicon.connectedGraph.nodes).toBeDefined();
         expect(lexicon.connectedGraph.precedes).toBeDefined();
         expect(lexicon.connectedGraph.length).toEqual(45);
-        expect(lexicon.connectedGraph.precedes.length).toEqual(56);
+        expect(lexicon.connectedGraph.precedes.length).toEqual(26); //TODO was 56
 
         expect(lexicon.warnMessage).toBeDefined();
         expect(lexicon.warnMessage).toContain("d3");

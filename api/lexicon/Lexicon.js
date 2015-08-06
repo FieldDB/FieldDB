@@ -1442,7 +1442,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       }
       tooltip = self.localDOM.createElement("div");
       self.localDOM.body.appendChild(tooltip);
-      tooltip = d3.select(tooltip)
+      tooltip = this.d3.select(tooltip)
         .style("position", "absolute")
         .style("z-index", "10")
         .style("visibility", "hidden")
@@ -1473,18 +1473,18 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       /*
        Short morphemes will be blue, long will be red
        */
-      var color = d3.scale.linear()
+      var color = this.d3.scale.linear()
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
 
-      var lineColor = d3.scale.linear()
+      var lineColor = this.d3.scale.linear()
         .range(["#FFFFF", "#FFFF00"]) // or use hex values
         .domain([1, 8]);
 
-      var x = d3.scale.linear()
+      var x = this.d3.scale.linear()
         .range([0, width]);
 
-      var y = d3.scale.linear()
+      var y = this.d3.scale.linear()
         .range([0, height - 40]);
 
 
@@ -1504,8 +1504,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       };
 
 
-      var force = d3.layout.force()
-        .nodes(d3.values(self.connectedGraph.nodes)) // can be an object
+      var force = this.d3.layout.force()
+        .nodes(this.d3.values(self.connectedGraph.nodes)) // can be an object
         .links(self.connectedGraph.links)
         .size([width, height])
         .linkStrength(0.5)
@@ -1522,9 +1522,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       } else {
         divElement.appendChild(svg);
       }
-      svg = d3.select(svg);
+      svg = this.d3.select(svg);
 
-      var svg = d3.select(divElement).append("svg");
+      var svg = this.d3.select(divElement).append("svg");
 
       svg.attr("width", width)
         .attr("height", height);
@@ -1563,7 +1563,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   .text(titletext);
 
 
-      //d3.json("./libs/rules.json", function(json) {
+      //this.d3.json("./libs/rules.json", function(json) {
 
 
       // var path = svg.append("g").selectAll("path")
