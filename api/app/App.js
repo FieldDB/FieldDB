@@ -498,7 +498,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         this.corpus.status = "Loading corpus details.";
         return this.corpus.fetch().then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
-          self.status = self.corpus.status = "Loaded corpus details.";
+          self.corpus.status += "\n Loaded corpus details.";
+          self.status = "Loaded corpus details.";
           if (self.application.importer) {
             self.application.importer.corpus = self.corpus;
           }
