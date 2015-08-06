@@ -106,7 +106,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         $scope.okay = function(response) {
 
           // Let the user enter info, even JSON
-          if (response === "yes") {
+          if (response === "yes" || $scope.userInput === JSON.stringify(providedInput)) {
             response = providedInput;
           } else {
             if (typeof providedInput !== "string" && typeof providedInput !== "number") {
@@ -157,9 +157,9 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     });
     return deferred.promise;
   };
-  FieldDB.FieldDBObject.warn = function(message) {
-    console.warn(message);
-  };
+  // FieldDB.FieldDBObject.warn = function(message) {
+  //   console.warn(message);
+  // };
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
