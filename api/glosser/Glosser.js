@@ -296,7 +296,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         }
       }
       var self = this;
-      var deffered = Q.defer();
+      var deferred = Q.defer();
 
       this.fetching = true;
       CORS.makeCORSRequest({
@@ -306,7 +306,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
           if (!reducedCouchDBresult || !reducedCouchDBresult.rows || reducedCouchDBresult.rows.length === undefined) {
             self.fetching = false;
-            deffered.reject({
+            deferred.reject({
               details: reducedCouchDBresult,
               userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
             });
@@ -339,21 +339,21 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
               }
             }
           }
-          deffered.resolve(self.morphemeSegmentationKnowledgeBase);
+          deferred.resolve(self.morphemeSegmentationKnowledgeBase);
         },
         function(e) {
           self.fetching = false;
           self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
           self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
-          deffered.reject(e);
+          deferred.reject(e);
         }).fail(function(exception) {
         self.fetching = false;
         self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", exception.stack);
         self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
-        deffered.reject(exception);
+        deferred.reject(exception);
       });
 
-      return deffered.promise;
+      return deferred.promise;
     }
   },
 
