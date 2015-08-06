@@ -88,6 +88,7 @@ Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prot
 
   search: {
     configurable: true,
+    writable: true,
     value: function(value) {
       if (value !== this.searchQuery) {
         this.searchQuery = value;
@@ -104,8 +105,9 @@ Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prot
         return;
       }
       var title = "";
-      if (this.corpus && this.corpus.title) {
-        title = " in " + this.corpus.title;
+      if (this.corpus && this.corpus.dbname) {
+        title = this.corpus.title || this.corpus.dbname;
+        title = " in " + title;
       }
       this.datalist = {
         id: this.id,
@@ -124,7 +126,7 @@ Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prot
       return this._datalist;
     },
     set: function(value) {
-      if (value && value.id && this._datalist && this._datalist.id && value.id !== this._datalist.id) {
+      if (value && value.id && this._datalist && this._datalist.id && value.id !== this._datalist.id && this._datalist.length) {
         // add to previous searches
         if (!this.previousSearchDataLists) {
           this.previousSearchDataLists = {};
