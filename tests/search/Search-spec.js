@@ -62,7 +62,6 @@ describe("Search: as a user I want my data at my finger tips", function() {
     expect(search.searchQuery).toEqual("nay*");
     expect(search.warnMessage).toEqual("searchKeywords is deprecated, use searchQuery instead.");
   });
-
   describe("previous searches", function() {
 
     it("should use a datalist for results", function() {
@@ -103,8 +102,33 @@ describe("Search: as a user I want my data at my finger tips", function() {
       expect(search.previousSearchDataLists["aserum%7C"].docIds[0]).toEqual("uiwniaejoaio-io23ijwoeisjo3");
       expect(search.previousSearchDataListsCount).toEqual(1);
 
-
     });
 
   });
+
+  describe("persistance", function() {
+    it("should serialize previous datalists", function() {
+      var search = new Search();
+      search.search("aserum|");
+      // mock data list being set due to search.
+      search.datalist.docIds = ["uiwniaejoaio-io23ijwoeisjo3", "uiwniaejoaio-io23ijwoeisj5", "uiwniaejoaio-io23ijwoeisjo6"];
+      
+      search.search("peχ|leg");
+      // mock data list being set due to search.
+      search.datalist.docIds = ["aweb9023-asdjnw2", "aweb9023-asdjnw3", "aweb9023-asdjnw24"];
+
+      var jsonToSave = search.toJSON();
+      expect(jsonToSave).toBeDefined();
+      // expect(jsonToSave.datalist).toBeDefined(); //TODO need to remove datalist from ignore list
+      expect(jsonToSave.datalist).toBeDefined();
+      expect(jsonToSave.previousSearchDataLists).toBeDefined();
+      // expect(jsonToSave.previousSearchDataListsCount).toEqual(1); //TODO 
+      expect(jsonToSave.previousSearchDataLists["aserum%7C"]).toBeDefined();
+      expect(jsonToSave.previousSearchDataLists["aserum%7C"].parent).toBeUndefined();
+      // expect(jsonToSave.previousSearchDataLists["aserum%7C"].docs).toBeUndefined(); //TODO 
+      expect(jsonToSave.previousSearchDataLists["aserum%7C"].docIds).toEqual(["uiwniaejoaio-io23ijwoeisjo3", "uiwniaejoaio-io23ijwoeisj5", "uiwniaejoaio-io23ijwoeisjo6"]);
+
+    });
+  });
+
 });
