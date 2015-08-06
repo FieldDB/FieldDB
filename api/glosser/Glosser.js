@@ -306,7 +306,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
           if (!reducedCouchDBresult || !reducedCouchDBresult.rows || reducedCouchDBresult.rows.length === undefined) {
             self.fetching = false;
-            deferred.reject({
+            deffered.reject({
               details: reducedCouchDBresult,
               userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
             });

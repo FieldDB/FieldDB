@@ -383,7 +383,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
   clean: {
     value: function() {
       // console.log("Preparing datum with this lexical entry to be cleaned...");
-      var deffered = Q.defer();
+      var deferred = Q.defer();
       this.cleanedData = [];
       var promises = [];
       var self = this;
@@ -425,14 +425,14 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       }
       Q.allSettled(promises).then(function(results) {
         self.debug(" cleaned promises are finished ", results);
-        deffered.resolve(self.proposedChanges);
+        deferred.resolve(self.proposedChanges);
       });
-      return deffered.promise;
+      return deferred.promise;
     }
   },
   save: {
     value: function() {
-      var deffered = Q.defer(),
+      var deferred = Q.defer(),
         self = this,
         promises = [];
 
@@ -454,10 +454,10 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
             self.bug("One of your changes was not saved " + cleanedDatum._id + " " + result.value.userFriendlyErrors.join("\n"));
           }
         });
-        deffered.resolve(results);
+        deferred.resolve(results);
         self.unsaved = true;
       });
-      return deffered.promise;
+      return deferred.promise;
     }
   },
   unsaved: {
