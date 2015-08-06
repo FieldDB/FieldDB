@@ -549,8 +549,10 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
         this.docIds = null;
         this.docIds = this.docIds;
       }
-      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
-      delete json.docs;
+      removeEmptyAttributes = removeEmptyAttributes || [];
+      removeEmptyAttributes = removeEmptyAttributes.concat(["docs"]);
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes]);
+      // delete json.docs;
       this.todo("Adding datumIds for backward compatability until prototype can handle docIds");
       json.datumIds = this.docIds;
 
