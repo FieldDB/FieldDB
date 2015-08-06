@@ -122,6 +122,7 @@ var Lexicon = function(options) {
   }
 
   this.debug("constructing a lexicon from options ");
+  this.id = "lexicon";
   Collection.apply(this, arguments);
   if (this.entryRelations) {
     this.debug("constructing a graph from lexicon's relations", options);
@@ -142,6 +143,23 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   INTERNAL_MODELS: {
     value: {
       item: LexiconNode
+    }
+  },
+
+  id: {
+    get: function() {
+      this._id = "lexicon";
+      return this._id;
+    },
+    set: function(value) {
+      if (value === this._id) {
+        return;
+      }
+      if (value !== "lexicon") {
+        this.warn("Lexicon id cannot be set, it is \"lexicon\" by default." + value);
+      }
+      value = "lexicon";
+      this._id = value;
     }
   },
 
@@ -173,12 +191,12 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
   getLexicalEntries: {
     value: function(lexicalEntryToMatch) {
-      var deffered = Q.defer(),
+      var deferred = Q.defer(),
         matches = [],
         self = this;
 
       if (!lexicalEntryToMatch) {
-        deffered.resolve(matches);
+        deferred.resolve(matches);
       } else {
         // this.filter(function(value, key, object, depth) {
         this.filter(function(value, key) {
@@ -204,11 +222,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             }
           }
           if (key === self.length - 1) {
-            deffered.resolve(matches);
+            deferred.resolve(matches);
           }
         }, this);
       }
-      return deffered.promise;
+      return deferred.promise;
     }
   },
 
@@ -277,7 +295,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       listElement = self.localDOM.createElement("ul");
       lexicalEntriesElement.appendChild(listElement);
 
-      console.log("Rendering ", this.collection.length + " entries.");
+      self.status = "Rendering " + this.collection.length + " entries.";
       this.collection.map(function(entry) {
         var discussion,
           field;
@@ -291,7 +309,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (entry && entry.morphemes === "#_") {
           return;
         }
-        console.log("Binding ", entry.id);
+        self.status += "\nBinding " + entry.id;
         var cleanAndSaveIfChanged = function(e) {
           e.target.parentElement.__data__.clean().then(function(proposedChanges) {
             if (!proposedChanges || !proposedChanges.length) {
@@ -765,6 +783,27 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
+  maxLexiconSize: {
+    get: function() {
+      if (this._maxLexiconSize) {
+        return this._maxLexiconSize;
+      }
+
+      if (this.corpus && this.corpus.prefs && this.corpus.prefs.maxLexiconSize) {
+        return this.corpus.prefs.maxLexiconSize;
+      }
+
+      return Lexicon.maxLexiconSize;
+    },
+    set: function(value) {
+      if (this.corpus && this.corpus.prefs) {
+        this.corpus.prefs.maxLexiconSize = value;
+      } else {
+        this._maxLexiconSize = value;
+      }
+    }
+  },
+
   set: {
     value: function(searchingFor, originalValue, optionalKeyToIdentifyItem, optionalInverted) {
       if (originalValue && originalValue.key) {
@@ -773,7 +812,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       if (!originalValue) {
         return;
       }
-      if (this.length > Lexicon.maxLexiconSize) {
+      if (this.length > this.maxLexiconSize) {
         this.debug("Lexicon is too big, ignoring...", originalValue);
         return;
       }
@@ -926,6 +965,38 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         nodes: {},
         links: []
       };
+
+      this.availableLexicalRelations = this.availableLexicalRelations = [{
+        icon: "<i class=\"fa fa-arrow-right\"></i>",
+        name: "Precedes",
+        maker: ": Show x-> y",
+        ticked: true
+      }, {
+        icon: "<i class=\"fa fa-arrow-left\"></i>",
+        name: "Follows",
+        maker: ": Show x <- y",
+        ticked: false
+      }, {
+        icon: "<i class=\"fa fa-volume-up\"></i>",
+        name: "Phonology",
+        maker: ": Show phonological priming",
+        ticked: false
+      }, {
+        icon: "<i class=\"fa fa-globe\"></i>",
+        name: "Semantics",
+        maker: ": Show semantic priming",
+        ticked: false
+      }, {
+        icon: "<i class=\"fa fa-share\"></i>",
+        name: "Syntax",
+        maker: ": Show morpho-syntactic priming",
+        ticked: false
+      }, {
+        icon: "<i class=\"fa fa-refresh\"></i>",
+        name: "All ",
+        maker: ": Show all relations in the lexicon",
+        ticked: false
+      }];
 
       /*
        * Cycle through the precedence rules, convert them into graph edges with the morpheme index in the morpheme array as the source/target values
@@ -1120,7 +1191,53 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
       });
 
+      this.updateAvailableLexicalRelations();
+
       return this.connectedGraph;
+    }
+  },
+
+  /**
+   * Add any new reltions to the list that the user can choose from 
+   * @return {Array} updated list of available lexical relations
+   */
+  updateAvailableLexicalRelations: {
+    value: function() {
+      if (!this.connectedGraph) {
+        this.warn("unable to update availableLexicalRelations, connectedGraph is not defined.");
+        return;
+      }
+
+      this.availableLexicalRelations = this.availableLexicalRelations || [];
+      var attrib;
+      var newRelation;
+      var self = this;
+      var relationsIndex = {};
+
+      this.availableLexicalRelations.map(function(availableRelation) {
+        relationsIndex[availableRelation.name.toLowerCase()] = availableRelation;
+      });
+
+      for (attrib in this.connectedGraph) {
+        if (!this.connectedGraph.hasOwnProperty(attrib) || !this.connectedGraph[attrib] || !this.connectedGraph[attrib].length) {
+          continue;
+        }
+        if (["nodes"].indexOf(attrib) > -1) {
+          continue;
+        }
+        if (relationsIndex[attrib] || (attrib === "links" && relationsIndex["all"])) {
+          relationsIndex[attrib].count = self.connectedGraph[attrib].length;
+        } else {
+          this.availableLexicalRelations.add({
+            icon: "<i class=\"fa fa-link\"></i>",
+            name: attrib,
+            maker: ": Other",
+            ticked: false,
+            count: this.connectedGraph[attrib].length
+          });
+        }
+      }
+      return this.availableLexicalRelations;
     }
   },
 
@@ -1165,7 +1282,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (this.corpus.prefs && this.corpus.prefs.lexiconURL) {
           url = this.corpus.prefs.lexiconURL;
         } else {
-          url = this.corpus.url + "/_design/lexicon/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit=" + Lexicon.maxLexiconSize;
+          url = this.corpus.url + "/_design/lexicon/_view/" + LEXICON_NODES_MAP_REDUCE.filename + "?group=true&limit=" + this.maxLexiconSize;
         }
       }
 
@@ -1248,7 +1365,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * http://alignedleft.com/tutorials/d3/binding-data
    *
    * @param  {[type]} rulesGraph [description]
-   * @param  {[type]} element [description]
+   * @param  {[type]} divElement [description]
    * @param  {[type]} dbname  [description]
    * @return {[type]}            [description]
    */
@@ -1256,7 +1373,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     value: function(options) {
       var self = this;
       options = options || {};
-      var element = options.element;
+      var divElement = options.divElement || options.connectionsElement || options.element;
       var prefs = options.prefs;
 
       if (!prefs && this.corpus && this.corpus.prefs) {
@@ -1302,32 +1419,35 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
       }
 
-      if (!element) {
-        this.warn("Lexicon will be unable to render a visual representation of itself. If you intended to render it, you should provide an element where it should be rendered.", element);
+      if (!divElement) {
+        this.warn("Lexicon will be unable to render a visual representation of itself. If you intended to render it, you should provide an divElement where it should be rendered.", divElement);
         return this;
       }
-      this.debug("Using element", element);
+      this.debug("Using divElement", divElement);
 
-      var width = element.clientWidth,
-        height = 600;
+
+      var width = divElement.clientWidth,
+        height = 300;
+
 
       var tooltip;
-      if (!this.localDOM) {
+      if (!self.localDOM) {
         try {
-          this.localDOM = document;
+          self.localDOM = document;
         } catch (e) {
-          // this.warn("Lexicon will be unable to render a hover on the connected graph. If you intended to render it, you should provide an localDOM to the lexicon.");
-          this.warn("Lexicon will be unable to render the connected graph. If you intended to render it, you should provide an localDOM to the lexicon.");
-          return this;
+          // self.warn("Lexicon will be unable to render a hover on the connected graph. If you intended to render it, you should provide an localDOM to the self.");
+          self.warn("Lexicon will be unable to render the connected graph. If you intended to render it, you should provide an localDOM to the self.");
+          return self;
         }
       }
-      tooltip = this.localDOM.createElement("div");
-      this.localDOM.body.appendChild(tooltip);
-      tooltip = this.d3.select(tooltip)
+      tooltip = self.localDOM.createElement("div");
+      self.localDOM.body.appendChild(tooltip);
+      tooltip = d3.select(tooltip)
         .style("position", "absolute")
         .style("z-index", "10")
         .style("visibility", "hidden")
         .html("");
+
 
       var linkArc = function(d) {
         var dx = d.source.x - d.target.x,
@@ -1339,22 +1459,33 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       var transform = function(d) {
         if (d.morphemes === "_#") {
-          d.x = width - 20;
+          d.x = width - 40;
           d.y = height / 2;
         }
         if (d.morphemes === "#_") {
-          d.x = 20;
+          d.x = 40;
           d.y = height / 2;
         }
         return "translate(" + d.x + "," + d.y + ")";
       };
 
+
       /*
-      Short morphemes will be blue, long will be red
-      */
-      var color = this.d3.scale.linear()
+       Short morphemes will be blue, long will be red
+       */
+      var color = d3.scale.linear()
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
+
+      var lineColor = d3.scale.linear()
+        .range(["#FFFFF", "#FFFF00"]) // or use hex values
+        .domain([1, 8]);
+
+      var x = d3.scale.linear()
+        .range([0, width]);
+
+      var y = d3.scale.linear()
+        .range([0, height - 40]);
 
 
       var colorByMorphemeLength = function(lexicalEntry) {
@@ -1371,40 +1502,35 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         return color(lexicalEntry.morphemes.length);
         // return color(d.confidence * 10);
       };
-      // var lineColor = this.d3.scale.linear()
-      //   .range(["#FFFFF", "#FFFF00"]) // or use hex values
-      //   .domain([1, 8]);
 
-      // var force = this.d3.layout.force()
-      //   .charge(-120)
-      //   .linkStrength(0.2)
-      //   .linkDistance(30)
-      //   .size([width, height]);
 
-      var force = this.d3.layout.force()
-        .nodes(self.collection) // can be an object
+      var force = d3.layout.force()
+        .nodes(d3.values(self.connectedGraph.nodes)) // can be an object
         .links(self.connectedGraph.links)
         .size([width, height])
         .linkStrength(0.5)
-        .linkDistance(60)
-        .charge(-400);
+        .linkDistance(50)
+        .charge(-100);
 
-      self.connectedGraph.svg = this.localDOM.createElement("svg");
-      if (typeof element.appendChild !== "function") {
-        this.warn("You have provided a defective element, it is unable to append elements to itself. Appending to the body of the document instead.", element);
-        // return this;
-        this.localDOM.body.appendChild(self.connectedGraph.svg);
+
+
+      var svg = self.localDOM.createElement("svg");
+      if (typeof divElement.appendChild !== "function") {
+        self.warn("You have provided a defective divElement, it is unable to append divElements to itself. Appending to the body of the document instead.", divElement);
+        // return self;
+        self.localDOM.body.appendChild(svg);
       } else {
-        element.appendChild(self.connectedGraph.svg);
+        divElement.appendChild(svg);
       }
-      self.connectedGraph.svg = this.d3.select(self.connectedGraph.svg);
+      svg = d3.select(svg);
 
-      self.connectedGraph.svg.attr("width", width)
+      var svg = d3.select(divElement).append("svg");
+
+      svg.attr("width", width)
         .attr("height", height);
 
-      // Per-type markers, as they don't inherit styles.
-      self.connectedGraph.svg.append("defs").selectAll("marker")
-        .data(["precedes"])
+      svg.append("defs").selectAll("marker")
+        .data(force.links())
         // .data(["suit", "licensing", "resolved"])
         .enter()
         .append("marker")
@@ -1424,7 +1550,34 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .append("path")
         .attr("d", "M0,-5L10,0L0,5");
 
-      var path = self.connectedGraph.svg.append("g").selectAll("path")
+
+      // var titletext = "Click to search morphemes in your corpus";
+
+      // //A label for the current year.
+      // var title = svg.append("text")
+      //   .attr("class", "vis-title")
+      //   .attr("dy", "1em")
+      //   .attr("dx", "1em")
+      //   .style("fill", "#cccccc")
+      //   //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
+      //   .text(titletext);
+
+
+      //d3.json("./libs/rules.json", function(json) {
+
+
+      // var path = svg.append("g").selectAll("path")
+      //   .data(force.links())
+      //   .enter().append("line")
+      //   .attr("class", "link")
+      //   .style("stroke", function(d) {
+      //     return lineColor(d.value);
+      //   })
+      //   .style("stroke-width", function(d) {
+      //     return d.value;
+      //   });
+
+      var path = svg.append("g").selectAll("path")
         .data(force.links())
         .enter().append("path")
         .attr("class", function(d) {
@@ -1435,7 +1588,67 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return "url(#" + d.relation + ")";
         });
 
-      var circle = self.connectedGraph.svg.append("g").selectAll("circle")
+      // var circle = svg.append("g").selectAll("circle")
+      //   .data(force.nodes())
+      //   .enter().append("circle")
+      //   .attr("class", "node")
+      //   .attr("r", 5)
+      //   .attr("data-details", function(d) {
+      //     return d;
+      //   })
+      //   .style("fill", colorByMorphemeLength)
+      //   .style("opacity", function(d) {
+      //     // return color(d.morphemes.length);
+      //     return d.confidence ? d.confidence / 2 : 1;
+      //   })
+      //   .on("mouseover", function(object) {
+      //     var findNode;
+      //     if (self.localDOM) {
+      //       findNode = self.localDOM.getElementById(object.id);
+      //     }
+      //     if (findNode) {
+      //       findNode = findNode.innerHTML + "<p>" + findNode.getAttribute("title") + "<p>";
+      //     } else {
+      //       findNode = "Morpheme: " + object.morphemes + "<br/> Gloss: " + object.gloss + "<br/> Confidence: " + object.confidence;
+      //     }
+      //     if (tooltip) {
+      //       return;
+      //     }
+      //     return tooltip
+      //       .style("visibility", "visible")
+      //       .html("<div class='node_details_tooltip self'>" + findNode + "</div>");
+      //   })
+      //   .on("mousemove", function() {
+      //     /*global  event */
+      //     if (tooltip) {
+      //       return;
+      //     }
+      //     return tooltip.style("top", (event.pageY - 10) + "px")
+      //       .style("left", (event.pageX + 10) + "px");
+      //   })
+      //   .on("mouseout", function() {
+      //     if (tooltip) {
+      //       return;
+      //     }
+      //     return tooltip
+      //       .style("visibility", "hidden");
+      //   })
+      //   .on("click", function(d) {
+      //     /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
+      //     if (self.application && self.application.router) {
+      //       // self.application.router.showEmbeddedSearch(dbname, "morphemes:"+d.morphemes);
+      //       var url = "corpus/" + self.corpus.dbname + "/search/" + "morphemes:" + d.morphemes;
+      //       // window.location.replace(url);
+      //       self.application.router.navigate(url, {
+      //         trigger: true
+      //       });
+
+      //     }
+      //   })
+      //   .call(force.drag);
+
+
+      var circle = svg.append("g").selectAll("circle")
         .data(force.nodes())
         .enter().append("circle")
         .attr("class", "node")
@@ -1448,7 +1661,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .on("mouseover", function(object) {
           var findNode;
           if (self.localDOM) {
-            findNode = self.localDOM.getElementById(object.morphemes);
+            findNode = self.localDOM.getElementById(object.id);
           }
           if (findNode) {
             findNode = findNode.innerHTML + "<p>" + findNode.getAttribute("title") + "<p>";
@@ -1460,7 +1673,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
           return tooltip
             .style("visibility", "visible")
-            .html("<div class='node_details_tooltip lexicon'>" + findNode + "</div>");
+            .html("<div class='node_details_tooltip self'>" + findNode + "</div>");
         })
         .on("mousemove", function() {
           /*global  event */
@@ -1479,19 +1692,24 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         })
         .on("click", function(d) {
           /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
-          if (this.application && this.application.router) {
-            // this.application.router.showEmbeddedSearch(dbname, "morphemes:"+d.morphemes);
-            var url = "corpus/" + self.corpus.dbname + "/search/" + "morphemes:" + d.morphemes;
+          if (self.application && self.application.router) {
+            // self.application.router.showEmbeddedSearch(dbname, "morphemes:"+d.morphemes);
+            var url = "/" + self.application.currentCorpusDashboard + "/lexicon/" + d.headword;
             // window.location.replace(url);
-            this.application.router.navigate(url, {
+            self.application.router.navigate(url, {
               trigger: true
             });
 
           }
         })
         .call(force.drag);
+      // circle.append("title")
+      //   .text(function(d) {
+      //     return d.morphemes;
+      //   });
 
-      var text = self.connectedGraph.svg.append("g").selectAll("text")
+
+      var text = svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
         .attr("x", 8)
@@ -1506,6 +1724,28 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         });
 
 
+      // force.on("tick", function() {
+      //   link.attr("x1", function(d) {
+      //       return d.source.x;
+      //     })
+      //     .attr("y1", function(d) {
+      //       return d.source.y;
+      //     })
+      //     .attr("x2", function(d) {
+      //       return d.target.x;
+      //     })
+      //     .attr("y2", function(d) {
+      //       return d.target.y;
+      //     });
+
+      //   node.attr("cx", function(d) {
+      //       return d.x;
+      //     })
+      //     .attr("cy", function(d) {
+      //       return d.y;
+      //     });
+      // });
+
       // Use elliptical arc path segments to doubly-encode directionality.
       var tick = function() {
         path.attr("d", linkArc);
@@ -1519,9 +1759,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           .start();
       } catch (e) {
         if (e.message === "TypeError: Cannot read property 'weight' of undefined") {
-          this.bug("Something is wrong with one of the links in the lexicon, it doesn't have a source or target. ", e.stack);
+          self.bug("Something is wrong with one of the links in the lexicon, it doesn't have a source or target. ", e.stack);
         } else {
-          this.warn("\nThe lexicon was able to start the connected graph. Something was wrong. ", e.stack);
+          self.warn("\nThe lexicon was able to start the connected graph. Something was wrong. ", e.stack);
         }
 
       }
