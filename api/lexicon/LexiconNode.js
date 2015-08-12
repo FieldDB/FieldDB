@@ -110,7 +110,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       }
       constructHeadwordFromMorphemesAndGloss += "|";
       // without this morphemes glossed as ? will be counted as another morpheme, if that morpheme has a gloss
-      if (!this.gloss || this.gloss == "?" || this.gloss == "??") {
+      if (!this.gloss || this.gloss === "?" || this.gloss === "??") {
         // constructHeadwordFromMorphemesAndGloss += "?";
       } else if (this.gloss) {
         constructHeadwordFromMorphemesAndGloss += this.gloss;
