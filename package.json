@@ -70,8 +70,7 @@
     "grunt-exec": "^0.4.6",
     "grunt-jasmine-node": "git://github.com/cesine/grunt-jasmine-node.git",
     "grunt-jsdoc": "0.5.8",
-    "grunt-newer": "^1.1.0",
-    "jasmine-node": "^1.14.5"
+    "grunt-newer": "^1.1.0"
   },
   "main": "api/fielddb.js",
   "scripts": {
