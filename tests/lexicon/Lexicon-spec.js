@@ -756,10 +756,27 @@ describe("Lexicon: as a user I want to search for anything, even things that don
           expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
           expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
           expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(4);
-          if (lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes) {
-            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
+          expect(lexicon.connectedGraph.svg[0][0].children[0]).toBeDefined();
+          if (lexicon.connectedGraph.svg[0][0].children[0].children) {
+
+            expect(lexicon.connectedGraph.svg[0][0].children[0].children.length).toEqual(28);
+            expect(lexicon.connectedGraph.svg[0][0].children[1]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[1].children.length).toEqual(28);
+            expect(lexicon.connectedGraph.svg[0][0].children[2]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[2].children.length).toEqual(45);
+            expect(lexicon.connectedGraph.svg[0][0].children[3]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[3].children.length).toEqual(45);
+            // expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
           } else {
-            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
+            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0].childElementCount).toEqual(28);
+            expect(lexicon.connectedGraph.svg[0][0].children[1]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(28);
+            expect(lexicon.connectedGraph.svg[0][0].children[2]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(45);
+            expect(lexicon.connectedGraph.svg[0][0].children[3]).toBeDefined();
+            expect(lexicon.connectedGraph.svg[0][0].children[3].childNodes[0].childElementCount).toEqual(45);
+
+            // expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
           }
         }
       });
