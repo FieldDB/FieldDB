@@ -38,13 +38,9 @@ angular.module("fielddbAngular", [
       !FieldDB.FieldDBObject.application.router.navigate) {
 
       FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
+        console.warn("Not navigating to " + url + " please override navigate in a controller.");
         // $location.url(url);
         $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
-
-        // $scope.$apply(function() {
-        //   // $location.path($scope.application.basePathname +  "/#/welcome/", false);
-        //   window.location.replace($scope.application.basePathname + "/#/welcome");
-        // });
       };
     }
 
