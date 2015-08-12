@@ -1880,7 +1880,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       this.todo("We haven't implemented the 'diff' tool yet" +
         " (ie, showing the changes, letting you undo changes etc)." +
         " We will do it eventually, when it becomes a priority. " +
-        "<a target='blank'  href='https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/124'>" +
+        "<a target='blank'  href='https://github.com/FieldDB/FieldDB/issues/124'>" +
         "You can vote for it in our issue tracker</a>.  " +
         "We use the " +
         "<a target='blank' href='" + this.url + "/" + oldrevision + "?rev=" + newrevision + "'>" + "Futon User Interface</a> directly to track revisions in the data, you can too (if your a power user type).", "alert", "Track Changes:");

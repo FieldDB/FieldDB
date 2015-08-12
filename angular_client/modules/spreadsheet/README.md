@@ -39,11 +39,11 @@ _Some default caveats of a [Yeoman](http://yeoman.io/) project: if you edit file
 
 * [Signup for a GitHub account](https://github.com/signup/free) (GitHub is free for OpenSource)
 * Click on the "Fork" button to create your own copy.
-* Leave us a note in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues) to tell us a bit about the bug/feature you want to work on.
+* Leave us a note in our [issue tracker](https://github.com/FieldDB/FieldDB/issues) to tell us a bit about the bug/feature you want to work on.
 * You can [follow the 4 GitHub Help Tutorials](http://help.github.com/) to install and use Git on your computer.
-* You can watch the videos on [YouTube dev playlist](https://www.youtube.com/playlist?list=PLUrH6CNxFDrO3zLHtHAMW-8u_v7TSvE-H) and/or in the [Developer's Blog](https://wwwdev.lingsync.org/dev.html) to find out how the codebase works, and to find where is the code that you want to edit. You might also like the [user tutorial screencasts](https://www.youtube.com/playlist?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT) to see how the app is supposed to behave. Feel free to ask us questions in our [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues), we're friendly and welcome Open Source newbies.
+* You can watch the videos on [YouTube dev playlist](https://www.youtube.com/playlist?list=PLUrH6CNxFDrO3zLHtHAMW-8u_v7TSvE-H) and/or in the [Developer's Blog](https://wwwdev.lingsync.org/dev.html) to find out how the codebase works, and to find where is the code that you want to edit. You might also like the [user tutorial screencasts](https://www.youtube.com/playlist?list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT) to see how the app is supposed to behave. Feel free to ask us questions in our [issue tracker](https://github.com/FieldDB/FieldDB/issues), we're friendly and welcome Open Source newbies.
 * Edit the code on your computer, commit it referencing the issue #xx you created ($ git commit -m "fixes #xxxx i changed blah blah...") and push to your origin ($ git push origin master).
-* Run the tests `$ npm install` and  `$ bower install` and `$ grunt` it should say something like `Done, without errors.` And show how long each step `jshint` `test` `karma:unit` `dist` and `cssmin` took to run. If any of these parts errors, ask us for help in the [issue tracker](https://github.com/OpenSourceFieldlinguistics/FieldDB/issues).
+* Run the tests `$ npm install` and  `$ bower install` and `$ grunt` it should say something like `Done, without errors.` And show how long each step `jshint` `test` `karma:unit` `dist` and `cssmin` took to run. If any of these parts errors, ask us for help in the [issue tracker](https://github.com/FieldDB/FieldDB/issues).
 ![screen shot 2015-02-20 at 12 02 57 pm](https://cloud.githubusercontent.com/assets/196199/6281705/8294acc2-b8f8-11e4-829e-81f29314a980.png)
 * Click on the "Pull Request" button, and leave us a note about what you changed. We will look at your changes and help you bring them into the project!
 * Feel the glow of contributing to OpenSource :)
@@ -66,12 +66,12 @@ If you are interested in the Spreadsheet app, you might be interested in some ot
 
 * The [Prototype](https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa)
 * The [Psycholinguistics Dashboard](https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame)
-* The [Learn X app](https://github.com/opensourcefieldlinguistics/AndroidLanguageLearningClientForFielddb)
-* The Android [Elicitation Session Recorder](https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder)
+* The [Learn X app](https://github.com/FieldDB/AndroidLanguageLearningClientForFielddb)
+* The Android [Elicitation Session Recorder](https://github.com/FieldDB/AndroidFieldDBElicitationRecorder)
 * The Android [Speech Recognition Trainer App](https://github.com/batumi/AndroidSpeechRecognitionTrainer)
-* The [My Dictionary](https://github.com/OpenSourceFieldlinguistics/DictionaryChromeExtension) Chrome app
-* The [Lexicon Browser](https://github.com/OpenSourceFieldlinguistics/FieldDBLexicon)
-* The [Word Cloud Visualizer](https://github.com/OpenSourceFieldlinguistics/FieldDBWordCloudChromeApp)
+* The [My Dictionary](https://github.com/FieldDB/DictionaryChromeExtension) Chrome app
+* The [Lexicon Browser](https://github.com/FieldDB/FieldDBLexicon)
+* The [Word Cloud Visualizer](https://github.com/FieldDB/FieldDBWordCloudChromeApp)
 
 ## License
 Copyright (c) 2013-2014 FieldDB Contributors

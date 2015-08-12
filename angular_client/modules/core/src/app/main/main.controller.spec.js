@@ -38,7 +38,7 @@ describe("Controller: FieldDBController", function() {
     expect(scope.FieldDBComponents).toBeDefined();
     expect(scope.FieldDBComponents.User).toEqual({
       fieldDBtype: "User",
-      url: "http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/User.html"
+      url: "http://fielddb.github.io/FieldDB/docs/javascript/User.html"
     });
   }));
 });

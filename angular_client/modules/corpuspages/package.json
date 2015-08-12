@@ -3,7 +3,7 @@
   "version": "3.16.12",
   "repository": {
     "type": "git",
-    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
+    "url": "git://github.com/FieldDB/FieldDB.git"
   },
   "dependencies": {},
   "scripts": {

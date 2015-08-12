@@ -232,7 +232,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     }
     $scope.FieldDBComponents[klass] = {
       fieldDBtype: klass,
-      url: "http://opensourcefieldlinguistics.github.io/FieldDB/docs/javascript/" + klass + ".html"
+      url: "http://fielddb.github.io/FieldDB/docs/javascript/" + klass + ".html"
     };
   }
   // $scope.application.currentCorpusDashboard = ":team/:corpusidentifier/import/:importType";

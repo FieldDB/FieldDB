@@ -656,7 +656,7 @@
     "description": " "
   },
   "locale_learn_scripting_answer": {
-    "message": "Sure, we accept new \"interns\" on the team every semester. We can usually train you in things you want to learn, and find you a task to take on. <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> to introduce yourself, or join us on <a target=\"_blank\" href=\"https://github.com/OpenSourceFieldlinguistics/FieldDB/issues\">GitHub</a> by commenting on, or adding an item in the issue tracker if you already have an account. If you have friends in Software Engineering or related disciplines who are looking for OpenSource projects to build their portfolio, we would be happy to welcome them as well.",
+    "message": "Sure, we accept new \"interns\" on the team every semester. We can usually train you in things you want to learn, and find you a task to take on. <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">Send us an email</a> to introduce yourself, or join us on <a target=\"_blank\" href=\"https://github.com/FieldDB/FieldDB/issues\">GitHub</a> by commenting on, or adding an item in the issue tracker if you already have an account. If you have friends in Software Engineering or related disciplines who are looking for OpenSource projects to build their portfolio, we would be happy to welcome them as well.",
     "description": " "
   },
   "locale_contact_question": {
