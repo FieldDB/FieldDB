@@ -101,6 +101,12 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
     }
   },
 
+  debug: {
+    value: function() {
+      FieldDBObject.prototype.debug.apply(this, arguments);
+    }
+  },
+  
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       attributesToIgnore = attributesToIgnore || [];
