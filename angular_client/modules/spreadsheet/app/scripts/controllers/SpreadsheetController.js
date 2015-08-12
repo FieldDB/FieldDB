@@ -601,65 +601,69 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if ($scope.saved === 'no') {
       $rootScope.notificationMessage = "Please save changes before continuing.";
       $rootScope.openNotification();
-    } else if ($scope.saved === "saving") {
+      return false;
+    }
+    if ($scope.saved === "saving") {
       $rootScope.notificationMessage = "Changes are currently being saved.\nPlease wait until this operation is done.";
       $rootScope.openNotification();
-    } else if ($rootScope.newRecordHasBeenEdited === true) {
+      return false;
+    }
+    if ($rootScope.newRecordHasBeenEdited === true) {
       $rootScope.notificationMessage = "Please click \'Create New\' and then save your changes before continuing.";
       $rootScope.openNotification();
-    } else {
-
-      $scope.appReloaded = true;
-
-      if ($rootScope.corpus) {
-        $rootScope.corpusSelected = true;
-      }
-
-      $rootScope.loading = false;
-
-      $scope.activeMenu = itemToDisplay;
-
-      switch (itemToDisplay) {
-        case "settings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          window.location.assign("#/settings");
-          break;
-        case "corpusSettings":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          window.location.assign("#/corpussettings");
-          break;
-        case "home":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          window.location.assign("#/corpora_list");
-          break;
-        case "searchMenu":
-          $scope.changeActiveSubMenu(itemToDisplay);
-          $scope.searching = true;
-          $scope.activeDatumIndex = null;
-          window.location.assign("#/spreadsheet/" + $rootScope.templateId);
-          break;
-        case "faq":
-          $scope.dataentry = false;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu('none');
-          window.location.assign("#/faq");
-          break;
-        case "register":
-          window.location.assign("#/register");
-          break;
-        default:
-          $scope.dataentry = true;
-          $scope.searching = false;
-          $scope.changeActiveSubMenu(itemToDisplay || 'none');
-          window.location.assign("#/spreadsheet/" + $rootScope.templateId);
-      }
+      return false;
     }
+    $scope.appReloaded = true;
+
+    if ($rootScope.corpus) {
+      $rootScope.corpusSelected = true;
+    }
+
+    $rootScope.loading = false;
+
+    $scope.activeMenu = itemToDisplay;
+
+    switch (itemToDisplay) {
+      case "settings":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        window.location.assign("#/settings");
+        break;
+      case "corpusSettings":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        window.location.assign("#/corpussettings");
+        break;
+      case "home":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        window.location.assign("#/corpora_list");
+        break;
+      case "searchMenu":
+        $scope.changeActiveSubMenu(itemToDisplay);
+        $scope.searching = true;
+        $scope.activeDatumIndex = null;
+        window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+        break;
+      case "faq":
+        $scope.dataentry = false;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu('none');
+        window.location.assign("#/faq");
+        break;
+      case "register":
+        window.location.assign("#/register");
+        break;
+      default:
+        $scope.dataentry = true;
+        $scope.searching = false;
+        $scope.changeActiveSubMenu(itemToDisplay || 'none');
+        window.location.assign("#/spreadsheet/" + $rootScope.templateId);
+    }
+    return true;
   };
 
 
@@ -993,6 +997,15 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     if (!selectedCorpus) {
       $rootScope.notificationMessage = "Please select a database.";
       $rootScope.openNotification();
+      return;
+    }
+    if (selectedCorpus === "none") {
+      // TODO remove this corpus from $rootScope.user.corpora
+      $scope.scopePreferences.savedState.mostRecentCorpusDBname = "";
+      localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
+      $timeout(function() {
+        window.location.replace("/");
+      }, 500);
       return;
     }
     if (typeof selectedCorpus === "string") {
@@ -1931,39 +1944,56 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   // Add activities to scope object, to be uploaded when 'SAVE' is clicked
   $scope.addActivity = function(activityArray, uploadnow) {
-    Data.blankActivityTemplate()
-      .then(function(activitySampleJSON) {
 
-        for (var index = 0; index < activityArray.length; index++) {
-          var newActivityObject = JSON.parse(JSON.stringify(activitySampleJSON));
-          var bareActivityObject = activityArray[index];
+    var activitySampleJSON = JSON.parse(JSON.stringify({
+      "verb": "",
+      "verbicon": "",
+      "directobjecticon": "",
+      "directobject": "",
+      "indirectobject": "",
+      "teamOrPersonal": "",
+      "context": " via Spreadsheet App.",
+      "user": {
+        "gravatar": "",
+        "username": "",
+        "id": "",
+        "_id": "",
+        "collection": ""
+      },
+      "timestamp": "",
+      "dateModified": ""
+    }));
 
-          bareActivityObject.verb = bareActivityObject.verb.replace("href=", "target='_blank' href=");
-          bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
-          bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
 
-          newActivityObject.appVersion = $rootScope.appVersion;
-          newActivityObject.verb = bareActivityObject.verb;
-          newActivityObject.verbicon = bareActivityObject.verbicon;
-          newActivityObject.directobjecticon = bareActivityObject.directobjecticon;
-          newActivityObject.directobject = bareActivityObject.directobject;
-          newActivityObject.indirectobject = bareActivityObject.indirectobject;
-          newActivityObject.teamOrPersonal = bareActivityObject.teamOrPersonal;
-          newActivityObject.user.username = $rootScope.user.username;
-          newActivityObject.user.gravatar = $rootScope.user.gravatar || "0df69960706112e38332395a4f2e7542";
-          newActivityObject.user.id = $rootScope.user.username;
-          newActivityObject.user._id = $rootScope.user.username; //TODO remove this too eventually...
-          newActivityObject.dateModified = JSON.parse(JSON.stringify(new Date())); //TODO #1109 eventually remove date modified?
-          newActivityObject.timestamp = Date.now();
+    for (var index = 0; index < activityArray.length; index++) {
+      var newActivityObject = JSON.parse(JSON.stringify(activitySampleJSON));
+      var bareActivityObject = activityArray[index];
 
-          var uniqueid = newActivityObject.user.username + newActivityObject.verb + newActivityObject.directobject + newActivityObject.teamOrPersonal;
-          $scope.activities[uniqueid] = newActivityObject;
+      bareActivityObject.verb = bareActivityObject.verb.replace("href=", "target='_blank' href=");
+      bareActivityObject.directobject = bareActivityObject.directobject.replace("href=", "target='_blank' href=");
+      bareActivityObject.indirectobject = bareActivityObject.indirectobject.replace("href=", "target='_blank' href=");
 
-        }
-        if (uploadnow) {
-          $scope.uploadActivities();
-        }
-      });
+      newActivityObject.appVersion = $rootScope.appVersion;
+      newActivityObject.verb = bareActivityObject.verb;
+      newActivityObject.verbicon = bareActivityObject.verbicon;
+      newActivityObject.directobjecticon = bareActivityObject.directobjecticon;
+      newActivityObject.directobject = bareActivityObject.directobject;
+      newActivityObject.indirectobject = bareActivityObject.indirectobject;
+      newActivityObject.teamOrPersonal = bareActivityObject.teamOrPersonal;
+      newActivityObject.user.username = $rootScope.user.username;
+      newActivityObject.user.gravatar = $rootScope.user.gravatar || "0df69960706112e38332395a4f2e7542";
+      newActivityObject.user.id = $rootScope.user.username;
+      newActivityObject.user._id = $rootScope.user.username; //TODO remove this too eventually...
+      newActivityObject.dateModified = JSON.parse(JSON.stringify(new Date())); //TODO #1109 eventually remove date modified?
+      newActivityObject.timestamp = Date.now();
+
+      var uniqueid = newActivityObject.user.username + newActivityObject.verb + newActivityObject.directobject + newActivityObject.teamOrPersonal;
+      $scope.activities[uniqueid] = newActivityObject;
+
+    }
+    if (uploadnow) {
+      $scope.uploadActivities();
+    }
   };
 
   $scope.uploadActivities = function() {
@@ -2062,9 +2092,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.leaveCorpus = function() {
+    // var allSaved = $scope.navigateVerifySaved("home");
+    // if (!allSaved) {
+    //   return;
+    // }
     $scope.loadCorpusTeam().then(function() {
-      $scope.removeAccessFromUser($rootScope.user.username, ['all']).then(function(){
-        // TODO: remove this corpus from $rootScope.user.corpora
+      $scope.removeAccessFromUser($rootScope.user.username, ['all']).then(function() {
+        // $scope.selectCorpus("none"); done automatically
+      }, function(reason) {
+        console.log("Not leaving corpus", reason);
+        $rootScope.notificationMessage += " As a result, you have not left the corpus yet.";
+      }).fail(function(exception) {
+        console.warn("Not leaving corpus", exception.stack);
+        $rootScope.notificationMessage += " There was a problem leaving the corpus. As a result, you have not left the corpus yet. Please report this.";
+        $rootScope.openNotification();
+
       });
     });
   };
@@ -2094,14 +2136,17 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             newCorpus.dbname = response.corpus.dbname;
             newCorpus.title = response.corpus.title;
             var directObjectString = "<a href='#corpus/" + response.corpus.dbname + "'>" + response.corpus.title + "</a>";
-            $scope.addActivity([{
-              verb: "added",
-              verbicon: "icon-plus",
-              directobjecticon: "icon-cloud",
-              directobject: directObjectString,
-              indirectobject: "",
-              teamOrPersonal: "personal"
-            }], "uploadnow");
+
+            $timeout(function() {
+              $scope.addActivity([{
+                verb: "added",
+                verbicon: "icon-plus",
+                directobjecticon: "icon-cloud",
+                directobject: directObjectString,
+                indirectobject: "",
+                teamOrPersonal: "personal"
+              }], "uploadnow");
+            }, 1000);
 
             $scope.corpora.push(newCorpus);
             FieldDB.FieldDBObject.application.authentication.user.roles = FieldDB.FieldDBObject.application.authentication.user.roles.concat([newCorpus.dbname + "_admin", newCorpus.dbname + "_writer", newCorpus.dbname + "_reader", newCorpus.dbname + "_commenter"]);
@@ -2127,9 +2172,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     dataToPost.serverCode = $rootScope.serverCode;
     dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
     dataToPost.dbname = $rootScope.corpus.dbname;
-
+    $rootScope.loading = true;
     var promise = Data.getallusers(dataToPost)
       .then(function(users) {
+        $rootScope.loading = false;
         if (!users) {
           console.log("User doesn't have access to roles.");
           users = {
@@ -2138,6 +2184,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
         $scope.users = users;
       }, function(err) {
+        $rootScope.loading = false;
         console.warn(err);
         var message = "";
         if (err.status === 0) {
@@ -2249,18 +2296,21 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (debugging) {
           console.log(response);
         }
-        var indirectObjectString = "on <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a> as " + rolesString;
+        var indirectObjectString = ", access privileges on <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a> to " + rolesString;
+        if (response && response.info && typeof response.info.join === "function") {
+          indirectObjectString = response.info.join(" ").replace($rootScope.corpus.dbname, "<a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>");
+        }
         $scope.addActivity([{
           verb: "modified",
           verbicon: "icon-pencil",
-          directobjecticon: "icon-user",
+          directobjecticon: "icon-group",
           directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "personal"
         }, {
           verb: "modified",
           verbicon: "icon-pencil",
-          directobjecticon: "icon-user",
+          directobjecticon: "icon-group",
           directobject: "<a href='http://lingsync.org/" + newUserRoles.usernameToModify + "'>" + newUserRoles.usernameToModify + "</a> ",
           indirectobject: indirectObjectString,
           teamOrPersonal: "team"
@@ -2283,17 +2333,26 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
   };
 
   $scope.removeAccessFromUser = function(userid, roles) {
+    var deferred = FieldDB.Q.defer();
     if (!roles || roles.length === 0) {
       console.warn("no roles were requested to be removed. cant do anything");
+      deferred.reject({
+        userFriendlyErrors: ["There was a problem performing this operation. Please report this."]
+      });
       alert("There was a problem performing this operation. Please report this.");
+      return deferred.promise;
     }
     // Prevent an admin from removing him/herself from a corpus if there are no other admins; This
     // helps to avoid a situation in which there is no admin for a
     // corpus
     if ($scope.users.admins.length < 2) {
       if ($scope.users.admins[0].username.indexOf(userid) > -1) {
-        window.alert("You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin.");
-        return;
+        deferred.reject({
+          userFriendlyErrors: ["You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin. Alternatively, if you would like to delete this corpus, please use the Delete Corpus button."]
+        });
+        $rootScope.notificationMessage = "You cannot remove the final admin from a corpus.\nPlease add someone else as corpus admin before removing the final admin. Alternatively, if you would like to delete this corpus, please use the Delete Corpus button.";
+        $rootScope.openNotification();
+        return deferred.promise;
       }
     }
     var referingNoun = userid;
@@ -2302,46 +2361,84 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
 
     var r = confirm("Are you sure you want to remove " + roles.join(" ") + " access from " + referingNoun + " on " + $rootScope.corpus.title);
-    if (r === true) {
+    if (r !== true) {
+      deferred.reject({
+        userFriendlyErrors: [""]
+      });
+      return deferred.promise;
+    }
 
-      var dataToPost = {};
-      dataToPost.username = $rootScope.user.username.trim();
-      dataToPost.password = $rootScope.loginInfo.password.trim();
-      dataToPost.serverCode = $rootScope.serverCode;
-      dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
-      dataToPost.dbname = $rootScope.corpus.dbname;
+    var dataToPost = {};
+    dataToPost.username = $rootScope.user.username.trim();
+    dataToPost.password = $rootScope.loginInfo.password.trim();
+    dataToPost.serverCode = $rootScope.serverCode;
+    dataToPost.authUrl = Servers.getServiceUrl($rootScope.serverCode, "auth");
+    dataToPost.dbname = $rootScope.corpus.dbname;
 
-      dataToPost.users = [{
-        username: userid,
-        remove: roles,
-        add: []
-      }];
+    dataToPost.users = [{
+      username: userid,
+      remove: roles,
+      add: []
+    }];
+
+    var indirectObjectString = "from " + roles.join(" ") + " access to <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
+    if (referingNoun === "yourself") {
+      $scope.addActivity([{
+        verb: "removed",
+        verbicon: "icon-remove-sign",
+        directobjecticon: "icon-group",
+        directobject: "themself",
+        indirectobject: indirectObjectString,
+        teamOrPersonal: "team"
+      }], "uploadnow");
+    }
+
+    //TODO: Hackaround because we can't wait for the activities to upload
+    $timeout(function() {
 
       Data.removeroles(dataToPost)
         .then(function(response) {
           if (debugging) {
             console.log(response);
           }
-          var indirectObjectString = roles.join(" ") + "access from <a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>";
+          if (!response || response.userFriendlyErrors) {
+            deferred.reject(response);
+            console.warn("There was an error removing roles from user", response);
+            return;
+          }
+          if (response && response.info && typeof response.info.join === "function") {
+            indirectObjectString = response.info.join(" ").replace($rootScope.corpus.dbname, "<a href='#corpus/" + $rootScope.corpus.dbname + "'>" + $rootScope.corpus.title + "</a>");
+          }
           $scope.addActivity([{
             verb: "removed",
             verbicon: "icon-remove-sign",
-            directobjecticon: "icon-user",
-            directobject: userid,
+            directobjecticon: "icon-group",
+            directobject: referingNoun,
             indirectobject: indirectObjectString,
             teamOrPersonal: "personal"
-          }, {
-            verb: "removed",
-            verbicon: "icon-remove-sign",
-            directobjecticon: "icon-user",
-            directobject: userid,
-            indirectobject: indirectObjectString,
-            teamOrPersonal: "team"
           }], "uploadnow");
 
-          $scope.loadCorpusTeam();
+          if (referingNoun !== "yourself") {
+            $scope.addActivity([{
+              verb: "removed",
+              verbicon: "icon-remove-sign",
+              directobjecticon: "icon-group",
+              directobject: referingNoun,
+              indirectobject: indirectObjectString,
+              teamOrPersonal: "team"
+            }], "uploadnow");
+          }
+          if (referingNoun === "yourself" && roles && roles.length === 1 && roles[0] === "all") {
+            console.log("Not loading the team because you no longer have access.");
+            $scope.selectCorpus("none");
+          } else {
+            $scope.loadCorpusTeam();
+          }
+          deferred.resolve(response);
         });
-    }
+    }, 500);
+
+    return deferred.promise;
   };
 
 
