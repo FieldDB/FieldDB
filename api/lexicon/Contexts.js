@@ -248,7 +248,7 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
     configurable: true,
     get: function() {
       if (!this.collection) {
-        return ""
+        return "";
       }
       var preview = this.map(function(context) {
         return context.id;

@@ -12,7 +12,7 @@
     "linguistics"
   ],
   "license": "Apache-2.0",
-  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
+  "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -38,8 +38,8 @@
     "autofill-event": "~1.0.0",
     "bootstrap": "~3.3.1",
     "es5-shim": "~3.1.0",
-    "fielddb": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb.git",
-    "fielddb-angular": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb-angular.git",
+    "fielddb": "git://github.com/FieldDB/bower-fielddb.git",
+    "fielddb-angular": "git://github.com/FieldDB/bower-fielddb-angular.git",
     "fielddb-glosser": "1.82.3",
     "font-awesome": "~4.2.0",
     "jquery": "~2.1.1",

@@ -277,7 +277,7 @@ to enable consistency, users see typeahead drop-down menus containing terms prev
 LingSync is built using web technologies which permit the application to be 100\% Unicode, including support for right-to-left orthographies as well as IPA symbols. LingSync data is stored as plain text, and exportable in human-readable formats including JSON, LaTeX, CSV, and XML, all of which are non-proprietary and compatible with applications commonly used in linguistic data collection and documentation. LingSync runs on Mac OS X, Linux and Windows, as well as on newer platforms such as Android, ChromeBook and iOS (iPhone/iPad).
 
 \begin{exe} 
-\ex Data is stored as plain text in Unicode\footnote{For more examples of LingSync's data schema see\\ https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/tests}
+\ex Data is stored as plain text in Unicode\footnote{For more examples of LingSync's data schema see\\ https://github.com/FieldDB/FieldDB/tree/master/tests}
 
  \centering
     \includegraphics[width=0.8\textwidth]{../figures/dataIsPlainTextUnicode}
@@ -666,7 +666,7 @@ NLP web services for mobile apps \citep{Sateli:2013},
  handwriting recognition research for low resource languages \citep{Sadri:2007} or even training novel speech recognition systems with
 %  as little as one hour of annotated data using web-services which wrap 
  open source toolkits such as Sphinx-4 \citep{Walker:2004}.% or Kaldi \citep{Povey:2011}.
-Sample  services which can wrap Bash/Python/Perl scripts  into RESTful web services are provided on the OpenSourceFieldlinguistics GitHub. https://github.com/OpenSourceFieldlinguistics %\citep{Desilets:2010}
+Sample  services which can wrap Bash/Python/Perl scripts  into RESTful web services are provided on the FieldDB GitHub. https://github.com/FieldDB %\citep{Desilets:2010}
 }
 Even complex user interfaces can be combined and integrated with LingSync via the NPM and Bower web module management system.
 In fact, LingSync itself is composed of numerous plugins which can be re-used or embedded in an organization's website or existing web based tools.
@@ -700,20 +700,20 @@ True to the name, data entry in this interface is spreadsheet-like, complete wit
 \label{ex:spreadsheet}
 \end{exe} 
 
-Other features of the spreadsheet interface include the auto-glosser, as described in \S\ref{sec:autoglosser}, which can be turned on and off while entering data, without visiting another screen.  The restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface looks similar to a conventional spreadsheet such as Google Spreadsheets (but with the added benefit of a glosser). The spreadsheet plugin was written in Angular.js and is built using Grunt.js. It took roughly three months to build, and six months to beta test.\footnote{https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular\_client/modules/spreadsheet}
+Other features of the spreadsheet interface include the auto-glosser, as described in \S\ref{sec:autoglosser}, which can be turned on and off while entering data, without visiting another screen.  The restrictive search function permits users to do keyword search and further filter results by additional search terms. Audio can be recorded and/or  uploaded directly into the data records. All data are commentable, and the comment and the audio area can be  open  (\ref{ex:spreadsheet}) or hidden  (\ref{ex:spreadsheetcompact}), even to a point where the user interface looks similar to a conventional spreadsheet such as Google Spreadsheets (but with the added benefit of a glosser). The spreadsheet plugin was written in Angular.js and is built using Grunt.js. It took roughly three months to build, and six months to beta test.\footnote{https://github.com/FieldDB/FieldDB/tree/master/angular\_client/modules/spreadsheet}
 
 
 \subsubsection{Custom glosser}
 
 For a team working on Inuktitut \citep{Bielig:2013} we wrapped \cite{Farley:2012:Online}'s morphological analyzer for Inuktitut, which  into a web service, permitting a glosser which was prepared to look up variant  surface realizations of morphemes in Inuktitut corpora. 
-The Inuktitut glosser took Farley over five years to build and test, and four days to wrap as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/LexiconWebService}%refer to somewhere for more details? %where did the Inuktitut corpus/corpora live, on our servers or somewhere online? 
+The Inuktitut glosser took Farley over five years to build and test, and four days to wrap as a web service.\footnote{https://github.com/FieldDB/LexiconWebService}%refer to somewhere for more details? %where did the Inuktitut corpus/corpora live, on our servers or somewhere online? 
 
 \subsubsection{Language learning module for Android}
 
 We built a prototype mobile app for language learning which uses the LingSync data structure, to enable researchers and language teachers to create language learning aids from the data in existing linguistic corpora and to use data newly collected for the purpose of language learning for linguistic analysis, if desired.
 The language learning prototype aims to help heritage language learners include their language as part of their daily activities and improve their listening and speaking skills.
 The orthographic lines (i.e.
-utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons by taking pictures and making audio recordings using their Android phone's built-in features, and share them with other learners. The language learning app took one month to design and implement a clickable prototype.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidLanguageLearningClientForFieldDB}
+utterance and morpheme lines) and the attached audio or video recordings of a datum are taken as materials to create lessons. Users are also able to make their own lessons by taking pictures and making audio recordings using their Android phone's built-in features, and share them with other learners. The language learning app took one month to design and implement a clickable prototype.\footnote{https://github.com/FieldDB/AndroidLanguageLearningClientForFieldDB}
 
 \begin{exe} 
 \ex The Language Learning prototype is downloadable on Google Play\footnote{https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons}
@@ -729,11 +729,11 @@ utterance and morpheme lines) and the attached audio or video recordings of a da
 The phonetic aligner web service makes it possible to upload audio or video recordings and the orthographic/utterance lines of datum to create a phonetic dictionary unique to the language of the corpus,
 and to run the McGill ProsodyLab Aligner,
 a machine learning algorithm which uses Hidden Markov Models to predict boundaries between segments and creates a Praat TextGrid with estimated segments boundaries,
-saving hours of boundary tagging. The ProsodyLab took roughly two years to build and test the aligner, and it took two weeks to wrap it as a web service.\footnote{https://github.com/OpenSourceFieldlinguistics/AudioWebService}
+saving hours of boundary tagging. The ProsodyLab took roughly two years to build and test the aligner, and it took two weeks to wrap it as a web service.\footnote{https://github.com/FieldDB/AudioWebService}
 
 
 We also created an Android app which permits recording of high quality video on 7-inch or 10-inch tablets during elicitation sessions.
-Multiple videos can be associated to a session and uploaded to the ProsodyLab Aligner web service for automatic generation of aligned TextGrids. The android app took roughly one month to build and is currently being beta tested.\footnote{https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder  \indent https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.videorecorder}
+Multiple videos can be associated to a session and uploaded to the ProsodyLab Aligner web service for automatic generation of aligned TextGrids. The android app took roughly one month to build and is currently being beta tested.\footnote{https://github.com/FieldDB/AndroidFieldDBElicitationRecorder  \indent https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.videorecorder}
 
 %\subsubsection{WebSpider}
 %

@@ -98,7 +98,7 @@ angular.module("fielddbAngular", [
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
-    "http://opensourcefieldlinguistics.github.io/**",
+    "http://fielddb.github.io/**",
     "http://*.example.org/**",
     "https://*.example.org/**",
     "https://localhost:3184/**",
