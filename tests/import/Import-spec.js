@@ -350,7 +350,7 @@ describe("api/import/Import", function() {
       var corpus,
         importer,
         localUri = "./sample_data/orthography.txt",
-        remoteUri = "https://raw.githubusercontent.com/OpenSourceFieldlinguistics/FieldDB/master/sample_data/orthography.txt";
+        remoteUri = "https://raw.githubusercontent.com/FieldDB/FieldDB/master/sample_data/orthography.txt";
 
       var defaultOptions = {
         uri: localUri,

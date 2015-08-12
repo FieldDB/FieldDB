@@ -1501,7 +1501,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             cant see each others data.
 
             Probably the clients wanted the spreadsheet roles to appear implicative since its more common.
-            see https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1113
+            see https://github.com/FieldDB/FieldDB/issues/1113
           */
       case "admin":
         newUserRoles.admin = true;

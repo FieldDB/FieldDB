@@ -10,7 +10,7 @@ Install the module with: `bower install fielddb-corpus-pages-app --save`
 
 Or, download the [production version][js] and the [optional html templates][html_templates].
 
-[js]: https://raw.github.com/OpenSourceFieldlinguistics/FieldDB/master/angular_client/modules/fielddb-corpus-pages-app/dist/scripts/fielddb-corpus-pages-app.js
+[js]: https://raw.github.com/FieldDB/FieldDB/master/angular_client/modules/fielddb-corpus-pages-app/dist/scripts/fielddb-corpus-pages-app.js
 
 
 In your website/app declare a div where the app will attach itself, and load the js and vendor dependancies:
