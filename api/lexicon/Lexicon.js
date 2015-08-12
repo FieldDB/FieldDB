@@ -1514,22 +1514,25 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
 
 
-      var svg = self.localDOM.createElement("svg");
+      this.connectedGraph.svg = self.localDOM.createElement("svg");
       if (typeof divElement.appendChild !== "function") {
         self.warn("You have provided a defective divElement, it is unable to append divElements to itself. Appending to the body of the document instead.", divElement);
         // return self;
-        self.localDOM.body.appendChild(svg);
+        self.localDOM.body.appendChild(self.connectedGraph.svg);
       } else {
-        divElement.appendChild(svg);
+        divElement.appendChild(self.connectedGraph.svg);
       }
-      svg = this.d3.select(svg);
+      this.connectedGraph.svg = this.d3.select(self.connectedGraph.svg);
+      try {
+        this.connectedGraph.svg = this.d3.select(divElement).append("svg");
+      } catch (e) {
+        //couldnt use the dom, the svg wont work really well.        
+      }
 
-      var svg = this.d3.select(divElement).append("svg");
-
-      svg.attr("width", width)
+      self.connectedGraph.svg.attr("width", width)
         .attr("height", height);
 
-      svg.append("defs").selectAll("marker")
+      self.connectedGraph.svg.append("defs").selectAll("marker")
         .data(force.links())
         // .data(["suit", "licensing", "resolved"])
         .enter()
@@ -1554,7 +1557,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       // var titletext = "Click to search morphemes in your corpus";
 
       // //A label for the current year.
-      // var title = svg.append("text")
+      // var title = self.connectedGraph.svg.append("text")
       //   .attr("class", "vis-title")
       //   .attr("dy", "1em")
       //   .attr("dx", "1em")
@@ -1566,7 +1569,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //this.d3.json("./libs/rules.json", function(json) {
 
 
-      // var path = svg.append("g").selectAll("path")
+      // var path = self.connectedGraph.svg.append("g").selectAll("path")
       //   .data(force.links())
       //   .enter().append("line")
       //   .attr("class", "link")
@@ -1577,7 +1580,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //     return d.value;
       //   });
 
-      var path = svg.append("g").selectAll("path")
+      var path = self.connectedGraph.svg.append("g").selectAll("path")
         .data(force.links())
         .enter().append("path")
         .attr("class", function(d) {
@@ -1588,7 +1591,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return "url(#" + d.relation + ")";
         });
 
-      // var circle = svg.append("g").selectAll("circle")
+      // var circle = self.connectedGraph.svg.append("g").selectAll("circle")
       //   .data(force.nodes())
       //   .enter().append("circle")
       //   .attr("class", "node")
@@ -1648,7 +1651,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   .call(force.drag);
 
 
-      var circle = svg.append("g").selectAll("circle")
+      var circle = self.connectedGraph.svg.append("g").selectAll("circle")
         .data(force.nodes())
         .enter().append("circle")
         .attr("class", "node")
@@ -1709,7 +1712,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   });
 
 
-      var text = svg.append("g").selectAll("text")
+      var text = self.connectedGraph.svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
         .attr("x", 8)
