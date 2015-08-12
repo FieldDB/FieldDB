@@ -160,23 +160,46 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
   // FieldDB.FieldDBObject.warn = function(message) {
   //   console.warn(message);
   // };
+  FieldDB.FieldDBObject.render = function() {
+    // try {
+    //   if (!$scope.$$phase) {
+    //     $scope.$apply(); //$digest or $apply
+    //   }
+    // } catch (e) {
+    //   console.warn("Rendering generated probably a digest erorr");
+    // }
+  };
 
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
-    FieldDB.FieldDBObject.render = function() {
-      // try {
-      //   if (!$scope.$$phase) {
-      //     $scope.$apply(); //$digest or $apply
-      //   }
-      // } catch (e) {
-      //   console.warn("Rendering generated probably a digest erorr");
-      // }
+
+    FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
+      if (!url) {
+        console.warn("Not navigating to an empty url.");
+        return;
+      }
+      // $location.url(url);
+      // $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
+
+      // TODO routeparams and location are not being triggered, so manually looking for a search term and rendering it
+      window.location.href = url;
+      var searchQuery = url.substring(url.lastIndexOf('/') + 1);
+      if (searchQuery) {
+        console.log("Navigating to show a search " + searchQuery);
+        FieldDB.FieldDBObject.application.search.searchQuery = searchQuery;
+        FieldDB.FieldDBObject.application.search.search(FieldDB.FieldDBObject.application.search.searchQuery);
+        if (!$scope.$$phase) {
+          $scope.$digest();
+        }
+      }
     };
 
   } else {
     console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
-    window.alert("The app cannot load, please report this. ");
+    FieldDB.FieldDBObject.bug("The app cannot load, please report this. ");
   }
+
+
   $rootScope.contextualize = function(message) {
     if (!FieldDB || !FieldDB.FieldDBObject || !FieldDB.FieldDBObject.application || !FieldDB.FieldDBObject.application.contextualizer || !FieldDB.FieldDBObject.application.contextualizer.data) {
       return message;
