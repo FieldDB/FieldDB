@@ -70,5 +70,6 @@ var Tree = {
   "rightBranching": rightBranchingBracketIt,
   "leftBranching": leftBranchingBracketIt,
   "generate": bracketIt
-
 };
+
+exports.Tree = Tree;

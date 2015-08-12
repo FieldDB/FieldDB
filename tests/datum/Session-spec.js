@@ -449,7 +449,7 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       if (session.datalist.docs._collection[0].fieldDBtype === "FieldDBObject") {
         expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("FieldDBObject");
       } else {
-        expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("Datum");
+        expect(session.datalist.docs._collection[0].fieldDBtype).toEqual("LanguageDatum");
       }
 
       expect(session.docs).toBeDefined();

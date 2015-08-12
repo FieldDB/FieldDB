@@ -287,7 +287,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         }
       }
 
-      if (keepTrying && !this.requestedCorpusSpecificLocalizations && FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.loaded) {
+      if (keepTrying && !this.requestedCorpusSpecificLocalizations && FieldDBObject && FieldDBObject.application && FieldDBObject.application.corpus && FieldDBObject.application.corpus.loaded && typeof FieldDBObject.application.corpus.getCorpusSpecificLocalizations === "function") {
         FieldDBObject.application.corpus.getCorpusSpecificLocalizations();
         this.requestedCorpusSpecificLocalizations = true;
       }

@@ -1,0 +1,17 @@
+<div>
+  <div class="modal-header">
+    <h3>{{message}}</h3>
+  </div>
+  <div class="modal-body centered">
+  <i class="fa fa-bug fa-5x red" ng-show="isBug">  </i>
+  <i class="fa fa-check-circle fa-3x" ng-show="isHappyPopup"></i>
+  <i class="fa fa-question-circle fa-3x" ng-show="isConfirm"></i>
+  <i class="fa fa-comment-o fa-3x" ng-show="isPrompt" ></i>
+  <input ng-show="isPrompt&&inputType!='password'" ng-model="userInput"/>
+  <input ng-show="isPrompt&&inputType=='password'" ng-model="userInput" type="password"/>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="okay(userInput)">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()" ng-show="showCancelButton">Cancel</button> 
+  </div>
+</div>

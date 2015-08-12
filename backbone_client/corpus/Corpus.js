@@ -429,7 +429,7 @@ define([
         return this.originalParse(originalModel);
       }
       var x;
-      originalModel.datumFields = originalModel.datumFields || [];
+      originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
       originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       originalModel.connection = originalModel.connection || originalModel.couchConnection;
       originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;

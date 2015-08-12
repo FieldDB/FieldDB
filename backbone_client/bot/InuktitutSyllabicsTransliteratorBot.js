@@ -75,7 +75,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 			return;
 		}
 
-		var fieldLabels = _.pluck(datum.datumFields, "label");
+		var fieldLabels = _.pluck(datum.fields, "label");
 		// console.log("Fields in this datum " + fieldLabels);
 
 		var utteranceFieldIndex = fieldLabels.indexOf("utterance");
@@ -85,7 +85,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 			console.log("This datum didn't have an utterance field, that's really odd." + JSON.stringify(datum));
 			return;
 		}
-		var utteranceField = datum.datumFields[utteranceFieldIndex];
+		var utteranceField = datum.fields[utteranceFieldIndex];
 		/* dont need to process empty data */
 		if (!utteranceField.value) {
 			return;
@@ -101,7 +101,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 		/* look to see if we already have an orthography field */
 		var orthoField = null;
 		if(orthographyFieldIndex > -1){
-			orthoField = datum.datumFields[orthographyFieldIndex];
+			orthoField = datum.fields[orthographyFieldIndex];
 			console.log("orthoField ", orthoField);
 		}
 		/* if we do, don't modify it, use a syllabicsOrthography field instead */
@@ -112,7 +112,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 			}
 			/*  look to see if we already have a syllabics field */
 			if (syllabicsOrthographyFieldIndex > -1) {
-				syllabicsField = datum.datumFields[syllabicsOrthographyFieldIndex];
+				syllabicsField = datum.fields[syllabicsOrthographyFieldIndex];
 			}
 		}
 
@@ -123,7 +123,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 			syllabicsField = {};
 			/* copy the old utterance field to a new field for sylabics */
 			jQuery.extend(syllabicsField, utteranceField);
-			datum.datumFields.push(syllabicsField);
+			datum.fields.push(syllabicsField);
 			/* if there was a field called orthography, call this one syllabicsOrthography, otherwise just use orthography */
 			if (orthoField) {
 				syllabicsField.label = "syllabicsOrthography";
@@ -155,16 +155,16 @@ var Bot = function(dbname, corpusid, corpustitle){
 		// var checkedWithConsultantIndex = fieldLabels.indexOf("checkedWithConsultant");
 		// console.log("Deprecated fields : " + notesFieldIndex + dialectFieldIndex + checkedWithConsultantIndex);
 		// if(dialectFieldIndex > -1){
-		// 	datum.datumFields.splice(dialectFieldIndex,1);
+		// 	datum.fields.splice(dialectFieldIndex,1);
 		// }
 		// if(checkedWithConsultantIndex > -1){
-		// 	datum.datumFields.splice(checkedWithConsultantIndex,1);
+		// 	datum.fields.splice(checkedWithConsultantIndex,1);
 		// }
 		// if(notesFieldIndex > -1){
-		// 	datum.datumFields.splice(notesFieldIndex,1);
+		// 	datum.fields.splice(notesFieldIndex,1);
 		// }
 		// if(dateElicitedIndex > -1){
-		// 	datum.datumFields.splice(dateElicitedIndex,1);
+		// 	datum.fields.splice(dateElicitedIndex,1);
 		// }
 
 		/* put chapter verse into another place */
@@ -190,7 +190,7 @@ var Bot = function(dbname, corpusid, corpustitle){
 		// 	verseField.label = "Verse number from Bible Book Chapter";
 		// 	verseField.value = pieces[2];
 		// 	verseField.mask = pieces[2];
-		// 	datum.datumFields.push(verseField);
+		// 	datum.fields.push(verseField);
 		// 	utteranceField.value = utteranceField.value.replace(chapterVerse, "");
 		// 	utteranceField.mask = utteranceField.mask.replace(chapterVerse, "");
 		// }

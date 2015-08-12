@@ -193,6 +193,12 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       this.debug("data", this.data);
     }
   },
+  
+  isEmpty: {
+    value: function() {
+      return FieldDBObject.prototype.isEmpty.apply(this, arguments);
+    }
+  },
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {

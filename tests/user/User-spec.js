@@ -357,8 +357,11 @@ describe("User ", function() {
     it("should be able to get a connection from only the title", function() {
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
 
+      expect(user.corpora["sapir-firstcorpus"].title).toEqual("sapir-firstcorpus");
+      expect(user.corpora["sapir-firstcorpus"].fieldDBtype).toEqual("Connection");
       user.corpora["sapir-firstcorpus"].title = "Quechua Sample Data";
       expect(user.corpora["sapir-firstcorpus"].title).toEqual("Quechua Sample Data");
+      expect(user.corpora["sapir-firstcorpus"]._title).toEqual("Quechua Sample Data");
       expect(user.corpora["sapir-firstcorpus"]).toBe(user.corpora.collection[1]);
 
       var connection = user.corpora.findCorpusConnectionFromTitleAsUrl("Quechua Sample Data");

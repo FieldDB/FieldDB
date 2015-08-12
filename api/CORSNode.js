@@ -60,7 +60,7 @@ CORS.makeCORSRequest = function(options) {
         deferred.reject(response);
         return;
       }
-      console.log("Server response, ", response);
+      console.log("Server response, "+ response);
       deferred.resolve(response);
     });
   });
@@ -76,7 +76,7 @@ CORS.makeCORSRequest = function(options) {
     req.write(data, "utf8");
     req.end();
   } else {
-    console.log("sending no data to http connection", urlObject);
+    console.log("sending no data to http connection");
     req.end();
   }
 

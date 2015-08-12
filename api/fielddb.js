@@ -105,6 +105,9 @@
   var FieldDatabase = require("./corpus/Corpus").FieldDatabase;
   FieldDB.FieldDatabase = FieldDatabase;
   FieldDB["FieldDatabase"] = FieldDatabase;
+  var Glosser = require("./glosser/Glosser").Glosser;
+  FieldDB.Glosser = Glosser;
+  FieldDB["Glosser"] = Glosser;
   var HotKeys = require("./hotkey/HotKeys").HotKeys;
   FieldDB.HotKeys = HotKeys;
   FieldDB["HotKeys"] = HotKeys;
@@ -114,6 +117,12 @@
   var Import = require("./import/Import").Import;
   FieldDB.Import = Import;
   FieldDB["Import"] = Import;
+  var LanguageDatum = require("./datum/LanguageDatum").LanguageDatum;
+  FieldDB.LanguageDatum = LanguageDatum;
+  FieldDB["LanguageDatum"] = LanguageDatum;
+  var Lexicon = require("./lexicon/Lexicon").Lexicon;
+  FieldDB.Lexicon = Lexicon;
+  FieldDB["Lexicon"] = Lexicon;
   var Participant = require("./user/Participant").Participant;
   FieldDB.Participant = Participant;
   FieldDB["Participant"] = Participant;

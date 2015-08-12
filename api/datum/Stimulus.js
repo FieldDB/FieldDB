@@ -1,11 +1,11 @@
-var Datum = require("./Datum").Datum;
+var LanguageDatum = require("./LanguageDatum").LanguageDatum;
 
 /**
- * @class The Stimulus is a minimal customization of a Datum which allows the user to add additional information
+ * @class The Stimulus is a minimal customization of a LanguageDatum which allows the user to add additional information
  *  which can be used for experiments.
  *
  * @name  Stimulus
- * @extends Datum
+ * @extends LanguageDatum
  * @constructs
  */
 var Stimulus = function Stimulus(options) {
@@ -13,10 +13,10 @@ var Stimulus = function Stimulus(options) {
     this._fieldDBtype = "Stimulus";
   }
   this.debug("Constructing Stimulus ", options);
-  Datum.apply(this, arguments);
+  LanguageDatum.apply(this, arguments);
 };
 
-Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototype */ {
+Stimulus.prototype = Object.create(LanguageDatum.prototype, /** @lends Stimulus.prototype */ {
   constructor: {
     value: Stimulus
   },

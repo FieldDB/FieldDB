@@ -253,8 +253,18 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var deferred = Q.defer(),
         self = this;
 
+      try {
+        throw new Error("Decrypted mode was requested by the app. ");
+      } catch (exception) {
+        console.warn("Decrypted mode was requested by the app. ", exception.stack);
+      }
+
       this.whenDecryptionReady = deferred.promise;
-      this.prompt("You can only view encrypted data if you confirm your identity. Please enter your password.").then(function(promptDetails) {
+      var username;
+      if (this.authentication && this.authentication.user && this.authentication.user.username) {
+        username = this.authentication.user.username;
+      }
+      this.prompt("Some data which you are about to view is encrypted. You can only view encrypted data if you confirm your identity. If you would like to edit or view the data we need to make sure that you are " + username).then(function(promptDetails) {
         if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
           self.application.authentication.confirmIdentity({
             password: promptDetails.response
@@ -415,8 +425,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         };
       } else if (routeParams.searchQuery) {
         this.search = this.search || new Search({
-          searchKeywords: routeParams.searchQuery
+          searchQuery: routeParams.searchQuery
         });
+        this.search.search(routeParams.searchQuery);
       } else if (routeParams.docid) {
         if (this.currentDoc && this.currentDoc.save) {
           this.currentDoc.bug("Switching to another document without saving...");
@@ -446,7 +457,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
            */
           routeParams.corpusidentifier = Connection.validateIdentifier(routeParams.corpusidentifier).identifier;
           this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
-          
+
           var connection;
           if (this.authentication &&
             this.authentication.user &&
@@ -487,7 +498,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         this.corpus.status = "Loading corpus details.";
         return this.corpus.fetch().then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
-          self.status = self.corpus.status = "Loaded corpus details.";
+          self.corpus.status += "\n Loaded corpus details.";
+          self.status = "Loaded corpus details.";
           if (self.application.importer) {
             self.application.importer.corpus = self.corpus;
           }

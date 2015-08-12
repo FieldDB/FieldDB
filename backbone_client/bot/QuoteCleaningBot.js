@@ -38,25 +38,25 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
 		}
 
 		var changes = [];
-		for (var field = datum.datumFields.length - 1; field > 0; field--) {
-			var previousMask = datum.datumFields[field].mask;
-			var previousValue = datum.datumFields[field].value;
-			datum.datumFields[field].mask = previousMask.replace(/[â]/g, "'").replace(/''/g,"'");
-			if (datum.datumFields[field].label === "translation") {
-				datum.datumFields[field].mask = datum.datumFields[field].mask.replace(/OM/g,"om");
-				datum.datumFields[field].mask = datum.datumFields[field].mask.trim().replace(/' +`/g," ").replace(/['"]$/g, "").replace(/^['`"]/g, "");
+		for (var field = datum.fields.length - 1; field > 0; field--) {
+			var previousMask = datum.fields[field].mask;
+			var previousValue = datum.fields[field].value;
+			datum.fields[field].mask = previousMask.replace(/[â]/g, "'").replace(/''/g,"'");
+			if (datum.fields[field].label === "translation") {
+				datum.fields[field].mask = datum.fields[field].mask.replace(/OM/g,"om");
+				datum.fields[field].mask = datum.fields[field].mask.trim().replace(/' +`/g," ").replace(/['"]$/g, "").replace(/^['`"]/g, "");
 			}
-			if (previousMask !== datum.datumFields[field].mask) {
-				changes.push(" quote encoding problems " + previousMask + " -> " + datum.datumFields[field].mask);
+			if (previousMask !== datum.fields[field].mask) {
+				changes.push(" quote encoding problems " + previousMask + " -> " + datum.fields[field].mask);
 			}
 
-			datum.datumFields[field].value = previousValue.replace(/[â]/g, "'").replace(/''/g,"'");
-			if (datum.datumFields[field].label === "translation") {
-				datum.datumFields[field].value = datum.datumFields[field].value.replace(/OM/g,"om");
-				datum.datumFields[field].value = datum.datumFields[field].value.trim().replace(/' +`/g," ").replace(/['"]$/g, "").replace(/^['`"]/g, "");
+			datum.fields[field].value = previousValue.replace(/[â]/g, "'").replace(/''/g,"'");
+			if (datum.fields[field].label === "translation") {
+				datum.fields[field].value = datum.fields[field].value.replace(/OM/g,"om");
+				datum.fields[field].value = datum.fields[field].value.trim().replace(/' +`/g," ").replace(/['"]$/g, "").replace(/^['`"]/g, "");
 			}
-			if (previousValue !== datum.datumFields[field].value) {
-				changes.push(" quote encoding problems " + previousValue + " -> " + datum.datumFields[field].value);
+			if (previousValue !== datum.fields[field].value) {
+				changes.push(" quote encoding problems " + previousValue + " -> " + datum.fields[field].value);
 			}
 
 		}
