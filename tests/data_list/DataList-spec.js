@@ -447,6 +447,7 @@ describe("Data List", function() {
 
     it("should convert docs into datumIds", function() {
       var list = new DataList({
+        // debugMode: true,
         docs: [new FieldDBObject({
           "_id": "docone",
           "datumFields": [],
