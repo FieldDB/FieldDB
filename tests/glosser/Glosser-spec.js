@@ -588,11 +588,15 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			// The morphemeSegmentationKnowledgeBase isnt an array, its a hasmap of ngrams by count
 			glosser.lexicon.entryRelations = glosser.morphemeSegmentationKnowledgeBase;
 			expect(glosser.lexicon.entryRelations.length).toEqual(14);
-			expect(glosser.lexicon.entryRelations[10].from.morphemes).toEqual("tusu");
-			expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
-			expect(glosser.lexicon.entryRelations[10].to.gloss).toBeUndefined();
+			expect(glosser.lexicon.entryRelations.map(function(relation){
+				return relation.source.morphemes;
+			})).toEqual([ "lloqsi", "lloqsi", "nay", "nay", "wa", "wa", "ra", "ra", "victor", "victor", "tusu", "tusu", "naya", "naya" ]);
+			expect(glosser.lexicon.entryRelations[10]).toBeDefined();
+			expect(glosser.lexicon.entryRelations[10].source.morphemes).toEqual("tusu");
+			expect(glosser.lexicon.entryRelations[10].target.morphemes).toEqual("naya");
+			expect(glosser.lexicon.entryRelations[10].target.gloss).toBeUndefined();
 			expect(glosser.lexicon.entryRelations[10].relation).toEqual("precedes");
-			expect(glosser.lexicon.entryRelations[10].from.contexts).toEqual(["Victor-ta tusu-naya-n"]);
+			expect(glosser.lexicon.entryRelations[10].source.contexts).toEqual(["Victor-ta tusu-naya-n"]);
 			
 
 			glosser.lexicon.updateConnectedGraph();
@@ -601,16 +605,16 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			// expect(glosser.lexicon.connectedGraph.nodes["naya"]).toBeUndefined();
 			// expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBeUndefined();
 			// expect(glosser.lexicon.connectedGraph.nodes["naya|"].gloss).toEqual("");
-			// expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
-			// expect(glosser.lexicon.entryRelations[10].to.gloss).toEqual("");
+			// expect(glosser.lexicon.entryRelations[10].target.morphemes).toEqual("naya");
+			// expect(glosser.lexicon.entryRelations[10].target.gloss).toEqual("");
 
 			// With lexicon looking up incomplete entries
 			expect(glosser.lexicon.connectedGraph.nodes["naya"]).toBeUndefined();
 			expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBeDefined();
 			expect(glosser.lexicon.connectedGraph.nodes["naya|DES"]).toBe(glosser.lexicon["naya|DES"]);
 			expect(glosser.lexicon.connectedGraph.nodes["naya|"]).toBeUndefined();
-			expect(glosser.lexicon.entryRelations[10].to.morphemes).toEqual("naya");
-			expect(glosser.lexicon.entryRelations[10].to.gloss).toEqual("DES");
+			expect(glosser.lexicon.entryRelations[10].target.morphemes).toEqual("naya");
+			expect(glosser.lexicon.entryRelations[10].target.gloss).toEqual("DES");
 			expect(glosser.lexicon.entryRelations[10]).not.toBe(glosser.lexicon["naya|DES"]);
 			expect(glosser.lexicon["naya|DES"].warnMessage).toBeUndefined();
 
