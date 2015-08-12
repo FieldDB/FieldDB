@@ -1945,7 +1945,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           attributesToIgnore = [];
         }
         attributesToIgnore = attributesToIgnore.concat(FieldDBObject.internalAttributesToNotJSONify);
-        // this.debug("Ignoring for json ", attributesToIgnore);
+        this.debug("Ignoring for json ", attributesToIgnore);
         for (aproperty in this) {
           if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && !FieldDBObject.ignore(aproperty, attributesToIgnore)) {
             underscorelessProperty = aproperty.replace(/^_/, "");
