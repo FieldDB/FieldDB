@@ -421,6 +421,7 @@ describe("Database", function() {
         expect(result.corpora[0].dbname).toEqual(result.username + "-firstcorpus");
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://localhost:3183");
+        expect(error.details.connection).toBeDefined();
         expect(error.details.connection.userFriendlyServerName).toEqual("Localhost");
         expect(error.details.connection.serverLabel).toEqual("localhost");
         if (error.status === 500) {
@@ -432,6 +433,9 @@ describe("Database", function() {
         } else {
           expect(false).toBeTruthy();
         }
+      }).fail(function(exception){
+        console.log(exception.stack);
+        expect(exception).toEqual(" ");
       }).done(done);
     }, specIsRunningTooLong);
 

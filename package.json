@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "3.9.22",
+  "version": "3.16.12",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -42,14 +42,21 @@
     "bcrypt-nodejs": "0.0.3",
     "browserify-mime": "^1.2.9",
     "btoa": "^1.1.2",
+    "collections": "^1.2.3",
     "crypto-js": "^3.1.4",
     "diacritic": "0.0.2",
+    "frb": "git://github.com/cesine/frb.git#contenteditable",
     "mime": "^1.3.4",
     "node-cryptojs-aes": "^0.4.0",
     "q": "1.2.0",
     "recordmp3js": "0.5.0",
     "textgrid": "2.2.0",
     "underscore": "^1.8.3"
+  },
+  "optionalDependancies": {
+    "d3": "^3.5.5",
+    "jsdom": "^3.0.0",
+    "memory": "0.0.3"
   },
   "devDependencies": {
     "browserify": "9.0.7",

@@ -679,7 +679,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //     }
 
         //     $.each(array[a], forEachRow);
-        //     d.set("datumFields", fields);
+        //     d.set("fields", fields);
         //     if (audioVideo) {
         //       d.audioVideo.add(audioVideo);
         //       if (self.debugMode) {
@@ -742,8 +742,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             deferred.resolve(optionsWithResults);
           };
 
-          options.datum.datumFields.orthography.value = options.rawText;
-          options.datum.datumFields.utterance.value = options.rawText;
+          options.datum.fields.orthography.value = options.rawText;
+          options.datum.fields.utterance.value = options.rawText;
           options.datum.id = options.uri;
 
           self.debug("running write for preprocessed");

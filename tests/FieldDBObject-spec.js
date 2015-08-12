@@ -1,13 +1,15 @@
 "use strict";
 /* globals localStorage, FieldDB*/
 var FieldDBObject;
+var Q;
 try {
   if (FieldDB) {
     FieldDBObject = FieldDB.FieldDBObject;
+    Q = FieldDB.Q;
   }
 } catch (e) {}
 FieldDBObject = FieldDBObject || require("./../api/FieldDBObject").FieldDBObject;
-
+Q = Q || require("q");
 
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
@@ -1242,7 +1244,7 @@ describe("FieldDBObject", function() {
 
       objectToDelete.prompt("Why do you want to delete this item?").then(function(results) {
         expect(results).toBeDefined();
-        expect(results.message).toEqual(" ");
+        expect(results.message).toEqual("Why do you want to delete this item?");
         expect(objectToDelete.promptMessage).toEqual("Why do you want to delete this item?");
         expect(results.response).toEqual(false);
         expect(true).toBeFalsy();
@@ -1412,36 +1414,42 @@ describe("FieldDBObject", function() {
     it("should be able to ask the user asynchronously what to do if overwrite is not specified false case", function(done) {
       aBaseObject.merge("self", atriviallyDifferentObject);
 
-      setTimeout(function() {
+      Q.allSettled(aBaseObject.confirmMergePromises).then(function() {
         expect(aBaseObject.externalString).toEqual("easy model");
         expect(aBaseObject.externalObject.internalString).toEqual("internal");
 
         expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
         expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
-        done();
-      }, 10);
-      expect(aBaseObject.confirmMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> \"trivial model\"");
-      expect(aBaseObject.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal overwrite\"");
-    });
+      }, function(reason){
+        expect(reason).toEqual("");
+      }).fail(function(reason){
+        expect(reason).toEqual("");
+      }).done(done);
+      expect(aBaseObject.promptMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> trivial model");
+      expect(aBaseObject.externalObject.promptMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> internal overwrite");
+    }, specIsRunningTooLong);
 
 
     it("should be able to ask the user asynchronously what to do if overwrite is not specified  true case", function(done) {
-      aBaseObject.alwaysConfirmOkay = true;
-      aBaseObject.externalObject.alwaysConfirmOkay = true;
+      aBaseObject.alwaysReplyToPrompt = true;
+      aBaseObject.externalObject.alwaysReplyToPrompt = true;
       aBaseObject.merge("self", atriviallyDifferentObject);
 
-      setTimeout(function() {
+      Q.allSettled(aBaseObject.confirmMergePromises).then(function() {
         expect(aBaseObject.externalString).toEqual("trivial model");
         expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
 
         expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
         expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
-        done();
-      }, 10);
+      }, function(reason){
+        expect(reason).toEqual("");
+      }).fail(function(reason){
+        expect(reason).toEqual("");
+      }).done(done);
 
-      expect(aBaseObject.confirmMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> \"trivial model\"");
-      expect(aBaseObject.externalObject.confirmMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> \"internal overwrite\"");
-    });
+      expect(aBaseObject.promptMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> trivial model");
+      expect(aBaseObject.externalObject.promptMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> internal overwrite");
+    }, specIsRunningTooLong);
 
     it("should reject to merge items with different ids", function() {
       var aBaseObjectWithDifferentId = new FieldDBObject({

@@ -1,13 +1,15 @@
 /* globals alert, confirm, prompt, navigator, Android, FieldDB */
+"use strict";
+
 var Diacritics = require("diacritic");
 var Q = require("q");
-var package;
+var packageJson;
 try {
-  package = require("./../package.json");
+  packageJson = require("./../package.json");
 } catch (e) {
   console.log("failed to load package.json", e);
-  package = {
-    version: "2.2.0"
+  packageJson = {
+    version: "x.x.x"
   };
 }
 // var FieldDBDate = function FieldDBDate(options) {
@@ -88,6 +90,12 @@ var FieldDBObject = function FieldDBObject(json) {
   if (json && json.id) {
     this.useIdNotUnderscore = true;
   }
+  if (json && json.api && this.api) {
+    if (json.api !== this.api) {
+      console.log("Using " + this.api + " when the api of the incoming model was " + json.api);
+    }
+    delete json.api;
+  }
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
@@ -117,7 +125,7 @@ var FieldDBObject = function FieldDBObject(json) {
     try {
       this[member] = json[member];
     } catch (e) {
-      console.log(e.stack);
+      this.warn(e.stack);
     }
   }
   if (simpleModels.length > 0) {
@@ -135,6 +143,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "application",
   "bugMessage",
   "confirmMessage",
+  "confirmMergePromises",
   "contextualizer",
   "corpus",
   "currentDoc",
@@ -144,6 +153,7 @@ FieldDBObject.internalAttributesToNotJSONify = [
   "db",
   "debugMessages",
   "decryptedMode",
+  "dontRecurse",
   "fetching",
   "fieldsInColumns",
   "fossil",
@@ -179,7 +189,7 @@ FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesTo
 ]);
 
 FieldDBObject.ignore = function(property, ignorelist) {
-  if(!ignorelist){
+  if (!ignorelist) {
     throw new Error("missing the list of ignores");
   }
   if (ignorelist.indexOf(property) > -1 || ignorelist.indexOf(property.replace(/^_/, "")) > -1) {
@@ -194,7 +204,7 @@ FieldDBObject.DEFAULT_STRING = "";
 FieldDBObject.DEFAULT_OBJECT = {};
 FieldDBObject.DEFAULT_ARRAY = [];
 FieldDBObject.DEFAULT_COLLECTION = [];
-FieldDBObject.DEFAULT_VERSION = "v" + package.version;
+FieldDBObject.DEFAULT_VERSION = "v" + packageJson.version;
 FieldDBObject.DEFAULT_DATE = 0;
 
 FieldDBObject.render = function(options) {
@@ -263,6 +273,17 @@ FieldDBObject.todo = function(message, message2, message3, message4) {
   }
 };
 
+FieldDBObject.popup = function(message) {
+  try {
+    alert(message);
+  } catch (e) {
+    this.warn(" Couldn't tell user about a popup: " + message);
+    // console.log("Alert is not defined, this is strange.");
+  }
+  var type = this.fieldDBtype || this._id || "UNKNOWNTYPE";
+  console.log(type.toUpperCase() + " POPUP: " + message);
+};
+
 FieldDBObject.bug = function(message) {
   try {
     alert(message);
@@ -290,22 +311,39 @@ FieldDBObject.warn = function(message, message2, message3, message4) {
   }
 };
 
-FieldDBObject.prompt = function(message, optionalLocale) {
+FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
   var deferred = Q.defer(),
     self = this;
 
   Q.nextTick(function() {
     var response;
 
-    if (self.alwaysReplyToPrompt) {
-      console.warn(self.fieldDBtype.toUpperCase() + " NOT ASKING USER: " + message + " \nThe code decided that they would probably reply " + self.alwaysReplyToPrompt + " and it wasnt worth asking.");
-      response = self.alwaysReplyToPrompt;
+    if (self.alwaysReplyToPrompt !== undefined) {
+      response = providedInput || self.alwaysReplyToPrompt;
+      console.warn(self.fieldDBtype.toUpperCase() + " NOT PROMPTING USER: " + message + " \nThe code decided that they would probably reply `" + response + "` and it wasnt worth prompting.");
     } else {
       try {
-        response = prompt(message);
+        response = prompt(message, providedInput);
+
+        // Let the user enter info, even JSON
+        if (response === "yes") {
+          response = providedInput;
+        } else if (response !== null) {
+          if (typeof providedInput !== "string" && typeof providedInput !== "number") {
+            try {
+              var parsed = JSON.parse(response);
+              response = parsed;
+            } catch (e) {
+              FieldDB.FieldDBObject.bug("There was a problem parsing your input.").then(function() {
+                FieldDB.FieldDBObject.prompt(message, optionalLocale, providedInput);
+              });
+            }
+          }
+        }
+
       } catch (e) {
-        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO ASK USER: " + message + " pretending they said " + self.alwaysReplyToPrompt);
-        response = self.alwaysReplyToPrompt;
+        response = null;
+        console.warn(self.fieldDBtype.toUpperCase() + " UNABLE TO PROMPT USER: " + message + " pretending they said `" + response + "`");
       }
     }
     if (response !== null && response !== undefined && typeof response.trim === "function") {
@@ -422,6 +460,9 @@ FieldDBObject.guessType = function(doc) {
   if (guessedType === "FieldDBObject") {
     if (doc.session) {
       guessedType = "Datum";
+      if (doc.fields && doc.fields[0] === "judgement") {
+        guessedType = "LanguageDatum";
+      }
     } else if (doc.datumFields && doc.sessionFields) {
       guessedType = "Corpus";
     } else if (doc.collection === "sessions" && doc.sessionFields) {
@@ -611,6 +652,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       FieldDBObject.bug.apply(this, arguments);
     }
   },
+  popup: {
+    value: function(message) {
+      if (this.popupMessage) {
+        if (this.popupMessage.indexOf(message) > -1) {
+          this.warn("Not repeating popup message: " + message);
+          return;
+        }
+        this.popupMessage += ";;; ";
+      } else {
+        this.popupMessage = "";
+      }
+
+      this.popupMessage = this.popupMessage + message;
+      FieldDBObject.popup.apply(this, arguments);
+    }
+  },
   alwaysConfirmOkay: {
     get: function() {
       if (this.perObjectAlwaysConfirmOkay === undefined) {
@@ -700,6 +757,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   ensureSetViaAppropriateType: {
     value: function(propertyname, value, optionalInnerPropertyName) {
+      this.debug("ensureSetViaAppropriateType on " + propertyname, this.INTERNAL_MODELS);
       if (!propertyname) {
         console.error("Invalid call to ensureSetViaAppropriateType", value);
         throw new Error("Invalid call to ensureSetViaAppropriateType");
@@ -721,7 +779,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         !(value instanceof this.INTERNAL_MODELS[propertyname]) &&
         !(this.INTERNAL_MODELS[propertyname].compatibleWithSimpleStrings && typeof value === "string")) {
 
-        this.debug("Converting this into its type.", value.constructor.toString());
+        this.debug("Converting this into  type for " + propertyname, value.constructor.toString());
         value = new this.INTERNAL_MODELS[propertyname](value);
 
       }
@@ -1240,6 +1298,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           typeof anObject[aproperty] !== "function" &&
           !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
+        } else {
+          this.debug("Not merging " + aproperty, "parent ", anObject.parent ? anObject.parent.length : "");
         }
       }
 
@@ -1248,29 +1308,44 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           typeof anotherObject[aproperty] !== "function" &&
           !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
+        } else {
+          this.debug("Not merging " + aproperty, "parent ", anObject.parent ? anObject.parent.length : "");
         }
       }
 
-      this.debug(" Merging properties: ", propertyList);
+      this.debug(" Merging properties: " + this.id, propertyList);
 
       var handleAsyncConfirmMerge = function(self, apropertylocal) {
+        var deferred = Q.defer();
+        var promptInputText = anotherObject[apropertylocal];
+        if (typeof promptInputText === "object") {
+          promptInputText = JSON.stringify(anotherObject[apropertylocal]);
+        }
+        var context = self.id || self._id || "";
+        self.prompt(context + " I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + promptInputText, null, promptInputText)
+          .then(function(reply) {
+            // Let the user enter the value they would like
 
-        self.confirm("I found a conflict for " + apropertylocal + ", Do you want to overwrite it from " + JSON.stringify(anObject[apropertylocal]) + " -> " + JSON.stringify(anotherObject[apropertylocal]))
-          .then(function() {
             if (apropertylocal === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
               // resultObject._dbname = self.dbname;
               self.warn(" Keeping _dbname of " + resultObject.dbname);
             } else {
               self.warn("Async Overwriting contents of " + apropertylocal + " (this may cause disconnection in listeners)");
-              self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", anotherObject[apropertylocal]);
+              self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", reply.response);
 
-              resultObject[apropertylocal] = anotherObject[apropertylocal];
+              resultObject[apropertylocal] = reply.response;
             }
-          }, function() {
+            deferred.resolve(reply);
+          }, function(reason) {
             resultObject[apropertylocal] = anObject[apropertylocal];
+            deferred.reject(reason);
           }).fail(function(error) {
             console.error(error.stack, self);
+            deferred.reject(error);
           });
+
+        self.confirmMergePromises = self.confirmMergePromises || [];
+        self.confirmMergePromises.push(deferred.promise);
       };
 
       for (aproperty in propertyList) {
@@ -1279,9 +1354,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.debug("  Ignoring ---" + aproperty + "----");
           continue;
         }
-        if (this.debugMode) {
-          this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
-        }
+        // if (this.debugMode) {
+        this.debug("  Merging ---" + aproperty + "--- \n   :::" + JSON.stringify(resultObject[aproperty]) + ":::\n   :::" + JSON.stringify(anObject[aproperty]) + ":::\n   :::" + JSON.stringify(anotherObject[aproperty]) + ":::");
+        // }
 
         // if the result is missing the property, clone it from anObject or anotherObject
         if (resultObject[aproperty] === undefined || resultObject[aproperty] === null) {
@@ -1387,7 +1462,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             this.debug("after internal merge ", result);
             this.debug("after internal merge ", resultObject[aproperty]);
           } catch (e) {
-            console.warn("problem merging this " + aproperty, e);
+            console.warn("problem merging this " + aproperty, e.stack);
           }
           continue;
         }
@@ -1591,7 +1666,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
       if (!db) {
-        this.warn("Operations that need a database wont work for the " + this._id + " object");
+        this.warn("Operations that need a corpus/database wont work for the " + this._id + " object");
       }
 
       return db;
@@ -1954,8 +2029,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   addRelatedData: {
     value: function(json) {
       var relatedData;
-      if (this.datumFields && this.datumFields.relatedData) {
-        relatedData = this.datumFields.relatedData.json.relatedData || [];
+      if (this.fields && this.fields.relatedData) {
+        relatedData = this.fields.relatedData.json.relatedData || [];
       } else if (this.relatedData) {
         relatedData = this.relatedData;
       } else {
@@ -1998,8 +2073,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var source = this.id;
       if (this.id && this.rev) {
         var relatedData;
-        if (json.datumFields && json.datumFields.relatedData) {
-          relatedData = json.datumFields.relatedData.json.relatedData || [];
+        if (json.fields && json.fields.relatedData) {
+          relatedData = json.fields.relatedData.json.relatedData || [];
         } else if (json.relatedData) {
           relatedData = json.relatedData;
         } else {
@@ -2062,7 +2137,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.debug("sanitizeStringForPrimaryKey " + value);
         return value;
       } else if (typeof value === "number") {
-        return parseInt(value, 10);
+        return parseFloat(value, 10);
       } else {
         return null;
       }

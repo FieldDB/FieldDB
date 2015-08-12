@@ -1,3 +1,5 @@
+/* globals FieldDB */
+
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 
@@ -226,7 +228,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
 
       optionalKeyToIdentifyItem = optionalKeyToIdentifyItem || this.primaryKey || "id";
-      this.debug("find is searchingFor", searchingFor);
+      // this.debug("find is searchingFor", searchingFor);
       if (!searchingFor) {
         return results;
       }
@@ -273,17 +275,20 @@ Collection.prototype = Object.create(Object.prototype, {
         searchingFor = new RegExp("^" + searchingFor + "$");
       }
       this.debug("searchingFor", searchingFor);
-      for (var index in this.collection) {
-        if (!this.collection.hasOwnProperty(index)) {
-          continue;
-        }
+      for (var index = 0; index < this.collection.length; index++) {
         if (searchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
-          results.push(this.collection[index]);
+          // avoid having the same entry twice
+          if (!results[0] || results[0] !== this.collection[index]) {
+            results.push(this.collection[index]);
+          }
+          this.debug("Found a match ", results);
         } else if (fuzzy && sanitzedSearchingFor.test(this.collection[index][optionalKeyToIdentifyItem])) {
-          results.push(this.collection[index]);
+          if (!results[0] || results[0] !== this.collection[index]) {
+            results.push(this.collection[index]);
+          }
         }
       }
-
+      this.debug("Found total matches ", results.length);
       return results;
     }
   },
@@ -306,9 +311,9 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!searchingFor && value) {
         //previously code in the add function
 
-        this.debug("  the constructor of this before casting it ", value.constructor);
+        this.debug("  the constructor of this before casting it ");
         value = FieldDBObject.convertDocIntoItsType(value);
-        this.debug(" checking the constructor of this after casting it ", value.constructor);
+        this.debug(" checking the constructor of this after casting it ");
 
         if (value &&
           this.INTERNAL_MODELS &&
@@ -391,6 +396,10 @@ Collection.prototype = Object.create(Object.prototype, {
         this.warn("An item was added to the collection which has a reserved word for its key... dot notation will not work to retreive this object, but find() will work. ", value);
       }
 
+      if (value && typeof value === "object") {
+        value.parent = this;
+      }
+
       if (optionalInverted) {
         this.collection.unshift(value);
       } else {
@@ -441,7 +450,7 @@ Collection.prototype = Object.create(Object.prototype, {
       }
       var value = member[this.primaryKey];
       if (!value) {
-        this.warn("This object is missing a value for the primary key " + this.primaryKey + "... it will be hard to find in the collection.");
+        this.warn("This object is missing a value for the primary key " + this.primaryKey + "...not adding it because it will be hard to find in the collection.");
         this.debug("  not adding: ", member);
         return;
       }
@@ -466,9 +475,8 @@ Collection.prototype = Object.create(Object.prototype, {
   add: {
     value: function(value) {
       if (value && Object.prototype.toString.call(value) === "[object Array]") {
-        var self = this;
-        for (var itemIndex in value) {
-          value[itemIndex] = self.add(value[itemIndex]);
+        for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
+          value[itemIndex] = this.add(value[itemIndex]);
         }
         return value;
       }
@@ -966,7 +974,9 @@ Collection.prototype = Object.create(Object.prototype, {
         }
 
         if (anItem !== aCollection[idToMatch]) {
-          self.warn(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
+          // TODO why was this bug, then warn, and now showing for every context?
+          self.warn(" Looking at an anItem that should have matched the aCollection's member of " + idToMatch);
+          self.debug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
         }
 
         if (anotherItem === undefined) {
@@ -1004,7 +1014,7 @@ Collection.prototype = Object.create(Object.prototype, {
               overwrite = optionalOverwriteOrAsk;
               if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
                 // overwrite = self.confirm("Do you want to overwrite " + idToMatch);
-                self.confirm("I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
+                self.confirm(this.id + " I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
                   .then(function() {
                     self.warn("IM HERE HERE");
                     self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
@@ -1033,7 +1043,8 @@ Collection.prototype = Object.create(Object.prototype, {
           // var resultItem = resultCollection[idToMatch];
 
           if (anotherItem !== anotherCollection[idToMatch]) {
-            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
+            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+            self.debug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
           }
 
           if (anItem === undefined) {
@@ -1120,6 +1131,49 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  corpus: {
+    get: function() {
+      var db = null;
+      // this.debugMode = true;
+      if (this._corpus) {
+        db = this._corpus;
+        this.debug("this " + this._id + " has a _corpus hard coded inside it, using it.", db);
+      } else if (FieldDBObject.application && FieldDBObject.application._corpus) {
+        db = FieldDBObject.application._corpus;
+        this.debug("this " + this._id + " is running in the context where FieldDBObject.application._corpus is defined, using it.", db);
+      } else {
+
+        try {
+          if (FieldDB && FieldDB["Database"]) {
+            db = FieldDB["Database"].prototype;
+            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            this.debug(" the database", db);
+          }
+        } catch (e) {
+          var message = e ? e.message : " unknown error in getting the corpus";
+          if (message !== "FieldDB is not defined") {
+            this.warn(this._id + "Cant get the corpus, cant find the Database class.", e);
+            if (e) {
+              this.warn("  stack trace" + e.stack);
+            }
+          }
+        }
+      }
+      if (!db) {
+        this.warn("Operations that need a corpus/database wont work for the " + this._id + " object");
+      }
+
+      return db;
+    },
+    set: function(value) {
+      if (value && value.dbname && this.dbname && value.dbname !== this.dbname) {
+        this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
+        return;
+      }
+      this._corpus = value;
+    }
+  },
+  
   dbname: {
     get: function() {
       return;

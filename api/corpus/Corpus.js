@@ -1,7 +1,7 @@
 /* global window, OPrime */
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var CorpusMask = require("./CorpusMask").CorpusMask;
-var Datum = require("./../datum/Datum").Datum;
+var LanguageDatum = require("./../datum/LanguageDatum").LanguageDatum;
 var DatumField = require("./../datum/DatumField").DatumField;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var Session = require("./../datum/Session").Session;
@@ -65,6 +65,7 @@ var Corpus = function Corpus(options) {
   this.debug("Constructing corpus", options);
   CorpusMask.apply(this, arguments);
 };
+Corpus.DEFAULT_DATUM = LanguageDatum;
 
 Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototype */ {
   constructor: {
@@ -467,17 +468,31 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     }
   },
 
+  newDoc: {
+    value: function(options) {
+      return this.newDatum(options);
+    }
+  },
+
   newDatum: {
     value: function(options) {
       this.debug("Creating a datum for this corpus");
       if (!this.datumFields || !this.datumFields.clone) {
         throw new Error("This corpus has no default datum fields... It is unable to create a datum.");
       }
-      var datum = new Datum({
-        fields: new DatumFields(this.datumFields.cloneStructure()),
-        dbname: this.dbname,
-        confidential: this.confidential
-      });
+      var datum;
+      if (options instanceof Corpus.DEFAULT_DATUM) {
+        datum = options;
+        datum.dbname = this.dbname;
+        datum.confidential = this.confidential;
+        datum = this.updateDatumToCorpusFields(datum);
+      } else {
+        datum = new Corpus.DEFAULT_DATUM({
+          fields: new DatumFields(this.datumFields.cloneStructure()),
+          dbname: this.dbname,
+          confidential: this.confidential
+        });
+      }
       for (var field in options) {
         if (!options.hasOwnProperty(field)) {
           continue;

@@ -17,10 +17,11 @@ angular.module("fielddbAngular", [
   "ngSanitize",
   "ui.router",
   "ui.bootstrap",
+  // "ui.bootstrap.modal",
   "angularFileUpload",
   "contenteditable"
-]).run(["$rootScope", "$state", "$stateParams",
-  function($rootScope, $state, $stateParams) {
+]).run(["$rootScope", "$state", "$stateParams", "$location",
+  function($rootScope, $state, $stateParams, $location) {
     // From UI-Router sample
     // It's very handy to add references to $state and $stateParams to the $rootScope
     // so that you can access them from any scope within your applications.For example,
@@ -29,6 +30,20 @@ angular.module("fielddbAngular", [
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     console.log(" state ", $state, $stateParams);
+
+    if (FieldDB &&
+      FieldDB.FieldDBObject &&
+      FieldDB.FieldDBObject.application &&
+      FieldDB.FieldDBObject.application.router &&
+      !FieldDB.FieldDBObject.application.router.navigate) {
+
+      FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
+        console.warn("Not navigating to " + url + " please override navigate in a controller.");
+        // $location.url(url);
+        $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
+      };
+    }
+
   }
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
@@ -62,14 +77,7 @@ angular.module("fielddbAngular", [
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
   fieldDBApp.debugMode = true;
 
-  /* Overriding bug and warn messages to use angular UI components
-   TODO use angular modal for bugs */
-  FieldDB.FieldDBObject.bug = function(message) {
-    console.warn(message);
-  };
-  FieldDB.FieldDBObject.warn = function(message) {
-    console.warn(message);
-  };
+
 
   /* Add Event listeners */
   document.addEventListener("logout", function() {
@@ -126,7 +134,7 @@ angular.module("fielddbAngular", [
       fieldDBApp.debug(fieldDBApp.routeParams);
     }
   };
-  
+
   /* Add some default Routes/States which the app knows how to render */
   // if (FieldDB.Router.otherwise) {
   //   $urlRouterProvider.otherwise(FieldDB.Router.otherwise.redirectTo);

@@ -69,7 +69,7 @@ describe("UserPreference", function() {
 
     it("should allow remember if users change their preferences", function() {
       var prefs = new UserPreference({
-        debugMode: true
+        // debugMode: true
       });
       var serialized = prefs.toJSON();
       expect(serialized).toEqual({});
