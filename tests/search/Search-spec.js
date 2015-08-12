@@ -120,7 +120,6 @@ describe("Search: as a user I want my data at my finger tips", function() {
       var jsonToSave = search.toJSON();
       expect(jsonToSave).toBeDefined();
       // expect(jsonToSave.datalist).toBeDefined(); //TODO need to remove datalist from ignore list
-      expect(jsonToSave.datalist).toBeDefined();
       expect(jsonToSave.previousSearchDataLists).toBeDefined();
       // expect(jsonToSave.previousSearchDataListsCount).toEqual(1); //TODO 
       expect(jsonToSave.previousSearchDataLists["aserum%7C"]).toBeDefined();
