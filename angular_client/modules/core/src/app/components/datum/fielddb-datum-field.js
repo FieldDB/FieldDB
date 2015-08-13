@@ -10,7 +10,7 @@
 angular.module("fielddbAngular").directive("fielddbDatumField", function() {
 
   var directiveDefinitionObject = {
-    templateUrl: "components/datum/datum-field.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/datum/datum-field.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     scope: {

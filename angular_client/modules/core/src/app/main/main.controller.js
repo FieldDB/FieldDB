@@ -9,7 +9,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
-      templateUrl: "components/popup/prompt.html",
+      templateUrl: "app/components/popup/prompt.html",
       backdrop: false,
       controller: function($scope, $modalInstance) {
         $scope.okay = function(response) {
@@ -40,7 +40,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
-      templateUrl: "components/popup/prompt.html",
+      templateUrl: "app/components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
         $scope.okay = function(response) {
           $modalInstance.dismiss();
@@ -70,7 +70,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     var deferred = FieldDB.Q.defer();
     console.warn(message);
     $modal.open({
-      templateUrl: "components/popup/prompt.html",
+      templateUrl: "app/components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
         $scope.okay = function(response) {
           $modalInstance.dismiss();
@@ -101,7 +101,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     console.warn(message);
 
     $modal.open({
-      templateUrl: "components/popup/prompt.html",
+      templateUrl: "app/components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
         $scope.okay = function(response) {
 

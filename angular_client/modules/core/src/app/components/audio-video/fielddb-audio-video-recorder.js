@@ -10,7 +10,7 @@
 angular.module("fielddbAngular").directive("fielddbAudioVideoRecorder", function() {
 
   return {
-    templateUrl: "components/audio-video/audio-video-recorder.html",
+    templateUrl: "app/components/audio-video/audio-video-recorder.html",
     restrict: "A",
     transclude: false,
     scope: {

@@ -63,7 +63,7 @@ xdescribe("FieldDBController Routes", function() {
     inject(function($route, $location, $rootScope, $httpBackend) {
       expect($route.current).toBeUndefined();
 
-      $httpBackend.expectGET("components/corpus/corpus-page.html").respond(200);
+      $httpBackend.expectGET("app/components/corpus/corpus-page.html").respond(200);
       $location.path("/lingllama/communitycorpus");
       $rootScope.$digest();
       if (debugMode) {
@@ -71,7 +71,7 @@ xdescribe("FieldDBController Routes", function() {
       }
 
       expect($route.current).toBeDefined();
-      expect($route.current.templateUrl).toBe("components/corpus/corpus-page.html");
+      expect($route.current.templateUrl).toBe("app/components/corpus/corpus-page.html");
       expect($route.current.controller).toBe("FieldDBController");
 
     });
@@ -82,12 +82,12 @@ xdescribe("FieldDBController Routes", function() {
     inject(function($route, $location, $rootScope, $httpBackend) {
       expect($route.current).toBeUndefined();
 
-      $httpBackend.expectGET("components/import/import-page.html").respond(200);
+      $httpBackend.expectGET("app/components/import/import-page.html").respond(200);
       $location.path("/community/georgian/import");
       $rootScope.$digest();
 
       expect($location.path()).toBe("/community/georgian/import/data");
-      expect($route.current.templateUrl).toEqual("components/import/import-page.html");
+      expect($route.current.templateUrl).toEqual("app/components/import/import-page.html");
       expect($route.current.controller).toBe("FieldDBController");
     });
   });
