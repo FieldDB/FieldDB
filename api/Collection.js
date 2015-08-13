@@ -34,6 +34,10 @@ var Collection = function Collection(json) {
     };
   }
 
+  // if (json && json.corpus) {
+  //   this.corpus = json.corpus;
+  // }
+
   for (var member in json) {
     if (!json.hasOwnProperty(member) || member === "collection" /* set collection after all else has been set */ ) {
       continue;
@@ -586,7 +590,7 @@ Collection.prototype = Object.create(Object.prototype, {
 
       this.debug("requested remove of ", searchingFor);
       if (searchingFor.length === 0) {
-        this.warn("Didn't remove object(s) which were not in the collection.", searchingFor);
+        this.warn("Didn't need to remove object(s) which were not in the collection.");
         return removed;
       }
       /*
@@ -738,7 +742,7 @@ Collection.prototype = Object.create(Object.prototype, {
       this.whenReady = deferred.promise;
 
       this.map(function(item) {
-        console.log("saving ", item);
+        self.debug("saving ", item);
         if (item) {
           promises.push(item.save(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl));
         } else {
@@ -975,8 +979,8 @@ Collection.prototype = Object.create(Object.prototype, {
 
         if (anItem !== aCollection[idToMatch]) {
           // TODO why was this bug, then warn, and now showing for every context?
-          self.warn(" Looking at an anItem that should have matched the aCollection's member of " + idToMatch);
-          self.debug(" Looking at an anItem that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
+          // self.warn(" Looking at an anItem that should have matched the aCollection's member of " + idToMatch);
+          self.debug(" Looking at an an Item that doesnt match the aCollection's member of " + idToMatch, anItem, aCollection[idToMatch]);
         }
 
         if (anotherItem === undefined) {
@@ -1016,8 +1020,7 @@ Collection.prototype = Object.create(Object.prototype, {
                 // overwrite = self.confirm("Do you want to overwrite " + idToMatch);
                 self.confirm(this.id + " I found a conflict for " + idToMatch + ", Do you want to overwrite it from " + JSON.stringify(anItem) + " -> " + JSON.stringify(anotherItem))
                   .then(function() {
-                    self.warn("IM HERE HERE");
-                    self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
+                    self.debug("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
                     self.debug("Overwriting  ", anItem, " ->", anotherItem);
                     resultCollection[idToMatch] = anotherItem;
                   }, function() {
@@ -1027,7 +1030,7 @@ Collection.prototype = Object.create(Object.prototype, {
                     console.error(error.stack, self);
                   });
               } else {
-                self.warn("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
+                self.debug("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
                 self.debug("Overwriting  ", anItem, " ->", anotherItem);
                 resultCollection[idToMatch] = anotherItem;
               }
@@ -1043,7 +1046,7 @@ Collection.prototype = Object.create(Object.prototype, {
           // var resultItem = resultCollection[idToMatch];
 
           if (anotherItem !== anotherCollection[idToMatch]) {
-            self.warn(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
+            // self.debug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch);
             self.debug(" Looking at an anItem that doesnt match the anotherCollection's member of " + idToMatch, anotherItem, anotherCollection[idToMatch]);
           }
 
@@ -1145,8 +1148,8 @@ Collection.prototype = Object.create(Object.prototype, {
 
         try {
           if (FieldDB && FieldDB["Database"]) {
-            db = FieldDB["Database"].prototype;
-            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            // db = FieldDB["Database"].prototype;
+            this.debug("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
             this.debug(" the database", db);
           }
         } catch (e) {
@@ -1170,10 +1173,11 @@ Collection.prototype = Object.create(Object.prototype, {
         this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
         return;
       }
+      this.debug("setting corpus ", value);
       this._corpus = value;
     }
   },
-  
+
   dbname: {
     get: function() {
       return;

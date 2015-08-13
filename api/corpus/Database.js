@@ -465,7 +465,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       try {
         connectionInfo = localStorage.getItem("_connectionInfo");
       } catch (e) {
-        this.warn("Localstorage is not available, there will be no connectionInfo persistance across loads");
+        // this.debug("Localstorage is not available, there will be no connectionInfo persistance across loads");
         this.debug("Localstorage is not available, using the object there will be no persistance across loads", e, this._connectionInfo);
         connectionInfo = this._connectionInfo;
       }
@@ -570,7 +570,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         var validateUsername = Connection.validateUsername(options[usernameField]);
         if (validateUsername.changes.length > 0) {
           options[usernameField] = validateUsername.identifier;
-          self.warn(" Invalid username ", validateUsername.changes.join("\n "));
+          self.debug(" Invalid username ", validateUsername.changes.join("\n "));
           deferred.reject({
             error: validateUsername,
             userFriendlyErrors: validateUsername.changes,

@@ -2,7 +2,7 @@
 
 angular.module("fielddbAngular").directive("fielddbOfflineControls", function() {
   return {
-    templateUrl: "components/connection/offline-controls.html",
+    templateUrl: "app/components/connection/offline-controls.html",
     restrict: "A",
     transclude: false,
     scope: {

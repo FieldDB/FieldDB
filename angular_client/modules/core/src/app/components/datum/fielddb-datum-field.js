@@ -1,20 +1,29 @@
 "use strict";
 
-angular.module("fielddbAngular").directive("fielddbCorpus", function() {
+/**
+ * @ngdoc directive
+ * @name fielddbAngular.directive:fielddbDatumField
+ * @description
+ * # fielddbDatumField
+ */
+
+angular.module("fielddbAngular").directive("fielddbDatumField", function() {
 
   var directiveDefinitionObject = {
-    templateUrl: "components/corpus/corpus.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/datum/datum-field.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     scope: {
-      corpus: "=json"
+      datumField: "=json"
     },
     // controller: function($scope, $element, $attrs, $transclude, otherInjectables) {
     // controller: function($scope, $element, $attrs, $transclude) {
     //   console.log("in controller");
     //   console.log($element.html());
     // },
-    link: function postLink() {
+    link: function postLink(scope) {
+      console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      scope.contextualize = scope.$root.contextualize;
     },
     priority: 0,
     replace: false,
@@ -28,7 +37,7 @@ angular.module("fielddbAngular").directive("fielddbCorpus", function() {
     //     post: function postLink(scope, iElement, iAttrs, controller) {
     //       console.log("in postLink");
     //       console.log(iElement.html());
-    //       iElement.text("this is the corpus directive");
+    //       iElement.text("this is the datumField directive");
     //     }
     //   }
     //   // or

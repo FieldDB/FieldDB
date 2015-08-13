@@ -1,7 +1,7 @@
 {
   "name": "fielddb-prototype",
   "version": "3.16.12",
-  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB",
+  "homepage": "https://github.com/FieldDB/FieldDB",
   "authors": [
     "cesine <cesine@yahoo.com>",
     "trisapeace <trisapeace@gmail.com>",
@@ -34,6 +34,6 @@
     "jquery": "2.0.0",
     "handlebars": "~1.3.0",
     "fielddb-glosser": "1.82.3",
-    "fielddb": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb.git"
+    "fielddb": "git://github.com/FieldDB/bower-fielddb.git"
   }
 }

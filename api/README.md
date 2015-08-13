@@ -15,7 +15,7 @@ $ bower install fielddb --save
 
 ## Angular
 
-There are angular directives which were built to use provide UI bindings with this codebase in angular. You can use bower to install it. For usage examples see the readme in the [angular_client/modules/core/README.md](https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/angular_client/modules/core).
+There are angular directives which were built to use provide UI bindings with this codebase in angular. You can use bower to install it. For usage examples see the readme in the [angular_client/modules/core/README.md](https://github.com/FieldDB/FieldDB/tree/master/angular_client/modules/core).
 
 ```bash
 $ bower install fielddb-angular --save

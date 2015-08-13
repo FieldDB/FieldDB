@@ -20,14 +20,25 @@ try {
 	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom@3.0` ");
 }
 
+var mockCorpus = {
+  dbname: "jenkins-firstcorpus",
+  url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+  prefs: {
+    maxLexiconSize: 400
+  }
+};
+
 describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
-	var tinyLexicon = [{
-		morphemes: "kjun",
-		gloss: "why"
-	}, {
-		morphemes: "naya",
-		gloss: "DES"
-	}];
+	var tinyLexicon = {
+		corpus: mockCorpus,
+		collection: [{
+			morphemes: "kjun",
+			gloss: "why"
+		}, {
+			morphemes: "naya",
+			gloss: "DES"
+		}]
+	};
 
 	var tinyPrecedenceRelationsFromCouchDBMapReduce = [{
 		"key": {
@@ -588,16 +599,16 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			// The morphemeSegmentationKnowledgeBase isnt an array, its a hasmap of ngrams by count
 			glosser.lexicon.entryRelations = glosser.morphemeSegmentationKnowledgeBase;
 			expect(glosser.lexicon.entryRelations.length).toEqual(14);
-			expect(glosser.lexicon.entryRelations.map(function(relation){
+			expect(glosser.lexicon.entryRelations.map(function(relation) {
 				return relation.source.morphemes;
-			})).toEqual([ "lloqsi", "lloqsi", "nay", "nay", "wa", "wa", "ra", "ra", "victor", "victor", "tusu", "tusu", "naya", "naya" ]);
+			})).toEqual(["lloqsi", "lloqsi", "nay", "nay", "wa", "wa", "ra", "ra", "victor", "victor", "tusu", "tusu", "naya", "naya"]);
 			expect(glosser.lexicon.entryRelations[10]).toBeDefined();
 			expect(glosser.lexicon.entryRelations[10].source.morphemes).toEqual("tusu");
 			expect(glosser.lexicon.entryRelations[10].target.morphemes).toEqual("naya");
 			expect(glosser.lexicon.entryRelations[10].target.gloss).toBeUndefined();
 			expect(glosser.lexicon.entryRelations[10].relation).toEqual("precedes");
 			expect(glosser.lexicon.entryRelations[10].source.contexts).toEqual(["Victor-ta tusu-naya-n"]);
-			
+
 
 			glosser.lexicon.updateConnectedGraph();
 

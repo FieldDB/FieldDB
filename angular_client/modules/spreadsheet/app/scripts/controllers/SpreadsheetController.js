@@ -1501,7 +1501,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
             cant see each others data.
 
             Probably the clients wanted the spreadsheet roles to appear implicative since its more common.
-            see https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1113
+            see https://github.com/FieldDB/FieldDB/issues/1113
           */
       case "admin":
         newUserRoles.admin = true;
@@ -1671,7 +1671,6 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   /**
    *  changes the current page, which is watched in a directive, which in turn calls loadPaginatedData above
-   * @return {[type]} [description]
    */
   $scope.pageForward = function() {
     $scope.activeDatumIndex = null;

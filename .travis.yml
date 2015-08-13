@@ -34,6 +34,9 @@ before_install:
   - npm install -g bower
   - npm install -g jasmine-node
   - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+  - npm install d3
+  - npm install jsdom@3.0
+  - npm install memory
 
 before_script:
   # Make sure the emulator has started before running tests
@@ -49,10 +52,10 @@ env:
 after_success:
   # on:
   #   branch: master
-  #   condition: $TRAVIS_REPO_SLUG = "OpenSourceFieldlinguistics/FieldDB"
+  #   condition: $TRAVIS_REPO_SLUG = "FieldDB/FieldDB"
   - echo branch $TRAVIS_BRANCH
   - echo repo $TRAVIS_REPO_SLUG
   - touch "angular_client/modules/spreadsheet/dist/deployed at `date`"
   # - NOW=`date` && sed "s/\(appVersion = \"[^,]*ss\)\"/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js  > output && echo $NOW
   # - mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
-  # - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]  && [ "${TRAVIS_REPO_SLUG}" = "OpenSourceFieldlinguistics/FieldDB" ]  && ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*'
+  # - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]  && [ "${TRAVIS_REPO_SLUG}" = "FieldDB/FieldDB" ]  && ncftpput -R -v -u $USERNAME -p $PASSWORD $SERVER / angular_client/modules/spreadsheet/dist/*'

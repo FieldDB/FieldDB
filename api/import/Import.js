@@ -397,12 +397,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // }));
         }
 
-        if (self.debugMode) {
-          self.debug("JSON.stringify(self.extractedHeaderObjects, null, 2)");
-          self.extractedHeaderObjects.map(function(headerField) {
-            self.debug("headerField", headerField);
-          });
-        }
+        self.debug("JSON.stringify(self.extractedHeaderObjects, null, 2)");
+        self.extractedHeaderObjects.map(function(headerField) {
+          self.debug("headerField", headerField);
+        });
 
         /*
          * Cycle through all the rows in table and create a datum with the matching fields.

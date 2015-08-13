@@ -38,7 +38,7 @@ angular.module("fielddbAngular", [
       !FieldDB.FieldDBObject.application.router.navigate) {
 
       FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
-        console.warn("Not navigating to " + url + " please override navigate in a controller.");
+        console.warn("Not navigating to " + url + " please override navigate in a controller.", options);
         // $location.url(url);
         $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
       };
@@ -98,7 +98,7 @@ angular.module("fielddbAngular", [
     "https://youtube.com/**",
     "https://youtu.be/**",
     "https://soundcloud.com/**",
-    "http://opensourcefieldlinguistics.github.io/**",
+    "http://fielddb.github.io/**",
     "http://*.example.org/**",
     "https://*.example.org/**",
     "https://localhost:3184/**",

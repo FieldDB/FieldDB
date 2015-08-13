@@ -685,15 +685,15 @@ describe("lib/Collection", function() {
       expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
 
       // expect(chicken).toEqual( " ");
-      expect(collection.warnMessage).toContain("Didn't remove object(s) which were not in the collection.");
+      expect(collection.warnMessage).toContain("Didn't need to remove object(s) which were not in the collection.");
       expect(removedOne).toEqual([]);
       expect(collection.removedCollection).toEqual([chicken, uppercasechicken]);
       expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
 
       collection.warnMessage = "";
-      expect(collection.warnMessage).not.toContain("Didn't remove object(s) which were not in the collection.");
+      expect(collection.warnMessage).not.toContain("Didn't need to remove object(s) which were not in the collection.");
       expect(collection.remove({})).toEqual([]);
-      expect(collection.warnMessage).toContain("Didn't remove object(s) which were not in the collection.");
+      expect(collection.warnMessage).toContain("Didn't need to remove object(s) which were not in the collection.");
       expect(collection.warnMessage).not.toContain("One of the requested removal items dont match what was removed");
 
       expect(collection.length).toEqual(4);

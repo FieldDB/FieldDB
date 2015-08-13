@@ -14,7 +14,6 @@ angular.module("fielddbAngular").directive("fielddbLocales", function() {
 
     /**
      * Error: 10 $digest() iterations reached. Aborting!
-     * @type {[type]}
      * http://stackoverflow.com/questions/14376879/error-10-digest-iterations-reached-aborting-with-dynamic-sortby-predicate
      */
     $timeout(function() {
@@ -39,7 +38,7 @@ angular.module("fielddbAngular").directive("fielddbLocales", function() {
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: "components/locales/locales.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/locales/locales.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     // scope: {

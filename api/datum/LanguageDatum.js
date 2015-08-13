@@ -107,7 +107,7 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
    * Morphemes of the datum, if morphemes is empty it will provide the utterance
    * or the orthography as a last resort copy
    * 
-   * @return {[type]} [description]
+   * @return {String} morphemes, or utterance or orthography
    */
   morphemes: {
     configurable: true,
