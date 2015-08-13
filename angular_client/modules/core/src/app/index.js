@@ -38,7 +38,7 @@ angular.module("fielddbAngular", [
       !FieldDB.FieldDBObject.application.router.navigate) {
 
       FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
-        console.warn("Not navigating to " + url + " please override navigate in a controller.");
+        console.warn("Not navigating to " + url + " please override navigate in a controller.", options);
         // $location.url(url);
         $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
       };
