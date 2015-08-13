@@ -253,12 +253,6 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var deferred = Q.defer(),
         self = this;
 
-      try {
-        throw new Error("Decrypted mode was requested by the app. ");
-      } catch (exception) {
-        console.warn("Decrypted mode was requested by the app. ", exception.stack);
-      }
-
       this.whenDecryptionReady = deferred.promise;
       var username;
       if (this.authentication && this.authentication.user && this.authentication.user.username) {

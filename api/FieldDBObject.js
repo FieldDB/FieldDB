@@ -98,6 +98,9 @@ var FieldDBObject = function FieldDBObject(json) {
   }
   this.verbose("In parent an json", json);
   // Set the confidential first, so the rest of the fields can be encrypted
+  // if (json && json.corpus) {
+  //   this.corpus = json.corpus;
+  // }
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
     this.confidential = new this.INTERNAL_MODELS["confidential"](json.confidential);
   }
@@ -1330,7 +1333,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
               // resultObject._dbname = self.dbname;
               self.warn(" Keeping _dbname of " + resultObject.dbname);
             } else {
-              self.warn("Async Overwriting contents of " + apropertylocal + " (this may cause disconnection in listeners)");
+              self.debug("Async Overwriting contents of " + apropertylocal + " (this may cause disconnection in listeners)");
               self.debug("Async Overwriting  ", anObject[apropertylocal], " ->", reply.response);
 
               resultObject[apropertylocal] = reply.response;
@@ -1478,7 +1481,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             this.warn(" Keeping _dbname of " + resultObject.dbname);
           } else {
             if (!FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
-              this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+              this.debug("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
             }
             this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
 
@@ -1651,8 +1654,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         try {
           if (FieldDB && FieldDB["Database"]) {
-            db = FieldDB["Database"].prototype;
-            this.warn("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
+            // db = FieldDB["Database"].prototype;
+            this.debug("  using the Database.prototype to run db calls for " + this._id + ", this could be problematic " + this._id + " .");
             this.debug(" the database", db);
           }
         } catch (e) {
@@ -1676,6 +1679,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         this.warn("The corpus " + value.db + " cant be set on this item, its db is different" + this.dbname);
         return;
       }
+      this.debug("setting corpus ", value);
       this._corpus = value;
     }
   },

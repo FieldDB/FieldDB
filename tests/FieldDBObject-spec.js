@@ -527,7 +527,7 @@ describe("FieldDBObject", function() {
       expect(snapshot.enteredByUser.value).toEqual("unknown");
       expect(snapshot.enteredByUser.json.user.name).toEqual("");
       expect(snapshot.enteredByUser.json.user.username).toEqual("unknown");
-      console.log("hardware", snapshot.enteredByUser.json.hardware);
+      object.debug("hardware", snapshot.enteredByUser.json.hardware);
       if (snapshot.enteredByUser.json.software.appVersion === "PhantomJS unknown") {
         expect(snapshot.enteredByUser.json.software.appVersion).toEqual("PhantomJS unknown");
         expect(snapshot.enteredByUser.json.hardware.cpus).toBeGreaterThan(1);
@@ -699,7 +699,7 @@ describe("FieldDBObject", function() {
         expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
         expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
         expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
-        // console.log("hardware", object.modifiedByUser.json.hardware);
+        object.debug("hardware", object.modifiedByUser.json.hardware);
         expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
 
@@ -714,7 +714,7 @@ describe("FieldDBObject", function() {
       expect(object.modifiedByUser.json.users[0].username).toEqual("inuktitutcleaningbot");
       expect(object.modifiedByUser.json.users[1].username).toEqual("unknown");
       expect(object.modifiedByUser.json.users[1].software.appVersion.length).toBeGreaterThan(10);
-      // console.log("hardware", object.modifiedByUser.json.hardware);
+      object.debug("hardware", object.modifiedByUser.json.hardware);
       expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
     }, specIsRunningTooLong);
@@ -1322,7 +1322,7 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalString).toEqual("trivial model");
       expect(aBaseObject.externalEqualString).toEqual("merging");
       expect(aBaseObject.externalArray).toEqual(["four", "two", "one", "three"]);
-      expect(aBaseObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
+      // expect(aBaseObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aBaseObject.externalObject.internalString).toEqual("internal overwrite");
       expect(aBaseObject.externalObject.internalTrue).toEqual(true);
@@ -1331,7 +1331,7 @@ describe("FieldDBObject", function() {
       expect(aBaseObject.externalObject.internalNumber).toEqual(2);
       expect(aBaseObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aBaseObject.externalObject.missingInOriginal).toEqual("i'm a new property");
-      expect(aBaseObject.externalObject.warnMessage).toContain("Overwriting contents of internalString (this may cause disconnection in listeners)");
+      // expect(aBaseObject.externalObject.warnMessage).toContain("Overwriting contents of internalString (this may cause disconnection in listeners)");
 
       // Make sure atriviallyDifferentObject is as it was
       expect(atriviallyDifferentObject).not.toEqual(aBaseObject);
@@ -1361,7 +1361,7 @@ describe("FieldDBObject", function() {
       expect(aThirdObject.externalString).toEqual("trivial model");
       expect(aThirdObject.externalEqualString).toEqual("merging");
       expect(aThirdObject.externalArray).toEqual(["four", "two", "one", "three"]);
-      expect(aThirdObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
+      // expect(aThirdObject.warnMessage).toContain("Overwriting contents of externalString (this may cause disconnection in listeners)");
 
       expect(aThirdObject.externalObject.internalString).toEqual("internal overwrite");
       expect(aThirdObject.externalObject.internalTrue).toEqual(true);
@@ -1370,7 +1370,7 @@ describe("FieldDBObject", function() {
       expect(aThirdObject.externalObject.internalNumber).toEqual(2);
       expect(aThirdObject.externalObject.missingInTarget).toEqual("i'm a old property");
       expect(aThirdObject.externalObject.missingInOriginal).toEqual("i'm a new property");
-      expect(aThirdObject.externalObject.warnMessage).toContain("Overwriting contents of internalString (this may cause disconnection in listeners)");
+      // expect(aThirdObject.externalObject.warnMessage).toContain("Overwriting contents of internalString (this may cause disconnection in listeners)");
 
       // Make sure aBaseObject is as it was
       expect(aBaseObject.externalString).toEqual("easy model");
