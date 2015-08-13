@@ -79,7 +79,7 @@ try {
  *        their allomorphs and glosses. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
  *
- *
+ * @name Lexicon
  * @extends Collection
  *
  * @constructs
@@ -1364,10 +1364,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * http://bl.ocks.org/mbostock/1153292
    * http://alignedleft.com/tutorials/d3/binding-data
    *
-   * @param  {[type]} rulesGraph [description]
-   * @param  {[type]} divElement [description]
-   * @param  {[type]} dbname  [description]
-   * @return {[type]}            [description]
+   * @param  {Object} rulesGraph [description]
+   * @param  {Object} divElement [description]
+   * @param  {Object} dbname  [description]
+   * @return {Object}            [description]
    */
   visualizeAsForceDirectedGraph: {
     value: function(options) {
@@ -1831,7 +1831,7 @@ Lexicon.lexicon_nodes_mapReduce = function(doc, emit, rows) {
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
  *
- * @param {[type]} options [description]
+ * @param {Object} options [description]
  */
 var LexiconFactory = function(options) {
   var lex = new Lexicon(options);

@@ -115,8 +115,8 @@ function(doc) {
    * https://mths.be/esrever v0.2.0 by @mathias
    * https://raw.githubusercontent.com/mathiasbynens/esrever/master/esrever.js
    *
-   * @param  {[type]} input [description]
-   * @return {[type]}       [description]
+   * @param  {String} input [description]
+   * @return {String}       [description]
    */
   var reverseUnicodeString = function(input) {
 
