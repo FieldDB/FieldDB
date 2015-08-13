@@ -476,7 +476,8 @@ describe("Data List", function() {
     });
 
     it("should serialize existing datalists without breaking prototype app", function() {
-      // JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)).debugMode = true;
+      // JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL))
+      // .debugMode = true;
       var list = new DataList(JSON.parse(JSON.stringify(SAMPLE_DATALIST_MODEL)));
 
 
