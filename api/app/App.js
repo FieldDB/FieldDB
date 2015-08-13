@@ -253,11 +253,20 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       var deferred = Q.defer(),
         self = this;
 
-      this.whenDecryptionReady = deferred.promise;
       var username;
       if (this.authentication && this.authentication.user && this.authentication.user.username) {
         username = this.authentication.user.username;
+      } else {
+        return;
       }
+      this.whenDecryptionReady = deferred.promise;
+
+      // try {
+      //   throw new Error("Decrypted mode was requested by the app. ");
+      // } catch (exception) {
+      //   console.warn("Decrypted mode was requested by the app. ", exception.stack);
+      // }
+
       this.prompt("Some data which you are about to view is encrypted. You can only view encrypted data if you confirm your identity. If you would like to edit or view the data we need to make sure that you are " + username).then(function(promptDetails) {
         if (self.application && self.application.authentication && typeof self.application.authentication.confirmIdentity === "function") {
           self.application.authentication.confirmIdentity({
@@ -298,7 +307,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (this._decryptedMode !== undefined) {
         return this._decryptedMode;
       }
-      if (!this.whenDecryptionReady) {
+      if (!this.whenDecryptionReady && !this.authentication.loggingIn) {
         this.enterDecryptedMode();
       }
     },
