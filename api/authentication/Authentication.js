@@ -149,7 +149,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       dataToPost.username = loginDetails.username;
       dataToPost.password = loginDetails.password;
       dataToPost.authUrl = loginDetails.authUrl;
-
+      dataToPost.connection = loginDetails.connection;
       //if the same user is re-authenticating, include their details to sync to the server.
       tempUser.fetch();
       if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
@@ -297,6 +297,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         return deferred.promise;
       }
 
+      if (loginDetails.connection) {
+        corpusServersWhichHouseUsersCorpora.push(loginDetails.connection.corpusUrl);
+      }
       this.user.corpora.map(function(connection) {
         var addThisServerIfNotAlreadyThere = function(url) {
           var couchdbSessionUrl = url.replace(connection.dbname, "_session");

@@ -12,6 +12,9 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
   var controller = function($scope, $rootScope) {
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
+    if (!$scope.loginDetails.connection) {
+      $scope.loginDetails.connection = $scope.application.currentConnection;
+    }
     // $scope.application.authentication = $scope.application.authentication || {};
     // $scope.application.authentication.user = $scope.application.authentication.user || {};
     if ($scope.application && typeof $scope.application.debug === "function") {
