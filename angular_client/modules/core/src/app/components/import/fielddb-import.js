@@ -200,7 +200,7 @@ angular.module("fielddbAngular").directive("fielddbImport", function() {
   controller.$inject = ["$scope", "$upload", "$rootScope"];
 
   var directiveDefinitionObject = {
-    templateUrl: "components/import/import.html",
+    templateUrl: "app/components/import/import.html",
     restrict: "A",
     transclude: false,
     scope: {

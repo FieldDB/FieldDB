@@ -38,7 +38,7 @@ angular.module("fielddbAngular").directive("fielddbLocales", function() {
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: "components/locales/locales.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/locales/locales.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     // scope: {

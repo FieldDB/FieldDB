@@ -5,7 +5,7 @@ angular.module("fielddbAngular").directive("fielddbSearch", function() {
   search.sortBy = "dateCreated";
   search.fields = ["utterance", "translation"];
   return {
-    templateUrl: "components/search/search.html",
+    templateUrl: "app/components/search/search.html",
     restrict: "A",
     transclude: false,
     scope: true,

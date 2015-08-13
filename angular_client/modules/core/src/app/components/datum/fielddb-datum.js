@@ -8,7 +8,7 @@
  */
 angular.module("fielddbAngular").directive("fielddbDatum", function() {
   return {
-    templateUrl: "components/datum/datum_generic.html",
+    templateUrl: "app/components/datum/datum_generic.html",
     restrict: "A",
     transclude: false,
     scope: {

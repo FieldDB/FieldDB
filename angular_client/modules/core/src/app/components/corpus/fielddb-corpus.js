@@ -3,7 +3,7 @@
 angular.module("fielddbAngular").directive("fielddbCorpus", function() {
 
   var directiveDefinitionObject = {
-    templateUrl: "components/corpus/corpus.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/corpus/corpus.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     scope: {

@@ -29,13 +29,13 @@ angular.module("fielddbAngular").directive("fielddbUser", function() {
   var directiveDefinitionObject = {
     templateUrl: function(elem, attrs) {
       if (attrs.view === "User") {
-        return "components/user/user-page.html";
+        return "app/components/user/user-page.html";
       } else if (attrs.view === "UserMask") {
-        return "components/user/user.html";
+        return "app/components/user/user.html";
       } else if (attrs.view === "Participant") {
-        return "components/user/participant.html";
+        return "app/components/user/participant.html";
       } else {
-        return "components/user/user.html";
+        return "app/components/user/user.html";
       }
     },
     restrict: "A",
