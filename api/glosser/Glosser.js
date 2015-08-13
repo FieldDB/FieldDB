@@ -598,6 +598,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
               break;
             }
             for (var suffixMatchIndex = 0; suffixMatchIndex < options.matchingRules.length; suffixMatchIndex++) {
+              if (matchedRules[j].r[0].key.y === "@" && suffixtemplate.length > 1) {
+                continue;
+              }
               var suffixmatch = options.matchingRules[suffixMatchIndex];
 
               // this morpheme matches, and the following morpheme can be found somewhere later in the word
@@ -607,7 +610,9 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
                   // following morphemes)
                   this.debug("Ambiguity point for suffixes " + word + " " + suffixtemplate[ii + 1], options.alternateMorphemeSegmentationsByWord[word]);
                   options.alternateMorphemeSegmentationsByWord[word].suffixTemplates.push(suffixtemplate.pop());
-                  break;
+                  if (suffixtemplate[i + 1].length < matchedRules[j].r[0].key.x.length) {
+                    suffixtemplate[i + 1] = matchedRules[j].r[0].key.x;
+                  }
                 } else {
                   suffixtemplate[ii + 1] = suffixmatch.morphemes[0];
                   this.debug("   suffixtemplate " + suffixtemplate.join("-"));
