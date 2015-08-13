@@ -300,7 +300,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.fetching = this.loading = true;
       this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
           self.fetching = self.loading = false;
-          self.warn("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
+          self.debug("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
           if (!generatedDatalist) {
             self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
             return;
@@ -542,16 +542,16 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
   },
 
   toJSON: {
-    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       // Force docIds to be set to current docs
       if (this.docs && this.docs.length > 0) {
         this.docIds = null;
         this.docIds = this.docIds;
       }
-      removeEmptyAttributes = removeEmptyAttributes || [];
-      removeEmptyAttributes = removeEmptyAttributes.concat(["docs"]);
-      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes]);
+      attributesToIgnore = attributesToIgnore || [];
+      attributesToIgnore.push("_docs");
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, attributesToIgnore);
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore]);
       // delete json.docs;
       this.todo("Adding datumIds for backward compatability until prototype can handle docIds");
       json.datumIds = this.docIds;

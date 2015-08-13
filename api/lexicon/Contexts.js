@@ -101,6 +101,12 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
     }
   },
 
+  debug: {
+    value: function() {
+      FieldDBObject.prototype.debug.apply(this, arguments);
+    }
+  },
+  
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       attributesToIgnore = attributesToIgnore || [];
@@ -248,7 +254,7 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
     configurable: true,
     get: function() {
       if (!this.collection) {
-        return ""
+        return "";
       }
       var preview = this.map(function(context) {
         return context.id;

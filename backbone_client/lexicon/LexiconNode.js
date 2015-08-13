@@ -11,11 +11,9 @@ define([
      *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
      * 
      * @description
-     * 
+     * @name  LexiconNode
      * @extends Backbone.Model
-     * 
      * @constructs
-     * 
      */
     initialize : function() {
     },

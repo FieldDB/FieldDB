@@ -17,7 +17,7 @@ env:FIELDDB_HOME=$HOME/fielddbhome
 # }
 
 # ls /Applications/SmartGit.app/Contents/MacOS/SmartGit || {
-#   echo 'You dont have SmartGit installed. We use SmartGit to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/1788' ;
+#   echo 'You dont have SmartGit installed. We use SmartGit to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/FieldDB/FieldDB/issues/1788' ;
 #   echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
 #   echo ''
 #   echo ''
@@ -129,12 +129,12 @@ echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
 echo "Downloading the FieldDB core from Github."
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/FieldDB.git
+git clone https://github.com/FieldDB/FieldDB.git
 cd FieldDB
 
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDB.git
+git remote add upstream https://github.com/FieldDB/FieldDB.git
 git remote rm origin
 
 echo " Installing build dependancies (managed by NPM)"
@@ -215,11 +215,11 @@ cd $env:FIELDDB_HOME/FieldDB
 echo ''
 echo "Downloading the PraatTextGridJS lib from Github, this is for the manipulating audio intervals in textgrid and/or json"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/PraatTextGridJS.git
+git clone https://github.com/FieldDB/PraatTextGridJS.git
 cd PraatTextGridJS
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/PraatTextGridJS.git
+git remote add upstream https://github.com/FieldDB/PraatTextGridJS.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/PraatTextGridJS.git;
 git remote -v
@@ -230,11 +230,11 @@ npm install
 echo ''
 echo "Downloading the Praat-Scripts lib from Github, this contains all the praat scripts the Audio web service can run. You can also use it to run/improve scripts locally"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/Praat-Scripts.git
+git clone https://github.com/FieldDB/Praat-Scripts.git
 cd Praat-Scripts
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/Praat-Scripts.git
+git remote add upstream https://github.com/FieldDB/Praat-Scripts.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/Praat-Scripts.git;
 git remote -v
@@ -245,11 +245,11 @@ npm install
 echo ''
 echo "Downloading the FieldDBGlosser lib from Github, this is for modifying the default glosser functionality"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/FieldDBGlosser.git
+git clone https://github.com/FieldDB/FieldDBGlosser.git
 cd FieldDBGlosser
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDBGlosser.git
+git remote add upstream https://github.com/FieldDB/FieldDBGlosser.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/FieldDBGlosser.git;
 git remote -v
@@ -285,11 +285,11 @@ echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Web server from Github, this is for the Public URLS and the website"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
+git clone https://github.com/FieldDB/FieldDBWebServer.git
 cd FieldDBWebServer
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git
+git remote add upstream https://github.com/FieldDB/FieldDBWebServer.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/FieldDBWebServer.git;
 git remote -v
@@ -302,11 +302,11 @@ echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 echo ''
 echo "Downloading the FieldDB Authentication webservice from Github, this is for validating users and creating databases"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService.git
+git clone https://github.com/FieldDB/AuthenticationWebService.git
 cd AuthenticationWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/AuthenticationWebService.git
+git remote add upstream https://github.com/FieldDB/AuthenticationWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AuthenticationWebService.git;
 git remote -v
@@ -320,11 +320,11 @@ echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Audio webservice from Github, this is for extracting audio from video etc, or running Praat processes on the audio to chunk the files into utterances etc"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
+git clone https://github.com/FieldDB/AudioWebService.git
 cd AudioWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/AudioWebService.git
+git remote add upstream https://github.com/FieldDB/AudioWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/AudioWebService.git;
 git remote -v
@@ -352,11 +352,11 @@ echo -en '\E[47;35m'"\033[1mJ"   # Magenta
 echo ''
 echo "Downloading the FieldDB Lexicon webservice from Github, this is for searching the databases, and some default glosser webservices"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
+git clone https://github.com/FieldDB/LexiconWebService.git
 cd LexiconWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/LexiconWebService.git
+git remote add upstream https://github.com/FieldDB/LexiconWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/LexiconWebService.git;
 git remote -v
@@ -370,11 +370,11 @@ echo -en '\E[47;34m'"\033[1mE" #Blue
 echo ''
 echo "Downloading the FieldDB Corpus webservice from Github, this is for wrapping the database server (we are currently using CouchDB) in CORS if you have to use a pre 1.3 version of CouchDB, as well as for the couchdb config files"
 cd $env:FIELDDB_HOME
-git clone https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
+git clone https://github.com/FieldDB/CorpusWebService.git
 cd CorpusWebService
 echo "Setting the upstream of the repository so that updates are easy to do"
 git remote rm upstream
-git remote add upstream https://github.com/OpenSourceFieldlinguistics/CorpusWebService.git
+git remote add upstream https://github.com/FieldDB/CorpusWebService.git
 git remote rm origin
 git remote add origin git@github.com:"$github_username"/CorpusWebService.git;
 git remote -v

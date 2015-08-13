@@ -8,7 +8,7 @@
  */
 angular.module("fielddbAngular").directive("fielddbSession", function() {
   return {
-    templateUrl: "components/session/session.html",
+    templateUrl: "app/components/session/session.html",
     restrict: "A",
     transclude: false,
     scope: {

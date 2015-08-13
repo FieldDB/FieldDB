@@ -38,7 +38,10 @@ var specIsRunningTooLong = 5000;
 
 var mockCorpus = {
   dbname: "jenkins-firstcorpus",
-  url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
+  url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+  prefs: {
+    maxLexiconSize: 400
+  }
 };
 var tinyPrecedenceRelations = [{
   "previous": {
@@ -130,18 +133,23 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
     it("should accept no options", function() {
-      var lexicon = new Lexicon();
+      var lexicon = new Lexicon({
+        corpus: mockCorpus
+      });
       expect(lexicon).toBeDefined();
     });
 
     it("should accept an array of entries", function() {
-      var lexicon = new Lexicon([{
-        morphemes: "one",
-        gloss: "one"
-      }, {
-        morphemes: "two",
-        gloss: "two"
-      }]);
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        collection: [{
+          morphemes: "one",
+          gloss: "one"
+        }, {
+          morphemes: "two",
+          gloss: "two"
+        }]
+      });
       expect(lexicon).toBeDefined();
       expect(lexicon.collection.length).toEqual(2);
       expect(lexicon.length).toEqual(2);
@@ -548,7 +556,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         count: 14
       });
       // contexts.debugMode = true;
-      console.log("\n\n");
+      // console.log("\n\n");
       contexts.add({
         URL: "",
         morphemes: "noqa-ta",
@@ -566,7 +574,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
     it("should be able to automerge contexts of equivalent nodes", function() {
-      var lexicon = new Lexicon();
+      var lexicon = new Lexicon({
+        corpus: mockCorpus
+      });
 
       var one = lexicon.add({
         morphemes: "one",
@@ -614,7 +624,13 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(SAMPLE_V1_LEXICON.rows[223].key.context).toEqual("noqa-yku");
       expect(SAMPLE_V1_LEXICON.rows[223].value).toEqual(1);
 
-      var lexicon = new Lexicon([SAMPLE_V1_LEXICON.rows[221], SAMPLE_V1_LEXICON.rows[223]]);
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        entryRelations: [
+          SAMPLE_V1_LEXICON.rows[221],
+          SAMPLE_V1_LEXICON.rows[223]
+        ]
+      });
       expect(lexicon).toBeDefined();
 
       expect(lexicon.length).toEqual(3);
@@ -649,7 +665,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     describe("render lexical entries", function() {
 
       it("should be able to build DOM elements with 2 way binding", function() {
-        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        var lexicon = new Lexicon({
+          corpus: mockCorpus,
+          entryRelations: SAMPLE_V3_LEXICON
+        });
         expect(lexicon).toBeDefined();
         expect(lexicon.length).toEqual(45);
         expect(lexicon.entryRelations.length).toEqual(447);
@@ -719,7 +738,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     describe("render connections between entries", function() {
 
       it("should be able to build precedence relations as a force directed graph", function() {
-        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        var lexicon = new Lexicon({
+          corpus: mockCorpus,
+          entryRelations: SAMPLE_V3_LEXICON
+        });
         expect(lexicon).toBeDefined();
         expect(lexicon.length).toEqual(45);
         expect(lexicon.entryRelations.length).toEqual(447);
@@ -786,7 +808,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     describe("render both entries and connections", function() {
 
       it("should be able to build precedence relations as a force directed graph", function() {
-        var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+        var lexicon = new Lexicon({
+          corpus: mockCorpus,
+          entryRelations: SAMPLE_V3_LEXICON
+        });
         expect(lexicon).toBeDefined();
         expect(lexicon.length).toEqual(45);
         expect(lexicon.entryRelations.length).toEqual(447);
@@ -834,7 +859,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   describe("backward compatibility", function() {
     it("should be able to automerge equivalent nodes", function() {
-      var lexicon = new Lexicon();
+      var lexicon = new Lexicon({
+        corpus: mockCorpus
+      });
 
       lexicon.add({
         morphemes: "one",
@@ -864,7 +891,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       var startingMemoryLoad = memoryLoad();
 
-      var lexicon = new Lexicon(SAMPLE_V1_LEXICON);
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        entryRelations: SAMPLE_V1_LEXICON
+      });
       expect(lexicon).toBeDefined();
       expect(lexicon.length).toEqual(84);
 
@@ -912,12 +942,12 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       var startingMemoryLoad = memoryLoad();
 
       var lexicon = new Lexicon({
-        entryRelations: SAMPLE_V2_LEXICON,
         corpus: {
           prefs: {
             maxDistanceForContext: 2
           }
-        }
+        },
+        entryRelations: SAMPLE_V2_LEXICON
       });
       expect(lexicon).toBeDefined();
       expect(lexicon.length).toEqual(41);
@@ -947,7 +977,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       var startingMemoryLoad = memoryLoad();
 
-      var lexicon = new Lexicon(SAMPLE_V3_LEXICON);
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        entryRelations: SAMPLE_V3_LEXICON
+      });
       expect(lexicon).toBeDefined();
       expect(lexicon.length).toEqual(45);
       expect(lexicon.collection.map(function(node) {
@@ -982,7 +1015,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       // var lexicon = new Lexicon(SAMPLE_V4_LEXICON);
 
-      var lexicon = new Lexicon();
+      var lexicon = new Lexicon({
+        corpus: mockCorpus
+      });
       expect(lexicon).toBeDefined();
       lexicon.entryRelations = SAMPLE_V4_LEXICON;
       expect(lexicon.length).toEqual(0);

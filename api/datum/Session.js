@@ -680,7 +680,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
           },
           dbname: this.dbname,
           docs: [],
-          debugMode: true
+          // debugMode: true
         };
       }
       this._datalist = new DataList(datalistJson);

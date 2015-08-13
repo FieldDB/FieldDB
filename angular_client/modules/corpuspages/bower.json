@@ -3,20 +3,20 @@
   "version": "3.16.12",
   "repository": {
     "type": "git",
-    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
+    "url": "git://github.com/FieldDB/FieldDB.git"
   },
   "description": "Dashboard to administor corpora's webpages",
-  "homepage": "http://opensourcefieldlinguistics.github.io/FieldDB/",
+  "homepage": "http://fielddb.github.io/FieldDB/",
   "bugs": {
-    "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
+    "url": "https://github.com/FieldDB/FieldDB/issues"
   },
   "main": [
     "dist/styles/*.css",
     "dist/scripts/*.js"
   ],
   "dependencies": {
-    "fielddb": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb.git",
-    "fielddb-angular": "git://github.com/OpenSourceFieldlinguistics/bower-fielddb-angular.git",
+    "fielddb": "git://github.com/FieldDB/bower-fielddb.git",
+    "fielddb-angular": "git://github.com/FieldDB/bower-fielddb-angular.git",
     "font-awesome": "~4.3.0"
   },
   "devDependencies": {

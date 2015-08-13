@@ -60,7 +60,7 @@ angular.module("fielddbAngular").directive("fielddbCollection", function() {
 
   var directiveDefinitionObject = {
     templateUrl: function() {
-      return "components/collection/collection.html";
+      return "app/components/collection/collection.html";
     },
     restrict: "A",
     transclude: false,

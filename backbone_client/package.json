@@ -2,13 +2,13 @@
   "name": "fielddb",
   "version": "2.24.0",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
-  "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/milestones?state=closed",
+  "homepage": "https://github.com/FieldDB/FieldDB/milestones?state=closed",
   "repository": {
     "type": "git",
-    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDB.git"
+    "url": "git://github.com/FieldDB/FieldDB.git"
   },
   "bugs": {
-    "url": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues"
+    "url": "https://github.com/FieldDB/FieldDB/issues"
   },
   "keywords": [
     "fielddb",

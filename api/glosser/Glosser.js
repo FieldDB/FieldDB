@@ -343,7 +343,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         },
         function(e) {
           self.fetching = false;
-          self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
+          self.debug("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
           self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
           deferred.reject(e);
         }).fail(function(exception) {
@@ -466,8 +466,8 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   /** 
    * Find the this.morphemeSegmentationKnowledgeBase which match in local precedence
-   * @param  {[type]} utteranceWithExplictWordBoundaries [description]
-   * @return {[type]}                                    [description]
+   * @param  {Object} options [description]
+   * @return {Object} options after processing                               [description]
    */
   findRelevantSegmentationContexts: {
     value: function(options) {

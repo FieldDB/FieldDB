@@ -86,7 +86,7 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
 
   /* Directive declaration */
   var directiveDefinitionObject = {
-    templateUrl: "components/authentication/authentication.html", // or // function(tElement, tAttrs) { ... },
+    templateUrl: "app/components/authentication/authentication.html", // or // function(tElement, tAttrs) { ... },
     restrict: "A",
     transclude: false,
     // scope: {

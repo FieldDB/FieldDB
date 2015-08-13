@@ -79,53 +79,57 @@ try {
  *        their allomorphs and glosses. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
  *
- *
+ * @name Lexicon
  * @extends Collection
  *
  * @constructs
  *
  */
 
-var Lexicon = function(options) {
+var Lexicon = function(json) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Lexicon";
   }
-  options = options || [];
+  json = json || [];
 
-  /* Treat the options in a fielddb way so they dont get added to the Collection directly */
-  if (options && (Object.prototype.toString.call(options) === "[object Array]" || options.rows)) {
-    if ((options.rows && options.rows[0] && options.rows[0].key && options.rows[0].key.relation) ||
-      (options[0] &&
-        (options[0].relation || (options[0].key && options[0].key.relation))
+  /* Treat the json in a fielddb way so they dont get added to the Collection directly */
+  if (json && (Object.prototype.toString.call(json) === "[object Array]" || json.rows)) {
+    if ((json.rows && json.rows[0] && json.rows[0].key && json.rows[0].key.relation) ||
+      (json[0] &&
+        (json[0].relation || (json[0].key && json[0].key.relation))
       )) {
-      if (options.rows) {
-        options.entryRelations = options.rows;
+      if (json.rows) {
+        json.entryRelations = json.rows;
       } else {
-        options = {
-          entryRelations: options
+        json = {
+          entryRelations: json
         };
       }
-      this.debug("constructing a lexicon from a set of connected nodes " + options.entryRelations.length);
+      this.debug("constructing a lexicon from a set of connected nodes " + json.entryRelations.length);
     } else {
       // The array passed in is the actional nodes 
-      options = {
-        collection: options
+      json = {
+        collection: json
       };
-      this.debug("constructing a lexicon from a set of nodes " + options.collection.length);
+      this.debug("constructing a lexicon from a set of nodes " + json.collection.length);
     }
   } else {
-    options.collection = options.collection || options.wordFrequencies || [];
-    if (options.orthography && (!options.collection || options.collection.length === 0) && typeof Lexicon.bootstrapLexicon === "function") {
+    json.collection = json.collection || json.wordFrequencies || [];
+    if (json.orthography && (!json.collection || json.collection.length === 0) && typeof Lexicon.bootstrapLexicon === "function") {
       this.warn("constructing a lexicon from an orthography");
-      Lexicon.bootstrapLexicon(options);
+      Lexicon.bootstrapLexicon(json);
     }
   }
 
-  this.debug("constructing a lexicon from options ");
+  if (json && json.corpus) {
+    this._corpus = json.corpus;
+  }
+
+  this.debug("constructing a lexicon from json ");
   this.id = "lexicon";
-  Collection.apply(this, arguments);
+  Collection.apply(this, [json]);
   if (this.entryRelations) {
-    this.debug("constructing a graph from lexicon's relations", options);
+    this.debug("constructing a graph from lexicon's relations", json);
     this.updateConnectedGraph();
   }
 };
@@ -1364,10 +1368,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * http://bl.ocks.org/mbostock/1153292
    * http://alignedleft.com/tutorials/d3/binding-data
    *
-   * @param  {[type]} rulesGraph [description]
-   * @param  {[type]} divElement [description]
-   * @param  {[type]} dbname  [description]
-   * @return {[type]}            [description]
+   * @param  {Object} rulesGraph [description]
+   * @param  {Object} divElement [description]
+   * @param  {Object} dbname  [description]
+   * @return {Object}            [description]
    */
   visualizeAsForceDirectedGraph: {
     value: function(options) {
@@ -1386,7 +1390,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         prefs.showRelations = ["precedes"];
       }
       if (!this.connectedGraph || (!this.connectedGraph.links || !this.connectedGraph.links.length) || !this.connectedGraph.nodes) {
-        console.log("Updating the connected graph, it wasnt ready yet. ", this.connectedGraph);
+        this.warn("Updating the connected graph, it wasnt ready yet. ", this.connectedGraph);
         this.updateConnectedGraph(prefs);
 
         if (!this.connectedGraph || !this.connectedGraph.nodes) {
@@ -1401,7 +1405,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           self.connectedGraph.links = self.connectedGraph.links.concat(self.connectedGraph[relation]);
         });
       } else {
-        console.log("Not updating the connected graph, it was already generated.");
+        this.warn("Not updating the connected graph, it was already generated.");
       }
 
       this.debug("Displaying a connected graph of " + this.connectedGraph.links.length + " links");
@@ -1496,7 +1500,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           return "#fffff";
         }
         if (!lexicalEntry.morphemes) {
-          console.log("this morpheme is empty ", lexicalEntry);
+          self.warn("this morpheme is empty ", lexicalEntry);
           return "#ffffff";
         }
         return color(lexicalEntry.morphemes.length);
@@ -1831,7 +1835,7 @@ Lexicon.lexicon_nodes_mapReduce = function(doc, emit, rows) {
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
  *
- * @param {[type]} options [description]
+ * @param {Object} options [description]
  */
 var LexiconFactory = function(options) {
   var lex = new Lexicon(options);

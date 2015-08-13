@@ -1,4 +1,4 @@
-This is the backbone client, where most of the code base was in 2012. Since then we have ported this code to [CommonJS](https://github.com/OpenSourceFieldlinguistics/FieldDB/tree/master/api) so that it can be used in any Javascript framework.
+This is the backbone client, where most of the code base was in 2012. Since then we have ported this code to [CommonJS](https://github.com/FieldDB/FieldDB/tree/master/api) so that it can be used in any Javascript framework.
 
 You can see the Prototype in action by installing it from the [Chrome Store](https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa?authuser)
 
@@ -56,9 +56,9 @@ For up-to-date details see the milestones
 If you are interested in the Prototype app, you might be interested in some other  client apps which also use FieldDB.
 
 * The [Psycholinguistics Dashboard](https://github.com/ProjetDeRechercheSurLecriture/DyslexDisorthGame)
-* The [Learn X app](https://github.com/opensourcefieldlinguistics/AndroidLanguageLearningClientForFielddb)
-* The Android [Elicitation Session Recorder](https://github.com/OpenSourceFieldlinguistics/AndroidFieldDBElicitationRecorder)
+* The [Learn X app](https://github.com/FieldDB/AndroidLanguageLearningClientForFielddb)
+* The Android [Elicitation Session Recorder](https://github.com/FieldDB/AndroidFieldDBElicitationRecorder)
 * The Android [Speech Recognition Trainer App](https://github.com/batumi/AndroidSpeechRecognitionTrainer)
-* The [My Dictionary](https://github.com/OpenSourceFieldlinguistics/DictionaryChromeExtension) Chrome app
-* The [Lexicon Browser](https://github.com/OpenSourceFieldlinguistics/FieldDBLexicon)
-* The [Word Cloud Visualizer](https://github.com/OpenSourceFieldlinguistics/FieldDBWordCloudChromeApp)
+* The [My Dictionary](https://github.com/FieldDB/DictionaryChromeExtension) Chrome app
+* The [Lexicon Browser](https://github.com/FieldDB/FieldDBLexicon)
+* The [Word Cloud Visualizer](https://github.com/FieldDB/FieldDBWordCloudChromeApp)

@@ -23,11 +23,9 @@ var escapeRegexCharacters = function(regex) {
  * @description Lexicon Node is key value pair with an index of related datum. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
  * 
- * 
+ * @name  LexiconNode
  * @extends LanguageDatum
- * 
  * @constructs
- * 
  */
 var LexiconNode = function(options) {
   if (!this._fieldDBtype) {
@@ -80,7 +78,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
    *  Lexical entries/Nodes unique id is composed of their morphemes and gloss.
    *  However, the user can edit the id/headword if there really are more
    *  than one morpheme with the exact same morphemes and gloss combo.
-   * @return {[type]} [description]
+   * @return {String} [description]
    */
   id: {
     configurable: true,
@@ -110,7 +108,7 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       }
       constructHeadwordFromMorphemesAndGloss += "|";
       // without this morphemes glossed as ? will be counted as another morpheme, if that morpheme has a gloss
-      if (!this.gloss || this.gloss == "?" || this.gloss == "??") {
+      if (!this.gloss || this.gloss === "?" || this.gloss === "??") {
         // constructHeadwordFromMorphemesAndGloss += "?";
       } else if (this.gloss) {
         constructHeadwordFromMorphemesAndGloss += this.gloss;
