@@ -466,8 +466,8 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   /** 
    * Find the this.morphemeSegmentationKnowledgeBase which match in local precedence
-   * @param  {[type]} utteranceWithExplictWordBoundaries [description]
-   * @return {[type]}                                    [description]
+   * @param  {Object} options [description]
+   * @return {Object} options after processing                               [description]
    */
   findRelevantSegmentationContexts: {
     value: function(options) {
