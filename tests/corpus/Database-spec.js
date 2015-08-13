@@ -265,6 +265,37 @@ describe("Database", function() {
           expect(error.status).toEqual(0);
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
+      }).done(done);
+    }, specIsRunningTooLong);
+
+
+    it("should be guess its a couchdb if it has port 5984, 3984, 6984 any *984", function(done) {
+      var db = new Database();
+      db.login({
+        name: "jenkins",
+        password: "phoneme",
+        authUrl: "http://localhost:5984"
+      }).then(function(couchdbSessionLoginResult) {
+        expect(couchdbSessionLoginResult).toBeDefined();
+        expect(couchdbSessionLoginResult.url).toEqual("http://localhost:5984/_session");
+        expect(couchdbSessionLoginResult.ok).toEqual(true);
+        expect(couchdbSessionLoginResult.name).toEqual("jenkins");
+        expect(couchdbSessionLoginResult.roles).toBeDefined();
+        expect(couchdbSessionLoginResult.roles.length).toBeGreaterThan(4);
+      }, function(error) {
+        expect(error.details).toBeDefined();
+        expect(error.details.authUrl).toEqual("http://localhost:5984/_session");
+        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
+          expect(error.status).toEqual(400);
+          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        } else {
+          expect(error.status).toEqual(0);
+          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -286,8 +317,11 @@ describe("Database", function() {
         } else if (error.status === 0) {
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          console.log(error);
+          expect(error).toBeUndefined();
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -301,6 +335,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -314,6 +350,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -331,6 +369,8 @@ describe("Database", function() {
         expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
         expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
         expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -341,6 +381,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -364,6 +406,8 @@ describe("Database", function() {
           expect(error.status).toEqual(0);
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -384,6 +428,8 @@ describe("Database", function() {
           expect(error.status).toEqual(0);
           expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -400,6 +446,8 @@ describe("Database", function() {
       }, function(error) {
         expect(error.status).toEqual(412);
         expect(error.userFriendlyErrors).toEqual(["You cannot log out of https://ifielddevs.example.com/auth using this application."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -433,9 +481,11 @@ describe("Database", function() {
         } else {
           expect(false).toBeTruthy();
         }
-      }).fail(function(exception){
+      }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" ");
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -481,6 +531,8 @@ describe("Database", function() {
         } else {
           expect(false).toBeTruthy();
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -509,6 +561,8 @@ describe("Database", function() {
         } else {
           expect(false).toBeTruthy();
         }
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
     }, specIsRunningTooLong * 2);
 
@@ -518,6 +572,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -531,6 +587,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -544,6 +602,8 @@ describe("Database", function() {
         expect(false).toBeTruthy();
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -562,6 +622,8 @@ describe("Database", function() {
         expect(error.userFriendlyErrors).toContain("We are using - as a reserved symbol in database URIs (Uniform Resource Identifiers), so you can't use it in your username.");
         expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
         expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
+      }).fail(function(exception) {
+        expect(exception).toBeUndefined();
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -598,6 +660,8 @@ describe("Database", function() {
           } else {
             expect(false).toBeTruthy();
           }
+        }).fail(function(exception) {
+          expect(exception).toBeUndefined();
         }).done(done);
 
       }, function(error) {

@@ -2,6 +2,7 @@
 
 var Q = require("q");
 var CORS = require("../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 // var User = require("../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
@@ -591,6 +592,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               }
               deferred.resolve(authOrCorpusServerResult.user);
             } else if (authOrCorpusServerResult && authOrCorpusServerResult.roles) {
+              authOrCorpusServerResult.url = options.authUrl;
               deferred.resolve(authOrCorpusServerResult);
             } else {
               authOrCorpusServerResult = authOrCorpusServerResult || {};
@@ -667,6 +669,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         } else {
           optionalAuthUrl = this.BASE_AUTH_URL;
         }
+      }
+      if (optionalAuthUrl.indexOf("984") > -1 && optionalAuthUrl.indexOf("_session") === -1) {
+        optionalAuthUrl = optionalAuthUrl + "/_session";
       }
       return optionalAuthUrl;
     }
