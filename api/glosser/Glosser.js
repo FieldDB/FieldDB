@@ -343,7 +343,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         },
         function(e) {
           self.fetching = false;
-          self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
+          self.debug("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
           self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
           deferred.reject(e);
         }).fail(function(exception) {

@@ -300,7 +300,7 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.fetching = this.loading = true;
       this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
           self.fetching = self.loading = false;
-          self.warn("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
+          self.debug("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
           if (!generatedDatalist) {
             self.bug("There was a problem downloading the list of data in the " + self.title + " data list. Please report this.");
             return;

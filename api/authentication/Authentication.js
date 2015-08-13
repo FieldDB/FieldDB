@@ -78,7 +78,7 @@ var Authentication = function Authentication(options) {
         return;
       }
       self.loading = false;
-      self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
+      self.warn("Unable to resume login " + error.userFriendlyErrors.join(" "));
       if (error.status === 401) {
         self.dispatchEvent("authenticate:mustconfirmidentity");
       } else {

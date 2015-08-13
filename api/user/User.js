@@ -383,7 +383,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
           key = Confidential.secretKeyGenerator();
           this.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C = key;
         }
-        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug("unable to use local storage, this app wont be very usable offline ");
         this.debug(" error ", e);
       }
       userKey = key + this.username;
@@ -398,7 +398,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         this.constructor.prototype.temp = this.constructor.prototype.temp || {};
         this.constructor.prototype.temp[userKey] = encryptedUserPreferences;
-        this.warn("unable to use local storage, this app wont be very usable offline ");
+        this.debug("unable to use local storage, this app wont be very usable offline ");
         this.debug(" error ", e);
       }
 
@@ -429,7 +429,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       } catch (e) {
         self.constructor.prototype.temp = self.constructor.prototype.temp || {};
         key = self.constructor.prototype.temp.X09qKvcQn8DnANzGdrZFqCRUutIi2C;
-        self.warn("unable to use local storage, this app wont be very usable offline ");
+        self.debug("unable to use local storage, this app wont be very usable offline ");
         self.debug(" error ", e);
       }
       if (!key) {
