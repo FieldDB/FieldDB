@@ -13,7 +13,7 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
     /* initialize or confirm scope is prepared */
     $scope.loginDetails = $scope.loginDetails || {};
     if (!$scope.loginDetails.connection) {
-      $scope.loginDetails.connection = $scope.application.currentConnection;
+      $scope.loginDetails.connection = $scope.application.connection;
     }
     // $scope.application.authentication = $scope.application.authentication || {};
     // $scope.application.authentication.user = $scope.application.authentication.user || {};
@@ -34,6 +34,7 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
           if ($scope.application.authentication.error.toLowerCase().indexOf("username") > -1) {
             registerDetails.username = "";
           }
+          $scope.application.authentication.popup($scope.application.authentication.error);
           $scope.application.authentication.render();
           return $scope;
         });
@@ -49,7 +50,7 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
         return $scope;
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
-        $scope.application.authentication.render();
+        $scope.application.authentication.popup($scope.application.authentication.error);
         return $scope;
       });
     };
@@ -72,6 +73,7 @@ angular.module("fielddbAngular").directive("fielddbAuthentication", function() {
         // $scope.$digest();
       }, function(error) {
         $scope.application.authentication.error = error.userFriendlyErrors.join(" ");
+        $scope.application.authentication.popup($scope.application.authentication.error);
         try {
           if (!$scope.$$phase) {
             $scope.$digest(); //$digest or $apply
