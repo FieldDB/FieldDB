@@ -183,9 +183,9 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
 
       // TODO routeparams and location are not being triggered, so manually looking for a search term and rendering it
       window.location.href = url;
-      var searchQuery = url.substring(url.lastIndexOf('/') + 1);
+      var searchQuery = url.substring(url.lastIndexOf("/") + 1);
       if (searchQuery) {
-        console.log("Navigating to show a search " + searchQuery);
+        console.log("Navigating to show a search " + searchQuery, options);
         FieldDB.FieldDBObject.application.search.searchQuery = searchQuery;
         FieldDB.FieldDBObject.application.search.search(FieldDB.FieldDBObject.application.search.searchQuery);
         if (!$scope.$$phase) {
