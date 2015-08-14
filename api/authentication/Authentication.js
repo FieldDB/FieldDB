@@ -2,12 +2,15 @@
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Database = require("./../corpus/Database").Database;
+var CORS = Database.CORS;
 // var UserMask = require("./../user/UserMask").UserMask;
 var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
-var CORS = require("./../CORS").CORS;
+// var CORS = require("./../CORS").CORS;
+// var CORS = require("../CORSNode").CORS;
+
 // var MD5 = require("MD5");
 var bcrypt = require("bcrypt-nodejs");
 // console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
@@ -289,7 +292,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         corpusServersWhichHouseUsersCorpora = [],
         promises = [];
 
-      if (!this.user.corpora || this.user.corpora.length === 0) {
+      if ((!this.user.corpora || this.user.corpora.length === 0) && !loginDetails.connection) {
         Q.nextTick(function() {
           self.bug("You don't have access to any corpora. This is strange.");
           deferred.resolve(self.user);
@@ -300,6 +303,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       if (loginDetails.connection) {
         corpusServersWhichHouseUsersCorpora.push(loginDetails.connection.corpusUrl);
       }
+
+      self.debug("loginDetails.connection", loginDetails.connection);
       this.user.corpora.map(function(connection) {
         var addThisServerIfNotAlreadyThere = function(url) {
           var couchdbSessionUrl = url.replace(connection.dbname, "_session");
@@ -336,14 +341,37 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       }
 
       Q.allSettled(promises).then(function(results) {
+        var anySucceeded = false;
+        var errorReason = {};
         results.map(function(result) {
+          self.debug("some roles", result);
           if (result.state === "fulfilled" && result.value && result.value.roles) {
-            self.user.roles = self.user.roles.concat(result.value.roles);
+            // TODO  roles depend on the result.value.url  
+
+            self.user.roles = self.user.roles.concat(result.value.roles.map(function(role) {
+              return result.value.url + "/" + role;
+            }));
+            anySucceeded = true;
           } else {
             self.debug("Failed to login to one of the users's corpus servers ", result);
+            if (result.reason && result.reason.status) {
+              errorReason.status = result.reason.status;
+            }
+            if (result.reason && result.reason.userFriendlyErrors) {
+              errorReason.userFriendlyErrors = result.reason.userFriendlyErrors;
+            }
+            if (result.reason && result.reason.details) {
+              errorReason.details = result.reason.details;
+            }
           }
+          self.debug("some roles", self.user.roles);
         });
-        deferred.resolve(self.user);
+        if (anySucceeded) {
+          deferred.resolve(self.user);
+        } else {
+          errorReason.all = results;
+          deferred.reject(errorReason);
+        }
       });
 
       // .then(function(sessionInfo) {

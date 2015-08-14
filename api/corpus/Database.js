@@ -1057,6 +1057,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   }
 });
 
+Database.CORS = CORS;
 exports.Database = Database;
 
 var FieldDBConnection = FieldDBConnection || {};
