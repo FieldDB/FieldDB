@@ -1,8 +1,8 @@
-<nav class="navbar navbar-static-top navbar-inverse" ng-controller="NavbarCtrl">
+<nav class="navbar navbar-static-top navbar-inverse" role="navigation" ng-controller="NavbarCtrl">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fielddb-navbar-mobile-menu">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fielddb-navbar-mobile-menu-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -12,14 +12,12 @@
         {{application.brand}}
       </a>
     </div>
-
-    <div class="collapse navbar-collapse" id="fielddb-navbar-mobile-menu">
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="fielddb-navbar-mobile-menu-1">
       <ul class="nav navbar-nav">
-        <li class="active">
-          <a href="/">Home</a>
-        </li>
+
         <li>
-        <!-- search form -->
+          <!-- search form -->
           <form class="navbar-form navbar-right" role="search" ng-submit="application.search.search(application.search.searchQuery)">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search" ng-model="application.search.searchQuery">
@@ -32,12 +30,12 @@
           </form>
         </li>
         <li><a ui-sref="faq">FAQ</a></li>
-        <li><a href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform" >Contact</a></li>
+        <li><a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">Contact</a></li>
       </ul>
-
-      <ul class="nav navbar-nav navbar-right">
-        <li>Current date: {{ date | date:'yyyy-MM-dd' }}</li>
-      </ul>
+      <div data-fielddb-authentication></div>
+      
     </div>
+    <!-- /.navbar-collapse -->
   </div>
+  <!-- /.container-fluid -->
 </nav>
