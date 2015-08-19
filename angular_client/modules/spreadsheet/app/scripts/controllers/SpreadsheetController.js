@@ -749,6 +749,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     $rootScope.loading = true;
     Data.async($rootScope.corpus.dbname)
       .then(function(dataFromServer) {
+        $scope.updatePermissionsForCurrentCorpus();
         var scopeData = [];
         for (var i = 0; i < dataFromServer.length; i++) {
           if (dataFromServer[i].value.datumFields && dataFromServer[i].value.session) {
@@ -992,7 +993,33 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.overrideTemplateSetting(corpus.preferredTemplate, fieldsForTemplate, true);
     }
   };
+  $scope.updatePermissionsForCurrentCorpus = function() {
+    if (!FieldDB.FieldDBObject.application.authentication || !FieldDB.FieldDBObject.application.authentication.user || !FieldDB.FieldDBObject.application.authentication.user.roles || !FieldDB.FieldDBObject.application.authentication.user.roles.length) {
+      console.warn("There are no roles yet defined for this user, we dont know if they have access to the corpus. ");
+    } else {
+      var roles = FieldDB.FieldDBObject.application.authentication.user.roles;
+      $rootScope.admin = false;
+      $rootScope.readPermissions = false;
+      $rootScope.writePermissions = false;
+      $rootScope.commentPermissions = false;
 
+      if (roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
+        $rootScope.admin = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
+        $rootScope.readPermissions = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
+        $rootScope.writePermissions = true;
+      }
+      if (roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
+        $rootScope.commentPermissions = true;
+      }
+      if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
+        $rootScope.commentPermissions = true;
+      }
+    }
+  };
   $scope.selectCorpus = function(selectedCorpus) {
     if (!selectedCorpus) {
       $rootScope.notificationMessage = "Please select a database.";
@@ -1063,31 +1090,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       previousPreferedSpreadsheetShape = null;
     }
 
-    if (!FieldDB.FieldDBObject.application.authentication || !FieldDB.FieldDBObject.application.authentication.user || !FieldDB.FieldDBObject.application.authentication.user.roles) {
-      console.warn("There are no roles yet defined for this user, we dont know if they have access to the corpus. ");
-    } else {
-      var roles = FieldDB.FieldDBObject.application.authentication.user.roles;
-      $rootScope.admin = false;
-      $rootScope.readPermissions = false;
-      $rootScope.writePermissions = false;
-      $rootScope.commentPermissions = false;
-
-      if (roles.indexOf($rootScope.corpus.dbname + "_admin") > -1) {
-        $rootScope.admin = true;
-      }
-      if (roles.indexOf($rootScope.corpus.dbname + "_reader") > -1) {
-        $rootScope.readPermissions = true;
-      }
-      if (roles.indexOf($rootScope.corpus.dbname + "_writer") > -1) {
-        $rootScope.writePermissions = true;
-      }
-      if (roles.indexOf($rootScope.corpus.dbname + "_commenter") > -1) {
-        $rootScope.commentPermissions = true;
-      }
-      if (!$rootScope.commentPermissions && $rootScope.readPermissions && $rootScope.writePermissions) {
-        $rootScope.commentPermissions = true;
-      }
-    }
+    $scope.updatePermissionsForCurrentCorpus();
 
     $rootScope.availableFieldsInCurrentCorpus = selectedCorpus.datumFields._collection;
 
