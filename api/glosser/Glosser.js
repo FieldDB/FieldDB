@@ -607,6 +607,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
                   // following morphemes)
                   this.debug("Ambiguity point for suffixes " + word + " " + suffixtemplate[ii + 1], options.alternateMorphemeSegmentationsByWord[word]);
                   options.alternateMorphemeSegmentationsByWord[word].suffixTemplates.push(suffixtemplate.pop());
+                  break;
                 } else {
                   suffixtemplate[ii + 1] = suffixmatch.morphemes[0];
                   this.debug("   suffixtemplate " + suffixtemplate.join("-"));
