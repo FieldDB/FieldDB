@@ -2746,6 +2746,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.forgotPasswordInfo = {};
         $scope.showForgotPassword = false;
+        $scope.showResetPassword = true;
         $rootScope.notificationMessage = response.data.info.join(" ") || "Successfully emailed password.";
         $rootScope.openNotification();
 
@@ -2765,6 +2766,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         }
 
         $scope.showForgotPassword = false;
+        $scope.showResetPassword = false;
         $rootScope.notificationMessage = message;
         $rootScope.openNotification();
 
@@ -2802,6 +2804,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
         $scope.resetPasswordInfo = {};
         $scope.showResetPassword = false;
+        $scope.showForgotPassword = false;
         $rootScope.notificationMessage = response.data.info.join(" ") || "Successfully updated password.";
         $rootScope.openNotification();
 
@@ -2821,6 +2824,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
         }
         $scope.showResetPassword = false;
+        $scope.showForgotPassword = false;
 
         $rootScope.notificationMessage = message;
         $rootScope.openNotification();
