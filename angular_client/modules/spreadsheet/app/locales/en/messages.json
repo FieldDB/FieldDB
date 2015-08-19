@@ -792,6 +792,16 @@
         "message": "For any other questions or comments, you may <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> or <a target=\"_blank\" href=\"https://www.facebook.com/LingSyncApp\">ask other users on Facebook</a>.",
         "description": "links screw up the json format so I leave it empty for the moment"
     },
+
+    "locale_instructor_faq_question": {
+        "message": "I am an instructor and want to use LingSync for my class. What do I need to do?",
+        "description": " "
+    },
+    "locale_instructor_faq_answer": {
+        "message": "There is a FAQ specifically for instructors at <a target='_blank' href='/#/faq_instructors'>FAQ_for_instructors</a> that will help you set up LingSync for your class.",
+        "description": ""
+    },
+
     "locale_delete_duplicate_tags_button": {
         "message": "Delete Duplicate Tags",
         "description": " "

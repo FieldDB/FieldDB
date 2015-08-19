@@ -31,6 +31,8 @@ angular
       templateUrl: 'views/corpussettings.html'
     }).when('/register', {
       templateUrl: 'views/register.html'
+    }).when('/faq_instructors', {
+      templateUrl: 'views/faq_instructors.html'
     }).when('/faq', {
       templateUrl: 'views/faq.html'
     }).when('/spreadsheet/compacttemplate', {
