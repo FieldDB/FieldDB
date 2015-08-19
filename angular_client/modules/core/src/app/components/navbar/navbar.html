@@ -29,6 +29,22 @@
             </div>
           </form>
         </li>
+
+        <li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" ng-click="!!showCorporaDropdown">
+            <i class="fa fa-cloud"></i>
+            Corpora
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu" ng-show="showCorporaDropdown">
+            <li ng-repeat="corpus in application.authentication.user.corpora._collection">
+              <a href="{{application.basePathname}}/{{corpus.owner}}/{{corpus.titleAsUrl}}">
+                <img class="nav-icon" ng-src="https://secure.gravatar.com/avatar/{{corpus.team.gravatar}}.jpg?s=30&d=identicon&r=pg" title="{{application.brand}}"/>  {{corpus.title}}
+              </a>
+            </li>
+          </ul>
+        </li>
+        
         <li><a ui-sref="faq">FAQ</a></li>
         <li><a target="_blank" href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">Contact</a></li>
       </ul>
