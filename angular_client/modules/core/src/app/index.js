@@ -71,12 +71,14 @@ angular.module("fielddbAngular", [
   }
 
   // Let client apps override current app connection by setting the auth and/or db url. 
-  fieldDBApp.knownConnections = FieldDB.Connection.knownConnections;
+  fieldDBApp.knownConnections = new FieldDB.Corpora(FieldDB.Connection.knownConnections);
+  fieldDBApp.knownConnections.primaryKey = "userFriendlyServerName";
   if (FieldDB.Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
-    fieldDBApp.connection = FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL);
+    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL, "passByReference"));
   } else {
-    fieldDBApp.connection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
+    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(window.location.href, "passByReference"));
   }
+  fieldDBApp.knownConnections.unshift(fieldDBApp.connection);
   if (FieldDB.Database.prototype.BASE_DB_URL !== fieldDBApp.connection.corpusUrl) {
     fieldDBApp.connection.corpusUrl = FieldDB.Database.prototype.BASE_DB_URL;
     fieldDBApp.connection.userFriendlyServerName  = "Custom";
