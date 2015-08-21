@@ -11,7 +11,8 @@ manifest.json
 # Map reduces
 couchapp_activities
 couchapp_cleaning
-couchapp_dev
+couchapp_unused
+couchapp_data
 couchapp_export
 couchapp_learnx
 couchapp_lexicon
@@ -40,10 +41,6 @@ compiled_handlebars.js
 #ignore generated folders
 release/
 dist
-couchapp_dev/_attachments
-couchapp_minified/views
-couchapp_minified/lists
-couchapp_minified/_attachments
 
 spreadsheet_build_dev
 

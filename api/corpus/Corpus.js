@@ -929,135 +929,135 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return {
         // activities: {
         //   url: "/_design/pages/_view/activities",
-        //   map: requireoff("./../../couchapp_dev/views/activities/map")
+        //   map: requireoff("./../../couchapp_unused/views/activities/map")
         // },
         // add_synctactic_category: {
         //   url: "/_design/pages/_view/add_synctactic_category",
-        //   map: requireoff("./../../couchapp_dev/views/add_synctactic_category/map")
+        //   map: requireoff("./../../couchapp_unused/views/add_synctactic_category/map")
         // },
         // audioIntervals: {
         //   url: "/_design/pages/_view/audioIntervals",
-        //   map: requireoff("./../../couchapp_dev/views/audioIntervals/map")
+        //   map: requireoff("./../../couchapp_unused/views/audioIntervals/map")
         // },
         // byCollection: {
         //   url: "/_design/pages/_view/byCollection",
-        //   map: requireoff("./../../couchapp_dev/views/byCollection/map")
+        //   map: requireoff("./../../couchapp_unused/views/byCollection/map")
         // },
         // by_date: {
         //   url: "/_design/pages/_view/by_date",
-        //   map: requireoff("./../../couchapp_dev/views/by_date/map")
+        //   map: requireoff("./../../couchapp_unused/views/by_date/map")
         // },
         // by_rhyming: {
         //   url: "/_design/pages/_view/by_rhyming",
-        //   map: requireoff("./../../couchapp_dev/views/by_rhyming/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/by_rhyming/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/by_rhyming/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/by_rhyming/reduce")
         // },
         // cleaning_example: {
         //   url: "/_design/pages/_view/cleaning_example",
-        //   map: requireoff("./../../couchapp_dev/views/cleaning_example/map")
+        //   map: requireoff("./../../couchapp_unused/views/cleaning_example/map")
         // },
         // corpora: {
         //   url: "/_design/pages/_view/corpora",
-        //   map: requireoff("./../../couchapp_dev/views/corpora/map")
+        //   map: requireoff("./../../couchapp_unused/views/corpora/map")
         // },
         // datalists: {
         //   url: "/_design/pages/_view/datalists",
-        //   map: requireoff("./../../couchapp_dev/views/datalists/map")
+        //   map: requireoff("./../../couchapp_unused/views/datalists/map")
         // },
         // datums: {
         //   url: "/_design/pages/_view/datums",
-        //   map: requireoff("./../../couchapp_dev/views/datums/map")
+        //   map: requireoff("./../../couchapp_unused/views/datums/map")
         // },
         // datums_by_user: {
         //   url: "/_design/pages/_view/datums_by_user",
-        //   map: requireoff("./../../couchapp_dev/views/datums_by_user/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/datums_by_user/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/datums_by_user/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/datums_by_user/reduce")
         // },
         // datums_chronological: {
         //   url: "/_design/pages/_view/datums_chronological",
-        //   map: requireoff("./../../couchapp_dev/views/datums_chronological/map")
+        //   map: requireoff("./../../couchapp_unused/views/datums_chronological/map")
         // },
         // deleted: {
         //   url: "/_design/pages/_view/deleted",
-        //   map: requireoff("./../../couchapp_dev/views/deleted/map")
+        //   map: requireoff("./../../couchapp_unused/views/deleted/map")
         // },
         // export_eopas_xml: {
         //   url: "/_design/pages/_view/export_eopas_xml",
-        //   map: requireoff("./../../couchapp_dev/views/export_eopas_xml/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/export_eopas_xml/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/export_eopas_xml/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/export_eopas_xml/reduce")
         // },
         // get_corpus_datum_tags: {
         //   url: "/_design/pages/_view/get_corpus_datum_tags",
-        //   map: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/get_corpus_datum_tags/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/get_corpus_datum_tags/reduce")
         // },
         // get_corpus_fields: {
         //   url: "/_design/pages/_view/get_corpus_fields",
-        //   map: requireoff("./../../couchapp_dev/views/get_corpus_fields/map")
+        //   map: requireoff("./../../couchapp_unused/views/get_corpus_fields/map")
         // },
         // get_corpus_validationStati: {
         //   url: "/_design/pages/_view/get_corpus_validationStati",
-        //   map: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/get_corpus_validationStati/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/get_corpus_validationStati/reduce")
         // },
         // get_datum_fields: {
         //   url: "/_design/pages/_view/get_datum_fields",
-        //   map: requireoff("./../../couchapp_dev/views/get_datum_fields/map")
+        //   map: requireoff("./../../couchapp_unused/views/get_datum_fields/map")
         // },
         // get_datums_by_session_id: {
         //   url: "/_design/pages/_view/get_datums_by_session_id",
-        //   map: requireoff("./../../couchapp_dev/views/get_datums_by_session_id/map")
+        //   map: requireoff("./../../couchapp_unused/views/get_datums_by_session_id/map")
         // },
         // get_frequent_fields: {
         //   url: "/_design/pages/_view/get_frequent_fields",
-        //   map: requireoff("./../../couchapp_dev/views/get_frequent_fields/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/get_frequent_fields/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/get_frequent_fields/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/get_frequent_fields/reduce")
         // },
         // get_search_fields_chronological: {
         //   url: "/_design/pages/_view/get_search_fields_chronological",
-        //   map: requireoff("./../../couchapp_dev/views/get_search_fields_chronological/map")
+        //   map: requireoff("./../../couchapp_unused/views/get_search_fields_chronological/map")
         // },
         // glosses_in_utterance: {
         //   url: "/_design/pages/_view/glosses_in_utterance",
-        //   map: requireoff("./../../couchapp_dev/views/glosses_in_utterance/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/glosses_in_utterance/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/glosses_in_utterance/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/glosses_in_utterance/reduce")
         // },
         // lexicon_create_tuples: {
         //   url: "/_design/pages/_view/lexicon_create_tuples",
-        //   map: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/lexicon_create_tuples/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/lexicon_create_tuples/reduce")
         // },
         // morpheme_neighbors: {
         //   url: "/_design/pages/_view/morpheme_neighbors",
-        //   map: requireoff("./../../couchapp_dev/views/morpheme_neighbors/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/morpheme_neighbors/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/morpheme_neighbors/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/morpheme_neighbors/reduce")
         // },
         // morphemes_in_gloss: {
         //   url: "/_design/pages/_view/morphemes_in_gloss",
-        //   map: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/morphemes_in_gloss/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/morphemes_in_gloss/reduce")
         // },
         // recent_comments: {
         //   url: "/_design/pages/_view/recent_comments",
-        //   map: requireoff("./../../couchapp_dev/views/recent_comments/map")
+        //   map: requireoff("./../../couchapp_unused/views/recent_comments/map")
         // },
         // sessions: {
         //   url: "/_design/pages/_view/sessions",
-        //   map: requireoff("./../../couchapp_dev/views/sessions/map")
+        //   map: requireoff("./../../couchapp_unused/views/sessions/map")
         // },
         // users: {
         //   url: "/_design/pages/_view/users",
-        //   map: requireoff("./../../couchapp_dev/views/users/map")
+        //   map: requireoff("./../../couchapp_unused/views/users/map")
         // },
         // word_list: {
         //   url: "/_design/pages/_view/word_list",
-        //   map: requireoff("./../../couchapp_dev/views/word_list/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/word_list/reduce")
+        //   map: requireoff("./../../couchapp_unused/views/word_list/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/word_list/reduce")
         // },
-        // couchapp_dev_word_list_rdf: {
-        //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
-        //   map: requireoff("./../../couchapp_dev/views/word_list_rdf/map"),
-        //   reduce: requireoff("./../../couchapp_dev/views/word_list_rdf/reduce")
+        // couchapp_unused_word_list_rdf: {
+        //   url: "/_design/pages/_view/couchapp_unused_word_list_rdf",
+        //   map: requireoff("./../../couchapp_unused/views/word_list_rdf/map"),
+        //   reduce: requireoff("./../../couchapp_unused/views/word_list_rdf/reduce")
         // }
       };
     }

@@ -21,7 +21,7 @@ bash scripts/build_templates.sh
 # Optionally, minify if you want to test with minification
 #bash scripts/build_fielddb_minified.sh
 
-cd couchapp_dev
+cd couchapp_data
 rm -rf _attachments
 cp -r ../backbone_client _attachments
 
