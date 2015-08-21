@@ -21,7 +21,7 @@ var MORPHEMES_N_GRAMS_MAP_REDUCE = {
   }
 };
 try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
+  var mapcannotbeincludedviarequire = require("../../couchapp_data/views/morpheme_n_grams/map").morpheme_n_grams;
   /*jshint unused:false */
   var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
