@@ -1,3 +1,6 @@
+var debugMode = true,
+  showHumanDates = true;
+
 var guessType = function(doc) {
   // v3.0+
   if (doc.fieldDBtype) {
@@ -111,17 +114,68 @@ var guessPreview = function(doc, type) {
   }
 
   // Make the preview a max length of 30 
-  if (preview.length > 29) {
+  if (preview.length > 30) {
     preview = preview.substring(0, 30) + "...";
   }
   return preview;
 };
 
+var createIndexableComment = function(docid, comment) {
+  var commentUUID,
+    commentPreview,
+    commentDateCreated,
+    commentDateModified;
+
+  commentUUID = docid + "/comment/" + comment.timestamp;
+  commentPreview = comment.text;
+  if (commentPreview && commentPreview.length > 100) {
+    commentPreview = commentPreview.substring(0, 40) + "..." + commentPreview.substring(commentPreview.length - 40, commentPreview.length);
+    // Ensure all @mentions are in the preview 
+    var mentions = comment.text.match(/@[^ \t]*/g);
+    if (mentions && mentions.length) {
+      commentPreview = mentions.join(" ") + " : " + commentPreview;
+    }
+  }
+
+  commentDateCreated = comment.timestamp;
+  commentDateModified = comment.timestampModified;
+  // var milisecondsSinceComment = Date.now() - commentDateModified;
+
+  if (showHumanDates) {
+    commentDateCreated = commentDateCreated ? new Date(commentDateCreated) : 0;
+    commentDateModified = commentDateModified ? new Date(commentDateModified) : 0;
+  }
+
+  return [commentDateModified, commentUUID, commentDateCreated, commentPreview, comment.gravatar];
+};
+
+
+var createIndexableImage = function(image) {
+  var imageUUID,
+    imagePreview,
+    imageDateCreated,
+    imageDateModified;
+
+  imageUUID = image.URL;
+  imagePreview = image.caption;
+  if (imagePreview && imagePreview.length > 60) {
+    imagePreview = imagePreview.substring(0, 20) + "..." + imagePreview.substring(imagePreview.length - 20, imagePreview.length);
+  }
+  imageDateCreated = image.timestamp;
+  imageDateModified = image.timestampModified;
+  // var milisecondsSinceComment = Date.now() - imageDateModified;
+
+  if (showHumanDates) {
+    imageDateCreated = imageDateCreated ? new Date(imageDateCreated) : 0;
+    imageDateModified = imageDateModified ? new Date(imageDateModified) : 0;
+  }
+
+  return [imageDateModified, imageUUID, imageDateCreated, imagePreview];
+};
+
 function(doc) {
   try {
-    var debugMode = true,
-      showHumanDates = true,
-      type = guessType(doc),
+    var type = guessType(doc),
       preview = guessPreview(doc, type),
       dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
       dateModified = convertToTimestamp(doc.dateModified);
@@ -174,47 +228,15 @@ function(doc) {
      *
      */
     if (doc.comments) {
-      var commentIndex,
-        comment,
-        commentUUID,
-        commentPreview,
-        commentDateCreated,
-        commentDateModified;
-
-      for (commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
-        comment = doc.comments[commentIndex];
-        commentUUID = doc._id + "/comment/" + comment.timestamp;
-        commentPreview = comment.text;
-        if (comment.text && comment.text.length > 100) {
-          commentPreview = comment.text.substring(0, 100) + "...";
-        }
-        commentDateCreated = comment.timestamp;
-        commentDateModified = comment.timestampModified;
-        // var milisecondsSinceComment = Date.now() - commentDateModified;
-        // 
-        if (showHumanDates) {
-          commentDateCreated = commentDateCreated ? new Date(commentDateCreated) : 0;
-          commentDateModified = commentDateModified ? new Date(commentDateModified) : 0;
-        }
-
-        emit("Comment", [commentDateModified, commentUUID, commentDateCreated, commentPreview, comment.gravatar]);
+      for (var commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
+        emit("Comment", createIndexableComment(doc._id, doc.comments[commentIndex]));
       }
-
-      // var obj = convertDatumIntoSimpleObject(doc);
-
-      //      var mostRecentComment = doc.comments[doc.comments.length - 1];
-      //      var commentDateModified = mostRecentComment.timestampModified;
-      //      var milisecondsSinceLastComment = Date.now() - commentDateModified;
-      //      emit(milisecondsSinceLastComment, {
-      //        user: mostRecentComment.username,
-      //        time: new Date(mostRecentComment.timestampModified).toString(),
-      //        comment: mostRecentComment.text,
-      //        datum: obj
-      //      });
     }
 
     if (doc.images) {
-      // todo emit images
+      for (var imageIndex = 0; imageIndex < doc.images.length; imageIndex++) {
+        emit("Image", createIndexableImage(doc.images[imageIndex]));
+      }
     }
 
     if (doc.audioVideo) {
