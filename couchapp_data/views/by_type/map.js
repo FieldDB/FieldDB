@@ -76,15 +76,17 @@ var convertToTimestamp = function(dateCreated) {
 };
 
 var guessPreview = function(doc, type) {
-  var preview = doc.title || doc.preview || "";
+  var preview = doc.title || doc.preview || "",
+    fields;
+
   if (preview) {
     return preview;
   }
 
   // Get direct object from activity
   if (type === "Activity") {
-    preview = doc.verb + " " + doc.directobject;
-
+    // preview = doc.verb + " " + doc.directobject;
+    preview = doc.verb + " " + doc.directobjecticon;
   }
 
   // Get gravatar from a user
@@ -94,7 +96,7 @@ var guessPreview = function(doc, type) {
 
   // Get goal from session
   else if (type === "Session" || doc.sessionFields) {
-    var fields = doc.fields || doc.sessionFields;
+    fields = doc.fields || doc.sessionFields;
     if (fields.length && fields[0].mask) {
       preview = fields[0].mask;
     }
@@ -102,7 +104,7 @@ var guessPreview = function(doc, type) {
 
   // Get utterance from datum
   else if (type === "Datum" || type === "LanguageDatum" || doc.fields || doc.datumFields) {
-    var fields = doc.fields || doc.datumFields;
+    fields = doc.fields || doc.datumFields;
     if (fields && fields.length > 2 && fields[1] && fields[1].mask) {
       preview = fields[1].mask;
     }
@@ -118,6 +120,7 @@ var guessPreview = function(doc, type) {
 function(doc) {
   try {
     var debugMode = true,
+      showHumanDates = true,
       type = guessType(doc),
       preview = guessPreview(doc, type),
       dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
@@ -128,9 +131,9 @@ function(doc) {
     }
 
     /* see the dates while debugging */
-    if (true) {
+    if (showHumanDates) {
       dateCreated = dateCreated ? new Date(dateCreated) : 0;
-      dateModified = dateModified ? new Date(dateModified): 0;
+      dateModified = dateModified ? new Date(dateModified) : 0;
     }
 
     if (!type) {
@@ -148,7 +151,7 @@ function(doc) {
       return;
     }
 
-    if (type == "Locales") {
+    if (type === "Locales") {
       var localeCode = doc._id.replace("/messages.json", "");
       if (localeCode.indexOf("/") > -1) {
         localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
@@ -163,34 +166,45 @@ function(doc) {
 
     emit(type, [dateModified, doc._id, dateCreated, preview]);
 
+    /** 
+     * Comments are emmitted with 
+     * - their UUID is their index on the data's comments (so you can open them in context of the document they are on),
+     * - a preview of their text, 
+     * - the gravatar of the user and 
+     *
+     */
     if (doc.comments) {
-      // todo emit comment
-      // var title = doc.title;
-      // if (!title && doc.datumFields && doc.datumFields.length) {
-      //   doc.datumFields.map(function(datumField) {
-      //     if (!title && datumField.id === "orthography" || datumField.label === "orthography" || datumField.id === "utterance" || datumField.label === "utterance") {
-      //       title = datumField.mask;
-      //     }
-      //   });
-      // }
-      // if (!title) {
-      //   title = doc._id;
-      // }
-      // var commentIndex;
-      // for (commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
-      //   var comment = JSON.parse(JSON.stringify(doc.comments[commentIndex]));
-      //   var lastCommentsTimestampModified = comment.timestampModified;
-      //   var milisecondsSinceComment = Date.now() - lastCommentsTimestampModified;
-      //   comment.docId = doc._id;
-      //   comment.docTitle = title;
-      //   emit(milisecondsSinceComment, comment);
-      // }
+      var commentIndex,
+        comment,
+        commentUUID,
+        commentPreview,
+        commentDateCreated,
+        commentDateModified;
+
+      for (commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
+        comment = doc.comments[commentIndex];
+        commentUUID = doc._id + "/comment/" + comment.timestamp;
+        commentPreview = comment.text;
+        if (comment.text && comment.text.length > 100) {
+          commentPreview = comment.text.substring(0, 100) + "...";
+        }
+        commentDateCreated = comment.timestamp;
+        commentDateModified = comment.timestampModified;
+        // var milisecondsSinceComment = Date.now() - commentDateModified;
+        // 
+        if (showHumanDates) {
+          commentDateCreated = commentDateCreated ? new Date(commentDateCreated) : 0;
+          commentDateModified = commentDateModified ? new Date(commentDateModified) : 0;
+        }
+
+        emit("Comment", [commentDateModified, commentUUID, commentDateCreated, commentPreview, comment.gravatar]);
+      }
 
       // var obj = convertDatumIntoSimpleObject(doc);
 
       //      var mostRecentComment = doc.comments[doc.comments.length - 1];
-      //      var lastCommentsTimestampModified = mostRecentComment.timestampModified;
-      //      var milisecondsSinceLastComment = Date.now() - lastCommentsTimestampModified;
+      //      var commentDateModified = mostRecentComment.timestampModified;
+      //      var milisecondsSinceLastComment = Date.now() - commentDateModified;
       //      emit(milisecondsSinceLastComment, {
       //        user: mostRecentComment.username,
       //        time: new Date(mostRecentComment.timestampModified).toString(),
@@ -213,11 +227,6 @@ function(doc) {
 
 }
 
-_count
-
-// function(keys, values, rereduce){
-//   return values.length;
-// }
 
 // try {
 //   exports.by_type = exports.byType = by_type;
