@@ -174,7 +174,7 @@ var createIndexableMediaFile = function(media) {
   return [mediaDateModified, mediaUUID, mediaDateCreated, mediaPreview];
 };
 
-function(doc) {
+function byType(doc) {
   try {
     var type = guessType(doc),
       preview = guessPreview(doc, type),
@@ -270,8 +270,14 @@ function(doc) {
 }
 
 
-// try {
-//   exports.by_type = exports.byType = by_type;
-// } catch (e) {
-//   //  // DEBUG console.log("not in a node context")
-// }
+try {
+  exports.debugMode = debugMode;
+  exports.showHumanDates = showHumanDates;
+  exports.skipBotComments = skipBotComments;
+  exports.convertToTimestamp = convertToTimestamp;
+  exports.createIndexableMediaFile = createIndexableMediaFile;
+  exports.byType = byType;
+  exports.by_type = byType;
+} catch (e) {
+  //  // DEBUG console.log("not in a node context")
+}
