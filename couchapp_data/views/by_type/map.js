@@ -1,5 +1,6 @@
 var debugMode = true,
-  showHumanDates = true;
+  showHumanDates = true,
+  skipBotComments = true;
 
 var guessType = function(doc) {
   // v3.0+
@@ -49,7 +50,7 @@ var guessType = function(doc) {
       guessedType = "Activity";
     } else if (doc.datumFields && doc.sessionFields) {
       guessedType = "Corpus";
-    } else if (doc.collection === "sessions" && doc.sessionFields) {
+    } else if (doc.sessionFields) {
       guessedType = "Session";
     } else if (doc.text && doc.username && doc.timestamp && doc.gravatar) {
       guessedType = "Comment";
@@ -150,27 +151,27 @@ var createIndexableComment = function(docid, comment) {
 };
 
 
-var createIndexableImage = function(image) {
-  var imageUUID,
-    imagePreview,
-    imageDateCreated,
-    imageDateModified;
+var createIndexableMediaFile = function(media) {
+  var mediaUUID,
+    mediaPreview,
+    mediaDateCreated,
+    mediaDateModified;
 
-  imageUUID = image.URL;
-  imagePreview = image.caption;
-  if (imagePreview && imagePreview.length > 60) {
-    imagePreview = imagePreview.substring(0, 20) + "..." + imagePreview.substring(imagePreview.length - 20, imagePreview.length);
+  mediaUUID = media.URL;
+  mediaPreview = media.caption || media.description;
+  if (mediaPreview && mediaPreview.length > 60) {
+    mediaPreview = mediaPreview.substring(0, 20) + "..." + mediaPreview.substring(mediaPreview.length - 20, mediaPreview.length);
   }
-  imageDateCreated = image.timestamp;
-  imageDateModified = image.timestampModified;
-  // var milisecondsSinceComment = Date.now() - imageDateModified;
+  mediaDateCreated = media.timestamp;
+  mediaDateModified = media.timestampModified;
+  // var milisecondsSinceComment = Date.now() - mediaDateModified;
 
   if (showHumanDates) {
-    imageDateCreated = imageDateCreated ? new Date(imageDateCreated) : 0;
-    imageDateModified = imageDateModified ? new Date(imageDateModified) : 0;
+    mediaDateCreated = mediaDateCreated ? new Date(mediaDateCreated) : 0;
+    mediaDateModified = mediaDateModified ? new Date(mediaDateModified) : 0;
   }
 
-  return [imageDateModified, imageUUID, imageDateCreated, imagePreview];
+  return [mediaDateModified, mediaUUID, mediaDateCreated, mediaPreview];
 };
 
 function(doc) {
@@ -227,20 +228,39 @@ function(doc) {
      * - the gravatar of the user and 
      *
      */
+    var embeddedDataIndex;
     if (doc.comments) {
-      for (var commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
-        emit("Comment", createIndexableComment(doc._id, doc.comments[commentIndex]));
+      for (embeddedDataIndex = 0; embeddedDataIndex < doc.comments.length; embeddedDataIndex++) {
+        if (skipBotComments && doc.comments[embeddedDataIndex].username && doc.comments[embeddedDataIndex].username.indexOf("bot") > -1) {
+          // if (debugMode) {
+          //   emit(" skipping bot comment", doc.comments[embeddedDataIndex]);
+          // } else {
+          //   emit(" skipping bot comment", doc._id + "/comment/" + doc.comments[embeddedDataIndex].timestamp);
+          // }
+          continue;
+        }
+        emit("Comment", createIndexableComment(doc._id, doc.comments[embeddedDataIndex]));
       }
     }
 
     if (doc.images) {
-      for (var imageIndex = 0; imageIndex < doc.images.length; imageIndex++) {
-        emit("Image", createIndexableImage(doc.images[imageIndex]));
+      for (embeddedDataIndex = 0; embeddedDataIndex < doc.images.length; embeddedDataIndex++) {
+        emit("Image", createIndexableMediaFile(doc.images[embeddedDataIndex]));
       }
     }
 
     if (doc.audioVideo) {
-      // todo emit audioVideos
+      var audioVideos = doc.audioVideo;
+      if (!Array.isArray(audioVideos)) {
+        audioVideos = []; //skipping old audio from pre 2.0 dbs
+      }
+      for (embeddedDataIndex = 0; embeddedDataIndex < audioVideos.length; embeddedDataIndex++) {
+        var fileType = audioVideos[embeddedDataIndex].type;
+        if (fileType) {
+          fileType = fileType[0].toUpperCase() + fileType.substring(1, fileType.length);
+        }
+        emit(fileType, createIndexableMediaFile(audioVideos[embeddedDataIndex]));
+      }
     }
 
   } catch (error) {
