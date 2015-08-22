@@ -1,4 +1,4 @@
-This is to dev and debug FieldDB App Client in a couchapp
+This is to dev and debug FieldDB App Client in a map_reduce
 
 ## CouchApp
 

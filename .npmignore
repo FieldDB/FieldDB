@@ -9,13 +9,13 @@ manifest.json
 
 
 # Map reduces
-couchapp_activities
-couchapp_cleaning
-couchapp_unused
-couchapp_data
-couchapp_export
-couchapp_learnx
-couchapp_lexicon
+map_reduce_activities
+map_reduce_cleaning
+map_reduce_unused
+map_reduce_data
+map_reduce_export
+map_reduce_learnx
+map_reduce_lexicon
 couchapp_minified
 
 

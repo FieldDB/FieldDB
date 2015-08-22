@@ -30,7 +30,7 @@ var LEXICON_NODES_MAP_REDUCE = {
   }
 };
 try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/lexiconNodes/map").lexiconNodes;
+  var mapcannotbeincludedviarequire = require("../../map_reduce_lexicon/views/lexiconNodes/map").lexiconNodes;
   var emit = LEXICON_NODES_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
   /*jslint evil: true */
@@ -57,7 +57,7 @@ var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = {
   }
 };
 try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+  var mapcannotbeincludedviarequire = require("../../map_reduce_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
   /*jshint unused:false */
   var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
   // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
@@ -148,6 +148,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     value: {
       item: LexiconNode
     }
+  },
+  /**
+   *  Lexicon find will be faster but insert will be slower
+   *  
+   * @type {Object}
+   */
+  sorted: {
+    value: true
   },
 
   id: {
