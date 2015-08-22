@@ -7,7 +7,10 @@ var guessType = function(doc) {
     return "Locales";
   }
 
-  // < v3.0+
+  /* 
+   * 
+   * Handle data which were creatd before v3.0 
+   */
   var guessedType = doc.previousFieldDBtype || doc.jsonType || doc.collection || "";
   if (!guessedType && doc.api && doc.api.length > 0) {
     guessedType = doc.api[0].toUpperCase() + doc.api.substring(1, doc.api.length);
@@ -19,7 +22,10 @@ var guessType = function(doc) {
   }
 
   // Uppercase first char for Class name
-  guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
+  if (guessedType) {
+    guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
+  }
+
   if (guessedType === "Datalist") {
     guessedType = "DataList";
   }
@@ -36,6 +42,8 @@ var guessType = function(doc) {
   if (guessedType === "") {
     if (doc.session) {
       guessedType = "LanguageDatum";
+    } else if (doc.verb) {
+      guessedType = "Activity";
     } else if (doc.datumFields && doc.sessionFields) {
       guessedType = "Corpus";
     } else if (doc.collection === "sessions" && doc.sessionFields) {
@@ -49,89 +57,167 @@ var guessType = function(doc) {
   return guessedType;
 };
 
+var convertToTimestamp = function(dateCreated) {
+  if (dateCreated) {
+    if (dateCreated[0] === "\"") {
+      dateCreated = dateCreated.replace(/["\\]/g, "");
+    }
+    if (dateCreated[dateCreated.length - 1] === "Z") {
+      dateCreated = new Date(dateCreated);
+      /* Use date modified as a timestamp if it isnt one already */
+      dateCreated = dateCreated.getTime();
+    }
+  }
+
+  if (!dateCreated) {
+    dateCreated = 0;
+  }
+  return dateCreated;
+};
+
+var guessPreview = function(doc, type) {
+  var preview = doc.title || doc.preview || "";
+  if (preview) {
+    return preview;
+  }
+
+  // Get direct object from activity
+  if (type === "Activity") {
+    preview = doc.verb + " " + doc.directobject;
+
+  }
+
+  // Get gravatar from a user
+  else if (type === "User") {
+    return doc.gravatar;
+  }
+
+  // Get goal from session
+  else if (type === "Session" || doc.sessionFields) {
+    var fields = doc.fields || doc.sessionFields;
+    if (fields.length && fields[0].mask) {
+      preview = fields[0].mask;
+    }
+  }
+
+  // Get utterance from datum
+  else if (type === "Datum" || type === "LanguageDatum" || doc.fields || doc.datumFields) {
+    var fields = doc.fields || doc.datumFields;
+    if (fields && fields.length > 2 && fields[1] && fields[1].mask) {
+      preview = fields[1].mask;
+    }
+  }
+
+  // Make the preview a max length of 30 
+  if (preview.length > 29) {
+    preview = preview.substring(0, 30) + "...";
+  }
+  return preview;
+};
+
 function(doc) {
-  var debugMode = true;
+  try {
+    var debugMode = true,
+      type = guessType(doc),
+      preview = guessPreview(doc, type),
+      dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
+      dateModified = convertToTimestamp(doc.dateModified);
 
-
-  /* if this document has been deleted, put it in the deleted category */
-  if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
-    emit("deleted", doc.id);
-    return;
-  }
-
-  var type = guessType(doc);
-  var preview = "";
-  var dateCreated = "";
-  var dateModified = "";
-
-  if (!type) {
-    if (debugMode) {
-      emit(" ignoring typeless doc", doc._id);
+    if (!dateModified) {
+      dateModified = dateCreated;
     }
-    return;
-  }
 
-  if(type == "Locales"){
-     var localeCode = doc._id.replace("/messages.json", "");
-    if (localeCode.indexOf("/") > -1) {
-      localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+    /* see the dates while debugging */
+    if (true) {
+      dateCreated = dateCreated ? new Date(dateCreated) : 0;
+      dateModified = dateModified ? new Date(dateModified): 0;
     }
-    localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
-    if (!localeCode || localeCode.length < 2) {
-      localeCode = "default";
+
+    if (!type) {
+      if (debugMode) {
+        emit(" skipping typeless doc", doc);
+      } else {
+        emit(" skipping typeless doc", doc._id);
+      }
+      return;
     }
-    emit(localeCode, doc);
-    return;
+
+    /* if this document has been deleted, put it in the deleted category */
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      emit("Deleted", [dateModified, doc._id, dateCreated, preview, type]);
+      return;
+    }
+
+    if (type == "Locales") {
+      var localeCode = doc._id.replace("/messages.json", "");
+      if (localeCode.indexOf("/") > -1) {
+        localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+      }
+      localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+      if (!localeCode || localeCode.length < 2) {
+        localeCode = "default";
+      }
+      emit(localeCode, doc._id);
+      return;
+    }
+
+    emit(type, [dateModified, doc._id, dateCreated, preview]);
+
+    if (doc.comments) {
+      // todo emit comment
+      // var title = doc.title;
+      // if (!title && doc.datumFields && doc.datumFields.length) {
+      //   doc.datumFields.map(function(datumField) {
+      //     if (!title && datumField.id === "orthography" || datumField.label === "orthography" || datumField.id === "utterance" || datumField.label === "utterance") {
+      //       title = datumField.mask;
+      //     }
+      //   });
+      // }
+      // if (!title) {
+      //   title = doc._id;
+      // }
+      // var commentIndex;
+      // for (commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
+      //   var comment = JSON.parse(JSON.stringify(doc.comments[commentIndex]));
+      //   var lastCommentsTimestampModified = comment.timestampModified;
+      //   var milisecondsSinceComment = Date.now() - lastCommentsTimestampModified;
+      //   comment.docId = doc._id;
+      //   comment.docTitle = title;
+      //   emit(milisecondsSinceComment, comment);
+      // }
+
+      // var obj = convertDatumIntoSimpleObject(doc);
+
+      //      var mostRecentComment = doc.comments[doc.comments.length - 1];
+      //      var lastCommentsTimestampModified = mostRecentComment.timestampModified;
+      //      var milisecondsSinceLastComment = Date.now() - lastCommentsTimestampModified;
+      //      emit(milisecondsSinceLastComment, {
+      //        user: mostRecentComment.username,
+      //        time: new Date(mostRecentComment.timestampModified).toString(),
+      //        comment: mostRecentComment.text,
+      //        datum: obj
+      //      });
+    }
+
+    if (doc.images) {
+      // todo emit images
+    }
+
+    if (doc.audioVideo) {
+      // todo emit audioVideos
+    }
+
+  } catch (error) {
+    emit(" error" + error, doc._id);
   }
 
-  /* Version <3.x */
-  emit(type, [dateModified, doc._id, dateCreated, preview]);
-
-  if (doc.comments) {
-    // todo emit comment
-    // var title = doc.title;
-    // if (!title && doc.datumFields && doc.datumFields.length) {
-    //   doc.datumFields.map(function(datumField) {
-    //     if (!title && datumField.id === "orthography" || datumField.label === "orthography" || datumField.id === "utterance" || datumField.label === "utterance") {
-    //       title = datumField.mask;
-    //     }
-    //   });
-    // }
-    // if (!title) {
-    //   title = doc._id;
-    // }
-    // var commentIndex;
-    // for (commentIndex = 0; commentIndex < doc.comments.length; commentIndex++) {
-    //   var comment = JSON.parse(JSON.stringify(doc.comments[commentIndex]));
-    //   var lastCommentsTimestampModified = comment.timestampModified;
-    //   var milisecondsSinceComment = Date.now() - lastCommentsTimestampModified;
-    //   comment.docId = doc._id;
-    //   comment.docTitle = title;
-    //   emit(milisecondsSinceComment, comment);
-    // }
-
- // var obj = convertDatumIntoSimpleObject(doc);
-
- //      var mostRecentComment = doc.comments[doc.comments.length - 1];
- //      var lastCommentsTimestampModified = mostRecentComment.timestampModified;
- //      var milisecondsSinceLastComment = Date.now() - lastCommentsTimestampModified;
- //      emit(milisecondsSinceLastComment, {
- //        user: mostRecentComment.username,
- //        time: new Date(mostRecentComment.timestampModified).toString(),
- //        comment: mostRecentComment.text,
- //        datum: obj
- //      });
-  }
-
-  if (doc.images) {
-    // todo emit images
-  }
-
-  if (doc.audioVideo) {
-    // todo emit audioVideos
-  }
-  
 }
+
+_count
+
+// function(keys, values, rereduce){
+//   return values.length;
+// }
 
 // try {
 //   exports.by_type = exports.byType = by_type;
