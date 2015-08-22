@@ -14,7 +14,7 @@ function lexiconNodes(doc) {
     // Only continue if the document is a Datum
     if (!fields || !doc.session || !doc.session.sessionFields) {
       if (debug) {
-        emit("skipping", doc);
+        emit(" skipping non datum", doc);
       }
       return;
     }
@@ -102,7 +102,7 @@ function lexiconNodes(doc) {
           // If the Judgement or utterance contains a '*', discard the datum
           if (fields[key].mask && fields[key].mask.search(/[#*]/) >= 0) {
             if (debug) {
-              emit("skipping ungrammatical example " + doc._id, fields[key]);
+              emit(" skipping ungrammatical example " + doc._id, fields[key]);
             }
             return;
           }
@@ -293,7 +293,7 @@ function lexiconNodes(doc) {
   } catch (e) {
     if (debug || onlyErrors) {
       // DEBUG console.log(e.stack);
-      emit(e || "error", 1);
+      emit(" error " +e, e);
     }
   }
 };
