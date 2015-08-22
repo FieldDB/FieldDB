@@ -14,61 +14,22 @@ var CORS = require("../CORS").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;
+var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
-var LEXICON_NODES_MAP_REDUCE = {
+var lexiconNodesMapReduceString = require("../../map_reduce_lexicon/views/lexiconNodes/map").lexiconNodes;
+var LEXICON_NODES_MAP_REDUCE = mapReduceFactory({
   filename: "lexiconNodes",
-  map: null,
-  reduce: null,
-  rows: [],
-  emit: function(key, val) {
-    this.rows.push({
-      key: key,
-      value: val
-    });
-  }
-};
-try {
-  var mapcannotbeincludedviarequire = require("../../map_reduce_lexicon/views/lexiconNodes/map").lexiconNodes;
-  var emit = LEXICON_NODES_MAP_REDUCE.emit;
-  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  /*jslint evil: true */
-  eval("LEXICON_NODES_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
-} catch (exception) {
-  console.log("Unable to parse the map reduce ", exception.stack);
-  var emit = LEXICON_NODES_MAP_REDUCE.emit;
-  LEXICON_NODES_MAP_REDUCE.map = function() {
-    emit("error", "unable to load map reduce");
-  };
-}
+  mapString: lexiconNodesMapReduceString
+});
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
-var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = {
+var morphemesPrecedenceMapReduceString = require("../../map_reduce_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = mapReduceFactory({
   filename: "morphemesPrecedenceContext",
-  map: null,
-  reduce: null,
-  rows: [],
-  emit: function(key, val) {
-    this.rows.push({
-      key: key,
-      value: val
-    });
-  }
-};
-try {
-  var mapcannotbeincludedviarequire = require("../../map_reduce_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
-  /*jshint unused:false */
-  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
-  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  eval("LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
-} catch (exception) {
-  console.log("Unable to parse the map reduce ", exception.stack);
-  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
-  LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = function() {
-    emit("error", "unable to load map reduce");
-  };
-}
+  mapString: morphemesPrecedenceMapReduceString
+});
 
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
