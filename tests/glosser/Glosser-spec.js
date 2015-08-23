@@ -21,11 +21,11 @@ try {
 }
 
 var mockCorpus = {
-  dbname: "jenkins-firstcorpus",
-  url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
-  prefs: {
-    maxLexiconSize: 400
-  }
+	dbname: "jenkins-firstcorpus",
+	url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+	prefs: {
+		maxLexiconSize: 400
+	}
 };
 
 describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
@@ -72,7 +72,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
 	};
 
-	describe("construction", function() {
+	xdescribe("construction", function() {
 
 		it("should load", function() {
 			expect(Glosser).toBeDefined();
@@ -93,7 +93,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	describe("conservativeness", function() {
+	xdescribe("conservativeness", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -269,9 +269,9 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		it("should provide the same map reduce as that in couchdb", function() {
 			expect(Glosser.morpheme_n_grams_mapReduce).toBeDefined();
-			expect(typeof Glosser.morpheme_n_grams_mapReduce).toEqual("function");
+			expect(typeof Glosser.morpheme_n_grams_mapReduce.map).toEqual("function");
 
-			var result = Glosser.morpheme_n_grams_mapReduce({});
+			var result = Glosser.morpheme_n_grams_mapReduce.customMap({});
 			expect(result).toBeDefined();
 			expect(result).toEqual({
 				rows: []
@@ -287,7 +287,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				});
 			};
 
-			var result = Glosser.morpheme_n_grams_mapReduce({}, emit, rows);
+			var result = Glosser.morpheme_n_grams_mapReduce.customMap({}, emit, rows);
 			expect(result).toBeDefined();
 			expect(result.rows).toBe(rows);
 			expect(result).toEqual({
@@ -304,7 +304,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			};
 			expect(doc).toBeDefined();
 			console.log("Testing ngrams");
-			var result = Glosser.morpheme_n_grams_mapReduce(doc);
+			Glosser.morpheme_n_grams_mapReduce.rows = [];
+			var result = Glosser.morpheme_n_grams_mapReduce.customMap(doc);
 
 			expect(result.rows).toBeDefined();
 			// expect(result.rows).toEqual();
@@ -322,7 +323,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			};
 			expect(doc).toBeDefined();
 			console.log("Testing ngrams");
-			var result = Glosser.morpheme_n_grams_mapReduce(doc);
+			Glosser.morpheme_n_grams_mapReduce.rows = [];
+			var result = Glosser.morpheme_n_grams_mapReduce.customMap(doc);
 
 			expect(result.rows).toBeDefined();
 			expect(result.rows.length).toEqual(26);
@@ -395,7 +397,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	describe("helper methods", function() {
+	xdescribe("helper methods", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -482,7 +484,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(parseInProgress.alternateMorphemeLines).toEqual(["lloqsi-naywaran khunan", "lloqsinaywaran khunan"]);
 			// expect(parseInProgress.matchingRules).toEqual(" ");
 			expect(parseInProgress.matchingRules.length).toEqual(5);
-			expect(parseInProgress.usedRules.map(function(rule) {
+			expect(parseInProgress.usedRules.customMap(function(rule) {
 				return rule.segmentation;
 			})).toEqual(["@-lloqsi", "lloqsi-naywaran", "naywaran-@", "naywaran-@", "n-@", "n-@"]);
 			expect(parseInProgress.usedRules.length).toEqual(6);
@@ -493,7 +495,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	describe("visualization", function() {
+	xdescribe("visualization", function() {
 
 		if (optionalD3) {
 			it("should accept an element", function() {
@@ -599,7 +601,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			// The morphemeSegmentationKnowledgeBase isnt an array, its a hasmap of ngrams by count
 			glosser.lexicon.entryRelations = glosser.morphemeSegmentationKnowledgeBase;
 			expect(glosser.lexicon.entryRelations.length).toEqual(14);
-			expect(glosser.lexicon.entryRelations.map(function(relation) {
+			expect(glosser.lexicon.entryRelations.customMap(function(relation) {
 				return relation.source.morphemes;
 			})).toEqual(["lloqsi", "lloqsi", "nay", "nay", "wa", "wa", "ra", "ra", "victor", "victor", "tusu", "tusu", "naya", "naya"]);
 			expect(glosser.lexicon.entryRelations[10]).toBeDefined();
@@ -634,7 +636,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	describe("backward compatibility", function() {
+	xdescribe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {
 			var glosser = new Glosser();

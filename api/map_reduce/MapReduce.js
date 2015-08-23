@@ -1,3 +1,5 @@
+var debugMode = false;
+
 var MapReduceFactory = function(options) {
   options = options || {
     filename: "",
@@ -6,10 +8,34 @@ var MapReduceFactory = function(options) {
   };
   options.rows = options.rows || [];
   options.emit = options.emit || function(key, val) {
-    this.rows.push({
+    if (debugMode) {
+      console.log(options);
+    }
+    options.rows.push({
       key: key,
       value: val
     });
+  };
+
+  options.customMap = function(doc, emit, rows) {
+    rows = rows || options.rows || [];
+    if (!emit) {
+      emit = options.emit;
+    }
+
+    try {
+      // ugly way to make sure references to 'emit' in map/reduce bind to the
+      // above emit at run time
+      eval("options.map = " + options.map.toString() + ";");
+    } catch (e) {
+      console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
+    }
+
+    options.map(doc);
+
+    return {
+      rows: rows
+    };
   };
 
   // Acccept a file path

@@ -42,31 +42,7 @@ Glosser.morphemeBoundaryRegEX = /[-=]/g;
  * [morpheme_n_grams_mapReduce description]
  * @type {Function}
  */
-Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
-  rows = rows || [];
-  if (!emit) {
-    emit = function(key, value) {
-      rows.push({
-        key: key,
-        value: value
-      });
-    };
-  }
-
-  try {
-    // ugly way to make sure references to 'emit' in map/reduce bind to the
-    // above emit at run time
-    /*jslint evil: true */
-    eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ";");
-  } catch (e) {
-    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");
-  }
-
-  MORPHEMES_N_GRAMS_MAP_REDUCE.map(doc);
-  return {
-    rows: rows
-  };
-};
+Glosser.morpheme_n_grams_mapReduce = MORPHEMES_N_GRAMS_MAP_REDUCE;
 
 /**
  * Finds all combinations of an utterance line by looping through all 
