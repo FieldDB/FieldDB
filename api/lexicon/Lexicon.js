@@ -1776,30 +1776,7 @@ Lexicon.convertMapReduceRowIntoLexicalEntry = function(row) {
  * [lexicon_nodes_mapReduce description]
  * @type {Function}
  */
-Lexicon.lexicon_nodes_mapReduce = function(doc, emit, rows) {
-  rows = rows || [];
-  if (!emit) {
-    emit = function(key, value) {
-      rows.push({
-        key: key,
-        value: value
-      });
-    };
-  }
-
-  try {
-    // ugly way to make sure references to 'emit' in map/reduce bind to the
-    // above emit at run time
-    eval("LEXICON_NODES_MAP_REDUCE.map = " + LEXICON_NODES_MAP_REDUCE.map.toString() + ";");
-  } catch (e) {
-    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for LEXICON_NODES_MAP_REDUCE");
-  }
-
-  LEXICON_NODES_MAP_REDUCE.map(doc);
-  return {
-    rows: rows
-  };
-};
+Lexicon.lexicon_nodes_mapReduce = LEXICON_NODES_MAP_REDUCE;
 
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
