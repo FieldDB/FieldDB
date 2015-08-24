@@ -18,14 +18,7 @@ SAMPLE_v3_CORPORA[0].dateCreated = 1439925745602;
 
 var SAMPLE_v1_DATALISTS = require("../../sample_data/datalist_v1.22.1.json");
 var SAMPLE_v2_DATALISTS = require("../../sample_data/game_v2.24.0.json");
-SAMPLE_v2_DATALISTS[0].participants = [{
-  _id: "ALXD645210KI"
-}];
-SAMPLE_v2_DATALISTS[0].experimenters = [{
-  _id: "juliesmith"
-},{
-  _id: "manontee"
-}];
+
 var SAMPLE_SESSIONS = require("../../sample_data/session_v1.22.1.json");
 var SAMPLE_PARTICIPANTS = require("../../sample_data/participant_v2.32.0.json");
 var SAMPLE_USER_MASK = require("../../sample_data/usermask_v3.6.1.json");
@@ -146,6 +139,31 @@ describe("MapReduce by_type", function() {
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 10:37:51 GMT-0400 (EDT)");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("morphemes:nay AND gl...rch result");
     });
+
+    it("should emit a preview of title and participants if its an experiment datalist", function() {
+      var simpleGameResult = {
+        _id: "jumpgame",
+        fieldDBtype: "SubExperimentDataList",
+        participants: [{
+          _id: "ALXD645210KI"
+        }],
+        experimenters: [{
+          _id: "juliesmith"
+        }, {
+          _id: "manontee"
+        }],
+        title: {
+          default: "Jump",
+          locale_gamified_title: "Jump with us!"
+        }
+      };
+      BY_TYPE_MAP_REDUCE.map(simpleGameResult);
+      expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(1);
+      expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual("SubExperimentDataList");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("jumpgame");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("Jump (participants: ALXD645210KI) (experimenters: juliesmith, manontee)");
+    });
+
 
     it("should emit a preview of comments", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_v1_DATALISTS[0]);
@@ -298,7 +316,7 @@ describe("MapReduce by_type", function() {
       expect(gamifyRows[65].value[0].toString()).toEqual("Fri Oct 10 2014 10:41:09 GMT-0400 (EDT)");
       expect(gamifyRows[65].value[1]).toEqual("32a4e729a4c1d2278bec26f69b29b7cd");
       expect(gamifyRows[65].value[2].toString()).toEqual("Fri Aug 21 2015 11:21:45 GMT-0400 (EDT)");
-      expect(gamifyRows[65].value[3]).toEqual("locale_title (participants: ALXD645210KI) (experimenters: juliesmith, manontee)");
+      expect(gamifyRows[65].value[3]).toEqual("locale_title (participants: LEBB720610PS) (experimenters: juliesmith)");
 
     });
   });

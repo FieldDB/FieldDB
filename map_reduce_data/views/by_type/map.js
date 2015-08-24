@@ -146,15 +146,17 @@ function byType(doc) {
     }
 
     // Add score if a game response
-    if (doc.participants && doc.participants.length) {
-      preview += " (participants: " + doc.participants.map(function(participant) {
+    if (doc.participant || (doc.participants && doc.participants.length)) {
+      var participant = doc.participant || doc.participants.map(function(participant) {
         return participant._id;
-      }).join(", ") + ")";
+      }).join(", ")
+      preview += " (participants: " + participant + ")";
     }
-    if (doc.experimenters && doc.experimenters.length) {
-      preview += " (experimenters: " + doc.experimenters.map(function(experimenter) {
+    if (doc.experimenter || (doc.experimenters && doc.experimenters.length)) {
+      var experimenter = doc.experimenter || doc.experimenters.map(function(experimenter) {
         return experimenter._id;
-      }).join(", ") + ")";
+      }).join(", ")
+      preview += " (experimenters: " + experimenter + ")";
     }
     return preview;
   };
@@ -217,125 +219,117 @@ function byType(doc) {
     return [mediaDateModified, mediaUUID, mediaDateCreated, mediaPreview];
   };
 
-  console.log("Processing doc " + doc._id);
-  try {
-    var type = guessType(doc);
-    if (type === "SubExperimentDataList" && doc.results) {
-      console.log(" indexing the results");
-      for (var resultIndex = 0; resultIndex < doc.results.length; resultIndex++) {
-        byType(doc.results[resultIndex]);
-      };
-      // return;
-    }
+  var processDocument = function processDocument(doc) {
 
-    var
-      preview = guessPreview(doc, type),
-      dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
-      dateModified = convertToTimestamp(doc.dateModified);
-
-    if (!dateModified) {
-      dateModified = dateCreated;
-    }
-
-    /* see the dates while debugging */
-    if (showHumanDates) {
-      dateCreated = dateCreated ? new Date(dateCreated) : 0;
-      dateModified = dateModified ? new Date(dateModified) : 0;
-    }
-
-    if (!type) {
-      if (debugMode) {
-        emit(" skipping typeless doc", [0, doc._id, 0, doc]);
-      } else {
-        emit(" skipping typeless doc", [0, doc._id, 0, ""]);
+    //  // DEBUG console.log("Processing doc " + doc._id);
+    try {
+      var type = guessType(doc);
+      if (type === "SubExperimentDataList" && doc.results) {
+        //  // DEBUG console.log(" indexing the results");
+        for (var resultIndex = 0; resultIndex < doc.results.length; resultIndex++) {
+          processDocument(doc.results[resultIndex]);
+        };
+        // return;
       }
-      return;
-    }
 
-    /* if this document has been deleted, put it in the deleted category */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
-      emit("Deleted", [dateModified, doc._id, dateCreated, preview, type]);
-      return;
-    }
+      var
+        preview = guessPreview(doc, type),
+        dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
+        dateModified = convertToTimestamp(doc.dateModified);
 
-    if (type === "Locales") {
-      var localeCode = doc._id.replace("/messages.json", "");
-      if (localeCode.indexOf("/") > -1) {
-        localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
+      if (!dateModified) {
+        dateModified = dateCreated;
       }
-      localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
-      if (!localeCode || localeCode.length < 2) {
-        localeCode = "default";
+
+      /* see the dates while debugging */
+      if (showHumanDates) {
+        dateCreated = dateCreated ? new Date(dateCreated) : 0;
+        dateModified = dateModified ? new Date(dateModified) : 0;
       }
-      emit(localeCode, doc._id);
-      return;
-    }
 
-    emit(type, [dateModified, doc._id, dateCreated, preview]);
-
-    /** 
-     * Comments are emmitted with 
-     * - their UUID is their index on the data's comments (so you can open them in context of the document they are on),
-     * - a preview of their text, 
-     * - the gravatar of the user and 
-     *
-     */
-    var embeddedDataIndex;
-    if (doc.comments) {
-      for (embeddedDataIndex = 0; embeddedDataIndex < doc.comments.length; embeddedDataIndex++) {
-        if (skipBotComments && doc.comments[embeddedDataIndex].username && doc.comments[embeddedDataIndex].username.indexOf("bot") > -1) {
-          // if (debugMode) {
-          //   emit(" skipping bot comment", doc.comments[embeddedDataIndex]);
-          // } else {
-          //   emit(" skipping bot comment", doc._id + "/comment/" + doc.comments[embeddedDataIndex].timestamp);
-          // }
-          continue;
+      if (!type) {
+        if (!doc.admins) {
+          if (debugMode) {
+            emit(" skipping typeless doc", [0, doc._id, 0, doc]);
+          } else {
+            emit(" skipping typeless doc", [0, doc._id, 0, ""]);
+          }
         }
-        emit("Comment", createIndexableComment(doc._id, doc.comments[embeddedDataIndex]));
+        return;
       }
-    }
 
-    if (doc.images) {
-      for (embeddedDataIndex = 0; embeddedDataIndex < doc.images.length; embeddedDataIndex++) {
-        emit("Image", createIndexableMediaFile(doc.images[embeddedDataIndex]));
+      /* if this document has been deleted, put it in the deleted category */
+      if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+        emit("Deleted", [dateModified, doc._id, dateCreated, preview, type]);
+        return;
       }
-    }
 
-    if (type !== "Datalist" && type !== "SubExperimentDataList" && doc.audioVideo) {
-      var audioVideos = doc.audioVideo;
-      if (!Array.isArray(audioVideos)) {
-        audioVideos = []; //skipping old audio from pre 2.0 dbs
-      }
-      for (embeddedDataIndex = 0; embeddedDataIndex < audioVideos.length; embeddedDataIndex++) {
-        var fileType = audioVideos[embeddedDataIndex].type;
-        if (!fileType && audioVideos[embeddedDataIndex].details.type && audioVideos[embeddedDataIndex].details.type) {
-          fileType = audioVideos[embeddedDataIndex].details.type.substring(0, audioVideos[embeddedDataIndex].details.type.lastIndexOf("/"));
+      if (type === "Locales") {
+        var localeCode = doc._id.replace("/messages.json", "");
+        if (localeCode.indexOf("/") > -1) {
+          localeCode = localeCode.substring(localeCode.lastIndexOf("/"));
         }
-        if (fileType) {
-          fileType = fileType[0].toUpperCase() + fileType.substring(1, fileType.length);
+        localeCode = localeCode.replace(/[^a-z-]/g, "").toLowerCase();
+        if (!localeCode || localeCode.length < 2) {
+          localeCode = "default";
         }
-        emit(fileType, createIndexableMediaFile(audioVideos[embeddedDataIndex]));
+        emit(localeCode, doc._id);
+        return;
       }
+
+      emit(type, [dateModified, doc._id, dateCreated, preview]);
+
+      /** 
+       * Comments are emmitted with 
+       * - their UUID is their index on the data's comments (so you can open them in context of the document they are on),
+       * - a preview of their text, 
+       * - the gravatar of the user and 
+       *
+       */
+      var embeddedDataIndex;
+      if (doc.comments) {
+        for (embeddedDataIndex = 0; embeddedDataIndex < doc.comments.length; embeddedDataIndex++) {
+          if (skipBotComments && doc.comments[embeddedDataIndex].username && doc.comments[embeddedDataIndex].username.indexOf("bot") > -1) {
+            // if (debugMode) {
+            //   emit(" skipping bot comment", doc.comments[embeddedDataIndex]);
+            // } else {
+            //   emit(" skipping bot comment", doc._id + "/comment/" + doc.comments[embeddedDataIndex].timestamp);
+            // }
+            continue;
+          }
+          emit("Comment", createIndexableComment(doc._id, doc.comments[embeddedDataIndex]));
+        }
+      }
+
+      if (doc.images) {
+        for (embeddedDataIndex = 0; embeddedDataIndex < doc.images.length; embeddedDataIndex++) {
+          emit("Image", createIndexableMediaFile(doc.images[embeddedDataIndex]));
+        }
+      }
+
+      if (type !== "Datalist" && type !== "SubExperimentDataList" && doc.audioVideo) {
+        var audioVideos = doc.audioVideo;
+        if (!Array.isArray(audioVideos)) {
+          audioVideos = []; //skipping old audio from pre 2.0 dbs
+        }
+        for (embeddedDataIndex = 0; embeddedDataIndex < audioVideos.length; embeddedDataIndex++) {
+          var fileType = audioVideos[embeddedDataIndex].type;
+          if (!fileType && audioVideos[embeddedDataIndex].details.type && audioVideos[embeddedDataIndex].details.type) {
+            fileType = audioVideos[embeddedDataIndex].details.type.substring(0, audioVideos[embeddedDataIndex].details.type.lastIndexOf("/"));
+          }
+          if (fileType) {
+            fileType = fileType[0].toUpperCase() + fileType.substring(1, fileType.length);
+          }
+          emit(fileType, createIndexableMediaFile(audioVideos[embeddedDataIndex]));
+        }
+      }
+
+    } catch (error) {
+      emit(" error" + error, doc._id);
     }
-
-  } catch (error) {
-    emit(" error" + error, doc._id);
-  }
-
-
-  try {
-    exports.debugMode = debugMode;
-    exports.showHumanDates = showHumanDates;
-    exports.guessType = guessType;
-    exports.guessPreview = guessPreview;
-    exports.skipBotComments = skipBotComments;
-    exports.convertToTimestamp = convertToTimestamp;
-    exports.createIndexableMediaFile = createIndexableMediaFile;
-  } catch (e) {
-    //  // DEBUG console.log("not in a node context")
-  }
-}
-
+  };
+  processDocument(doc);
+};
 
 try {
   exports.byType = byType;
