@@ -1,0 +1,16 @@
+[{
+  "_id": "juliesmith",
+  "_rev": "1-cbb3db33b2dacc8794fe6ad02f4af47b",
+  "fieldDBtype": "UserMask",
+  "gravatar": "d2371c1271e42cbe0be18f5bc4586fd8",
+  "username": "juliesmith",
+  "appbrand": "dyslexdisorth",
+  "collection": "users",
+  "firstname": "",
+  "lastname": "",
+  "researchInterest": "No public information available",
+  "affiliation": "No public information available",
+  "description": "No public information available",
+  "version": "v3.6.1",
+  "api": "users"
+}]
