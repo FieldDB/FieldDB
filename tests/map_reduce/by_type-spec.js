@@ -67,6 +67,30 @@ describe("MapReduce by_type", function() {
       // expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("");
     });
 
+
+    it("should run reduce map on an array", function() {
+      [{
+        _id: "one"
+      },{
+        _id: "two"
+      },{
+        _id: "two"
+      }].map(BY_TYPE_MAP_REDUCE.map);
+
+      expect(BY_TYPE_MAP_REDUCE.rows).toBeDefined();
+      expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(3);
+      expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual(" skipping typeless doc");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0]).toEqual(0);
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("one");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2]).toEqual(0);
+      // expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("");
+    
+      var results = BY_TYPE_MAP_REDUCE.group();
+      expect(results).toBeDefined();
+      expect(results.rows.length).toEqual(1);
+      expect(results.rows[0].key).toEqual(" skipping typeless doc");
+      expect(results.rows[0].value).toEqual(3);
+    });
   });
 
   describe("custom emit", function() {
