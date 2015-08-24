@@ -88,6 +88,10 @@ function byType(doc) {
       fields;
 
     if (preview) {
+      // handle contextualized titles
+      if (preview.default) {
+        preview = preview.default;
+      }
       // return preview;
     }
 
@@ -98,8 +102,17 @@ function byType(doc) {
     }
 
     // Get gravatar from a user
-    else if (type === "User") {
+    else if (type === "User" || type === "UserMask") {
       return doc.gravatar;
+    }
+
+    // Use anonymous code from participants or speakers
+    else if (type === "Participant" || type === "Consultant" || type === "Speaker") {
+      if (doc.fields && doc.fields.length && doc.fields[0] && doc.fields[0].mask) {
+        return doc.fields[0].mask;
+      } else {
+        return type;
+      }
     }
 
     // Get goal from session
@@ -284,7 +297,7 @@ function byType(doc) {
   } catch (e) {
     //  // DEBUG console.log("not in a node context")
   }
-};
+}
 
 
 try {
