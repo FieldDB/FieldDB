@@ -114,9 +114,14 @@ describe("MapReduce by_type", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_DATA[0]);
       expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(1);
       expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual("LanguageDatum");
+
+      expect(SAMPLE_DATA[0].dateModified).toEqual("\"2012-09-26T14:13:03.928Z\"");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toEqual("Wed Sep 26 2012 10:13:03 GMT-0400 (EDT)");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("D3DE2F48-451F-4E1D-809C-AD5D9D7D8120");
+
+      expect(SAMPLE_DATA[0].dateEntered).toEqual("\"2012-09-26T13:51:49.463Z\"");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 09:51:49 GMT-0400 (EDT)");
+
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("Jaunpa much'asqami kani.");
     });
 
