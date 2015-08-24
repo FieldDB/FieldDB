@@ -135,6 +135,27 @@ function byType(doc) {
     if (preview.length > 40) {
       preview = preview.substring(0, 20) + "..." + preview.substring(preview.length - 10, preview.length);
     }
+
+    // Add Item number if a stumlus response
+    if (doc.itemNumberInExperiment !== undefined) {
+      var score = "NA";
+      if (doc.responses && doc.responses.length && doc.responses[doc.responses.length - 1]) {
+        score = doc.responses[doc.responses.length - 1].score;
+      }
+      preview += " (" + doc.subexperimentLabel + " " + doc.itemNumberInExperiment + ", score: " + score + ")";
+    }
+
+    // Add score if a game response
+    if (doc.participants && doc.participants.length) {
+      preview += " (participants: " + doc.participants.map(function(participant) {
+        return participant._id;
+      }).join(", ") + ")";
+    }
+    if (doc.experimenters && doc.experimenters.length) {
+      preview += " (experimenters: " + doc.experimenters.map(function(experimenter) {
+        return experimenter._id;
+      }).join(", ") + ")";
+    }
     return preview;
   };
 
@@ -175,13 +196,17 @@ function byType(doc) {
       mediaDateCreated,
       mediaDateModified;
 
-    mediaUUID = media.URL;
+    mediaUUID = media.URL || media.filename;
     mediaPreview = media.caption || media.description;
     if (mediaPreview && mediaPreview.length > 60) {
       mediaPreview = mediaPreview.substring(0, 20) + "..." + mediaPreview.substring(mediaPreview.length - 20, mediaPreview.length);
     }
     mediaDateCreated = media.timestamp;
     mediaDateModified = media.timestampModified;
+
+    if (!mediaDateModified && media.details && media.details.mtime) {
+      mediaDateModified = media.details.mtime;
+    }
     // var milisecondsSinceComment = Date.now() - mediaDateModified;
 
     if (showHumanDates) {
@@ -194,7 +219,16 @@ function byType(doc) {
 
   console.log("Processing doc " + doc._id);
   try {
-    var type = guessType(doc),
+    var type = guessType(doc);
+    if (type === "SubExperimentDataList" && doc.results) {
+      console.log(" indexing the results");
+      for (var resultIndex = 0; resultIndex < doc.results.length; resultIndex++) {
+        byType(doc.results[resultIndex]);
+      };
+      // return;
+    }
+
+    var
       preview = guessPreview(doc, type),
       dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
       dateModified = convertToTimestamp(doc.dateModified);
@@ -267,13 +301,16 @@ function byType(doc) {
       }
     }
 
-    if (doc.audioVideo) {
+    if (type !== "Datalist" && type !== "SubExperimentDataList" && doc.audioVideo) {
       var audioVideos = doc.audioVideo;
       if (!Array.isArray(audioVideos)) {
         audioVideos = []; //skipping old audio from pre 2.0 dbs
       }
       for (embeddedDataIndex = 0; embeddedDataIndex < audioVideos.length; embeddedDataIndex++) {
         var fileType = audioVideos[embeddedDataIndex].type;
+        if (!fileType && audioVideos[embeddedDataIndex].details.type && audioVideos[embeddedDataIndex].details.type) {
+          fileType = audioVideos[embeddedDataIndex].details.type.substring(0, audioVideos[embeddedDataIndex].details.type.lastIndexOf("/"));
+        }
         if (fileType) {
           fileType = fileType[0].toUpperCase() + fileType.substring(1, fileType.length);
         }
