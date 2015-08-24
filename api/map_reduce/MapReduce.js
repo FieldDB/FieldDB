@@ -16,22 +16,42 @@ var MapReduceFactory = function(options) {
       value: val
     });
   };
+  var scopedEmit = function(key, value) {
+    rows.push({
+      key: key,
+      value: value,
+      custom: "custom"
+    });
+  };
 
   options.customMap = function(doc, emit, rows) {
     rows = rows || options.rows || [];
-    if (!emit) {
-      emit = options.emit;
-    }
-
-    try {
-      // ugly way to make sure references to 'emit' in map/reduce bind to the
-      // above emit at run time
-      eval("options.map = " + options.map.toString() + ";");
-    } catch (e) {
-      console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
+    if (emit) {
+      try {
+        // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time
+        eval("options.map = " + options.map.toString() + ";");
+        options.mustRescopeEmit = true;
+        console.log("customizing emit")
+      } catch (e) {
+        console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
+      }
     }
 
     options.map(doc);
+
+    if (options.mustRescopeEmit) {
+      try {
+        emit = options.emit;
+        // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time 
+        eval("options.map = " + options.map.toString() + ";");
+        options.mustRescopeEmit = false;
+        console.log("rescoped emit");
+      } catch (e) {
+        console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
+      }
+    } else {
+      console.log("not rescoping emit, already using the default");
+    }
 
     return {
       rows: rows
