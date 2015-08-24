@@ -9,7 +9,7 @@ function byUserModified(doc) {
       return;
     }
     if (!(doc.fieldDBtype === "Datum" || doc.collection === "datums" || (doc.datumFields && doc.session))) {
-      emit(" skipping non datum", doc._id);
+      // DEBUG console.log(" skipping non datum", doc._id);
       return;
     }
 
