@@ -18,6 +18,14 @@ SAMPLE_v3_CORPORA[0].dateCreated = 1439925745602;
 
 var SAMPLE_v1_DATALISTS = require("../../sample_data/datalist_v1.22.1.json");
 var SAMPLE_v2_DATALISTS = require("../../sample_data/game_v2.24.0.json");
+SAMPLE_v2_DATALISTS[0].participants = [{
+  _id: "ALXD645210KI"
+}];
+SAMPLE_v2_DATALISTS[0].experimenters = [{
+  _id: "juliesmith"
+},{
+  _id: "manontee"
+}];
 var SAMPLE_SESSIONS = require("../../sample_data/session_v1.22.1.json");
 var SAMPLE_PARTICIPANTS = require("../../sample_data/participant_v2.32.0.json");
 var SAMPLE_USER_MASK = require("../../sample_data/usermask_v3.6.1.json");
@@ -169,8 +177,7 @@ describe("MapReduce by_type", function() {
       SAMPLE_GAMIFY_DATA.map(BY_TYPE_MAP_REDUCE.map);
       gamifyRows = BY_TYPE_MAP_REDUCE.rows;
 
-      expect(gamifyRows.length).toEqual(SAMPLE_GAMIFY_DATA.length);
-      expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(SAMPLE_GAMIFY_DATA.length);
+      expect(gamifyRows.length).toEqual(66);
       expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(gamifyRows.length);
     });
 
@@ -240,11 +247,59 @@ describe("MapReduce by_type", function() {
       expect(SAMPLE_GAMIFY_DATA[3].results[1].results[0].datumFields.length).toEqual(7);
       expect(SAMPLE_GAMIFY_DATA[3].results[1].results[0].datumFields[2].mask).toEqual("Child,&nbsp;NormalProduction");
 
-      expect(gamifyRows[3].key).toEqual("SubExperimentDataList");
-      expect(gamifyRows[3].value[0].toString()).toEqual("Fri Oct 10 2014 10:41:09 GMT-0400 (EDT)");
-      expect(gamifyRows[3].value[1]).toEqual("32a4e729a4c1d2278bec26f69b29b7cd");
-      expect(gamifyRows[3].value[2].toString()).toEqual("Fri Aug 21 2015 11:21:45 GMT-0400 (EDT)");
-      expect(gamifyRows[3].value[3]).toEqual("locale_title");
+      expect(gamifyRows[3].key).toEqual("Response");
+      expect(gamifyRows[3].value[0].toString()).toEqual("Mon Jul 14 2014 10:39:11 GMT-0400 (EDT)");
+      expect(gamifyRows[3].value[1]).toEqual("1440170554221a999eaa0bf68ef3c6870c1f158491ab9");
+      expect(gamifyRows[3].value[2].toString()).toEqual("Fri Aug 21 2015 11:22:34 GMT-0400 (EDT)");
+      expect(gamifyRows[3].value[3]).toEqual("dʒəmp (Practice 1, score: 1)");
+
+      expect(gamifyRows[4].key).toEqual("Image");
+      expect(gamifyRows[4].value[0]).toEqual(0);
+      expect(gamifyRows[4].value[1]).toEqual("jump.png");
+      expect(gamifyRows[4].value[2]).toEqual(0);
+      expect(gamifyRows[4].value[3]).toEqual("A depiction of a fro...ker did say 'jump').");
+
+      expect(gamifyRows[5].key).toEqual("Audio");
+      expect(gamifyRows[5].value[0].toString()).toEqual("Mon Jul 14 2014 10:04:37 GMT-0400 (EDT)");
+      expect(gamifyRows[5].value[1]).toEqual("https://speechdev.example.org/jumprun-fr-ca/GR02A_jump__MOD.mp3");
+      expect(gamifyRows[5].value[2]).toEqual(0);
+      expect(gamifyRows[5].value[3]).toEqual(" Downloaded Praat Te... for GR02A_jump__MOD");
+
+      expect(gamifyRows[3].value[3]).toEqual("dʒəmp (Practice 1, score: 1)");
+      expect(gamifyRows[6].value[3]).toEqual("ni (Practice 2, score: 1)");
+      expect(gamifyRows[9].value[3]).toEqual("dʒəmp (Practice 3, score: 1)");
+      expect(gamifyRows[12].value[3]).toEqual("ni (Practice 4, score: 1)");
+      expect(gamifyRows[15].value[3]).toEqual("ni (Practice 5, score: 1)");
+      expect(gamifyRows[18].value[3]).toEqual("dʒəmp (Practice 6, score: 1)");
+      expect(gamifyRows[21].value[3]).toEqual("dʒəmp (Practice 7, score: 1)");
+      expect(gamifyRows[24].value[3]).toEqual("ni (Practice 8, score: 1)");
+      expect(gamifyRows[27].value[3]).toEqual("ni (Practice 9, score: 1)");
+      expect(gamifyRows[30].value[3]).toEqual("dʒəmp (Practice 10, score: 1)");
+
+      expect(gamifyRows[33].key).toEqual("SubExperimentDataList");
+      expect(gamifyRows[33].value[0].toString()).toEqual("Thu Sep 04 2014 18:45:13 GMT-0400 (EDT)");
+      expect(gamifyRows[33].value[1]).toEqual("4e06b60e129dff5c7bb4bb234990b834");
+      expect(gamifyRows[33].value[2].toString()).toEqual("Mon Jul 14 2014 10:39:11 GMT-0400 (EDT)");
+      expect(gamifyRows[33].value[3]).toEqual("locale_practice");
+
+      expect(gamifyRows[34].value[3]).toEqual("dʒəmp (Test 11, score: 1)");
+      expect(gamifyRows[37].value[3]).toEqual("gi (Test 12, score: 1)");
+      expect(gamifyRows[40].value[3]).toEqual("gji (Test 13, score: 0)");
+      expect(gamifyRows[43].value[3]).toEqual("dʒəmp (Test 14, score: 1)");
+      expect(gamifyRows[46].value[3]).toEqual("dʒəmp (Test 15, score: 1)");
+      expect(gamifyRows[49].value[3]).toEqual("gi (Test 16, score: 1)");
+      expect(gamifyRows[52].value[3]).toEqual("dʒəmp (Test 17, score: 1)");
+      expect(gamifyRows[55].value[3]).toEqual("gi (Test 18, score: 1)");
+      expect(gamifyRows[58].value[3]).toEqual("gi (Test 19, score: 1)");
+      expect(gamifyRows[61].value[3]).toEqual("dʒəmp (Test 20, score: 1)");
+
+
+      expect(gamifyRows[65].key).toEqual("SubExperimentDataList");
+      expect(gamifyRows[65].value[0].toString()).toEqual("Fri Oct 10 2014 10:41:09 GMT-0400 (EDT)");
+      expect(gamifyRows[65].value[1]).toEqual("32a4e729a4c1d2278bec26f69b29b7cd");
+      expect(gamifyRows[65].value[2].toString()).toEqual("Fri Aug 21 2015 11:21:45 GMT-0400 (EDT)");
+      expect(gamifyRows[65].value[3]).toEqual("locale_title (participants: ALXD645210KI) (experimenters: juliesmith, manontee)");
+
     });
   });
 });
