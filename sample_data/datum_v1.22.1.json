@@ -150,8 +150,8 @@
       "userchooseable": "disabled"
     }, {
       "label": "user",
-      "value": "",
-      "mask": "",
+      "value": "sapir",
+      "mask": "sapir",
       "encrypted": "",
       "shouldBeEncrypted": "",
       "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
@@ -174,7 +174,7 @@
   }
 }, {
   "fieldDBtype": "Datum",
-  "id": "af3e7eaca2f20158c2a89c7da704c1a5",
+  "_id": "af3e7eaca2f20158c2a89c7da704c1a5",
   "dbname": "testingspreadsheet-firstcorpus",
   "version": "v2.49.1",
   "_rev": "6-49f5f46760ac12961b33c6f0bea579c4",
