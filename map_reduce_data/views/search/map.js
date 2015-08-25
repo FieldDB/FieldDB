@@ -1,15 +1,42 @@
-function(doc) { var convertDatumIntoSimpleObject = function(datum) {
-    var obj = {},
-      fieldKeyName = "label";
+function search(doc) {
+  var debugMode = true,
+    showHumanDates = true;
 
-    for (var i = 0; i < datum.datumFields.length; i++) {
-      if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+  var convertToTimestamp = function(dateOrTimestamp) {
+    if (dateOrTimestamp) {
+      if (dateOrTimestamp[0] === "\"") {
+        dateOrTimestamp = dateOrTimestamp.replace(/["\\]/g, "");
+      }
+      if (dateOrTimestamp[dateOrTimestamp.length - 1] === "Z") {
+        dateOrTimestamp = new Date(dateOrTimestamp);
+        /* Use date modified as a timestamp if it isnt one already */
+        dateOrTimestamp = dateOrTimestamp.getTime();
+      }
+    }
+
+    if (!dateOrTimestamp) {
+      dateOrTimestamp = 0;
+    }
+    return dateOrTimestamp;
+  };
+
+  var convertDatumIntoSimpleObject = function(datum) {
+    if (!datum.session) {
+      return;
+    }
+    var obj = {},
+      fieldKeyName = "label",
+      fields;
+
+    fields = datum.fields || datum.datumFields;
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].id && fields[i].id.length > 0) {
         fieldKeyName = "id"; /* update to version 2.35+ */
       } else {
         fieldKeyName = "label";
       }
-      if (datum.datumFields[i].mask) {
-        obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+      if (fields[i].mask) {
+        obj[fields[i][fieldKeyName]] = fields[i].mask;
       }
     }
     if (datum.session.sessionFields) {
@@ -24,41 +51,68 @@ function(doc) { var convertDatumIntoSimpleObject = function(datum) {
         }
       }
     }
-    obj.utterance = obj.utterance || "";
-    obj.morphemes = obj.morphemes || "";
-    obj.gloss = obj.gloss || "";
-
     return obj;
   };
   try {
     /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) return;
-    if (doc.datumFields && doc.session) {
-      var obj = convertDatumIntoSimpleObject(doc);
-
-      if (doc.comments) {
-        obj["comments"] = JSON.stringify(doc.comments);
-      }
-      if (doc.audioVideo) {
-        obj["audioVideo"] = JSON.stringify(doc.audioVideo);
-      }
-      var dateEntered = doc.dateEntered;
-      if (dateEntered) {
-        try {
-          dateEntered = dateEntered.replace(/["\\]/g, '');
-          dateEntered = new Date(dateEntered);
-          /* Use date modified as a timestamp if it isnt one already */
-          dateEntered = dateEntered.getTime();
-        } catch (e) {
-          //emit(error, null);
-        }
-      }
-      if (!dateEntered) {
-        dateEntered = 0;
-      }
-      emit(dateEntered, obj);
+    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      return;
     }
-  } catch (e) {
-    //emit(e, 1);
+    var obj = convertDatumIntoSimpleObject(doc);
+    if (!obj) {
+      return;
+    }
+    if (doc.comments && doc.comments.length) {
+      obj["comments"] = "";
+      doc.comments.map(function(comment) {
+        obj["comments"] += comment.username;
+        if (comment.text) {
+          obj["comments"] += ": " + comment.text + ". ";
+        }
+      });
+    }
+    if (doc.audioVideo && doc.audioVideo.length && typeof doc.audioVideo.map === "function") {
+      obj["audioVideo"] = "";
+      doc.audioVideo.map(function(audioVideo) {
+        obj["audioVideo"] += audioVideo.filename;
+        if (audioVideo.description) {
+          obj["audioVideo"] += ", " + audioVideo.description + ". ";
+        }
+      });
+    }
+    if (doc.images&& doc.images.length) {
+      obj["images"] = "";
+      doc.images.map(function(image) {
+        obj["images"] += image.filename;
+        if (image.caption) {
+          obj["images"] += ", " + image.caption + ". ";
+        }
+      });
+    }
+    var dateCreated = convertToTimestamp(doc.dateCreated || doc.dateEntered || doc.timestamp),
+      dateModified = convertToTimestamp(doc.dateModified);
+
+    if (!dateModified) {
+      dateModified = dateCreated;
+    }
+
+    /* see the dates while debugging */
+    if (showHumanDates) {
+      dateCreated = dateCreated ? new Date(dateCreated) : 0;
+      dateModified = dateModified ? new Date(dateModified) : 0;
+    }
+
+    obj.dateCreated = dateCreated;
+    obj.dateModified = dateModified;
+    emit(dateCreated, obj);
+  } catch (error) {
+    emit(" error" + error, doc._id);
   }
+}
+
+
+try {
+  exports.search = search;
+} catch (e) {
+  //  // DEBUG console.log("not in a node context")
 }
