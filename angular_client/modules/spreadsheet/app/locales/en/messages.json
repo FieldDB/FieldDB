@@ -806,7 +806,7 @@
         "description": " "
     },
     "locale_instructor_faq_answer": {
-        "message": "There is a FAQ specifically for instructors at <a target='_blank' href='/#/faq_instructors'>FAQ_for_instructors</a> that will help you set up LingSync for your class.",
+        "message": "There is a FAQ specifically for instructors at <a href='/#/faq_instructors'>FAQ_for_instructors</a> that will help you set up LingSync for your class.",
         "description": ""
     },
 
