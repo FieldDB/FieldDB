@@ -7,7 +7,7 @@ var BY_USER_MAP_REDUCE = mapReduceFactory({
 });
 
 var SAMPLE_DATA = require("../../sample_data/datum_v1.22.1.json");
-var specIsRunningTooLong = 5000;
+// var specIsRunningTooLong = 5000;
 
 describe("MapReduce by_user_modified", function() {
 

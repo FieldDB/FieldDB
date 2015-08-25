@@ -28,7 +28,7 @@ var SAMPLE_GAMIFY_DATA = [
   SAMPLE_v3_CORPORA[0],
   SAMPLE_v2_DATALISTS[0]
 ];
-var specIsRunningTooLong = 5000;
+// var specIsRunningTooLong = 5000;
 
 describe("MapReduce by_type", function() {
 
