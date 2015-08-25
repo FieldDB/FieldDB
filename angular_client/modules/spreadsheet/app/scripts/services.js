@@ -30,7 +30,7 @@ angular.module('spreadsheetApp')
       } else {
         config = {
           method: "GET",
-          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
+          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/datums_chronological",
           withCredentials: true
         };
         console.log("Contacting the DB to get all corpus data for " + DB);
@@ -111,7 +111,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/get_datum_fields",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/get_datum_fields",
         withCredentials: true
       };
 
@@ -131,7 +131,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/sessions",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/sessions",
         withCredentials: true
       };
 
@@ -151,7 +151,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/precedence_rules?group=true",
         withCredentials: true
       };
 
@@ -172,7 +172,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/lexicon_create_tuples?group=true",
         withCredentials: true
       };
 
