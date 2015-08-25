@@ -56,6 +56,8 @@ var Collection = function Collection(json) {
   Object.apply(this, arguments);
 };
 
+Collection.notWorthSortingSize = 100;
+
 /** @lends Collection.prototype */
 Collection.prototype = Object.create(Object.prototype, {
   constructor: {
@@ -207,10 +209,22 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  sorted: {
+    get: function() {
+      if (this.length && this.length < Collection.notWorthSortingSize && this._sorted) {
+        return true;
+      }
+    },
+    set: function(value) {
+      this._sorted = value;
+      //TODO if becoming sorted and worth sorting, do sort now
+    }
+  },
+
   /**
    * Loops through the collection (inefficiently, from start to end) to find
    * something which matches.
-   *
+   * TODO add sorted option with faster search
    *
    * @param  {String} arg1  If run with only one argument, this is the string to look for in the primary keys.
    * @param  {String} arg2  If run with two arguments, this is the string to look for in the first argument

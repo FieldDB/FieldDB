@@ -403,7 +403,7 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
             "url": "http://spreadsheet.fielddb.org"
           }, {
             "userFriendlyClientName": "Prototype Online",
-            "url": "https://corpusdev.fielddb.org/lingllama-communitycorpus/_design/pages/corpus.html"
+            "url": "https://corpusdev.fielddb.org/lingllama-communitycorpus/_design/app/corpus.html"
           }, {
             "userFriendlyClientName": "Beta Chrome App",
             "url": "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa/user.html#corpus/lingllama-communitycorpus"

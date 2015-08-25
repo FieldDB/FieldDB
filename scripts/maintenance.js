@@ -398,7 +398,7 @@ var MAINTAINENCE = {
               return;
             }
             var database = $.couch.db(dbname);
-            database.openDoc("_design/pages", {
+            database.openDoc("_design/data", {
               success: function(results) {
                 console.log(results._rev + " in " + dbname);
 
@@ -856,7 +856,7 @@ var MAINTAINENCE = {
                 sourceDB = "new_user_activity_feed";
               }
             } else {
-              sourceDB = "new_corpus";
+              sourceDB = "new_corpus_deprecated";
             }
 
             if (dbname.indexOf("-") === -1) {

@@ -36,22 +36,22 @@ cd couchapp_minified
 
 TESTUSERNAME=$2
 
-couchapp push . $SERVER/public-firstcorpus
+erica push  . $SERVER/public-firstcorpus
 
 # Deploy app to the template corpus
-couchapp push . $SERVER/new_corpus
+erica push  . $SERVER/new_corpus
 
 # Deploy app to the testing corpora
-couchapp push . $SERVER/$TESTUSERNAME-firstcorpus
+erica push  . $SERVER/$TESTUSERNAME-firstcorpus
 
 # deploy activity feeds too
-cd ../couchapp_activities
+cd ../map_reduce_activities
 
-couchapp push . $SERVER/public-firstcorpus-activity_feed
-couchapp push . $SERVER/public-activity_feed
+erica push  . $SERVER/public-firstcorpus-activity_feed
+erica push  . $SERVER/public-activity_feed
 
-couchapp push . $SERVER/new_user_activity_feed
-couchapp push . $SERVER/new_corpus_activity_feed
+erica push  . $SERVER/new_user_activity_feed
+erica push  . $SERVER/new_corpus_activity_feed
 
-couchapp push . $SERVER/$TESTUSERNAME-firstcorpus-activity_feed
-couchapp push . $SERVER/$TESTUSERNAME-activity_feed
+erica push  . $SERVER/$TESTUSERNAME-firstcorpus-activity_feed
+erica push  . $SERVER/$TESTUSERNAME-activity_feed

@@ -31,7 +31,7 @@ you will need to go to the top level folder (above this folder), do
 ## CouchApp
 
 If you want to deploy the app so that it can run online on URL, the fastest way is to push it to a couchdb.
-You can use the couchapp_dev folder and the build_debug.sh script, or the couchapp_minified folder, and the build_fielddb_minified.sh script.
+You can use the map_reduce_data folder and the build_debug.sh script, or the couchapp_minified folder, and the build_fielddb_minified.sh script.
 
 ## Android App
 

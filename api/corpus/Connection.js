@@ -84,7 +84,7 @@ Connection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
       "url": "chrome-extension://pcflbgejbbgijjbmaodhhbibegdfecjc/index.html"
     }, {
       "userFriendlyClientName": "Prototype Online",
-      "url": "https://localhost:6984/" + options.dbname + "/_design/pages/corpus.html"
+      "url": "https://localhost:6984/" + options.dbname + "/_design/data/corpus.html"
     }, {
       "userFriendlyClientName": "Localhost Chrome App",
       "url": "chrome-extension://kaaemcdklbfiiaihlnkmknkgbnkamcbh/user.html#corpus/" + options.dbname
@@ -675,7 +675,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
 
   if (Connection.knownConnections[optionalHREF]) {
     connection = Connection.knownConnections[optionalHREF];
-  } else if (optionalHREF.indexOf("_design/pages") > -1) {
+  } else if (optionalHREF.indexOf("_design/") > -1) {
     if (optionalHREF.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = Connection.knownConnections.beta;
     } else if (optionalHREF.indexOf("lingsync.org") >= 0) {

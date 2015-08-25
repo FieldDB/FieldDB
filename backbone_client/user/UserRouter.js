@@ -85,7 +85,7 @@ define([
             if(!corpusidfromCorpusMask){
 
               var couchurl = OPrime.getCouchUrl(connection);
-              var queryUrl = couchurl + "/_design/pages/_view/private_corpora";
+              var queryUrl = couchurl + "/_design/deprecated/_view/private_corpora";
 
               var errorfunction = function(response) {
                 OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));

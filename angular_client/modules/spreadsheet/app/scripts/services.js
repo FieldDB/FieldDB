@@ -14,7 +14,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
+        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/deprecated/_view/precedence_rules?group=true",
         withCredentials: true
       };
 
@@ -35,7 +35,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
+        url: FieldDB.FieldDBObject.application.connection.corpusUrl + "/" + DB + "/_design/deprecated/_view/lexicon_create_tuples?group=true",
         withCredentials: true
       };
 

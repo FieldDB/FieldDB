@@ -1,0 +1,123 @@
+[{
+  "_id": "ALXD645210KI",
+  "_rev": "1-4ad7196dfc9a33141cc0ce555453bcfe",
+  "fieldDBtype": "Participant",
+  "fields": [{
+    "fieldDBtype": "DatumField",
+    "labelNonLinguists": "Anonymous Code",
+    "labelTranslators": "Anonymous Code",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "A field to anonymously identify language speakers/participants.",
+    "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc).",
+    "version": "v2.32.0",
+    "labelExperimenters": "Code Permanent",
+    "encryptedValue": "alxd645210ki",
+    "mask": "alxd645210ki",
+    "value": "alxd645210ki",
+    "id": "anonymousCode"
+  }, {
+    "fieldDBtype": "DatumField",
+    "labelExperimenter": "Course/Class/Section Number",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "Optional course or section number, if used by the participants result reports or experimental conditions.",
+    "helpLinguists": "Optional course or section number, if used by the participants result reports or experimental conditions.",
+    "version": "v2.32.0",
+    "labelExperimenters": "N° section",
+    "encryptedValue": "confidential:VTJGc2RHVmtYMStQeGFvYlN0azdQa3NSbG1BWUxsN1B6bWpGUUsyWUdPWT0=",
+    "mask": "xxx",
+    "value": "xxx",
+    "id": "courseNumber"
+  }, {
+    "fieldDBtype": "DatumField",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
+    "helpLinguists": "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)",
+    "version": "v2.32.0",
+    "labelExperimenters": "Prénom",
+    "encryptedValue": "confidential:VTJGc2RHVmtYMTlrZTVtR05xN1liWUdjQmx3SU5YOEVYRXlhTDlFMFVZcz0=",
+    "mask": "xxxxxxx",
+    "value": "xxxxxxx",
+    "id": "firstname"
+  }, {
+    "fieldDBtype": "DatumField",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The last name of the speaker/participant (encrypted)",
+    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)",
+    "version": "v2.32.0",
+    "labelExperimenters": "Nom de famille",
+    "encryptedValue": "confidential:VTJGc2RHVmtYMS9GSnBwOUxIbElHY3VMN2tYWFNXRHNOQmZDVE10eCtSbz0=",
+    "mask": "xxxxxxxxx",
+    "value": "xxxxxxxxx",
+    "id": "lastname"
+  }, {
+    "fieldDBtype": "DatumField",
+    "type": "date",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months).",
+    "helpLinguists": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months).",
+    "version": "v2.32.0",
+    "labelExperimenters": "Date de naissance",
+    "encryptedValue": "confidential:VTJGc2RHVmtYMTlOeDRuaFA5U2EyQ3p1OEZNRkovQmlkRWJ6M0hUYm5Mcz0=",
+    "mask": "xxxx-xx-xx",
+    "value": "xxxx-xx-xx",
+    "id": "dateOfBirth"
+  }],
+  "dateCreated": 1439926942805,
+  "url": "https://corpusdev.example.org/juliesmith-dyslexdisorth",
+  "version": "v2.32.0",
+  "enteredByUser": {
+    "value": "juliesmith",
+    "json": {
+      "user": {
+        "name": "",
+        "username": "juliesmith"
+      },
+      "software": {
+        "appCodeName": "Mozilla",
+        "appName": "Netscape",
+        "appVersion": "5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36",
+        "cookieEnabled": true,
+        "doNotTrack": null,
+        "hardwareConcurrency": 8,
+        "language": "en-US",
+        "languages": [
+          "ka",
+          "en-US",
+          "en",
+          "fr"
+        ],
+        "maxTouchPoints": 0,
+        "onLine": true,
+        "platform": "MacIntel",
+        "product": "Gecko",
+        "productSub": "20030107",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36",
+        "vendor": "Google Inc.",
+        "vendorSub": ""
+      },
+      "hardware": {}
+    }
+  },
+  "api": "participants"
+}]

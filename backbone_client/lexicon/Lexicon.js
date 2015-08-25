@@ -47,7 +47,7 @@ define([
         }
         FieldDB.CORS.makeCORSRequest({
           type: 'GET',
-          url: couchurl + "/_design/pages/_view/lexicon_create_tuples?group=true"
+          url: couchurl + "/_design/deprecated/_view/lexicon_create_tuples?group=true"
         }).then(function(results) {
           if (localStorage.getItem(dbname + "lexiconResults")) {
             if (typeof callback == "function") {

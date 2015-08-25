@@ -529,7 +529,7 @@ define([
 
             var connection = OPrime.defaultConnection();
             connection.dbname = potentialdbname;
-            var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/pages/_view/private_corpora";
+            var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
 
             window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
               OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {

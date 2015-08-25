@@ -14,62 +14,23 @@ var CORS = require("../CORS").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;
+var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
-var LEXICON_NODES_MAP_REDUCE = {
+var lexiconNodesMapReduceString = require("../../map_reduce_lexicon/views/lexiconNodes/map").lexiconNodes;
+var LEXICON_NODES_MAP_REDUCE = mapReduceFactory({
   filename: "lexiconNodes",
-  map: null,
-  reduce: null,
-  rows: [],
-  emit: function(key, val) {
-    this.rows.push({
-      key: key,
-      value: val
-    });
-  }
-};
-try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/lexiconNodes/map").lexiconNodes;
-  var emit = LEXICON_NODES_MAP_REDUCE.emit;
-  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  /*jslint evil: true */
-  eval("LEXICON_NODES_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
-} catch (exception) {
-  console.log("Unable to parse the map reduce ", exception.stack);
-  var emit = LEXICON_NODES_MAP_REDUCE.emit;
-  LEXICON_NODES_MAP_REDUCE.map = function() {
-    emit("error", "unable to load map reduce");
-  };
-}
+  mapString: lexiconNodesMapReduceString
+});
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
-var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = {
+var morphemesPrecedenceMapReduceString = require("../../map_reduce_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
+var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = mapReduceFactory({
   filename: "morphemesPrecedenceContext",
-  map: null,
-  reduce: null,
-  rows: [],
-  emit: function(key, val) {
-    this.rows.push({
-      key: key,
-      value: val
-    });
-  }
-};
-try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
-  /*jshint unused:false */
-  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
-  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  eval("LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
-} catch (exception) {
-  console.log("Unable to parse the map reduce ", exception.stack);
-  var emit = LEXICON_CONNECTED_GRAPH_MAP_REDUCE.emit;
-  LEXICON_CONNECTED_GRAPH_MAP_REDUCE.map = function() {
-    emit("error", "unable to load map reduce");
-  };
-}
-
+  mapString: morphemesPrecedenceMapReduceString
+});
+console.log("TODO hook up ", LEXICON_CONNECTED_GRAPH_MAP_REDUCE);
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
  *        their allomorphs and glosses. It allows the search to index
@@ -148,6 +109,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     value: {
       item: LexiconNode
     }
+  },
+  /**
+   *  Lexicon find will be faster but insert will be slower
+   *  
+   * @type {Object}
+   */
+  sorted: {
+    value: true
   },
 
   id: {
@@ -1214,7 +1183,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       this.availableLexicalRelations = this.availableLexicalRelations || [];
       var attrib;
-      var newRelation;
       var self = this;
       var relationsIndex = {};
 
@@ -1263,7 +1231,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * Overwrite/build the lexicon from the corpus server if it is there, saves
    * the results to local storage so they can be reused offline.
    *
-   * OLD url /_design/pages/_view/lexicon_create_tuples?group=true
+   * OLD url /_design/deprecated/_view/lexicon_create_tuples?group=true
    *
    * New url _design/lexicon/_view/morphemesPrecedenceContext?group=true&limit=400
    * 
@@ -1324,7 +1292,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
   fetchConnectedGraph: {
     value: function(options) {
-
+      this.debug("not doing anything for fetchConnectedGraph ", options);
     }
   },
 
@@ -1481,15 +1449,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
 
-      var lineColor = this.d3.scale.linear()
-        .range(["#FFFFF", "#FFFF00"]) // or use hex values
-        .domain([1, 8]);
+      // var lineColor = this.d3.scale.linear()
+      //   .range(["#FFFFF", "#FFFF00"]) // or use hex values
+      //   .domain([1, 8]);
 
-      var x = this.d3.scale.linear()
-        .range([0, width]);
+      // var x = this.d3.scale.linear()
+      //   .range([0, width]);
 
-      var y = this.d3.scale.linear()
-        .range([0, height - 40]);
+      // var y = this.d3.scale.linear()
+      //   .range([0, height - 40]);
 
 
       var colorByMorphemeLength = function(lexicalEntry) {
@@ -1807,30 +1775,7 @@ Lexicon.convertMapReduceRowIntoLexicalEntry = function(row) {
  * [lexicon_nodes_mapReduce description]
  * @type {Function}
  */
-Lexicon.lexicon_nodes_mapReduce = function(doc, emit, rows) {
-  rows = rows || [];
-  if (!emit) {
-    emit = function(key, value) {
-      rows.push({
-        key: key,
-        value: value
-      });
-    };
-  }
-
-  try {
-    // ugly way to make sure references to 'emit' in map/reduce bind to the
-    // above emit at run time
-    eval("LEXICON_NODES_MAP_REDUCE.map = " + LEXICON_NODES_MAP_REDUCE.map.toString() + ";");
-  } catch (e) {
-    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for LEXICON_NODES_MAP_REDUCE");
-  }
-
-  LEXICON_NODES_MAP_REDUCE.map(doc);
-  return {
-    rows: rows
-  };
-};
+Lexicon.lexicon_nodes_mapReduce = LEXICON_NODES_MAP_REDUCE;
 
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
