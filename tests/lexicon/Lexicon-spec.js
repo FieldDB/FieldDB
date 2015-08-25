@@ -211,7 +211,99 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   describe("map reduces", function() {
 
-    it("should accept custom emit function and rows holder", function() {
+    it("should accept custom igt fields", function() {
+      var docs = [{
+        _id: "one",
+        fields: [{
+          id: "utterance",
+          mask: "Erqe qankuna qaparinaywankichis"
+        }, {
+          id: "gloss",
+          mask: "Erqe qan-kuna qapari-nay-wankichis"
+        }, {
+          id: "anotherigtfields",
+          mask: "A B-C D-E-F",
+          type: "IGT"
+        }],
+        session: {
+          fields: []
+        }
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(6);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
+        key: {
+          gloss: "Erqe",
+          confidence: 1,
+          anotherigtfields: "A"
+        },
+        value: "Erqe"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[1]).toEqual({
+        key: {
+          gloss: "qan",
+          confidence: 1,
+          anotherigtfields: "B"
+        },
+        value: "qankuna"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[2]).toEqual({
+        key: {
+          gloss: "kuna",
+          confidence: 1,
+          anotherigtfields: "C"
+        },
+        value: "qankuna"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
+        key: {
+          gloss: "qapari",
+          confidence: 1,
+          anotherigtfields: "D"
+        },
+        value: "qaparinaywankichis"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
+        key: {
+          gloss: "nay",
+          confidence: 1,
+          anotherigtfields: "E"
+        },
+        value: "qaparinaywankichis"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
+        key: {
+          gloss: "wankichis",
+          confidence: 1,
+          anotherigtfields: "F"
+        },
+        value: "qaparinaywankichis"
+      });
+    });
+
+    xit("should accept flag fiels which have too many segmentations", function() {
+      var docs = [{
+        _id: "one",
+        fields: [{
+          id: "utterance",
+          mask: "A B C D E"
+        }, {
+          id: "gloss",
+          mask: "a b1-b2 c-c2-c3"
+        }],
+        session: {
+          fields: []
+        }
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual();
+    });
+
+    xit("should accept custom emit function and rows holder", function() {
       var rows = ["some previous stuff"];
       var emit = function(key, value) {
         rows.push({
