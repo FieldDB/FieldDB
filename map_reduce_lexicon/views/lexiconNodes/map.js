@@ -93,7 +93,7 @@ function lexiconNodes(doc) {
       potentiallyUnmatchedIGT = {
         size: 0
       },
-      previousContext;
+      previousContext = "";
 
     // Count through the expected numer of words
     for (wordIndex = 0; wordIndex < mostWords; wordIndex++) {
@@ -106,7 +106,7 @@ function lexiconNodes(doc) {
         words[wordIndex] = words[wordIndex] || {};
         // Detect if this row has more words than we are expecting
         words[wordIndex][fieldLabel] = igt[fieldLabel][wordIndex] || "";
-        if (igt[fieldLabel].length > mostWords) {
+        if (!igt[fieldLabel][wordIndex]) {
           if (extendedContextFields.indexOf(fieldLabel) === -1) {
             potentiallyUnmatchedIGT[fieldLabel] = igt[fieldLabel];
             potentiallyUnmatchedIGT[fieldLabel].missing = wordIndex;
@@ -117,7 +117,7 @@ function lexiconNodes(doc) {
           words[wordIndex]["confidence"] = 1;
         }
       }
-      if (igt.context[wordIndex]) {
+      if (igt.context && igt.context[wordIndex]) {
         words[wordIndex].context = igt.context[wordIndex];
         previousContext = igt.context[wordIndex];
       } else {
@@ -218,6 +218,13 @@ function lexiconNodes(doc) {
         console.log("Skipping field ", field);
       }
     }
+    // Use morphemes if utterance wasn't provided
+    if (datum.morphemes && !datum.utterance) {
+      datum.utterance = datum.morphemes.map(function(morpheme) {
+        return morpheme.replace(/-=/g, "");
+      });
+    }
+    // Move utterance or othography into context per word
     if (!datum.context) {
       datum.context = datum.utterance || datum.orthography;
       delete datum.utterance;
@@ -258,6 +265,7 @@ function lexiconNodes(doc) {
       });
 
     } catch (error) {
+      console.log(error.stack);
       emit(" error" + error, doc._id);
     }
   };
