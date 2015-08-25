@@ -83,7 +83,7 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
   var optionalCouchAppPath = "";
   if (OPrime.isCouchApp()) {
     var corpusURL = "https://localhost:6984";
-    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/pages/";
+    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/data/";
   }
   return optionalCouchAppPath;
 };

@@ -169,7 +169,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
             .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
         connection = OPrime.servers[appropriateserver];
         window.location.replace(OPrime.getCouchUrl(connection, "")
-            + "/public-firstcorpus/_design/pages/corpus.html");
+            + "/public-firstcorpus/_design/data/corpus.html");
       }
     } else {
       authUrl = OPrime.authUrl;
@@ -266,7 +266,7 @@ OPrime.guessCorpusUrlBasedOnWindowOrigin = function(dbname) {
     } else if (corpusURL.indexOf("localhost") >= 0) {
       // use the window origin
     }
-    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/pages/";
+    optionalCouchAppPath = corpusURL + "/" + dbname + "/_design/data/";
   }
   return optionalCouchAppPath;
 };
