@@ -9,7 +9,7 @@ var FREQUENT_MAP_REDUCE = mapReduceFactory({
 });
 
 var SAMPLE_GAME = require("../../sample_data/game_v2.24.0.json");
-var specIsRunningTooLong = 5000;
+// var specIsRunningTooLong = 5000;
 
 describe("MapReduce frequent", function() {
 

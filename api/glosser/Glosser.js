@@ -695,7 +695,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   guessUtteranceFromMorphemes: {
-    value: function(fields, justCopyDontGuessIGT) {
+    value: function(fields) {
       if (!fields.utterance && fields.morphemes) {
         fields.utterance = fields.morphemes.replace(/[-.]/g, "");
       }
@@ -874,10 +874,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         this.warn("Cannot visualize an empty lexicon.");
         return this;
       }
-
-      var prefs = {
-        showRelations: ["precedes"]
-      };
 
       this.lexicon.visualizeAsForceDirectedGraph(options);
 

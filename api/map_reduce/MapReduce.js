@@ -1,5 +1,5 @@
 var debugMode = false;
-
+/*jslint evil: true */
 var MapReduceFactory = function(options) {
   options = options || {
     filename: "",
@@ -74,7 +74,7 @@ var MapReduceFactory = function(options) {
     reducedRows = reducedRows.map(function(groupedRow) {
       groupedRow.value = options.reduce(null, groupedRow.value, false);
       return groupedRow;
-    })
+    });
     // DEBUG console.log("re-reduced ", reducedRows);
 
     return {
@@ -130,7 +130,10 @@ var MapReduceFactory = function(options) {
   // Acccept a string
   if (!options.map && options.mapString) {
     try {
+      /* jshint ignore:start */
       var emit = options.emit;
+      /* jshint ignore:end */
+
       // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
       /*jslint evil: true */
       eval("options.map = " + options.mapString.toString() + ";");

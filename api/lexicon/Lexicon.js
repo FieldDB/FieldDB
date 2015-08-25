@@ -30,7 +30,7 @@ var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = mapReduceFactory({
   filename: "morphemesPrecedenceContext",
   mapString: morphemesPrecedenceMapReduceString
 });
-
+console.log("TODO hook up ", LEXICON_CONNECTED_GRAPH_MAP_REDUCE);
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
  *        their allomorphs and glosses. It allows the search to index
@@ -1183,7 +1183,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       this.availableLexicalRelations = this.availableLexicalRelations || [];
       var attrib;
-      var newRelation;
       var self = this;
       var relationsIndex = {};
 
@@ -1293,7 +1292,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
   fetchConnectedGraph: {
     value: function(options) {
-
+      this.debug("not doing anything for fetchConnectedGraph ", options);
     }
   },
 
@@ -1450,15 +1449,15 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .range(["darkblue", "darkred"]) // or use hex values
         .domain([1, 8]);
 
-      var lineColor = this.d3.scale.linear()
-        .range(["#FFFFF", "#FFFF00"]) // or use hex values
-        .domain([1, 8]);
+      // var lineColor = this.d3.scale.linear()
+      //   .range(["#FFFFF", "#FFFF00"]) // or use hex values
+      //   .domain([1, 8]);
 
-      var x = this.d3.scale.linear()
-        .range([0, width]);
+      // var x = this.d3.scale.linear()
+      //   .range([0, width]);
 
-      var y = this.d3.scale.linear()
-        .range([0, height - 40]);
+      // var y = this.d3.scale.linear()
+      //   .range([0, height - 40]);
 
 
       var colorByMorphemeLength = function(lexicalEntry) {
