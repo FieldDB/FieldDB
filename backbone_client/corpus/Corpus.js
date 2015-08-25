@@ -124,7 +124,7 @@ define([
     },
     loadOrCreateCorpusBydbname : function(connection, sucessloadingorCreatingcallback){
       var couchurl = OPrime.getCouchUrl(connection);
-      var queryUrl = couchurl + "/_design/pages/_view/private_corpora";
+      var queryUrl = couchurl + "/_design/deprecated/_view/private_corpora";
 
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
@@ -899,7 +899,7 @@ define([
             var potentialdbname = response.corpus.dbname;
             var connection =OPrime.defaultConnection();
             connection.dbname =potentialdbname;
-            var nextCorpusUrl = OPrime.getCouchUrl(connection)+ "/_design/pages/_view/private_corpora";
+            var nextCorpusUrl = OPrime.getCouchUrl(connection)+ "/_design/deprecated/_view/private_corpora";
 
             OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl , function() {
               //              OPrime.bug("Attempting to save the new corpus in its database.");
@@ -1448,7 +1448,7 @@ define([
       var glosserURL = this.get("glosserURL");
       if (!glosserURL) {
         var couchurl = OPrime.getCouchUrl(this.get("connection"));
-        glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
+        glosserURL = couchurl + "/_design/deprecated/_view/precedence_rules?group=true";
       }
       Glosser.downloadPrecedenceRules(dbname, glosserURL, callback);
     },
@@ -1474,7 +1474,7 @@ define([
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/deprecated/_view/get_frequent_fields?group=true
      *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      *
@@ -1504,7 +1504,7 @@ define([
             return;
           }
         }
-        jsonUrl = couchurl + "/_design/pages/_view/get_frequent_fields?group=true";
+        jsonUrl = couchurl + "/_design/deprecated/_view/get_frequent_fields?group=true";
       }
 
       var self = this;
@@ -1568,7 +1568,7 @@ define([
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
      *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      *
@@ -1602,7 +1602,7 @@ define([
             return;
           }
         }
-        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_validationStati?group=true";
+        jsonUrl = couchurl + "/_design/deprecated/_view/get_corpus_validationStati?group=true";
       }
 
       var self = this;
@@ -1641,7 +1641,7 @@ define([
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
      * more representative datum
-     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+     * example : https://corpusdev.lingsync.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
      *
      * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
      *
@@ -1675,7 +1675,7 @@ define([
             return;
           }
         }
-        jsonUrl = couchurl + "/_design/pages/_view/get_corpus_datum_tags?group=true";
+        jsonUrl = couchurl + "/_design/deprecated/_view/get_corpus_datum_tags?group=true";
       }
 
       var self = this;

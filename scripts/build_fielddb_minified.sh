@@ -75,10 +75,10 @@ cp -R backbone_client/user/skins couchapp_minified/_attachments/user/skins
 
 
 rm -rf couchapp_minified/lists
-cp -R couchapp_dev/lists couchapp_minified/lists
+cp -R map_reduce_data/lists couchapp_minified/lists
 
 rm -rf couchapp_minified/views
-cp -R couchapp_dev/views couchapp_minified/views
+cp -R map_reduce_data/views couchapp_minified/views
 
 rm -rf release
 

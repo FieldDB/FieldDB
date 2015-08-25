@@ -4,36 +4,16 @@ var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
 var CORS = require("../CORS").CORS;
 // var CORS = require("../CORSNode").CORS;
+var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 var _ = require("underscore");
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
-var MORPHEMES_N_GRAMS_MAP_REDUCE = {
+var morphemeNGramsMapString = require("../../map_reduce_data/views/morpheme_n_grams/map").morpheme_n_grams;
+var MORPHEMES_N_GRAMS_MAP_REDUCE = mapReduceFactory({
   filename: "morpheme_n_grams",
-  map: null,
-  reduce: null,
-  rows: [],
-  emit: function(key, val) {
-    this.rows.push({
-      key: key,
-      value: val
-    });
-  }
-};
-try {
-  var mapcannotbeincludedviarequire = require("../../couchapp_dev/views/morpheme_n_grams/map").morpheme_n_grams;
-  /*jshint unused:false */
-  var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
-  // ugly way to make sure references to 'emit' in map/reduce bind to the above emit
-  /*jslint evil: true */
-  eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + mapcannotbeincludedviarequire.toString() + ";");
-} catch (exception) {
-  console.log("Unable to parse the map reduce ", exception.stack);
-  var emit = MORPHEMES_N_GRAMS_MAP_REDUCE.emit;
-  MORPHEMES_N_GRAMS_MAP_REDUCE.map = function() {
-    emit("error", "unable to load map reduce");
-  };
-}
+  mapString: morphemeNGramsMapString
+});
 
 /**
  * @class The Glosser is able to guess morpheme segmentation and/or glosses from an orthography/transcription.
@@ -62,31 +42,7 @@ Glosser.morphemeBoundaryRegEX = /[-=]/g;
  * [morpheme_n_grams_mapReduce description]
  * @type {Function}
  */
-Glosser.morpheme_n_grams_mapReduce = function(doc, emit, rows) {
-  rows = rows || [];
-  if (!emit) {
-    emit = function(key, value) {
-      rows.push({
-        key: key,
-        value: value
-      });
-    };
-  }
-
-  try {
-    // ugly way to make sure references to 'emit' in map/reduce bind to the
-    // above emit at run time
-    /*jslint evil: true */
-    eval("MORPHEMES_N_GRAMS_MAP_REDUCE.map = " + MORPHEMES_N_GRAMS_MAP_REDUCE.map.toString() + ";");
-  } catch (e) {
-    console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for MORPHEMES_N_GRAMS_MAP_REDUCE");
-  }
-
-  MORPHEMES_N_GRAMS_MAP_REDUCE.map(doc);
-  return {
-    rows: rows
-  };
-};
+Glosser.morpheme_n_grams_mapReduce = MORPHEMES_N_GRAMS_MAP_REDUCE;
 
 /**
  * Finds all combinations of an utterance line by looping through all 
@@ -739,7 +695,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   },
 
   guessUtteranceFromMorphemes: {
-    value: function(fields, justCopyDontGuessIGT) {
+    value: function(fields) {
       if (!fields.utterance && fields.morphemes) {
         fields.utterance = fields.morphemes.replace(/[-.]/g, "");
       }
@@ -918,10 +874,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         this.warn("Cannot visualize an empty lexicon.");
         return this;
       }
-
-      var prefs = {
-        showRelations: ["precedes"]
-      };
 
       this.lexicon.visualizeAsForceDirectedGraph(options);
 

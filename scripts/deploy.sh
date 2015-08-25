@@ -28,18 +28,18 @@ echo "Deploying key corpora on the testing couch"
 
 BETAUSERSCORPORA="some space seperated beta users databases here"
 for db in $BETAUSERSCORPORA; do
-  couchapp push . $TESTING/$db
+  erica push  . $TESTING/$db
 done
 
 echo "Building activity feeds"
 cd ../
 ./scripts/build_activity_feed.sh
-cd couchapp_activities/
+cd map_reduce_activities/
 echo "Deploying key activity feeds on the testing couch"
 
 BETAUSERSACTIVITYFEEDS="some space seperated beta users databases here"
 for db in $BETAUSERSACTIVITYFEEDS; do
-  couchapp push . $TESTING/$db
+  erica push  . $TESTING/$db
 done
 
 # Only deploy to beta testers
@@ -53,15 +53,15 @@ cd $COUCHAPPDIR
 
 USERSCORPORA="some users databases here"
 for db in $USERSCORPORA; do
-  couchapp push . $TESTING/$db
+  erica push  . $TESTING/$db
 done
 
 echo "Building activity feeds"
 cd ../
 ./scripts/build_activity_feed.sh
-cd couchapp_activities/
+cd map_reduce_activities/
 
 USERSACTIVITYFEEDS="some users databases here"
 for db in $USERSACTIVITYFEEDS; do
-  couchapp push . $TESTING/$db
+  erica push  . $TESTING/$db
 done

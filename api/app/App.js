@@ -791,7 +791,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   isCouchApp: {
     get: function() {
       try {
-        return window.location.href.indexOf("_design/pages") > -1;
+        return window.location.href.indexOf("_design/") > -1;
       } catch (e) {
         this.warn("Cant determine app type isCouchApp, " + e);
         return false;
