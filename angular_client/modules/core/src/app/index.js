@@ -70,8 +70,20 @@ angular.module("fielddbAngular", [
     });
   }
 
-  fieldDBApp.knownConnections = FieldDB.Connection.knownConnections;
-  fieldDBApp.currentConnection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
+  // Let client apps override current app connection by setting the auth and/or db url. 
+  // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
+  fieldDBApp.knownConnections = new FieldDB.Corpora(FieldDB.Connection.knownConnections);
+  fieldDBApp.knownConnections.primaryKey = "userFriendlyServerName";
+  if (FieldDB.Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
+    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL, "passByReference"));
+  } else {
+    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(window.location.href, "passByReference"));
+  }
+  fieldDBApp.knownConnections.unshift(fieldDBApp.connection);
+  if (FieldDB.Database.prototype.BASE_DB_URL !== fieldDBApp.connection.corpusUrl) {
+    fieldDBApp.connection.corpusUrl = FieldDB.Database.prototype.BASE_DB_URL;
+    fieldDBApp.connection.userFriendlyServerName  = "Custom";
+  }
 
   fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);

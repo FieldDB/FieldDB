@@ -141,7 +141,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         };
         $scope.message = message;
         $scope.userInput = providedInput || "";
-        if (message.toLowerCase().indexOf("password") > -1) {
+        if (message.toLowerCase().indexOf("password") > -1 || message.toLowerCase().indexOf("confirm your identity") > -1 || message.toLowerCase().indexOf("mot de passe") > -1 ) {
           $scope.inputType = "password";
         } else if (message.toLowerCase().indexOf("date") > -1) {
           $scope.inputType = "date";
@@ -173,17 +173,20 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
 
-    FieldDB.FieldDBObject.application.router.navigate = function(url, options) {
-      if (!url) {
-        console.warn("Not navigating to an empty url.");
+    FieldDB.FieldDBObject.application.router.navigate = function(route, options) {
+      if (!route) {
+        console.warn("Not navigating to an empty route.");
         return;
       }
-      // $location.url(url);
-      // $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
+      // $location.route(route);
+      // $location.path(FieldDB.FieldDBObject.application.basePathname + route, false);
 
       // TODO routeparams and location are not being triggered, so manually looking for a search term and rendering it
-      window.location.href = url;
-      var searchQuery = url.substring(url.lastIndexOf("/") + 1);
+      if (route.indexOf(FieldDB.FieldDBObject.application.basePathname) !== 0) {
+        route = FieldDB.FieldDBObject.application.basePathname + route;
+      }
+      window.location.href = route;
+      var searchQuery = route.substring(route.lastIndexOf("/") + 1);
       if (searchQuery) {
         console.log("Navigating to show a search " + searchQuery, options);
         FieldDB.FieldDBObject.application.search.searchQuery = searchQuery;

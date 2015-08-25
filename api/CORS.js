@@ -156,7 +156,7 @@ CORS.makeCORSRequest = function(options) {
         }
       }
       if (response.userFriendlyErrors[0] === "no_db_file") {
-        response.userFriendlyErrors = ["That db doesn't exist. Are you sure this is the db you wanted to open: " + options.url];
+        response.userFriendlyErrors = ["That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url];
       }
       response.details = options;
       deferred.reject(response);
