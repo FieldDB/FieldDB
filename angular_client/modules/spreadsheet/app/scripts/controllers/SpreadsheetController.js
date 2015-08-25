@@ -10,7 +10,7 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http, $sce) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
   var allDataInCurrentSession = [];
@@ -907,6 +907,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
           $scope.scopePreferences.savedState.server = $rootScope.serverCode;
           $scope.scopePreferences.savedState.username = $rootScope.user.username;
+          $rootScope.user.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.user.username + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username);
           $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
           localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
@@ -1059,6 +1060,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.corpus.loadCorpusByDBname(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
             if ($rootScope.corpus && $rootScope.corpus._rev) {
+              $rootScope.corpus.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.corpus.dbname + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username + "/corpus/" + $rootScope.corpus.dbname);
               if (!$rootScope.corpus.confidential || !$rootScope.corpus.confidential.secretkey) {
                 $rootScope.corpus.previousConfidential = $rootScope.corpus.confidential;
                 $rootScope.corpus.previousConfidentialReason = "Corpus was created by a version of auth service which was missing the confidential creation. Updated at " + $rootScope.corpus._rev;
@@ -2869,5 +2871,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }, 10000);
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http', '$sce'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);

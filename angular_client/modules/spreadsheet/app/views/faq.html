@@ -69,6 +69,22 @@
 </div>
 <div class="answer" ng-bind-html="contextualize('locale_delete_record_answer')">
 </div>
+
+
+<div class="question " >
+How can I see what has been happening in my corpus?
+</div>
+<div class="answer">
+
+You can look in your <a target="_blank" href="https://corpus.lingsync.org/{{corpus.dbname}}-activity_feed/_design/activities/activity_feed.html#/user/{{user.username}}/corpus/{{corpus.dbname}}">team's activity feed</a>.
+<!--
+<iframe ng-show="corpus.activityFeedUrl" 
+  src="corpus.activityFeedUrl"
+  width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true">
+</iframe> -->
+</div>
+
+
 <div class="question" ng-bind-html="contextualize('locale_privacy_question')">
 </div>
 <div class="answer" ng-bind-html="contextualize('locale_privacy_answer')">
@@ -108,6 +124,19 @@
 <div class="question" ng-bind-html="contextualize('locale_own_glossers_question')">
 </div>
 <div class="answer" ng-bind-html="contextualize('locale_own_glossers_answer')">
+</div>
+
+
+<div class="question" >
+What was I working on last time?
+</div>
+<div class="answer">
+You can look in <a target="_blank" href="https://corpus.lingsync.org/{{user.username}}-activity_feed/_design/activities/activity_feed.html#/user/{{user.username}}">your activity feed</a>.
+<!--
+<iframe hidden ng-show="user.activityFeedUrl" 
+  src="user.activityFeedUrl"
+  width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true">
+</iframe> -->
 </div>
 
 <div class="question" ng-bind-html="contextualize('locale_learn_scripting_question')">
