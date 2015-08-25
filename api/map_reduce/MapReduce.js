@@ -64,7 +64,7 @@ var MapReduceFactory = function(options) {
       if (rowsGroupedById.hasOwnProperty(key)) {
         reducedRows.push({
           key: key,
-          value: options.reduce(key, rowsGroupedById[key], false)
+          value: options.reduce(key, rowsGroupedById[key], true)
         });
       }
     }
@@ -72,7 +72,7 @@ var MapReduceFactory = function(options) {
 
     // Re-reduce all grouped items
     reducedRows = reducedRows.map(function(groupedRow) {
-      groupedRow.value = options.reduce(null, groupedRow.value, true);
+      groupedRow.value = options.reduce(null, groupedRow.value, false);
       return groupedRow;
     })
     // DEBUG console.log("re-reduced ", reducedRows);

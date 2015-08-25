@@ -57,15 +57,39 @@ describe("MapReduce frequent", function() {
       expect(counts.rows.length).toEqual(3);
       expect(counts.rows[0]).toEqual({
         key: "ResponseFields",
-        value: ['Utterance:::20', 'Orthography:::20']
+        value: [{
+          key: "Utterance",
+          value: 20
+        }, {
+          key: "Orthography",
+          value: 20
+        }]
       });
       expect(counts.rows[1]).toEqual({
         key: "Tag",
-        value: ['NormalProduction:::15', 'Adult:::12', 'Child:::8', 'AbnormalProduction:::5', 'Male:::1']
+        value: [{
+          key: "NormalProduction",
+          value: 15
+        }, {
+          key: "Adult",
+          value: 12
+        }, {
+          key: "Child",
+          value: 8
+        }, {
+          key: "AbnormalProduction",
+          value: 5
+        }, {
+          key: "Male",
+          value: 1
+        }]
       });
       expect(counts.rows[2]).toEqual({
         key: "ValidationStatus",
-        value: ['CheckedWithFelicia:::20']
+        value: [{
+          key: "CheckedWithFelicia",
+          value: 20
+        }]
       });
     });
 
