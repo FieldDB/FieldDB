@@ -23,10 +23,10 @@ try {
 }
 
 try {
-  virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+  virtualDOM = require("node-jsdom").jsdom("<html><head></head><body></body></html>");
   virtualElement = virtualDOM.body;
 } catch (e) {
-  console.log("If you want to run the tests for render of the Lexicon, run `npm install jsdom@3.0` ");
+  console.log("If you want to run the tests for render of the Lexicon, run `npm install node-jsdom` ");
 }
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");

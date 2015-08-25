@@ -14,10 +14,10 @@ try {
 }
 
 try {
-	virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+	virtualDOM = require("node-jsdom").jsdom("<html><head></head><body></body></html>");
 	virtualElement = virtualDOM.body;
 } catch (e) {
-	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom@3.0` ");
+	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install node-jsdom` ", e.stack);
 }
 
 var mockCorpus = {

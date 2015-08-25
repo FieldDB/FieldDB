@@ -71,6 +71,7 @@ angular.module("fielddbAngular", [
   }
 
   // Let client apps override current app connection by setting the auth and/or db url. 
+  // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
   fieldDBApp.knownConnections = new FieldDB.Corpora(FieldDB.Connection.knownConnections);
   fieldDBApp.knownConnections.primaryKey = "userFriendlyServerName";
   if (FieldDB.Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
