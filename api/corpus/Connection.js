@@ -654,7 +654,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       userFriendlyServerName: "Localhost"
     };
   }
-  if (!optionalHREF && FieldDBObject.application.connection) {
+  if (!optionalHREF && FieldDBObject.application && FieldDBObject.application.connection) {
     connection = FieldDBObject.application.connection;
     optionalHREF = connection.serverLabel;
   }
