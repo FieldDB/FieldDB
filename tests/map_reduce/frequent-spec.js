@@ -45,19 +45,28 @@ describe("MapReduce frequent", function() {
 
     it("should reduce data", function() {
       expect(SAMPLE_GAME[0].results[1].results.length).toEqual(10);
-      SAMPLE_GAME[0].results[1].results.map(FREQUENT_MAP_REDUCE.map);
-      
-      expect(FREQUENT_MAP_REDUCE.rows.length).toEqual(51);
-      expect(FREQUENT_MAP_REDUCE.rows.map(function(row){
-        return row.key
-      })).toEqual(" ");
+      SAMPLE_GAME[0].results.map(FREQUENT_MAP_REDUCE.map);
+
+      expect(FREQUENT_MAP_REDUCE.rows.length).toEqual(101);
+      // expect(FREQUENT_MAP_REDUCE.rows.map(function(row){
+      //   return row.key
+      // })).toEqual(" ");
 
       var counts = FREQUENT_MAP_REDUCE.group();
       expect(counts.rows).toBeDefined();
       expect(counts.rows.length).toEqual(3);
-      expect(counts.rows[0]).toEqual({ key : "ResponseFields", value : [ 'Utterance', 'Orthography' ]});
-      expect(counts.rows[1]).toEqual({ key : "Tag", value :  [ 'Child', 'NormalProduction', 'AbnormalProduction', 'Adult', 'Male' ]});
-      expect(counts.rows[2]).toEqual({ key : "ValidationStatus", value : [ 'CheckedWithFelicia' ] });
+      expect(counts.rows[0]).toEqual({
+        key: "ResponseFields",
+        value: ['Utterance:::20', 'Orthography:::20']
+      });
+      expect(counts.rows[1]).toEqual({
+        key: "Tag",
+        value: ['NormalProduction:::15', 'Adult:::12', 'Child:::8', 'AbnormalProduction:::5', 'Male:::1']
+      });
+      expect(counts.rows[2]).toEqual({
+        key: "ValidationStatus",
+        value: ['CheckedWithFelicia:::20']
+      });
     });
 
   });

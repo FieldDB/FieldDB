@@ -56,7 +56,7 @@ var MapReduceFactory = function(options) {
         rowsGroupedById[key].push(row.value);
       }
     });
-    console.log("regrouped ", rowsGroupedById);
+    // DEBUG console.log("regrouped ", rowsGroupedById);
 
     // Reduce all grouped items
     var reducedRows = [];
@@ -68,14 +68,14 @@ var MapReduceFactory = function(options) {
         });
       }
     }
-    console.log("reduced ", reducedRows);
+    // DEBUG console.log("reduced ", reducedRows);
 
     // Re-reduce all grouped items
     reducedRows = reducedRows.map(function(groupedRow) {
       groupedRow.value = options.reduce(null, groupedRow.value, true);
       return groupedRow;
     })
-    console.log("re-reduced ", reducedRows);
+    // DEBUG console.log("re-reduced ", reducedRows);
 
     return {
       rows: reducedRows.sort(function(a, b) {
