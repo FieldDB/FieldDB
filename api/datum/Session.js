@@ -686,7 +686,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
       this._datalist = new DataList(datalistJson);
 
       if (this.id) {
-        this._datalist.api = "_design/pages/_list/as_data_list/list_of_data_by_session?key=%22" + this.id + "%22";
+        this._datalist.api = "_design/data/_list/as_data_list/by_session_or_user?key=%22" + this.id + "%22";
       }
 
       this.debug("Asking the datalist to check for changes in the database.");
