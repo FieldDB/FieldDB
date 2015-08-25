@@ -215,8 +215,8 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
         version: user.version,
         pouchname: "sapir-cherokee",
-        title: "sapir-cherokee",
-        titleAsUrl: "sapir-cherokee"
+        title: "cherokee",
+        titleAsUrl: "cherokee"
       });
       expect(user.corpora.toJSON()[1]).toEqual({
         fieldDBtype: "Connection",
@@ -230,8 +230,8 @@ describe("User ", function() {
         corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],
         version: user.version,
         pouchname: "sapir-firstcorpus",
-        title: "sapir-firstcorpus",
-        titleAsUrl: "sapir-firstcorpus"
+        title: "firstcorpus",
+        titleAsUrl: "firstcorpus"
       });
     });
 
@@ -357,7 +357,7 @@ describe("User ", function() {
     it("should be able to get a connection from only the title", function() {
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
 
-      expect(user.corpora["sapir-firstcorpus"].title).toEqual("sapir-firstcorpus");
+      expect(user.corpora["sapir-firstcorpus"].title).toEqual("firstcorpus");
       expect(user.corpora["sapir-firstcorpus"].fieldDBtype).toEqual("Connection");
       user.corpora["sapir-firstcorpus"].title = "Quechua Sample Data";
       expect(user.corpora["sapir-firstcorpus"].title).toEqual("Quechua Sample Data");

@@ -35,7 +35,7 @@ before_install:
   - npm install -g jasmine-node
   - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
   - npm install d3
-  - npm install jsdom@3.0
+  - npm install node-jsdom
   - npm install memory
 
 before_script:

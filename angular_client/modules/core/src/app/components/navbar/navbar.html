@@ -40,3 +40,195 @@
   </div>
   <!-- /.container-fluid -->
 </nav>
+
+
+<!--
+
+        <li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-cloud"></i>
+            Corpora
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="corpus in application.authentication.user.corpora._collection">
+              <a href="{{application.basePathname}}/{{corpus.owner}}/{{corpus.titleAsUrl}}">
+                <img class="nav-icon" ng-src="https://secure.gravatar.com/avatar/{{corpus.team.gravatar}}.jpg?s=30&d=identicon&r=pg" title="{{application.brand}}"/>  {{corpus.title}}
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+
+<li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a  class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-tasks"></i> Statistics
+            <span class="caret">
+            </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/statistics/members">
+                <i class="fa fa-group"></i> Data
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/statistics/members">
+                <i class="fa fa-group"></i> Members
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/statistics/speakers">
+                <i class="fa fa-user"></i> Speakers
+              </a>
+            </li>
+            <li class="divider">
+            </li>
+
+          </ul>
+        </li>
+        <li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a  class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-gears"></i> Customiser
+            <span class="caret">
+            </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/customize/team">
+                <i class="fa fa-team"></i> Team Overview
+              </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/customize/template-statistics">
+                <i class="fa fa-tasks"></i> Statistical Overview
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/customize/template-language-lessons">
+                <i class="fa fa-file-pdf-o"></i> Language Lessons
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/customize/template-website">
+                <i class="fa fa-file-pdf-o"></i> Website
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/customize/template-certificat-member">
+                <i class="fa fa-certificate"></i> Reference letter for team member
+              </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li>
+              <a href="">
+                <i class="fa fa-trash"></i> Effacer toutes les customisations
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a  class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-plus-circle"></i> New
+            <span class="caret">
+            </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/new/data">
+                <i class="fa fa-user"></i> Data
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/new/member">
+                <i class="fa fa-group"></i> Members 
+              </a>
+            </li>
+            <li>
+              <a href="{{application.basePathname}}/{{application.currentCorpusDashboard}}/new/speakers">
+                <i class="fa fa-user"></i> Speakers 
+              </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li>
+              <a target="blank" href="/sample/members_template_point_virgule_win.csv">
+                <i class="fa fa-download"></i>  Download sample.csv (<i class="fa fa-windows"></i> Excel fr)
+              </a>
+            </li>
+            <li>
+              <a target="blank" href="/sample/members_template_win.csv">
+                <i class="fa fa-download"></i>  Download sample.csv (<i class="fa fa-windows"></i> Excel en)
+              </a>
+            </li>
+            <li>
+              <a target="blank" href="/sample/members_template_point_virgule_mac.csv">
+                <i class="fa fa-download"></i>  Download sample.csv (<i class="fa fa-apple"></i> Excel fr)
+              </a>
+            </li>
+            <li>
+              <a target="blank" href="/sample/members_template_mac.csv">
+                <i class="fa fa-download"></i>  Download sample.csv (<i class="fa fa-apple"></i> Excel en)
+              </a>
+            </li>
+            <li>
+              <a target="blank" href="/sample/members_template.csv">
+                <i class="fa fa-download"></i>  Download sample.csv (LibreOffice/Autre UTF-8)
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" ng-show="application.authentication.user.authenticated">
+          <a  class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-eye">
+            </i>
+            <span class="caret">
+            </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a >
+                View as Team Manager
+              </a>
+            </li>
+            <li>
+              <a >
+                View as Experiment Designer
+              </a>
+            </li>
+            <li>
+              <a >
+                View as Language Speaker
+              </a>
+            </li>
+            <li class="divider">
+            </li>
+            <li>
+              <a >
+                View as Fieldmethods student
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown" ng-show="application.authentication.user.authenticated" >
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-cloud"></i>
+            <span class="caret">
+            </span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="corpus in application.authentication.user.corpora._collection">
+              <a href="{{application.basePathname}}/{{corpus.owner}}/{{corpus.titleAsUrl}}">
+                <i class="fa fa-cloud"></i> {{corpus.title}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      -->
