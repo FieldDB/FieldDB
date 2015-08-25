@@ -9,28 +9,19 @@ An app which was originally a student project, built in a few months using Angul
 
 To maintain this app you should first go to the root of the repo and run `$ grunt travis` this will download and compile all dependancies for this app, and run the tests and build the minified version. With out this step you wil only be testing updates to the spreadsheet app, not updates to the entire app. 
 
-Terminal tab one:
+
 ```bash
-$ cd $FIELDDB_HOME
-$ grunt travis
-$ grunt watch
-
-```
-
-Terminal tab one:
-```bash
-$ cd $FIELDDB_HOME/angular_client/modules/core
-$ grunt watch
-
-```
-
-Terminal tab three:
-```bash
-$ cd $FIELDDB_HOME/angular_client/modules/core
+$ cd $FIELDDB_HOME/FieldDB/angular_client/modules/spreadsheet
+$ cp apps/scripts/private_services_sample.js apps/scripts/private_services.js
+$ npm install
 $ grunt serve
 
 ```
 The final `$ grunt serve` will open up your default browser with this app running so you can begin developing the app. We usually use Chrome as our default browser, and use CMD+Shift+J to open the Chrome developer tools to do break pointing in the app. 
+
+## Customizing the server
+
+In the private_services.js file, replace all instances of "example.org" with the server name that you want to contact on your domain.
 
 
 ## Contributing

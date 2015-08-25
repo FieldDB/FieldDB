@@ -431,7 +431,7 @@ angular.module('spreadsheetApp')
               $rootScope.notificationMessage = response.data.info.join(" ");
               $rootScope.openNotification();
             }
-            return response;
+            return response.data;
           },
           function(err) {
             console.warn(err);
@@ -474,7 +474,7 @@ angular.module('spreadsheetApp')
             console.log("Removed user roles.", response);
             $rootScope.notificationMessage = response.data.info.join(" ");
             $rootScope.openNotification();
-            return response;
+            return response.data;
           },
           function(err) {
             console.warn(err);
@@ -494,6 +494,7 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = message;
             $rootScope.openNotification();
             $rootScope.loading = false;
+            return err.data;
           });
       return promise;
     };
@@ -566,6 +567,7 @@ angular.module('spreadsheetApp')
     };
 
     var blankActivityTemplate = function() {
+      console.warn("blankActivityTemplate is depreacated");
       var promise = $http
         .get('data/blank_activity_template.json').then(
           function(response) {

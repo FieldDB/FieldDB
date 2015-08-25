@@ -290,6 +290,28 @@
         "message": "Create New",
         "description": "button"
     },
+    "locale_delete_or_leave_corpus": {
+        "message": "Remove this corpus from your list of corpora",
+        "description": "title for delete or leave section"
+    },
+    "locale_leave_corpus_button": {
+        "message": "Leave",
+        "description": "button to leave corpus"
+    },
+    "locale_leave_corpus_info": {
+        "message": "Leaving a corpus will remove it from your corpora list, but other team members will still have access to it.",
+        "description": "message about deleting corpus"
+    },
+
+    "locale_delete_corpus_info": {
+        "message": "Deleting a corpus will remove it from the corpora list of ALL team members. Only delete a corpus if you are sure that it is not useful to anyone anymore. If you are unsure about deleting a corpus, please refer to the <a target='_blank' href='/#/faq'>FAQ</a> for more options.",
+        "description": "message about deleting corpus"
+    },
+
+    "locale_delete_corpus_button": {
+        "message": "Delete",
+        "description": "button to delete corpus"
+    },
     "locale_corpus_settings": {
         "message": "Corpus Settings",
         "description": "title for the Corpus Settings page"
@@ -632,6 +654,15 @@
         "message": "After you have logged in, hover over 'Settings' and select 'Corpus'. From this page, you can add a new corpus.",
         "description": " "
     },
+
+    "locale_remove_corpus_question": {
+        "message": "How do I delete a corpus?",
+        "description": " "
+    },
+    "locale_remove_corpus_answer": {
+        "message": " <p>After you have logged in, hover over 'Settings' and select 'Corpus'. From this page, you can choose to delete a corpus or leave a corpus. Leaving a corpus will remove it from your corpora list, but other team members will still have access to it. Deleting a corpus, on the other hand, will remove it from the corpora list of ALL team members. Only delete a corpus if you are sure that it is not useful to anyone anymore.  </p><p> If the corpus might still be useful to someone other than yourself, you should elect/add another admin to the corpus if you are currently the only admin, and then click the \"Leave corpus\" rather than \"Delete corpus\" button. </p> <p>If you don't have another candidate who is willing to be the admin on the corpus, you can add the \"community\" user as the admin, and the corpus will become part of the corpora which are managed by the <a href='http://lingsync.org/community' target='_blank'>LingSync community</a> (as recommended in <a href='http://emeld.org/school/what.html' target='_blank'>EMELD  digital language documentation best practices #7</a>. </p>",
+        "description": " "
+    },
     "locale_enter_data_question": {
         "message": "How do I enter data?",
         "description": " "
@@ -761,6 +792,16 @@
         "message": "For any other questions or comments, you may <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> or <a target=\"_blank\" href=\"https://www.facebook.com/LingSyncApp\">ask other users on Facebook</a>.",
         "description": "links screw up the json format so I leave it empty for the moment"
     },
+
+    "locale_instructor_faq_question": {
+        "message": "I am an instructor and want to use LingSync for my class. What do I need to do?",
+        "description": " "
+    },
+    "locale_instructor_faq_answer": {
+        "message": "There is a FAQ specifically for instructors at <a target='_blank' href='/#/faq_instructors'>FAQ_for_instructors</a> that will help you set up LingSync for your class.",
+        "description": ""
+    },
+
     "locale_delete_duplicate_tags_button": {
         "message": "Delete Duplicate Tags",
         "description": " "
