@@ -398,7 +398,7 @@ var MAINTAINENCE = {
               return;
             }
             var database = $.couch.db(dbname);
-            database.openDoc("_design/pages", {
+            database.openDoc("_design/data", {
               success: function(results) {
                 console.log(results._rev + " in " + dbname);
 

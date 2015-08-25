@@ -1232,7 +1232,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * Overwrite/build the lexicon from the corpus server if it is there, saves
    * the results to local storage so they can be reused offline.
    *
-   * OLD url /_design/pages/_view/lexicon_create_tuples?group=true
+   * OLD url /_design/deprecated/_view/lexicon_create_tuples?group=true
    *
    * New url _design/lexicon/_view/morphemesPrecedenceContext?group=true&limit=400
    * 

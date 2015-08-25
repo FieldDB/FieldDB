@@ -231,7 +231,7 @@ OPrime.isChromeApp = function() {
 };
 
 OPrime.isCouchApp = function() {
-  return window.location.href.indexOf("_design/pages") > -1;
+  return window.location.href.indexOf("_design/") > -1;
 };
 
 OPrime.isTouchDBApp = function() {

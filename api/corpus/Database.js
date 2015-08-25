@@ -21,7 +21,7 @@ var Database = function Database(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true&limit=LIMIT";
+var DEFAULT_COLLECTION_MAPREDUCE = "_design/data/_view/by_type?key=COLLECTION&descending=true&limit=LIMIT";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 

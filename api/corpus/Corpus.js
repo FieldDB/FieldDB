@@ -928,134 +928,134 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: function() {
       return {
         // activities: {
-        //   url: "/_design/pages/_view/activities",
+        //   url: "/_design/deprecated/_view/activities",
         //   map: requireoff("./../../map_reduce_unused/views/activities/map")
         // },
         // add_synctactic_category: {
-        //   url: "/_design/pages/_view/add_synctactic_category",
+        //   url: "/_design/deprecated/_view/add_synctactic_category",
         //   map: requireoff("./../../map_reduce_unused/views/add_synctactic_category/map")
         // },
         // audioIntervals: {
-        //   url: "/_design/pages/_view/audioIntervals",
+        //   url: "/_design/deprecated/_view/audioIntervals",
         //   map: requireoff("./../../map_reduce_unused/views/audioIntervals/map")
         // },
         // byCollection: {
-        //   url: "/_design/pages/_view/byCollection",
+        //   url: "/_design/deprecated/_view/byCollection",
         //   map: requireoff("./../../map_reduce_unused/views/byCollection/map")
         // },
         // by_date: {
-        //   url: "/_design/pages/_view/by_date",
+        //   url: "/_design/deprecated/_view/by_date",
         //   map: requireoff("./../../map_reduce_unused/views/by_date/map")
         // },
         // by_rhyming: {
-        //   url: "/_design/pages/_view/by_rhyming",
+        //   url: "/_design/deprecated/_view/by_rhyming",
         //   map: requireoff("./../../map_reduce_unused/views/by_rhyming/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/by_rhyming/reduce")
         // },
         // cleaning_example: {
-        //   url: "/_design/pages/_view/cleaning_example",
+        //   url: "/_design/deprecated/_view/cleaning_example",
         //   map: requireoff("./../../map_reduce_unused/views/cleaning_example/map")
         // },
         // corpora: {
-        //   url: "/_design/pages/_view/corpora",
+        //   url: "/_design/deprecated/_view/corpora",
         //   map: requireoff("./../../map_reduce_unused/views/corpora/map")
         // },
         // datalists: {
-        //   url: "/_design/pages/_view/datalists",
+        //   url: "/_design/deprecated/_view/datalists",
         //   map: requireoff("./../../map_reduce_unused/views/datalists/map")
         // },
         // datums: {
-        //   url: "/_design/pages/_view/datums",
+        //   url: "/_design/deprecated/_view/datums",
         //   map: requireoff("./../../map_reduce_unused/views/datums/map")
         // },
         // datums_by_user: {
-        //   url: "/_design/pages/_view/datums_by_user",
+        //   url: "/_design/deprecated/_view/datums_by_user",
         //   map: requireoff("./../../map_reduce_unused/views/datums_by_user/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/datums_by_user/reduce")
         // },
         // datums_chronological: {
-        //   url: "/_design/pages/_view/datums_chronological",
+        //   url: "/_design/deprecated/_view/datums_chronological",
         //   map: requireoff("./../../map_reduce_unused/views/datums_chronological/map")
         // },
         // deleted: {
-        //   url: "/_design/pages/_view/deleted",
+        //   url: "/_design/deprecated/_view/deleted",
         //   map: requireoff("./../../map_reduce_unused/views/deleted/map")
         // },
         // export_eopas_xml: {
-        //   url: "/_design/pages/_view/export_eopas_xml",
+        //   url: "/_design/deprecated/_view/export_eopas_xml",
         //   map: requireoff("./../../map_reduce_unused/views/export_eopas_xml/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/export_eopas_xml/reduce")
         // },
         // get_corpus_datum_tags: {
-        //   url: "/_design/pages/_view/get_corpus_datum_tags",
+        //   url: "/_design/deprecated/_view/get_corpus_datum_tags",
         //   map: requireoff("./../../map_reduce_unused/views/get_corpus_datum_tags/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/get_corpus_datum_tags/reduce")
         // },
         // get_corpus_fields: {
-        //   url: "/_design/pages/_view/get_corpus_fields",
+        //   url: "/_design/deprecated/_view/get_corpus_fields",
         //   map: requireoff("./../../map_reduce_unused/views/get_corpus_fields/map")
         // },
         // get_corpus_validationStati: {
-        //   url: "/_design/pages/_view/get_corpus_validationStati",
+        //   url: "/_design/deprecated/_view/get_corpus_validationStati",
         //   map: requireoff("./../../map_reduce_unused/views/get_corpus_validationStati/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/get_corpus_validationStati/reduce")
         // },
         // get_datum_fields: {
-        //   url: "/_design/pages/_view/get_datum_fields",
+        //   url: "/_design/deprecated/_view/get_datum_fields",
         //   map: requireoff("./../../map_reduce_unused/views/get_datum_fields/map")
         // },
         // get_datums_by_session_id: {
-        //   url: "/_design/pages/_view/get_datums_by_session_id",
+        //   url: "/_design/deprecated/_view/get_datums_by_session_id",
         //   map: requireoff("./../../map_reduce_unused/views/get_datums_by_session_id/map")
         // },
         // get_frequent_fields: {
-        //   url: "/_design/pages/_view/get_frequent_fields",
+        //   url: "/_design/deprecated/_view/get_frequent_fields",
         //   map: requireoff("./../../map_reduce_unused/views/get_frequent_fields/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/get_frequent_fields/reduce")
         // },
         // get_search_fields_chronological: {
-        //   url: "/_design/pages/_view/get_search_fields_chronological",
+        //   url: "/_design/deprecated/_view/get_search_fields_chronological",
         //   map: requireoff("./../../map_reduce_unused/views/get_search_fields_chronological/map")
         // },
         // glosses_in_utterance: {
-        //   url: "/_design/pages/_view/glosses_in_utterance",
+        //   url: "/_design/deprecated/_view/glosses_in_utterance",
         //   map: requireoff("./../../map_reduce_unused/views/glosses_in_utterance/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/glosses_in_utterance/reduce")
         // },
         // lexicon_create_tuples: {
-        //   url: "/_design/pages/_view/lexicon_create_tuples",
+        //   url: "/_design/deprecated/_view/lexicon_create_tuples",
         //   map: requireoff("./../../map_reduce_unused/views/lexicon_create_tuples/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/lexicon_create_tuples/reduce")
         // },
         // morpheme_neighbors: {
-        //   url: "/_design/pages/_view/morpheme_neighbors",
+        //   url: "/_design/deprecated/_view/morpheme_neighbors",
         //   map: requireoff("./../../map_reduce_unused/views/morpheme_neighbors/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/morpheme_neighbors/reduce")
         // },
         // morphemes_in_gloss: {
-        //   url: "/_design/pages/_view/morphemes_in_gloss",
+        //   url: "/_design/deprecated/_view/morphemes_in_gloss",
         //   map: requireoff("./../../map_reduce_unused/views/morphemes_in_gloss/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/morphemes_in_gloss/reduce")
         // },
         // recent_comments: {
-        //   url: "/_design/pages/_view/recent_comments",
+        //   url: "/_design/deprecated/_view/recent_comments",
         //   map: requireoff("./../../map_reduce_unused/views/recent_comments/map")
         // },
         // sessions: {
-        //   url: "/_design/pages/_view/sessions",
+        //   url: "/_design/deprecated/_view/sessions",
         //   map: requireoff("./../../map_reduce_unused/views/sessions/map")
         // },
         // users: {
-        //   url: "/_design/pages/_view/users",
+        //   url: "/_design/deprecated/_view/users",
         //   map: requireoff("./../../map_reduce_unused/views/users/map")
         // },
         // word_list: {
-        //   url: "/_design/pages/_view/word_list",
+        //   url: "/_design/deprecated/_view/word_list",
         //   map: requireoff("./../../map_reduce_unused/views/word_list/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/word_list/reduce")
         // },
         // map_reduce_unused_word_list_rdf: {
-        //   url: "/_design/pages/_view/map_reduce_unused_word_list_rdf",
+        //   url: "/_design/deprecated/_view/map_reduce_unused_word_list_rdf",
         //   map: requireoff("./../../map_reduce_unused/views/word_list_rdf/map"),
         //   reduce: requireoff("./../../map_reduce_unused/views/word_list_rdf/reduce")
         // }
@@ -1113,7 +1113,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_frequent_fields?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -1132,7 +1132,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -1222,7 +1222,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
