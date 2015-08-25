@@ -65,22 +65,22 @@ function byType(doc) {
     return guessedType;
   };
 
-  var convertToTimestamp = function(dateCreated) {
-    if (dateCreated) {
-      if (dateCreated[0] === "\"") {
-        dateCreated = dateCreated.replace(/["\\]/g, "");
+  var convertToTimestamp = function(dateOrTimestamp) {
+    if (dateOrTimestamp) {
+      if (dateOrTimestamp[0] === "\"") {
+        dateOrTimestamp = dateOrTimestamp.replace(/["\\]/g, "");
       }
-      if (dateCreated[dateCreated.length - 1] === "Z") {
-        dateCreated = new Date(dateCreated);
+      if (dateOrTimestamp[dateOrTimestamp.length - 1] === "Z") {
+        dateOrTimestamp = new Date(dateOrTimestamp);
         /* Use date modified as a timestamp if it isnt one already */
-        dateCreated = dateCreated.getTime();
+        dateOrTimestamp = dateOrTimestamp.getTime();
       }
     }
 
-    if (!dateCreated) {
-      dateCreated = 0;
+    if (!dateOrTimestamp) {
+      dateOrTimestamp = 0;
     }
-    return dateCreated;
+    return dateOrTimestamp;
   };
 
   var guessPreview = function(doc, type) {
