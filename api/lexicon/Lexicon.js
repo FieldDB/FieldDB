@@ -1701,7 +1701,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           /* show the morpheme as a search result so the user can use the viz to explore the corpus*/
           if (self.application && self.application.router) {
             // self.application.router.showEmbeddedSearch(dbname, "morphemes:"+d.morphemes);
-            var url = "/" + self.application.currentCorpusDashboard + "/lexicon/" + d.headword;
+            var url = self.application.basePathname + self.application.currentCorpusDashboard + "/lexicon/" + d.headword;
             // window.location.replace(url);
             self.application.router.navigate(url, {
               trigger: true

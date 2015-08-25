@@ -261,19 +261,13 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   title: {
     get: function() {
-      if (this.parent &&  this.parent.title) {
+      if (this.parent && this.parent.title) {
         this._title = this.parent.title;
         this.debug("returned this.parent.title", this.parent.id);
       }
 
       if (!this._title && this.dbname) {
-        // var pieces = this.dbname.split("-");
-        // // if (this.dbname !== "default" && pieces.length !== 2) {
-        // //   throw new Error("Database names should be composed of a username-datbaseidentifier" + this.dbname);
-        // // }
-        // pieces.shift();
-        // var corpusidentifier = pieces.join("-");
-        this._title = this.dbname;
+        this._title = this.dbname.replace(this.owner + "-", "");
       }
       return this._title;
     },
@@ -303,6 +297,10 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       if (!this._titleAsUrl) {
         if (this.title) {
           this._titleAsUrl = this.sanitizeStringForFileSystem(this.title, "_").toLowerCase();
+        } else {
+          if (this.dbname) {
+            this._title = this._titleAsUrl = this.dbname.replace(this.owner + "-", "");
+          }
         }
       }
       return this._titleAsUrl;
@@ -655,6 +653,10 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       // corpusUrls: ["https://localhost:6984"],
       userFriendlyServerName: "Localhost"
     };
+  }
+  if (!optionalHREF && FieldDBObject.application && FieldDBObject.application.connection) {
+    connection = FieldDBObject.application.connection;
+    optionalHREF = connection.serverLabel;
   }
 
   if (!optionalHREF) {

@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "3.16.12",
+  "version": "3.18.25",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -55,7 +55,7 @@
   },
   "optionalDependancies": {
     "d3": "^3.5.5",
-    "jsdom": "^3.0.0",
+    "node-jsdom": "^3.1.5",
     "memory": "0.0.3"
   },
   "devDependencies": {
