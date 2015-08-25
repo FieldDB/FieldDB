@@ -54,15 +54,10 @@ describe("MapReduce frequent", function() {
 
       var counts = FREQUENT_MAP_REDUCE.group();
       expect(counts.rows).toBeDefined();
-      expect(counts.rows.length).toEqual(8);
-      expect(counts.rows[0]).toEqual({ key : "Utterance", value : 10 });
-      expect(counts.rows[1]).toEqual({ key : "Child", value : 8 });
-      expect(counts.rows[2]).toEqual({ key : "NormalProduction", value : 5 });
-      expect(counts.rows[3]).toEqual({ key : "CheckedWithFelicia", value : 10 });
-      expect(counts.rows[4]).toEqual({ key : "Orthography", value : 10 });
-      expect(counts.rows[5]).toEqual({ key : "AbnormalProduction", value : 5 });
-      expect(counts.rows[6]).toEqual({ key : "Adult", value : 2 });
-      expect(counts.rows[7]).toEqual({ key : "Male", value : 1 });
+      expect(counts.rows.length).toEqual(3);
+      expect(counts.rows[0]).toEqual({ key : "ResponseFields", value : [ 'Utterance', 'Orthography' ]});
+      expect(counts.rows[1]).toEqual({ key : "Tag", value :  [ 'Child', 'NormalProduction', 'AbnormalProduction', 'Adult', 'Male' ]});
+      expect(counts.rows[2]).toEqual({ key : "ValidationStatus", value : [ 'CheckedWithFelicia' ] });
     });
 
   });
