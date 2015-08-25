@@ -153,6 +153,11 @@ function byUserModified(doc) {
       }
     }
 
+    // Emit by session and date created
+    if (doc.session && doc.session._id) {
+      emit(doc.session._id, [dateCreated, doc._id, dateModified, preview]);
+    }
+
   } catch (error) {
     emit(" error" + error, doc._id);
   }

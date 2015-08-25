@@ -420,7 +420,7 @@ define([
      */
     showAllDataInSession : function(dbname, id, goal) {
       /* this is the actual url of the map reduce result that is precisely these datum that are in this session, but really we dont htink that is what the user wants to see. */
-      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("connection")) +'/_design/data/_list/as_data_list/list_of_data_by_x?key="'+id+'"';
+      var urlOfMapReduceWithThisSessionsExactDatum = OPrime.getCouchUrl(window.app.get("connection")) +'/_design/data/_list/as_data_list/by_session_or_user?key="'+id+'"';
 
 //    this.hideEverything();
 //    $("#dashboard-view").show();
