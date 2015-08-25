@@ -6,16 +6,19 @@ function frequent(doc) {
     return txt.charAt(0).toUpperCase() + txt.substr(1);
   };
 
-  var emitNonNullFields = function(field) {
+  var emitNonNullFields = function(field, type) {
+    type = uppercaseFirstLetter(type);
+
     if (field && field.mask) {
       var key = field.id || field.label;
       if (!field.readonly && field.mask) {
-        emit(uppercaseFirstLetter(key), doc._id);
+        emit(type, uppercaseFirstLetter(key));
       }
     }
   };
 
-  var emitTags = function(tags) {
+  var emitTags = function(tags, type) {
+    type = uppercaseFirstLetter(type);
     if (tags) {
       tags = tags.replace(/ be/g, "Be").replace(/ to/g, "To").replace(/ checked/g, "Checked").replace(/&nbsp;/g, " ");
       var processedTags = tags.split(/[, ]/);
@@ -24,13 +27,13 @@ function frequent(doc) {
         tag = tag.replace(/[,!@#$%^&*()]/g, "").trim();
         if (tag) {
           tag = tag.replace(/\w\S*/g, uppercaseFirstLetter);
-          emit(tag, doc._id);
+          emit(type, tag);
         }
       }
     }
   }
 
-  var processFields = function(fields) {
+  var processFields = function(fields, type) {
     if (!fields || !fields.length) {
       return;
     }
@@ -39,12 +42,15 @@ function frequent(doc) {
     // Data post 2.x
     for (fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
       label = fields[fieldIndex].id || fields[fieldIndex].label;
+      if (label === "tags") {
+        label = "tag";
+      }
       if (fields[fieldIndex].type === "tags" ||
-        label === "tags" ||
+        label === "tag" ||
         label === "validationStatus") {
-        emitTags(fields[fieldIndex].mask);
+        emitTags(fields[fieldIndex].mask, label);
       } else {
-        emitNonNullFields(fields[fieldIndex]);
+        emitNonNullFields(fields[fieldIndex], type);
       }
     }
   };
@@ -64,7 +70,23 @@ function frequent(doc) {
       }
 
       var fields = doc.fields || doc.datumFields;
-      processFields(fields);
+      var type = doc.fieldDBtype;
+      if (type) {
+        type += "Fields"
+      } else {
+        if (doc.session) {
+          type = "DatumFields";
+        } else if (!doc.datumFields && doc.sessionFields) {
+          type = "SessionFields";
+        } else if (doc.fields && doc.title) {
+          type = "CorpusFields";
+        } else if (doc.fields && !doc.title) {
+          type = "ParticipantFields";
+        } else if (doc.datumFields && !doc.title) {
+          type = "DatumFields";
+        }
+      }
+      processFields(fields, type);
 
     } catch (error) {
       emit(" error" + error, 1);

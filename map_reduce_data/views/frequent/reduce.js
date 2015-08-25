@@ -1,6 +1,7 @@
 function unique(keys, values, rereduce) {
   if (rereduce) {
-    return sum(values);
+    // return sum(values);
+    return values;
   } else {
     /** 
      * return only unique values
@@ -21,6 +22,7 @@ function unique(keys, values, rereduce) {
           uniqueValues.push(uniqueHash[valueIndex]);
         }
       }
+      //  // DEBUG console.log("Unique values", uniqueValues);
       return uniqueValues;
     }
 
@@ -30,7 +32,7 @@ function unique(keys, values, rereduce) {
     }
 
     // Has to reduce faster
-    return findUniqueValues(values).length;
+    return findUniqueValues(values);
   }
 }
 
