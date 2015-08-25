@@ -211,7 +211,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   describe("map reduces", function() {
 
-    it("should accept custom igt fields", function() {
+    xit("should accept custom igt fields", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
         _id: "one",
         fields: [{
@@ -225,9 +226,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
           mask: "A B-C D-E-F",
           type: "IGT"
         }],
-        session: {
-          fields: []
-        }
+        session: {}
       }];
       docs.map(Lexicon.lexicon_nodes_mapReduce.map)
 
@@ -283,24 +282,87 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
     });
 
-    xit("should accept flag fiels which have too many segmentations", function() {
+    it("should flag morphemes as low confidence which are missing fields", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
         _id: "one",
         fields: [{
-          id: "utterance",
-          mask: "A B C D E"
+          id: "morphemes",
+          mask: "A B-BB C-CC-CCC D E"
         }, {
           id: "gloss",
           mask: "a b1-b2 c-c2-c3"
         }],
-        session: {
-          fields: []
-        }
+        session: {}
       }];
       docs.map(Lexicon.lexicon_nodes_mapReduce.map)
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
-      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(8);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
+        key: {
+          morphemes: "A",
+          confidence: 1,
+          gloss: "a"
+        },
+        value: "A"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[1]).toEqual({
+        key: {
+          morphemes: "B",
+          confidence: 1,
+          gloss: "b1"
+        },
+        value: "B"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[2]).toEqual({
+        key: {
+          morphemes: "BB",
+          confidence: 1,
+          gloss: "b2"
+        },
+        value: "BB"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
+        key: {
+          morphemes: "C",
+          confidence: 1,
+          gloss: "c"
+        },
+        value: "C"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
+        key: {
+          morphemes: "CC",
+          confidence: 1,
+          gloss: "c2"
+        },
+        value: "CC"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
+        key: {
+          morphemes: "CCC",
+          confidence: 1,
+          gloss: "c3"
+        },
+        value: "CCC"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[6]).toEqual({
+        key: {
+          morphemes: "D",
+          confidence: 0.25,
+          gloss: ""
+        },
+        value: "D"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[7]).toEqual({
+        key: {
+          morphemes: "E",
+          confidence: 0.25,
+          gloss: ""
+        },
+        value: "E"
+      });
     });
 
     xit("should accept custom emit function and rows holder", function() {
