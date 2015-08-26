@@ -1,370 +1,318 @@
-function morphemesPrecedenceContext(doc) {
-  var onlyErrors = false;
-  var debug = false;
-  var maxDistance = 1;
-  try {
-    /* if this document has been deleted, the ignore it and return immediately */
-    if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+function lexiconNodes(doc) {
+  var conservativeTokenizer = {
+    delimiter: " ",
+    pattern: /\s+/g,
+    collapseCase: false,
+    removeSententialPunctuation: true,
+    punctuationToRemoveAfterTokenization: null
+  };
+  /* Assumes
+   * - no capitals (eg. D or T for retroflex or R for uvular) as contrastive segments
+   * - nor long vowels written as :
+   * - nor numbers representing pharingeals
+   * - nor ? representing glottal stop
+   */
+  var aggressiveTokenizer = {
+    delimiter: " ",
+    pattern: /\s+/g,
+    collapseCase: false,
+    removeSententialPunctuation: true,
+    punctuationToRemoveAfterTokenization: /[#!.,;:“\“\”\“\"\/\(\)\*\#0-9]+/g
+  };
+  /* Uses the Agressive tokenizer but also attempts to guess whether
+   * - there are contrastive capital letters
+   * - there are long vowels written with :
+   * - there are palatals or ejectives written as '
+   * - there are numbers used as pharyngeals
+   */
+  var adaptiveTokenizer = JSON.parse(JSON.stringify(aggressiveTokenizer));
+  var morphemeWordAgnosticTokenizer = {
+    delimiter: " ",
+    pattern: /[\-=\s]+/g,
+    collapseCase: false,
+    removeSententialPunctuation: true,
+    punctuationToRemoveAfterTokenization: null
+  };
+
+  var tokenize = function(value, tokenizer) {
+    if (!value) {
+      return [];
+    }
+    value = value + "";
+    // Use Agressive tokenizer by default
+    if (!tokenizer) {
+      tokenizer = aggressiveTokenizer;
+    }
+    if (tokenizer.collapseCase) {
+      value = value.toLocaleLowerCase();
+    }
+    var tokens = [];
+    value.replace(tokenizer.pattern, tokenizer.delimiter).trim().split(tokenizer.delimiter).map(function(token) {
+      if (tokenizer.punctuationToRemoveAfterTokenization) {
+        token = token.replace(tokenizer.punctuationToRemoveAfterTokenization, "");
+      }
+      token = token.trim();
+      if (tokenizer.removeSententialPunctuation) {
+        token = token.replace(/[.,;!”\“\“\"\)\]\}\-]$/g, "").replace(/^[”\-\“\“\",.;\(\[\{]/g, "");
+      }
+      if (token) {
+        tokens.push(token);
+      }
+    });
+    return tokens;
+  };
+
+  var flagDocForCleaning = function(doc, words, potentiallyUnmatchedIGT) {
+    emit({
+      error: "This datum might need cleaning, one or more of the lines has more 'words' than it should for an IGT"
+    }, {
+      reason: {
+        fieldwhichHasMoreUnitsThanExpected: potentiallyUnmatchedIGT.length,
+        expectedUnits: words.length
+      },
+      potentiallyInaccurateData: words,
+      id: doc._id
+    });
+  };
+
+  var alignIGT = function(igt) {
+    if (!igt) {
       return;
     }
-    // Only continue if the document is a Datum
-    if (!doc.datumFields || !doc.session || !doc.session.sessionFields) {
-      if (debug) {
-        emit("skipping", doc);
+    // // DEBUG console.log("Aligning words ", igt);
+    var mostWords = igt.morphemes || igt.gloss || igt.context;
+    mostWords = mostWords.length;
+    if (!mostWords) {
+      // DEBUG console.log("missing an igt line that make sense.");
+      return;
+    }
+    var words = [],
+      wordIndex,
+      fieldLabel,
+      potentiallyUnmatchedIGT = {
+        size: 0
+      },
+      previousContext = "";
+
+    // Count through the expected numer of words
+    for (wordIndex = 0; wordIndex < mostWords; wordIndex++) {
+      // Get the corresponding item in IGT tiers
+      // DEBUG console.log("aligning ", igt);
+      for (fieldLabel in igt) {
+        if (!igt.hasOwnProperty(fieldLabel) || extendedContextFields.indexOf(fieldLabel) > -1) {
+          continue;
+        }
+        words[wordIndex] = words[wordIndex] || {
+          confidence: igt.confidence || 1,
+          fieldCount: 0
+        };
+        // Detect if this row has more words than we are expecting
+        if (!igt[fieldLabel][wordIndex]) {
+          if (extendedContextFields.indexOf(fieldLabel) === -1) {
+            potentiallyUnmatchedIGT[fieldLabel] = igt[fieldLabel];
+            potentiallyUnmatchedIGT[fieldLabel].size++;
+          }
+        } else {
+          words[wordIndex][fieldLabel] = igt[fieldLabel][wordIndex];
+          words[wordIndex].fieldCount++;
+        }
       }
+      if (igt.context && igt.context[wordIndex]) {
+        words[wordIndex].context = igt.context[wordIndex];
+        previousContext = igt.context[wordIndex];
+      } else {
+        words[wordIndex].context = previousContext;
+      }
+    }
+    // // DEBUG console.log("IGT alignd ", words);
+    if (potentiallyUnmatchedIGT.size) {
+      words[wordIndex]["confidence"] = words[wordIndex]["confidence"] * words[wordIndex].fieldCount / (words[wordIndex].fieldCount + potentiallyUnmatchedIGT.size);
+      flagDocForCleaning(doc, words, potentiallyUnmatchedIGT);
+    }
+    return words;
+  };
+
+  var alignMorphemes = function(words) {
+    var wordIndex,
+      fieldLabel,
+      morphemes = [],
+      igt;
+
+    for (wordIndex = 0; wordIndex < words.length; wordIndex++) {
+      igt = words[wordIndex];
+      // Tokenize the IGT lines, re-align them
+      // DEBUG console.log("tokenizing on ", igt);
+      for (fieldLabel in igt) {
+        if (!igt.hasOwnProperty(fieldLabel) || fieldLabel === "confidence") {
+          continue;
+        }
+        // // DEBUG console.log(" before", 
+        if (fieldLabel === "gloss") {
+          conservativeTokenizer.pattern = morphemeWordAgnosticTokenizer.pattern;
+          igt[fieldLabel] = tokenize(igt[fieldLabel], conservativeTokenizer);
+        } else {
+          igt[fieldLabel] = tokenize(igt[fieldLabel], morphemeWordAgnosticTokenizer);
+        }
+        // // DEBUG console.log(" tokenized", igt[fieldLabel]);
+      }
+
+      // DEBUG console.log(" tokenized", igt);
+      igt = alignIGT(igt);
+      if (igt) {
+        morphemes.push({
+          morphemes: "@"
+        });
+        morphemes = morphemes.concat(igt);
+      }
+    }
+    morphemes.push({
+      morphemes: "@"
+    });
+    return morphemes;
+  };
+  var extendedContextFields = ["context", "utterance", "orthography", "translation"];
+  var extendedIGTFields = ["morphemes", "gloss", "allomorphs", "phonetic", "ipa", "utterance", "orthography", "syntacticCategory"];
+  var extractLexicalEntries = function(doc) {
+    if (!doc.session) {
+      emit({
+        error: "non-datum"
+      }, doc._id);
+      return;
+    }
+    var fields = doc.fields || doc.datumFields;
+    if (!fields || !fields.length) {
       return;
     }
 
-    /* =====   helper methods  ======= */
-    var extendedIGTFields = ["utterance", "orthography", "gloss", "morphemes", "allomorphs", "phonetic", "ipa"];
-    var conservativeTokenizer = {
-      delimiter: " ",
-      pattern: /\s+/g,
-      collapseCase: false,
-      removeSententialPunctuation: false,
-      punctuationToRemoveAfterTokenization: null
-    };
-    /* Assumes
-     * - no capitals (eg. D or T for retroflex or R for uvular) as contrastive segments
-     * - nor long vowels written as :
-     * - nor numbers representing pharingeals
-     * - nor ? representing glottal stop
-     */
-    var aggressiveTokenizer = {
-      delimiter: " ",
-      pattern: /\s+/g,
-      collapseCase: true,
-      removeSententialPunctuation: true,
-      punctuationToRemoveAfterTokenization: /[#!.,;:“\“\”\“\"\/\(\)\*\#0-9]+/g
-    };
-    /* Uses the Agressive tokenizer but also attempts to guess whether
-     * - there are contrastive capital letters
-     * - there are long vowels written with :
-     * - there are palatals or ejectives written as '
-     * - there are numbers used as pharyngeals
-     */
-    var adaptiveTokenizer = JSON.parse(JSON.stringify(aggressiveTokenizer));
-    var morphemeWordAgnosticTokenizer = {
-      delimiter: " ",
-      pattern: /[-=\s]+/g,
-      collapseCase: true,
-      removeSententialPunctuation: true,
-      punctuationToRemoveAfterTokenization: null
-    };
-    var tokenize = function(value, tokenizer) {
-      if (!value) {
-        return [];
+    var datum = {
+        confidence: 1
+      },
+      fieldLabel,
+      field,
+      key,
+      isEmpty = true;
+
+    // // DEBUG console.log(" extracting IGT fields from  ", fields);
+    for (key = 0; key < fields.length; key++) {
+      field = fields[key];
+      if (field.id && field.id.length > 0) {
+        fieldLabel = field.id; /* update to version 2.35+ */
+      } else {
+        fieldLabel = field.label;
       }
-      value = value + "";
-      if (tokenizer.collapseCase) {
-        value = value.toLocaleLowerCase();
-      }
-      var tokens = [];
-      value.replace(tokenizer.pattern, tokenizer.delimiter).trim().split(tokenizer.delimiter).map(function(token) {
-        if (tokenizer.punctuationToRemoveAfterTokenization) {
-          token = token.replace(tokenizer.punctuationToRemoveAfterTokenization, '');
-        }
-        token = token.trim();
-        if (tokenizer.removeSententialPunctuation) {
-          token = token.replace(/[.,;!\“\“\"\)\]\}]$/g, '').replace(/^[\“\“\",.;\(\[\{]/g, '');
-        }
-        if (token) {
-          tokens.push(token);
-        }
-      });
-      return tokens;
-    };
-    var extractFieldValues = function(doc) {
 
-
-
-      var datumFieldsForDatumLevelContext = {};
-      var datumFieldsForWordLevelContext = {};
-      var datumFieldsForMorphemeLevelContext = {};
-      var key;
-      var fields = doc.datumFields.concat(doc.session.sessionFields);
-
-
-
-      // Extract datum level and word level tokens
-      for (key = 0; key < fields.length; key++) {
-        if (fields[key].label === 'judgement' || fields[key].label === 'utterance') {
-          // If the Judgement or utterance contains a '*', discard the datum
-          if (fields[key].mask && fields[key].mask.search(/[#*]/) >= 0) {
-            if (debug) {
-              emit("skipping", fields);
-            }
+      // If the Judgement or utterance contains a '*', discard the datum
+      if (fieldLabel === "judgement" || fieldLabel === "utterance") {
+        if (field.mask) {
+          field.mask = field.mask.trim();
+          if (field.mask[0] === "*" || field.mask[0] === "#" || field.mask[0] === "?") {
             return;
           }
         }
-        // if its the gloss line, leave - and . punctuation and case sensitive
-        if (fields[key].label === 'gloss') {
-          fields[key].tokenizer = aggressiveTokenizer;
-        }
-        if (fields[key].mask) {
-          fields[key].mask = fields[key].mask.trim();
-          datumFieldsForDatumLevelContext[fields[key].label] = fields[key].mask;
-          datumFieldsForWordLevelContext[fields[key].label] = tokenize(fields[key].mask, fields[key].tokenizer ? fields[key].tokenizer : aggressiveTokenizer);
-          if (fields[key].igt) {
-            extendedIGTFields.push(fields[key].label);
-          }
-        }
-      }
-      if (doc.comments && doc.comments.length > 0) {
-        datumFieldsForDatumLevelContext.comments = JSON.stringify(doc.comments);
-      }
-      datumFieldsForDatumLevelContext.id = doc._id;
-
-
-      // Now we can extract Word Level IGT
-      var words = datumFieldsForWordLevelContext.utterance || datumFieldsForWordLevelContext.morphemes || datumFieldsForWordLevelContext.orthography || [];
-      var wordLevelTuples = [];
-      var word;
-      var detectIfDatumHasUnmatchedIGT = {};
-      for (word in words) {
-        // Get the corresponding item in IGT tiers
-        for (key in datumFieldsForWordLevelContext) {
-          if (datumFieldsForWordLevelContext.hasOwnProperty(key)) {
-            if (extendedIGTFields.indexOf(key) > -1) {
-              wordLevelTuples[word] = wordLevelTuples[word] || {};
-              wordLevelTuples[word][key] = datumFieldsForWordLevelContext[key][word];
-              // Detect if this datum needs cleaning
-              if (datumFieldsForWordLevelContext[key].length > words.length) {
-                detectIfDatumHasUnmatchedIGT[key] = datumFieldsForWordLevelContext[key];
-                wordLevelTuples[word]["confidence"] = 0.5;
-              } else {
-                wordLevelTuples[word]["confidence"] = 1;
-              }
-            }
-          }
-        }
-      }
-      if (Object.keys(detectIfDatumHasUnmatchedIGT).length > 0 && (debug || onlyErrors)) {
-        emit({
-          error: "This datum might need cleaning, one or more of the lines has more 'words' than it should for an IGT"
-        }, {
-          reason: {
-            fieldwhichHasMoreUnitsThanExpected: detectIfDatumHasUnmatchedIGT,
-            expectedUnits: words
-          },
-          potentiallyInaccurateData: wordLevelTuples,
-          id: doc._id
-        });
       }
 
-
-
-      // Now  we can  extract Morpheme Level IGT
-      var morphemeLevelTuples = [];
-      var wordIndex;
-      var tokenIndex;
-      var keyIndex;
-      var morphemeTupleIndex;
-      var detectIfDatumHasUnmatchedUnSegmentedFields = {};
-      var detectIfDatumHasUnmatchedIGTMorphemes = {};
-      for (wordIndex in wordLevelTuples) {
-        var wordIGT = wordLevelTuples[wordIndex];
-        var keysWhichAreContextButNotSegmented = [];
-        var morphemeTuples = [];
-        for (key in wordIGT) {
-          var value = wordIGT[key];
-          var tokens = tokenize(value, morphemeWordAgnosticTokenizer);
-          // If this is the utterance, or unsegmented field, then dont put it, instead add it to all tuples.
-          if (tokens.length >= 1) {
-            for (tokenIndex = 0; tokenIndex < tokens.length; tokenIndex++) {
-              morphemeTuples[tokenIndex] = morphemeTuples[tokenIndex] || {};
-              morphemeTuples[tokenIndex][key] = tokens[tokenIndex];
-            }
-          } else {
-            keysWhichAreContextButNotSegmented.push(key);
-          }
-        }
-        // Fill in the fields (like utterance) that dont have segmented to the other fields as context
-        for (keyIndex in keysWhichAreContextButNotSegmented) {
-          for (morphemeTupleIndex = 0; morphemeTupleIndex < morphemeTuples.length; morphemeTupleIndex++) {
-            morphemeTuples[morphemeTupleIndex][keysWhichAreContextButNotSegmented[keyIndex]] = wordIGT[keysWhichAreContextButNotSegmented[keyIndex]];
-          }
-        }
-        // Detect if any tuples are missing fields, which could indicate mis-matching segmentation
-        var flagOthersAsLowConfidence = false;
-        for (morphemeTupleIndex = morphemeTuples.length - 1; morphemeTupleIndex >= 0; morphemeTupleIndex--) {
-          if (Object.keys(morphemeTuples[morphemeTupleIndex]).length !== Object.keys(wordIGT).length) {
-            morphemeTuples[morphemeTupleIndex]["confidence"] = morphemeTuples[morphemeTupleIndex]["confidence"] ? morphemeTuples[morphemeTupleIndex]["confidence"] * 0.5 : 0.5;
-            flagOthersAsLowConfidence = true;
-            if (debug || onlyErrors) {
-              emit({
-                error: "This datum might need cleaning, one or more of the lines has more 'morphemes' than it should for an IGT"
-              }, {
-                reason: {
-                  fieldwhichHasMoreUnitsThanExpected: "unknown",
-                  expectedUnits: wordIGT
-                },
-                potentiallyInaccurateData: morphemeTuples[morphemeTupleIndex],
-                id: doc._id
-              });
-            }
-          } else {
-            if (flagOthersAsLowConfidence) {
-              morphemeTuples[morphemeTupleIndex]["confidence"] = morphemeTuples[morphemeTupleIndex]["confidence"] ? morphemeTuples[morphemeTupleIndex]["confidence"] * 0.9 : 0.9;
-            }
-          }
-        }
-        // If part of the morpheme had a segmentation, keep track of the unsegmented fields in case word show uneven segmentation
-        if (keysWhichAreContextButNotSegmented.length !== Object.keys(wordIGT).length) {
-          detectIfDatumHasUnmatchedUnSegmentedFields[keysWhichAreContextButNotSegmented.join()] = detectIfDatumHasUnmatchedUnSegmentedFields[keysWhichAreContextButNotSegmented.join()] || [];
-          detectIfDatumHasUnmatchedUnSegmentedFields[keysWhichAreContextButNotSegmented.join()].push(wordIGT);
-        }
-        morphemeLevelTuples.push({
-          "morphemes": "@",
-          "confidence": 1
-        });
-        morphemeLevelTuples = morphemeLevelTuples.concat(morphemeTuples);
+      // If its the gloss line, leave - and . punctuation and case sensitive
+      if (fieldLabel === "gloss") {
+        field.tokenizer = conservativeTokenizer;
+      } else if (field.mask && field.type === "IGT") {
+        extendedIGTFields.push(fieldLabel);
       }
-      morphemeLevelTuples.push({
-        "morphemes": "@",
-        "confidence": 1
+
+      // Tokenize the line
+      if (field.mask && extendedIGTFields.indexOf(fieldLabel) > -1) {
+        field.mask = field.mask.trim();
+        datum[fieldLabel] = tokenize(field.mask, field.tokenizer);
+        if (datum[fieldLabel].length) {
+          isEmpty = false;
+        }
+      } else {
+        // DEBUG console.log("Skipping field ", field);
+      }
+    }
+    // Use morphemes if utterance wasn't provided
+    if (datum.morphemes && !datum.utterance) {
+      datum.utterance = datum.morphemes.map(function(morpheme) {
+        return morpheme.replace(/-=/g, "");
       });
+    }
+    // Move utterance or othography into context per word
+    if (!datum.context) {
+      datum.context = datum.utterance || datum.orthography;
+      delete datum.utterance;
+      delete datum.orthography;
+    }
 
-      // Detect if this datum needs cleaning because some of the fields probably should be missing segmentation
-      var countOfUnsegmentedFields = Object.keys(detectIfDatumHasUnmatchedUnSegmentedFields).length;
-      if (countOfUnsegmentedFields > 1) {
-        for (morphemeTupleIndex = 0; morphemeTupleIndex < morphemeLevelTuples.length; morphemeTupleIndex++) {
-          morphemeLevelTuples[morphemeTupleIndex]["confidence"] = morphemeLevelTuples[morphemeTupleIndex]["confidence"] ? parseFloat(morphemeLevelTuples[morphemeTupleIndex]["confidence"], 10) * 0.9 : 0.91;
-        }
-        if (debug || onlyErrors) {
-          emit({
-            error: "This datum needs cleaning, some of its IGT fields which are segmented in other words, are missing segmentation in one or more words"
-          }, {
-            reason: detectIfDatumHasUnmatchedUnSegmentedFields,
-            potentiallyInaccurateData: morphemeLevelTuples,
-            id: doc._id
-          });
-        }
-      }
-
-
-
-      return {
-        datumLevelContext: datumFieldsForDatumLevelContext,
-        // wordLevelContext: datumFieldsForWordLevelContext,
-        // wordLevelContext: wordLevelTuples,
-        morphemeLevelContext: morphemeLevelTuples
-      };
-    };
-
-    var emitPrecedenceRules = function(datumInContextTiers, localemit) {
-      // TODO add precedence rules
-
-      var thisNode;
-      var skippedNodes;
-      var nodeIndex;
-      var previousNodeIndex;
-      var previousNode;
-      var distance;
-
-      if (!onlyErrors) {
-
-        for (previousNodeIndex = 0; previousNodeIndex < datumInContextTiers.morphemeLevelContext.length - 1; previousNodeIndex++) {
-          for (nodeIndex = previousNodeIndex + 1; nodeIndex < datumInContextTiers.morphemeLevelContext.length; nodeIndex++) {
-
-            previousNode = datumInContextTiers.morphemeLevelContext[previousNodeIndex];
-            thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-
-            skippedNodes = [];
-            while (!thisNode.morphemes) {
-              if (debug || onlyErrors) {
-                emit({
-                  error: "Skipping this relation because one of the nodes has no morphemes"
-                }, {
-                  reason: {
-                    relation: [previousNode, thisNode]
-                  },
-                  potentiallyInaccurateData: thisNode,
-                  id: doc._id
-                });
-              }
-              nodeIndex++;
-              skippedNodes.push(thisNode);
-              thisNode = datumInContextTiers.morphemeLevelContext[nodeIndex];
-            }
-            if (skippedNodes.length > 0) {
-              thisNode.skippedNodes = skippedNodes;
-            }
-            if (thisNode.morphemes === "@" && previousNode.morphemes === "@") {
-              previousNode = thisNode;
-              continue;
-            }
-            var wordLevelContext = "";
-            if (previousNode.utterance !== thisNode.utterance) {
-              wordLevelContext = datumInContextTiers.datumLevelContext.utterance;
-            } else {
-              wordLevelContext = previousNode.utterance || thisNode.utterance;
-            }
-            if (!wordLevelContext) {
-              if (previousNode.morphemes !== thisNode.morphemes) {
-                wordLevelContext = datumInContextTiers.datumLevelContext.morphemes;
-              } else {
-                wordLevelContext = previousNode.morphemes || thisNode.morphemes;
-              }
-            }
-            if (thisNode.morphemes === previousNode.morphemes && !wordLevelContext.match(new RegExp(thisNode.morphemes + ".*" + previousNode.morphemes))) {
-              if (debug || onlyErrors) {
-                emit({
-                  error: "Skipping this relation because one of the nodes morphemes match but the utterance doesn't contain it twice"
-                }, {
-                  reason: {
-                    relation: [previousNode, thisNode]
-                  },
-                  potentiallyInaccurateData: [previousNode, thisNode],
-                  id: doc._id
-                });
-              }
-              previousNode = thisNode;
-              continue;
-            }
-            distance = nodeIndex - previousNodeIndex;
-            if (distance <= maxDistance) {
-              localemit({
-                "previous": previousNode,
-                "subsequent": thisNode,
-                "relation": "precedes",
-                "distance": distance,
-                "context": datumInContextTiers.datumLevelContext
-              }, wordLevelContext);
-
-              // localemit({
-              //   "previous": previousNode,
-              //   "subsequent": thisNode,
-              //   "relation": "follows",
-              //   "distance": distance,
-              //   "context": datumInContextTiers.datumLevelContext
-              // }, wordLevelContext);
-            }
-            // localemit(thisNode, doc._id);
-            previousNode = thisNode;
-
-          }
-        }
-      }
-    };
-    /* =======  end helper methods  ======= */
-
-
-    /* main */
-    var datum = extractFieldValues(doc);
-    if (!datum) {
+    if (isEmpty) {
+      // DEBUG console.log("effectively empty ", datum);
       return;
     }
-    emitPrecedenceRules(datum, emit);
+    var morphemes = alignMorphemes(alignIGT(datum));
+    // DEBUG console.log(" morphemes", morphemes);
 
-  } catch (e) {
-    if (debug || onlyErrors) {
-      emit(e, 1);
+    return morphemes;
+  };
+
+
+  var processDocument = function(doc) {
+    //  // DEBUG // DEBUG console.log("Processing doc " + doc._id);
+    try {
+      if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+        // DEBUG console.log("Not looking for lexical entries in deleted data");
+        return;
+      }
+      var lexicalEntries = extractLexicalEntries(doc);
+      if (!lexicalEntries) {
+        // DEBUG console.log("No lexical entries were found in this doc" + doc._id);
+        return;
+      }
+      var previousLexicalEntry;
+      lexicalEntries.map(function(lexicalEntry) {
+        if (lexicalEntry && !previousLexicalEntry) {
+          previousLexicalEntry = lexicalEntry;
+          return;
+        }
+        if (!lexicalEntry || !previousLexicalEntry) {
+          return;
+        }
+        // what to do about empty entries?
+        if (!lexicalEntry.gloss && !lexicalEntry.morphemes) {
+          previousLexicalEntry = lexicalEntry;
+          return;
+        }
+        if (lexicalEntry.gloss === "?" || lexicalEntry.gloss === "??") {
+          lexicalEntry.gloss = "";
+        }
+        if (previousLexicalEntry.morphemes === "@" && lexicalEntry.morphemes === "@") {
+          previousLexicalEntry = lexicalEntry;
+          return;
+        }
+        if (!lexicalEntry.fieldCount || lexicalEntry.fieldCount < 2) {
+          previousLexicalEntry = lexicalEntry;
+          return;
+        }
+
+        emit(previousLexicalEntry.morphemes +
+          "|" + (previousLexicalEntry.gloss ? previousLexicalEntry.gloss : "") +
+          "-" +
+          lexicalEntry.morphemes +
+          "|" + (lexicalEntry.gloss ? lexicalEntry.gloss : ""),
+          lexicalEntry.context || previousLexicalEntry.context);
+        previousLexicalEntry = lexicalEntry;
+      });
+
+    } catch (error) {
+      // DEBUG console.log(error.stack);
+      emit({
+        error: "" + error,
+        stack: error.stack
+      }, doc._id);
     }
-  }
-};
+  };
+  processDocument(doc);
+
+}
 try {
-  exports.morphemesPrecedenceContext = morphemesPrecedenceContext;
+  exports.lexiconNodes = lexiconNodes;
 } catch (e) {
-  // console.log("not in a node context")
+  // // DEBUG console.log("not in a node context")
 }

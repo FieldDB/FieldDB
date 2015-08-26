@@ -1,10 +1,9 @@
 function lexiconNodes(doc) {
-  var debugMode = true;
   var conservativeTokenizer = {
     delimiter: " ",
     pattern: /\s+/g,
     collapseCase: false,
-    removeSententialPunctuation: false,
+    removeSententialPunctuation: true,
     punctuationToRemoveAfterTokenization: null
   };
   /* Assumes
@@ -29,7 +28,7 @@ function lexiconNodes(doc) {
   var adaptiveTokenizer = JSON.parse(JSON.stringify(aggressiveTokenizer));
   var morphemeWordAgnosticTokenizer = {
     delimiter: " ",
-    pattern: /[-=\s]+/g,
+    pattern: /[\-=\s]+/g,
     collapseCase: false,
     removeSententialPunctuation: true,
     punctuationToRemoveAfterTokenization: null
@@ -80,11 +79,11 @@ function lexiconNodes(doc) {
     if (!igt) {
       return;
     }
-    // console.log("Aligning words ", igt);
+    // // DEBUG console.log("Aligning words ", igt);
     var mostWords = igt.morphemes || igt.gloss || igt.context;
     mostWords = mostWords.length;
     if (!mostWords) {
-      console.log("missing an igt line that make sense.");
+      // DEBUG console.log("missing an igt line that make sense.");
       return;
     }
     var words = [],
@@ -98,23 +97,24 @@ function lexiconNodes(doc) {
     // Count through the expected numer of words
     for (wordIndex = 0; wordIndex < mostWords; wordIndex++) {
       // Get the corresponding item in IGT tiers
-      console.log("aligning ", igt);
+      // DEBUG console.log("aligning ", igt);
       for (fieldLabel in igt) {
         if (!igt.hasOwnProperty(fieldLabel) || extendedContextFields.indexOf(fieldLabel) > -1) {
           continue;
         }
-        words[wordIndex] = words[wordIndex] || {};
+        words[wordIndex] = words[wordIndex] || {
+          confidence: igt.confidence || 1,
+          fieldCount: 0
+        };
         // Detect if this row has more words than we are expecting
-        words[wordIndex][fieldLabel] = igt[fieldLabel][wordIndex] || "";
         if (!igt[fieldLabel][wordIndex]) {
           if (extendedContextFields.indexOf(fieldLabel) === -1) {
             potentiallyUnmatchedIGT[fieldLabel] = igt[fieldLabel];
-            potentiallyUnmatchedIGT[fieldLabel].missing = wordIndex;
-            words[wordIndex]["confidence"] = words[wordIndex]["confidence"] || 1;
-            words[wordIndex]["confidence"] = words[wordIndex]["confidence"] * 0.5;
+            potentiallyUnmatchedIGT[fieldLabel].size++;
           }
         } else {
-          words[wordIndex]["confidence"] = 1;
+          words[wordIndex][fieldLabel] = igt[fieldLabel][wordIndex];
+          words[wordIndex].fieldCount++;
         }
       }
       if (igt.context && igt.context[wordIndex]) {
@@ -124,8 +124,9 @@ function lexiconNodes(doc) {
         words[wordIndex].context = previousContext;
       }
     }
-    // console.log("IGT alignd ", words);
+    // // DEBUG console.log("IGT alignd ", words);
     if (potentiallyUnmatchedIGT.size) {
+      words[wordIndex]["confidence"] = words[wordIndex]["confidence"] * words[wordIndex].fieldCount / (words[wordIndex].fieldCount +potentiallyUnmatchedIGT.size);
       flagDocForCleaning(doc, words, potentiallyUnmatchedIGT);
     }
     return words;
@@ -140,17 +141,22 @@ function lexiconNodes(doc) {
     for (wordIndex = 0; wordIndex < words.length; wordIndex++) {
       igt = words[wordIndex];
       // Tokenize the IGT lines, re-align them
-      console.log("tokenizing on ", igt);
+      // DEBUG console.log("tokenizing on ", igt);
       for (fieldLabel in igt) {
         if (!igt.hasOwnProperty(fieldLabel) || fieldLabel === "confidence") {
           continue;
         }
-        // console.log(" before", 
-        igt[fieldLabel] = tokenize(igt[fieldLabel], morphemeWordAgnosticTokenizer);
-        // console.log(" tokenized", igt[fieldLabel]);
+        // // DEBUG console.log(" before", 
+        if (fieldLabel === "gloss") {
+          conservativeTokenizer.pattern = morphemeWordAgnosticTokenizer.pattern;
+          igt[fieldLabel] = tokenize(igt[fieldLabel], conservativeTokenizer);
+        } else {
+          igt[fieldLabel] = tokenize(igt[fieldLabel], morphemeWordAgnosticTokenizer);
+        }
+        // // DEBUG console.log(" tokenized", igt[fieldLabel]);
       }
 
-      console.log(" tokenized", igt);
+      // DEBUG console.log(" tokenized", igt);
       igt = alignIGT(igt);
       if (igt) {
         morphemes.push({
@@ -178,13 +184,15 @@ function lexiconNodes(doc) {
       return;
     }
 
-    var datum = {},
+    var datum = {
+        confidence: 1
+      },
       fieldLabel,
       field,
       key,
       isEmpty = true;
 
-    // console.log(" extracting IGT fields from  ", fields);
+    // // DEBUG console.log(" extracting IGT fields from  ", fields);
     for (key = 0; key < fields.length; key++) {
       field = fields[key];
       if (field.id && field.id.length > 0) {
@@ -218,7 +226,7 @@ function lexiconNodes(doc) {
           isEmpty = false;
         }
       } else {
-        console.log("Skipping field ", field);
+        // DEBUG console.log("Skipping field ", field);
       }
     }
     // Use morphemes if utterance wasn't provided
@@ -235,41 +243,51 @@ function lexiconNodes(doc) {
     }
 
     if (isEmpty) {
-      console.log("effectively empty ", datum);
+      // DEBUG console.log("effectively empty ", datum);
       return;
     }
-
     var morphemes = alignMorphemes(alignIGT(datum));
-    console.log(" morphemes", morphemes);
+    // DEBUG console.log(" morphemes", morphemes);
 
     return morphemes;
   };
 
 
   var processDocument = function(doc) {
-    //  // DEBUG console.log("Processing doc " + doc._id);
+    //  // DEBUG // DEBUG console.log("Processing doc " + doc._id);
     try {
       if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
-        console.log("Not looking for lexical entries in deleted data");
+        // DEBUG console.log("Not looking for lexical entries in deleted data");
         return;
       }
       var lexicalEntries = extractLexicalEntries(doc);
       if (!lexicalEntries) {
-        console.log("No lexical entries were found in this doc" + doc._id);
+        // DEBUG console.log("No lexical entries were found in this doc" + doc._id);
         return;
       }
       lexicalEntries.map(function(lexicalEntry) {
         if (!lexicalEntry || lexicalEntry.morphemes === "@") {
           return;
         }
+        // what to do about empty entries?
+        if (!lexicalEntry.gloss && !lexicalEntry.morphemes) {
+          return;
+        }
+        if (!lexicalEntry.fieldCount || lexicalEntry.fieldCount < 2) {
+          return;
+        }
+        delete lexicalEntry.fieldCount;
         var context = lexicalEntry.context;
         delete lexicalEntry.context;
         emit(lexicalEntry, context);
       });
 
     } catch (error) {
-      console.log(error.stack);
-      emit(" error" + error, doc._id);
+      // DEBUG console.log(error.stack);
+      emit({
+        error: "" + error,
+        stack: error.stack
+      }, doc._id);
     }
   };
   processDocument(doc);
@@ -278,5 +296,5 @@ function lexiconNodes(doc) {
 try {
   exports.lexiconNodes = lexiconNodes;
 } catch (e) {
-  // console.log("not in a node context")
+  // // DEBUG console.log("not in a node context")
 }
