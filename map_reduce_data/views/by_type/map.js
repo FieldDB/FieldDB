@@ -31,7 +31,7 @@ function byType(doc) {
     if (guessedType) {
       guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
     }
-
+ 
     if (guessedType === "Datalist") {
       guessedType = "DataList";
     }
@@ -219,7 +219,7 @@ function byType(doc) {
     return [mediaDateModified, mediaUUID, mediaDateCreated, mediaPreview];
   };
 
-  var processDocument = function processDocument(doc) {
+  var processDocument = function(doc) {
 
     //  // DEBUG console.log("Processing doc " + doc._id);
     try {
