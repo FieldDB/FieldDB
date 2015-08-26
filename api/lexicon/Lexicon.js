@@ -26,11 +26,10 @@ var LEXICON_NODES_MAP_REDUCE = mapReduceFactory({
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
 var morphemesPrecedenceMapReduceString = require("../../map_reduce_lexicon/views/morphemesPrecedenceContext/map").morphemesPrecedenceContext;
-var LEXICON_CONNECTED_GRAPH_MAP_REDUCE = mapReduceFactory({
+var LEXICON_PRECEDENCE_CONTEXT_MAP_REDUCE = mapReduceFactory({
   filename: "morphemesPrecedenceContext",
   mapString: morphemesPrecedenceMapReduceString
 });
-console.log("TODO hook up ", LEXICON_CONNECTED_GRAPH_MAP_REDUCE);
 /**
  * @class Lexicon is directed graph (triple store) between morphemes and
  *        their allomorphs and glosses. It allows the search to index
@@ -1776,6 +1775,12 @@ Lexicon.convertMapReduceRowIntoLexicalEntry = function(row) {
  * @type {Function}
  */
 Lexicon.lexicon_nodes_mapReduce = LEXICON_NODES_MAP_REDUCE;
+
+/**
+ * [lexicon_nodes_mapReduce description]
+ * @type {Function}
+ */
+Lexicon.lexicon_precedence_context_mapReduce = LEXICON_PRECEDENCE_CONTEXT_MAP_REDUCE;
 
 /**
  * Constructs a lexicon given an input of precedenceRules or an orthography
