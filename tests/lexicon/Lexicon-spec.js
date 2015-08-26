@@ -228,42 +228,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         }],
         session: {}
       }];
-      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
       expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(6);
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
-        key: {
-          gloss: "Erqe",
-          confidence: 1,
-          anotherigtfields: "A"
-        },
-        value: "Erqe"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[1]).toEqual({
-        key: {
-          gloss: "qan",
-          confidence: 1,
-          anotherigtfields: "B"
-        },
-        value: "qankuna"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[2]).toEqual({
-        key: {
-          gloss: "kuna",
-          confidence: 1,
-          anotherigtfields: "C"
-        },
-        value: "qankuna"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
-        key: {
-          gloss: "qapari",
-          confidence: 1,
-          anotherigtfields: "D"
-        },
-        value: "qaparinaywankichis"
-      });
       expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
         key: {
           gloss: "nay",
@@ -272,17 +240,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         },
         value: "qaparinaywankichis"
       });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
-        key: {
-          gloss: "wankichis",
-          confidence: 1,
-          anotherigtfields: "F"
-        },
-        value: "qaparinaywankichis"
-      });
     });
 
-    it("should flag morphemes as low confidence which are missing fields", function() {
+    xit("should flag morphemes as low confidence which are missing fields", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
         _id: "one",
@@ -295,50 +255,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         }],
         session: {}
       }];
-      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
       expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(8);
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
-        key: {
-          morphemes: "A",
-          confidence: 1,
-          gloss: "a"
-        },
-        value: "A"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[1]).toEqual({
-        key: {
-          morphemes: "B",
-          confidence: 1,
-          gloss: "b1"
-        },
-        value: "B"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[2]).toEqual({
-        key: {
-          morphemes: "BB",
-          confidence: 1,
-          gloss: "b2"
-        },
-        value: "BB"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
-        key: {
-          morphemes: "C",
-          confidence: 1,
-          gloss: "c"
-        },
-        value: "C"
-      });
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
-        key: {
-          morphemes: "CC",
-          confidence: 1,
-          gloss: "c2"
-        },
-        value: "CC"
-      });
       expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
         key: {
           morphemes: "CCC",
@@ -365,6 +285,92 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
     });
 
+    it("should produce similar output as before", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
+      docs = [{
+        "_id": "38b751d2a58a13f04a201ac9f98f3f49",
+        "datumFields": [{
+          "label": "utterance",
+          "mask": "amma guuti uqarivuq, “nunaqjuaq qanuittutuinnarngnik piruqtuqaqli, piruqtunik piruqsiaksaqarunnaqtunik, paurngalingniglu napaaqtunik paurngangillu piruqsiaksaqaqlutik iluagut, atunit qanuittuunitik maliglugit nunami.” taaimaailiqpuqlu."
+        }, {
+          "label": "allomorphs",
+          "mask": "amma guuti uqarivuq, “nunaqjuaq qanuittutuinnarngnik piruqtuqaqli, piruqtunik piruqsiaksaqarunnaqtunik, paurngalingniglu napaaqtunik paurngangillu piruqsiaksaqaqlutik iluagut, atunit qanuittuunitik maliglugit nunami. -” taaimaai-liq-puq-lu.       ᑍᒤliqpuqlu."
+        }, {
+          "label": "morphemes",
+          "mask": "amma guuti uqarivuq, “nuna-q-juaq qanuittu-tuinnar-ng-nik piruqtuq-aq-li, piruqtu-nik piruq-siaqksaqarunnaqtu-nik, paurnga-li-ngnig-lu napa-aq-tu-nik paurnga-ngil-lu piruq-siaksaqaqlutik ilu-agut, atunit qanuitt-uunitik maliglugit nuna-mi. -” taaimaai-liq-puq-lu."
+        }, {
+          "label": "gloss",
+          "mask": "? he say.PAST land-?-large have.it.wrong-to.be.done-?-ACC plant-spread-but, plant-ACC grow-?-ACC, fruit-make-?-and stand-CAUSE-?-ACC fruit-?-and grow-? inside-?, each have.it.wrong-? ? land-LOC so.thusly.as-toward-?-and.",
+          "alternates": [
+            "then he say.PAST land-?-large have.it.wrong-?-?-ACC plant-spread-but, plant-ACC grow-?-ACC fruit-?-?-?? stand-spread-?-ACC fruit-?-?? grow-? inside-?, each have.it.wrong-? ? land-again ??-?? ?-toward-??-and.",
+            "then he say.PAST ? ? ? plant-ACC ? ? ? ? ? inside-?-? each ? ? ?-?? ?",
+            "? he say.PAST say.PAST ? ? ? ? ? ? ? ? ?-? ? ? ? ?-?? ?",
+            "? he say.PAST ?-large ?-?-?-ACC ?-?-? ?-ACC grow-?-?-?-ACC ?-?-?-?? stand-?-?-ACC ?-?-?? grow-? ?-? ? ?-? ? ? ?-?? ?",
+            "amma guuti uqarivuq, “nuna-q-juaq qanuittu-tuinnar-ng-nik piruqtuq-aq-li, piruqtu-nik piruq-siaqksaqarunnaqtu-nik, paurnga-li-ngnig-lu napa-aq-tu-nik paurnga-ngil-lu piruq-siaksaqaqlutik ilu-agut, atunit qanuitt-uunitik maliglugit nuna-mi. -” taaimaai-liq-puq-lu."
+          ]
+        }, {
+          "label": "translation",
+          "mask": "Then he said, \"Let the land produce plants. Let them bear their own seeds. And let there be trees on the land that bear fruit with seeds in it. Let each kind of plant or tree have its own kind of seeds.\" And that's exactly what happened."
+        }, {
+          "label": "validationStatus",
+          "mask": "ToBeCheckedWithASpeakerForNaturalness, PublishedInWrittenDocument, ToBeAnnotatedByHisako"
+        }, {
+          "label": "syntacticTreeLatex",
+          "mask": "\\item[\\sc{Left}] \\Tree  [  [  [  [  [  [  [  [  [  [  [  [  [  [  [  [  [  [ amma guuti ]  uqarivuq, ]  “nuna-q-juaq ]  qanuittu-tuinnar-ng-nik ]  piruqtuq-aq-li, ]  piruqtu-nik ]  piruq-siaqksaqarunnaqtu-nik, ]  paurnga-li-ngnig-lu ]  napa-aq-tu-nik ]  paurnga-ngil-lu ]  piruq-siaksaqaqlutik ]  ilu-agut, ]  atunit ]  qanuitt-uunitik ]  maliglugit ]  nuna-mi. ]  -” ]  taaimaai-liq-puq-lu. ]  \\\\ \n \\item[\\sc{Right}] \\Tree  [ amma  [ guuti  [ uqarivuq,  [ “nuna-q-juaq  [ qanuittu-tuinnar-ng-nik  [ piruqtuq-aq-li,  [ piruqtu-nik  [ piruq-siaqksaqarunnaqtu-nik,  [ paurnga-li-ngnig-lu  [ napa-aq-tu-nik  [ paurnga-ngil-lu  [ piruq-siaksaqaqlutik  [ ilu-agut,  [ atunit  [ qanuitt-uunitik  [ maliglugit  [ nuna-mi.  [ -” taaimaai-liq-puq-lu. ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  \\\\ \n  \\item[\\sc{Mixed}] \\Tree  [ amma  [ guuti  [ uqarivuq,  [ “nuna-q-juaq  [ qanuittu-tuinnar-ng-nik  [ piruqtuq-aq-li,  [ piruqtu-nik  [ piruq-siaqksaqarunnaqtu-nik,  [ paurnga-li-ngnig-lu  [ napa-aq-tu-nik  [ paurnga-ngil-lu  [ piruq-siaksaqaqlutik  [ ilu-agut,  [ atunit  [ qanuitt-uunitik  [ maliglugit  [ nuna-mi.  [ -” taaimaai-liq-puq-lu. ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ]  ] "
+        }, {
+          "label": "another_translation",
+          "value": "Then he said, “Let the earth grow grass, plants that make grain, and fruit trees. The fruit trees will make fruit with seeds in it. And each plant will make its own kind of seed. Let these plants grow on the earth.” And it happened."
+        }, {
+          "label": "context_translation",
+          "mask": "he spoke: \"Earth, green up! Grow all varieties of seed-bearing plants, Every sort of fruit-bearing tree.\" And there it was. Earth produced green seed-bearing plants, all varieties, And fruit-bearing trees of all sorts. he saw that it was good. It was evening, it was morning— Day Three. (context for: 11-13)"
+        }, {
+          "label": "orthography",
+          "mask": "ᐊᒻᒪ ᒎᑎ ᐅᖃᕆᕗᖅ, “ᓄᓇᖅᔪᐊᖅ ᖃᓄᐃᑦᑐᑐᐃᓐᓇᕐᖕᓂᒃ ᐱᕈᖅᑐᖃᖅᓕ, ᐱᕈᖅᑐᓂᒃ ᐱᕈᖅᓯᐊᒃᓴᖃᕈᓐᓇᖅᑐᓂᒃ, ᐸᐅᕐᖓᓕᖕᓂᒡᓗ ᓇᐹᖅᑐᓂᒃ ᐸᐅᕐᖓᖏᓪᓗ ᐱᕈᖅᓯᐊᒃᓴᖃᖅᓗᑎᒃ ᐃᓗᐊᒍᑦ, ᐊᑐᓂᑦ ᖃᓄᐃᑦᑑᓂᑎᒃ ᒪᓕᒡᓗᒋᑦ ᓄᓇᒥ.” ᑍᒤᓕᖅᐳᖅᓗ."
+        }, {
+          "label": "verse",
+          "mask": "11"
+        }, {
+          "label": "syntacticCategory",
+          "mask": ""
+        }],
+        "session": {}
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(43);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.map(function(node) {
+        return node.key.morphemes + ":" + node.key.confidence;
+      })).toEqual(["amma:1", "guuti:1", "uqarivuq:1", "nuna:1", "q:1", "juaq:1",
+        "qanuittu:1", "tuinnar:1", "ng:1", "nik:1", "piruqtuq:1", "aq:1", "li:1",
+        "piruqtu:1", "nik:1", "piruq:1", "siaqksaqarunnaqtu:1", "nik:1", "paurnga:1",
+        "li:1", "ngnig:1", "lu:1", "napa:1", "aq:1", "tu:1", "nik:1", "paurnga:1",
+        "ngil:1", "lu:1", "piruq:1", "siaksaqaqlutik:1", "ilu:1", "agut:1", "atunit:1",
+        "qanuitt:1", "uunitik:1", "maliglugit:1", "nuna:1", "mi:1", "taaimaai:1",
+        "liq:1", "puq:1", "lu:1"
+      ]);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
+        key: {
+          allomorphs: "nunaqjuaq",
+          confidence: 1,
+          morphemes: "nuna",
+          gloss: "land"
+        },
+        value: "nunaqjuaq"
+      });
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
+        key: {
+          allomorphs: "",
+          confidence: 1,
+          morphemes: "juaq",
+          gloss: "large"
+        },
+        value: "nunaqjuaq"
+      });
+    });
+
+
     xit("should accept custom emit function and rows holder", function() {
       var rows = ["some previous stuff"];
       var emit = function(key, value) {
@@ -373,7 +379,6 @@ describe("Lexicon: as a user I want to search for anything, even things that don
           value: value
         });
       };
-
       var result = Lexicon.lexicon_nodes_mapReduce.customMap({
         _id: "8h329983jr200023j20",
         session: {

@@ -54,7 +54,7 @@ function lexiconNodes(doc) {
       }
       token = token.trim();
       if (tokenizer.removeSententialPunctuation) {
-        token = token.replace(/[.,;!\“\“\"\)\]\}]$/g, "").replace(/^[\“\“\",.;\(\[\{]/g, "");
+        token = token.replace(/[.,;!”\“\“\"\)\]\}\-]$/g, "").replace(/^[”\-\“\“\",.;\(\[\{]/g, "");
       }
       if (token) {
         tokens.push(token);
@@ -151,10 +151,13 @@ function lexiconNodes(doc) {
       }
 
       console.log(" tokenized", igt);
-      morphemes.push({
-        morphemes: "@"
-      });
-      morphemes = morphemes.concat(alignIGT(igt));
+      igt = alignIGT(igt);
+      if (igt) {
+        morphemes.push({
+          morphemes: "@"
+        });
+        morphemes = morphemes.concat(igt);
+      }
     }
     morphemes.push({
       morphemes: "@"
@@ -162,7 +165,7 @@ function lexiconNodes(doc) {
     return morphemes;
   };
   var extendedContextFields = ["context", "utterance", "orthography", "translation"];
-  var extendedIGTFields = ["morphemes", "gloss", "allomorphs", "phonetic", "ipa", "utterance", "orthography"];
+  var extendedIGTFields = ["morphemes", "gloss", "allomorphs", "phonetic", "ipa", "utterance", "orthography", "syntacticCategory"];
   var extractLexicalEntries = function(doc) {
     if (!doc.session) {
       emit({
@@ -256,7 +259,7 @@ function lexiconNodes(doc) {
         return;
       }
       lexicalEntries.map(function(lexicalEntry) {
-        if (lexicalEntry.morphemes === "@") {
+        if (!lexicalEntry || lexicalEntry.morphemes === "@") {
           return;
         }
         var context = lexicalEntry.context;
