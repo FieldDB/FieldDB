@@ -211,7 +211,75 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   describe("map reduces", function() {
 
-    xit("should accept custom igt fields", function() {
+    it("should not remove . from glosses", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
+      var docs = [{
+        _id: "one",
+        fields: [{
+          id: "utterance",
+          mask: "sanavuq"
+        }, {
+          id: "morphemes",
+          mask: "sana-vuq"
+        }, {
+          id: "gloss",
+          mask: "work.at.something-?"
+        }],
+        session: {}
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(2);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
+        key: {
+          confidence: 1,
+          morphemes: "sana",
+          gloss: "work.at.something"
+        },
+        value: "sanavuq"
+      });
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[1]).toEqual({
+        key: {
+          confidence: 1,
+          morphemes: "vuq",
+          gloss: "?"
+        },
+        value: "sanavuq"
+      });
+    });
+
+    it("should not include empty entries", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
+      var docs = [{
+        _id: "one",
+        fields: [{
+          id: "utterance",
+          mask: "one"
+        }, {
+          id: "morphemes",
+          mask: "on"
+        }, {
+          id: "gloss",
+          mask: "hh"
+        }],
+        session: {}
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(1);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
+        key: {
+          confidence: 1,
+          morphemes: 'on',
+          gloss: 'hh'
+        },
+        value: 'one'
+      });
+    });
+
+    it("should accept custom igt fields", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
         _id: "one",
@@ -234,15 +302,15 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(6);
       expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
         key: {
-          gloss: "nay",
           confidence: 1,
+          gloss: "nay",
           anotherigtfields: "E"
         },
         value: "qaparinaywankichis"
       });
     });
 
-    xit("should flag morphemes as low confidence which are missing fields", function() {
+    it("should flag morphemes as low confidence which are missing fields", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
         _id: "one",
@@ -261,25 +329,23 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(8);
       expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
         key: {
-          morphemes: "CCC",
           confidence: 1,
+          morphemes: "CCC",
           gloss: "c3"
         },
         value: "CCC"
       });
       expect(Lexicon.lexicon_nodes_mapReduce.rows[6]).toEqual({
         key: {
+          confidence: 1,
           morphemes: "D",
-          confidence: 0.25,
-          gloss: ""
         },
         value: "D"
       });
       expect(Lexicon.lexicon_nodes_mapReduce.rows[7]).toEqual({
         key: {
+          confidence: 1,
           morphemes: "E",
-          confidence: 0.25,
-          gloss: ""
         },
         value: "E"
       });
@@ -287,7 +353,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
     it("should produce similar output as before", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];
-      docs = [{
+      var docs = [{
         "_id": "38b751d2a58a13f04a201ac9f98f3f49",
         "datumFields": [{
           "label": "utterance",
@@ -335,7 +401,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         }],
         "session": {}
       }];
-      docs.map(Lexicon.lexicon_nodes_mapReduce.map)
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
       expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(43);
@@ -351,8 +417,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       ]);
       expect(Lexicon.lexicon_nodes_mapReduce.rows[3]).toEqual({
         key: {
-          allomorphs: "nunaqjuaq",
           confidence: 1,
+          allomorphs: "nunaqjuaq",
           morphemes: "nuna",
           gloss: "land"
         },
@@ -361,7 +427,6 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows[5]).toEqual({
         key: {
-          allomorphs: "",
           confidence: 1,
           morphemes: "juaq",
           gloss: "large"
