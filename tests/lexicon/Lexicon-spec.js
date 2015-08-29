@@ -272,10 +272,10 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
         key: {
           confidence: 1,
-          morphemes: 'on',
-          gloss: 'hh'
+          morphemes: "on",
+          gloss: "hh"
         },
-        value: 'one'
+        value: "one"
       });
     });
 
