@@ -69,7 +69,7 @@ var tinyPrecedenceRelations = [{
 
 describe("Lexicon: as a user I want to search for anything, even things that don't exist", function() {
 
-  xdescribe("lexicon nodes", function() {
+  describe("lexicon nodes", function() {
 
     it("should load", function() {
       expect(LexiconNode).toBeDefined();
@@ -125,7 +125,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  xdescribe("construction", function() {
+  describe("construction", function() {
 
     it("should load", function() {
       expect(Lexicon).toBeDefined();
@@ -501,7 +501,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  xdescribe("entries", function() {
+  describe("entries", function() {
 
     it("should be able to add lexical entries", function() {
       var lexicon = new Lexicon({
@@ -653,7 +653,8 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
   });
-  xdescribe("persistance", function() {
+  
+  describe("persistance", function() {
 
     it("should be able to fetch itself", function(done) {
       var lexicon = new Lexicon({
@@ -685,7 +686,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  xdescribe("connected graph", function() {
+  describe("connected graph", function() {
 
     it("should be able to build a precedence graph from relations", function() {
       var lexicon = new Lexicon({
@@ -753,7 +754,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  xdescribe("contexts", function() {
+  describe("contexts", function() {
 
     it("should be able to count contexts", function() {
       expect(Contexts).toBeDefined();
@@ -884,9 +885,9 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
   });
 
-  xdescribe("render ", function() {
+  describe("render ", function() {
 
-    xdescribe("render lexical entries", function() {
+    describe("render lexical entries", function() {
 
       it("should be able to build DOM elements with 2 way binding", function() {
         var lexicon = new Lexicon({
@@ -959,7 +960,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
     });
 
-    xdescribe("render connections between entries", function() {
+    describe("render connections between entries", function() {
 
       it("should be able to build precedence relations as a force directed graph", function() {
         var lexicon = new Lexicon({
@@ -1029,7 +1030,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
     });
 
-    xdescribe("render both entries and connections", function() {
+    describe("render both entries and connections", function() {
 
       it("should be able to build precedence relations as a force directed graph", function() {
         var lexicon = new Lexicon({
@@ -1081,7 +1082,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
   });
 
 
-  xdescribe("backward compatibility", function() {
+  describe("backward compatibility", function() {
     it("should be able to automerge equivalent nodes", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus
