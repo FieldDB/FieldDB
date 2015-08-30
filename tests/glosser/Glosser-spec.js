@@ -72,7 +72,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
 	};
 
-	xdescribe("construction", function() {
+	describe("construction", function() {
 
 		it("should load", function() {
 			expect(Glosser).toBeDefined();
@@ -93,7 +93,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("conservativeness", function() {
+	describe("conservativeness", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -397,7 +397,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("helper methods", function() {
+	describe("helper methods", function() {
 		var glosser;
 		beforeEach(function() {
 			glosser = new Glosser({
@@ -484,7 +484,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(parseInProgress.alternateMorphemeLines).toEqual(["lloqsi-naywaran khunan", "lloqsinaywaran khunan"]);
 			// expect(parseInProgress.matchingRules).toEqual(" ");
 			expect(parseInProgress.matchingRules.length).toEqual(5);
-			expect(parseInProgress.usedRules.customMap(function(rule) {
+			expect(parseInProgress.usedRules.map(function(rule) {
 				return rule.segmentation;
 			})).toEqual(["@-lloqsi", "lloqsi-naywaran", "naywaran-@", "naywaran-@", "n-@", "n-@"]);
 			expect(parseInProgress.usedRules.length).toEqual(6);
@@ -495,7 +495,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("visualization", function() {
+	describe("visualization", function() {
 
 		if (optionalD3) {
 			it("should accept an element", function() {
@@ -601,7 +601,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			// The morphemeSegmentationKnowledgeBase isnt an array, its a hasmap of ngrams by count
 			glosser.lexicon.entryRelations = glosser.morphemeSegmentationKnowledgeBase;
 			expect(glosser.lexicon.entryRelations.length).toEqual(14);
-			expect(glosser.lexicon.entryRelations.customMap(function(relation) {
+			expect(glosser.lexicon.entryRelations.map(function(relation) {
 				return relation.source.morphemes;
 			})).toEqual(["lloqsi", "lloqsi", "nay", "nay", "wa", "wa", "ra", "ra", "victor", "victor", "tusu", "tusu", "naya", "naya"]);
 			expect(glosser.lexicon.entryRelations[10]).toBeDefined();
@@ -636,7 +636,7 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
-	xdescribe("backward compatibility", function() {
+	describe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {
 			var glosser = new Glosser();
