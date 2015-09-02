@@ -1,4 +1,4 @@
-function(keys, values, rereduce) {
+function count(keys, values, rereduce) {
   if (rereduce) {
     return sum(values);
   } else {
@@ -32,4 +32,10 @@ function(keys, values, rereduce) {
     // Has to reduce faster
     return findUniqueValues(values).length;
   }
+}
+
+try {
+  exports.count = count;
+} catch (e) {
+  //  // DEBUG console.log("not in a node context")
 }
