@@ -411,43 +411,41 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.corpus.prefs.preferredSpreadsheetShape.rows = $rootScope.corpus.prefs.preferredSpreadsheetShape.rows || Math.ceil($rootScope.corpus.datumFields._collection.length / $rootScope.corpus.prefs.preferredSpreadsheetShape.columns);
     }
 
-    var columns = {};
+    var columns = {
+      first: [],
+      second: [],
+      third: []
+    };
+
+    var dontShowTheseFieldsToSpreadsheetUsers = ["judgement", "relatedData", "enteredByUser", "modifiedByUser"];
+    $rootScope.corpus.datumFields._collection.map(function(field) {
+      var label = field.id || field.label;
+      // Skip readonly fields, or complex fields that the spreadsheet  would overwrite, or fields which are not to be shown to field linguist users
+      if (field.readonly === true || field.showToUserTypes === "machine" || dontShowTheseFieldsToSpreadsheetUsers.indexOf(label) > -1) {
+        return;
+      }
+      if (columns.first.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+        columns.first.push(field);
+      } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns >= 2) {
+        if (columns.second.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+          columns.second.push(field);
+        } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns >= 3) {
+          if (columns.third.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+            columns.third.push(field);
+          } else {
+            console.log("Not displaying " + label);
+          }
+        }
+      }
+    });
 
     if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 1) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = [];
-      columns.third = [];
       $scope.fieldSpanWidthClassName = "span10";
       $scope.columnWidthClass = "span10";
     } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 2) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
-      );
-      columns.third = [];
-
       $scope.fieldSpanWidthClassName = "span5";
       $scope.columnWidthClass = "span5";
     } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 3) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
-      );
-      columns.third = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 3 + 1
-      );
       $scope.fieldSpanWidthClassName = "span3";
       $scope.columnWidthClass = "span3";
     }
@@ -1060,7 +1058,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.corpus.loadCorpusByDBname(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
             if ($rootScope.corpus && $rootScope.corpus._rev) {
-              $rootScope.corpus.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.corpus.dbname + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username + "/corpus/" + $rootScope.corpus.dbname);
+              if ($rootScope.user && $rootScope.user.username) {
+                $rootScope.corpus.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.corpus.dbname + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username + "/corpus/" + $rootScope.corpus.dbname);
+              }
               if (!$rootScope.corpus.confidential || !$rootScope.corpus.confidential.secretkey) {
                 $rootScope.corpus.previousConfidential = $rootScope.corpus.confidential;
                 $rootScope.corpus.previousConfidentialReason = "Corpus was created by a version of auth service which was missing the confidential creation. Updated at " + $rootScope.corpus._rev;
