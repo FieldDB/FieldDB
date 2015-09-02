@@ -855,8 +855,9 @@ var MAINTAINENCE = {
               } else {
                 sourceDB = "new_user_activity_feed";
               }
+              return; // no change to activities
             } else {
-              sourceDB = "new_corpus_deprecated";
+              sourceDB = "new_corpus";
             }
 
             if (dbname.indexOf("-") === -1) {
@@ -864,28 +865,28 @@ var MAINTAINENCE = {
               return;
             }
             if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 ||  dbname.indexOf("jenkins") === 0 ) {
-              // return;
+              return;
               if (sourceDB === "new_corpus") {
                 sourceDB = "new_testing_corpus";
               }
               console.log("deploying to a beta tester " + sourceDB);
             } else if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("sails-") === 0 || dbname.indexOf("tcpp-") === 0 || dbname.indexOf("tdfp-") === 0 || dbname.indexOf("tdfm-") === 0 || dbname.indexOf("experiment") > -1 || dbname.indexOf("game") > -1 || dbname.indexOf("gamify") > -1) {
               return;
-              if (sourceDB === "new_corpus") {
-                sourceDB = "new_gamify_corpus";
-              }
+              // if (sourceDB === "new_corpus") {
+              //   sourceDB = "new_gamify_corpus";
+              // }
               console.log("deploying to a gamify user " + sourceDB);
             } else {
               if (dbname.indexOf("anonymous") > -1 || dbname.indexOf("community") === 0) {
                 return;
                 if (sourceDB === "new_corpus") {
-                  if (dbname.indexOf("wordcloud") > -1 ) {
-                    sourceDB = "new_wordcloud_corpus";
-                  // } else if (dbname.indexOf("speechrec") > -1) {
-                  //   sourceDB = "new_speech_recognition_corpus";
-                  } else {
-                    sourceDB = "new_learnx_corpus";
-                  }
+                  // if (dbname.indexOf("wordcloud") > -1 ) {
+                  //   sourceDB = "new_wordcloud_corpus";
+                  // // } else if (dbname.indexOf("speechrec") > -1) {
+                  // //   sourceDB = "new_speech_recognition_corpus";
+                  // } else {
+                  //   sourceDB = "new_learnx_corpus";
+                  // }
                 }
                 console.log("deploying to anonymous users TODO use another sourceDB also. " + sourceDB);
               } else {
