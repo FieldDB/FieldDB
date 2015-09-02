@@ -172,7 +172,7 @@ describe("MapReduce frequent", function() {
             expect(reason).toBeUndefined();
           })
         .fail(function(error) {
-          expect(reason).toBeUndefined();
+          expect(error).toBeUndefined();
         })
         .done(done);
 
