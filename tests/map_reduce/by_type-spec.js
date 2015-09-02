@@ -361,7 +361,7 @@ describe("MapReduce by_type", function() {
     it("should run serverside", function(done) {
       var server = "http://localhost:5984";
       var url = server + "/testinglexicon-kartuli/_design/data/_view/" + BY_TYPE_MAP_REDUCE.filename + "?group=true";
-      console.log("requesting server side run of map reduce to see if out put has changed");
+      console.log("requesting server side run of map reduce to see if out put has changed " + url);
 
       CORS.makeCORSRequest({
           type: "GET",
@@ -369,27 +369,25 @@ describe("MapReduce by_type", function() {
         }).then(function(results) {
             expect(results).toBeDefined();
             expect(results.rows).toBeDefined();
-            expect(results.rows.length).toEqual(12);
+            expect(results.rows.length).toEqual(11);
             expect(results.rows[0].key).toEqual("Activity");
             expect(results.rows[0].value).toEqual(3);
             expect(results.rows[1].key).toEqual("Audio");
-            expect(results.rows[1].value).toEqual(125);
-            expect(results.rows[2].key).toEqual("Audio/mpeg");
-            expect(results.rows[2].value).toEqual(1);
-            expect(results.rows[3].key).toEqual("Comment");
+            expect(results.rows[1].value).toEqual(127);
+            expect(results.rows[2].key).toEqual("Comment");
+            expect(results.rows[2].value).toEqual(2);
+            expect(results.rows[3].key).toEqual("Corpus");
             expect(results.rows[3].value).toEqual(2);
-            expect(results.rows[4].key).toEqual("Corpus");
-            expect(results.rows[4].value).toEqual(2);
-            expect(results.rows[5].key).toEqual("CorpusMask");
-            expect(results.rows[5].value).toEqual(1);
-            expect(results.rows[6].key).toEqual("DataList");
-            expect(results.rows[6].value).toEqual(5);
-            expect(results.rows[7].key).toEqual("Deleted");
-            expect(results.rows[7].value).toEqual(21);
-            expect(results.rows[8].key).toEqual("Image");
-            expect(results.rows[8].value).toEqual(12);
-            expect(results.rows[9].key).toEqual("LanguageDatum");
-            expect(results.rows[9].value).toEqual(72);
+            expect(results.rows[4].key).toEqual("CorpusMask");
+            expect(results.rows[4].value).toEqual(1);
+            expect(results.rows[5].key).toEqual("DataList");
+            expect(results.rows[5].value).toEqual(5);
+            expect(results.rows[6].key).toEqual("Deleted");
+            expect(results.rows[6].value).toEqual(21);
+            expect(results.rows[7].key).toEqual("Image");
+            expect(results.rows[7].value).toEqual(12);
+            expect(results.rows[8].key).toEqual("LanguageDatum");
+            expect(results.rows[8].value).toEqual(72);
           },
           function(reason) {
             expect(reason).toBeUndefined();
