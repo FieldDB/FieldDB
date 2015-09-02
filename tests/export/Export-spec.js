@@ -42,7 +42,7 @@ describe("Export: as a user I want to export to various formats", function() {
     var datumCSVheader = datum.exportAsCSV(null, null, "header");
     var datumCSV = datum.exportAsCSV();
     expect(datumCSVheader).toEqual("\"judgement\",\"utterance\",\"morphemes\",\"gloss\",\"translation\",\"dateElicited\",\"notes\",\"checkedWithConsultant\",\"dialect\",\"goal\",\"consultants\",\"language\",\"user\",\"dateSEntered\",\"comments\",\"audioVideo\",\"images\"\n");
-    expect(datumCSV).toEqual("\"Jaunpa much'a-sqa-mi ka-ni\",\"Jaunpa much'asqami kani.\",\"\",\"Juan.gen kiss.pass.? be.1SG.\",\"I was kissed by John.\",\"Probably Prior to Saturday, September 15, 2012\",\"\",\"Lucia\",\"\",\"Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Saturday, September 15, 2012\",\"Unknown\",\"\",\"\",\"\",\"\",\"\",\"\"\n");
+    expect(datumCSV).toEqual("\"Jaunpa much'a-sqa-mi ka-ni\",\"Jaunpa much'asqami kani.\",\"\",\"Juan.gen kiss.pass.? be.1SG.\",\"I was kissed by John.\",\"Probably Prior to Saturday, September 15, 2012\",\"\",\"Lucia\",\"\",\"Goal from file import sample_filemaker.csv text/csv - 12641 bytes, last modified: Saturday, September 15, 2012\",\"Unknown\",\"\",\"sapir\",\"\",\"\",\"\",\"\"\n");
 
     datumCSV = datum.exportAsCSV(null, ["utterance", "comments"]);
     expect(datumCSV).toEqual("\"Jaunpa much'asqami kani.\",\"\"\n");

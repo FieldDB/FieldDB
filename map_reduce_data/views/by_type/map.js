@@ -31,7 +31,7 @@ function byType(doc) {
     if (guessedType) {
       guessedType = guessedType[0].toUpperCase() + guessedType.substring(1, guessedType.length);
     }
- 
+
     if (guessedType === "Datalist") {
       guessedType = "DataList";
     }
@@ -314,11 +314,14 @@ function byType(doc) {
         }
         for (embeddedDataIndex = 0; embeddedDataIndex < audioVideos.length; embeddedDataIndex++) {
           var fileType = audioVideos[embeddedDataIndex].type;
-          if (!fileType && audioVideos[embeddedDataIndex].details.type && audioVideos[embeddedDataIndex].details.type) {
-            fileType = audioVideos[embeddedDataIndex].details.type.substring(0, audioVideos[embeddedDataIndex].details.type.lastIndexOf("/"));
+          if (!fileType && audioVideos[embeddedDataIndex].details.type) {
+            fileType = audioVideos[embeddedDataIndex].details.type;
           }
           if (fileType) {
             fileType = fileType[0].toUpperCase() + fileType.substring(1, fileType.length);
+          }
+          if (fileType.indexOf("/") > -1) {
+            fileType = fileType.substring(0, fileType.lastIndexOf("/"));
           }
           emit(fileType, createIndexableMediaFile(audioVideos[embeddedDataIndex]));
         }

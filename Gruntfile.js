@@ -83,35 +83,43 @@ module.exports = function(grunt) {
     jasmine_node: {
       dev: {
         options: {
-          specFolders: ["tests"],
-          //   match: ".",
-          //   matchall: false,
-          //   extensions: "js",
-          // specNameMatcher: "Test",
-          projectRoot: "api",
-          //   requirejs: false,
+          coverage: {},
           forceExit: true,
-          isVerbose: true,
-          showColors: true,
-          // jUnit: {
-          //   report: true,
-          //   savePath: "./build/reports/jasmine/",
-          //   consolidate: true,
-          //   useDotNotation: true
-          // }
+          match: ".",
+          matchAll: false,
+          specFolders: ["tests"],
+          extensions: "js",
+          specNameMatcher: "spec",
+          captureExceptions: true,
+          junitreport: {
+            report: false,
+            savePath: "./build/reports/jasmine/",
+            useDotNotation: true,
+            // consolidate: true
+          }
         },
-        all: ["tests/"]
+        src: ["api/**/*.js"]
       },
       travis: {
         options: {
-          specFolders: ["tests"],
-          // specNameMatcher: "Test",
-          projectRoot: "api",
+          coverage: {},
           forceExit: true,
           isVerbose: false,
           showColors: false,
+          match: ".",
+          matchAll: false,
+          specFolders: ["tests"],
+          extensions: "js",
+          specNameMatcher: "spec",
+          captureExceptions: true,
+          junitreport: {
+            report: false,
+            savePath: "./build/reports/jasmine/",
+            useDotNotation: true,
+            consolidate: true
+          }
         },
-        all: ["tests/"]
+        src: ["api/**/*.js"]
       }
     },
     jasmine: {
@@ -156,8 +164,7 @@ module.exports = function(grunt) {
         ]
       },
       test: {
-        options: {
-        },
+        options: {},
         src: [
           "tests/**/*-spec.js"
         ]
@@ -221,7 +228,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-exec");
   grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-jasmine-node");
+  grunt.loadNpmTasks("grunt-jasmine-node-coverage");
   grunt.loadNpmTasks("grunt-contrib-jasmine");
   grunt.loadNpmTasks("grunt-jsdoc");
   grunt.loadNpmTasks("grunt-contrib-jshint");
@@ -236,6 +243,6 @@ module.exports = function(grunt) {
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesApp"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetApp"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify",  "uglify", "docs", "fielddb-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular"]);
 
 };
