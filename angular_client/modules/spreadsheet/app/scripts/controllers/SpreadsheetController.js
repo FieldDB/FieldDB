@@ -1116,7 +1116,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     // $scope.loadUsersAndRoles();
 
-    console.log("setting current corpus details: " + $rootScope.corpus);
+    console.log("setting current corpus details: " + $rootScope.corpus.dbname);
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       if (!FieldDB.FieldDBObject.application.corpus) {
         FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
@@ -2195,13 +2195,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
 
         $rootScope.notificationMessage = message;
@@ -2761,13 +2761,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
 
         $scope.showForgotPassword = false;
@@ -2820,13 +2820,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
         $scope.showResetPassword = false;
         $scope.showForgotPassword = false;
