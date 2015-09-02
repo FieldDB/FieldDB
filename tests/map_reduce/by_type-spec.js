@@ -357,7 +357,7 @@ describe("MapReduce by_type", function() {
     });
   });
 
-  describe("serverside", function() {
+  xdescribe("serverside", function() {
     it("should run serverside", function(done) {
       var server = "http://localhost:5984";
       var url = server + "/testinglexicon-kartuli/_design/data/_view/" + BY_TYPE_MAP_REDUCE.filename + "?group=true";

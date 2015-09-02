@@ -99,7 +99,7 @@ describe("MapReduce frequent", function() {
   });
 
 
-  describe("serverside", function() {
+  xdescribe("serverside", function() {
     it("should run serverside", function(done) {
       var server = "http://localhost:5984";
       var url = server + "/testinglexicon-kartuli/_design/data/_view/" + FREQUENT_MAP_REDUCE.filename + "?group=true";
