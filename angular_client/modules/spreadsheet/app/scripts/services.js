@@ -30,7 +30,7 @@ angular.module('spreadsheetApp')
       } else {
         config = {
           method: "GET",
-          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/datums_chronological",
+          url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/datums_chronological",
           withCredentials: true
         };
         console.log("Contacting the DB to get all corpus data for " + DB);
@@ -111,7 +111,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/get_datum_fields",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/get_datum_fields",
         withCredentials: true
       };
 
@@ -131,7 +131,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/sessions",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/sessions",
         withCredentials: true
       };
 
@@ -151,7 +151,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/precedence_rules?group=true",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/precedence_rules?group=true",
         withCredentials: true
       };
 
@@ -172,7 +172,7 @@ angular.module('spreadsheetApp')
       }
       var config = {
         method: "GET",
-        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/pages/_view/lexicon_create_tuples?group=true",
+        url: Servers.getServiceUrl($rootScope.serverCode, "corpus") + "/" + DB + "/_design/deprecated/_view/lexicon_create_tuples?group=true",
         withCredentials: true
       };
 
@@ -249,13 +249,13 @@ angular.module('spreadsheetApp')
             if (err.status === 0) {
               message = "are you offline?";
               if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 400 && err.data && err.data.reason) {
               message = err.data.reason;
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact the server, please report this.";
             }
             deferred.reject(message);
           });
@@ -276,13 +276,13 @@ angular.module('spreadsheetApp')
           if (err.status === 0) {
             message = "are you offline?";
             if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-              message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
             }
           }
           if (err && err.status >= 400 && err.data && err.data.userFriendlyErrors) {
             message = err.data.userFriendlyErrors;
           } else {
-            message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+            message = "Cannot contact the server, please report this.";
           }
           deferred.reject(message);
 
@@ -331,13 +331,13 @@ angular.module('spreadsheetApp')
           if (err.status === 0) {
             message = "are you offline?";
             if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-              message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+              message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
             }
           }
           if (err && err.status >= 400 && err.data.userFriendlyErrors) {
             message = err.data.userFriendlyErrors.join(" ");
           } else {
-            message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+            message = "Cannot contact the server, please report this.";
           }
 
           $rootScope.notificationMessage = message;
@@ -385,13 +385,13 @@ angular.module('spreadsheetApp')
             if (err.status === 0) {
               message = "are you offline?";
               if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia" || $rootScope.serverCode === "localhost") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 300 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact the server, please report this.";
             }
 
             $rootScope.notificationMessage = message;
@@ -439,13 +439,13 @@ angular.module('spreadsheetApp')
             if (err.status === 0) {
               message = "are you offline?";
               if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 400 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact the server, please report this.";
             }
 
             $rootScope.notificationMessage = message;
@@ -482,13 +482,13 @@ angular.module('spreadsheetApp')
             if (err.status === 0) {
               message = "are you offline?";
               if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-                message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+                message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
               }
             }
             if (err && err.status >= 400 && err.data.userFriendlyErrors) {
               message = err.data.userFriendlyErrors.join(" ");
             } else {
-              message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+              message = "Cannot contact the server, please report this.";
             }
 
             $rootScope.notificationMessage = message;
@@ -510,6 +510,7 @@ angular.module('spreadsheetApp')
           try {
             fieldDBDatum = SpreadsheetDatum.convertSpreadSheetDatumIntoFieldDBDatum(spreadsheetDatumToBeSaved, fieldDBDatumDocOrTemplate);
           } catch (e) {
+            console.log(e.stack);
             deferred.reject("Error saving datum: " + JSON.stringify(e));
             return;
           }

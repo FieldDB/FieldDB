@@ -10,7 +10,7 @@ console.log("Declaring Loading the SpreadsheetStyleDataEntryController.");
  * Controller of the spreadsheetApp
  */
 
-var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http) {
+var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource, $filter, $document, Data, Servers, md5, $timeout, $modal, $log, $http, $sce) {
   console.log(" Loading the SpreadsheetStyleDataEntryController.");
   var debugging = false;
   var allDataInCurrentSession = [];
@@ -58,7 +58,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "3.5.27.23.07ss";
+  $rootScope.appVersion = "3.19.02.10.32ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -411,43 +411,41 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
       $rootScope.corpus.prefs.preferredSpreadsheetShape.rows = $rootScope.corpus.prefs.preferredSpreadsheetShape.rows || Math.ceil($rootScope.corpus.datumFields._collection.length / $rootScope.corpus.prefs.preferredSpreadsheetShape.columns);
     }
 
-    var columns = {};
+    var columns = {
+      first: [],
+      second: [],
+      third: []
+    };
+
+    var dontShowTheseFieldsToSpreadsheetUsers = ["judgement", "relatedData", "enteredByUser", "modifiedByUser"];
+    $rootScope.corpus.datumFields._collection.map(function(field) {
+      var label = field.id || field.label;
+      // Skip readonly fields, or complex fields that the spreadsheet  would overwrite, or fields which are not to be shown to field linguist users
+      if (field.readonly === true || field.showToUserTypes === "machine" || dontShowTheseFieldsToSpreadsheetUsers.indexOf(label) > -1) {
+        return;
+      }
+      if (columns.first.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+        columns.first.push(field);
+      } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns >= 2) {
+        if (columns.second.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+          columns.second.push(field);
+        } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns >= 3) {
+          if (columns.third.length < $rootScope.corpus.prefs.preferredSpreadsheetShape.rows) {
+            columns.third.push(field);
+          } else {
+            console.log("Not displaying " + label);
+          }
+        }
+      }
+    });
 
     if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 1) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = [];
-      columns.third = [];
       $scope.fieldSpanWidthClassName = "span10";
       $scope.columnWidthClass = "span10";
     } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 2) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
-      );
-      columns.third = [];
-
       $scope.fieldSpanWidthClassName = "span5";
       $scope.columnWidthClass = "span5";
     } else if ($rootScope.corpus.prefs.preferredSpreadsheetShape.columns === 3) {
-      columns.first = $rootScope.corpus.datumFields._collection.slice(
-        1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1
-      );
-      columns.second = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1
-      );
-      columns.third = $rootScope.corpus.datumFields._collection.slice(
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 2 + 1,
-        $rootScope.corpus.prefs.preferredSpreadsheetShape.rows * 3 + 1
-      );
       $scope.fieldSpanWidthClassName = "span3";
       $scope.columnWidthClass = "span3";
     }
@@ -907,6 +905,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $scope.scopePreferences = overwiteAndUpdatePreferencesToCurrentVersion();
           $scope.scopePreferences.savedState.server = $rootScope.serverCode;
           $scope.scopePreferences.savedState.username = $rootScope.user.username;
+          $rootScope.user.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.user.username + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username);
           $scope.scopePreferences.savedState.password = sjcl.encrypt("password", $rootScope.loginInfo.password);
           localStorage.setItem('SpreadsheetPreferences', JSON.stringify($scope.scopePreferences));
 
@@ -1059,6 +1058,9 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
           $rootScope.corpus.loadCorpusByDBname(selectedCorpus.dbname).then(function(results) {
             console.log("loaded the corpus", results);
             if ($rootScope.corpus && $rootScope.corpus._rev) {
+              if ($rootScope.user && $rootScope.user.username) {
+                $rootScope.corpus.activityFeedUrl = $sce.trustAsResourceUrl("https://corpus.lingsync.org/" + $rootScope.corpus.dbname + "-activity_feed/_design/activities/activity_feed.html#/user/" + $rootScope.user.username + "/corpus/" + $rootScope.corpus.dbname);
+              }
               if (!$rootScope.corpus.confidential || !$rootScope.corpus.confidential.secretkey) {
                 $rootScope.corpus.previousConfidential = $rootScope.corpus.confidential;
                 $rootScope.corpus.previousConfidentialReason = "Corpus was created by a version of auth service which was missing the confidential creation. Updated at " + $rootScope.corpus._rev;
@@ -1114,7 +1116,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
     // $scope.loadUsersAndRoles();
 
-    console.log("setting current corpus details: " + $rootScope.corpus);
+    console.log("setting current corpus details: " + $rootScope.corpus.dbname);
     if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
       if (!FieldDB.FieldDBObject.application.corpus) {
         FieldDB.FieldDBObject.application.corpus = $rootScope.corpus;
@@ -2193,13 +2195,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
 
         $rootScope.notificationMessage = message;
@@ -2759,13 +2761,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
 
         $scope.showForgotPassword = false;
@@ -2818,13 +2820,13 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
         if (err.status === 0) {
           message = "are you offline?";
           if ($rootScope.serverCode === "mcgill" || $rootScope.serverCode === "concordia") {
-            message = "Cannot contact " + $rootScope.serverCode + " server, have you accepted the server's security certificate? (please refer to your registration email)";
+            message = "Cannot contact the server, have you accepted the server's security certificate? (please refer to your registration email)";
           }
         }
         if (err && err.status >= 400 && err.data.userFriendlyErrors) {
           message = err.data.userFriendlyErrors.join(" ");
         } else {
-          message = "Cannot contact " + $rootScope.serverCode + " server, please report this.";
+          message = "Cannot contact the server, please report this.";
         }
         $scope.showResetPassword = false;
         $scope.showForgotPassword = false;
@@ -2869,5 +2871,5 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }, 10000);
 };
-SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http'];
+SpreadsheetStyleDataEntryController.$inject = ['$scope', '$rootScope', '$resource', '$filter', '$document', 'Data', 'Servers', 'md5', '$timeout', '$modal', '$log', '$http', '$sce'];
 angular.module('spreadsheetApp').controller('SpreadsheetStyleDataEntryController', SpreadsheetStyleDataEntryController);
