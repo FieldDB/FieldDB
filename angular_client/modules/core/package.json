@@ -17,7 +17,7 @@
     "gulp-angular-templatecache": "^1.7.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-csso": "^1.0.0",
-    "gulp-filter": "2.0.2",
+    "gulp-filter": "^3.0.1",
     "gulp-flatten": "0.0.4",
     "gulp-inject": "1.1.1",
     "gulp-jshint": "^1.11.2",
