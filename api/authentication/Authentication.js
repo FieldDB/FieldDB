@@ -11,7 +11,7 @@ var Connection = require("./../corpus/Connection").Connection;
 // var CORS = require("./../CORS").CORS;
 // var CORS = require("../CORSNode").CORS;
 
-// var MD5 = require("MD5");
+// var md5 = require("md5");
 var bcrypt = require("bcrypt-nodejs");
 // console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
 
