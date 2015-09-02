@@ -53,7 +53,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
       if (!existingGravatar) {
         if (emailOrOtherString) {
-          this._gravatar = MD5(emailOrOtherString);
+          this._gravatar = md5(emailOrOtherString);
         } else {
           this._gravatar = "0df69960706112e38332395a4f2e7542";
         }
