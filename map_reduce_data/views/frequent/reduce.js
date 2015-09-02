@@ -1,4 +1,4 @@
-function unique(keys, values, rereduce) {
+function groupedCount(keys, values, rereduce) {
   var uniqueHash = {},
     uniqueValues = [];
 
@@ -53,7 +53,7 @@ function unique(keys, values, rereduce) {
 
 
 try {
-  exports.unique = unique;
+  exports.groupedCount = groupedCount;
 } catch (e) {
   //  // DEBUG console.log("not in a node context")
 }

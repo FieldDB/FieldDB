@@ -1,6 +1,6 @@
 var mapReduceFactory = require("./../../api/map_reduce/MapReduce").MapReduceFactory;
 var frequentMapString = require("../../map_reduce_data/views/frequent/map").frequent;
-var frequentReduceString = require("../../map_reduce_data/views/frequent/reduce").unique;
+var frequentReduceString = require("../../map_reduce_data/views/frequent/reduce").groupedCount;
 
 var FREQUENT_MAP_REDUCE = mapReduceFactory({
   filename: "frequent",
