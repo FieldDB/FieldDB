@@ -1,9 +1,15 @@
 /* globals FieldDB, localStorage */
 "use strict";
 var debugMode = false;
-localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
-  iso: "ka"
-}));
+
+try {
+  localStorage.setItem("_userOverridenLocalePreference", JSON.stringify({
+    iso: "ka"
+  }));
+} catch (e) {
+  console.log("localStorage isnt defiend here");
+}
+
 
 describe("Directive: fielddb-locales", function() {
 
