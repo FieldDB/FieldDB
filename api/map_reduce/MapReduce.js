@@ -8,26 +8,39 @@ var MapReduceFactory = function(options) {
   };
   options.rows = options.rows || [];
 
+  var debug = function(){
+    // console.log(arguments);
+  };
+
   var sum = function(values) {
-    console.log("summing ", values);
+    debug("summing ", values);
     if (!values || !values.reduce) {
+      debug("this isn't an array");
       return values;
     }
+    if (values && typeof values[0] !== "number") {
+      debug("using number of values " + values.length);
+      return values.length;
+    }
     return values.reduce(function(a, b) {
+      debug("adding " + a + " " + b);
       return a + b;
     });
   };
   var count = function(keys, values, rereduce) {
+    debug("counting" + keys);
     if (rereduce) {
+      debug("suming " + values);
       return sum(values);
     } else {
+      debug("count  " + values.length);
       return values.length;
     }
   };
 
   options.emit = options.emit || function(key, val) {
     if (debugMode) {
-      console.log(options);
+      debug(options);
     }
     options.rows.push({
       key: key,
@@ -38,7 +51,7 @@ var MapReduceFactory = function(options) {
 
   options.group = options.group || function(rows) {
     if (debugMode) {
-      console.log(options);
+      debug(options);
     }
     options.reduce = options.reduce || options._count;
     rows = rows || options.rows;
@@ -47,35 +60,44 @@ var MapReduceFactory = function(options) {
     var rowsGroupedById = {};
     rows.map(function(row) {
       var key = row.key;
+      var value = row.value;
       if (typeof key !== "string") {
-        key = JSON.stringify(row.key);
+        key = JSON.stringify(key);
+      }
+      if (typeof value !== "string") {
+        value = JSON.stringify(value);
       }
       if (!rowsGroupedById[key]) {
-        rowsGroupedById[key] = [row.value];
+        rowsGroupedById[key] = [value];
       } else {
-        rowsGroupedById[key].push(row.value);
+        rowsGroupedById[key].push(value);
       }
     });
-    // DEBUG console.log("regrouped ", rowsGroupedById);
+    debug("regrouped ", rowsGroupedById);
 
     // Reduce all grouped items
+    var rereduceMode = false;
     var reducedRows = [];
     for (var key in rowsGroupedById) {
       if (rowsGroupedById.hasOwnProperty(key)) {
         reducedRows.push({
           key: key,
-          value: options.reduce(key, rowsGroupedById[key], true)
+          value: options.reduce(key, rowsGroupedById[key], rereduceMode)
         });
       }
     }
-    // DEBUG console.log("reduced ", reducedRows);
+    debug("reduced ", reducedRows);
 
     // Re-reduce all grouped items
-    reducedRows = reducedRows.map(function(groupedRow) {
-      groupedRow.value = options.reduce(null, groupedRow.value, false);
-      return groupedRow;
-    });
-    // DEBUG console.log("re-reduced ", reducedRows);
+    if (Object.prototype.toString.call(reducedRows.value) === "[object Array]") {
+      rereduceMode = true;
+      reducedRows = reducedRows.map(function(groupedRow) {
+        groupedRow.value = options.reduce(null, groupedRow.value, rereduceMode);
+        return groupedRow;
+      });
+    }
+
+    debug("re-reduced ", reducedRows);
 
     return {
       rows: reducedRows.sort(function(a, b) {
@@ -91,7 +113,7 @@ var MapReduceFactory = function(options) {
         // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time
         eval("options.map = " + options.map.toString() + ";");
         options.mustRescopeEmit = true;
-        console.log("customizing emit");
+        debug("customizing emit");
       } catch (e) {
         console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
       }
@@ -105,12 +127,12 @@ var MapReduceFactory = function(options) {
         // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time 
         eval("options.map = " + options.map.toString() + ";");
         options.mustRescopeEmit = false;
-        console.log("rescoped emit");
+        debug("rescoped emit");
       } catch (e) {
         console.warn("Probably running in a Chrome app or other context where eval is not permitted. Using global emit and results for options");
       }
     } else {
-      console.log("not rescoping emit, already using the default");
+      debug("not rescoping emit, already using the default");
     }
 
     return {
@@ -123,7 +145,7 @@ var MapReduceFactory = function(options) {
     try {
       options.mapString = require(options.mapFilename)[options.filename];
     } catch (exception) {
-      console.log("Unable to load the map reduce " + options.mapFilePath, exception.stack);
+      debug("Unable to load the map reduce " + options.mapFilePath, exception.stack);
     }
   }
 

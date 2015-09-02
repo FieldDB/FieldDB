@@ -1,5 +1,6 @@
 function count(keys, values, rereduce) {
   if (rereduce) {
+    // console.log("im the reduce's rereduce", values);
     return sum(values);
   } else {
     /** 
