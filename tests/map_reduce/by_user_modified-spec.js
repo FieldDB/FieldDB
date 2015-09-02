@@ -1,5 +1,5 @@
 var mapReduceFactory = require("./../../api/map_reduce/MapReduce").MapReduceFactory;
-var byUserModifiedMapString = require("../../map_reduce_data/views/by_user_modified/map").by_user_modified;
+var byUserModifiedMapString = require("../../map_reduce_data/views/by_session_or_user/map").byUserModified;
 
 var BY_USER_MAP_REDUCE = mapReduceFactory({
   filename: "byUserModified",
@@ -9,7 +9,7 @@ var BY_USER_MAP_REDUCE = mapReduceFactory({
 var SAMPLE_DATA = require("../../sample_data/datum_v1.22.1.json");
 // var specIsRunningTooLong = 5000;
 
-describe("MapReduce by_user_modified", function() {
+describe("MapReduce by_session_or_user", function() {
 
   beforeEach(function() {
     BY_USER_MAP_REDUCE.rows = [];
