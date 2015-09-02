@@ -103,7 +103,7 @@ describe("MapReduce frequent", function() {
     it("should run serverside", function(done) {
       var server = "http://localhost:5984";
       var url = server + "/testinglexicon-kartuli/_design/data/_view/" + FREQUENT_MAP_REDUCE.filename + "?group=true";
-      console.log("requesting server side run of map reduce to see if out put has changed");
+      console.log("requesting server side run of map reduce to see if out put has changed " + url);
 
       CORS.makeCORSRequest({
           type: "GET",
