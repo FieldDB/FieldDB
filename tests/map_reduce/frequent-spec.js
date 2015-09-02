@@ -1,6 +1,9 @@
+var CORS = require("../../api/CORSNode").CORS;
+
 var mapReduceFactory = require("./../../api/map_reduce/MapReduce").MapReduceFactory;
 var frequentMapString = require("../../map_reduce_data/views/frequent/map").frequent;
 var frequentReduceString = require("../../map_reduce_data/views/frequent/reduce").groupedCount;
+var specIsRunningTooLong = 5000;
 
 var FREQUENT_MAP_REDUCE = mapReduceFactory({
   filename: "frequent",
@@ -93,6 +96,87 @@ describe("MapReduce frequent", function() {
       });
     });
 
+  });
+
+
+  describe("serverside", function() {
+    it("should run serverside", function(done) {
+      var server = "http://localhost:5984";
+      var url = server + "/testinglexicon-kartuli/_design/data/_view/" + FREQUENT_MAP_REDUCE.filename + "?group=true";
+      console.log("requesting server side run of map reduce to see if out put has changed");
+
+      CORS.makeCORSRequest({
+          type: "GET",
+          url: url
+        }).then(function(results) {
+            expect(results).toBeDefined();
+            expect(results.rows).toBeDefined();
+            expect(results.rows.length).toEqual(4);
+            expect(results.rows[0].key).toEqual("DatumFields");
+            expect(results.rows[0].value.length).toEqual(10);
+            expect(results.rows[0].value[0].key).toEqual("Utterance");
+            expect(results.rows[0].value[0].value).toEqual(70);
+            expect(results.rows[0].value[1].key).toEqual("Translation");
+            expect(results.rows[0].value[1].value).toEqual(60);
+            expect(results.rows[0].value[2].key).toEqual("Morphemes");
+            expect(results.rows[0].value[2].value).toEqual(58);
+            expect(results.rows[0].value[3].key).toEqual("Orthography");
+            expect(results.rows[0].value[3].value).toEqual(58);
+            expect(results.rows[0].value[4].key).toEqual("Gloss");
+            expect(results.rows[0].value[4].value).toEqual(52);
+            expect(results.rows[0].value[5].key).toEqual("Context");
+            expect(results.rows[0].value[5].value).toEqual(43);
+            expect(results.rows[0].value[6].key).toEqual("EnteredByUser");
+            expect(results.rows[0].value[6].value).toEqual(7);
+            expect(results.rows[0].value[7].key).toEqual("SyntacticCategory");
+            expect(results.rows[0].value[7].value).toEqual(3);
+            expect(results.rows[0].value[8].key).toEqual("Audio");
+            expect(results.rows[0].value[8].value).toEqual(3);
+            expect(results.rows[0].value[9].key).toEqual("SyntacticTreeLatex");
+            expect(results.rows[0].value[9].value).toEqual(1);
+
+            expect(results.rows[1].key).toEqual("SessionFields");
+            expect(results.rows[1].value.length).toEqual(1);
+            expect(results.rows[1].value[0].key).toEqual("Goal");
+            expect(results.rows[1].value[0].value).toEqual(1);
+
+            expect(results.rows[2].key).toEqual("Tag");
+            expect(results.rows[2].value.length).toEqual(2);
+            expect(results.rows[2].value[0].key).toEqual("SampleData");
+            expect(results.rows[2].value[0].value).toEqual(10);
+
+            expect(results.rows[3].key).toEqual("ValidationStatus");
+            expect(results.rows[3].value.length).toEqual(10);
+            expect(results.rows[3].value[0].key).toEqual("Checked");
+            expect(results.rows[3].value[0].value).toEqual(43);
+            expect(results.rows[3].value[1].key).toEqual("ToBeChecked");
+            expect(results.rows[3].value[1].value).toEqual(10);
+            expect(results.rows[3].value[2].key).toEqual("CheckedWithGoogleTranslate");
+            expect(results.rows[3].value[2].value).toEqual(6);
+            expect(results.rows[3].value[3].key).toEqual("CheckedWithMenu");
+            expect(results.rows[3].value[3].value).toEqual(6);
+            expect(results.rows[3].value[4].key).toEqual("CheckedWithGirl1");
+            expect(results.rows[3].value[4].value).toEqual(4);
+            expect(results.rows[3].value[5].key).toEqual("ToBeCheckedForNaturalness");
+            expect(results.rows[3].value[5].value).toEqual(3);
+            expect(results.rows[3].value[6].key).toEqual("ElicitedWithGirl3");
+            expect(results.rows[3].value[6].value).toEqual(2);
+            expect(results.rows[3].value[7].key).toEqual("ToBeElicited");
+            expect(results.rows[3].value[7].value).toEqual(2);
+            expect(results.rows[3].value[8].key).toEqual("CheckedWithGirl2");
+            expect(results.rows[3].value[8].value).toEqual(1);
+            expect(results.rows[3].value[9].key).toEqual("Deleted");
+            expect(results.rows[3].value[9].value).toEqual(1);
+          },
+          function(reason) {
+            expect(reason).toBeUndefined();
+          })
+        .fail(function(error) {
+          expect(reason).toBeUndefined();
+        })
+        .done(done);
+
+    }, specIsRunningTooLong);
   });
 
 });

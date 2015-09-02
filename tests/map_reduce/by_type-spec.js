@@ -1,9 +1,14 @@
+var CORS = require("../../api/CORSNode").CORS;
+
 var mapReduceFactory = require("./../../api/map_reduce/MapReduce").MapReduceFactory;
 var byTypeMapString = require("../../map_reduce_data/views/by_type/map").byType;
+var byTypeReduceString = require("../../map_reduce_data/views/by_type/reduce").count;
+var specIsRunningTooLong = 5000;
 
 var BY_TYPE_MAP_REDUCE = mapReduceFactory({
-  filename: "byType",
-  mapString: byTypeMapString
+  filename: "by_type",
+  mapString: byTypeMapString,
+  reduceString: byTypeReduceString
 });
 
 var SAMPLE_DATA = require("../../sample_data/datum_v1.22.1.json");
@@ -28,6 +33,8 @@ var SAMPLE_GAMIFY_DATA = [
   SAMPLE_v3_CORPORA[0],
   SAMPLE_v2_DATALISTS[0]
 ];
+
+
 // var specIsRunningTooLong = 5000;
 
 describe("MapReduce by_type", function() {
@@ -71,10 +78,10 @@ describe("MapReduce by_type", function() {
     it("should run reduce map on an array", function() {
       [{
         _id: "one"
-      },{
+      }, {
         _id: "two"
-      },{
-        _id: "two"
+      }, {
+        _id: "three"
       }].map(BY_TYPE_MAP_REDUCE.map);
 
       expect(BY_TYPE_MAP_REDUCE.rows).toBeDefined();
@@ -84,7 +91,7 @@ describe("MapReduce by_type", function() {
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("one");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[2]).toEqual(0);
       // expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("");
-    
+
       var results = BY_TYPE_MAP_REDUCE.group();
       expect(results).toBeDefined();
       expect(results.rows.length).toEqual(1);
@@ -349,4 +356,50 @@ describe("MapReduce by_type", function() {
 
     });
   });
+
+  describe("serverside", function() {
+    it("should run serverside", function(done) {
+      var server = "http://localhost:5984";
+      var url = server + "/testinglexicon-kartuli/_design/data/_view/" + BY_TYPE_MAP_REDUCE.filename + "?group=true";
+      console.log("requesting server side run of map reduce to see if out put has changed");
+
+      CORS.makeCORSRequest({
+          type: "GET",
+          url: url
+        }).then(function(results) {
+            expect(results).toBeDefined();
+            expect(results.rows).toBeDefined();
+            expect(results.rows.length).toEqual(12);
+            expect(results.rows[0].key).toEqual("Activity");
+            expect(results.rows[0].value).toEqual(3);
+            expect(results.rows[1].key).toEqual("Audio");
+            expect(results.rows[1].value).toEqual(125);
+            expect(results.rows[2].key).toEqual("Audio/mpeg");
+            expect(results.rows[2].value).toEqual(1);
+            expect(results.rows[3].key).toEqual("Comment");
+            expect(results.rows[3].value).toEqual(2);
+            expect(results.rows[4].key).toEqual("Corpus");
+            expect(results.rows[4].value).toEqual(2);
+            expect(results.rows[5].key).toEqual("CorpusMask");
+            expect(results.rows[5].value).toEqual(1);
+            expect(results.rows[6].key).toEqual("DataList");
+            expect(results.rows[6].value).toEqual(5);
+            expect(results.rows[7].key).toEqual("Deleted");
+            expect(results.rows[7].value).toEqual(21);
+            expect(results.rows[8].key).toEqual("Image");
+            expect(results.rows[8].value).toEqual(12);
+            expect(results.rows[9].key).toEqual("LanguageDatum");
+            expect(results.rows[9].value).toEqual(72);
+          },
+          function(reason) {
+            expect(reason).toBeUndefined();
+          })
+        .fail(function(error) {
+          expect(reason).toBeUndefined();
+        })
+        .done(done);
+
+    }, specIsRunningTooLong);
+  });
+
 });
