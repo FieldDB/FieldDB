@@ -11,6 +11,7 @@ couchapp_minified/views
 couchapp_minified/lists
 couchapp_minified/_attachments
 dist/
+coverage/
 
 spreadsheet_build_dev
 
