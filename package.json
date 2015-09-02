@@ -42,6 +42,7 @@
     "btoa": "*",
     "diacritic": "0.0.2",
     "frb": "git://github.com/cesine/frb.git#contenteditable",
+    "md5": "^2.0.0",
     "q": "1.2.0",
     "recordmp3js": "*",
     "textgrid": "^2.2.0",
