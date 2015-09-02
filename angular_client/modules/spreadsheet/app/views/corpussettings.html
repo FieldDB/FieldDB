@@ -20,7 +20,7 @@
 
 <hr />
 
-<div ng-hide="loginInfo==undefined" class="form-horizontal">
+<div ng-hide="!loginInfo || !corpus" class="form-horizontal">
   <div class="settings_section_header">
     <h2>{{contextualize('locale_delete_or_leave_corpus')}}: {{corpus.title}}</h2>
   </div>
