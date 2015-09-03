@@ -708,7 +708,7 @@
         "description": " "
     },
     "locale_delete_record_answer": {
-        "message": "To delete a record, click the relevant record and then click the 'Delete' button. To delete an audio file, click on the 'X' next to the file. In both cases, you will be prompted to verify the deletion. Note that deleting records and files only a flag and does not result in destroying data.",
+        "message": "To delete a record, click the relevant record and then click the 'Delete' button. To delete an audio file, click on the 'X' next to the file. In both cases, you will be prompted to verify the deletion. Note that deleting records and files only a flag and does not result in destroying data. To delete a Session, open the session and click on the Session menu at the top of the screen. You will find more options which show how to delete or edit the session.",
         "description": " "
     },
     "locale_privacy_question": {
