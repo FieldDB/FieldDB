@@ -24,16 +24,16 @@ There are quite a few client apps which use FieldDB api/corpora. Each project is
 ![screen shot 2014-10-03 at 10 13 41 am](https://cloud.githubusercontent.com/assets/196199/4506891/8bad9030-4b07-11e4-9643-7a3e1748e633.png)
 * The [Activity Feed widget](https://github.com/FieldDB/FieldDB/tree/master/angular_client/modules/activity) This app lets you view the activity feed of a corpus.<br>
 <img src="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png"  height="200" />
-* The [Learn X app](https://github.com/FieldDB/AndroidLanguageLearningClientForFielddb)
-![learn_x_tablet](https://f.cloud.github.com/assets/196199/2483261/6c4e6442-b0fe-11e3-93df-e74309100571.png) This is an Android app which lets you turn your corpus into a collaborative language learning app so that heritage speakers can use field methods to collect stories and analyze them.
-* The Android [Elicitation Session Recorder](https://github.com/FieldDB/AndroidFieldDBElicitationRecorder) This app lets you record video sessions and up them to the audio server for procssing (automatic utterance detection) which can partially automate the import of an elicitiation session by chunking it into datum. This was also a student project and has a force closeon Android 4.4.
-* The Android [Speech Recognition Trainer App](https://github.com/batumi/AndroidSpeechRecognitionTrainer) This app uses pocketsphinx to recognize speech on Android. It lets native speakers of low resource languages speak training data to their device which is used to build their voice model. Any corpus can be used as training data and as the data grows the user' language model improves and the app can recognize more words. We tested the app on ქართული (Georgian) we had little expectations for the recognition to work or be useable but we have reasonably okay results for SMS messages. This app can also be used for produciton experiments (it presents a visual and text representation which the user should read).<br>
+* The [Learn X app](https://github.com/FieldDB/AndroidLanguageLearningClientForFielddb) This is an Android app which lets you turn your corpus into a collaborative language learning app so that heritage speakers can use field methods to collect stories and analyze them.
+![learn_x_tablet](https://f.cloud.github.com/assets/196199/2483261/6c4e6442-b0fe-11e3-93df-e74309100571.png) 
+* The Android [Elicitation Session Recorder](https://github.com/FieldDB/AndroidFieldDBElicitationRecorder) This app lets you record video sessions and upload them to the audio server for processing straight from your Android. This was also a student project and has a force closeon Android 4.4.
+* The Android [Speech Recognition Trainer App](https://github.com/batumi/AndroidSpeechRecognitionTrainer) This app uses pocketsphinx on Android. It lets native speakers of low resource languages speak training data to their device which is used to build their voice model. Any corpus can be used as training data and as the data grows the user' language model improves and the app can recognize more words. We tested the app on ქართული (Georgian) we had little expectations for the recognition to work or be useable but we have reasonably okay results for SMS messages. This app can also be used for produciton experiments (it presents a visual and text representation which the user should read).<br>
 <img src="https://cloud.githubusercontent.com/assets/196199/3277961/25a67bb0-f39d-11e3-8ff2-917b06069261.png"  height="200" />
 * The [My Dictionary](https://github.com/FieldDB/DictionaryChromeExtension) This is a chrome extension which can be customized for any langauge which has a wiktionary. It is able to look up the word in the wiktionary and display the word's information to you on any website. Useful for browsing Facebook in your heritage language.
 ![screen shot 2014-07-08 at 3 56 40 pm](https://cloud.githubusercontent.com/assets/196199/6282739/1cb609a0-b90c-11e4-99c1-03a5c4c519e7.png) 
 * The [Lexicon Browser](https://github.com/FieldDB/FieldDBLexicon) This app displays the lexicon of a corpus as a connected graph of morphemes. You can edit the morphemes, and clean the data where the morphemes are used. You can add discussion and linking between morphemes.
 ![lexicon_browser_dashboard](https://f.cloud.github.com/assets/196199/2366164/8555cb70-a6f3-11e3-93ec-140fcaad2294.png)
-* The [Word Cloud Visualizer](https://github.com/FieldDB/FieldDBWordCloudChromeApp) This app displays the words in a corpus in a word cloud. You can use this interface to lematize morphemes and play with the data in a frequency oriented way where the most frequent words pop out at the user.
+* The [Word Cloud Visualizer](https://github.com/FieldDB/FieldDBWordCloudChromeApp) This app uses D3 to display the words in a corpus in a word cloud. You can use this interface to lematize morphemes and play with the data in a frequency oriented way where the most frequent words pop out at the user.
 ![lexicon_browser2](https://cloud.githubusercontent.com/assets/196199/6282934/6bc5fb10-b90f-11e4-8e4c-8fb9bbf0799f.png)
 * You can [add others](https://github.com/FieldDB/FieldDB/edit/master/README.md) if there any missing in this list...
 
@@ -50,11 +50,11 @@ $ cd $HOME/Downloads && curl -O --retry 999 --retry-max-time 0 -C - https://raw.
 <pre>
 $ cd $HOME/Downloads && wget https://raw.githubusercontent.com/FieldDB/FieldDB/master/install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh && bash install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh
 </pre>
-  
+
+## Core webservices:
 
 These are the webservices which the FieldDB clients use, and which make up the complete FieldDB architecture. If you fork the project, you might also be intersted in forking these repositories and adapting them to your needs. 
 
-## Core webservices:
 * [Authentication webservice](https://github.com/FieldDB/AuthenticationWebService) (for creation of new users and their accounts on the various webservices)
 * [FieldDB Webserver](https://github.com/FieldDB/FieldDBWebServer) (for public URLs)
 * [Database webservice](http://couchdb.apache.org/) (we are using pure CouchDB for this webservice)
@@ -97,10 +97,6 @@ Then you can also run the entire build `$ grunt travis` to make sure your change
 1. Push to your fork and submit a [pull request](https://github.com/FieldDB/FieldDB/compare) and leave us a note about what you changed. We will look at your changes and help you bring them into the project!
 s
 
-# Funding
-
-We would like to thank SSHRC Connection Grant (\#611-2012-0001) and SSHRC Standard Research Grant (\#410-2011-2401) which advocates open-source approaches to knowledge mobilization and partially funded the students who have doubled as fieldwork research assistants and interns on the project. We would like to thank numerous other granting agencies which have funded the RAs and TAs who have also contributed to the project as interns. If you have a student/RA who you would like to customize the project for your needs, contact us at support @ lingsync . org 
-
 # Interns and Development Team
 
 * [Louisa Bielig](https://www.lingsync.org/louisabielig) (McGill)
@@ -115,6 +111,10 @@ We would like to thank SSHRC Connection Grant (\#611-2012-0001) and SSHRC Standa
 * [Jesse Pollak](http://jessepollak.me/) (Pomona College)
 * [Tobin Skinner](http://tobinskinner.com) (Amilia, McGill)
 * [Xianli Sun](http://myaamiacenter.org/) (Miami University)
+
+# Funding
+
+We would like to thank SSHRC Connection Grant (\#611-2012-0001) and SSHRC Standard Research Grant (\#410-2011-2401) which advocates open-source approaches to knowledge mobilization and partially funded the students who have doubled as fieldwork research assistants and interns on the project. We would like to thank numerous other granting agencies which have funded the RAs and TAs who have also contributed to the project as interns. If you have a student/RA who you would like to customize the project for your needs, contact us at support @ lingsync . org 
 
 # License 
 
