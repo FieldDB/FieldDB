@@ -50,7 +50,7 @@ Create an App:
 If you pass no parameters the app will assume you want to connect to a local server. (CouchDB is used as the corpus server under SSL at https://localhost:6984, Node.js is used for the authentication server at https://localhost:3183);
 
 ```javascript
-var app = new App();
+var app = new FieldDB.App();
 
 ```
 
@@ -60,7 +60,7 @@ Create an App:
 Below is a more realistic example which does some configuration.
 
 ```javascript
-var app = new App({
+var app = new FieldDB.App({
   // debugMode: true
 });
 var processingPromise = app.processRouteParams({
