@@ -8,7 +8,7 @@ Activities are also useful for teams to catch up on what has happened in their c
 
 <img src="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png"  height="300" />
 
-![screen shot 2014-09-15 at 3 46 55 pm](https://cloud.githubusercontent.com/assets/196199/4277848/c0c6a28c-3d12-11e4-9ac0-3f3a464bed7d.png)
+![screen shot 2014-12-20 at 2 16 40 am](https://cloud.githubusercontent.com/assets/196199/5514105/4e98e414-87ee-11e4-9ad4-d213de5a4f64.png)
 
 ## Demos which you can break point
 
@@ -117,11 +117,11 @@ Save unsaved activites in a feed:
 activityFeed.save();
 ```
 
-More examples are show in the ["it should do x" Activity specifications](tests/activity/Activity-spec.js).
+More examples are show in the ["it should do x" Activity specifications](../../tests/activity/Activity-spec.js).
 
 ## Tests
 
-You can find more sample ways to use Activies, and what Activies are supposed to know how to do in the ["it should do x" Activity specifications](tests/activity/Activity-spec.js).
+You can find more sample ways to use Activies, and what Activies are supposed to know how to do in the ["it should do x" Activity specifications](../../tests/activity/Activity-spec.js).
 
 To run the Activity test suite: 
 
@@ -224,7 +224,7 @@ From an Android app:
 
 ```
 
-More sample serialized data: [sample_data/activity_v2.4.0.json](sample_data/activity_v2.4.0.json)
+More sample serialized data: [sample_data/activity_v2.4.0.json](../../sample_data/activity_v2.4.0.json)
 
 
 
@@ -245,7 +245,7 @@ https://github.com/fielddb/fielddb/issues?utf8=✓&q=activity
 
 ## Known UI 
 
-* [Backbone.js MVC](backbone_client/activity/)
-* [Angular.js Activity Feed](angular_client/modules/activity/client)
-* [Angular.js Directive](angular_client/modules/core/src/app/components)
+* [Backbone.js MVC](../../backbone_client/activity/)
+* [Angular.js Activity Feed](../../angular_client/modules/activity/client)
+* [Angular.js Directive](../../angular_client/modules/core/src/app/components/activity)
 

@@ -110,88 +110,88 @@ You can take a look at the submodules to find concreate examples of how to use e
 
 ## Activity
 
-[activity/](api/activity/)
+[api/activity/](activity/)
 
 ## App
 
-[app/](api/app/)
+[api/app/](app/)
 
 ## Audio / Video
 
-[audio_video/](api/audio_video/)
+[api/audio_video/](audio_video/)
 
 ## Authentication
 
-[authentication/](api/authentication/)
+[api/authentication/](authentication/)
 
 ## Bot
 
-[bot/](api/bot/)
+[api/bot/](bot/)
 
 ## Comment
 
-[comment/](api/comment/)
+[api/comment/](comment/)
 
 ## Confidentiality / Encryption
 
-[confidentiality_encryption/](api/confidentiality_encryption/)
+[api/confidentiality_encryption/](confidentiality_encryption/)
 
 ## Corpus
 
-[corpus/](api/corpus/)
+[api/corpus/](corpus/)
 
 ## DataList
 
-[data_list/](api/data_list/)
+[api/data_list/](data_list/)
 
 ## Datum / Fields / Sessions / Tags / Validation Status / Stimuli / Stimuli-Responses
 
-[datum/](api/datum/)
+[api/datum/](datum/)
 
 ## Export
 
-[export/](api/export/)
+[api/export/](export/)
 
 ## Glosser
 
-[glosser/](api/glosser/)
+[api/glosser/](glosser/)
 
 ## Hotkeys / Keyboard shortcuts
 
-[hotkey/](api/hotkey/)
+[api/hotkey/](hotkey/)
 
 ## Image
 
-[image/](api/image/)
+[api/image/](image/)
 
 ## Import
 
-[import/](api/import/)
+[api/import/](import/)
 
 ## Lexicon
 
-[lexicon/](api/lexicon/)
+[api/lexicon/](lexicon/)
 
 ## Locales / Contextualization
 
-[locales/](api/locales/)
+[api/locales/](locales/)
 
 ## Map Reduce
 
-[map_reduce/](api/map_reduce/)
+[api/map_reduce/](map_reduce/)
 
 ## Permission
 
-[permission/](api/permission/)
+[api/permission/](permission/)
 
 ## Search
 
-[search/](api/search/)
+[api/search/](search/)
 
 ## Unicode
 
-[unicode/](api/unicode/)
+[api/unicode/](unicode/)
 
 ## User
 
-[user/](api/user/)
+[api/user/](user/)
