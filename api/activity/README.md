@@ -8,6 +8,8 @@ Activities are also useful for teams to catch up on what has happened in their c
 
 <img src="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png"  height="300" />
 
+![screen shot 2014-09-15 at 3 46 55 pm](https://cloud.githubusercontent.com/assets/196199/4277848/c0c6a28c-3d12-11e4-9ac0-3f3a464bed7d.png)
+
 ## Demos which you can break point
 
 You can see [LingLlama's activity feed](https://corpus.lingsync.org/lingllama-communitycorpus-activity_feed/_design/activities/activity_feed.html#/user/lingllama/corpus/lingllama-communitycorpus) in action. NOTE: You need to be logged in in order to open this link.
@@ -239,7 +241,7 @@ There are quite a few issues in the issue tracker which talk about activities, h
 
 https://github.com/fielddb/fielddb/issues?utf8=✓&q=activity
 
-#27 #96 #99 #148 #337 #412 #426 #458 #479 #495 #514 #567 #715 #755 #763 #764 #768 #888 #889 #912 #968 #1006 #1016 #1033 #1043 #1055 #1067 #1124 #1137 #1166 #1200 #1225 #1227 #1228 #1233 #1235 #1300 #1400 #1541 #1693 #1766 #1951
+[#27](https://github.com/FieldDB/FieldDB/issues/27) [#96](https://github.com/FieldDB/FieldDB/issues/96) [#99](https://github.com/FieldDB/FieldDB/issues/99) [#148](https://github.com/FieldDB/FieldDB/issues/148) [#337](https://github.com/FieldDB/FieldDB/issues/337) [#412](https://github.com/FieldDB/FieldDB/issues/412) [#426](https://github.com/FieldDB/FieldDB/issues/426) [#458](https://github.com/FieldDB/FieldDB/issues/458) [#479](https://github.com/FieldDB/FieldDB/issues/479) [#495](https://github.com/FieldDB/FieldDB/issues/495) [#514](https://github.com/FieldDB/FieldDB/issues/514) [#567](https://github.com/FieldDB/FieldDB/issues/567) [#715](https://github.com/FieldDB/FieldDB/issues/715) [#755](https://github.com/FieldDB/FieldDB/issues/755) [#763](https://github.com/FieldDB/FieldDB/issues/763) [#764](https://github.com/FieldDB/FieldDB/issues/764) [#768](https://github.com/FieldDB/FieldDB/issues/768) [#888](https://github.com/FieldDB/FieldDB/issues/888) [#889](https://github.com/FieldDB/FieldDB/issues/889) [#912](https://github.com/FieldDB/FieldDB/issues/912) [#968](https://github.com/FieldDB/FieldDB/issues/968) [#1006](https://github.com/FieldDB/FieldDB/issues/1006) [#1016](https://github.com/FieldDB/FieldDB/issues/1016) [#1033](https://github.com/FieldDB/FieldDB/issues/1033) [#1043](https://github.com/FieldDB/FieldDB/issues/1043) [#1055](https://github.com/FieldDB/FieldDB/issues/1055) [#1067](https://github.com/FieldDB/FieldDB/issues/1067) [#1124](https://github.com/FieldDB/FieldDB/issues/1124) [#1137](https://github.com/FieldDB/FieldDB/issues/1137) [#1166](https://github.com/FieldDB/FieldDB/issues/1166) [#1200](https://github.com/FieldDB/FieldDB/issues/1200) [#1225](https://github.com/FieldDB/FieldDB/issues/1225) [#1227](https://github.com/FieldDB/FieldDB/issues/1227) [#1228](https://github.com/FieldDB/FieldDB/issues/1228) [#1233](https://github.com/FieldDB/FieldDB/issues/1233) [#1235](https://github.com/FieldDB/FieldDB/issues/1235) [#1300](https://github.com/FieldDB/FieldDB/issues/1300) [#1400](https://github.com/FieldDB/FieldDB/issues/1400) [#1541](https://github.com/FieldDB/FieldDB/issues/1541) [#1693](https://github.com/FieldDB/FieldDB/issues/1693) [#1766](https://github.com/FieldDB/FieldDB/issues/1766) [#1951](https://github.com/FieldDB/FieldDB/issues/1951) 
 
 ## Known UI 
 

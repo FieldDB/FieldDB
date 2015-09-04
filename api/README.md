@@ -77,7 +77,7 @@ FieldDBObjects know how to:
 * assign a date created, date modified and app version to itself
 * and more... 
 
-You can see more concrete examples in the ["it should do x" FieldDBObject specifications](tests/FieldDBObject-spec.js) 
+You can see more concrete examples in the ["it should do x" FieldDBObject specifications](../tests/FieldDBObject-spec.js) 
 
 Colections know how to:
 
@@ -91,7 +91,7 @@ Colections know how to:
 * fuzzy find matching items(s)
 * and more... 
 
-You can see more examples in the ["it should do x" Collection specifications](tests/activity/Collection-spec.js) 
+You can see more examples in the ["it should do x" Collection specifications](../tests/Collection-spec.js) 
 
 
 # Related Issues 
@@ -101,7 +101,7 @@ There are quite a few issues in the issue tracker which talk about the data mode
 
 https://github.com/fielddb/fielddb/issues?utf8=✓&q=docs
 
-#20 #24 #45 #65 #69 #70 #96 #878 #879 #993 #1083 #1139 #1349 #1398 #1470 #2043 #2069
+[#20](https://github.com/FieldDB/FieldDB/issues/20) [#24](https://github.com/FieldDB/FieldDB/issues/24) [#45](https://github.com/FieldDB/FieldDB/issues/45) [#65](https://github.com/FieldDB/FieldDB/issues/65) [#69](https://github.com/FieldDB/FieldDB/issues/69) [#70](https://github.com/FieldDB/FieldDB/issues/70) [#96](https://github.com/FieldDB/FieldDB/issues/96) [#878](https://github.com/FieldDB/FieldDB/issues/878) [#879](https://github.com/FieldDB/FieldDB/issues/879) [#993](https://github.com/FieldDB/FieldDB/issues/993) [#1083](https://github.com/FieldDB/FieldDB/issues/1083) [#1139](https://github.com/FieldDB/FieldDB/issues/1139) [#1349](https://github.com/FieldDB/FieldDB/issues/1349) [#1398](https://github.com/FieldDB/FieldDB/issues/1398) [#1470](https://github.com/FieldDB/FieldDB/issues/1470) [#2043](https://github.com/FieldDB/FieldDB/issues/2043) [#2069](https://github.com/FieldDB/FieldDB/issues/2069) 
 
 
 # Examples
@@ -110,88 +110,88 @@ You can take a look at the submodules to find concreate examples of how to use e
 
 ## Activity
 
-[api/activity/](api/activity/)
+[activity/](api/activity/)
 
 ## App
 
-[api/app/](api/app/)
+[app/](api/app/)
 
 ## Audio / Video
 
-[api/audio_video/](api/audio_video/)
+[audio_video/](api/audio_video/)
 
 ## Authentication
 
-[api/authentication/](api/authentication/)
+[authentication/](api/authentication/)
 
 ## Bot
 
-[api/bot/](api/bot/)
+[bot/](api/bot/)
 
 ## Comment
 
-[api/comment/](api/comment/)
+[comment/](api/comment/)
 
 ## Confidentiality / Encryption
 
-[api/confidentiality_encryption/](api/confidentiality_encryption/)
+[confidentiality_encryption/](api/confidentiality_encryption/)
 
 ## Corpus
 
-[api/corpus/](api/corpus/)
+[corpus/](api/corpus/)
 
 ## DataList
 
-[api/data_list/](api/data_list/)
+[data_list/](api/data_list/)
 
 ## Datum / Fields / Sessions / Tags / Validation Status / Stimuli / Stimuli-Responses
 
-[api/datum/](api/datum/)
+[datum/](api/datum/)
 
 ## Export
 
-[api/export/](api/export/)
+[export/](api/export/)
 
 ## Glosser
 
-[api/glosser/](api/glosser/)
+[glosser/](api/glosser/)
 
 ## Hotkeys / Keyboard shortcuts
 
-[api/hotkey/](api/hotkey/)
+[hotkey/](api/hotkey/)
 
 ## Image
 
-[api/image/](api/image/)
+[image/](api/image/)
 
 ## Import
 
-[api/import/](api/import/)
+[import/](api/import/)
 
 ## Lexicon
 
-[api/lexicon/](api/lexicon/)
+[lexicon/](api/lexicon/)
 
 ## Locales / Contextualization
 
-[api/locales/](api/locales/)
+[locales/](api/locales/)
 
 ## Map Reduce
 
-[api/map_reduce/](api/map_reduce/)
+[map_reduce/](api/map_reduce/)
 
 ## Permission
 
-[api/permission/](api/permission/)
+[permission/](api/permission/)
 
 ## Search
 
-[api/search/](api/search/)
+[search/](api/search/)
 
 ## Unicode
 
-[api/unicode/](api/unicode/)
+[unicode/](api/unicode/)
 
 ## User
 
-[api/user/](api/user/)
+[user/](api/user/)
