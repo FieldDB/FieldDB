@@ -16,6 +16,9 @@ var Team = require("fielddb/api/user/Team").Team;
 var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 
+
+var activityHeatMap = require("./routes/activity").activityHeatMap;
+
 //read in the specified filenames as the security key and certificate
 
 var connect = node_config.usersDbConnection.protocol + couch_keys.username + ':' +
@@ -52,109 +55,14 @@ app.configure(function() {
 /*
  * Routes
  */
-
 app.get('/activity/:dbname', function(req, res) {
-
-  var dbname = req.params.dbname + '-activity_feed';
-  var activitydb = nano.db.use(dbname);
-  var data = {
-    'rows': [{
-      'key': {
-        'action': 'testdata',
-        'week': 50
-      },
-      'value': 77
-    }, {
-      'key': {
-        'action': 'added',
-        'week': 21
-      },
-      'value': 1
-    }, {
-      'key': {
-        'action': 'added',
-        'week': 22
-      },
-      'value': 1
-    }, {
-      'key': {
-        'action': 'attempted',
-        'week': 12
-      },
-      'value': 1
-    }, {
-      'key': {
-        'action': 'commented',
-        'week': 12
-      },
-      'value': 21
-    }, {
-      'key': {
-        'action': 'downloaded',
-        'week': 4
-      },
-      'value': 6
-    }, {
-      'key': {
-        'action': 'imported',
-        'week': 12
-      },
-      'value': 31
-    }, {
-      'key': {
-        'action': 'modified',
-        'week': 26
-      },
-      'value': 7
-    }, {
-      'key': {
-        'action': 'updated',
-        'week': 4
-      },
-      'value': 10
-    }, {
-      'key': {
-        'action': 'updated',
-        'week': 12
-      },
-      'value': 13
-    }, {
-      'key': {
-        'action': 'updated',
-        'week': 21
-      },
-      'value': 51
-    }, {
-      'key': {
-        'action': 'updated',
-        'week': 22
-      },
-      'value': 1
-    }, {
-      'key': {
-        'action': 'updated',
-        'week': 26
-      },
-      'value': 64
-    }, {
-      'key': {
-        'action': 'uploaded',
-        'week': 4
-      },
-      'value': 3
-    }]
-  };
-
-  activitydb.view('activities', 'one-year-weekly', {
-    group: true
-  }, function(err, body) {
-    if (!err) {
-      res.send(body);
-    } else {
-      res.send(data);
-    }
+  activityHeatMap(req.params.dbname, nano).then(function(data) {
+    res.send(data);
+  }, function() {
+    res.send({});
+  }).fail(function() {
+    res.send({});
   });
-
 });
 
 var processCorpusPageParams = function(req, res) {
@@ -564,7 +472,7 @@ function getRequestedCorpus(corporaCollection, titleAsUrl, corpusowner) {
 
 if (process.env.NODE_DEPLOY_TARGET === "production") {
   app.listen(node_config.port);
-  //console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
+  console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
 } else {
   // config.httpsOptions.key = FileSystem.readFileSync(config.httpsOptions.key);
   // config.httpsOptions.cert = FileSystem.readFileSync(config.httpsOptions.cert);
@@ -573,6 +481,8 @@ if (process.env.NODE_DEPLOY_TARGET === "production") {
 
   https.createServer(node_config.httpsOptions, app).listen(node_config.port);
   // https.createServer(config.httpsOptions, AuthWebService).listen(node_config.port, function() {
-  //console.log("Listening on https port %d", node_config.port);
+  console.log("Listening on https port %d", node_config.port);
   // });
 }
+
+exports.app = app;
