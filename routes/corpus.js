@@ -10,9 +10,9 @@ var cleanErrorStatus = function(status) {
   return "";
 };
 
-var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = false;
+var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = true;
 
-var getCorpusMask = function(dbname, nano) {
+var getCorpusMask = function(dbname, nano, optionalUserMask) {
   var deferred = Q.defer();
 
   Q.nextTick(function() {
@@ -47,16 +47,17 @@ var getCorpusMask = function(dbname, nano) {
         console.log(new Date() + " corpusMask was missing " + dbname);
         error = error || {};
         error.status = cleanErrorStatus(error.statusCode) || 500;
-        var userFriendlyErrors = ["Database details not found"];
+        var userFriendlyErrors = ["Database " + dbname + " details not found"];
         if (error.code === "ECONNREFUSED") {
           userFriendlyErrors = ["Server errored, please report this 6339"];
         } else if (error.code === "ETIMEDOUT") {
           error.status = 500;
           userFriendlyErrors = ["Server timed out, please try again later"];
         }
+        delete error.uri;
         deferred.reject({
           status: error.status,
-          error: error,
+          error: error.error,
           userFriendlyErrors: userFriendlyErrors
         });
         return;
@@ -73,8 +74,8 @@ var getCorpusMask = function(dbname, nano) {
         corpusMask.startYear = " " + year + " - ";
       }
       getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
-        if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS) {
-          corpusMask.team.merge("self", userMask.toJSON(), "overwrite");
+        if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS && optionalUserMask) {
+          corpusMask.team.merge("self", optionalUserMask.toJSON(), "overwrite");
         }
         corpusMask.team.merge("self", teamMask, "overwrite");
         console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
@@ -130,17 +131,17 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
     return deferred.promise;
   }
 
-  var matchingCorpusConnections = userMask.corpora.find("titleAsUrl", titleAsUrl);
+  var matchingCorpusConnections = userMask.corpora.fuzzyFind("titleAsUrl", titleAsUrl);
   if (!matchingCorpusConnections || !matchingCorpusConnections.length) {
     deferred.reject({
       status: 404,
-      userFriendlyErrors: ["Couldn't find " + titleAsUrl + " among " + userMask.username + "'s corpora."],
+      userFriendlyErrors: ["Couldn't find " + titleAsUrl + " among " + userMask.username + "'s  " + userMask.corpora.length + " corpora."],
       error: {}
     });
     return deferred.promise;
   }
 
-  return getCorpusMask(matchingCorpusConnections[0].dbname, nano);
+  return getCorpusMask(matchingCorpusConnections[0].dbname, nano, userMask);
 };
 
 exports.getCorpusMask = getCorpusMask;

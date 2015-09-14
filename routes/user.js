@@ -87,7 +87,9 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
         var promises = [];
 
         userPrivateDetails.corpora.map(function(corpusConnection) {
-          if (corpusConnection.dbname === "public-firstcorpus" || corpusConnection.dbname === "lingllama-communitycorpus") {
+          if ((userPrivateDetails.username !== "public" && corpusConnection.dbname === "public-firstcorpus") ||
+            (userPrivateDetails.username !== "lingllama" && corpusConnection.dbname === "lingllama-communitycorpus")) {
+            // Skip sample corpora if not showing the sample user who owns the corpus
             return;
           }
           corpusConnection = corpusConnection.toJSON();
