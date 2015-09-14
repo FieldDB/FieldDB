@@ -312,13 +312,24 @@ describe("lib/Collection", function() {
       }]);
     });
 
-    /*TODO chagne this to "ren" once we have fuzzy find for real */
+    /*TODO could change this to "rVn" once we have phonological fuzzy find */
     it("should be able to fuzzy find items by any attribute", function() {
       expect(collection.fuzzyFind("color", "r.*n").map(function(item) {
         return item.color;
       })).toEqual(["green", "orange", "green", "orange"]);
     });
 
+    it("should be able to fuzzy find best match items by any attribute", function() {
+      collection.push({
+        validationStatus: "CheckedByRanran",
+        color: "ran"
+      });
+      var results = collection.fuzzyFind("color", "ran");
+      expect(results[0].color).toEqual("ran");
+      expect(results.map(function(item) {
+        return item.color;
+      })).toEqual(["ran", "orange", "orange"]);
+    });
 
     it("should provide map on its internal collection", function() {
       expect(collection.map).toBeDefined();
@@ -1039,7 +1050,7 @@ describe("lib/Collection", function() {
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
 
       var aThirdCollection = new Collection();
-      expect(function(){
+      expect(function() {
         // aThirdCollection.debugMode = true;
         var result = aThirdCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
         expect(result).toBe(aThirdCollection);
