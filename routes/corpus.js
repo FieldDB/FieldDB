@@ -68,11 +68,11 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
         corpusMask.dbname = dbname;
         console.log(new Date() + "  the corpus for " + dbname + " was missing a poucname/dbname TODO consider saving it.");
       }
-      // console.log("Corpus mask ", corpusMask.team.toJSON());
-      var year = new Date(corpusMask.dateCreated).getFullYear();
-      if (year < new Date().getFullYear()) {
-        corpusMask.startYear = " " + year + " - ";
+      if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
+        corpusMask.copyright = corpusMask.connection.owner;
       }
+      // console.log("Corpus mask ", corpusMask.team.toJSON());
+
       getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
         if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS && optionalUserMask) {
           corpusMask.team.merge("self", optionalUserMask.toJSON(), "overwrite");
@@ -81,7 +81,9 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
         console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
         // console.log("Corpus mask ", corpusMask.team.toJSON());
       }, function() {
-        corpusMask.team = {};
+        if (!corpusMask.team) {
+          corpusMask.team = {};
+        }
       }).fail(function(exception) {
         console.log(new Date() + " ", exception.stack);
         deferred.reject({

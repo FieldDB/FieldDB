@@ -76,11 +76,10 @@ app.get("/db/:dbname", function(req, res) {
 });
 
 app.get("/:username/:anything/:dbname", function(req, res) {
-  getCorpusMask(req.params.dbname).then(function(mask) {
-    if (mask && typeof mask.toJSON === "function") {
-      mask = mask.toJSON();
-    }
-    res.render("corpus", mask);
+  getCorpusMask(req.params.dbname, nano).then(function(mask) {
+    res.render("corpus", {
+      corpusMask: mask
+    });
   }, function() {
     res.status(404);
     res.redirect("404.html");
