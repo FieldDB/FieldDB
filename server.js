@@ -1,5 +1,13 @@
 var https = require("https");
 var express = require("express");
+var favicon = require("serve-favicon");
+var logger = require("morgan");
+var methodOverride = require("method-override");
+var session = require("express-session");
+var bodyParser = require("body-parser");
+var errorHandler = require("errorhandler");
+
+var path = require("path");
 var fs = require("fs");
 
 var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
@@ -20,30 +28,18 @@ var nano = require("nano")(connect);
 
 var app = express();
 
-// var errorHandler = require("express-error-handler"),
-//   handler = errorHandler({
-//     static: {
-//       "404": "404.html"
-//     }
-//   });
-
 // configure Express
-app.configure(function() {
-  app.set("views", __dirname + "/views");
-  app.set("view engine", "jade");
-  app.use(express.favicon());
-  app.use(express.logger());
-  app.use(express.static(__dirname + "/public"));
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({
-    secret: "CtlFYUMLlrwr1VdIr35"
-  }));
-  // app.use(errorHandler.httpError(404) );
-  app.use(app.router);
-});
-
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "jade");
+app.use(favicon(__dirname + "/public/favicon.ico"));
+app.use(logger("common"));
+app.use(methodOverride());
+app.use(session({ resave: true,
+                  saveUninitialized: true,
+                  secret: node_config.session_key }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
 /*
  * Routes
@@ -57,7 +53,7 @@ app.get("/activity/:dbname", function(req, res) {
   }).fail(function() {
     res.status(500);
     res.status(404);
-    res.redirect("404.html");
+    res.redirect("/404.html");
   });
 });
 
@@ -68,10 +64,10 @@ app.get("/db/:dbname", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("404.html");
+    res.redirect("/404.html");
   }).fail(function() {
     res.status(404);
-    res.redirect("500.html");
+    res.redirect("/500.html");
   });
 });
 
@@ -82,10 +78,10 @@ app.get("/:username/:anything/:dbname", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("404.html");
+    res.redirect("/404.html");
   }).fail(function() {
     res.status(500);
-    res.redirect("500.html");
+    res.redirect("/500.html");
   });
 });
 
@@ -97,17 +93,17 @@ app.get("/:username/:titleAsUrl", function(req, res) {
       });
     }, function() {
       res.status(404);
-      res.redirect("404.html");
+      res.redirect("/404.html");
     }).fail(function() {
       res.status(404);
-      res.redirect("500.html");
+      res.redirect("/500.html");
     });
   }, function() {
     res.status(404);
-    res.redirect("404.html");
+    res.redirect("/404.html");
   }).fail(function() {
     res.status(500);
-    res.redirect("500.html");
+    res.redirect("/500.html");
   });
 });
 
@@ -126,12 +122,17 @@ app.get("/:username", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("404.html");
+    res.redirect("/404.html");
   }).fail(function() {
     res.status(500);
-    res.redirect("500.html");
+    res.redirect("/500.html");
   });
 });
+
+// error handling middleware should be loaded after the loading the routes
+if ('production' !== app.get('env')) {
+  app.use(errorHandler());
+}
 
 
 console.log("process.env.NODE_DEPLOY_TARGET " + process.env.NODE_DEPLOY_TARGET);

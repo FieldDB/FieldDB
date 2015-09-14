@@ -23,17 +23,22 @@
     "Fieldlinguist <info@fieldlinguist.com>"
   ],
   "dependencies": {
-    "MD5": "~1.0.3",
-    "express": "3.3.7",
+    "body-parser": "^1.13.3",
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
     "fielddb": "https://github.com/FieldDB/FieldDB.git",
-    "forever": "latest",
-    "jade": "~0.31.2",
-    "nano": "6.1.2",
-    "q": "~0.9.6"
+    "forever": "^0.15.1",
+    "jade": "^1.11.0",
+    "method-override": "^2.3.5",
+    "morgan": "^1.6.1",
+    "nano": "^6.1.5",
+    "q": "^1.2.0",
+    "serve-favicon": "^2.3.0"
   },
   "main": "./service.js",
   "bin": {
-    "fielddb-web": "./service.js"
+    "fielddb-web": "./server.js"
   },
   "engines": {
     "node": "~0.8 || ~0.10 || ~0.12"
