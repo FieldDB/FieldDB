@@ -6,6 +6,8 @@ var methodOverride = require("method-override");
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var errorHandler = require("errorhandler");
+var handlebars = require('handlebars');
+var consolidate = require('consolidate');
 
 var path = require("path");
 var fs = require("fs");
@@ -18,6 +20,7 @@ var couch_keys = require("./lib/couchkeys_" + deploy_target);
 var activityHeatMap = require("./routes/activity").activityHeatMap;
 var getUserMask = require("./routes/user").getUserMask;
 var getCorpusMask = require("./routes/corpus").getCorpusMask;
+var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
 
 var connect = node_config.usersDbConnection.protocol + couch_keys.username + ":" +
   couch_keys.password + "@" + node_config.usersDbConnection.domain +
@@ -29,16 +32,21 @@ var nano = require("nano")(connect);
 var app = express();
 
 // configure Express
+app.engine('html', consolidate.handlebars)
+app.set('view engine', '.html');
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
 app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger("common"));
 app.use(methodOverride());
-app.use(session({ resave: true,
-                  saveUninitialized: true,
-                  secret: node_config.session_key }));
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: node_config.session_key
+}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static(path.join(__dirname, "public")));
 
 /*
@@ -53,7 +61,7 @@ app.get("/activity/:dbname", function(req, res) {
   }).fail(function() {
     res.status(500);
     res.status(404);
-    res.redirect("/404.html");
+    res.render("404");
   });
 });
 
@@ -64,10 +72,10 @@ app.get("/db/:dbname", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("/404.html");
+    res.render("404");
   }).fail(function() {
     res.status(404);
-    res.redirect("/500.html");
+    res.render("500");
   });
 });
 
@@ -78,10 +86,10 @@ app.get("/:username/:anything/:dbname", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("/404.html");
+    res.render("404");
   }).fail(function() {
     res.status(500);
-    res.redirect("/500.html");
+    res.render("500");
   });
 });
 
@@ -93,17 +101,17 @@ app.get("/:username/:titleAsUrl", function(req, res) {
       });
     }, function() {
       res.status(404);
-      res.redirect("/404.html");
+      res.render("404");
     }).fail(function() {
       res.status(404);
-      res.redirect("/500.html");
+      res.render("500");
     });
   }, function() {
     res.status(404);
-    res.redirect("/404.html");
+    res.render("404");
   }).fail(function() {
     res.status(500);
-    res.redirect("/500.html");
+    res.render("500");
   });
 });
 
@@ -122,10 +130,10 @@ app.get("/:username", function(req, res) {
     });
   }, function() {
     res.status(404);
-    res.redirect("/404.html");
+    res.render("404");
   }).fail(function() {
     res.status(500);
-    res.redirect("/500.html");
+    res.render("500");
   });
 });
 
