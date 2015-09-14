@@ -116,11 +116,11 @@ app.get("/:username", function(req, res) {
     return;
   }
 
-  getUserMask(req.params.username).then(function(mask) {
-    if (mask && typeof mask.toJSON === "function") {
-      mask = mask.toJSON();
-    }
-    res.render("corpus", mask);
+  getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(mask) {
+    mask = mask;
+    res.render("user", {
+      userMask: mask
+    });
   }, function() {
     res.status(404);
     res.redirect("404.html");

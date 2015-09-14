@@ -5,11 +5,11 @@ block content
     .row
       .span3
         p.text-center
-          img.img-polaroid(src='https://secure.gravatar.com/avatar/#{user.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+          img.img-polaroid(src='https://secure.gravatar.com/avatar/#{userMask.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
         div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
-          if user.username
-            h1= user.name
-            p= user.username
+          if userMask.username
+            h1= userMask.name
+            p= userMask.username
           else
             h2.text-center Sorry! User does not exist.
         .well.well-small
@@ -18,28 +18,28 @@ block content
               i(style='margin-top:3px').icon-folder-open
               | &nbsp;&nbsp;Interests:
             dd
-              | #{user.researchInterest}
+              | #{userMask.researchInterest}
             dt
               i(style='margin-top:3px').icon-user
               | &nbsp;&nbsp;Affiliation:
             dd
-              | #{user.affiliation}
+              | #{userMask.affiliation}
             dt
               i(style='margin-top:3px').icon-comment
               | &nbsp;&nbsp;Description:
             dd
-              | #{user.description}
+              | #{userMask.description}
       .span6.offset1
         h1 Corpora
         br
-        +renderCorporaList(corpora)
+        +renderCorporaList(userMask.corpora._collection)
     .row
       .span12
         h2 Activity Feed
-        <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{user.username}" width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
+        <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{userMask.username}" width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
     hr
     footer
       - var year = (new Date()).getFullYear()
-      p © #{user.username} #{user.startYear} #{year} 
+      p © #{userMask.username} #{userMask.startYear} #{year} 
         a(href="http://creativecommons.org/licenses/by/3.0/", rel="license", title="Creative Commons Attribution 3.0 License") link&nbsp;
           img(src="//i.creativecommons.org/l/by/3.0/88x31.png", alt="License")
