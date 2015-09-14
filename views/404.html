@@ -40,6 +40,11 @@
         background: #fcfcfc;
       }
 
+      .centered {
+        text-align: center;
+        width: 100%;
+      }
+
       h1 {
         margin: 0 10px;
         font-size: 50px;
@@ -145,17 +150,24 @@
   <body>
     <div class="">
       <h1><a href ="http://lingsync.org"><img src="site/img/lingsync-logo.png" border="0"></a><br/> Not found </h1>
+      {{#each userFriendlyErrors}}
+        <p>{{this}}</p>
+      {{/each}}
+
+      {{#unless userFriendlyErrors}} 
+        <p>Sorry, but the page you are looking for was not found.</p>
+      {{/unless}}
 
       <img class="failwhale" src="http://www.yiyinglu.com/failwhale/images/failwhale.gif">
 
-      <p>Sorry, but the page you are looking for was not found.</p>
-      <p>It looks like this was the result of either:</p>
-      <ul>
-        <li>a mistyped address</li>
-        <li>an out-of-date link</li>
-      </ul>
+      <p>
+        You could try looking here: 
 
-      Please <a href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform"> Contact Us</a> or maybe you can look on <a href="http://lingsync.org">LingSync.org</a>
+        {{#if tryLookingHere}} 
+          <a href="{{tryLookingHere}}">{{tryLookingHere}}</a>
+        {{else}}
+          <a href="http://lingsync.org">LingSync.org</a>{{/if}}, or email us using the form below.
+      </p>
 
       <iframe height="800" width="100%" border="0" src="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
       </iframe>

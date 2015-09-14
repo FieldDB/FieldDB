@@ -6,8 +6,7 @@ var methodOverride = require("method-override");
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var errorHandler = require("errorhandler");
-var handlebars = require('handlebars');
-var consolidate = require('consolidate');
+var consolidate = require("consolidate");
 
 var path = require("path");
 var fs = require("fs");
@@ -32,8 +31,8 @@ var nano = require("nano")(connect);
 var app = express();
 
 // configure Express
-app.engine('html', consolidate.handlebars)
-app.set('view engine', '.html');
+app.engine("html", consolidate.handlebars);
+app.set("view engine", ".html");
 app.set("views", path.join(__dirname, "views"));
 app.use(favicon(__dirname + "/public/favicon.ico"));
 app.use(logger("common"));
@@ -55,13 +54,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/activity/:dbname", function(req, res) {
   activityHeatMap(req.params.dbname, nano).then(function(heatMapData) {
     res.send(heatMapData);
-  }, function() {
+  }, function(reason) {
     res.status(404);
     res.send({});
-  }).fail(function() {
+  }).fail(function(exception) {
+    console.log(exception.stack);
     res.status(500);
     res.status(404);
-    res.render("404");
+    res.render("500");
   });
 });
 
@@ -70,10 +70,13 @@ app.get("/db/:dbname", function(req, res) {
     res.render("corpus", {
       corpusMask: mask
     });
-  }, function() {
+  }, function(reason) {
     res.status(404);
-    res.render("404");
-  }).fail(function() {
+    res.render("404", {
+      userFriendlyErrors: reason.userFriendlyErrors
+    });
+  }).fail(function(exception) {
+    console.log(exception.stack);
     res.status(404);
     res.render("500");
   });
@@ -84,10 +87,14 @@ app.get("/:username/:anything/:dbname", function(req, res) {
     res.render("corpus", {
       corpusMask: mask
     });
-  }, function() {
+  }, function(reason) {
     res.status(404);
-    res.render("404");
-  }).fail(function() {
+    res.render("404", {
+      userFriendlyErrors: reason.userFriendlyErrors,
+      tryLookingHere: "/" + req.params.username
+    });
+  }).fail(function(exception) {
+    console.log(exception.stack);
     res.status(500);
     res.render("500");
   });
@@ -99,17 +106,24 @@ app.get("/:username/:titleAsUrl", function(req, res) {
       res.render("corpus", {
         corpusMask: mask
       });
-    }, function() {
+    }, function(reason) {
       res.status(404);
-      res.render("404");
-    }).fail(function() {
+      res.render("404", {
+        userFriendlyErrors: reason.userFriendlyErrors,
+        tryLookingHere: "/" + req.params.username
+      });
+    }).fail(function(exception) {
+      console.log(exception.stack);
       res.status(404);
       res.render("500");
     });
-  }, function() {
+  }, function(reason) {
     res.status(404);
-    res.render("404");
-  }).fail(function() {
+    res.render("404", {
+      userFriendlyErrors: reason.userFriendlyErrors
+    });
+  }).fail(function(exception) {
+    console.log(exception.stack);
     res.status(500);
     res.render("500");
   });
@@ -128,17 +142,20 @@ app.get("/:username", function(req, res) {
     res.render("user", {
       userMask: mask
     });
-  }, function() {
+  }, function(reason) {
     res.status(404);
-    res.render("404");
-  }).fail(function() {
+    res.render("404", {
+      userFriendlyErrors: reason.userFriendlyErrors
+    });
+  }).fail(function(exception) {
+    console.log(exception.stack);
     res.status(500);
     res.render("500");
   });
 });
 
 // error handling middleware should be loaded after the loading the routes
-if ('production' !== app.get('env')) {
+if ("production" !== app.get("env")) {
   app.use(errorHandler());
 }
 
