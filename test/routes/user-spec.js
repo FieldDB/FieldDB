@@ -29,7 +29,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ['Server errored, please report this 5342']
+          userFriendlyErrors: ["Server errored, please report this 5342"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -45,7 +45,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ['Server errored, please report this 5342']
+          userFriendlyErrors: ["Server errored, please report this 5342"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -129,5 +129,73 @@ describe("user routes", function() {
     }, specIsRunningTooLong);
 
   });
+
+  describe("sanitize requests", function() {
+
+    it("should return 404 if username is too short", function(done) {
+      getUserMask("aa", nano, node_config.usersDbConnection.dbname)
+        .then(function(results) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.status).toEqual(404);
+          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should return 404 if username is not a string", function(done) {
+      getUserMask({
+          "not": "astring"
+        }, nano, node_config.usersDbConnection.dbname)
+        .then(function(results) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.status).toEqual(404);
+          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should return 404 if username contains invalid characters", function(done) {
+      getUserMask("a.*-haaha script injection attack attempt file:///some/try", nano, node_config.usersDbConnection.dbname)
+        .then(function(results) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.status).toEqual(404);
+          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should be case insensitive", function(done) {
+      getUserMask("LingLlama", nano, node_config.usersDbConnection.dbname)
+        .then(function(results) {
+          expect(results).toBeDefined();
+          expect(results.username).toEqual("lingllama");
+          expect(results.gravatar).toEqual("54b53868cb4d555b804125f1a3969e87");
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.status).toEqual(404);
+          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+    }, specIsRunningTooLong);
+
+  });
+
 
 });
