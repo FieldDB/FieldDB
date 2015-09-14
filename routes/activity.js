@@ -1,5 +1,7 @@
 var Q = require("q");
-var SAMPLE_HEAT_MAP = require("./../lib/sample-activity-heatmap");
+var SAMPLE_HEAT_MAP = {
+  rows: []
+};
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 
 var activityHeatMap = function(dbname, nano) {
@@ -25,8 +27,10 @@ var activityHeatMap = function(dbname, nano) {
       return;
     }
 
-    if (dbname.indexOf("-activity_feed") !== dbname.length - 14) {
+    if (dbname.length < 14 || dbname.indexOf("-activity_feed") !== dbname.length - 14) {
       dbname = dbname + "-activity_feed";
+    } else {
+      console.log(new Date() + " this db was already an activity feed " + dbname);
     }
 
     var activitydb = nano.db.use(dbname);
@@ -37,7 +41,7 @@ var activityHeatMap = function(dbname, nano) {
         console.log(new Date() + " responded with activity heat map " + body.rows.length + " for: " + dbname);
         deferred.resolve(body);
       } else {
-        console.log(new Date() + " there was a problem fetching the activity heatmap for: " + dbname);
+        console.log(new Date() + " there was a problem fetching the activity heatmap for: " + dbname, body);
         deferred.resolve(SAMPLE_HEAT_MAP);
       }
     });

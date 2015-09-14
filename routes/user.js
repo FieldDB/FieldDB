@@ -51,6 +51,8 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
         } else if (error.code === "ETIMEDOUT") {
           error.status = 500;
           userFriendlyErrors = ["Server timed out, please try again later"];
+        } else if (error.statusCode === 502){
+          error.status = 500;
         }
         deferred.reject({
           status: error.status,

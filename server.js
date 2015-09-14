@@ -55,12 +55,11 @@ app.get("/activity/:dbname", function(req, res) {
   activityHeatMap(req.params.dbname, nano).then(function(heatMapData) {
     res.send(heatMapData);
   }, function(reason) {
-    res.status(404);
+    res.status(reason.status);
     res.send({});
   }).fail(function(exception) {
     console.log(exception.stack);
     res.status(500);
-    res.status(404);
     res.render("500");
   });
 });
@@ -71,10 +70,16 @@ app.get("/db/:dbname", function(req, res) {
       corpusMask: mask
     });
   }, function(reason) {
-    res.status(404);
-    res.render("404", {
-      userFriendlyErrors: reason.userFriendlyErrors
-    });
+    res.status(reason.status);
+    if (reason.status >= 500) {
+      res.render("500", {
+        userFriendlyErrors: reason.userFriendlyErrors
+      });
+    } else {
+      res.render("404", {
+        userFriendlyErrors: reason.userFriendlyErrors
+      });
+    }
   }).fail(function(exception) {
     console.log(exception.stack);
     res.status(404);
@@ -83,40 +88,62 @@ app.get("/db/:dbname", function(req, res) {
 });
 
 app.get("/:username/:anything/:dbname", function(req, res) {
-  getCorpusMask(req.params.dbname, nano).then(function(mask) {
-    res.redirect("/" + req.params.username + "/" + mask.titleAsUrl);
-  }, function(reason) {
-    res.status(404);
-    res.render("404", {
-      userFriendlyErrors: reason.userFriendlyErrors,
-      tryLookingHere: "/" + req.params.username
-    });
-  }).fail(function(exception) {
-    console.log(exception.stack);
-    res.status(500);
-    res.render("500");
-  });
+  res.redirect("/" + req.params.username + "/" + req.params.dbname);
 });
 
 app.get("/:username/:titleAsUrl", function(req, res) {
+  if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
+    getCorpusMask(req.params.titleAsUrl, nano).then(function(mask) {
+      res.render("corpus", {
+        corpusMask: mask
+      });
+    }, function(reason) {
+      res.status(reason.status);
+      if (reason.status >= 500) {
+        res.render("500", {
+          status: reason.status,
+          userFriendlyErrors: reason.userFriendlyErrors
+        });
+      } else {
+        res.render("404", {
+          status: reason.status,
+          userFriendlyErrors: reason.userFriendlyErrors
+        });
+      }
+    }).fail(function(exception) {
+      console.log(exception.stack);
+      res.status(404);
+      res.render("500");
+    });
+    return;
+  }
   getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(userMask) {
     getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
       res.render("corpus", {
         corpusMask: mask
       });
     }, function(reason) {
-      res.status(404);
-      res.render("404", {
-        userFriendlyErrors: reason.userFriendlyErrors,
-        tryLookingHere: "/" + req.params.username
-      });
+      res.status(reason.status);
+      if (reason.status >= 500) {
+        res.render("500", {
+          status: reason.status,
+          userFriendlyErrors: reason.userFriendlyErrors,
+          tryLookingHere: "/" + req.params.username
+        });
+      } else {
+        res.render("404", {
+          status: reason.status,
+          userFriendlyErrors: reason.userFriendlyErrors,
+          tryLookingHere: "/" + req.params.username
+        });
+      }
     }).fail(function(exception) {
       console.log(exception.stack);
       res.status(404);
       res.render("500");
     });
   }, function(reason) {
-    res.status(404);
+    res.status(reason.status);
     res.render("404", {
       userFriendlyErrors: reason.userFriendlyErrors
     });
@@ -141,7 +168,7 @@ app.get("/:username", function(req, res) {
       userMask: mask
     });
   }, function(reason) {
-    res.status(404);
+    res.status(reason.status);
     res.render("404", {
       userFriendlyErrors: reason.userFriendlyErrors
     });

@@ -147,6 +147,8 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
     // handle situation where the user has access to >1 corpora by other users which have the same titleAsUrl
     if (connection.titleAsUrl === titleAsUrl && connection.dbname && connection.dbname.indexOf(userMask.username) === 0) {
       bestMatch = connection;
+    } else {
+      console.log(connection.titleAsUrl + " wasnt the best match for " + titleAsUrl, connection.dbname);
     }
   });
   if (!bestMatch) {
