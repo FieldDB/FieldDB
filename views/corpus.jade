@@ -5,12 +5,12 @@ block content
     .row-fluid
       .span3
         p.text-center
-          a(href="/#{user.username}") 
-            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{user.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
+          a(href="/#{corpusMask.team.username}") 
+            img.img-polaroid(src='https://secure.gravatar.com/avatar/#{corpusMask.team.gravatar}.jpg?s=200&d=identicon&r=pg', alt='Your gravatar.com profile image')
         div(style='margin: 10px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd')
-          if user.username
-            h1= user.name
-            p= user.username
+          if corpusMask.team.username
+            h1= corpusMask.team.name
+            p= corpusMask.team.username
           else
             h2.text-center Sorry! User does not exist.
         .well.well-small
@@ -19,36 +19,40 @@ block content
               i(style='margin-top:3px').icon-folder-open
               | &nbsp;&nbsp;Interests:
             dd
-              | #{user.researchInterest}
+              | #{corpusMask.team.researchInterest}
             dt
               i(style='margin-top:3px').icon-user
               | &nbsp;&nbsp;Affiliation:
             dd
-              | #{user.affiliation}
+              | #{corpusMask.team.affiliation}
             dt
               i(style='margin-top:3px').icon-comment
               | &nbsp;&nbsp;Description:
             dd
-              | #{user.description}
+              | #{corpusMask.team.description}
       .span9
         .row-fluid
           .span7.offset1
-            +renderCorpus(corpora)
+            h1.media-heading #{corpusMask.title}
+            .media(style='margin-bottom:40px')
+              a(href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html").pull-right
+                img(src='https://secure.gravatar.com/avatar/#{corpusMask.team.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
+              .media-body
+                div= corpusMask.description
           .span4
         .row-fluid
           .span12
-            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpora[0].dbname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
+            <iframe src="/corpus-pages/libs/activities_visualization/index.html?#{corpusMask.dbname}" width="100%" height="200" frameborder="0" allowtransparency="true"></iframe>
         .row-fluid
           .span11.offset1
-            - var dbname = corpora[0].dbname.toString()
-            form.form-inline#searchCorpus(action='http://localhost:3185/search/#{dbname}', method='POST', enctype='application/json', style='display:inline-block')
+            form.form-inline#searchCorpus(action='http://localhost:3185/search/#{corpusMask.dbname}', method='POST', enctype='application/json', style='display:inline-block')
               input(type='text', id='queryString', name='queryString', placeholder='Enter search terms…')
               | &nbsp;&nbsp;
               button.btn.btn-small.btn-success(type='submit', id='corpus_search')
                 i.icon-search.icon-white(style='margin-top:2px')
                 | &nbsp;Search…
             | &nbsp;&nbsp;
-            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{dbname}\')')
+            button.btn.btn-small.btn-info(type='button', id='corpus_build', onclick='reindex(\'#{corpusMask.dbname}\')')
               i.icon-refresh.icon-white(style='margin-top:2px')
               | &nbsp;Rebuild search lexicon
             | &nbsp;&nbsp;
@@ -64,21 +68,20 @@ block content
     hr
     footer
       - var year = (new Date()).getFullYear()
-      p © #{corpora[0].copyright} #{year} 
+      p © #{corpusMask.copyright} #{corpusMask.startYear} #{year} 
         
-      - var dbname = corpora[0].dbname.toString()
       .tabbable
         ul.nav.nav-tabs
           li.active
-            a(href="#terms", data-toggle="tab") Terms of Use for #{dbname}
+            a(href="#terms", data-toggle="tab") Terms of Use for #{corpusMask.dbname}
           li
             a(href="#emeldtermsreccomendations", data-toggle="tab") Why have a Terms of Use?
         .tab-content
           .tab-pane.active#terms
-            p #{corpora[0].termsOfUse.humanReadable}
+            p #{corpusMask.termsOfUse.humanReadable}
             span License: 
-            a(href="#{corpora[0].license.link}", rel="license", title="#{corpora[0].license.title}") #{corpora[0].license.title}
-            p #{corpora[0].license.humanReadable}
+            a(href="#{corpusMask.license.link}", rel="license", title="#{corpusMask.license.title}") #{corpusMask.license.title}
+            p #{corpusMask.license.humanReadable}
             img(src="//i.creativecommons.org/l/by-sa/3.0/88x31.png", alt="License")
           .tab-pane#emeldtermsreccomendations
             ul

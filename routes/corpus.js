@@ -1,223 +1,90 @@
 var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
+var getTeamMask = require("./team").getTeamMask;
+var Q = require("q");
 
-
-var processCorpusPageParams = function(req, res) {
-
-  var dbname = req.params.dbname;
-
-  var promiseForCorpus = getCorpusFromDbname(dbname);
-  if (!promiseForCorpus) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
+var cleanErrorStatus = function(status) {
+  if (status && status.length === 3) {
+    return status;
   }
-
-  promiseForCorpus.then(function(result) {
-      result.corpus.copyright = result.corpus.copyright || result.team.username;
-      if (result.corpus.copyright.indexOf("Add names of the copyright holders") > -1) {
-        result.corpus.copyright = result.team.username;
-      }
-      if (result.corpus.dateCreated) {
-        year = new Date(result.corpus.dateCreated).getFullYear();
-        if (year < new Date().getFullYear()) {
-          result.corpus.copyright = result.corpus.copyright + " " + year + " - ";
-        }
-      }
-      // var defaultLicense = {
-      //   title: "Creative Commons Attribution-ShareAlike (CC BY-SA).",
-      //   humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-      //   link: "http://creativecommons.org/licenses/by-sa/3.0/"
-      // };
-      // if (!result.corpus.license || typeof result.corpus.license == "string") {
-      //   result.corpus.license = defaultLicense;
-      // }
-      // result.corpus.license.title = result.corpus.license.title.replace(/Default:/, "");
-      // console.log(result.corpus.license);
-      // var defaultTerms = {
-      //   humanReadable: "Sample terms of use: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      // };
-      // if (!result.corpus.termsOfUse) {
-      //   if (result.corpus.terms && typeof result.corpus.terms !== "string") {
-      //     result.corpus.termsOfUse = result.corpus.terms;
-      //   } else {
-      //     result.corpus.termsOfUse = defaultTerms;
-      //   }
-      // }
-      // if (result.corpus.terms) {
-      //   delete result.corpus.terms;
-      // }
-
-      var data = {
-        corpora: [result.corpus],
-        // ghash: result.team.gravatar,
-        user: result.team
-      };
-      res.render('corpus', data);
-    })
-    .fail(function(error) {
-      console.log(new Date() + " there was a problem getCorpusFromDbname in route /db/:dbname" + error);
-      if (dbname.indexOf("public") > -1) {
-        res.redirect("404.html");
-      } else {
-        res.redirect('/public');
-      }
-    })
-    .done();
-
+  return "";
 };
 
-/*
- * Promise handlers
- */
+var getCorpusMask = function(dbname, nano) {
+  var deferred = Q.defer();
 
-function sanitizeAgainstInjection(id) {
-  if (!id || !id.indexOf || !id.toLowerCase) {
-    return;
-  }
-
-  if (id.indexOf('.js') === id.length - 3 ||
-    id.indexOf('+') > -1 ||
-    id.indexOf('?') > -1 ||
-    id.indexOf('=') > -1 ||
-    id.indexOf(',') > -1 ||
-    id.indexOf('.txt') === id.length - 4 ||
-    id.indexOf('.php') === id.length - 4 ||
-    id.indexOf('html') === id.length - 4) {
-
-    console.log(new Date() + ' evil attempt on server to open ' + id + ' sending 404 instead');
-    return false;
-  }
-
-  var sanitized = id.toLowerCase().replace(/[^a-z0-9_-]/g, '');
-  if (sanitized !== id.toLowerCase()) {
-    console.log(new Date() + ' potentially evil attempt on server to open ' + id + ' sending 404 instead');
-    return false;
-  }
-  return sanitized;
-}
-
-var getData = function getData(res, user, corpus) {
-
-  user = sanitizeAgainstInjection(user);
-  if (user === false) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-  corpus = sanitizeAgainstInjection(corpus);
-  if (corpus === false) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-
-
-  var usersMask = {};
-
-  getUser(user)
-    .then(function(userdetails) {
-      usersMask = userdetails;
-      return getRequestedCorpus(userdetails.corpora, corpus, user);
-    })
-    .then(function(result) {
-      // result = new CorpusMask(result);
-      // var ghash = md5(userdetails.email);
-      var data = {
-        corpora: result,
-        // ghash: ghash,
-        user: usersMask
-      };
-      var template = corpus ? 'corpus' : 'user';
-      //console.log("rendering the data", util.inspect(data));
-      res.render(template, data);
-    })
-    .fail(function(error) {
-      console.log(new Date() + " couldnt get the user " + error.message);
-      if (error && error.message && (error.message.indexOf("ror happened in your connect") > -1 || error.message.indexOf("ame or password is incorre") > -1)) {
-        res.status(500);
-        res.send("<script> window.setTimeout(function(){\nalert('The server is currently unable to serve your request: code 71921. Please notify us of this erorr code, or check again later. Taking you to the contact us form...');\n window.location.href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform'; },100);</script>  ");
-        return;
-      }
-      if (error && error.message === "missing" && user !== "public") {
-        console.log(new Date() + " user " + user + "was missing, redirecting to the public user");
-        res.redirect("/public)")
-        return;
-      }
-
-      console.log(new Date() + " There was an error on this server, we are unable to take the user to the public user. ");
-      res.status(404);
-      res.redirect("404.html")
+  Q.nextTick(function() {
+    if (!nano) {
+      console.log(new Date() + " the server is misconfigured and cannot reply request for corpus mask: " + dbname);
+      deferred.reject({
+        status: 500,
+        userFriendlyErrors: ["Server errored, please report this 5342"]
+      });
       return;
-    })
-    .done();
-
-};
-
-
-var getCorpusMask = function(dbname) {
-  dbname = sanitizeAgainstInjection(dbname);
-  if (!dbname) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-
-  var df = Q.defer();
-  var corpusdb = nano.db.use(dbname);
-  var result = {};
-
-  corpusdb.get('corpus', function(error, corpus) {
-    if (error) {
-      console.log(new Date() + " corpus was missing " + dbname);
-      df.reject(new Error(error));
-    } else {
-      if (!corpus) {
-        console.log(new Date() + " corpus was empty " + dbname);
-        df.resolve({});
-      } else {
-        //console.log(" using commonjs for corpusmask " + dbname);
-
-        corpus = new CorpusMask(corpus);
-        // corpus.gravatar = corpus.gravatar || md5(dbname);
-        result.corpus = corpus;
-        //console.log("Gettign team");
-        corpusdb.get('team', function(error, team) {
-          if (error) {
-            console.log(new Date() + " team was missing " + dbname);
-            df.reject(new Error(error));
-          } else {
-            if (!team) {
-              console.log(new Date() + " team was empty " + dbname);
-
-              result.team = {};
-              df.resolve(result);
-            } else {
-              //console.log(" Using commonjs team ", dbname);
-
-              team = new Team(team);
-              // if (!team.gravatar || team.gravatar.indexOf("anonymousbydefault") > -1) {
-              //   if (team.email) {
-              //     team.gravatar = md5(team.email);
-              //   } else {
-              //     team.gravatar = md5(dbname);
-              //   }
-              // }
-              // team.subtitle = team.subtitle || team.firstname + ' ' + team.lastname;
-              result.team = team;
-              df.resolve(result);
-            }
-          }
-        });
-
-      }
     }
+
+    if (!dbname || typeof dbname.trim !== "function") {
+      dbname = "";
+    } else {
+      dbname = dbname.trim().toLowerCase();
+    }
+    var validateIdentifier = Connection.validateIdentifier(dbname);
+    if (!dbname || validateIdentifier.identifier.length < 3 || validateIdentifier.identifier !== validateIdentifier.original) {
+      console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
+      deferred.reject({
+        status: 404,
+        userFriendlyErrors: ["This is a strange database identifier, are you sure you didn't mistype it?"],
+        error: validateIdentifier
+      });
+      return;
+    }
+
+    var corpusdb = nano.db.use(dbname);
+    corpusdb.get("corpus", function(error, corpusMask) {
+      if (error || !corpusMask) {
+        console.log(new Date() + " corpusMask was missing " + dbname);
+        error = error || {};
+        error.status = cleanErrorStatus(error.statusCode) || 500;
+        var userFriendlyErrors = ["Database details not found"];
+        if (error.code === "ECONNREFUSED") {
+          userFriendlyErrors = ["Server errored, please report this 6339"];
+        } else if (error.code === "ETIMEDOUT") {
+          error.status = 500;
+          userFriendlyErrors = ["Server timed out, please try again later"];
+        }
+        deferred.reject({
+          status: error.status,
+          error: error,
+          userFriendlyErrors: userFriendlyErrors
+        });
+        return;
+      }
+
+      corpusMask = new CorpusMask(corpusMask);
+      var year = new Date(corpusMask.dateCreated).getFullYear();
+      if (year < new Date().getFullYear()) {
+        corpusMask.startYear = " " + year + " - ";
+      }
+      getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
+        corpusMask.team = teamMask;
+      }, function() {
+        corpusMask.team = {};
+      }).fail(function(exception) {
+        console.log(new Date() + " ", exception.stack);
+        deferred.reject({
+          status: 500,
+          error: exception,
+          userFriendlyErrors: ["Server errored, please report this 78923"]
+        });
+      }).done(function() {
+        deferred.resolve(corpusMask);
+      });
+    });
+
   });
 
-  return df.promise;
-
-}
-
+  return deferred.promise;
+};
 
 var getCorpus = function getCorpus(dbname, titleAsUrl, corpusid) {
 

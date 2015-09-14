@@ -101,7 +101,7 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
           }
           corpusConnection.title = "Private Corpus";
           corpusConnection.description = "The details of this corpus are not public";
-
+          corpusConnection.corpuspage = corpusConnection.owner + "/" + corpusConnection.titleAsUrl;
           var corpusConnectionPromise = Q.defer();
           promises.push(corpusConnectionPromise.promise);
           console.log(new Date() + " Requesting the corpus mask details", corpusConnection.dbname);
@@ -119,6 +119,9 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
               fullCorpusMask.connection = corpusConnection;
             }
             console.log(new Date() + " Using connection from the corpus mask details", fullCorpusMask.connection.gravatar);
+            fullCorpusMask.connection.title = fullCorpusMask.connection.title;
+            fullCorpusMask.connection.description = fullCorpusMask.connection.description;
+            fullCorpusMask.connection.corpuspage = fullCorpusMask.connection.owner + "/" + fullCorpusMask.connection.titleAsUrl;
             corpusConnectionPromise.resolve(fullCorpusMask.connection);
             userPrivateDetails.userMask.corpora.push(fullCorpusMask.connection);
           });

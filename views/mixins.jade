@@ -69,12 +69,3 @@ mixin renderCorporaList(corpora)
           a(href="#{url}")= corpusMask.title
         - var shortDescription = corpusMask.description ? corpusMask.description : ""
         p= shortDescription.length > 200 ? shortDescription.substr(0,200) + '…' : shortDescription
-
-mixin renderCorpus(corpora)
-  each corpusMask in corpora
-    h1.media-heading #{corpusMask.title}
-    .media(style='margin-bottom:40px')
-      a(href="https://corpusdev.lingsync.org/public-firstcorpus/_design/pages/corpus.html").pull-right
-        img(src='https://secure.gravatar.com/avatar/#{corpusMask.gravatar}.jpg?s=96&d=retro&r=pg', alt='Corpus image').media-object
-      .media-body
-        div= corpusMask.description
