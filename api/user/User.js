@@ -199,16 +199,6 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
-  corpora: {
-    configurable: true,
-    get: function() {
-      return this._corpora || FieldDBObject.DEFAULT_ARRAY;
-    },
-    set: function(value) {
-      this.ensureSetViaAppropriateType("corpora", value);
-    }
-  },
-
   newCorpusConnections: {
     configurable: true,
     get: function() {

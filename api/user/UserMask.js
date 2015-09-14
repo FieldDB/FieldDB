@@ -1,5 +1,6 @@
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
+var Corpora = require("./../corpus/Corpora").Corpora;
 var MD5 = require("MD5");
 
 /**
@@ -31,6 +32,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
   INTERNAL_MODELS: {
     value: {
+      corpora: Corpora,
       username: FieldDBObject.DEFAULT_STRING,
       firstname: FieldDBObject.DEFAULT_STRING,
       lastname: FieldDBObject.DEFAULT_STRING,
@@ -279,6 +281,16 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
           this._lastname = pieces[1];
         }
       }
+    }
+  },
+
+  corpora: {
+    configurable: true,
+    get: function() {
+      return this._corpora || FieldDBObject.DEFAULT_ARRAY;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("corpora", value);
     }
   },
 

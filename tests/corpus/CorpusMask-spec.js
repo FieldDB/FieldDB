@@ -90,6 +90,7 @@ describe("CorpusMask ", function() {
         researchInterest: "",
         affiliation: "",
         description: "",
+        corpora: [],
         fields: [],
         version: corpusJson.team.version,
         api: "users"
