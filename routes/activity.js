@@ -37,11 +37,11 @@ var activityHeatMap = function(dbname, nano) {
     activitydb.view("activities", "one-year-weekly", {
       group: true
     }, function(err, body) {
-      if (!err && body.rows) {
+      if (!err && body && body.rows) {
         console.log(new Date() + " responded with activity heat map " + body.rows.length + " for: " + dbname);
         deferred.resolve(body);
       } else {
-        console.log(new Date() + " there was a problem fetching the activity heatmap for: " + dbname, body);
+        console.log(new Date() + " there was a problem fetching the activity heatmap for: " + dbname, err);
         deferred.resolve(SAMPLE_HEAT_MAP);
       }
     });

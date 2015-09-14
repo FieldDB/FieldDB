@@ -10,7 +10,7 @@ var cleanErrorStatus = function(status) {
   return "";
 };
 
-var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = false;
+var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = true;
 
 var getCorpusMask = function(dbname, nano, optionalUserMask) {
   var deferred = Q.defer();
@@ -72,11 +72,15 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
         corpusMask.copyright = corpusMask.team.username;
       }
       // console.log("Corpus mask ", corpusMask.team.toJSON());
+      console.log(new Date() + " teams's gravatar in corpus.json " + corpusMask.team.gravatar);
       getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
+        console.log(new Date() + " owners's gravatar in this database " + teamMask.gravatar);
         if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS && optionalUserMask) {
           corpusMask.team.merge("self", optionalUserMask.toJSON(), "overwrite");
         }
+        console.log(new Date() + " after merge " + teamMask.gravatar);
         corpusMask.team.merge("self", teamMask, "overwrite");
+        console.log(new Date() + " final team gravatar in this database " + corpusMask.team.gravatar);
         console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
         // console.log("Corpus mask ", corpusMask.team.toJSON());
       }, function() {
@@ -154,6 +158,7 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
   if (!bestMatch) {
     bestMatch = matchingCorpusConnections[0];
   }
+  console.log(new Date() + " user's default gravatar " + userMask.gravatar);
   return getCorpusMask(bestMatch.dbname, nano, userMask);
 };
 
