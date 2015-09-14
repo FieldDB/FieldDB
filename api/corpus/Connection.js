@@ -259,6 +259,33 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     }
   },
 
+  description: {
+    get: function() {
+      if (this.parent && this.parent.description) {
+        this._description = this.parent.description;
+        if (this._description.length > 220) {
+          this._description = this._description.substring(0, 200) + "...";
+        }
+        this.debug("returned this.parent.description", this.parent.id);
+      }
+      return this._description;
+    },
+    set: function(value) {
+      if (value === this._description) {
+        return;
+      }
+      if (!value) {
+        delete this._description;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._description = value;
+    }
+  },
+
   title: {
     get: function() {
       if (this.parent && this.parent.title) {

@@ -156,7 +156,8 @@ describe("CorpusMask ", function() {
       expect(corpus.connection.parent).toBeDefined();
       expect(corpus.connection.parent).toBe(corpus);
       expect(corpus.connection.dbname).toEqual("jenkins-anothercorpus");
-      expect(corpus.connection.titleAsUrl).toEqual("private_corpus");
+      expect(corpus.connection.titleAsUrl).toEqual(corpus.titleAsUrl);
+      expect(corpus.connection.description).toEqual(corpus.description);
       expect(corpus.connection.owner).toEqual("jenkins");
 
       expect(corpus.termsOfUse).toEqual({
@@ -192,6 +193,23 @@ describe("CorpusMask ", function() {
 
     });
 
+    it("should transmit title and truncated description to its connection", function() {
+      var corpus = new CorpusMask({
+        dbname: "some-databasename",
+        connection: {},
+        title: "A real title",
+        description: "A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description "
+      });
+      expect(corpus.titleAsUrl).toEqual("a_real_title");
+      expect(corpus.dbname).toEqual("some-databasename");
+      expect(corpus.connection.parent).toBeDefined();
+      expect(corpus.connection.parent).toBe(corpus);
+      expect(corpus.connection.dbname).toEqual(corpus.dbname);
+      expect(corpus.connection.titleAsUrl).toEqual(corpus.titleAsUrl);
+      expect(corpus.connection.description).toEqual("A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very long description A very l...");
+      expect(corpus.connection.owner).toEqual("some");
+    });
+
     describe("serialization", function() {
 
       it("should serialize the id as corpus", function() {
@@ -200,6 +218,7 @@ describe("CorpusMask ", function() {
       });
 
     });
+
   });
 
   describe("corpus collections", function() {
