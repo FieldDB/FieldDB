@@ -63,9 +63,6 @@ app.get("/activity/:dbname", function(req, res) {
 
 app.get("/db/:dbname", function(req, res) {
   getCorpusMask(req.params.dbname, nano).then(function(mask) {
-    if (mask && typeof mask.toJSON === "function") {
-      mask = mask.toJSON();
-    }
     res.render("corpus", {
       corpusMask: mask
     });
@@ -78,7 +75,7 @@ app.get("/db/:dbname", function(req, res) {
   });
 });
 
-app.get("/:user/:corpus/:dbname", function(req, res) {
+app.get("/:username/:anything/:dbname", function(req, res) {
   getCorpusMask(req.params.dbname).then(function(mask) {
     if (mask && typeof mask.toJSON === "function") {
       mask = mask.toJSON();
@@ -93,12 +90,19 @@ app.get("/:user/:corpus/:dbname", function(req, res) {
   });
 });
 
-app.get("/:user/:dbname", function(req, res) {
-  getCorpusMask(req.params.dbname).then(function(mask) {
-    if (mask && typeof mask.toJSON === "function") {
-      mask = mask.toJSON();
-    }
-    res.render("user", mask);
+app.get("/:username/:titleAsUrl", function(req, res) {
+  getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(userMask) {
+    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
+      res.render("corpus", {
+        corpusMask: mask
+      });
+    }, function() {
+      res.status(404);
+      res.redirect("404.html");
+    }).fail(function() {
+      res.status(404);
+      res.redirect("500.html");
+    });
   }, function() {
     res.status(404);
     res.redirect("404.html");
@@ -107,7 +111,6 @@ app.get("/:user/:dbname", function(req, res) {
     res.redirect("500.html");
   });
 });
-
 
 app.get("/:username", function(req, res) {
 
@@ -119,7 +122,6 @@ app.get("/:username", function(req, res) {
   }
 
   getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(mask) {
-    mask = mask;
     res.render("user", {
       userMask: mask
     });

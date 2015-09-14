@@ -4,11 +4,13 @@ var getTeamMask = require("./team").getTeamMask;
 var Q = require("q");
 
 var cleanErrorStatus = function(status) {
-  if (status && status.length === 3) {
+  if (status && status < 600) {
     return status;
   }
   return "";
 };
+
+var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = false;
 
 var getCorpusMask = function(dbname, nano) {
   var deferred = Q.defer();
@@ -18,7 +20,7 @@ var getCorpusMask = function(dbname, nano) {
       console.log(new Date() + " the server is misconfigured and cannot reply request for corpus mask: " + dbname);
       deferred.reject({
         status: 500,
-        userFriendlyErrors: ["Server errored, please report this 5342"]
+        userFriendlyErrors: ["Server errored, please report this 3242"]
       });
       return;
     }
@@ -61,12 +63,22 @@ var getCorpusMask = function(dbname, nano) {
       }
 
       corpusMask = new CorpusMask(corpusMask);
+      if (!corpusMask.dbname) {
+        corpusMask.dbname = dbname;
+        console.log(new Date() + "  the corpus for " + dbname + " was missing a poucname/dbname TODO consider saving it.");
+      }
+      // console.log("Corpus mask ", corpusMask.team.toJSON());
       var year = new Date(corpusMask.dateCreated).getFullYear();
       if (year < new Date().getFullYear()) {
         corpusMask.startYear = " " + year + " - ";
       }
       getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
-        corpusMask.team = teamMask;
+        if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS) {
+          corpusMask.team.merge("self", userMask.toJSON(), "overwrite");
+        }
+        corpusMask.team.merge("self", teamMask, "overwrite");
+        console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
+        // console.log("Corpus mask ", corpusMask.team.toJSON());
       }, function() {
         corpusMask.team = {};
       }).fail(function(exception) {
@@ -86,116 +98,50 @@ var getCorpusMask = function(dbname, nano) {
   return deferred.promise;
 };
 
-var getCorpus = function getCorpus(dbname, titleAsUrl, corpusid) {
-
-  dbname = sanitizeAgainstInjection(dbname);
-  if (!dbname) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-  titleAsUrl = sanitizeAgainstInjection(titleAsUrl);
-  if (titleAsUrl === false) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-  corpusid = sanitizeAgainstInjection(corpusid);
-  //console.log("The corpus id" + corpusid);
-  if (corpusid === false) {
-    res.status(404);
-    res.redirect("404.html")
-    return;
-  }
-
-  var df = Q.defer();
-  var corpusdb = nano.db.use(dbname);
-  var doc = corpusid;
-  var showPublicVersion = true;
-  if (showPublicVersion) {
-    doc = 'corpus';
-  }
-  //console.log("Getting corpus public mask");
-  corpusdb.get(doc, function(error, result) {
-    if (error) {
-      console.log(new Date() + " there was a problem getting corpusdb", error);
-      df.reject(new Error(error));
-    } else {
-      if (!result) {
-        console.log(new Date() + 'No result', result);
-        df.reject(new Error('No result'));
-      } else {
-        result = new CorpusMask(result);
-        //console.log(" Recieved result corpus mask");
-        df.resolve(result);
-      }
-    }
-  });
-
-  return df.promise;
-
-}
-
-function getRequestedCorpus(corporaCollection, titleAsUrl, corpusowner) {
-
-  var df = Q.defer();
-  var resultingPromises = [];
-
-  corporaCollection.map(function(connection) {
-    resultingPromises.push(getCorpus(connection.dbname, titleAsUrl, connection.corpusid))
-  });
-
-  //console.log("Requested corpus masks " + resultingPromises.length);
-  Q.allSettled(resultingPromises)
-    .then(function(results) {
-
-      results = results.map(function(result) {
-        if (result.state === 'fulfilled') {
-          //console.log(" Got back a corpus mask for " + result.value.dbname);
-          if (!result.value.connection) {
-            result.value.connection = corporaCollection[result.value.dbname];
-          }
-          // corporaCollection[value.dbname] = value;
-          // corporaCollection[value.dbname] 
-          // // var value = new CorpusMask(result.value);
-          // result.value.connection.gravatar = result.value.connection.gravatar || md5(result.value.dbname)
-          result.value.corpuspage = corpusowner + '/' + result.value.titleAsUrl + '/' + result.value.dbname;
-          return result.value
-        } else {
-          console.log(new Date() + " One of the corpora had no corpus document." + corpusowner)
-          return new CorpusMask({
-            corpuspage: corpusowner + '/Unknown/' + corpusowner + '-firstcorpus',
-            title: 'Unknown',
-            dbname: corpusowner + '-firstcorpus',
-            connection: corporaCollection[corpusowner + '-firstcorpus'],
-            gravatar: "",
-            description: 'Private corpus'
-          });
-        }
-      });
-
-      // for (corpus in corporaCollection) {
-      //   //console.log("Processing corpus", corporaCollection[corpus]);
-      //   corporaCollection[corpus] = new CorpusMask({
-      //     connection: corporaCollection[corpus]
-      //   });
-
-      //   // {
-      //   //   corpuspage: corpusowner + '/Unknown/' + corpusowner + '-firstcorpus',
-      //   //   title: 'Unknown',
-      //   //   gravatar: md5(corporaCollection[corpus].dbname),
-      //   //   description: 'Private corpus'
-      //   // };
-
-      // }
-      df.resolve(results);
-    }).done(function() {
-      //console.log("done promises");
+var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
+  var deferred = Q.defer();
+  if (!nano) {
+    console.log(new Date() + " the server is misconfigured and cannot reply request for corpus mask from titleAsUrl: " + titleAsUrl);
+    deferred.reject({
+      status: 500,
+      userFriendlyErrors: ["Server errored, please report this 3242"]
     });
+    return deferred.promise;
+  }
+  if (!userMask || !userMask.username) {
+    deferred.reject({
+      status: 500,
+      userFriendlyErrors: ["Server errored, please report this 8234"]
+    });
+    return deferred.promise;
+  }
+  if (!userMask.corpora || !userMask.corpora.length) {
+    deferred.reject({
+      status: 404,
+      userFriendlyErrors: ["Couldn't find any corpora for " + userMask.username + ", if this is an error please report it to us."]
+    });
+    return deferred.promise;
+  }
+  if (typeof userMask.corpora.find !== "function") {
+    deferred.reject({
+      status: 500,
+      userFriendlyErrors: ["Server errored, please report this 9313"]
+    });
+    return deferred.promise;
+  }
 
-  return df.promise;
+  var matchingCorpusConnections = userMask.corpora.find("titleAsUrl", titleAsUrl);
+  if (!matchingCorpusConnections || !matchingCorpusConnections.length) {
+    deferred.reject({
+      status: 404,
+      userFriendlyErrors: ["Couldn't find " + titleAsUrl + " among " + userMask.username + "'s corpora."],
+      error: {}
+    });
+    return deferred.promise;
+  }
 
-}
-
+  return getCorpusMask(matchingCorpusConnections[0].dbname, nano);
+};
 
 exports.getCorpusMask = getCorpusMask;
+exports.getCorpusMaskFromTitleAsUrl = getCorpusMaskFromTitleAsUrl;

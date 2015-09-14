@@ -198,4 +198,66 @@ describe("corpus routes", function() {
 
   });
 
+  describe("as a user I want a url that looks like the title", function() {
+
+    it("should load", function() {
+      expect(getCorpusMaskFromTitleAsUrl).toBeDefined();
+    });
+
+
+    describe("invalid requests", function() {
+
+      it("should return 500 error if nano is not provided", function(done) {
+        getCorpusMaskFromTitleAsUrl("CommunityCorpus").then(function(mask) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason).toEqual({
+            status: 500,
+            userFriendlyErrors: ["Server errored, please report this 3242"]
+          });
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+      }, specIsRunningTooLong);
+
+      it("should return 500 error if usermask is not provided", function(done) {
+        getCorpusMaskFromTitleAsUrl(null, "CommunityCorpus", nano).then(function(mask) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason).toEqual({
+            status: 500,
+            userFriendlyErrors: ["Server errored, please report this 8234"]
+          });
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+      }, specIsRunningTooLong);
+
+      it("should return 404 error if usermask has no corpora", function(done) {
+        getCorpusMaskFromTitleAsUrl({
+          username: "lingllama"
+        }, "CommunityCorpus", nano).then(function(mask) {
+          console.log(mask);
+          expect(true).toBeFalsy();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason).toEqual({
+            status: 404,
+            userFriendlyErrors: ["Couldn't find any corpora for lingllama, if this is an error please report it to us."]
+          });
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
+      }, specIsRunningTooLong);
+
+    });
+  });
+
 });

@@ -4,7 +4,7 @@ var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
 
 var cleanErrorStatus = function(status) {
-  if (status && status.length === 3) {
+  if (status && status < 600) {
     return status;
   }
   return "";
