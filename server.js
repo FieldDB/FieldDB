@@ -84,9 +84,7 @@ app.get("/db/:dbname", function(req, res) {
 
 app.get("/:username/:anything/:dbname", function(req, res) {
   getCorpusMask(req.params.dbname, nano).then(function(mask) {
-    res.render("corpus", {
-      corpusMask: mask
-    });
+    res.redirect("/" + req.params.username + "/" + mask.titleAsUrl);
   }, function(reason) {
     res.status(404);
     res.render("404", {

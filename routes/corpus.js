@@ -10,7 +10,7 @@ var cleanErrorStatus = function(status) {
   return "";
 };
 
-var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = true;
+var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = false;
 
 var getCorpusMask = function(dbname, nano, optionalUserMask) {
   var deferred = Q.defer();
@@ -63,16 +63,15 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
         return;
       }
 
-      corpusMask = new CorpusMask(corpusMask);
       if (!corpusMask.dbname) {
         corpusMask.dbname = dbname;
         console.log(new Date() + "  the corpus for " + dbname + " was missing a poucname/dbname TODO consider saving it.");
       }
+      corpusMask = new CorpusMask(corpusMask);
       if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
-        corpusMask.copyright = corpusMask.connection.owner;
+        corpusMask.copyright = corpusMask.team.username;
       }
       // console.log("Corpus mask ", corpusMask.team.toJSON());
-
       getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
         if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS && optionalUserMask) {
           corpusMask.team.merge("self", optionalUserMask.toJSON(), "overwrite");
@@ -143,7 +142,17 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
     return deferred.promise;
   }
 
-  return getCorpusMask(matchingCorpusConnections[0].dbname, nano, userMask);
+  var bestMatch;
+  matchingCorpusConnections.map(function(connection) {
+    // handle situation where the user has access to >1 corpora by other users which have the same titleAsUrl
+    if (connection.titleAsUrl === titleAsUrl && connection.dbname && connection.dbname.indexOf(userMask.username) === 0) {
+      bestMatch = connection;
+    }
+  });
+  if (!bestMatch) {
+    bestMatch = matchingCorpusConnections[0];
+  }
+  return getCorpusMask(bestMatch.dbname, nano, userMask);
 };
 
 exports.getCorpusMask = getCorpusMask;

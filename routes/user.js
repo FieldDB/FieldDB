@@ -87,23 +87,27 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
         var promises = [];
 
         userPrivateDetails.corpora.map(function(corpusConnection) {
+          // Correct error from a version of the auth service
+          if (corpusConnection.dbname === "lingllama-community_corpus") {
+            corpusConnection.dbname = "lingllama-communitycorpus"
+          }
           if ((userPrivateDetails.username !== "public" && corpusConnection.dbname === "public-firstcorpus") ||
             (userPrivateDetails.username !== "lingllama" && corpusConnection.dbname === "lingllama-communitycorpus")) {
             // Skip sample corpora if not showing the sample user who owns the corpus
             return;
           }
-          corpusConnection = corpusConnection.toJSON();
-          if (corpusConnection.title !== corpusConnection.dbname) {
-            // This corpus has already information 
+          if (corpusConnection.title !== corpusConnection.dbname &&
+            (corpusConnection.owner + "-" + corpusConnection.title) !== corpusConnection.dbname) {
+            console.log(new Date() + " Dont need to fetch title and description for  ", corpusConnection.owner + "-" + corpusConnection.title);
+            corpusConnection = corpusConnection.toJSON();
             if (!corpusConnection.gravatar) {
               corpusConnection.gravatar = userPrivateDetails.userMask.buildGravatar(corpusConnection.dbname);
             }
             userPrivateDetails.userMask.corpora.push(corpusConnection);
             return;
           }
-          corpusConnection.title = "Private Corpus";
-          corpusConnection.description = "The details of this corpus are not public";
-          corpusConnection.corpuspage = corpusConnection.owner + "/" + corpusConnection.titleAsUrl;
+
+          corpusConnection = corpusConnection.toJSON();
           var corpusConnectionPromise = Q.defer();
           promises.push(corpusConnectionPromise.promise);
           console.log(new Date() + " Requesting the corpus mask details", corpusConnection.dbname);
@@ -113,17 +117,23 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
             if (error) {
               corpusConnectionPromise.reject(error);
               console.log(new Date() + " wasnt able to find the corpus mask details on the server");
+              corpusConnection.title = "Private Corpus";
+              corpusConnection.description = "The details of this corpus are not public";
               userPrivateDetails.userMask.corpora.push(corpusConnection);
               return;
+            }
+            if (!fullCorpusMask.dbname && !fullCorpusMask.pouchname) {
+              fullCorpusMask.dbname = corpusConnection.dbname;
+              console.log(new Date() + "  the corpus for " + corpusConnection.dbname + " was missing a poucname/dbname TODO consider saving it.");
             }
             fullCorpusMask = new CorpusMask(fullCorpusMask);
             if (!fullCorpusMask.connection) {
               fullCorpusMask.connection = corpusConnection;
             }
+            // Must prime the gravatar
             console.log(new Date() + " Using connection from the corpus mask details", fullCorpusMask.connection.gravatar);
             fullCorpusMask.connection.title = fullCorpusMask.connection.title;
             fullCorpusMask.connection.description = fullCorpusMask.connection.description;
-            fullCorpusMask.connection.corpuspage = fullCorpusMask.connection.owner + "/" + fullCorpusMask.connection.titleAsUrl;
             corpusConnectionPromise.resolve(fullCorpusMask.connection);
             userPrivateDetails.userMask.corpora.push(fullCorpusMask.connection);
           });
