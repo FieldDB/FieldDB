@@ -113,7 +113,7 @@ describe("corpus routes", function() {
         expect(mask.title).toEqual("CommunityCorpus");
         expect(mask.titleAsUrl).toEqual("communitycorpus");
         expect(mask.description).toEqual("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
-        expect(mask.copyright).toEqual("Default: Add names of the copyright holders of the corpus.");
+        expect(mask.copyright).toEqual("lingllama");
         expect(mask.termsOfUse).toBeDefined();
         expect(mask.termsOfUse.humanReadable).toContain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).toEqual("948814f0b1bc8bebd701a9732ab3ebbd");
@@ -174,7 +174,7 @@ describe("corpus routes", function() {
         expect(mask.title).toEqual("Private Corpus");
         expect(mask.titleAsUrl).toEqual("private_corpus");
         expect(mask.description).toEqual("The details of this corpus are not public.");
-        expect(mask.copyright).toEqual("Default: Add names of the copyright holders of the corpus.");
+        expect(mask.copyright).toEqual("teammatetiger");
         expect(mask.termsOfUse).toBeDefined();
         expect(mask.termsOfUse.humanReadable).toContain("Sample: The materials included in this corpus are available");
         expect(mask.team.gravatar).toEqual("fa988b6264338e873c2eb43328d41e9d");
@@ -336,7 +336,7 @@ describe("corpus routes", function() {
           expect(mask.title).toEqual("CommunityCorpus");
           expect(mask.titleAsUrl).toEqual("communitycorpus");
           expect(mask.description).toEqual("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
-          expect(mask.copyright).toEqual("Default: Add names of the copyright holders of the corpus.");
+          expect(mask.copyright).toEqual("lingllama");
           expect(mask.termsOfUse).toBeDefined();
           expect(mask.termsOfUse.humanReadable).toContain("Sample: The materials included in this corpus are available");
           // expect(mask.team.gravatar).toEqual("948814f0b1bc8bebd701a9732ab3ebbd");
