@@ -291,6 +291,31 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  startYear: {
+    get: function() {
+      if (this.parent && this.parent.dateCreated && this.parent._rev && this.parent._fieldDBtype === "Corpus") {
+        this.dateCreated = this.parent.dateCreated;
+      }
+      if (this.dateCreated) {
+        var year = new Date(this.dateCreated).getFullYear();
+        if (year < new Date().getFullYear()) {
+          this._startYear = " " + year + " - ";
+        }
+      }
+      return this._startYear;
+    },
+    set: function(value) {
+      if (value === this._startYear) {
+        return;
+      }
+      if (!value) {
+        // delete this._startYear;
+        return;
+      }
+      this._startYear = value;
+    }
+  },
+
   // unserializedSessions: {
   //   value: null
   // },
