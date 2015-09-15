@@ -6,12 +6,24 @@ var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
 var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
 var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
 
-var connect = node_config.usersDbConnection.protocol + couch_keys.username + ":" +
-  couch_keys.password + "@" + node_config.usersDbConnection.domain +
-  ":" + node_config.usersDbConnection.port +
-  node_config.usersDbConnection.path;
-var nano = require("nano")(connect);
 
+var corpusWebServiceUrl = node_config.corpusWebService.protocol +
+  couch_keys.username + ":" +
+  couch_keys.password + "@" +
+  node_config.corpusWebService.domain +
+  ":" + node_config.corpusWebService.port +
+  node_config.corpusWebService.path;
+
+var acceptSelfSignedCertificates = {
+  strictSSL: false
+};
+if (deploy_target === "production") {
+  acceptSelfSignedCertificates = {};
+}
+var nano = require("nano")({
+  url: corpusWebServiceUrl,
+  requestDefaults: acceptSelfSignedCertificates
+});
 
 describe("user routes", function() {
 
@@ -59,7 +71,7 @@ describe("user routes", function() {
   describe("normal requests", function() {
 
     it("should return the user mask from the sample user", function(done) {
-      getUserMask("lingllama", nano, node_config.usersDbConnection.dbname).then(function(mask) {
+      getUserMask("lingllama", nano, node_config.corpusWebService.users).then(function(mask) {
         expect(mask).toBeDefined();
         expect(mask.fieldDBtype).toEqual("UserMask");
         expect(mask.username).toEqual("lingllama");
@@ -74,7 +86,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server connection timed out, please try again later"]
+          userFriendlyErrors: ["Server errored, please report this 6339"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -83,7 +95,7 @@ describe("user routes", function() {
     }, specIsRunningTooLong);
 
     it("should return the user mask from the community user", function(done) {
-      getUserMask("community", nano, node_config.usersDbConnection.dbname).then(function(mask) {
+      getUserMask("community", nano, node_config.corpusWebService.users).then(function(mask) {
         expect(mask).toBeDefined();
         expect(mask.fieldDBtype).toEqual("UserMask");
         expect(mask.username).toEqual("community");
@@ -95,7 +107,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server connection timed out, please try again later"]
+          userFriendlyErrors: ["Server errored, please report this 6339"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -104,7 +116,7 @@ describe("user routes", function() {
     });
 
     it("should return a bleached user mask for users by default", function(done) {
-      getUserMask("teammatetiger", nano, node_config.usersDbConnection.dbname).then(function(mask) {
+      getUserMask("teammatetiger", nano, node_config.corpusWebService.users).then(function(mask) {
         expect(mask).toBeDefined();
         expect(mask.fieldDBtype).toEqual("UserMask");
         expect(mask.username).toEqual("teammatetiger");
@@ -119,7 +131,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server connection timed out, please try again later"]
+          userFriendlyErrors: ["Server errored, please report this 6339"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -133,7 +145,7 @@ describe("user routes", function() {
   xdescribe("close enough requests", function() {
 
     it("should be case insensitive", function(done) {
-      getUserMask("LingLlama", nano, node_config.usersDbConnection.dbname)
+      getUserMask("LingLlama", nano, node_config.corpusWebService.users)
         .then(function(results) {
           expect(results).toBeDefined();
           expect(results.username).toEqual("lingllama");
@@ -153,7 +165,7 @@ describe("user routes", function() {
   describe("sanitize requests", function() {
 
     it("should return 404 if username is too short", function(done) {
-      getUserMask("aa", nano, node_config.usersDbConnection.dbname)
+      getUserMask("aa", nano, node_config.corpusWebService.users)
         .then(function(results) {
           console.log(mask);
           expect(true).toBeFalsy();
@@ -170,7 +182,7 @@ describe("user routes", function() {
     it("should return 404 if username is not a string", function(done) {
       getUserMask({
           "not": "astring"
-        }, nano, node_config.usersDbConnection.dbname)
+        }, nano, node_config.corpusWebService.users)
         .then(function(results) {
           console.log(mask);
           expect(true).toBeFalsy();
@@ -185,7 +197,7 @@ describe("user routes", function() {
     }, specIsRunningTooLong);
 
     it("should return 404 if username contains invalid characters", function(done) {
-      getUserMask("a.*-haaha script injection attack attempt file:///some/try", nano, node_config.usersDbConnection.dbname)
+      getUserMask("a.*-haaha script injection attack attempt file:///some/try", nano, node_config.corpusWebService.users)
         .then(function(results) {
           console.log(mask);
           expect(true).toBeFalsy();

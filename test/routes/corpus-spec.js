@@ -8,12 +8,24 @@ var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
 var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
 var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
 
-var connect = node_config.usersDbConnection.protocol + couch_keys.username + ":" +
-  couch_keys.password + "@" + node_config.usersDbConnection.domain +
-  ":" + node_config.usersDbConnection.port +
-  node_config.usersDbConnection.path;
-var nano = require("nano")(connect);
 
+var corpusWebServiceUrl = node_config.corpusWebService.protocol +
+  couch_keys.username + ":" +
+  couch_keys.password + "@" +
+  node_config.corpusWebService.domain +
+  ":" + node_config.corpusWebService.port +
+  node_config.corpusWebService.path;
+
+var acceptSelfSignedCertificates = {
+  strictSSL: false
+};
+if (deploy_target === "production") {
+  acceptSelfSignedCertificates = {};
+}
+var nano = require("nano")({
+  url: corpusWebServiceUrl,
+  requestDefaults: acceptSelfSignedCertificates
+});
 
 var SAMPLE_USER_MASK = new UserMask({
   fieldDBtype: "UserMask",
@@ -254,7 +266,7 @@ describe("corpus routes", function() {
         }, function(reason) {
           expect(reason).toBeDefined();
           expect(reason.status).toEqual(500);
-          expect(reason.userFriendlyErrors[0]).toEqual("Server connection timed out, please try again later");
+          expect(reason.userFriendlyErrors[0]).toEqual("Server errored, please report this 6339");
         }).fail(function(exception) {
           console.log(exception.stack);
           expect(exception).toBeUndefined();
