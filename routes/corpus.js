@@ -69,7 +69,7 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
       }
       corpusMask = new CorpusMask(corpusMask);
       if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
-        corpusMask.copyright = corpusMask.team.username;
+        corpusMask.copyright = corpusMask.team.name;
       }
       // console.log("Corpus mask ", corpusMask.team.toJSON());
       console.log(new Date() + " teams's gravatar in corpus.json " + corpusMask.team.gravatar);
