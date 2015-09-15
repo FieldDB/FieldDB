@@ -74,7 +74,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          userFriendlyErrors: ["Server connection timed out, please try again later"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -95,7 +95,7 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          userFriendlyErrors: ["Server connection timed out, please try again later"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -119,13 +119,33 @@ describe("user routes", function() {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
           status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          userFriendlyErrors: ["Server connection timed out, please try again later"]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toBeUndefined();
       }).done(done);
 
+    }, specIsRunningTooLong);
+
+  });
+
+  xdescribe("close enough requests", function() {
+
+    it("should be case insensitive", function(done) {
+      getUserMask("LingLlama", nano, node_config.usersDbConnection.dbname)
+        .then(function(results) {
+          expect(results).toBeDefined();
+          expect(results.username).toEqual("lingllama");
+          expect(results.gravatar).toEqual("54b53868cb4d555b804125f1a3969e87");
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.status).toEqual(404);
+          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toBeUndefined();
+        }).done(done);
     }, specIsRunningTooLong);
 
   });
@@ -179,23 +199,6 @@ describe("user routes", function() {
         }).done(done);
     }, specIsRunningTooLong);
 
-    it("should be case insensitive", function(done) {
-      getUserMask("LingLlama", nano, node_config.usersDbConnection.dbname)
-        .then(function(results) {
-          expect(results).toBeDefined();
-          expect(results.username).toEqual("lingllama");
-          expect(results.gravatar).toEqual("54b53868cb4d555b804125f1a3969e87");
-        }, function(reason) {
-          expect(reason).toBeDefined();
-          expect(reason.status).toEqual(404);
-          expect(reason.userFriendlyErrors[0]).toEqual("This is a strange username, are you sure you didn't mistype it?");
-        }).fail(function(exception) {
-          console.log(exception.stack);
-          expect(exception).toBeUndefined();
-        }).done(done);
-    }, specIsRunningTooLong);
-
   });
-
 
 });

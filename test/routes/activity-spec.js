@@ -46,7 +46,7 @@ describe("activity routes", function() {
 
   });
 
-  describe("normal requests", function() {
+  xdescribe("normal requests", function() {
 
     it("should return heat map data from the sample activity feeds", function(done) {
       activityHeatMap("lingllama-communitycorpus", nano).then(function(results) {
@@ -98,6 +98,25 @@ describe("activity routes", function() {
 
   });
 
+  xdescribe("close enough requests", function() {
+
+    it("should use lowercase dbname", function(done) {
+      activityHeatMap("LingLlama-communitycorpus", nano).then(function(results) {
+        expect(results).toBeDefined();
+        expect(results.rows).toBeDefined();
+        expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
+      }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should accept activity feed dbname", function(done) {
+      activityHeatMap("lingllama-communitycorpus-activity_feed", nano).then(function(results) {
+        expect(results).toBeDefined();
+        expect(results.rows).toBeDefined();
+        expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
+      }).done(done);
+    }, specIsRunningTooLong);
+  });
+
   describe("sanitize requests", function() {
 
     it("should return empty data if dbname is too short", function(done) {
@@ -125,22 +144,7 @@ describe("activity routes", function() {
         expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
-
-    it("should use lowercase dbname", function(done) {
-      activityHeatMap("LingLlama-communitycorpus", nano).then(function(results) {
-        expect(results).toBeDefined();
-        expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
-      }).done(done);
-    }, specIsRunningTooLong);
-
-    it("should accept activity feed dbname", function(done) {
-      activityHeatMap("lingllama-communitycorpus-activity_feed", nano).then(function(results) {
-        expect(results).toBeDefined();
-        expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
-      }).done(done);
-    }, specIsRunningTooLong);
   });
+
 
 });

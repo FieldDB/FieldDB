@@ -53,6 +53,11 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
         } else if (error.code === "ETIMEDOUT") {
           error.status = 500;
           userFriendlyErrors = ["Server timed out, please try again later"];
+        } else if (error.code === "ENOTFOUND" && error.syscall === "getaddrinfo") {
+          error.status = 500;
+          userFriendlyErrors = ["Server connection timed out, please try again later"];
+        } else {
+          console.log("The server errored when looking up " + dbname, error);
         }
         delete error.uri;
         deferred.reject({

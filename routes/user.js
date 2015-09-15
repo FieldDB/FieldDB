@@ -51,12 +51,18 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
         } else if (error.code === "ETIMEDOUT") {
           error.status = 500;
           userFriendlyErrors = ["Server timed out, please try again later"];
-        } else if (error.statusCode === 502){
+        } else if (error.statusCode === 502) {
           error.status = 500;
+          userFriendlyErrors = ["Server errored, please report this 36339"];
+        } else if (error.code === "ENOTFOUND" && error.syscall === "getaddrinfo") {
+          error.status = 500;
+          userFriendlyErrors = ["Server connection timed out, please try again later"];
+        } else {
+          console.log("The server errored when looking up " + dbname, error);
         }
         deferred.reject({
           status: error.status,
-          error: error,
+          // error: error,
           userFriendlyErrors: userFriendlyErrors
         });
         return;
