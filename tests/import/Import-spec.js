@@ -616,7 +616,6 @@ describe("api/import/Import", function() {
     var dbname = "testingcorpusinimport-firstcorpus";
     var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
     corpus.dbname = dbname;
-    corpus.confidential.secretkey = "abc123";
 
     it("should error if a options are not passed in", function(done) {
       var importer = new Import();
@@ -675,7 +674,7 @@ describe("api/import/Import", function() {
         expect(importer.corpus).toBeDefined();
         expect(importer.corpus.confidential).toBeDefined();
         expect(importer.corpus.confidential.encrypt).toBeDefined();
-        expect(importer.corpus.confidential.secretkey).toEqual("abc123");
+        expect(importer.corpus.confidential.secretkey.length).toBeGreaterThan(14);
 
         expect(importer.rawText).toBeDefined();
 

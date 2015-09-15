@@ -62,9 +62,9 @@ describe("Corpus", function() {
       var corpus;
       corpus = new Corpus(Corpus.prototype.defaults);
       expect(corpus.confidential).toBeDefined();
-      expect(corpus.confidential.secretKey).toBeDefined();
-      // expect(corpus.confidential.secretKey.length).toEqual(45);
-      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
+      expect(corpus.confidential.secretkey).toBeDefined();
+      // expect(corpus.confidential.secretkey.length).toEqual(45);
+      expect(corpus.confidential.secretkey.length).toBeGreaterThan(10);
     });
 
   });
@@ -317,7 +317,7 @@ describe("Corpus", function() {
     it("should update a speaker to have all the current corpus speakerFields in the same order", function(done) {
       expect(corpus.confidential).toBeDefined();
       expect(corpus.confidential.secretkey).toBeDefined();
-      expect(corpus.confidential.secretKey.length).toBeGreaterThan(10);
+      expect(corpus.confidential.secretkey.length).toBeGreaterThan(10);
 
       corpus.newSpeaker().then(function(speaker) {
         corpus.debug(speaker);
