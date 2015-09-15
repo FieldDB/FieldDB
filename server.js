@@ -21,11 +21,23 @@ var getUserMask = require("./routes/user").getUserMask;
 var getCorpusMask = require("./routes/corpus").getCorpusMask;
 var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
 
-var connect = node_config.usersDbConnection.protocol + couch_keys.username + ":" +
-  couch_keys.password + "@" + node_config.usersDbConnection.domain +
-  ":" + node_config.usersDbConnection.port +
-  node_config.usersDbConnection.path;
-var nano = require("nano")(connect);
+var corpusWebServiceUrl = node_config.corpusWebService.protocol +
+  couch_keys.username + ":" +
+  couch_keys.password + "@" +
+  node_config.corpusWebService.domain +
+  ":" + node_config.corpusWebService.port +
+  node_config.corpusWebService.path;
+
+var acceptSelfSignedCertificates = {
+  strictSSL: false
+};
+if (deploy_target === "production") {
+  acceptSelfSignedCertificates = {};
+}
+var nano = require("nano")({
+  url: corpusWebServiceUrl,
+  requestDefaults: acceptSelfSignedCertificates
+});
 
 
 var app = express();
@@ -117,7 +129,7 @@ app.get("/:username/:titleAsUrl", function(req, res) {
     });
     return;
   }
-  getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(userMask) {
+  getUserMask(req.params.username, nano, node_config.corpusWebService.users).then(function(userMask) {
     getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
       res.render("corpus", {
         corpusMask: mask
@@ -163,15 +175,23 @@ app.get("/:username", function(req, res) {
     return;
   }
 
-  getUserMask(req.params.username, nano, node_config.usersDbConnection.dbname).then(function(mask) {
+  getUserMask(req.params.username, nano, node_config.corpusWebService.users).then(function(mask) {
     res.render("user", {
       userMask: mask
     });
   }, function(reason) {
     res.status(reason.status);
-    res.render("404", {
-      userFriendlyErrors: reason.userFriendlyErrors
-    });
+    if (reason.status >= 500) {
+      res.render("500", {
+        status: reason.status,
+        userFriendlyErrors: reason.userFriendlyErrors,
+      });
+    } else {
+      res.render("404", {
+        status: reason.status,
+        userFriendlyErrors: reason.userFriendlyErrors,
+      });
+    }
   }).fail(function(exception) {
     console.log(exception.stack);
     res.status(500);
