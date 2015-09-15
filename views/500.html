@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Page Not Found :(</title>
+    <title>Internal Server Error</title>
     <style>
       ::-moz-selection {
         background: #b3d4fc;
@@ -144,18 +144,17 @@
   </head>
   <body>
     <div class="">
-      <h1><a href ="http://lingsync.org"><img src="site/img/lingsync-logo.png" border="0"></a><br/> Not found </h1>
-
+      <h1><a href ="http://lingsync.org"><img src="site/img/lingsync-logo.png" border="0"></a><br/> Internal Server Error </h1>
+      {{#each userFriendlyErrors}}
+        <p>{{this}}</p>
+      {{/each}}
       <img class="failwhale" src="http://www.yiyinglu.com/failwhale/images/failwhale.gif">
+      {{#unless userFriendlyErrors}} 
+        <p>Sorry, there was an internal server error while processing your request.</p>
+      {{/unless}}
 
-      <p>Sorry, but the page you are looking for was not found.</p>
-      <p>It looks like this was the result of either:</p>
-      <ul>
-        <li>a mistyped address</li>
-        <li>an out-of-date link</li>
-      </ul>
 
-      Please <a href="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform"> Contact Us</a> or maybe you can look on <a href="http://lingsync.org">LingSync.org</a>
+      Please contact us about this error, or try again later.
 
       <iframe height="800" width="100%" border="0" src="https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform">
       </iframe>

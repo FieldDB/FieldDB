@@ -1,7 +1,4 @@
 #!/bin/bash
 
-pm2 stop server.js
-
-cd $FIELDDB_HOME/FieldDBWebServer
-bash switch_to_develop_easy_setup.sh
+forever stop server.js
 

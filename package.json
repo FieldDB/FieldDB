@@ -1,17 +1,51 @@
 {
-  "name": "FieldDBWebServer",
-  "version": "3.0.21",
+  "name": "fielddb-webserver",
+  "version": "3.21.15",
+  "description": "Web site for FieldDB corpora pages.",
+  "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
     "type": "git",
-    "url": "git://github.com/OpenSourceFieldlinguistics/FieldDBWebServer.git"
+    "url": "git://github.com/FieldDB/FieldDBWebServer.git"
   },
+  "bugs": {
+    "url": "https://github.com/FieldDB/FieldDB/issues"
+  },
+  "keywords": [
+    "fielddb",
+    "website"
+  ],
+  "author": "FieldDB contributors <info@fielddb.org>",
+  "contributors": [
+    "cesine <cesine@yahoo.com>",
+    "Tobin Skinner <tobin.skinner@gmail.com>",
+    "Josh <josh.horner@gmail.com>",
+    "hisakonog <hisakonog@gmail.com>",
+    "Fieldlinguist <info@fieldlinguist.com>"
+  ],
   "dependencies": {
-    "MD5": "~1.0.3",
-    "express": "3.3.7",
-    "fielddb": "3.0.21",
-    "forever": "latest",
-    "jade": "~0.31.2",
-    "nano": "6.1.2",
-    "q": "~0.9.6"
-  }
+    "body-parser": "^1.13.3",
+    "consolidate": "^0.13.1",
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "fielddb": "https://github.com/FieldDB/FieldDB.git",
+    "forever": "^0.15.1",
+    "handlebars": "^4.0.2",
+    "method-override": "^2.3.5",
+    "morgan": "^1.6.1",
+    "nano": "^6.1.5",
+    "q": "^1.2.0",
+    "serve-favicon": "^2.3.0"
+  },
+  "main": "./service.js",
+  "bin": {
+    "fielddb-web": "./server.js"
+  },
+  "engines": {
+    "node": "~0.8 || ~0.10 || ~0.12"
+  },
+  "scripts": {
+    "test": "jasmine-node test"
+  },
+  "license": "Apache-2.0"
 }
