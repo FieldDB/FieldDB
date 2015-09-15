@@ -211,12 +211,12 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   gravatar: {
     get: function() {
-      if (this.parent && this.parent.team) {
-        if (this.parent.team.gravatar) {
-          this._gravatar = this.parent.team.gravatar;
-        } else {
-          this._gravatar = this.parent.team.buildGravatar(this.dbname);
-        }
+      if (this.parent && this.parent.gravatar) {
+        this._gravatar = this.parent.gravatar;
+        // } else if (this.parent.team.gravatar) { // Dont use team gravatars for corpus connection gravatars anymore
+        //   this._gravatar = this.parent.team.gravatar;
+      } else if (!this._gravatar && this.dbname && this.parent.team && typeof this.parent.team.buildGravatar === "function") {
+        this._gravatar = this.parent.team.buildGravatar(this.dbname);
       }
       return this._gravatar;
     },
