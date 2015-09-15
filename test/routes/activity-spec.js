@@ -28,19 +28,19 @@ describe("activity routes", function() {
 
   describe("invalid requests", function() {
 
-    it("should return fossil data if dbname is not provided", function(done) {
+    it("should return empty data if dbname is not provided", function(done) {
       activityHeatMap().then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(14);
+        expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
 
-    it("should return fossil data if nano is not provided", function(done) {
+    it("should return empty data if nano is not provided", function(done) {
       activityHeatMap("lingllama-communitycorpus").then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(14);
+        expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -100,29 +100,29 @@ describe("activity routes", function() {
 
   describe("sanitize requests", function() {
 
-    it("should return fossil data if dbname is too short", function(done) {
+    it("should return empty data if dbname is too short", function(done) {
       activityHeatMap("aa", nano).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(14);
+        expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
 
-    it("should return fossil data if dbname is not a string", function(done) {
+    it("should return empty data if dbname is not a string", function(done) {
       activityHeatMap({
         "not": "astring"
       }, nano).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(14);
+        expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
 
-    it("should return fossil data if dbname contains invalid characters", function(done) {
+    it("should return empty data if dbname contains invalid characters", function(done) {
       activityHeatMap("a.*-haaha script injection attack attempt file:///some/try", nano).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(14);
+        expect(results.rows.length).toEqual(0);
       }).done(done);
     }, specIsRunningTooLong);
 
