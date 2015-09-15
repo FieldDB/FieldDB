@@ -121,6 +121,16 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
     });
     return deferred.promise;
   }
+  if (!titleAsUrl) {
+    deferred.reject({
+      status: 404,
+      userFriendlyErrors: ["This is a strange title for a database, are you sure you didn't mistype it?"]
+    });
+    return deferred.promise;
+  } else {
+    titleAsUrl = titleAsUrl + "";
+    titleAsUrl = titleAsUrl.toLowerCase();
+  }
   if (!userMask.corpora || !userMask.corpora.length) {
     deferred.reject({
       status: 404,
@@ -138,18 +148,21 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
 
   var matchingCorpusConnections = userMask.corpora.fuzzyFind("titleAsUrl", titleAsUrl);
   if (!matchingCorpusConnections || !matchingCorpusConnections.length) {
-    deferred.reject({
-      status: 404,
-      userFriendlyErrors: ["Couldn't find " + titleAsUrl + " among " + userMask.username + "'s  " + userMask.corpora.length + " corpora."],
-      error: {}
-    });
-    return deferred.promise;
+    matchingCorpusConnections = userMask.corpora.fuzzyFind("dbname", titleAsUrl);
+    if (!matchingCorpusConnections || !matchingCorpusConnections.length) {
+      deferred.reject({
+        status: 404,
+        userFriendlyErrors: ["Couldn't find " + titleAsUrl + " among " + userMask.username + "'s  " + userMask.corpora.length + " corpora."],
+        error: {}
+      });
+      return deferred.promise;
+    }
   }
 
   var bestMatch;
   matchingCorpusConnections.map(function(connection) {
     // handle situation where the user has access to >1 corpora by other users which have the same titleAsUrl
-    if (connection.titleAsUrl === titleAsUrl && connection.dbname && connection.dbname.indexOf(userMask.username) === 0) {
+    if (connection.titleAsUrl.toLowerCase().indexOf(titleAsUrl) > -1 && connection.dbname && connection.dbname.indexOf(userMask.username) === 0) {
       bestMatch = connection;
     } else {
       console.log(connection.titleAsUrl + " wasnt the best match for " + titleAsUrl, connection.dbname);
