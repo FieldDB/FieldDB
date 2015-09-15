@@ -60,7 +60,7 @@ CORS.makeCORSRequest = function(options) {
         deferred.reject(response);
         return;
       }
-      console.log("Server response, "+ response);
+      console.log("Server response, " + response);
       deferred.resolve(response);
     });
   });
