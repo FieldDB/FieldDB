@@ -30,8 +30,18 @@ var User = function User(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "User";
   }
+  if (options && options.nodejs) {
+    this.todo("creating user from express body, verify options are sanitized ");
+    delete options.nodejs;
+    delete options.password;
+  }
+
   this.debug("Constructing User length: ", options);
   UserMask.apply(this, arguments);
+
+  if (this.username) {
+    this.id = this.username;
+  }
 };
 
 User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ {
