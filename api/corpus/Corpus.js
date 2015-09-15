@@ -342,7 +342,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   defaults: {
     get: function() {
       var corpusTemplate = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
-      corpusTemplate.confidential.secretKey = FieldDBObject.uuidGenerator();
+      corpusTemplate.confidential.secretkey = FieldDBObject.uuidGenerator();
       return corpusTemplate;
     },
     set: function() {}
@@ -1255,6 +1255,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       }
       if (this.team && typeof this.team.toJSON === "function") {
         json.team = this.team.toJSON();
+      }
+      if (this.confidential && typeof this.confidential.toJSON === "function") {
+        json.confidential = this.confidential.toJSON();
       }
       if (this.activityConnection && typeof this.activityConnection.toJSON === "function") {
         json.activityConnection = this.activityConnection.toJSON();

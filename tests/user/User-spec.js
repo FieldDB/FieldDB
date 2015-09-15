@@ -140,6 +140,7 @@ describe("User ", function() {
           researchInterest: "",
           affiliation: "",
           description: "",
+          corpora: [],
           fields: [],
           api: "users"
         },

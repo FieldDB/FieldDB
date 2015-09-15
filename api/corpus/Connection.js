@@ -211,12 +211,12 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   gravatar: {
     get: function() {
-      if (this.parent && this.parent.team) {
-        if (this.parent.team.gravatar) {
-          this._gravatar = this.parent.team.gravatar;
-        } else {
-          this._gravatar = this.parent.team.buildGravatar(this.dbname);
-        }
+      if (this.parent && this.parent.gravatar) {
+        this._gravatar = this.parent.gravatar;
+        // } else if (this.parent.team.gravatar) { // Dont use team gravatars for corpus connection gravatars anymore
+        //   this._gravatar = this.parent.team.gravatar;
+      } else if (!this._gravatar && this.dbname && this.parent.team && typeof this.parent.team.buildGravatar === "function") {
+        this._gravatar = this.parent.team.buildGravatar(this.dbname);
       }
       return this._gravatar;
     },
@@ -256,6 +256,33 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         }
       }
       this._corpusid = value;
+    }
+  },
+
+  description: {
+    get: function() {
+      if (this.parent && this.parent.description) {
+        this._description = this.parent.description;
+        if (this._description.length > 220) {
+          this._description = this._description.substring(0, 200) + "...";
+        }
+        this.debug("returned this.parent.description", this.parent.id);
+      }
+      return this._description;
+    },
+    set: function(value) {
+      if (value === this._description) {
+        return;
+      }
+      if (!value) {
+        delete this._description;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      this._description = value;
     }
   },
 
