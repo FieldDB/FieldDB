@@ -1,14 +1,8 @@
+var nanoErrorHandler = require("./../lib/error-handler").nanoErrorHandler;
 var User = require("fielddb/api/user/User").User;
 var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
-
-var cleanErrorStatus = function(status) {
-  if (status && status < 600) {
-    return status;
-  }
-  return "";
-};
 
 var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) {
   var deferred = Q.defer();
@@ -41,30 +35,10 @@ var getUserMask = function getUserMask(username, nano, usersDbConnectionDBname) 
 
     var usersdb = nano.db.use(usersDbConnectionDBname);
     usersdb.get(username, function(error, userPrivateDetails) {
-      if (error) {
-        console.log(new Date() + " missing user " + username, error);
-        error = error || {};
-        error.status = cleanErrorStatus(error.statusCode) || 500;
-        var userFriendlyErrors = ["User not found"];
-        if (error.code === "ECONNREFUSED") {
-          userFriendlyErrors = ["Server errored, please report this 6339"];
-        } else if (error.code === "ETIMEDOUT") {
-          error.status = 500;
-          userFriendlyErrors = ["Server timed out, please try again later"];
-        } else if (error.statusCode === 502) {
-          error.status = 500;
-          userFriendlyErrors = ["Server errored, please report this 36339"];
-        } else if (error.code === "ENOTFOUND" && error.syscall === "getaddrinfo") {
-          error.status = 500;
-          userFriendlyErrors = ["Server connection timed out, please try again later"];
-        } else {
-          console.log("The server errored when looking up " + dbname, error);
-        }
-        deferred.reject({
-          status: error.status,
-          // error: error,
-          userFriendlyErrors: userFriendlyErrors
-        });
+      if (error || !userPrivateDetails) {
+        console.log(new Date() + " username lookup failed " + username, error);
+        var reason = nanoErrorHandler(error, ["User not found."]);
+        deferred.reject(reason);
         return;
       }
 

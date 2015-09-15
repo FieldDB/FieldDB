@@ -145,10 +145,14 @@
   <body>
     <div class="">
       <h1><a href ="http://lingsync.org"><img src="site/img/lingsync-logo.png" border="0"></a><br/> Internal Server Error </h1>
-
+      {{#each userFriendlyErrors}}
+        <p>{{this}}</p>
+      {{/each}}
       <img class="failwhale" src="http://www.yiyinglu.com/failwhale/images/failwhale.gif">
+      {{#unless userFriendlyErrors}} 
+        <p>Sorry, there was an internal server error while processing your request.</p>
+      {{/unless}}
 
-      <p>Sorry, there was an internal server error while processing your request.</p>
 
       Please contact us about this error, or try again later.
 

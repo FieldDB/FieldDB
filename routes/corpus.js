@@ -1,14 +1,8 @@
+var nanoErrorHandler = require("./../lib/error-handler").nanoErrorHandler;
 var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var getTeamMask = require("./team").getTeamMask;
 var Q = require("q");
-
-var cleanErrorStatus = function(status) {
-  if (status && status < 600) {
-    return status;
-  }
-  return "";
-};
 
 var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = true;
 
@@ -45,26 +39,8 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
     corpusdb.get("corpus", function(error, corpusMask) {
       if (error || !corpusMask) {
         console.log(new Date() + " corpusMask was missing " + dbname);
-        error = error || {};
-        error.status = cleanErrorStatus(error.statusCode) || 500;
-        var userFriendlyErrors = ["Database " + dbname + " details not found"];
-        if (error.code === "ECONNREFUSED") {
-          userFriendlyErrors = ["Server errored, please report this 6339"];
-        } else if (error.code === "ETIMEDOUT") {
-          error.status = 500;
-          userFriendlyErrors = ["Server timed out, please try again later"];
-        } else if (error.code === "ENOTFOUND" && error.syscall === "getaddrinfo") {
-          error.status = 500;
-          userFriendlyErrors = ["Server connection timed out, please try again later"];
-        } else {
-          console.log("The server errored when looking up " + dbname, error);
-        }
-        delete error.uri;
-        deferred.reject({
-          status: error.status,
-          error: error.error,
-          userFriendlyErrors: userFriendlyErrors
-        });
+        var reason = nanoErrorHandler(error, ["Database " + dbname + " details not found."]);
+        deferred.reject(reason);
         return;
       }
 

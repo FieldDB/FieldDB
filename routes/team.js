@@ -1,3 +1,4 @@
+var nanoErrorHandler = require("./../lib/error-handler").nanoErrorHandler;
 var Team = require("fielddb/api/user/Team").Team;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
@@ -42,20 +43,8 @@ var getTeamMask = function(dbname, nano) {
     corpusdb.get("team", function(error, teamMask) {
       if (error || !teamMask) {
         console.log(new Date() + " teamMask was missing " + dbname);
-        error = error || {};
-        error.status = cleanErrorStatus(error.statusCode) || 500;
-        var userFriendlyErrors = ["Database details not found"];
-        if (error.code === "ECONNREFUSED") {
-          userFriendlyErrors = ["Server errored, please report this 6339"];
-        } else if (error.code === "ETIMEDOUT") {
-          error.status = 500;
-          userFriendlyErrors = ["Server timed out, please try again later"];
-        }
-        deferred.reject({
-          status: error.status,
-          error: error,
-          userFriendlyErrors: userFriendlyErrors
-        });
+        var reason = nanoErrorHandler(error, ["Team " + dbname + " details not found."]);
+        deferred.reject(reason);
         return;
       }
 
