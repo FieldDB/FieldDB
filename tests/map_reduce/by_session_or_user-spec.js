@@ -6,7 +6,7 @@ var BY_USER_MAP_REDUCE = mapReduceFactory({
   mapString: byUserModifiedMapString
 });
 
-var SAMPLE_DATA = require("../../sample_data/datum_v1.22.1.json");
+var SAMPLE_DATA = JSON.parse(JSON.stringify(require("../../sample_data/datum_v1.22.1.json")));
 // var specIsRunningTooLong = 5000;
 
 describe("MapReduce by_session_or_user", function() {
@@ -65,30 +65,45 @@ describe("MapReduce by_session_or_user", function() {
   describe("support data v1.22", function() {
 
     it("should have a preview", function() {
+      expect(SAMPLE_DATA[0].session._id).toEqual("763568EE-BB24-48D2-BEAD-D46E22D11418");
+      expect(SAMPLE_DATA[1].session._id).toEqual("f840a6c3f41393f4ab2f1cff25000bf2");
+
       SAMPLE_DATA.map(BY_USER_MAP_REDUCE.map);
-      expect(BY_USER_MAP_REDUCE.rows.length).toEqual(SAMPLE_DATA.length);
+      expect(BY_USER_MAP_REDUCE.rows.length).toEqual(SAMPLE_DATA.length * 2);
+
       expect(BY_USER_MAP_REDUCE.rows[0].key).toEqual("sapir");
-     
+
       expect(SAMPLE_DATA[0].dateModified).toEqual("\"2012-09-26T14:13:03.928Z\"");
       expect(BY_USER_MAP_REDUCE.rows[0].value[0].toString()).toEqual("Wed Sep 26 2012 10:13:03 GMT-0400 (EDT)");
-      
+
       expect(SAMPLE_DATA[0].dateEntered).toEqual("\"2012-09-26T13:51:49.463Z\"");
       expect(BY_USER_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 09:51:49 GMT-0400 (EDT)");
-     
-      expect(BY_USER_MAP_REDUCE.rows[0].value[1]).toEqual("D3DE2F48-451F-4E1D-809C-AD5D9D7D8120");
+
+      expect(BY_USER_MAP_REDUCE.rows[0].value[1]).toEqual(SAMPLE_DATA[0]._id);
       expect(BY_USER_MAP_REDUCE.rows[0].value[3]).toEqual("Jaunpa much'asqami kani.");
-    
-      expect(BY_USER_MAP_REDUCE.rows.length).toEqual(SAMPLE_DATA.length);
-      expect(BY_USER_MAP_REDUCE.rows[1].key).toEqual("testingspreadsheet");
-     
+
+      expect(BY_USER_MAP_REDUCE.rows[1].key).toEqual(SAMPLE_DATA[0].session._id);
+      expect(BY_USER_MAP_REDUCE.rows[1].value[0].toString()).toEqual(BY_USER_MAP_REDUCE.rows[0].value[2].toString());
+      expect(BY_USER_MAP_REDUCE.rows[1].value[1]).toEqual(BY_USER_MAP_REDUCE.rows[0].value[1]);
+      expect(BY_USER_MAP_REDUCE.rows[1].value[2].toString()).toEqual(BY_USER_MAP_REDUCE.rows[0].value[0].toString());
+      expect(BY_USER_MAP_REDUCE.rows[1].value[3]).toEqual(BY_USER_MAP_REDUCE.rows[0].value[3]);
+
+      expect(BY_USER_MAP_REDUCE.rows[2].key).toEqual("testingspreadsheet");
+
       expect(SAMPLE_DATA[1].dateModified).toEqual(1428030685907);
-      expect(BY_USER_MAP_REDUCE.rows[1].value[0].toString()).toEqual("Sat Jan 03 2015 01:29:36 GMT-0500 (EST)");
-      
+      expect(BY_USER_MAP_REDUCE.rows[2].value[0].toString()).toEqual("Sat Jan 03 2015 01:29:36 GMT-0500 (EST)");
+
       expect(SAMPLE_DATA[1].dateEntered).toEqual("2014-12-13T10:21:27.777Z");
-      expect(BY_USER_MAP_REDUCE.rows[1].value[2].toString()).toEqual("Sat Jan 03 2015 01:29:36 GMT-0500 (EST)");
-     
-      expect(BY_USER_MAP_REDUCE.rows[1].value[1]).toEqual("af3e7eaca2f20158c2a89c7da704c1a5");
-      expect(BY_USER_MAP_REDUCE.rows[1].value[3]).toEqual("testing audio upload details come back");
+      expect(BY_USER_MAP_REDUCE.rows[2].value[2].toString()).toEqual("Sat Jan 03 2015 01:29:36 GMT-0500 (EST)");
+
+      expect(BY_USER_MAP_REDUCE.rows[2].value[1]).toEqual("af3e7eaca2f20158c2a89c7da704c1a5");
+      expect(BY_USER_MAP_REDUCE.rows[2].value[3]).toEqual("testing audio upload details come back");
+
+      expect(BY_USER_MAP_REDUCE.rows[3].key).toEqual(SAMPLE_DATA[1].session._id);
+      expect(BY_USER_MAP_REDUCE.rows[3].value[0].toString()).toEqual(BY_USER_MAP_REDUCE.rows[2].value[2].toString());
+      expect(BY_USER_MAP_REDUCE.rows[3].value[1]).toEqual(BY_USER_MAP_REDUCE.rows[2].value[1]);
+      expect(BY_USER_MAP_REDUCE.rows[3].value[2].toString()).toEqual("Thu Apr 02 2015 23:11:25 GMT-0400 (EDT)");
+      expect(BY_USER_MAP_REDUCE.rows[3].value[3]).toEqual(BY_USER_MAP_REDUCE.rows[2].value[3]);
     });
 
   });

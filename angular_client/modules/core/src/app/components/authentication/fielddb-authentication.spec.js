@@ -3,7 +3,11 @@
 var debugMode = false;
 var specIsRunningTooLong = 5000;
 
-localStorage.clear();
+try {
+  localStorage.clear();
+} catch (e) {
+  console.log("localStorage isnt defiend here");
+}
 
 describe("Directive: fielddb-authentication", function() {
 
