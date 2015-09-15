@@ -4,6 +4,9 @@ cd $FIELDDB_HOME/FieldDBWebServer
 bash switch_to_producti.sh
 
 cd $FIELDDB_HOME/FieldDBWebServer
-pm2 \
+forever \
 start \
+-al $FIELDDB_HOME/logs/fielddbwww.log \
+-ao $FIELDDB_HOME/logs/fielddbwwwout.log \
+-ae $FIELDDB_HOME/logs/fielddbwwwerr.log \
 server.js
