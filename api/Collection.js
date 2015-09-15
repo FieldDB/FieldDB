@@ -309,14 +309,14 @@ Collection.prototype = Object.create(Object.prototype, {
       this.debug("Found total matches ", results.length);
       // If this is fuzzy find and there are multiple matches, move the exact match first.
       if (results && results.length > 1 && fuzzy) {
-        this.debug("lets look for the best result where " + optionalKeyToIdentifyItem + " = " + arg2, results.length)
+        this.debug("lets look for the best result where " + optionalKeyToIdentifyItem + " = " + arg2, results.length);
         for (var i = results.length - 1; i >= 0; i--) {
           if (i !== 0 && results[i] && results[i][optionalKeyToIdentifyItem] === arg2) {
             var bestMatch = results.splice(i);  
-            this.debug("a pefect match  " , bestMatch)
+            this.debug("a pefect match  " , bestMatch);
             results.unshift(bestMatch[0]);
           }
-        };
+        }
       }
       return results;
     }
