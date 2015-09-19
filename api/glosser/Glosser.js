@@ -248,7 +248,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         if (this.corpus.prefs && this.corpus.prefs.glosserURL) {
           glosserURL = this.corpus.prefs.glosserURL;
         } else {
-          glosserURL = this.corpus.url + "/_design/pages/_view/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "?group=true";
+          glosserURL = this.corpus.url + "/_design/data/_view/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "?group=true";
         }
       }
       var self = this;
