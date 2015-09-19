@@ -199,7 +199,6 @@ FieldDBObject.ignore = function(property, ignorelist) {
     return true;
   }
 };
-
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
 
@@ -421,6 +420,12 @@ FieldDBObject.uuidGenerator = function() {
   };
   return Date.now() + (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
 };
+
+FieldDBObject.regExpEscape = function(s) {
+  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").
+  replace(/\x08/g, "\\x08");
+};
+
 FieldDBObject.getHumanReadableTimestamp = function() {
   var today = new Date();
   var year = today.getFullYear();
