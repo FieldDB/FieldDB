@@ -6,7 +6,7 @@ var CORS = require("../CORS").CORS;
 // var CORS = require("../CORSNode").CORS;
 var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
-var _ = require("underscore");
+var _ = require("lodash");
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
 var morphemeNGramsMapString = require("../../map_reduce_data/views/morpheme_n_grams/map").morpheme_n_grams;

@@ -42,11 +42,11 @@
     "btoa": "*",
     "diacritic": "0.0.2",
     "frb": "git://github.com/cesine/frb.git#contenteditable",
+    "lodash": "^2.4.1",
     "md5": "^2.0.0",
     "q": "1.2.0",
     "recordmp3js": "*",
-    "textgrid": "^2.2.0",
-    "underscore": "^1.8.3"
+    "textgrid": "^2.2.0"
   },
   "optionalDependancies": {
     "d3": "^3.5.6",

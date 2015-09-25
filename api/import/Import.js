@@ -16,7 +16,7 @@ var Session = require("./../datum/Session").Session;
 var TextGrid = require("textgrid").TextGrid;
 var X2JS = {};
 var Q = require("q");
-var _ = require("underscore");
+var _ = require("lodash");
 
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
