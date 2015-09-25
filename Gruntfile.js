@@ -68,7 +68,6 @@ module.exports = function(grunt) {
         options: {
           external: ["api/**/*.js"],
           basedir: "./api/"
-            // ignore: ["./node_modules/underscore/underscore.js"],
         }
       },
     },
@@ -128,7 +127,7 @@ module.exports = function(grunt) {
       src: "<%= browserify.src.dest %>",
       options: {
         specs: "<%= browserify.test.dest %>",
-        // vendor: ["libs/jquery-1.9.1.js", "libs/underscore.js"]
+        // vendor: ["libs/jquery-1.9.1.js"]
       }
     },
 
