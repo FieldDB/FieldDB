@@ -6,7 +6,6 @@ var CORS = require("../CORS").CORS;
 // var CORS = require("../CORSNode").CORS;
 var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
-var _ = require("lodash");
 
 // Load n grams map reduce which is used in both couchdb and in the codebase
 var morphemeNGramsMapString = require("../../map_reduce_data/views/morpheme_n_grams/map").morpheme_n_grams;
@@ -734,9 +733,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       var morphemeGroup = morphemesLine.split(/ +/);
       var glossGroups = [];
       if (!this.lexicon) {
-        return "";
-      }
-      if (!this.lexicon) {
         var corpusSize = 31; //TODO get corpus size another way. // app.get("corpus").datalists.models[app.get("corpus").datalists.models.length-1].get("datumIds").length;
         if (corpusSize > 30 && !Glosser.toastedUserToSync) {
           Glosser.toastedUserToSync = true;
@@ -747,23 +743,22 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
             this.popup("You have roughly " + corpusSize + " datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.", "alert-info", "AutoGlosser:");
           }
         }
-        return "";
       }
-      var lexiconNodes = this.lexicon;
       for (var group in morphemeGroup) {
         var morphemes = morphemeGroup[group].split("-");
         var glosses = [];
         for (var m in morphemes) {
+          if (!this.lexicon) {
+            glosses.push("?");
+            continue;
+          }
+          console.log("looking for morpheme " + morphemes[m]);
           // Take the first gloss for this morpheme
-          var matchingNode = _.max(lexiconNodes.where({
-            morpheme: morphemes[m]
-          }), function(node) {
-            return node.get("value");
-          });
-          //      self.debug(matchingNode);
+          var matchingNode = this.lexicon.find("morphemes", morphemes[m]);
           var gloss = "?"; // If there"s no matching gloss, use question marks
-          if (matchingNode) {
-            gloss = matchingNode.get("gloss");
+          this.warn(matchingNode);
+          if (matchingNode.length) {
+            gloss = matchingNode[0].gloss;
           }
           glosses.push(gloss);
         }
