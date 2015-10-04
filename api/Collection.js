@@ -3,11 +3,6 @@
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 
-var regExpEscape = function(s) {
-  return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, "\\$1").
-  replace(/\x08/g, "\\x08");
-};
-
 
 /**
  * @class An array backed collection that can look up elements loosely based on id or label.
@@ -57,7 +52,6 @@ var Collection = function Collection(json) {
 };
 
 Collection.notWorthSortingSize = 100;
-
 /** @lends Collection.prototype */
 Collection.prototype = Object.create(Object.prototype, {
   constructor: {
@@ -288,7 +282,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!searchingFor || !searchingFor.test || typeof searchingFor.test !== "function") {
         /* if not a regex, the excape it */
         if (searchingFor && searchingFor.indexOf && searchingFor.indexOf("/") !== 0) {
-          searchingFor = regExpEscape(searchingFor);
+          searchingFor = FieldDBObject.regExpEscape(searchingFor);
         }
         searchingFor = new RegExp("^" + searchingFor + "$");
       }

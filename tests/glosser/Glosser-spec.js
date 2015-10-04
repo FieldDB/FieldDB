@@ -636,6 +636,25 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	});
 
+
+	describe("glossing", function() {
+		it("should give placeholder glosses if lexicon is not defined", function() {
+			var glosser = new Glosser();
+			var datum = glosser.glossFinder("yeh kya hai?");
+
+			expect(datum).toEqual("? ? ?");
+		});
+
+		it("should give use the most likely gloss", function() {
+			var glosser = new Glosser();
+			glosser.lexicon = [];
+			glosser.lexicon.add({morphemes: "yeh", gloss: "this"});
+			glosser.lexicon.add({morphemes: "yeh", gloss: "DEMONS"});
+			var gloss = glosser.glossFinder("yeh kya hai?");
+
+			expect(gloss).toEqual("this ? ?");
+		});
+	});
 	describe("backward compatibility", function() {
 
 		it("should be backward compatible with prototype app", function() {

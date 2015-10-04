@@ -53,10 +53,12 @@ module.exports = function(grunt) {
           // "tests/data_list/*.js",
           // "tests/datum/*.js",
           // "tests/export/*.js",
+          // "!tests/glosser/*.js",
           // "tests/hotkey/*.js",
           // "tests/image/*.js",
           // "tests/import/*.js",
           // "tests/insert_unicode/*.js",
+          // "!tests/lexicon/*.js",
           // "tests/locales/*.js",
           // "tests/permission/*.js",
           // "tests/search/*.js",
@@ -66,7 +68,6 @@ module.exports = function(grunt) {
         options: {
           external: ["api/**/*.js"],
           basedir: "./api/"
-            // ignore: ["./node_modules/underscore/underscore.js"],
         }
       },
     },
@@ -126,7 +127,7 @@ module.exports = function(grunt) {
       src: "<%= browserify.src.dest %>",
       options: {
         specs: "<%= browserify.test.dest %>",
-        // vendor: ["libs/jquery-1.9.1.js", "libs/underscore.js"]
+        // vendor: ["libs/jquery-1.9.1.js"]
       }
     },
 
@@ -237,12 +238,12 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask("docs", ["jsdoc"]);
   grunt.registerTask("test", ["jasmine_node:dev", "browserify", "jasmine"]);
-  grunt.registerTask("build", ["jshint", "browserify"]);
-  grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify", "uglify"]);
+  grunt.registerTask("build", ["jshint", "browserify:src"]);
+  grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify:src", "uglify"]);
   grunt.registerTask("default", ["dist"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesApp"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetApp"]);
-  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify", "uglify", "docs", "fielddb-angular"]);
+  grunt.registerTask("travis", ["exec:jasmineAllTestsErrorWorkaround", "exec:updateFieldDBVersion", "jshint", "jasmine_node:travis", "browserify:src", "uglify", "docs", "fielddb-angular"]);
 
 };

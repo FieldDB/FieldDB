@@ -1,6 +1,6 @@
 {
   "name": "fielddb-spreadsheet",
-  "version": "3.21.15",
+  "version": "3.22.19",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.1",

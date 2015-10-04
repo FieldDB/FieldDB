@@ -16,7 +16,6 @@ var Session = require("./../datum/Session").Session;
 var TextGrid = require("textgrid").TextGrid;
 var X2JS = {};
 var Q = require("q");
-var _ = require("underscore");
 
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
@@ -2304,9 +2303,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
 
-      var mostLikelyImport = _.max(importTypeConfidenceMeasures, function(obj) {
-        return obj.confidence;
-      });
+      var mostLikelyImport;
+      for (var importType in importTypeConfidenceMeasures) {
+        if (!importTypeConfidenceMeasures.hasOwnProperty(importType)) {
+          continue;
+        }
+        if (!mostLikelyImport || mostLikelyImport.confidence < importTypeConfidenceMeasures[importType].confidence) {
+          mostLikelyImport = importTypeConfidenceMeasures[importType];
+        }
+      }
+
       this.importTypeConfidenceMeasures.mostLikely = mostLikelyImport;
       this.status = "";
       mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
