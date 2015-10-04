@@ -95,8 +95,8 @@ angular.module("fielddbAngular", [
   document.addEventListener("logout", function() {
     fieldDBApp.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
   }, false);
-  document.addEventListener("authenticate:fail", function() {
-    fieldDBApp.warn("user isn't able to see anything, show them the welcome page");
+  document.addEventListener("authenticateFail", function(reason) {
+    fieldDBApp.warn("user isn't able to see anything, show them the welcome page", reason);
     // fieldDBApp.authentication.error = "";
     console.log("  Redirecting the user to the welcome page");
     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/

@@ -236,7 +236,8 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
   };
 
-  document.addEventListener("authenticate:fail", function() {
+  document.addEventListener("authenticateFail", function(error) {
+    console.log("Login didnt work", error);
     $rootScope.clickSuccess = true;
     if ($rootScope.application) {
       $rootScope.application.warn("user isn't able to see anything, show them the welcome page");
@@ -692,7 +693,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
 
-  document.addEventListener("authenticate:success", function() {
+  document.addEventListener("authenticateSuccess", function() {
     $rootScope.clickSuccess = true;
 
     if (!$rootScope.application.authentication.user || !$rootScope.application.authentication.user.rev) {
