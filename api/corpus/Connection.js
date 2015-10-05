@@ -406,6 +406,9 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   corpusUrl: {
     get: function() {
+      if (this.corpusUrls && this.corpusUrls[0] === "https://localhost:6984"){
+        this.corpusUrls.shift();
+      }
       if (this.corpusUrls && this.corpusUrls[0]) {
         return this.corpusUrls[0];
       }
