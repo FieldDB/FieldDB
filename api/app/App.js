@@ -57,7 +57,7 @@ var App = function App(options) {
     this.debug("previous app", FieldDBObject.application);
   }
   FieldDBObject.application = this;
-  
+
   FieldDBObject.apply(this, arguments);
 
   if (!this.knownConnections || !this.knownConnections.length) {
@@ -71,15 +71,16 @@ var App = function App(options) {
     if (Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
       this.connection = new Connection(Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference"));
     } else {
-      this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
+      if (window && window.location && window.location.href) {
+        this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
+      }
     }
     this.knownConnections.unshift(this.connection);
-    if (Database.prototype.BASE_DB_URL !== this.connection.corpusUrl) {
+    if (this.connection && Database.prototype.BASE_DB_URL !== this.connection.corpusUrl) {
       this.connection.corpusUrl = Database.prototype.BASE_DB_URL;
       this.connection.userFriendlyServerName = "Custom";
     }
   }
-
 
   this.speakersList = this.speakersList || new DataList({
     title: {
