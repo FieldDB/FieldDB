@@ -593,7 +593,7 @@ Connection.knownConnections = {
     serverLabel: "localhost",
     authUrls: ["https://localhost:3183"],
     websiteUrls: ["https://localhost:3182"],
-    // corpusUrls: ["https://localhost:6984"],
+    corpusUrls: ["https://localhost:6984"],
     userFriendlyServerName: "Localhost"
   },
   beta: {
@@ -606,7 +606,7 @@ Connection.knownConnections = {
     brandLowerCase: "lingsync_beta",
     authUrls: ["https://authdev.lingsync.org"],
     websiteUrls: ["http://lingsync.org"],
-    // corpusUrls: ["https://corpusdev.lingsync.org"],
+    corpusUrls: ["https://corpusdev.lingsync.org"],
     userFriendlyServerName: "LingSync Beta"
   },
   lingsync: {
@@ -619,7 +619,7 @@ Connection.knownConnections = {
     brandLowerCase: "lingsync",
     authUrls: ["https://auth.lingsync.org"],
     websiteUrls: ["http://lingsync.org"],
-    // corpusUrls: ["https://corpus.lingsync.org"],
+    corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "LingSync.org"
   },
   mcgill: {
@@ -631,7 +631,7 @@ Connection.knownConnections = {
     serverLabel: "mcgill",
     authUrls: ["https://auth.lingsync.org"],
     websiteUrls: ["http://lingsync.org"],
-    // corpusUrls: ["https://corpus.lingsync.org"],
+    corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "McGill ProsodyLab"
   },
   concordia: {
@@ -643,7 +643,7 @@ Connection.knownConnections = {
     serverLabel: "concordia",
     authUrls: ["https://auth.lingsync.org"],
     websiteUrls: ["http://lingsync.org"],
-    // corpusUrls: ["https://corpus.lingsync.org"],
+    corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "Concordia Linguistics"
   }
 };
