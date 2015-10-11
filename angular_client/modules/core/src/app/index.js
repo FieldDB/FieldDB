@@ -59,30 +59,15 @@ angular.module("fielddbAngular", [
       },
       contextualizer: new FieldDB.Contextualizer().loadDefaults(),
       online: true,
-      apiURL: "https://localhost:3183",
-      offlineCouchURL: "https://localhost:6984",
-      brand: "Example",
-      brandLowerCase: "example",
-      website: "http://example.org",
-      faq: "http://app.example.org/#/faq",
+      // apiURL: "https://localhost:3183",
+      // offlineCouchURL: "https://localhost:6984",
+      // brand: "Example",
+      // brandLowerCase: "example",
+      // website: "http://example.org",
+      // faq: "http://app.example.org/#/faq",
       // basePathname: window.location.origin + "/#", //might be necessary for apache
       basePathname: "/",
     });
-  }
-
-  // Let client apps override current app connection by setting the auth and/or db url. 
-  // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
-  fieldDBApp.knownConnections = new FieldDB.Corpora(FieldDB.Connection.knownConnections);
-  fieldDBApp.knownConnections.primaryKey = "userFriendlyServerName";
-  if (FieldDB.Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
-    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL, "passByReference"));
-  } else {
-    fieldDBApp.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(window.location.href, "passByReference"));
-  }
-  fieldDBApp.knownConnections.unshift(fieldDBApp.connection);
-  if (FieldDB.Database.prototype.BASE_DB_URL !== fieldDBApp.connection.corpusUrl) {
-    fieldDBApp.connection.corpusUrl = FieldDB.Database.prototype.BASE_DB_URL;
-    fieldDBApp.connection.userFriendlyServerName  = "Custom";
   }
 
   fieldDBApp.debug("Loaded fielddbAngular module ");
@@ -95,8 +80,8 @@ angular.module("fielddbAngular", [
   document.addEventListener("logout", function() {
     fieldDBApp.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
   }, false);
-  document.addEventListener("authenticate:fail", function() {
-    fieldDBApp.warn("user isn't able to see anything, show them the welcome page");
+  document.addEventListener("authenticateFail", function(reason) {
+    fieldDBApp.warn("user isn't able to see anything, show them the welcome page", reason);
     // fieldDBApp.authentication.error = "";
     console.log("  Redirecting the user to the welcome page");
     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/

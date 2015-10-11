@@ -6,6 +6,7 @@ var Corpus = require("./../corpus/Corpus").Corpus;
 var CorpusMask = require("./../corpus/CorpusMask").CorpusMask;
 var Database = require("./../corpus/Database").Database;
 var Connection = require("./../corpus/Connection").Connection;
+var Corpora = require("./../corpus/Corpora").Corpora;
 var DataList = require("./../data_list/DataList").DataList;
 var Import = require("./../import/Import").Import;
 var Search = require("./../search/Search").Search;
@@ -50,13 +51,36 @@ var App = function App(options) {
     this._fieldDBtype = "App";
   }
   this.debug("Constructing App ", options);
-  FieldDBObject.apply(this, arguments);
 
-  if (FieldDBObject.application) {
+  if (FieldDBObject.application && FieldDBObject.application instanceof App) {
     this.warn("You shouldn't declare two apps at one time. Overwriting previous app.");
     this.debug("previous app", FieldDBObject.application);
   }
   FieldDBObject.application = this;
+
+  FieldDBObject.apply(this, arguments);
+
+  if (!this.knownConnections || !this.knownConnections.length) {
+    // Let client apps override current app connection by setting the auth and/or db url. 
+    // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
+    this.knownConnections = new Corpora(Connection.knownConnections);
+    this.knownConnections.primaryKey = "userFriendlyServerName";
+  }
+
+  if (!this.connection) {
+    if (Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
+      this.connection = new Connection(Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference"));
+    } else {
+      if (window && window.location && window.location.href) {
+        this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
+      }
+    }
+    this.knownConnections.unshift(this.connection);
+    if (this.connection && Database.prototype.BASE_DB_URL !== this.connection.corpusUrl) {
+      this.connection.corpusUrl = Database.prototype.BASE_DB_URL;
+      this.connection.userFriendlyServerName = "Custom";
+    }
+  }
 
   this.speakersList = this.speakersList || new DataList({
     title: {
@@ -170,6 +194,7 @@ var App = function App(options) {
   this.thisyear = (new Date()).getFullYear();
   this.whiteListCORS = this.whiteListCORS || ["self"];
 
+
   var self = this;
   Q.nextTick(function() {
     self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
@@ -245,6 +270,63 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       if (this.authentication && this.authentication.user && this.authentication.user.prefs) {
         return this.authentication.user.prefs;
       }
+    }
+  },
+
+  brand: {
+    get: function() {
+      if (this.connection) {
+        return this.connection.brand;
+      }
+      return this._brand;
+    },
+    set: function(value) {
+      if (this.connection) {
+        this.connection.brand = value;
+        return;
+      }
+      this._brand = value;
+    }
+  },
+
+  brandLowerCase: {
+    get: function() {
+      if (this.connection) {
+        return this.connection.brandLowerCase;
+      }
+      return this._brandLowerCase;
+    },
+    set: function(value) {
+      if (this.connection) {
+        this.connection.brandLowerCase = value;
+        return;
+      }
+      this._brandLowerCase = value;
+    }
+  },
+
+  website: {
+    get: function() {
+      if (this.connection) {
+        return this.connection.website;
+      }
+      return this._website;
+    },
+    set: function(value) {
+      if (this.connection) {
+        this.connection.website = value;
+        return;
+      }
+      this._website = value;
+    }
+  },
+
+  connection: {
+    get: function() {
+      return this._connection;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("connection", value);
     }
   },
 
@@ -336,6 +418,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   // Internal models: used by the parse function
   INTERNAL_MODELS: {
     value: {
+      connection: Connection,
       corpus: Corpus,
       contextualizer: Contextualizer,
       authentication: Authentication,

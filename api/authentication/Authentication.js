@@ -49,11 +49,11 @@ var Authentication = function Authentication(options) {
     self.user.fetch();
     if (self.user._rev) {
       self.user.authenticated = true;
-      self.dispatchEvent("authenticate:success");
+      self.dispatchEvent("authenticateSuccess");
       deferred.resolve(self.user);
     } else {
       self.user.authenticated = false;
-      self.dispatchEvent("authenticate:mustconfirmidentity");
+      self.dispatchEvent("authenticateMustConfirmIdentity");
       deferred.reject({
         status: 401,
         userFriendlyErrors: ["Please login."]
@@ -83,11 +83,11 @@ var Authentication = function Authentication(options) {
       self.loading = false;
       self.warn("Unable to resume login " + error.userFriendlyErrors.join(" "));
       if (error.status === 401) {
-        self.dispatchEvent("authenticate:mustconfirmidentity");
+        self.dispatchEvent("authenticateMustConfirmIdentity");
       } else {
         // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
         self.error = error.userFriendlyErrors.join(" ");
-        // self.dispatchEvent("authenticate:mustconfirmidentity");
+        // self.dispatchEvent("authenticateMustConfirmIdentity");
       }
       self.render();
       deferred.reject(error);
@@ -174,9 +174,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.loading = false;
         if (!error || !error.userFriendlyErrors) {
           error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
-          self.dispatchEvent("authenticate:mustconfirmidentity");
+          self.dispatchEvent("authenticateMustConfirmIdentity");
         } else {
-          self.dispatchEvent("authenticate:fail");
+          self.dispatchEvent("authenticateFail", error);
         }
         error.details = loginDetails;
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
@@ -191,7 +191,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
             if (!userDetails) {
               self.loading = false;
-              self.dispatchEvent("authenticate:mustconfirmidentity");
+              self.dispatchEvent("authenticateMustConfirmIdentity");
               deferred.reject({
                 details: loginDetails,
                 status: 500,
@@ -209,7 +209,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             self.authenticateWithAllCorpusServers(loginDetails).then(function() {
               self.loading = false;
               self.user.authenticated = true;
-              self.dispatchEvent("authenticate:success");
+              self.dispatchEvent("authenticateSuccess");
               deferred.resolve(self.user);
             }, function() {
               self.loading = false;
