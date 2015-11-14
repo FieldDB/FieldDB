@@ -3,7 +3,7 @@ require.config({
   paths : {
 
     /* jQuery and jQuery plugins */
-    "jquery" : "bower_components/jquery/jquery",
+    "jquery" : "bower_components/jquery/dist/jquery",
 
     "pouch" : "libs/pouch.alpha",
 

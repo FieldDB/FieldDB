@@ -11,6 +11,15 @@
 # Note: If you have requirejs installed globally, replace the backbone_client/node_modules/requirejs/bin/r.js below with the global executable
 grunt browserify
 
+echo "Installing dependancies"
+cd backbone_client
+npm install
+
+echo "Compiling templates (so that the app doesnt need to use eval() )"
+cd ../
+./scripts/build_templates.sh
+
+echo "Linking a local copy of the fielddb commonjs"
 rm backbone_client/bower_components/fielddb/fielddb.js
 ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
