@@ -94,7 +94,7 @@ describe("lib/DatumFields", function() {
       u.id = "a.field-with*dangerous characters (for import)";
       expect(u.id).toEqual("aFieldWithDangerousCharactersForImport");
       u.id = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ";
-      expect(u.id).toEqual("internationalization");
+      expect(u.id).toEqual("internationalizati0n");
 
     });
 

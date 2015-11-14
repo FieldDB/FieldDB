@@ -39,10 +39,10 @@ describe("CorpusMask ", function() {
 
     it("should set the title as url", function() {
       var corpus = new CorpusMask();
-      corpus.title = "Private corpus";
-      expect(corpus.titleAsUrl).toEqual("private_corpus");
+      corpus.title = "Private corpus1";
+      expect(corpus.titleAsUrl).toEqual("private_corpus1");
       corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ Of Quechua";
-      expect(corpus.titleAsUrl).toEqual("internationalization_of_quechua");
+      expect(corpus.titleAsUrl).toEqual("internationalizati0n_of_quechua");
 
     });
 

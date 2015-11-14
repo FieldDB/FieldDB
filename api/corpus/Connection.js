@@ -1,7 +1,7 @@
 /* globals window, URL */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
-var Diacritics = require("diacritic");
+var Diacritics = require("diacritics");
 /**
  * @class Corpus connections by default define a set of web services which are used by that corpus,
  *         generally on one server. However, over time and use the user might move their audio data to
@@ -818,9 +818,9 @@ Connection.validateIdentifier = function(originalIdentifier, username) {
     }
   }
 
-  if (Diacritics.clean(identifier) !== identifier) {
+  if (Diacritics.remove(identifier) !== identifier) {
     changes.push("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
-    identifier = Diacritics.clean(identifier);
+    identifier = Diacritics.remove(identifier);
   }
 
   if (identifier.replace(/[^a-z0-9_-]/g, "_") !== identifier) {
