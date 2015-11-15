@@ -88,7 +88,7 @@ define([
   Backbone.couch_connector = con = {
     config: {
       db_name: "default",
-      ddoc_name: "pages",
+      ddoc_name: "deprecated",
       view_name: "byCollection",
       list_name: null,
       global_changes: false,

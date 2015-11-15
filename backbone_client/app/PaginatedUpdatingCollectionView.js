@@ -1,6 +1,10 @@
 define([
-    "backbone", "handlebars"
-], function(Backbone, Handlebars) {
+  "backbone",
+  "libs/compiled_handlebars",
+], function(
+  Backbone,
+  Handlebars
+) {
 var PaginatedUpdatingCollectionView = Backbone.View.extend(
     /** @lends PaginatedUpdatingCollectionView.prototype */
 {
@@ -218,6 +222,9 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       for (var id in objectIds) {
         var obj = new Model();
+        self.collection.model = {
+          prototype: {}
+        };
         obj.set("dbname", app.get("corpus").get("dbname"));
         // obj.set("session", new Model({
         //   dbname: app.get("corpus").get("dbname")

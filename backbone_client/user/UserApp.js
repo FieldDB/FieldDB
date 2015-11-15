@@ -3,7 +3,7 @@ define([
     "backbone",
     "bootstrap",
     "libs/backbone_couchdb/backbone-couchdb",
-    "handlebars",
+    "libs/compiled_handlebars",
     "authentication/Authentication",
     "corpus/Corpus",
     "user/UserAppView",

@@ -3,7 +3,7 @@ define([
     "backbone",
     "jquerycouch",
     "libs/backbone_couchdb/backbone-couchdb",
-    "handlebars",
+    "libs/compiled_handlebars",
     "app/AppView",
     "activity/Activity",
     "authentication/Authentication",

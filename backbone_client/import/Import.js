@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideo",
     "audio_video/AudioVideos",
     "data_list/DataList",

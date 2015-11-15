@@ -34,7 +34,8 @@
     "jquery": "2.1.4",
     "handlebars": "4.0.4",
     "fielddb-glosser": "1.82.3",
-    "fielddb": "git://github.com/FieldDB/bower-fielddb.git"
+    "fielddb": "git://github.com/FieldDB/bower-fielddb.git",
+    "requirejs": "~2.1.20"
   },
   "resolutions": {
     "underscore": ">=1.8.3"

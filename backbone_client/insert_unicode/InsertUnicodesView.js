@@ -1,6 +1,6 @@
 define([
     "backbone", 
-    "handlebars", 
+    "libs/compiled_handlebars", 
     "insert_unicode/InsertUnicode",
     "insert_unicode/InsertUnicodeView",
     "app/UpdatingCollectionView",

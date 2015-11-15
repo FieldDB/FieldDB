@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "corpus/CorpusLinkView",

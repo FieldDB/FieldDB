@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "authentication/Authentication",
     "corpus/Corpus",
     "confidentiality_encryption/Confidential",

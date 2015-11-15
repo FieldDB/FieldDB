@@ -1,6 +1,6 @@
 define(
     [ "backbone",
-      "handlebars",
+      "libs/compiled_handlebars",
       "user/UserApp",
       "user/UserRouter",
         "authentication/Authentication",

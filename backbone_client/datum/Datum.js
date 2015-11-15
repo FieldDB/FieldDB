@@ -158,7 +158,7 @@ define([
        * Gets all the DatumIds in the current Corpus sorted by their date.
        *
        * @param {Function} callback A function that expects a single parameter. That
-       * parameter is the result of calling "pages/datums". So it is an array
+       * parameter is the result of calling "deprecated/datums". So it is an array
        * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
        * attribute contains the Datum's dateModified and the 'value' attribute contains
        * the Datum itself.
@@ -193,7 +193,7 @@ define([
 
         try {
           self.pouch(function(err, db) {
-            db.query("pages/datums", {
+            db.query("deprecated/datums", {
               reduce: false
             }, function(err, response) {
 
@@ -206,7 +206,7 @@ define([
                  * Its possible that the pouch has no by date views, create them and then try searching again.
                  */
                 window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("pages/datums", function() {
+                window.app.get("corpus").createPouchView("deprecated/datums", function() {
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.", "alert-success", "Sort:");
                   self.getMostRecentIdsByDate(howmany, callback);
                 });
@@ -570,7 +570,7 @@ define([
             delete window.get_search_fields_chronological;
           }
           if (!window.get_search_fields_chronological) {
-            $.couch.db(self.get("dbname")).view("pages/get_search_fields_chronological", {
+            $.couch.db(self.get("dbname")).view("deprecated/get_search_fields_chronological", {
               success: afterDownload,
               error: function(status) {
                 console.log("Error quering datum", status);
@@ -588,7 +588,7 @@ define([
 
         try {
           self.pouch(function(err, db) {
-            db.query("pages/get_datum_fields", {
+            db.query("deprecated/get_datum_fields", {
               reduce: false
             }, function(err, response) {
               var matchIds = [];
@@ -619,7 +619,7 @@ define([
                   " <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>", "alert-success", "Search:");
                 window.toldSearchtomakeviews = true;
                 var previousquery = queryString;
-                window.app.get("corpus").createPouchView("pages/get_datum_fields", function() {
+                window.app.get("corpus").createPouchView("deprecated/get_datum_fields", function() {
                   window.appView.searchEditView.search(previousquery);
                 });
               }

@@ -1,7 +1,7 @@
 
 define( [
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",

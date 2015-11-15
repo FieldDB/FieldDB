@@ -40,8 +40,7 @@ require.config({
     "wikitext": "libs/jquery-wikitext",
 
     /* Handlebars html templating libraries and compiled templates */
-    "handlebars": "libs/compiled_handlebars",
-    "handlebarsjs": "bower_components/handlebars/handlebars.runtime",
+    "handlebars.runtime": "bower_components/handlebars/handlebars.runtime.amd",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
     "_": "bower_components/underscore/underscore",
@@ -90,12 +89,8 @@ require.config({
     //   deps: ["underscore", "bootstrap"],
     //   exports: "Backbone"
     // },
-    "handlebarsjs": {
+    "handlebars.runtime": {
       deps: ["backbone", "jquery"],
-      exports: "Handlebars"
-    },
-    "handlebars": {
-      deps: ["handlebarsjs"],
       exports: "Handlebars"
     },
     // "backbone": {

@@ -11,14 +11,21 @@
 
 cd backbone_client
 rm libs/compiled_handlebars.js
+echo "define(['handlebars.runtime'], function(Handlebars) {" > libs/compiled_handlebars.js
+echo "var Templates = {};" >> libs/compiled_handlebars.js
 
 find . -name '*.handlebars' -type f |
 while read NAME ;
 	do
 		echo "Compiling "${NAME}
 		../backbone_client/node_modules/handlebars/bin/handlebars "${NAME}" -f "${NAME}.js" ;
+		echo "Templates['${NAME}'] = " >> libs/compiled_handlebars.js;
 		cat "${NAME}.js" >> libs/compiled_handlebars.js;
 		rm "${NAME}.js"
 	done
 
+echo "" >> libs/compiled_handlebars.js
+# echo "return Templates;" >> libs/compiled_handlebars.js
+echo "return Handlebars;" >> libs/compiled_handlebars.js
+echo "});" >> libs/compiled_handlebars.js
 date;
