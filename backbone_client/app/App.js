@@ -172,6 +172,18 @@ define([
       currentDataList : DataList,
       search : Search
     },
+
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      FieldDB.FieldDBObject.application = new FieldDB.App(originalModel);
+      return this.originalParse(originalModel);
+    },
+
     /*
      * This will be the only time the app should open the pouch.
      */
@@ -236,6 +248,11 @@ define([
      * @param callback
      */
     createAppBackboneObjects : function(optionaldbname, callback){
+
+      console.log("TOOD Use the fielddb app to load the dashboard");
+      var fieldDBApp = {};
+      this.parse(fieldDBApp);
+
       if (optionaldbname == null) {
         optionaldbname == "default";
       }
