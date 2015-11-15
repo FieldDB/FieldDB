@@ -106,6 +106,10 @@ define([
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
+      FieldDB.FieldDBObject.bug = function(message){
+        window.appView.toastUser(message, "alert-danger");
+      };
+
       this.format = "default";
 
       this.setUpAndAssociateViewsAndModelsWithCurrentUser();
