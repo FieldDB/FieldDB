@@ -11,7 +11,6 @@ define([
   "image/Images",
   "datum/Session",
   "xml2json",
-  "glosser/Tree",
   "OPrime"
 ], function(
   Backbone,
@@ -1233,7 +1232,7 @@ define([
     */
       guessTree: function(morphemesLine) {
         if (morphemesLine) {
-          var trees = Tree.generate(morphemesLine);
+          var trees = FieldDB.Tree.generate(morphemesLine);
           OPrime.debug(trees);
           var syntacticTreeLatex = "";
           syntacticTreeLatex += "\\item[\\sc{Left}] \\Tree " + trees.left;
