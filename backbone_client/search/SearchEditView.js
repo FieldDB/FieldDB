@@ -149,8 +149,10 @@ define([
 
 
 
-      try{
-        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("dbname"));
+      try {
+        window.app.get("corpus").glosser.render({
+          element: $(this.el).find(".corpus-precedence-rules-visualization")[0]
+        });
       }catch(e){
         window.appView.toastUser("There was a problem loading your corpus visualization.");
       }

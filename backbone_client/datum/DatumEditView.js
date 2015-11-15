@@ -16,7 +16,6 @@ define([
     "image/ImagesView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -593,7 +592,7 @@ define([
         var asIGT = this.model.exportAsIGTJSON();
         asIGT.utterance = utteranceLine;
         asIGT.morphemes = ""; // force glosser to guess becaus the app handles if it matches previous guesses
-        var morphemesLine = Glosser.guessMorphemesFromUtterance(asIGT).morphemes;
+        var morphemesLine = window.app.get("corpus").glosser.guessMorphemesFromUtterance(asIGT).morphemes;
 
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
         this.previousMorphemesGuess.push(morphemesLine);
@@ -638,7 +637,7 @@ define([
           asIGT.gloss = "";
         }
         asIGT.morphemes = morphemesLine;
-        var glossLine = Glosser.guessGlossFromMorphemes(asIGT).gloss;
+        var glossLine = window.app.get("corpus").glosser.guessGlossFromMorphemes(asIGT).gloss;
 
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
@@ -684,7 +683,7 @@ define([
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
           var asIGT = this.model.exportAsIGTJSON();
-          var utteranceLine = Glosser.guessUtteranceFromMorphemes(asIGT).utterance;
+          var utteranceLine = window.app.get("corpus").glosser.guessUtteranceFromMorphemes(asIGT).utterance;
           /* uppercase the first letter of the line */
           // utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
 

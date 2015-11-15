@@ -4,6 +4,7 @@ define([
     "comment/Comments",
     "corpus/CorpusMask",
     "confidentiality_encryption/Confidential",
+    "bower_components/d3/d3",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumState",
@@ -13,7 +14,7 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    "lexicon/Lexicon",
+    // "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Session",
@@ -22,7 +23,6 @@ define([
     "user/User",
     "user/Users",
     "user/UserMask",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -30,6 +30,7 @@ define([
     Comments,
     CorpusMask,
     Confidential,
+    d3,
     DatumField,
     DatumFields,
     DatumState,
@@ -39,7 +40,7 @@ define([
     DataList,
     DataLists,
     Consultants,
-    Lexicon,
+    // Lexicon,
     Permission,
     Permissions,
     Session,
@@ -422,8 +423,8 @@ define([
       }
     },
 
-    originalParse : Backbone.Model.prototype.parse,
-    parse : function(originalModel){
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel){
       /* if this is just a couchdb save result, dont process it */
       if (originalModel.ok) {
         return this.originalParse(originalModel);
@@ -540,7 +541,10 @@ define([
         delete originalModel.terms;
       }
 
-
+      // Use a paralel corpus in the FieldDB application
+      if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+        FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(JSON.parse(JSON.stringify(originalModel)));
+      }
 
       return this.originalParse(originalModel);
     },
@@ -822,8 +826,8 @@ define([
       window.appView.corpusNewModalView.render();
     },
 
-//    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
-    lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
+    glosser: null,//DONOT store in attributes when saving to pouch (too big)
+    // lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     prepareANewPouch : function(connection, callback) {
       if (!connection || connection == undefined) {
         console.log("App.changePouch connection must be supplied.");
@@ -1440,17 +1444,47 @@ define([
      */
     buildMorphologicalAnalyzerFromTeamServer: function(dbname, callback) {
       if (!dbname) {
-        this.get("dbname");
+        dbname = this.get("dbname");
       }
-      if (!callback) {
-        callback = null;
+
+      var url = this.get("glosserURL");
+      if (url) {
+        url = url.substring(0, url.lastIndexOf('/_design'));
+      } else {
+        url = OPrime.getCouchUrl(this.get("connection"));
       }
-      var glosserURL = this.get("glosserURL");
-      if (!glosserURL) {
-        var couchurl = OPrime.getCouchUrl(this.get("connection"));
-        glosserURL = couchurl + "/_design/deprecated/_view/precedence_rules?group=true";
-      }
-      Glosser.downloadPrecedenceRules(dbname, glosserURL, callback);
+
+      this.glosser = this.glosser || new FieldDB.Glosser({
+        dbname: dbname,
+        d3: d3
+      });
+
+      // this.glosser.corpus = this.glosser.corpus || {
+      //   dbname: dbname,
+      //   url: url
+      // };
+
+      var self = this;
+      this.glosser.fetch().then(function() {
+        console.log("Glosser is ready");
+
+        if (!self.glosser.lexicon || !self.glosser.lexicon.length){
+          self.glosser.lexicon = [];
+          // If you dont need to look up the glosses
+          // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
+          // self.glosser.lexicon.updateConnectedGraph();
+          self.glosser.lexicon.fetch();
+        }
+
+        if (callback && typeof callback === "function") {
+          callback();
+        }
+      }, function(reason) {
+        console.log("Unable to fetch the glosser.", reason);
+        self.glosser.bug(reason.userFriendlyErrors.join(" "));
+      }).fail(function(exception) {
+        console.log("Unable to fetch the glosser.", exception);
+      });
     },
     /**
      * This function takes in a dbname, which could be different
@@ -1461,13 +1495,14 @@ define([
      * @param callback
      */
     buildLexiconFromTeamServer : function(dbname, callback){
-      if(!dbname){
-        this.get("dbname");
-      }
-      if(!callback){
-        callback = null;
-      }
-      this.lexicon.buildLexiconFromCouch(dbname,callback);
+      console.log("Buildign lexicon is deprecated", this.glosser);
+      // if(!dbname){
+      //   this.get("dbname");
+      // }
+      // if(!callback){
+      //   callback = null;
+      // }
+      // this.lexicon.buildLexiconFromCouch(dbname,callback);
     },
 
     /**

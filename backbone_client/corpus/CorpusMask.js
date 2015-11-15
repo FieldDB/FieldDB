@@ -8,10 +8,9 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "user/Consultants",
-    "lexicon/Lexicon",
+    // "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -23,7 +22,7 @@ define([
     DatumState,
     DatumStates,
     Consultants,
-    Lexicon,
+    // Lexicon,
     Permission,
     Permissions
 ) {
@@ -49,13 +48,6 @@ define([
      * @property {DataLists} datalists Collection of data lists created under the corpus
      * @property {Permissions} permissions Collection of permissions groups associated to the corpus
      *
-     *
-     * @property {Glosser} glosser The glosser listens to
-     *           orthography/utterence lines and attempts to guess the
-     *           gloss.
-     * @property {Lexicon} lexicon The lexicon is a list of morphemes,
-     *           allomorphs and glosses which are used to index datum, and
-     *           also to gloss datum.
      *
      * @description The initialize function probably checks to see if
      *              the corpus is new or existing and brings it down to
@@ -236,8 +228,6 @@ define([
       permissions : Permissions,
       comments: Comments
     },
-//    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
-    lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
     /**
      * this function makes it possible to save the CorpusMask with a
      * hardcoded id, it uses pouch's API directly
@@ -343,13 +333,7 @@ define([
      * @param callback
      */
     buildMorphologicalAnalyzerFromTeamServer : function(dbname, callback){
-      if(!dbname){
-        this.get("dbname");
-      }
-      if(!callback){
-        callback = null;
-      }
-      // Glosser.downloadPrecedenceRules(dbname, callback);
+      console.log("corpus masks dont have buildMorphologicalAnalyzerFromTeamServer");
     },
     /**
      * This function takes in a dbname, which could be different

@@ -13,7 +13,6 @@ define([
     "datum/DatumTagReadView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "libs/OPrime"
 ], function(
     Backbone,
@@ -522,7 +521,7 @@ define([
         window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("dbname"));
       }
       if (utteranceLine) {
-        var morphemesLine = Glosser.morphemefinder(utteranceLine);
+        var morphemesLine = window.app.get("corpus").glosser.morphemefinder(utteranceLine);
         if (this.$el.find(".morphemes .datum_field_input").val() == "") {
           // If the morphemes line is empty, make it a copy of the utterance
           this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
@@ -567,7 +566,7 @@ define([
     },
     guessGlosses : function(morphemesLine) {
       if (morphemesLine) {
-        var glossLine = Glosser.glossFinder(morphemesLine);
+        var glossLine = window.app.get("corpus").glosser.glossFinder(morphemesLine);
         if (this.$el.find(".gloss .datum_field_input").val() == "") {
           // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
 //          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
