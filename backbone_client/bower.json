@@ -33,11 +33,12 @@
     "underscore": "1.8.3",
     "jquery": "2.1.4",
     "handlebars": "4.0.4",
-    "fielddb-glosser": "1.82.3",
     "fielddb": "git://github.com/FieldDB/bower-fielddb.git",
-    "requirejs": "~2.1.20"
+    "requirejs": "~2.1.20",
+    "d3": "~3.5.8"
   },
   "resolutions": {
-    "underscore": ">=1.8.3"
+    "underscore": ">=1.8.3",
+    "d3": "~3.5.8"
   }
 }
