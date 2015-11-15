@@ -594,10 +594,13 @@ define([
             });
 
           }
-        }, function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("Error registering user", e, f, g);
-          $(".welcome-screen-alerts").html(
-            " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
+        }, function(reason) {
+          var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
+          if (reason.userFriendlyErrors) {
+            message = reason.userFriendlyErrors.join("<br/>");
+          }
+          if (OPrime.debugMode) OPrime.debug("Error registering user", reason);
+          $(".welcome-screen-alerts").html(message);
           $(".welcome-screen-alerts").addClass("alert-error");
           $(".welcome-screen-alerts").removeClass("alert-success");
           $(".welcome-screen-alerts").show();
@@ -606,7 +609,7 @@ define([
           authedself.registering = false;
         });
       } else{
-        if (OPrime.debugMode) OPrime.debug("User has not entered good info. ");
+        if (OPrime.debugMode) OPrime.debug("User has not entered correct info. ");
           $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs );
           $(".welcome-screen-alerts").show();
           $(".register-new-user").removeClass("disabled");
@@ -689,10 +692,14 @@ define([
             window.location.replace(optionalCouchAppPath + "corpus.html");
           });
         }
-      }, function(e, f, g) {
-        if (OPrime.debugMode) OPrime.debug("Error syncing user", e, f, g);
-        $(".welcome-screen-alerts").html(
-          " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs);
+      }, function(reason) {
+        var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
+        if (reason.userFriendlyErrors) {
+          message = reason.userFriendlyErrors.join("<br/>");
+        }
+
+        if (OPrime.debugMode) OPrime.debug("Error syncing user", reason);
+        $(".welcome-screen-alerts").html(message);
         $(".welcome-screen-alerts").addClass("alert-error");
         $(".welcome-screen-alerts").removeClass("alert-success");
         $(".welcome-screen-alerts").show();
