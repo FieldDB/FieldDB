@@ -125,6 +125,53 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
+  describe("lexical entry lookup", function() {
+    it("should be able to find glosses for morphemes", function() {
+      var lexicon = new Lexicon({
+        corpus: mockCorpus,
+        entryRelations: SAMPLE_V3_LEXICON
+      });
+      lexicon.add({
+        morphemes: "ს",
+        gloss: "GEN"
+      });
+      lexicon.add({
+        morphemes: "ს",
+        gloss: "of"
+      });
+
+      var result = lexicon.guessFirstGloss({
+        morphemes: " ek  do"
+      });
+      expect(result).toBeDefined();
+      expect(result.gloss).toEqual("? ?");
+      expect(result.alternateGlossLines).toEqual(["?", "?"]);
+      expect(result.morphemes).toEqual(" ek  do");
+
+      result = lexicon.guessFirstGloss({
+        morphemes: "წარმოადგენ-ს შეესაბამებ"
+      });
+      expect(result).toBeDefined();
+      expect(result.gloss).toEqual("is-? relevant");
+      expect(result.alternateGlossLines).toEqual(["is-?", "relevant"]);
+      expect(result.morphemes).toEqual("წარმოადგენ-ს შეესაბამებ");
+
+      result = lexicon.guessContextSensitiveGlosses({
+        morphemes: "წარმოადგენ-ს შეესაბამებ",
+        alternateGlossLines: ['?-? ?']
+      });
+      expect(result).toBeDefined();
+      expect(result.gloss).toEqual("is-? relevant");
+      expect(result.alternateGlossLines).toEqual([
+        // "is-GEN relevant",
+        // "is-of relevant",
+        "is-? relevant",
+        "?-? ?"
+      ]);
+      expect(result.morphemes).toEqual("წარმოადგენ-ს შეესაბამებ");
+    });
+  });
+
   describe("construction", function() {
 
     it("should load", function() {
@@ -653,7 +700,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
 
   });
-  
+
   describe("persistance", function() {
 
     it("should be able to fetch itself", function(done) {

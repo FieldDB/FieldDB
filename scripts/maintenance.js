@@ -837,14 +837,18 @@ var MAINTAINENCE = {
 
   deployToAllUsers: function() {
 
+
     /*
     Deploy to all users
      */
+    var typeOfDBToDeploy = "new_lexicon";
+    // var typeOfDBToDeploy = "new_export";
+
     window.needToRetry = [];
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
-        
+
         for (var db in results) {
 
           (function(dbname) {
@@ -864,8 +868,8 @@ var MAINTAINENCE = {
               console.log(dbname + "  is not a corpus or activity feed ");
               return;
             }
-            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 ||  dbname.indexOf("jenkins") === 0 ) {
-              return;
+            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 || dbname.indexOf("jenkins") === 0) {
+              // return;
               if (sourceDB === "new_corpus") {
                 sourceDB = "new_testing_corpus";
               }
@@ -895,8 +899,11 @@ var MAINTAINENCE = {
               }
             }
 
-
-            console.log(dbname + " is a " + sourceDB);
+            if (typeOfDBToDeploy && sourceDB.indexOf("corpus") > -1) {
+              sourceDB = typeOfDBToDeploy;
+            }
+            console.log("   will deploy " + sourceDB + " to " + dbname);
+            return;
             $.couch.replicate(sourceDB, dbname, {
               success: function(result) {
                 console.log(dbname, result);

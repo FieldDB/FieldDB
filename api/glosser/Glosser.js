@@ -20,7 +20,7 @@ var MORPHEMES_N_GRAMS_MAP_REDUCE = mapReduceFactory({
  *
  * The Glosser can display a visual representation of itself if D3 is provided to it as options
  * or D3 is loaded in the context of the app.
- * 
+ *
  * @name  Glosser
  * @extends FieldDBObject
  * @constructs
@@ -44,19 +44,19 @@ Glosser.morphemeBoundaryRegEX = /[-=]/g;
 Glosser.morpheme_n_grams_mapReduce = MORPHEMES_N_GRAMS_MAP_REDUCE;
 
 /**
- * Finds all combinations of an utterance line by looping through all 
- * possible parses of all words in the utterance line. 
+ * Finds all combinations of an utterance line by looping through all
+ * possible parses of all words in the utterance line.
  *
  * This results in a list of alternateMorphemeLines which can be shown to the user
- * as a type-ahead on the utterance line. 
+ * as a type-ahead on the utterance line.
  *
- * These alternateMorphemeLines can be further filtered using other information 
- * (likelyhood of long distance relationships between morphemes, 
+ * These alternateMorphemeLines can be further filtered using other information
+ * (likelyhood of long distance relationships between morphemes,
  * likelyhood of long distance relationships between glosses).
  *
  * http://stackoverflow.com/questions/15298912/javascript-generating-combinations-from-n-arrays-with-m-elements
- * 
- * @param  {Object} options An object containing metadata, 
+ *
+ * @param  {Object} options An object containing metadata,
  *                           options.columns is used to generate the combinations
  *                           options.sort is optionally used to sort the resulting combinations
  * @return {Object}         [description]
@@ -115,13 +115,13 @@ Glosser.calculateAllAlternativeCombinations = function(options) {
 };
 
 /**
- * If passed to a alternateMorphemeLines.map() results in a sort order where more 
+ * If passed to a alternateMorphemeLines.map() results in a sort order where more
  * segmentations are listed first (on top in a typeahead).
  *
- * This is only useful if the user doesn't realize that the app can segment 
+ * This is only useful if the user doesn't realize that the app can segment
  * the utterance line, and/or if the glosser's segmentations are conservative
  * and only offer real segmentations.
- * 
+ *
  * @param  {String} a A string (normallly a morphemes line)
  * @param  {String} b A string (normallly a morphemes line)
  * @return {boolean}   If a has more segmentations than b
@@ -139,13 +139,13 @@ Glosser.sortAlternatesByMoreSegmentation = function(a, b) {
 };
 
 /**
- * If passed to a alternateMorphemeLines.map() results in a sort order where fewer segmentations 
- * are listed first (on top in a typeahead). 
- * 
- * This is useful if the user prefers to see segmentations, but will most often 
+ * If passed to a alternateMorphemeLines.map() results in a sort order where fewer segmentations
+ * are listed first (on top in a typeahead).
+ *
+ * This is useful if the user prefers to see segmentations, but will most often
  * choose the utteracne line as the morphemes line and then add the segmentations
  * themself.
- * 
+ *
  * @param  {String} a A string (normallly a morphemes line)
  * @param  {String} b A string (normallly a morphemes line)
  * @return {boolean}   If a has more segmentations than b
@@ -163,8 +163,8 @@ Glosser.sortAlternatesByLessSegmentation = function(a, b) {
 };
 
 /**
- * Removes redundant copies from an array 
- * 
+ * Removes redundant copies from an array
+ *
  * @param  {Array} input An array to be cleaned
  * @return {Array}       The same array after removing redundant copies
  */
@@ -235,14 +235,34 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   fetch: {
     value: function(options) {
+      if (this.fetching && this.whenFetched) {
+        return this.whenFetched;
+      }
+      var self = this;
+      var deferred = Q.defer();
+      this.fetching = true;
+      this.whenFetched = deferred.promise;
+
       options = options || {};
       var glosserURL = "";
       if (options && options.url) {
         glosserURL = options.url;
       }
       if (!glosserURL || glosserURL === "default") {
+        var error;
         if (!this.dbname && !options.dbname) {
-          throw "Glosser's webservice can't be guessed, there is no current corpus so the URL must be defined.";
+          error = {
+            userFriendlyErrors: ["Glosser's webservice can't be guessed, there is no current database identifier so the URL must be defined."]
+          };
+        }
+        if (!this.corpus) {
+          error = {
+            userFriendlyErrors: ["Glosser's webservice can't be guessed, there is no corpus loaded so the URL must be defined."]
+          };
+        }
+        if (error) {
+          deferred.reject(error);
+          return this.whenFetched;
         }
         if (this.corpus.prefs && this.corpus.prefs.glosserURL) {
           glosserURL = this.corpus.prefs.glosserURL;
@@ -250,20 +270,17 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           glosserURL = this.corpus.url + "/_design/data/_view/" + MORPHEMES_N_GRAMS_MAP_REDUCE.filename + "?group=true";
         }
       }
-      var self = this;
-      var deferred = Q.defer();
 
-      this.fetching = true;
       CORS.makeCORSRequest({
-        type: "GET",
-        url: glosserURL
-      }).then(function(reducedCouchDBresult) {
-
+          type: "GET",
+          url: glosserURL
+        })
+        .then(function(reducedCouchDBresult) {
           if (!reducedCouchDBresult || !reducedCouchDBresult.rows || reducedCouchDBresult.rows.length === undefined) {
             self.fetching = false;
             deferred.reject({
               details: reducedCouchDBresult,
-              userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
+              userFriendlyErrors: ["The result from the server " + glosserURL + " was not a standard response. Please report this."]
             });
             return;
           }
@@ -295,20 +312,20 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
             }
           }
           deferred.resolve(self.morphemeSegmentationKnowledgeBase);
-        },
-        function(e) {
+        }, function(e) {
           self.fetching = false;
           self.debug("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
           self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
           deferred.reject(e);
-        }).fail(function(exception) {
-        self.fetching = false;
-        self.warn("Error getting precedence self.morphemeSegmentationKnowledgeBase:", exception.stack);
-        self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
-        deferred.reject(exception);
-      });
+        })
+        .fail(function(exception) {
+          self.fetching = false;
+          self.warn("Exception getting precedence self.morphemeSegmentationKnowledgeBase:", exception.stack);
+          self.bug("Exception getting precedence self.morphemeSegmentationKnowledgeBase:");
+          deferred.reject(exception);
+        });
 
-      return deferred.promise;
+      return this.whenFetched;
     }
   },
 
@@ -381,7 +398,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (!datum || !datum.utterance) {
         return datum;
       }
-      // Keep the current morphemes as an alternate, and copy the utteracne into the morphemes if it was empty
+      // Keep the current morphemes as an alternate, and copy the utterance into the morphemes if it was empty
       if (datum.morphemes) {
         datum.alternateMorphemeLines = datum.alternateMorphemeLines || [];
         datum.alternateMorphemeLines.unshift(datum.morphemes);
@@ -401,7 +418,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
 
       // Divide the utterance line into words
-      datum.utteranceWithExplictWordBoundaries = "@" + datum.utterance.trim().toLocaleLowerCase().split(/ +/).join("@") + "@";
+      datum.utteranceWithExplictWordBoundaries = "@" + datum.utterance.trim().toLocaleLowerCase().split(/\s+/).join("@") + "@";
       datum.matchingRules = [];
       this.findRelevantSegmentationContexts(datum);
 
@@ -419,7 +436,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     }
   },
 
-  /** 
+  /**
    * Find the this.morphemeSegmentationKnowledgeBase which match in local precedence
    * @param  {Object} options [description]
    * @return {Object} options after processing                               [description]
@@ -630,68 +647,68 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     }
   },
 
-  simplisticGlossFinder: {
-    value: function(morphemesLine, justCopyDontGuessIGT) {
-      if (!morphemesLine) {
-        return "";
-      }
+  // simplisticGlossFinder: {
+  //   value: function(morphemesLine, justCopyDontGuessIGT) {
+  //     if (!morphemesLine) {
+  //       return "";
+  //     }
 
-      if (justCopyDontGuessIGT) {
-        var justQuestionMarks = morphemesLine.trim().replace(/[^ -]+/g, "?");
-        return justQuestionMarks;
-      }
+  //     if (justCopyDontGuessIGT) {
+  //       var justQuestionMarks = morphemesLine.trim().replace(/[^ -]+/g, "?");
+  //       return justQuestionMarks;
+  //     }
 
-      if (!this.dbname) {
-        if (!this.application || !this.application.get("corpus")) {
-          throw "Glosser can't be guessed, there is no app so the URL must be defined.";
-        }
-        this.dbname = this.application.get("corpus").get("couchConnection").this.dbname;
-      }
+  //     if (!this.dbname) {
+  //       if (!this.application || !this.application.get("corpus")) {
+  //         throw "Glosser can't be guessed, there is no app so the URL must be defined.";
+  //       }
+  //       this.dbname = this.application.get("corpus").get("couchConnection").this.dbname;
+  //     }
 
-      var lexiconNodes = localStorage.getItem(this.dbname + "lexiconResults");
-      if (!lexiconNodes) {
-        return "";
-      }
+  //     var lexiconNodes = localStorage.getItem(this.dbname + "lexiconResults");
+  //     if (!lexiconNodes) {
+  //       return "";
+  //     }
 
-      lexiconNodes = JSON.parse(lexiconNodes);
+  //     lexiconNodes = JSON.parse(lexiconNodes);
 
-      var glossGroups = [];
-      var morphemeGroup = morphemesLine.split(/ +/);
-      for (var group in morphemeGroup) {
-        var morphemes = morphemeGroup[group].split("-");
-        var glosses = [];
-        for (var m in morphemes) {
+  //     var glossGroups = [];
+  //     var morphemeGroup = morphemesLine.split(/\s+/);
+  //     for (var group in morphemeGroup) {
+  //       var morphemes = morphemeGroup[group].split("-");
+  //       var glosses = [];
+  //       for (var m in morphemes) {
 
-          var matchingNodes = [];
-          var node = lexiconNodes[morphemes[m]];
-          if (node) {
-            matchingNodes.push(node);
-          }
-          node = lexiconNodes[morphemes[m].toLowerCase()];
-          if (node) {
-            matchingNodes.push(node);
-          }
-          var gloss = "?"; // If there's no matching gloss, use question marks
-          if (matchingNodes.length > 0) {
-            // Take the first gloss for this morpheme
-            this.debug("Glosses which match: ", matchingNodes);
-            try {
-              gloss = matchingNodes[0][0].gloss;
-            } catch (e) {
-              this.debug(matchingNodes);
-            }
-          }
-          glosses.push(gloss);
+  //         var matchingNodes = [];
+  //         var node = lexiconNodes[morphemes[m]];
+  //         if (node) {
+  //           matchingNodes.push(node);
+  //         }
+  //         node = lexiconNodes[morphemes[m].toLowerCase()];
+  //         if (node) {
+  //           matchingNodes.push(node);
+  //         }
+  //         var gloss = "?"; // If there's no matching gloss, use question marks
+  //         if (matchingNodes.length > 0) {
+  //           // Take the first gloss for this morpheme
+  //           this.debug("Glosses which match: ", matchingNodes);
+  //           try {
+  //             gloss = matchingNodes[0][0].gloss;
+  //           } catch (e) {
+  //             this.debug(matchingNodes);
+  //           }
+  //         }
+  //         glosses.push(gloss);
 
-        }
+  //       }
 
-        glossGroups.push(glosses.join("-"));
-      }
+  //       glossGroups.push(glosses.join("-"));
+  //     }
 
-      // Replace the gloss line with the guessed glosses
-      return glossGroups.join(" ");
-    }
-  },
+  //     // Replace the gloss line with the guessed glosses
+  //     return glossGroups.join(" ");
+  //   }
+  // },
 
   guessUtteranceFromMorphemes: {
     value: function(fields) {
@@ -727,49 +744,49 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
     }
   },
 
-  glossFinder: {
-    value: function(morphemesLine) {
-      //Guess a gloss
-      var morphemeGroup = morphemesLine.split(/ +/);
-      var glossGroups = [];
-      if (!this.lexicon) {
-        var corpusSize = 31; //TODO get corpus size another way. // app.get("corpus").datalists.models[app.get("corpus").datalists.models.length-1].get("datumIds").length;
-        if (corpusSize > 30 && !Glosser.toastedUserToSync) {
-          Glosser.toastedUserToSync = true;
-          this.popup("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.", "alert-success", "Sync to train your auto-glosser:");
-        } else {
-          Glosser.toastedUserToImport++;
-          if (Glosser.toastedUserToImport % 10 === 1 && corpusSize < 30) {
-            this.popup("You have roughly " + corpusSize + " datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.", "alert-info", "AutoGlosser:");
-          }
-        }
-      }
-      for (var group in morphemeGroup) {
-        var morphemes = morphemeGroup[group].split("-");
-        var glosses = [];
-        for (var m in morphemes) {
-          if (!this.lexicon) {
-            glosses.push("?");
-            continue;
-          }
-          console.log("looking for morpheme " + morphemes[m]);
-          // Take the first gloss for this morpheme
-          var matchingNode = this.lexicon.find("morphemes", morphemes[m]);
-          var gloss = "?"; // If there"s no matching gloss, use question marks
-          this.warn(matchingNode);
-          if (matchingNode.length) {
-            gloss = matchingNode[0].gloss;
-          }
-          glosses.push(gloss);
-        }
+  // glossFinder: {
+  //   value: function(morphemesLine) {
+  //     //Guess a gloss
+  //     var morphemeGroup = morphemesLine.split(/\s+/);
+  //     var glossGroups = [];
+  //     if (!this.lexicon) {
+  //       var corpusSize = 31; //TODO get corpus size another way. // app.get("corpus").datalists.models[app.get("corpus").datalists.models.length-1].get("datumIds").length;
+  //       if (corpusSize > 30 && !Glosser.toastedUserToSync) {
+  //         Glosser.toastedUserToSync = true;
+  //         this.popup("You probably have enough data to train an autoglosser for your corpus.\n\nIf you sync your data with the team server then editing the morphemes will automatically run the auto glosser.", "alert-success", "Sync to train your auto-glosser:");
+  //       } else {
+  //         Glosser.toastedUserToImport++;
+  //         if (Glosser.toastedUserToImport % 10 === 1 && corpusSize < 30) {
+  //           this.popup("You have roughly " + corpusSize + " datum saved in your pouch, if you have around 30 datum, then you have enough data to train an autoglosser for your corpus.", "alert-info", "AutoGlosser:");
+  //         }
+  //       }
+  //     }
+  //     for (var group in morphemeGroup) {
+  //       var morphemes = morphemeGroup[group].split("-");
+  //       var glosses = [];
+  //       for (var m in morphemes) {
+  //         if (!this.lexicon) {
+  //           glosses.push("?");
+  //           continue;
+  //         }
+  //         console.log("looking for morpheme " + morphemes[m]);
+  //         // Take the first gloss for this morpheme
+  //         var matchingNode = this.lexicon.find("morphemes", morphemes[m]);
+  //         var gloss = "?"; // If there"s no matching gloss, use question marks
+  //         this.warn(matchingNode);
+  //         if (matchingNode.length) {
+  //           gloss = matchingNode[0].gloss;
+  //         }
+  //         glosses.push(gloss);
+  //       }
 
-        glossGroups.push(glosses.join("-"));
-      }
+  //       glossGroups.push(glosses.join("-"));
+  //     }
 
-      // Replace the gloss line with the guessed glosses
-      return glossGroups.join(" ");
-    }
-  },
+  //     // Replace the gloss line with the guessed glosses
+  //     return glossGroups.join(" ");
+  //   }
+  // },
 
   /**
    * Takes as a parameters an array of self.morphemeSegmentationKnowledgeBase which came from CouchDB precedence rule query.
@@ -855,7 +872,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   /*
    * Show precedes relations in a connected graph
-   * 
+   *
    * http://bl.ocks.org/mbostock/1153292
    * http://alignedleft.com/tutorials/d3/binding-data
    *
