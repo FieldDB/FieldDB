@@ -124,7 +124,7 @@ var MapReduceFactory = function(options) {
     if (options.mustRescopeEmit) {
       try {
         emit = options.emit;
-        // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time 
+        // ugly way to make sure references to 'emit' in map/reduce bind to the above emit at run time
         eval("options.map = " + options.map.toString() + ";");
         options.mustRescopeEmit = false;
         debug("rescoped emit");
@@ -160,7 +160,7 @@ var MapReduceFactory = function(options) {
       /*jslint evil: true */
       eval("options.map = " + options.mapString.toString() + ";");
     } catch (exception) {
-      console.log("Unable to parse the map reduce ", exception.stack);
+      console.log("Unable to parse the map reduce in this context, most likely eval is not permitted. (The app will function normally, you just can't run the map reduces in a custom scope.) ");
       options.map = function() {
         options.emit("error", "unable to load map reduce");
       };
@@ -172,7 +172,7 @@ var MapReduceFactory = function(options) {
       /*jslint evil: true */
       eval("options.reduce = " + options.reduceString.toString() + ";");
     } catch (exception) {
-      console.log("Unable to parse the map reduce ", exception.stack);
+      console.log("Unable to parse the map reduce in this context, most likely eval is not permitted. (The app will function normally, you just can't run the map reduces in a custom scope.) ");
     }
   }
   return options;
