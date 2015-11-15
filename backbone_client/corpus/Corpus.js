@@ -14,7 +14,6 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    // "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Session",
@@ -40,7 +39,6 @@ define([
     DataList,
     DataLists,
     Consultants,
-    // Lexicon,
     Permission,
     Permissions,
     Session,
@@ -827,7 +825,7 @@ define([
     },
 
     glosser: null,//DONOT store in attributes when saving to pouch (too big)
-    // lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
+    lexicon: null,//DONOT store in attributes when saving to pouch (too big)
     prepareANewPouch : function(connection, callback) {
       if (!connection || connection == undefined) {
         console.log("App.changePouch connection must be supplied.");
@@ -1470,6 +1468,7 @@ define([
 
         if (!self.glosser.lexicon || !self.glosser.lexicon.length){
           self.glosser.lexicon = [];
+          self.lexicon = self.glosser.lexicon;
           // If you dont need to look up the glosses
           // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
           // self.glosser.lexicon.updateConnectedGraph();
@@ -1494,17 +1493,22 @@ define([
      * @param dbname
      * @param callback
      */
-    buildLexiconFromTeamServer : function(dbname, callback){
-      console.log("Buildign lexicon is deprecated", this.glosser);
-      // if(!dbname){
-      //   this.get("dbname");
-      // }
-      // if(!callback){
-      //   callback = null;
-      // }
-      // this.lexicon.buildLexiconFromCouch(dbname,callback);
+    buildLexiconFromTeamServer: function(dbname, callback) {
+      if (this.lexicon || !this.lexicon.length && typeof this.lexicon.fetch !== "function") {
+        this.lexicon.fetch().then(function() {
+          console.log("lexicon is ready");
+          if (callback && typeof callback === "function") {
+            callback();
+          }
+        }, function(reason) {
+          console.log("lexicon is not ready", reason);
+        }).fail(function(exception) {
+          console.log("lexicon is not ready", exception);
+        });
+      } else {
+        console.log("The lexicon hasn't been attached yet, you should use the glosser to attach it..", this.lexicon);
+      }
     },
-
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht

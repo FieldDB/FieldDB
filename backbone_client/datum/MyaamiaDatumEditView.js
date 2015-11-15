@@ -515,79 +515,10 @@ define([
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
     utteranceBlur : function(e){
-      var utteranceLine = $(e.currentTarget).val();
-      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("dbname"));
-      }
-      if (utteranceLine) {
-        var morphemesLine = window.app.get("corpus").glosser.morphemefinder(utteranceLine);
-        if (this.$el.find(".morphemes .datum_field_input").val() == "") {
-          // If the morphemes line is empty, make it a copy of the utterance
-          this.$el.find(".morphemes .datum_field_input").val(utteranceLine);
-          this.needsSave = true;
-
-//          //autosize the morphemes field
-//          var datumself = this;
-//          window.setTimeout(function(){
-//            $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//          },500);
-        }
-        // If the guessed morphemes is different than the unparsed utterance
-        if (morphemesLine != utteranceLine && morphemesLine != "") {
-          //trigger the gloss guessing
-          this.guessGlosses(morphemesLine);
-          // Ask the user if they want to use the guessed morphemes
-          if (confirm("Would you like to use these morphemes:\n" + morphemesLine)) {
-            // Replace the morphemes line with the guessed morphemes
-            this.$el.find(".morphemes .datum_field_input").val(morphemesLine);
-            this.needsSave = true;
-            //redo the gloss guessing
-            this.guessGlosses(morphemesLine);
-
-//            //autosize the morphemes field
-//            var datumself = this;
-//            window.setTimeout(function(){
-//              $(datumself.el).find(".morphemes .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//            },500);
-
-          }
-        }
-      }
     },
     morphemesBlur : function(e){
-      if(! window.app.get("corpus").lexicon.get("lexiconNodes") ){
-        //This will get the lexicon to load from local storage if the app is offline, only after the user starts typing in datum.
-        window.app.get("corpus").lexicon.buildLexiconFromLocalStorage(this.model.get("dbname"));
-      }
-      this.guessGlosses($(e.currentTarget).val());
-      this.needsSave = true;
-
     },
     guessGlosses : function(morphemesLine) {
-      if (morphemesLine) {
-        var glossLine = window.app.get("corpus").glosser.glossFinder(morphemesLine);
-        if (this.$el.find(".gloss .datum_field_input").val() == "") {
-          // If the gloss line is empty, make it a copy of the morphemes, i took this off it was annoying
-//          this.$el.find(".gloss .datum_field_input").val(morphemesLine);
-
-          this.needsSave = true;
-        }
-        // If the guessed gloss is different than the existing glosses, and the gloss line has something other than question marks
-        if (glossLine != morphemesLine && glossLine != "" && glossLine.replace(/[ ?-]/g,"") != "") {
-          // Ask the user if they want to use the guessed gloss
-          if (confirm("Would you like to use this gloss:\n" + glossLine)) {
-            // Replace the gloss line with the guessed gloss
-            this.$el.find(".gloss .datum_field_input").val(glossLine);
-            this.needsSave = true;
-            //autosize the gloss field
-//            var datumself = this;
-//            window.setTimeout(function(){
-//              $(datumself.el).find(".gloss .datum_field_input").autosize();//This comes from the jquery autosize library which makes the datum text areas fit their size. https://github.com/jackmoore/autosize/blob/master/demo.html
-//            },500);
-          }
-        }
-      }
     }
   });
 

@@ -8,7 +8,6 @@ define([
     "datum/DatumState",
     "datum/DatumStates",
     "user/Consultants",
-    // "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "OPrime"
@@ -22,7 +21,6 @@ define([
     DatumState,
     DatumStates,
     Consultants,
-    // Lexicon,
     Permission,
     Permissions
 ) {
@@ -344,13 +342,7 @@ define([
      * @param callback
      */
     buildLexiconFromTeamServer : function(dbname, callback){
-      if(!dbname){
-        this.get("dbname");
-      }
-      if(!callback){
-        callback = null;
-      }
-      // this.lexicon.buildLexiconFromCouch(dbname,callback);
+     console.log("corpus masks dont have buildLexiconFromTeamServer");
     }
   });
 

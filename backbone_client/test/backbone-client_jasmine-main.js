@@ -128,28 +128,27 @@ require([ //"handlebars",
  * For some mysterious reason as yet unknown to us, these tests need to run
  * (first), or no FieldDB tests will run
  */
-          "PlayerSpec", 
-          "../tests/libs/jasmine/spec/AsyncSpec", 
+          "PlayerSpec",
+          "../tests/libs/jasmine/spec/AsyncSpec",
 //    "../tests/libs/backbone/JQueryTest",
 
     /* FieldDB tests */
-//          "../tests/audioVideo/AudioWebServiceTest", 
+//          "../tests/audioVideo/AudioWebServiceTest",
 
-	"../tests/app/AppTest", 
+	"../tests/app/AppTest",
 	"../tests/activity/ActivityTest",
 	"../tests/authentication/AuthenticationTest",
     "../tests/comment/CommentTest",
     "../tests/confidentiality_encryption/ConfidentialTest",
-    "../tests/corpus/CorpusTest", 
-//    "../tests/corpus/CorpusWebServiceTest", 
+    "../tests/corpus/CorpusTest",
+//    "../tests/corpus/CorpusWebServiceTest",
     "../tests/export/ExportTest",
-    "../tests/glosser/GlosserTest", 
+    "../tests/glosser/GlosserTest",
     "../tests/hotkey/HotKeyTest",
-    "../tests/import/ImportTest", 
+    "../tests/import/ImportTest",
     "../tests/insert_unicode/InsertUnicodeTest",
-    "../tests/lexicon/LexiconTest", 
     "../tests/permission/PermissionTest",
-    "../tests/search/SearchTest", 
+    "../tests/search/SearchTest",
     "../tests/datum/SessionTest",
     "../tests/user/UserTest",
 
@@ -160,7 +159,7 @@ require([ //"handlebars",
     /* Test DOM manipulation, only run these (199 tests) once in a while */
 //    "jasmine-jquery-spec",
     "JUnitReporter" , "ConsoleReporter", "TerminalReporter"], function() {
-  
+
 
   OPrime.debugMode = false;
 

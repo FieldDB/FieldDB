@@ -11,7 +11,6 @@ define([
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
-    "lexicon/LexiconView",
     "permission/Permission",
     "permission/Permissions",
     "permission/PermissionReadView",
@@ -33,7 +32,6 @@ define([
     DataListReadView,
     DatumFieldReadView,
     DatumStateReadView,
-    LexiconView,
     Permission,
     Permissions,
     PermissionReadView,
@@ -147,9 +145,6 @@ define([
      */
     model : Corpus,
 
-    // TODO Should LexiconView really be here?
-    lexicon : LexiconView,
-
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
@@ -180,11 +175,8 @@ define([
       }
       window.appView.currentCorpusReadView.destroy_view();
 
-      // Build the lexicon
-      this.model.buildLexiconFromTeamServer(this.model.get("dbname"));
-
       // Get the corpus' current precedence rules
-      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("dbname"));
+      this.model.buildMorphologicalAnalyzerFromTeamServer();
 
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
