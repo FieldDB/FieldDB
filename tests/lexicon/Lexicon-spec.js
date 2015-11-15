@@ -145,7 +145,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
       expect(result).toBeDefined();
       expect(result.gloss).toEqual("? ?");
-      expect(result.alternateGlossLines).toEqual(["?", "?"]);
+      expect(result.alternateGlossLines).toEqual(["? ?"]);
       expect(result.morphemes).toEqual(" ek  do");
 
       result = lexicon.guessFirstGloss({
@@ -153,12 +153,12 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
       expect(result).toBeDefined();
       expect(result.gloss).toEqual("is-? relevant");
-      expect(result.alternateGlossLines).toEqual(["is-?", "relevant"]);
+      expect(result.alternateGlossLines).toEqual(["is-? relevant"]);
       expect(result.morphemes).toEqual("წარმოადგენ-ს შეესაბამებ");
 
       result = lexicon.guessContextSensitiveGlosses({
         morphemes: "წარმოადგენ-ს შეესაბამებ",
-        alternateGlossLines: ['?-? ?']
+        alternateGlossLines: ["?-? ?"]
       });
       expect(result).toBeDefined();
       expect(result.gloss).toEqual("is-? relevant");
