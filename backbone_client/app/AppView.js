@@ -497,13 +497,13 @@ define([
         }
         this.searchEditView.searchTop();
       },
-      "keyup #quick-authenticate-password" : function(e) {
-          var code = e.keyCode || e.which;
-          // code == 13 is the enter key
-          if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
-            $("#quick-authentication-okay-btn").click();
-          }
-      },
+      // "keyup #quick-authenticate-password" : function(e) {
+      //     var code = e.keyCode || e.which;
+      //     // code == 13 is the enter key
+      //     if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
+      //       $("#quick-authentication-okay-btn").click();
+      //     }
+      // },
       "keyup #search_box" : function(e) {
 //        if(e){
 //          e.stopPropagation();

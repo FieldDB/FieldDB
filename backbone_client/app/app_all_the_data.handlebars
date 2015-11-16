@@ -216,41 +216,47 @@
     target="_blank"> <img
     src="https://docs.google.com/drawings/pub?id=16MZ_wF0XX83q2QDQO9BPJnF5HGrNgVe17zOAElu6iqU&amp;w=1450&amp;h=918" /></a>
 </div>
-<div id="quick-authenticate-modal" data-backdrop="static"
-  data-keyboard="static" class="modal hide">
-  <div class="modal-header">
-    <h4>
-      <span class="reason_why_we_need_to_make_sure_its_you"></span> <span
-         >{{locale_We_need_to_make_sure_its_you}}</span>
-    </h4>
-  </div>
-  <div class="modal-body">
-    <label>{{locale_Password}}</label> <input type="password"
-      id="quick-authenticate-password" />
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal">Close</button>
-    <button class="btn btn-success"
-      id="quick-authentication-okay-btn">{{locale_Yep_its_me}}</button>
-  </div>
+<div id="quick-authenticate-modal" data-backdrop="static" data-keyboard="static" class="modal hide">
+  <form>
+    <div class="modal-header">
+      <h4>
+        <span class="reason_why_we_need_to_make_sure_its_you"></span>
+        <span>{{locale_We_need_to_make_sure_its_you}} </span>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <label>{{locale_Password}}</label>
+      <input type="password" id="quick-authenticate-password"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-success" id="quick-authentication-okay-btn">{{locale_Yep_its_me}}</button>
+    </div>
+  </form>
 </div>
+
 <div id="login_modal" class="modal hide">
-  <div class="modal-header">
-    <h3>{{locale_Log_In}}</h3>
-  </div>
-  <div class="modal-body">
-    <div class="alert alert-error hide welcome-screen-alerts"></div>
-    <label>{{locale_Username}}</label> <input size="16" type="text"
-      class="welcomeusername" value="" /> <label>{{locale_Password}}</label>
-    <input type="password" size="16" class="welcomepassword" value="" />
-    <label class="locale_authUrl">Server</label> <input type="text"
+  <form>
+    <div class="modal-header">
+      <h3>{{locale_Log_In}}</h3>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error hide welcome-screen-alerts"></div>
+      <label>{{locale_Username}}</label>
+      <input size="16" type="text" class="welcomeusername" value="" />
+      <label>{{locale_Password}}</label>
+      <input type="password" size="16" class="welcomepassword" value="" />
+      <label class="locale_authUrl">Server</label>
+      <input type="text"
       size="16" class="welcomeauthurl" data-provide="typeahead"
       data-items="4"
       data-source='[&quot;LingSync.org&quot;,&quot;LingSync Beta&quot;,&quot;McGill ProsodyLab&quot;,&quot;Localhost&quot;]' />
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn btn-success sync-my-data"> <span
-       >{{locale_Log_In}}</span>
-    </a>
-  </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success sync-my-data" type="submit">
+        <span >{{locale_Log_In}}</span>
+      </button>
+    </div>
+  </form>
 </div>
+
