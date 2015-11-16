@@ -458,18 +458,18 @@ define([
       /* Use the couch connection defined by this app. */
       if (originalModel.connection) {
         originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = OPrime.defaultConnection();
+        var normalizedConnection =new FieldDB.Connection(FieldDB.Connection.defaultConnection());
         normalizedConnection.dbname = originalModel.connection.dbname;
         originalModel.connection.merge("self", normalizedConnection, "overwrite");
         originalModel.connection = originalModel.connection.toJSON();
       } else {
-        // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
+        // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
         originalModel.connection = new FieldDB.Connection(OPrime.defaultConnection()).toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }
 
-      // some versions of the FieldBD common js in the spreadsheet removed the confidential?
+      // some versions of the FieldDB common js in the spreadsheet removed the confidential?
       if(!originalModel.confidential){
         originalModel.confidential = {
           secretkey : new Confidential().secretKeyGenerator(),
@@ -666,7 +666,7 @@ define([
 //      conversationFields : DatumFields,
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
-//      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || OPrime.defaultConnection()
+//      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) ||new FieldDB.Connection(FieldDB.Connection.defaultConnection())
     },
 
     // Internal models: used by the parse function
@@ -866,7 +866,7 @@ define([
     },
     'createCorpus': function(dataToPost) {
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
-      dataToPost.authUrl = OPrime.defaultConnection().authUrl;
+      dataToPost.authUrl =new FieldDB.Connection(FieldDB.Connection.defaultConnection()).authUrl;
       dataToPost.newCorpusTitle = this.get("title");
 
       var functionForError = function(err){

@@ -77,7 +77,7 @@ define([
       delete originalModel.activityCouchConnection;
       if (originalModel.activityConnection) {
         originalModel.activityConnection = new FieldDB.Connection(originalModel.activityConnection);
-        normalizedConnection = OPrime.defaultConnection();
+        normalizedConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
         normalizedConnection.dbname = originalModel.activityConnection.dbname;
         originalModel.activityConnection.merge("self", normalizedConnection, "overwrite");
         originalModel.activityConnection = originalModel.activityConnection.toJSON()
@@ -86,7 +86,7 @@ define([
       if (originalModel.mostRecentIds ) {
         originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection || originalModel.mostRecentIds.couchConnection;
         originalModel.mostRecentIds.connection = new FieldDB.Connection(originalModel.mostRecentIds.connection);
-        normalizedConnection = OPrime.defaultConnection();
+        normalizedConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
         normalizedConnection.dbname = originalModel.mostRecentIds.connection.dbname;
         originalModel.mostRecentIds.connection.merge("self", normalizedConnection, "overwrite");
         originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection.toJSON();
@@ -181,7 +181,7 @@ define([
       for (var role in roles) {
         var dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
         if (dbname && !corpora[dbname] && dbname !== "public-firstcorpus") {
-          newconnection = new FieldDB.Connection(OPrime.defaultConnection());
+          newconnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
           newconnection.dbname = dbname;
           if (newconnection.title && newconnection.title.length > 30) {
             newconnection.title = newconnection.title.replace(username + "-", "");

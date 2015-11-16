@@ -26,7 +26,7 @@ OPrime.pouchUrl = "idb://";
 
 OPrime.getCouchUrl = function(connection, couchdbcommand) {
   if (!connection) {
-    connection = OPrime.defaultConnection();
+    connection = FieldDB.Connection(FieldDB.Connection.defaultConnection());
     if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
   }
 

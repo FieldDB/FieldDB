@@ -424,13 +424,13 @@ define([
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a dbname to create
-      var corpusConnection = OPrime.defaultConnection();
+      var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
       corpusConnection.dbname = "firstcorpus";
       dataToPost.corpora = [corpusConnection];
       dataToPost.mostRecentIds = {};
       dataToPost.mostRecentIds.connection = JSON.parse(JSON.stringify(corpusConnection));
       dataToPost.mostRecentIds.connection.dbname = dataToPost.username + "-" + dataToPost.mostRecentIds.connection.dbname;
-      var activityConnection = OPrime.defaultConnection();
+      var activityConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
       activityConnection.dbname = dataToPost.username + "-activity_feed";
       dataToPost.activityConnection = activityConnection;
       var u = new UserMask();
@@ -455,6 +455,8 @@ define([
       window.app.showSpinner();
       window.app.router.hideEverything();
       $(".spinner-status").html("Contacting the server...");
+      console.log("sending ", dataToPost);
+
       /*
        * Contact the server and register the new user
        */
@@ -464,108 +466,107 @@ define([
         url: dataToPost.authUrl + "/register",
         data: dataToPost
       }).then(function(serverResults) {
-        var userFriendlyErrors = serverResults.userFriendlyErrors || "";
-        if (userFriendlyErrors) {
-          $(".welcome-screen-alerts").html(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs);
+        if (serverResults.userFriendlyErrors || !serverResults.user) {
+          $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs);
           $(".welcome-screen-alerts").show();
-        } else if (serverResults.user) {
+          return;
+        }
 
-          localStorage.removeItem("username");
-          localStorage.removeItem("mostRecentDashboard");
-          localStorage.removeItem("mostRecentConnection");
-          localStorage.removeItem("encryptedUser");
+        localStorage.removeItem("username");
+        localStorage.removeItem("mostRecentDashboard");
+        localStorage.removeItem("mostRecentConnection");
+        localStorage.removeItem("encryptedUser");
 
-          //Destropy cookies, and load the public user
-          OPrime.setCookie("username", undefined, -365);
-          OPrime.setCookie("token", undefined, -365);
+        //Destropy cookies, and load the public user
+        OPrime.setCookie("username", undefined, -365);
+        OPrime.setCookie("token", undefined, -365);
 
-          //              var auth  = new Authentication({filledWithDefaults: true});
-          var auth = new Authentication({
-            "confidential": new Confidential({
-              secretkey: serverResults.user.hash
-            }),
-            "userPrivate": new User(serverResults.user)
-          });
+        //              var auth  = new Authentication({filledWithDefaults: true});
+        var auth = new Authentication({
+          "confidential": new Confidential({
+            secretkey: serverResults.user.hash
+          }),
+          "userPrivate": new User(serverResults.user)
+        });
 
-          OPrime.setCookie("username", serverResults.user.username, 365);
-          OPrime.setCookie("token", serverResults.user.hash, 365);
-          var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-          localStorage.setItem("encryptedUser", u);
-          $(".spinner-status").html("Building your database for you...");
+        OPrime.setCookie("username", serverResults.user.username, 365);
+        OPrime.setCookie("token", serverResults.user.hash, 365);
+        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+        localStorage.setItem("encryptedUser", u);
+        $(".spinner-status").html("Building your database for you...");
 
-          /*
-           * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
-           */
-          var potentialdbname = serverResults.user.corpora[0].dbname;
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
+        /*
+         * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
+         */
+        var potentialdbname = serverResults.user.corpora[0].dbname;
+        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
 
-          var connection = OPrime.defaultConnection();
-          connection.dbname = potentialdbname;
-          var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
+        var connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+        connection.dbname = potentialdbname;
+        var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
 
-          window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
-            OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
+        window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
+          OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
 
-              if (OPrime.isBackboneCouchDBApp()) {
-                try {
-                  Backbone.couch_connector.config.db_name = potentialdbname;
-                } catch (e) {
-                  OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
-                }
-              } else {
-                alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
+            if (OPrime.isBackboneCouchDBApp()) {
+              try {
+                Backbone.couch_connector.config.db_name = potentialdbname;
+              } catch (e) {
+                OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
               }
-              var newCorpusToBeSaved = new Corpus({
-                "filledWithDefaults": true,
-                "title": serverResults.user.username + "'s Corpus",
-                "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
-                "team": new UserMask({
-                  username: dataToPost.username
-                }),
-                "connection": connection,
-                "dbname": connection.dbname,
-                "dateOfLastDatumModifiedToCheckForOldSession": JSON.stringify(new Date())
-              });
+            } else {
+              alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
+            }
+            var newCorpusToBeSaved = new Corpus({
+              "filledWithDefaults": true,
+              "title": serverResults.user.username + "'s Corpus",
+              "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
+              "team": new UserMask({
+                username: dataToPost.username
+              }),
+              "connection": connection,
+              "dbname": connection.dbname,
+              "dateOfLastDatumModifiedToCheckForOldSession": JSON.stringify(new Date())
+            });
 
-              newCorpusToBeSaved.prepareANewPouch(connection, function() {
-                //                    alert("Saving new corpus in register.");
-                $(".spinner-status").html("Saving a corpus in your new database ...");
+            newCorpusToBeSaved.prepareANewPouch(connection, function() {
+              //                    alert("Saving new corpus in register.");
+              $(".spinner-status").html("Saving a corpus in your new database ...");
 
-                window.functionToSaveNewCorpus = function() {
-                  newCorpusToBeSaved.save(null, {
-                    success: function(model, response) {
-                      model.get("corpusMask").set("corpusid", model.id);
-                      auth.get("userPrivate").set("mostRecentIds", {});
-                      auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                      model.get("connection").corpusid = model.id;
-                      auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
-                      auth.get("userPrivate").get("corpora")[0] = model.get("connection");
-                      var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-                      localStorage.setItem("encryptedUser", u);
+              window.functionToSaveNewCorpus = function() {
+                newCorpusToBeSaved.save(null, {
+                  success: function(model, response) {
+                    model.get("corpusMask").set("corpusid", model.id);
+                    auth.get("userPrivate").set("mostRecentIds", {});
+                    auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
+                    model.get("connection").corpusid = model.id;
+                    auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
+                    auth.get("userPrivate").get("corpora")[0] = model.get("connection");
+                    var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+                    localStorage.setItem("encryptedUser", u);
 
-                      var sucessorfailcallbackforcorpusmask = function() {
-                        $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
-                        window.setTimeout(function() {
-                          window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
-                        }, 1000);
-                      };
-                      model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
+                    var sucessorfailcallbackforcorpusmask = function() {
+                      $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
+                      window.setTimeout(function() {
+                        window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
+                      }, 1000);
+                    };
+                    model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
 
-                    },
-                    error: function(e, f, g) {
-                      //                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
-                      $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
-                      window.corpusToBeSaved = newCorpusToBeSaved;
-                      window.setTimeout(window.functionToSaveNewCorpus, 10000);
-                    }
-                  });
-                };
-                window.functionToSaveNewCorpus();
-              });
+                  },
+                  error: function(e, f, g) {
+                    //                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
+                    $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
+                    window.corpusToBeSaved = newCorpusToBeSaved;
+                    window.setTimeout(window.functionToSaveNewCorpus, 10000);
+                  }
+                });
+              };
+              window.functionToSaveNewCorpus();
             });
           });
+        });
 
-        }
       }, function(reason) {
         var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
         if (reason.userFriendlyErrors) {
