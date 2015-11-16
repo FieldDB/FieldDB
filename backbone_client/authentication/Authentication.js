@@ -262,7 +262,10 @@ define([
         return;
       }
       var userString = this.get("confidential").decrypt(encryptedUserString);
-
+      if (userString.indexOf("confidential:") === 0) {
+       this.logout();
+       return;
+      }
       /* Switch user to the new prod servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpus.lingsync.org");

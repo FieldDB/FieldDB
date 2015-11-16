@@ -417,6 +417,7 @@ define([
       var dataToPost = {};
       dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g, "");
       $(".registerusername").val(dataToPost.username);
+
       dataToPost.email = $(".registeruseremail").val().trim();
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = OPrime.getAuthUrl();
@@ -435,8 +436,7 @@ define([
       var u = new UserMask();
       dataToPost.gravatar = u.getGravatar(dataToPost.email || dataToPost.username);
 
-      if (dataToPost.username != "" && (dataToPost.password == $(".to-confirm-password").val().trim())) {
-
+      if (dataToPost.password !== $(".to-confirm-password").val().trim()) {
         if (OPrime.debugMode) OPrime.debug("User has not entered correct info. ");
         $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs);
         $(".welcome-screen-alerts").show();
