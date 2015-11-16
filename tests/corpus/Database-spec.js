@@ -210,7 +210,7 @@ describe("Database", function() {
         userFriendlyServerName: "LingSync.org",
         version: db.version,
         clientUrls: [],
-        corpusUrls: ["https://corpus.lingsync.org"],
+        corpusUrls: [],
         lexiconUrls: [],
         searchUrls: [],
         audioUrls: [],

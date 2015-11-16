@@ -406,9 +406,8 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   corpusUrl: {
     get: function() {
-      if (this.corpusUrls && this.corpusUrls[0] === "https://localhost:6984"){
-        this.corpusUrls.shift();
-      }
+      this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
+
       if (this.corpusUrls && this.corpusUrls[0]) {
         return this.corpusUrls[0];
       }
@@ -454,6 +453,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       } else if (this.corpusUrls.length === 0) {
         this.corpusUrls.unshift(value);
       } else {
+        this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
         var alreadyKnown = this.corpusUrls.indexOf(value);
         if (alreadyKnown > -1) {
           this.corpusUrls.splice(alreadyKnown, 1);
@@ -558,7 +558,10 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       includeEvenEmptyAttributes = true;
+
       this.debug(" forcing corpusUrls to be defined ", this.corpusUrl);
+      this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
+
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
       delete json.dateCreated;
@@ -784,7 +787,10 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     }
   }
   if (!passAsReference) {
-    connection = new Connection(connection).clone();
+    connection = JSON.parse(JSON.stringify(connection));
+    // delete connection.fieldDBtype;
+    // connection = new Connection(connection);
+    connection = new Connection(connection).clone(); /* causes corpus urls to be shared accross connections */
   }
   return connection;
 };
@@ -851,6 +857,22 @@ Connection.validateUsername = function(originalIdentifier) {
   return Connection.validateIdentifier(originalIdentifier, "username");
 };
 
+Connection.cleanCorpusUrls = function(corpusUrls) {
+  if (!corpusUrls || !corpusUrls.length) {
+    return corpusUrls;
+  }
+  var defaultUrls = [];
+  for (var connection in Connection.knownConnections) {
+    if (!Connection.knownConnections.hasOwnProperty(connection)) {
+      continue;
+    }
+    defaultUrls = defaultUrls.concat(Connection.knownConnections[connection].corpusUrls);
+  }
+  while (corpusUrls.length && defaultUrls.indexOf(corpusUrls[0]) > -1) {
+    corpusUrls.shift();
+  }
+  return corpusUrls;
+};
 
 /**
  * This is the base schema of a corpus connection, other fields may be added.
