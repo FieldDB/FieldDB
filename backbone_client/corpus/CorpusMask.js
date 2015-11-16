@@ -39,7 +39,7 @@ define([
      * @property {String} remote The git url of the remote eg:
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *
-     * @property {Consultants} consultants Collection of consultants who contributed to the corpus
+     * @property {Consultants} source Collection of source who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {Sessions} sessions Collection of sessions that belong to the corpus
@@ -111,13 +111,13 @@ define([
                                                  label : "translation",
                                                  shouldBeEncrypted: "checked",
                                                  userchooseable: "disabled",
-                                                 help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. "
+                                                 help: "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If the speaker often gives multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then the Translations field could be in Spanish by convention, and add an additional field for English if you want to generate a handout containing the datum. "
                                                })
                                                ]
             ));
       }//end if to set datumFields
 
-      //Removed goal and consultants by default, keeping language and dialect since these seem okay to make public
+      //Removed goal and source by default, keeping language and dialect since these seem okay to make public
       if(!this.get("sessionFields")){
         this.set("sessionFields", new DatumFields([
                                                    new DatumField({
@@ -176,7 +176,7 @@ define([
       title : "Private Corpus",
       titleAsUrl :"PrivateCorpus",
       description : "The details of this corpus are not public.",
-//      consultants : Consultants,
+//      source : Consultants,
 //      datumStates : DatumStates,
 //      datumFields : DatumFields,
 //      sessionFields : DatumFields,
@@ -216,7 +216,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
-      consultants : Consultants,
+      source : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields,
       sessionFields : DatumFields,

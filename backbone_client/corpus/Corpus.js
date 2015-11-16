@@ -71,7 +71,7 @@ define([
      * @property {String} remote The git url of the remote eg:
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *
-     * @property {Consultants} consultants Collection of consultants who contributed to the corpus
+     * @property {Consultants} source Collection of source who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
@@ -336,7 +336,7 @@ define([
               label : "speakers",
               shouldBeEncrypted: "checked",
               userchooseable: "disabled",
-              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever they prefer."
             }),
             new DatumField({
                 label : "modality",
@@ -356,10 +356,10 @@ define([
              help: "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
            }),
           new DatumField({
-            label : "consultants",
+            label : "source",
             shouldBeEncrypted: "",
             userMasks: [],
-            help: "This is a comma seperated field of all the consultants who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the consultants if they are not anonymous or are actual users of the system. ",
+            help: "This is a comma seperated field of all the speakers who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the source if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -383,7 +383,7 @@ define([
           new DatumField({
             label : "user",
             shouldBeEncrypted: "",
-            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and consultants. ",
+            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and source. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -660,7 +660,7 @@ define([
       titleAsUrl :"UntitledCorpus",
       description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
-//      consultants : Consultants,
+//      source : Consultants,
 //      datumStates : DatumStates,
 //      datumFields : DatumFields,
 //      conversationFields : DatumFields,
@@ -672,7 +672,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       confidential :  Confidential,
-      consultants : Consultants,
+      source : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields,
       conversationFields : DatumFields,

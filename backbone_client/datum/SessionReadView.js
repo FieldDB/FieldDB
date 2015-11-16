@@ -113,17 +113,32 @@ define([
       }
 
       try {
-        if (this.model.get("fields").where({label: "goal"})[0] == undefined) {
+        var goal = this.model.get("fields").where({label: "goal"});
+        if (!goal || !goal[0] || typeof goal[0].get !== "function") {
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
+        } else {
+          goal = goal[0].get("mask");
         }
 
         var jsonToRender = this.model.toJSON();
-        jsonToRender.goal = this.model.get("fields").where({label: "goal"})[0].get("mask");
-        jsonToRender.consultants = this.model.get("fields").where({label: "consultants"})[0].get("mask");
-        jsonToRender.dateElicited = this.model.get("fields").where({label: "dateElicited"})[0].get("mask");
+        jsonToRender.goal = goal;
 
-        jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
+        jsonToRender.source = this.model.get("fields").where({label: "source"});
+        if (jsonToRender.source && jsonToRender.source[0] && typeof jsonToRender.source[0].get === "function") {
+          jsonToRender.source = jsonToRender.source[0].get("mask");
+        } else {
+          jsonToRender.source = "";
+        }
+
+        jsonToRender.dateElicited = this.model.get("fields").where({label: "dateElicited"});
+        if (jsonToRender.dateElicited && jsonToRender.dateElicited[0] && typeof jsonToRender.dateElicited[0].get === "function") {
+          jsonToRender.dateElicited = jsonToRender.dateElicited[0].get("mask");
+        } else {
+          jsonToRender.dateElicited = "";
+        }
+
+        jsonToRender.locale_Source = Locale.get("locale_Source");
         jsonToRender.locale_Edit_Session = Locale.get("locale_Edit_Session");
         jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
         jsonToRender.locale_Goal = Locale.get("locale_Goal");

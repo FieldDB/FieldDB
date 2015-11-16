@@ -474,8 +474,8 @@ define( [
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
       this.model.set("datumArray", []);
-      this.model.get("session").setConsultants(this.model.get("consultants"));
-      var consultantsInThisImportSession = [];
+      this.model.get("session").setSource(this.model.get("source"));
+      var sourceInThisImportSession = [];
       /* clear out the data list views and datum views
        *
        * Copied from SearchEditView
@@ -702,18 +702,18 @@ define( [
 //          }
           /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
           else if (index.toLowerCase().indexOf("checkedwithconsultant") >-1 ) {
-            var consultants = [];
+            var source = [];
             if (value.indexOf(",") > -1) {
-              consultants = value.split(",");
+              source = value.split(",");
             } else if (value.indexOf(";") > -1) {
-              consultants = value.split(";");
+              source = value.split(";");
             } else {
-              consultants = value.split(" ");
+              source = value.split(" ");
             }
             var validationStati = [];
-            for(g in consultants){
-              var consultantusername = consultants[g].toLowerCase();
-              consultantsInThisImportSession.push(consultantusername);
+            for(g in source){
+              var consultantusername = source[g].toLowerCase();
+              sourceInThisImportSession.push(consultantusername);
               if(!consultantusername){
                 continue;
               }
@@ -724,7 +724,7 @@ define( [
                 validationColor = "warning";
               }
 
-              var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
+              var validationString = validationType + source[g].replace(/[- _.]/g,"");
               validationStati.push(validationString);
               var n = fields.where({label: "validationStatus"})[0];
               /* add to any exisitng validation states */
@@ -736,7 +736,7 @@ define( [
 
 //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
 //              /* get the initials from the data */
-//              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+//              var consultantCode = source[g].replace(/[a-z -]/g,"");
 //              if(consultantusername.length == 2){
 //                consultantCode = consultantusername;
 //              }
@@ -753,7 +753,7 @@ define( [
 //               * This function uses the consultant code to create a new validation status
 //               */
 //              var onceWeGetTheConsultant = function(){
-//                var validationString = validationType+consultants[g].replace(/ /g,"");
+//                var validationString = validationType+source[g].replace(/ /g,"");
 //                validationStati.push(validationString);
 //                var n = fields.where({label: "validationStatus"})[0];
 //                if(n != undefined){
@@ -852,7 +852,7 @@ define( [
         d.lookForSimilarDatum();
         this.model.get("datumArray").push(d);
       }
-      this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
+      this.model.set("source", _.unique(sourceInThisImportSession).join(","));
       this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
 
       $(".approve-save").removeAttr("disabled");
@@ -1095,7 +1095,7 @@ define( [
         })[0].set("mask", "Probably Prior to " + filemodified);
 
         this.model.get("session").get("fields").where({
-          label : "consultants"
+          label : "source"
         })[0].set("mask", "Unknown");
       }
 

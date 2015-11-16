@@ -646,7 +646,7 @@ define([
         interval,
         tierName;
       var header = [];
-      var consultants = [];
+      var source = [];
       if (textgrid.isIGTNestedOrAlignedOrBySpeaker.probablyAligned) {
         for (itemIndex in textgrid.intervalsByXmin) {
           if (!textgrid.intervalsByXmin.hasOwnProperty(itemIndex)) {
@@ -664,7 +664,7 @@ define([
               row.speakers = interval.speaker;
               row.audioFileName = interval.fileName || audioFileName;
               row.CheckedWithConsultant = interval.speaker;
-              consultants.push(row.speakers);
+              source.push(row.speakers);
               row[interval.tierName] = interval.text;
               header.push(interval.tierName);
             }
@@ -688,7 +688,7 @@ define([
               row.speakers = interval.speaker;
               row.audioFileName = interval.fileName || audioFileName;
               row.CheckedWithConsultant = interval.speaker;
-              consultants.push(row.speakers);
+              source.push(row.speakers);
               row[interval.tierName] = interval.text;
               header.push(interval.tierName);
               matrix.push(row);
@@ -697,11 +697,11 @@ define([
         }
       }
       header = _.unique(header);
-      consultants = _.unique(consultants);
-      if (consultants.length > 0) {
-        self.set("consultants", consultants.join(","));
+      source = _.unique(source);
+      if (source.length > 0) {
+        self.set("source", source.join(","));
       } else {
-        self.set("consultants", "Unknown");
+        self.set("source", "Unknown");
       }
       header = header.concat( ["utterance", "tier", "speakers", "CheckedWithConsultant", "startTime", "endTime", "modality", "audioFileName"]);
       var rows = [];

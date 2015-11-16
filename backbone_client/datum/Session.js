@@ -47,7 +47,7 @@ define([
             userchooseable: "disabled"
           }),
           new DatumField({
-            label : "consultants",
+            label : "source",
             shouldBeEncrypted: "",
             userchooseable: "disabled"
           }),
@@ -116,17 +116,17 @@ define([
         }
       }
       this.get("fields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
-      this.get("fields").where({label: "consultants"})[0].set("mask", "XY");
+      this.get("fields").where({label: "source"})[0].set("mask", "XY");
       this.get("fields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
       this.get("fields").where({label: "dateSEntered"})[0].set("mask", new Date());
       this.get("fields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
 
     },
-    setConsultants: function(consultants){
-      if(consultants == undefined || consultants == null){
+    setSource: function(source){
+      if(source == undefined || source == null){
         return;
       }
-      this.get("fields").where({label: "consultants"})[0].set("mask", consultants.trim());
+      this.get("fields").where({label: "source"})[0].set("mask", source.trim());
     },
     getGoal : function(){
       var goal = "";
@@ -450,7 +450,7 @@ define([
        //for (team not in teams) {
       //    return "team must be in the system.";
       // }
-       //if (consultant not in consultants ) {
+       //if (consultant not in source ) {
       //    return "consultant must be in the system.";
       // }
     }

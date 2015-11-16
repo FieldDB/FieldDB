@@ -94,16 +94,20 @@ define([
       "click .icon-resize-small" : 'resizeSmall',
       "click .icon-resize-full" : "resizeLarge",
       "click .icon-book": "showReadonly",
-      "blur .session-consultant-input" : "updateConsultant",
+      "blur .session-consultant-input" : "updateSource",
       "blur .session-elicitation-date-input" : "updateElicitedDate",
       "blur .session-goal-input" : "updateGoal"
     },
 
-    updateConsultant : function(){
-      this.model.get("fields").where({
-        label : "consultants"
-      })[0].set("mask", this.$el.find(".session-consultant-input")
-          .val());
+    updateSource : function(){
+      var source = this.model.get("fields").where({
+        label : "source"
+      });
+      if (!source || !source[0] || typeof source[0].set !== "function") {
+        return;
+      }
+      source = source[0];
+      source.set("mask", this.$el.find(".session-consultant-input") .val());
 
       if(this.format != "import"){
         window.appView.addUnsavedDoc(this.model.id);
@@ -111,10 +115,14 @@ define([
     },
 
     updateElicitedDate : function(){
-      this.model.get("fields").where({
+      var dateElicited = this.model.get("fields").where({
         label : "dateElicited"
-      })[0].set("mask", this.$el.find(".session-elicitation-date-input")
-          .val());
+      });
+      if (!dateElicited || !dateElicited[0] || typeof dateElicited[0].set !== "function") {
+        return;
+      }
+      dateElicited = dateElicited[0];
+      dateElicited.set("mask", this.$el.find(".session-elicitation-date-input") .val());
 
       if(this.format != "import"){
         window.appView.addUnsavedDoc(this.model.id);
@@ -122,10 +130,14 @@ define([
     },
 
     updateGoal : function(){
-      this.model.get("fields").where({
+      var goal = this.model.get("fields").where({
         label : "goal"
-      })[0].set("mask", this.$el.find(".session-goal-input")
-          .val());
+      });
+      if (!goal || !goal[0] || typeof goal[0].set !== "function") {
+        return;
+      }
+      goal = goal[0];
+      goal.set("mask", this.$el.find(".session-goal-input") .val());
 
       if(this.format != "import"){
         window.appView.addUnsavedDoc(this.model.id);
@@ -161,11 +173,11 @@ define([
         }
         var jsonToRender = this.model.toJSON();
         jsonToRender.goal = this.model.get("fields").where({label: "goal"})[0].get("mask");
-        jsonToRender.consultants = this.model.get("fields").where({label: "consultants"})[0].get("mask");
+        jsonToRender.source = this.model.get("fields").where({label: "source"})[0].get("mask");
         jsonToRender.dateElicited = this.model.get("fields").where({label: "dateElicited"})[0].get("mask");
 
         jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
-        jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
+        jsonToRender.locale_Source = Locale.get("locale_Source");
         jsonToRender.locale_Elicitation_Session = Locale.get("locale_Elicitation_Session");
         jsonToRender.locale_Goal = Locale.get("locale_Goal");
         jsonToRender.locale_New_Session = Locale.get("locale_New_Session");
