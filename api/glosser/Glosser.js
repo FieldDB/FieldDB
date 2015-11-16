@@ -312,16 +312,16 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
             }
           }
           deferred.resolve(self.morphemeSegmentationKnowledgeBase);
-        }, function(e) {
+        }, function(reason) {
           self.fetching = false;
-          self.debug("Error getting precedence self.morphemeSegmentationKnowledgeBase:", e);
-          self.bug("Error getting precedence self.morphemeSegmentationKnowledgeBase:");
-          deferred.reject(e);
+          self.debug("Error getting precedence self.morphemeSegmentationKnowledgeBase:", reason);
+          // self.bug(reason.userFriendlyErrors.join(" "));
+          deferred.reject(reason);
         })
         .fail(function(exception) {
           self.fetching = false;
           self.warn("Exception getting precedence self.morphemeSegmentationKnowledgeBase:", exception.stack);
-          self.bug("Exception getting precedence self.morphemeSegmentationKnowledgeBase:");
+          self.bug("Exception getting precedence rules in the glosser.");
           deferred.reject(exception);
         });
 

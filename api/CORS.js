@@ -149,6 +149,9 @@ CORS.makeCORSRequest = function(options) {
       if (response.reason && !response.userFriendlyErrors) {
         response.userFriendlyErrors = [response.reason];
       }
+      if (response.userFriendlyErrors[0] === "missing") {
+        response.userFriendlyErrors = ["The server replied that " + options.url + " is missing, please report this."];
+      }
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
       if (xhr.status === 401) {
         if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
