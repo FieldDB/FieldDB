@@ -38,7 +38,7 @@ define([
       this.changeViewsOfInternalModels();
 
       var self = this;
-      this.model.bind('change:sessionFields', function(){
+      this.model.bind('change:fields', function(){
         self.changeViewsOfInternalModels();
         self.render();
         }, this);
@@ -113,15 +113,15 @@ define([
       }
 
       try {
-        if (this.model.get("sessionFields").where({label: "goal"})[0] == undefined) {
+        if (this.model.get("fields").where({label: "goal"})[0] == undefined) {
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
 
         var jsonToRender = this.model.toJSON();
-        jsonToRender.goal = this.model.get("sessionFields").where({label: "goal"})[0].get("mask");
-        jsonToRender.consultants = this.model.get("sessionFields").where({label: "consultants"})[0].get("mask");
-        jsonToRender.dateElicited = this.model.get("sessionFields").where({label: "dateElicited"})[0].get("mask");
+        jsonToRender.goal = this.model.get("fields").where({label: "goal"})[0].get("mask");
+        jsonToRender.consultants = this.model.get("fields").where({label: "consultants"})[0].get("mask");
+        jsonToRender.dateElicited = this.model.get("fields").where({label: "dateElicited"})[0].get("mask");
 
         jsonToRender.locale_Consultants = Locale.get("locale_Consultants");
         jsonToRender.locale_Edit_Session = Locale.get("locale_Edit_Session");
@@ -150,8 +150,8 @@ define([
           $(this.el).html(this.templateEmbedded(jsonToRender));
 
 
-          this.sessionFieldsView.el = this.$(".session-fields-ul");
-          this.sessionFieldsView.render();
+          this.fieldsView.el = this.$(".session-fields-ul");
+          this.fieldsView.render();
           // Display the CommentReadView
           this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
@@ -166,8 +166,8 @@ define([
           this.setElement("#session-fullscreen");
           $(this.el).html(this.templateFullscreen(jsonToRender));
 
-          this.sessionFieldsView.el = this.$(".session-fields-ul");
-          this.sessionFieldsView.render();
+          this.fieldsView.el = this.$(".session-fields-ul");
+          this.fieldsView.render();
 
           // Display the CommentReadView
           this.commentReadView.el = $(this.el).find('.comments');
@@ -193,8 +193,8 @@ define([
     },
 
     changeViewsOfInternalModels : function(){
-      this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
+      this.fieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("fields"),
         childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
         childViewFormat      : "session"

@@ -108,30 +108,30 @@ define([
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      if(!this.get("sessionFields") || this.get("sessionFields").length == 0){
+      if(!this.get("fields") || this.get("fields").length == 0){
         if(window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
-          this.set("sessionFields", window.app.get("corpus").get("sessionFields").clone());
+          this.set("fields", window.app.get("corpus").get("sessionFields").clone());
         }else{
           if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
         }
       }
-      this.get("sessionFields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
-      this.get("sessionFields").where({label: "consultants"})[0].set("mask", "XY");
-      this.get("sessionFields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
-      this.get("sessionFields").where({label: "dateSEntered"})[0].set("mask", new Date());
-      this.get("sessionFields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
+      this.get("fields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
+      this.get("fields").where({label: "consultants"})[0].set("mask", "XY");
+      this.get("fields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
+      this.get("fields").where({label: "dateSEntered"})[0].set("mask", new Date());
+      this.get("fields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
 
     },
     setConsultants: function(consultants){
       if(consultants == undefined || consultants == null){
         return;
       }
-      this.get("sessionFields").where({label: "consultants"})[0].set("mask", consultants.trim());
+      this.get("fields").where({label: "consultants"})[0].set("mask", consultants.trim());
     },
     getGoal : function(){
       var goal = "";
       try {
-        goal = this.get("sessionFields").where({
+        goal = this.get("fields").where({
           label : "goal"
         })[0].get("mask");
       } catch (e) {
@@ -150,7 +150,7 @@ define([
 
     // Internal models: used by the parse function
     internalModels : {
-      sessionFields : DatumFields,
+      fields : DatumFields,
       comments : Comments
     },
     originalParse : Backbone.Model.prototype.parse,
@@ -159,12 +159,12 @@ define([
       if (originalModel.ok) {
         return this.originalParse.apply(this, [originalModel]);
       }
-      originalModel.sessionFields = originalModel.sessionFields || originalModel.fields || [];
+      originalModel.fields = originalModel.sessionFields || originalModel.fields || [];
       OPrime.debug("Edit this function to update session to the latest schema.");
 
       if(window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
         /* Add any new corpus fields to this session so they can be edited */
-        var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
+        var originalFieldLabels = _.pluck(originalModel.fields, "label");
         window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
         var corpusFields = window.corpusfieldsforSessionParse;
         if(corpusFields.length > originalFieldLabels.length){
@@ -176,7 +176,7 @@ define([
               corpusFieldClone.value = "";
               delete corpusFieldClone.user;
               delete corpusFieldClone.users;
-              originalModel.sessionFields.push(corpusFieldClone);
+              originalModel.fields.push(corpusFieldClone);
             }
           }
         }
@@ -195,7 +195,7 @@ define([
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
 
-      var goal = this.get("sessionFields").where({label: "goal"})[0].get("mask");
+      var goal = this.get("fields").where({label: "goal"})[0].get("mask");
 
       window.app.addActivity(
           {
@@ -313,7 +313,7 @@ define([
         self.save(null, {
           success : function(model, response) {
             if (OPrime.debugMode) OPrime.debug('Session save success');
-            var goal = model.get("sessionFields").where({label: "goal"})[0].get("mask");
+            var goal = model.get("fields").where({label: "goal"})[0].get("mask");
             var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
             //TODO add privacy for session goals in corpus
 //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){

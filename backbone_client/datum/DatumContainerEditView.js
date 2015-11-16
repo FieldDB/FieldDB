@@ -205,7 +205,7 @@ define([
       }
       this.prependDatum(new Datum({
         filledWithDefaults : true,
-        datumFields : new DatumFields(datumfields),
+        fields : new DatumFields(datumfields),
         dbname : app.get("corpus").get("dbname"),
         session : app.get("currentSession")
       }));

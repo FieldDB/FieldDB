@@ -35,7 +35,7 @@ define([
   {
     /**
      * @class The layout of a single editable Datum. It contains a datum
-     *        state, datumFields, datumTags and a datum menu. This is where
+     *        state, fields, datumTags and a datum menu. This is where
      *        the user enters theirs data, the main task of our application.
      *
      * @property {String} format Valid values are "well"
@@ -63,8 +63,8 @@ define([
       });
 
       // Create the DatumFieldsValueEditView
-      this.datumFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumFields"),
+      this.fieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("fields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "li",
         childViewClass   : "datum-field",
@@ -253,8 +253,8 @@ define([
         this.sessionView.render();
 
         // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$(".datum_fields_ul");
-        this.datumFieldsView.render();
+        this.fieldsView.el = this.$(".datum_fields_ul");
+        this.fieldsView.render();
 
 
         var self = this;
@@ -310,10 +310,10 @@ define([
       if(!this.frequentFields){
         return;
       }
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        if( this.frequentFields.indexOf( this.model.get("datumFields").models[f].get("label") ) == -1 ){
-          $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
-          this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
+      for(var f = 0; f < this.model.get("fields").length; f++ ){
+        if( this.frequentFields.indexOf( this.model.get("fields").models[f].get("label") ) == -1 ){
+          $(this.el).find("."+this.model.get("fields").models[f].get("label")).hide();
+          this.rareFields.push(this.model.get("fields").models[f].get("label"));
         }
       }
       $(this.el).find(".icon-th-list").addClass("icon-list-alt");
@@ -327,8 +327,8 @@ define([
         e.stopPropagation();
         e.preventDefault();
       }
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
+      for(var f = 0; f < this.model.get("fields").length; f++ ){
+        $(this.el).find("."+this.model.get("fields").models[f].get("label")).show();
       }
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
@@ -423,7 +423,7 @@ define([
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
 
-      var utterance = this.model.get("datumFields").where({label: "utterance"})[0].get("mask");
+      var utterance = this.model.get("fields").where({label: "utterance"})[0].get("mask");
 
       window.app.addActivity(
           {

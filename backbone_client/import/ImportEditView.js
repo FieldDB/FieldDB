@@ -352,19 +352,19 @@ define( [
       return this;
     },
     renderDatumFieldsLabels : function(){
-      if(this.model.get("datumFields") == undefined){
+      if(this.model.get("fields") == undefined){
         return;
       }
       var colors= ["label-info","label-inverse","label-success","label-warning","label-important"];
       var colorindex = 0;
       $("#import-datum-field-labels").html("");//Locale.get("locale_Drag_Fields_Instructions"));
-      for(i in this.model.get("datumFields").models){
+      for(i in this.model.get("fields").models){
         var x = document.createElement("span");
         x.classList.add("pull-left");
         x.classList.add("label");
         x.classList.add(colors[colorindex%colors.length]);
         x.draggable="true";
-        x.innerHTML = this.model.get("datumFields").models[i].get("label");
+        x.innerHTML = this.model.get("fields").models[i].get("label");
         x.addEventListener('dragstart', this.handleDragStart);
         colorindex++;
         $("#import-datum-field-labels").append(x);
@@ -536,7 +536,7 @@ define( [
           this.sessionView.destroy_view();
         }
         /* put metadata in the session goals */
-        var sessionGoal = this.model.get("session").get("sessionFields").where({
+        var sessionGoal = this.model.get("session").get("fields").where({
             label : "goal"
           })[0];
         if(sessionGoal){
@@ -576,14 +576,14 @@ define( [
         } else if (headers[f] == "ToBeCheckedWithConsultant") {
           // do nothing
         } else{
-          if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
+          if(this.model.get("fields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
               label : headers[f],
               shouldBeEncrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
             });
-            this.model.get("datumFields").add(newfield);
+            this.model.get("fields").add(newfield);
             window.app.get("corpus").get("datumFields").add(newfield);
           }
         }
@@ -838,7 +838,7 @@ define( [
             }
           }
         });
-        d.set("datumFields", fields);
+        d.set("fields", fields);
         if (audioVideo) {
           d.get("audioVideo").add(audioVideo);
           // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
@@ -1086,15 +1086,15 @@ define( [
           //do nothing
         }
 
-        this.model.get("session").get("sessionFields").where({
+        this.model.get("session").get("fields").where({
           label : "goal"
         })[0].set("mask", "Goal from file import " + this.model.get("status"));
 
-        this.model.get("session").get("sessionFields").where({
+        this.model.get("session").get("fields").where({
           label : "dateElicited"
         })[0].set("mask", "Probably Prior to " + filemodified);
 
-        this.model.get("session").get("sessionFields").where({
+        this.model.get("session").get("fields").where({
           label : "consultants"
         })[0].set("mask", "Unknown");
       }

@@ -47,8 +47,8 @@ define([
      */
     initialize : function() {
       this.set("dbname", window.app.get("corpus").get("dbname"));
-      if(this.get("datumFields") == undefined){
-        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      if(this.get("fields") == undefined){
+        this.set("fields",window.app.get("corpus").get("datumFields").clone());
       }
       if(this.get("filledWithDefaults")){
         this.fillWithDefaults();
@@ -57,8 +57,8 @@ define([
       this.set("audioVideo", new AudioVideos());
     },
     fillWithDefaults : function(){
-      if(this.get("datumFields") == undefined){
-        this.set("datumFields",window.app.get("corpus").get("datumFields").clone());
+      if(this.get("fields") == undefined){
+        this.set("fields",window.app.get("corpus").get("datumFields").clone());
       }
     },
     // This is an list of attributes and their default values
@@ -77,7 +77,7 @@ define([
     // Internal models: used by the parse function
     internalModels : {
       dataList : DataList,
-      datumFields : DatumFields,
+      fields : DatumFields,
       session : Session
     },
 

@@ -226,13 +226,13 @@ define([
       this.currentSessionReadView.format = "leftSide";
 
       //Only make a new session modal if it was not already created
-      if(! this.sessionNewModalView && window.app.get("currentSession") && window.app.get("currentSession").get("sessionFields")){
+      if(! this.sessionNewModalView && window.app.get("currentSession") && window.app.get("currentSession").get("fields")){
         if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
             comments : new Comments(),
             dbname : window.app.get("corpus").get("dbname"),
-            sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+            fields : window.app.get("currentSession").get("fields").clone()
           })
         });
         this.sessionNewModalView.format = "modal";
