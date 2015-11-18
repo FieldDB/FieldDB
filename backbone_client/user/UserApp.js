@@ -279,6 +279,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchurl);
 
       var appself = this;
+      $.couch.urlPrefix = OPrime.getCouchUrl(connection, "");
       $.couch.login({
         name: username,
         password: password,

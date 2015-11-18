@@ -503,8 +503,6 @@ define([
 
         var connection = serverResults.user.corpora[0];
         var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
-        $.couch.urlPrefix = OPrime.getCouchUrl(connection, "");
-
         window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
           OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
 

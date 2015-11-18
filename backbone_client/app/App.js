@@ -392,6 +392,7 @@ define([
 
       var appself = this;
       var connectionInscope = connection;
+      $.couch.urlPrefix = OPrime.getCouchUrl(connection, "");
       $.couch.login({
         name: username,
         password: password,
