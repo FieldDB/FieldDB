@@ -561,7 +561,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
       this.debug(" forcing corpusUrls to be defined ", this.corpusUrl);
       this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
-
+      this.brandLowerCase = this.brandLowerCase;
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
       delete json.dateCreated;

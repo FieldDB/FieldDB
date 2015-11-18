@@ -316,6 +316,7 @@ describe("CorpusMask ", function() {
         authUrls: ["https://localhost:3183"],
         websiteUrls: ["https://localhost:3182"],
         userFriendlyServerName: "Localhost",
+        brandLowerCase: "localhost",
         version: connection.version,
         corpusid: "",
         titleAsUrl: "",
