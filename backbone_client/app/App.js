@@ -179,7 +179,7 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
-
+      // originalModel.authentication = originalModel.authentication || {};
       FieldDB.FieldDBObject.application = new FieldDB.App(originalModel);
       return this.originalParse(originalModel);
     },

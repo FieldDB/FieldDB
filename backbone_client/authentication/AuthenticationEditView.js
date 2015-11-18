@@ -421,20 +421,20 @@ define([
       dataToPost.email = $(".registeruseremail").val().trim();
       dataToPost.password = $(".registerpassword").val().trim();
       dataToPost.authUrl = OPrime.getAuthUrl();
-      dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
+      dataToPost.appbrand = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a dbname to create
-      var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
-      corpusConnection.dbname = "firstcorpus";
-      dataToPost.corpora = [corpusConnection];
-      dataToPost.mostRecentIds = {};
-      dataToPost.mostRecentIds.connection = JSON.parse(JSON.stringify(corpusConnection));
-      dataToPost.mostRecentIds.connection.dbname = dataToPost.username + "-" + dataToPost.mostRecentIds.connection.dbname;
-      var activityConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
-      activityConnection.dbname = dataToPost.username + "-activity_feed";
-      dataToPost.activityConnection = activityConnection;
-      var u = new UserMask();
-      dataToPost.gravatar = u.getGravatar(dataToPost.email || dataToPost.username);
+      // var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+      // corpusConnection.dbname = "firstcorpus";
+      // dataToPost.corpora = [corpusConnection];
+      // dataToPost.mostRecentIds = {};
+      // dataToPost.mostRecentIds.connection = JSON.parse(JSON.stringify(corpusConnection));
+      // dataToPost.mostRecentIds.connection.dbname = dataToPost.username + "-" + dataToPost.mostRecentIds.connection.dbname;
+      // var activityConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+      // activityConnection.dbname = dataToPost.username + "-activity_feed";
+      // dataToPost.activityConnection = activityConnection;
+      // var u = new UserMask();
+      // dataToPost.gravatar = u.getGravatar(dataToPost.email || dataToPost.username);
 
       if (dataToPost.password !== $(".to-confirm-password").val().trim()) {
         if (OPrime.debugMode) OPrime.debug("User has not entered correct info. ");
@@ -501,9 +501,9 @@ define([
         var potentialdbname = serverResults.user.corpora[0].dbname;
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
 
-        var connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
-        connection.dbname = potentialdbname;
+        var connection = serverResults.user.corpora[0];
         var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
+        $.couch.urlPrefix = OPrime.getCouchUrl(connection, "");
 
         window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
           OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
