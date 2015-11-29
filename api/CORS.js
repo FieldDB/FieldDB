@@ -40,7 +40,13 @@ CORS.supportCORSandIE = function(method, url) {
   }
   if ("withCredentials" in xhrCors) {
     // XHR for Chrome/Firefox/Opera/Safari.
-    xhrCors.open(method, url, true);
+    try {
+      xhrCors.open(method, url, true);
+    } catch (exception) {
+      console.log(exception);
+      this.error = exception.message;
+      return null;
+    }
     // https://mathiasbynens.be/notes/xhr-responsetype-json
     // xhrCors.responseType = "json";
   } else if (typeof XDomainRequest !== "undefined") {
@@ -79,12 +85,13 @@ CORS.makeCORSRequest = function(options) {
 
   xhr = this.supportCORSandIE(options.method, options.url);
   if (!xhr) {
-    this.bug("CORS not supported, your browser is unable to contact the database.");
+    var message = this.error || "CORS not supported, your browser will be unable to contact the database: " + options.url;
+    this.bug(message);
     Q.nextTick(function() {
       deferred.reject({
         status: 400,
         details: options,
-        userFriendlyErrors: ["CORS not supported, your browser is unable to contact the database."]
+        userFriendlyErrors: [message]
       });
     });
     return deferred.promise;
@@ -184,10 +191,9 @@ CORS.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e, f, g) {
     self.debug(e, f, g);
-    self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     var returnObject = {
       userFriendlyErrors: "There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.",
-      status: null,
+      status: xhr.status,
       error: e
     };
     if (e && e.userFriendlyErrors) {
@@ -202,6 +208,7 @@ CORS.makeCORSRequest = function(options) {
     if (returnObject.status === 0) {
       returnObject.userFriendlyErrors = ["Unable to contact the server, are you sure you're not offline?"];
     }
+    self.bug(returnObject.userFriendlyErrors.join(" "));
     returnObject.details = options;
     deferred.reject(returnObject);
   };

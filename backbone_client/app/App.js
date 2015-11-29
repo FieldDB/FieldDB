@@ -199,7 +199,7 @@ define([
       $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"),"");
 
       if(OPrime.isChromeApp()){
-        Backbone.couch_connector.config.base_url = this.getCouchUrl(connection,"");
+        Backbone.couch_connector.config.base_url = $.couch.urlPrefix;
         Backbone.couch_connector.config.db_name = connection.dbname;
       }else{
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
@@ -250,7 +250,9 @@ define([
     createAppBackboneObjects : function(optionaldbname, callback){
 
       console.log("TOOD Use the fielddb app to load the dashboard");
-      var fieldDBApp = {};
+      var fieldDBApp = {
+        connection: this.get("connection")
+      };
       this.parse(fieldDBApp);
 
       if (optionaldbname == null) {
@@ -384,22 +386,22 @@ define([
         return;
       }
 
-      var couchurl = this.getCouchUrl(connection, "/_session");
-      var corpusloginparams = {};
-      corpusloginparams.name = username;
-      corpusloginparams.password = password;
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchurl);
+      var couchSessionUrl = this.getCouchUrl(connection, "/_session");
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchSessionUrl);
 
       var appself = this;
       var connectionInscope = connection;
-      $.couch.urlPrefix = OPrime.getCouchUrl(connection, "");
-      $.couch.login({
-        name: username,
-        password: password,
-        success : function(serverResults) {
-          if(!serverResults){
-            OPrime.bug("There was a problem logging you into your backup database, please report this.");
+      $.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
+
+      FieldDB.CORS.makeCORSRequest({
+          type: "POST",
+          url: couchSessionUrl,
+          data: {
+            name: username,
+            password: password
           }
+        }).then(function(serverResults){
+
           appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
           // var corpora =  window.app.get("corporaUserHasAccessTo")  || new Corpuses();
           // var roles = serverResults.roles;
@@ -430,11 +432,8 @@ define([
 
           if (window.appView) {
             window.appView
-            .toastUser(
-                "I logged you into your team server automatically, your syncs will be successful.",
-                "alert-info", "Online Mode:");
+            .toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info", "Online Mode:");
           }
-
 
           /* if in chrome extension, or offline, turn on replication */
           if(OPrime.isChromeApp()){
@@ -445,56 +444,37 @@ define([
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
-        },
-        error : function(serverResults) {
-          window
-          .setTimeout(
-              function() {
-                //try one more time 5 seconds later
-                $.couch.login({
-                  name: username,
-                  password: password,
-                  success : function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                      .toastUser(
-                          "I logged you into your team server automatically, your syncs will be successful.",
-                          "alert-info", "Online Mode:");
-                    }
-                    /* if in chrome extension, or offline, turn on replication */
-                    if(OPrime.isChromeApp()){
-                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-//                      appself.replicateContinuouslyWithCouch();
-                    }
 
-                    if (typeof succescallback == "function") {
-                      succescallback(serverResults);
-                    }
-                  },
-                  error : function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                      .toastUser(
-                          "I couldn't log you into your corpus. What does this mean? "
-                          + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
-                          + "You also can't share your data with team members. If your computer is online and you are"
-                          + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
-                          + OPrime.contactUs
-                          + " If you're offline you can ignore this warning, and sync later when you're online. ",
-                          "alert-danger",
-                      "Offline Mode:");
-                    }
-                    if (typeof failurecallback == "function") {
-                      failurecallback("I couldn't log you into your corpus.");
-                    }
-                    if (OPrime.debugMode) OPrime.debug(serverResults);
-                    window.app.get("authentication").set(
-                        "staleAuthentication", true);
-                  }
-                });
-              }, 5000);
-        }
-      });
+        }, function(reason){
+
+          if (window.appView) {
+            window.appView
+            .toastUser(
+                "I couldn't log you into your corpus. What does this mean? "
+                + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
+                + "You also can't share your data with team members. If your computer is online and you are"
+                + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
+                + OPrime.contactUs
+                + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                "alert-danger",
+            "Offline Mode:");
+          }
+          if (typeof failurecallback == "function") {
+            failurecallback("I couldn't log you into your corpus.");
+          }
+          if (OPrime.debugMode) OPrime.debug(reason);
+          window.app.get("authentication").set(
+          "staleAuthentication", true);
+
+        }).fail(function(exception){
+
+          console.warn(exception.stack);
+          OPrime.bug("There was a problem logging you into your backup database, please report this.");
+          if (typeof failurecallback == "function") {
+            failurecallback("Unexpected error when logging you in to your corpus.");
+          }
+
+        });
     },
     getCouchUrl : function(connection, couchdbcommand) {
       if(!connection){
