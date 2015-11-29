@@ -83,7 +83,7 @@ define([
         originalModel.activityConnection = originalModel.activityConnection.toJSON()
       }
 
-      if (originalModel.mostRecentIds ) {
+      if (originalModel.mostRecentIds && originalModel.mostRecentIds.connection && !originalModel.mostRecentIds.connection.version) {
         originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection || originalModel.mostRecentIds.couchConnection;
         originalModel.mostRecentIds.connection = new FieldDB.Connection(originalModel.mostRecentIds.connection);
         normalizedConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
@@ -179,7 +179,10 @@ define([
       }
 
       for (var role in roles) {
-        var dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
+        if (!roles[role] || roles[role].indexOf("-") === -1){
+          continue;
+        }
+        var dbname = roles[role].replace(/_admin|_writer|_reader|_commenter/g, "");
         if (dbname && !corpora[dbname] && dbname !== "public-firstcorpus") {
           newconnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
           newconnection.dbname = dbname;
