@@ -12,7 +12,7 @@ define([
   {
     /**
      * @class Hold preferences for users like the skin of the app
-     * 
+     *
      * @property {int} skin This is user's preferred skin.
      * @property {int} numVisibleDatum The number of Datum visible at the time on
      * the Datum*View's.
@@ -31,7 +31,7 @@ define([
     	  /*
     	   if(OPrime.apptype == "myaamia" && app.get("authentication").get("userPrivate").get("username") == "public"){
        this.set("transparentDashboard", "true");
-     } 
+     }
     	   */
       }
     },
@@ -50,7 +50,7 @@ define([
       alwaysRandomizeSkin : "true",
       numberOfItemsInPaginatedViews : 10
     },
-    
+
     // Internal models: used by the parse function
     internalModels : {
       unicodes : InsertUnicodes
@@ -59,9 +59,10 @@ define([
     originalParse : Backbone.Model.prototype.parse,
     parse: function(originalModel) {
       if (originalModel) {
-        if (originalModel.preferedDashboardLayout) {
+        if (!originalModel.preferredDashboardLayout && originalModel.preferedDashboardLayout) {
           originalModel.preferredDashboardLayout = originalModel.preferedDashboardLayout;
         }
+        delete originalModel.preferedDashboardLayout;
       }
       return this.originalParse(originalModel);
     },
@@ -71,7 +72,7 @@ define([
         callback();
       }
     }
-    
+
   });
 
   return UserPreference;
