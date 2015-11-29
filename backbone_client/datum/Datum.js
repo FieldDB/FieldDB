@@ -267,8 +267,7 @@ define([
               OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
               corpusFieldClone.mask = "";
               corpusFieldClone.value = "";
-              delete corpusFieldClone.user;
-              delete corpusFieldClone.users;
+              corpusFieldClone.json = {};
               originalModel.fields.push(corpusFieldClone);
             }
           }
@@ -284,9 +283,18 @@ define([
         try {
           if (indexOfEnterdByUserField > -1) {
             var enteredByUserField = originalModel.fields[indexOfEnterdByUserField];
-            if (enteredByUserField.user && (!enteredByUserField.value || !enteredByUserField.mask)) {
-              enteredByUserField.value = enteredByUserField.user.username;
-              enteredByUserField.mask = enteredByUserField.user.username;
+
+            var user = enteredByUserField.user
+            if (enteredByUserField.json && enteredByUserField.json.user && enteredByUserField.json.user.username) {
+              user = enteredByUserField.json.user;
+            }
+            enteredByUserField.json = enteredByUserField.json || {};
+            enteredByUserField.json.user = user;
+            delete enteredByUserField.user;
+
+            if (enteredByUserField.json.user && (!enteredByUserField.value || !enteredByUserField.mask)) {
+              enteredByUserField.value = enteredByUserField.json.user.username;
+              enteredByUserField.mask = enteredByUserField.json.user.username;
               console.log("repaired enteredByUserField", enteredByUserField);
 
             } else {
@@ -301,30 +309,31 @@ define([
         try {
           if (indexOfModifiedByUserField > -1) {
             var modifiyersField = originalModel.fields[indexOfModifiedByUserField];
-            if (modifiyersField.users && modifiyersField.users.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
-              var modifiers = modifiyersField.users;
-              // Limit users array to unique usernames
-              modifiers = _.map(_.groupBy(modifiers, function(x) {
-                return x.username;
-              }), function(grouped) {
-                /* take the most recent version of the user in case they updated their gravatar or first and last name*/
-                return grouped[grouped.length - 1];
-              });
-              modifiyersField.users = modifiers;
+            var modifiers = modifiyersField.users;
+            if (!modifiers && modifiyersField.json && modifiyersField.json.users){
+              modifiers = modifiyersField.json.users;
+            }
+            enteredByUserField.json = enteredByUserField.json || {};
+            enteredByUserField.json.users = modifiers || [];
+            delete modifiyersField.users;
+
+            if (modifiers && modifiers.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
+              // // Limit value view of modifiers array to unique usernames
+              // modifiers = _.map(_.groupBy(modifiers, function(x) {
+              //   return x.username;
+              // }), function(grouped) {
+              //   /* take the most recent version of the user in case they updated their gravatar or first and last name*/
+              //   return grouped[grouped.length - 1];
+              // });
 
               /* generate the users as a string using the users array */
-              var usersAsString = [];
-              for (var user in modifiers) {
-                var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
-                userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
-                if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
-                  userFirstandLastName = modifiers[user].username;
+              modifiyersField.mask = _.unique(modifiers.map(function(userMask){
+                if (!(userMask instanceof FieldDB.UserMask)) {
+                  userMask = new FieldDB.UserMask(userMask)
                 }
-                usersAsString.push(userFirstandLastName);
-              }
-              usersAsString = usersAsString.join(", ");
-              modifiyersField.mask = usersAsString;
-              modifiyersField.value = usersAsString;
+                return userMask.name;
+              })).join(", ");
+              modifiyersField.value = modifiyersField.mask;
               console.log("repaired modifiedByUser", modifiyersField);
 
             } else {
@@ -1469,11 +1478,17 @@ define([
         if (OPrime.debugMode) OPrime.debug("Saving a Datum");
         var self = this;
         var newModel = true;
+        var appVersion = "";
+        if (appView.authView.appVersion){
+          appVersion = appView.authView.appVersion;
+        }
         var user = {
           username: window.app.get("authentication").get("userPublic").get("username"),
           gravatar: window.app.get("authentication").get("userPublic").get("gravatar"),
           firstname: window.app.get("authentication").get("userPublic").get("firstname"),
-          lastname: window.app.get("authentication").get("userPublic").get("lastname")
+          lastname: window.app.get("authentication").get("userPublic").get("lastname"),
+          timestamp: Date.now(),
+          appVersion: appVersion
         };
         var usersName = user.firstname + " " + user.lastname;
         usersName = usersName.replace(/undefined/g, "");
@@ -1485,30 +1500,20 @@ define([
           newModel = false;
           var modifiyersField = this.get("fields").where({
             label: "modifiedByUser"
-          })[0];
-          if (modifiyersField) {
-            var modifiers = modifiyersField.get("users");
-            modifiers.push(user);
-            // Limit users array to unique usernames
-            modifiers = _.map(_.groupBy(modifiers, function(x) {
-              return x.username;
-            }), function(grouped) {
-              /* take the most recent version of the user in case they updated their gravatar or first and last name*/
-              return grouped[grouped.length - 1];
-            });
-            modifiyersField.set("users", modifiers);
-
+          });
+          if (modifiyersField && modifiyersField[0]) {
+            modifiyersField = modifiyersField[0];
+            var json = modifiyersField.get("json") || {};
+            json.users = json.users || [];
+            json.users.push(user);
             /* generate the users as a string using the users array */
-            var usersAsString = [];
-            for (var user in modifiers) {
-              var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
-              userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
-              if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
-                userFirstandLastName = modifiers[user].username;
+            var usersAsString  = _.unique(json.users.map(function(userMask){
+              if (!(userMask instanceof FieldDB.UserMask)) {
+                userMask = new FieldDB.UserMask(userMask)
               }
-              usersAsString.push(userFirstandLastName);
-            }
-            usersAsString = usersAsString.join(", ");
+              return userMask.name;
+            })).join(", ");
+            modifiyersField.set("json", json);
             modifiyersField.set("mask", usersAsString);
           }
         } else {
@@ -1518,7 +1523,7 @@ define([
           })[0];
           if (userField) {
             userField.set("mask", usersName);
-            userField.set("user", user);
+            userField.set("json", {user: user});
           }
         }
         var timeSpentDetails = this.calculateEditTime();

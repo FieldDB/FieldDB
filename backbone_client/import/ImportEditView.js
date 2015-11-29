@@ -657,7 +657,7 @@ define( [
           datumfields[x].mask = "";
           datumfields[x].value = "";
           if (datumfields[x].label === "modifiedByUser") {
-            datumfields[x].users = [];
+            datumfields[x].json = {};
           } else if (datumfields[x].label === "enteredByUser") {
             var user = {
               username: window.app.get("authentication").get("userPublic").get("username"),
@@ -670,7 +670,8 @@ define( [
             if (!usersName || usersName.trim().length < 2) {
               usersName = user.username;
             }
-            datumfields[x].user = user;
+            datumfields[x].json = datumfields[x].json || {};
+            datumfields[x].json.user = user;
             datumfields[x].mask = usersName;
             datumfields[x].value = usersName;
           }

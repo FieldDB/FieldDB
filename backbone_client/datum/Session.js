@@ -174,8 +174,7 @@ define([
               OPrime.debug("Adding field to this session: " + corpusFieldClone.label);
               corpusFieldClone.mask = "";
               corpusFieldClone.value = "";
-              delete corpusFieldClone.user;
-              delete corpusFieldClone.users;
+              delete corpusFieldClone.json;
               originalModel.fields.push(corpusFieldClone);
             }
           }

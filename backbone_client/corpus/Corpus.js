@@ -314,7 +314,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
-            user: {},
+            json: {},
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),
@@ -323,7 +323,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
-            users: [],
+            json: {},
             userchooseable: "disabled",
             help: "An array of users who modified the datum"
           }),
@@ -440,10 +440,10 @@ define([
         originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
 
         if (originalModel.datumFields[x].users) {
-          originalModel.datumFields[x].users = [];
+          delete originalModel.datumFields[x].users;
         }
         if (originalModel.datumFields[x].user) {
-          originalModel.datumFields[x].user = {};
+          delete originalModel.datumFields[x].user;
         }
         if (originalModel.datumFields[x].json) {
           originalModel.datumFields[x].json = {};

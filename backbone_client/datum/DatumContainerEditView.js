@@ -199,8 +199,8 @@ define([
       for(var x in datumfields){
         datumfields[x].mask = "";
         datumfields[x].value = "";
-        if (datumfields[x].users) {
-          datumfields[x].users = [];
+        if (datumfields[x].json) {
+          datumfields[x].json = {};
         }
       }
       this.prependDatum(new Datum({
