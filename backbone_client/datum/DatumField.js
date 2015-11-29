@@ -259,8 +259,8 @@ define([
         callback();
       }
     },
-    originalParse : Backbone.Model.prototype.parse,
-    parse : function(originalModel){
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel){
       originalModel.label = originalModel.label || originalModel.id;
       return this.originalParse(originalModel);
     }

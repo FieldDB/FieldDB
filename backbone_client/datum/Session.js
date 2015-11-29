@@ -154,7 +154,7 @@ define([
       comments : Comments
     },
     originalParse : Backbone.Model.prototype.parse,
-    parse : function(originalModel){
+    parse: function(originalModel){
       /* if this is just a couchdb save result, dont process it */
       if (originalModel.ok) {
         return this.originalParse.apply(this, [originalModel]);
