@@ -749,8 +749,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
         glossGroups.push(glosses.join("-"));
       }
-      datum.alternateGlossLines = datum.alternateGlossLines ? datum.alternateGlossLines.concat(glossGroups.join(" ")) : glossGroups.join(" ");
       datum.gloss = glossGroups.join(" ");
+      datum.alternateGlossLines = datum.alternateGlossLines ? datum.alternateGlossLines.concat(glossGroups.join(" ")) : [datum.gloss];
       // Replace the gloss line with the guessed glosses
       return datum;
     }
