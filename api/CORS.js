@@ -205,7 +205,7 @@ CORS.makeCORSRequest = function(options) {
     if (e && e.srcElement && e.srcElement.status !== undefined) {
       returnObject.status = e.srcElement.status;
     }
-    if (navigator && !navigator.onLine) {
+    if (window && window.navigator && !window.navigator.onLine) {
       returnObject.userFriendlyErrors = ["Unable to contact the server, you appear to be offline."];
       returnObject.status = 600;
     } else {
