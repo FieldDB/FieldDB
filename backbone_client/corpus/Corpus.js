@@ -744,7 +744,7 @@ define([
         window.appView.sessionNewModalView.model = new Session({
           comments : new Comments(),
           dbname : self.get("dbname"),
-          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+          fields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.fillWithDefaults();
         window.appView.sessionNewModalView.render();
@@ -1232,7 +1232,7 @@ define([
           }else{
             if (OPrime.debugMode) OPrime.debug("You have no sessions, creating a new one...");
             var s = new Session({
-              sessionFields : self.get("sessionFields").clone(),
+              fields : self.get("sessionFields").clone(),
               filledWithDefaults: true,
               dbname : self.get("dbname")
             }); //MUST be a new model, other wise it wont save in a new pouch.

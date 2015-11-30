@@ -1069,7 +1069,7 @@ define( [
     createNewSession : function(callback){
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
-          sessionFields : window.app.get("corpus").get("sessionFields").clone(),
+          fields : window.app.get("corpus").get("sessionFields").clone(),
           "dbname" : window.app.get("corpus").get("dbname"),
         }));
 
