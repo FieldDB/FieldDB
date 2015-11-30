@@ -376,12 +376,13 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       docs.map(Lexicon.lexicon_nodes_mapReduce.map);
 
       expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
-      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(6);
-      expect(Lexicon.lexicon_nodes_mapReduce.rows[4]).toEqual({
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(3);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[2]).toEqual({
         key: {
           confidence: 1,
-          gloss: "nay",
-          anotherigtfields: "E"
+          gloss: "qapari",
+          morphemes: "qaparinaywankichis",
+          anotherigtfields: "D"
         },
         value: "qaparinaywankichis"
       });
