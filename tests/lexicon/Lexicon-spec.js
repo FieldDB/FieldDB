@@ -326,6 +326,36 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
     });
 
+    it("should copy utterance if gloss is not empty but morphemes is empty", function() {
+      Lexicon.lexicon_nodes_mapReduce.rows = [];
+      var docs = [{
+        _id: "one",
+        fields: [{
+          id: "utterance",
+          mask: "one two three"
+        }, {
+          id: "morphemes",
+          mask: ""
+        }, {
+          id: "gloss",
+          mask: "aa bb cc"
+        }],
+        session: {}
+      }];
+      docs.map(Lexicon.lexicon_nodes_mapReduce.map);
+
+      expect(Lexicon.lexicon_nodes_mapReduce.rows).toBeDefined();
+      expect(Lexicon.lexicon_nodes_mapReduce.rows.length).toEqual(3);
+      expect(Lexicon.lexicon_nodes_mapReduce.rows[0]).toEqual({
+        key: {
+          confidence: 1,
+          morphemes: "one",
+          gloss: "aa"
+        },
+        value: "one"
+      });
+    });
+
     it("should accept custom igt fields", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];
       var docs = [{
