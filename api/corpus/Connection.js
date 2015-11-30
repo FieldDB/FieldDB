@@ -515,7 +515,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   brandLowerCase: {
     get: function() {
-      return this._brandLowerCase || this.serverLabel;
+      return this._brandLowerCase || this.serverLabel || "";
     },
     set: function(value) {
       this._brandLowerCase = value;

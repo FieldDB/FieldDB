@@ -108,6 +108,57 @@ describe("User ", function() {
       u.lastname = "Smith";
 
       var result = u.toJSON("complete");
+      var expectedPrefs = {
+        fieldDBtype: "UserPreference",
+        dateCreated: result.prefs.dateCreated,
+        version: u.version,
+        hotkeys: [],
+        unicodes: []
+      };
+      expect(result.prefs).toEqual(expectedPrefs);
+
+      var expectedUserMask = {
+        fieldDBtype: "UserMask",
+        username: "",
+        dateCreated: result.userMask.dateCreated,
+        version: result.userMask.version,
+        firstname: "",
+        lastname: "",
+        gravatar: "",
+        researchInterest: "",
+        affiliation: "",
+        description: "",
+        corpora: [],
+        fields: [],
+        api: "users"
+      };
+      expect(result.userMask).toEqual(expectedUserMask);
+
+      var expectedActivityConnection = {
+        fieldDBtype: "Connection",
+        version: u.version,
+        corpusid: "",
+        titleAsUrl: "",
+        dbname: "",
+        pouchname: "",
+        protocol: "",
+        domain: "",
+        port: "",
+        path: "",
+        userFriendlyServerName: "",
+        brandLowerCase: "",
+        authUrls: [],
+        clientUrls: [],
+        corpusUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        websiteUrls: [],
+        activityUrls: [],
+        title: "",
+      };
+      expect(result.activityConnection).toEqual(expectedActivityConnection);
+
       expect(result).toEqual({
         fieldDBtype: "User",
         username: "",
@@ -122,51 +173,10 @@ describe("User ", function() {
         description: "",
         appbrand: "",
         fields: [],
-        prefs: {
-          fieldDBtype: "UserPreference",
-          dateCreated: result.prefs.dateCreated,
-          version: u.version,
-          hotkeys: [],
-          unicodes: []
-        },
-        userMask: {
-          fieldDBtype: "UserMask",
-          username: "",
-          dateCreated: result.userMask.dateCreated,
-          version: result.userMask.version,
-          firstname: "",
-          lastname: "",
-          gravatar: "",
-          researchInterest: "",
-          affiliation: "",
-          description: "",
-          corpora: [],
-          fields: [],
-          api: "users"
-        },
+        prefs: expectedPrefs,
+        userMask: expectedUserMask,
         mostRecentIds: {},
-        activityConnection: {
-          fieldDBtype: "Connection",
-          version: u.version,
-          corpusid: "",
-          titleAsUrl: "",
-          dbname: "",
-          pouchname: "",
-          protocol: "",
-          domain: "",
-          port: "",
-          path: "",
-          userFriendlyServerName: "",
-          authUrls: [],
-          clientUrls: [],
-          corpusUrls: [],
-          lexiconUrls: [],
-          searchUrls: [],
-          audioUrls: [],
-          websiteUrls: [],
-          activityUrls: [],
-          title: "",
-        },
+        activityConnection: expectedActivityConnection,
         authUrl: "",
         corpora: [],
         newCorpora: [],
@@ -214,6 +224,7 @@ describe("User ", function() {
         // authUrls: ["https://auth.lingsync.org"],
         // path: "",
         corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
+        brandLowerCase: '',
         version: user.version,
         pouchname: "sapir-cherokee",
         title: "cherokee",
@@ -229,6 +240,7 @@ describe("User ", function() {
         // authUrls: ["https://auth.lingsync.org"],
         // path: "",
         corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],
+        brandLowerCase: '',
         version: user.version,
         pouchname: "sapir-firstcorpus",
         title: "firstcorpus",
@@ -372,7 +384,7 @@ describe("User ", function() {
 
     it("should be able to get a connection from only the title as url", function() {
       var user = new User(JSON.parse(JSON.stringify(SAMPLE_USERS[0])));
-      
+
       user.corpora["sapir-firstcorpus"].title = "Practice corpus";
       expect(user.corpora["sapir-firstcorpus"].title).toEqual("Practice corpus");
       expect(user.corpora["sapir-firstcorpus"].titleAsUrl).toEqual("practice_corpus");
