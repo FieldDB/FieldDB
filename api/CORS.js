@@ -36,7 +36,7 @@ CORS.supportCORSandIE = function(method, url) {
     xhrCors = new XMLHttpRequest();
   } catch (e) {
     this.warn("XMLHttpRequest is not defined, nothing will happen.", e);
-    xhrCors = {};
+    return null;
   }
   if ("withCredentials" in xhrCors) {
     // XHR for Chrome/Firefox/Opera/Safari.
@@ -89,7 +89,7 @@ CORS.makeCORSRequest = function(options) {
     this.bug(message);
     Q.nextTick(function() {
       deferred.reject({
-        status: 400,
+        status: 620,
         details: options,
         userFriendlyErrors: [message]
       });
@@ -192,7 +192,7 @@ CORS.makeCORSRequest = function(options) {
   xhr.onerror = function(e, f, g) {
     self.debug(e, f, g);
     var returnObject = {
-      userFriendlyErrors: "There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.",
+      userFriendlyErrors: ["There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this."],
       status: xhr.status,
       error: e
     };
@@ -205,8 +205,11 @@ CORS.makeCORSRequest = function(options) {
     if (e && e.srcElement && e.srcElement.status !== undefined) {
       returnObject.status = e.srcElement.status;
     }
-    if (returnObject.status === 0) {
-      returnObject.userFriendlyErrors = ["Unable to contact the server, are you sure you're not offline?"];
+    if (navigator && !navigator.onLine) {
+      returnObject.userFriendlyErrors = ["Unable to contact the server, you appear to be offline."];
+      returnObject.status = 600;
+    } else {
+      returnObject.status = 610;
     }
     self.bug(returnObject.userFriendlyErrors.join(" "));
     returnObject.details = options;

@@ -12,6 +12,22 @@ try {
 }
 
 var specIsRunningTooLong = 5000;
+var CORS_ERROR = "CORS not supported, your browser will be unable to contact the database";
+
+var expectedErrors = function(reason) {
+  if (reason.status === 620) {
+    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+    return true;
+  } else if (reason.status === 610) {
+    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+    return true;
+  } else if (reason.status === 600) {
+    expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
+    return true;
+  } else {
+    return false;
+  }
+};
 
 describe("Database", function() {
   it("should be load", function() {
@@ -49,18 +65,18 @@ describe("Database", function() {
           "description": "No public information available"
         });
       }, function(error) {
-        if (error.status >= 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status >= 500) {
           expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -75,18 +91,18 @@ describe("Database", function() {
         expect(resultingdocument.rev).toBeDefined();
         expect(resultingdocument.rev).toContain("1-");
       }, function(error) {
-        if (error.status >= 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status >= 500) {
           expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -119,18 +135,18 @@ describe("Database", function() {
         expect(resumedCouchDBSession.roles).toBeDefined();
         expect(resumedCouchDBSession.roles.length).toBeGreaterThan(4);
       }, function(error) {
-        if (error.status >= 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status >= 500) {
           expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Please login."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -259,15 +275,17 @@ describe("Database", function() {
         expect(couchdbSessionLoginResult.roles).toBeDefined();
         expect(couchdbSessionLoginResult.roles.length).toBeGreaterThan(4);
       }, function(error) {
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toContain("Please report this");
         } else {
-          expect(error.status).toEqual(0);
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          console.log(error);
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -288,15 +306,17 @@ describe("Database", function() {
       }, function(error) {
         expect(error.details).toBeDefined();
         expect(error.details.authUrl).toEqual("http://localhost:5984/_session");
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toContain("Please report this");
         } else {
-          expect(error.status).toEqual(0);
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          console.log(error);
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -311,18 +331,17 @@ describe("Database", function() {
         expect(resultingFielddbUser.username).toEqual(resultingFielddbUser._id);
         expect(resultingFielddbUser._rev).toBeDefined();
       }, function(error) {
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
           console.log(error);
-          expect(error).toBeUndefined();
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -332,12 +351,13 @@ describe("Database", function() {
       db.login({
         username: "",
         password: "phoneme"
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -347,12 +367,13 @@ describe("Database", function() {
       db.login({
         username: "jenkins",
         password: ""
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -362,8 +383,8 @@ describe("Database", function() {
       db.login({
         username: "Ling Llamâ's-friend",
         password: "phoneme"
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
         expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
@@ -371,19 +392,21 @@ describe("Database", function() {
         expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
         expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
 
     it("should tell user there is a bug if the client didnt provide any login details", function(done) {
       var db = new Database();
-      db.login().then(function() {
-        expect(false).toBeTruthy();
+      db.login().then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -400,15 +423,17 @@ describe("Database", function() {
       db.logout().then(function() {
         expect(db.connectionInfo).toBeUndefined();
       }, function(error) {
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toContain("Please report this");
         } else {
-          expect(error.status).toEqual(0);
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          console.log(error);
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -422,15 +447,17 @@ describe("Database", function() {
       db.logout("https://ifielddevs.iriscouch.com/_session").then(function() {
         expect(db.connectionInfo).toBeUndefined();
       }, function(error) {
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.status).toEqual(400);
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
+          expect(error.userFriendlyErrors[0]).toContain("Please report this");
         } else {
-          expect(error.status).toEqual(0);
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          console.log(error);
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -448,7 +475,8 @@ describe("Database", function() {
         expect(error.status).toEqual(412);
         expect(error.userFriendlyErrors).toEqual(["You cannot log out of https://ifielddevs.example.com/auth using this application."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -473,20 +501,16 @@ describe("Database", function() {
         expect(error.details.connection).toBeDefined();
         expect(error.details.connection.userFriendlyServerName).toEqual("Localhost");
         expect(error.details.connection.serverLabel).toEqual("localhost");
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
         console.log(exception.stack);
-        expect(exception).toEqual(" ");
-      }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -497,8 +521,8 @@ describe("Database", function() {
         password: "morpheme",
         confirmPassword: "morpheme",
         authUrl: "https://auth.linguistics.miauniversity.edu:3222/some/virtual/host"
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
         if (error.details.connection && error.details.connection.serverLabel !== "localhost") {
@@ -523,31 +547,32 @@ describe("Database", function() {
             activityUrls: []
           });
         }
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong);
 
     it("should be able to register a new user if its a new corpus (wordcloud users)", function(done) {
       var db = new Database();
       db.dbname = "anonymouseuser123-wordclouddb";
-      db.register().then(function() {
-        expect(false).toBeTruthy();
+      db.register().then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.details.username).toEqual("anonymouseuser123");
         expect(error.details.authUrl).toEqual("https://auth.lingsync.org");
         expect(error.details.connection.serverLabel).toEqual("production");
         expect(error.details.connection.brand).toEqual("LingSync.org");
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           if (error.userFriendlyErrors && error.userFriendlyErrors[0] && error.userFriendlyErrors[0].indexOf("already exists, try a different username.") > -1) {
             expect(error.userFriendlyErrors[0]).toContain("already exists, try a different username.");
           } else {
@@ -555,26 +580,24 @@ describe("Database", function() {
           }
         } else if (error.status === 409) {
           expect(error.userFriendlyErrors).toEqual(["Username anonymouseuser123 already exists, try a different username."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
     }, specIsRunningTooLong * 2);
 
     it("should tell user there is a bug if the client didnt provide any register details", function(done) {
       var db = new Database();
-      db.register().then(function() {
-        expect(false).toBeTruthy();
+      db.register().then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["This application has errored, please contact us."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -584,12 +607,13 @@ describe("Database", function() {
       db.register({
         username: "",
         password: "phoneme"
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a username."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -599,12 +623,13 @@ describe("Database", function() {
       db.register({
         username: "jenkins",
         password: ""
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toEqual(["Please supply a password."]);
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -615,8 +640,8 @@ describe("Database", function() {
         username: "Ling Llamâ's-friend",
         password: "phoneme",
         confirmPassword: "phoneme"
-      }).then(function() {
-        expect(false).toBeTruthy();
+      }).then(function(response) {
+        expect(response).toEqual("should not get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toContain("You asked to use Ling Llamâ's-friend but we would reccomend using this instead: lingllamasfriend the following are a list of reason's why.");
         expect(error.userFriendlyErrors).toContain("The identifier has to be lowercase so that it can be used in your CouchDB database names.");
@@ -624,7 +649,8 @@ describe("Database", function() {
         expect(error.userFriendlyErrors).toContain("You have to use ascii characters in your identifiers because your identifier is used in your in web urls, so its better if you can use something more web friendly.");
         expect(error.userFriendlyErrors).toContain("You have some characters which web servers wouldn't trust in your identifier.");
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -643,7 +669,7 @@ describe("Database", function() {
       db.login({
         name: "jenkins",
         password: "phoneme"
-      }).then(function() {
+      }).then(function(response) {
 
         db.fetchRevisions("team").then(function(resultingdocument) {
           expect(resultingdocument).toBeDefined();
@@ -652,32 +678,28 @@ describe("Database", function() {
         }, function(error) {
           expect(error).toBeDefined();
           expect(error.userFriendlyErrors).toBeDefined();
-          if (error.status === 500) {
-            expect(error.userFriendlyErrors).toEqual([" "]);
-          } else if (error.status === 400) {
-            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-          } else if (error.status === 0) {
-            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          if (expectedErrors(error)) {
+            // errors were expected
           } else {
-            expect(false).toBeTruthy();
+            expect(response).toEqual("should not get here");
           }
         }).fail(function(exception) {
-          expect(exception).toBeUndefined();
+          console.log(exception.stack);
+          expect(exception).toEqual("shouldnt get here");
         }).done(done);
 
       }, function(error) {
         expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toBeDefined();
-        if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual([" "]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+        if (expectedErrors(error)) {
+          // errors were expected
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
         done();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("shouldnt get here");
       });
     }, specIsRunningTooLong);
 

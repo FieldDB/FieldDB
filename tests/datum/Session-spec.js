@@ -21,6 +21,21 @@ FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObj
 var sample_1_22_datum = require("./../../sample_data/datum_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
+var expectedErrors = function(reason) {
+  if (reason.status === 620) {
+    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+    return true;
+  } else if (reason.status === 610) {
+    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+    return true;
+  } else if (reason.status === 600) {
+    expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
+    return true;
+  } else {
+    return false;
+  }
+};
+
 describe("Session: as a linguist I often collect data in an elicitation session", function() {
 
   beforeEach(function() {
@@ -320,22 +335,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
         expect(session.docs.thefirstdocinthissession).toBeDefined();
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
@@ -358,22 +371,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
         expect(session.docs.thefirstdocinthissession).toBeDefined();
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
@@ -402,22 +413,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(resultingdatalist).toBe(session.datalist);
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This datalist doesn't need to be re-indexed. 29834.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
 
         expect(session.docs.thefirstdocinthissession.id).toEqual("thefirstdocinthissession");
@@ -494,22 +503,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(true).toBeFalsy();
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
@@ -545,22 +552,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(true).toBeFalsy();
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
@@ -604,22 +609,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(true).toBeFalsy();
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
@@ -662,22 +665,20 @@ describe("Session: as a linguist I often collect data in an elicitation session"
         expect(true).toBeFalsy();
       }, function(error) {
         // console.log(error);
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors[0]).toEqual("Error saving a user in the database. ");
         } else if (error.status === 412) {
           expect(error.userFriendlyErrors[0]).toEqual("This application has errored. Please notify its developers: Cannot reindex this datalist if the corpus is not specified.");
         } else if (error.status === 404) {
           expect(error.userFriendlyErrors[0]).toContain(" Please report this 290323.");
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors[0]).toEqual("Unable to contact the server, are you sure you're not offline?");
         } else {
-          expect(false).toBeTruthy();
+          expect(error).toEqual("should not get here");
         }
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("should not get here");
       }).done(function() {
 
         expect(session.datalist.docIds).toBeDefined();
@@ -693,7 +694,6 @@ describe("Session: as a linguist I often collect data in an elicitation session"
       });
 
     }, specIsRunningTooLong);
-
 
     it("should not serialize an ordered list of datum which are in the session", function() {
       var session = new Session({
@@ -722,7 +722,6 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   });
 
-
   describe("serialization", function() {
 
     it("should serialize v1.22 sessions", function() {
@@ -748,7 +747,6 @@ describe("Session: as a linguist I often collect data in an elicitation session"
 
   });
   describe("Backward compatability with v1.22", function() {
-
 
     it("should load v1.22 session", function() {
       var session = new Session(JSON.parse(JSON.stringify(sample_1_22_datum[0].session)));

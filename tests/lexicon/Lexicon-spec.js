@@ -719,11 +719,19 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         })).toEqual(["eight|", "eleven|", "five|", "four|", "fourteen|", "nine|", "one|", "seven|", "six|", "ten|", "thirteen|", "three|", "twelve|", "two|"]);
 
       }, function(reason) {
-        console.warn("If you want to run this test, use CORSNode in the lexicon instead of CORS");
         expect(reason).toBeDefined();
         expect(reason.userFriendlyErrors).toBeDefined();
         expect(reason.details).toBeDefined();
-        expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+
+        if (reason.status === 620) {
+          console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+          expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+        } else if (reason.status === 401) {
+          expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
+        } else {
+          expect(reason).toEqual("should not get here");
+        }
+
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" unexpected exception while processing rules");

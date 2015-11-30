@@ -172,7 +172,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         url: this.url
       }).then(function(result) {
         if (!result || !result.ok) {
-          result.status = result.status || 400;
           result.userFriendlyErrors = result.userFriendlyErrors || ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."];
           deferred.reject(result);
           return;
@@ -593,6 +592,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               deferred.resolve(authOrCorpusServerResult.user);
             } else if (authOrCorpusServerResult && authOrCorpusServerResult.roles) {
               authOrCorpusServerResult.url = options.authUrl;
+              authOrCorpusServerResult.roles = authOrCorpusServerResult.roles.map(function(role) {
+                return options.authUrl + "/" + role;
+              });
               deferred.resolve(authOrCorpusServerResult);
             } else {
               authOrCorpusServerResult = authOrCorpusServerResult || {};
