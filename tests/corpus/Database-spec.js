@@ -12,7 +12,6 @@ try {
 }
 
 var specIsRunningTooLong = 5000;
-var CORS_ERROR = "CORS not supported, your browser will be unable to contact the database";
 
 var expectedErrors = function(reason) {
   if (reason.status === 620) {
