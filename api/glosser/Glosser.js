@@ -240,7 +240,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
       var self = this;
       var deferred = Q.defer();
-      this.fetching = true;
       this.whenFetched = deferred.promise;
 
       options = options || {};
@@ -271,6 +270,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         }
       }
 
+      this.fetching = true;
       CORS.makeCORSRequest({
           type: "GET",
           url: glosserURL
