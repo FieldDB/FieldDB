@@ -19,6 +19,10 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
    * @constructs
    */
   initialize : function(options) {
+    this.collection.model = {
+      prototype: {}
+    };
+
     if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION INIT");
       _(this).bindAll('addChildView', 'removeChildView');
 
@@ -222,9 +226,7 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
       }
       for (var id in objectIds) {
         var obj = new Model();
-        self.collection.model = {
-          prototype: {}
-        };
+
         obj.set("dbname", app.get("corpus").get("dbname"));
         // obj.set("session", new Model({
         //   dbname: app.get("corpus").get("dbname")
