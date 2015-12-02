@@ -841,8 +841,10 @@ var MAINTAINENCE = {
     /*
     Deploy to all users
      */
-    var typeOfDBToDeploy = "new_lexicon";
+    // var typeOfDBToDeploy = "new_lexicon";
     // var typeOfDBToDeploy = "new_export";
+
+    var typeOfDBToDeploy = "";
 
     window.needToRetry = [];
     $.couch.allDbs({
