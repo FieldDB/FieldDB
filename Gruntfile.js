@@ -66,7 +66,8 @@ module.exports = function(grunt) {
         ],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
-          external: ["api/**/*.js"],
+          // external: ["api/**/*.js"],
+          external: ["memory"],
           basedir: "./api/"
         }
       },
