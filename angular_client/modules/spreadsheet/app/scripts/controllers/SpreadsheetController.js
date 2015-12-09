@@ -2038,14 +2038,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.registerNewUser = function(newLoginInfo, serverCode) {
+    if(!confirm("NOTICE: We do *NOT* recommend using LingSync for field methods next semester. \n\nFor more details see the FAQ.")) {
+      return;
+    }
+    newLoginInfo = newLoginInfo || {};
+
     if (!newLoginInfo.serverCode) {
       newLoginInfo.serverCode = serverCode;
     }
-    if (!newLoginInfo || !newLoginInfo.serverCode) {
-      $rootScope.notificationMessage = "Please select a server.";
-      $rootScope.openNotification();
-      return;
-    }
+    // if (!newLoginInfo || !newLoginInfo.serverCode) {
+    //   $rootScope.notificationMessage = "Please select a server.";
+    //   $rootScope.openNotification();
+    //   return;
+    // }
     if (!newLoginInfo.password || !newLoginInfo.confirmPassword) {
       $rootScope.notificationMessage = "Please enter a password.";
       $rootScope.openNotification();
@@ -2116,6 +2121,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
   $scope.createNewCorpus = function(newCorpusInfo) {
+    if (!confirm("NOTICE: We do *NOT* recommend using LingSync for field methods next semester. \n\nFor more details see the FAQ.")) {
+      return;
+    }
+
     if (!newCorpusInfo) {
       $rootScope.notificationMessage = "Please enter a corpus name.";
       $rootScope.openNotification();

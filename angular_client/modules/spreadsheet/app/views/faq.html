@@ -3,6 +3,16 @@
   <h1>{{contextualize('locale_frequently_asked_questions')}}</h1>
 <br />
 
+
+<div class="question">
+Should I use LingSync for my Fields methods classes?
+</div>
+<div class="answer">
+<p>No, we do not recommend using LingSync for upcoming fields methods classes.</p>
+<p>Last semester's classes experienced a great deal of student frustration. The current hosting provider and server is unreliable 80%-90% uptime which makes it almost impossible to rely on the app. We will update you as/if we find a solution. We expect to change hosting providers during the Christmas break.</p>
+<p>If you were planning on using the app, please <a href="mailto:support@lingsync.org">email us</a> for instructions on how to use Dative.</p>
+</div>
+
 <div class="question" ng-bind-html="contextualize('locale_tips')">
 </div>
 <div class="answer">
@@ -14,6 +24,7 @@
   <li ng-bind-html="contextualize('locale_change_settings_and_sync')"></li>
 </ul>
 </div>
+
 
 <div class="question" ng-bind-html="contextualize('locale_create_account_question')">
 </div>
@@ -78,7 +89,7 @@ How can I see what has been happening in my corpus?
 
 You can look in your <a target="_blank" href="https://corpus.lingsync.org/{{corpus.dbname}}-activity_feed/_design/activities/activity_feed.html#/user/{{user.username}}/corpus/{{corpus.dbname}}">team's activity feed</a>.
 <!--
-<iframe ng-show="corpus.activityFeedUrl" 
+<iframe ng-show="corpus.activityFeedUrl"
   src="corpus.activityFeedUrl"
   width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true">
 </iframe> -->
@@ -139,7 +150,7 @@ What was I working on last time?
 <div class="answer">
 You can look in <a target="_blank" href="https://corpus.lingsync.org/{{user.username}}-activity_feed/_design/activities/activity_feed.html#/user/{{user.username}}">your activity feed</a>.
 <!--
-<iframe hidden ng-show="user.activityFeedUrl" 
+<iframe hidden ng-show="user.activityFeedUrl"
   src="user.activityFeedUrl"
   width="100%" height="400" frameborder="0" ALLOWTRANSPARENCY="true">
 </iframe> -->
