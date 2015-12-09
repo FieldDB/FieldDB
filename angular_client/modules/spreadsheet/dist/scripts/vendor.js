@@ -34252,7 +34252,7 @@ var styleDirective = valueFn({
   }
 }).call(this);
 
-/*! fielddb - v3.0.19 - 2015-04-19
+/*! fielddb - v3.6.1 - 2015-06-02
 * https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed
 * Copyright (c) 2015 
 	cesine <cesine@yahoo.com>
@@ -34433,6 +34433,9 @@ CORS.makeCORSRequest = function(options) {
           CORS.application.authentication.dispatchEvent("unauthorized");
         }
       }
+      if (response.userFriendlyErrors[0] === "no_db_file") {
+        response.userFriendlyErrors = ["That db doesn't exist. Are you sure this is the db you wanted to open: " + options.url];
+      }
       deferred.reject(response);
       return;
     }
@@ -34491,8 +34494,7 @@ CORS.makeCORSRequest = function(options) {
 };
 
 exports.CORS = CORS;
-
-},{"q":241}],2:[function(require,module,exports){
+},{"q":243}],2:[function(require,module,exports){
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 
@@ -34508,7 +34510,7 @@ var regExpEscape = function(s) {
  * @param {Object} options Optional json initialization object
  * @property {String} primaryKey This is the optional attribute to look in the objects when doing a get or find
  * @property {Boolean} inverted This is the optional parameter for whether the collection should be inserted from the bottom or the top of the collection
-
+ 
  * @extends Object
  * @tutorial tests/CollectionTest.js
  */
@@ -34670,8 +34672,9 @@ Collection.prototype = Object.create(Object.prototype, {
         return;
       }
       if (Object.prototype.toString.call(value) !== "[object Array]") {
-        console.error("Cannot set collection to an object, only an array", value);
-        throw new Error("Cannot set collection to an object, only an array");
+        this.bug("Cannot set collection to an object, only an array", value);
+        return;
+        // throw new Error("Cannot set collection to an object, only an array");
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
@@ -34754,8 +34757,8 @@ Collection.prototype = Object.create(Object.prototype, {
         results.push(this[searchingFor]);
       }
       if (fuzzy) {
-        searchingFor = new RegExp(".*" + searchingFor + ".*", "i");
         sanitzedSearchingFor = new RegExp(".*" + this.sanitizeStringForPrimaryKey(searchingFor) + ".*", "i");
+        searchingFor = new RegExp(".*" + searchingFor + ".*", "i");
         this.debug("fuzzy ", searchingFor, sanitzedSearchingFor);
       }
       // this.debug("searching for somethign with indexOf", searchingFor);
@@ -34833,8 +34836,9 @@ Collection.prototype = Object.create(Object.prototype, {
         }
         searchingFor = this.getSanitizedDotNotationKey(value);
         if (!searchingFor) {
-          this.warn("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
-          throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
+          this.bug("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
+          return;
+          // throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
         }
         this.debug("adding " + searchingFor);
 
@@ -34928,8 +34932,9 @@ Collection.prototype = Object.create(Object.prototype, {
   getSanitizedDotNotationKey: {
     value: function(member) {
       if (!this.primaryKey) {
-        this.warn("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
-        throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
+        this.bug("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
+        return;
+        // throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
@@ -35013,7 +35018,7 @@ Collection.prototype = Object.create(Object.prototype, {
         this.debug("removed dot notation for ", key);
         delete this[key];
       }
-
+      key = key + "";
       if (this[key.toLowerCase().replace(/_/g, "")]) {
         this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
         delete this[key.toLowerCase().replace(/_/g, "")];
@@ -35040,7 +35045,7 @@ Collection.prototype = Object.create(Object.prototype, {
         this.debug("removed dot notation for ", key);
         delete this[key];
       }
-
+      key = key + "";
       if (this[key.toLowerCase().replace(/_/g, "")]) {
         this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
         delete this[key.toLowerCase().replace(/_/g, "")];
@@ -35090,7 +35095,7 @@ Collection.prototype = Object.create(Object.prototype, {
           this.debug("removed dot notation for ", key);
           delete this[key];
         }
-
+        key = key + "";
         if (this[key.toLowerCase().replace(/_/g, "")]) {
           this.debug("removed dot notation for ", key.toLowerCase().replace(/_/g, ""));
           delete this[key.toLowerCase().replace(/_/g, "")];
@@ -35637,8 +35642,7 @@ Collection.prototype = Object.create(Object.prototype, {
 });
 
 exports.Collection = Collection;
-
-},{"./FieldDBObject":3,"q":241}],3:[function(require,module,exports){
+},{"./FieldDBObject":3,"q":243}],3:[function(require,module,exports){
 (function (process){
 /* globals alert, confirm, prompt, navigator, Android, FieldDB */
 var Diacritics = require("diacritic");
@@ -35715,7 +35719,7 @@ try {
  *           a corpus is created. It must be a file save name, and be a permitted
  *           name in CouchDB which means it is [a-z] with no uppercase letters or
  *           symbols, by convention it cannot contain -, but _ is acceptable.
-
+ 
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
@@ -35774,32 +35778,30 @@ var FieldDBObject = function FieldDBObject(json) {
 };
 FieldDBObject.internalAttributesToNotJSONify = [
   "$$hashKey",
-  "_corpus",
-  "_datalist",
-  "currentSession",
-  "currentDoc",
-  "_db",
-  "_unsaved",
-  "_parent",
   "application",
   "bugMessage",
   "confirmMessage",
   "contextualizer",
   "corpus",
+  "currentDoc",
+  "currentSession",
+  "datalist",
+  "database",
   "db",
+  "debugMessages",
   "decryptedMode",
-  "fieldsInColumns",
   "fetching",
+  "fieldsInColumns",
   "fossil",
   "loaded",
   "loading",
+  "newDatum",
   "parent",
   "perObjectAlwaysConfirmOkay",
   "perObjectDebugMode",
   "promptMessage",
-  "newDatum",
-  "saving",
   "saved",
+  "saving",
   "selected",
   "temp",
   "unsaved",
@@ -35809,20 +35811,27 @@ FieldDBObject.internalAttributesToNotJSONify = [
 ];
 
 FieldDBObject.internalAttributesToAutoMerge = FieldDBObject.internalAttributesToNotJSONify.concat([
-  "_dateCreated",
-  "_dateModified",
-  "_fieldDBtype",
-  "_version",
   "appVersionWhenCreated",
   "authServerVersionWhenCreated",
   "created_at",
   "dateCreated",
   "dateModified",
+  "fieldDBtype",
   "modifiedByUser",
+  "rev",
   "roles",
   "updated_at",
-  "version",
+  "version"
 ]);
+
+FieldDBObject.ignore = function(property, ignorelist) {
+  if(!ignorelist){
+    throw new Error("missing the list of ignores");
+  }
+  if (ignorelist.indexOf(property) > -1 || ignorelist.indexOf(property.replace(/^_/, "")) > -1) {
+    return true;
+  }
+};
 
 FieldDBObject.software = {};
 FieldDBObject.hardware = {};
@@ -36760,7 +36769,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
   equals: {
     value: function(anotherObject) {
       for (var aproperty in this) {
-        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
+        if (!this.hasOwnProperty(aproperty) || typeof this[aproperty] === "function" || FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           this.debug("skipping equality of " + aproperty);
           continue;
         }
@@ -36875,7 +36884,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in anObject) {
         if (anObject.hasOwnProperty(aproperty) &&
           typeof anObject[aproperty] !== "function" &&
-          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+          !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
         }
       }
@@ -36883,7 +36892,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       for (aproperty in anotherObject) {
         if (anotherObject.hasOwnProperty(aproperty) &&
           typeof anotherObject[aproperty] !== "function" &&
-          FieldDBObject.internalAttributesToNotJSONify.indexOf(aproperty) === -1) {
+          !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToNotJSONify)) {
           propertyList[aproperty] = true;
         }
       }
@@ -37031,15 +37040,15 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         overwrite = optionalOverwriteOrAsk;
         this.debug("Found conflict for " + aproperty + " Requested with " + optionalOverwriteOrAsk + " " + optionalOverwriteOrAsk.indexOf("overwrite"));
-        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+        if (optionalOverwriteOrAsk.indexOf("overwrite") === -1 && !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           handleAsyncConfirmMerge(this, aproperty);
         }
-        if (overwrite || FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) > -1) {
+        if (overwrite || FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
           if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
             // resultObject._dbname = this.dbname;
             this.warn(" Keeping _dbname of " + resultObject.dbname);
           } else {
-            if (FieldDBObject.internalAttributesToAutoMerge.indexOf(aproperty) === -1) {
+            if (!FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
               this.warn("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
             }
             this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
@@ -37295,7 +37304,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         return;
       }
       if (this._dbname && this._dbname !== "default" && this.rev) {
-        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus, you must create a clone of the object first.");
+        throw new Error("This is the " + this._dbname + ". You cannot change the dbname of an object in this corpus to " + value + ", you must create a clone of the object first.");
       }
       if (!value) {
         delete this._dbname;
@@ -37380,6 +37389,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateCreated: {
     get: function() {
+      if (this.created_at) {
+        this.dateCreated = this.created_at;
+      }
       return this._dateCreated || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
@@ -37405,6 +37417,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateModified: {
     get: function() {
+      if (!this._dateModified && this.updated_at) {
+        this.dateModified = this.updated_at;
+      }
       return this._dateModified || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
@@ -37493,15 +37508,17 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
         if (this.useIdNotUnderscore) {
           json.id = this.id;
+        } else {
+          json._id = this.id;
         }
 
         if (!attributesToIgnore) {
           attributesToIgnore = [];
         }
         attributesToIgnore = attributesToIgnore.concat(FieldDBObject.internalAttributesToNotJSONify);
-
+        // this.debug("Ignoring for json ", attributesToIgnore);
         for (aproperty in this) {
-          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && attributesToIgnore.indexOf(aproperty) === -1) {
+          if (this.hasOwnProperty(aproperty) && typeof this[aproperty] !== "function" && !FieldDBObject.ignore(aproperty, attributesToIgnore)) {
             underscorelessProperty = aproperty.replace(/^_/, "");
             if (underscorelessProperty === "id" || underscorelessProperty === "rev") {
               underscorelessProperty = "_" + underscorelessProperty;
@@ -37521,7 +37538,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           for (aproperty in this.INTERNAL_MODELS) {
             if (!json[aproperty] && this.INTERNAL_MODELS) {
               if (this.INTERNAL_MODELS[aproperty] && typeof this.INTERNAL_MODELS[aproperty] === "function" && typeof new this.INTERNAL_MODELS[aproperty]().toJSON === "function") {
-                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
+                json[aproperty] = new this.INTERNAL_MODELS[aproperty]().toJSON(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore);
               } else {
                 json[aproperty] = this.INTERNAL_MODELS[aproperty];
               }
@@ -37547,10 +37564,11 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         for (var uninterestingAttrib in FieldDBObject.internalAttributesToNotJSONify) {
           if (FieldDBObject.internalAttributesToNotJSONify.hasOwnProperty(uninterestingAttrib)) {
             delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib]];
+            delete json[FieldDBObject.internalAttributesToNotJSONify[uninterestingAttrib].replace(/^_/, "")];
           }
         }
 
-        if (this.collection !== "private_corpora") {
+        if (this.collection !== "private_corpora" || this.api !== "private_corpora") {
           delete json.confidential;
           delete json.confidentialEncrypter;
         } else {
@@ -37564,7 +37582,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         if (json.previousFieldDBtype && json.fieldDBtype && json.previousFieldDBtype === json.fieldDBtype) {
           delete json.previousFieldDBtype;
         }
-
+        if (attributesToIgnore.indexOf("fieldDBtype") > -1) {
+          delete json.fieldDBtype;
+        }
         return json;
 
       } catch (e) {
@@ -37730,9 +37750,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
 exports.FieldDBObject = FieldDBObject;
 exports.Document = FieldDBObject;
-
 }).call(this,require('_process'))
-},{"./../package.json":245,"_process":218,"diacritic":240,"q":241}],4:[function(require,module,exports){
+},{"./../package.json":247,"_process":220,"diacritic":242,"q":243}],4:[function(require,module,exports){
 var Router = Router || {};
 
 Router.routes = Router.routes || [];
@@ -38093,7 +38112,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
         return;
       }
       if (value) {
-        this.dbname = value;
+        this._dbname = value;
       }
     }
   },
@@ -38154,32 +38173,42 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
       }
 
       activity.parent = this;
+      var addedActivity;
       try {
-        var addedActivity = DataList.prototype.add.apply(this, [activity]);
+        addedActivity = DataList.prototype.add.apply(this, [activity]);
+      } catch (e) {
+        this.warn("Error adding this activity", e);
+        var message = e ? e.message : " Error adding this activity.";
+        if (e) {
+          console.error(e.stack);
+        }
+        this.warn(message);
+        activity.errorMessage = message;
+      }
+
+      if (addedActivity) {
         if (this._database) {
           addedActivity.corpus = this._database;
         }
         if (!addedActivity.rev) {
-          addedActivity.debug("This activity "+addedActivity.directobject+" has no evidence of having been saved before, makeing its fossil empty to trigger save.");
+          addedActivity.debug("This activity " + addedActivity.directobject + " has no evidence of having been saved before, makeing its fossil empty to trigger save.");
           addedActivity.unsaved = true;
           addedActivity.fossil = {};
           addedActivity.debug("This activity", addedActivity);
         }
         return addedActivity;
-      } catch (e) {
-        this.warn("Error adding this activity, it was not complete enough", e);
-        var message = e ? e.message : " Error adding this activity, it was not complete enough";
-        if (e) {
-          console.error(e.stack);
-        }
-        this.warn(message);
+      }
+
+      if (!addedActivity) {
         this.incompleteActivitesStockPile = this.incompleteActivitesStockPile || [];
+        delete activity.parent;
         this.incompleteActivitesStockPile.push({
           activity: activity,
-          errorMessage: message
+          errorMessage: activity.errorMessage || "Activity was not added."
         });
         return undefined;
       }
+
     }
   },
 
@@ -38237,7 +38266,7 @@ Activities.prototype = Object.create(DataList.prototype, /** @lends Activities.p
 });
 exports.Activities = Activities;
 
-},{"./../comment/Comments":16,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Database":23,"./../data_list/DataList":27,"./../datum/DocumentCollection":37,"./../locales/ContextualizableObject":48,"./Activity":6,"q":241}],6:[function(require,module,exports){
+},{"./../comment/Comments":16,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Database":23,"./../data_list/DataList":28,"./../datum/DocumentCollection":38,"./../locales/ContextualizableObject":49,"./Activity":6,"q":243}],6:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./../user/UserMask").UserMask;
 var CORS = require("./../CORS").CORS;
@@ -38900,6 +38929,14 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
         delete json.dateCreated;
       }
 
+      if (this.user) {
+        json.user = {
+          username: this.user.username,
+          gravatar: this.user.gravatar,
+          name: this.user.name
+        };
+      }
+
       this.debug(json);
       return json;
     }
@@ -38909,12 +38946,13 @@ Activity.prototype = Object.create(FieldDBObject.prototype, /** @lends Activity.
 
 exports.Activity = Activity;
 
-},{"./../CORS":1,"./../FieldDBObject":3,"./../user/UserMask":64,"q":241}],7:[function(require,module,exports){
+},{"./../CORS":1,"./../FieldDBObject":3,"./../user/UserMask":65,"q":243}],7:[function(require,module,exports){
 /* globals window, localStorage, navigator */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Activity = require("./../activity/Activity").Activity;
 var Authentication = require("./../authentication/Authentication").Authentication;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var CorpusMask = require("./../corpus/CorpusMask").CorpusMask;
 var Database = require("./../corpus/Database").Database;
 var Connection = require("./../corpus/Connection").Connection;
 var DataList = require("./../data_list/DataList").DataList;
@@ -39329,44 +39367,9 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
           searchKeywords: routeParams.searchQuery
         });
       } else if (routeParams.docid) {
-        if (this.doc && this.doc.save) {
-          this.doc.bug("Switching to another document without saving...");
+        if (this.currentDoc && this.currentDoc.save) {
+          this.currentDoc.bug("Switching to another document without saving...");
         }
-        this.doc = new FieldDBObject({
-          id: routeParams.docid
-        });
-      }
-
-      /*
-       * Letting the url determine which team is loaded
-       */
-      if (routeParams.team) {
-        routeParams.team = Connection.validateUsername(routeParams.team).identifier;
-
-        /*
-         * Letting the url determine which corpus is loaded
-         */
-        if (routeParams.corpusidentifier) {
-          routeParams.corpusidentifier = Connection.validateIdentifier(routeParams.corpusidentifier).identifier;
-          this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
-          this.currentCorpusDashboardDBname = routeParams.team + "-" + routeParams.corpusidentifier;
-          if (this.currentCorpusDashboardDBname.split("-").length < 2) {
-            this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
-            return;
-          }
-
-          // this.team.dbname = this.currentCorpusDashboardDBname;
-          if (this.corpus && this.corpus.save) {
-            this.corpus.bug("Switching to another corpus without saving...");
-          }
-          if (!this.corpus || this.currentCorpusDashboardDBname !== this.corpus.dbname) {
-            this.corpus = new Corpus({
-              dbname: this.currentCorpusDashboardDBname
-            });
-          }
-        }
-      }
-      if (routeParams.docid) {
         var tempdoc = new FieldDBObject({
           id: routeParams.docid
         }).fetch().then(function(result) {
@@ -39379,31 +39382,78 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       }
 
       /*
-       * Fetching models if they are not complete
+       * Letting the url determine which team is loaded
+       */
+      if (routeParams.team) {
+        routeParams.team = Connection.validateUsername(routeParams.team).identifier;
+
+        if (!routeParams.corpusidentifier) {
+          this.todo("load the user's profile..." + routeParams.team);
+        } else {
+          /*
+           * Letting the url determine which corpus is loaded
+           */
+          routeParams.corpusidentifier = Connection.validateIdentifier(routeParams.corpusidentifier).identifier;
+          this.currentCorpusDashboard = routeParams.team + "/" + routeParams.corpusidentifier;
+          
+          var connection;
+          if (this.authentication &&
+            this.authentication.user &&
+            this.authentication.user.username &&
+            this.authentication.user.corpora &&
+            this.authentication.user.corpora.length > 0 &&
+            typeof this.authentication.user.corpora.findCorpusConnectionFromTitleAsUrl === "function") {
+
+            connection = this.authentication.user.corpora.findCorpusConnectionFromTitleAsUrl(routeParams.corpusidentifier, routeParams.team);
+            if (connection) {
+              // this.currentCorpusDashboardDBname = connection.dbname;
+              if (this.corpus && this.corpus.save && this.corpus.dbname !== connection.dbname) {
+                this.corpus.bug("Switching to another corpus without saving...");
+              }
+              this.corpus = new Corpus({
+                connection: connection,
+                dbname: connection.dbname
+              });
+            }
+          }
+          if (!connection) {
+            // this.status = "Please try another url of the form teamname/corpusname " + this.currentCorpusDashboardDBname + " is not valid.";
+            connection = Connection.defaultConnection();
+            connection.dbname = routeParams.team + "-" + routeParams.corpusidentifier;
+            this.corpus = new CorpusMask({
+              connection: connection,
+              dbname: connection.dbname
+            });
+          }
+          this.application.connection = connection;
+        }
+      }
+
+      /*
+       * Fetching corpus details if it is not complete
        */
       if (this.corpus && this.corpus.dbname && !this.corpus.title) {
         this.corpus.status = "Loading corpus details.";
-        return this.corpus.loadCorpusByDBname(this.corpus.dbname).then(function(result) {
+        return this.corpus.fetch().then(function(result) {
           self.debug("Suceeded to download corpus details.", result);
           self.status = self.corpus.status = "Loaded corpus details.";
           if (self.application.importer) {
             self.application.importer.corpus = self.corpus;
           }
-          self.render();
-
+          // self.render();
           return self;
         }, function(result) {
           self.debug("Failed to download corpus details.", result);
-
+          self.corpus.error = result.userFriendlyErrors.join(" ");
           self.status = self.corpus.status = "Failed to download corpus details. Are you sure this is the corpus you wanted to see: " + self.corpus.dbname;
           // self.loginDetails.username = self.team.username;
-          self.render();
+          // self.render();
           return self;
         }).fail(function(error) {
           console.error(error.stack, self);
         });
       } else {
-        this.debug("Not fetching corpus, its aleady here.", this.corpus);
+        this.debug("Not fetching corpus ", this.corpus);
       }
     }
   },
@@ -39738,8 +39788,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
 
 });
 exports.App = App;
-
-},{"./../FieldDBObject":3,"./../Router":4,"./../activity/Activity":6,"./../authentication/Authentication":14,"./../corpus/Connection":19,"./../corpus/Corpus":21,"./../corpus/Database":23,"./../data_list/DataList":27,"./../datum/Session":39,"./../import/Import":47,"./../locales/Contextualizer":49,"./../search/Search":56,"q":241}],8:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../Router":4,"./../activity/Activity":6,"./../authentication/Authentication":14,"./../corpus/Connection":19,"./../corpus/Corpus":21,"./../corpus/CorpusMask":22,"./../corpus/Database":23,"./../data_list/DataList":28,"./../datum/Session":40,"./../import/Import":48,"./../locales/Contextualizer":50,"./../search/Search":57,"q":243}],8:[function(require,module,exports){
 var App = require("./App").App;
 
 /**
@@ -40100,7 +40149,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
 });
 exports.AudioVideo = AudioVideo;
 
-},{"./../FieldDBObject":3,"./AudioPlayer":9,"browserify-mime":73}],11:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./AudioPlayer":9,"browserify-mime":74}],11:[function(require,module,exports){
 /* globals document, window, navigator, Media, FileReader */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
@@ -40513,7 +40562,7 @@ try {
 
 exports.AudioVideoRecorder = AudioVideoRecorder;
 
-},{"./../FieldDBObject":3,"q":241,"recordmp3js/js/recordmp3":242}],12:[function(require,module,exports){
+},{"./../FieldDBObject":3,"q":243,"recordmp3js/js/recordmp3":244}],12:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var AudioVideo = require("./AudioVideo").AudioVideo;
 
@@ -40876,17 +40925,25 @@ var Authentication = function Authentication(options) {
     // }
     return self.user;
   }, function(error) {
-    self.loading = false;
-    self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
-    if (error.status === 409) {
-      self.dispatchEvent("authenticate:mustconfirmidentity");
-    } else {
-      // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
-      self.error = error.userFriendlyErrors.join(" ");
-      self.dispatchEvent("authenticate:mustconfirmidentity");
-    }
-    self.render();
-    deferred.reject(error);
+    // Wait and see if a login call is coming...
+    Q.nextTick(function() {
+      if (self.loggingIn) {
+        deferred.resolve(self.user);
+        return;
+      }
+      self.loading = false;
+      self.warn("Unable to resume login ", error.userFriendlyErrors.join(" "));
+      if (error.status === 401) {
+        self.dispatchEvent("authenticate:mustconfirmidentity");
+      } else {
+        // error.userFriendlyErrors = ["Unable to resume session, are you sure you're not offline?"];
+        self.error = error.userFriendlyErrors.join(" ");
+        // self.dispatchEvent("authenticate:mustconfirmidentity");
+      }
+      self.render();
+      deferred.reject(error);
+    });
+
     return error;
   }).fail(function(error) {
     console.error(error.stack, self);
@@ -40962,7 +41019,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       this.error = "";
       this.status = "";
-      this.loading = true;
+      this.loading = this.loggingIn = true;
 
       var handleFailedLogin = function(error) {
         self.loading = false;
@@ -40976,6 +41033,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
         deferred.reject(error);
+        delete self.loggingIn;
       };
 
       self.resumingSessionPromise = deferred.promise;
@@ -41013,9 +41071,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               deferred.resolve(self.user);
             });
 
+            delete self.loggingIn;
           }, //end successful login
           handleFailedLogin)
         .fail(function(error) {
+          delete self.loggingIn;
           console.error(error.stack, self);
           handleFailedLogin(error);
         });
@@ -41031,7 +41091,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       if (!loginDetails || !loginDetails.password) {
         Q.nextTick(function() {
-          deferred.reject("You must enter your password to confirm your identity.");
+          deferred.reject({
+            userFriendlyErrors: ["You must enter your password to confirm your identity."]
+          });
         });
         return deferred.promise;
       }
@@ -41042,15 +41104,18 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         !this.user.hash ||
         !this.user.salt) {
         Q.nextTick(function() {
-          deferred.reject("You must login first.");
+          deferred.reject({
+            userFriendlyErrors: "You must login first."
+          });
         });
         return deferred.promise;
       }
 
       try {
+        loginDetails.password = (loginDetails.password + "").trim();
         bcrypt.compare(loginDetails.password, self.user.hash, function(err, confirmed) {
           if (confirmed) {
-            loginDetails.info = ["Verified"];
+            loginDetails.info = ["Verified offline."];
             deferred.resolve(loginDetails);
           } else {
             loginDetails.error = err;
@@ -41200,15 +41265,20 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       this.loading = true;
 
       this.save();
-      return Database.prototype.logout(options).then(function() {
+      options = options || {};
+      return Database.prototype.logout(options.url).then(function() {
         self.dispatchEvent("logout");
         self.loading = false;
-        self.warn("Reloading the page");
-        try {
-          window.location.reload();
-        } catch (e) {
-          self.debug("Window is undefined", e);
+
+        if (options && !options.letClientHandleCleanUp) {
+          self.warn("Reloading the page");
+          try {
+            window.location.reload();
+          } catch (e) {
+            self.debug("Window is undefined", e);
+          }
         }
+
       });
     }
   },
@@ -41334,8 +41404,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           });
           return;
         }
-        details.title = details.title || details.newCorpusName;
-        details.newCorpusName = details.title;
+        details.title = details.title || details.newCorpusTitle;
+        details.newCorpusTitle = details.title;
 
         if (!details.title) {
           deferred.reject({
@@ -41370,7 +41440,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               self.save();
             } else {
               if (authserverResult.status > 0 && authserverResult.status < 400 && self.user.corpora && typeof self.user.corpora.find === "function") {
-                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusName).identifier, "fuzzy");
+                authserverResult.corpus = self.user.corpora.find("dbname", Connection.validateIdentifier(details.newCorpusTitle).identifier, "fuzzy");
                 if (authserverResult.corpus && authserverResult.corpus.length > 0) {
                   authserverResult.corpus = authserverResult.corpus[0];
                 }
@@ -41412,8 +41482,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
 
 exports.Authentication = Authentication;
-
-},{"./../CORS":1,"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Database":23,"./../user/User":63,"bcrypt-nodejs":72,"q":241}],15:[function(require,module,exports){
+},{"./../CORS":1,"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Database":23,"./../user/User":64,"bcrypt-nodejs":73,"q":243}],15:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
@@ -41716,7 +41785,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
 
 exports.Confidential = Confidential;
 
-},{"./../FieldDBObject":3,"./Crypto_AES":18,"atob":71,"btoa":239}],18:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./Crypto_AES":18,"atob":72,"btoa":241}],18:[function(require,module,exports){
 /*
 CryptoJS v3.0.1
 code.google.com/p/crypto-js
@@ -41753,6 +41822,7 @@ l[m&255]^d[r++],w=e[o>>>24]^f[q>>>16&255]^h[m>>>8&255]^l[n&255]^d[r++],q=e[q>>>2
 exports.CryptoJS = CryptoJS;
 
 },{}],19:[function(require,module,exports){
+(function (process){
 /* globals window, URL */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -42044,6 +42114,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         }
       }
       this._title = value;
+      this._titleAsUrl = "";
     }
   },
 
@@ -42384,6 +42455,12 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
    * authorized server that is authorized in the chrome app's manifest
    */
   var connection;
+  var otherwise = "production";
+  try {
+    otherwise = process.env.NODE_DEPLOY_TARGET || "localhost";
+  } catch (e) {
+    // not running in node environment.
+  }
 
   /* Ensuring at least the localhost connection is known */
   if (!Connection.knownConnections) {
@@ -42409,16 +42486,18 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       if (window && window.location) {
         optionalHREF = window.location.href;
       } else {
-        connection = Connection.knownConnections.localhost;
+        connection = Connection.knownConnections[otherwise];
         optionalHREF = connection.authUrls[0];
       }
     } catch (e) {
-      connection = Connection.knownConnections.localhost;
+      connection = Connection.knownConnections[otherwise];
       optionalHREF = connection.authUrls[0];
     }
   }
 
-  if (optionalHREF.indexOf("_design/pages") > -1) {
+  if (Connection.knownConnections[optionalHREF]) {
+    connection = Connection.knownConnections[optionalHREF];
+  } else if (optionalHREF.indexOf("_design/pages") > -1) {
     if (optionalHREF.indexOf("corpusdev.lingsync.org") >= 0) {
       connection = Connection.knownConnections.beta;
     } else if (optionalHREF.indexOf("lingsync.org") >= 0) {
@@ -42446,7 +42525,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     } else if (optionalHREF.indexOf("lingsync") >= 0) {
       connection = Connection.knownConnections.production;
     } else if (optionalHREF.indexOf("localhost") >= 0) {
-      connection = Connection.knownConnections.localhost;
+      connection = Connection.knownConnections[otherwise];
     }
   }
 
@@ -42474,8 +42553,8 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       // console.log(connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
-      console.warn("There was no way to deduce the HREF, probably we are in Node. Using localhost instead. ", optionalHREF);
-      connection = Connection.knownConnections.localhost;
+      console.warn("There was no way to deduce the HREF, probably we are in Node. Using " + otherwise + " instead. ", optionalHREF);
+      connection = Connection.knownConnections[otherwise];
     } else {
       var domainName = connectionUrlObject.hostname.split(".");
       while (domainName.length > 2) {
@@ -42637,7 +42716,8 @@ Connection.baseSchema = {
 
 exports.Connection = Connection;
 
-},{"./../FieldDBObject":3,"diacritic":240}],20:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"./../FieldDBObject":3,"_process":220,"diacritic":242}],20:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var Connection = require("./Connection").Connection;
 
@@ -42680,10 +42760,28 @@ Corpora.prototype = Object.create(Collection.prototype, /** @lends Corpora.proto
     }
   },
 
-  insertNewConnectionFromObject: {
-    value: function(commentObject) {
-      commentObject.timestamp = Date.now();
-      this.add(new Connection(commentObject));
+  findCorpusConnectionFromTitleAsUrl: {
+    value: function(titleOrCorpusIdentifier, optionalOwnersUsername) {
+      var potentialMatches = this.find(titleOrCorpusIdentifier);
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the dbname: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find(optionalOwnersUsername + "-" + titleOrCorpusIdentifier);
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the owner's username: " + optionalOwnersUsername + " and the dbname: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find("title", titleOrCorpusIdentifier, "fuzzy");
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the title: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
+      potentialMatches = this.find("titleAsUrl", titleOrCorpusIdentifier, "fuzzy");
+      if (potentialMatches.length > 0) {
+        this.debug("Found a corpus connection using the titleAsUrl: " + titleOrCorpusIdentifier, potentialMatches);
+        return potentialMatches[0];
+      }
     }
   },
 
@@ -42692,7 +42790,6 @@ Corpora.prototype = Object.create(Collection.prototype, /** @lends Corpora.proto
       return value;
     }
   }
-
 
 });
 exports.Corpora = Corpora;
@@ -43149,7 +43246,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         dbname: this.dbname,
         fields: sessionFields,
         confidential: this.confidential,
-        url: this.url
+        // url: this.url
       });
 
       for (var field in options) {
@@ -43614,134 +43711,134 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
     value: function() {
       return {
         // activities: {
-        //   url: "/_design/pages/_view/activities",
+        //   url: "/_design/deprecated/_view/activities",
         //   map: requireoff("./../../couchapp_dev/views/activities/map")
         // },
         // add_synctactic_category: {
-        //   url: "/_design/pages/_view/add_synctactic_category",
+        //   url: "/_design/deprecated/_view/add_synctactic_category",
         //   map: requireoff("./../../couchapp_dev/views/add_synctactic_category/map")
         // },
         // audioIntervals: {
-        //   url: "/_design/pages/_view/audioIntervals",
+        //   url: "/_design/deprecated/_view/audioIntervals",
         //   map: requireoff("./../../couchapp_dev/views/audioIntervals/map")
         // },
         // byCollection: {
-        //   url: "/_design/pages/_view/byCollection",
+        //   url: "/_design/deprecated/_view/byCollection",
         //   map: requireoff("./../../couchapp_dev/views/byCollection/map")
         // },
         // by_date: {
-        //   url: "/_design/pages/_view/by_date",
+        //   url: "/_design/deprecated/_view/by_date",
         //   map: requireoff("./../../couchapp_dev/views/by_date/map")
         // },
         // by_rhyming: {
-        //   url: "/_design/pages/_view/by_rhyming",
+        //   url: "/_design/deprecated/_view/by_rhyming",
         //   map: requireoff("./../../couchapp_dev/views/by_rhyming/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/by_rhyming/reduce")
         // },
         // cleaning_example: {
-        //   url: "/_design/pages/_view/cleaning_example",
+        //   url: "/_design/deprecated/_view/cleaning_example",
         //   map: requireoff("./../../couchapp_dev/views/cleaning_example/map")
         // },
         // corpora: {
-        //   url: "/_design/pages/_view/corpora",
+        //   url: "/_design/deprecated/_view/corpora",
         //   map: requireoff("./../../couchapp_dev/views/corpora/map")
         // },
         // datalists: {
-        //   url: "/_design/pages/_view/datalists",
+        //   url: "/_design/deprecated/_view/datalists",
         //   map: requireoff("./../../couchapp_dev/views/datalists/map")
         // },
         // datums: {
-        //   url: "/_design/pages/_view/datums",
+        //   url: "/_design/deprecated/_view/datums",
         //   map: requireoff("./../../couchapp_dev/views/datums/map")
         // },
         // datums_by_user: {
-        //   url: "/_design/pages/_view/datums_by_user",
+        //   url: "/_design/deprecated/_view/datums_by_user",
         //   map: requireoff("./../../couchapp_dev/views/datums_by_user/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/datums_by_user/reduce")
         // },
         // datums_chronological: {
-        //   url: "/_design/pages/_view/datums_chronological",
+        //   url: "/_design/deprecated/_view/datums_chronological",
         //   map: requireoff("./../../couchapp_dev/views/datums_chronological/map")
         // },
         // deleted: {
-        //   url: "/_design/pages/_view/deleted",
+        //   url: "/_design/deprecated/_view/deleted",
         //   map: requireoff("./../../couchapp_dev/views/deleted/map")
         // },
         // export_eopas_xml: {
-        //   url: "/_design/pages/_view/export_eopas_xml",
+        //   url: "/_design/deprecated/_view/export_eopas_xml",
         //   map: requireoff("./../../couchapp_dev/views/export_eopas_xml/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/export_eopas_xml/reduce")
         // },
         // get_corpus_datum_tags: {
-        //   url: "/_design/pages/_view/get_corpus_datum_tags",
+        //   url: "/_design/deprecated/_view/get_corpus_datum_tags",
         //   map: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_datum_tags/reduce")
         // },
         // get_corpus_fields: {
-        //   url: "/_design/pages/_view/get_corpus_fields",
+        //   url: "/_design/deprecated/_view/get_corpus_fields",
         //   map: requireoff("./../../couchapp_dev/views/get_corpus_fields/map")
         // },
         // get_corpus_validationStati: {
-        //   url: "/_design/pages/_view/get_corpus_validationStati",
+        //   url: "/_design/deprecated/_view/get_corpus_validationStati",
         //   map: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/get_corpus_validationStati/reduce")
         // },
         // get_datum_fields: {
-        //   url: "/_design/pages/_view/get_datum_fields",
+        //   url: "/_design/deprecated/_view/get_datum_fields",
         //   map: requireoff("./../../couchapp_dev/views/get_datum_fields/map")
         // },
         // get_datums_by_session_id: {
-        //   url: "/_design/pages/_view/get_datums_by_session_id",
+        //   url: "/_design/deprecated/_view/get_datums_by_session_id",
         //   map: requireoff("./../../couchapp_dev/views/get_datums_by_session_id/map")
         // },
         // get_frequent_fields: {
-        //   url: "/_design/pages/_view/get_frequent_fields",
+        //   url: "/_design/deprecated/_view/get_frequent_fields",
         //   map: requireoff("./../../couchapp_dev/views/get_frequent_fields/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/get_frequent_fields/reduce")
         // },
         // get_search_fields_chronological: {
-        //   url: "/_design/pages/_view/get_search_fields_chronological",
+        //   url: "/_design/deprecated/_view/get_search_fields_chronological",
         //   map: requireoff("./../../couchapp_dev/views/get_search_fields_chronological/map")
         // },
         // glosses_in_utterance: {
-        //   url: "/_design/pages/_view/glosses_in_utterance",
+        //   url: "/_design/deprecated/_view/glosses_in_utterance",
         //   map: requireoff("./../../couchapp_dev/views/glosses_in_utterance/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/glosses_in_utterance/reduce")
         // },
         // lexicon_create_tuples: {
-        //   url: "/_design/pages/_view/lexicon_create_tuples",
+        //   url: "/_design/deprecated/_view/lexicon_create_tuples",
         //   map: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/lexicon_create_tuples/reduce")
         // },
         // morpheme_neighbors: {
-        //   url: "/_design/pages/_view/morpheme_neighbors",
+        //   url: "/_design/deprecated/_view/morpheme_neighbors",
         //   map: requireoff("./../../couchapp_dev/views/morpheme_neighbors/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/morpheme_neighbors/reduce")
         // },
         // morphemes_in_gloss: {
-        //   url: "/_design/pages/_view/morphemes_in_gloss",
+        //   url: "/_design/deprecated/_view/morphemes_in_gloss",
         //   map: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/morphemes_in_gloss/reduce")
         // },
         // recent_comments: {
-        //   url: "/_design/pages/_view/recent_comments",
+        //   url: "/_design/deprecated/_view/recent_comments",
         //   map: requireoff("./../../couchapp_dev/views/recent_comments/map")
         // },
         // sessions: {
-        //   url: "/_design/pages/_view/sessions",
+        //   url: "/_design/deprecated/_view/sessions",
         //   map: requireoff("./../../couchapp_dev/views/sessions/map")
         // },
         // users: {
-        //   url: "/_design/pages/_view/users",
+        //   url: "/_design/deprecated/_view/users",
         //   map: requireoff("./../../couchapp_dev/views/users/map")
         // },
         // word_list: {
-        //   url: "/_design/pages/_view/word_list",
+        //   url: "/_design/deprecated/_view/word_list",
         //   map: requireoff("./../../couchapp_dev/views/word_list/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/word_list/reduce")
         // },
         // couchapp_dev_word_list_rdf: {
-        //   url: "/_design/pages/_view/couchapp_dev_word_list_rdf",
+        //   url: "/_design/deprecated/_view/couchapp_dev_word_list_rdf",
         //   map: requireoff("./../../couchapp_dev/views/word_list_rdf/map"),
         //   reduce: requireoff("./../../couchapp_dev/views/word_list_rdf/reduce")
         // }
@@ -43799,7 +43896,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_frequent_fields?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_frequent_fields?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -43818,7 +43915,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -43908,7 +44005,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    * This function takes in a dbname, which could be different
    * from the current corpus incase there is a master corpus wiht
    * more representative datum
-   * example : https://corpusdev.example.org/lingllama-cherokee/_design/pages/_view/get_corpus_validationStati?group=true
+   * example : https://corpusdev.example.org/lingllama-cherokee/_design/deprecated/_view/get_corpus_validationStati?group=true
    *
    * It takes the values stored in the corpus, if set, otherwise it will take the values from this corpus since the window was last refreshed
    *
@@ -43957,7 +44054,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
 exports.Corpus = Corpus;
 exports.FieldDatabase = Corpus;
 
-},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../datum/Datum":30,"./../datum/DatumField":31,"./../datum/DatumFields":32,"./../datum/Session":39,"./../user/Speaker":61,"./CorpusMask":22,"./corpus.json":25,"./psycholinguistics-corpus.json":26,"q":241}],22:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../datum/Datum":31,"./../datum/DatumField":32,"./../datum/DatumFields":33,"./../datum/Session":40,"./../user/Speaker":62,"./CorpusMask":22,"./corpus.json":25,"./psycholinguistics-corpus.json":27,"q":243}],22:[function(require,module,exports){
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Activities = require("./../activity/Activities").Activities;
 var Database = require("./Database").Database;
@@ -43975,7 +44072,7 @@ var Permissions = require("./../permission/Permissions").Permissions;
 var Q = require("q");
 
 
-var DEFAULT_CORPUS_MODEL = require("./corpus.json");
+var DEFAULT_CORPUS_MODEL = require("./corpus_mask.json");
 /**
  * @class The CorpusMask is saved as corpus in the Couch repository,
  *        it is the publicly visible version of a corpus. By default it just says "This
@@ -44042,7 +44139,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   id: {
     get: function() {
-      return "corpus";
+      this._id = "corpus";
+      return this._id;
     },
     set: function(value) {
       if (value === this._id) {
@@ -44061,73 +44159,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   defaults: {
     get: function() {
       var filteredCorpus = JSON.parse(JSON.stringify(DEFAULT_CORPUS_MODEL));
-      filteredCorpus.title = "Private Corpus";
-      filteredCorpus.description = "The details of this corpus are not public.";
-      filteredCorpus.location = {
-        latitude: 0,
-        longitude: 0,
-        accuracy: 0
-      };
-
-      var publicStates = [];
-      filteredCorpus.validationStati.map(function(state) {
-        if (state.validationStatus === "Checked*") {
-          publicStates.push(state);
-        } else if (state.validationStatus === "Published*") {
-          publicStates.push(state);
-        } else if (state.validationStatus === "ApprovedLanguageLearningContent*") {
-          publicStates.push(state);
-        }
-      });
-      filteredCorpus.validationStati = publicStates;
-
-      var publicableTags = [];
-      filteredCorpus.tags.map(function() {
-        // none
-      });
-      filteredCorpus.tags = publicableTags;
-
-      var publicableDatumFields = [];
-      filteredCorpus.datumFields.map(function(field) {
-        if (field.id === "judgement") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "orthography") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "utterance") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "morphemes") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "gloss") {
-          publicableDatumFields.push(field);
-        } else if (field.id === "translation") {
-          publicableDatumFields.push(field);
-        }
-      });
-      filteredCorpus.datumFields = publicableDatumFields;
-
-      var publicableSessionFields = [];
-      filteredCorpus.sessionFields.map(function(field) {
-        if (field.id === "dialect") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "register") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "language") {
-          publicableSessionFields.push(field);
-        } else if (field.id === "location") {
-          publicableSessionFields.push(field);
-        }
-      });
-      filteredCorpus.sessionFields = publicableSessionFields;
-
-      var publicableSpeakerFields = [];
-      filteredCorpus.speakerFields.map(function(field) {
-        if (field.id === "anonymousCode") {
-          publicableSpeakerFields.push(field);
-        }
-      });
-      filteredCorpus.speakerFields = publicableSpeakerFields;
-
-
       return filteredCorpus;
     }
   },
@@ -44462,6 +44493,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
   prefs: {
     get: function() {
+      if (!this._prefs && this.INTERNAL_MODELS && this.INTERNAL_MODELS.prefs && this.INTERNAL_MODELS.prefs.prototype && this.INTERNAL_MODELS.prefs.prototype.defaults) {
+        this.prefs = this.INTERNAL_MODELS.prefs.prototype.defaults;
+      }
       return this._prefs;
     },
     set: function(value) {
@@ -44511,13 +44545,14 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       }
       this.preferredDatumTemplateAtVersion = this.version;
       this.preferredDatumTemplate = null;
-
-      var order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+      this.prefs = this.prefs || {};
+      this.prefs.debug(" this.prefs.preferredSpreadsheetShape.rows ", this.prefs.preferredSpreadsheetShape.rows);
+      var order = ["judgement", "utterance", "morphemes", "gloss", "translation", "context", "documentation"];
       if (value === "compacttemplate") {
         order = ["judgement", "utterance", "morphemes", "gloss", "translation"];
 
       } else if (value === "fulltemplate") {
-        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
+        order = ["judgement", "utterance", "morphemes", "gloss", "translation", "context", "documentation"];
 
       } else if (value === "mcgillfieldmethodsspring2014template") {
         order = ["judgement", "utterance", "morphemes", "gloss", "translation", "validationStatus", "tags"];
@@ -44527,11 +44562,10 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
       } else if (value === "yalefieldmethodsspring2014template") {
         order = ["judgement", "orthography", "utterance", "morphemes", "gloss", "translation", "spanish", "Housekeeping", "tags"];
-
-        this.prefs.preferedSpreadsheetShape = this.prefs.preferedSpreadsheetShape;
-        this.prefs.preferedSpreadsheetShape.rows = 4;
+        this.prefs.debug("setting to yalefieldmethodsspring2014template");
+        this.prefs.preferredSpreadsheetShape = this.prefs.preferredSpreadsheetShape;
+        this.prefs.preferredSpreadsheetShape.rows = 4;
       }
-
 
       var fieldTemplate = {
         "label": "",
@@ -44625,8 +44659,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
 
 });
 exports.CorpusMask = CorpusMask;
-
-},{"./../FieldDBObject":3,"./../activity/Activities":5,"./../comment/Comments":16,"./../confidentiality_encryption/Confidential":17,"./../datum/DatumFields":32,"./../datum/DatumStates":34,"./../datum/DatumTags":36,"./../datum/DocumentCollection":37,"./../permission/Permissions":55,"./../user/Team":62,"./../user/UserPreference":65,"./Connection":19,"./Database":23,"./corpus.json":25,"q":241}],23:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../activity/Activities":5,"./../comment/Comments":16,"./../confidentiality_encryption/Confidential":17,"./../datum/DatumFields":33,"./../datum/DatumStates":35,"./../datum/DatumTags":37,"./../datum/DocumentCollection":38,"./../permission/Permissions":56,"./../user/Team":63,"./../user/UserPreference":66,"./Connection":19,"./Database":23,"./corpus_mask.json":26,"q":243}],23:[function(require,module,exports){
 /* globals localStorage */
 
 var Q = require("q");
@@ -44649,7 +44682,7 @@ var Database = function Database(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = "_design/pages/_view/COLLECTION?descending=true&limit=LIMIT";
+var DEFAULT_COLLECTION_MAPREDUCE = "_design/deprecated/_view/COLLECTION?descending=true&limit=LIMIT";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
@@ -44716,9 +44749,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     set: function(value) {
       if (value) {
         value.parent = this;
-        if (!value.confidential && this.confidential) {
-          value.confidential = this.confidential;
-        }
+        // if (!value.confidential && this.confidential) {
+        //   value.confidential = this.confidential;
+        // }
       }
       this.ensureSetViaAppropriateType("connection", value);
       if (this._connection && this._connection.dbname && this._connection.dbname !== "default" && !this.dbname) {
@@ -45902,7 +45935,7 @@ var CouchDBConnection = function(url, user) {
 
 exports.CouchDBConnection = CouchDBConnection;
 
-},{"../CORS":1,"../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./Connection":19,"q":241}],24:[function(require,module,exports){
+},{"../CORS":1,"../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./Connection":19,"q":243}],24:[function(require,module,exports){
 var FieldDBDatabase = require("./Database").Database;
 
 var PsycholinguisticsDatabase = function PsycholinguisticsDatabase(options) {
@@ -46010,7 +46043,7 @@ module.exports={
   }],
   "datumFields": [{
     "id": "judgement",
-    "labelFieldLinguists": "Gramaticality Judgement",
+    "labelFieldLinguists": "Grammaticality Judgement",
     "labelExperimenters": "Naturalness",
     "labelNonLinguists": "Not-a-normal-thing-to-say",
     "labelTranslators": "Grammatical/How-normal-Is-This-Example",
@@ -46021,25 +46054,9 @@ module.exports={
     "json": {
       "grammatical": true
     },
-    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
-    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
-  }, {
-    "id": "orthography",
-    "labelFieldLinguists": "Orthography",
-    "labelNonLinguists": "Written",
-    "labelTranslators": "Orthography",
-    "type": "IGT, parallelText",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "writingSystem": {
-        "id": "",
-        "referenceLink": ""
-      }
-    },
-    "help": "What was said/written using the alphabet/writing system of the language.",
-    "helpLinguists": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
+    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange).",
+    "helpLinguists": "Grammaticality/acceptability judgement (*, #, ?, 1-3, etc.). Leave this field blank if this entry is grammatical/acceptable.",
+    "helpDevelopers": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
     "id": "utterance",
     "labelFieldLinguists": "Transcription",
@@ -46056,21 +46073,8 @@ module.exports={
       }
     },
     "help": "What was said/written in an alphabet the team is comfortable using.",
-    "helpLinguists": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
-  }, {
-    "id": "allomorphs",
-    "labelFieldLinguists": "Allomorphs",
-    "labelNonLinguists": "",
-    "labelTranslators": "Prefixe-s-root-suffixe-s",
-    "type": "IGT",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "linguist",
-    "defaultfield": true,
-    "json": {
-      "alternates": []
-    },
-    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguists": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+    "helpLinguists": "Transcription of the utterance, without morpheme breaks and probably orthographic.",
+    "helpDevelopers": "Unparsed utterance in the language, in orthography or romanized or IPA transcription (what ever is commonly used for linguistic examples of this language.) Line 1 in your LaTeXed examples for handouts. Sample entry: amigas"
   }, {
     "id": "morphemes",
     "labelFieldLinguists": "Morphemes",
@@ -46083,8 +46087,596 @@ module.exports={
     "json": {
       "alternates": []
     },
-    "help": "Words divided into prefixes, root and suffixes using a - between each eg: prefix-prefix-root-suffix-suffix-suffix",
-    "helpLinguists": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
+    "help": "Words divided into prefixes, root and suffixes using a - between each eg: un-forget-able.",
+    "helpLinguists": "Morpheme-segmented utterance in the language, probably transcribed phonemically.",
+    "helpDevelopers": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s"
+  }, {
+    "id": "gloss",
+    "labelFieldLinguists": "Gloss",
+    "labelNonLinguists": "Word-for-word Translation",
+    "labelTranslators": "Word-for-word Translation",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "language": "",
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "Translation for each prefix, root and suffix in the words.",
+    "helpLinguists": "A sequence of glosses (i.e., brief translations), one for each morpheme in the “morphemes” field.",
+    "helpDevelopers": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc).  Sample entry: friend-fem-pl"
+  }, {
+    "id": "translation",
+    "labelFieldLinguists": "Translation",
+    "labelNonLinguists": "English",
+    "labelTranslators": "English",
+    "type": "parallelText",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      },
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    },
+    "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
+    "helpLinguists": "A translation of the utterance in the language of analysis, i.e., the metalanguage.",
+    "helpDevelopers": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
+  }, {
+    "id": "context",
+    "labelFieldLinguists": "Context",
+    "labelNonLinguists": "Context",
+    "labelTranslators": "Context",
+    "type": "wiki",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Linguistic/social context when this can be said.",
+    "helpLinguists": "Linguistic/social context when this can be said, or when it is semantically/pragmatically felicitous etc."
+  }, {
+    "id": "documentation",
+    "labelFieldLinguists": "Discussion",
+    "labelNonLinguists": "Additional Documentation",
+    "labelTranslators": "Documentation",
+    "type": "wiki, LaTeX",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "wiki": "",
+      "latex": ""
+    },
+    "help": "Additional discussion of this example (for handouts or for documentation).",
+    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). This can be in Wiki or LaTeX or plain text formatting"
+  }, {
+    "id": "orthography",
+    "labelFieldLinguists": "Orthography",
+    "labelNonLinguists": "Written",
+    "labelTranslators": "Orthography",
+    "type": "IGT, parallelText",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "writingSystem": {
+        "id": "",
+        "referenceLink": ""
+      }
+    },
+    "help": "What was said/written using the alphabet/writing system of the language.",
+    "helpLinguists": "Orthographic transcription of the utterance; without morpheme breaks.",
+    "helpDevelopers": "Many teams will only use the utterance line. However if your team needs to distinguish between utterance and orthography this is the unparsed word/sentence/dialog/paragraph/document in the language, in its native orthography. If there are more than one orthography an additional field can be added to the corpus. This is Line 0 in your LaTeXed examples for handouts (if you distinguish the orthography from the utterance line and you choose to display the orthography for your language consultants and/or native speaker linguists). Sample entry: amigas"
+  }, {
+    "id": "allomorphs",
+    "labelFieldLinguists": "Allomorphs",
+    "labelNonLinguists": "",
+    "labelTranslators": "Prefixe-s-root-suffixe-s",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": []
+    },
+    "help": "Words divided into prefixes, root and suffixes which match the spelling of the word (not necessarily the actual dictionary entry of the word) using a - between each eg: prefix-prefix-root-suffix-suffix-suffix.",
+    "helpLinguists": "A segmentation of the utterance into morphemes in their surface realizations.",
+    "helpDevelopers": "Surface realizations of the morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Usually does not appear in your LaTeX examples unless you are working on morpho-phonology. Sample entry: amig-a-s"
+  }, {
+    "id": "syntacticCategory",
+    "labelFieldLinguists": "Morpho-Syntactic Category",
+    "labelNonLinguists": "",
+    "labelTranslators": "Part of Speech",
+    "type": "IGT",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine, linguist",
+    "defaultfield": true,
+    "json": {
+      "alternates": [],
+      "conventions": {
+        "id": "",
+        "tagSet": [],
+        "referenceLink": ""
+      }
+    },
+    "help": "This is an optional field which can be used to help with search and data cleaning. eg: noun-thematicvowel-plural",
+    "helpLinguists": "A sequence of categories, one for each morpheme in the “morphemes” field.",
+    "helpDevelopers": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
+  }, {
+    "id": "relatedData",
+    "labelFieldLinguists": "Related Data",
+    "labelNonLinguists": "Linked to",
+    "labelTranslators": "Linked to",
+    "labelComputationalLinguists": "Linked Data",
+    "type": "relatedData",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "relatedData": []
+    },
+    "help": "Related data in the database, or at any web url."
+  }, {
+    "id": "tags",
+    "labelFieldLinguists": "Tags",
+    "labelNonLinguists": "Tags",
+    "labelTranslators": "Tags",
+    "type": "tags",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Tags for categorizing your data."
+  }, {
+    "id": "validationStatus",
+    "labelFieldLinguists": "Data validity/verification Status",
+    "labelNonLinguists": "Data validity/verification Status",
+    "labelTranslators": "Data validity/verification Status",
+    "type": "tags",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Tags about data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
+    "helpLinguists": "Tags specifically relevant to data validity, e.g., “NeedsToBeChecked”.",
+    "helpDevelopers": "Any number of tags of data validity. For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
+  }, {
+    "id": "enteredByUser",
+    "labelFieldLinguists": "Imported/Entered By",
+    "labelNonLinguists": "Entered By",
+    "labelTranslators": "Imported/Entered By",
+    "type": "users",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "defaultfield": true,
+    "json": {
+      "user": {},
+      "hardware": {},
+      "software": {}
+    },
+    "help": "The user who originally entered this."
+  }, {
+    "id": "modifiedByUser",
+    "labelFieldLinguists": "Modified By",
+    "labelNonLinguists": "Modified By",
+    "labelTranslators": "Modified By",
+    "type": "users",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "defaultfield": true,
+    "json": {
+      "users": []
+    },
+    "help": "Users who modified this",
+    "helpDevelopers": "An array of users who modified this, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
+  }, {
+    "id": "syntacticTreeLatex",
+    "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "type": "LaTeX",
+    "shouldBeEncrypted": true,
+    "showToUserTypes": "machine",
+    "defaultfield": true,
+    "json": {
+      "alternates": []
+    },
+    "help": "This an optional field. If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
+    "helpLinguists": "A string-based representation of a syntax tree, i.e., a tree in bracket notation. We assume you will use the bracket notation conventions of The LaTeX tree-drawing package QTree, but you may use others if you wish.",
+    "helpDevelopers": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
+  }],
+  "conversationFields": [{
+    "id": "speakers",
+    "labelFieldLinguists": "Speakers",
+    "labelNonLinguists": "Speakers",
+    "labelTranslators": "Speakers",
+    "type": "users",
+    "shouldBeEncrypted": true,
+    "defaultfield": true,
+    "json": {
+      "users": []
+    },
+    "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
+    "helpLinguists": "The speaker (or speakers) who produced or judged this utterance.",
+    "helpDevelopers": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+  }, {
+    "id": "modality",
+    "labelFieldLinguists": "Modality",
+    "labelNonLinguists": "Modality",
+    "labelTranslators": "Modality",
+    "type": "tags",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "tags": []
+    },
+    "help": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality.",
+    "helpLinguists": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
+  }],
+  "sessionFields": [{
+    "id": "goal",
+    "labelFieldLinguists": "Goal",
+    "labelNonLinguists": "Goal",
+    "labelTranslators": "Goal",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "help": "The goals of this text/transcript or elicitation session. Why did you get together today or why is this data being added to the database, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature...",
+    "helpLinguists": "The goal(s) that drove the elicitation session. For example, you may have wanted to collect stories or you may have had specific data questions relevant to a larger research question.",
+    "helpDevelopers": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
+  }, {
+    "id": "source",
+    "labelFieldLinguists": "Language Speakers/Publication/Source",
+    "labelNonLinguists": "By",
+    "labelTranslators": "Language Speakers/Publication/Source",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "users": []
+    },
+    "help": "This is a comma seperated field of all the consultants/publications/sources who were were the source/present for the data in this data session.",
+    "helpLinguists": "A comma-separated list of sources (e.g., textual documents) for this entry.",
+    "helpDevelopers": "This is a comma seperated field of all the consultants (usernames, or anonymous codes, or publication uri's) who were present for this elicitation session. This field also contains a (hidden) array of consultant/source masks if they are actual users of the system. "
+  }, {
+    "id": "dialect",
+    "type": "language",
+    "labelFieldLinguists": "Dialect",
+    "labelNonLinguists": "Dialect",
+    "labelTranslators": "Dialect",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "help": "Dialect of this example (city, village, region etc)",
+    "helpLinguists": "The dialect represented by the data in this session.",
+    "helpDevelopers": "This dialect may precise as the team chooses (province, region, city, village or any other measure of dialect)"
+  }, {
+    "id": "register",
+    "type": "language",
+    "labelFieldLinguists": "Social Register",
+    "labelNonLinguists": "Social Register",
+    "labelTranslators": "Social Register",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "help": "Social register of this example (friends, children speaking with children, formal, religious, ceremonial, etc.)",
+    "helpLinguists": "This is an optional field which indicates the social register of the example (friends, children speaking with children, formal, religious, ceremonial, etc.)"
+  }, {
+    "id": "language",
+    "type": "language",
+    "labelFieldLinguists": "Language Name",
+    "labelNonLinguists": "Language Name",
+    "labelTranslators": "Language Name (Ethnologue)",
+    "labelComputationalLinguists": "Language Name (ISO 639-3)",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "language": {
+        "ethnologueUrl": "",
+        "wikipediaUrl": "",
+        "iso": "",
+        "locale": "",
+        "englishName": "",
+        "nativeName": "",
+        "alternateNames": ""
+      }
+    },
+    "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
+    "helpLinguists": "The language represented by the data in this session.",
+    "helpDevelopers": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
+  }, {
+    "id": "location",
+    "type": "location",
+    "labelFieldLinguists": "Location",
+    "labelNonLinguists": "Location",
+    "labelTranslators": "Location",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "defaultfield": true,
+    "json": {
+      "location": {
+        "latitude": 0,
+        "longitude": 0,
+        "accuracy": 0
+      }
+    },
+    "help": "The GPS location of the elicitation session (if available)"
+  }, {
+    "id": "dateElicited",
+    "type": "date",
+    "labelFieldLinguists": "Original Date Elicited",
+    "labelNonLinguists": "OriginalDate Spoken",
+    "labelTranslators": "Original Date Spoken/Published",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "The date when the elicitation session took place, or when the data within it was spoken/published.",
+    "helpLinguists": "The date when the elicitation session took place, or when the data within it was spoken/published."
+  }, {
+    "id": "participants",
+    "labelFieldLinguists": "Elicitation Session Participants",
+    "labelNonLinguists": "Session Participants",
+    "labelTranslators": "Participants",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "users": []
+    },
+    "help": "A comma-separated list of the people who were present for this elicitation session, or of the authors/reviewers of the publication represented by this session.",
+    "helpLinguists": "A comma-separated list of the people who were present for this elicitation session, or of the authors/reviewers of the publication represented by this session.",
+    "helpDevelopers": "This is a comma separated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. "
+  }, {
+    "id": "DateSessionEntered",
+    "type": "date",
+    "labelFieldLinguists": "Date Entered",
+    "labelNonLinguists": "Date Entered",
+    "labelTranslators": "Date Entered",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "The date when the elicitation session data was entered into the computer.",
+    "helpDevelopers": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
+  }, {
+    "id": "device",
+    "type": "device",
+    "labelFieldLinguists": "Device Hardware",
+    "labelNonLinguists": "Device Hardware",
+    "labelTranslators": "Device Hardware",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "device": {}
+    },
+    "help": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. e.g.: Nexus 7 Android 4.1",
+    "helpLinguists": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. e.g., Nexus 7 Android 4.1",
+    "helpDevelopers": "Your app can save optional anonymous device details of the equipment/software which used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. e.g.: Nexus 7 Android 4.1"
+  }],
+  "speakerFields": [{
+    "id": "anonymousCode",
+    "labelFieldLinguists": "Anonymous Code",
+    "labelNonLinguists": "Anonymous Code",
+    "labelTranslators": "Anonymous Code",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "A field to anonymously identify language speakers/participants.",
+    "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc)."
+  }, {
+    "id": "firstname",
+    "labelFieldLinguists": "First Name",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
+    "helpLinguists": "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)"
+  }, {
+    "id": "lastname",
+    "labelFieldLinguists": "Last Name",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "The last name of the speaker/participant (encrypted).",
+    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)."
+  }, {
+    "id": "username",
+    "labelFieldLinguists": "Username",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "help": "Optional username of the speaker/participant, if the speaker/participant is registered in the system (encrypted)."
+  }, {
+    "id": "dateOfBirth",
+    "type": "date",
+    "labelFieldLinguists": "Date of Birth",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "timestamp": {
+        "start": null,
+        "end": null,
+        "accuracy": null
+      }
+    },
+    "help": "Optional date of birth of the speaker/participant, if used by the experimental analysis (i.e., speaker/participants of 20 months performed differently from speaker/participants of 22 months)."
+  }, {
+    "id": "gender",
+    "labelFieldLinguists": "Gender",
+    "labelNonLinguists": "",
+    "labelTranslators": "",
+    "shouldBeEncrypted": true,
+    "encrypted": true,
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": [
+        "Female",
+        "Male",
+        "Unknown"
+      ],
+      "children": [
+        "Girl",
+        "Boy",
+        "Unknown"
+      ],
+      "adult": [
+        "Woman",
+        "Man",
+        "Unknown"
+      ]
+    },
+    "help": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis."
+  }, {
+    "id": "languages",
+    "type": "language collection",
+    "labelFieldLinguists": "Language(s) Spoken/Understood",
+    "labelNonLinguists": "Language(s) Spoken/Understood",
+    "labelTranslators": "Language(s) Spoken/Understood (Ethnologue)",
+    "labelComputationalLinguists": "Language(s) Spoken/Understood (ISO 639-3)",
+    "shouldBeEncrypted": false,
+    "defaultfield": true,
+    "json": {
+      "languages": [{
+        "language": {
+          "ethnologueUrl": "",
+          "wikipediaUrl": "",
+          "iso": "",
+          "locale": "",
+          "englishName": "",
+          "nativeName": "",
+          "alternateNames": ""
+        },
+        "fluency": {
+          "comprehensionFluency": "",
+          "speakingFluency": "",
+          "readingFluency": "",
+          "writingFluency": ""
+        },
+        "dates": {
+          "start": "",
+          "end": "",
+          "proportionOfUse": ""
+        }
+      }]
+    },
+    "help": "This is the language name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
+    "helpLinguists": "This is the language (or language family), there are optional extra information fields if your team wants to tie it to an Ethnologue three letter language code (ISO 639-3)."
+  }, {
+    "id": "confidentiality",
+    "labelFieldLinguists": "Confidentiality Setting",
+    "labelNonLinguists": "Confidentiality Setting",
+    "labelTranslators": "Confidentiality Setting",
+    "shouldBeEncrypted": false,
+    "value": "anonymous",
+    "showToUserTypes": "all",
+    "defaultfield": true,
+    "json": {
+      "choices": [
+        "generalize",
+        "team",
+        "anonymous",
+        "public"
+      ]
+    },
+    "help": "Confidentiality setting of this speaker. The default value is “anonymous”, which means that data can be associated to one speaker but the speaker cannot be identified. A value of “hidden” means data will be associated to the entire speaker population of the corpus. A value of “team” means that team members can see the consultant's identity but that viewers who are not team members can only see an anonymous user. A value of “public” means the speaker has signed a consent form and has asked that his/her data be associated to his/her user account or identity."
+  }]
+}
+},{}],26:[function(require,module,exports){
+module.exports={
+  "_id": "corpus",
+  "title": "Private Corpus",
+  "titleAsUrl": "private_corpus",
+  "description": "The details of this corpus are not public.",
+  "connection": {},
+  "activityConnection": {},
+  "termsOfUse": {
+    "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+  },
+  "license": {
+    "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+    "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+    "imageUrl": "https://i.creativecommons.org/l/by/4.0/88x31.png",
+    "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "copyright": "Default: Add names of the copyright holders of the corpus.",
+  "dbname": "",
+  "api": "corpora",
+  "comments": [],
+  "validationStati": [{
+    "validationStatus": "Checked*",
+    "color": "green",
+    "default": true
+  }, {
+    "validationStatus": "Published*",
+    "color": "blue"
+  }, {
+    "validationStatus": "ApprovedLanguageLearningContent*",
+    "color": "green",
+    "showInLanguageLearnignApps": true
+  }],
+  "tags": [{
+    "tag": "SampleData",
+    "color": "green"
+  }],
+  "datumFields": [{
+    "id": "judgement",
+    "labelFieldLinguists": "Grammaticality Judgement",
+    "labelExperimenters": "Naturalness",
+    "labelNonLinguists": "Not-a-normal-thing-to-say",
+    "labelTranslators": "Grammatical/How-normal-Is-This-Example",
+    "size": "3",
+    "shouldBeEncrypted": false,
+    "showToUserTypes": "linguist",
+    "defaultfield": true,
+    "json": {
+      "grammatical": true
+    },
+    "help": "Acceptablity judgement (*,#,?  mean this sentence is strange)",
+    "helpLinguists": "Grammaticality/acceptability judgement (*,#,?,1-3 etc). Leaving it blank usually means grammatical/acceptable, or your team can choose any symbol for this meaning."
   }, {
     "id": "gloss",
     "labelFieldLinguists": "Gloss",
@@ -46124,61 +46716,6 @@ module.exports={
     },
     "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
     "helpLinguists": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html"
-  }, {
-    "id": "translation",
-    "labelFieldLinguists": "Translation",
-    "labelNonLinguists": "English",
-    "labelTranslators": "English",
-    "type": "parallelText",
-    "shouldBeEncrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "writingSystem": {
-        "id": "",
-        "referenceLink": ""
-      },
-      "language": {
-        "ethnologueUrl": "",
-        "wikipediaUrl": "",
-        "iso": "",
-        "locale": "",
-        "englishName": "",
-        "nativeName": "",
-        "alternateNames": ""
-      }
-    },
-    "help": "Translation into English/Spanish/Russian, or simply a language the team is comfortable with. There may also be additional languages in the other fields.",
-    "helpLinguists": "The team's primary translation. It might not be English, just a language the team is comfortable with (in which case you should change the lable to the language you are using). There may also be additional translations in the other fields."
-  }, {
-    "id": "context",
-    "labelFieldLinguists": "Context",
-    "labelNonLinguists": "Context",
-    "labelTranslators": "Context",
-    "type": "wiki",
-    "shouldBeEncrypted": false,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "tags": []
-    },
-    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
-    "helpLinguists": "Tags for constructions or other info that you might want to use to categorize your data."
-  }, {
-    "id": "documentation",
-    "labelFieldLinguists": "Discussion for Handouts",
-    "labelNonLinguists": "Additional Documentation",
-    "labelTranslators": "Documentation",
-    "type": "wiki, LaTeX",
-    "shouldBeEncrypted": false,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "wiki": "",
-      "latex": ""
-    },
-    "help": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable.",
-    "helpLinguists": "Additional discussion of this example (for handouts or for documentation). Wiki or LaTeX formatable."
   }, {
     "id": "relatedData",
     "labelFieldLinguists": "Related Data",
@@ -46224,38 +46761,6 @@ module.exports={
     "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc...",
     "helpLinguists": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedBySeberina, CheckedByRicardo, Deleted etc..."
   }, {
-    "id": "enteredByUser",
-    "labelFieldLinguists": "Imported/Entered By",
-    "labelNonLinguists": "Entered By",
-    "labelTranslators": "Imported/Entered By",
-    "type": "users",
-    "shouldBeEncrypted": "",
-    "showToUserTypes": "all",
-    "readonly": true,
-    "defaultfield": true,
-    "json": {
-      "user": {},
-      "hardware": {},
-      "software": {}
-    },
-    "help": "The user who originally entered the datum",
-    "helpLinguists": "The user who originally entered the datum"
-  }, {
-    "id": "modifiedByUser",
-    "labelFieldLinguists": "Modified By",
-    "labelNonLinguists": "Modified By",
-    "labelTranslators": "Modified By",
-    "type": "users",
-    "shouldBeEncrypted": "",
-    "showToUserTypes": "all",
-    "readonly": true,
-    "defaultfield": true,
-    "json": {
-      "users": []
-    },
-    "help": "An array of users who modified the datum",
-    "helpLinguists": "An array of users who modified the datum, this can optionally introduce a 'CheckedByUsername' into the datum's validation status if your team chooses."
-  }, {
     "id": "syntacticTreeLatex",
     "labelFieldLinguists": "Syntactic Tree/Constituency (LaTeX)",
     "labelNonLinguists": "",
@@ -46270,43 +46775,8 @@ module.exports={
     "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]",
     "helpLinguists": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: \\Tree [.S NP VP ]"
   }],
-  "conversationFields": [{
-    "id": "speakers",
-    "labelFieldLinguists": "Speakers",
-    "labelNonLinguists": "Speakers",
-    "labelTranslators": "Speakers",
-    "type": "users",
-    "shouldBeEncrypted": true,
-    "defaultfield": true,
-    "json": {
-      "users": []
-    },
-    "help": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer.",
-    "helpLinguists": "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
-  }, {
-    "id": "modality",
-    "labelFieldLinguists": "Modality",
-    "labelNonLinguists": "Modality",
-    "labelTranslators": "Modality",
-    "type": "tags",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "json": {
-      "tags": []
-    },
-    "help": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality.",
-    "helpLinguists": "Use this field to indicate if this is a voice or gesture tier, or a tier for another modality."
-  }],
+  "conversationFields": [],
   "sessionFields": [{
-    "id": "goal",
-    "labelFieldLinguists": "Goal",
-    "labelNonLinguists": "Goal",
-    "labelTranslators": "Goal",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "help": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature...",
-    "helpLinguists": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
-  }, {
     "id": "source",
     "labelFieldLinguists": "Language Speakers/Publication/Source",
     "labelNonLinguists": "By",
@@ -46361,25 +46831,7 @@ module.exports={
     },
     "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
     "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
-  }, {
-    "id": "location",
-    "type": "location",
-    "labelFieldLinguists": "Location",
-    "labelNonLinguists": "Location",
-    "labelTranslators": "Location",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "defaultfield": true,
-    "json": {
-      "location": {
-        "latitude": 0,
-        "longitude": 0,
-        "accuracy": 0
-      }
-    },
-    "help": "This is the GPS location of the elicitation session (if available)",
-    "helpLinguists": "This is the GPS location of the elicitation session (if available)"
-  }, {
+  },{
     "id": "dateElicited",
     "type": "date",
     "labelFieldLinguists": "Original Date Elicited",
@@ -46396,50 +46848,6 @@ module.exports={
     },
     "help": "The date when the elicitation session took place, or when the datum was spoken/published.",
     "helpLinguists": "The date when the elicitation session took place, or when the datum was spoken/published."
-  }, {
-    "id": "participants",
-    "labelFieldLinguists": "Eliciation Session Participants",
-    "labelNonLinguists": "Session Participants",
-    "labelTranslators": "Participants",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "json": {
-      "users": []
-    },
-    "help": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
-    "helpLinguists": "This is a comma seperated field of all the people who were present for this elicitation session, or authors/reviewers of the publication.",
-    "helpDevelopers": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. "
-  }, {
-    "id": "DateSessionEntered",
-    "type": "date",
-    "labelFieldLinguists": "Date Entered",
-    "labelNonLinguists": "Date Entered",
-    "labelTranslators": "Date Entered",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "json": {
-      "timestamp": {
-        "start": null,
-        "end": null,
-        "accuracy": null
-      }
-    },
-    "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
-    "helpLinguists": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book)."
-  }, {
-    "id": "device",
-    "type": "device",
-    "labelFieldLinguists": "Device Hardware",
-    "labelNonLinguists": "Device Hardware",
-    "labelTranslators": "Device Hardware",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "json": {
-      "device": {}
-    },
-    "help": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
-    "helpLinguists": "The optional device details of the equipment used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1",
-    "helpDevelopers": "Your app can save optional anonymous device details of the equipment/software which used to record the elicitation session. This can be useful for measuring phonetic quality of the recording etc. eg: Nexus 7 Android 4.1"
   }],
   "speakerFields": [{
     "id": "anonymousCode",
@@ -46451,127 +46859,10 @@ module.exports={
     "defaultfield": true,
     "help": "A field to anonymously identify language speakers/participants.",
     "helpLinguists": "A field to anonymously identify language consultants/informants/experiment participants (by default it can be a timestamp, or a combination of experimenter initials, speaker/participant initials etc)."
-  }, {
-    "id": "firstname",
-    "labelFieldLinguists": "First Name",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "The first name of the speaker/participant (optional, encrypted if speaker is anonymous)",
-    "helpLinguists": "The first name of the speaker/participant (optional, should be encrypted if speaker should remain anonymous)"
-  }, {
-    "id": "lastname",
-    "labelFieldLinguists": "Last Name",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "The last name of the speaker/participant (encrypted)",
-    "helpLinguists": "The last name of the speaker/participant (optional, encrypted if speaker should remain anonymous)"
-  }, {
-    "id": "username",
-    "labelFieldLinguists": "Username",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "help": "Optional username of the speaker/participant, if the speaker/participant is registered in the system (encrypted).",
-    "helpLinguists": "Optional username of the speaker/participant, if the speaker/participant is registered in the system (encrypted)."
-  }, {
-    "id": "dateOfBirth",
-    "type": "date",
-    "labelFieldLinguists": "Date of Birth",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "timestamp": {
-        "start": null,
-        "end": null,
-        "accuracy": null
-      }
-    },
-    "help": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months).",
-    "helpLinguists": "Optional date of birth of the speaker/participant, if used by the experimental analysis (ie speaker/participants of 20 months performed differently from speaker/participants of 22 months)."
-  }, {
-    "id": "gender",
-    "labelFieldLinguists": "Gender",
-    "labelNonLinguists": "",
-    "labelTranslators": "",
-    "shouldBeEncrypted": true,
-    "encrypted": true,
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "choices": ["Female", "Male", "Unknown"],
-      "children": ["Girl", "Boy", "Unknown"],
-      "adult": ["Woman", "Man", "Unknown"]
-    },
-    "help": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis.",
-    "helpLinguists": "Optional gender or biological sex of the speaker/participant, if used by the speaker/participants result reports or experimental analysis."
-  }, {
-    "id": "languages",
-    "type": "language collection",
-    "labelFieldLinguists": "Language(s) Spoken/Understood",
-    "labelNonLinguists": "Language(s) Spoken/Understood",
-    "labelTranslators": "Language(s) Spoken/Understood (Ethnologue)",
-    "labelComputationalLinguists": "Language(s) Spoken/Understood (ISO 639-3)",
-    "shouldBeEncrypted": false,
-    "defaultfield": true,
-    "json": {
-      "languages": [{
-        "language": {
-          "ethnologueUrl": "",
-          "wikipediaUrl": "",
-          "iso": "",
-          "locale": "",
-          "englishName": "",
-          "nativeName": "",
-          "alternateNames": ""
-        },
-        "fluency": {
-          "comprehensionFluency": "",
-          "speakingFluency": "",
-          "readingFluency": "",
-          "writingFluency": ""
-        },
-        "dates": {
-          "start": "",
-          "end": "",
-          "proportionOfUse": ""
-        }
-      }]
-    },
-    "help": "This is the langauge name (or language family), it is optionally tied to an Ethnologue language code (ISO 639-3).",
-    "helpLinguists": "This is the langauge (or language family), there is optional extra information fields if your team wants to tie it to an Ethnologe three letter language code (ISO 639-3)."
-  }, {
-    "id": "confidentiality",
-    "labelFieldLinguists": "Confidentiality Setting",
-    "labelNonLinguists": "Confidentiality Setting",
-    "labelTranslators": "Confidentiality Setting",
-    "shouldBeEncrypted": false,
-    "value": "anonymous",
-    "showToUserTypes": "all",
-    "defaultfield": true,
-    "json": {
-      "choices": ["generalize", "team", "anonymous", "public"]
-    },
-    "help": "Confidentiality setting of this speaker. By default the speaker is anonymous which means data can be associated to one speaker, but the speaker cannot be identified) hidden means data will be associated to the entire speaker population of the corpus, team means that team members can see the consultant's identity, but the outsiders of the team can only see an anonymous user, public means the speaker has signed a consent form and has asked that his/her data to be associated his/her user account or identity.",
-    "helpLinguists": "Confidentiality setting of this speaker. By default the speaker is anonymous which means data can be associated to the speaker, but the speaker cannot be identified) hidden means data will be associated to the entire speaker population of the corpus, team means that team members can see the consultant's identity, but the outsiders of the team can only see an anonymous user, public means the speaker has signed a consent form and has asked that his/her data to be associated his/her user account or identity."
   }]
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 module.exports={
   "description": "This is first database which contains the results of your experiment, you can use it to play with the app... When you want to make a real database, click New : Database/Corpus",
   "participantFields": [ {
@@ -46601,7 +46892,7 @@ module.exports={
   }]
 }
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 // console.log("Loading DataList.js");
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -47169,7 +47460,7 @@ exports.DataList = DataList;
 
 // console.log("Exported DataList", exports);
 
-},{"./../FieldDBObject":3,"./../comment/Comments":16,"./../datum/DocumentCollection":37,"./../locales/ContextualizableObject":48,"q":241}],28:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../comment/Comments":16,"./../datum/DocumentCollection":38,"./../locales/ContextualizableObject":49,"q":243}],29:[function(require,module,exports){
 var SubExperimentDataList = require("./SubExperimentDataList").SubExperimentDataList;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
@@ -47211,7 +47502,7 @@ ExperimentDataList.prototype = Object.create(SubExperimentDataList.prototype, /*
 });
 exports.ExperimentDataList = ExperimentDataList;
 
-},{"./../comment/Comments":16,"./../datum/DocumentCollection":37,"./../locales/ContextualizableObject":48,"./SubExperimentDataList":29}],29:[function(require,module,exports){
+},{"./../comment/Comments":16,"./../datum/DocumentCollection":38,"./../locales/ContextualizableObject":49,"./SubExperimentDataList":30}],30:[function(require,module,exports){
 var DataList = require("./DataList").DataList;
 var Stimulus = require("./../datum/Stimulus").Stimulus;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
@@ -47304,7 +47595,7 @@ SubExperimentDataList.prototype = Object.create(DataList.prototype, /** @lends S
 });
 exports.SubExperimentDataList = SubExperimentDataList;
 
-},{"./../comment/Comments":16,"./../datum/DocumentCollection":37,"./../datum/Stimulus":40,"./../locales/ContextualizableObject":48,"./DataList":27}],30:[function(require,module,exports){
+},{"./../comment/Comments":16,"./../datum/DocumentCollection":38,"./../datum/Stimulus":41,"./../locales/ContextualizableObject":49,"./DataList":28}],31:[function(require,module,exports){
 /* globals window, $, _ , OPrime*/
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
@@ -48853,7 +49144,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 });
 exports.Datum = Datum;
 
-},{"./../Collection":2,"./../FieldDBObject":3,"./../audio_video/AudioVideo":10,"./../audio_video/AudioVideos":12,"./../comment/Comments":16,"./../corpus/corpus.json":25,"./../image/Images":46,"./DatumField":31,"./DatumFields":32,"./DatumStates":34,"./DatumTags":36,"./Session":39}],31:[function(require,module,exports){
+},{"./../Collection":2,"./../FieldDBObject":3,"./../audio_video/AudioVideo":10,"./../audio_video/AudioVideos":12,"./../comment/Comments":16,"./../corpus/corpus.json":25,"./../image/Images":47,"./DatumField":32,"./DatumFields":33,"./DatumStates":35,"./DatumTags":37,"./Session":40}],32:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 
@@ -48959,15 +49250,22 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   label: {
     get: function() {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists, labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      return this._labelFieldLinguists || this.id || FieldDBObject.DEFAULT_STRING;
+      return this._labelNonLinguists || this._labelFieldLinguists || this.id || FieldDBObject.DEFAULT_STRING;
     },
     set: function(value) {
       this.debug("label is deprecated, instead automatically contextualize a label for appropriate user eg labelFieldLinguists,  labelNonLinguists, labelTranslators, labelComputationalLinguist");
-      if (!this.labelFieldLinguists) {
+      if (!this._labelFieldLinguists) {
         if (value && value.length > 2) {
-          this.labelFieldLinguists = value[0].toUpperCase() + value.substring(1, value.length);
+          this._labelFieldLinguists = value[0].toUpperCase() + value.substring(1, value.length);
         } else {
-          this.labelFieldLinguists = value;
+          this._labelFieldLinguists = value;
+        }
+      }
+      if (!this._labelNonLinguists) {
+        if (value && value.length > 2) {
+          this._labelNonLinguists = value[0].toUpperCase() + value.substring(1, value.length);
+        } else {
+          this._labelNonLinguists = value;
         }
       }
       if (!this._id) {
@@ -49396,7 +49694,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
   help: {
     configurable: true,
     get: function() {
-      return this._helpLinguists || this._help || "Put your team's data entry conventions here (if any)...";
+      return this._help || this._helpNonLinguists || "Put your team's data entry conventions here (if any)...";
     },
     set: function(value) {
       if (value === this._help) {
@@ -49407,8 +49705,8 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         return;
       }
       this._help = value.trim();
-      if (!this.helpLinguists) {
-        this.helpLinguists = this._help;
+      if (!this._helpNonLinguists) {
+        this.helpNonLinguists = this._help;
       }
     }
   },
@@ -49742,8 +50040,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 });
 
 exports.DatumField = DatumField;
-
-},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17}],32:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17}],33:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var DatumField = require("./../datum/DatumField").DatumField;
 
@@ -49848,7 +50145,7 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
 });
 exports.DatumFields = DatumFields;
 
-},{"./../Collection":2,"./../datum/DatumField":31}],33:[function(require,module,exports){
+},{"./../Collection":2,"./../datum/DatumField":32}],34:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var UserMask = require("./../user/UserMask").UserMask;
 
@@ -49923,7 +50220,7 @@ DatumState.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumSt
 });
 exports.DatumState = DatumState;
 
-},{"./../FieldDBObject":3,"./../user/UserMask":64}],34:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../user/UserMask":65}],35:[function(require,module,exports){
 var DatumTags = require("./DatumTags").DatumTags;
 var DatumState = require("./DatumState").DatumState;
 
@@ -49968,7 +50265,7 @@ DatumStates.prototype = Object.create(DatumTags.prototype, /** @lends DatumState
 });
 exports.DatumStates = DatumStates;
 
-},{"./DatumState":33,"./DatumTags":36}],35:[function(require,module,exports){
+},{"./DatumState":34,"./DatumTags":37}],36:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
@@ -49997,7 +50294,7 @@ DatumTag.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumTag.
 });
 exports.DatumTag = DatumTag;
 
-},{"./../FieldDBObject":3}],36:[function(require,module,exports){
+},{"./../FieldDBObject":3}],37:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var DatumTag = require("./DatumTag").DatumTag;
 
@@ -50043,7 +50340,7 @@ DatumTags.prototype = Object.create(Collection.prototype, /** @lends DatumTags.p
 });
 exports.DatumTags = DatumTags;
 
-},{"./../Collection":2,"./DatumTag":35}],37:[function(require,module,exports){
+},{"./../Collection":2,"./DatumTag":36}],38:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
@@ -50085,7 +50382,7 @@ DocumentCollection.prototype = Object.create(Collection.prototype, /** @lends Do
 });
 exports.DocumentCollection = DocumentCollection;
 
-},{"./../Collection":2,"./../FieldDBObject":3}],38:[function(require,module,exports){
+},{"./../Collection":2,"./../FieldDBObject":3}],39:[function(require,module,exports){
 var Stimulus = require("./Stimulus").Stimulus,
   Q = require("q");
 
@@ -50359,7 +50656,7 @@ Response.prototype = Object.create(Stimulus.prototype, /** @lends Response.proto
 });
 exports.Response = Response;
 
-},{"./Stimulus":40,"q":241}],39:[function(require,module,exports){
+},{"./Stimulus":41,"q":243}],40:[function(require,module,exports){
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var DatumFields = require("./DatumFields").DatumFields;
 var DataList = require("./../data_list/DataList").DataList;
@@ -51261,7 +51558,7 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
 });
 exports.Session = Session;
 
-},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/corpus.json":25,"./../data_list/DataList":27,"./DatumFields":32}],40:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/corpus.json":25,"./../data_list/DataList":28,"./DatumFields":33}],41:[function(require,module,exports){
 var Datum = require("./Datum").Datum;
 
 /**
@@ -51355,7 +51652,7 @@ Stimulus.prototype = Object.create(Datum.prototype, /** @lends Stimulus.prototyp
 });
 exports.Stimulus = Stimulus;
 
-},{"./Datum":30}],41:[function(require,module,exports){
+},{"./Datum":31}],42:[function(require,module,exports){
 /**
  * @class The export class helps export a set of selected data into csv, xml
  *        and LaTex file.
@@ -51385,7 +51682,7 @@ var Export = /** @lends Export.prototype */ {
 };
 exports.Export = Export;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function (global){
 /* globals window, URL */
 
@@ -51619,7 +51916,7 @@ exports.Export = Export;
 }(typeof exports === "object" && exports || this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./CORS":1,"./Collection":2,"./FieldDBObject":3,"./Router":4,"./activity/Activities":5,"./activity/Activity":6,"./app/App":7,"./app/PsycholinguisticsApp":8,"./audio_video/AudioVideo":10,"./audio_video/AudioVideoRecorder":11,"./audio_video/AudioVideos":12,"./authentication/Authentication":14,"./comment/Comment":15,"./comment/Comments":16,"./confidentiality_encryption/Confidential":17,"./corpus/Connection":19,"./corpus/Corpora":20,"./corpus/Corpus":21,"./corpus/CorpusMask":22,"./corpus/Database":23,"./corpus/PsycholinguisticsDatabase":24,"./data_list/DataList":27,"./data_list/ExperimentDataList":28,"./data_list/SubExperimentDataList":29,"./datum/Datum":30,"./datum/DatumField":31,"./datum/DatumFields":32,"./datum/Response":38,"./datum/Session":39,"./datum/Stimulus":40,"./export/Export":41,"./hotkey/HotKeys":44,"./image/Image":45,"./image/Images":46,"./import/Import":47,"./locales/ContextualizableObject":48,"./locales/Contextualizer":49,"./permission/Permission":54,"./permission/Permissions":55,"./search/Search":56,"./unicode/UnicodeSymbol":57,"./unicode/UnicodeSymbols":58,"./user/Consultant":59,"./user/Participant":60,"./user/Speaker":61,"./user/Team":62,"./user/User":63,"./user/UserMask":64,"./user/UserPreference":65,"./user/Users":66,"q":241,"url":236}],43:[function(require,module,exports){
+},{"./CORS":1,"./Collection":2,"./FieldDBObject":3,"./Router":4,"./activity/Activities":5,"./activity/Activity":6,"./app/App":7,"./app/PsycholinguisticsApp":8,"./audio_video/AudioVideo":10,"./audio_video/AudioVideoRecorder":11,"./audio_video/AudioVideos":12,"./authentication/Authentication":14,"./comment/Comment":15,"./comment/Comments":16,"./confidentiality_encryption/Confidential":17,"./corpus/Connection":19,"./corpus/Corpora":20,"./corpus/Corpus":21,"./corpus/CorpusMask":22,"./corpus/Database":23,"./corpus/PsycholinguisticsDatabase":24,"./data_list/DataList":28,"./data_list/ExperimentDataList":29,"./data_list/SubExperimentDataList":30,"./datum/Datum":31,"./datum/DatumField":32,"./datum/DatumFields":33,"./datum/Response":39,"./datum/Session":40,"./datum/Stimulus":41,"./export/Export":42,"./hotkey/HotKeys":45,"./image/Image":46,"./image/Images":47,"./import/Import":48,"./locales/ContextualizableObject":49,"./locales/Contextualizer":50,"./permission/Permission":55,"./permission/Permissions":56,"./search/Search":57,"./unicode/UnicodeSymbol":58,"./unicode/UnicodeSymbols":59,"./user/Consultant":60,"./user/Participant":61,"./user/Speaker":62,"./user/Team":63,"./user/User":64,"./user/UserMask":65,"./user/UserPreference":66,"./user/Users":67,"q":243,"url":238}],44:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
@@ -51664,7 +51961,7 @@ HotKey.prototype = Object.create(FieldDBObject.prototype, /** @lends HotKey.prot
 });
 exports.HotKey = HotKey;
 
-},{"./../FieldDBObject":3}],44:[function(require,module,exports){
+},{"./../FieldDBObject":3}],45:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var HotKey = require("./HotKey").HotKey;
 
@@ -51713,7 +52010,7 @@ HotKeys.prototype = Object.create(Collection.prototype, /** @lends HotKeys.proto
 });
 exports.HotKeys = HotKeys;
 
-},{"./../Collection":2,"./HotKey":43}],45:[function(require,module,exports){
+},{"./../Collection":2,"./HotKey":44}],46:[function(require,module,exports){
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 
 /**
@@ -51744,7 +52041,7 @@ Image.prototype = Object.create(AudioVideo.prototype, /** @lends Image.prototype
 });
 exports.Image = Image;
 
-},{"./../audio_video/AudioVideo":10}],46:[function(require,module,exports){
+},{"./../audio_video/AudioVideo":10}],47:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var Image = require("./Image").Image;
 
@@ -51783,7 +52080,7 @@ Images.prototype = Object.create(Collection.prototype, /** @lends Images.prototy
 });
 exports.Images = Images;
 
-},{"./../Collection":2,"./Image":45}],47:[function(require,module,exports){
+},{"./../Collection":2,"./Image":46}],48:[function(require,module,exports){
 /* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
 var FieldDBImage = require("./../image/Image").Image;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
@@ -53462,7 +53759,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.rawText = self.rawText.trim();
           self.render();
         }
-
         if (!self.dbname && self.parent && self.parent.dbname) {
           self.dbname = self.parent.dbname;
         }
@@ -53657,7 +53953,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
       this[fileCollection].add(details);
       if (this.parent) {
-        this.parent.audioVideo.push(details);
+        if (typeof this.parent.markAsNeedsToBeSaved === "function") {
+          this.parent.markAsNeedsToBeSaved();
+        }
+        if (typeof this.parent.addFile === "function") {
+          this.parent.addFile(details);
+        } else if (this.parent.audioVideo && typeof this.parent.audioVideo.push === "function") {
+          this.parent.audioVideo.push(details);
+        } else {
+          this.bug("There was a problem attaching this file. Please report this.");
+        }
         this.render();
         // this.asCSV = [];
       }
@@ -54100,8 +54405,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 });
 
 exports.Import = Import;
-
-},{"./../CORS":1,"./../Collection":2,"./../FieldDBObject":3,"./../audio_video/AudioVideo":10,"./../audio_video/AudioVideos":12,"./../corpus/Corpus":21,"./../datum/Datum":30,"./../datum/DatumField":31,"./../datum/DatumFields":32,"./../datum/Session":39,"./../image/Image":45,"./../user/Participant":60,"q":241,"textgrid":243,"underscore":244}],48:[function(require,module,exports){
+},{"./../CORS":1,"./../Collection":2,"./../FieldDBObject":3,"./../audio_video/AudioVideo":10,"./../audio_video/AudioVideos":12,"./../corpus/Corpus":21,"./../datum/Datum":31,"./../datum/DatumField":32,"./../datum/DatumFields":33,"./../datum/Session":40,"./../image/Image":46,"./../user/Participant":61,"q":243,"textgrid":245,"underscore":246}],49:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject,
   Q = require("q");
 
@@ -54350,7 +54654,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
 });
 exports.ContextualizableObject = ContextualizableObject;
 
-},{"./../FieldDBObject":3,"q":241}],49:[function(require,module,exports){
+},{"./../FieldDBObject":3,"q":243}],50:[function(require,module,exports){
 (function (global){
 /* globals window, localStorage, navigator */
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -54893,7 +55197,7 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
 exports.Contextualizer = Contextualizer;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../CORS":1,"./../FieldDBObject":3,"./ELanguages":50,"./elanguages.json":51,"./en/messages.json":52,"./es/messages.json":53,"q":241}],50:[function(require,module,exports){
+},{"./../CORS":1,"./../FieldDBObject":3,"./ELanguages":51,"./elanguages.json":52,"./en/messages.json":53,"./es/messages.json":54,"q":243}],51:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
@@ -54939,7 +55243,7 @@ ELanguages.prototype = Object.create(Collection.prototype, /** @lends ELanguages
 });
 exports.ELanguages = ELanguages;
 
-},{"./../Collection":2,"./../FieldDBObject":3}],51:[function(require,module,exports){
+},{"./../Collection":2,"./../FieldDBObject":3}],52:[function(require,module,exports){
 module.exports=[{
   "iso": "Non applicable",
   "name": "NA",
@@ -55678,7 +55982,7 @@ module.exports=[{
   "nativeName": "Saɯ cueŋƅ, Saw cuengh"
 }]
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 module.exports={
   "application_title" : {
     "message" : "LingSync beta",
@@ -56274,7 +56578,7 @@ module.exports={
   }
 }
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 module.exports={
   "application_title" : {
     "message" : "iCampo beta"
@@ -56804,7 +57108,7 @@ module.exports={
     "message" : "Más"
   }
 }
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Users = require("./../user/Users").Users;
 
@@ -56877,7 +57181,7 @@ Permission.prototype = Object.create(FieldDBObject.prototype, /** @lends Permiss
 });
 exports.Permission = Permission;
 
-},{"./../FieldDBObject":3,"./../user/Users":66}],55:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../user/Users":67}],56:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var Permission = require("./Permission").Permission;
 var Users = require("./../user/Users").Users;
@@ -57711,7 +58015,7 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
 
 exports.Permissions = Permissions;
 
-},{"./../CORS":1,"./../Collection":2,"./../user/Users":66,"./Permission":54,"q":241}],56:[function(require,module,exports){
+},{"./../CORS":1,"./../Collection":2,"./../user/Users":67,"./Permission":55,"q":243}],57:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
@@ -57775,7 +58079,7 @@ Search.prototype = Object.create(FieldDBObject.prototype, /** @lends Search.prot
 });
 exports.Search = Search;
 
-},{"./../FieldDBObject":3}],57:[function(require,module,exports){
+},{"./../FieldDBObject":3}],58:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
 /**
@@ -57843,7 +58147,7 @@ UnicodeSymbol.prototype = Object.create(FieldDBObject.prototype, /** @lends Unic
 });
 exports.UnicodeSymbol = UnicodeSymbol;
 
-},{"./../FieldDBObject":3}],58:[function(require,module,exports){
+},{"./../FieldDBObject":3}],59:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var UnicodeSymbol = require("./UnicodeSymbol").UnicodeSymbol;
 
@@ -58151,7 +58455,7 @@ UnicodeSymbols.prototype = Object.create(Collection.prototype, /** @lends Unicod
 });
 exports.UnicodeSymbols = UnicodeSymbols;
 
-},{"./../Collection":2,"./UnicodeSymbol":57}],59:[function(require,module,exports){
+},{"./../Collection":2,"./UnicodeSymbol":58}],60:[function(require,module,exports){
 var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
@@ -58202,7 +58506,7 @@ Consultant.prototype = Object.create(Speaker.prototype, /** @lends Consultant.pr
 });
 exports.Consultant = Consultant;
 
-},{"./../corpus/corpus.json":25,"./Speaker":61}],60:[function(require,module,exports){
+},{"./../corpus/corpus.json":25,"./Speaker":62}],61:[function(require,module,exports){
 var Speaker = require("./Speaker").Speaker;
 var DEFAULT_CORPUS_MODEL = require("./../corpus/corpus.json");
 
@@ -58259,7 +58563,7 @@ Participant.prototype = Object.create(Speaker.prototype, /** @lends Participant.
 });
 exports.Participant = Participant;
 
-},{"./../corpus/corpus.json":25,"./Speaker":61}],61:[function(require,module,exports){
+},{"./../corpus/corpus.json":25,"./Speaker":62}],62:[function(require,module,exports){
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -58764,7 +59068,7 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
 });
 exports.Speaker = Speaker;
 
-},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/corpus.json":25,"./../datum/DatumFields":32,"./UserMask":64}],62:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../confidentiality_encryption/Confidential":17,"./../corpus/corpus.json":25,"./../datum/DatumFields":33,"./UserMask":65}],63:[function(require,module,exports){
 var UserMask = require("./UserMask").UserMask;
 
 /**
@@ -58839,26 +59143,27 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
       this.warn("subtitle is deprecated, use name instead.");
       this.name = value;
     }
-  },
-
-  toJSON: {
-    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
-      var json = UserMask.prototype.toJSON.apply(this, [false, true]);
-      delete json.fieldDBtype;
-      delete json.version;
-      delete json.api;
-      this.debug(json);
-      return json;
-    }
   }
+
+  // toJSON: {
+  //   value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+  //     this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+  //     var json = UserMask.prototype.toJSON.apply(this, [false, true]);
+  //     json._id = this.id;
+  //     delete json.fieldDBtype;
+  //     delete json.version;
+  //     delete json.api;
+  //     this.debug(json);
+  //     return json;
+  //   }
+  // }
 
 
 });
 
 exports.Team = Team;
 
-},{"./UserMask":64}],63:[function(require,module,exports){
+},{"./UserMask":65}],64:[function(require,module,exports){
 /* globals localStorage */
 var Activities = require("./../activity/Activities").Activities;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
@@ -58923,10 +59228,12 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       appbrand: FieldDBObject.DEFAULT_STRING,
       fields: DatumFields,
       prefs: UserPreference,
-      mostRecentIds: FieldDBObject.DEFAULT_OBJECT,
+      mostRecentIds: FieldDBObject,
       activityConnection: Activities,
       authUrl: FieldDBObject.DEFAULT_STRING,
+      userMask: UserMask,
       corpora: Corpora,
+      newCorpora: Corpora,
       sessionHistory: FieldDBObject.DEFAULT_ARRAY,
       datalistHistory: FieldDBObject.DEFAULT_ARRAY
     }
@@ -59014,16 +59321,20 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       if (value === this._mostRecentIds) {
         return;
       }
-      // if (!value) {
-      //   delete this._mostRecentIds;
-      //   return;
-      // } else {
-      //   if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
-      //     value = new this.INTERNAL_MODELS["mostRecentIds"](value);
-      //   }
-      // }
-      if (value && value.connection) {
-        value.connection = value.connection = new Connection(value.connection);
+      if (!value) {
+        delete this._mostRecentIds;
+        return;
+      } else {
+        if (!(value instanceof this.INTERNAL_MODELS["mostRecentIds"])) {
+          value = new this.INTERNAL_MODELS["mostRecentIds"](value);
+        }
+      }
+
+      value.connection = value.connection || value.corpusConnection || value.couchConnection;
+      delete value.corpusConnection;
+      delete value.couchConnection;
+      if (value.connection) {
+        value.connection = new Connection(value.connection);
       }
       this._mostRecentIds = value;
     }
@@ -59064,13 +59375,23 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  newCorpusConnections: {
+    configurable: true,
+    get: function() {
+      return this.newCorpora;
+    },
+    set: function(value) {
+      this.newCorpora = value;
+    }
+  },
+
   appbrand: {
     get: function() {
-      if (this.prefs && !this.prefs.preferedDashboardType) {
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
-          this.debug(" setting preferedDashboardType from user " + this._appbrand);
+          this.debug(" setting preferredDashboardType from user " + this._appbrand);
 
-          this.prefs.preferedDashboardType = "experimenter";
+          this.prefs.preferredDashboardType = "experimenter";
         }
       }
       return this._appbrand || "lingsync";
@@ -59088,14 +59409,40 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         }
         this._appbrand = value;
       }
-      this.debug(" setting preferedDashboardType from user " + this._appbrand);
-      if (this.prefs && !this.prefs.preferedDashboardType) {
+      this.debug(" setting preferredDashboardType from user " + this._appbrand);
+      if (this.prefs && this.prefs.preferredDashboardType === this.prefs.defaults.preferredDashboardType) {
         if (this._appbrand === "phophlo") {
-          this.prefs._preferedDashboardType = "experimenter";
-          this.debug(" it is now " + this.prefs.preferedDashboardType);
+          this.prefs._preferredDashboardType = "experimenter";
+          this.debug(" it is now " + this.prefs.preferredDashboardType);
 
         }
       }
+    }
+  },
+
+  userMask: {
+    get: function() {
+      this.debug("getting userMask");
+      return this._userMask;
+    },
+    set: function(value) {
+      if (value && typeof value === "object") {
+        value.username = this.username;
+        value.gravatar = value.gravatar || this.gravatar;
+        value.researchInterest = value.researchInterest || "No public information available";
+        value.description = value.description || "No public information available";
+        value.affiliation = value.affiliation || "No public information available";
+      }
+      this.ensureSetViaAppropriateType("userMask", value);
+    }
+  },
+
+  publicSelf: {
+    get: function() {
+      return this.userMask;
+    },
+    set: function(value) {
+      this.userMask = value;
     }
   },
 
@@ -59151,6 +59498,17 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
       // TODO deprecated
       json.datalists = this.datalists;
+
+      if (json.mostRecentIds) {
+        delete json.mostRecentIds.fieldDBtype;
+        delete json.mostRecentIds.version;
+        delete json.mostRecentIds.dateCreated;
+        delete json.mostRecentIds.dateModified;
+        delete json.mostRecentIds.comments;
+        if (!json.mostRecentIds.dbname) {
+          delete json.mostRecentIds.dbname;
+        }
+      }
 
       this.debug(json);
       return json;
@@ -59278,8 +59636,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
 
 });
 exports.User = User;
-
-},{"./../FieldDBObject":3,"./../activity/Activities":5,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Corpora":20,"./../corpus/Database":23,"./../datum/DatumFields":32,"./UserMask":64,"./UserPreference":65,"./user.json":67,"q":241}],64:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../activity/Activities":5,"./../confidentiality_encryption/Confidential":17,"./../corpus/Connection":19,"./../corpus/Corpora":20,"./../corpus/Database":23,"./../datum/DatumFields":33,"./UserMask":65,"./UserPreference":66,"./user.json":68,"q":243}],65:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DatumFields = require("./../datum/DatumFields").DatumFields;
 var MD5 = require("MD5");
@@ -59622,7 +59979,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
 exports.UserMask = UserMask;
 
-},{"./../FieldDBObject":3,"./../datum/DatumFields":32,"MD5":68}],65:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../datum/DatumFields":33,"MD5":69}],66:[function(require,module,exports){
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var HotKeys = require("./../hotkey/HotKeys").HotKeys;
 var UnicodeSymbols = require("./../unicode/UnicodeSymbols").UnicodeSymbols;
@@ -59646,20 +60003,31 @@ var UserPreference = function UserPreference(options) {
   FieldDBObject.apply(this, arguments);
 };
 
+UserPreference.preferredDashboardLayouts = ["layoutAllTheData", "layoutJustEntering", "layoutWhatsHappening", "layoutCompareDataLists"];
+UserPreference.preferredDashboardTypes = ["fieldlinguistNormalUser", "fieldlinguistPowerUser"];
+
 UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends UserPreference.prototype */ {
   constructor: {
     value: UserPreference
   },
 
   defaults: {
-    value: {
-      skin: "",
-      numVisibleDatum: 2, //Use two as default so users can see minimal pairs
-      transparentDashboard: "false",
-      alwaysRandomizeSkin: "true",
-      numberOfItemsInPaginatedViews: 10,
-      preferedDashboardLayout: "layoutAllTheData",
-      preferedDashboardType: "fieldlinguistNormalUser"
+    get: function() {
+      return {
+        skin: "",
+        numVisibleDatum: 2, //Use two as default so users can see minimal pairs
+        transparentDashboard: false,
+        alwaysRandomizeSkin: true,
+        numberOfItemsInPaginatedViews: 10,
+        preferredDashboardLayout: "layoutAllTheData",
+        preferredDashboardType: "fieldlinguistNormalUser",
+        preferredSpreadsheetShape: {
+          columns: 2,
+          rows: 3
+        },
+        hotkeys: [],
+        unicodes: []
+      };
     }
   },
 
@@ -59670,68 +60038,148 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
     }
   },
 
-  preferedDashboardType: {
+  skin: {
     get: function() {
-      this.debug("getting preferedDashboardType " + this._preferedDashboardType);
-      if (!this._preferedDashboardType && this.preferedDashboardLayout) {
-        this.debug("getting preferedDashboardType from _preferedDashboardLayout ");
-      }
-      return this._preferedDashboardType || FieldDBObject.DEFAULT_STRING;
+      return this._skin || this.defaults.skin;
     },
     set: function(value) {
-      this.debug("setting _preferedDashboardType from " + value);
-      if (value === this._preferedDashboardType) {
+      this.debug("setting _skin from " + value);
+      if (value === this._skin) {
         return;
       }
       if (!value) {
-        delete this._preferedDashboardType;
+        delete this._skin;
         return;
       }
       if (value.trim) {
         value = value.trim();
       }
-      this._preferedDashboardType = value;
+      this._skin = value;
+    }
+  },
+
+  transparentDashboard: {
+    get: function() {
+      return this._transparentDashboard || this.defaults.transparentDashboard;
+    },
+    set: function(value) {
+      this.debug("setting _transparentDashboard from " + value);
+      if (value === this._transparentDashboard) {
+        return;
+      }
+      if (value === false || value === "false" || !value) {
+        this._transparentDashboard = false;
+      } else {
+        this._transparentDashboard = true;
+      }
+    }
+  },
+
+  alwaysRandomizeSkin: {
+    get: function() {
+      return this._alwaysRandomizeSkin || this.defaults.alwaysRandomizeSkin;
+    },
+    set: function(value) {
+      this.debug("setting _alwaysRandomizeSkin from " + value);
+      if (value === this._alwaysRandomizeSkin) {
+        return;
+      }
+      if (value === false || value === "false" || !value) {
+        this._alwaysRandomizeSkin = false;
+      } else {
+        this._alwaysRandomizeSkin = true;
+      }
+    }
+  },
+
+  preferedDashboardType: {
+    get: function() {
+      this.warn("preferedDashboardType is deprecated use preferredDashboardType instead");
+      return this.preferredDashboardType;
+    },
+    set: function(value) {
+      this.warn("preferedDashboardType is deprecated use preferredDashboardType instead");
+      this.preferredDashboardType = value;
+    }
+  },
+
+  preferredDashboardType: {
+    get: function() {
+      return this._preferredDashboardType || this.defaults.preferredDashboardType;
+    },
+    set: function(value) {
+      this.debug("setting _preferredDashboardType from " + value);
+      if (value === this._preferredDashboardType) {
+        return;
+      }
+      if (!value) {
+        delete this._preferredDashboardType;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._preferredDashboardType = value;
     }
   },
 
   preferedDashboardLayout: {
     get: function() {
-      this.debug("getting preferedDashboardLayout from ");
-
-      return this._preferedDashboardLayout || FieldDBObject.DEFAULT_STRING;
+      this.warn("preferedDashboardLayout is deprecated use preferredDashboardLayout instead");
+      return this.preferredDashboardLayout;
     },
     set: function(value) {
-      this.debug("setting preferedDashboardLayout from " + value);
+      this.warn("preferedDashboardType is deprecated use preferredDashboardLayout instead");
+      this.preferredDashboardLayout = value;
+    }
+  },
 
-      if (value === this._preferedDashboardLayout) {
+  preferredDashboardLayout: {
+    get: function() {
+      return this._preferredDashboardLayout || this.defaults.preferredDashboardLayout;
+    },
+    set: function(value) {
+
+      if (value === this._preferredDashboardLayout) {
         return;
       }
       if (!value) {
-        delete this._preferedDashboardLayout;
+        delete this._preferredDashboardLayout;
         return;
       }
       // Guess which kind of user this is
-      if (!this.preferedDashboardType) {
-        if (this._preferedDashboardLayout === "layoutAllTheData" || this._preferedDashboardLayout === "layoutJustEntering" || this._preferedDashboardLayout === "layoutWhatsHappening") {
-          this.preferedDashboardType = "fieldlinguistNormalUser";
-        } else if (this._preferedDashboardLayout === "layoutCompareDataLists" || this._preferedDashboardLayout === "layoutEverythingAtOnce") {
-          this.preferedDashboardType = "fieldlinguistPowerUser";
+      if (!this.preferredDashboardType) {
+        if (this._preferredDashboardLayout === "layoutAllTheData" || this._preferredDashboardLayout === "layoutJustEntering" || this._preferredDashboardLayout === "layoutWhatsHappening") {
+          this.preferredDashboardType = "fieldlinguistNormalUser";
+        } else if (this._preferredDashboardLayout === "layoutCompareDataLists" || this._preferredDashboardLayout === "layoutEverythingAtOnce") {
+          this.preferredDashboardType = "fieldlinguistPowerUser";
         }
       }
 
-      this._preferedDashboardLayout = value;
+      this._preferredDashboardLayout = value;
     }
   },
 
   preferedSpreadsheetShape: {
     get: function() {
-      return this._preferedSpreadsheetShape || {
-        columns: 2,
-        rows: 3
-      };
+      this.warn("preferedSpreadsheetShape is deprecated use preferredSpreadsheetShape instead");
+      return this.preferredSpreadsheetShape;
     },
     set: function(value) {
-      this._preferedSpreadsheetShape = value;
+      this.warn("preferedDashboardType is deprecated use preferredSpreadsheetShape instead");
+      this.preferredSpreadsheetShape = value;
+    }
+  },
+
+  preferredSpreadsheetShape: {
+    get: function() {
+      if (!this._preferredSpreadsheetShape) {
+        this._preferredSpreadsheetShape = JSON.parse(JSON.stringify(this.defaults.preferredSpreadsheetShape));
+      }
+      return this._preferredSpreadsheetShape;
+    },
+    set: function(value) {
+      this._preferredSpreadsheetShape = value;
     }
   },
 
@@ -59780,7 +60228,7 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
 
   numVisibleDatum: {
     get: function() {
-      return this._numVisibleDatum || 10;
+      return this._numVisibleDatum || this.defaults.numVisibleDatum;
     },
     set: function(value) {
       if (value === this._numVisibleDatum) {
@@ -59797,12 +60245,102 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
       value = parseInt(value, 10);
       this._numVisibleDatum = value;
     }
+  },
+
+  numberOfItemsInPaginatedViews: {
+    get: function() {
+      return this._numberOfItemsInPaginatedViews || this.defaults.numberOfItemsInPaginatedViews;
+    },
+    set: function(value) {
+      if (value === this._numberOfItemsInPaginatedViews) {
+        return;
+      }
+      if (!value) {
+        delete this._numberOfItemsInPaginatedViews;
+        return;
+      } else {
+        if (typeof value.trim === "function") {
+          value = value.trim();
+        }
+      }
+      value = parseInt(value, 10);
+      this._numberOfItemsInPaginatedViews = value;
+    }
+  },
+
+  preferedLocale: {
+    get: function() {
+      this.warn("preferedLocale is deprecated use preferredLocale instead");
+      return this.preferredLocale;
+    },
+    set: function(value) {
+      this.warn("preferedDashboardType is deprecated use preferredLocale instead");
+      this.preferredLocale = value;
+    }
+  },
+
+  preferredLocale: {
+    get: function() {
+      return this._preferredLocale;
+    },
+    set: function(value) {
+      this.debug("setting _preferredLocale from " + value);
+      if (value === this._preferredLocale) {
+        return;
+      }
+      if (!value) {
+        delete this._preferredLocale;
+        return;
+      }
+      if (value.trim) {
+        value = value.trim();
+      }
+      this._preferredLocale = value;
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var attributesNotToJsonify = ["fieldDBtype", "dateCreated", "version"];
+      var json = FieldDBObject.prototype.toJSON.apply(this, [includeEvenEmptyAttributes, removeEmptyAttributes, attributesNotToJsonify]);
+
+      if (!json) {
+        this.warn("Not returning json right now.");
+        return;
+      }
+      this.debug("JSON before removing items which match defaults", json);
+
+      if (!includeEvenEmptyAttributes) {
+        for (var pref in this.defaults) {
+          if (!this.defaults.hasOwnProperty(pref)) {
+            continue;
+          }
+          if (new FieldDBObject(json[pref]).equals(this.defaults[pref]) || (Object.prototype.toString.call(json[pref]) === "[object Array]" && json[pref].length === 0)) {
+            this.debug("removing pref which is set to a default " + pref);
+            delete json[pref];
+          }
+        }
+
+        // if (json.preferredSpreadsheetShape && json.preferredSpreadsheetShape.columns === this.defaults.preferredSpreadsheetShape.columns && json.preferredSpreadsheetShape.rows === this.defaults.preferredSpreadsheetShape.rows) {
+        //   delete json.preferredSpreadsheetShape;
+        // }
+      }
+
+      if (JSON.stringify(json) === "{}") {
+        return {};
+      }
+      json.fieldDBtype = this.fieldDBtype;
+      json.version = this.version;
+      json.dateCreated = this.dateCreated;
+      this.debug("Json", json);
+      return json;
+    }
   }
 
 });
 exports.UserPreference = UserPreference;
-
-},{"./../FieldDBObject":3,"./../hotkey/HotKeys":44,"./../unicode/UnicodeSymbols":58}],66:[function(require,module,exports){
+},{"./../FieldDBObject":3,"./../hotkey/HotKeys":45,"./../unicode/UnicodeSymbols":59}],67:[function(require,module,exports){
 var Collection = require("./../Collection").Collection;
 var UserMask = require("./UserMask").UserMask;
 
@@ -59849,7 +60387,7 @@ Users.prototype = Object.create(Collection.prototype, /** @lends Users.prototype
 
 exports.Users = Users;
 
-},{"./../Collection":2,"./UserMask":64}],67:[function(require,module,exports){
+},{"./../Collection":2,"./UserMask":65}],68:[function(require,module,exports){
 module.exports={
   "_id": "",
   "jsonType": "user",
@@ -59879,7 +60417,7 @@ module.exports={
   },
   "appbrand": "",
   "gravatar": "",
-  "appVersionWhenCreated": "1.62.2",
+  "appVersionWhenCreated": "",
   "authServerVersionWhenCreated": "",
   "authUrl": "",
   "created_at": "",
@@ -59891,9 +60429,9 @@ module.exports={
   "dataLists": [],
   "prefs": {
     "skin": "",
-    "numVisibleDatum": "10",
-    "transparentDashboard": "false",
-    "alwaysRandomizeSkin": "true",
+    "numVisibleDatum": 10,
+    "transparentDashboard": false,
+    "alwaysRandomizeSkin": true,
     "numberOfItemsInPaginatedViews": 10,
     "unicodes": [{
       "symbol": "ɔ",
@@ -59984,7 +60522,7 @@ module.exports={
       "tipa": "",
       "useCount": 0
     }],
-    "preferedDashboardLayout": "default",
+    "preferredDashboardLayout": "default",
     "showNewDatumAtTopOrBottomOfDataEntryArea": "bottom",
     "hotkeys": []
   },
@@ -60006,27 +60544,12 @@ module.exports={
   "firstname": "",
   "lastname": "",
   "sessionHistory": [],
-  "hotkeys": {
-    "firstKey": "",
-    "secondKey": "",
-    "description": "",
-    "filledWithDefaults": true
-  },
-  "newCorpora": [{
-    "protocol": "",
-    "domain": "",
-    "port": "",
-    "dbname": "",
-    "path": "",
-    "authUrl": "",
-    "userFriendlyServerName": ""
-  }],
-  "roles": [],
-  "authenticated": true,
-  "accessibleDBS": []
+  "hotkeys": [],
+  "newCorpora": [],
+  "roles": []
 }
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 (function (Buffer){
 (function(){
   var crypt = require('crypt'),
@@ -60190,7 +60713,7 @@ module.exports={
 })();
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"charenc":69,"crypt":70}],69:[function(require,module,exports){
+},{"buffer":76,"charenc":70,"crypt":71}],70:[function(require,module,exports){
 var charenc = {
   // UTF-8 encoding
   utf8: {
@@ -60225,7 +60748,7 @@ var charenc = {
 
 module.exports = charenc;
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 (function() {
   var base64map
       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
@@ -60323,7 +60846,7 @@ module.exports = charenc;
   module.exports = crypt;
 })();
 
-},{}],71:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 (function (Buffer){
 (function () {
   "use strict";
@@ -60336,7 +60859,7 @@ module.exports = charenc;
 }());
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],72:[function(require,module,exports){
+},{"buffer":76}],73:[function(require,module,exports){
 (function (process,Buffer){
 var crypto = require("crypto");
 
@@ -61047,7 +61570,7 @@ exports.compare = compare;
 exports.getRounds = getRounds;
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":218,"buffer":75,"crypto":79}],73:[function(require,module,exports){
+},{"_process":220,"buffer":76,"crypto":80}],74:[function(require,module,exports){
 //this file was generated
 "use strict"
 var mime = module.exports = {
@@ -62861,9 +63384,9 @@ var mime = module.exports = {
 }
 mime.types.constructor = undefined
 mime.extensions.constructor = undefined
-},{}],74:[function(require,module,exports){
-
 },{}],75:[function(require,module,exports){
+
+},{}],76:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -62930,68 +63453,149 @@ Buffer.TYPED_ARRAY_SUPPORT = (function () {
  * By augmenting the instances, we can avoid modifying the `Uint8Array`
  * prototype.
  */
-function Buffer (subject, encoding) {
-  var self = this
-  if (!(self instanceof Buffer)) return new Buffer(subject, encoding)
+function Buffer (arg) {
+  if (!(this instanceof Buffer)) {
+    // Avoid going through an ArgumentsAdaptorTrampoline in the common case.
+    if (arguments.length > 1) return new Buffer(arg, arguments[1])
+    return new Buffer(arg)
+  }
 
-  var type = typeof subject
-  var length
+  this.length = 0
+  this.parent = undefined
 
-  if (type === 'number') {
-    length = +subject
-  } else if (type === 'string') {
-    length = Buffer.byteLength(subject, encoding)
-  } else if (type === 'object' && subject !== null) {
-    // assume object is array-like
-    if (subject.type === 'Buffer' && isArray(subject.data)) subject = subject.data
-    length = +subject.length
-  } else {
+  // Common case.
+  if (typeof arg === 'number') {
+    return fromNumber(this, arg)
+  }
+
+  // Slightly less common case.
+  if (typeof arg === 'string') {
+    return fromString(this, arg, arguments.length > 1 ? arguments[1] : 'utf8')
+  }
+
+  // Unusual.
+  return fromObject(this, arg)
+}
+
+function fromNumber (that, length) {
+  that = allocate(that, length < 0 ? 0 : checked(length) | 0)
+  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+    for (var i = 0; i < length; i++) {
+      that[i] = 0
+    }
+  }
+  return that
+}
+
+function fromString (that, string, encoding) {
+  if (typeof encoding !== 'string' || encoding === '') encoding = 'utf8'
+
+  // Assumption: byteLength() return value is always < kMaxLength.
+  var length = byteLength(string, encoding) | 0
+  that = allocate(that, length)
+
+  that.write(string, encoding) | 0
+  return that
+}
+
+function fromObject (that, object) {
+  if (Buffer.isBuffer(object)) return fromBuffer(that, object)
+
+  if (isArray(object)) return fromArray(that, object)
+
+  if (object == null) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
-  if (length > kMaxLength) {
-    throw new RangeError('Attempt to allocate Buffer larger than maximum size: 0x' +
-      kMaxLength.toString(16) + ' bytes')
+  if (typeof ArrayBuffer !== 'undefined' && object.buffer instanceof ArrayBuffer) {
+    return fromTypedArray(that, object)
   }
 
-  if (length < 0) length = 0
-  else length >>>= 0 // coerce to uint32
+  if (object.length) return fromArrayLike(that, object)
 
+  return fromJsonObject(that, object)
+}
+
+function fromBuffer (that, buffer) {
+  var length = checked(buffer.length) | 0
+  that = allocate(that, length)
+  buffer.copy(that, 0, 0, length)
+  return that
+}
+
+function fromArray (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+// Duplicate of fromArray() to keep fromArray() monomorphic.
+function fromTypedArray (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  // Truncating the elements is probably not what people expect from typed
+  // arrays with BYTES_PER_ELEMENT > 1 but it's compatible with the behavior
+  // of the old Buffer constructor.
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+function fromArrayLike (that, array) {
+  var length = checked(array.length) | 0
+  that = allocate(that, length)
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+// Deserialize { type: 'Buffer', data: [1,2,3,...] } into a Buffer object.
+// Returns a zero-length buffer for inputs that don't conform to the spec.
+function fromJsonObject (that, object) {
+  var array
+  var length = 0
+
+  if (object.type === 'Buffer' && isArray(object.data)) {
+    array = object.data
+    length = checked(array.length) | 0
+  }
+  that = allocate(that, length)
+
+  for (var i = 0; i < length; i += 1) {
+    that[i] = array[i] & 255
+  }
+  return that
+}
+
+function allocate (that, length) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    // Preferred: Return an augmented `Uint8Array` instance for best performance
-    self = Buffer._augment(new Uint8Array(length)) // eslint-disable-line consistent-this
+    // Return an augmented `Uint8Array` instance, for best performance
+    that = Buffer._augment(new Uint8Array(length))
   } else {
-    // Fallback: Return THIS instance of Buffer (created by `new`)
-    self.length = length
-    self._isBuffer = true
+    // Fallback: Return an object instance of the Buffer class
+    that.length = length
+    that._isBuffer = true
   }
 
-  var i
-  if (Buffer.TYPED_ARRAY_SUPPORT && typeof subject.byteLength === 'number') {
-    // Speed optimization -- use set if we're copying from a typed array
-    self._set(subject)
-  } else if (isArrayish(subject)) {
-    // Treat array-ish objects as a byte array
-    if (Buffer.isBuffer(subject)) {
-      for (i = 0; i < length; i++) {
-        self[i] = subject.readUInt8(i)
-      }
-    } else {
-      for (i = 0; i < length; i++) {
-        self[i] = ((subject[i] % 256) + 256) % 256
-      }
-    }
-  } else if (type === 'string') {
-    self.write(subject, 0, encoding)
-  } else if (type === 'number' && !Buffer.TYPED_ARRAY_SUPPORT) {
-    for (i = 0; i < length; i++) {
-      self[i] = 0
-    }
+  var fromPool = length !== 0 && length <= Buffer.poolSize >>> 1
+  if (fromPool) that.parent = rootParent
+
+  return that
+}
+
+function checked (length) {
+  // Note: cannot use `length < kMaxLength` here because that fails when
+  // length is NaN (which is otherwise coerced to zero.)
+  if (length >= kMaxLength) {
+    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+                         'size: 0x' + kMaxLength.toString(16) + ' bytes')
   }
-
-  if (length > 0 && length <= Buffer.poolSize) self.parent = rootParent
-
-  return self
+  return length >>> 0
 }
 
 function SlowBuffer (subject, encoding) {
@@ -63044,7 +63648,7 @@ Buffer.isEncoding = function isEncoding (encoding) {
   }
 }
 
-Buffer.concat = function concat (list, totalLength) {
+Buffer.concat = function concat (list, length) {
   if (!isArray(list)) throw new TypeError('list argument must be an Array of Buffers.')
 
   if (list.length === 0) {
@@ -63054,14 +63658,14 @@ Buffer.concat = function concat (list, totalLength) {
   }
 
   var i
-  if (totalLength === undefined) {
-    totalLength = 0
+  if (length === undefined) {
+    length = 0
     for (i = 0; i < list.length; i++) {
-      totalLength += list[i].length
+      length += list[i].length
     }
   }
 
-  var buf = new Buffer(totalLength)
+  var buf = new Buffer(length)
   var pos = 0
   for (i = 0; i < list.length; i++) {
     var item = list[i]
@@ -63071,36 +63675,33 @@ Buffer.concat = function concat (list, totalLength) {
   return buf
 }
 
-Buffer.byteLength = function byteLength (str, encoding) {
-  var ret
-  str = str + ''
+function byteLength (string, encoding) {
+  if (typeof string !== 'string') string = String(string)
+
+  if (string.length === 0) return 0
+
   switch (encoding || 'utf8') {
     case 'ascii':
     case 'binary':
     case 'raw':
-      ret = str.length
-      break
+      return string.length
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      ret = str.length * 2
-      break
+      return string.length * 2
     case 'hex':
-      ret = str.length >>> 1
-      break
+      return string.length >>> 1
     case 'utf8':
     case 'utf-8':
-      ret = utf8ToBytes(str).length
-      break
+      return utf8ToBytes(string).length
     case 'base64':
-      ret = base64ToBytes(str).length
-      break
+      return base64ToBytes(string).length
     default:
-      ret = str.length
+      return string.length
   }
-  return ret
 }
+Buffer.byteLength = byteLength
 
 // pre-set for values that may exist in the future
 Buffer.prototype.length = undefined
@@ -63253,13 +63854,11 @@ function hexWrite (buf, string, offset, length) {
 }
 
 function utf8Write (buf, string, offset, length) {
-  var charsWritten = blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
-  return charsWritten
+  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
 }
 
 function asciiWrite (buf, string, offset, length) {
-  var charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
-  return charsWritten
+  return blitBuffer(asciiToBytes(string), buf, offset, length)
 }
 
 function binaryWrite (buf, string, offset, length) {
@@ -63267,75 +63866,83 @@ function binaryWrite (buf, string, offset, length) {
 }
 
 function base64Write (buf, string, offset, length) {
-  var charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
-  return charsWritten
+  return blitBuffer(base64ToBytes(string), buf, offset, length)
 }
 
-function utf16leWrite (buf, string, offset, length) {
-  var charsWritten = blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
-  return charsWritten
+function ucs2Write (buf, string, offset, length) {
+  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
 }
 
 Buffer.prototype.write = function write (string, offset, length, encoding) {
-  // Support both (string, offset, length, encoding)
-  // and the legacy (string, encoding, offset, length)
-  if (isFinite(offset)) {
-    if (!isFinite(length)) {
+  // Buffer#write(string)
+  if (offset === undefined) {
+    encoding = 'utf8'
+    length = this.length
+    offset = 0
+  // Buffer#write(string, encoding)
+  } else if (length === undefined && typeof offset === 'string') {
+    encoding = offset
+    length = this.length
+    offset = 0
+  // Buffer#write(string, offset[, length][, encoding])
+  } else if (isFinite(offset)) {
+    offset = offset >>> 0
+    if (isFinite(length)) {
+      length = length >>> 0
+      if (encoding === undefined) encoding = 'utf8'
+    } else {
       encoding = length
       length = undefined
     }
-  } else {  // legacy
+  // legacy write(string, encoding, offset, length) - remove in v0.13
+  } else {
     var swap = encoding
     encoding = offset
-    offset = length
+    offset = length >>> 0
     length = swap
   }
 
-  offset = Number(offset) || 0
+  var remaining = this.length - offset
+  if (length === undefined || length > remaining) length = remaining
 
-  if (length < 0 || offset < 0 || offset > this.length) {
+  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
     throw new RangeError('attempt to write outside buffer bounds')
   }
 
-  var remaining = this.length - offset
-  if (!length) {
-    length = remaining
-  } else {
-    length = Number(length)
-    if (length > remaining) {
-      length = remaining
+  if (!encoding) encoding = 'utf8'
+
+  var loweredCase = false
+  for (;;) {
+    switch (encoding) {
+      case 'hex':
+        return hexWrite(this, string, offset, length)
+
+      case 'utf8':
+      case 'utf-8':
+        return utf8Write(this, string, offset, length)
+
+      case 'ascii':
+        return asciiWrite(this, string, offset, length)
+
+      case 'binary':
+        return binaryWrite(this, string, offset, length)
+
+      case 'base64':
+        // Warning: maxLength not taken into account in base64Write
+        return base64Write(this, string, offset, length)
+
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return ucs2Write(this, string, offset, length)
+
+      default:
+        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+        encoding = ('' + encoding).toLowerCase()
+        loweredCase = true
     }
   }
-  encoding = String(encoding || 'utf8').toLowerCase()
-
-  var ret
-  switch (encoding) {
-    case 'hex':
-      ret = hexWrite(this, string, offset, length)
-      break
-    case 'utf8':
-    case 'utf-8':
-      ret = utf8Write(this, string, offset, length)
-      break
-    case 'ascii':
-      ret = asciiWrite(this, string, offset, length)
-      break
-    case 'binary':
-      ret = binaryWrite(this, string, offset, length)
-      break
-    case 'base64':
-      ret = base64Write(this, string, offset, length)
-      break
-    case 'ucs2':
-    case 'ucs-2':
-    case 'utf16le':
-    case 'utf-16le':
-      ret = utf16leWrite(this, string, offset, length)
-      break
-    default:
-      throw new TypeError('Unknown encoding: ' + encoding)
-  }
-  return ret
 }
 
 Buffer.prototype.toJSON = function toJSON () {
@@ -64059,12 +64666,6 @@ function stringtrim (str) {
   return str.replace(/^\s+|\s+$/g, '')
 }
 
-function isArrayish (subject) {
-  return isArray(subject) || Buffer.isBuffer(subject) ||
-      subject && typeof subject === 'object' &&
-      typeof subject.length === 'number'
-}
-
 function toHex (n) {
   if (n < 16) return '0' + n.toString(16)
   return n.toString(16)
@@ -64196,7 +64797,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":76,"ieee754":77,"is-array":78}],76:[function(require,module,exports){
+},{"base64-js":77,"ieee754":78,"is-array":79}],77:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -64322,7 +64923,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],77:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -64408,7 +65009,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 
 /**
  * isArray
@@ -64443,7 +65044,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 'use strict';
 
 exports.randomBytes = exports.rng = exports.pseudoRandomBytes = exports.prng = require('randombytes')
@@ -64457,7 +65058,7 @@ exports.getHashes = function () {
   return hashes;
 }
 
-var p = require('pbkdf2-compat')
+var p = require('pbkdf2')
 exports.pbkdf2 = p.pbkdf2
 exports.pbkdf2Sync = p.pbkdf2Sync
 
@@ -64488,7 +65089,15 @@ var dh = require('diffie-hellman');
   exports[key] = dh[key];
 })
 
-require('browserify-sign/inject')(module.exports, exports);
+var sign = require('browserify-sign');
+[
+  'createSign',
+  'Sign',
+  'createVerify',
+  'Verify'
+].forEach(function (key) {
+  exports[key] = sign[key];
+})
 
 exports.createECDH = require('create-ecdh')
 
@@ -64516,7 +65125,7 @@ var publicEncrypt = require('public-encrypt');
   }
 })
 
-},{"browserify-aes":83,"browserify-sign/algos":98,"browserify-sign/inject":99,"create-ecdh":145,"create-hash":167,"create-hmac":179,"diffie-hellman":180,"pbkdf2-compat":187,"public-encrypt":188,"randombytes":214}],80:[function(require,module,exports){
+},{"browserify-aes":84,"browserify-sign":100,"browserify-sign/algos":99,"create-ecdh":146,"create-hash":168,"create-hmac":180,"diffie-hellman":181,"pbkdf2":188,"public-encrypt":189,"randombytes":216}],81:[function(require,module,exports){
 (function (Buffer){
 var md5 = require('create-hash/md5');
 module.exports = EVP_BytesToKey;
@@ -64581,7 +65190,7 @@ function EVP_BytesToKey(password, keyLen, ivLen) {
   };
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"create-hash/md5":169}],81:[function(require,module,exports){
+},{"buffer":76,"create-hash/md5":170}],82:[function(require,module,exports){
 (function (Buffer){
 // based on the aes implimentation in triple sec
 // https://github.com/keybase/triplesec
@@ -64782,7 +65391,7 @@ AES.prototype._doCryptBlock = function(M, keySchedule, SUB_MIX, SBOX) {
 
   exports.AES = AES;
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],82:[function(require,module,exports){
+},{"buffer":76}],83:[function(require,module,exports){
 (function (Buffer){
 var aes = require('./aes');
 var Transform = require('./cipherBase');
@@ -64885,7 +65494,7 @@ function xorTest(a, b) {
 
 
 }).call(this,require("buffer").Buffer)
-},{"./aes":81,"./cipherBase":84,"./ghash":87,"./xor":97,"buffer":75,"inherits":216}],83:[function(require,module,exports){
+},{"./aes":82,"./cipherBase":85,"./ghash":88,"./xor":98,"buffer":76,"inherits":218}],84:[function(require,module,exports){
 var ciphers = require('./encrypter');
 exports.createCipher = exports.Cipher = ciphers.createCipher;
 exports.createCipheriv = exports.Cipheriv = ciphers.createCipheriv;
@@ -64898,7 +65507,7 @@ function getCiphers () {
 }
 exports.listCiphers = exports.getCiphers = getCiphers;
 
-},{"./decrypter":85,"./encrypter":86,"./modes":88}],84:[function(require,module,exports){
+},{"./decrypter":86,"./encrypter":87,"./modes":89}],85:[function(require,module,exports){
 (function (Buffer){
 var Transform = require('stream').Transform;
 var inherits = require('inherits');
@@ -64938,7 +65547,7 @@ CipherBase.prototype.final = function (outputEnc) {
   return outData;
 };
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"inherits":216,"stream":234}],85:[function(require,module,exports){
+},{"buffer":76,"inherits":218,"stream":236}],86:[function(require,module,exports){
 (function (Buffer){
 var aes = require('./aes');
 var Transform = require('./cipherBase');
@@ -65078,7 +65687,7 @@ function createDecipher (suite, password) {
 exports.createDecipher = createDecipher;
 exports.createDecipheriv = createDecipheriv;
 }).call(this,require("buffer").Buffer)
-},{"./EVP_BytesToKey":80,"./aes":81,"./authCipher":82,"./cipherBase":84,"./modes":88,"./modes/cbc":89,"./modes/cfb":90,"./modes/cfb1":91,"./modes/cfb8":92,"./modes/ctr":93,"./modes/ecb":94,"./modes/ofb":95,"./streamCipher":96,"buffer":75,"inherits":216}],86:[function(require,module,exports){
+},{"./EVP_BytesToKey":81,"./aes":82,"./authCipher":83,"./cipherBase":85,"./modes":89,"./modes/cbc":90,"./modes/cfb":91,"./modes/cfb1":92,"./modes/cfb8":93,"./modes/ctr":94,"./modes/ecb":95,"./modes/ofb":96,"./streamCipher":97,"buffer":76,"inherits":218}],87:[function(require,module,exports){
 (function (Buffer){
 var aes = require('./aes');
 var Transform = require('./cipherBase');
@@ -65202,7 +65811,7 @@ function createCipher (suite, password) {
 exports.createCipheriv = createCipheriv;
 exports.createCipher = createCipher;
 }).call(this,require("buffer").Buffer)
-},{"./EVP_BytesToKey":80,"./aes":81,"./authCipher":82,"./cipherBase":84,"./modes":88,"./modes/cbc":89,"./modes/cfb":90,"./modes/cfb1":91,"./modes/cfb8":92,"./modes/ctr":93,"./modes/ecb":94,"./modes/ofb":95,"./streamCipher":96,"buffer":75,"inherits":216}],87:[function(require,module,exports){
+},{"./EVP_BytesToKey":81,"./aes":82,"./authCipher":83,"./cipherBase":85,"./modes":89,"./modes/cbc":90,"./modes/cfb":91,"./modes/cfb1":92,"./modes/cfb8":93,"./modes/ctr":94,"./modes/ecb":95,"./modes/ofb":96,"./streamCipher":97,"buffer":76,"inherits":218}],88:[function(require,module,exports){
 (function (Buffer){
 var zeros = new Buffer(16);
 zeros.fill(0);
@@ -65303,7 +65912,7 @@ function xor(a, b) {
   ];
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],88:[function(require,module,exports){
+},{"buffer":76}],89:[function(require,module,exports){
 exports['aes-128-ecb'] = {
   cipher: 'AES',
   key: 128,
@@ -65475,7 +66084,7 @@ exports['aes-256-gcm'] = {
   mode: 'GCM',
   type: 'auth'
 };
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 var xor = require('../xor');
 exports.encrypt = function (self, block) {
   var data = xor(block, self._prev);
@@ -65488,7 +66097,7 @@ exports.decrypt = function (self, block) {
   var out = self._cipher.decryptBlock(block);
   return xor(out, pad);
 };
-},{"../xor":97}],90:[function(require,module,exports){
+},{"../xor":98}],91:[function(require,module,exports){
 (function (Buffer){
 var xor = require('../xor');
 exports.encrypt = function (self, data, decrypt) {
@@ -65518,7 +66127,7 @@ function encryptStart(self, data, decrypt) {
   return out;
 }
 }).call(this,require("buffer").Buffer)
-},{"../xor":97,"buffer":75}],91:[function(require,module,exports){
+},{"../xor":98,"buffer":76}],92:[function(require,module,exports){
 (function (Buffer){
 
 function encryptByte(self, byte, decrypt) {
@@ -65556,7 +66165,7 @@ function shiftIn(buffer, value) {
   return out;
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],92:[function(require,module,exports){
+},{"buffer":76}],93:[function(require,module,exports){
 (function (Buffer){
 function encryptByte(self, byte, decrypt) {
   var pad = self._cipher.encryptBlock(self._prev);
@@ -65574,7 +66183,7 @@ exports.encrypt = function (self, chunk, decrypt) {
   return out;
 };
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],93:[function(require,module,exports){
+},{"buffer":76}],94:[function(require,module,exports){
 (function (Buffer){
 var xor = require('../xor');
 function getBlock(self) {
@@ -65605,14 +66214,14 @@ function incr32(iv) {
   }
 }
 }).call(this,require("buffer").Buffer)
-},{"../xor":97,"buffer":75}],94:[function(require,module,exports){
+},{"../xor":98,"buffer":76}],95:[function(require,module,exports){
 exports.encrypt = function (self, block) {
   return self._cipher.encryptBlock(block);
 };
 exports.decrypt = function (self, block) {
   return self._cipher.decryptBlock(block);
 };
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 (function (Buffer){
 var xor = require('../xor');
 function getBlock(self) {
@@ -65628,7 +66237,7 @@ exports.encrypt = function (self, chunk) {
   return xor(chunk, pad);
 };
 }).call(this,require("buffer").Buffer)
-},{"../xor":97,"buffer":75}],96:[function(require,module,exports){
+},{"../xor":98,"buffer":76}],97:[function(require,module,exports){
 (function (Buffer){
 var aes = require('./aes');
 var Transform = require('./cipherBase');
@@ -65656,7 +66265,7 @@ StreamCipher.prototype._final = function () {
   this._cipher.scrub();
 };
 }).call(this,require("buffer").Buffer)
-},{"./aes":81,"./cipherBase":84,"buffer":75,"inherits":216}],97:[function(require,module,exports){
+},{"./aes":82,"./cipherBase":85,"buffer":76,"inherits":218}],98:[function(require,module,exports){
 (function (Buffer){
 module.exports = xor;
 function xor(a, b) {
@@ -65669,162 +66278,189 @@ function xor(a, b) {
   return out;
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],98:[function(require,module,exports){
+},{"buffer":76}],99:[function(require,module,exports){
 (function (Buffer){
+'use strict'
 exports['RSA-SHA224'] = exports.sha224WithRSAEncryption = {
   sign: 'rsa',
   hash: 'sha224',
   id: new Buffer('302d300d06096086480165030402040500041c', 'hex')
-};
+}
 exports['RSA-SHA256'] = exports.sha256WithRSAEncryption = {
   sign: 'rsa',
   hash: 'sha256',
   id: new Buffer('3031300d060960864801650304020105000420', 'hex')
-};
+}
 exports['RSA-SHA384'] = exports.sha384WithRSAEncryption = {
   sign: 'rsa',
   hash: 'sha384',
   id: new Buffer('3041300d060960864801650304020205000430', 'hex')
-};
+}
 exports['RSA-SHA512'] = exports.sha512WithRSAEncryption = {
   sign: 'rsa',
   hash: 'sha512',
   id: new Buffer('3051300d060960864801650304020305000440', 'hex')
-};
+}
 exports['RSA-SHA1'] = {
 	sign: 'rsa',
 	hash: 'sha1',
 	id: new Buffer('3021300906052b0e03021a05000414', 'hex')
-};
+}
 exports['ecdsa-with-SHA1'] = {
 	sign: 'ecdsa',
 	hash: 'sha1',
 	id: new Buffer('', 'hex')
-};
+}
 exports.DSA = exports['DSA-SHA1'] = exports['DSA-SHA'] = {
   sign: 'dsa',
   hash: 'sha1',
   id: new Buffer('', 'hex')
-};
+}
 exports['DSA-SHA224'] = exports['DSA-WITH-SHA224'] = {
   sign: 'dsa',
   hash: 'sha224',
   id: new Buffer('', 'hex')
-};
+}
 exports['DSA-SHA256'] = exports['DSA-WITH-SHA256'] = {
   sign: 'dsa',
   hash: 'sha256',
   id: new Buffer('', 'hex')
-};
+}
 exports['DSA-SHA384'] = exports['DSA-WITH-SHA384'] = {
   sign: 'dsa',
   hash: 'sha384',
   id: new Buffer('', 'hex')
-};
+}
 exports['DSA-SHA512'] = exports['DSA-WITH-SHA512'] = {
   sign: 'dsa',
   hash: 'sha512',
   id: new Buffer('', 'hex')
-};
+}
 exports['DSA-RIPEMD160'] = {
   sign: 'dsa',
   hash: 'rmd160',
   id: new Buffer('', 'hex')
-};
+}
 exports['RSA-RIPEMD160'] = exports.ripemd160WithRSA = {
   sign: 'rsa',
   hash: 'rmd160',
   id: new Buffer('3021300906052b2403020105000414', 'hex')
-};
+}
 exports['RSA-MD5'] = exports.md5WithRSAEncryption = {
   sign: 'rsa',
   hash: 'md5',
   id: new Buffer('3020300c06082a864886f70d020505000410', 'hex')
-};
+}
+
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],99:[function(require,module,exports){
+},{"buffer":76}],100:[function(require,module,exports){
 (function (Buffer){
-var sign = require('./sign');
-var verify = require('./verify');
-var stream = require('stream');
-var inherits = require('inherits');
-var _algos = require('./algos');
-var algos = {};
+'use strict'
+var sign = require('./sign')
+var verify = require('./verify')
+var stream = require('stream')
+var inherits = require('inherits')
+var _algos = require('./algos')
+var createHash = require('create-hash')
+var algos = {}
 Object.keys(_algos).forEach(function (key) {
-	algos[key] = algos[key.toLowerCase()] = _algos[key];
-});
-'use strict';
-module.exports = function (exports, crypto) {
-	exports.createSign = exports.Sign = createSign;
-	function createSign(algorithm) {
+  algos[key] = algos[key.toLowerCase()] = _algos[key]
+})
 
-		return new Sign(algorithm, crypto);
-	}
-	exports.createVerify = exports.Verify = createVerify;
-	function createVerify(algorithm) {
-		return new Verify(algorithm, crypto);
-	}
-};
-inherits(Sign, stream.Writable);
-function Sign(algorithm, crypto) {
-	stream.Writable.call(this);
-	var data = algos[algorithm];
-	if (!data) {
-		throw new Error('Unknown message digest');
-	}
-	this._hashType = data.hash;
-	this._hash = crypto.createHash(data.hash);
-	this._tag = data.id;
-	this._crypto = crypto;
+exports.createSign = exports.Sign = createSign
+
+function createSign (algorithm) {
+  return new Sign(algorithm)
 }
-Sign.prototype._write = function _write(data, _, done) {
-	this._hash.update(data);
-	done();
-};
-Sign.prototype.update = function update(data) {
-	this.write(data);
-	return this;
-};
 
-Sign.prototype.sign = function signMethod(key, enc) {
-	this.end();
-	var hash = this._hash.digest();
-	var sig = sign(Buffer.concat([this._tag, hash]), key, this._hashType, this._crypto);
-	if (enc) {
-		sig = sig.toString(enc);
-	}
-	return sig;
-};
+exports.createVerify = exports.Verify = createVerify
 
-inherits(Verify, stream.Writable);
-function Verify(algorithm, crypto) {
-	stream.Writable.call(this);
-	var data = algos[algorithm];
-	if (!data) {
-		throw new Error('Unknown message digest');
-	}
-	this._hash = crypto.createHash(data.hash);
-	this._tag = data.id;
+function createVerify (algorithm) {
+  return new Verify(algorithm)
 }
-Verify.prototype._write = function _write(data, _, done) {
-	this._hash.update(data);
-	done();
-};
-Verify.prototype.update = function update(data) {
-	this.write(data);
-	return this;
-};
 
-Verify.prototype.verify = function verifyMethod(key, sig, enc) {
-	this.end();
-	var hash = this._hash.digest();
-	if (!Buffer.isBuffer(sig)) {
-		sig = new Buffer(sig, enc);
-	}
-	return verify(sig, Buffer.concat([this._tag, hash]), key);
-};
+inherits(Sign, stream.Writable)
+
+function Sign (algorithm) {
+  stream.Writable.call(this)
+  var data = algos[algorithm]
+  if (!data)
+    throw new Error('Unknown message digest')
+
+  this._hashType = data.hash
+  this._hash = createHash(data.hash)
+  this._tag = data.id
+  this._signType = data.sign
+}
+
+Sign.prototype._write = function _write (data, _, done) {
+  this._hash.update(data)
+  done()
+}
+
+Sign.prototype.update = function update (data, enc) {
+  if (typeof data === 'string')
+    data = new Buffer(data, enc)
+  this._hash.update(data)
+  return this
+}
+
+Sign.prototype.sign = function signMethod (key, enc) {
+  this.end()
+  var hash = this._hash.digest()
+  var sig = sign(Buffer.concat([this._tag, hash]), key, this._hashType, this._signType)
+  if (enc) {
+    sig = sig.toString(enc)
+  }
+  return sig
+}
+
+inherits(Verify, stream.Writable)
+function Verify (algorithm) {
+  stream.Writable.call(this)
+  var data = algos[algorithm]
+  if (!data)
+    throw new Error('Unknown message digest')
+
+  this._hash = createHash(data.hash)
+  this._tag = data.id
+  this._signType = data.sign
+}
+
+Verify.prototype._write = function _write (data, _, done) {
+  this._hash.update(data)
+  done()
+}
+
+Verify.prototype.update = function update (data, enc) {
+  if (typeof data === 'string')
+    data = new Buffer(data, enc)
+
+  this._hash.update(data)
+  return this
+}
+
+Verify.prototype.verify = function verifyMethod (key, sig, enc) {
+  this.end()
+  var hash = this._hash.digest()
+  if (typeof sig === 'string')
+    sig = new Buffer(sig, enc)
+
+  return verify(sig, Buffer.concat([this._tag, hash]), key, this._signType)
+}
+
 }).call(this,require("buffer").Buffer)
-},{"./algos":98,"./sign":142,"./verify":143,"buffer":75,"inherits":216,"stream":234}],100:[function(require,module,exports){
+},{"./algos":99,"./sign":143,"./verify":144,"buffer":76,"create-hash":168,"inherits":218,"stream":236}],101:[function(require,module,exports){
+'use strict'
+exports['1.3.132.0.10'] = 'secp256k1'
+
+exports['1.3.132.0.33'] = 'p224'
+
+exports['1.2.840.10045.3.1.1'] = 'p192'
+
+exports['1.2.840.10045.3.1.7'] = 'p256'
+
+},{}],102:[function(require,module,exports){
 (function(module, exports) {
 
 'use strict';
@@ -67959,12 +68595,13 @@ Mont.prototype.invm = function invm(a) {
 
 })(typeof module === 'undefined' || module, this);
 
-},{}],101:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 (function (Buffer){
 var bn = require('bn.js');
+var randomBytes = require('randombytes');
 module.exports = crt;
-function blind(priv, crypto) {
-  var r = getr(priv, crypto);
+function blind(priv) {
+  var r = getr(priv);
   var blinder = r.toRed(bn.mont(priv.modulus))
   .redPow(new bn(priv.publicExponent)).fromRed();
   return {
@@ -67972,8 +68609,8 @@ function blind(priv, crypto) {
     unblinder:r.invm(priv.modulus)
   };
 }
-function crt(msg, priv, crypto) {
-  var blinds = blind(priv, crypto);
+function crt(msg, priv) {
+  var blinds = blind(priv);
   var len = priv.modulus.byteLength();
   var mod = bn.mont(priv.modulus);
   var blinded = new bn(msg).mul(blinds.blinder).mod(priv.modulus);
@@ -67998,16 +68635,16 @@ function crt(msg, priv, crypto) {
   return out;
 }
 crt.getr = getr;
-function getr(priv, crypto) {
+function getr(priv) {
   var len = priv.modulus.byteLength();
-  var r = new bn(crypto.randomBytes(len));
+  var r = new bn(randomBytes(len));
   while (r.cmp(priv.modulus) >=  0 || !r.mod(priv.prime1) || !r.mod(priv.prime2)) {
-    r = new bn(crypto.randomBytes(len));
+    r = new bn(randomBytes(len));
   }
   return r;
 }
 }).call(this,require("buffer").Buffer)
-},{"bn.js":100,"buffer":75}],102:[function(require,module,exports){
+},{"bn.js":102,"buffer":76,"randombytes":216}],104:[function(require,module,exports){
 var elliptic = exports;
 
 elliptic.version = require('../package.json').version;
@@ -68020,7 +68657,7 @@ elliptic.curves = require('./elliptic/curves');
 // Protocols
 elliptic.ec = require('./elliptic/ec');
 
-},{"../package.json":121,"./elliptic/curve":105,"./elliptic/curves":108,"./elliptic/ec":109,"./elliptic/hmac-drbg":112,"./elliptic/utils":113,"brorand":114}],103:[function(require,module,exports){
+},{"../package.json":123,"./elliptic/curve":107,"./elliptic/curves":110,"./elliptic/ec":111,"./elliptic/hmac-drbg":114,"./elliptic/utils":115,"brorand":116}],105:[function(require,module,exports){
 var bn = require('bn.js');
 var elliptic = require('../../elliptic');
 
@@ -68324,7 +68961,7 @@ BasePoint.prototype.dblp = function dblp(k) {
   return r;
 };
 
-},{"../../elliptic":102,"bn.js":100}],104:[function(require,module,exports){
+},{"../../elliptic":104,"bn.js":102}],106:[function(require,module,exports){
 var curve = require('../curve');
 var elliptic = require('../../elliptic');
 var bn = require('bn.js');
@@ -68687,7 +69324,7 @@ Point.prototype.getY = function getY() {
 Point.prototype.toP = Point.prototype.normalize;
 Point.prototype.mixedAdd = Point.prototype.add;
 
-},{"../../elliptic":102,"../curve":105,"bn.js":100,"inherits":216}],105:[function(require,module,exports){
+},{"../../elliptic":104,"../curve":107,"bn.js":102,"inherits":218}],107:[function(require,module,exports){
 var curve = exports;
 
 curve.base = require('./base');
@@ -68695,7 +69332,7 @@ curve.short = require('./short');
 curve.mont = require('./mont');
 curve.edwards = require('./edwards');
 
-},{"./base":103,"./edwards":104,"./mont":106,"./short":107}],106:[function(require,module,exports){
+},{"./base":105,"./edwards":106,"./mont":108,"./short":109}],108:[function(require,module,exports){
 var curve = require('../curve');
 var elliptic = require('../../elliptic');
 var bn = require('bn.js');
@@ -68860,7 +69497,7 @@ Point.prototype.getX = function getX() {
   return this.x.fromRed();
 };
 
-},{"../../elliptic":102,"../curve":105,"bn.js":100,"inherits":216}],107:[function(require,module,exports){
+},{"../../elliptic":104,"../curve":107,"bn.js":102,"inherits":218}],109:[function(require,module,exports){
 var curve = require('../curve');
 var elliptic = require('../../elliptic');
 var bn = require('bn.js');
@@ -69758,7 +70395,7 @@ JPoint.prototype.isInfinity = function isInfinity() {
   return this.z.cmpn(0) === 0;
 };
 
-},{"../../elliptic":102,"../curve":105,"bn.js":100,"inherits":216}],108:[function(require,module,exports){
+},{"../../elliptic":104,"../curve":107,"bn.js":102,"inherits":218}],110:[function(require,module,exports){
 var curves = exports;
 
 var hash = require('hash.js');
@@ -70688,7 +71325,7 @@ defineCurve('secp256k1', {
   ]
 });
 
-},{"../elliptic":102,"bn.js":100,"hash.js":115}],109:[function(require,module,exports){
+},{"../elliptic":104,"bn.js":102,"hash.js":117}],111:[function(require,module,exports){
 var bn = require('bn.js');
 var elliptic = require('../../elliptic');
 var utils = elliptic.utils;
@@ -70841,7 +71478,7 @@ EC.prototype.verify = function verify(msg, signature, key) {
   return p.getX().mod(this.n).cmp(r) === 0;
 };
 
-},{"../../elliptic":102,"./key":110,"./signature":111,"bn.js":100}],110:[function(require,module,exports){
+},{"../../elliptic":104,"./key":112,"./signature":113,"bn.js":102}],112:[function(require,module,exports){
 var bn = require('bn.js');
 
 var elliptic = require('../../elliptic');
@@ -70987,7 +71624,7 @@ KeyPair.prototype.inspect = function inspect() {
          ' pub: ' + (this.pub && this.pub.inspect()) + ' >';
 };
 
-},{"../../elliptic":102,"bn.js":100}],111:[function(require,module,exports){
+},{"../../elliptic":104,"bn.js":102}],113:[function(require,module,exports){
 var bn = require('bn.js');
 
 var elliptic = require('../../elliptic');
@@ -71052,7 +71689,7 @@ Signature.prototype.toDER = function toDER(enc) {
   return utils.encode(res, enc);
 };
 
-},{"../../elliptic":102,"bn.js":100}],112:[function(require,module,exports){
+},{"../../elliptic":104,"bn.js":102}],114:[function(require,module,exports){
 var hash = require('hash.js');
 var elliptic = require('../elliptic');
 var utils = elliptic.utils;
@@ -71166,7 +71803,7 @@ HmacDRBG.prototype.generate = function generate(len, enc, add, addEnc) {
   return utils.encode(res, enc);
 };
 
-},{"../elliptic":102,"hash.js":115}],113:[function(require,module,exports){
+},{"../elliptic":104,"hash.js":117}],115:[function(require,module,exports){
 var bn = require('bn.js');
 
 var utils = exports;
@@ -71318,7 +71955,7 @@ function getJSF(k1, k2) {
 }
 utils.getJSF = getJSF;
 
-},{"bn.js":100}],114:[function(require,module,exports){
+},{"bn.js":102}],116:[function(require,module,exports){
 var r;
 
 module.exports = function rand(len) {
@@ -71377,7 +72014,7 @@ if (typeof window === 'object') {
   }
 }
 
-},{}],115:[function(require,module,exports){
+},{}],117:[function(require,module,exports){
 var hash = exports;
 
 hash.utils = require('./hash/utils');
@@ -71394,7 +72031,7 @@ hash.sha384 = hash.sha.sha384;
 hash.sha512 = hash.sha.sha512;
 hash.ripemd160 = hash.ripemd.ripemd160;
 
-},{"./hash/common":116,"./hash/hmac":117,"./hash/ripemd":118,"./hash/sha":119,"./hash/utils":120}],116:[function(require,module,exports){
+},{"./hash/common":118,"./hash/hmac":119,"./hash/ripemd":120,"./hash/sha":121,"./hash/utils":122}],118:[function(require,module,exports){
 var hash = require('../hash');
 var utils = hash.utils;
 var assert = utils.assert;
@@ -71487,7 +72124,7 @@ BlockHash.prototype._pad = function pad() {
   return res;
 };
 
-},{"../hash":115}],117:[function(require,module,exports){
+},{"../hash":117}],119:[function(require,module,exports){
 var hmac = exports;
 
 var hash = require('../hash');
@@ -71537,7 +72174,7 @@ Hmac.prototype.digest = function digest(enc) {
   return this.outer.digest(enc);
 };
 
-},{"../hash":115}],118:[function(require,module,exports){
+},{"../hash":117}],120:[function(require,module,exports){
 var hash = require('../hash');
 var utils = hash.utils;
 
@@ -71683,7 +72320,7 @@ var sh = [
   8, 5, 12, 9, 12, 5, 14, 6, 8, 13, 6, 5, 15, 13, 11, 11
 ];
 
-},{"../hash":115}],119:[function(require,module,exports){
+},{"../hash":117}],121:[function(require,module,exports){
 var hash = require('../hash');
 var utils = hash.utils;
 var assert = utils.assert;
@@ -72249,7 +72886,7 @@ function g1_512_lo(xh, xl) {
   return r;
 }
 
-},{"../hash":115}],120:[function(require,module,exports){
+},{"../hash":117}],122:[function(require,module,exports){
 var utils = exports;
 var inherits = require('inherits');
 
@@ -72508,7 +73145,7 @@ function shr64_lo(ah, al, num) {
 };
 exports.shr64_lo = shr64_lo;
 
-},{"inherits":216}],121:[function(require,module,exports){
+},{"inherits":218}],123:[function(require,module,exports){
 module.exports={
   "name": "elliptic",
   "version": "1.0.1",
@@ -72550,7 +73187,7 @@ module.exports={
   "gitHead": "17dc013761dd1efcfb868e2b06b0b897627b40be",
   "_id": "elliptic@1.0.1",
   "_shasum": "d180376b66a17d74995c837796362ac4d22aefe3",
-  "_from": "elliptic@^1.0.0",
+  "_from": "elliptic@>=1.0.0 <2.0.0",
   "_npmVersion": "1.4.28",
   "_npmUser": {
     "name": "indutny",
@@ -72570,10 +73207,10 @@ module.exports={
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-1.0.1.tgz"
 }
 
-},{}],122:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
 (function (Buffer){
-
-module.exports = function evp(crypto, password, salt, keyLen) {
+var createHash = require('create-hash');
+module.exports = function evp(password, salt, keyLen) {
   keyLen = keyLen/8;
   var ki = 0;
   var ii = 0;
@@ -72582,7 +73219,7 @@ module.exports = function evp(crypto, password, salt, keyLen) {
   var md, md_buf;
   var i;
   while (true) {
-    md = crypto.createHash('md5');
+    md = createHash('md5');
     if(addmd++ > 0) {
        md.update(md_buf);
     }
@@ -72612,7 +73249,7 @@ module.exports = function evp(crypto, password, salt, keyLen) {
   return key;
 };
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],123:[function(require,module,exports){
+},{"buffer":76,"create-hash":168}],125:[function(require,module,exports){
 module.exports={"2.16.840.1.101.3.4.1.1": "aes-128-ecb",
 "2.16.840.1.101.3.4.1.2": "aes-128-cbc",
 "2.16.840.1.101.3.4.1.3": "aes-128-ofb",
@@ -72626,12 +73263,11 @@ module.exports={"2.16.840.1.101.3.4.1.1": "aes-128-ecb",
 "2.16.840.1.101.3.4.1.43": "aes-256-ofb",
 "2.16.840.1.101.3.4.1.44": "aes-256-cfb"
 }
-},{}],124:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
 // from https://github.com/indutny/self-signed/blob/gh-pages/lib/asn1.js
 // Fedor, you are amazing.
 
 var asn1 = require('asn1.js');
-var rfc3280 = require('asn1.js-rfc3280');
 
 var RSAPrivateKey = asn1.define('RSAPrivateKey', function() {
   this.seq().obj(
@@ -72656,34 +73292,31 @@ var RSAPublicKey = asn1.define('RSAPublicKey', function() {
 });
 exports.RSAPublicKey = RSAPublicKey;
 
-var PublicKey = rfc3280.SubjectPublicKeyInfo;
+var PublicKey = asn1.define('SubjectPublicKeyInfo', function() {
+  this.seq().obj(
+    this.key('algorithm').use(AlgorithmIdentifier),
+    this.key('subjectPublicKey').bitstr()
+  );
+});
 exports.PublicKey = PublicKey;
-var ECPublicKey =  asn1.define('ECPublicKey', function() {
+
+var AlgorithmIdentifier = asn1.define('AlgorithmIdentifier', function() {
   this.seq().obj(
-    this.key('algorithm').seq().obj(
-      this.key('id').objid(),
-      this.key('curve').objid()
-    ),
-    this.key('subjectPrivateKey').bitstr()
+    this.key('algorithm').objid(),
+    this.key('none').null_().optional(),
+    this.key('curve').objid().optional(),
+    this.key('params').seq().obj(
+        this.key('p').int(),
+        this.key('q').int(),
+        this.key('g').int()
+      ).optional()
   );
 });
-exports.ECPublicKey = ECPublicKey;
-var ECPrivateWrap =  asn1.define('ECPrivateWrap', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('algorithm').seq().obj(
-      this.key('id').objid(),
-      this.key('curve').objid()
-    ),
-    this.key('subjectPrivateKey').octstr()
-  );
-});
-exports.ECPrivateWrap = ECPrivateWrap;
 
 var PrivateKeyInfo = asn1.define('PrivateKeyInfo', function() {
   this.seq().obj(
     this.key('version').int(),
-    this.key('algorithm').use(rfc3280.AlgorithmIdentifier),
+    this.key('algorithm').use(AlgorithmIdentifier),
     this.key('subjectPrivateKey').octstr()
   );
 });
@@ -72709,39 +73342,9 @@ var EncryptedPrivateKeyInfo = asn1.define('EncryptedPrivateKeyInfo', function() 
     this.key('subjectPrivateKey').octstr()
   );
 });
-var dsaParams = asn1.define('dsaParams', function() {
-  this.seq().obj(
-    this.key('algorithm').objid(),
-    this.key('parameters').seq().obj(
-        this.key('p').int(),
-        this.key('q').int(),
-        this.key('g').int()
-      )
-  );
-});
+
 exports.EncryptedPrivateKey = EncryptedPrivateKeyInfo;
-var DSAPublicKey = asn1.define('DSAPublicKey', function() {
-  this.seq().obj(
-    this.key('algorithm').use(dsaParams),
-    this.key('subjectPublicKey').bitstr()
-  );
-});
-exports.DSAPublicKey = DSAPublicKey;
-var DSAPrivateWrap =  asn1.define('DSAPrivateWrap', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('algorithm').seq().obj(
-      this.key('id').objid(),
-      this.key('parameters').seq().obj(
-        this.key('p').int(),
-        this.key('q').int(),
-        this.key('g').int()
-      )
-    ),
-    this.key('subjectPrivateKey').octstr()
-  );
-});
-exports.DSAPrivateWrap = DSAPrivateWrap;
+
 var DSAPrivateKey = asn1.define('DSAPrivateKey', function() {
   this.seq().obj(
     this.key('version').int(),
@@ -72772,45 +73375,44 @@ var ECParameters = asn1.define('ECParameters', function() {
   });
 });
 
-var ECPrivateKey2 = asn1.define('ECPrivateKey2', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('privateKey').octstr(),
-    this.key('publicKey').seq().obj(
-      this.key('key').bitstr()
-    )
-  );
-});
-exports.ECPrivateKey2 = ECPrivateKey2;
-
 exports.signature = asn1.define('signature', function() {
   this.seq().obj(
     this.key('r').int(),
     this.key('s').int()
   );
 });
-},{"asn1.js":128,"asn1.js-rfc3280":127}],125:[function(require,module,exports){
+
+},{"asn1.js":129}],127:[function(require,module,exports){
 (function (Buffer){
+// adapted from https://github.com/apatil/pemstrip
 var findProc = /Proc-Type: 4,ENCRYPTED\n\r?DEK-Info: AES-((?:128)|(?:192)|(?:256))-CBC,([0-9A-H]+)\n\r?\n\r?([0-9A-z\n\r\+\/\=]+)\n\r?/m;
-var startRegex = /^-----BEGIN (.*)-----\n/;
+var startRegex =/^-----BEGIN (.*) KEY-----\n/m;
+var fullRegex = /^-----BEGIN (.*) KEY-----\n\r?([0-9A-z\n\r\+\/\=]+)\n\r?-----END \1 KEY-----$/m;
 var evp = require('./EVP_BytesToKey');
-module.exports = function (okey, password, crypto) {
+var ciphers = require('browserify-aes');
+module.exports = function (okey, password) {
   var key = okey.toString();
   var match = key.match(findProc);
+  var decrypted;
   if (!match) {
-    return okey;
+    var match2 = key.match(fullRegex);
+    decrypted = new Buffer(match2[2].replace(/\n\r?/g, ''), 'base64');
+  } else {
+    var suite = 'aes' + match[1];
+    var iv = new Buffer(match[2], 'hex');
+    var cipherText = new Buffer(match[3].replace(/\n\r?/g, ''), 'base64');
+    var cipherKey = evp(password, iv.slice(0,8), parseInt(match[1]));
+    var out = [];
+    var cipher = ciphers.createDecipheriv(suite, cipherKey, iv);
+    out.push(cipher.update(cipherText));
+    out.push(cipher.final());
+    decrypted = Buffer.concat(out);
   }
-  var suite = 'aes' + match[1];
-  var iv = new Buffer(match[2], 'hex');
-  var cipherText = new Buffer(match[3].replace(/\n\r?/g, ''), 'base64');
-  var cipherKey = evp(crypto, password, iv.slice(0,8), parseInt(match[1]));
-  var out = [];
-  var cipher = crypto.createDecipheriv(suite, cipherKey, iv);
-  out.push(cipher.update(cipherText));
-  out.push(cipher.final());
-  var decrypted = Buffer.concat(out).toString('base64');
-  var tag = key.match(startRegex)[1];
-  return '-----BEGIN ' + tag + "-----\n" + wrap(decrypted) + "\n" + '-----END ' + tag + "-----\n";
+  var tag = key.match(startRegex)[1] + ' KEY';
+  return {
+    tag: tag,
+    data: decrypted
+  };
 };
 // http://stackoverflow.com/a/7033705
 function wrap(str) {
@@ -72828,15 +73430,16 @@ function wrap(str) {
   return chunks.join("\n");
 }
 }).call(this,require("buffer").Buffer)
-},{"./EVP_BytesToKey":122,"buffer":75}],126:[function(require,module,exports){
+},{"./EVP_BytesToKey":124,"browserify-aes":84,"buffer":76}],128:[function(require,module,exports){
 (function (Buffer){
-var pemstrip = require('pemstrip');
 var asn1 = require('./asn1');
 var aesid = require('./aesid.json');
 var fixProc = require('./fixProc');
+var ciphers = require('browserify-aes');
+var compat = require('pbkdf2-compat');
 module.exports = parseKeys;
 
-function parseKeys(buffer, crypto) {
+function parseKeys(buffer) {
   var password;
   if (typeof buffer === 'object' && !Buffer.isBuffer(buffer)) {
     password = buffer.passphrase;
@@ -72845,12 +73448,11 @@ function parseKeys(buffer, crypto) {
   if (typeof buffer === 'string') {
     buffer = new Buffer(buffer);
   }
-  if (password) {
-    buffer = fixProc(buffer, password, crypto);
-  }
-  var stripped = pemstrip.strip(buffer);
+
+  var stripped = fixProc(buffer, password);
+
   var type = stripped.tag;
-  var data = new Buffer(stripped.base64, 'base64');
+  var data = stripped.data;
   var subtype,ndata;
   switch (type) {
     case 'PUBLIC KEY':
@@ -72860,23 +73462,23 @@ function parseKeys(buffer, crypto) {
         case '1.2.840.113549.1.1.1':
           return asn1.RSAPublicKey.decode(ndata.subjectPublicKey.data, 'der');
         case '1.2.840.10045.2.1':
+        ndata.subjectPrivateKey = ndata.subjectPublicKey;
           return {
             type: 'ec',
-            data:  asn1.ECPublicKey.decode(data, 'der')
+            data:  ndata
           };
         case '1.2.840.10040.4.1':
-          ndata = asn1.DSAPublicKey.decode(data, 'der');
-          ndata.algorithm.parameters.pub_key = asn1.DSAparam.decode(ndata.subjectPublicKey.data, 'der');
+          ndata.algorithm.params.pub_key = asn1.DSAparam.decode(ndata.subjectPublicKey.data, 'der');
           return {
             type: 'dsa',
-            data: ndata.algorithm.parameters
+            data: ndata.algorithm.params
           };
         default: throw new Error('unknown key id ' +  subtype);
       }
       throw new Error('unknown key type ' +  type);
     case 'ENCRYPTED PRIVATE KEY':
       data = asn1.EncryptedPrivateKey.decode(data, 'der');
-      data = decrypt(crypto, data, password);
+      data = decrypt(data, password);
       //falling through
     case 'PRIVATE KEY':
       ndata = asn1.PrivateKey.decode(data, 'der');
@@ -72885,17 +73487,15 @@ function parseKeys(buffer, crypto) {
         case '1.2.840.113549.1.1.1':
           return asn1.RSAPrivateKey.decode(ndata.subjectPrivateKey, 'der');
         case '1.2.840.10045.2.1':
-          ndata =  asn1.ECPrivateWrap.decode(data, 'der');
           return {
             curve: ndata.algorithm.curve,
             privateKey: asn1.ECPrivateKey.decode(ndata.subjectPrivateKey, 'der').privateKey
           };
         case '1.2.840.10040.4.1':
-          ndata =  asn1.DSAPrivateWrap.decode(data, 'der');
-          ndata.algorithm.parameters.priv_key = asn1.DSAparam.decode(ndata.subjectPrivateKey, 'der');
+          ndata.algorithm.params.priv_key = asn1.DSAparam.decode(ndata.subjectPrivateKey, 'der');
           return {
             type: 'dsa',
-            params: ndata.algorithm.parameters
+            params: ndata.algorithm.params
           };
         default: throw new Error('unknown key id ' +  subtype);
       }
@@ -72919,176 +73519,22 @@ function parseKeys(buffer, crypto) {
   }
 }
 parseKeys.signature = asn1.signature;
-function decrypt(crypto, data, password) {
+function decrypt(data, password) {
   var salt = data.algorithm.decrypt.kde.kdeparams.salt;
   var iters = data.algorithm.decrypt.kde.kdeparams.iters;
   var algo = aesid[data.algorithm.decrypt.cipher.algo.join('.')];
   var iv = data.algorithm.decrypt.cipher.iv;
   var cipherText = data.subjectPrivateKey;
   var keylen = parseInt(algo.split('-')[1], 10)/8;
-  var key = crypto.pbkdf2Sync(password, salt, iters, keylen);
-  var cipher = crypto.createDecipheriv(algo, key, iv);
+  var key = compat.pbkdf2Sync(password, salt, iters, keylen);
+  var cipher = ciphers.createDecipheriv(algo, key, iv);
   var out = [];
   out.push(cipher.update(cipherText));
   out.push(cipher.final());
   return Buffer.concat(out);
 }
 }).call(this,require("buffer").Buffer)
-},{"./aesid.json":123,"./asn1":124,"./fixProc":125,"buffer":75,"pemstrip":141}],127:[function(require,module,exports){
-try {
-  var asn1 = require('asn1.js');
-} catch (e) {
-  var asn1 = require('../' + '..');
-}
-
-var CRLReason = asn1.define('CRLReason', function() {
-  this.enum({
-    0: 'unspecified',
-    1: 'keyCompromise',
-    2: 'CACompromise',
-    3: 'affiliationChanged',
-    4: 'superseded',
-    5: 'cessationOfOperation',
-    6: 'certificateHold',
-    8: 'removeFromCRL',
-    9: 'privilegeWithdrawn',
-    10: 'AACompromise'
-  });
-});
-exports.CRLReason = CRLReason;
-
-var AlgorithmIdentifier = asn1.define('AlgorithmIdentifier', function() {
-  this.seq().obj(
-    this.key('algorithm').objid(),
-    this.key('parameters').optional().any()
-  );
-});
-exports.AlgorithmIdentifier = AlgorithmIdentifier;
-
-var Certificate = asn1.define('Certificate', function() {
-  this.seq().obj(
-    this.key('tbsCertificate').use(TBSCertificate),
-    this.key('signatureAlgorithm').use(AlgorithmIdentifier),
-    this.key('signature').bitstr()
-  );
-});
-exports.Certificate = Certificate;
-
-var TBSCertificate = asn1.define('TBSCertificate', function() {
-  this.seq().obj(
-    this.key('version').def('v1').explicit(0).use(Version),
-    this.key('serialNumber').use(CertificateSerialNumber),
-    this.key('signature').use(AlgorithmIdentifier),
-    this.key('issuer').use(Name),
-    this.key('validity').use(Validity),
-    this.key('subject').use(Name),
-    this.key('subjectPublicKeyInfo').use(SubjectPublicKeyInfo),
-
-    // TODO(indutny): validate that version is v2 or v3
-    this.key('issuerUniqueID').optional().explicit(1).use(UniqueIdentifier),
-    this.key('subjectUniqueID').optional().explicit(2).use(UniqueIdentifier),
-
-    // TODO(indutny): validate that version is v3
-    this.key('extensions').optional().explicit(3).use(Extensions)
-  );
-});
-exports.TBSCertificate = TBSCertificate;
-
-var Version = asn1.define('Version', function() {
-  this.int({
-    0: 'v1',
-    1: 'v2',
-    2: 'v3'
-  });
-});
-exports.Version = Version;
-
-var CertificateSerialNumber = asn1.define('CertificateSerialNumber',
-                                          function() {
-  this.int();
-});
-exports.CertificateSerialNumber = CertificateSerialNumber;
-
-var Validity = asn1.define('Validity', function() {
-  this.seq().obj(
-    this.key('notBefore').use(Time),
-    this.key('notAfter').use(Time)
-  );
-});
-exports.Validity = Validity;
-
-var Time = asn1.define('Time', function() {
-  this.choice({
-    utcTime: this.utctime(),
-    genTime: this.gentime()
-  });
-});
-exports.Time = Time;
-
-var UniqueIdentifier = asn1.define('UniqueIdentifier', function() {
-  this.bitstr();
-});
-exports.UniqueIdentifier = UniqueIdentifier;
-
-var SubjectPublicKeyInfo = asn1.define('SubjectPublicKeyInfo', function() {
-  this.seq().obj(
-    this.key('algorithm').use(AlgorithmIdentifier),
-    this.key('subjectPublicKey').bitstr()
-  );
-});
-exports.SubjectPublicKeyInfo = SubjectPublicKeyInfo;
-
-var Extensions = asn1.define('Extensions', function() {
-  this.seqof(Extension);
-});
-exports.Extensions = Extensions;
-
-var Extension = asn1.define('Extension', function() {
-  this.seq().obj(
-    this.key('extnID').objid(),
-    this.key('critical').bool().def(false),
-    this.key('extnValue').octstr()
-  );
-});
-exports.Extension = Extension;
-
-var Name = asn1.define('Name', function() {
-  this.choice({
-    rdn: this.use(RDNSequence)
-  });
-});
-exports.Name = Name;
-
-var RDNSequence = asn1.define('RDNSequence', function() {
-  this.seqof(RelativeDistinguishedName);
-});
-exports.RDNSequence = RDNSequence;
-
-var RelativeDistinguishedName = asn1.define('RelativeDistinguishedName',
-                                            function() {
-  this.setof(AttributeTypeAndValue);
-});
-exports.RelativeDistinguishedName = RelativeDistinguishedName;
-
-var AttributeTypeAndValue = asn1.define('AttributeTypeAndValue', function() {
-  this.seq().obj(
-    this.key('type').use(AttributeType),
-    this.key('value').use(AttributeValue)
-  );
-});
-exports.AttributeTypeAndValue = AttributeTypeAndValue;
-
-var AttributeType = asn1.define('AttributeType', function() {
-  this.objid();
-});
-exports.AttributeType = AttributeType;
-
-var AttributeValue = asn1.define('AttributeValue', function() {
-  this.any();
-});
-exports.AttributeValue = AttributeValue;
-
-},{"asn1.js":128}],128:[function(require,module,exports){
+},{"./aesid.json":125,"./asn1":126,"./fixProc":127,"browserify-aes":84,"buffer":76,"pbkdf2-compat":142}],129:[function(require,module,exports){
 var asn1 = exports;
 
 asn1.bignum = require('bn.js');
@@ -73099,10 +73545,9 @@ asn1.constants = require('./asn1/constants');
 asn1.decoders = require('./asn1/decoders');
 asn1.encoders = require('./asn1/encoders');
 
-},{"./asn1/api":129,"./asn1/base":131,"./asn1/constants":135,"./asn1/decoders":137,"./asn1/encoders":139,"bn.js":100}],129:[function(require,module,exports){
+},{"./asn1/api":130,"./asn1/base":132,"./asn1/constants":136,"./asn1/decoders":138,"./asn1/encoders":140,"bn.js":102}],130:[function(require,module,exports){
 var asn1 = require('../asn1');
 var inherits = require('inherits');
-var vm = require('vm');
 
 var api = exports;
 
@@ -73119,9 +73564,18 @@ function Entity(name, body) {
 };
 
 Entity.prototype._createNamed = function createNamed(base) {
-  var named = vm.runInThisContext('(function ' + this.name + '(entity) {\n' +
-    '  this._initNamed(entity);\n' +
-    '})');
+  var named;
+  try {
+    named = require('vm').runInThisContext(
+      '(function ' + this.name + '(entity) {\n' +
+      '  this._initNamed(entity);\n' +
+      '})'
+    );
+  } catch (e) {
+    named = function (entity) {
+      this._initNamed(entity);
+    };
+  }
   inherits(named, base);
   named.prototype._initNamed = function initnamed(entity) {
     base.call(this, entity);
@@ -73152,7 +73606,7 @@ Entity.prototype.encode = function encode(data, enc, /* internal */ reporter) {
   return this._getEncoder(enc).encode(data, reporter);
 };
 
-},{"../asn1":128,"inherits":216,"vm":237}],130:[function(require,module,exports){
+},{"../asn1":129,"inherits":218,"vm":239}],131:[function(require,module,exports){
 var inherits = require('inherits');
 var Reporter = require('../base').Reporter;
 var Buffer = require('buffer').Buffer;
@@ -73269,7 +73723,7 @@ EncoderBuffer.prototype.join = function join(out, offset) {
   return out;
 };
 
-},{"../base":131,"buffer":75,"inherits":216}],131:[function(require,module,exports){
+},{"../base":132,"buffer":76,"inherits":218}],132:[function(require,module,exports){
 var base = exports;
 
 base.Reporter = require('./reporter').Reporter;
@@ -73277,7 +73731,7 @@ base.DecoderBuffer = require('./buffer').DecoderBuffer;
 base.EncoderBuffer = require('./buffer').EncoderBuffer;
 base.Node = require('./node');
 
-},{"./buffer":130,"./node":132,"./reporter":133}],132:[function(require,module,exports){
+},{"./buffer":131,"./node":133,"./reporter":134}],133:[function(require,module,exports){
 var Reporter = require('../base').Reporter;
 var EncoderBuffer = require('../base').EncoderBuffer;
 var assert = require('minimalistic-assert');
@@ -73854,7 +74308,7 @@ Node.prototype._encodePrimitive = function encodePrimitive(tag, data) {
     throw new Error('Unsupported tag: ' + tag);
 };
 
-},{"../base":131,"minimalistic-assert":140}],133:[function(require,module,exports){
+},{"../base":132,"minimalistic-assert":141}],134:[function(require,module,exports){
 var inherits = require('inherits');
 
 function Reporter(options) {
@@ -73945,7 +74399,7 @@ ReporterError.prototype.rethrow = function rethrow(msg) {
   return this;
 };
 
-},{"inherits":216}],134:[function(require,module,exports){
+},{"inherits":218}],135:[function(require,module,exports){
 var constants = require('../constants');
 
 exports.tagClass = {
@@ -73989,7 +74443,7 @@ exports.tag = {
 };
 exports.tagByName = constants._reverse(exports.tag);
 
-},{"../constants":135}],135:[function(require,module,exports){
+},{"../constants":136}],136:[function(require,module,exports){
 var constants = exports;
 
 // Helper
@@ -74010,7 +74464,7 @@ constants._reverse = function reverse(map) {
 
 constants.der = require('./der');
 
-},{"./der":134}],136:[function(require,module,exports){
+},{"./der":135}],137:[function(require,module,exports){
 var inherits = require('inherits');
 
 var asn1 = require('../../asn1');
@@ -74312,12 +74766,12 @@ function derDecodeLen(buf, primitive, fail) {
   return len;
 }
 
-},{"../../asn1":128,"inherits":216}],137:[function(require,module,exports){
+},{"../../asn1":129,"inherits":218}],138:[function(require,module,exports){
 var decoders = exports;
 
 decoders.der = require('./der');
 
-},{"./der":136}],138:[function(require,module,exports){
+},{"./der":137}],139:[function(require,module,exports){
 var inherits = require('inherits');
 var Buffer = require('buffer').Buffer;
 
@@ -74589,12 +75043,12 @@ function encodeTag(tag, primitive, cls, reporter) {
   return res;
 }
 
-},{"../../asn1":128,"buffer":75,"inherits":216}],139:[function(require,module,exports){
+},{"../../asn1":129,"buffer":76,"inherits":218}],140:[function(require,module,exports){
 var encoders = exports;
 
 encoders.der = require('./der');
 
-},{"./der":138}],140:[function(require,module,exports){
+},{"./der":139}],141:[function(require,module,exports){
 module.exports = assert;
 
 function assert(val, msg) {
@@ -74607,284 +75061,371 @@ assert.equal = function assertEqual(l, r, msg) {
     throw new Error(msg || ('Assertion failed: ' + l + ' != ' + r));
 };
 
-},{}],141:[function(require,module,exports){
-exports.strip = function strip(artifact) {
-  artifact = artifact.toString()
-  var startRegex = /^-----BEGIN (.*)-----\n/;
-  var match = startRegex.exec(artifact);
-  var tag = match[1];
-  var endRegex = new RegExp("\n-----END " + tag + "-----(\n*)$");
-  var base64 = artifact.slice(match[0].length).replace(endRegex, "").replace(/\n/g, "");
-  return {tag: tag, base64: base64};
-};
-
-// http://stackoverflow.com/a/7033705
-var wrap = function wrap(str, l) {
-  var chunks = [];
-  while (str) {
-    if (str.length < l) {
-      chunks.push(str);
-      break;
-    }
-    else {
-      chunks.push(str.substr(0, l));
-      str = str.substr(l);
-    }
-  }
-  return chunks.join("\n");
-}
-
-exports.assemble = function assemble(info) {
-  var tag = info.tag;
-  var base64 = info.base64;
-  var startLine = "-----BEGIN " + tag + "-----";
-  var endLine = "-----END " + tag + "-----";
-  return startLine + "\n" + wrap(base64, 64) + "\n" + endLine + "\n";
-}
 },{}],142:[function(require,module,exports){
 (function (Buffer){
+var createHmac = require('create-hmac')
+
+exports.pbkdf2 = pbkdf2
+function pbkdf2 (password, salt, iterations, keylen, digest, callback) {
+  if (typeof digest === 'function') {
+    callback = digest
+    digest = undefined
+  }
+
+  if (typeof callback !== 'function') {
+    throw new Error('No callback provided to pbkdf2')
+  }
+
+  var result = pbkdf2Sync(password, salt, iterations, keylen, digest)
+  setTimeout(function () {
+    callback(undefined, result)
+  })
+}
+
+exports.pbkdf2Sync = pbkdf2Sync
+function pbkdf2Sync (password, salt, iterations, keylen, digest) {
+  if (typeof iterations !== 'number')
+    throw new TypeError('Iterations not a number')
+
+  if (iterations < 0)
+    throw new TypeError('Bad iterations')
+
+  if (typeof keylen !== 'number')
+    throw new TypeError('Key length not a number')
+
+  if (keylen < 0)
+    throw new TypeError('Bad key length')
+
+  digest = digest || 'sha1'
+
+  if (!Buffer.isBuffer(password)) password = new Buffer(password)
+  if (!Buffer.isBuffer(salt)) salt = new Buffer(salt)
+
+  var hLen
+  var l = 1
+  var DK = new Buffer(keylen)
+  var block1 = new Buffer(salt.length + 4)
+  salt.copy(block1, 0, 0, salt.length)
+
+  var r
+  var T
+
+  for (var i = 1; i <= l; i++) {
+    block1.writeUInt32BE(i, salt.length)
+    var U = createHmac(digest, password).update(block1).digest()
+
+    if (!hLen) {
+      hLen = U.length
+      T = new Buffer(hLen)
+      l = Math.ceil(keylen / hLen)
+      r = keylen - (l - 1) * hLen
+
+      if (keylen > (Math.pow(2, 32) - 1) * hLen)
+        throw new TypeError('keylen exceeds maximum length')
+    }
+
+    U.copy(T, 0, 0, hLen)
+
+    for (var j = 1; j < iterations; j++) {
+      U = createHmac(digest, password).update(U).digest()
+
+      for (var k = 0; k < hLen; k++) {
+        T[k] ^= U[k]
+      }
+    }
+
+    var destPos = (i - 1) * hLen
+    var len = (i === l ? r : hLen)
+    T.copy(DK, destPos, 0, len)
+  }
+
+  return DK
+}
+
+}).call(this,require("buffer").Buffer)
+},{"buffer":76,"create-hmac":180}],143:[function(require,module,exports){
+(function (Buffer){
 // much of this based on https://github.com/indutny/self-signed/blob/gh-pages/lib/rsa.js
-var parseKeys = require('parse-asn1');
-var bn = require('bn.js');
-var elliptic = require('elliptic');
-var crt = require("browserify-rsa");
-module.exports = sign;
-function sign(hash, key, hashType, crypto) {
-  var priv = parseKeys(key, crypto);
+var parseKeys = require('parse-asn1')
+var BN = require('bn.js')
+var elliptic = require('elliptic')
+var crt = require('browserify-rsa')
+var createHmac = require('create-hmac')
+var curves = require('./curves')
+
+module.exports = sign
+function sign (hash, key, hashType, signType) {
+  var priv = parseKeys(key)
   if (priv.curve) {
-    return ecSign(hash, priv, crypto);
+    if (signType !== 'ecdsa') {
+      throw new Error('wrong public key type')
+    }
+    return ecSign(hash, priv)
   } else if (priv.type === 'dsa') {
-    return dsaSign(hash, priv, hashType, crypto);
-  }
-  var len = priv.modulus.byteLength();
-  var pad = [ 0, 1 ];
-  while (hash.length + pad.length + 1 < len) {
-    pad.push(0xff);
-  }
-  pad.push(0x00);
-  var i = -1;
-  while (++i < hash.length) {
-    pad.push(hash[i]);
-  }
-  
-  var out = crt(pad, priv, crypto);
-  return out;
-}
-function ecSign(hash, priv, crypto) {
-  elliptic.rand = crypto.randomBytes;
-  var curve;
-  if (priv.curve.join('.')  === '1.3.132.0.10') {
-    curve = new elliptic.ec('secp256k1');
-  }
-  var key = curve.genKeyPair();
-  key._importPrivate(priv.privateKey);
-  var out = key.sign(hash);
-  return new Buffer(out.toDER());
-}
-function dsaSign(hash, priv, algo, crypto) {
-  var x = priv.params.priv_key;
-  var p = priv.params.p;
-  var q = priv.params.q;
-  var montq = bn.mont(q);
-  var g = priv.params.g;
-  var r = new bn(0);
-  var k;
-  var H = bits2int(hash, q).mod(q);
-  var s = false;
-  var kv = getKay(x, q, hash, algo, crypto);
-  while (s === false) {
-    k = makeKey(q, kv, algo, crypto);
-    r = makeR(g, k, p, q);
-    s = k.invm(q).imul(H.add(x.mul(r))).mod(q);
-    if (!s.cmpn(0)) {
-      s = false;
-      r = new bn(0);
+    return dsaSign(hash, priv, hashType)
+    if (signType !== 'dsa') {
+      throw new Error('wrong public key type')
+    }
+  } else {
+    if (signType !== 'rsa') {
+      throw new Error('wrong public key type')
     }
   }
-  return toDER(r,s);
+  var len = priv.modulus.byteLength()
+  var pad = [ 0, 1 ]
+  while (hash.length + pad.length + 1 < len) {
+    pad.push(0xff)
+  }
+  pad.push(0x00)
+  var i = -1
+  while (++i < hash.length) {
+    pad.push(hash[i])
+  }
+
+  var out = crt(pad, priv)
+  return out
 }
-function toDER(r, s) {
-  r = r.toArray();
-  s = s.toArray();
+function ecSign (hash, priv) {
+  var curveId = curves[priv.curve.join('.')]
+  if (!curveId)
+    throw new Error('unknown curve ' + priv.curve.join('.'))
+
+  var curve = new elliptic.ec(curveId)
+
+  var key = curve.genKeyPair()
+  key._importPrivate(priv.privateKey)
+  var out = key.sign(hash)
+  return new Buffer(out.toDER())
+}
+function dsaSign (hash, priv, algo) {
+  var x = priv.params.priv_key
+  var p = priv.params.p
+  var q = priv.params.q
+  var montq = BN.mont(q)
+  var g = priv.params.g
+  var r = new BN(0)
+  var k
+  var H = bits2int(hash, q).mod(q)
+  var s = false
+  var kv = getKey(x, q, hash, algo)
+  while (s === false) {
+    k = makeKey(q, kv, algo)
+    r = makeR(g, k, p, q)
+    s = k.invm(q).imul(H.add(x.mul(r))).mod(q)
+    if (!s.cmpn(0)) {
+      s = false
+      r = new BN(0)
+    }
+  }
+  return toDER(r, s)
+}
+function toDER (r, s) {
+  r = r.toArray()
+  s = s.toArray()
 
   // Pad values
   if (r[0] & 0x80)
-    r = [ 0 ].concat(r);
+    r = [ 0 ].concat(r)
   // Pad values
   if (s[0] & 0x80)
-    s = [0].concat(s);
+    s = [0].concat(s)
 
-  var total = r.length + s.length + 4;
-  var res = [ 0x30, total, 0x02, r.length ];
-  res = res.concat(r, [ 0x02, s.length ], s);
-  return new Buffer(res);
+  var total = r.length + s.length + 4
+  var res = [ 0x30, total, 0x02, r.length ]
+  res = res.concat(r, [ 0x02, s.length ], s)
+  return new Buffer(res)
 }
-module.exports.getKay = getKay;
-function getKay(x, q, hash, algo, crypto) {
-  x = new Buffer(x.toArray());
+module.exports.getKey = getKey
+function getKey (x, q, hash, algo) {
+  x = new Buffer(x.toArray())
   if (x.length < q.byteLength()) {
-    var zeros = new Buffer(q.byteLength() - x.length);
-    zeros.fill(0);
-    x = Buffer.concat([zeros, x]);
+    var zeros = new Buffer(q.byteLength() - x.length)
+    zeros.fill(0)
+    x = Buffer.concat([zeros, x])
   }
-  var hlen = hash.length;
-  var hbits = bits2octets(hash, q);
-  var v = new Buffer(hlen);
-  v.fill(1);
-  var k = new Buffer(hlen);
-  k.fill(0);
-  k = crypto.createHmac(algo, k)
+  var hlen = hash.length
+  var hbits = bits2octets(hash, q)
+  var v = new Buffer(hlen)
+  v.fill(1)
+  var k = new Buffer(hlen)
+  k.fill(0)
+  k = createHmac(algo, k)
     .update(v)
     .update(new Buffer([0]))
     .update(x)
     .update(hbits)
-    .digest();
-  v = crypto.createHmac(algo, k)
+    .digest()
+  v = createHmac(algo, k)
     .update(v)
-    .digest();
-  k = crypto.createHmac(algo, k)
+    .digest()
+  k = createHmac(algo, k)
     .update(v)
     .update(new Buffer([1]))
     .update(x)
     .update(hbits)
-    .digest();
-  v = crypto.createHmac(algo, k)
+    .digest()
+  v = createHmac(algo, k)
     .update(v)
-    .digest();
+    .digest()
   return {
-    k:k,
-    v:v
-  };
-}
-function bits2int(obits, q) {
-  bits = new bn(obits);
-  var shift = obits.length * 8 - q.bitLength();
-  if (shift > 0) {
-    bits.ishrn(shift);
+    k: k,
+    v: v
   }
-  return bits;
+}
+function bits2int (obits, q) {
+  var bits = new BN(obits)
+  var shift = (obits.length << 3) - q.bitLength()
+  if (shift > 0) {
+    bits.ishrn(shift)
+  }
+  return bits
 }
 function bits2octets (bits, q) {
-  bits = bits2int(bits, q);
-  bits = bits.mod(q);
-  var out = new Buffer(bits.toArray());
+  bits = bits2int(bits, q)
+  bits = bits.mod(q)
+  var out = new Buffer(bits.toArray())
   if (out.length < q.byteLength()) {
-    var zeros = new Buffer(q.byteLength() - out.length);
-    zeros.fill(0);
-    out = Buffer.concat([zeros, out]);
+    var zeros = new Buffer(q.byteLength() - out.length)
+    zeros.fill(0)
+    out = Buffer.concat([zeros, out])
   }
-  return out;
+  return out
 }
-module.exports.makeKey = makeKey;
-function makeKey(q, kv, algo, crypto) {
-  var t;
-  var k;
+module.exports.makeKey = makeKey
+function makeKey (q, kv, algo) {
+  var t
+  var k
   while (true) {
-    t = new Buffer('');
+    t = new Buffer('')
     while (t.length * 8 < q.bitLength()) {
-      kv.v = crypto.createHmac(algo, kv.k)
+      kv.v = createHmac(algo, kv.k)
         .update(kv.v)
-        .digest();
-      t = Buffer.concat([t, kv.v]);
+        .digest()
+      t = Buffer.concat([t, kv.v])
     }
-    k = bits2int(t, q);
-    kv.k =  crypto.createHmac(algo, kv.k)
+    k = bits2int(t, q)
+    kv.k =  createHmac(algo, kv.k)
         .update(kv.v)
         .update(new Buffer([0]))
-        .digest();
-    kv.v = crypto.createHmac(algo, kv.k)
+        .digest()
+    kv.v = createHmac(algo, kv.k)
         .update(kv.v)
-        .digest();
+        .digest()
     if (k.cmp(q) === -1) {
-      return k;
+      return k
     }
   }
 }
-function makeR(g, k, p, q) {
-  return g.toRed(bn.mont(p)).redPow(k).fromRed().mod(q);
+function makeR (g, k, p, q) {
+  return g.toRed(BN.mont(p)).redPow(k).fromRed().mod(q)
 }
+
 }).call(this,require("buffer").Buffer)
-},{"bn.js":100,"browserify-rsa":101,"buffer":75,"elliptic":102,"parse-asn1":126}],143:[function(require,module,exports){
+},{"./curves":101,"bn.js":102,"browserify-rsa":103,"buffer":76,"create-hmac":180,"elliptic":104,"parse-asn1":128}],144:[function(require,module,exports){
 (function (Buffer){
+'use strict'
 // much of this based on https://github.com/indutny/self-signed/blob/gh-pages/lib/rsa.js
-var parseKeys = require('parse-asn1');
-var elliptic = require('elliptic');
-var bn = require('bn.js');
-module.exports = verify;
-function verify(sig, hash, key) {
-  var pub = parseKeys(key);
+var parseKeys = require('parse-asn1')
+var elliptic = require('elliptic')
+var curves = require('./curves')
+var BN = require('bn.js')
+module.exports = verify
+
+function verify (sig, hash, key, signType) {
+  var pub = parseKeys(key)
   if (pub.type === 'ec') {
-    return ecVerify(sig, hash, pub);
+    if (signType !== 'ecdsa') {
+      throw new Error('wrong public key type')
+    }
+    return ecVerify(sig, hash, pub)
   } else if (pub.type === 'dsa') {
-    return dsaVerify(sig, hash, pub);
+    if (signType !== 'dsa') {
+      throw new Error('wrong public key type')
+    }
+    return dsaVerify(sig, hash, pub)
+  } else {
+    if (signType !== 'rsa') {
+      throw new Error('wrong public key type')
+    }
   }
-  var len = pub.modulus.byteLength();
-  var pad = [ 0, 1 ];
-  while (hash.length + pad.length + 1 < len) {
-    pad.push(0xff);
+  var len = pub.modulus.byteLength()
+  var pad = [ 1 ]
+  var padNum = 0
+  while (hash.length + pad.length + 2 < len) {
+    pad.push(0xff)
+    padNum++
   }
-  pad.push(0x00);
-  var i = -1;
+  pad.push(0x00)
+  var i = -1
   while (++i < hash.length) {
-    pad.push(hash[i]);
+    pad.push(hash[i])
   }
-  pad = hash;
-  var red = bn.mont(pub.modulus);
-  sig = new bn(sig).toRed(red);
+  pad = new Buffer(pad)
+  var red = BN.mont(pub.modulus)
+  sig = new BN(sig).toRed(red)
 
-  sig = sig.redPow(new bn(pub.publicExponent));
+  sig = sig.redPow(new BN(pub.publicExponent))
 
-  sig = new Buffer(sig.fromRed().toArray());
-  sig = sig.slice(sig.length - hash.length);
-  var out = 0;
-  len = sig.length;
-  i = -1;
+  sig = new Buffer(sig.fromRed().toArray())
+  var out = 0
+  if (padNum < 8) {
+    out = 1
+  }
+  len = Math.min(sig.length, pad.length)
+  if (sig.length !== pad.length) {
+    out = 1
+  }
+
+  i = -1
   while (++i < len) {
-    out += (sig[i] ^ hash[i]);
+    out |= (sig[i] ^ pad[i])
   }
-  return !out;
+  return out === 0
 }
-function ecVerify(sig, hash, pub) {
-  var curve;
-  if (pub.data.algorithm.curve.join('.')  === '1.3.132.0.10') {
-    curve = new elliptic.ec('secp256k1');
-  }
-  var pubkey = pub.data.subjectPrivateKey.data;
-  return curve.verify(hash.toString('hex'), sig.toString('hex'), pubkey.toString('hex'));
+function ecVerify (sig, hash, pub) {
+  var curveId = curves[pub.data.algorithm.curve.join('.')]
+  if (!curveId)
+    throw new Error('unknown curve ' + pub.data.algorithm.curve.join('.'))
+
+  var curve = new elliptic.ec(curveId)
+
+  var pubkey = pub.data.subjectPrivateKey.data
+  return curve.verify(hash.toString('hex'), sig.toString('hex'), pubkey.toString('hex'))
 }
-function dsaVerify(sig, hash, pub) {
-  var p = pub.data.p;
-  var q = pub.data.q;
-  var g = pub.data.g;
-  var y = pub.data.pub_key;
-  var unpacked = parseKeys.signature.decode(sig, 'der');
-  var s = unpacked.s;
-  var r = unpacked.r;
-  checkValue(s, q);
-  checkValue(r, q);
-  var montq = bn.mont(q);
-  var montp = bn.mont(p);
-  var w =  s.invm(q);
+function dsaVerify (sig, hash, pub) {
+  var p = pub.data.p
+  var q = pub.data.q
+  var g = pub.data.g
+  var y = pub.data.pub_key
+  var unpacked = parseKeys.signature.decode(sig, 'der')
+  var s = unpacked.s
+  var r = unpacked.r
+  checkValue(s, q)
+  checkValue(r, q)
+  var montq = BN.mont(q)
+  var montp = BN.mont(p)
+  var w =  s.invm(q)
   var v = g.toRed(montp)
-  .redPow(new bn(hash).mul(w).mod(q))
+  .redPow(new BN(hash).mul(w).mod(q))
   .fromRed()
   .mul(
     y.toRed(montp)
     .redPow(r.mul(w).mod(q))
     .fromRed()
-  ).mod(p).mod(q);
-  return !v.cmp(r);
+  ).mod(p).mod(q)
+  return !v.cmp(r)
 }
-function checkValue(b, q) {
+function checkValue (b, q) {
   if (b.cmpn(0) <= 0) {
-    throw new Error('invalid sig');
+    throw new Error('invalid sig')
   }
   if (b.cmp(q) >= q) {
-    throw new Error('invalid sig');
+    throw new Error('invalid sig')
   }
 }
+
 }).call(this,require("buffer").Buffer)
-},{"bn.js":100,"buffer":75,"elliptic":102,"parse-asn1":126}],144:[function(require,module,exports){
+},{"./curves":101,"bn.js":102,"buffer":76,"elliptic":104,"parse-asn1":128}],145:[function(require,module,exports){
 (function (Buffer){
 var elliptic = require('elliptic');
 var BN = require('bn.js');
@@ -75003,53 +75544,53 @@ function formatReturnValue(bn, enc, len) {
 	}
 }
 }).call(this,require("buffer").Buffer)
-},{"bn.js":146,"buffer":75,"elliptic":147}],145:[function(require,module,exports){
+},{"bn.js":147,"buffer":76,"elliptic":148}],146:[function(require,module,exports){
 var createECDH = require('crypto').createECDH;
 
 module.exports = createECDH || require('./browser');
-},{"./browser":144,"crypto":79}],146:[function(require,module,exports){
-arguments[4][100][0].apply(exports,arguments)
-},{"dup":100}],147:[function(require,module,exports){
+},{"./browser":145,"crypto":80}],147:[function(require,module,exports){
 arguments[4][102][0].apply(exports,arguments)
-},{"../package.json":166,"./elliptic/curve":150,"./elliptic/curves":153,"./elliptic/ec":154,"./elliptic/hmac-drbg":157,"./elliptic/utils":158,"brorand":159,"dup":102}],148:[function(require,module,exports){
-arguments[4][103][0].apply(exports,arguments)
-},{"../../elliptic":147,"bn.js":146,"dup":103}],149:[function(require,module,exports){
+},{"dup":102}],148:[function(require,module,exports){
 arguments[4][104][0].apply(exports,arguments)
-},{"../../elliptic":147,"../curve":150,"bn.js":146,"dup":104,"inherits":216}],150:[function(require,module,exports){
+},{"../package.json":167,"./elliptic/curve":151,"./elliptic/curves":154,"./elliptic/ec":155,"./elliptic/hmac-drbg":158,"./elliptic/utils":159,"brorand":160,"dup":104}],149:[function(require,module,exports){
 arguments[4][105][0].apply(exports,arguments)
-},{"./base":148,"./edwards":149,"./mont":151,"./short":152,"dup":105}],151:[function(require,module,exports){
+},{"../../elliptic":148,"bn.js":147,"dup":105}],150:[function(require,module,exports){
 arguments[4][106][0].apply(exports,arguments)
-},{"../../elliptic":147,"../curve":150,"bn.js":146,"dup":106,"inherits":216}],152:[function(require,module,exports){
+},{"../../elliptic":148,"../curve":151,"bn.js":147,"dup":106,"inherits":218}],151:[function(require,module,exports){
 arguments[4][107][0].apply(exports,arguments)
-},{"../../elliptic":147,"../curve":150,"bn.js":146,"dup":107,"inherits":216}],153:[function(require,module,exports){
+},{"./base":149,"./edwards":150,"./mont":152,"./short":153,"dup":107}],152:[function(require,module,exports){
 arguments[4][108][0].apply(exports,arguments)
-},{"../elliptic":147,"bn.js":146,"dup":108,"hash.js":160}],154:[function(require,module,exports){
+},{"../../elliptic":148,"../curve":151,"bn.js":147,"dup":108,"inherits":218}],153:[function(require,module,exports){
 arguments[4][109][0].apply(exports,arguments)
-},{"../../elliptic":147,"./key":155,"./signature":156,"bn.js":146,"dup":109}],155:[function(require,module,exports){
+},{"../../elliptic":148,"../curve":151,"bn.js":147,"dup":109,"inherits":218}],154:[function(require,module,exports){
 arguments[4][110][0].apply(exports,arguments)
-},{"../../elliptic":147,"bn.js":146,"dup":110}],156:[function(require,module,exports){
+},{"../elliptic":148,"bn.js":147,"dup":110,"hash.js":161}],155:[function(require,module,exports){
 arguments[4][111][0].apply(exports,arguments)
-},{"../../elliptic":147,"bn.js":146,"dup":111}],157:[function(require,module,exports){
+},{"../../elliptic":148,"./key":156,"./signature":157,"bn.js":147,"dup":111}],156:[function(require,module,exports){
 arguments[4][112][0].apply(exports,arguments)
-},{"../elliptic":147,"dup":112,"hash.js":160}],158:[function(require,module,exports){
+},{"../../elliptic":148,"bn.js":147,"dup":112}],157:[function(require,module,exports){
 arguments[4][113][0].apply(exports,arguments)
-},{"bn.js":146,"dup":113}],159:[function(require,module,exports){
+},{"../../elliptic":148,"bn.js":147,"dup":113}],158:[function(require,module,exports){
 arguments[4][114][0].apply(exports,arguments)
-},{"dup":114}],160:[function(require,module,exports){
+},{"../elliptic":148,"dup":114,"hash.js":161}],159:[function(require,module,exports){
 arguments[4][115][0].apply(exports,arguments)
-},{"./hash/common":161,"./hash/hmac":162,"./hash/ripemd":163,"./hash/sha":164,"./hash/utils":165,"dup":115}],161:[function(require,module,exports){
+},{"bn.js":147,"dup":115}],160:[function(require,module,exports){
 arguments[4][116][0].apply(exports,arguments)
-},{"../hash":160,"dup":116}],162:[function(require,module,exports){
+},{"dup":116}],161:[function(require,module,exports){
 arguments[4][117][0].apply(exports,arguments)
-},{"../hash":160,"dup":117}],163:[function(require,module,exports){
+},{"./hash/common":162,"./hash/hmac":163,"./hash/ripemd":164,"./hash/sha":165,"./hash/utils":166,"dup":117}],162:[function(require,module,exports){
 arguments[4][118][0].apply(exports,arguments)
-},{"../hash":160,"dup":118}],164:[function(require,module,exports){
+},{"../hash":161,"dup":118}],163:[function(require,module,exports){
 arguments[4][119][0].apply(exports,arguments)
-},{"../hash":160,"dup":119}],165:[function(require,module,exports){
+},{"../hash":161,"dup":119}],164:[function(require,module,exports){
 arguments[4][120][0].apply(exports,arguments)
-},{"dup":120,"inherits":216}],166:[function(require,module,exports){
+},{"../hash":161,"dup":120}],165:[function(require,module,exports){
 arguments[4][121][0].apply(exports,arguments)
-},{"dup":121}],167:[function(require,module,exports){
+},{"../hash":161,"dup":121}],166:[function(require,module,exports){
+arguments[4][122][0].apply(exports,arguments)
+},{"dup":122,"inherits":218}],167:[function(require,module,exports){
+arguments[4][123][0].apply(exports,arguments)
+},{"dup":123}],168:[function(require,module,exports){
 (function (Buffer){
 'use strict';
 var inherits = require('inherits')
@@ -75142,7 +75683,7 @@ module.exports = function createHash (alg) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"./md5":169,"buffer":75,"inherits":216,"ripemd160":170,"sha.js":172,"stream":234}],168:[function(require,module,exports){
+},{"./md5":170,"buffer":76,"inherits":218,"ripemd160":171,"sha.js":173,"stream":236}],169:[function(require,module,exports){
 (function (Buffer){
 'use strict';
 var intSize = 4;
@@ -75179,7 +75720,7 @@ function hash(buf, fn, hashSize, bigEndian) {
 }
 exports.hash = hash;
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],169:[function(require,module,exports){
+},{"buffer":76}],170:[function(require,module,exports){
 'use strict';
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
@@ -75336,7 +75877,7 @@ function bit_rol(num, cnt)
 module.exports = function md5(buf) {
   return helpers.hash(buf, core_md5, 16);
 };
-},{"./helpers":168}],170:[function(require,module,exports){
+},{"./helpers":169}],171:[function(require,module,exports){
 (function (Buffer){
 /*
 CryptoJS v3.1.2
@@ -75546,7 +76087,7 @@ function ripemd160(message) {
 module.exports = ripemd160
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],171:[function(require,module,exports){
+},{"buffer":76}],172:[function(require,module,exports){
 (function (Buffer){
 //prototype class for hash functions
 function Hash (blockSize, finalSize) {
@@ -75619,7 +76160,7 @@ Hash.prototype._update = function () {
 module.exports = Hash
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],172:[function(require,module,exports){
+},{"buffer":76}],173:[function(require,module,exports){
 var exports = module.exports = function (alg) {
   var Alg = exports[alg.toLowerCase()]
   if(!Alg) throw new Error(alg + ' is not supported (we accept pull requests)')
@@ -75634,7 +76175,7 @@ exports.sha256 = require('./sha256')
 exports.sha384 = require('./sha384')
 exports.sha512 = require('./sha512')
 
-},{"./sha":173,"./sha1":174,"./sha224":175,"./sha256":176,"./sha384":177,"./sha512":178}],173:[function(require,module,exports){
+},{"./sha":174,"./sha1":175,"./sha224":176,"./sha256":177,"./sha384":178,"./sha512":179}],174:[function(require,module,exports){
 (function (Buffer){
 /*
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-0, as defined
@@ -75737,7 +76278,7 @@ module.exports = Sha
 
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"buffer":75,"inherits":216}],174:[function(require,module,exports){
+},{"./hash":172,"buffer":76,"inherits":218}],175:[function(require,module,exports){
 (function (Buffer){
 /*
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined
@@ -75837,7 +76378,7 @@ module.exports = Sha1
 
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"buffer":75,"inherits":216}],175:[function(require,module,exports){
+},{"./hash":172,"buffer":76,"inherits":218}],176:[function(require,module,exports){
 (function (Buffer){
 /**
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined
@@ -75893,7 +76434,7 @@ Sha224.prototype._hash = function () {
 module.exports = Sha224
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"./sha256":176,"buffer":75,"inherits":216}],176:[function(require,module,exports){
+},{"./hash":172,"./sha256":177,"buffer":76,"inherits":218}],177:[function(require,module,exports){
 (function (Buffer){
 /**
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined
@@ -76046,7 +76587,7 @@ Sha256.prototype._hash = function () {
 module.exports = Sha256
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"buffer":75,"inherits":216}],177:[function(require,module,exports){
+},{"./hash":172,"buffer":76,"inherits":218}],178:[function(require,module,exports){
 (function (Buffer){
 var inherits = require('inherits')
 var SHA512 = require('./sha512');
@@ -76106,7 +76647,7 @@ Sha384.prototype._hash = function () {
 module.exports = Sha384
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"./sha512":178,"buffer":75,"inherits":216}],178:[function(require,module,exports){
+},{"./hash":172,"./sha512":179,"buffer":76,"inherits":218}],179:[function(require,module,exports){
 (function (Buffer){
 var inherits = require('inherits')
 var Hash = require('./hash')
@@ -76355,7 +76896,7 @@ Sha512.prototype._hash = function () {
 module.exports = Sha512
 
 }).call(this,require("buffer").Buffer)
-},{"./hash":171,"buffer":75,"inherits":216}],179:[function(require,module,exports){
+},{"./hash":172,"buffer":76,"inherits":218}],180:[function(require,module,exports){
 (function (Buffer){
 'use strict';
 var createHash = require('create-hash/browser');
@@ -76427,7 +76968,7 @@ module.exports = function createHmac(alg, key) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"create-hash/browser":167,"inherits":216,"stream":234}],180:[function(require,module,exports){
+},{"buffer":76,"create-hash/browser":168,"inherits":218,"stream":236}],181:[function(require,module,exports){
 (function (Buffer){
 var generatePrime = require('./lib/generatePrime');
 var primes = require('./lib/primes');
@@ -76471,7 +77012,7 @@ exports.DiffieHellmanGroup = exports.createDiffieHellmanGroup = exports.getDiffi
 exports.createDiffieHellman = exports.DiffieHellman = createDiffieHellman;
 
 }).call(this,require("buffer").Buffer)
-},{"./lib/dh":181,"./lib/generatePrime":182,"./lib/primes":183,"buffer":75}],181:[function(require,module,exports){
+},{"./lib/dh":182,"./lib/generatePrime":183,"./lib/primes":184,"buffer":76}],182:[function(require,module,exports){
 (function (Buffer){
 var BN = require('bn.js');
 var MillerRabin = require('miller-rabin');
@@ -76641,7 +77182,7 @@ function formatReturnValue(bn, enc) {
   }
 }
 }).call(this,require("buffer").Buffer)
-},{"./generatePrime":182,"bn.js":184,"buffer":75,"miller-rabin":185,"randombytes":214}],182:[function(require,module,exports){
+},{"./generatePrime":183,"bn.js":185,"buffer":76,"miller-rabin":186,"randombytes":216}],183:[function(require,module,exports){
 var randomBytes = require('randombytes');
 module.exports = findPrime;
 findPrime.simpleSieve = simpleSieve;
@@ -76774,7 +77315,7 @@ function findPrime(bits, gen) {
   }
 
 }
-},{"bn.js":184,"miller-rabin":185,"randombytes":214}],183:[function(require,module,exports){
+},{"bn.js":185,"miller-rabin":186,"randombytes":216}],184:[function(require,module,exports){
 module.exports={
     "modp1": {
         "gen": "02",
@@ -76809,9 +77350,9 @@ module.exports={
         "prime": "ffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024e088a67cc74020bbea63b139b22514a08798e3404ddef9519b3cd3a431b302b0a6df25f14374fe1356d6d51c245e485b576625e7ec6f44c42e9a637ed6b0bff5cb6f406b7edee386bfb5a899fa5ae9f24117c4b1fe649286651ece45b3dc2007cb8a163bf0598da48361c55d39a69163fa8fd24cf5f83655d23dca3ad961c62f356208552bb9ed529077096966d670c354e4abc9804f1746c08ca18217c32905e462e36ce3be39e772c180e86039b2783a2ec07a28fb5c55df06f4c52c9de2bcbf6955817183995497cea956ae515d2261898fa051015728e5a8aaac42dad33170d04507a33a85521abdf1cba64ecfb850458dbef0a8aea71575d060c7db3970f85a6e1e4c7abf5ae8cdb0933d71e8c94e04a25619dcee3d2261ad2ee6bf12ffa06d98a0864d87602733ec86a64521f2b18177b200cbbe117577a615d6c770988c0bad946e208e24fa074e5ab3143db5bfce0fd108e4b82d120a92108011a723c12a787e6d788719a10bdba5b2699c327186af4e23c1a946834b6150bda2583e9ca2ad44ce8dbbbc2db04de8ef92e8efc141fbecaa6287c59474e6bc05d99b2964fa090c3a2233ba186515be7ed1f612970cee2d7afb81bdd762170481cd0069127d5b05aa993b4ea988d8fddc186ffb7dc90a6c08f4df435c93402849236c3fab4d27c7026c1d4dcb2602646dec9751e763dba37bdf8ff9406ad9e530ee5db382f413001aeb06a53ed9027d831179727b0865a8918da3edbebcf9b14ed44ce6cbaced4bb1bdb7f1447e6cc254b332051512bd7af426fb8f401378cd2bf5983ca01c64b92ecf032ea15d1721d03f482d7ce6e74fef6d55e702f46980c82b5a84031900b1c9e59e7c97fbec7e8f323a97a7e36cc88be0f1d45b7ff585ac54bd407b22b4154aacc8f6d7ebf48e1d814cc5ed20f8037e0a79715eef29be32806a1d58bb7c5da76f550aa3d8a1fbff0eb19ccb1a313d55cda56c9ec2ef29632387fe8d76e3c0468043e8f663f4860ee12bf2d5b0b7474d6e694f91e6dbe115974a3926f12fee5e438777cb6a932df8cd8bec4d073b931ba3bc832b68d9dd300741fa7bf8afc47ed2576f6936ba424663aab639c5ae4f5683423b4742bf1c978238f16cbe39d652de3fdb8befc848ad922222e04a4037c0713eb57a81a23f0c73473fc646cea306b4bcbc8862f8385ddfa9d4b7fa2c087e879683303ed5bdd3a062b3cf5b3a278a66d2a13f83f44f82ddf310ee074ab6a364597e899a0255dc164f31cc50846851df9ab48195ded7ea1b1d510bd7ee74d73faf36bc31ecfa268359046f4eb879f924009438b481c6cd7889a002ed5ee382bc9190da6fc026e479558e4475677e9aa9e3050e2765694dfc81f56e880b96e7160c980dd98edd3dfffffffffffffffff"
     }
 }
-},{}],184:[function(require,module,exports){
-arguments[4][100][0].apply(exports,arguments)
-},{"dup":100}],185:[function(require,module,exports){
+},{}],185:[function(require,module,exports){
+arguments[4][102][0].apply(exports,arguments)
+},{"dup":102}],186:[function(require,module,exports){
 var bn = require('bn.js');
 var brorand = require('brorand');
 
@@ -76927,11 +77468,12 @@ MillerRabin.prototype.getDivisor = function getDivisor(n, k) {
   return prime;
 };
 
-},{"bn.js":184,"brorand":186}],186:[function(require,module,exports){
-arguments[4][114][0].apply(exports,arguments)
-},{"dup":114}],187:[function(require,module,exports){
+},{"bn.js":185,"brorand":187}],187:[function(require,module,exports){
+arguments[4][116][0].apply(exports,arguments)
+},{"dup":116}],188:[function(require,module,exports){
 (function (Buffer){
 var createHmac = require('create-hmac')
+var MAX_ALLOC = Math.pow(2, 30) - 1 // default in iojs
 
 exports.pbkdf2 = pbkdf2
 function pbkdf2 (password, salt, iterations, keylen, digest, callback) {
@@ -76952,22 +77494,26 @@ function pbkdf2 (password, salt, iterations, keylen, digest, callback) {
 
 exports.pbkdf2Sync = pbkdf2Sync
 function pbkdf2Sync (password, salt, iterations, keylen, digest) {
-  if (typeof iterations !== 'number')
+  if (typeof iterations !== 'number') {
     throw new TypeError('Iterations not a number')
+  }
 
-  if (iterations < 0)
+  if (iterations < 0) {
     throw new TypeError('Bad iterations')
+  }
 
-  if (typeof keylen !== 'number')
+  if (typeof keylen !== 'number') {
     throw new TypeError('Key length not a number')
+  }
 
-  if (keylen < 0)
+  if (keylen < 0 || keylen > MAX_ALLOC) {
     throw new TypeError('Bad key length')
+  }
 
   digest = digest || 'sha1'
 
-  if (!Buffer.isBuffer(password)) password = new Buffer(password)
-  if (!Buffer.isBuffer(salt)) salt = new Buffer(salt)
+  if (!Buffer.isBuffer(password)) password = new Buffer(password, 'binary')
+  if (!Buffer.isBuffer(salt)) salt = new Buffer(salt, 'binary')
 
   var hLen
   var l = 1
@@ -76987,9 +77533,6 @@ function pbkdf2Sync (password, salt, iterations, keylen, digest) {
       T = new Buffer(hLen)
       l = Math.ceil(keylen / hLen)
       r = keylen - (l - 1) * hLen
-
-      if (keylen > (Math.pow(2, 32) - 1) * hLen)
-        throw new TypeError('keylen exceeds maximum length')
     }
 
     U.copy(T, 0, 0, hLen)
@@ -77011,7 +77554,7 @@ function pbkdf2Sync (password, salt, iterations, keylen, digest) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"create-hmac":179}],188:[function(require,module,exports){
+},{"buffer":76,"create-hmac":180}],189:[function(require,module,exports){
 exports.publicEncrypt = require('./publicEncrypt');
 exports.privateDecrypt = require('./privateDecrypt');
 
@@ -77022,7 +77565,7 @@ exports.privateEncrypt = function privateEncrypt(key, buf) {
 exports.publicDecrypt = function publicDecrypt(key, buf) {
   return exports.privateDecrypt(key, buf, true);
 };
-},{"./privateDecrypt":210,"./publicEncrypt":211}],189:[function(require,module,exports){
+},{"./privateDecrypt":212,"./publicEncrypt":213}],190:[function(require,module,exports){
 (function (Buffer){
 var createHash = require('create-hash');
 module.exports = function (seed, len) {
@@ -77041,399 +77584,49 @@ function i2ops(c) {
   return out;
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75,"create-hash":167}],190:[function(require,module,exports){
-arguments[4][100][0].apply(exports,arguments)
-},{"dup":100}],191:[function(require,module,exports){
-(function (Buffer){
-var bn = require('bn.js');
-var randomBytes = require('randombytes');
-module.exports = crt;
-function blind(priv) {
-  var r = getr(priv);
-  var blinder = r.toRed(bn.mont(priv.modulus))
-  .redPow(new bn(priv.publicExponent)).fromRed();
-  return {
-    blinder: blinder,
-    unblinder:r.invm(priv.modulus)
-  };
-}
-function crt(msg, priv) {
-  var blinds = blind(priv);
-  var len = priv.modulus.byteLength();
-  var mod = bn.mont(priv.modulus);
-  var blinded = new bn(msg).mul(blinds.blinder).mod(priv.modulus);
-  var c1 = blinded.toRed(bn.mont(priv.prime1));
-  var c2 = blinded.toRed(bn.mont(priv.prime2));
-  var qinv = priv.coefficient;
-  var p = priv.prime1;
-  var q = priv.prime2;
-  var m1 = c1.redPow(priv.exponent1);
-  var m2 = c2.redPow(priv.exponent2);
-  m1 = m1.fromRed();
-  m2 = m2.fromRed();
-  var h = m1.isub(m2).imul(qinv).mod(p);
-  h.imul(q);
-  m2.iadd(h);
-  var out = new Buffer(m2.imul(blinds.unblinder).mod(priv.modulus).toArray());
-  if (out.length < len) {
-    var prefix = new Buffer(len - out.length);
-    prefix.fill(0);
-    out = Buffer.concat([prefix, out], len);
-  }
-  return out;
-}
-crt.getr = getr;
-function getr(priv) {
-  var len = priv.modulus.byteLength();
-  var r = new bn(randomBytes(len));
-  while (r.cmp(priv.modulus) >=  0 || !r.mod(priv.prime1) || !r.mod(priv.prime2)) {
-    r = new bn(randomBytes(len));
-  }
-  return r;
-}
-}).call(this,require("buffer").Buffer)
-},{"bn.js":190,"buffer":75,"randombytes":214}],192:[function(require,module,exports){
-(function (Buffer){
-var createHash = require('create-hash');
-module.exports = function evp(password, salt, keyLen) {
-  keyLen = keyLen/8;
-  var ki = 0;
-  var ii = 0;
-  var key = new Buffer(keyLen);
-  var addmd = 0;
-  var md, md_buf;
-  var i;
-  while (true) {
-    md = createHash('md5');
-    if(addmd++ > 0) {
-       md.update(md_buf);
-    }
-    md.update(password);
-    md.update(salt);
-    md_buf = md.digest();
-    i = 0;
-    if(keyLen > 0) {
-      while(true) {
-        if(keyLen === 0) {
-          break;
-        }
-        if(i === md_buf.length) {
-          break;
-        }
-        key[ki++] = md_buf[i++];
-        keyLen--;
-       }
-    }
-   if(keyLen === 0) {
-      break;
-    }
-  }
-  for(i=0;i<md_buf.length;i++) {
-    md_buf[i] = 0;
-  }
-  return key;
-};
-}).call(this,require("buffer").Buffer)
-},{"buffer":75,"create-hash":167}],193:[function(require,module,exports){
-arguments[4][123][0].apply(exports,arguments)
-},{"dup":123}],194:[function(require,module,exports){
-// from https://github.com/indutny/self-signed/blob/gh-pages/lib/asn1.js
-// Fedor, you are amazing.
-
-var asn1 = require('asn1.js');
-
-var RSAPrivateKey = asn1.define('RSAPrivateKey', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('modulus').int(),
-    this.key('publicExponent').int(),
-    this.key('privateExponent').int(),
-    this.key('prime1').int(),
-    this.key('prime2').int(),
-    this.key('exponent1').int(),
-    this.key('exponent2').int(),
-    this.key('coefficient').int()
-  );
-});
-exports.RSAPrivateKey = RSAPrivateKey;
-
-var RSAPublicKey = asn1.define('RSAPublicKey', function() {
-  this.seq().obj(
-    this.key('modulus').int(),
-    this.key('publicExponent').int()
-  );
-});
-exports.RSAPublicKey = RSAPublicKey;
-
-var PublicKey = asn1.define('SubjectPublicKeyInfo', function() {
-  this.seq().obj(
-    this.key('algorithm').use(AlgorithmIdentifier),
-    this.key('subjectPublicKey').bitstr()
-  );
-});
-exports.PublicKey = PublicKey;
-
-var AlgorithmIdentifier = asn1.define('AlgorithmIdentifier', function() {
-  this.seq().obj(
-    this.key('algorithm').objid(),
-    this.key('none').null_().optional(),
-    this.key('curve').objid().optional(),
-    this.key('params').seq().obj(
-        this.key('p').int(),
-        this.key('q').int(),
-        this.key('g').int()
-      ).optional()
-  );
-});
-
-var PrivateKeyInfo = asn1.define('PrivateKeyInfo', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('algorithm').use(AlgorithmIdentifier),
-    this.key('subjectPrivateKey').octstr()
-  );
-});
-exports.PrivateKey = PrivateKeyInfo;
-var EncryptedPrivateKeyInfo = asn1.define('EncryptedPrivateKeyInfo', function() {
-  this.seq().obj(
-    this.key('algorithm').seq().obj(
-      this.key('id').objid(),
-      this.key('decrypt').seq().obj(
-        this.key('kde').seq().obj(
-          this.key('id').objid(),
-          this.key('kdeparams').seq().obj(
-            this.key('salt').octstr(),
-            this.key('iters').int()
-          )
-        ),
-        this.key('cipher').seq().obj(
-          this.key('algo').objid(),
-          this.key('iv').octstr()
-        )
-      )
-    ),
-    this.key('subjectPrivateKey').octstr()
-  );
-});
-
-exports.EncryptedPrivateKey = EncryptedPrivateKeyInfo;
-
-var DSAPrivateKey = asn1.define('DSAPrivateKey', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('p').int(),
-    this.key('q').int(),
-    this.key('g').int(),
-    this.key('pub_key').int(),
-    this.key('priv_key').int()
-  );
-});
-exports.DSAPrivateKey = DSAPrivateKey;
-
-exports.DSAparam = asn1.define('DSAparam', function () {
-  this.int();
-});
-var ECPrivateKey = asn1.define('ECPrivateKey', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('privateKey').octstr(),
-    this.key('parameters').optional().explicit(0).use(ECParameters),
-    this.key('publicKey').optional().explicit(1).bitstr()
-  );
-});
-exports.ECPrivateKey = ECPrivateKey;
-var ECParameters = asn1.define('ECParameters', function() {
-  this.choice({
-    namedCurve: this.objid()
-  });
-});
-
-exports.signature = asn1.define('signature', function() {
-  this.seq().obj(
-    this.key('r').int(),
-    this.key('s').int()
-  );
-});
-
-},{"asn1.js":197}],195:[function(require,module,exports){
-(function (Buffer){
-// adapted from https://github.com/apatil/pemstrip
-var findProc = /Proc-Type: 4,ENCRYPTED\n\r?DEK-Info: AES-((?:128)|(?:192)|(?:256))-CBC,([0-9A-H]+)\n\r?\n\r?([0-9A-z\n\r\+\/\=]+)\n\r?/m;
-var startRegex =/^-----BEGIN (.*) KEY-----\n/m;
-var fullRegex = /^-----BEGIN (.*) KEY-----\n\r?([0-9A-z\n\r\+\/\=]+)\n\r?-----END \1 KEY-----$/m;
-var evp = require('./EVP_BytesToKey');
-var ciphers = require('browserify-aes');
-module.exports = function (okey, password) {
-  var key = okey.toString();
-  var match = key.match(findProc);
-  var decrypted;
-  if (!match) {
-    var match2 = key.match(fullRegex);
-    decrypted = new Buffer(match2[2].replace(/\n\r?/g, ''), 'base64');
-  } else {
-    var suite = 'aes' + match[1];
-    var iv = new Buffer(match[2], 'hex');
-    var cipherText = new Buffer(match[3].replace(/\n\r?/g, ''), 'base64');
-    var cipherKey = evp(password, iv.slice(0,8), parseInt(match[1]));
-    var out = [];
-    var cipher = ciphers.createDecipheriv(suite, cipherKey, iv);
-    out.push(cipher.update(cipherText));
-    out.push(cipher.final());
-    decrypted = Buffer.concat(out);
-  }
-  var tag = key.match(startRegex)[1] + ' KEY';
-  return {
-    tag: tag,
-    data: decrypted
-  };
-};
-// http://stackoverflow.com/a/7033705
-function wrap(str) {
-  var chunks = [];
-  while (str) {
-    if (str.length < 64) {
-      chunks.push(str);
-      break;
-    }
-    else {
-      chunks.push(str.slice(0, 64));
-      str = str.slice(64);
-    }
-  }
-  return chunks.join("\n");
-}
-}).call(this,require("buffer").Buffer)
-},{"./EVP_BytesToKey":192,"browserify-aes":83,"buffer":75}],196:[function(require,module,exports){
-(function (Buffer){
-var asn1 = require('./asn1');
-var aesid = require('./aesid.json');
-var fixProc = require('./fixProc');
-var ciphers = require('browserify-aes');
-var compat = require('pbkdf2-compat');
-module.exports = parseKeys;
-
-function parseKeys(buffer) {
-  var password;
-  if (typeof buffer === 'object' && !Buffer.isBuffer(buffer)) {
-    password = buffer.passphrase;
-    buffer = buffer.key;
-  }
-  if (typeof buffer === 'string') {
-    buffer = new Buffer(buffer);
-  }
-
-  var stripped = fixProc(buffer, password);
-
-  var type = stripped.tag;
-  var data = stripped.data;
-  var subtype,ndata;
-  switch (type) {
-    case 'PUBLIC KEY':
-      ndata = asn1.PublicKey.decode(data, 'der');
-      subtype = ndata.algorithm.algorithm.join('.');
-      switch(subtype) {
-        case '1.2.840.113549.1.1.1':
-          return asn1.RSAPublicKey.decode(ndata.subjectPublicKey.data, 'der');
-        case '1.2.840.10045.2.1':
-        ndata.subjectPrivateKey = ndata.subjectPublicKey;
-          return {
-            type: 'ec',
-            data:  ndata
-          };
-        case '1.2.840.10040.4.1':
-          ndata.algorithm.params.pub_key = asn1.DSAparam.decode(ndata.subjectPublicKey.data, 'der');
-          return {
-            type: 'dsa',
-            data: ndata.algorithm.params
-          };
-        default: throw new Error('unknown key id ' +  subtype);
-      }
-      throw new Error('unknown key type ' +  type);
-    case 'ENCRYPTED PRIVATE KEY':
-      data = asn1.EncryptedPrivateKey.decode(data, 'der');
-      data = decrypt(data, password);
-      //falling through
-    case 'PRIVATE KEY':
-      ndata = asn1.PrivateKey.decode(data, 'der');
-      subtype = ndata.algorithm.algorithm.join('.');
-      switch(subtype) {
-        case '1.2.840.113549.1.1.1':
-          return asn1.RSAPrivateKey.decode(ndata.subjectPrivateKey, 'der');
-        case '1.2.840.10045.2.1':
-          return {
-            curve: ndata.algorithm.curve,
-            privateKey: asn1.ECPrivateKey.decode(ndata.subjectPrivateKey, 'der').privateKey
-          };
-        case '1.2.840.10040.4.1':
-          ndata.algorithm.params.priv_key = asn1.DSAparam.decode(ndata.subjectPrivateKey, 'der');
-          return {
-            type: 'dsa',
-            params: ndata.algorithm.params
-          };
-        default: throw new Error('unknown key id ' +  subtype);
-      }
-      throw new Error('unknown key type ' +  type);
-    case 'RSA PUBLIC KEY':
-      return asn1.RSAPublicKey.decode(data, 'der');
-    case 'RSA PRIVATE KEY':
-      return asn1.RSAPrivateKey.decode(data, 'der');
-    case 'DSA PRIVATE KEY':
-      return {
-        type: 'dsa',
-        params: asn1.DSAPrivateKey.decode(data, 'der')
-      };
-    case 'EC PRIVATE KEY':
-      data = asn1.ECPrivateKey.decode(data, 'der');
-      return {
-        curve: data.parameters.value,
-        privateKey: data.privateKey
-      };
-    default: throw new Error('unknown key type ' +  type);
-  }
-}
-parseKeys.signature = asn1.signature;
-function decrypt(data, password) {
-  var salt = data.algorithm.decrypt.kde.kdeparams.salt;
-  var iters = data.algorithm.decrypt.kde.kdeparams.iters;
-  var algo = aesid[data.algorithm.decrypt.cipher.algo.join('.')];
-  var iv = data.algorithm.decrypt.cipher.iv;
-  var cipherText = data.subjectPrivateKey;
-  var keylen = parseInt(algo.split('-')[1], 10)/8;
-  var key = compat.pbkdf2Sync(password, salt, iters, keylen);
-  var cipher = ciphers.createDecipheriv(algo, key, iv);
-  var out = [];
-  out.push(cipher.update(cipherText));
-  out.push(cipher.final());
-  return Buffer.concat(out);
-}
-}).call(this,require("buffer").Buffer)
-},{"./aesid.json":193,"./asn1":194,"./fixProc":195,"browserify-aes":83,"buffer":75,"pbkdf2-compat":187}],197:[function(require,module,exports){
+},{"buffer":76,"create-hash":168}],191:[function(require,module,exports){
+arguments[4][102][0].apply(exports,arguments)
+},{"dup":102}],192:[function(require,module,exports){
+arguments[4][103][0].apply(exports,arguments)
+},{"bn.js":191,"buffer":76,"dup":103,"randombytes":216}],193:[function(require,module,exports){
+arguments[4][124][0].apply(exports,arguments)
+},{"buffer":76,"create-hash":168,"dup":124}],194:[function(require,module,exports){
+arguments[4][125][0].apply(exports,arguments)
+},{"dup":125}],195:[function(require,module,exports){
+arguments[4][126][0].apply(exports,arguments)
+},{"asn1.js":198,"dup":126}],196:[function(require,module,exports){
+arguments[4][127][0].apply(exports,arguments)
+},{"./EVP_BytesToKey":193,"browserify-aes":84,"buffer":76,"dup":127}],197:[function(require,module,exports){
 arguments[4][128][0].apply(exports,arguments)
-},{"./asn1/api":198,"./asn1/base":200,"./asn1/constants":204,"./asn1/decoders":206,"./asn1/encoders":208,"bn.js":190,"dup":128}],198:[function(require,module,exports){
+},{"./aesid.json":194,"./asn1":195,"./fixProc":196,"browserify-aes":84,"buffer":76,"dup":128,"pbkdf2-compat":211}],198:[function(require,module,exports){
 arguments[4][129][0].apply(exports,arguments)
-},{"../asn1":197,"dup":129,"inherits":216,"vm":237}],199:[function(require,module,exports){
+},{"./asn1/api":199,"./asn1/base":201,"./asn1/constants":205,"./asn1/decoders":207,"./asn1/encoders":209,"bn.js":191,"dup":129}],199:[function(require,module,exports){
 arguments[4][130][0].apply(exports,arguments)
-},{"../base":200,"buffer":75,"dup":130,"inherits":216}],200:[function(require,module,exports){
+},{"../asn1":198,"dup":130,"inherits":218,"vm":239}],200:[function(require,module,exports){
 arguments[4][131][0].apply(exports,arguments)
-},{"./buffer":199,"./node":201,"./reporter":202,"dup":131}],201:[function(require,module,exports){
+},{"../base":201,"buffer":76,"dup":131,"inherits":218}],201:[function(require,module,exports){
 arguments[4][132][0].apply(exports,arguments)
-},{"../base":200,"dup":132,"minimalistic-assert":209}],202:[function(require,module,exports){
+},{"./buffer":200,"./node":202,"./reporter":203,"dup":132}],202:[function(require,module,exports){
 arguments[4][133][0].apply(exports,arguments)
-},{"dup":133,"inherits":216}],203:[function(require,module,exports){
+},{"../base":201,"dup":133,"minimalistic-assert":210}],203:[function(require,module,exports){
 arguments[4][134][0].apply(exports,arguments)
-},{"../constants":204,"dup":134}],204:[function(require,module,exports){
+},{"dup":134,"inherits":218}],204:[function(require,module,exports){
 arguments[4][135][0].apply(exports,arguments)
-},{"./der":203,"dup":135}],205:[function(require,module,exports){
+},{"../constants":205,"dup":135}],205:[function(require,module,exports){
 arguments[4][136][0].apply(exports,arguments)
-},{"../../asn1":197,"dup":136,"inherits":216}],206:[function(require,module,exports){
+},{"./der":204,"dup":136}],206:[function(require,module,exports){
 arguments[4][137][0].apply(exports,arguments)
-},{"./der":205,"dup":137}],207:[function(require,module,exports){
+},{"../../asn1":198,"dup":137,"inherits":218}],207:[function(require,module,exports){
 arguments[4][138][0].apply(exports,arguments)
-},{"../../asn1":197,"buffer":75,"dup":138,"inherits":216}],208:[function(require,module,exports){
+},{"./der":206,"dup":138}],208:[function(require,module,exports){
 arguments[4][139][0].apply(exports,arguments)
-},{"./der":207,"dup":139}],209:[function(require,module,exports){
+},{"../../asn1":198,"buffer":76,"dup":139,"inherits":218}],209:[function(require,module,exports){
 arguments[4][140][0].apply(exports,arguments)
-},{"dup":140}],210:[function(require,module,exports){
+},{"./der":208,"dup":140}],210:[function(require,module,exports){
+arguments[4][141][0].apply(exports,arguments)
+},{"dup":141}],211:[function(require,module,exports){
+arguments[4][142][0].apply(exports,arguments)
+},{"buffer":76,"create-hmac":180,"dup":142}],212:[function(require,module,exports){
 (function (Buffer){
 var parseKeys = require('parse-asn1');
 var mgf = require('./mgf');
@@ -77544,7 +77737,7 @@ function compare(a, b){
   return dif;
 }
 }).call(this,require("buffer").Buffer)
-},{"./mgf":189,"./withPublic":212,"./xor":213,"bn.js":190,"browserify-rsa":191,"buffer":75,"create-hash":167,"parse-asn1":196}],211:[function(require,module,exports){
+},{"./mgf":190,"./withPublic":214,"./xor":215,"bn.js":191,"browserify-rsa":192,"buffer":76,"create-hash":168,"parse-asn1":197}],213:[function(require,module,exports){
 (function (Buffer){
 var parseKeys = require('parse-asn1');
 var randomBytes = require('randombytes');
@@ -77642,7 +77835,7 @@ function nonZero(len, crypto) {
   return out;
 }
 }).call(this,require("buffer").Buffer)
-},{"./mgf":189,"./withPublic":212,"./xor":213,"bn.js":190,"browserify-rsa":191,"buffer":75,"create-hash":167,"parse-asn1":196,"randombytes":214}],212:[function(require,module,exports){
+},{"./mgf":190,"./withPublic":214,"./xor":215,"bn.js":191,"browserify-rsa":192,"buffer":76,"create-hash":168,"parse-asn1":197,"randombytes":216}],214:[function(require,module,exports){
 (function (Buffer){
 var bn = require('bn.js');
 function withPublic(paddedMsg, key) {
@@ -77655,7 +77848,7 @@ function withPublic(paddedMsg, key) {
 
 module.exports = withPublic;
 }).call(this,require("buffer").Buffer)
-},{"bn.js":190,"buffer":75}],213:[function(require,module,exports){
+},{"bn.js":191,"buffer":76}],215:[function(require,module,exports){
 module.exports = function xor(a, b) {
   var len = a.length;
   var i = -1;
@@ -77664,7 +77857,7 @@ module.exports = function xor(a, b) {
   }
   return a
 };
-},{}],214:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 (function (process,global,Buffer){
 'use strict';
 
@@ -77696,7 +77889,7 @@ function oldBrowser() {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer)
-},{"_process":218,"buffer":75}],215:[function(require,module,exports){
+},{"_process":220,"buffer":76}],217:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -77999,7 +78192,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],216:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -78024,12 +78217,12 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],217:[function(require,module,exports){
+},{}],219:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],218:[function(require,module,exports){
+},{}],220:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -78089,7 +78282,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],219:[function(require,module,exports){
+},{}],221:[function(require,module,exports){
 (function (global){
 /*! http://mths.be/punycode v1.2.4 by @mathias */
 ;(function(root) {
@@ -78600,7 +78793,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],220:[function(require,module,exports){
+},{}],222:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -78686,7 +78879,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],221:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -78773,16 +78966,16 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],222:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":220,"./encode":221}],223:[function(require,module,exports){
+},{"./decode":222,"./encode":223}],225:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":224}],224:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":226}],226:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -78875,7 +79068,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":226,"./_stream_writable":228,"_process":218,"core-util-is":229,"inherits":216}],225:[function(require,module,exports){
+},{"./_stream_readable":228,"./_stream_writable":230,"_process":220,"core-util-is":231,"inherits":218}],227:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -78923,7 +79116,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":227,"core-util-is":229,"inherits":216}],226:[function(require,module,exports){
+},{"./_stream_transform":229,"core-util-is":231,"inherits":218}],228:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -79878,7 +80071,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":224,"_process":218,"buffer":75,"core-util-is":229,"events":215,"inherits":216,"isarray":217,"stream":234,"string_decoder/":235,"util":74}],227:[function(require,module,exports){
+},{"./_stream_duplex":226,"_process":220,"buffer":76,"core-util-is":231,"events":217,"inherits":218,"isarray":219,"stream":236,"string_decoder/":237,"util":75}],229:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -80089,7 +80282,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":224,"core-util-is":229,"inherits":216}],228:[function(require,module,exports){
+},{"./_stream_duplex":226,"core-util-is":231,"inherits":218}],230:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -80570,7 +80763,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":224,"_process":218,"buffer":75,"core-util-is":229,"inherits":216,"stream":234}],229:[function(require,module,exports){
+},{"./_stream_duplex":226,"_process":220,"buffer":76,"core-util-is":231,"inherits":218,"stream":236}],231:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -80680,10 +80873,10 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],230:[function(require,module,exports){
+},{"buffer":76}],232:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":225}],231:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":227}],233:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = require('stream');
 exports.Readable = exports;
@@ -80692,13 +80885,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":224,"./lib/_stream_passthrough.js":225,"./lib/_stream_readable.js":226,"./lib/_stream_transform.js":227,"./lib/_stream_writable.js":228,"stream":234}],232:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":226,"./lib/_stream_passthrough.js":227,"./lib/_stream_readable.js":228,"./lib/_stream_transform.js":229,"./lib/_stream_writable.js":230,"stream":236}],234:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":227}],233:[function(require,module,exports){
+},{"./lib/_stream_transform.js":229}],235:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":228}],234:[function(require,module,exports){
+},{"./lib/_stream_writable.js":230}],236:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -80827,7 +81020,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":215,"inherits":216,"readable-stream/duplex.js":223,"readable-stream/passthrough.js":230,"readable-stream/readable.js":231,"readable-stream/transform.js":232,"readable-stream/writable.js":233}],235:[function(require,module,exports){
+},{"events":217,"inherits":218,"readable-stream/duplex.js":225,"readable-stream/passthrough.js":232,"readable-stream/readable.js":233,"readable-stream/transform.js":234,"readable-stream/writable.js":235}],237:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -81050,7 +81243,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":75}],236:[function(require,module,exports){
+},{"buffer":76}],238:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -81759,7 +81952,7 @@ function isNullOrUndefined(arg) {
   return  arg == null;
 }
 
-},{"punycode":219,"querystring":222}],237:[function(require,module,exports){
+},{"punycode":221,"querystring":224}],239:[function(require,module,exports){
 var indexOf = require('indexof');
 
 var Object_keys = function (obj) {
@@ -81899,7 +82092,7 @@ exports.createContext = Script.createContext = function (context) {
     return copy;
 };
 
-},{"indexof":238}],238:[function(require,module,exports){
+},{"indexof":240}],240:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -81910,7 +82103,7 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],239:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 (function (Buffer){
 (function () {
   "use strict";
@@ -81932,7 +82125,7 @@ module.exports = function(arr, obj){
 }());
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":75}],240:[function(require,module,exports){
+},{"buffer":76}],242:[function(require,module,exports){
 // Diacritics.js
 // 
 // Started as something to be an equivalent of the Google Java Library diacritics library for JavaScript.
@@ -82085,7 +82278,7 @@ module.exports = function(arr, obj){
 
   return output;
 });
-},{}],241:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -84075,7 +84268,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":218}],242:[function(require,module,exports){
+},{"_process":220}],244:[function(require,module,exports){
 (function(global) {
 
   var WORKER_PATH;
@@ -84476,7 +84669,7 @@ return Q;
 
 })(exports || window);
 
-},{}],243:[function(require,module,exports){
+},{}],245:[function(require,module,exports){
 /*
  * textgrid
  * https://github.com/OpenSourceFieldlinguistics/PraatTextGridJS
@@ -84757,7 +84950,7 @@ return Q;
 
 }(typeof exports === "object" && exports || this));
 
-},{}],244:[function(require,module,exports){
+},{}],246:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -86307,10 +86500,10 @@ return Q;
   }
 }.call(this));
 
-},{}],245:[function(require,module,exports){
+},{}],247:[function(require,module,exports){
 module.exports={
   "name": "fielddb",
-  "version": "3.0.19",
+  "version": "3.6.02",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/OpenSourceFieldlinguistics/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -86376,10 +86569,6 @@ module.exports={
     "grunt-newer": "^1.1.0",
     "jasmine-node": "^1.14.5"
   },
-  "main": "./scripts/build_template_databases_using_fielddb.sh",
-  "bin": {
-    "fielddb": "./scripts/build_template_databases_using_fielddb.sh"
-  },
   "engines": {
     "node": "~0.8 || ~0.10"
   },
@@ -86394,7 +86583,7 @@ module.exports={
   ]
 }
 
-},{}]},{},[42]);
+},{}]},{},[43]);
 
 /**
  * @license AngularJS v1.2.26
@@ -92223,6 +92412,9 @@ angular.module("fielddbAngularApp").directive("fielddbAuthentication", function(
 
     $scope.logout = function() {
       $scope.application.authentication.error = "";
+      if (true) {
+        return;
+      }
       if (!FieldDB || !FieldDB.Database) {
         console.warn("Authentication is handled by FieldDB, whcih is not currently loaded");
         return;
@@ -93113,7 +93305,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
       parent: "=parent"
     },
     controller: function($scope) {
-      var debugging = true;
+      var debugging = false;
       if (debugging) {
         console.log("loading fielddbAudioVideoRecorder", $scope.parent);
       }
@@ -93221,7 +93413,7 @@ angular.module("fielddbAngularApp").directive("fielddbAudioVideoRecorder", funct
 
     },
     link: function postLink(scope, el) {
-      console.log("keeping a reference to this element");
+      // console.log("keeping a reference to this element");
       scope.element = el;
       // if (FieldDB && FieldDB.AudioVideoRecorder && FieldDB.AudioVideoRecorder.Recorder) {
       //   FieldDB.AudioVideoRecorder.Recorder.initRecorder();
@@ -93254,31 +93446,32 @@ angular.module("fielddbAngularApp").directive("fielddbDatumField", function() {
     //   console.log($element.html());
     // },
     link: function postLink(scope) {
-      console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      if (scope && scope.datumfield && scope.datumfield.debugMode) {
+        console.log("linking datumfield", scope.datumField, scope.contextualizer);
+      }
       scope.contextualize = scope.$root.contextualize;
     },
     priority: 0,
     replace: false,
     controllerAs: "stringAlias"
-    // require: "siblingDirectiveName", // or // ["^parentDirectiveName", "?optionalDirectiveName", "?^optionalParent"],
-    // compile: function compile(tElement, tAttrs, transclude) {
-    //   return {
-    //     pre: function preLink(scope, iElement, iAttrs, controller) {
-    //       console.log("in preLink");
-    //     },
-    //     post: function postLink(scope, iElement, iAttrs, controller) {
-    //       console.log("in postLink");
-    //       console.log(iElement.html());
-    //       iElement.text("this is the datumField directive");
-    //     }
-    //   }
-    //   // or
-    //   // return function postLink( ... ) { ... }
-    // }
+      // require: "siblingDirectiveName", // or // ["^parentDirectiveName", "?optionalDirectiveName", "?^optionalParent"],
+      // compile: function compile(tElement, tAttrs, transclude) {
+      //   return {
+      //     pre: function preLink(scope, iElement, iAttrs, controller) {
+      //       console.log("in preLink");
+      //     },
+      //     post: function postLink(scope, iElement, iAttrs, controller) {
+      //       console.log("in postLink");
+      //       console.log(iElement.html());
+      //       iElement.text("this is the datumField directive");
+      //     }
+      //   }
+      //   // or
+      //   // return function postLink( ... ) { ... }
+      // }
   };
   return directiveDefinitionObject;
 });
-
 "use strict";
 
 /**
@@ -93362,12 +93555,12 @@ angular.module('fielddbAngularApp').run(['$templateCache', function($templateCac
 
 
   $templateCache.put('views/audio-video-recorder.html',
-    "<div class=\"span6\"><form class=\"btn-toolbar\"><div class=\"btn-group\"><button class=\"btn btn-success\" ng-click=\"peripheralsCheck('audio')\"><i class=\"fa\" ng-class=\"{'fa-microphone': (application.audioRecordingVerified || application.audioRecordingVerified==undefined), 'fa-microphone-slash': application.audioRecordingVerified==false }\"></i></button> <button class=\"btn btn-success hide hidden\" ng-click=\"peripheralsCheck('video')\" ng-disabled=\"application.videoRecordingVerified==false\"><i class=\"fa\" ng-class=\"{'fa-video-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-microphone-slash ': application.videoRecordingVerified==false }\"></i></button> <button class=\"btn btn-success hide hidden\" ng-click=\"peripheralsCheck('picture')\" ng-disabled=\"application.videoRecordingVerified==false\"><i class=\"fa\" ng-class=\"{'fa-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-eye-close': application.videoRecordingVerified==false }\"></i></button></div><img src=\"images/spinner-small.gif\" ng-show=\"processingAudio\"></form><p ng-hide=\"showPictureInstructions\" class=\"span6 RecordMP3js-recorder\" data-format=\"mp3\" data-callback=\"showFile\"></p><p class=\"\"><span ng-show=\"showPictureInstructions\">Click preview when ready to take a picture</span><h3 ng-show=\"application.audioRecordingVerified\">Preview Audio/Video/Image</h3><small ng-show=\"mutedAudioInstructions\">Note: audio/video is muted to reduce audio feedback noises. If you are using a headset, you can unmute them to listen to the audio as you record.</small><audio hidden class=\"hide\" autoplay controls></audio><video hidden class=\"hide\" autoplay controls></video><canvas hidden class=\"hide\" ng-hide=\"true===true\"></canvas><img hidden class=\"hide\"></p></div><div class=\"span6\" data-fielddb-import json=\"importer\" corpus=\"application.corpus\"></div><div class=\"span12\" ng-model=\"audioRecorder.status\"></div>"
+    "<div class=\"span6\"><form class=\"btn-toolbar\"><div class=\"btn-group\"><button class=\"btn btn-success\" ng-click=\"peripheralsCheck('audio')\"><i class=\"fa\" ng-class=\"{'fa-microphone': (application.audioRecordingVerified || application.audioRecordingVerified==undefined), 'fa-microphone-slash': application.audioRecordingVerified==false }\"></i></button> <button class=\"btn btn-success hide hidden\" ng-click=\"peripheralsCheck('video')\" ng-disabled=\"application.videoRecordingVerified==false\"><i class=\"fa\" ng-class=\"{'fa-video-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-microphone-slash ': application.videoRecordingVerified==false }\"></i></button> <button class=\"btn btn-success hide hidden\" ng-click=\"peripheralsCheck('picture')\" ng-disabled=\"application.videoRecordingVerified==false\"><i class=\"fa\" ng-class=\"{'fa-camera': (application.videoRecordingVerified || application.videoRecordingVerified==undefined), 'fa-eye-close': application.videoRecordingVerified==false }\"></i></button></div><img src=\"images/spinner-small.gif\" ng-show=\"processingAudio\"></form><p ng-hide=\"showPictureInstructions\" class=\"span6 RecordMP3js-recorder\" data-format=\"mp3\" data-callback=\"showFile\"></p><p class=\"\"><span ng-show=\"showPictureInstructions\">Click preview when ready to take a picture</span><h3 ng-show=\"application.audioRecordingVerified\">Preview Audio/Video/Image</h3><small ng-show=\"mutedAudioInstructions\">Note: audio/video is muted to reduce audio feedback noises. If you are using a headset, you can unmute them to listen to the audio as you record.</small><audio hidden class=\"hide\" autoplay controls></audio><video hidden class=\"hide\" autoplay controls></video><canvas hidden class=\"hide\" ng-hide=\"true===true\"></canvas><img hidden class=\"hide\"></p></div><div class=\"span6\" data-fielddb-import json=\"importer\" corpus=\"importer.corpus\"></div><div class=\"span12\" ng-model=\"audioRecorder.status\"></div>"
   );
 
 
   $templateCache.put('views/authentication.html',
-    "<form class=\"navbar-form navbar-right\" role=\"login\"><div class=\"form-group\" ng-hide=\"application.authentication.user.authenticated\"><input type=\"text\" placeholder=\"Username\" class=\"form-control\" ng-model=\"loginDetails.username\" name=\"username\" value=\"\" tabindex=\"1\"> &nbsp; <input type=\"password\" placeholder=\"Password\" class=\"form-control\" ng-model=\"loginDetails.password\" name=\"password\" tabindex=\"2\"> &nbsp; <button type=\"submit\" class=\"btn btn-default\" ng-click=\"login(loginDetails)\" tabindex=\"3\">Login</button></div>{{application.authentication.error}} <span class=\"form-group\" ng-show=\"application.authentication.user.authenticated\"><button class=\"btn btn-default\" ng-click=\"logout()\" tabindex=\"3\">Logout</button> <span data-fielddb-locales></span></span></form>"
+    "<form class=\"navbar-form navbar-right\" role=\"login\"><div class=\"form-group\" ng-hide=\"application.authentication.user.authenticated\"><input type=\"text\" placeholder=\"Username\" class=\"form-control\" ng-model=\"loginDetails.username\" name=\"username\" value=\"\" tabindex=\"1\"> &nbsp; <input type=\"password\" placeholder=\"Password\" class=\"form-control\" ng-model=\"loginDetails.password\" name=\"password\" tabindex=\"2\"> &nbsp; <button type=\"submit\" class=\"btn btn-default\" ng-click=\"login(loginDetails)\" tabindex=\"3\">Login</button></div>{{application.authentication.error}} <span class=\"form-group\" ng-show=\"application.authentication.user.authenticated\"><button class=\"btn btn-default\" ng-click=\"logout()\" tabindex=\"-1\">Logout</button> <span data-fielddb-locales></span></span></form>"
   );
 
 
@@ -93413,7 +93606,9 @@ angular.module('fielddbAngularApp').run(['$templateCache', function($templateCac
 
 
   $templateCache.put('views/datum-field.html',
-    "<span class=\"pull-right {{datumField.label}}\"><span>{{contextualize('locale_Encrypt_if_confidential')}}</span> <input type=\"checkbox\" ng-class=\"{'shouldBeEncrypted': datumField.shouldBeEncrypted}\"><!-- Issue #797 --> <i class=\"remove-datum-field icon-remove-sign\"></i></span><label>{{contextualize('locale_Title')}}</label><input class=\"{'choose-field: datumField.userchooseable}\" ng-model=\"datumField.labelFieldLinguists\" type=\"text\"><label>{{contextualize('locale_Help_Text')}}</label><textarea class=\"help-text\" placeholder=\"{{contextualize('locale_Help_Text_Placeholder')}}\" ng-model=\"datumField.helpLinguists\"></textarea>"
+    "<span class=\"pull-right {{datumField.label}}\"><span>{{contextualize('locale_Encrypt_if_confidential')}}</span> <input type=\"checkbox\" ng-class=\"{'shouldBeEncrypted': datumField.shouldBeEncrypted}\"><!-- Issue #797 --> <i class=\"remove-datum-field icon-remove-sign\"></i></span><label>{{contextualize('locale_Title')}}</label><!-- <input class=\"{'choose-field: datumField.userchooseable}\" ng-model=\"datumField.labelNonLinguists\"\n" +
+    "\ttype=\"text\"  title=\"This field label which is shown to users of non-technical apps. It should be user-friendly and generic.\" /> --><input class=\"{'choose-field: datumField.userchooseable}\" ng-model=\"datumField.labelFieldLinguists\" type=\"text\" title=\"This the field label which shown to users who want to see the linguisty version of the data. It is not shown in this app, but might be used by other LingSync apps.\"><label>{{contextualize('locale_Help_Text')}}</label><!-- <textarea class=\"help-text\" placeholder=\"{{contextualize('locale_Help_Text_Placeholder')}}\" ng-model=\"datumField.help\" title=\"This help text is show to users of the user-friendly apps. It should be friendly and generic and not-to-lingiusty.\"></textarea>\n" +
+    " --><textarea class=\"help-text\" placeholder=\"{{contextualize('locale_Help_Text_Placeholder')}}\" ng-model=\"datumField.helpLinguists\" title=\"This help text is shown to users who want to see the linguisty version of the data. It is not shown in this app, but might be used by other LingSync apps.\"></textarea>"
   );
 
 
@@ -104299,7 +104494,7 @@ d3 = function() {
       }
       var connection = window.app.get("corpus").get("connection");
       var couchurl = OPrime.getCouchUrl(connection);
-      glosserURL = couchurl + "/_design/pages/_view/precedence_rules?group=true";
+      glosserURL = couchurl + "/_design/deprecated/_view/precedence_rules?group=true";
     }
     OPrime.makeCORSRequest({
       type: 'GET',

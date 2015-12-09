@@ -28,7 +28,7 @@
         "description": "appears in Top navgation bar"
     },
     "locale_glosser": {
-        "message": "Semi-auto Glosser",
+        "message": "Glosser",
         "description": "appears in Top menu bar"
     },
     "locale_logout": {
@@ -243,7 +243,7 @@
         "description": "Person List Bio Header"
     },
     "locale_no_data_message": {
-        "message": "No data to display. Please click on <img src=\"images/icon16_dev.png\" border=\"0 \" /> above and/or log in.",
+        "message": "No data to display. Please refresh the page to try again.",
         "description": ""
     },
     "locale_done_button": {
@@ -289,6 +289,28 @@
     "locale_create_new_button": {
         "message": "Create New",
         "description": "button"
+    },
+    "locale_delete_or_leave_corpus": {
+        "message": "Remove this corpus from your list of corpora",
+        "description": "title for delete or leave section"
+    },
+    "locale_leave_corpus_button": {
+        "message": "Leave",
+        "description": "button to leave corpus"
+    },
+    "locale_leave_corpus_info": {
+        "message": "Leaving a corpus will remove it from your corpora list, but other team members will still have access to it.",
+        "description": "message about deleting corpus"
+    },
+
+    "locale_delete_corpus_info": {
+        "message": "Deleting a corpus will remove it from the corpora list of ALL team members. Only delete a corpus if you are sure that it is not useful to anyone anymore. If you are unsure about deleting a corpus, please refer to the <a target='_blank' href='/#/faq'>FAQ</a> for more options.",
+        "description": "message about deleting corpus"
+    },
+
+    "locale_delete_corpus_button": {
+        "message": "Delete",
+        "description": "button to delete corpus"
     },
     "locale_corpus_settings": {
         "message": "Corpus Settings",
@@ -501,7 +523,7 @@
         "description": "option in number of records to display dropdown"
     },
     "locale_templates": {
-        "message": "Templates",
+        "message": "Template",
         "description": "title for template setting"
     },
     "locale_interface_language": {
@@ -632,6 +654,15 @@
         "message": "After you have logged in, hover over 'Settings' and select 'Corpus'. From this page, you can add a new corpus.",
         "description": " "
     },
+
+    "locale_remove_corpus_question": {
+        "message": "How do I delete a corpus?",
+        "description": " "
+    },
+    "locale_remove_corpus_answer": {
+        "message": " <p>After you have logged in, hover over 'Settings' and select 'Corpus'. From this page, you can choose to delete a corpus or leave a corpus. Leaving a corpus will remove it from your corpora list, but other team members will still have access to it. Deleting a corpus, on the other hand, will remove it from the corpora list of ALL team members. Only delete a corpus if you are sure that it is not useful to anyone anymore.  </p><p> If the corpus might still be useful to someone other than yourself, you should elect/add another admin to the corpus if you are currently the only admin, and then click the \"Leave corpus\" rather than \"Delete corpus\" button. </p> <p>If you don't have another candidate who is willing to be the admin on the corpus, you can add the \"community\" user as the admin, and the corpus will become part of the corpora which are managed by the <a href='http://lingsync.org/community' target='_blank'>LingSync community</a> (as recommended in <a href='http://emeld.org/school/what.html' target='_blank'>EMELD  digital language documentation best practices #7</a>. </p>",
+        "description": " "
+    },
     "locale_enter_data_question": {
         "message": "How do I enter data?",
         "description": " "
@@ -693,8 +724,16 @@
         "description": " "
     },
     "locale_export_answer": {
-        "message": "You can export your entire database as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
-        "prevMessage": "You can export your entire database as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/pages/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"CORPUS_DB_URL/_design/pages/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "message": "You can download your records as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/get_datum_fields\">csv</a> (note, this contains only a fraction of the metadata). If you want to backup your database you can replicate the entire database to your computer/server using <a target=\"_blank\" href=\"https://corpus.lingsync.org/_utils/replicator.html\">CouchDB</a>, or download it as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_view/byCollection\">json</a>. You dont have to export your data to share it, you can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/word_list?group=true\">word list</a>, <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "prevMessage": "You can export your entire database as <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/get_datum_fields\">csv</a> (warning, csv is a lossy format, don't use this for backing up your data), or backup your data as non-lossy <a target=\"_blank\" href=\"CORPUS_DB_URL/_design/deprecated/_view/get_datum_fields\">json</a>. You can also share your data with other people by adding them to your corpus, or you can make parts of your corpus public and sharable on <a target=\"_blank\" href=\"CORPUS_PAGE_URL\">your corpus' own webpage</a> You can also export lists of data in LaTeX among other things using the <a target=\"_blank\" href=\"https://chrome.google.com/webstore/detail/lingsync-prototype/eeipnabdeimobhlkfaiohienhibfcfpa\">Prototype app</a>. <p>You can also download a <a href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/word_list?group=true\">word list</a>, <a href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/lexicon_create_tuples?group=true\">glossed word list</a> and a <a href=\"CORPUS_DB_URL/_design/deprecated/_list/asCSV/morphemes_in_utterance?group=true\">morphemes list</a>, among other things. If you're curious about other exports you can do, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial. Exporting data from LingSync.org is extremely powerful and flexible.</p>",
+        "description": "links screw up the json format so i leave it empty for the moment"
+    },
+    "locale_python_question": {
+        "message": "How can I use my data from Python?",
+        "description": " "
+    },
+    "locale_python_answer": {
+        "message": "You can use the CouchDB API to your database directly. Your corpus is stored in the JSON format which is readable by Python scripts. You should also replicate the entire database to your computer using <a target=\"_blank\" href=\"https://corpus.lingsync.org/_utils/replicator.html\">CouchDB</a> to be able to prototype locally. You can create new 'map reduces' which can transform the data to create new APIs for example if you are creating a language learning app or a dictionary. If you're curious about how to use the CouchDB API, <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">contact us</a> and one of the current students will give you a tutorial, or you can search on YouTube for CouchDB.</p>",
         "description": "links screw up the json format so i leave it empty for the moment"
     },
     "locale_share_session_question": {
@@ -761,6 +800,16 @@
         "message": "For any other questions or comments, you may <a target=\"_blank\" href=\"https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform\">send us an email</a> or <a target=\"_blank\" href=\"https://www.facebook.com/LingSyncApp\">ask other users on Facebook</a>.",
         "description": "links screw up the json format so I leave it empty for the moment"
     },
+
+    "locale_instructor_faq_question": {
+        "message": "I am an instructor and want to use LingSync for my class. What do I need to do?",
+        "description": " "
+    },
+    "locale_instructor_faq_answer": {
+        "message": "There is a FAQ specifically for instructors at <a href='/#/faq_instructors'>FAQ_for_instructors</a> that will help you set up LingSync for your class.",
+        "description": ""
+    },
+
     "locale_delete_duplicate_tags_button": {
         "message": "Delete Duplicate Tags",
         "description": " "

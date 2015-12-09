@@ -2,9 +2,9 @@
 'use strict';
 console.log("Declaring the SpreadsheetPrivateServices.");
 
-FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
-FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
-FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
+FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.lingsync.org";
+FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.lingsync.org";
+FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.lingsync.org";
 
 angular.module('spreadsheetApp')
   .factory('Servers', function() {
@@ -14,6 +14,7 @@ angular.module('spreadsheetApp')
     if (window.location.host.indexOf("localhost") > -1) {
       localhost = true;
     }
+localhost = false;
     var servers = {};
 
     if (localhost) {
@@ -26,14 +27,14 @@ angular.module('spreadsheetApp')
     }
 
     servers.production = {
-      auth: "https://auth.example.org",
-      corpus: "https://corpus.example.org",
+      auth: "https://auth.lingsync.org",
+      corpus: "https://corpus.lingsync.org",
       serverCode: "production",
       userFriendlyServerName: "Example"
     };
     // servers.testing = {
-    //   auth: "https://authdev.example.org",
-    //   corpus: "https://corpusdev.example.org",
+    //   auth: "https://authdev.lingsync.org",
+    //   corpus: "https://corpusdev.lingsync.org",
     //   serverCode: "testing",
     //   userFriendlyServerName: "Example Beta"
     // };
@@ -53,9 +54,9 @@ angular.module('spreadsheetApp')
             FieldDB.Database.prototype.BASE_AUTH_URL = "https://localhost:3181";
             FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://localhost:3184";
           } else {
-            FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.example.org";
-            FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.example.org";
-            FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.example.org";
+            FieldDB.Database.prototype.BASE_DB_URL = "https://corpus.lingsync.org";
+            FieldDB.Database.prototype.BASE_AUTH_URL = "https://auth.lingsync.org";
+            FieldDB.AudioVideo.prototype.BASE_SPEECH_URL = "https://speech.lingsync.org";
           }
         }
 
