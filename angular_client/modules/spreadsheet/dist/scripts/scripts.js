@@ -393,29 +393,28 @@ angular.module('spreadsheetApp')
     if (window.location.host.indexOf("localhost") > -1) {
       localhost = true;
     }
-localhost = false;
     var servers = {};
 
     if (localhost) {
-      servers.localhost = {
-        auth: "https://localhost:3183",
-        corpus: "https://localhost:6984",
-        serverCode: "localhost",
-        userFriendlyServerName: "Localhost"
-      };
+      // servers.localhost = {
+      //   auth: "https://localhost:3183",
+      //   corpus: "https://localhost:6984",
+      //   serverCode: "localhost",
+      //   userFriendlyServerName: "Localhost"
+      // };
     }
 
     servers.production = {
       auth: "https://auth.lingsync.org",
       corpus: "https://corpus.lingsync.org",
       serverCode: "production",
-      userFriendlyServerName: "Example"
+      userFriendlyServerName: "LingSync"
     };
     // servers.testing = {
     //   auth: "https://authdev.lingsync.org",
     //   corpus: "https://corpusdev.lingsync.org",
     //   serverCode: "testing",
-    //   userFriendlyServerName: "Example Beta"
+    //   userFriendlyServerName: "LingSync Beta"
     // };
 
     return {
@@ -777,7 +776,7 @@ angular.module('spreadsheetApp')
             $rootScope.notificationMessage = response.data.userFriendlyErrors[0];
             $rootScope.openNotification();
           } else {
-            $rootScope.notificationMessage = "Welcome! Your usenamme is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
+            $rootScope.notificationMessage = "Welcome! Your usename is " + response.data.user.username + "\nYou may now play with your Practice Corpus or browse some sample data in LingLlama's community corpus of Quechua data. You can also find a tutorial by clicking on the FAQ.";
             $rootScope.openNotification();
 
             login(response.data.user.username, newLoginInfo.password).then(function() {
@@ -1597,7 +1596,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     }
   }
 
-  $rootScope.appVersion = "3.19.02.10.32ss";
+  $rootScope.appVersion = "3.33.09.00.29ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
@@ -3577,14 +3576,19 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
 
 
   $scope.registerNewUser = function(newLoginInfo, serverCode) {
+    if(!confirm("NOTICE: We do *NOT* recommend using LingSync for field methods next semester. \n\nFor more details see the FAQ.")) {
+      return;
+    }
+    newLoginInfo = newLoginInfo || {};
+
     if (!newLoginInfo.serverCode) {
       newLoginInfo.serverCode = serverCode;
     }
-    if (!newLoginInfo || !newLoginInfo.serverCode) {
-      $rootScope.notificationMessage = "Please select a server.";
-      $rootScope.openNotification();
-      return;
-    }
+    // if (!newLoginInfo || !newLoginInfo.serverCode) {
+    //   $rootScope.notificationMessage = "Please select a server.";
+    //   $rootScope.openNotification();
+    //   return;
+    // }
     if (!newLoginInfo.password || !newLoginInfo.confirmPassword) {
       $rootScope.notificationMessage = "Please enter a password.";
       $rootScope.openNotification();
@@ -3655,6 +3659,10 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     });
   };
   $scope.createNewCorpus = function(newCorpusInfo) {
+    if (!confirm("NOTICE: We do *NOT* recommend using LingSync for field methods next semester. \n\nFor more details see the FAQ.")) {
+      return;
+    }
+
     if (!newCorpusInfo) {
       $rootScope.notificationMessage = "Please enter a corpus name.";
       $rootScope.openNotification();

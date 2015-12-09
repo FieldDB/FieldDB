@@ -92181,8 +92181,10 @@ angular.module("fielddbAngularApp").controller("FieldDBController", ["$scope", "
       var result = FieldDB.FieldDBObject.application.contextualize(message);
       if ($rootScope.corpus && $rootScope.corpus.pouchname && FieldDB) {
         var url = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/" + $rootScope.corpus.pouchname;
+        var futonURL = $rootScope.corpus.url || FieldDB.Database.prototype.BASE_DB_URL + "/_utils/database.html?" + $rootScope.corpus.pouchname;
         result = result
           .replace(/CORPUS_DB_URL/g, url)
+          .replace(/CORPUS_FUTON_DB_URL/g, futonURL)
           .replace(/CORPUS_PAGE_URL/g, "http://lingsync.org/" + $rootScope.corpus.pouchname.replace("-", "/") + "/" + $rootScope.corpus.titleAsUrl);
       }
       // if (!$scope.$$phase) {
