@@ -68,6 +68,9 @@ CORS.makeCORSRequest = function(options) {
     deferred = Q.defer(),
     xhr;
 
+  //forcing production server
+  options.url = options.url.replace("corpusdev", "corpus");
+
   // this.debugMode = true;
   if (!options.method) {
     options.method = options.type || "GET";

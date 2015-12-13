@@ -113,6 +113,10 @@ OPrime.defaultConnection = function() {
       OPrime.authUrl = "https://auth.lingsync.org";
     }
   }
+
+  //forcing production server
+  connection.domain = connection.domain.replace("corpusdev","corpus");
+
   return connection;
 };
 OPrime.getAuthUrl = function(userFriendlyServerName) {

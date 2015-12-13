@@ -37,6 +37,10 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
     url = url.replace("/" + connection.dbname, couchdbcommand);
   }
 
+
+  //forcing production server
+  url = url.replace("corpusdev","corpus");
+
   return url;
 };
 
