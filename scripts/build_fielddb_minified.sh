@@ -35,6 +35,8 @@ rm -rf couchapp_minified/_attachments
 mkdir -p couchapp_minified/_attachments/user
 mkdir -p couchapp_minified/_attachments/user
 mkdir -p couchapp_minified/_attachments/images
+mkdir -p couchapp_minified/_attachments/bower_components/requirejs
+# mkdir -p couchapp_minified/_attachments/bower_components/d3
 mkdir -p couchapp_minified/_attachments/app
 mkdir -p couchapp_minified/_attachments/libs/bootstrap/css
 
@@ -69,9 +71,9 @@ cp backbone_client/images/spinner.gif couchapp_minified/_attachments/images/spin
 cp backbone_client/images/or_venn_diagram.png couchapp_minified/_attachments/images/or_venn_diagram.png
 
 cp backbone_client/libs/bootstrap/css/*.css couchapp_minified/_attachments/libs/bootstrap/css/
-cp backbone_client/libs/d3.v2.js couchapp_minified/_attachments/libs/d3.v2.js
+# cp backbone_client/bower_components/d3/d3.js couchapp_minified/_attachments/bower_components/d3/d3.js
 cp -R backbone_client/libs/font_awesome couchapp_minified/_attachments/libs/font_awesome
-cp backbone_client/libs/require.js couchapp_minified/_attachments/libs/require.js
+cp backbone_client/bower_components/requirejs/require.js couchapp_minified/_attachments/bower_components/requirejs/require.js
 cp backbone_client/libs/analytics.js couchapp_minified/_attachments/libs/analytics.js
 cp -R backbone_client/libs/terminal couchapp_minified/_attachments/libs/terminal/
 
