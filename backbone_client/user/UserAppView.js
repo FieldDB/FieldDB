@@ -49,6 +49,20 @@ define(
             initialize : function() {
               if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
+              FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
+                var deferred = FieldDB.Q.defer();
+                console.warn(message);
+                FieldDB.Q.nextTick(function(){
+                  // always reject until these merges make sense.
+                  deferred.reject({
+                    message: message,
+                    optionalLocale: optionalLocale,
+                    response: null
+                  });
+                });
+                return deferred.promise;
+              };
+
               this.setUpAndAssociateViewsAndModelsWithCurrentUser();
             },
 

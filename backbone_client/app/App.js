@@ -711,9 +711,9 @@ define([
                 oldConnection.domain  = "corpus.lingsync.org";
                 oldConnection.port = "";
               }
-              if(oldConnection.domain == "corpusdev.lingsync.org"){
-                oldConnection.domain  = "corpus.lingsync.org";
-              }
+              // if(oldConnection.domain == "corpusdev.lingsync.org"){
+              //   oldConnection.domain  = "corpus.lingsync.org";
+              // }
               corpusModel.set("connection", oldConnection);
             }
 
