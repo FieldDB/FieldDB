@@ -1097,7 +1097,6 @@ var MAINTAINENCE = {
       throw "You have to tell me the source and target";
     }
 
-
     var throttleReplications = 10000;
     var confirmContinueEveryXDbs = 30;
     var self = this;
@@ -1199,7 +1198,7 @@ var MAINTAINENCE = {
       } else {
 
         if (dbname.indexOf("-") === -1) {
-          // return turnOnReplicationAndLoop(dbnames);
+          return turnOnReplicationAndLoop(dbnames);
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
           return turnOnReplicationAndLoop(dbnames); //turn on continuous replication for only beta testers and/or phophlo users
