@@ -165,6 +165,26 @@ var PaginatedUpdatingCollectionView = Backbone.View.extend(
         $(viewToRemove.el).remove();
     },
 
+    removeIds : function(ids) {
+      if (!ids || !ids.length) {
+        return;
+      }
+
+      var self = this;
+      ids.map(function(id) {
+        var matchingView = _(self._childViews).select(function(cv) {
+          return cv.model.id === id;
+        });
+        if (matchingView && matchingView[0]) {
+          self._childViews = _(self._childViews).without(matchingView[0]);
+
+          if (self._rendered) {
+            $(matchingView[0].el).remove();
+          }
+        }
+      });
+    },
+
     render : function() {
       if (OPrime.debugMode) OPrime.debug("PAGINATED UPDATING COLLECTION render: " , this._childViews.length);
 
