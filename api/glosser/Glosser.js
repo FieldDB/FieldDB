@@ -794,7 +794,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
    */
   morphemeSegmentationKnowledgeBaseGraph: {
     get: function() {
-      if (this._morphemeSegmentationKnowledgeBaseGrapho) {
+      if (this._morphemeSegmentationKnowledgeBaseGraph) {
         return this._morphemeSegmentationKnowledgeBaseGraph;
       }
       if (!this.morphemeSegmentationKnowledgeBase) {
@@ -885,6 +885,10 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       if (!this.lexicon || !this.lexicon.length) {
         this.warn("Cannot visualize an empty lexicon.");
         return this;
+      }
+
+      if (!this.lexicon.connectedGraph && !this.lexicon.entryRelations){
+        this.lexicon.entryRelations = this.morphemeSegmentationKnowledgeBase;
       }
 
       this.lexicon.visualizeAsForceDirectedGraph(options);

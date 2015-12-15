@@ -1456,9 +1456,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.debug("Using divElement", divElement);
 
 
-      var width = divElement.clientWidth,
+      var width = divElement.clientWidth || 200,
         height = 300;
 
+      divElement.innerHTML = "";
 
       var tooltip;
       if (!self.localDOM) {

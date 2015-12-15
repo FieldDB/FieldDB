@@ -518,24 +518,35 @@ select,.like-form-inline
 }
 
 /* D3 force directed graph */
-circle
-.node {
+.corpus-precedence-rules-visualization circle.node {
 	stroke: #fff;
 	stroke-width: 1.5px;
 }
 
-line
-.link {
-	stroke: #999;
+.corpus-precedence-rules-visualization line.link {
 	stroke-opacity: .6;
+}
+
+.corpus-precedence-rules-visualization .link {
+	fill: none;
+	stroke: #666;
+	stroke-width: 1.5px;
 }
 
 .corpus-precedence-rules-visualization {
 	background-color: #333;
 	text-align: center;
+	width: 100%;
+	min-width: 10em;
+	color: #ccc;
 }
 
-.vis-title {
+.corpus-precedence-rules-visualization text {
+	fill: #ccc;
+	color: #ccc;
+}
+
+.corpus-precedence-rules-visualization .vis-title {
 	font-size: 2em;
 	color: #fff;
 }
@@ -1097,28 +1108,10 @@ spacer {
 	width: 100%;
 }
 
-/* D3 force directed graph */
-circle.node {
-	stroke: #fff;
-	stroke-width: 1.5px;
-}
-
-line.link {
-	stroke: #999;
-	stroke-opacity: .6;
-}
 .ungrammatical {
 	text-decoration: line-through;
 }
-.corpus-precedence-rules-visualization {
-	background-color: #333;
-	text-align: center;
-}
 
-.vis-title {
-	font-size: 2em;
-	color: #fff;
-}
 .input-right
 {
 	height: 3em;

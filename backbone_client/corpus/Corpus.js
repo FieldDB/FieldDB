@@ -1452,6 +1452,14 @@ define([
         url = OPrime.getCouchUrl(this.get("connection"));
       }
 
+      if (FieldDB.FieldDBObject &&
+        FieldDB.FieldDBObject.application &&
+        FieldDB.FieldDBObject.application.corpus &&
+        FieldDB.FieldDBObject.application.corpus.prefs &&
+        FieldDB.FieldDBObject.application.corpus.prefs.showGlosserAsMorphemicTemplate === undefined) {
+
+        FieldDB.FieldDBObject.application.corpus.prefs.showGlosserAsMorphemicTemplate = true;
+      }
       this.glosser = this.glosser || new FieldDB.Glosser({
         dbname: dbname,
         d3: d3

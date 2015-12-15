@@ -169,6 +169,8 @@ define([
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
+      var self = this;
+
       if (OPrime.debugMode) OPrime.debug("CORPUS READ render: ");
       if(window.appView.currentCorpusEditView){
         window.appView.currentCorpusEditView.destroy_view();
@@ -288,9 +290,11 @@ define([
 //        this.permissionsView.render();
 
         try {
-          this.model.glosser.render({
-            element: $(this.el).find(".corpus-precedence-rules-visualization")[0]
-          });
+          window.setTimeout(function() {
+            self.model.glosser.render({
+              element: $(self.el).find(".corpus-precedence-rules-visualization")[0]
+            });
+          }, 500);
         }catch(e){
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }

@@ -103,6 +103,8 @@ define([
      * Renders the SearchEditView.
      */
     render : function() {
+      var self = this;
+
       if (OPrime.debugMode) OPrime.debug("SEARCH render: " + this.el);
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
@@ -150,9 +152,11 @@ define([
 
 
       try {
-        window.app.get("corpus").glosser.render({
-          element: $(this.el).find(".corpus-precedence-rules-visualization")[0]
-        });
+        window.setTimeout(function() {
+          window.app.get("corpus").glosser.render({
+            element: $(self.el).find(".corpus-precedence-rules-visualization")[0]
+          });
+        }, 500);
       }catch(e){
         window.appView.toastUser("There was a problem loading your corpus visualization.");
       }
