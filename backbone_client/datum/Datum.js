@@ -236,6 +236,7 @@ define([
 
         OPrime.debug("Edit this function to update datum to the latest schema.");
         originalModel.fields = originalModel.datumFields || originalModel.fields || [];
+        delete originalModel.datumFields;
         var x;
         /* make sure the fields have a label */
         for (x in originalModel.fields) {
