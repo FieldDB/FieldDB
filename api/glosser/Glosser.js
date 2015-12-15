@@ -292,7 +292,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
           // Save the reduced precedence self.morphemeSegmentationKnowledgeBase in localStorage
           if (self.dbname) {
             try {
-              localStorage.setItem(this.dbname + "morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
+              localStorage.setItem(self.dbname + "morphemeSegmentationKnowledgeBase", JSON.stringify(self.morphemeSegmentationKnowledgeBase));
             } catch (error) {
               if (error.message === "localStorage is not defined") {
                 console.warn("cannot save precedence self.morphemeSegmentationKnowledgeBase for offline use");
