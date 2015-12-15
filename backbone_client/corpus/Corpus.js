@@ -1471,6 +1471,9 @@ define([
       // };
 
       var self = this;
+      this.glosser.application.basePathname = "#/";
+      this.glosser.application.currentCorpusDashboard = "corpus/" + this.get("dbname");
+      this.glosser.application.router = window.app.router;
       this.glosser.fetch().then(function() {
         console.log("Glosser is ready");
 
