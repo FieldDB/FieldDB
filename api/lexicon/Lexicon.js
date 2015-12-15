@@ -1291,6 +1291,14 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    */
   fetch: {
     value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (this.fetching && this.whenReady) {
+        this.warn("Fetching is in process, don't need to fetch right now...");
+        return this.whenReady;
+      }
+
       options = options || {};
 
       var url = "";
@@ -1309,10 +1317,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
       }
 
-      var deferred = Q.defer(),
-        self = this;
+      this.fetching = true;
+      this.whenReady = deferred.promise;
 
-      self.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         url: url

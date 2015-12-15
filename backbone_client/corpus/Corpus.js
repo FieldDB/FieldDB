@@ -1466,9 +1466,11 @@ define([
       this.glosser.fetch().then(function() {
         console.log("Glosser is ready");
 
-        if (!self.glosser.lexicon || !self.glosser.lexicon.length){
+        if (!self.glosser.lexicon) {
           self.glosser.lexicon = [];
           self.lexicon = self.glosser.lexicon;
+        }
+        if (!self.glosser.lexicon.length) {
           // If you dont need to look up the glosses
           // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
           // self.glosser.lexicon.updateConnectedGraph();
