@@ -175,7 +175,8 @@ function lexiconNodes(doc) {
   var extractLexicalEntries = function(doc) {
     if (!doc.session) {
       emit({
-        error: "non-datum"
+        error: "non-datum",
+        id: doc._id
       }, doc._id);
       return;
     }
