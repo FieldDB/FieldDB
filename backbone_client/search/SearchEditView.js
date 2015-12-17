@@ -354,6 +354,10 @@ define([
      * @param queryString {String} The string representing the query.
      */
     search : function(queryString, callback) {
+      if (queryString && typeof queryString.trim === "function") {
+        queryString = queryString.trim();
+      }
+
       this.model.saveKeyword(queryString);
       // Search for Datum that match the search criteria
       var searchself = this;

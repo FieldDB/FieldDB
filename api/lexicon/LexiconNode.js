@@ -19,10 +19,10 @@ var escapeRegexCharacters = function(regex) {
 /**
  * @class Lexicon Node is key value pair with an index of related datum. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
- * 
+ *
  * @description Lexicon Node is key value pair with an index of related datum. It allows the search to index
  *        the corpus to find datum, it is also used by the default glosser to guess glosses based on what the user inputs on line 1 (utterance/orthography).
- * 
+ *
  * @name  LexiconNode
  * @extends LanguageDatum
  * @constructs
@@ -106,14 +106,14 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
       if (this.morphemes) {
         constructHeadwordFromMorphemesAndGloss = this.morphemes;
       }
-      constructHeadwordFromMorphemesAndGloss += "|";
+      constructHeadwordFromMorphemesAndGloss += LexiconNode.HEADWORD_DELIMITER;
       // without this morphemes glossed as ? will be counted as another morpheme, if that morpheme has a gloss
       if (!this.gloss || this.gloss === "?" || this.gloss === "??") {
         // constructHeadwordFromMorphemesAndGloss += "?";
       } else if (this.gloss) {
         constructHeadwordFromMorphemesAndGloss += this.gloss;
       }
-      if (constructHeadwordFromMorphemesAndGloss && constructHeadwordFromMorphemesAndGloss !== "|") {
+      if (constructHeadwordFromMorphemesAndGloss && constructHeadwordFromMorphemesAndGloss !== LexiconNode.HEADWORD_DELIMITER) {
         return constructHeadwordFromMorphemesAndGloss;
       }
     },
@@ -474,6 +474,8 @@ LexiconNode.prototype = Object.create(BASE_LEXICON_NODE.prototype, /** @lends Le
     }
   }
 });
+
+LexiconNode.HEADWORD_DELIMITER = "|";
 
 LexiconNode.mergeContextsIntoContexts = function(value) {
   if (!value) {

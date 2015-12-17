@@ -35,6 +35,7 @@ define([
     routes : {
       "corpus/:dbname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:dbname/datum/:id"     : "showEmbeddedDatum", //dbname has to match the pouch of the datum
+      "corpus/:dbname/lexicon/:searchterm"        : "searchLexicon",//dbname has to match the pouch of the corpus
       "corpus/:dbname/search/:searchterm"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
       "corpus/:dbname/search"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
       "corpus/:dbname/alldata"       : "showAllData",//dbname has to match the pouch of the corpus
@@ -395,6 +396,28 @@ define([
       window.appView.searchEditView.format = "centreWell";
       window.appView.searchEditView.render();
       $("#search-embedded").show();
+    },
+
+    /**
+     * Displays the advanced search in embedded form.
+     */
+    searchLexicon : function(dbname, searchterm) {
+      if (!searchterm) {
+        return;
+      }
+      var pieces = searchterm.split(FieldDB.Lexicon.LexiconNode.HEADWORD_DELIMITER);
+      if (pieces && pieces.length) {
+        searchterm = "";
+        if (pieces[0]) {
+          searchterm += " morphemes:" + pieces[0];
+        }
+        if (pieces[1]) {
+          searchterm += " gloss:" + pieces[1];
+        }
+      }
+      if (searchterm) {
+        this.showEmbeddedSearch(dbname, searchterm);
+      }
     },
 
     /**
