@@ -1792,35 +1792,34 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         text.attr("transform", transform);
       };
 
-      var tickNear = function() {
-        path.attr("d", linkArc);
+      // var tickNear = function() {
+      //   path.attr("d", linkArc);
 
-        circle.attr("cx", function(d) {
-            if (d.morphemes === "_#") {
-              d.x = width - 20;
-              d.y = height / 2;
-            }
-            if (d.morphemes === "#_") {
-              d.x = 42;
-              d.y = height / 2;
-            }
-            return d.x;
-          })
-          .attr("cy", function(d) {
-            if (d.morphemes === "_#") {
-              d.x = width - 20;
-              d.y = height / 2;
-            }
-            if (d.morphemes === "#_") {
-              d.x = 42;
-              d.y = height / 2;
-            }
-            return d.y;
-          });
+      //   circle.attr("cx", function(d) {
+      //       if (d.morphemes === "_#") {
+      //         d.x = width - 20;
+      //         d.y = height / 2;
+      //       }
+      //       if (d.morphemes === "#_") {
+      //         d.x = 42;
+      //         d.y = height / 2;
+      //       }
+      //       return d.x;
+      //     })
+      //     .attr("cy", function(d) {
+      //       if (d.morphemes === "_#") {
+      //         d.x = width - 20;
+      //         d.y = height / 2;
+      //       }
+      //       if (d.morphemes === "#_") {
+      //         d.x = 42;
+      //         d.y = height / 2;
+      //       }
+      //       return d.y;
+      //     });
 
-        text.attr("transform", transform);
-      };
-
+      //   text.attr("transform", transform);
+      // };
 
       try {
         force
