@@ -1456,8 +1456,8 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.debug("Using divElement", divElement);
 
 
-      var width = divElement.clientWidth || 200,
-        height = 300;
+      var width = options.width || divElement.clientWidth || 200,
+        height = options.height || 350;
 
       divElement.innerHTML = "";
 
@@ -1490,11 +1490,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       var transform = function(d) {
         if (d.morphemes === "_#") {
-          d.x = width - 40;
+          d.x = width - 20;
           d.y = height / 2;
         }
         if (d.morphemes === "#_") {
-          d.x = 40;
+          d.x = 20;
           d.y = height / 2;
         }
         return "translate(" + d.x + "," + d.y + ")";
@@ -1539,11 +1539,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .nodes(this.d3.values(self.connectedGraph.nodes)) // can be an object
         .links(self.connectedGraph.links)
         .size([width, height])
-        .linkStrength(0.5)
-        .linkDistance(50)
-        .charge(-100);
+        // .linkStrength(0.5)
+        .linkDistance(30)
+        .friction(0.5)
+        .charge(-120);
 
 
+      // force.nodes().map(function(node){
+      //   node.x = width/2;
+      //   node.y = height/2;
+      // });
 
       this.connectedGraph.svg = self.localDOM.createElement("svg");
       if (typeof divElement.appendChild !== "function") {
@@ -1786,6 +1791,36 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         circle.attr("transform", transform);
         text.attr("transform", transform);
       };
+
+      var tickNear = function() {
+        path.attr("d", linkArc);
+
+        circle.attr("cx", function(d) {
+            if (d.morphemes === "_#") {
+              d.x = width - 20;
+              d.y = height / 2;
+            }
+            if (d.morphemes === "#_") {
+              d.x = 42;
+              d.y = height / 2;
+            }
+            return d.x;
+          })
+          .attr("cy", function(d) {
+            if (d.morphemes === "_#") {
+              d.x = width - 20;
+              d.y = height / 2;
+            }
+            if (d.morphemes === "#_") {
+              d.x = 42;
+              d.y = height / 2;
+            }
+            return d.y;
+          });
+
+        text.attr("transform", transform);
+      };
+
 
       try {
         force

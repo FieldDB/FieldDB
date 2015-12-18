@@ -154,7 +154,8 @@ define([
       try {
         window.setTimeout(function() {
           window.app.get("corpus").glosser.render({
-            element: $(self.el).find(".corpus-precedence-rules-visualization")[0]
+            element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+            height: 300
           });
         }, 500);
       }catch(e){
