@@ -547,7 +547,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       return this._entryRelations;
     },
     set: function(value) {
-      if (value.rows) {
+      if (!value) {
+        return;
+      }
+      if (value && value.rows) {
         value = value.rows;
       }
 
