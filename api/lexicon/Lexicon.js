@@ -353,7 +353,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
           try {
             window.currentlySelectedNode = e.target;
-            console.log(window.currentlySelectedNode.__data__);
+            console.log("window.currentlySelectedNode", window.currentlySelectedNode.__data__);
           } catch (e) {
             console.warn("Unable to make current node investigatable on the console.");
           }
@@ -1334,28 +1334,30 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.whenReady = deferred.promise;
 
       CORS.makeCORSRequest({
-        type: "GET",
-        url: url
-      }).then(function(results) {
-          if (results && results.rows && results.rows.length !== undefined) {
+          type: "GET",
+          url: url
+        })
+        .then(function(results) {
+            self.fetching = false;
+            if (!results || !results.rows || !results.rows.length) {
+              deferred.reject({
+                details: results,
+                userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
+              });
+              return;
+            }
             self.add(results.rows);
             deferred.resolve(self.collection);
-          } else {
-            deferred.reject({
-              details: results,
-              userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
-            });
-          }
+          },
+          function(reason) {
+            self.fetching = false;
+            deferred.reject(reason);
+          })
+        .fail(function(error) {
           self.fetching = false;
-        },
-        function(reason) {
-          self.fetching = false;
-          deferred.reject(reason);
-        }).fail(function(error) {
-        self.fetching = false;
-        console.error(error.stack, self);
-        deferred.reject(error);
-      });
+          console.error(error.stack, self);
+          deferred.reject(error);
+        });
 
       return deferred.promise;
     }
@@ -1909,6 +1911,7 @@ var LexiconFactory = function(options) {
   return lex;
 };
 
+Lexicon.CORS = CORS;
 Lexicon.bootstrapLexicon = Lexicon.lexicon_nodes_mapReduce;
 Lexicon.LexiconNode = LexiconNode;
 Lexicon.Contexts = Contexts;

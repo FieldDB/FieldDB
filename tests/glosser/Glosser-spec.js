@@ -1,3 +1,5 @@
+/* globals document */
+"use strict";
 var Glosser = require("../../api/glosser/Glosser").Glosser;
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
@@ -5,7 +7,7 @@ var SAMPLE_SEGMENTATION_V3 = SAMPLE_LEXICONS[3];
 var optionalD3;
 var virtualDOM;
 var virtualElement;
-var specIsRunningTooLong = 5000;
+var specIsRunningTooLong = 1000;
 
 try {
 	optionalD3 = require("d3");
@@ -14,10 +16,23 @@ try {
 }
 
 try {
-	virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
-	virtualElement = virtualDOM.body;
+	// If in a browser
+	virtualDOM = document;
+	console.log("Testing in a browser");
 } catch (e) {
-	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom` ", e.stack);
+	// Use node cors to fetch lexicon
+	var CORS = require("../../api/CORSNode").CORS;
+	Glosser.Lexicon.CORS = CORS;
+
+	try {
+		// In node, with jsdom
+		virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+		virtualElement = virtualDOM.body;
+		console.log("Testing in node using jsdom");
+	} catch (e) {
+		// In node, without jsdom render wont be tested
+		console.log("If you want to run the tests for render of the Lexicon, run `npm install node-jsdom` ");
+	}
 }
 
 var mockCorpus = {
@@ -43,7 +58,7 @@ var expectedErrors = function(reason) {
 	}
 };
 
-describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
+describe("Glosser", function() {
 	var tinyLexicon = {
 		corpus: mockCorpus,
 		collection: [{
@@ -559,7 +574,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		if (optionalD3) {
 			it("should accept an element", function() {
-				expect(virtualElement).toBeDefined();
+				var element = virtualElement;
+				try {
+					element = document.getElementById("glosser-0");
+					if (!element) {
+						element = virtualElement;
+					}
+				} catch (e) {}
+				expect(element).toBeDefined();
 			});
 
 			it("should be able to use an injected d3 if a lexicon with entryRelations is defined", function() {
@@ -579,8 +601,16 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(glosser.lexicon.entryRelations[0]).toEqual(tinyPrecedenceRelationsFromCouchDBMapReduce[0]);
 				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
+				var element = virtualElement;
+				try {
+					element = document.getElementById("glosser-0");
+					if (!element) {
+						element = virtualElement;
+					}
+				} catch (e) {}
+
 				expect(glosser.render({
-					element: virtualElement
+					element: element
 				})).toEqual(glosser);
 				if (glosser.warnMessage) {
 					expect(glosser.warnMessage).not.toContain("d3");

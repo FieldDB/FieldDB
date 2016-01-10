@@ -30,6 +30,10 @@ try {
   virtualDOM = document;
   console.log("Testing in a browser");
 } catch (e) {
+  // Use node cors to fetch lexicon
+  var CORS = require("../../api/CORSNode").CORS;
+  Lexicon.CORS = CORS;
+
   try {
     // In node, with jsdom
     virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
@@ -53,6 +57,13 @@ var mockCorpus = {
   url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
   prefs: {
     maxLexiconSize: 400
+  },
+  login: function(options) {
+    return Lexicon.CORS.makeCORSRequest({
+      url: "http://localhost:5984/_session",
+      method: "POST",
+      data: options
+    });
   }
 };
 var tinyPrecedenceRelations = [{
@@ -752,36 +763,46 @@ describe("Lexicon", function() {
       });
       expect(lexicon).toBeDefined();
       expect(lexicon.corpus.dbname).toEqual("jenkins-firstcorpus");
+      lexicon.corpus.login({
+        name: "jenkins",
+        password: "phoneme"
+      }).then(function() {
 
-      lexicon.fetch().then(function(results) {
-        expect(results).toBe(lexicon.collection);
-        expect(lexicon.length).toBeGreaterThan(0);
-        expect(lexicon.length).toEqual(14);
-        expect(lexicon.collection.map(function(entry) {
-          return entry.id;
-        })).toEqual(["eight|", "eleven|", "five|", "four|", "fourteen|", "nine|", "one|", "seven|", "six|", "ten|", "thirteen|", "three|", "twelve|", "two|"]);
+        lexicon.fetch().then(function(results) {
+          expect(results).toBe(lexicon.collection);
+          expect(lexicon.length).toBeGreaterThan(0);
+          expect(lexicon.length).toEqual(14);
+          expect(lexicon.collection.map(function(entry) {
+            return entry.id;
+          })).toEqual(["eight|", "eleven|", "five|", "four|", "fourteen|", "nine|", "one|", "seven|", "six|", "ten|", "thirteen|", "three|", "twelve|", "two|"]);
+
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.userFriendlyErrors).toBeDefined();
+          expect(reason.details).toBeDefined();
+
+          if (reason.status === 620) {
+            console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+            expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+          } else if (reason.status === 401) {
+            expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
+          } else {
+            expect(reason).toEqual("should not get here");
+          }
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toEqual(" unexpected exception while processing rules");
+        }).done(done);
 
       }, function(reason) {
-        expect(reason).toBeDefined();
-        expect(reason.userFriendlyErrors).toBeDefined();
-        expect(reason.details).toBeDefined();
-
-        if (reason.status === 620) {
-          console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-          expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
-        } else if (reason.status === 401) {
-          expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
-        } else {
-          expect(reason).toEqual("should not get here");
-        }
-
+        expect(reason).toEqual(" unexpected reason while processing rules", reason);
+        done();
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" unexpected exception while processing rules");
-      }).done(done);
-
+        done();
+      });
     }, specIsRunningTooLong);
-
   });
 
   describe("connected graph", function() {
