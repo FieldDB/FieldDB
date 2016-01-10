@@ -1,13 +1,23 @@
-/* globals window, localStorage, d3, document */
+/* globals window, localStorage, d3, document, FieldDB */
+"use strict";
 
+var Bindings;
 try {
-  var ObservableDOM = require("frb/dom"); // add support for content editable
-  console.log("content editable is defined", ObservableDOM);
+  // var ObservableDOM = require("frb/dom"); // add support for content editable
+  // console.log("content editable is defined", ObservableDOM);
+  // var Bindings = require("frb/bindings");
+  Bindings = FieldDB.Bindings;
 } catch (e) {
-  console.warn("Warning contentEditable binding in the lexicon won't work because the document is probably not defined.");
+  Bindings = {
+    defineBindings: function(component, bindings) {
+      if (false) {
+        console.log("Binding should be injected as FieldDB.Bindings to have two-way binding in a user interface", component, bindings);
+      }
+    }
+  };
+  console.warn("Warning two-way editable binding in the lexicon won't work because the bindings weren't injected.");
 }
 
-var Bindings = require("frb/bindings");
 var Collection = require("../Collection").Collection;
 var CORS = require("../CORS").CORS;
 // var CORS = require("../CORSNode").CORS;
@@ -1254,7 +1264,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (relationsIndex[attrib] || (attrib === "links" && relationsIndex["all"])) {
           relationsIndex[attrib].count = self.connectedGraph[attrib].length;
         } else {
-          this.availableLexicalRelations.add({
+          this.availableLexicalRelations.push({
             icon: "<i class=\"fa fa-link\"></i>",
             name: attrib,
             maker: ": Other",
@@ -1462,7 +1472,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var width = options.width || divElement.clientWidth || 200,
         height = options.height || 350;
 
-      divElement.innerHTML = "";
+      if (prefs.clear) {
+        if (this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
+          this.connectedGraph.svg[0][0].innerHTML = "";
+        }
+      } else {
+        if (this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
+          this.debug("Not re-rendering the lexicon connected graph.");
+          return self;
+        }
+      }
 
       var tooltip;
       if (!self.localDOM) {
