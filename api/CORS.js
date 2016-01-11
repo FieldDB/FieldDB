@@ -1,10 +1,27 @@
-/* globals window, XDomainRequest, XMLHttpRequest, FormData */
+/* globals window, XDomainRequest, XMLHttpRequest, FormData, FieldDB, document */
 
-var Q = require("q");
+var Q;
+
+try {
+  Q = document.Q || FieldDB.Q;
+  if (!Q) {
+    Q = require("Q");
+  }
+} catch (exception) {}
 
 var CORS = {
+  OFFLINE: {
+    CODE: 600,
+    MESSAGE: "Unable to contact the server, you appear to be offline."
+  },
+  INTERNAL_SERVER_ERROR: {
+    CODE: 500
+  },
+  CLIENT_ERROR: {
+    CODE: 400
+  },
   fieldDBtype: "CORS",
-  debugMode: false,
+  debugMode: true,
   debug: function(a, b, c) {
     if (this.debugMode) {
       console.log(a, b, c);
@@ -24,6 +41,17 @@ var CORS = {
   },
   render: function() {
     this.debug("Render requested but this object has no render defined.");
+  },
+  preprocess: function(options) {
+    this.debug("preprocess", options);
+  },
+  handleResponse: function(options, deferred) {
+    this.debug("handleResponse", options);
+    // deferred.resolve(options);
+  },
+  handleError: function(options, deferred) {
+    this.debug("handleError", options);
+    // deferred.reject({});
   }
 };
 
@@ -68,8 +96,10 @@ CORS.makeCORSRequest = function(options) {
     deferred = Q.defer(),
     xhr;
 
+  this.preprocess(options, deferred);
+
   //forcing production server
-  options.url = options.url.replace("corpusdev", "corpus");
+  // options.url = options.url.replace("corpusdev", "corpus");
 
   // this.debugMode = true;
   if (!options.method) {
@@ -134,6 +164,8 @@ CORS.makeCORSRequest = function(options) {
   xhr.addEventListener("progress", onProgress, false);
 
   xhr.onload = function(e, f, g) {
+    self.handleResponse(options, deferred);
+
     var response = xhr.responseJSON || xhr.responseText || xhr.response;
     self.debug("Response from CORS request to " + options.url + ": " + response);
     if (xhr.status >= 400) {
@@ -192,10 +224,12 @@ CORS.makeCORSRequest = function(options) {
     // self.debugMode = false;
   };
 
-  xhr.onerror = function(e, f, g) {
-    self.debug(e, f, g);
+  xhr.onerror = function(e) {
+    self.handleError(options, deferred);
+
+    self.debug(e);
     var returnObject = {
-      userFriendlyErrors: ["There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this."],
+      userFriendlyErrors: ["There was an error contacting " + options.url + " from " + window.location.href + " the app will not function normally. Please report this."],
       status: xhr.status,
       error: e
     };
@@ -209,8 +243,8 @@ CORS.makeCORSRequest = function(options) {
       returnObject.status = e.srcElement.status;
     }
     if (window && window.navigator && !window.navigator.onLine) {
-      returnObject.userFriendlyErrors = ["Unable to contact the server, you appear to be offline."];
-      returnObject.status = 600;
+      returnObject.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
+      returnObject.status = CORS.OFFLINE.CODE;
     } else {
       returnObject.status = 610;
     }
@@ -234,4 +268,6 @@ CORS.makeCORSRequest = function(options) {
   return deferred.promise;
 };
 
-exports.CORS = CORS;
+try {
+  exports.CORS = CORS;
+} catch (e) {}

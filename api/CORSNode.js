@@ -3,10 +3,7 @@ var http = require("http");
 var https = require("https");
 var url = require("url");
 
-var CORS = CORS || {};
-CORS.bug = function(message) {
-  console.log(message);
-};
+var CORS = require("./CORS").CORS;
 
 CORS.makeCORSRequest = function(options) {
   var deferred = Q.defer();
