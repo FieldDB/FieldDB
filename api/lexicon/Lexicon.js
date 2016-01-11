@@ -1333,7 +1333,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.fetching = true;
       this.whenReady = deferred.promise;
 
-      CORS.makeCORSRequest({
+      Lexicon.CORS.makeCORSRequest({
           type: "GET",
           url: url
         })
