@@ -1246,12 +1246,12 @@ describe("Lexicon", function() {
         lexicon.d3 = optionalD3;
         lexicon.localDOM = virtualDOM;
         lexicon.warnMessage = "";
-        expect(lexicon.render({
-          lexicalEntriesElement: element
-        })).toBe(lexicon);
-
         expect(lexicon.visualizeAsForceDirectedGraph({
           element: element
+        })).toBe(lexicon);
+
+        expect(lexicon.render({
+          lexicalEntriesElement: element
         })).toBe(lexicon);
 
         expect(element.children).toBeDefined();
