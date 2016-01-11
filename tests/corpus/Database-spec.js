@@ -1,5 +1,6 @@
-"use strict";
 /* globals localStorage */
+"use strict";
+
 var Database;
 try {
   /* globals FieldDB */
@@ -8,6 +9,8 @@ try {
   }
 } catch (e) {
   Database = require("./../../api/corpus/Database").Database;
+  var CORS = require("../../api/CORSNode").CORS;
+  Database.CORS = CORS;
   Database.URLParser = require("url");
 }
 
