@@ -143,7 +143,7 @@ describe("CORS", function() {
       }).then(function(results) {
         expect(results.ok).toEqual(true);
       }, function(reason) {
-        expect(reason).toEqual();
+        expect(reason).toEqual("unexpected error while testing");
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual("unexpected exception while testing");
@@ -158,7 +158,7 @@ describe("CORS", function() {
         expect(results.userCtx.name).toEqual(null);
         expect(results.userCtx.roles).toEqual([]);
       }, function(reason) {
-        expect(reason).toEqual();
+        expect(reason).toEqual("unexpected error while testing");
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual("unexpected exception while testing");
@@ -204,7 +204,7 @@ describe("CORS", function() {
         url: "https://speech.lingsync.org/utterances/community-georgian/orive_gi%C9%A3deba/orive_gi%C9%A3deba.png",
       };
       CORS.makeCORSRequest(options).then(function(results) {
-        expect(results).toContain(" ");
+        expect(results.length).toEqual(142838);
       }, function(reason) {
         expect(reason).toEqual("unexpected error");
       }).fail(function(exception) {

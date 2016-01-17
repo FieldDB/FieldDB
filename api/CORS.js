@@ -35,7 +35,7 @@ var CORS = {
   },
   fieldDBtype: "CORS",
   timeout: 30 * 1000,
-  debugMode: true,
+  debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {
       console.log(a, b, c);
@@ -78,7 +78,7 @@ var CORS = {
       status,
       attr;
 
-    this.debug("handleResponse", options);
+    // this.debug("handleResponse", options);
 
     var response = options.xhr.responseJSON || options.xhr.responseText || options.xhr.response;
     // this.debug("Response from CORS request to " + options.url + ": " + response);
@@ -123,7 +123,7 @@ var CORS = {
   handleError: function(options, err, deferred) {
     var response;
 
-    this.warn("The request to " + options.url + " was unsuccesful ");
+    // this.warn("The request to " + options.url + " was unsuccesful ");
     this.debug(err.stack);
 
     response = {
@@ -144,12 +144,14 @@ var CORS = {
       }
     }
 
-    if (window && window.navigator && !window.navigator.onLine) {
-      response.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
-      response.status = CORS.OFFLINE.CODE;
-    } else if (err && err.srcElement && err.srcElement.status !== undefined) {
-      response.status = err.srcElement.status;
-    }
+    try {
+      if (window && window.navigator && !window.navigator.onLine) {
+        response.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
+        response.status = CORS.OFFLINE.CODE;
+      } else if (err && err.srcElement && err.srcElement.status !== undefined) {
+        response.status = err.srcElement.status;
+      }
+    } catch (e) {}
 
     response.userFriendlyErrors[0] = response.userFriendlyErrors[0].replace("URL", options.url);
     this.bug(response.userFriendlyErrors.join(" "));
@@ -162,21 +164,21 @@ var CORS = {
   },
   ontimeout: function(options, evt, deferred) {
     var err = new Error(this.CLIENT_TIMEOUT.MESSAGE);
-    this.warn("The request to " + options.url + " timed out.", evt);
+    this.debug("The request to " + options.url + " timed out.", evt);
 
     err.status = this.CLIENT_TIMEOUT.CODE;
     this.handleError(options, err, deferred);
   },
   onabort: function(options, evt, deferred) {
     var err = new Error(this.CONNECTION_ABORTED.MESSAGE);
-    this.warn("The request to " + options.url + " was aborted.", evt);
+    this.debug("The request to " + options.url + " was aborted.", evt);
 
     err.status = this.CONNECTION_ABORTED.CODE;
     this.handleError(options, err, deferred);
   },
   onerror: function(options, evt, deferred) {
     var err = new Error(this.CONNECTION_ERRORED.MESSAGE);
-    this.warn("The request to " + options.url + " errored.", evt);
+    this.debug("The request to " + options.url + " errored.", evt);
 
     err.status = options.xhr.status || this.CONNECTION_ERRORED.CODE;
     this.handleError(options, err, deferred);
@@ -201,7 +203,7 @@ var CORS = {
 /*
  * Helper function which handles IE
  */
-CORS.supportCORSandIE = function(options) {
+CORS.buildXhr = function(options, deferred) {
   var xhr;
   try {
     xhr = new XMLHttpRequest();
@@ -272,7 +274,7 @@ CORS.makeCORSRequest = function(options) {
   //forcing production server
   // options.url = options.url.replace("corpusdev", "corpus");
 
-  xhr = this.supportCORSandIE(options);
+  xhr = this.buildXhr(options);
   if (!xhr) {
     var message = this.error || "CORS not supported, your device will be unable to contact " + options.url;
     this.bug(message);

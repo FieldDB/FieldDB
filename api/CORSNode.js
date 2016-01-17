@@ -5,76 +5,111 @@ var url = require("url");
 
 var CORS = require("./CORS").CORS;
 
+/*
+ * Helper function which handles IE
+ */
+CORS.buildXhr = function() {};
+CORS.setHeader = function(xhr, key, value) {
+  xhr.setHeader(key, value);
+};
+
+/*
+ * Functions for well formed CORS requests
+ */
 CORS.makeCORSRequest = function(options) {
-  var deferred = Q.defer();
-  var data = options.data;
-  if (!options.method) {
-    options.method = options.type || "GET";
-  }
-  if (!options.url) {
-    CORS.bug("There was an error. Please report this.");
-  }
-  if (!data) {
-    data = "";
-  } else {
-    data = JSON.stringify(data);
-    console.log("data to send" + data);
+  var self = this,
+    deferred = Q.defer(),
+    data = "",
+    xhr;
+
+  if (!options || !options.url) {
+    Q.nextTick(function() {
+      deferred.reject({
+        status: 400,
+        details: options,
+        userFriendlyErrors: ["Url must be defined"]
+      });
+    });
+    return deferred.promise;
   }
 
+  this.preprocess(options, deferred);
+
+  //forcing production server
+  // options.url = options.url.replace("corpusdev", "corpus");
   var urlObject = url.parse(options.url);
-  if (options.dataType === "json") {
-    urlObject.headers = {
-      "content-type": "application/json",
-      "accept": "application/json"
-    };
-  }
-  urlObject.method = options.method;
 
   var httpOrHttps = http;
-  if (urlObject.protocol === "https://") {
+  if (urlObject.protocol === "https:") {
     httpOrHttps = https;
+    urlObject.port = urlObject.port || 443;
   }
   delete urlObject.protocol;
 
-  var req = httpOrHttps.request(urlObject, function(res) {
+  urlObject.method = options.method || "GET";
+  xhr = httpOrHttps.request(urlObject, function(res) {
     var output = "";
     res.setEncoding("utf8");
 
     res.on("data", function(chunk) {
       output += chunk;
+      self.onprogress.apply(self, [options, {
+        lengthComputable: true,
+        loaded: output.length - chunk.length,
+        total: output.length
+      }, deferred]);
     });
 
     res.on("end", function() {
-      var response;
-      // console.log("Server response ended." + output);
-      try {
-        response = JSON.parse(output);
-      } catch (e) {
-        console.log("Unexpected server response");
-        response = {
-          error: output
-        };
-        deferred.reject(response);
-        return;
-      }
-      console.log("Server response, " + response);
-      deferred.resolve(response);
+      xhr.responseText = output;
+      xhr.status = res.statusCode;
+      self.onload.apply(self, [options, {}, deferred]);
     });
   });
 
-  req.on("error", function(err) {
-    console.log("Error requesting " + JSON.stringify(urlObject));
-    console.log(err);
-    deferred.reject(err);
+  xhr.setHeader("Content-type", "application/json");
+
+  xhr.setTimeout(options.timeout || this.timeout);
+
+  // If it contains files, make it into a mulitpart upload
+  if (options && options.data && options.data.files) {
+    // console.log("converting to formdata ", options.data);
+
+    // data = new FormData();
+    // for (var part in options.data) {
+    //   if (options.data.hasOwnProperty(part)) {
+    //     data.append(part, options.data[part]);
+    //   }
+    // }
+    // data = data;
+    // xhr.setHeader("Content-Type", "multipart/form-data");
+  } else {
+    if (options.data) {
+      data = JSON.stringify(options.data);
+    }
+  }
+
+  xhr.on("error", function(err) {
+    self.onerror.apply(self, [options, err, deferred]);
   });
 
-  if (data) {
-    console.log("sending data to http connection", data);
-    req.write(data, "utf8");
-    req.end();
-  } else {
-    console.log("sending no data to http connection");
-    req.end();
+  xhr.on("timeout", function(err) {
+    self.ontimeout.apply(self, [options, err, deferred]);
+  });
+
+  options.xhr = xhr;
+  try {
+    if (data) {
+      self.debug("sending ", data);
+      xhr.write(data);
+    } else {
+      xhr.write("");
+    }
+    xhr.end();
+  } catch (e) {
+    self.warn("Caught an exception when calling send on xhr", e.stack);
+    e.details = options;
+    deferred.reject(e);
   }
 
   return deferred.promise;
