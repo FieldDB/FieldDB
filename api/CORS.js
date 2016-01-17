@@ -1,18 +1,31 @@
 /* globals window, XDomainRequest, XMLHttpRequest, FormData, FieldDB, document */
-
+"use strict";
 var Q;
 
 try {
   Q = document.Q || FieldDB.Q;
+} catch (exception) {
   if (!Q) {
     Q = require("Q");
   }
-} catch (exception) {}
+}
 
 var CORS = {
   OFFLINE: {
     CODE: 600,
-    MESSAGE: "Unable to contact the server, you appear to be offline."
+    MESSAGE: "Unable to contact URL, you appear to be offline."
+  },
+  CLIENT_TIMEOUT: {
+    CODE: 500,
+    MESSAGE: "The request to URL timed out, please try again."
+  },
+  CONNECTION_ABORTED: {
+    CODE: 500,
+    MESSAGE: "The request to URL was aborted by the server, please report this."
+  },
+  CONNECTION_ERRORED: {
+    CODE: 500,
+    MESSAGE: "The request to URL errored, please report this."
   },
   INTERNAL_SERVER_ERROR: {
     CODE: 500
@@ -21,6 +34,7 @@ var CORS = {
     CODE: 400
   },
   fieldDBtype: "CORS",
+  timeout: 30 * 1000,
   debugMode: true,
   debug: function(a, b, c) {
     if (this.debugMode) {
@@ -44,48 +58,193 @@ var CORS = {
   },
   preprocess: function(options) {
     this.debug("preprocess", options);
+    // this.debugMode = true;
+    if (!options.method) {
+      options.method = options.type || "GET";
+    }
+    if (!options.url) {
+      this.bug("There was an error. Please report this.");
+    }
+    if (!options.data) {
+      options.data = "";
+    }
+    if (options.method === "GET" && options.data) {
+      options.dataToSend = JSON.stringify(options.data).replace(/,/g, "&").replace(/:/g, "=").replace(/"/g, "").replace(/[}{]/g, "");
+      options.url = options.url + "?" + options.dataToSend;
+    }
   },
   handleResponse: function(options, deferred) {
+    var err,
+      status,
+      attr;
+
     this.debug("handleResponse", options);
-    // deferred.resolve(options);
+
+    var response = options.xhr.responseJSON || options.xhr.responseText || options.xhr.response;
+    // this.debug("Response from CORS request to " + options.url + ": " + response);
+
+    try {
+      response = JSON.parse(response);
+    } catch (e) {}
+    if (!response) {
+      response = {};
+    }
+    if (response.reason) {
+      response.message = response.reason;
+      delete response.reason;
+    }
+    status = response.status || options.xhr.status;
+
+    if (status < 400) {
+      if (typeof response === "object") {
+        response.status = status;
+      }
+      deferred.resolve(response);
+      return;
+    }
+
+    if (typeof response !== "object") {
+      response = {
+        message: response
+      };
+    }
+
+    err = new Error(response.userFriendlyErrors ? response.userFriendlyErrors[0] : response.message);
+    for (attr in response) {
+      if (response.hasOwnProperty(attr)) {
+        err[attr] = response[attr];
+      }
+    }
+    err.status = status;
+
+    delete options.xhr;
+    this.handleError(options, err, deferred);
   },
-  handleError: function(options, deferred) {
-    this.debug("handleError", options);
-    // deferred.reject({});
+  handleError: function(options, err, deferred) {
+    var response;
+
+    this.warn("The request to " + options.url + " was unsuccesful ");
+    this.debug(err.stack);
+
+    response = {
+      userFriendlyErrors: err.userFriendlyErrors || [err.message || "There was an error contacting URL from " + window.location.href + " the app will not function normally. Please report this."],
+      status: err.status || 610,
+      error: err
+    };
+
+    if (response.userFriendlyErrors[0] === "missing") {
+      response.userFriendlyErrors = ["The server replied that " + options.url + " is missing, please report this."];
+    } else if (response.userFriendlyErrors[0] === "no_db_file") {
+      response.userFriendlyErrors = ["That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url];
+    }
+
+    if (response.status === 401) {
+      if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
+        CORS.application.authentication.dispatchEvent("unauthorized");
+      }
+    }
+
+    if (window && window.navigator && !window.navigator.onLine) {
+      response.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
+      response.status = CORS.OFFLINE.CODE;
+    } else if (err && err.srcElement && err.srcElement.status !== undefined) {
+      response.status = err.srcElement.status;
+    }
+
+    response.userFriendlyErrors[0] = response.userFriendlyErrors[0].replace("URL", options.url);
+    this.bug(response.userFriendlyErrors.join(" "));
+
+    response.details = options;
+    deferred.reject(response);
+  },
+  setHeader: function(xhr, key, value) {
+    xhr.setRequestHeader(key, value);
+  },
+  ontimeout: function(options, evt, deferred) {
+    var err = new Error(this.CLIENT_TIMEOUT.MESSAGE);
+    this.warn("The request to " + options.url + " timed out.", evt);
+
+    err.status = this.CLIENT_TIMEOUT.CODE;
+    this.handleError(options, err, deferred);
+  },
+  onabort: function(options, evt, deferred) {
+    var err = new Error(this.CONNECTION_ABORTED.MESSAGE);
+    this.warn("The request to " + options.url + " was aborted.", evt);
+
+    err.status = this.CONNECTION_ABORTED.CODE;
+    this.handleError(options, err, deferred);
+  },
+  onerror: function(options, evt, deferred) {
+    var err = new Error(this.CONNECTION_ERRORED.MESSAGE);
+    this.warn("The request to " + options.url + " errored.", evt);
+
+    err.status = options.xhr.status || this.CONNECTION_ERRORED.CODE;
+    this.handleError(options, err, deferred);
+  },
+  onload: function(options, evt, deferred) {
+    this.handleResponse(options, deferred);
+  },
+  onprogress: function(options, evt, deferred) {
+    if (evt.lengthComputable) {
+      var percentComplete = (evt.loaded / evt.total) * 100;
+      console.log("percentComplete", percentComplete);
+    }
+    if (options.onprogress && typeof options.onprogress === "function") {
+      options.onprogress(evt);
+    }
+    if (deferred && deferred.progress) {
+      deferred.progress(evt);
+    }
   }
 };
 
 /*
  * Helper function which handles IE
  */
-CORS.supportCORSandIE = function(method, url) {
-  var xhrCors;
+CORS.supportCORSandIE = function(options) {
+  var xhr;
   try {
-    xhrCors = new XMLHttpRequest();
+    xhr = new XMLHttpRequest();
   } catch (e) {
     this.warn("XMLHttpRequest is not defined, nothing will happen.", e);
     return null;
   }
-  if ("withCredentials" in xhrCors) {
+  if ("withCredentials" in xhr) {
     // XHR for Chrome/Firefox/Opera/Safari.
     try {
-      xhrCors.open(method, url, true);
+      xhr.open(options.method, options.url, true);
     } catch (exception) {
       console.log(exception);
       this.error = exception.message;
       return null;
     }
     // https://mathiasbynens.be/notes/xhr-responsetype-json
-    // xhrCors.responseType = "json";
+    // xhr.responseType = "json";
   } else if (typeof XDomainRequest !== "undefined") {
     // XDomainRequest for IE.
-    xhrCors = new XDomainRequest();
-    xhrCors.open(method, url);
+    xhr = new XDomainRequest();
+    xhr.open(options.method, options.url);
   } else {
     // CORS not supported.
-    xhrCors = null;
+    xhr = null;
   }
-  return xhrCors;
+
+  if (!xhr) {
+    return;
+  }
+
+  this.setHeader(xhr, "Content-type", "application/json");
+  if (options.withCredentials !== false) {
+    xhr.withCredentials = true;
+    // Dont use CORS if its a file
+    if (options.url.lastIndexOf(".") > options.url.lastIndexOf("/") && options.url.substring(options.url.lastIndexOf(".")).indexOf("htm") !== 0) {
+      xhr.withCredentials = false;
+    }
+  }
+
+  xhr.timeout = options.timeout || this.timeout;
+
+  return xhr;
 };
 
 /*
@@ -94,31 +253,28 @@ CORS.supportCORSandIE = function(method, url) {
 CORS.makeCORSRequest = function(options) {
   var self = this,
     deferred = Q.defer(),
+    data,
     xhr;
+
+  if (!options || !options.url) {
+    Q.nextTick(function() {
+      deferred.reject({
+        status: 400,
+        details: options,
+        userFriendlyErrors: ["Url must be defined"]
+      });
+    });
+    return deferred.promise;
+  }
 
   this.preprocess(options, deferred);
 
   //forcing production server
   // options.url = options.url.replace("corpusdev", "corpus");
 
-  // this.debugMode = true;
-  if (!options.method) {
-    options.method = options.type || "GET";
-  }
-  if (!options.url) {
-    this.bug("There was an error. Please report this.");
-  }
-  if (!options.data) {
-    options.data = "";
-  }
-  if (options.method === "GET" && options.data) {
-    options.dataToSend = JSON.stringify(options.data).replace(/,/g, "&").replace(/:/g, "=").replace(/"/g, "").replace(/[}{]/g, "");
-    options.url = options.url + "?" + options.dataToSend;
-  }
-
-  xhr = this.supportCORSandIE(options.method, options.url);
+  xhr = this.supportCORSandIE(options);
   if (!xhr) {
-    var message = this.error || "CORS not supported, your browser will be unable to contact the database: " + options.url;
+    var message = this.error || "CORS not supported, your device will be unable to contact " + options.url;
     this.bug(message);
     Q.nextTick(function() {
       deferred.reject({
@@ -130,132 +286,45 @@ CORS.makeCORSRequest = function(options) {
     return deferred.promise;
   }
 
-  //  if(options.method === "POST"){
-  //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-  xhr.setRequestHeader("Content-type", "application/json");
-  if (options.withCredentials !== false) {
-    xhr.withCredentials = true;
-  }
-
   // If it contains files, make it into a mulitpart upload
   if (options && options.data && options.data.files) {
     console.log("converting to formdata ", options.data);
 
-    var data = new FormData();
+    data = new FormData();
     for (var part in options.data) {
       if (options.data.hasOwnProperty(part)) {
         data.append(part, options.data[part]);
       }
     }
-    options.data = data;
-    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    data = data;
+    this.setHeader(xhr, "Content-Type", "multipart/form-data");
   } else {
     if (options.data) {
-      options.data = JSON.stringify(options.data);
+      data = JSON.stringify(options.data);
     }
   }
-  //  }
-  var onProgress = function(e) {
-    if (e.lengthComputable) {
-      var percentComplete = (e.loaded / e.total) * 100;
-      console.log("percentComplete", percentComplete);
-    }
+
+  xhr.onprogress = function(evt) {
+    self.onprogress(options, evt, deferred);
   };
-  xhr.addEventListener("progress", onProgress, false);
-
-  xhr.onload = function(e, f, g) {
-    self.handleResponse(options, deferred);
-
-    var response = xhr.responseJSON || xhr.responseText || xhr.response;
-    self.debug("Response from CORS request to " + options.url + ": " + response);
-    if (xhr.status >= 400) {
-      self.warn("The request to " + options.url + " was unsuccesful " + xhr.statusText);
-      try {
-        response = JSON.parse(response);
-      } catch (e) {
-        if (e && e.message === "Unexpected token o") {
-          self.debug("response was json", e);
-        } else {
-          response = {
-            userFriendlyErrors: xhr.statusText,
-            error: response
-          };
-          if (xhr.status >= 500) {
-            self.bug("There was a serious error on the server. It replied in plain text.", response);
-            response.userFriendlyErrors = ["There was a problem contacting the server, please report this 2382"];
-          }
-          response.status = xhr.status;
-        }
-      }
-      response.status = response.status || xhr.status;
-      if (response.reason && !response.userFriendlyErrors) {
-        response.userFriendlyErrors = [response.reason];
-      }
-      if (response.userFriendlyErrors[0] === "missing") {
-        response.userFriendlyErrors = ["The server replied that " + options.url + " is missing, please report this."];
-      }
-      response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
-      if (xhr.status === 401) {
-        if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
-          CORS.application.authentication.dispatchEvent("unauthorized");
-        }
-      }
-      if (response.userFriendlyErrors[0] === "no_db_file") {
-        response.userFriendlyErrors = ["That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url];
-      }
-      response.details = options;
-      deferred.reject(response);
-      return;
-    }
-    if (response) {
-      try {
-        response = JSON.parse(response);
-      } catch (e) {
-        self.debug("Response was already json.", e);
-      }
-      deferred.resolve(response);
-    } else {
-      self.bug("There was no content in the server's response text. Please report this.");
-      self.warn(e, f, g);
-      e.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
-      e.details = options;
-      deferred.reject(e);
-    }
-    // self.debugMode = false;
+  xhr.onload = function(evt) {
+    self.onload(options, evt, deferred);
+  };
+  xhr.onerror = function(evt) {
+    self.onerror(options, evt, deferred);
+  };
+  xhr.onabort = function(evt) {
+    self.onabort(options, evt, deferred);
+  };
+  xhr.ontimeout = function(evt) {
+    self.ontimeout(options, evt, deferred);
   };
 
-  xhr.onerror = function(e) {
-    self.handleError(options, deferred);
-
-    self.debug(e);
-    var returnObject = {
-      userFriendlyErrors: ["There was an error contacting " + options.url + " from " + window.location.href + " the app will not function normally. Please report this."],
-      status: xhr.status,
-      error: e
-    };
-    if (e && e.userFriendlyErrors) {
-      returnObject.userFriendlyErrors = e.userFriendlyErrors;
-    }
-    if (e && e.status) {
-      returnObject.status = e.status;
-    }
-    if (e && e.srcElement && e.srcElement.status !== undefined) {
-      returnObject.status = e.srcElement.status;
-    }
-    if (window && window.navigator && !window.navigator.onLine) {
-      returnObject.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
-      returnObject.status = CORS.OFFLINE.CODE;
-    } else {
-      returnObject.status = 610;
-    }
-    self.bug(returnObject.userFriendlyErrors.join(" "));
-    returnObject.details = options;
-    deferred.reject(returnObject);
-  };
+  options.xhr = xhr;
   try {
-    if (options.data) {
-      self.debug("sending ", options.data);
-      xhr.send(options.data);
+    if (data) {
+      self.debug("sending ", data);
+      xhr.send(data);
     } else {
       xhr.send();
     }

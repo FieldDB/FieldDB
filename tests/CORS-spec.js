@@ -12,7 +12,8 @@ try {
   } catch (e) {}
 }
 
-var specIsRunningTooLong = 5000;
+var specIsRunningTooLong = 20000;
+jasmine.getEnv().defaultTimeoutInterval = specIsRunningTooLong;
 
 describe("CORS", function() {
 
@@ -22,7 +23,17 @@ describe("CORS", function() {
     });
   });
 
-  xdescribe("errors", function() {
+  describe("errors", function() {
+    it("should not run if url is missing", function(done) {
+      CORS.makeCORSRequest().then(function(results) {
+        expect("should not have succeeded if url is missing").toBeUndefined();
+      }, function(reason) {
+        expect(reason.userFriendlyErrors[0]).toEqual("Url must be defined");
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception while testing");
+      }).done(done);
+    }, specIsRunningTooLong);
 
     it("should know if the user is offline", function(done) {
       var options = {
@@ -35,8 +46,8 @@ describe("CORS", function() {
         expect(results.vendor.name).toEqual("Homebrew");
       }, function(reason) {
         expect(reason.status).toEqual(600);
-        expect(reason.details.url).toEqual(options.url);
         expect(reason.userFriendlyErrors).toEqual(["Unable to contact the server, you appear to be offline."]);
+        expect(reason.details.url).toEqual(options.url);
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual("unexpected exception while testing");
@@ -52,10 +63,11 @@ describe("CORS", function() {
         }
       };
       CORS.makeCORSRequest(options).then(function(results) {
-        expect("successfully contacted http://localhost:3111").toBeUndefined();
+        expect("should not be able to contact http://localhost:3111").toBeUndefined();
         expect(results).toBeUndefined();
       }, function(reason) {
-        expect(reason.status).toEqual(610);
+        expect(reason.status).toEqual(500);
+        expect(reason.userFriendlyErrors[0]).toContain("errored, please report this.");
         expect(reason.details.data).toEqual(options.data);
         expect(reason.details.method).toEqual(options.method);
         expect(reason.details.url).toEqual(options.url);
@@ -65,45 +77,59 @@ describe("CORS", function() {
       }).done(done);
     }, specIsRunningTooLong);
 
-    it("should know if the server is unreachable", function(done) {
-      CORS.makeCORSRequest({
+    it("should know if the server connection times out", function(done) {
+      expect(CORS.timeout).toEqual(30 * 1000);
+      var options = {
         url: "http://ifield.iriscouch.com:5984/_session",
         method: "POST",
         data: {
           name: "public",
           password: "none"
-        }
-      }).then(function(results) {
-        expect("successfully contacted http://localhost:32222").toBeUndefined();
-        expect(results).toBeUndefined();
-      }, function(reason) {
-        expect(reason).toEqual(" ");
-      }).fail(function(exception) {
-        console.log(exception.stack);
-        expect(exception).toEqual("unexpected exception while testing");
-      }).done(done);
-    }, 20 * 1000);
-
-    it("should return unauthorized", function(done) {
-      var options = {
-        url: "https://corpusdev.lingsync.org/public-curldemo",
-        method: "POST",
-        data: {
-          id: "test_unauth_post" + Date.now()
-        }
+        },
+        timeout: 1000
       };
       CORS.makeCORSRequest(options).then(function(results) {
-        expect("should not have created a doc when not logged in").toBeUndefined();
+        expect("should not have reached an unreachable server").toBeUndefined();
         expect(results).toBeUndefined();
       }, function(reason) {
-        expect(reason.error).toEqual("unauthorized");
-        expect(reason.details.id).toEqual(options.data.id);
-        expect(reason.status).toEqual(401);
-        expect(reason.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
+        expect(reason.status).toEqual(500);
+        expect(reason.userFriendlyErrors[0]).toContain("timed out, please try again");
+        expect(reason.details.data).toEqual(options.data);
+        expect(reason.details.method).toEqual(options.method);
+        expect(reason.details.url).toEqual(options.url);
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual("unexpected exception while testing");
       }).done(done);
+    }, specIsRunningTooLong);
+
+    it("should return unauthorized", function(done) {
+
+      CORS.makeCORSRequest({
+        url: "https://corpusdev.lingsync.org/_session",
+        method: "DELETE"
+      }).then(function() {
+
+        var options = {
+          url: "https://corpusdev.lingsync.org/public-curldemo",
+          method: "POST",
+          data: {
+            id: "test_unauth_post" + Date.now()
+          }
+        };
+        CORS.makeCORSRequest(options).then(function(results) {
+          expect("should not have created a doc when not logged in").toBeUndefined();
+          expect(results).toBeUndefined();
+        }, function(reason) {
+          expect(reason.details.data.id).toEqual(options.data.id);
+          expect(reason.status).toEqual(401);
+          expect(reason.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toEqual("unexpected exception while testing");
+        }).done(done);
+
+      }, done).fail(done);
     }, specIsRunningTooLong);
 
   });
