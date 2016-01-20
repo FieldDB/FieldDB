@@ -1,7 +1,7 @@
 /* globals alert, confirm, prompt, navigator, Android, FieldDB */
 "use strict";
 
-var Diacritics = require("diacritic");
+var Diacritics = require("diacritics");
 var Q = require("q");
 var packageJson;
 try {
@@ -2139,7 +2139,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         optionalReplacementCharacter = "_";
       }
       if (value.trim) {
-        value = Diacritics.clean(value);
+        value = Diacritics.remove(value);
         this.debug("sanitizeStringForPrimaryKey " + value);
 
         value = value.trim().replace(/[^-a-zA-Z0-9]+/g, optionalReplacementCharacter).replace(/^_/, "").replace(/_$/, "");

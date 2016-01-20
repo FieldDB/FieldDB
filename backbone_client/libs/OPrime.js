@@ -26,36 +26,22 @@ OPrime.pouchUrl = "idb://";
 
 OPrime.getCouchUrl = function(connection, couchdbcommand) {
   if (!connection) {
-    connection = OPrime.defaultConnection();
-    if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
+    connection = FieldDB.Connection(FieldDB.Connection.defaultConnection());
+    connection.debug("Using the default connection", connection);
+  } else if (! (connection instanceof FieldDB.Connection)) {
+    connection = new FieldDB.Connection(connection);
   }
 
-  var couchurl = connection.protocol + connection.domain;
-  if (connection.port && connection.port != "443" && connection.port != "80") {
-    couchurl = couchurl + ":" + connection.port;
-  }
-  if(!connection.path){
-    connection.path = "";
-  }
-  couchurl = couchurl + connection.path;
-  if (couchdbcommand === null || couchdbcommand === undefined) {
-    couchurl = couchurl + "/" + connection.dbname;
-  } else {
-    couchurl = couchurl + couchdbcommand;
+  var url = connection.corpusUrl;
+  if (couchdbcommand !== null && couchdbcommand !== undefined){
+    url = url.replace("/" + connection.dbname, couchdbcommand);
   }
 
 
-  /* Switch user to the new dev servers if they have the old ones */
-  couchurl = couchurl.replace(/ifielddevs.iriscouch.com/g, "corpus.lingsync.org");
-  couchurl = couchurl.replace(/corpusdev.lingsync.org/g, "corpus.lingsync.org");
+  //forcing production server
+  url = url.replace("corpusdev","corpus");
 
-  /*
-   * For debugging cors #838: Switch to use the corsproxy corpus service instead
-   * of couchdb directly
-   */
-  // couchurl = couchurl.replace(/https/g,"http").replace(/6984/g,"3186");
-
-  return couchurl;
+  return url;
 };
 
 OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";

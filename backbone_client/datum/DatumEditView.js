@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
@@ -16,7 +16,6 @@ define([
     "image/ImagesView",
     "datum/SessionReadView",
     "app/UpdatingCollectionView",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -42,7 +41,7 @@ define([
   {
     /**
      * @class The layout of a single editable Datum. It contains a datum
-     *        state, datumFields, datumTags and a datum menu. This is where
+     *        state, fields, datumTags and a datum menu. This is where
      *        the user enters theirs data, the main task of our application.
      *
      * @property {String} format Valid values are "well"
@@ -84,8 +83,8 @@ define([
       });
 
       // Create the DatumFieldsValueEditView
-      this.datumFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumFields"),
+      this.fieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("fields"),
         childViewConstructor : DatumFieldEditView,
         childViewTagName     : "tr",
         childViewClass   : "datum-field",
@@ -99,7 +98,7 @@ define([
 
       this.model.bind("change:audioVideo", this.playAudio, this);
       this.model.bind("change:dateModified", this.updateLastModifiedUI, this);
-      this.bind("change:datumFields", this.reloadIGTPreview, this);
+      this.bind("change:fields", this.reloadIGTPreview, this);
 
       this.prepareDatumFieldAlternatesTypeAhead();
     },
@@ -253,8 +252,8 @@ define([
 //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
-      jsonToRender.utterance = jsonToRender.datumFields.toJSON()[1].mask;
-      jsonToRender.translation = jsonToRender.datumFields.toJSON()[6].mask;
+      jsonToRender.utterance = jsonToRender.fields.toJSON()[1].mask;
+      jsonToRender.translation = jsonToRender.fields.toJSON()[6].mask;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       jsonToRender.datumstate = this.model.getValidationStatus();
       if(jsonToRender.datumstate.length > 30){
@@ -326,8 +325,8 @@ define([
         this.sessionView.render();
 
         // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$(".datum_fields_ul");
-        this.datumFieldsView.render();
+        this.fieldsView.el = this.$(".datum_fields_ul");
+        this.fieldsView.render();
 
 
         var self = this;
@@ -365,14 +364,14 @@ define([
       if(!this.frequentFields || this.frequentFields.length === 0){
         return;
       }
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
+      for(var f = 0; f < this.model.get("fields").length; f++ ){
         //hide entered by user or modified by user if they match the person logged in (ie are not informative because only one person is working on this corpus.)
-        var fieldValue  = this.model.get("datumFields").models[f].get("mask");
+        var fieldValue  = this.model.get("fields").models[f].get("mask");
         var currentUsername = window.app.get("authentication").get("userPrivate").get("username");
-        var fieldsLabel = this.model.get("datumFields").models[f].get("label") ;
+        var fieldsLabel = this.model.get("fields").models[f].get("label") ;
         if( (fieldsLabel.indexOf("ByUser") > -1 && !fieldValue ) || fieldValue == currentUsername || this.frequentFields.indexOf( fieldsLabel ) == -1 ){
-          $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).hide();
-          this.rareFields.push(this.model.get("datumFields").models[f].get("label"));
+          $(this.el).find("."+this.model.get("fields").models[f].get("label")).hide();
+          this.rareFields.push(this.model.get("fields").models[f].get("label"));
         }
       }
       /* make ungrammatical sentences have a strike through them */
@@ -394,8 +393,8 @@ define([
       }
       $(this.el).find(".extra-datum-info-which-can-be-hidden").show();
 
-      for(var f = 0; f < this.model.get("datumFields").length; f++ ){
-        $(this.el).find("."+this.model.get("datumFields").models[f].get("label")).show();
+      for(var f = 0; f < this.model.get("fields").length; f++ ){
+        $(this.el).find("."+this.model.get("fields").models[f].get("label")).show();
       }
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
@@ -563,7 +562,7 @@ define([
     },
     utteranceBlur : function(e){
       var utteranceLine = $(e.currentTarget).val();
-      // var utteranceField =  this.model.get("datumFields").where({label: "utterance"})[0];
+      // var utteranceField =  this.model.get("fields").where({label: "utterance"})[0];
       // if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
       //   return;
       // }
@@ -573,7 +572,7 @@ define([
     },
     morphemesBlur : function(e){
       var morphemesLine = $(e.currentTarget).val();
-      // var morphemesField =  this.model.get("datumFields").where({label: "morphemes"})[0];
+      // var morphemesField =  this.model.get("fields").where({label: "morphemes"})[0];
       // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
       //   return;
       // }
@@ -593,12 +592,12 @@ define([
         var asIGT = this.model.exportAsIGTJSON();
         asIGT.utterance = utteranceLine;
         asIGT.morphemes = ""; // force glosser to guess becaus the app handles if it matches previous guesses
-        var morphemesLine = Glosser.guessMorphemesFromUtterance(asIGT).morphemes;
+        var morphemesLine = window.app.get("corpus").glosser.guessMorphemesFromUtterance(asIGT).morphemes;
 
         this.previousMorphemesGuess = this.previousMorphemesGuess || [];
         this.previousMorphemesGuess.push(morphemesLine);
 
-        var morphemesField = this.model.get("datumFields").where({
+        var morphemesField = this.model.get("fields").where({
           label: "morphemes"
         })[0];
         var alternates = morphemesField.get("alternates") || [];
@@ -626,7 +625,7 @@ define([
     },
 
     guessGlosses: function(morphemesLine, asIGT) {
-      var glossField = this.model.get("datumFields").where({
+      var glossField = this.model.get("fields").where({
         label: "gloss"
       })[0];
       var currentGloss = glossField.get("mask") || "";
@@ -638,7 +637,7 @@ define([
           asIGT.gloss = "";
         }
         asIGT.morphemes = morphemesLine;
-        var glossLine = Glosser.guessGlossFromMorphemes(asIGT).gloss;
+        var glossLine = window.app.get("corpus").glosser.guessGlossFromMorphemes(asIGT).gloss;
 
         var alternates = glossField.get("alternates") || [];
         alternates.push(morphemesLine);
@@ -671,7 +670,7 @@ define([
         if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
           this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
         }
-        var treeField = this.model.get("datumFields").where({label: "syntacticTreeLatex"})[0];
+        var treeField = this.model.get("fields").where({label: "syntacticTreeLatex"})[0];
         if (treeField) {
           treeField.set("mask", syntacticTreeLatex);
           this.needsSave = true;
@@ -684,7 +683,7 @@ define([
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
           var asIGT = this.model.exportAsIGTJSON();
-          var utteranceLine = Glosser.guessUtteranceFromMorphemes(asIGT).utterance;
+          var utteranceLine = window.app.get("corpus").glosser.guessUtteranceFromMorphemes(asIGT).utterance;
           /* uppercase the first letter of the line */
           // utteranceLine =  utteranceLine.charAt(0).toUpperCase() + utteranceLine.slice(1);
 
@@ -694,12 +693,12 @@ define([
       }
     },
     prepareDatumFieldAlternatesTypeAhead : function(){
-      var validationStatusField =  this.model.get("datumFields").where({label: "validationStatus"})[0];
+      var validationStatusField =  this.model.get("fields").where({label: "validationStatus"})[0];
       window.app.get("corpus").getFrequentDatumValidationStates(null, null, function(results){
         validationStatusField.set("alternates", results);
       });
 
-      var tagField =  this.model.get("datumFields").where({label: "tags"})[0];
+      var tagField =  this.model.get("fields").where({label: "tags"})[0];
       window.app.get("corpus").getFrequentDatumTags(null, null, function(results){
         tagField.set("alternates", results);
       });

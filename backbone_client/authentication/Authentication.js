@@ -101,14 +101,13 @@ define([
         url: authUrl + "/login",
         data: dataToPost
       }).then(function(serverResults) {
-        var userFriendlyErrors = serverResults.userFriendlyErrors || "";
-        if (userFriendlyErrors) {
-          window.appView.toastUser(userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger", "Login errors:");
+        if (serverResults.userFriendlyErrors) {
+          window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger", "Login errors:");
           if (typeof failcallback == "function") {
-            failcallback(userFriendlyErrors.join("<br/>"));
+            failcallback(serverResults.userFriendlyErrors.join("<br/>"));
           }
           if (typeof successcallback == "function") {
-            successcallback(null, userFriendlyErrors); // tell caller that the user failed to
+            successcallback(null, serverResults.userFriendlyErrors); // tell caller that the user failed to
             // authenticate
           }
         } else if (serverResults.user != null) {
@@ -129,9 +128,14 @@ define([
           self.saveServerResponseToUser(serverResults, successcallback);
         }
       }, function(e) {
+        var message = "There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs;
+        if (e && e.userFriendlyErrors && typeof e.userFriendlyErrors.join === "function") {
+          message = e.userFriendlyErrors.join(" ");
+        }
+
         if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
         if (window.appView) {
-          window.appView.toastUser("There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs, "alert-danger", "Connection errors:");
+          window.appView.toastUser(message, "alert-danger", "Connection errors:");
         }
 
         if (typeof failcallback == "function") {
@@ -258,11 +262,14 @@ define([
         return;
       }
       var userString = this.get("confidential").decrypt(encryptedUserString);
-
+      if (userString.indexOf("confidential:") === 0) {
+       this.logout();
+       return;
+      }
       /* Switch user to the new prod servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpus.lingsync.org");
-      userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
+      // userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
 
       /*
        * For debugging cors #838: Switch to use the corsproxy

@@ -16,6 +16,15 @@ define([
   Backbone.Model.prototype.parse = function(response) {
     // parse internal models
     if (response.ok === undefined) {
+
+      // Upgrade data structure to 3.x+
+      // try {
+      //   this.fielddbModel = FieldDB.FieldDBObject.convertDocIntoItsType(response);
+      //   response = this.fielddbModel.toJSON();
+      // } catch (exception) {
+      //   console.log('Unable to normalize this model.', exception.stack);
+      // }
+
       for ( var key in this.internalModels) {
         var embeddedClass = this.internalModels[key];
         if(!response[key]){
@@ -23,7 +32,7 @@ define([
         }
         var embeddedData = response[key];
         response[key] = new embeddedClass(embeddedData, {
-          parse : true
+          parse: true
         });
       }
     }
@@ -88,7 +97,7 @@ define([
   Backbone.couch_connector = con = {
     config: {
       db_name: "default",
-      ddoc_name: "pages",
+      ddoc_name: "deprecated",
       view_name: "byCollection",
       list_name: null,
       global_changes: false,

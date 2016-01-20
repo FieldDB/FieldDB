@@ -28,32 +28,38 @@
     <div class="alert alert-error hide welcome-screen-alerts"></div>
 
     <div class="breadcrumb create_new_user_password ">
-      <h3>{{locale_Create_a_new_user}}</h3>
-      <p>
-        http://www.lingsync.org/<span class="potentialUsername">yourusernamegoeshere</span>
-      </p>
-      <!-- <label class = "locale_What_is_your_username_going_to_be">  </label> -->
-      <span class="like-form-inline"> <input
-        class="registerusername" value="yourusernamegoeshere" type="text" />
-        <button class="btn btn-primary new-user-button">{{locale_New_User}}</button>
-      </span>
-      <div class="hide confirm-password">
-        <label>{{locale_Password}}</label> <input
-          class="registerpassword" type="password" /> <label
-           >{{locale_Confirm_Password}}</label> <input
-          class="to-confirm-password" type="password" /> <label>Email:</label>
-        <input class="registeruseremail" type="email" /> <br />
-        <button
-          class="btn btn-success register-new-user">{{locale_Sign_in_with_password}}
+      <form>
+        <h3>{{locale_Create_a_new_user}}</h3>
+        <p>
+          http://www.lingsync.org/<span class="potentialUsername">yourusernamegoeshere</span>
+        </p>
+        <!-- <label class = "locale_What_is_your_username_going_to_be">  </label> -->
+        <span class="like-form-inline">
+          <input class="registerusername" value="yourusernamegoeshere" type="text" placeholder="yourusernamegoeshere"/>
+          <a href="#" class="btn btn-primary new-user-button">
+            {{locale_New_User}}
+          </a>
+        </span>
+        <div class="hide confirm-password">
+          <label>{{locale_Password}}</label>
+          <input class="registerpassword" type="password" placeholder="{{locale_Password}}"/>
+          <label >{{locale_Confirm_Password}}</label>
+          <input class="to-confirm-password" type="password" placeholder="{{locale_Confirm_Password}}"/>
+          <label>Email:</label>
+          <input class="registeruseremail" type="email" placeholder="email"/>
+          <br />
+          <button class="btn btn-success register-new-user" type="submit" disabled>
+            {{locale_Sign_in_with_password}}
           </button>
-        <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
-        <i class="i icon-twitter"></i> Sign in with Twitter
-      </button>
-      <button class="btn btn-success register-facebook">
-        <i class="i icon-facebook"></i> Sign in with Facebook
-      </button> -->
+          <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
+          <i class="i icon-twitter"></i> Sign in with Twitter
+        </button>
+        <button class="btn btn-success register-facebook">
+          <i class="i icon-facebook"></i> Sign in with Facebook
+        </button> -->
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </li>
 

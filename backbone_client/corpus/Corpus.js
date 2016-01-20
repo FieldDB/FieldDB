@@ -4,6 +4,7 @@ define([
     "comment/Comments",
     "corpus/CorpusMask",
     "confidentiality_encryption/Confidential",
+    "bower_components/d3/d3",
     "datum/DatumField",
     "datum/DatumFields",
     "datum/DatumState",
@@ -13,7 +14,6 @@ define([
     "data_list/DataList",
     "data_list/DataLists",
     "user/Consultants",
-    "lexicon/Lexicon",
     "permission/Permission",
     "permission/Permissions",
     "datum/Session",
@@ -22,7 +22,6 @@ define([
     "user/User",
     "user/Users",
     "user/UserMask",
-    "bower_components/fielddb-glosser/fielddb-glosser",
     "OPrime"
 ], function(
     Backbone,
@@ -30,6 +29,7 @@ define([
     Comments,
     CorpusMask,
     Confidential,
+    d3,
     DatumField,
     DatumFields,
     DatumState,
@@ -39,7 +39,6 @@ define([
     DataList,
     DataLists,
     Consultants,
-    Lexicon,
     Permission,
     Permissions,
     Session,
@@ -72,7 +71,7 @@ define([
      * @property {String} remote The git url of the remote eg:
      *           git@fieldlinguist.com:LingLlama/SampleFieldLinguisticsCorpus.git
      *
-     * @property {Consultants} consultants Collection of consultants who contributed to the corpus
+     * @property {Consultants} source Collection of source who contributed to the corpus
      * @property {DatumStates} datumstates Collection of datum states used to describe the state of datums in the corpus
      * @property {DatumFields} datumfields Collection of datum fields used in the corpus
      * @property {ConversationFields} conversationfields Collection of conversation-based datum fields used in the corpus
@@ -315,7 +314,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
-            user: {},
+            json: {},
             userchooseable: "disabled",
             help: "The user who originally entered the datum"
           }),
@@ -324,7 +323,7 @@ define([
             shouldBeEncrypted: "",
             showToUserTypes: "all",
             readonly: true,
-            users: [],
+            json: {},
             userchooseable: "disabled",
             help: "An array of users who modified the datum"
           }),
@@ -337,7 +336,7 @@ define([
               label : "speakers",
               shouldBeEncrypted: "checked",
               userchooseable: "disabled",
-              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever your consultants prefer."
+              help: "Use this field to keep track of who your speaker is. You can use names, initials, or whatever they prefer."
             }),
             new DatumField({
                 label : "modality",
@@ -357,10 +356,10 @@ define([
              help: "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature..."
            }),
           new DatumField({
-            label : "consultants",
+            label : "source",
             shouldBeEncrypted: "",
             userMasks: [],
-            help: "This is a comma seperated field of all the consultants who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the consultants if they are not anonymous or are actual users of the system. ",
+            help: "This is a comma seperated field of all the speakers who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the source if they are not anonymous or are actual users of the system. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -384,7 +383,7 @@ define([
           new DatumField({
             label : "user",
             shouldBeEncrypted: "",
-            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and consultants. ",
+            help: "This is the username of who created this elicitation session. There are other fields contains an array of participants and source. ",
             userchooseable: "disabled"
           }),
           new DatumField({
@@ -422,8 +421,8 @@ define([
       }
     },
 
-    originalParse : Backbone.Model.prototype.parse,
-    parse : function(originalModel){
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel){
       /* if this is just a couchdb save result, dont process it */
       if (originalModel.ok) {
         return this.originalParse(originalModel);
@@ -441,10 +440,10 @@ define([
         originalModel.datumFields[x].label = originalModel.datumFields[x].label ||originalModel.datumFields[x].id;
 
         if (originalModel.datumFields[x].users) {
-          originalModel.datumFields[x].users = [];
+          delete originalModel.datumFields[x].users;
         }
         if (originalModel.datumFields[x].user) {
-          originalModel.datumFields[x].user = {};
+          delete originalModel.datumFields[x].user;
         }
         if (originalModel.datumFields[x].json) {
           originalModel.datumFields[x].json = {};
@@ -459,18 +458,18 @@ define([
       /* Use the couch connection defined by this app. */
       if (originalModel.connection) {
         originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = OPrime.defaultConnection();
+        var normalizedConnection =new FieldDB.Connection(FieldDB.Connection.defaultConnection());
         normalizedConnection.dbname = originalModel.connection.dbname;
         originalModel.connection.merge("self", normalizedConnection, "overwrite");
         originalModel.connection = originalModel.connection.toJSON();
       } else {
-        // some versions of the FieldBD common in the spreadsheet js deprecated the couch connection
+        // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
         originalModel.connection = new FieldDB.Connection(OPrime.defaultConnection()).toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }
 
-      // some versions of the FieldBD common js in the spreadsheet removed the confidential?
+      // some versions of the FieldDB common js in the spreadsheet removed the confidential?
       if(!originalModel.confidential){
         originalModel.confidential = {
           secretkey : new Confidential().secretKeyGenerator(),
@@ -540,7 +539,10 @@ define([
         delete originalModel.terms;
       }
 
-
+      // Use a paralel corpus in the FieldDB application
+      if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+        FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(JSON.parse(JSON.stringify(originalModel)));
+      }
 
       return this.originalParse(originalModel);
     },
@@ -658,19 +660,19 @@ define([
       titleAsUrl :"UntitledCorpus",
       description : "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
 //      confidential :  Confidential,
-//      consultants : Consultants,
+//      source : Consultants,
 //      datumStates : DatumStates,
 //      datumFields : DatumFields,
 //      conversationFields : DatumFields,
 //      sessionFields : DatumFields,
 //      searchFields : DatumFields,
-//      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || OPrime.defaultConnection()
+//      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) ||new FieldDB.Connection(FieldDB.Connection.defaultConnection())
     },
 
     // Internal models: used by the parse function
     internalModels : {
       confidential :  Confidential,
-      consultants : Consultants,
+      source : Consultants,
       datumStates : DatumStates,
       datumFields : DatumFields,
       conversationFields : DatumFields,
@@ -742,7 +744,7 @@ define([
         window.appView.sessionNewModalView.model = new Session({
           comments : new Comments(),
           dbname : self.get("dbname"),
-          sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+          fields : window.app.get("currentSession").get("sessionFields").clone()
         });
         window.appView.sessionNewModalView.model.fillWithDefaults();
         window.appView.sessionNewModalView.render();
@@ -822,8 +824,8 @@ define([
       window.appView.corpusNewModalView.render();
     },
 
-//    glosser: new Glosser(),//DONOT store in attributes when saving to pouch (too big)
-    lexicon: new Lexicon(),//DONOT store in attributes when saving to pouch (too big)
+    glosser: null,//DONOT store in attributes when saving to pouch (too big)
+    lexicon: null,//DONOT store in attributes when saving to pouch (too big)
     prepareANewPouch : function(connection, callback) {
       if (!connection || connection == undefined) {
         console.log("App.changePouch connection must be supplied.");
@@ -864,7 +866,7 @@ define([
     },
     'createCorpus': function(dataToPost) {
       dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
-      dataToPost.authUrl = OPrime.defaultConnection().authUrl;
+      dataToPost.authUrl =new FieldDB.Connection(FieldDB.Connection.defaultConnection()).authUrl;
       dataToPost.newCorpusTitle = this.get("title");
 
       var functionForError = function(err){
@@ -1230,7 +1232,7 @@ define([
           }else{
             if (OPrime.debugMode) OPrime.debug("You have no sessions, creating a new one...");
             var s = new Session({
-              sessionFields : self.get("sessionFields").clone(),
+              fields : self.get("sessionFields").clone(),
               filledWithDefaults: true,
               dbname : self.get("dbname")
             }); //MUST be a new model, other wise it wont save in a new pouch.
@@ -1271,7 +1273,7 @@ define([
      */
     validCouchViews : function(){
       return {
-        "pages/datums" : {
+        "deprecated/datums" : {
           map: /* updated to be compatible with pre-1.38 databases */
             function(doc) {
                 try {
@@ -1296,7 +1298,7 @@ define([
                 }
             }
         },
-        "pages/get_datum_fields" : {
+        "deprecated/get_datum_fields" : {
           map : function(doc) {if ((doc.datumFields) && (doc.session)) {var obj = {};for (i = 0; i < doc.datumFields.length; i++) {if (doc.datumFields[i].mask) {obj[doc.datumFields[i].label] = doc.datumFields[i].mask;}}if (doc.session.sessionFields) {for (j = 0; j < doc.session.sessionFields.length; j++) {if (doc.session.sessionFields[j].mask) {obj[doc.session.sessionFields[j].label] = doc.session.sessionFields[j].mask;}}}emit(obj, doc._id);}}
         }
       };
@@ -1440,17 +1442,61 @@ define([
      */
     buildMorphologicalAnalyzerFromTeamServer: function(dbname, callback) {
       if (!dbname) {
-        this.get("dbname");
+        dbname = this.get("dbname");
       }
-      if (!callback) {
-        callback = null;
+
+      var url = this.get("glosserURL");
+      if (url) {
+        url = url.substring(0, url.lastIndexOf('/_design'));
+      } else {
+        url = OPrime.getCouchUrl(this.get("connection"));
       }
-      var glosserURL = this.get("glosserURL");
-      if (!glosserURL) {
-        var couchurl = OPrime.getCouchUrl(this.get("connection"));
-        glosserURL = couchurl + "/_design/deprecated/_view/precedence_rules?group=true";
+
+      if (FieldDB.FieldDBObject &&
+        FieldDB.FieldDBObject.application &&
+        FieldDB.FieldDBObject.application.corpus &&
+        FieldDB.FieldDBObject.application.corpus.prefs &&
+        FieldDB.FieldDBObject.application.corpus.prefs.showGlosserAsMorphemicTemplate === undefined) {
+
+        FieldDB.FieldDBObject.application.corpus.prefs.showGlosserAsMorphemicTemplate = true;
       }
-      Glosser.downloadPrecedenceRules(dbname, glosserURL, callback);
+      this.glosser = this.glosser || new FieldDB.Glosser({
+        dbname: dbname,
+        d3: d3
+      });
+
+      // this.glosser.corpus = this.glosser.corpus || {
+      //   dbname: dbname,
+      //   url: url
+      // };
+
+      var self = this;
+      this.glosser.application.basePathname = "";
+      this.glosser.application.currentCorpusDashboard = "corpus/" + this.get("dbname");
+      this.glosser.application.router = window.app.router;
+      this.glosser.fetch().then(function() {
+        console.log("Glosser is ready");
+
+        if (!self.glosser.lexicon) {
+          self.glosser.lexicon = [];
+          self.lexicon = self.glosser.lexicon;
+        }
+        if (!self.glosser.lexicon.length) {
+          // If you dont need to look up the glosses
+          // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
+          // self.glosser.lexicon.updateConnectedGraph();
+          self.glosser.lexicon.fetch();
+        }
+
+        if (callback && typeof callback === "function") {
+          callback();
+        }
+      }, function(reason) {
+        console.log("Unable to fetch the glosser.", reason);
+        self.glosser.bug(reason.userFriendlyErrors.join(" "));
+      }).fail(function(exception) {
+        console.log("Unable to fetch the glosser.", exception);
+      });
     },
     /**
      * This function takes in a dbname, which could be different
@@ -1460,16 +1506,22 @@ define([
      * @param dbname
      * @param callback
      */
-    buildLexiconFromTeamServer : function(dbname, callback){
-      if(!dbname){
-        this.get("dbname");
+    buildLexiconFromTeamServer: function(dbname, callback) {
+      if (this.lexicon || !this.lexicon.length && typeof this.lexicon.fetch !== "function") {
+        this.lexicon.fetch().then(function() {
+          console.log("lexicon is ready");
+          if (callback && typeof callback === "function") {
+            callback();
+          }
+        }, function(reason) {
+          console.log("lexicon is not ready", reason);
+        }).fail(function(exception) {
+          console.log("lexicon is not ready", exception);
+        });
+      } else {
+        console.log("The lexicon hasn't been attached yet, you should use the glosser to attach it..", this.lexicon);
       }
-      if(!callback){
-        callback = null;
-      }
-      this.lexicon.buildLexiconFromCouch(dbname,callback);
     },
-
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht

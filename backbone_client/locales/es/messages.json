@@ -62,7 +62,7 @@
     "message" : "<p>TODO translate Permissions are where you give your team members access to your corpus. Add users to the 'Admin' group if you want to let them add other team members. Add users to the 'Writers' group if you want to let them add comments, enter new data, change Datum State from 'to be checked to 'checked' etc. For example, if you would like to allow your language consultant to enter or check data, you can put them in the 'writers' group. Add users to the 'Readers' group if you want them to be able to see your data, but not modify it. For example, you might want to share your data with other researchers outside of your team, but you might not want them to leave comments or modify , or mass-export the data. If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, click the Public checkbox. Don't worry, if your corpus contains confidential or personal information you can, and should, encrypt the Datum containing sensitive information using the <i class=' icon-unlock'></i> buttons. Data which are encrypted are shown as 'xxx xx xx xx' to all users, including on the web. If you want to see the contents of the confidential datum you have to click on the <i class='icon-eye-open'></i>, it will prompt you for your password to make sure you are really you. This will make confidential data visible for 10 minutes.</p>"
   },
   "locale_datum_fields_explanation" : {
-    "message" : "<p>TODO translate Datum Fields are fields which where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. As defaults the app comes with 4 fields which it uses to create inter-linear-glossed text views (i.e. pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class='icon-list-alt '> </i> to see the rare fields. The fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a lambda calculus field, or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which your consultants would like to keep confidential. Each Datum Fields can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class='icon-question-sign'></i> next to the Datum Field label in the Datum Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
+    "message" : "<p>TODO translate Datum Fields are fields which where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. As defaults the app comes with 4 fields which it uses to create inter-linear-glossed text views (i.e. pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class='icon-list-alt '> </i> to see the rare fields. The fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a lambda calculus field, or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which speakers would like to keep confidential. Each Datum Fields can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class='icon-question-sign'></i> next to the Datum Field label in the Datum Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
   },
     "locale_conversation_fields_explanation" : {
     "message" : "<p>TODO translate  Conversation Fields are fields which where you can add information about your Conversation. As defaults the conversation comes with 2 fields (audio and speakers), and each turn of the conversation (each Datum within it) comes with the usual 4 default datum fields.  You can add any number of fields here if they are relevant to the WHOLE conversation (ex: location, context, world knowledge, sociolinguistic variables).  The conversation fields in your corpus (shown below) are automatically available in the search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Conversation as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a 'location' field, but instead choose to encrypt a 'world knowledge' field as it may contain sensitive personal information which consultants would not want public. Each Conversation field can have a help convention, which is the text you see below. Your team members can see these help/conventions by clicking the <i class='icon-question-sign'></i> next to the Conversation field label in the Conversation Edit view. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
@@ -298,7 +298,7 @@
   "locale_New_Session_Instructions" : {
     "message" : "<p> Edite los forma abajo para crear una sesión, o presionar ESC para entrar más datos en la sesión presente. </ p> "
   },
-  "locale_Consultants" : {
+  "locale_Source" : {
     "message" : "Consultor(es):"
   },
   "locale_Goal" : {
@@ -327,7 +327,7 @@
   },
   "locale_Import_Third_Step" : {
     "message" : "<p>Step 3: The imported data will look like this. Edit in the table or the text area above as needed. Edit the datalist title and description, and the eliciation session section before finishing import. </p>"
-  },  
+  },
   "locale_Drag_Fields_Instructions" : {
     "message" : "TODO translate Drag (or type) the colored datum fields to the column headings which match, type in any additional column headings which you would like to keep as datum fields. The columns will become searchable fields in your database."
   },
@@ -417,7 +417,7 @@
   },
   "locale_Help_Text_Placeholder" : {
     "message" : "Put a help text or your team data entry conventions for this field here (optional)."
-  },  
+  },
   "locale_Add_Placeholder" : {
     "message" : "Añadir...."
   },
@@ -486,7 +486,7 @@
   },
   "locale_Remove_checked_from_datalist_tooltip" : {
     "message" : "TODO translate los seleccionados"
-  },    
+  },
   "locale_Plain_Text_Export_Tooltip" : {
     "message" : "TODO translate Export as plain text/Copy to clipboard"
   },

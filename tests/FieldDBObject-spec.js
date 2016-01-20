@@ -13,6 +13,7 @@ Q = Q || require("q");
 
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
+var CORS_ERROR = "CORS not supported, your browser will be unable to contact the database";
 
 describe("FieldDBObject", function() {
 
@@ -703,8 +704,8 @@ describe("FieldDBObject", function() {
         expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
 
-      }, function(error) {
-        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }, function(userFriendlyErrors) {
+        expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
       }).done(done);
 
       expect(object.saving).toEqual(true);
@@ -945,8 +946,8 @@ describe("FieldDBObject", function() {
         expect(resultingdocument).toEqual(object);
         expect(object.rev.length).toBeGreaterThan(13);
 
-      }, function(error) {
-        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }, function(userFriendlyErrors) {
+        expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
       }).done(done);
 
       expect(object.location.value).toEqual("45.5169767,-73.5537868");
@@ -974,8 +975,8 @@ describe("FieldDBObject", function() {
         expect(resultingdocument).toEqual(object);
         expect(object.rev.length).toBeGreaterThan(13);
 
-      }, function(error) {
-        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }, function(userFriendlyErrors) {
+        expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
       }).done(done);
 
       expect(object.trashed).toEqual("deleted");
@@ -1000,8 +1001,8 @@ describe("FieldDBObject", function() {
       object.undelete("I deleted this by mistake").then(function(resultingdocument) {
         expect(resultingdocument).toEqual(object);
         expect(object.rev.length).toBeGreaterThan(13);
-      }, function(error) {
-        expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+      }, function(userFriendlyErrors) {
+        expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
       }).done(done);
 
       expect(object.trashed).toEqual("restored");
@@ -1026,8 +1027,8 @@ describe("FieldDBObject", function() {
         object.fetchRevisions().then(function(revisions) {
           expect(revisions).toBeUndefined();
           expect(object._revisions).toBeUndefined();
-        }, function(error) {
-          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }, function(userFriendlyErrors) {
+          expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
         }).done(done);
 
       }, specIsRunningTooLong);
@@ -1044,8 +1045,8 @@ describe("FieldDBObject", function() {
         object.fetchRevisions().then(function(revisions) {
           expect(revisions).toEqual(["https://localhost:6984/lingallama-communitycorpus/1234490ej0a9ak3q?rev=\"4-23iwoai3jr\""]);
           expect(object._revisions).toBeDefined();
-        }, function(error) {
-          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }, function(userFriendlyErrors) {
+          expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
         }).done(done);
 
       }, specIsRunningTooLong);
@@ -1071,8 +1072,8 @@ describe("FieldDBObject", function() {
           ]);
           expect(object._revisions).toBeDefined();
           expect(object._revisions.length).toEqual(3);
-        }, function(error) {
-          expect(error).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        }, function(userFriendlyErrors) {
+          expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
         }).done(done);
 
       }, specIsRunningTooLong);

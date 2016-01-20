@@ -14,10 +14,10 @@ try {
 }
 
 try {
-	virtualDOM = require("node-jsdom").jsdom("<html><head></head><body></body></html>");
+	virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
 	virtualElement = virtualDOM.body;
 } catch (e) {
-	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install node-jsdom` ", e.stack);
+	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom` ", e.stack);
 }
 
 var mockCorpus = {
@@ -25,6 +25,21 @@ var mockCorpus = {
 	url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
 	prefs: {
 		maxLexiconSize: 400
+	}
+};
+
+var expectedErrors = function(reason) {
+	if (reason.status === 620) {
+		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+		return true;
+	} else if (reason.status === 610) {
+		expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+		return true;
+	} else if (reason.status === 600) {
+		expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
+		return true;
+	} else {
+		return false;
 	}
 };
 
@@ -92,6 +107,45 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 		});
 
 	});
+
+	describe("persistance", function() {
+
+		it("should fetch itself", function(done) {
+			var glosser = new Glosser({
+				corpus: tinyCorpus
+			});
+			expect(glosser).toBeDefined();
+			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
+
+			glosser.fetch()
+				.then(function() {
+					expect(glosser.fetching).toBeFalsy();
+					expect(glosser.whenFetched).toBeDefined();
+				}, function(reason) {
+					expect(glosser.fetching).toBeFalsy();
+					if (expectedErrors(reason)) {
+						// errors were expected
+						console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+					} else if (reason.status === 401) {
+						expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
+					} else {
+						expect(reason).toEqual("should not get here");
+					}
+				})
+				.fail(function(exception) {
+					expect(glosser.fetching).toBeFalsy();
+					console.log(exception.stack);
+					expect(exception).toEqual(" unexpected exception while processing rules");
+				})
+				.done(done);
+
+			expect(glosser.fetching).toBeTruthy();
+			expect(glosser.whenFetched).toBeDefined();
+
+		}, specIsRunningTooLong);
+
+	});
+
 
 	describe("conservativeness", function() {
 		var glosser;
@@ -386,8 +440,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(datum.gloss).toEqual("?-?");
 
 			}, function(reason) {
-				console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS");
-				expect(reason.userFriendlyErrors[0]).toEqual("CORS not supported, your browser is unable to contact the database.");
+				if (expectedErrors(reason)) {
+					// errors were expected
+					console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+				} else if (reason.status === 401) {
+					expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
+				} else {
+					expect(reason).toEqual("should not get here");
+				}
 			}).fail(function(exception) {
 				console.log(exception.stack);
 				expect(exception).toEqual(" unexpected exception while processing rules");
@@ -640,19 +700,29 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 	describe("glossing", function() {
 		it("should give placeholder glosses if lexicon is not defined", function() {
 			var glosser = new Glosser();
-			var datum = glosser.glossFinder("yeh kya hai?");
+			var datum = glosser.guessGlossFromMorphemes({
+				morphemes: "yeh kya hai?"
+			});
 
-			expect(datum).toEqual("? ? ?");
+			expect(datum.gloss).toEqual("? ? ?");
 		});
 
 		it("should give use the most likely gloss", function() {
 			var glosser = new Glosser();
 			glosser.lexicon = [];
-			glosser.lexicon.add({morphemes: "yeh", gloss: "this"});
-			glosser.lexicon.add({morphemes: "yeh", gloss: "DEMONS"});
-			var gloss = glosser.glossFinder("yeh kya hai?");
+			glosser.lexicon.add({
+				morphemes: "yeh",
+				gloss: "this"
+			});
+			glosser.lexicon.add({
+				morphemes: "yeh",
+				gloss: "DEMONS"
+			});
+			var datum = glosser.guessGlossFromMorphemes({
+				morphemes: "yeh kya hai?"
+			});
 
-			expect(gloss).toEqual("this ? ?");
+			expect(datum.gloss).toEqual("this ? ?");
 		});
 	});
 	describe("backward compatibility", function() {
@@ -680,15 +750,15 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(typeof glosser.morphemefinder).toEqual("function");
 
 			// .glossFinder(morphemesLine);
-			expect(typeof glosser.glossFinder).toEqual("function");
+			expect(glosser.glossFinder).toBeUndefined();
 
-			// 
+			//
 			expect(typeof glosser.downloadPrecedenceRules).toEqual("function");
 
-			// 
+			//
 			expect(typeof glosser.downloadPrecedenceRules).toEqual("function");
 
-			// 
+			//
 			expect(typeof glosser.downloadPrecedenceRules).toEqual("function");
 
 		});

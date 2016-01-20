@@ -67,7 +67,7 @@ var Lexicon = function(json) {
       }
       this.debug("constructing a lexicon from a set of connected nodes " + json.entryRelations.length);
     } else {
-      // The array passed in is the actional nodes 
+      // The array passed in is the actional nodes
       json = {
         collection: json
       };
@@ -94,6 +94,7 @@ var Lexicon = function(json) {
   }
 };
 
+Lexicon.morphemeBoundaryRegEX = /[-=]/g;
 
 Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.prototype */ {
   constructor: {
@@ -111,7 +112,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   },
   /**
    *  Lexicon find will be faster but insert will be slower
-   *  
+   *
    * @type {Object}
    */
   sorted: {
@@ -161,46 +162,46 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
-  getLexicalEntries: {
-    value: function(lexicalEntryToMatch) {
-      var deferred = Q.defer(),
-        matches = [],
-        self = this;
+  // getLexicalEntries: {
+  //   value: function(lexicalEntryToMatch) {
+  //     var deferred = Q.defer(),
+  //       matches = [],
+  //       self = this;
 
-      if (!lexicalEntryToMatch) {
-        deferred.resolve(matches);
-      } else {
-        // this.filter(function(value, key, object, depth) {
-        this.filter(function(value, key) {
-          this.debug(key + " of " + self.length);
-          if (typeof lexicalEntryToMatch.uniqueEntriesOnHeadword === "function") {
-            if (lexicalEntryToMatch.uniqueEntriesOnHeadword(value)) {
-              matches.push(value);
-              this.debug("lexicalEntryToMatch equals ", value);
-            }
-          } else {
-            var howWellDoesThisMatch = 0;
-            lexicalEntryToMatch = lexicalEntryToMatch.trim();
-            for (var attr in value) {
-              if (value.hasOwnProperty(attr) && value[attr] === lexicalEntryToMatch) {
-                howWellDoesThisMatch = howWellDoesThisMatch + 1;
-              }
-            }
-            if (howWellDoesThisMatch > 0) {
-              matches.push(value);
-              this.debug("lexicalEntryToMatch matches well enough ", value);
-            } else {
-              this.debug("lexicalEntryToMatch doesnt match ", value);
-            }
-          }
-          if (key === self.length - 1) {
-            deferred.resolve(matches);
-          }
-        }, this);
-      }
-      return deferred.promise;
-    }
-  },
+  //     if (!lexicalEntryToMatch) {
+  //       deferred.resolve(matches);
+  //     } else {
+  //       // this.filter(function(value, key, object, depth) {
+  //       this.filter(function(value, key) {
+  //         this.debug(key + " of " + self.length);
+  //         if (typeof lexicalEntryToMatch.uniqueEntriesOnHeadword === "function") {
+  //           if (lexicalEntryToMatch.uniqueEntriesOnHeadword(value)) {
+  //             matches.push(value);
+  //             this.debug("lexicalEntryToMatch equals ", value);
+  //           }
+  //         } else {
+  //           var howWellDoesThisMatch = 0;
+  //           lexicalEntryToMatch = lexicalEntryToMatch.trim();
+  //           for (var attr in value) {
+  //             if (value.hasOwnProperty(attr) && value[attr] === lexicalEntryToMatch) {
+  //               howWellDoesThisMatch = howWellDoesThisMatch + 1;
+  //             }
+  //           }
+  //           if (howWellDoesThisMatch > 0) {
+  //             matches.push(value);
+  //             this.debug("lexicalEntryToMatch matches well enough ", value);
+  //           } else {
+  //             this.debug("lexicalEntryToMatch doesnt match ", value);
+  //           }
+  //         }
+  //         if (key === self.length - 1) {
+  //           deferred.resolve(matches);
+  //         }
+  //       }, this);
+  //     }
+  //     return deferred.promise;
+  //   }
+  // },
 
   bindToView: {
     value: function() {
@@ -546,7 +547,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       return this._entryRelations;
     },
     set: function(value) {
-      if (value.rows) {
+      if (!value) {
+        return;
+      }
+      if (value && value.rows) {
         value = value.rows;
       }
 
@@ -576,7 +580,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             continue;
           }
           // Convert into a string and slit on boundaries
-          morphemes = (morphemes + "").split("-");
+          morphemes = (morphemes + "").split(Lexicon.morphemeBoundaryRegEX);
           count = 1;
           context = "";
           if (typeof value[rowIndex].value === "number") {
@@ -654,7 +658,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           if (!value.hasOwnProperty(ngram) || !ngram || ngram === "length") {
             continue;
           }
-          morphemes = ngram.split("-");
+          morphemes = ngram.split(Lexicon.morphemeBoundaryRegEX);
           previousMorph = morphemes[0];
           for (morphemeIndex = 1; morphemeIndex < morphemes.length; morphemeIndex++) {
             this.debug(" working on " + previousMorph + "-" + morphemes[morphemeIndex]);
@@ -705,7 +709,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
-  guessContextSensitiveGlosses: {
+  guessFirstGloss: {
     value: function(datum) {
 
       if (!datum.morphemes) {
@@ -715,41 +719,92 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var glossGroups = [];
       var matchingNodes = [];
       var morphemeToFind = "";
-      var morphemeGroup = datum.morphemes.split(/ +/);
-      var matchingfunction = function(node) {
-        if (node.morphemes === morphemeToFind) {
-          // console.log(node);
-          matchingNodes.push(node);
-        }
-      };
+      var morphemeGroup = datum.morphemes.trim().split(/\s+/);
       for (var group in morphemeGroup) {
-        var morphemes = morphemeGroup[group].split("-");
+        var morphemes = morphemeGroup[group].split(Lexicon.morphemeBoundaryRegEX);
         var glosses = [];
         for (var m in morphemes) {
           if (!morphemes.hasOwnProperty(m)) {
             continue;
           }
           matchingNodes = [];
-          morphemeToFind = morphemes[m];
-          this.filter(matchingfunction);
-
           var gloss = "?"; // If there's no matching gloss, use question marks
+          morphemeToFind = morphemes[m];
+          if (!morphemeToFind) {
+            glosses.push(gloss);
+            continue;
+          }
+          this.debug("looking for " + morphemeToFind);
+          matchingNodes = this.find("morphemes", morphemeToFind);
           if (matchingNodes && matchingNodes.length > 0) {
             // Take the first gloss for this morpheme
-            // console.log("Glosses which match: " + morphemes[m], matchingNodes);
+            // this.debug("Glosses which match: " + morphemes[m], matchingNodes);
             try {
-              gloss = matchingNodes[0].gloss;
+              gloss = matchingNodes[0].gloss || "?";
             } catch (e) {
-              // console.log(matchingNodes);
+              // this.debug(matchingNodes);
             }
           }
+
+          this.debug("found  " + gloss);
           glosses.push(gloss);
         }
 
         glossGroups.push(glosses.join("-"));
       }
-      datum.glossAlternates = datum.glossAlternates ? datum.glossAlternates.concat(glossGroups) : glossGroups;
       datum.gloss = glossGroups.join(" ");
+      datum.alternateGlossLines = datum.alternateGlossLines ? datum.alternateGlossLines.concat(glossGroups.join(" ")) : [datum.gloss];
+      // Replace the gloss line with the guessed glosses
+      return datum;
+    }
+  },
+
+  guessContextSensitiveGlosses: {
+    value: function(datum) {
+      if (!datum.morphemes) {
+        console.warn("There was no morphemes line to guess the gloss from...");
+        return datum;
+      }
+      var glossGroups = [];
+      var matchingNodes = [];
+      var morphemeToFind = "";
+      var morphemeGroup = datum.morphemes.trim().split(/\s+/);
+      for (var groupIndex in morphemeGroup) {
+        if (groupIndex > 0 && groupIndex < morphemeGroup) {
+          glossGroups.push([" "]);
+        }
+        var morphemes = morphemeGroup[groupIndex].split(Lexicon.morphemeBoundaryRegEX);
+        for (var m = 0; m < morphemes.length; m++) {
+          if (m > 0 && m < morphemes.length) {
+            glossGroups.push(["-"]);
+          }
+          morphemeToFind = morphemes[m];
+          if (!morphemeToFind) {
+            glossGroups.push(["?"]);
+            continue;
+          }
+          this.debug("looking for " + morphemeToFind);
+          matchingNodes = this.find("morphemes", morphemeToFind);
+          if (matchingNodes && matchingNodes.length > 0 && matchingNodes[0].gloss) {
+            glossGroups.push(matchingNodes);
+          } else {
+            glossGroups.push(["?"]);
+          }
+        }
+      }
+      // this.debug(glossGroups);
+      datum.alternateGlossLines = datum.alternateGlossLines || [];
+
+      datum.gloss = glossGroups.map(function(position) {
+        if (position && position.length) {
+          var gloss = position[0];
+          if (typeof gloss !== "string") {
+            gloss = position[0].gloss;
+          }
+          return gloss;
+        }
+      }).join("");
+      datum.alternateGlossLines.unshift(datum.gloss);
       // Replace the gloss line with the guessed glosses
       return datum;
     }
@@ -868,9 +923,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   },
 
   /**
-   *  Adds a node to the lexicon, if an equivalent node (as defined by the equals function) 
+   *  Adds a node to the lexicon, if an equivalent node (as defined by the equals function)
    *  is found, it merges the new one into the existing one.
-   *  
+   *
    * @param  {Object} value A node or array of nodes
    * @return {Object}       The node or array of nodes which were added
    */
@@ -1081,7 +1136,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           // delete target.utterance;
           // delete source.orthography;
           // delete target.orthography;
-          // 
+          //
 
           // connectionEdge.contexts = context.utterance;
           // connectionEdge.datumid = context.id;
@@ -1170,7 +1225,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
   },
 
   /**
-   * Add any new reltions to the list that the user can choose from 
+   * Add any new reltions to the list that the user can choose from
    * @return {Array} updated list of available lexical relations
    */
   updateAvailableLexicalRelations: {
@@ -1233,12 +1288,20 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
    * OLD url /_design/deprecated/_view/lexicon_create_tuples?group=true
    *
    * New url _design/lexicon/_view/morphemesPrecedenceContext?group=true&limit=400
-   * 
+   *
    * @param options
    * @param callback
    */
   fetch: {
     value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      if (this.fetching && this.whenReady) {
+        this.warn("Fetching is in process, don't need to fetch right now...");
+        return this.whenReady;
+      }
+
       options = options || {};
 
       var url = "";
@@ -1257,10 +1320,9 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         }
       }
 
-      var deferred = Q.defer(),
-        self = this;
+      this.fetching = true;
+      this.whenReady = deferred.promise;
 
-      self.fetching = true;
       CORS.makeCORSRequest({
         type: "GET",
         url: url
@@ -1397,9 +1459,10 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.debug("Using divElement", divElement);
 
 
-      var width = divElement.clientWidth,
-        height = 300;
+      var width = options.width || divElement.clientWidth || 200,
+        height = options.height || 350;
 
+      divElement.innerHTML = "";
 
       var tooltip;
       if (!self.localDOM) {
@@ -1430,11 +1493,11 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
 
       var transform = function(d) {
         if (d.morphemes === "_#") {
-          d.x = width - 40;
+          d.x = width - 20;
           d.y = height / 2;
         }
         if (d.morphemes === "#_") {
-          d.x = 40;
+          d.x = 20;
           d.y = height / 2;
         }
         return "translate(" + d.x + "," + d.y + ")";
@@ -1479,11 +1542,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .nodes(this.d3.values(self.connectedGraph.nodes)) // can be an object
         .links(self.connectedGraph.links)
         .size([width, height])
-        .linkStrength(0.5)
-        .linkDistance(50)
-        .charge(-100);
+        // .linkStrength(0.5)
+        .linkDistance(30)
+        .friction(0.5)
+        .charge(-120);
 
 
+      // force.nodes().map(function(node){
+      //   node.x = width/2;
+      //   node.y = height/2;
+      // });
 
       this.connectedGraph.svg = self.localDOM.createElement("svg");
       if (typeof divElement.appendChild !== "function") {
@@ -1497,7 +1565,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       try {
         this.connectedGraph.svg = this.d3.select(divElement).append("svg");
       } catch (e) {
-        //couldnt use the dom, the svg wont work really well.        
+        //couldnt use the dom, the svg wont work really well.
       }
 
       self.connectedGraph.svg.attr("width", width)
@@ -1726,6 +1794,35 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         circle.attr("transform", transform);
         text.attr("transform", transform);
       };
+
+      // var tickNear = function() {
+      //   path.attr("d", linkArc);
+
+      //   circle.attr("cx", function(d) {
+      //       if (d.morphemes === "_#") {
+      //         d.x = width - 20;
+      //         d.y = height / 2;
+      //       }
+      //       if (d.morphemes === "#_") {
+      //         d.x = 42;
+      //         d.y = height / 2;
+      //       }
+      //       return d.x;
+      //     })
+      //     .attr("cy", function(d) {
+      //       if (d.morphemes === "_#") {
+      //         d.x = width - 20;
+      //         d.y = height / 2;
+      //       }
+      //       if (d.morphemes === "#_") {
+      //         d.x = 42;
+      //         d.y = height / 2;
+      //       }
+      //       return d.y;
+      //     });
+
+      //   text.attr("transform", transform);
+      // };
 
       try {
         force

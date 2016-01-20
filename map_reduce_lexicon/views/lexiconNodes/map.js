@@ -126,7 +126,7 @@ function lexiconNodes(doc) {
     }
     // // DEBUG console.log("IGT alignd ", words);
     if (potentiallyUnmatchedIGT.size) {
-      words[wordIndex]["confidence"] = words[wordIndex]["confidence"] * words[wordIndex].fieldCount / (words[wordIndex].fieldCount +potentiallyUnmatchedIGT.size);
+      words[wordIndex]["confidence"] = words[wordIndex]["confidence"] * words[wordIndex].fieldCount / (words[wordIndex].fieldCount + potentiallyUnmatchedIGT.size);
       flagDocForCleaning(doc, words, potentiallyUnmatchedIGT);
     }
     return words;
@@ -146,7 +146,7 @@ function lexiconNodes(doc) {
         if (!igt.hasOwnProperty(fieldLabel) || fieldLabel === "confidence") {
           continue;
         }
-        // // DEBUG console.log(" before", 
+        // // DEBUG console.log(" before",
         if (fieldLabel === "gloss") {
           conservativeTokenizer.pattern = morphemeWordAgnosticTokenizer.pattern;
           igt[fieldLabel] = tokenize(igt[fieldLabel], conservativeTokenizer);
@@ -175,7 +175,8 @@ function lexiconNodes(doc) {
   var extractLexicalEntries = function(doc) {
     if (!doc.session) {
       emit({
-        error: "non-datum"
+        error: "non-datum",
+        id: doc._id
       }, doc._id);
       return;
     }
@@ -235,6 +236,12 @@ function lexiconNodes(doc) {
         return morpheme.replace(/-=/g, "");
       });
     }
+
+    // Use utterance if morphemes was not present
+    if (!datum.morphemes && datum.utterance && datum.gloss) {
+      datum.morphemes = datum.utterance;
+    }
+
     // Move utterance or othography into context per word
     if (!datum.context) {
       datum.context = datum.utterance || datum.orthography;

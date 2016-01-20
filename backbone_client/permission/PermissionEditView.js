@@ -1,6 +1,6 @@
 define([ 
          "backbone",
-         "handlebars", 
+         "libs/compiled_handlebars", 
          "permission/Permission",
          "user/UserMask"
   ], function(

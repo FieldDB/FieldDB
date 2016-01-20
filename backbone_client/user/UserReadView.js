@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "corpus/Corpus",
     "corpus/Corpuses",
     "corpus/CorpusLinkView",
@@ -140,6 +140,9 @@ define([
         this.corporaReadView.render();
 
         var connection = window.app.get("connection");
+        if (this.model && this.model.get("corpora") && this.model.get("corpora")[0]) {
+          connection = this.model.get("corpora")[0];
+        }
         var self = this;
         FieldDB.CORS.makeCORSRequest({
           type: 'GET',

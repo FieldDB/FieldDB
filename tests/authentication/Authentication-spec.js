@@ -13,6 +13,21 @@ Authentication = Authentication || require("./../../api/authentication/Authentic
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 var specIsRunningTooLong = 5000;
 
+var expectedErrors = function(reason) {
+  if (reason.status === 620) {
+    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+    return true;
+  } else if (reason.status === 610) {
+    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+    return true;
+  } else if (reason.status === 600) {
+    expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
+    return true;
+  } else {
+    return false;
+  }
+};
+
 describe("Authentication ", function() {
 
   beforeEach(function() {
@@ -46,16 +61,16 @@ describe("Authentication ", function() {
         expect(auth.user.researchInterest).toEqual("Automated testing :)");
       }, function(error) {
         auth.debug("Failed authentication");
-        expect(error).toBeDefined();
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
         } else {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          expect(error.userFriendlyErrors).toEqual("untested error response");
         }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong * 2);
-
   });
 
   describe("create corpora for users", function() {
@@ -96,14 +111,15 @@ describe("Authentication ", function() {
         // expect(result.dbname).toEqual("jenkins-long_distance_anaphors_in_quechua");
       }, function(error) {
         auth.debug("Failed creating new corpus");
-        expect(error).toBeDefined();
-        if (error.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
+        if (expectedErrors(error)) {
+          // errors were expected
         } else {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
+          expect(error.userFriendlyErrors).toEqual("untested error response");
         }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
 
 
@@ -116,14 +132,18 @@ describe("Authentication ", function() {
         title: "Long distance anaphors in Quechua"
       }).then(function(result) {
         auth.debug("Done creating new corpus");
-        expect(result).toBeDefined();
-        expect(result).toEqual("Cannot be succesful in jasmine-node");
+        expect(result).toEqual("should not get here");
       }, function(error) {
         auth.debug("Failed creating new corpus");
-        expect(error).toBeDefined();
-        expect(error.userFriendlyErrors).toEqual(["You must enter your password to prove that that this is you."]);
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else {
+          expect(error.userFriendlyErrors).toEqual(["You must enter your password to prove that that this is you."]);
+        }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
 
 
@@ -136,14 +156,14 @@ describe("Authentication ", function() {
         password: "phoneme"
       }).then(function(result) {
         auth.debug("Done creating new corpus");
-        expect(result).toBeDefined();
-        expect(result).toEqual("Cannot be succesful in jasmine-node");
+        expect(result).toEqual("should not get here");
       }, function(error) {
         auth.debug("Failed creating new corpus");
-        expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toEqual(["Please supply a title for your new corpus."]);
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
 
   });
@@ -163,21 +183,19 @@ describe("Authentication ", function() {
         expect(result).toBe(auth.user);
         expect(auth.user).toBeDefined();
       }, function(error) {
-        expect(error).toBeDefined();
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Please login."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(error).toBeFalsy();
-          expect(error.status).toBeTruthy();
+          expect(error.userFriendlyErrors).toEqual("untested error response");
         }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
 
 
@@ -239,8 +257,10 @@ describe("Authentication ", function() {
         expect(anotherAuthLoad.user.prefs).toBeDefined();
         expect(anotherAuthLoad.user.prefs.unicodes.length).toEqual(20);
         expect(anotherAuthLoad.user.prefs.numVisibleDatum).toEqual(2);
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
 
 
@@ -264,10 +284,10 @@ describe("Authentication ", function() {
         expect(confirmation.info[0]).toEqual("Verified offline.");
       }, function(error) {
         console.log(error);
-        expect(false).toBeTruthy();
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+        expect(error).toEqual("should not get here");
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -289,12 +309,11 @@ describe("Authentication ", function() {
         expect(confirmation).toBeDefined();
         expect(false).toBeTruthy();
       }, function(error) {
-        expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toBeDefined();
         expect(error.userFriendlyErrors[0]).toEqual("Sorry, this doesn't appear to be you.");
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -315,14 +334,13 @@ describe("Authentication ", function() {
         password: "phoneme"
       }).then(function(confirmation) {
         expect(confirmation).toBeDefined();
-        expect(false).toBeTruthy();
+        expect(confirmation).toEqual("shouldnt get here");
       }, function(error) {
-        expect(error).toBeDefined();
         expect(error.userFriendlyErrors).toBeDefined();
         expect(error.userFriendlyErrors[0]).toEqual("This app has errored while trying to confirm your identity. Please report this 2892346.");
-      }).fail(function(error) {
-        console.log(error.stack);
-        expect(false).toBeTruthy();
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
     }, specIsRunningTooLong);
 
@@ -349,18 +367,18 @@ describe("Authentication ", function() {
         expect(auth.user.rev).toContain("1-");
       }, function(error) {
         auth.debug("Failed registering");
-        expect(error).toBeDefined();
-        if (error.status === 500) {
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 500) {
           expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
         } else if (error.status === 409) {
           expect(error.userFriendlyErrors).toEqual(["Username jenkins already exists, try a different username."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error.userFriendlyErrors).toEqual("untested error response");
         }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
 
     }, specIsRunningTooLong);
@@ -368,113 +386,90 @@ describe("Authentication ", function() {
 
     it("should not log the user in if the server replies not-authenticated", function(done) {
       var auth = new Authentication();
-      try {
-        auth.login({
-          username: "lingllama",
-          password: "hypothesis"
-        }).then(function(response) {
-          console.error("should not land in the sucess area. ", response);
-          expect(true).toBeFalsy();
-        }, function(error) {
-          auth.debug("Failed authentication");
-          expect(error).toBeDefined();
-          if (auth.user) {
-            expect(auth.user.authenticated).toEqual(false);
-          }
-          if (error.status === 500) {
-            expect(error.userFriendlyErrors).toEqual([" "]);
-          } else if (error.status === 401) {
-            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-          } else if (error.status === 400) {
-            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-          } else if (error.status === 0) {
-            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-          } else {
-            expect(false).toBeTruthy();
-          }
-        }).done(done);
-      } catch (e) {
-        expect(e).toEqual(" ");
-        done();
-      }
+      auth.login({
+        username: "lingllama",
+        password: "hypothesis"
+      }).then(function(response) {
+        console.error("should not land in the sucess area. ", response);
+        expect(response).toEqual("should not happen");
+      }, function(error) {
+        auth.debug("Failed authentication");
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 401) {
+          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual("untested error response");
+        }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
+      }).done(done);
     }, specIsRunningTooLong);
 
     it("should not authenticate if login good username bad password", function(done) {
       var auth = new Authentication();
-      try {
-        auth.login({
-          username: "lingllama",
-          password: "hypothesis"
-        }).then(function(response) {
-          auth.debug("Done authentication");
-          console.error("should not land in the sucess area. ", response);
-          expect(true).toBeFalsy();
-        }, function(error) {
-          auth.debug("Failed authentication");
-          if (auth.user) {
-            expect(auth.user.authenticated).toEqual(false);
-          }
-          expect(error).toBeDefined();
-          if (error.status === 500) {
-            expect(error.userFriendlyErrors).toEqual([" "]);
-          } else if (error.status === 401) {
-            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-          } else if (error.status === 400) {
-            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-          } else if (error.status === 0) {
-            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-          } else {
-            expect(false).toBeTruthy();
-          }
-        }).done(done);
-      } catch (e) {
-        expect(e).toEqual(" ");
-        done();
-      }
-
+      auth.login({
+        username: "lingllama",
+        password: "hypothesis"
+      }).then(function(response) {
+        auth.debug("Done authentication");
+        console.error("should not land in the sucess area. ", response);
+        expect(response).toEqual("should not happen");
+      }, function(error) {
+        auth.debug("Failed authentication");
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 401) {
+          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual("untested error response");
+        }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
+      }).done(done);
     }, specIsRunningTooLong);
 
     it("should not authenticate if login bad username any password", function(done) {
       var auth = new Authentication();
-      try {
-        auth.login({
-          username: "sapri",
-          password: "phoneme"
-        }).then(function(response) {
-          auth.debug("Done authentication");
-          console.error("should not land in the sucess area. ", response);
-          expect(true).toBeFalsy();
-        }, function(error) {
-          auth.debug("Failed authentication");
-          if (auth.user) {
-            expect(auth.user.authenticated).toEqual(false);
-          }
-          expect(error).toBeDefined();
-          if (error.status === 500) {
-            expect(error.userFriendlyErrors).toEqual([" "]);
-          } else if (error.status === 401) {
-            expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-          } else if (error.status === 400) {
-            expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-          } else if (error.status === 0) {
-            expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
-          } else {
-            expect(false).toBeTruthy();
-          }
-        }).done(done);
-      } catch (e) {
-        expect(e).toEqual(" ");
-        done();
-      }
+      auth.login({
+        username: "sapri",
+        password: "phoneme"
+      }).then(function(response) {
+        auth.debug("Done authentication");
+        console.error("should not land in the sucess area. ", response);
+        expect(response).toEqual("should not happen");
+      }, function(error) {
+        auth.debug("Failed authentication");
+        if (auth.user) {
+          expect(auth.user.authenticated).toEqual(false);
+        }
+        if (expectedErrors(error)) {
+          // errors were expected
+        } else if (error.status === 401) {
+          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
+        } else {
+          expect(error.userFriendlyErrors).toEqual("untested error response");
+        }
+      }).fail(function(exception) {
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
+      }).done(done);
     }, specIsRunningTooLong);
-
 
     it("should be able to authenticate with many corpus servers", function(done) {
       var auth = new Authentication();
       auth.user = {
         username: "jenkins",
         corpora: [],
-        roles: [],
+        roles: []
       };
       auth.authenticateWithAllCorpusServers({
         username: "jenkins",
@@ -489,24 +484,18 @@ describe("Authentication ", function() {
       }, function(error) {
         auth.debug("Failed to authenticate with any corpus server. the user will be able to do nothing in the app.");
         expect(auth.user.roles).toEqual([]);
-        expect(error).toBeDefined();
-        if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual([" "]);
+        if (expectedErrors(error)) {
+          // errors were expected
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else if (error.status === 400) {
-          expect(error.userFriendlyErrors).toEqual(["CORS not supported, your browser is unable to contact the database."]);
-        } else if (error.status === 0) {
-          expect(error.userFriendlyErrors).toEqual(["Unable to contact the server, are you sure you're not offline?"]);
         } else {
-          expect(false).toBeTruthy();
+          expect(error.userFriendlyErrors).toEqual("untested error response");
         }
       }).fail(function(exception) {
-        expect(exception).toBeUndefined();
+        console.log(exception.stack);
+        expect(exception).toEqual("unexpected exception");
       }).done(done);
-
     }, specIsRunningTooLong);
-
   });
 
 });

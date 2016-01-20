@@ -10,7 +10,7 @@ var Q = require("q");
  * @param {Object} options Optional json initialization object
  * @property {String} primaryKey This is the optional attribute to look in the objects when doing a get or find
  * @property {Boolean} inverted This is the optional parameter for whether the collection should be inserted from the bottom or the top of the collection
- 
+
  * @extends Object
  * @tutorial tests/CollectionTest.js
  */
@@ -270,7 +270,7 @@ Collection.prototype = Object.create(Object.prototype, {
         // this.debug("find is searchingFor an object whose key is ", searchingFor);
       }
 
-      if (this[searchingFor]) {
+      if (this[searchingFor] && typeof this[searchingFor] !== "function") {
         results.push(this[searchingFor]);
       }
       if (fuzzy) {
@@ -306,8 +306,8 @@ Collection.prototype = Object.create(Object.prototype, {
         this.debug("lets look for the best result where " + optionalKeyToIdentifyItem + " = " + arg2, results.length);
         for (var i = results.length - 1; i >= 0; i--) {
           if (i !== 0 && results[i] && results[i][optionalKeyToIdentifyItem] === arg2) {
-            var bestMatch = results.splice(i);  
-            this.debug("a pefect match  " , bestMatch);
+            var bestMatch = results.splice(i);
+            this.debug("a pefect match  ", bestMatch);
             results.unshift(bestMatch[0]);
           }
         }

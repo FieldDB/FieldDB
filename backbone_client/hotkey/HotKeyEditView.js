@@ -1,6 +1,6 @@
 define([
     "backbone", 
-    "handlebars", 
+    "libs/compiled_handlebars", 
     "hotkey/HotKey"
 ], function(Backbone, Handlebars, HotKey) {
     var HotKeyEditView = Backbone.View.extend(

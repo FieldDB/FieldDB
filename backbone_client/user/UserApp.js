@@ -3,7 +3,7 @@ define([
     "backbone",
     "bootstrap",
     "libs/backbone_couchdb/backbone-couchdb",
-    "handlebars",
+    "libs/compiled_handlebars",
     "authentication/Authentication",
     "corpus/Corpus",
     "user/UserAppView",
@@ -272,17 +272,22 @@ define([
         return;
       }
 
-      var couchurl = this.getCouchUrl(connection, "/_session");
-      var corpusloginparams = {};
-      corpusloginparams.name = username;
-      corpusloginparams.password = password;
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchurl);
+      var couchSessionUrl = this.getCouchUrl(connection, "/_session");
+      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchSessionUrl);
 
       var appself = this;
-      $.couch.login({
-        name: username,
-        password: password,
-        success : function(serverResults) {
+      var connectionInscope = connection;
+      $.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
+
+      FieldDB.CORS.makeCORSRequest({
+          type: "POST",
+          url: couchSessionUrl,
+          data: {
+            name: username,
+            password: password
+          }
+        }).then(function(serverResults){
+
           if (window.appView) {
             window.appView
             .toastUser(
@@ -301,55 +306,35 @@ define([
           if (typeof succescallback == "function") {
             succescallback(serverResults);
           }
-        },
-        error : function(serverResults) {
-          window
-          .setTimeout(
-              function() {
-                //try one more time 5 seconds later
-                $.couch.login({
-                  name: username,
-                  password: password,
-                  success : function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                      .toastUser(
-                          "I logged you into your team server automatically, your syncs will be successful.",
-                          "alert-info", "Online Mode:");
-                    }
-                    /* if in chrome extension, or offline, turn on replication */
-                    if(OPrime.isChromeApp()){
-                      //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-//                      appself.replicateContinuouslyWithCouch();
-                    }
+        }, function(reason){
 
-                    if (typeof succescallback == "function") {
-                      succescallback(serverResults);
-                    }
-                  },
-                  error : function(serverResults) {
-                    if (window.appView) {
-                      window.appView
-                      .toastUser(
-                          "I couldn't log you into your corpus. What does this mean? "
-                          + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
-                          + "You also can't share your data with team members. If your computer is online and you are"
-                          + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
-                          + OPrime.contactUs
-                          + " If you're offline you can ignore this warning, and sync later when you're online. ",
-                          "alert-danger",
-                      "Offline Mode:");
-                    }
-                    if (typeof failurecallback == "function") {
-                      failurecallback("I couldn't log you into your corpus.");
-                    }
-                    if (OPrime.debugMode) OPrime.debug(serverResults);
-                    window.app.get("authentication").set(
-                        "staleAuthentication", true);
-                  }
-                });
-              }, 5000);
+          if (window.appView) {
+            window.appView
+            .toastUser(
+                "I couldn't log you into your corpus. What does this mean? "
+                + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
+                + "You also can't share your data with team members. If your computer is online and you are"
+                + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
+                + OPrime.contactUs
+                + " If you're offline you can ignore this warning, and sync later when you're online. ",
+                "alert-danger",
+            "Offline Mode:");
+          }
+          if (typeof failurecallback == "function") {
+            failurecallback("I couldn't log you into your corpus.");
+          }
+          if (OPrime.debugMode) OPrime.debug(reason);
+          window.app.get("authentication").set(
+              "staleAuthentication", true);
+
+      }).fail(function(exception){
+
+        console.warn(exception.stack);
+        OPrime.bug("There was a problem logging you into your backup database, please report this.");
+        if (typeof failurecallback == "function") {
+          failurecallback("Unexpected error when logging you in to your corpus.");
         }
+
       });
     },
     /* TODO decide if we want this here once the pouch is ready */

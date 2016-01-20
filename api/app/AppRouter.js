@@ -35,6 +35,7 @@ define([
     routes : {
       "corpus/:dbname/session/:id/alldatainthissession/:goal" : "showAllDataInSession",
       "corpus/:dbname/datum/:id"     : "showEmbeddedDatum", //dbname has to match the pouch of the datum
+      "corpus/:dbname/lexicon/:searchterm"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
       "corpus/:dbname/search/:searchterm"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
       "corpus/:dbname/search"        : "showEmbeddedSearch",//dbname has to match the pouch of the corpus
       "corpus/:dbname/conversation/:id" : "showEmbeddedConversation",

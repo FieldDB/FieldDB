@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumFields",
@@ -199,13 +199,13 @@ define([
       for(var x in datumfields){
         datumfields[x].mask = "";
         datumfields[x].value = "";
-        if (datumfields[x].users) {
-          datumfields[x].users = [];
+        if (datumfields[x].json) {
+          datumfields[x].json = {};
         }
       }
       this.prependDatum(new Datum({
         filledWithDefaults : true,
-        datumFields : new DatumFields(datumfields),
+        fields : new DatumFields(datumfields),
         dbname : app.get("corpus").get("dbname"),
         session : app.get("currentSession")
       }));

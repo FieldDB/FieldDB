@@ -162,6 +162,9 @@
   var Team = require("./user/Team").Team;
   FieldDB.Team = Team;
   FieldDB["Team"] = Team;
+  var Tree = require("./glosser/Tree").Tree;
+  FieldDB.Tree = Tree;
+  FieldDB["Tree"] = Tree;
   var UnicodeSymbol = require("./unicode/UnicodeSymbol").UnicodeSymbol;
   FieldDB.UnicodeSymbol = UnicodeSymbol;
   FieldDB["UnicodeSymbol"] = UnicodeSymbol;

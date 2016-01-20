@@ -1,7 +1,7 @@
 
 define( [
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
@@ -455,7 +455,7 @@ define( [
       }
       try{
         this.model.set("datumIds", _.difference(this.model.get("datumIds"), [datumIds]) );
-        appView.currentPaginatedDataListDatumsView.collection.remove(appView.currentPaginatedDataListDatumsView.collection.get(datumIds[0]))
+        appView.currentPaginatedDataListDatumsView.removeIds(datumIds);
       }catch(e){
         if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
       }

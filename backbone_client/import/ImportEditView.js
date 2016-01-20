@@ -1,6 +1,6 @@
 define( [
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideo",
     "import/Import",
     "data_list/DataList",
@@ -352,19 +352,19 @@ define( [
       return this;
     },
     renderDatumFieldsLabels : function(){
-      if(this.model.get("datumFields") == undefined){
+      if(this.model.get("fields") == undefined){
         return;
       }
       var colors= ["label-info","label-inverse","label-success","label-warning","label-important"];
       var colorindex = 0;
       $("#import-datum-field-labels").html("");//Locale.get("locale_Drag_Fields_Instructions"));
-      for(i in this.model.get("datumFields").models){
+      for(i in this.model.get("fields").models){
         var x = document.createElement("span");
         x.classList.add("pull-left");
         x.classList.add("label");
         x.classList.add(colors[colorindex%colors.length]);
         x.draggable="true";
-        x.innerHTML = this.model.get("datumFields").models[i].get("label");
+        x.innerHTML = this.model.get("fields").models[i].get("label");
         x.addEventListener('dragstart', this.handleDragStart);
         colorindex++;
         $("#import-datum-field-labels").append(x);
@@ -474,8 +474,8 @@ define( [
     convertTableIntoDataList : function(){
       $(".import-progress").val($(".import-progress").val()+1);
       this.model.set("datumArray", []);
-      this.model.get("session").setConsultants(this.model.get("consultants"));
-      var consultantsInThisImportSession = [];
+      this.model.get("session").setSource(this.model.get("source"));
+      var sourceInThisImportSession = [];
       /* clear out the data list views and datum views
        *
        * Copied from SearchEditView
@@ -536,7 +536,7 @@ define( [
           this.sessionView.destroy_view();
         }
         /* put metadata in the session goals */
-        var sessionGoal = this.model.get("session").get("sessionFields").where({
+        var sessionGoal = this.model.get("session").get("fields").where({
             label : "goal"
           })[0];
         if(sessionGoal){
@@ -576,14 +576,14 @@ define( [
         } else if (headers[f] == "ToBeCheckedWithConsultant") {
           // do nothing
         } else{
-          if(this.model.get("datumFields").where({label: headers[f]})[0] == undefined){
+          if(this.model.get("fields").where({label: headers[f]})[0] == undefined){
             var newfield = new DatumField({
               label : headers[f],
               shouldBeEncrypted: "checked",
               userchooseable: "",
               help: "This field came from file import "+this.model.get("status")
             });
-            this.model.get("datumFields").add(newfield);
+            this.model.get("fields").add(newfield);
             window.app.get("corpus").get("datumFields").add(newfield);
           }
         }
@@ -657,7 +657,7 @@ define( [
           datumfields[x].mask = "";
           datumfields[x].value = "";
           if (datumfields[x].label === "modifiedByUser") {
-            datumfields[x].users = [];
+            datumfields[x].json = {};
           } else if (datumfields[x].label === "enteredByUser") {
             var user = {
               username: window.app.get("authentication").get("userPublic").get("username"),
@@ -670,7 +670,8 @@ define( [
             if (!usersName || usersName.trim().length < 2) {
               usersName = user.username;
             }
-            datumfields[x].user = user;
+            datumfields[x].json = datumfields[x].json || {};
+            datumfields[x].json.user = user;
             datumfields[x].mask = usersName;
             datumfields[x].value = usersName;
           }
@@ -702,18 +703,18 @@ define( [
 //          }
           /* turn the CheckedWithConsultant and ToBeCheckedWithConsultantinto columns into a status, with that string as the person */
           else if (index.toLowerCase().indexOf("checkedwithconsultant") >-1 ) {
-            var consultants = [];
+            var source = [];
             if (value.indexOf(",") > -1) {
-              consultants = value.split(",");
+              source = value.split(",");
             } else if (value.indexOf(";") > -1) {
-              consultants = value.split(";");
+              source = value.split(";");
             } else {
-              consultants = value.split(" ");
+              source = value.split(" ");
             }
             var validationStati = [];
-            for(g in consultants){
-              var consultantusername = consultants[g].toLowerCase();
-              consultantsInThisImportSession.push(consultantusername);
+            for(g in source){
+              var consultantusername = source[g].toLowerCase();
+              sourceInThisImportSession.push(consultantusername);
               if(!consultantusername){
                 continue;
               }
@@ -724,7 +725,7 @@ define( [
                 validationColor = "warning";
               }
 
-              var validationString = validationType + consultants[g].replace(/[- _.]/g,"");
+              var validationString = validationType + source[g].replace(/[- _.]/g,"");
               validationStati.push(validationString);
               var n = fields.where({label: "validationStatus"})[0];
               /* add to any exisitng validation states */
@@ -736,7 +737,7 @@ define( [
 
 //              ROUGH DRAFT of adding CONSULTANTS logic TODO do this in the angular app, dont bother with the backbone app
 //              /* get the initials from the data */
-//              var consultantCode = consultants[g].replace(/[a-z -]/g,"");
+//              var consultantCode = source[g].replace(/[a-z -]/g,"");
 //              if(consultantusername.length == 2){
 //                consultantCode = consultantusername;
 //              }
@@ -753,7 +754,7 @@ define( [
 //               * This function uses the consultant code to create a new validation status
 //               */
 //              var onceWeGetTheConsultant = function(){
-//                var validationString = validationType+consultants[g].replace(/ /g,"");
+//                var validationString = validationType+source[g].replace(/ /g,"");
 //                validationStati.push(validationString);
 //                var n = fields.where({label: "validationStatus"})[0];
 //                if(n != undefined){
@@ -838,7 +839,7 @@ define( [
             }
           }
         });
-        d.set("datumFields", fields);
+        d.set("fields", fields);
         if (audioVideo) {
           d.get("audioVideo").add(audioVideo);
           // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
@@ -852,7 +853,7 @@ define( [
         d.lookForSimilarDatum();
         this.model.get("datumArray").push(d);
       }
-      this.model.set("consultants", _.unique(consultantsInThisImportSession).join(","));
+      this.model.set("source", _.unique(sourceInThisImportSession).join(","));
       this.importPaginatedDataListDatumsView.renderUpdatedPaginationControl();
 
       $(".approve-save").removeAttr("disabled");
@@ -1068,7 +1069,7 @@ define( [
     createNewSession : function(callback){
       if(this.model.get("session") == undefined){
         this.model.set("session", new Session({
-          sessionFields : window.app.get("corpus").get("sessionFields").clone(),
+          fields : window.app.get("corpus").get("sessionFields").clone(),
           "dbname" : window.app.get("corpus").get("dbname"),
         }));
 
@@ -1086,16 +1087,16 @@ define( [
           //do nothing
         }
 
-        this.model.get("session").get("sessionFields").where({
+        this.model.get("session").get("fields").where({
           label : "goal"
         })[0].set("mask", "Goal from file import " + this.model.get("status"));
 
-        this.model.get("session").get("sessionFields").where({
+        this.model.get("session").get("fields").where({
           label : "dateElicited"
         })[0].set("mask", "Probably Prior to " + filemodified);
 
-        this.model.get("session").get("sessionFields").where({
-          label : "consultants"
+        this.model.get("session").get("fields").where({
+          label : "source"
         })[0].set("mask", "Unknown");
       }
 

@@ -837,14 +837,20 @@ var MAINTAINENCE = {
 
   deployToAllUsers: function() {
 
+
     /*
     Deploy to all users
      */
+    // var typeOfDBToDeploy = "new_lexicon";
+    // var typeOfDBToDeploy = "new_export";
+
+    var typeOfDBToDeploy = "";
+
     window.needToRetry = [];
     $.couch.allDbs({
       success: function(results) {
         console.log(results);
-        
+
         for (var db in results) {
 
           (function(dbname) {
@@ -864,8 +870,8 @@ var MAINTAINENCE = {
               console.log(dbname + "  is not a corpus or activity feed ");
               return;
             }
-            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 ||  dbname.indexOf("jenkins") === 0 ) {
-              return;
+            if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") >= 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0 || dbname.indexOf("jenkins") === 0) {
+              // return;
               if (sourceDB === "new_corpus") {
                 sourceDB = "new_testing_corpus";
               }
@@ -895,8 +901,11 @@ var MAINTAINENCE = {
               }
             }
 
-
-            console.log(dbname + " is a " + sourceDB);
+            if (typeOfDBToDeploy && sourceDB.indexOf("corpus") > -1) {
+              sourceDB = typeOfDBToDeploy;
+            }
+            console.log("   will deploy " + sourceDB + " to " + dbname);
+            return;
             $.couch.replicate(sourceDB, dbname, {
               success: function(result) {
                 console.log(dbname, result);
@@ -1062,7 +1071,6 @@ var MAINTAINENCE = {
       });
 
 
-
     };
 
     $.couch.allDbs({
@@ -1129,7 +1137,7 @@ var MAINTAINENCE = {
       });
     };
 
-    var turnOnContinuousReplication = function(dbnameToReplicate, dbnames) {
+    var turnOnReplication = function(dbnameToReplicate, dbnames) {
       var replicationOptions = {
         // create_target: true,
         // continuous: true
@@ -1145,18 +1153,18 @@ var MAINTAINENCE = {
 
             console.log("waiting " + throttleReplications);
             window.setTimeout(function() {
-              turnOnReplicationAndLoop(dbnames);
+              return turnOnReplicationAndLoop(dbnames);
             }, throttleReplications);
 
           },
           error: function(error) {
-            console.log("Error replicating to db" + dbnameToReplicate, error);
+            console.log("Error replicating to db " + dbnameToReplicate, error);
             self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
-            alert("There was a problem turing on replication to the new data base. pausing...");
+            alert("There was a problem turing on replication to the new database. pausing...");
 
             console.log("waiting " + throttleReplications);
             window.setTimeout(function() {
-              turnOnReplicationAndLoop(dbnames);
+              return turnOnReplicationAndLoop(dbnames);
             }, throttleReplications);
 
           }
@@ -1170,34 +1178,30 @@ var MAINTAINENCE = {
         return;
       }
       var dbname = dbnames.pop();
+      console.log("looking at "+ dbname);
 
       if (!dbname || dbname === "_replicator") {
         console.log(dbname + "  is couchdb internal db ");
-        turnOnReplicationAndLoop(dbnames);
-        return;
+        return turnOnReplicationAndLoop(dbnames);
       }
 
       if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-        turnOnReplicationAndLoop(dbnames);
-        return;
+       return  turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a phophlo user");
       } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
-        turnOnReplicationAndLoop(dbnames);
-        return; // dont bother to replicate any anonymous speech recognition or learn x users
+        return turnOnReplicationAndLoop(dbnames);
+        // dont bother to replicate any anonymous speech recognition or learn x users
         console.log("turning on continuous replication for a learn x user");
       } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-        turnOnReplicationAndLoop(dbnames);
-        return;
+        // return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a beta tester");
       } else {
 
         if (dbname.indexOf("-") === -1) {
-          turnOnReplicationAndLoop(dbnames);
-          return;
+          return turnOnReplicationAndLoop(dbnames);
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
-          turnOnReplicationAndLoop(dbnames);
-          return; //turn on continuous replication for only beta testers and/or phophlo users
+          return turnOnReplicationAndLoop(dbnames); //turn on continuous replication for only beta testers and/or phophlo users
         }
       }
 
@@ -1206,7 +1210,6 @@ var MAINTAINENCE = {
         if (!keepGoing) {
           window.dbnames = dbnames
           console.log("left " + dbnames.length);
-          // turnOnReplicationAndLoop(dbnames);
           return;
         }
       }
@@ -1220,16 +1223,16 @@ var MAINTAINENCE = {
         withCredentials: true
       }).then(function(result) {
         console.log("db " + dbname + " created", result);
-        turnOnContinuousReplication(dbname, dbnames);
+        turnOnReplication(dbname, dbnames);
       }, function(reason) {
         if (reason && reason.error && reason.error === "file_exists") {
-          turnOnContinuousReplication(dbname, dbnames);
+          turnOnReplication(dbname, dbnames);
         } else {
           console.log("Error creating " + dbname, reason);
           alert("There was a problem creating the new data base. pausing...");
 
-          turnOnContinuousReplication(dbname, dbnames);
           self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+          turnOnReplication(dbname, dbnames);
 
         }
       });

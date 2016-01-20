@@ -39,10 +39,10 @@ describe("CorpusMask ", function() {
 
     it("should set the title as url", function() {
       var corpus = new CorpusMask();
-      corpus.title = "Private corpus";
-      expect(corpus.titleAsUrl).toEqual("private_corpus");
+      corpus.title = "Private corpus1";
+      expect(corpus.titleAsUrl).toEqual("private_corpus1");
       corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ Of Quechua";
-      expect(corpus.titleAsUrl).toEqual("internationalization_of_quechua");
+      expect(corpus.titleAsUrl).toEqual("internationalizati0n_of_quechua");
 
     });
 
@@ -249,7 +249,6 @@ describe("CorpusMask ", function() {
         "https://auth.lingsync.org",
         "https://auth.anotherserver.ca"
       ]);
-
     });
 
 
@@ -258,29 +257,26 @@ describe("CorpusMask ", function() {
       connection.dbname = "jenkins-firstcorpus";
 
       expect(connection.dbname).toEqual("jenkins-firstcorpus");
-
     });
 
     it("should be able to figure out a corpus url", function() {
       var connection = new Connection(Connection.defaultConnection());
       connection.dbname = "jenkins-firstcorpus";
-      expect(connection.corpusUrls).toEqual([]);
       expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
       expect(connection.corpusUrls).toEqual(["https://localhost:6984/jenkins-firstcorpus"]);
 
+      connection = new Connection(Connection.defaultConnection());
       connection.corpusUrl = "https://corpusdev.anotherserver.ca/jenkins-firstcorpus";
       expect(connection.corpusUrl).toEqual("https://corpusdev.anotherserver.ca/jenkins-firstcorpus");
       expect(connection.corpusUrls).toEqual([
-        "https://corpusdev.anotherserver.ca/jenkins-firstcorpus",
-        "https://localhost:6984/jenkins-firstcorpus"
+        "https://corpusdev.anotherserver.ca/jenkins-firstcorpus"
       ]);
 
       connection.corpusUrl = "https://corpus.example.org/jenkins-firstcorpus";
       expect(connection.corpusUrl).toEqual("https://corpus.example.org/jenkins-firstcorpus");
       expect(connection.corpusUrls).toEqual([
         "https://corpus.example.org/jenkins-firstcorpus",
-        "https://corpusdev.anotherserver.ca/jenkins-firstcorpus",
-        "https://localhost:6984/jenkins-firstcorpus"
+        "https://corpusdev.anotherserver.ca/jenkins-firstcorpus"
       ]);
 
       connection.corpusUrl = "https://localhost:6984/jenkins-firstcorpus";
@@ -290,7 +286,22 @@ describe("CorpusMask ", function() {
         "https://corpus.example.org/jenkins-firstcorpus",
         "https://corpusdev.anotherserver.ca/jenkins-firstcorpus"
       ]);
+    });
 
+    it("should not use a corpus server url without the dbname", function() {
+      var connection = new Connection({
+        corpusUrls: [
+          "https://localhost:6984",
+          "https://corpusdev.lingsync.org",
+          "https://anothercorpus.url.somewhere",
+          "https://corpus.lingsync.org"
+        ]
+      });
+      expect(connection.corpusUrl).toEqual("https://anothercorpus.url.somewhere");
+
+      connection = new Connection(Connection.defaultConnection());
+      connection.dbname = "jenkins-firstcorpus";
+      expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
     });
 
     it("should be able to get a default connection", function() {
@@ -305,6 +316,7 @@ describe("CorpusMask ", function() {
         authUrls: ["https://localhost:3183"],
         websiteUrls: ["https://localhost:3182"],
         userFriendlyServerName: "Localhost",
+        brandLowerCase: "localhost",
         version: connection.version,
         corpusid: "",
         titleAsUrl: "",

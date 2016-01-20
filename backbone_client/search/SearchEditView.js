@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "data_list/DataList",
     "data_list/DataListEditView",
     "datum/Datum",
@@ -103,6 +103,8 @@ define([
      * Renders the SearchEditView.
      */
     render : function() {
+      var self = this;
+
       if (OPrime.debugMode) OPrime.debug("SEARCH render: " + this.el);
       //make sure the datum fields and session fields match the current corpus
       this.changeViewsOfInternalModels();
@@ -149,8 +151,13 @@ define([
 
 
 
-      try{
-        Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("dbname"));
+      try {
+        window.setTimeout(function() {
+          window.app.get("corpus").glosser.render({
+            element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+            height: 300
+          });
+        }, 500);
       }catch(e){
         window.appView.toastUser("There was a problem loading your corpus visualization.");
       }
@@ -348,6 +355,10 @@ define([
      * @param queryString {String} The string representing the query.
      */
     search : function(queryString, callback) {
+      if (queryString && typeof queryString.trim === "function") {
+        queryString = queryString.trim();
+      }
+
       this.model.saveKeyword(queryString);
       // Search for Datum that match the search criteria
       var searchself = this;

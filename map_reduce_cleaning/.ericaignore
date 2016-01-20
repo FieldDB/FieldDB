@@ -1,0 +1,21 @@
+[
+  ".*~$",
+  ".*\\.swp$",
+  ".*\\.bak$",
+  ".DS_Store$",
+  "\\.ericaignore$",
+  "\\.couchapprc$",
+  "\\.editorconfig$",
+  "^\\.git",
+  "\\.gitignore$",
+  "\\.jshintrc$",
+  "\\.travis.yml$",
+  "Gruntfile.js$",
+  "README.md$",
+  "bower.json$",
+  "^dist",
+  "^lib",
+  "^node_modules",
+  "package.json$",
+  "^test"
+]

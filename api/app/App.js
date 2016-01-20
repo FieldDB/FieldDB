@@ -61,7 +61,7 @@ var App = function App(options) {
   FieldDBObject.apply(this, arguments);
 
   if (!this.knownConnections || !this.knownConnections.length) {
-    // Let client apps override current app connection by setting the auth and/or db url. 
+    // Let client apps override current app connection by setting the auth and/or db url.
     // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
     this.knownConnections = new Corpora(Connection.knownConnections);
     this.knownConnections.primaryKey = "userFriendlyServerName";
@@ -608,7 +608,12 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
   },
 
   router: {
-    value: Router
+    get: function() {
+      return this._router;
+    },
+    set: function(router) {
+      this._router = router;
+    }
   },
 
   showHelpOrNot: {

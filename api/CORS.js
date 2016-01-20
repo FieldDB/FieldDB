@@ -36,11 +36,17 @@ CORS.supportCORSandIE = function(method, url) {
     xhrCors = new XMLHttpRequest();
   } catch (e) {
     this.warn("XMLHttpRequest is not defined, nothing will happen.", e);
-    xhrCors = {};
+    return null;
   }
   if ("withCredentials" in xhrCors) {
     // XHR for Chrome/Firefox/Opera/Safari.
-    xhrCors.open(method, url, true);
+    try {
+      xhrCors.open(method, url, true);
+    } catch (exception) {
+      console.log(exception);
+      this.error = exception.message;
+      return null;
+    }
     // https://mathiasbynens.be/notes/xhr-responsetype-json
     // xhrCors.responseType = "json";
   } else if (typeof XDomainRequest !== "undefined") {
@@ -62,6 +68,9 @@ CORS.makeCORSRequest = function(options) {
     deferred = Q.defer(),
     xhr;
 
+  //forcing production server
+  options.url = options.url.replace("corpusdev", "corpus");
+
   // this.debugMode = true;
   if (!options.method) {
     options.method = options.type || "GET";
@@ -79,12 +88,13 @@ CORS.makeCORSRequest = function(options) {
 
   xhr = this.supportCORSandIE(options.method, options.url);
   if (!xhr) {
-    this.bug("CORS not supported, your browser is unable to contact the database.");
+    var message = this.error || "CORS not supported, your browser will be unable to contact the database: " + options.url;
+    this.bug(message);
     Q.nextTick(function() {
       deferred.reject({
-        status: 400,
+        status: 620,
         details: options,
-        userFriendlyErrors: ["CORS not supported, your browser is unable to contact the database."]
+        userFriendlyErrors: [message]
       });
     });
     return deferred.promise;
@@ -149,6 +159,9 @@ CORS.makeCORSRequest = function(options) {
       if (response.reason && !response.userFriendlyErrors) {
         response.userFriendlyErrors = [response.reason];
       }
+      if (response.userFriendlyErrors[0] === "missing") {
+        response.userFriendlyErrors = ["The server replied that " + options.url + " is missing, please report this."];
+      }
       response.userFriendlyErrors = response.userFriendlyErrors || [" Unknown error  please report this 2312"];
       if (xhr.status === 401) {
         if (CORS.application && CORS.application.authentication && CORS.application.authentication.dispatchEvent) {
@@ -181,10 +194,9 @@ CORS.makeCORSRequest = function(options) {
 
   xhr.onerror = function(e, f, g) {
     self.debug(e, f, g);
-    self.bug("There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.");
     var returnObject = {
-      userFriendlyErrors: "There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this.",
-      status: null,
+      userFriendlyErrors: ["There was an error making the CORS request to " + options.url + " from " + window.location.href + " the app will not function normally. Please report this."],
+      status: xhr.status,
       error: e
     };
     if (e && e.userFriendlyErrors) {
@@ -196,9 +208,13 @@ CORS.makeCORSRequest = function(options) {
     if (e && e.srcElement && e.srcElement.status !== undefined) {
       returnObject.status = e.srcElement.status;
     }
-    if (returnObject.status === 0) {
-      returnObject.userFriendlyErrors = ["Unable to contact the server, are you sure you're not offline?"];
+    if (window && window.navigator && !window.navigator.onLine) {
+      returnObject.userFriendlyErrors = ["Unable to contact the server, you appear to be offline."];
+      returnObject.status = 600;
+    } else {
+      returnObject.status = 610;
     }
+    self.bug(returnObject.userFriendlyErrors.join(" "));
     returnObject.details = options;
     deferred.reject(returnObject);
   };

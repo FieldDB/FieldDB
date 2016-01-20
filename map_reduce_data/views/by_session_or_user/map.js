@@ -100,7 +100,7 @@ function byUserModified(doc) {
           // DEBUG console.log("Using  doc.fields.enteredByUser.user ");
         }
       } else if (fields[fieldIndex].id === "modifiedByUser" || fields[fieldIndex].label === "modifiedByUser") {
-        var users = fields[fieldIndex].users || fields[fieldIndex].json.users;
+        var users = fields[fieldIndex].users || fields[fieldIndex].json.users || [];
         for (userIndex = users.length - 1; userIndex >= 0; userIndex--) {
           if (users[userIndex] && users[userIndex].username) {
             addUser(users[userIndex]);

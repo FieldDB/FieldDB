@@ -172,6 +172,9 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       var handleFailedLogin = function(error) {
         self.loading = false;
+        if (self.user){
+          self.user.authenticated = false;
+        }
         if (!error || !error.userFriendlyErrors) {
           error.userFriendlyErrors = ["Unknown error. Please report this 2456."];
           self.dispatchEvent("authenticateMustConfirmIdentity");
@@ -343,18 +346,15 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       Q.allSettled(promises).then(function(results) {
         var anySucceeded = false;
         var errorReason = {};
+        var allRoles = [];
         results.map(function(result) {
           self.debug("some roles", result);
           if (result.state === "fulfilled" && result.value && result.value.roles) {
-            // TODO  roles depend on the result.value.url  
-
-            self.user.roles = self.user.roles.concat(result.value.roles.map(function(role) {
-              return result.value.url + "/" + role;
-            }));
+            allRoles = allRoles.concat(result.value.roles);
             anySucceeded = true;
           } else {
             self.debug("Failed to login to one of the users's corpus servers ", result);
-            if (result.reason && result.reason.status) {
+            if (result.reason && result.reason.status !== undefined) {
               errorReason.status = result.reason.status;
             }
             if (result.reason && result.reason.userFriendlyErrors) {
@@ -364,8 +364,17 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
               errorReason.details = result.reason.details;
             }
           }
-          self.debug("some roles", self.user.roles);
+          self.debug("some roles", allRoles);
         });
+        var roles = {};
+        self.user.roles = [];
+        allRoles.map(function(role) {
+          if (role && !roles[role]) {
+            roles[role] = 1;
+            self.user.roles.push(role);
+          }
+        });
+
         if (anySucceeded) {
           deferred.resolve(self.user);
         } else {
@@ -407,7 +416,6 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
           }, function(error) {
             waitTime = waitTime * 2;
-            error.status = error.status || 500;
             error.details = options;
             if (waitTime > 60 * 1000) {
               deferred.reject(error);
@@ -628,7 +636,6 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           function(reason) {
             reason = reason || {};
             reason.details = details;
-            reason.status = reason.status || 400;
             reason.userFriendlyErrors = reason.userFriendlyErrors || ["Unknown error, please report this."];
             self.debug(reason);
             deferred.reject(reason);

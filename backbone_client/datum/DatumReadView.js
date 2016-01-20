@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "audio_video/AudioVideoReadView",
     "comment/Comment",
     "comment/Comments",
@@ -29,7 +29,7 @@ define([
   {
     /**
      * @class The layout of a single Datum. It contains a datum state,
-     *        datumFields, datumTags and a datum menu.
+     *        fields, datumTags and a datum menu.
      *
      * @property {String} format Value formats are "latex", "leftSide", or "centreWell".
      *
@@ -58,8 +58,8 @@ define([
       }),
 
       // Create the DatumFieldsView
-      this.datumFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumFields"),
+      this.fieldsView = new UpdatingCollectionView({
+        collection           : this.model.get("fields"),
         childViewConstructor : DatumFieldReadView,
         childViewTagName     : "li",
         childViewFormat      : "datum"
@@ -151,18 +151,18 @@ define([
      * Renders the DatumReadView and all of its partials.
      */
     render : function() {
-      if(!this.model || !this.model.get("datumFields")){
+      if(!this.model || !this.model.get("fields")){
         return this;
       }
 
-      if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("datumFields").models[1].get("mask") );
+      if (OPrime.debugMode) OPrime.debug("DATUM READ render: " + this.model.get("fields").models[1].get("mask") );
 
       if(this.collection){
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
 //        delete this.collection;
       }
 
-      if(this.model.get("datumFields").where({label: "utterance"})[0] == undefined){
+      if(this.model.get("fields").where({label: "utterance"})[0] == undefined){
         if (OPrime.debugMode) OPrime.debug("DATUM fields is undefined, come back later.");
         return this;
       }
@@ -209,8 +209,8 @@ define([
         // this.sessionView.render();
 
         // Display the DatumFieldsView
-        this.datumFieldsView.el = this.$(".datum_fields_ul");
-        this.datumFieldsView.render();
+        this.fieldsView.el = this.$(".datum_fields_ul");
+        this.fieldsView.render();
 
       } else if (this.format == "latex" || this.format == "latexPreviewIGTonly") {
         //This gets the fields necessary from the model
@@ -357,8 +357,8 @@ define([
     	//corpus's most frequent fields
         var frequentFields = window.app.get("corpus").frequentFields ;
         //this datum/datalist's datumfields and their names
-    	var fields = _.pluck(this.model.get("datumFields").toJSON(), "mask");
-    	var fieldLabels = _.pluck(this.model.get("datumFields").toJSON(), "label");
+    	var fields = _.pluck(this.model.get("fields").toJSON(), "mask");
+    	var fieldLabels = _.pluck(this.model.get("fields").toJSON(), "label");
     	//setting up for IGT case...
     	var orthographyIndex = -1;
     	var orthography = "";

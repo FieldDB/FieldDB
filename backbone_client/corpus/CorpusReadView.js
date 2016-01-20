@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "corpus/Corpus",
     "comment/Comment",
     "comment/Comments",
@@ -11,7 +11,6 @@ define([
     "data_list/DataListReadView",
     "datum/DatumFieldReadView",
     "datum/DatumStateReadView",
-    "lexicon/LexiconView",
     "permission/Permission",
     "permission/Permissions",
     "permission/PermissionReadView",
@@ -33,7 +32,6 @@ define([
     DataListReadView,
     DatumFieldReadView,
     DatumStateReadView,
-    LexiconView,
     Permission,
     Permissions,
     PermissionReadView,
@@ -147,9 +145,6 @@ define([
      */
     model : Corpus,
 
-    // TODO Should LexiconView really be here?
-    lexicon : LexiconView,
-
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
@@ -174,17 +169,16 @@ define([
      * Renders the CorpusReadView and all of its child Views.
      */
     render : function() {
+      var self = this;
+
       if (OPrime.debugMode) OPrime.debug("CORPUS READ render: ");
       if(window.appView.currentCorpusEditView){
         window.appView.currentCorpusEditView.destroy_view();
       }
       window.appView.currentCorpusReadView.destroy_view();
 
-      // Build the lexicon
-      this.model.buildLexiconFromTeamServer(this.model.get("dbname"));
-
       // Get the corpus' current precedence rules
-      this.model.buildMorphologicalAnalyzerFromTeamServer(this.model.get("dbname"));
+      this.model.buildMorphologicalAnalyzerFromTeamServer();
 
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\tCorpus model was undefined.");
@@ -295,8 +289,13 @@ define([
 //        this.permissionsView.el = this.$('.permissions-updating-collection');
 //        this.permissionsView.render();
 
-        try{
-          Glosser.visualizeMorphemesAsForceDirectedGraph(null, $(this.el).find(".corpus-precedence-rules-visualization")[0], this.model.get("dbname"));
+        try {
+          window.setTimeout(function() {
+            self.model.glosser.render({
+              element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+              height: 400
+            });
+          }, 500);
         }catch(e){
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }

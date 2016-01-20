@@ -89,6 +89,20 @@ define([
 //      }
     },
 
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel) {
+      /* if this is just a couchdb save result, dont process it */
+      if (originalModel.ok) {
+        return this.originalParse(originalModel);
+      }
+
+      /* Use a more neutral source field instead of just langauge consultants*/
+      if (originalModel.label === "consultants") {
+        originalModel.label = originalModel.id = originalModel.labelFieldLinguists = originalModel.labelNonLinguists = originalModel.labelTranslators = "source";
+      }
+
+      return this.originalParse(originalModel);
+    },
     /**
      * In the case of the datumfield, if the datum
      * field is not encrypted, then the mask and value are essentially the same.
@@ -245,8 +259,8 @@ define([
         callback();
       }
     },
-    originalParse : Backbone.Model.prototype.parse,
-    parse : function(originalModel){
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel){
       originalModel.label = originalModel.label || originalModel.id;
       return this.originalParse(originalModel);
     }

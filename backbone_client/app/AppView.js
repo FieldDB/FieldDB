@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "app/App",
     "app/AppRouter",
     "authentication/Authentication",
@@ -105,6 +105,25 @@ define([
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
+
+      FieldDB.FieldDBObject.bug = function(message){
+        window.appView.toastUser(message, "alert-danger");
+      };
+
+
+      FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
+        var deferred = FieldDB.Q.defer();
+        console.warn(message);
+        FieldDB.Q.nextTick(function(){
+          // always reject until these merges make sense.
+          deferred.reject({
+            message: message,
+            optionalLocale: optionalLocale,
+            response: null
+          });
+        });
+        return deferred.promise;
+      };
 
       this.format = "default";
 
@@ -222,13 +241,13 @@ define([
       this.currentSessionReadView.format = "leftSide";
 
       //Only make a new session modal if it was not already created
-      if(! this.sessionNewModalView && window.app.get("currentSession") && window.app.get("currentSession").get("sessionFields")){
+      if(! this.sessionNewModalView && window.app.get("currentSession") && window.app.get("currentSession").get("fields")){
         if (OPrime.debugMode) OPrime.debug("Creating an empty new session for the new Session modal.");
         this.sessionNewModalView = new SessionEditView({
           model : new Session({
             comments : new Comments(),
             dbname : window.app.get("corpus").get("dbname"),
-            sessionFields : window.app.get("currentSession").get("sessionFields").clone()
+            fields : window.app.get("currentSession").get("fields").clone()
           })
         });
         this.sessionNewModalView.format = "modal";
@@ -493,13 +512,13 @@ define([
         }
         this.searchEditView.searchTop();
       },
-      "keyup #quick-authenticate-password" : function(e) {
-          var code = e.keyCode || e.which;
-          // code == 13 is the enter key
-          if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
-            $("#quick-authentication-okay-btn").click();
-          }
-      },
+      // "keyup #quick-authenticate-password" : function(e) {
+      //     var code = e.keyCode || e.which;
+      //     // code == 13 is the enter key
+      //     if ((code == 13) && ($("#quick-authenticate-password").val() != "")) {
+      //       $("#quick-authentication-okay-btn").click();
+      //     }
+      // },
       "keyup #search_box" : function(e) {
 //        if(e){
 //          e.stopPropagation();

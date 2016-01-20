@@ -1,6 +1,6 @@
 define([
     "backbone",
-    "handlebars",
+    "libs/compiled_handlebars",
     "datum/Datum",
     "datum/Datums",
     "datum/DatumReadView",

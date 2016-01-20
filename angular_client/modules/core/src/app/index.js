@@ -113,24 +113,24 @@ angular.module("fielddbAngular", [
   $locationProvider.html5Mode(true);
 
 
-  var passStateParamsController = function($stateParams) {
-    console.log("Loading ", $stateParams);
-    var paramsChanged = false;
-    if (!fieldDBApp.routeParams) {
-      paramsChanged = true;
-    } else {
-      for (var param in $stateParams) {
-        if ($stateParams.hasOwnProperty(param) && fieldDBApp.routeParams[param] !== $stateParams[param]) {
-          paramsChanged = true;
-        }
-      }
-    }
+  // var passStateParamsController = function($stateParams) {
+  //   console.log("Loading ", $stateParams);
+  //   var paramsChanged = false;
+  //   if (!fieldDBApp.routeParams) {
+  //     paramsChanged = true;
+  //   } else {
+  //     for (var param in $stateParams) {
+  //       if ($stateParams.hasOwnProperty(param) && fieldDBApp.routeParams[param] !== $stateParams[param]) {
+  //         paramsChanged = true;
+  //       }
+  //     }
+  //   }
 
-    if (paramsChanged) {
-      fieldDBApp.processRouteParams($stateParams);
-      fieldDBApp.debug(fieldDBApp.routeParams);
-    }
-  };
+  //   if (paramsChanged) {
+  //     fieldDBApp.processRouteParams($stateParams);
+  //     fieldDBApp.debug(fieldDBApp.routeParams);
+  //   }
+  // };
 
   /* Add some default Routes/States which the app knows how to render */
   // if (FieldDB.Router.otherwise) {

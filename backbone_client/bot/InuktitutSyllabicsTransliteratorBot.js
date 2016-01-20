@@ -176,14 +176,14 @@ var Bot = function(dbname, corpusid, corpustitle){
 		// 	bookField.label = "Bible Book";
 		// 	bookField.value = "Genesis";
 		// 	bookField.mask = "Genesis";
-		// 	datum.session.sessionFields.push(bookField);
+		// 	datum.session.fields.push(bookField);
 
 		// 	var chapterField = {};
 		// 	jQuery.extend(chapterField, utteranceField);
 		// 	chapterField.label = "Bible Book Chapter";
 		// 	chapterField.value = pieces[1];
 		// 	chapterField.mask = pieces[1];
-		// 	datum.session.sessionFields.push(chapterField);
+		// 	datum.session.fields.push(chapterField);
 
 		// 	var verseField = {};
 		// 	jQuery.extend(verseField, utteranceField);

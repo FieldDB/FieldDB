@@ -11,7 +11,6 @@ define([
   "image/Images",
   "datum/Session",
   "xml2json",
-  "glosser/Tree",
   "OPrime"
 ], function(
   Backbone,
@@ -99,8 +98,8 @@ define([
           this.set("datumTags", new DatumTags());
         }
 
-        if (!this.get("datumFields") || this.get("datumFields").length == 0) {
-          this.set("datumFields", window.app.get("corpus").get("datumFields").clone());
+        if (!this.get("fields") || this.get("fields").length == 0) {
+          this.set("fields", window.app.get("corpus").get("datumFields").clone());
         }
       },
       /**
@@ -115,7 +114,7 @@ define([
 
       // Internal models: used by the parse function
       internalModels: {
-        datumFields: DatumFields,
+        fields: DatumFields,
         audioVideo: AudioVideos,
         images: Images,
         session: Session,
@@ -138,7 +137,7 @@ define([
           editingTimeSpent: 0,
           editingTimeDetails: []
         };
-        var fields = this.get("datumFields").models;
+        var fields = this.get("fields").models;
         for (var field in fields) {
           if (fields[field].timeSpent) {
             details.editingTimeSpent += fields[field].timeSpent;
@@ -149,7 +148,7 @@ define([
       },
 
       clearEditTimeDetails: function() {
-        var fields = this.get("datumFields").models;
+        var fields = this.get("fields").models;
         for (var field in fields) {
           fields[field].timeSpent = 0;
         }
@@ -158,7 +157,7 @@ define([
        * Gets all the DatumIds in the current Corpus sorted by their date.
        *
        * @param {Function} callback A function that expects a single parameter. That
-       * parameter is the result of calling "pages/datums". So it is an array
+       * parameter is the result of calling "deprecated/datums". So it is an array
        * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
        * attribute contains the Datum's dateModified and the 'value' attribute contains
        * the Datum itself.
@@ -193,7 +192,7 @@ define([
 
         try {
           self.pouch(function(err, db) {
-            db.query("pages/datums", {
+            db.query("deprecated/datums", {
               reduce: false
             }, function(err, response) {
 
@@ -206,7 +205,7 @@ define([
                  * Its possible that the pouch has no by date views, create them and then try searching again.
                  */
                 window.toldSearchtomakebydateviews = true;
-                window.app.get("corpus").createPouchView("pages/datums", function() {
+                window.app.get("corpus").createPouchView("deprecated/datums", function() {
                   window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.", "alert-success", "Sort:");
                   self.getMostRecentIdsByDate(howmany, callback);
                 });
@@ -236,27 +235,28 @@ define([
         }
 
         OPrime.debug("Edit this function to update datum to the latest schema.");
-        originalModel.datumFields = originalModel.datumFields || originalModel.fields || [];
+        originalModel.fields = originalModel.datumFields || originalModel.fields || [];
+        delete originalModel.datumFields;
         var x;
         /* make sure the fields have a label */
-        for (x in originalModel.datumFields) {
-          originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
+        for (x in originalModel.fields) {
+          originalModel.fields[x].label = originalModel.fields[x].label || originalModel.fields[x].id;
         }
         if(!originalModel.session){
           originalModel.session = {
-            datumFields: []
+            fields: []
           };
         }
-        for (x in originalModel.session.datumFields) {
-          originalModel.session.datumFields[x].label = originalModel.session.datumFields[x].label ||originalModel.session.datumFields[x].id;
+        for (x in originalModel.session.fields) {
+          originalModel.session.fields[x].label = originalModel.session.fields[x].label ||originalModel.session.fields[x].id;
         }
 
         /* Add any new corpus fields to this datum so they can be edited */
         var originalFieldLabels;
-        if (originalModel.datumFields.id) {
-          originalFieldLabels = _.pluck(originalModel.datumFields, "id");
+        if (originalModel.fields.id) {
+          originalFieldLabels = _.pluck(originalModel.fields, "id");
         } else {
-          originalFieldLabels = _.pluck(originalModel.datumFields, "label");
+          originalFieldLabels = _.pluck(originalModel.fields, "label");
         }
 
         window.corpusfieldsforDatumParse = window.corpusfieldsforDatumParse || window.app.get("corpus").get("datumFields").toJSON()
@@ -268,9 +268,8 @@ define([
               OPrime.debug("Adding field to this datum: " + corpusFieldClone.label);
               corpusFieldClone.mask = "";
               corpusFieldClone.value = "";
-              delete corpusFieldClone.user;
-              delete corpusFieldClone.users;
-              originalModel.datumFields.push(corpusFieldClone);
+              corpusFieldClone.json = {};
+              originalModel.fields.push(corpusFieldClone);
             }
           }
         }
@@ -284,10 +283,19 @@ define([
         var indexOfEnterdByUserField = originalFieldLabels.indexOf("enteredByUser");
         try {
           if (indexOfEnterdByUserField > -1) {
-            var enteredByUserField = originalModel.datumFields[indexOfEnterdByUserField];
-            if (enteredByUserField.user && (!enteredByUserField.value || !enteredByUserField.mask)) {
-              enteredByUserField.value = enteredByUserField.user.username;
-              enteredByUserField.mask = enteredByUserField.user.username;
+            var enteredByUserField = originalModel.fields[indexOfEnterdByUserField];
+
+            var user = enteredByUserField.user
+            if (enteredByUserField.json && enteredByUserField.json.user && enteredByUserField.json.user.username) {
+              user = enteredByUserField.json.user;
+            }
+            enteredByUserField.json = enteredByUserField.json || {};
+            enteredByUserField.json.user = user;
+            delete enteredByUserField.user;
+
+            if (enteredByUserField.json.user && (!enteredByUserField.value || !enteredByUserField.mask)) {
+              enteredByUserField.value = enteredByUserField.json.user.username;
+              enteredByUserField.mask = enteredByUserField.json.user.username;
               console.log("repaired enteredByUserField", enteredByUserField);
 
             } else {
@@ -301,31 +309,32 @@ define([
         var indexOfModifiedByUserField = originalFieldLabels.indexOf("modifiedByUser");
         try {
           if (indexOfModifiedByUserField > -1) {
-            var modifiyersField = originalModel.datumFields[indexOfModifiedByUserField];
-            if (modifiyersField.users && modifiyersField.users.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
-              var modifiers = modifiyersField.users;
-              // Limit users array to unique usernames
-              modifiers = _.map(_.groupBy(modifiers, function(x) {
-                return x.username;
-              }), function(grouped) {
-                /* take the most recent version of the user in case they updated their gravatar or first and last name*/
-                return grouped[grouped.length - 1];
-              });
-              modifiyersField.users = modifiers;
+            var modifiyersField = originalModel.fields[indexOfModifiedByUserField];
+            var modifiers = modifiyersField.users;
+            if (!modifiers && modifiyersField.json && modifiyersField.json.users){
+              modifiers = modifiyersField.json.users;
+            }
+            enteredByUserField.json = enteredByUserField.json || {};
+            enteredByUserField.json.users = modifiers || [];
+            delete modifiyersField.users;
+
+            if (modifiers && modifiers.length > 0 && (!modifiyersField.value || !modifiyersField.mask)) {
+              // // Limit value view of modifiers array to unique usernames
+              // modifiers = _.map(_.groupBy(modifiers, function(x) {
+              //   return x.username;
+              // }), function(grouped) {
+              //   /* take the most recent version of the user in case they updated their gravatar or first and last name*/
+              //   return grouped[grouped.length - 1];
+              // });
 
               /* generate the users as a string using the users array */
-              var usersAsString = [];
-              for (var user in modifiers) {
-                var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
-                userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
-                if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
-                  userFirstandLastName = modifiers[user].username;
+              modifiyersField.mask = _.unique(modifiers.map(function(userMask){
+                if (!(userMask instanceof FieldDB.UserMask)) {
+                  userMask = new FieldDB.UserMask(userMask)
                 }
-                usersAsString.push(userFirstandLastName);
-              }
-              usersAsString = usersAsString.join(", ");
-              modifiyersField.mask = usersAsString;
-              modifiyersField.value = usersAsString;
+                return userMask.name;
+              })).join(", ");
+              modifiyersField.value = modifiyersField.mask;
               console.log("repaired modifiedByUser", modifiyersField);
 
             } else {
@@ -351,9 +360,9 @@ define([
         }
 
         /* enforce validation status to be comma seperated */
-        var fieldLabels = _.pluck(originalModel.datumFields, "label");
+        var fieldLabels = _.pluck(originalModel.fields, "label");
         var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
-        var validationFieldToclean = originalModel.datumFields[indexOfValidationSatus];
+        var validationFieldToclean = originalModel.fields[indexOfValidationSatus];
         var validationStatus = validationFieldToclean.mask || "";
         if (oldvalidationStatus) {
           // if the old status is not already subsumbed by a curretn status, do add it to the validation status
@@ -370,7 +379,7 @@ define([
 
         /* enforce tags to be comma seperated */
         var indexOfTags = fieldLabels.indexOf("tags");
-        var tagFieldToClean = originalModel.datumFields[indexOfTags];
+        var tagFieldToClean = originalModel.fields[indexOfTags];
         var tagValue = tagFieldToClean.mask || "";
         var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
           return nonemptyvalue;
@@ -400,8 +409,8 @@ define([
         try {
           if (indexOfCheckedField > -1) {
             //if its set to true or false, then its probably a bug not a user created field
-            if (originalModel.datumFields[indexOfCheckedField] && (originalModel.datumFields[indexOfCheckedField].value === true || originalModel.datumFields[indexOfCheckedField].value === false)) {
-              originalModel.datumFields.splice(indexOfCheckedField, 1)
+            if (originalModel.fields[indexOfCheckedField] && (originalModel.fields[indexOfCheckedField].value === true || originalModel.fields[indexOfCheckedField].value === false)) {
+              originalModel.fields.splice(indexOfCheckedField, 1)
             }
           }
         } catch (e) {
@@ -413,7 +422,7 @@ define([
       joinDatumOnFields: ["utterance", "orthography", "morphemes", "allomorphs", "translation"],
       lookForSimilarDatum: function() {
         var self = this;
-        var query = this.get("datumFields").toJSON().map(function(field) {
+        var query = this.get("fields").toJSON().map(function(field) {
           if (field.mask && field.mask.trim() && field.label && field.label.trim() && self.joinDatumOnFields.indexOf(field.label) > -1) {
             return field.label + ":" + field.mask.trim();
           } else {
@@ -427,7 +436,7 @@ define([
             if (similarDatumIds) {
               if (similarDatumIds.length > 1) {
                 var similarDatumString = "similarTo: " + similarDatumIds.join(", similarTo:");
-                self.get("datumFields").add({
+                self.get("fields").add({
                   label: "links",
                   mask: similarDatumString,
                   value: similarDatumString,
@@ -464,12 +473,12 @@ define([
                         });
                         console.log("merged images ", model.get("images"));
                       }
-                      if (importDatum.get("datumFields") && importDatum.get("datumFields").length > 0) {
-                        importDatum.get("datumFields").models.map(function(field) {
+                      if (importDatum.get("fields") && importDatum.get("fields").length > 0) {
+                        importDatum.get("fields").models.map(function(field) {
                           if (!field.get("mask") || !field.get("mask").trim() || field.get("label").toLowerCase().indexOf("user") > -1 || field.get("label").toLowerCase().indexOf("validationstatus") > -1) {
                             return;
                           }
-                          var previousField = model.get("datumFields").where({
+                          var previousField = model.get("fields").where({
                             "label": field.get("label")
                           });
                           if (previousField && previousField.length > 0) {
@@ -477,14 +486,14 @@ define([
                             previousField[0].set("mask", field.get("mask"));
                           } else {
                             console.log("new field", field);
-                            model.get("datumFields").add(field);
+                            model.get("fields").add(field);
                           }
                         });
-                        // model.get("datumFields").set(importDatum.get("datumFields").models, {merge: true, remove: false});
-                        console.log("updated datumFields", model.get("datumFields"));
+                        // model.get("fields").set(importDatum.get("fields").models, {merge: true, remove: false});
+                        console.log("updated fields", model.get("fields"));
                       }
                       // for(var field in importDatum){
-                      //   if(field == "datumFields"){
+                      //   if(field == "fields"){
 
                       //   }else{
                       //     if(importDatum.hasOwnProperty(field) && importDatum[field]){
@@ -527,7 +536,7 @@ define([
           //          if(doc.collection != "datums"){
           //            return;
           //          }
-          //          var fields  = doc.datumFields;
+          //          var fields  = doc.fields;
           //          var result = {};
           //          for(var f in fields){
           //            if(fields[f].label == "gloss"){
@@ -570,7 +579,7 @@ define([
             delete window.get_search_fields_chronological;
           }
           if (!window.get_search_fields_chronological) {
-            $.couch.db(self.get("dbname")).view("pages/get_search_fields_chronological", {
+            $.couch.db(self.get("dbname")).view("deprecated/get_search_fields_chronological", {
               success: afterDownload,
               error: function(status) {
                 console.log("Error quering datum", status);
@@ -588,7 +597,7 @@ define([
 
         try {
           self.pouch(function(err, db) {
-            db.query("pages/get_datum_fields", {
+            db.query("deprecated/get_datum_fields", {
               reduce: false
             }, function(err, response) {
               var matchIds = [];
@@ -619,7 +628,7 @@ define([
                   " <a href='http://www.kchodorow.com/blog/2010/03/15/mapreduce-the-fanfiction/' target='_blank'>MapReduce.</a>", "alert-success", "Search:");
                 window.toldSearchtomakeviews = true;
                 var previousquery = queryString;
-                window.app.get("corpus").createPouchView("pages/get_datum_fields", function() {
+                window.app.get("corpus").createPouchView("deprecated/get_datum_fields", function() {
                   window.appView.searchEditView.search(previousquery);
                 });
               }
@@ -780,7 +789,7 @@ define([
         return queryTokens;
       },
       getDisplayableFieldForActivitiesEtc: function() {
-        return this.get("datumFields").where({
+        return this.get("fields").where({
           label: "utterance"
         })[0].get("mask");
       },
@@ -853,7 +862,7 @@ define([
           }),
           dateEntered: this.get("dateEntered"),
           dateModified: this.get("dateModified"),
-          datumFields: new DatumFields(this.get("datumFields").toJSON(), {
+          fields: new DatumFields(this.get("fields").toJSON(), {
             parse: true
           }),
           datumTags: new DatumTags(this.get("datumTags").toJSON(), {
@@ -876,7 +885,7 @@ define([
        */
       getValidationStatus: function() {
         var validationStatus = "";
-        var stati = this.get("datumFields").where({
+        var stati = this.get("fields").where({
           "label": "validationStatus"
         });
         stati = stati[0].get("mask").trim().split(", ");
@@ -931,7 +940,7 @@ define([
       preprendValidationStatus: function(selectedValue) {
 
         /* prepend this state to the new validationStates as of v1.46.2 */
-        var n = this.get("datumFields").where({
+        var n = this.get("fields").where({
           label: "validationStatus"
         })[0];
         var validationStatus = n.get("mask") || "";
@@ -1002,7 +1011,7 @@ define([
         //corpus's most frequent fields
         var frequentFields = window.app.get("corpus").frequentFields;
         //this datum/datalist's datumfields and their names
-        var fieldsToExport = this.get("datumFields").toJSON().map(function(field) {
+        var fieldsToExport = this.get("fields").toJSON().map(function(field) {
           //Dont export the user fields
           if (field.label.toLowerCase().indexOf("byuser") > -1) {
             return {
@@ -1187,13 +1196,13 @@ define([
 
       getNumberInCollection: function() {
         var number;
-        var numberField = this.get("datumFields").where({
+        var numberField = this.get("fields").where({
           label: "number"
-        })[0] || this.get("datumFields").where({
+        })[0] || this.get("fields").where({
           label: "itemnumber"
-        })[0] || this.get("datumFields").where({
+        })[0] || this.get("fields").where({
           label: "numberintext"
-        })[0] || this.get("datumFields").where({
+        })[0] || this.get("fields").where({
           label: "numberincollection"
         })[0];
         if (numberField) {
@@ -1204,7 +1213,7 @@ define([
 
       datumIsInterlinearGlossText: function(fieldLabels) {
         if (!fieldLabels) {
-          fieldLabels = _.pluck(this.get("datumFields").toJSON(), "label");
+          fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
         }
         var utteranceOrMorphemes = false;
         var gloss = false;
@@ -1233,7 +1242,7 @@ define([
     */
       guessTree: function(morphemesLine) {
         if (morphemesLine) {
-          var trees = Tree.generate(morphemesLine);
+          var trees = FieldDB.Tree.generate(morphemesLine);
           OPrime.debug(trees);
           var syntacticTreeLatex = "";
           syntacticTreeLatex += "\\item[\\sc{Left}] \\Tree " + trees.left;
@@ -1254,7 +1263,7 @@ define([
        * them out as plain text so the user can do as they wish.
        */
       exportAsPlainText: function(showInExportModal) {
-        var fieldsToExport = this.get("datumFields").toJSON().map(function(field) {
+        var fieldsToExport = this.get("fields").toJSON().map(function(field) {
           if (field.label.toLowerCase().indexOf("latex") > -1) {
             return {
               label: "",
@@ -1295,7 +1304,7 @@ define([
        */
       exportAsCSV: function(showInExportModal, orderedFields, printheader) {
 
-        var fieldsToExport = this.get("datumFields").toJSON().map(function(field) {
+        var fieldsToExport = this.get("fields").toJSON().map(function(field) {
           if (field.label.toLowerCase().indexOf("latex") > -1) {
             return {
               label: "",
@@ -1355,7 +1364,7 @@ define([
           // dbname: this.get("dbname")
         };
         var helpConventions = {};
-        var asDatumFields = this.get("datumFields").toJSON().concat(this.get("session").get("sessionFields").toJSON());
+        var asDatumFields = this.get("fields").toJSON().concat(this.get("session").get("fields").toJSON());
         for (var fieldIndex = 0; fieldIndex < asDatumFields.length; fieldIndex++) {
           if (asDatumFields[fieldIndex].mask && asDatumFields[fieldIndex].mask.length > 0) {
             asIGTJSON[asDatumFields[fieldIndex].label] = asDatumFields[fieldIndex].mask;
@@ -1437,7 +1446,7 @@ define([
        */
       encrypt: function() {
         this.set("confidential", true);
-        this.get("datumFields").each(function(dIndex) {
+        this.get("fields").each(function(dIndex) {
           dIndex.set("encrypted", "checked");
         });
         //TODO scrub version history to get rid of all unencrypted versions.
@@ -1450,7 +1459,7 @@ define([
       decrypt: function() {
         this.set("confidential", false);
 
-        this.get("datumFields").each(function(dIndex) {
+        this.get("fields").each(function(dIndex) {
           dIndex.set("encrypted", "");
         });
       },
@@ -1470,11 +1479,17 @@ define([
         if (OPrime.debugMode) OPrime.debug("Saving a Datum");
         var self = this;
         var newModel = true;
+        var appVersion = "";
+        if (appView.authView.appVersion){
+          appVersion = appView.authView.appVersion;
+        }
         var user = {
           username: window.app.get("authentication").get("userPublic").get("username"),
           gravatar: window.app.get("authentication").get("userPublic").get("gravatar"),
           firstname: window.app.get("authentication").get("userPublic").get("firstname"),
-          lastname: window.app.get("authentication").get("userPublic").get("lastname")
+          lastname: window.app.get("authentication").get("userPublic").get("lastname"),
+          timestamp: Date.now(),
+          appVersion: appVersion
         };
         var usersName = user.firstname + " " + user.lastname;
         usersName = usersName.replace(/undefined/g, "");
@@ -1484,42 +1499,32 @@ define([
 
         if (this.id) {
           newModel = false;
-          var modifiyersField = this.get("datumFields").where({
+          var modifiyersField = this.get("fields").where({
             label: "modifiedByUser"
-          })[0];
-          if (modifiyersField) {
-            var modifiers = modifiyersField.get("users");
-            modifiers.push(user);
-            // Limit users array to unique usernames
-            modifiers = _.map(_.groupBy(modifiers, function(x) {
-              return x.username;
-            }), function(grouped) {
-              /* take the most recent version of the user in case they updated their gravatar or first and last name*/
-              return grouped[grouped.length - 1];
-            });
-            modifiyersField.set("users", modifiers);
-
+          });
+          if (modifiyersField && modifiyersField[0]) {
+            modifiyersField = modifiyersField[0];
+            var json = modifiyersField.get("json") || {};
+            json.users = json.users || [];
+            json.users.push(user);
             /* generate the users as a string using the users array */
-            var usersAsString = [];
-            for (var user in modifiers) {
-              var userFirstandLastName = modifiers[user].firstname + " " + modifiers[user].lastname;
-              userFirstandLastName = userFirstandLastName.replace(/undefined/g, "");
-              if (!userFirstandLastName || userFirstandLastName.trim().length < 2) {
-                userFirstandLastName = modifiers[user].username;
+            var usersAsString  = _.unique(json.users.map(function(userMask){
+              if (!(userMask instanceof FieldDB.UserMask)) {
+                userMask = new FieldDB.UserMask(userMask)
               }
-              usersAsString.push(userFirstandLastName);
-            }
-            usersAsString = usersAsString.join(", ");
+              return userMask.name;
+            })).join(", ");
+            modifiyersField.set("json", json);
             modifiyersField.set("mask", usersAsString);
           }
         } else {
           this.set("dateEntered", JSON.stringify(new Date()));
-          var userField = this.get("datumFields").where({
+          var userField = this.get("fields").where({
             label: "enteredByUser"
           })[0];
           if (userField) {
             userField.set("mask", usersName);
-            userField.set("user", user);
+            userField.set("json", {user: user});
           }
         }
         var timeSpentDetails = this.calculateEditTime();
@@ -1545,7 +1550,7 @@ define([
         }
         //If it was decrypted, this will save the changes before we go into encryptedMode
 
-        this.get("datumFields").each(function(dIndex) {
+        this.get("fields").each(function(dIndex) {
           //Anything can be done here, it is the set function which does all the work.
           dIndex.set("value", dIndex.get("mask"));
         });
@@ -1571,7 +1576,7 @@ define([
         self.save(null, {
           success: function(model, response) {
             if (OPrime.debugMode) OPrime.debug('Datum save success');
-            var utterance = model.get("datumFields").where({
+            var utterance = model.get("fields").where({
               label: "utterance"
             })[0].get("mask");
             var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
@@ -1652,7 +1657,7 @@ define([
              */
             if ($("#search_box").val() != "") {
               //TODO check this
-              var datumJson = model.get("datumFields").toJSON()
+              var datumJson = model.get("fields").toJSON()
               var datumAsDBResponseRow = {};
               for (var x in datumJson) {
                 datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;

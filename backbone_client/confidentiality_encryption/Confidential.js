@@ -16,20 +16,20 @@ define( [
      *        to be shared with anyone, with out worrying about confidential
      *        data or consultant stories being publically accessible. We are
      *        using the AES cipher algorithm.
-     * 
+     *
      * The Advanced Encryption Standard (AES) is a U.S. Federal Information
      * Processing Standard (FIPS). It was selected after a 5-year process where
      * 15 competing designs were evaluated.
-     * 
+     *
      * <a href="http://code.google.com/p/crypto-js/">More information on
      * CryptoJS</a>
-     * 
+     *
      * @description
-     * 
+     *
      * @extends Backbone.Model
-     * 
+     *
      * @constructs
-     * 
+     *
      */
     initialize : function() {
       if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
@@ -43,7 +43,7 @@ define( [
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
-      
+
     },
     fillWithDefaults : function(){
       if (this.get("secretkey") == "This should be a top secret pass phrase.") {
@@ -52,7 +52,7 @@ define( [
     },
     defaults : {
       secretkey : "This should be a top secret pass phrase."
-    },    
+    },
     decryptedMode : false,
     turnOnDecryptedMode : function(callback){
       this.decryptedMode = false;
@@ -65,7 +65,7 @@ define( [
       if(!this.decryptedMode){
         if(window.appView){
           window.appView.authView.showQuickAuthenticateView( function(){
-            //This happens after the user has been authenticated. 
+            //This happens after the user has been authenticated.
             self.decryptedMode = true;
             if(typeof callback == "function"){
               callback();
@@ -79,7 +79,7 @@ define( [
       // There are no nested models
     },
     saveAndInterConnectInApp : function(callback){
-      
+
       if(typeof callback == "function"){
         callback();
       }
@@ -88,7 +88,7 @@ define( [
      * Encrypt accepts a string (UTF8) and returns a CryptoJS object, in base64
      * encoding so that it looks like a string, and can be saved as a string in
      * the corpus.
-     * 
+     *
      * @param message
      *          A UTF8 string
      * @returns Returns a base64 string prefixed with "confidential" so that the
@@ -100,11 +100,11 @@ define( [
       return "confidential:" + btoa(result);
 
     },
-    
+
     /**
      * Decrypt uses this object's secret key to decode its parameter using the
      * AES algorithm.
-     * 
+     *
      * @param encrypted
      *          A base64 string prefixed (or not) with the word "confidential"
      * @returns Returns the encrypted result as a UTF8 string.
@@ -117,24 +117,30 @@ define( [
           encrypted = encrypted.replace("confidential:", "");
           // decode base64
           encrypted = atob(encrypted);
-          resultpromise =  CryptoJS.AES.decrypt(encrypted, confid.get("secretkey")).toString(
-              CryptoJS.enc.Utf8);
+          try {
+            resultpromise = CryptoJS.AES.decrypt(encrypted, confid.get("secretkey")).toString(CryptoJS.enc.Utf8);
+          } catch (e) {
+            console.log("Unable to decrypt ", e, e.stack);
+          }
           return resultpromise;
         });
       }else{
         encrypted = encrypted.replace("confidential:", "");
         // decode base64
         encrypted = atob(encrypted);
-        resultpromise =  CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(
-            CryptoJS.enc.Utf8);
+        try {
+          resultpromise = CryptoJS.AES.decrypt(encrypted, this.get("secretkey")).toString(CryptoJS.enc.Utf8);
+        } catch (e) {
+          console.log("Unable to decrypt ", e, e.stack);
+        }
         return resultpromise;
       }
     },
-    
+
     /**
      * The secretkeygenerator uses a "GUID" like generation to create a string
      * for the secret key.
-     * 
+     *
      * @returns {String} a string which is likely unique, in the format of a
      *          Globally Unique ID (GUID)
      */
