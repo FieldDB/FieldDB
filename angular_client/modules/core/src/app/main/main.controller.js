@@ -119,7 +119,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
                   FieldDB.FieldDBObject.prompt(message, optionalLocale, providedInput);
                 });
               }
-            } else if (typeof response !== "number" && parseFloat(response, 10) == response) {
+            } else if (typeof response !== "number" && parseFloat(response, 10) === response) {
               response = parseFloat(response, 10);
             }
           }
