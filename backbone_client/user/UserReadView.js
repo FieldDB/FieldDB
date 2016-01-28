@@ -148,9 +148,30 @@ define([
           type: 'GET',
           url: OPrime.getCouchUrl(connection, "/_session")
         }).then(function(serverResults) {
-          if (self.model && serverResults.userCtx.name && self.model.updateListOfCorpora && self.model.get("username") === serverResults.userCtx.name) {
-            self.model.updateListOfCorpora(serverResults.userCtx.roles);
-            self.changeViewsOfInternalModels();
+          if (self.model && serverResults.userCtx.name && self.model.get("username") === serverResults.userCtx.name) {
+            if (self.model.updateListOfCorpora) {
+              self.model.updateListOfCorpora(serverResults.userCtx.roles);
+              self.changeViewsOfInternalModels();
+            }
+          } else {
+            // self.application.router.navigate("/login/", {
+            //   trigger: true
+            // });
+            if (window.askingUserToConfirmIdentity) {
+              return;
+            }
+            window.askingUserToConfirmIdentity = true;
+            window.appView.authView.showQuickAuthenticateView(function(){
+            }, function(){
+
+            }, function(){
+              window.askingUserToConfirmIdentity = false;
+
+              console.log("Corpus is loged in yay.");
+            }, function(){
+              window.askingUserToConfirmIdentity = false;
+
+            })
           }
         });
       }
