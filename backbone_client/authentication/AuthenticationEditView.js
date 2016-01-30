@@ -284,10 +284,20 @@ define([
         if(username == "public"){
           self.model.savePublicUserForOfflineUse();
         }
-        var connection = self.model.get("userPrivate").get("corpora")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
-        if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
+        var connection;
+        if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection){
           connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         }
+        if (!connection){
+          connection = self.model.get("userPrivate").get("corpora")[0];
+        }
+        if(!connection){
+         connection = FieldDB.Connection.defaultConnection()
+        }
+        // Dont set to most recent, it might not be the most recent.
+        // if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
+        //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
+        // }
 
         window.app.logUserIntoTheirCorpusServer(connection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
@@ -547,7 +557,7 @@ define([
                     auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
                     model.get("connection").corpusid = model.id;
                     auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
-                    auth.get("userPrivate").get("corpora")[0] = model.get("connection");
+                    auth.get("userPrivate").get("corpora")[0] = model.get("connection"); // TODO should be an unshift no?
                     var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
                     localStorage.setItem("encryptedUser", u);
 
