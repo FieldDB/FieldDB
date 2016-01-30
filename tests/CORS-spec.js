@@ -80,9 +80,9 @@ describe("CORS", function() {
     it("should know if the server connection times out", function(done) {
       expect(CORS.timeout).toEqual(30 * 1000);
       var options = {
-        url: "http://ifield.iriscouch.com:5984/_session",
+        url: "https://corpusdev.lingsync.org/public-curldemo",
         method: "GET",
-        timeout: 1000
+        timeout: 10
       };
       CORS.makeCORSRequest(options).then(function(results) {
         expect("should not have reached an unreachable server").toBeUndefined();
