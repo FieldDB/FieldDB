@@ -25,7 +25,7 @@ var CORS = {
   },
   CONNECTION_ERRORED: {
     CODE: 500,
-    MESSAGE: "The request to URL errored, please report this."
+    MESSAGE: "Server is not responding for URL, please report this."
   },
   INTERNAL_SERVER_ERROR: {
     CODE: 500

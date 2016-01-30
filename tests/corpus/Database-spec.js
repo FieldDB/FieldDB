@@ -21,10 +21,13 @@ var expectedErrors = function(reason) {
     expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
     return true;
   } else if (reason.status === 610) {
-    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+    expect(reason.userFriendlyErrors[0]).toContain(["please report this"]);
     return true;
   } else if (reason.status === 600) {
     expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
+    return true;
+  } else if (reason.status === 500) {
+    expect(reason.userFriendlyErrors[0]).toContain("please report this.");
     return true;
   } else {
     return false;
@@ -70,7 +73,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status >= 500) {
-          expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:6984/jenkins-firstcorpus/team, please report this.");
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
         } else {
@@ -96,7 +99,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status >= 500) {
-          expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:6984/jenkins-firstcorpus, please report this.");
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["You are not authorized to access this db."]);
         } else {
@@ -140,7 +143,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status >= 500) {
-          expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:6984/_session, please report this.");
         } else if (error.status === 401) {
           expect(error.userFriendlyErrors).toEqual(["Please login."]);
         } else {
@@ -280,7 +283,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors[0]).toContain("Please report this");
+          expect(error.userFriendlyErrors[0]).toContain("please report this");
         } else {
           console.log(error);
           expect(error).toEqual("should not get here");
@@ -311,7 +314,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors[0]).toContain("Please report this");
+          expect(error.userFriendlyErrors[0]).toContain("please report this");
         } else {
           console.log(error);
           expect(error).toEqual("should not get here");
@@ -336,7 +339,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual(["Server is not responding for request to open the user `jenkins`. Please report this error. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:3183/login, please report this.");
         } else {
           console.log(error);
           expect(error).toEqual("should not get here");
@@ -428,7 +431,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors[0]).toContain("Please report this");
+          expect(error.userFriendlyErrors[0]).toContain("please report this");
         } else {
           console.log(error);
           expect(error).toEqual("should not get here");
@@ -452,7 +455,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors[0]).toContain("Please report this");
+          expect(error.userFriendlyErrors[0]).toContain("please report this");
         } else {
           console.log(error);
           expect(error).toEqual("should not get here");
@@ -506,7 +509,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:3183/register, please report this.");
         } else {
           expect(error).toEqual("should not get here");
         }
@@ -552,7 +555,7 @@ describe("Database", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else if (error.status === 500) {
-          expect(error.userFriendlyErrors).toEqual(["Error saving a user in the database. "]);
+          expect(error.userFriendlyErrors[0]).toEqual("Server is not responding for https://auth.linguistics.miauniversity.edu:3222/some/virtual/host/register, please report this.");
         } else {
           expect(error).toEqual("should not get here");
         }
