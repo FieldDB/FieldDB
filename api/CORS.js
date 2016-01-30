@@ -96,9 +96,6 @@ var CORS = {
     status = response.status || options.xhr.status;
 
     if (status < 400) {
-      if (typeof response === "object") {
-        response.status = status;
-      }
       deferred.resolve(response);
       return;
     }
