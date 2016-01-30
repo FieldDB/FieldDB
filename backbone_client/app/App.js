@@ -469,7 +469,7 @@ define([
         }).fail(function(exception){
 
           console.warn(exception.stack);
-          OPrime.bug("There was a problem logging you into your backup database, please report this.");
+          OPrime.bug("There was a problem logging you into your database, please report this.");
           if (typeof failurecallback == "function") {
             failurecallback("Unexpected error when logging you in to your corpus.");
           }
@@ -638,209 +638,223 @@ define([
     },
 
     loadBackboneObjectsByIdAndSetAsCurrentDashboard : function( appids, callback) {
-      if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+     if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
 
+     if (appids && appids.connection) {
+       appids.connection = new FieldDB.Connection(appids.connection).toJSON();
+     }
 
-      /*
-       * Verify that the user is in their database, and that the
-       * backbone couch adaptor is saving to the corpus' database,
-       * not where the user currently is.
-       */
-      if(OPrime.isCouchApp()){
-        var corpusdbname = appids.connection.dbname;
-        if(window.location.href.indexOf(corpusdbname) == -1){
-          if(corpusdbname != "public-firstcorpus"){
-            var username = "";
-            try{
-              username = window.app.get("authentication").get("userPrivate").get("username") || "";
-            }catch(e){
-              //do nothing
-            }
-            if(username != "public"){
-              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
-            }
-          }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-          window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusdbname);
+     /*
+      * Verify that the user is in their database, and that the
+      * backbone couch adaptor is saving to the corpus' database,
+      * not where the user currently is.
+      */
+     if (OPrime.isCouchApp()) {
+       var corpusdbname = appids.connection.dbname;
+       if (window.location.href.indexOf(corpusdbname) == -1) {
+         if (corpusdbname != "public-firstcorpus") {
+           var username = "";
+           try {
+             username = window.app.get("authentication").get("userPrivate").get("username") || "";
+           } catch (e) {
+             //do nothing
+           }
+           if (username != "public") {
+             OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+           }
+         }
+         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+         window.location.replace(optionalCouchAppPath + "user.html#login/" + corpusdbname);
 
-//        window.app.get("authentication").syncUserWithServer(function(){
-//        window.location.replace(optionalCouchAppPath+"corpus.html");
-//        });
-          return;
-        }
-      }
+         //        window.app.get("authentication").syncUserWithServer(function(){
+         //        window.location.replace(optionalCouchAppPath+"corpus.html");
+         //        });
+         return;
+       }
+     }
 
-      if (Backbone.couch_connector.config.db_name == "default") {
-        OPrime.bug("The app doesn't know which database its in. This is a problem.");
-      }
-      var connection = appids.connection;
-      this.set("connection", connection);
+     var connection = appids.connection;
+     var corpusid = connection.corpusid || appids.corpusid;
 
-      var corpusid = appids.corpusid;
-      if(!corpusid){
-        corpusid = connection.corpusid;
-      }
-      var c = new Corpus({
-        "dbname" : connection.dbname,
-        "connection" : connection
-      });
-      var selfapp = this;
-      if(!corpusid){
-        if(this.get("corpus").id){
-          corpusid = this.get("corpus").id;
-        }else{
-          $(".spinner-status").html("Opening/Creating Corpus...");
-          this.get("corpus").loadOrCreateCorpusBydbname(connection, function(){
-            /* if the corpusid is missing, make sure there are other objects in the dashboard */
-            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
-//          window.app.stopSpinner();
-          });
-          return;
-        }
-      }
-      c.id = corpusid; //tried setting both ids to match, and it worked!!
-        c.fetch({
-          success : function(corpusModel) {
-//            alert("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-            if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
-            /* Upgrade chrome app user corpora's to v1.38+ */
-            var oldConnection = corpusModel.get("connection");
-            if(oldConnection){
-              oldConnection.corpusid = corpusModel._id;
-              if(oldConnection.domain == "ifielddevs.iriscouch.com"){
-                oldConnection.domain  = "corpus.lingsync.org";
-                oldConnection.port = "";
-              }
-              // if(oldConnection.domain == "corpusdev.lingsync.org"){
-              //   oldConnection.domain  = "corpus.lingsync.org";
-              // }
-              corpusModel.set("connection", oldConnection);
-            }
+     var c = new Corpus({
+       "dbname": connection.dbname,
+       "connection": connection
+     });
+     var selfapp = this;
+     if (!corpusid) {
+       if (this.get("corpus").id) {
+         corpusid = this.get("corpus").id;
+       } else {
+         $(".spinner-status").html("Opening/Creating Corpus...");
+         this.get("corpus").loadOrCreateCorpusBydbname(connection, function() {
+           /* if the corpusid is missing, make sure there are other objects in the dashboard */
+           selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+           //          window.app.stopSpinner();
+         });
+         return;
+       }
+     }
+     c.id = corpusid;
 
-            $(".spinner-status").html("Opened Corpus...");
+     var fetchCorpusSucess = function(corpusModel) {
+       if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard", corpusModel);
+       /* Upgrade chrome app user corpora's to v1.38+ */
+       var oldConnection = corpusModel.get("connection");
+       if (oldConnection) {
+         corpusModel.set("connection", new FieldDB.Connection(oldConnection).toJSON());
+       }
 
-            c.setAsCurrentCorpus(function(){
-              $(".spinner-status").html("Loading Corpus...");
+       $(".spinner-status").html("Opened Corpus...");
+       c.setAsCurrentCorpus(function() {
+         $(".spinner-status").html("Loading Corpus...");
 
-              /*
-               * Fetch sessions and datalists
-               */
-              c.datalists.fetchDatalists();
-              c.sessions.fetchSessions();
-              c.fetchPublicSelf();
+         /*
+          * Fetch sessions and datalists
+          */
+         c.datalists.fetchDatalists();
+         c.sessions.fetchSessions();
+         c.fetchPublicSelf();
 
-              var dl = new DataList({
-                "dbname" : connection.dbname
-              });
-              dl.id = appids.datalistid;
-                dl.fetch({
-                  success : function(dataListModel) {
-                    $(".spinner-status").html("Opened DataList...");
+         var dl = new DataList({
+           "dbname": connection.dbname
+         });
+         dl.id = appids.datalistid;
+         dl.fetch({
+           success: fetchDatalistSucess,
+           error: fetchDatalistError
+         });
+       });
+     };
+     var fetchCorpusError = function(model, error, options) {
+       if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ", model, error, options);
 
-//                    alert("Data list fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                    if (OPrime.debugMode) OPrime.debug("Data list fetched successfully", dataListModel);
-                    dl.setAsCurrentDataList(function(){
-                      $(".spinner-status").html("Loading your most recent DataList, "+dataListModel.get("datumIds").length+" entries...");
+       if (error.status === 404) {
+         alert("Unable to open your corpus. Please try again.");
+         window.location.replace("user.html#login/" + connection.dbname);
+         return;
+       }
 
-                      var s = new Session({
-                        "dbname" : connection.dbname
-                      });
-                      s.id = appids.sessionid;
-                      var afterLoadingSession = function(loadedSession){
-                        loadedSession.setAsCurrentSession(function(){
-                              $(".spinner-status").html("Loading Elicitation Session...");
-//                              alert("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
-                              if(window.appView){
-                                window.appView.toastUser("Your dashboard has been loaded from where you left off last time.","alert-success","Dashboard loaded!");
-                              }
-                              try {
-                                window.app.set("corporaUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
-                                  window.app.get("authentication").get("userPrivate").get("username") + "corporaUserHasAccessTo"))));
-                              } catch (e) {
-                                console.log("Couldn't load the list of corpora which the user has access to.");
-                              }
-                              /*
-                               * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods
-                               */
-                              $(".spinner-status").html("Rendering Dashboard...");
+       var reason = "";
+       if (error.reason) {
+         reason = error.reason.message || error.reason || "";
+       }
 
-                              window.app.stopSpinner();
-                              if (typeof callback == "function") {
-                                callback();
-                              }
-                            }, function(){
-                              alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            });
-                      }
-                      if(!s.id){
-                        s.set(
-                            "sessionFields", window.app.get("corpus").get("sessionFields").clone()
-                        );
-                        afterLoadingSession(s);
-                      } else {
-                        s.fetch({
-                          success : function(sessionModel) {
-                            $(".spinner-status").html("Opened Elicitation Session...");
+       var originalCallbackFromLoadBackboneApp = callback;
+       if (reason.indexOf("not authorized") >= 0 || reason.indexOf("nauthorized") >= 0) {
+         //Show quick authentication so the user can get their corpus token and get access to the data
+         window.app.get("authentication").syncUserWithServer(function() {
+           if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
+           self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+         }, connection.dbname);
+         //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+         //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
+         return;
+       }
 
-//                            alert("Session fetched successfully in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                            if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
-                            afterLoadingSession(s);
-                          },
-                          error : function(model, error, options) {
-                            alert("There was an error fetching the session. "+error.reason);
-                            s.set(
-                                "sessionFields", window.app.get("corpus").get("sessionFields").clone()
-                            );
-                            s.id = s.id+"sessionDetailsWereMissing";
-                            afterLoadingSession(s);
-                          }
-                        });//end session fetch
-                      }
+       if (!window.navigator.onLine) {
+         OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only.");
+         return;
+       }
 
-                    },function(){
-                      alert("Failure to set as current data list in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-                    });
-                  },
-                  error : function(model, error, options) {
-                    alert("There was an error fetching the data list. "+error.reason);
-                  }
-                }); //end fetch data list
+       if (reason.indexOf("nexpected end of input") >= 0) {
+         OPrime.bug("Unable to contact the server, please report this.");
+       }
+       // window.app.get("authentication").syncUserWithServer(function() {
+       //   console.log("Trying to reload the app after a session token has timed out, or the users account was moved to another server in v1.90");
+       //   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+       // }, connection.dbname);
+     };
+     var fetchDatalistSucess = function(dataListModel) {
+       $(".spinner-status").html("Opened DataList...");
 
-            }, function(){
-              alert("Failure to set as current corpus in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
-            });//end setAsCurrentCorpus
-          },
-          error : function(model, error, options) {
-            if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ",model,error,options);
+       if (OPrime.debugMode) OPrime.debug("Data list fetched successfully", dataListModel);
+       dataListModel.setAsCurrentDataList(function() {
+         $(".spinner-status").html("Loading your most recent DataList, " + dataListModel.get("datumIds").length + " entries...");
 
-            var reason = "";
-            if(error.reason){
-              reason = error.reason.message || error.reason || "";
-            };
-            if(reason.indexOf("not authorized") >=0  || reason.indexOf("nauthorized") >=0 ){
-              //Show quick authentication so the user can get their corpus token and get access to the data
-              var originalCallbackFromLoadBackboneApp = callback;
-              window.app.get("authentication").syncUserWithServer(function(){
-                if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
-                self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
-              }, connection.dbname);
-//            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-//            window.location.replace(optionalCouchAppPath+"corpus.html#login");
-            }else{
-              if(reason.indexOf("nexpected end of input") >=0){
-                OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only. We are waiting for an upgrade in the PouchDB library (this is what makes it possible to have an offline database).");
-              }else{
-                // OPrime.bug("You appear to be offline. If you are not offline, please report this.");
-                var originalCallbackFromLoadBackboneApp = callback;
-                window.app.get("authentication").syncUserWithServer(function(){
-                  console.log("Trying to reload the app after a session token has timed out, or the users account was moved to another server in v1.90");
-                  self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
-                }, connection.dbname);
-              }
-            }
-          }
-        }); //end corpus fetch
+         var s = new Session({
+           "dbname": connection.dbname
+         });
+         s.id = appids.sessionid;
+         if (!s.id) {
+           if (c.sessions.models && c.sessions.models[0] && c.sessions.models[0].id) {
+             s.id = c.sessions.models[0].id;
+           } else {
+             s.set(
+               "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+             );
+             fetchSessionSucess(s);
+             return;
+           }
+         }
+         s.fetch({
+           success: fetchSessionSucess,
+           error: fetchSessionError
+         });
+       });
+     };
+     var fetchDatalistError = function(model, error, options) {
+       delete appids.datalistid;
+       if (c.datalists.models && c.datalists.models[0] && c.datalists.models[0].id) {
+         appids.datalistid = c.datalists.models[0].id;
+         fetchDatalistSucess(c.datalists.models[0]);
+       } else {
+         alert("There was an error fetching the data list. " + error.reason);
+       }
+     };
+     var fetchSessionSucess = function(loadedSession) {
+       $(".spinner-status").html("Opened Elicitation Session...");
+       if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
+       loadedSession.setAsCurrentSession(function() {
+         $(".spinner-status").html("Loading Elicitation Session...");
+         if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
+         if (window.appView) {
+           window.appView.toastUser("Your dashboard has been loaded from where you left off last time.", "alert-success", "Dashboard loaded!");
+         }
+         try {
+           window.app.set("corporaUserHasAccessTo", new Corpuses(JSON.parse(localStorage.getItem(
+             window.app.get("authentication").get("userPrivate").get("username") + "corporaUserHasAccessTo"))));
+         } catch (e) {
+           console.log("Couldn't load the list of corpora which the user has access to.");
+         }
+         /*
+          * After all fetches have succeeded show the pretty dashboard, the objects have already been linked up by their setAsCurrent methods
+          */
+         $(".spinner-status").html("Rendering Dashboard...");
+
+         window.app.stopSpinner();
+         if (typeof callback == "function") {
+           callback();
+         }
+       }, function() {
+         alert("Failure to set as current session in loadBackboneObjectsByIdAndSetAsCurrentDashboard");
+       });
+     };
+
+     var fetchSessionError = function(model, error, options) {
+       delete appids.sessionid;
+       if (c.sessions.models && c.sessions.models[0] && c.sessions.models[0].id) {
+         appids.sessionid = c.sessions.models[0].id;
+         fetchSessionSucess(c.sessions.models[0]);
+         return;
+       }
+       // alert("There was an error fetching the session. " + error.reason);
+       var s = new Session({
+         "dbname": connection.dbname
+       });
+       s.set(
+         "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+       );
+       s.id = s.id + "sessionDetailsWereMissing";
+       fetchSessionSucess(s);
+     };
+
+     // Change pouch and stat the fetch
+     this.changePouch(connection, function() {
+       c.fetch({
+         success: fetchCorpusSucess,
+         error: fetchCorpusError
+       });
+     });
     },
 
     router : AppRouter,

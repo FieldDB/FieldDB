@@ -968,6 +968,7 @@ define([
         this.saveAndInterConnectInApp(function() {
 
           if (!batchmode && window.appView) {
+            var timeSpentDetails = self.calculateEditTime();
             window.app.addActivity({
               verb: "deleted",
               verbicon: "icon-trash",
@@ -1598,6 +1599,8 @@ define([
             if (self.get("trashed")) {
               console.log("not setting a modified activity for a trashed item. ");
             } else {
+              var timeSpentDetails = self.calculateEditTime();
+
               window.app.addActivity({
                 verb: "<a href='" + differences + "'>" + verb + "</a> ",
                 verbicon: verbicon,

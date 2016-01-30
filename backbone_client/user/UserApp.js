@@ -330,7 +330,7 @@ define([
       }).fail(function(exception){
 
         console.warn(exception.stack);
-        OPrime.bug("There was a problem logging you into your backup database, please report this.");
+        OPrime.bug("There was a problem logging you into your database, please report this.");
         if (typeof failurecallback == "function") {
           failurecallback("Unexpected error when logging you in to your corpus.");
         }

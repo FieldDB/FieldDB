@@ -57,17 +57,24 @@ define([
       });
     },
     guessCorpusIdAndShowDashboard : function(dbname){
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
-      if(!connection){
-        return;
-      }
       if(!dbname || dbname == undefined || dbname == "undefined"){
         return;
       }
+
+      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {"dbname" : dbname});
+      if(!connection || !connection.length){
+        return;
+      }
+      connection = connection[0];
+
+      if (dbname && connection && connection.corpusid) {
+        window.app.router.showCorpusDashboard(dbname, connection.corpusid);
+        return;
+      }
+
       this.veryifyWeAreInTheRightDB(dbname);
 
       /* this assumes that the user's corpus connection for this pouch is not on a different server */
-      connection.dbname = dbname;
       window.app.changePouch(connection, function(){
         var c = new CorpusMask();
         c.set({
@@ -78,43 +85,41 @@ define([
           success : function(model) {
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
             var corpusidfromCorpusMask = model.get("corpusid");
+
             /* Upgrade to version 1.38 */
             if(!corpusidfromCorpusMask){
               corpusidfromCorpusMask = model.get("corpusId");
             }
-            if(!corpusidfromCorpusMask){
 
-              var couchurl = OPrime.getCouchUrl(connection);
-              var queryUrl = couchurl + "/_design/deprecated/_view/private_corpora";
-
-              var errorfunction = function(response) {
-                OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
-                OPrime.bug("There was a problem loading your corpus. Please report this error.");
-              };
-              var corpusself = this;
-              FieldDB.CORS.makeCORSRequest({
-                type: 'GET',
-                url: queryUrl
-              }).then(function(serverResults) {
-                if (!serverResults || !serverResults.rows || serverResults.rows.length === 0) {
-                  errorfunction("No corpus doc! this corpus is broken.");
-                }
-                var corpusidfromCorpusMask = serverResults.rows[0].id;
-                window.app.router.showCorpusDashboard(dbname, corpusidfromCorpusMask);
-              }, errorfunction);
+            if (corpusidfromCorpusMask) {
+              window.app.router.showCorpusDashboard(dbname, corpusidfromCorpusMask);
               return;
             }
 
-            if(corpusidfromCorpusMask){
-              window.app.router.showCorpusDashboard(dbname, corpusidfromCorpusMask);
-            }else{
-              OPrime.bug("There was a problem loading this corpus. Please report this.");
-              if(OPrime.isChromeApp()){
+            var couchurl = OPrime.getCouchUrl(connection);
+            var queryUrl = couchurl + "/_design/deprecated/_view/private_corpora";
+
+            var errorfunction = function(response) {
+              OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
+              OPrime.bug("There was a problem loading your corpus. Please report this error.");
+
+              if (OPrime.isChromeApp()) {
                 OPrime.bug("There was a problem loading this corpus, maybe it is not backed up?\n\n Attempting to back it up now...");
                 /* TODO get the id of the only corpus in the database */
                 window.location.replace("backup_pouches.html");
               }
-            }
+            };
+            var corpusself = this;
+            FieldDB.CORS.makeCORSRequest({
+              type: 'GET',
+              url: queryUrl
+            }).then(function(serverResults) {
+              if (!serverResults || !serverResults.rows || serverResults.rows.length === 0) {
+                errorfunction("No corpus doc! this corpus is broken.");
+              }
+              var corpusidfromCorpusMask = serverResults.rows[0].id;
+              window.app.router.showCorpusDashboard(dbname, corpusidfromCorpusMask);
+            }, errorfunction);
           },
           error : function(e, x, y ) {
             if (OPrime.debugMode) OPrime.debug("Problem opening the dashboard ", e, x, y);
@@ -152,14 +157,13 @@ define([
 
       this.veryifyWeAreInTheRightDB(dbname);
 
-      var connection = JSON.parse(JSON.stringify(window.app.get("authentication").get("userPrivate").get("corpora")[0]));
-      if(!connection){
+      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {"dbname" : dbname});
+      if(!connection || !connection.length){
         return;
       }
-
+      connection = connection[0];
 
       var self = this;
-      connection.dbname = dbname;
       window.app.changePouch(connection, function(){
 
         var c = new Corpus();
