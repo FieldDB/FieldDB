@@ -203,7 +203,7 @@ var CORS = {
 /*
  * Helper function which handles IE
  */
-CORS.buildXhr = function(options, deferred) {
+CORS.buildXhr = function(options) {
   var xhr;
   try {
     xhr = new XMLHttpRequest();
@@ -342,3 +342,11 @@ CORS.makeCORSRequest = function(options) {
 try {
   exports.CORS = CORS;
 } catch (e) {}
+
+try {
+  if (!window) {}
+} catch (e) {
+  var CORSNode = require("./CORSNode").CORS;
+  console.warn("REST requests: enabled");
+  exports.CORS = CORSNode || CORS;
+}

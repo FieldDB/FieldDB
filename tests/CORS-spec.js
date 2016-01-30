@@ -7,8 +7,7 @@ try {
   CORS = document.CORS || FieldDB.CORS;
 } catch (e) {
   try {
-    CORS = require("../api/CORSNode").CORS;
-    // CORS = require("../api/CORS").CORS;
+    CORS = require("../api/CORS").CORS;
   } catch (e) {}
 }
 
