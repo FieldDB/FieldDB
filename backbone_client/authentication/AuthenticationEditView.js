@@ -284,7 +284,21 @@ define([
         if(username == "public"){
           self.model.savePublicUserForOfflineUse();
         }
-        var connection = self.model.get("userPrivate").get("corpora")[0]; //TODO make this be the last corpus they edited so that we re-load their dashboard, or let them chooe which corpus they want.
+        var connection;
+        if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection){
+          connection = self.model.get("userPrivate").get("mostRecentIds").connection;
+        }
+        if (!connection){
+          connection = self.model.get("userPrivate").get("corpora")[0];
+        }
+        if(!connection){
+         connection = FieldDB.Connection.defaultConnection()
+        }
+        // Dont set to most recent, it might not be the most recent.
+        // if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
+        //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
+        // }
+
         window.app.logUserIntoTheirCorpusServer(connection, username, password, function(){
           if(typeof corpusloginsuccesscallback == "function"){
             if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
@@ -303,7 +317,7 @@ define([
                *  Load their last corpus, session, datalist etc,
                *  only if it is not the ones already most recently loaded.
                */
-              var appids = self.model.get("userPrivate").get("mostRecentIds");
+              var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
               var visibleids = {};
               if(app.get("corpus")){
                 visibleids.corpusid = app.get("corpus").id;
@@ -324,9 +338,9 @@ define([
                 if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
                 if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
-                }else{
+                } else {
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-                  window.app.router.showCorpusDashboard(connection.pouchame, app.get("corpus").id);
+                  window.app.router.showCorpusDashboard(connection.dbname, appids.corpusid);
                 }
               }
             }
@@ -358,13 +372,15 @@ define([
      */
     showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
       var self = this;
-      window.hub.unsubscribe("quickAuthenticationClose", null, this);
+      var subscription;
+      // window.hub.unsubscribe("quickAuthenticationClose", null, this);
       if( this.model.get("userPrivate").get("username") == "lingllama" ){
         / * Show the quick auth but fill in the password, to simulate a user */
         $("#quick-authenticate-modal").show();
         var preKnownPassword = "phoneme";
         $("#quick-authenticate-password").val(preKnownPassword);
-        window.hub.subscribe("quickAuthenticationClose",function(){
+
+        subscription = function(){
           window.appView.authView.authenticate("lingllama"
               , "phoneme"
               , OPrime.getAuthUrl(window.app.get("authentication").get("userPrivate").get("authUrl"))
@@ -374,9 +390,10 @@ define([
               , corpusloginfailcallback );
           $("#quick-authenticate-modal").hide();
           $("#quick-authenticate-password").val("");
-          window.hub.unsubscribe("quickAuthenticationClose", null, this); //TODO why was this off, this si probably why we were getting lots of authentications
-        }, self);
-      }else if (this.model.get("userPrivate").get("username") == "public"){
+          window.hub.unsubscribe("quickAuthenticationClose", subscription, self); //TODO why was this off, this si probably why we were getting lots of authentications
+        };
+        window.hub.subscribe("quickAuthenticationClose", subscription, self);
+      } else if (this.model.get("userPrivate").get("username") == "public") {
         / * Dont show the quick auth, just authenticate */
         window.appView.authView.authenticate("public"
             , "none"
@@ -385,9 +402,9 @@ define([
             , authfailurecallback
             , corpusloginsuccesscallback
             , corpusloginfailcallback );
-      }else {
+      } else {
         $("#quick-authenticate-modal").show();
-        window.hub.subscribe("quickAuthenticationClose",function(){
+        subscription = function(){
           window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
               , $("#quick-authenticate-password").val()
               , OPrime.getAuthUrl(window.app.get("authentication").get("userPrivate").get("authUrl"))
@@ -397,8 +414,9 @@ define([
               , corpusloginfailcallback );
           $("#quick-authenticate-modal").hide();
           $("#quick-authenticate-password").val("");
-          window.hub.unsubscribe("quickAuthenticationClose", null, this);//TODO why was this off, this si probably why we were getting lots of authentications
-        }, self);
+          window.hub.unsubscribe("quickAuthenticationClose", subscription, self);//TODO why was this off, this si probably why we were getting lots of authentications
+        };
+        window.hub.subscribe("quickAuthenticationClose", subscription, self);
       }
     },
 
@@ -539,7 +557,7 @@ define([
                     auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
                     model.get("connection").corpusid = model.id;
                     auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
-                    auth.get("userPrivate").get("corpora")[0] = model.get("connection");
+                    auth.get("userPrivate").get("corpora")[0] = model.get("connection"); // TODO should be an unshift no?
                     var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
                     localStorage.setItem("encryptedUser", u);
 

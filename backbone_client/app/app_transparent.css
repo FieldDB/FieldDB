@@ -1,12 +1,15 @@
-.well{
+.well, .dropdown-menu, .breadcrumb{
 	color: #fff;
 	background-color:rgba(0,0,0,0.4);
 	border: 0;
 }
-.breadcrumb{
+.dropdown-menu{
   color: #fff;
-  background-color:rgba(0,0,0,0.4);
-  background-image: none;
+  background-color: #000000;
+  border: 0;
+}
+.dropdown-menu li a {
+  color: #fff;
 }
 a {
   color: #3bf;

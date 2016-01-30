@@ -442,8 +442,8 @@ define([
       if( this.get("userPrivate").get("username") == "lingllama" ){
         $("#quick-authenticate-password").val("phoneme");
       }
-      window.hub.subscribe("quickAuthenticationClose",function(){
 
+      var subscription = function(){
         //prepare data and send it
         var dataToPost = {};
         var authUrl = "";
@@ -492,8 +492,9 @@ define([
         //Close the modal
         $("#quick-authenticate-modal").hide();
         $("#quick-authenticate-password").val("");
-        window.hub.unsubscribe("quickAuthenticationClose", null, this);
-      }, self);
+        window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
+      };
+      window.hub.subscribe("quickAuthenticationClose", subscription, self);
     }
 
   });
