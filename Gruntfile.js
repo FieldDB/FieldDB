@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
         src: [
-          "tests/**/*spec.js",
+          // "tests/**/*spec.js",
           // "tests/FieldDBObject-spec.js",
           // "tests/Collection-spec.js",
           // "tests/activity/*.js",
@@ -49,6 +49,7 @@ module.exports = function(grunt) {
           // "tests/authentication/*.js",
           // "tests/comment/*.js",
           // "tests/confidentiality_encryption/*.js",
+          "tests/corpus/Database-spec.js",
           // "tests/corpus/*-spec.js",
           // "tests/data_list/*.js",
           // "tests/datum/*.js",
@@ -67,7 +68,7 @@ module.exports = function(grunt) {
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
           // external: ["api/**/*.js"],
-          external: ["memory"],
+          external: ["memory","./CORSNode"],
           basedir: "./api/"
         }
       },

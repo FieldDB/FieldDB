@@ -109,7 +109,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return this.BASE_DB_URL + "/" + this.dbname;
         }
       }
-      this.warn("Using an unlikely url, as if this app was running in a website where the databse is.");
+      this.debug("Using an unlikely url, as if this app was running in a website where the databse is.");
       return "";
     },
     set: function(value) {

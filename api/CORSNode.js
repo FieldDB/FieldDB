@@ -15,6 +15,9 @@ CORS.setHeader = function(xhr, key, value) {
 
 var COOKIE_JAR = {};
 
+CORS.clearCookies = function(hostname) {
+  delete COOKIE_JAR[hostname];
+};
 /*
  * Functions for well formed CORS requests
  */
@@ -75,7 +78,7 @@ CORS.makeCORSRequest = function(options) {
       self.debug("response headers", res.headers);
       if (options.method === "DELETE" && urlObject.path === "/_session") {
         console.warn("Logged user out.");
-        delete COOKIE_JAR[urlObject.host]
+        self.clearCookies(urlObject.host);
       }
     });
   });
@@ -84,7 +87,7 @@ CORS.makeCORSRequest = function(options) {
   if (COOKIE_JAR[urlObject.host]) {
     xhr.setHeader("Cookie", COOKIE_JAR[urlObject.host].join(";"));
   }
-  self.debug("request headers", xhr.getHeader("cookie"));
+  self.debug("request cookies" + xhr.getHeader("cookie"));
 
   xhr.setHeader("Content-type", "application/json");
 

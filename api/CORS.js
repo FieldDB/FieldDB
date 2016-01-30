@@ -38,7 +38,15 @@ var CORS = {
   debugMode: false,
   debug: function(a, b, c) {
     if (this.debugMode) {
-      console.log(a, b, c);
+      if (a) {
+        console.log(a);
+      }
+      if (b) {
+        console.log(b);
+      }
+      if (c) {
+        console.log(c);
+      }
     }
   },
   warn: function(message) {
@@ -55,6 +63,9 @@ var CORS = {
   },
   render: function() {
     this.debug("Render requested but this object has no render defined.");
+  },
+  clearCookies: function(hostname) {
+    console.log("TODO clear cookies requested");
   },
   preprocess: function(options) {
     this.debug("preprocess", options);
