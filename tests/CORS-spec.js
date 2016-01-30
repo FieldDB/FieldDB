@@ -81,11 +81,7 @@ describe("CORS", function() {
       expect(CORS.timeout).toEqual(30 * 1000);
       var options = {
         url: "http://ifield.iriscouch.com:5984/_session",
-        method: "POST",
-        data: {
-          name: "public",
-          password: "none"
-        },
+        method: "GET",
         timeout: 1000
       };
       CORS.makeCORSRequest(options).then(function(results) {
