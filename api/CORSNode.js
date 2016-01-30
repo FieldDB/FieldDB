@@ -13,6 +13,8 @@ CORS.setHeader = function(xhr, key, value) {
   xhr.setHeader(key, value);
 };
 
+var COOKIE_JAR = {};
+
 /*
  * Functions for well formed CORS requests
  */
@@ -64,8 +66,25 @@ CORS.makeCORSRequest = function(options) {
       xhr.responseText = output;
       xhr.status = res.statusCode;
       self.onload.apply(self, [options, {}, deferred]);
+
+      // Save cookies
+      if (res.headers && res.headers["set-cookie"]) {
+        COOKIE_JAR[urlObject.host] = res.headers["set-cookie"];
+        self.debug("cookies", COOKIE_JAR);
+      }
+      self.debug("response headers", res.headers);
+      if (options.method === "DELETE" && urlObject.path === "/_session") {
+        console.warn("Logged user out.");
+        delete COOKIE_JAR[urlObject.host]
+      }
     });
   });
+
+  // Include cookies
+  if (COOKIE_JAR[urlObject.host]) {
+    xhr.setHeader("Cookie", COOKIE_JAR[urlObject.host].join(";"));
+  }
+  self.debug("request headers", xhr.getHeader("cookie"));
 
   xhr.setHeader("Content-type", "application/json");
 

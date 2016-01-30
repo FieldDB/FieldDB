@@ -9,9 +9,9 @@ try {
   }
 } catch (e) {
   Database = require("./../../api/corpus/Database").Database;
-  var CORS = require("../../api/CORSNode").CORS;
-  Database.CORS = CORS;
   Database.URLParser = require("url");
+  // Permit testing with local https
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 }
 
 var specIsRunningTooLong = 5000;
@@ -666,6 +666,7 @@ describe("Database", function() {
 
   describe("Database: as a team we want to be able to go back in time in the db revisions", function() {
     it("should be able to find urls of previous revisions", function(done) {
+      // Database.CORS.debugMode = true;
       var db = new Database({
         dbname: "jenkins-firstcorpus"
       });
@@ -686,7 +687,7 @@ describe("Database", function() {
           if (expectedErrors(error)) {
             // errors were expected
           } else {
-            expect(response).toEqual("should not get here");
+            expect(error).toEqual("should not get here");
           }
         }).fail(function(exception) {
           console.log(exception.stack);
