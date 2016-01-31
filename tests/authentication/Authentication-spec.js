@@ -20,8 +20,8 @@ var expectedErrors = function(reason) {
   if (reason.status === 620) {
     expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
     return true;
-  } else if (reason.status === 610) {
-    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+  } else if (reason.status === 500) {
+    expect(reason.userFriendlyErrors[0]).toContain("please report this");
     return true;
   } else if (reason.status === 600) {
     expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
