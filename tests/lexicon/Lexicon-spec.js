@@ -30,10 +30,6 @@ try {
   virtualDOM = document;
   console.log("Testing in a browser");
 } catch (e) {
-  // Use node cors to fetch lexicon
-  var CORS = require("../../api/CORSNode").CORS;
-  Lexicon.CORS = CORS;
-
   try {
     // In node, with jsdom
     virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
@@ -90,7 +86,7 @@ var tinyPrecedenceRelations = [{
   "count": 2
 }];
 
-describe("Lexicon", function() {
+xdescribe("Lexicon", function() {
 
   describe("nodes", function() {
 
@@ -783,7 +779,7 @@ describe("Lexicon", function() {
 
           if (reason.status === 620) {
             console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-            expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+            expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
           } else if (reason.status === 401) {
             expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
           } else {

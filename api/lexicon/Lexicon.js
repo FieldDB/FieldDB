@@ -20,7 +20,6 @@ try {
 
 var Collection = require("../Collection").Collection;
 var CORS = require("../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;

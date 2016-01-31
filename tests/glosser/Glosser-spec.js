@@ -20,10 +20,6 @@ try {
 	virtualDOM = document;
 	console.log("Testing in a browser");
 } catch (e) {
-	// Use node cors to fetch lexicon
-	var CORS = require("../../api/CORSNode").CORS;
-	Glosser.Lexicon.CORS = CORS;
-
 	try {
 		// In node, with jsdom
 		virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
@@ -45,7 +41,7 @@ var mockCorpus = {
 
 var expectedErrors = function(reason) {
 	if (reason.status === 620) {
-		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
 		return true;
 	} else if (reason.status === 610) {
 		expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
