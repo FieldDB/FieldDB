@@ -144,7 +144,7 @@ define(
              * Events that the UserAppView is listening to and their handlers.
              */
             events : {
-              "submit #quick-authentication-okay-form" : function(e){
+              "submit #quick-authentication-form" : function(e){
                 if(e){
                   e.stopPropagation();
                   e.preventDefault();
