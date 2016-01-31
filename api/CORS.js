@@ -352,7 +352,8 @@ try {
 } catch (e) {}
 
 try {
-  if (!window) {}
+  if (!document) {}
+  // console.log(document);
 } catch (e) {
   var CORSNode = require("./CORSNode").CORS;
   console.warn("REST requests: enabled");

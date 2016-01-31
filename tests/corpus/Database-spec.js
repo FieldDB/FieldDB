@@ -18,7 +18,7 @@ var specIsRunningTooLong = 5000;
 
 var expectedErrors = function(reason) {
   if (reason.status === 620) {
-    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
     return true;
   } else if (reason.status === 610) {
     expect(reason.userFriendlyErrors[0]).toContain(["please report this"]);
@@ -37,6 +37,7 @@ var expectedErrors = function(reason) {
 describe("Database", function() {
   it("should be load", function() {
     expect(Database).toBeDefined();
+    expect(Database.CORS).toBeDefined();
   });
 
   describe("construction options", function() {
