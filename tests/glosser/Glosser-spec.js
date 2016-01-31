@@ -7,7 +7,7 @@ var SAMPLE_SEGMENTATION_V3 = SAMPLE_LEXICONS[3];
 var optionalD3;
 var virtualDOM;
 var virtualElement;
-var specIsRunningTooLong = 1000;
+var specIsRunningTooLong = 500;
 
 try {
 	optionalD3 = require("d3");
@@ -43,8 +43,8 @@ var expectedErrors = function(reason) {
 	if (reason.status === 620) {
 		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
 		return true;
-	} else if (reason.status === 610) {
-		expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+	} else if (reason.status === 500) {
+		expect(reason.userFriendlyErrors[0]).toContain(["please report this"]);
 		return true;
 	} else if (reason.status === 600) {
 		expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
@@ -136,9 +136,6 @@ describe("Glosser", function() {
 					expect(glosser.fetching).toBeFalsy();
 					if (expectedErrors(reason)) {
 						// errors were expected
-						console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-					} else if (reason.status === 401) {
-						expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
 					} else {
 						expect(reason).toEqual("should not get here");
 					}
@@ -454,8 +451,6 @@ describe("Glosser", function() {
 				if (expectedErrors(reason)) {
 					// errors were expected
 					console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-				} else if (reason.status === 401) {
-					expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
 				} else {
 					expect(reason).toEqual("should not get here");
 				}

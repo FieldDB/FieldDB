@@ -776,12 +776,9 @@ describe("Lexicon", function() {
           expect(reason).toBeDefined();
           expect(reason.userFriendlyErrors).toBeDefined();
           expect(reason.details).toBeDefined();
-
           if (reason.status === 620) {
             console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
             expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
-          } else if (reason.status === 401) {
-            expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
           } else {
             expect(reason).toEqual("should not get here");
           }
@@ -791,7 +788,8 @@ describe("Lexicon", function() {
         }).done(done);
 
       }, function(reason) {
-        expect(reason).toEqual(" unexpected reason while processing rules", reason);
+        expect(reason.status).toEqual(500);
+        expect(reason.userFriendlyErrors[0]).toContain("please report this");
         done();
       }).fail(function(exception) {
         console.log(exception.stack);
