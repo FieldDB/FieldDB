@@ -1,6 +1,7 @@
 /* globals document */
 "use strict";
 var Glosser = require("../../api/glosser/Glosser").Glosser;
+var CORS = require("../../api/CORS").CORS;
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
 var SAMPLE_SEGMENTATION_V3 = SAMPLE_LEXICONS[3];
@@ -120,11 +121,19 @@ describe("Glosser", function() {
 	});
 
 	describe("persistance", function() {
-
-		it("should fetch itself", function(done) {
-			var glosser = new Glosser({
+		var glosser;
+		beforeEach(function(done) {
+			glosser = new Glosser({
 				corpus: tinyCorpus
 			});
+			CORS.makeCORSRequest({
+				name: "jenkins",
+				password: "phoneme",
+				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
+			}).finally(done);
+		});
+
+		it("should fetch itself", function(done) {
 			expect(glosser).toBeDefined();
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
@@ -430,35 +439,42 @@ describe("Glosser", function() {
 			expect(glosser).toBeDefined();
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
-			glosser.fetch().then(function(results) {
-				expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
-				expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
-				// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
-				expect(results).toEqual(glosser.morphemeSegmentationKnowledgeBase);
-				// Rather than depending on server to have exact words in it, add it now to rules
-				glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
+			CORS.makeCORSRequest({
+				name: "jenkins",
+				password: "phoneme",
+				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
+			}).finally(function() {
 
-				var datum = {
-					utterance: "rtyuio"
-				};
-				glosser.guessMorphemesFromUtterance(datum);
+				glosser.fetch().then(function(results) {
+					expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
+					expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
+					// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
+					expect(results).toEqual(glosser.morphemeSegmentationKnowledgeBase);
+					// Rather than depending on server to have exact words in it, add it now to rules
+					glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
 
-				expect(datum.utterance).toEqual("rtyuio");
-				expect(datum.morphemes).toEqual("rt-yuio");
-				expect(datum.gloss).toEqual("?-?");
+					var datum = {
+						utterance: "rtyuio"
+					};
+					glosser.guessMorphemesFromUtterance(datum);
 
-			}, function(reason) {
-				if (expectedErrors(reason)) {
-					// errors were expected
-					console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-				} else {
-					expect(reason).toEqual("should not get here");
-				}
-			}).fail(function(exception) {
-				console.log(exception.stack);
-				expect(exception).toEqual(" unexpected exception while processing rules");
-			}).done(done);
+					expect(datum.utterance).toEqual("rtyuio");
+					expect(datum.morphemes).toEqual("rt-yuio");
+					expect(datum.gloss).toEqual("?-?");
 
+				}, function(reason) {
+					if (expectedErrors(reason)) {
+						// errors were expected
+						console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+					} else {
+						expect(reason).toEqual("should not get here");
+					}
+				}).fail(function(exception) {
+					console.log(exception.stack);
+					expect(exception).toEqual(" unexpected exception while processing rules");
+				}).done(done);
+
+			});
 		}, specIsRunningTooLong);
 
 	});
