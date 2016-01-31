@@ -1050,8 +1050,7 @@ describe("lib/Collection", function() {
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
 
       var aThirdCollection = new Collection();
-      expect(function() {
-        // aThirdCollection.debugMode = true;
+      try {
         var result = aThirdCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
         expect(result).toBe(aThirdCollection);
         expect(aThirdCollection._collection.length).toEqual(8);
@@ -1075,8 +1074,9 @@ describe("lib/Collection", function() {
         expect(aThirdCollection.onlyintarget).toBeDefined();
         expect(aThirdCollection.onlyinnew).toBeDefined();
         expect(aThirdCollection.willbeoverwritten).toBeDefined();
-      }).toThrow("Maximum call stack size exceeded");
-
+      } catch (exception) {
+        expect(exception.message).toEqual("Maximum call stack size exceeded");
+      }
     });
 
     it("should be able to merge two collections in into a third collection", function() {
