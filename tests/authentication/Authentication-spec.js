@@ -8,6 +8,7 @@ try {
     Authentication = FieldDB.Authentication;
   }
 } catch (e) {
+  // Permit testing with local https
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
 Authentication = Authentication || require("./../../api/authentication/Authentication").Authentication;
