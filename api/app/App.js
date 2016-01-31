@@ -71,9 +71,11 @@ var App = function App(options) {
     if (Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
       this.connection = new Connection(Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference"));
     } else {
-      if (window && window.location && window.location.href) {
-        this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
-      }
+      try {
+        if (window && window.location && window.location.href) {
+          this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
+        }
+      } catch (e) {}
     }
     this.knownConnections.unshift(this.connection);
     if (this.connection && Database.prototype.BASE_DB_URL !== this.connection.corpusUrl) {
@@ -848,7 +850,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
       } catch (e) {
-        this.warn("Cant determine app type isAndroidApp, " + e);
+        this.debug("Cant determine app type isAndroidApp, " + e);
         return false;
       }
     }
@@ -859,7 +861,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return navigator.userAgent.indexOf("Android 4") > -1;
       } catch (e) {
-        this.warn("Cant determine app type isAndroid4, " + e);
+        this.debug("Cant determine app type isAndroid4, " + e);
         return false;
       }
     }
@@ -870,7 +872,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("chrome-extension") > -1;
       } catch (e) {
-        this.warn("Cant determine app type isChromeApp, " + e);
+        this.debug("Cant determine app type isChromeApp, " + e);
         return false;
       }
     }
@@ -881,7 +883,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("_design/") > -1;
       } catch (e) {
-        this.warn("Cant determine app type isCouchApp, " + e);
+        this.debug("Cant determine app type isCouchApp, " + e);
         return false;
       }
     }
@@ -892,7 +894,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href.indexOf("localhost:8128") > -1;
       } catch (e) {
-        this.warn("Cant determine app type isTouchDBApp, " + e);
+        this.debug("Cant determine app type isTouchDBApp, " + e);
         return false;
       }
     }
@@ -903,7 +905,7 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       try {
         return window.location.href !== undefined;
       } catch (e) {
-        // this.debug("Cant access window, app type isNodeJSApp, ", e);
+        this.debug("Cant access window, app type isNodeJSApp, ", e);
         return true;
       }
     }
