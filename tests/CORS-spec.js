@@ -1,4 +1,4 @@
-/* globals document */
+/* globals document, jasmine */
 "use strict";
 
 var CORS;
@@ -25,7 +25,7 @@ describe("CORS", function() {
   describe("errors", function() {
     it("should not run if url is missing", function(done) {
       CORS.makeCORSRequest().then(function(results) {
-        expect("should not have succeeded if url is missing").toBeUndefined();
+        expect(results).toEqual("should not have succeeded if url is missing");
       }, function(reason) {
         expect(reason.userFriendlyErrors[0]).toEqual("Url must be defined");
       }).fail(function(exception) {
@@ -199,7 +199,7 @@ describe("CORS", function() {
       var listenedToProgress = false;
       var options = {
         url: "https://speech.lingsync.org/utterances/community-georgian/orive_gi%C9%A3deba/orive_gi%C9%A3deba.png",
-        onprogress: function(evt){
+        onprogress: function(){
           listenedToProgress = true;
         }
       };
