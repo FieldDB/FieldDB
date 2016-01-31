@@ -10,16 +10,17 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var CryptoJS = require("./Crypto_AES").CryptoJS;
 var CryptoEncoding = CryptoJS.enc.Utf8;
 
+var ATOB;
+var BTOA;
 try {
   if (!window.atob) {
     console.log("ATOB is not defined, loading from npm");
   }
+  ATOB = window.atob;
+  BTOA = window.btoa;
 } catch (e) {
-  console.log(e);
-  /*jshint -W020 */
-  window = {};
-  window.atob = require("atob");
-  window.btoa = require("btoa");
+  ATOB = require("atob");
+  BTOA = require("btoa");
 }
 
 /**
@@ -102,9 +103,9 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
       // this.debugMode = true;
       this.debug("encrypting " + value);
       var result = CryptoJS.AES.encrypt(value, this.secretkey.toString("base64"));
-      this.verbose(this.secretkey, result.toString(), window.btoa(result.toString()));
+      this.verbose(this.secretkey, result.toString(), BTOA(result.toString()));
       // return the base64 version to save it as a string in the corpus
-      return "confidential:" + window.btoa(result.toString());
+      return "confidential:" + BTOA(result.toString());
     }
   },
 
@@ -122,7 +123,7 @@ Confidential.prototype = Object.create(FieldDBObject.prototype, /** @lends Confi
 
       encrypted = encrypted.replace("confidential:", "");
       // decode base64
-      encrypted = window.atob(encrypted);
+      encrypted = ATOB(encrypted);
       this.verbose("Decrypting " + encrypted, this.secretkey.toString("base64"));
       result = CryptoJS.AES.decrypt(encrypted, this.secretkey.toString("base64")).toString(CryptoEncoding);
       try {

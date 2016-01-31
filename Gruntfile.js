@@ -48,9 +48,9 @@ module.exports = function(grunt) {
           // "tests/audio_video/*.js",
           // "tests/authentication/*.js",
           // "tests/comment/*.js",
-          // "tests/confidentiality_encryption/*.js",
-          "tests/corpus/Database-spec.js",
-          // "tests/corpus/*-spec.js",
+          "tests/confidentiality_encryption/*.js",
+          // "tests/corpus/Database-spec.js",
+          "tests/corpus/*-spec.js",
           // "tests/data_list/*.js",
           // "tests/datum/*.js",
           // "tests/export/*.js",
@@ -67,6 +67,7 @@ module.exports = function(grunt) {
         ],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
+          ignore: ["atob", "btoa"],
           // external: ["api/**/*.js"],
           external: ["memory","./CORSNode"],
           basedir: "./api/"

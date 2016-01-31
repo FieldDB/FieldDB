@@ -1,16 +1,27 @@
+/* globals FieldDB, window */
 "use strict";
 
 var Confidential;
 try {
-  /* globals FieldDB */
   if (FieldDB) {
     Confidential = FieldDB.Confidential;
   }
 } catch (e) {}
 Confidential = Confidential || require("./../../api/confidentiality_encryption/Confidential").Confidential;
 
-var atob = atob || require("atob");
-var btoa = btoa || require("btoa");
+var ATOB;
+var BTOA;
+try {
+  if (!window.atob) {
+    console.log("ATOB is not defined, loading from npm");
+  }
+  ATOB = window.atob;
+  BTOA = window.btoa;
+} catch (e) {
+  ATOB = require("atob");
+  BTOA = require("btoa");
+}
+
 var SAMPLE_COMPLEX_OBJECT = require("./../../api/corpus/corpus.json");
 
 describe("Confidential: as a language consultant I want to be able to give data and have my data remain confidential", function() {
@@ -18,8 +29,8 @@ describe("Confidential: as a language consultant I want to be able to give data 
   it("should be able to use btoa and atob", function() {
     var message = "this is a sample confidential translation";
 
-    expect(btoa(message)).toEqual("dGhpcyBpcyBhIHNhbXBsZSBjb25maWRlbnRpYWwgdHJhbnNsYXRpb24=");
-    expect(btoa(atob(message))).toEqual("thisisasampleconfidentialtranslation");
+    expect(BTOA(message)).toEqual("dGhpcyBpcyBhIHNhbXBsZSBjb25maWRlbnRpYWwgdHJhbnNsYXRpb24=");
+    expect(BTOA(ATOB(message))).toEqual("thisisasampleconfidentialtranslation");
   });
 
   it("should encrypt and decrypt strings", function() {
