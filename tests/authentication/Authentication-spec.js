@@ -21,7 +21,16 @@ var expectedErrors = function(reason) {
     expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
     return true;
   } else if (reason.status === 500) {
-    expect(reason.userFriendlyErrors[0]).toContain("please report this");
+    if (reason.userFriendlyErrors[0].indexOf("Unable to create your corpus") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Unable to create your corpus");
+    } else if (reason.userFriendlyErrors[0].indexOf("Server is not responding for request to create user") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Server is not responding for request to create user");
+    } else if (reason.userFriendlyErrors[0].indexOf("Server is not responding to request") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Server is not responding to request");
+    } else if (reason.userFriendlyErrors[0].indexOf("Error saving a user in the database") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Error saving a user in the database");
+    }
+    expect(reason.userFriendlyErrors[0]).toContain("lease report this");
     return true;
   } else if (reason.status === 600) {
     expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
