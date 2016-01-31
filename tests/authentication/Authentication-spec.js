@@ -361,11 +361,13 @@ describe("Authentication ", function() {
   });
 
   describe("Server interaction", function() {
+    var auth;
+    beforeEach(function(){
+      auth = new Authentication();
+    });
 
     it("should be able to register a user", function(done) {
-      var auth = new Authentication();
-      expect(auth).toBeDefined();
-
+      expect(auth.register).toBeDefined();
       auth.register({
         username: "jenkins",
         password: "phoneme",
@@ -396,35 +398,7 @@ describe("Authentication ", function() {
 
     }, specIsRunningTooLong);
 
-
-    it("should not log the user in if the server replies not-authenticated", function(done) {
-      var auth = new Authentication();
-      auth.login({
-        username: "lingllama",
-        password: "hypothesis"
-      }).then(function(response) {
-        console.error("should not land in the sucess area. ", response);
-        expect(response).toEqual("should not happen");
-      }, function(error) {
-        auth.debug("Failed authentication");
-        if (auth.user) {
-          expect(auth.user.authenticated).toEqual(false);
-        }
-        if (expectedErrors(error)) {
-          // errors were expected
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else {
-          expect(error.userFriendlyErrors).toEqual("untested error response");
-        }
-      }).fail(function(exception) {
-        console.log(exception.stack);
-        expect(exception).toEqual("unexpected exception");
-      }).done(done);
-    }, specIsRunningTooLong);
-
     it("should not authenticate if login good username bad password", function(done) {
-      var auth = new Authentication();
       auth.login({
         username: "lingllama",
         password: "hypothesis"
@@ -451,7 +425,6 @@ describe("Authentication ", function() {
     }, specIsRunningTooLong);
 
     it("should not authenticate if login bad username any password", function(done) {
-      var auth = new Authentication();
       auth.login({
         username: "sapri",
         password: "phoneme"
@@ -478,7 +451,6 @@ describe("Authentication ", function() {
     }, specIsRunningTooLong);
 
     it("should be able to authenticate with many corpus servers", function(done) {
-      var auth = new Authentication();
       auth.user = {
         username: "jenkins",
         corpora: [],
