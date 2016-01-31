@@ -40,17 +40,17 @@ module.exports = function(grunt) {
       // https://github.com/amitayd/grunt-browserify-jasmine-node-example/blob/master/Gruntfile.js
       test: {
         src: [
-          // "tests/**/*spec.js",
+          "tests/**/*spec.js",
           // "tests/FieldDBObject-spec.js",
           // "tests/Collection-spec.js",
           // "tests/activity/*.js",
           // "tests/app/*.js",
           // "tests/audio_video/*.js",
-          "tests/authentication/*.js",
+          // "tests/authentication/*.js",
           // "tests/comment/*.js",
-          "tests/confidentiality_encryption/*.js",
+          // "tests/confidentiality_encryption/*.js",
           // "tests/corpus/Database-spec.js",
-          "tests/corpus/*-spec.js",
+          // "tests/corpus/*-spec.js",
           // "tests/data_list/*.js",
           // "tests/datum/*.js",
           // "tests/export/*.js",
@@ -67,9 +67,8 @@ module.exports = function(grunt) {
         ],
         dest: "dist/<%= pkg.name %>-spec.js",
         options: {
-          ignore: ["atob", "btoa"],
           // external: ["api/**/*.js"],
-          external: ["memory","./CORSNode"],
+          external: ["memory","./CORSNode", "atob", "btoa", "jsdom"],
           basedir: "./api/"
         }
       },
