@@ -435,6 +435,14 @@ describe("Corpus", function() {
 
   describe("serialization ", function() {
 
+    it("should serialize confidential key", function() {
+      var corpus = new Corpus(Corpus.prototype.defaults);
+      var serialization = corpus.toJSON();
+      expect(serialization.confidential).toBeDefined();
+      expect(serialization.confidential.secretkey).toBeDefined();
+      expect(serialization.confidential.secretkey.length).toBeGreaterThan(30);
+    });
+
     it("should serialize v1.22.1 to a standard json", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       var serialization = corpus.toJSON();
