@@ -761,9 +761,8 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     try {
       connectionUrlObject = new Connection.URLParser(optionalHREF);
     } catch (e) {
-      console.warn("Cant use new Connection.URLParser() in this environment.", e);
       connectionUrlObject = Connection.URLParser.parse(optionalHREF);
-      // console.log(connectionUrlObject);
+      // console.log("Cant use new Connection.URLParser() in this environment.", connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
       console.warn("There was no way to deduce the HREF, probably we are in Node. Using " + otherwise + " instead. ", optionalHREF);
