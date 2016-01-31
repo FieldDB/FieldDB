@@ -60,9 +60,7 @@ describe("Database", function() {
       db.login({
         name: "jenkins",
         password: "phoneme"
-      }).done(function() {
-        done();
-      });
+      }).finally(done);
     });
 
     it("should be able to return a promise for an item from the database", function(done) {
@@ -142,9 +140,7 @@ describe("Database", function() {
         db.login({
           name: "jenkins",
           password: "phoneme"
-        }).done(function() {
-          done();
-        });
+        }).finally(done);
       });
 
       it("should be to resume a login connection", function(done) {
@@ -281,9 +277,7 @@ describe("Database", function() {
     beforeEach(function(done) {
       Database.CORS.clearCookies("localhost:6984");
       db = new Database({});
-      db.logout().done(function() {
-        done();
-      });
+      db.logout().finally(done);
     });
 
     it("should be able to login on a couchdb", function(done) {
@@ -440,9 +434,7 @@ describe("Database", function() {
       db.login({
         name: "jenkins",
         password: "phoneme"
-      }).done(function() {
-        done();
-      });
+      }).finally(done);
     });
 
     it("should be able to logout", function(done) {
@@ -512,8 +504,8 @@ describe("Database", function() {
       } catch (e) {
         db._connectionInfo = encrypted;
       }
-      db.logout("https://ifielddevs.example.com/auth").then(function() {
-        expect(db.connectionInfo).toBeUndefined();
+      db.logout("https://ifielddevs.example.com/auth").then(function(result) {
+        expect(result).toBeUndefined("should not have succeeded");
       }, function(error) {
         expect(error.status).toEqual(412);
         expect(error.userFriendlyErrors).toEqual(["You cannot log out of https://ifielddevs.example.com/auth using this application."]);
@@ -711,9 +703,7 @@ describe("Database", function() {
       db.login({
         name: "jenkins",
         password: "phoneme"
-      }).done(function() {
-        done();
-      });
+      }).finally(done);
     });
 
     it("should be able to find urls of previous revisions", function(done) {

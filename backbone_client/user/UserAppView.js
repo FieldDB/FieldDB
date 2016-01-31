@@ -144,8 +144,14 @@ define(
              * Events that the UserAppView is listening to and their handlers.
              */
             events : {
-              "click #quick-authentication-okay-btn" : function(e) {
-                window.hub.publish("quickAuthenticationClose", "no message");
+              "submit #quick-authentication-okay-form" : function(e){
+                if(e){
+                  e.stopPropagation();
+                  e.preventDefault();
+                }
+                window.hub.publish("quickAuthenticationClose", $("#quick-authenticate-password").val());
+                $("#quick-authenticate-password").val("");
+                $("#quick-authenticate-modal").hide();
               },
               "click .icon-home" : function(e) {
                 if(e){
