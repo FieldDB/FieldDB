@@ -86,7 +86,7 @@ var tinyPrecedenceRelations = [{
   "count": 2
 }];
 
-xdescribe("Lexicon", function() {
+describe("Lexicon", function() {
 
   describe("nodes", function() {
 
