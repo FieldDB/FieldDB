@@ -34,7 +34,7 @@ try {
 
 var mockCorpus = {
 	dbname: "jenkins-firstcorpus",
-	url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+	url: "http://localhost:5984/jenkins-firstcorpus",
 	prefs: {
 		maxLexiconSize: 400
 	}
@@ -95,8 +95,8 @@ describe("Glosser", function() {
 
 	var tinyCorpus = {
 		dbname: "jenkins-firstcorpus",
-		title: "Community Corpus",
-		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
+		title: "Practice",
+		url: "http://localhost:5984/jenkins-firstcorpus"
 	};
 
 	describe("construction", function() {
