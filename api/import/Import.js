@@ -1,4 +1,4 @@
-/* globals window, escape, $, FileReader, FormData, atob,  unescape, Blob */
+/* globals window, escape, $, FileReader, FormData, unescape, Blob */
 var FieldDBImage = require("./../image/Image").Image;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
@@ -17,6 +17,15 @@ var TextGrid = require("textgrid").TextGrid;
 var X2JS = {};
 var Q = require("q");
 
+var ATOB;
+try {
+  if (!window.atob) {
+    console.log("ATOB is not defined, loading from npm");
+  }
+  ATOB = window.atob;
+} catch (e) {
+  ATOB = require("atob");
+}
 /**
  * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
  *
@@ -37,7 +46,7 @@ var dataURItoBlob = function(dataURI) {
   // convert base64/URLEncoded data component to raw binary data held in a string
   var byteString;
   if (dataURI.split(",")[0].indexOf("base64") >= 0) {
-    byteString = atob(dataURI.split(",")[1]);
+    byteString = ATOB(dataURI.split(",")[1]);
   } else {
     byteString = unescape(dataURI.split(",")[1]);
   }
