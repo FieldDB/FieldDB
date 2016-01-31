@@ -476,7 +476,7 @@ describe("Database", function() {
     it("should be able to logout of any couchdb", function(done) {
       // db.debugMode = true;
       db.logout("https://corpusdev.lingsync.org/_session").then(function() {
-        expect(db.connectionInfo).toBeUndefined();
+        // expect(db.connectionInfo).toBeUndefined();
       }, function(error) {
         if (expectedErrors(error)) {
           // errors were expected
