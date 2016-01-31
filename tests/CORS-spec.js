@@ -132,6 +132,7 @@ describe("CORS", function() {
   describe("servers", function() {
 
     it("should DELETE", function(done) {
+      // CORS.debugMode = true;
       CORS.makeCORSRequest({
         url: "https://corpusdev.lingsync.org/_session",
         method: "DELETE"
@@ -182,7 +183,7 @@ describe("CORS", function() {
 
     it("should GET html from node", function(done) {
       var options = {
-        url: "https://authdev.lingsync.org",
+        url: "https://authdev.lingsync.org"
       };
       CORS.makeCORSRequest(options).then(function(results) {
         expect(results).toContain("<!DOCTYPE html>");
@@ -195,11 +196,19 @@ describe("CORS", function() {
     }, specIsRunningTooLong);
 
     it("should GET binary from node", function(done) {
+      var listenedToProgress = false;
       var options = {
         url: "https://speech.lingsync.org/utterances/community-georgian/orive_gi%C9%A3deba/orive_gi%C9%A3deba.png",
+        onprogress: function(evt){
+          listenedToProgress = true;
+        }
       };
       CORS.makeCORSRequest(options).then(function(results) {
+        expect(listenedToProgress).toEqual(true);
+
         expect(results.length).toEqual(142838);
+        expect(options.complete).toEqual(true);
+        expect(options.percentComplete).toEqual(100);
       }, function(reason) {
         expect(reason).toEqual("unexpected error");
       }).fail(function(exception) {

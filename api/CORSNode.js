@@ -16,6 +16,11 @@ CORS.setHeader = function(xhr, key, value) {
 var COOKIE_JAR = {};
 
 CORS.clearCookies = function(hostname) {
+  if (!hostname) {
+    return;
+  }
+
+  this.warn("clearing cookies on " + hostname);
   delete COOKIE_JAR[hostname];
 };
 /*
@@ -56,8 +61,11 @@ CORS.makeCORSRequest = function(options) {
     var output = "";
     res.setEncoding("utf8");
 
+    self.debug(options.url + " " + options.complete + ":  requesting ");
+
     res.on("data", function(chunk) {
       output += chunk;
+      self.debug(options.url + " " + options.complete + ":  ondata ");
       self.onprogress.apply(self, [options, {
         lengthComputable: true,
         loaded: output.length - chunk.length,
@@ -68,18 +76,27 @@ CORS.makeCORSRequest = function(options) {
     res.on("end", function() {
       xhr.responseText = output;
       xhr.status = res.statusCode;
-      self.onload.apply(self, [options, {}, deferred]);
 
       // Save cookies
       if (res.headers && res.headers["set-cookie"]) {
         COOKIE_JAR[urlObject.host] = res.headers["set-cookie"];
-        self.debug("cookies", COOKIE_JAR);
+        self.debug(options.url + " " + options.complete + ": cookies", COOKIE_JAR);
       }
-      self.debug("response headers", res.headers);
+
+      // Remove cookies
+      self.debug(options.url + " " + options.complete + ":  response headers " + options.url, res.headers);
       if (options.method === "DELETE" && urlObject.path === "/_session") {
-        console.warn("Logged user out.");
         self.clearCookies(urlObject.host);
       }
+
+      // Final progress event
+      self.onprogress.apply(self, [options, {
+        lengthComputable: true,
+        loaded: output.length,
+        total: output.length
+      }, deferred]);
+
+      self.onload.apply(self, [options, {}, deferred]);
     });
   });
 
@@ -87,7 +104,7 @@ CORS.makeCORSRequest = function(options) {
   if (COOKIE_JAR[urlObject.host]) {
     xhr.setHeader("Cookie", COOKIE_JAR[urlObject.host].join(";"));
   }
-  self.debug("request cookies" + xhr.getHeader("cookie"));
+  self.debug(options.url + " " + options.complete + ": request cookies " + xhr.getHeader("cookie"));
 
   xhr.setHeader("Content-type", "application/json");
 
@@ -122,7 +139,7 @@ CORS.makeCORSRequest = function(options) {
   options.xhr = xhr;
   try {
     if (data) {
-      self.debug("sending ", data);
+      self.debug(options.url + " " + options.complete + ": sending ", data);
       xhr.write(data);
     } else {
       xhr.write("");

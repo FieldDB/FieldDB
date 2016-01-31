@@ -49,26 +49,35 @@ var CORS = {
       }
     }
   },
-  warn: function(message) {
+  warn: function(message, b, c) {
     if (this.warnMessage && this.warnMessage.indexOf("message") > -1) {
       return;
     } else {
       this.warnMessage = this.warnMessage + message;
     }
     console.warn("CORS-WARN: " + message);
+    if (b) {
+      console.log(b);
+    }
+    if (c) {
+      console.log(c);
+    }
     // throw message;
   },
   bug: function(message) {
     console.warn("CORS-BUG: " + message);
   },
   render: function() {
-    this.debug("Render requested but this object has no render defined.");
+    this.debug("Render requested for CORS, but it doesnt know how to render itself.");
   },
   clearCookies: function(hostname) {
-    console.log("TODO clear cookies requested");
+    this.warn("TODO clear cookies requested for " + hostname);
   },
   preprocess: function(options) {
-    this.debug("preprocess", options);
+    this.debug("\n\n\npreprocess " + options.url + " " + options.complete);
+    options.complete = false;
+    options.percentComplete = 0;
+
     // this.debugMode = true;
     if (!options.method) {
       options.method = options.type || "GET";
@@ -85,6 +94,12 @@ var CORS = {
     }
   },
   handleResponse: function(options, deferred) {
+    if (options.complete) {
+      // options = null;
+      return;
+    }
+    this.debug(options.url + " " + options.complete + ":   handleResponse " + options.url);
+
     var err,
       status,
       attr;
@@ -107,6 +122,9 @@ var CORS = {
     status = response.status || options.xhr.status;
 
     if (status < 400) {
+      this.debug("done " + options.url + " " + options.complete + "\n\n\n");
+      options.complete = true;
+      options.percentComplete = 100;
       deferred.resolve(response);
       return;
     }
@@ -125,13 +143,17 @@ var CORS = {
     }
     err.status = status;
 
-    delete options.xhr;
     this.handleError(options, err, deferred);
   },
   handleError: function(options, err, deferred) {
+    if (options.complete) {
+      // options = null;
+      return;
+    }
+    this.debug(options.url + " " + options.complete + ":   handleError " + options.url);
     var response;
 
-    // this.warn("The request to " + options.url + " was unsuccesful ");
+    // this.warn(options.url  + " " +  options.complete + ": was unsuccesful ");
     this.debug(err.stack);
 
     response = {
@@ -165,6 +187,12 @@ var CORS = {
     this.bug(response.userFriendlyErrors.join(" "));
 
     response.details = options;
+    if (response.details && response.details.xhr) {
+      this.debug(options.url + " " + options.complete + ":  cleaning up ", options.url);
+      delete options.xhr;
+    }
+    this.debug(options.url + " " + options.complete + ": done " + options.url + "\n\n\n");
+    options.complete = true;
     deferred.reject(response);
   },
   setHeader: function(xhr, key, value) {
@@ -172,21 +200,21 @@ var CORS = {
   },
   ontimeout: function(options, evt, deferred) {
     var err = new Error(this.CLIENT_TIMEOUT.MESSAGE);
-    this.debug("The request to " + options.url + " timed out.", evt);
+    this.debug(options.url + " " + options.complete + ": timed out.");
 
     err.status = this.CLIENT_TIMEOUT.CODE;
     this.handleError(options, err, deferred);
   },
   onabort: function(options, evt, deferred) {
     var err = new Error(this.CONNECTION_ABORTED.MESSAGE);
-    this.debug("The request to " + options.url + " was aborted.", evt);
+    this.debug(options.url + " " + options.complete + ": was aborted.");
 
     err.status = this.CONNECTION_ABORTED.CODE;
     this.handleError(options, err, deferred);
   },
   onerror: function(options, evt, deferred) {
     var err = new Error(this.CONNECTION_ERRORED.MESSAGE);
-    this.debug("The request to " + options.url + " errored.", evt);
+    this.debug(options.url + " " + options.complete + ": errored.");
 
     err.status = options.xhr.status || this.CONNECTION_ERRORED.CODE;
     this.handleError(options, err, deferred);
@@ -194,16 +222,18 @@ var CORS = {
   onload: function(options, evt, deferred) {
     this.handleResponse(options, deferred);
   },
-  onprogress: function(options, evt, deferred) {
+  onprogress: function(options, evt) {
+    this.debug(options.url + " " + options.complete + ":  onprogress " + options.url + " " + options.complete, evt);
     if (evt.lengthComputable) {
       var percentComplete = (evt.loaded / evt.total) * 100;
-      console.log("percentComplete", percentComplete);
+      this.debug(options.url + " " + options.complete + ":  percentComplete " + options.url, percentComplete);
+      console.log("Percent complete " + options.url + " : " + percentComplete);
+      if (!options.complete) {
+        options.percentComplete = percentComplete;
+      }
     }
     if (options.onprogress && typeof options.onprogress === "function") {
       options.onprogress(evt);
-    }
-    if (deferred && deferred.progress) {
-      deferred.progress(evt);
     }
   }
 };
@@ -333,7 +363,7 @@ CORS.makeCORSRequest = function(options) {
   options.xhr = xhr;
   try {
     if (data) {
-      self.debug("sending ", data);
+      self.debug(options.url + " " + options.complete + ": sending ", data);
       xhr.send(data);
     } else {
       xhr.send();
