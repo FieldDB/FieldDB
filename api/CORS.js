@@ -6,7 +6,7 @@ try {
   Q = document.Q || FieldDB.Q;
 } catch (exception) {
   if (!Q) {
-    Q = require("Q");
+    Q = require("q");
   }
 }
 
