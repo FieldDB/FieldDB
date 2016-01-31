@@ -317,6 +317,9 @@ describe("Database", function() {
         password: "phoneme",
         authUrl: "http://localhost:5984"
       }).then(function(couchdbSessionLoginResult) {
+        expect(db.connectionInfo).toBeDefined();
+        expect(db.connectionInfo.name).toEqual("jenkins");
+
         expect(couchdbSessionLoginResult).toBeDefined();
         expect(couchdbSessionLoginResult.url).toEqual("http://localhost:5984/_session");
         expect(couchdbSessionLoginResult.ok).toEqual(true);
@@ -346,6 +349,7 @@ describe("Database", function() {
         username: "jenkins",
         password: "phoneme"
       }).then(function(resultingFielddbUser) {
+        expect(db.connectionInfo).toBeUndefined();
         expect(resultingFielddbUser).toBeDefined();
         expect(resultingFielddbUser.username).toEqual("jenkins");
         expect(resultingFielddbUser.username).toEqual(resultingFielddbUser._id);
@@ -481,6 +485,7 @@ describe("Database", function() {
     }, specIsRunningTooLong);
 
     it("should be able to logout of any couchdb", function(done) {
+      // db.debugMode = true;
       try {
         localStorage.setItem("_connectionInfo", encrypted);
       } catch (e) {

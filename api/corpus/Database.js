@@ -596,6 +596,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
               authOrCorpusServerResult.roles = authOrCorpusServerResult.roles.map(function(role) {
                 return options.authUrl + "/" + role;
               });
+              self.connectionInfo = authOrCorpusServerResult;
               deferred.resolve(authOrCorpusServerResult);
             } else {
               authOrCorpusServerResult = authOrCorpusServerResult || {};
