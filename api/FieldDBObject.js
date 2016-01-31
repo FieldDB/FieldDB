@@ -75,13 +75,13 @@ try {
  *           a corpus is created. It must be a file save name, and be a permitted
  *           name in CouchDB which means it is [a-z] with no uppercase letters or
  *           symbols, by convention it cannot contain -, but _ is acceptable.
- 
+
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
 var FieldDBObject = function FieldDBObject(json) {
   if (json && (json instanceof this.constructor || json.constructor.toString() === this.constructor.toString())) {
-    json.warn("This was already the right type, not converting it.");
+    json.debug("This was already the right type, not converting it.");
     return json;
   }
   // if (!this._fieldDBtype) {

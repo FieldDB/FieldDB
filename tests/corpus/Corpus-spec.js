@@ -435,6 +435,14 @@ describe("Corpus", function() {
 
   describe("serialization ", function() {
 
+    it("should serialize confidential key", function() {
+      var corpus = new Corpus(Corpus.prototype.defaults);
+      var serialization = corpus.toJSON();
+      expect(serialization.confidential).toBeDefined();
+      expect(serialization.confidential.secretkey).toBeDefined();
+      expect(serialization.confidential.secretkey.length).toBeGreaterThan(30);
+    });
+
     it("should serialize v1.22.1 to a standard json", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       var serialization = corpus.toJSON();
@@ -520,8 +528,6 @@ describe("Corpus", function() {
 
   });
 
-
-
   describe("Corpus: as a user I want to be able to merge two corpora", function() {
     var oneCorpus;
     var anotherCorpus;
@@ -597,13 +603,11 @@ describe("Corpus", function() {
 
   });
 
-
   describe("Corpus: as a psycholinguist I want to have any number of fields on my participants.", function() {
     it("should be have speaker fields on participants", function() {
       expect(Corpus.prototype.defaults_psycholinguistics.participantFields.length).toBe(10);
     });
   });
-
 
   describe("Corpus: as a team we want to be able to go back in time in the corpus revisions", function() {
     it("should be able to import from GitHub repository", function() {

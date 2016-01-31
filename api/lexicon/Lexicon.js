@@ -1,16 +1,25 @@
-/* globals window, localStorage, d3, document */
+/* globals window, localStorage, d3, document, FieldDB */
+"use strict";
 
+var Bindings;
 try {
-  var ObservableDOM = require("frb/dom"); // add support for content editable
-  console.log("content editable is defined", ObservableDOM);
+  // var ObservableDOM = require("frb/dom"); // add support for content editable
+  // console.log("content editable is defined", ObservableDOM);
+  // var Bindings = require("frb/bindings");
+  Bindings = FieldDB.Bindings;
 } catch (e) {
-  console.warn("Warning contentEditable binding in the lexicon won't work because the document is probably not defined.");
+  Bindings = {
+    defineBindings: function(component, bindings) {
+      if (false) {
+        console.log("Binding should be injected as FieldDB.Bindings to have two-way binding in a user interface", component, bindings);
+      }
+    }
+  };
+  console.warn("Warning two-way editable binding in the lexicon won't work because the bindings weren't injected.");
 }
 
-var Bindings = require("frb/bindings");
 var Collection = require("../Collection").Collection;
 var CORS = require("../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
 var Q = require("q");
 var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;
@@ -343,7 +352,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           }
           try {
             window.currentlySelectedNode = e.target;
-            console.log(window.currentlySelectedNode.__data__);
+            console.log("window.currentlySelectedNode", window.currentlySelectedNode.__data__);
           } catch (e) {
             console.warn("Unable to make current node investigatable on the console.");
           }
@@ -1254,7 +1263,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         if (relationsIndex[attrib] || (attrib === "links" && relationsIndex["all"])) {
           relationsIndex[attrib].count = self.connectedGraph[attrib].length;
         } else {
-          this.availableLexicalRelations.add({
+          this.availableLexicalRelations.push({
             icon: "<i class=\"fa fa-link\"></i>",
             name: attrib,
             maker: ": Other",
@@ -1323,29 +1332,31 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       this.fetching = true;
       this.whenReady = deferred.promise;
 
-      CORS.makeCORSRequest({
-        type: "GET",
-        url: url
-      }).then(function(results) {
-          if (results && results.rows && results.rows.length !== undefined) {
+      Lexicon.CORS.makeCORSRequest({
+          type: "GET",
+          url: url
+        })
+        .then(function(results) {
+            self.fetching = false;
+            if (!results || !results.rows || !results.rows.length) {
+              deferred.reject({
+                details: results,
+                userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
+              });
+              return;
+            }
             self.add(results.rows);
             deferred.resolve(self.collection);
-          } else {
-            deferred.reject({
-              details: results,
-              userFriendlyErrors: ["The result from the server was not a standard response. Please report this."]
-            });
-          }
+          },
+          function(reason) {
+            self.fetching = false;
+            deferred.reject(reason);
+          })
+        .fail(function(error) {
           self.fetching = false;
-        },
-        function(reason) {
-          self.fetching = false;
-          deferred.reject(reason);
-        }).fail(function(error) {
-        self.fetching = false;
-        console.error(error.stack, self);
-        deferred.reject(error);
-      });
+          console.error(error.stack, self);
+          deferred.reject(error);
+        });
 
       return deferred.promise;
     }
@@ -1462,7 +1473,16 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var width = options.width || divElement.clientWidth || 200,
         height = options.height || 350;
 
-      divElement.innerHTML = "";
+      if (prefs.clear) {
+        if (this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
+          this.connectedGraph.svg[0][0].innerHTML = "";
+        }
+      } else {
+        if (this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
+          this.debug("Not re-rendering the lexicon connected graph.");
+          return self;
+        }
+      }
 
       var tooltip;
       if (!self.localDOM) {
@@ -1890,6 +1910,7 @@ var LexiconFactory = function(options) {
   return lex;
 };
 
+Lexicon.CORS = CORS;
 Lexicon.bootstrapLexicon = Lexicon.lexicon_nodes_mapReduce;
 Lexicon.LexiconNode = LexiconNode;
 Lexicon.Contexts = Contexts;

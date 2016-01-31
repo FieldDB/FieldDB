@@ -13,7 +13,7 @@ Q = Q || require("q");
 
 var specIsRunningTooLong = 5000;
 var mockDatabase = require("./corpus/DatabaseMock").mockDatabase;
-var CORS_ERROR = "CORS not supported, your browser will be unable to contact the database";
+var CORS_ERROR = "CORS not supported, your device will be unable to contact";
 
 describe("FieldDBObject", function() {
 

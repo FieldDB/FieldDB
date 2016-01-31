@@ -112,6 +112,7 @@ define([
      * Displays the public user page view of the given userid, if their public user is stored in this pouch.
      */
     showFullscreenUser : function(userid, dbname) {
+      var self = this;
       if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " + userid);
 
       if(userid){
@@ -131,9 +132,7 @@ define([
                 window.appView.publicReadUserView.render();
 
               },
-              error : function(e) {
-                alert("User not found in this corpus.");
-              }
+              error: self.handleFetchError
           });
         }
       }
@@ -182,7 +181,20 @@ define([
       $("#corpus-embedded").show();
     },
 
-
+    handleFetchError: function(model, response) {
+      console.log("handleFetchError", model, response);
+      if (response && response.status === 401) {
+        window.appView.authView.showQuickAuthenticateView(function() {
+          console.log("Auth is logged in.");
+        }, function() {
+          console.log("Auth login failed.");
+        }, function() {
+          console.log("Corpus is logged in.");
+        }, function() {
+          console.log("Corpus login failed.");
+        })
+      }
+    },
 
     /**
      * Displays the fullscreen view of the session specified by the given
@@ -194,8 +206,8 @@ define([
      *          sessionid The ID of the session within the corpus.
      */
     showEmbeddedSession : function(sessionid, dbname) {
-      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + dbname + " *** "
-          + sessionid);
+      var self = this;
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedSession: " + dbname + " *** "+ sessionid);
       if(sessionid){
         if(!dbname){
           dbname = window.app.get("corpus").get("dbname");
@@ -219,9 +231,7 @@ define([
                   });
                 });
               },
-              error : function(e) {
-                alert("There was an error fetching the sessions. Loading defaults..."+e);
-              }
+              error: self.handleFetchError
           });
         }
       }
@@ -237,8 +247,8 @@ define([
      * Displays the fullscreen view of the session.
      */
     showFullscreenSession : function(sessionid, dbname) {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + dbname + " *** "
-          + sessionid);
+      var self = this;
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenSession"  + dbname + " *** "+ sessionid);
       if(sessionid){
         if(!dbname){
           dbname = window.app.get("corpus").get("dbname");
@@ -262,9 +272,7 @@ define([
                   });
                 });
               },
-              error : function(e) {
-                alert("There was an error fetching the sessions. Loading defaults..."+e);
-              }
+              error: self.handleFetchError
           });
         }
       }
@@ -287,8 +295,8 @@ define([
      *          dataListid The ID of the datalist within the corpus.
      */
     showFullscreenDataList : function(dataListid, dbname) {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + dbname + " *** "
-          + dataListid);
+      var self = this;
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenDataList: " + dbname + " *** "+ dataListid);
       //If the user/app has specified a data list, and its not the same as the current one, then save the current one, fetch the one they requested and set it as the current one.
       if( !dataListid || dataListid == app.get("currentDataList").id  ){
         if($("#data-list-fullscreen-header").html() == ""){
@@ -329,9 +337,7 @@ define([
             });
           });
         },
-        error : function(e) {
-          alert("There was an error fetching the data list. Loading defaults..."+e);
-        }
+        error: self.handleFetchError
       });
 
      //TODO test other cases where datalist id needs to be changed
@@ -339,6 +345,7 @@ define([
     },
 
     showMiddleDataList : function(dataListid, dbname) {
+      var self = this;
       if (OPrime.debugMode) OPrime.debug("In showMiddleDataList");
 
       if(dataListid){
@@ -363,9 +370,7 @@ define([
                 });
               });
             },
-            error : function(e) {
-              alert("There was an error fetching the data list. Loading defaults..."+e);
-            }
+            error: self.handleFetchError
         });
       }
       this.hideEverything();
@@ -498,8 +503,8 @@ define([
     },
 
     showEmbeddedDatum : function(dbname, datumid){
-      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + dbname + " *** "
-          + datumid);
+      var self = this;
+      if (OPrime.debugMode) OPrime.debug("In showEmbeddedDatum"  + dbname + " *** "+ datumid);
       if(datumid){
         if(!dbname){
           dbname = window.app.get("corpus").get("dbname");
@@ -516,7 +521,8 @@ define([
             success : function(model, response) {
               window.appView.datumsEditView.prependDatum(model);
               window.location.href = "#render/true"; //TODO this is to clear the parameters in the url
-            }
+            },
+            error: self.handleFetchError
         });
       }else{
         window.location.href = "#render/true"; //TODO this is to clear the parameters in the url

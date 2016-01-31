@@ -8,8 +8,6 @@ var User = require("./../user/User").User;
 var Confidential = require("./../confidentiality_encryption/Confidential").Confidential;
 var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
-// var CORS = require("./../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
 
 // var md5 = require("md5");
 var bcrypt = require("bcrypt-nodejs");

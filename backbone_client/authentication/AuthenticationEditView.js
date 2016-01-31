@@ -370,54 +370,42 @@ define([
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.
      */
-    showQuickAuthenticateView : function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
-      var self = this;
-      var subscription;
-      // window.hub.unsubscribe("quickAuthenticationClose", null, this);
-      if( this.model.get("userPrivate").get("username") == "lingllama" ){
-        / * Show the quick auth but fill in the password, to simulate a user */
-        $("#quick-authenticate-modal").show();
-        var preKnownPassword = "phoneme";
-        $("#quick-authenticate-password").val(preKnownPassword);
-
-        subscription = function(){
-          window.appView.authView.authenticate("lingllama"
-              , "phoneme"
-              , OPrime.getAuthUrl(window.app.get("authentication").get("userPrivate").get("authUrl"))
-              , authsuccesscallback
-              , authfailurecallback
-              , corpusloginsuccesscallback
-              , corpusloginfailcallback );
-          $("#quick-authenticate-modal").hide();
-          $("#quick-authenticate-password").val("");
-          window.hub.unsubscribe("quickAuthenticationClose", subscription, self); //TODO why was this off, this si probably why we were getting lots of authentications
-        };
-        window.hub.subscribe("quickAuthenticationClose", subscription, self);
-      } else if (this.model.get("userPrivate").get("username") == "public") {
-        / * Dont show the quick auth, just authenticate */
-        window.appView.authView.authenticate("public"
-            , "none"
-            , OPrime.getAuthUrl(window.app.get("authentication").get("userPrivate").get("authUrl"))
-            , authsuccesscallback
-            , authfailurecallback
-            , corpusloginsuccesscallback
-            , corpusloginfailcallback );
-      } else {
-        $("#quick-authenticate-modal").show();
-        subscription = function(){
-          window.appView.authView.authenticate(window.app.get("authentication").get("userPrivate").get("username")
-              , $("#quick-authenticate-password").val()
-              , OPrime.getAuthUrl(window.app.get("authentication").get("userPrivate").get("authUrl"))
-              , authsuccesscallback
-              , authfailurecallback
-              , corpusloginsuccesscallback
-              , corpusloginfailcallback );
-          $("#quick-authenticate-modal").hide();
-          $("#quick-authenticate-password").val("");
-          window.hub.unsubscribe("quickAuthenticationClose", subscription, self);//TODO why was this off, this si probably why we were getting lots of authentications
-        };
-        window.hub.subscribe("quickAuthenticationClose", subscription, self);
+    showQuickAuthenticateView: function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+      if (window.askingUserToConfirmIdentity) {
+        return;
       }
+      window.askingUserToConfirmIdentity = true;
+
+      var self = this;
+      var authUrl = window.app.get("authentication").get("userPrivate").get("authUrl")
+      var username = window.app.get("authentication").get("userPrivate").get("username")
+      var subscription = function(password) {
+        window.appView.authView.authenticate(username, password, OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
+        setTimeout(function() {
+          window.askingUserToConfirmIdentity = false;
+        }, 2000);
+      };
+
+      if (username == "public") {
+        / * Dont show the quick auth, just authenticate */
+        window.appView.authView.authenticate("public", "none", OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        setTimeout(function() {
+          window.askingUserToConfirmIdentity = false;
+        }, 2000);
+        return;
+      }
+
+      if (username == "lingllama") {
+        / * Show the quick auth but fill in the password, to simulate a user */
+        $("#quick-authenticate-password").val("phoneme");
+        $("#quick-authenticate-modal").show();
+        window.hub.subscribe("quickAuthenticationClose", subscription, self);
+        return;
+      }
+
+      $("#quick-authenticate-modal").show();
+      window.hub.subscribe("quickAuthenticationClose", subscription, self);
     },
 
     registerNewUser: function(e) {

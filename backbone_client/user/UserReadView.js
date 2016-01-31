@@ -154,23 +154,15 @@ define([
               self.changeViewsOfInternalModels();
             }
           } else {
+            console.warn("username in database is somebody else, you should log in.");
             // self.application.router.navigate("/login/", {
             //   trigger: true
             // });
-            if (window.askingUserToConfirmIdentity) {
-              return;
-            }
-            window.askingUserToConfirmIdentity = true;
             window.appView.authView.showQuickAuthenticateView(function(){
             }, function(){
-
             }, function(){
-              window.askingUserToConfirmIdentity = false;
-
               console.log("Corpus is loged in yay.");
             }, function(){
-              window.askingUserToConfirmIdentity = false;
-
             })
           }
         });

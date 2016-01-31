@@ -2,8 +2,6 @@
 /* globals localStorage */
 var Q = require("q");
 var FieldDBObject = require("../FieldDBObject").FieldDBObject;
-var CORS = require("../CORS").CORS;
-// var CORS = require("../CORSNode").CORS;
 var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 var Lexicon = require("../lexicon/Lexicon").Lexicon;
 
@@ -36,6 +34,7 @@ var Glosser = function Glosser(options) {
 };
 
 Glosser.morphemeBoundaryRegEX = /[-=]/g;
+Glosser.Lexicon = Lexicon;
 
 /**
  * [morpheme_n_grams_mapReduce description]
@@ -271,7 +270,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
       }
 
       this.fetching = true;
-      CORS.makeCORSRequest({
+      Lexicon.CORS.makeCORSRequest({
           type: "GET",
           url: glosserURL
         })

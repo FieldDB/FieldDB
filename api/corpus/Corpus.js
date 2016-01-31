@@ -281,7 +281,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
           }
         }, function(reason) {
           self.debug(JSON.stringify(reason));
-          if (reason && reason.userFriendlyErrors && reason.userFriendlyErrors[0] === "CORS not supported, your browser is unable to contact the database.") {
+          if (reason && reason.userFriendlyErrors && reason.userFriendlyErrors[0].indexOf("device will be unable to contact") > -1) {
             deferred.reject(reason);
           } else {
             tryAgainInCaseThereWasALag(reason);

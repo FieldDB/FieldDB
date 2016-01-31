@@ -8,10 +8,12 @@ try {
     App = FieldDB.App;
     FieldDBObject = FieldDB.FieldDBObject;
   }
-} catch (e) {}
+} catch (e) {
+  // Permit testing with local https
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
 App = App || require("./../../api/app/App").App;
 FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
-
 
 var specIsRunningTooLong = 5000;
 

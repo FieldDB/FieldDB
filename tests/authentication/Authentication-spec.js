@@ -7,7 +7,10 @@ try {
   if (FieldDB) {
     Authentication = FieldDB.Authentication;
   }
-} catch (e) {}
+} catch (e) {
+  // Permit testing with local https
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
 Authentication = Authentication || require("./../../api/authentication/Authentication").Authentication;
 
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
@@ -15,10 +18,19 @@ var specIsRunningTooLong = 5000;
 
 var expectedErrors = function(reason) {
   if (reason.status === 620) {
-    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+    expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
     return true;
-  } else if (reason.status === 610) {
-    expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+  } else if (reason.status === 500) {
+    if (reason.userFriendlyErrors[0].indexOf("Unable to create your corpus") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Unable to create your corpus");
+    } else if (reason.userFriendlyErrors[0].indexOf("Server is not responding for request to create user") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Server is not responding for request to create user");
+    } else if (reason.userFriendlyErrors[0].indexOf("Server is not responding to request") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Server is not responding to request");
+    } else if (reason.userFriendlyErrors[0].indexOf("Error saving a user in the database") > -1) {
+      expect(reason.userFriendlyErrors[0]).toContain("Error saving a user in the database");
+    }
+    expect(reason.userFriendlyErrors[0]).toContain("lease report this");
     return true;
   } else if (reason.status === 600) {
     expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
@@ -108,9 +120,9 @@ describe("Authentication ", function() {
       }).then(function(result) {
         auth.debug("Done creating new corpus");
         expect(result).toBeDefined();
-        // expect(result.dbname).toEqual("jenkins-long_distance_anaphors_in_quechua");
+        expect(result.dbname).toEqual("jenkins-long_distance_anaphors_in_quechua");
       }, function(error) {
-        auth.debug("Failed creating new corpus");
+        auth.debug("Failed creating new corpus", error);
         if (expectedErrors(error)) {
           // errors were expected
         } else {
@@ -182,6 +194,7 @@ describe("Authentication ", function() {
       auth.resumingSessionPromise.then(function(result) {
         expect(result).toBe(auth.user);
         expect(auth.user).toBeDefined();
+        expect(auth.user.username).toEqual("jenkins");
       }, function(error) {
         if (expectedErrors(error)) {
           // errors were expected
@@ -348,11 +361,13 @@ describe("Authentication ", function() {
   });
 
   describe("Server interaction", function() {
+    var auth;
+    beforeEach(function(){
+      auth = new Authentication();
+    });
 
     it("should be able to register a user", function(done) {
-      var auth = new Authentication();
-      expect(auth).toBeDefined();
-
+      expect(auth.register).toBeDefined();
       auth.register({
         username: "jenkins",
         password: "phoneme",
@@ -383,35 +398,7 @@ describe("Authentication ", function() {
 
     }, specIsRunningTooLong);
 
-
-    it("should not log the user in if the server replies not-authenticated", function(done) {
-      var auth = new Authentication();
-      auth.login({
-        username: "lingllama",
-        password: "hypothesis"
-      }).then(function(response) {
-        console.error("should not land in the sucess area. ", response);
-        expect(response).toEqual("should not happen");
-      }, function(error) {
-        auth.debug("Failed authentication");
-        if (auth.user) {
-          expect(auth.user.authenticated).toEqual(false);
-        }
-        if (expectedErrors(error)) {
-          // errors were expected
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
-        } else {
-          expect(error.userFriendlyErrors).toEqual("untested error response");
-        }
-      }).fail(function(exception) {
-        console.log(exception.stack);
-        expect(exception).toEqual("unexpected exception");
-      }).done(done);
-    }, specIsRunningTooLong);
-
     it("should not authenticate if login good username bad password", function(done) {
-      var auth = new Authentication();
       auth.login({
         username: "lingllama",
         password: "hypothesis"
@@ -438,7 +425,6 @@ describe("Authentication ", function() {
     }, specIsRunningTooLong);
 
     it("should not authenticate if login bad username any password", function(done) {
-      var auth = new Authentication();
       auth.login({
         username: "sapri",
         password: "phoneme"
@@ -465,7 +451,6 @@ describe("Authentication ", function() {
     }, specIsRunningTooLong);
 
     it("should be able to authenticate with many corpus servers", function(done) {
-      var auth = new Authentication();
       auth.user = {
         username: "jenkins",
         corpora: [],
@@ -479,15 +464,13 @@ describe("Authentication ", function() {
         }
       }).then(function(response) {
         auth.debug("Done authentication", response);
-        expect(auth.user.roles.length).toEqual(10);
+        expect(auth.user.roles.length).toEqual(14);
         expect(auth.user.roles[0]).toEqual("http://localhost:5984/_session/jenkins-firstcorpus_admin");
       }, function(error) {
         auth.debug("Failed to authenticate with any corpus server. the user will be able to do nothing in the app.");
         expect(auth.user.roles).toEqual([]);
         if (expectedErrors(error)) {
           // errors were expected
-        } else if (error.status === 401) {
-          expect(error.userFriendlyErrors).toEqual(["Username or password is invalid. Please try again."]);
         } else {
           expect(error.userFriendlyErrors).toEqual("untested error response");
         }

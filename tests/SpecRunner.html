@@ -8,8 +8,29 @@
   <link rel="stylesheet" type="text/css" href="bower_components/jasmine/lib/jasmine-core/jasmine.css">
 </head>
 <body>
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/boot.js"></script>
 
-  <form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
+  <!-- Dont need Jasmine reporters for now
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.junit_reporter.js"></script>
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.console_reporter.js"></script>
+  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.terminal_reporter.js"></script>
+  -->
+
+  <!--
+     Unicode characters get messed up: must add charset="utf-8" to script tag to load correctly
+     https://github.com/substack/node-browserify/issues/349
+   -->
+
+   <div id="lexicon-3"></div>
+   <div id="lexicon-2"></div>
+   <div id="lexicon-1"></div>
+   <div id="lexicon-0"></div>
+
+   <div id="glosser-0"></div>
+
+   <form id="uploadForm" enctype="multipart/form-data" action="https://localhost:3184/upload" method="post">
     <input type="text" name="filesToBeAligned" value="Files to be Aligned"><br/>
     <input type="text" name="user" value="lingllama"><br/>
     <input type="text" name="dictionary" value="Url goes here"><br/>
@@ -21,25 +42,8 @@
     <input type="submit" value="Upload to server" />
   </form>
 
-  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
-  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
-  <script type="text/javascript" src="bower_components/jasmine/lib/jasmine-core/boot.js"></script>
-
-
-<!-- Dont need Jasmine reporters for now
-<script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.junit_reporter.js"></script>
-<script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.console_reporter.js"></script>
-<script type="text/javascript" src="bower_components/jasmine/lib/jasmine-reporters/src/jasmine.terminal_reporter.js"></script>
--->
-
-
-
-<!-- Browserify test bundle includes the Commonjs core files, so src and specs are loaded in one file.
-
-   Unicode characters get messed up: must add charset="utf-8" to script tag to load correctly
-   https://github.com/substack/node-browserify/issues/349
--->
-<script type="text/javascript" src="./../dist/fielddb-spec.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./../api/fielddb.js" charset="utf-8"></script>
+  <script type="text/javascript" src="./../dist/fielddb-spec.js" charset="utf-8"></script>
 
 </body>
 </html>

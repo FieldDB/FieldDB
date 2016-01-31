@@ -1,11 +1,14 @@
+/* globals document */
+"use strict";
 var Glosser = require("../../api/glosser/Glosser").Glosser;
+var CORS = require("../../api/CORS").CORS;
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
 var SAMPLE_SEGMENTATION_V3 = SAMPLE_LEXICONS[3];
 var optionalD3;
 var virtualDOM;
 var virtualElement;
-var specIsRunningTooLong = 5000;
+var specIsRunningTooLong = 500;
 
 try {
 	optionalD3 = require("d3");
@@ -14,15 +17,24 @@ try {
 }
 
 try {
-	virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
-	virtualElement = virtualDOM.body;
+	// If in a browser
+	virtualDOM = document;
+	console.log("Testing in a browser");
 } catch (e) {
-	console.log("If you want to run the tests for visualization of the Glosser/Lexicon, run `npm install jsdom` ", e.stack);
+	try {
+		// In node, with jsdom
+		virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+		virtualElement = virtualDOM.body;
+		console.log("Testing in node using jsdom");
+	} catch (e) {
+		// In node, without jsdom render wont be tested
+		console.log("If you want to run the tests for render of the Lexicon, run `npm install node-jsdom` ");
+	}
 }
 
 var mockCorpus = {
 	dbname: "jenkins-firstcorpus",
-	url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+	url: "http://localhost:5984/jenkins-firstcorpus",
 	prefs: {
 		maxLexiconSize: 400
 	}
@@ -30,10 +42,10 @@ var mockCorpus = {
 
 var expectedErrors = function(reason) {
 	if (reason.status === 620) {
-		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
+		expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
 		return true;
-	} else if (reason.status === 610) {
-		expect(reason.userFriendlyErrors[0]).toContain(["Please report this"]);
+	} else if (reason.status === 500) {
+		expect(reason.userFriendlyErrors[0]).toContain(["please report this"]);
 		return true;
 	} else if (reason.status === 600) {
 		expect(reason.userFriendlyErrors[0]).toContain("you appear to be offline");
@@ -43,7 +55,7 @@ var expectedErrors = function(reason) {
 	}
 };
 
-describe("Glosser: as a user I don't want to enter glosses that are already in my data", function() {
+describe("Glosser", function() {
 	var tinyLexicon = {
 		corpus: mockCorpus,
 		collection: [{
@@ -83,8 +95,8 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 	var tinyCorpus = {
 		dbname: "jenkins-firstcorpus",
-		title: "Community Corpus",
-		url: "http://admin:none@localhost:5984/jenkins-firstcorpus"
+		title: "Practice",
+		url: "http://localhost:5984/jenkins-firstcorpus"
 	};
 
 	describe("construction", function() {
@@ -109,11 +121,19 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 	});
 
 	describe("persistance", function() {
-
-		it("should fetch itself", function(done) {
-			var glosser = new Glosser({
+		var glosser;
+		beforeEach(function(done) {
+			glosser = new Glosser({
 				corpus: tinyCorpus
 			});
+			CORS.makeCORSRequest({
+				name: "jenkins",
+				password: "phoneme",
+				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
+			}).finally(done);
+		});
+
+		it("should fetch itself", function(done) {
 			expect(glosser).toBeDefined();
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
@@ -125,9 +145,6 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 					expect(glosser.fetching).toBeFalsy();
 					if (expectedErrors(reason)) {
 						// errors were expected
-						console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-					} else if (reason.status === 401) {
-						expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
 					} else {
 						expect(reason).toEqual("should not get here");
 					}
@@ -422,37 +439,42 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 			expect(glosser).toBeDefined();
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
-			glosser.fetch().then(function(results) {
-				expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
-				expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
-				// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
-				expect(results).toEqual(glosser.morphemeSegmentationKnowledgeBase);
-				// Rather than depending on server to have exact words in it, add it now to rules
-				glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
+			CORS.makeCORSRequest({
+				name: "jenkins",
+				password: "phoneme",
+				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
+			}).finally(function() {
 
-				var datum = {
-					utterance: "rtyuio"
-				};
-				glosser.guessMorphemesFromUtterance(datum);
+				glosser.fetch().then(function(results) {
+					expect(glosser.morphemeSegmentationKnowledgeBase.length).toBeGreaterThan(0);
+					expect(glosser.morphemeSegmentationKnowledgeBase.length).toEqual(14);
+					// expect(glosser.morphemeSegmentationKnowledgeBase).toEqual(14);
+					expect(results).toEqual(glosser.morphemeSegmentationKnowledgeBase);
+					// Rather than depending on server to have exact words in it, add it now to rules
+					glosser.morphemeSegmentationKnowledgeBase["@-rt-yuio"] = 1;
 
-				expect(datum.utterance).toEqual("rtyuio");
-				expect(datum.morphemes).toEqual("rt-yuio");
-				expect(datum.gloss).toEqual("?-?");
+					var datum = {
+						utterance: "rtyuio"
+					};
+					glosser.guessMorphemesFromUtterance(datum);
 
-			}, function(reason) {
-				if (expectedErrors(reason)) {
-					// errors were expected
-					console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-				} else if (reason.status === 401) {
-					expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
-				} else {
-					expect(reason).toEqual("should not get here");
-				}
-			}).fail(function(exception) {
-				console.log(exception.stack);
-				expect(exception).toEqual(" unexpected exception while processing rules");
-			}).done(done);
+					expect(datum.utterance).toEqual("rtyuio");
+					expect(datum.morphemes).toEqual("rt-yuio");
+					expect(datum.gloss).toEqual("?-?");
 
+				}, function(reason) {
+					if (expectedErrors(reason)) {
+						// errors were expected
+						console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+					} else {
+						expect(reason).toEqual("should not get here");
+					}
+				}).fail(function(exception) {
+					console.log(exception.stack);
+					expect(exception).toEqual(" unexpected exception while processing rules");
+				}).done(done);
+
+			});
 		}, specIsRunningTooLong);
 
 	});
@@ -559,7 +581,14 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 
 		if (optionalD3) {
 			it("should accept an element", function() {
-				expect(virtualElement).toBeDefined();
+				var element = virtualElement;
+				try {
+					element = document.getElementById("glosser-0");
+					if (!element) {
+						element = virtualElement;
+					}
+				} catch (e) {}
+				expect(element).toBeDefined();
 			});
 
 			it("should be able to use an injected d3 if a lexicon with entryRelations is defined", function() {
@@ -579,8 +608,16 @@ describe("Glosser: as a user I don't want to enter glosses that are already in m
 				expect(glosser.lexicon.entryRelations[0]).toEqual(tinyPrecedenceRelationsFromCouchDBMapReduce[0]);
 				expect(glosser.lexicon.fieldDBtype).toEqual("Lexicon");
 
+				var element = virtualElement;
+				try {
+					element = document.getElementById("glosser-0");
+					if (!element) {
+						element = virtualElement;
+					}
+				} catch (e) {}
+
 				expect(glosser.render({
-					element: virtualElement
+					element: element
 				})).toEqual(glosser);
 				if (glosser.warnMessage) {
 					expect(glosser.warnMessage).not.toContain("d3");

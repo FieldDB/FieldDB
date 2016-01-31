@@ -1,3 +1,6 @@
+/* globals document */
+"use strict";
+
 var Lexicon = require("../../api/lexicon/Lexicon").Lexicon;
 var LexiconNode = Lexicon.LexiconNode;
 var Contexts = Lexicon.Contexts;
@@ -23,10 +26,19 @@ try {
 }
 
 try {
-  virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
-  virtualElement = virtualDOM.body;
+  // If in a browser
+  virtualDOM = document;
+  console.log("Testing in a browser");
 } catch (e) {
-  console.log("If you want to run the tests for render of the Lexicon, run `npm install node-jsdom` ");
+  try {
+    // In node, with jsdom
+    virtualDOM = require("jsdom").jsdom("<html><head></head><body></body></html>");
+    virtualElement = virtualDOM.body;
+    console.log("Testing in node using jsdom");
+  } catch (e) {
+    // In node, without jsdom render wont be tested
+    console.log("If you want to run the tests for render of the Lexicon, run `npm install node-jsdom` ");
+  }
 }
 
 var SAMPLE_LEXICONS = require("../../sample_data/lexicon_v1.22.1.json");
@@ -38,9 +50,16 @@ var specIsRunningTooLong = 5000;
 
 var mockCorpus = {
   dbname: "jenkins-firstcorpus",
-  url: "http://admin:none@localhost:5984/jenkins-firstcorpus",
+  url: "http://localhost:5984/jenkins-firstcorpus",
   prefs: {
     maxLexiconSize: 400
+  },
+  login: function(options) {
+    return Lexicon.CORS.makeCORSRequest({
+      url: "http://localhost:5984/_session",
+      method: "POST",
+      data: options
+    });
   }
 };
 var tinyPrecedenceRelations = [{
@@ -67,9 +86,9 @@ var tinyPrecedenceRelations = [{
   "count": 2
 }];
 
-describe("Lexicon: as a user I want to search for anything, even things that don't exist", function() {
+describe("Lexicon", function() {
 
-  describe("lexicon nodes", function() {
+  describe("nodes", function() {
 
     it("should load", function() {
       expect(LexiconNode).toBeDefined();
@@ -125,7 +144,7 @@ describe("Lexicon: as a user I want to search for anything, even things that don
 
   });
 
-  describe("lexical entry lookup", function() {
+  describe("entry lookup", function() {
     it("should be able to find glosses for morphemes", function() {
       var lexicon = new Lexicon({
         corpus: mockCorpus,
@@ -740,36 +759,44 @@ describe("Lexicon: as a user I want to search for anything, even things that don
       });
       expect(lexicon).toBeDefined();
       expect(lexicon.corpus.dbname).toEqual("jenkins-firstcorpus");
+      lexicon.corpus.login({
+        name: "jenkins",
+        password: "phoneme"
+      }).then(function() {
 
-      lexicon.fetch().then(function(results) {
-        expect(results).toBe(lexicon.collection);
-        expect(lexicon.length).toBeGreaterThan(0);
-        expect(lexicon.length).toEqual(14);
-        expect(lexicon.collection.map(function(entry) {
-          return entry.id;
-        })).toEqual(["eight|", "eleven|", "five|", "four|", "fourteen|", "nine|", "one|", "seven|", "six|", "ten|", "thirteen|", "three|", "twelve|", "two|"]);
+        lexicon.fetch().then(function(results) {
+          expect(results).toBe(lexicon.collection);
+          expect(lexicon.length).toBeGreaterThan(0);
+          expect(lexicon.length).toEqual(14);
+          expect(lexicon.collection.map(function(entry) {
+            return entry.id;
+          })).toEqual(["eight|", "eleven|", "five|", "four|", "fourteen|", "nine|", "one|", "seven|", "six|", "ten|", "thirteen|", "three|", "twelve|", "two|"]);
+
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.userFriendlyErrors).toBeDefined();
+          expect(reason.details).toBeDefined();
+          if (reason.status === 620) {
+            console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
+            expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
+          } else {
+            expect(reason).toEqual("should not get here");
+          }
+        }).fail(function(exception) {
+          console.log(exception.stack);
+          expect(exception).toEqual(" unexpected exception while processing rules");
+        }).done(done);
 
       }, function(reason) {
-        expect(reason).toBeDefined();
-        expect(reason.userFriendlyErrors).toBeDefined();
-        expect(reason.details).toBeDefined();
-
-        if (reason.status === 620) {
-          console.warn("If you want to run this test, use CORSNode in the glosser instead of CORS", reason);
-          expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your browser will be unable to contact the database");
-        } else if (reason.status === 401) {
-          expect(reason.userFriendlyErrors[0]).toContain("You are not authorized to access this db.");
-        } else {
-          expect(reason).toEqual("should not get here");
-        }
-
+        expect(reason.status).toEqual(500);
+        expect(reason.userFriendlyErrors[0]).toContain("please report this");
+        done();
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual(" unexpected exception while processing rules");
-      }).done(done);
-
+        done();
+      });
     }, specIsRunningTooLong);
-
   });
 
   describe("connected graph", function() {
@@ -971,152 +998,227 @@ describe("Lexicon: as a user I want to search for anything, even things that don
     });
   });
 
-  describe("render ", function() {
+  describe("render", function() {
 
-    describe("render lexical entries", function() {
+    describe("options", function() {
 
-      it("should be able to build DOM elements with 2 way binding", function() {
-        var lexicon = new Lexicon({
-          corpus: mockCorpus,
-          entryRelations: SAMPLE_V3_LEXICON
-        });
+      it("should have a render function", function() {
+        var lexicon = new Lexicon();
         expect(lexicon).toBeDefined();
-        expect(lexicon.length).toEqual(45);
-        expect(lexicon.entryRelations.length).toEqual(447);
-        lexicon.updateConnectedGraph();
+        expect(lexicon.render).toBeDefined();
+        expect(typeof lexicon.render).toEqual("function");
+      });
 
-        expect(lexicon.connectedGraph).toBeDefined();
-        expect(lexicon.connectedGraph.nodes).toBeDefined();
-        expect(lexicon.connectedGraph.precedes).toBeDefined();
-        expect(lexicon.connectedGraph.length).toEqual(45);
-        expect(lexicon.connectedGraph.precedes.length).toEqual(56);
+      it("should warn if no element is provided", function() {
+        var lexicon = new Lexicon();
 
-        // need an element
         lexicon.warnMessage = "";
         expect(lexicon.render()).toBe(lexicon);
         expect(lexicon.warnMessage).toBeDefined();
-        expect(lexicon.warnMessage).not.toContain("d3");
-        expect(lexicon.warnMessage).not.toContain("visualize");
-        expect(lexicon.warnMessage).toContain("should provide an element");
+        expect(lexicon.warnMessage).toContain("provide an element");
+      });
 
-        // need an element which can appendChild
+      it("should warn if element cannot appendChild", function() {
+        var lexicon = new Lexicon();
+
         lexicon.warnMessage = "";
         expect(lexicon.render({
           lexicalEntriesElement: {}
         })).toBe(lexicon);
         expect(lexicon.warnMessage).toBeDefined();
-        expect(lexicon.warnMessage).not.toContain("d3");
-        expect(lexicon.warnMessage).not.toContain("visualize");
-        expect(lexicon.warnMessage).toContain("should provide an element");
-
-
-        if (virtualDOM) {
-          lexicon.warnMessage = "";
-          expect(lexicon.render({
-            lexicalEntriesElement: virtualElement
-          })).toBe(lexicon);
-          // If in a browser, this will be okay, if in node it needs the virtualDOM
-          if (lexicon.warnMessage) {
-            expect(lexicon.warnMessage).not.toContain("d3");
-            expect(lexicon.warnMessage).not.toContain("visualize");
-            expect(lexicon.warnMessage).not.toContain("should provide an element");
-            expect(lexicon.warnMessage).toContain("unable to render the lexical entries");
-          }
-
-
-          lexicon.warnMessage = "";
-          lexicon.localDOM = virtualDOM;
-          lexicon.render({
-            lexicalEntriesElement: virtualElement
-          });
-
-          if (lexicon.warnMessage) {
-            expect(lexicon.warnMessage).not.toContain("d3");
-            expect(lexicon.warnMessage).not.toContain("visualize");
-            expect(lexicon.warnMessage).not.toContain("should provide an element");
-            expect(lexicon.warnMessage).not.toContain("unable to render the lexical entries");
-          }
-          expect(virtualElement.children).toBeDefined();
-          expect(virtualElement.children[0]).toBeDefined();
-          expect(virtualElement.children[0].children).toBeDefined();
-          expect(virtualElement.children[0].children.length).toEqual(lexicon.length);
-        }
-
+        expect(lexicon.warnMessage).toContain("provide an element");
       });
 
     });
 
-    describe("render connections between entries", function() {
+    if (!virtualDOM) {
+      return;
+    }
+
+    try {
+      console.log("document is defined so no need to specify a localDOM", document);
+    } catch (e) {
+      it("should warn if no dom is provided", function() {
+        var lexicon = new Lexicon({
+          corpus: mockCorpus
+        });
+
+        var element = virtualElement;
+        try {
+          element = document.getElementById("lexicon-0");
+          if (!element) {
+            element = virtualElement;
+          }
+        } catch (e) {}
+
+        lexicon.warnMessage = "";
+        expect(lexicon.render({
+          lexicalEntriesElement: element
+        })).toBe(lexicon);
+
+        expect(lexicon.warnMessage).toBeDefined();
+        expect(lexicon.warnMessage).toContain("provide an localDOM");
+      });
+    }
+
+    var elementShouldContainElementsOfLexiconNodes = function(lexicon, element) {
+      expect(element.children).toBeDefined();
+
+      var lexiconEntries;
+      for (var i = element.children.length - 1; i >= 0; i--) {
+        if (lexiconEntries) {
+          continue;
+        }
+        if (element.children[i] && element.children[i].tagName === "UL") {
+          lexiconEntries = element.children[i];
+        }
+      }
+
+      expect(lexiconEntries).toBeDefined();
+      expect(lexiconEntries.tagName).toEqual("UL");
+      expect(lexiconEntries.children).toBeDefined();
+      expect(lexiconEntries.children.length).toEqual(lexicon.length);
+    };
+
+    var elementShouldContainAnSVGWhichContainsAConnectedGraph = function(lexicon, element) {
+      // Expect lexicon to have a warnMessage if it needs the virtualDOM
+      if (lexicon.warnMessage) {
+        expect(lexicon.warnMessage).not.toContain("d3");
+        expect(lexicon.warnMessage).not.toContain("visualize");
+        expect(lexicon.warnMessage).not.toContain("should provide an element");
+      }
+
+      var lexiconSvg;
+      for (var i = element.children.length - 1; i >= 0; i--) {
+        if (lexiconSvg) {
+          continue;
+        }
+        if (element.children[i] && element.children[i].tagName === "svg") {
+          lexiconSvg = element.children[i];
+        }
+      }
+      if (lexiconSvg) {
+        expect(lexiconSvg.tagName).toEqual("svg");
+
+        // Lexicon relations
+        expect(lexiconSvg.children[1].tagName).toEqual("g");
+        expect(lexiconSvg.children[1].childNodes[0]).toBeDefined();
+        expect(lexiconSvg.children[1].childNodes[0].tagName).toEqual("path");
+        expect(lexiconSvg.children[1].childNodes.length).toEqual(lexicon.connectedGraph.links.length);
+
+        // Lexicon nodes
+        expect(lexiconSvg.children[2].tagName).toEqual("g");
+        expect(lexiconSvg.children[2].childNodes[0]).toBeDefined();
+        expect(lexiconSvg.children[2].childNodes[0].tagName).toEqual("circle");
+        expect(lexiconSvg.children[2].childNodes.length).toEqual(lexicon.length);
+      } else {
+        expect(lexiconSvg).toBeDefined();
+      }
+
+      // lexicon svg should also have a reference to the svg of the element
+      expect(lexicon.connectedGraph).toBeDefined();
+      expect(lexicon.connectedGraph.svg).toBeDefined();
+      expect(lexicon.connectedGraph.svg[0]).toBeDefined();
+      expect(lexicon.connectedGraph.svg[0][0]).toEqual(lexiconSvg);
+    };
+
+    describe("lexical entries", function() {
+
+      it("should be able to build DOM elements with 2 way binding", function() {
+        var lexicon = new Lexicon({
+          corpus: mockCorpus,
+          entryRelations: SAMPLE_V4_LEXICON
+        });
+        expect(lexicon).toBeDefined();
+        expect(lexicon.length).toEqual(9);
+        expect(lexicon.entryRelations.length).toEqual(7);
+
+        var element = virtualElement;
+        try {
+          element = document.getElementById("lexicon-1");
+          if (!element) {
+            element = virtualElement;
+          }
+        } catch (e) {}
+
+        lexicon.localDOM = virtualDOM;
+        lexicon.render({
+          lexicalEntriesElement: element
+        });
+        elementShouldContainElementsOfLexiconNodes(lexicon, element);
+      });
+
+    });
+
+    describe("connections between entries", function() {
+
+      if (!optionalD3) {
+        it("should warn if d3 is not provided", function() {
+          var lexicon = new Lexicon();
+
+          var element = virtualElement;
+          try {
+            element = document.getElementById("lexicon-3");
+            if (!element) {
+              element = virtualElement;
+            }
+          } catch (e) {}
+
+          lexicon.warnMessage = "";
+          lexicon.localDOM = virtualDOM;
+          expect(lexicon.render({
+            lexicalEntriesElement: element
+          })).toBe(lexicon);
+
+          expect(lexicon.warnMessage).toBeDefined();
+          expect(lexicon.warnMessage).toContain("d3");
+          expect(lexicon.warnMessage).toContain("visualize");
+          // expect(lexicon.warnMessage).toContain("should provide an element");
+          // expect(lexicon.warnMessage).toContain("unable to render the lexical entries");
+        });
+        return;
+      }
 
       it("should be able to build precedence relations as a force directed graph", function() {
         var lexicon = new Lexicon({
           corpus: mockCorpus,
-          entryRelations: SAMPLE_V3_LEXICON
+          entryRelations: SAMPLE_V4_LEXICON
         });
         expect(lexicon).toBeDefined();
-        expect(lexicon.length).toEqual(45);
-        expect(lexicon.entryRelations.length).toEqual(447);
-
-
-        // need d3
-        lexicon.warnMessage = "";
-        expect(lexicon.visualizeAsForceDirectedGraph()).toBe(lexicon);
+        expect(lexicon.length).toEqual(9);
+        expect(lexicon.entryRelations.length).toEqual(7);
 
         expect(lexicon.connectedGraph).toBeDefined();
         expect(lexicon.connectedGraph.nodes).toBeDefined();
         expect(lexicon.connectedGraph.precedes).toBeDefined();
-        expect(lexicon.connectedGraph.length).toEqual(45);
-        expect(lexicon.connectedGraph.precedes.length).toEqual(28); //TODO was 56
+        expect(lexicon.connectedGraph.length).toEqual(9);
+        expect(lexicon.connectedGraph.precedes.length).toEqual(7);
 
-        expect(lexicon.warnMessage).toBeDefined();
-        expect(lexicon.warnMessage).toContain("d3");
-
-        if (virtualDOM && optionalD3) {
-          lexicon.d3 = optionalD3;
-          lexicon.localDOM = virtualDOM;
-
-          lexicon.warnMessage = "";
-          expect(lexicon.visualizeAsForceDirectedGraph({
-            element: virtualElement
-          })).toBe(lexicon);
-          // If in a browser, this will be okay, if in node it needs the virtualDOM
-          if (lexicon.warnMessage) {
-            expect(lexicon.warnMessage).not.toContain("d3");
-            expect(lexicon.warnMessage).not.toContain("visualize");
-            expect(lexicon.warnMessage).not.toContain("should provide an element");
+        var element = virtualElement;
+        try {
+          element = document.getElementById("lexicon-2");
+          if (!element) {
+            element = virtualElement;
           }
+        } catch (e) {}
 
-          expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
-          expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
-          expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(4);
-          expect(lexicon.connectedGraph.svg[0][0].children[0]).toBeDefined();
-          if (lexicon.connectedGraph.svg[0][0].children[0].children) {
+        lexicon.d3 = optionalD3;
+        lexicon.localDOM = virtualDOM;
+        lexicon.warnMessage = "";
+        expect(lexicon.visualizeAsForceDirectedGraph({
+          element: element
+        })).toBe(lexicon);
 
-            expect(lexicon.connectedGraph.svg[0][0].children[0].children.length).toEqual(28);
-            expect(lexicon.connectedGraph.svg[0][0].children[1]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[1].children.length).toEqual(28);
-            expect(lexicon.connectedGraph.svg[0][0].children[2]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[2].children.length).toEqual(45);
-            expect(lexicon.connectedGraph.svg[0][0].children[3]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[3].children.length).toEqual(45);
-            // expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
-          } else {
-            expect(lexicon.connectedGraph.svg[0][0].children[0].childNodes[0].childElementCount).toEqual(28);
-            expect(lexicon.connectedGraph.svg[0][0].children[1]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(28);
-            expect(lexicon.connectedGraph.svg[0][0].children[2]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(45);
-            expect(lexicon.connectedGraph.svg[0][0].children[3]).toBeDefined();
-            expect(lexicon.connectedGraph.svg[0][0].children[3].childNodes[0].childElementCount).toEqual(45);
-
-            // expect(lexicon.connectedGraph.svg[0][0].children[2].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
-          }
-        }
+        elementShouldContainAnSVGWhichContainsAConnectedGraph(lexicon, element);
       });
 
     });
 
-    describe("render both entries and connections", function() {
+    if (!optionalD3) {
+      return;
+    }
+
+    describe("both entries and connections", function() {
 
       it("should be able to build precedence relations as a force directed graph", function() {
         var lexicon = new Lexicon({
@@ -1127,46 +1229,33 @@ describe("Lexicon: as a user I want to search for anything, even things that don
         expect(lexicon.length).toEqual(45);
         expect(lexicon.entryRelations.length).toEqual(447);
 
-        if (virtualDOM && optionalD3) {
-          lexicon.d3 = optionalD3;
-          lexicon.localDOM = virtualDOM;
-
-          lexicon.warnMessage = "";
-
-          expect(lexicon.render({
-            lexicalEntriesElement: virtualElement
-          })).toBe(lexicon);
-
-          expect(lexicon.visualizeAsForceDirectedGraph({
-            element: virtualElement
-          })).toBe(lexicon);
-          // If in a browser, this will be okay, if in node it needs the virtualDOM
-          if (lexicon.warnMessage) {
-            expect(lexicon.warnMessage).not.toContain("d3");
-            expect(lexicon.warnMessage).not.toContain("visualize");
-            expect(lexicon.warnMessage).not.toContain("should provide an element");
+        var element = virtualElement;
+        try {
+          element = document.getElementById("lexicon-3");
+          if (!element) {
+            element = virtualElement;
           }
+        } catch (e) {}
 
-          expect(virtualElement.children).toBeDefined();
-          expect(virtualElement.children[0]).toBeDefined();
-          expect(virtualElement.children[0].children).toBeDefined();
-          // expect(virtualElement.children[0].children.length).toEqual(lexicon.length);
+        lexicon.d3 = optionalD3;
+        lexicon.localDOM = virtualDOM;
+        lexicon.warnMessage = "";
+        expect(lexicon.visualizeAsForceDirectedGraph({
+          element: element
+        })).toBe(lexicon);
 
-          // expect(lexicon.connectedGraph.svg[0][0]).toBeDefined();
-          // expect(lexicon.connectedGraph.svg[0][0].children).toBeDefined();
-          // expect(lexicon.connectedGraph.svg[0][0].children.length).toEqual(4);
-          // if (lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes) {
-          //   expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0]._childNodes.length).toEqual(lexicon.connectedGraph.length);
-          // } else {
-          //   expect(lexicon.connectedGraph.svg[0][0].children[1].childNodes[0].childElementCount).toEqual(lexicon.connectedGraph.length);
-          // }
-        }
+        expect(lexicon.render({
+          lexicalEntriesElement: element
+        })).toBe(lexicon);
+
+        expect(element.children).toBeDefined();
+        elementShouldContainElementsOfLexiconNodes(lexicon, element);
+        elementShouldContainAnSVGWhichContainsAConnectedGraph(lexicon, element);
       });
 
     });
 
   });
-
 
   describe("backward compatibility", function() {
     it("should be able to automerge equivalent nodes", function() {

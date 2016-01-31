@@ -1,4 +1,4 @@
-var CORS = require("../../api/CORSNode").CORS;
+var CORS = require("../../api/CORS").CORS;
 
 var mapReduceFactory = require("./../../api/map_reduce/MapReduce").MapReduceFactory;
 var byTypeMapString = require("../../map_reduce_data/views/by_type/map").byType;
