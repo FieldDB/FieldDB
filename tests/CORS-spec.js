@@ -66,7 +66,7 @@ describe("CORS", function() {
         expect(results).toBeUndefined();
       }, function(reason) {
         expect(reason.status).toEqual(500);
-        expect(reason.userFriendlyErrors[0]).toContain("errored, please report this.");
+        expect(reason.userFriendlyErrors[0]).toContain("please report this.");
         expect(reason.details.data).toEqual(options.data);
         expect(reason.details.method).toEqual(options.method);
         expect(reason.details.url).toEqual(options.url);
