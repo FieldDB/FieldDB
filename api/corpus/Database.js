@@ -505,7 +505,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }
       // this.todo(" Use Connection ");
-
     }
   },
 
