@@ -46,7 +46,7 @@ module.exports = function(grunt) {
           // "tests/activity/*.js",
           // "tests/app/*.js",
           // "tests/audio_video/*.js",
-          // "tests/authentication/*.js",
+          "tests/authentication/*.js",
           // "tests/comment/*.js",
           "tests/confidentiality_encryption/*.js",
           // "tests/corpus/Database-spec.js",
