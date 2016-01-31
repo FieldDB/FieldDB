@@ -30,7 +30,7 @@ describe("Confidential: as a language consultant I want to be able to give data 
     var message = "this is a sample confidential translation";
 
     expect(BTOA(message)).toEqual("dGhpcyBpcyBhIHNhbXBsZSBjb25maWRlbnRpYWwgdHJhbnNsYXRpb24=");
-    expect(BTOA(ATOB(message))).toEqual("thisisasampleconfidentialtranslation");
+    expect(ATOB(BTOA(message))).toEqual(message);
   });
 
   it("should encrypt and decrypt strings", function() {
