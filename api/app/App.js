@@ -613,8 +613,8 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
     get: function() {
       return this._router;
     },
-    set: function(router) {
-      this._router = router;
+    set: function(value) {
+      this.ensureSetViaAppropriateType("router", value);
     }
   },
 

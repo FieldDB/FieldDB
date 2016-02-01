@@ -141,7 +141,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         };
         $scope.message = message;
         $scope.userInput = providedInput || "";
-        if (message.toLowerCase().indexOf("password") > -1 || message.toLowerCase().indexOf("confirm your identity") > -1 || message.toLowerCase().indexOf("mot de passe") > -1 ) {
+        if (message.toLowerCase().indexOf("password") > -1 || message.toLowerCase().indexOf("confirm your identity") > -1 || message.toLowerCase().indexOf("mot de passe") > -1) {
           $scope.inputType = "password";
         } else if (message.toLowerCase().indexOf("date") > -1) {
           $scope.inputType = "date";
@@ -173,6 +173,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
   if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
     $scope.application = FieldDB.FieldDBObject.application;
 
+    FieldDB.FieldDBObject.application.router = FieldDB.FieldDBObject.application.router || {};
     FieldDB.FieldDBObject.application.router.navigate = function(route, options) {
       if (!route) {
         console.warn("Not navigating to an empty route.");
