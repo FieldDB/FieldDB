@@ -29,7 +29,7 @@ angular.module("fielddbAngular", [
     // to active whenever 'contacts.list' or one of its decendents is active.
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    console.log(" state ", $state, $stateParams);
+    // console.log(" state ", $state, $stateParams);
 
     if (FieldDB &&
       FieldDB.FieldDBObject &&
@@ -43,7 +43,6 @@ angular.module("fielddbAngular", [
         $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
       };
     }
-
   }
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
@@ -72,8 +71,7 @@ angular.module("fielddbAngular", [
 
   fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
-  fieldDBApp.debugMode = true;
-
+  // fieldDBApp.debugMode = true;
 
 
   /* Add Event listeners */
@@ -83,7 +81,7 @@ angular.module("fielddbAngular", [
   document.addEventListener("authenticateFail", function(reason) {
     fieldDBApp.warn("user isn't able to see anything, show them the welcome page", reason);
     // fieldDBApp.authentication.error = "";
-    console.log("  Redirecting the user to the welcome page");
+    // console.log("  Redirecting the user to the welcome page");
     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
     // $location.path("/welcome", false);
   }, false);
@@ -114,7 +112,7 @@ angular.module("fielddbAngular", [
 
 
   // var passStateParamsController = function($stateParams) {
-  //   console.log("Loading ", $stateParams);
+    console.log("Loading ", $stateParams);
   //   var paramsChanged = false;
   //   if (!fieldDBApp.routeParams) {
   //     paramsChanged = true;
