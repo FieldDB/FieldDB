@@ -7,7 +7,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
    TODO use angular modal for bugs */
   FieldDB.FieldDBObject.bug = function(message, optionalLocale) {
     var deferred = FieldDB.Q.defer();
-    console.warn(message);
+    // console.warn(message);
     $modal.open({
       templateUrl: "app/components/popup/prompt.html",
       backdrop: false,
@@ -31,14 +31,14 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         $scope.message = message;
         $scope.showCancelButton = false;
         $scope.isBug = true;
-        console.log("$modalInstance", $modalInstance);
+        // console.log("$modalInstance", $modalInstance);
       }
     });
     return deferred.promise;
   };
   FieldDB.FieldDBObject.popup = function(message, optionalLocale) {
     var deferred = FieldDB.Q.defer();
-    console.warn(message);
+    // console.warn(message);
     $modal.open({
       templateUrl: "app/components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
@@ -61,14 +61,14 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         $scope.message = message;
         $scope.showCancelButton = false;
         $scope.isPopup = true;
-        console.log("$modalInstance", $modalInstance);
+        // console.log("$modalInstance", $modalInstance);
       }
     });
     return deferred.promise;
   };
   FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
     var deferred = FieldDB.Q.defer();
-    console.warn(message);
+    // console.warn(message);
     $modal.open({
       templateUrl: "app/components/popup/prompt.html",
       controller: function($scope, $modalInstance) {
@@ -91,14 +91,14 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         $scope.message = message;
         $scope.showCancelButton = true;
         $scope.isConfirm = true;
-        console.log("$modalInstance", $modalInstance);
+        // console.log("$modalInstance", $modalInstance);
       }
     });
     return deferred.promise;
   };
   FieldDB.FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
     var deferred = FieldDB.Q.defer();
-    console.warn(message);
+    // console.warn(message);
 
     $modal.open({
       templateUrl: "app/components/popup/prompt.html",
@@ -113,7 +113,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
               try {
                 var parsed = JSON.parse(response);
                 response = parsed;
-                console.log("Using ", parsed);
+                // console.log("Using ", parsed);
               } catch (e) {
                 FieldDB.FieldDBObject.bug("There was a problem parsing your input.").then(function() {
                   FieldDB.FieldDBObject.prompt(message, optionalLocale, providedInput);
@@ -152,7 +152,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
         }
         $scope.showCancelButton = true;
         $scope.isPrompt = true;
-        console.log("$modalInstance", $modalInstance);
+        // console.log("$modalInstance", $modalInstance);
       }
     });
     return deferred.promise;
@@ -176,7 +176,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     FieldDB.FieldDBObject.application.router = FieldDB.FieldDBObject.application.router || {};
     FieldDB.FieldDBObject.application.router.navigate = function(route, options) {
       if (!route) {
-        console.warn("Not navigating to an empty route.");
+        // console.warn("Not navigating to an empty route.");
         return;
       }
       // $location.route(route);
@@ -189,7 +189,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
       window.location.href = route;
       var searchQuery = route.substring(route.lastIndexOf("/") + 1);
       if (searchQuery) {
-        console.log("Navigating to show a search " + searchQuery, options);
+        // console.log("Navigating to show a search " + searchQuery, options);
         FieldDB.FieldDBObject.application.search.searchQuery = searchQuery;
         FieldDB.FieldDBObject.application.search.search(FieldDB.FieldDBObject.application.search.searchQuery);
         if (!$scope.$$phase) {
@@ -199,7 +199,7 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
     };
 
   } else {
-    console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
+    // console.warn("The fielddb application was never created, are you sure you did new FieldDB.APP() somewhere?");
     FieldDB.FieldDBObject.bug("The app cannot load, please report this. ");
   }
 
@@ -242,5 +242,5 @@ angular.module("fielddbAngular").controller("FieldDBController", function($scope
   // $scope.application.currentCorpusDashboard = ":team/:corpusidentifier/import/:importType";
   $scope.FieldDBComponents.Activity.route = "/lingllama/communitycorpus/activityfeed"; //+ "/activityfeed/123";
 
-  console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
+  // console.log("FieldDBController was loaded, this means almost everything in the corpus is available now");
 });

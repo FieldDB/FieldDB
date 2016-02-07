@@ -69,7 +69,7 @@ angular.module("fielddbAngular", [
     });
   }
 
-  fieldDBApp.debug("Loaded fielddbAngular module ");
+  // fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
   // fieldDBApp.debugMode = true;
 
@@ -175,7 +175,7 @@ angular.module("fielddbAngular", [
   fieldDBApp.debug("Loaded Angular FieldDB Components ", fieldDBApp);
 });
 
-console.log("Loaded fielddbAngular module");
+// console.log("Loaded fielddbAngular module");
 // fielddbAngulaModule.run(["$route", "$rootScope", "$location",
 //   function($route, $rootScope, $location) {
 //     var original = $location.path;
