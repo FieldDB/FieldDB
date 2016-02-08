@@ -4,6 +4,9 @@ var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
 
+// Let tests contact self-signed SSL certs
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 var karma = require('karma');
 
 var pathSrcHtml = [
