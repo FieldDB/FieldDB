@@ -19,7 +19,9 @@ function listFiles() {
   var patterns = wiredep(wiredepOptions).js
     .concat([
       path.join(conf.paths.src, '/app/**/*.module.js'),
-      path.join(conf.paths.src, '/app/**/*.js'),
+      path.join(conf.paths.src, '/app/**/!(*.spec).js'),
+      // path.join(conf.paths.src, '/app/main/main.controller.spec.js'),
+      // path.join(conf.paths.src, '/app/components/authentication/fielddb-authentication.spec.js'),
       path.join(conf.paths.src, '/**/*.spec.js'),
       path.join(conf.paths.src, '/**/*.mock.js'),
     ])
