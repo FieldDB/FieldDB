@@ -374,7 +374,7 @@ describe("Directive: fielddb-datalist", function() {
         if (!scope.$$phase) {
           scope.$digest(); // <== digest to get the render to show the bound values
         }
-        console.log(el.html());
+        // console.log("  datalist html", el.html());
 
 
         // expect(el.scope().participantsList.fetchDatalistDocsExponentialDecay).toBeGreaterThan(31000);

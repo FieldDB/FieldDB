@@ -11,7 +11,7 @@ angular.module("fielddbAngular").directive("fielddbSearch", function() {
     scope: true,
     // controller: function($scope, $element, $attrs, $transclude) {},
     link: function postLink(scope, element, attrs) {
-      console.log(attrs);
+      // console.log(attrs);
       scope.search = search;
       // element.text("this is the search directive");
     }
