@@ -87,7 +87,7 @@ describe("Directive: fielddb-authentication", function() {
     previousClientSideLogin.user = {
       _id: "jenkins",
       username: "jenkins",
-      debugMode: true
+      debugMode: false
     };
     expect(previousClientSideLogin.user.fieldDBtype).toEqual("User");
     expect(previousClientSideLogin.userMask).toBeUndefined();
@@ -167,7 +167,7 @@ describe("Directive: fielddb-authentication", function() {
   it("should register users", function(done) {
 
     compileFunction(scope); // <== the html {{}} are bound
-    scope.application.authentication.debugMode = true;
+    scope.application.authentication.debugMode = false;
 
     expect(rootScope.register).toBeDefined();
     rootScope.register({

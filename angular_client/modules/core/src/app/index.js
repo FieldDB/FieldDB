@@ -79,9 +79,9 @@ angular.module("fielddbAngular", [
     fieldDBApp.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
   }, false);
   document.addEventListener("authenticateFail", function(reason) {
-    fieldDBApp.warn("user isn't able to see anything, show them the welcome page", reason);
+    fieldDBApp.warn("user isn't able to see anything, show them the welcome page");
     // fieldDBApp.authentication.error = "";
-    // console.log("  Redirecting the user to the welcome page");
+    console.log("  Redirecting the user to the welcome page");
     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
     // $location.path("/welcome", false);
   }, false);
@@ -112,7 +112,7 @@ angular.module("fielddbAngular", [
 
 
   // var passStateParamsController = function($stateParams) {
-    console.log("Loading ", $stateParams);
+  //   console.log("Loading ", $stateParams);
   //   var paramsChanged = false;
   //   if (!fieldDBApp.routeParams) {
   //     paramsChanged = true;

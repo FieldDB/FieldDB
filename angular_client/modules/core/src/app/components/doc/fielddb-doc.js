@@ -57,7 +57,7 @@ angular.module("fielddbAngular").directive("fielddbDoc", function($compile) {
             // }, 500);
             return;
           }
-          console.log(scope.doc.id + " doc type is ", scope.doc.fieldDBtype);
+          // console.log(scope.doc.id + " doc type is ", scope.doc.fieldDBtype);
           if (templates[scope.doc.fieldDBtype]) {
             element.html(templates[scope.doc.fieldDBtype]);
             if (scope && scope.doc && !scope.doc.fetch) {
