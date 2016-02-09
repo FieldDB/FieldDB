@@ -1,52 +1,67 @@
-// Karma configuration
-// http://karma-runner.github.io/0.10/config/configuration-file.html
 'use strict';
+
+var path = require('path');
+var conf = require('./gulp/conf');
+
+var _ = require('lodash');
+var wiredep = require('wiredep');
+
+var pathSrcHtml = [
+  path.join(conf.paths.src, '/**/*.html')
+];
+
+function listFiles() {
+  var wiredepOptions = _.extend({}, conf.wiredep, {
+    dependencies: true,
+    devDependencies: true
+  });
+
+  var patterns = wiredep(wiredepOptions).js
+    .concat([
+      path.join(conf.paths.src, '/app/**/*.module.js'),
+      path.join(conf.paths.src, '/app/**/!(*.spec).js'),
+      // path.join(conf.paths.src, '/app/main/main.controller.spec.js'),
+      // path.join(conf.paths.src, '/app/components/authentication/fielddb-authentication.spec.js'),
+      path.join(conf.paths.src, '/**/*.spec.js'),
+      path.join(conf.paths.src, '/**/*.mock.js'),
+    ])
+    .concat(pathSrcHtml);
+
+  var files = patterns.map(function(pattern) {
+    return {
+      pattern: pattern
+    };
+  });
+  files.push({
+    pattern: path.join(conf.paths.src, '/assets/**/*'),
+    included: false,
+    served: true,
+    watched: false
+  });
+  return files;
+}
 
 module.exports = function(config) {
 
   var configuration = {
+    files: listFiles(),
 
-    plugins: [
-      'karma-chrome-launcher',
-      // 'karma-firefox-launcher',
-      'karma-phantomjs-launcher',
-      'karma-jasmine',
-      'karma-ng-html2js-preprocessor'
-    ],
+    singleRun: true,
 
-    // base path, that will be used to resolve files and exclude
-    // basePath: '',
-
-    // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
-
-
-    preprocessors: {
-      'src/**/*.html': ['ng-html2js']
-    },
+    autoWatch: false,
 
     ngHtml2JsPreprocessor: {
-      stripPrefix: 'src/',
+      stripPrefix: conf.paths.src + '/',
       moduleName: 'fielddbAngular'
     },
 
+    logLevel: 'WARN',
 
-    // list of files / patterns to exclude
-    // exclude: [],
+    frameworks: ['jasmine', 'angular-filesort'],
 
-    // // web server port
-    // port: 8080,
-
-    // level of logging
-    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
-    // logLevel: config.LOG_DISABLE,
-
-    // https://groups.google.com/forum/#!topic/karma-users/B-E7nLphNHQ
-    // // browserNoActivityTimeout: 60000,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
-
+    angularFilesort: {
+      whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
+    },
 
     // Start these browsers, currently available:
     // - Chrome
@@ -56,17 +71,39 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Chrome'],
+    // browsers: ['Chrome'],
     // browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'Safari'],
-    // browsers: ['PhantomJS'],
+    browsers: ['PhantomJS'],
 
+    plugins: [
+      'karma-phantomjs-launcher',
+      'karma-chrome-launcher',
+      'karma-angular-filesort',
+      'karma-coverage',
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
+    ],
 
+    coverageReporter: {
+      type: 'html',
+      dir: 'coverage/'
+    },
 
-    // // Continuous Integration mode
-    // // if true, it capture browsers, run tests and exit
-    // singleRun: true
+    reporters: ['progress'],
 
+    proxies: {
+      '/assets/': path.join('/base/', conf.paths.src, '/assets/')
+    }
   };
+
+  // This is the default preprocessors configuration for a usage with Karma cli
+  // The coverage preprocessor is added in gulp/unit-test.js only for single tests
+  // It was not possible to do it there because karma doesn't let us now if we are
+  // running a single test or not
+  configuration.preprocessors = {};
+  pathSrcHtml.forEach(function(path) {
+    configuration.preprocessors[path] = ['ng-html2js'];
+  });
 
   // This block is needed to execute Chrome on Travis
   // If you ever plan to use Chrome and Travis, you can keep it
@@ -81,7 +118,6 @@ module.exports = function(config) {
     };
     configuration.browsers = ['chrome-travis-ci'];
   }
-
 
   config.set(configuration);
 };

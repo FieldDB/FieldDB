@@ -1,111 +1,55 @@
-"use strict";
+'use strict';
 
-var gulp = require("gulp");
+var path = require('path');
+var gulp = require('gulp');
+var conf = require('./conf');
 
-var $ = require("gulp-load-plugins")();
+// Let tests contact self-signed SSL certs
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-var wiredep = require("wiredep");
-var karma = require("karma");
-var concat = require("concat-stream");
-var _ = require("lodash");
+var karma = require('karma');
 
-module.exports = function(options) {
+var pathSrcHtml = [
+  path.join(conf.paths.src, '/**/*.html')
+];
 
-  function listFiles(sourceOrDistribution, callback) {
-    var bowerDeps = wiredep({
-      directory: "bower_components",
-      exclude: [/bootstrap\.js/],
-      dependencies: true,
-      devDependencies: true
-    });
+var pathSrcJs = [
+  path.join(conf.paths.src, '/**/!(*.spec).js')
+];
 
-    var specFiles = [
-      options.src + "/**/*.spec.js",
-      options.src + "/**/*.mock.js"
-    ];
+function runTests (singleRun, done) {
+  var reporters = ['progress'];
+  var preprocessors = {};
 
-    var htmlFiles = [
-      options.src + "/**/*.html"
-    ];
-
-    var srcFiles = [
-      options.src + "/{app,components}/**/*.js"
-    ].concat(specFiles.map(function(file) {
-      return "!" + file;
-    }));
-
-    if (sourceOrDistribution === "compiled") {
-      srcFiles = ["dist/scripts/fielddb-angular.js"];
-      bowerDeps.js = ["dist/scripts/vendor.js","bower_components/angular-mocks/angular-mocks.js"];
-      htmlFiles = [];
-    }
-
-    gulp.src(srcFiles)
-      .pipe(concat(function(files) {
-        callback(bowerDeps.js
-          .concat(_.pluck(files, "path"))
-          .concat(htmlFiles)
-          .concat(specFiles));
-      }));
-  }
-
-  function runTests(done) {
-    listFiles("src", function(files) {
-      karma.server.start({
-        configFile: __dirname + "/../karma.conf.js",
-        files: files,
-        singleRun: true,
-        browsers: ["PhantomJS"],
-        autowatch: false,
-        plugins: [
-          "karma-phantomjs-launcher",
-          "karma-jasmine",
-          "karma-ng-html2js-preprocessor"
-        ]
-      }, done);
-    });
-  }
-
-  function distTests(done) {
-    listFiles("compiled", function(files) {
-      karma.server.start({
-        configFile: __dirname + "/../karma.conf.js",
-        files: files,
-        singleRun: true,
-        browsers: ["PhantomJS"],
-        autowatch: false,
-        plugins: [
-          "karma-phantomjs-launcher",
-          "karma-jasmine",
-          "karma-ng-html2js-preprocessor"
-        ]
-      }, done);
-    });
-  }
-
-  function watchTests(done) {
-    listFiles("src", function(files) {
-      karma.server.start({
-        configFile: __dirname + "/../karma.conf.js",
-        files: files,
-        singleRun: false
-      }, done);
-    });
-  }
-
-  gulp.task("test", ["scripts"], function(done) {
-    runTests(done);
+  pathSrcHtml.forEach(function(path) {
+    preprocessors[path] = ['ng-html2js'];
   });
 
-  gulp.task("test:src", ["scripts"], function(done) {
-    runTests(done);
-  });
+  if (singleRun) {
+    pathSrcJs.forEach(function(path) {
+      preprocessors[path] = ['coverage'];
+    });
+    reporters.push('coverage');
+  }
 
-  gulp.task("test:dist", ["scripts"], function(done) {
-    distTests(done);
-  });
+  var localConfig = {
+    configFile: path.join(__dirname, '/../karma.conf.js'),
+    singleRun: singleRun,
+    autoWatch: !singleRun,
+    reporters: reporters,
+    preprocessors: preprocessors
+  };
 
-  gulp.task("test:watch", ["watch"], function(done) {
-    watchTests(done);
+  var server = new karma.Server(localConfig, function(failCount) {
+    done(failCount ? new Error('Failed ' + failCount + ' tests.') : null);
   });
-};
+  server.start();
+}
+
+gulp.task('test', ['scripts'], function(done) {
+  runTests(true, done);
+});
+
+gulp.task('test:auto', ['watch'], function(done) {
+  runTests(false, done);
+});

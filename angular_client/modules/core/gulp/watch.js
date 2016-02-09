@@ -1,52 +1,50 @@
-'use strict';
+"use strict";
 
-var gulp = require('gulp');
-var browserSync = require('browser-sync');
+var path = require("path");
+var gulp = require("gulp");
+var conf = require("./conf");
+
+var browserSync = require("browser-sync");
 
 var WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY = true;
 
 function isOnlyChange(event) {
-  return event.type === 'changed';
+  return event.type === "changed";
 }
 
-module.exports = function(options) {
-  gulp.task('watch', ['inject'], function() {
+gulp.task("watch", ["inject"], function() {
 
-    gulp.watch([options.src + '/*.html', 'bower.json'], ['inject']);
+  gulp.watch([path.join(conf.paths.src, "/*.html"), "bower.json"], ["inject-reload"]);
 
-    gulp.watch(options.src + '/{app,components}/**/*.css', function(event) {
-      if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
-        gulp.start('build');
-      } else {
-        if (isOnlyChange(event)) {
-          browserSync.reload(event.path);
-        } else {
-          gulp.start('inject');
-        }
-      }
-    });
-
-    gulp.watch([
-      options.src + '/{app,components}/**/*.js',
-      'bower_components/fielddb/fielddb.js'
-    ], function(event) {
-      if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
-        gulp.start('build');
-      } else {
-        if (isOnlyChange(event)) {
-          gulp.start('scripts');
-        } else {
-          gulp.start('inject');
-        }
-      }
-    });
-
-    gulp.watch(options.src + '/{app,components}/**/*.html', function(event) {
-      if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
-        gulp.start('build');
-      } else {
+  gulp.watch(path.join(conf.paths.src, "/app/**/*.css"), function(event) {
+    if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
+      gulp.start('build');
+    } else {
+      if (isOnlyChange(event)) {
         browserSync.reload(event.path);
+      } else {
+        gulp.start("inject-reload");
       }
-    });
+    }
   });
-};
+
+  gulp.watch(path.join(conf.paths.src, "/app/**/*.js", 'bower_components/fielddb/fielddb.js'), function(event) {
+    if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
+      gulp.start('build');
+    } else {
+      if (isOnlyChange(event)) {
+        gulp.start("scripts-reload");
+      } else {
+        gulp.start("inject-reload");
+      }
+    }
+  });
+
+  gulp.watch(path.join(conf.paths.src, "/app/**/*.html"), function(event) {
+    if (WATCH_AS_BOWER_COMPONENT_WHICH_MUST_BUILD_FULLY) {
+      gulp.start('build');
+    } else {
+      browserSync.reload(event.path);
+    }
+  });
+});

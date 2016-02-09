@@ -57,7 +57,7 @@ angular.module("fielddbAngular").directive("fielddbDoc", function($compile) {
             // }, 500);
             return;
           }
-          console.log(scope.doc.id + " doc type is ", scope.doc.fieldDBtype);
+          // console.log(scope.doc.id + " doc type is ", scope.doc.fieldDBtype);
           if (templates[scope.doc.fieldDBtype]) {
             element.html(templates[scope.doc.fieldDBtype]);
             if (scope && scope.doc && !scope.doc.fetch) {
@@ -77,7 +77,7 @@ angular.module("fielddbAngular").directive("fielddbDoc", function($compile) {
           }
           if (scope.doc.loaded === false && !scope.doc.rev && typeof scope.doc.fetch === "function") {
             scope.doc.fetch().then(function(result) {
-              console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...", result);
+              console.log("TODO maybe dont need to  how to get the FieldDBObject to be come an X object appart from talking to its parent...");
               // scope.doc.parent.add(FieldDB.FieldDBObject.convertDocIntoItsType(result));
               scope.$digest();
             });

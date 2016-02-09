@@ -10,7 +10,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
     <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
-    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <!-- bower:css -->
     <!-- run `gulp inject` to automatically populate bower styles dependencies -->
     <!-- endbower -->
@@ -21,6 +21,7 @@
     <!-- css files will be automatically insert here -->
     <!-- endinject -->
     <!-- endbuild -->
+    <base href="http://localhost:3000" />
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -36,7 +37,7 @@
              <span class="debugging-switch-switch"></span>
          </label>
      </div>
-    
+
     <p ng-show="application.debugMode">
       <pre >{{application.routeParams}}</pre>
       <pre ng-show="application.warnMessages">{{application.warnMessages}}</pre>

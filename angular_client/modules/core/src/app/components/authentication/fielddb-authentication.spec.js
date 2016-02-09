@@ -87,7 +87,7 @@ describe("Directive: fielddb-authentication", function() {
     previousClientSideLogin.user = {
       _id: "jenkins",
       username: "jenkins",
-      debugMode: true
+      debugMode: false
     };
     expect(previousClientSideLogin.user.fieldDBtype).toEqual("User");
     expect(previousClientSideLogin.userMask).toBeUndefined();
@@ -167,7 +167,7 @@ describe("Directive: fielddb-authentication", function() {
   it("should register users", function(done) {
 
     compileFunction(scope); // <== the html {{}} are bound
-    scope.application.authentication.debugMode = true;
+    scope.application.authentication.debugMode = false;
 
     expect(rootScope.register).toBeDefined();
     rootScope.register({
@@ -200,7 +200,7 @@ describe("Directive: fielddb-authentication", function() {
     }).then(function(resultScope) {
       console.log("success");
       expect(resultScope).toEqual(scope);
-      expect(resultScope.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
+      expect(resultScope.application.authentication.error).toContain("please report this");
     }, function(error) {
       console.log("fail", error);
       expect(error).toBeFalsy();
@@ -262,7 +262,7 @@ describe("Directive: fielddb-authentication", function() {
 
       el.scope().logout().then(function(resultScope) {
         expect(resultScope.application.authentication).toEqual(scope.application.authentication);
-        expect(resultScope.application.authentication.error).toEqual("Unable to contact the server, are you sure you're not offline?");
+        expect(resultScope.application.authentication.error).toContain("please report this");
       }, function(errorLoggingOut) {
         console.log("fail", errorLoggingOut);
         expect(errorLoggingOut).toBeFalsy();

@@ -17,7 +17,7 @@ angular.module("fielddbAngular").directive("fielddbAudioVideoRecorder", function
       parent: "=parent"
     },
     controller: function($scope) {
-      var debugging = true;
+      var debugging = false;
       if (debugging) {
         console.log("loading fielddbAudioVideoRecorder", $scope.parent);
       }
