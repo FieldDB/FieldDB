@@ -164,6 +164,12 @@ angular.module("fielddbAngular", [
       templateUrl: 'app/components/help/faq.html'
     });
   $stateProvider
+    .state('user', {
+      url: '^/:username/',
+      templateUrl: 'app/components/user/user-page.html',
+      controller: passStateParamsController
+    });
+  $stateProvider
     .state('home', {
       url: '^/',
       templateUrl: 'app/main/main.html'
