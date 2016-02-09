@@ -44,8 +44,8 @@ describe("Controller: FieldDBController", function() {
 });
 
 
-// http://stackoverflow.com/questions/15990102/angularjs-route-unit-testing
-xdescribe("FieldDBController Routes", function() {
+// http://stackoverflow.com/questions/15990102/angularjs-state-unit-testing
+describe("FieldDBController Routes", function() {
   beforeEach(module("fielddbAngular"));
 
   var FieldDBController,
@@ -60,35 +60,49 @@ xdescribe("FieldDBController Routes", function() {
 
   it("should load a corpus dashboard", function() {
 
-    inject(function($route, $location, $rootScope, $httpBackend) {
-      expect($route.current).toBeUndefined();
+    inject(function($state, $location, $rootScope, $httpBackend) {
+      expect($state.current).toBeDefined();
+
+      expect($state.href('faq', { team: 'hi' })).toEqual('/faq');
+      expect($state.href('corpus', { team: 'lingllama', corpusidentifier: 'communitycorpus' })).toEqual('/lingllama/communitycorpus');
 
       $httpBackend.expectGET("app/components/corpus/corpus-page.html").respond(200);
       $location.path("/lingllama/communitycorpus");
       $rootScope.$digest();
       if (debugMode) {
-        console.log($route);
+        console.log($state);
       }
 
-      expect($route.current).toBeDefined();
-      expect($route.current.templateUrl).toBe("app/components/corpus/corpus-page.html");
-      expect($route.current.controller).toBe("FieldDBController");
+      $state.go('corpus');
+      $rootScope.$digest();
+      expect($state.current.name).toBe('corpus');
 
+      expect($state.current).toBeDefined();
+      expect($state.current.templateUrl).toBe("app/components/corpus/corpus-page.html");
+      expect(typeof $state.current.controller).toEqual("function");
     });
   });
 
   it("should load a import data dashboard by default", function() {
 
-    inject(function($route, $location, $rootScope, $httpBackend) {
-      expect($route.current).toBeUndefined();
+    inject(function($state, $location, $rootScope, $httpBackend) {
+      expect($state.current).toBeDefined();
 
       $httpBackend.expectGET("app/components/import/import-page.html").respond(200);
       $location.path("/community/georgian/import");
       $rootScope.$digest();
 
-      expect($location.path()).toBe("/community/georgian/import/data");
-      expect($route.current.templateUrl).toEqual("app/components/import/import-page.html");
-      expect($route.current.controller).toBe("FieldDBController");
+      expect($location.path()).toBe("/community/georgian/import");
+      expect($state.current.templateUrl).toEqual("app/components/import/import-page.html");
+      expect(typeof $state.current.controller).toEqual("function");
+
+      $state.go("corpus");
+      $rootScope.$digest();
+      expect($state.current.name).toBe("corpus");
+
+      $state.go("corpus.import");
+      $rootScope.$digest();
+      expect($state.current.name).toBe("corpus.import");
     });
   });
 

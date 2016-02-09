@@ -29,7 +29,7 @@ angular.module("fielddbAngular", [
     // to active whenever 'contacts.list' or one of its decendents is active.
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    console.log(" state ", $state, $stateParams);
+    // console.log(" state ", $state, $stateParams);
 
     if (FieldDB &&
       FieldDB.FieldDBObject &&
@@ -43,7 +43,6 @@ angular.module("fielddbAngular", [
         $location.path(FieldDB.FieldDBObject.application.basePathname + url, false);
       };
     }
-
   }
 ]).config(function($urlRouterProvider, $sceDelegateProvider, $stateProvider, $locationProvider) {
 
@@ -70,10 +69,9 @@ angular.module("fielddbAngular", [
     });
   }
 
-  fieldDBApp.debug("Loaded fielddbAngular module ");
+  // fieldDBApp.debug("Loaded fielddbAngular module ");
   fieldDBApp.debug($urlRouterProvider, $stateProvider);
-  fieldDBApp.debugMode = true;
-
+  // fieldDBApp.debugMode = true;
 
 
   /* Add Event listeners */
@@ -81,7 +79,7 @@ angular.module("fielddbAngular", [
     fieldDBApp.bug("user has logged out, page will reload to clear state and take them to the welcome page.");
   }, false);
   document.addEventListener("authenticateFail", function(reason) {
-    fieldDBApp.warn("user isn't able to see anything, show them the welcome page", reason);
+    fieldDBApp.warn("user isn't able to see anything, show them the welcome page");
     // fieldDBApp.authentication.error = "";
     console.log("  Redirecting the user to the welcome page");
     //http://joelsaupe.com/programming/angularjs-change-path-without-reloading/
@@ -113,24 +111,26 @@ angular.module("fielddbAngular", [
   $locationProvider.html5Mode(true);
 
 
-  // var passStateParamsController = function($stateParams) {
-  //   console.log("Loading ", $stateParams);
-  //   var paramsChanged = false;
-  //   if (!fieldDBApp.routeParams) {
-  //     paramsChanged = true;
-  //   } else {
-  //     for (var param in $stateParams) {
-  //       if ($stateParams.hasOwnProperty(param) && fieldDBApp.routeParams[param] !== $stateParams[param]) {
-  //         paramsChanged = true;
-  //       }
-  //     }
-  //   }
-
-  //   if (paramsChanged) {
-  //     fieldDBApp.processRouteParams($stateParams);
-  //     fieldDBApp.debug(fieldDBApp.routeParams);
-  //   }
-  // };
+  var passStateParamsController = function($stateParams) {
+    console.log('Loading ', $stateParams);
+    var paramsChanged = false;
+    if (FieldDB && FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+      var fieldDBApp = FieldDB.FieldDBObject.application;
+      if (!fieldDBApp.routeParams) {
+        paramsChanged = true;
+      } else {
+        for (var param in $stateParams) {
+          if ($stateParams.hasOwnProperty(param) && fieldDBApp.routeParams[param] !== $stateParams[param]) {
+            paramsChanged = true;
+          }
+        }
+      }
+      if (paramsChanged) {
+        fieldDBApp.processRouteParams($stateParams);
+        fieldDBApp.debug(fieldDBApp.routeParams);
+      }
+    }
+  };
 
   /* Add some default Routes/States which the app knows how to render */
   // if (FieldDB.Router.otherwise) {
@@ -138,31 +138,38 @@ angular.module("fielddbAngular", [
   // } else {
   //   $urlRouterProvider.otherwise(fieldDBApp.basePathname);
   // }
-  // $stateProvider
+
   // // HOME STATES AND NESTED VIEWS ========================================
-  //   .state("dashboard", {
-  //     url: "/",
-  //     templateUrl: "app/main/main.html",
-  //     controller: passStateParamsController
-  //   })
-  //   // nested list with custom controller
-  //   .state("dashboard.team", {
-  //     url: "^/:team",
-  //     template: "<div>User {{application.routeParams.team}}</div>",
-  //     controller: passStateParamsController
-  //   })
-  //   // nested list with just some random string data
-  //   .state("dashboard.corpus", {
-  //     url: "^/:team/:corpusidentifier",
-  //     template: "<div>Corpus {{application.routeParams.corpusidentifier}} by {{application.routeParams.team}}</div>",
-  //     controller: passStateParamsController
-  //   })
-  //   // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-  //   .state("faq", {
-  //     url: "/faq",
-  //     template: "<div>FAQ</div>",
-  //     controller: passStateParamsController
-  //   });
+  $stateProvider
+    .state('corpus.import', {
+      url: '^/:team/:corpusidentifier/import',
+      templateUrl: 'app/components/import/import-page.html',
+      controller: passStateParamsController
+    });
+  $stateProvider
+    .state('corpus.data', {
+      url: '^/:team/:corpusidentifier/:data',
+      templateUrl: 'app/components/doc/data-page.html',
+      controller: passStateParamsController
+    });
+  $stateProvider
+    .state('corpus', {
+      url: '^/:team/:corpusidentifier',
+      templateUrl: 'app/components/corpus/corpus-page.html',
+      controller: passStateParamsController
+    });
+  $stateProvider
+    .state('faq', {
+      url: '^/faq',
+      templateUrl: 'app/components/help/faq.html'
+    });
+  $stateProvider
+    .state('home', {
+      url: '^/',
+      templateUrl: 'app/main/main.html'
+    });
+  $urlRouterProvider.otherwise('/');
+
   // var state;
   // for (var route in FieldDB.Router.routes) {
   //   state = FieldDB.Router.routes[route].path.replace(/\/:?/g, ".").replace(/^\./, "").replace("team.corpusidentifier", "dashboard.corpus");
@@ -177,7 +184,7 @@ angular.module("fielddbAngular", [
   fieldDBApp.debug("Loaded Angular FieldDB Components ", fieldDBApp);
 });
 
-console.log("Loaded fielddbAngular module");
+// console.log("Loaded fielddbAngular module");
 // fielddbAngulaModule.run(["$route", "$rootScope", "$location",
 //   function($route, $rootScope, $location) {
 //     var original = $location.path;

@@ -1,5 +1,6 @@
 #!/bin/bash
 CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
+bower link
 
 cd angular_client/modules/core &&
 # rm -rf node_modules

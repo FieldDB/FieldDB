@@ -13,7 +13,9 @@ exports.config = {
     'browserName': 'chrome'
   },
 
-  // Spec patterns are relative to the current working directly when
+  baseUrl: 'http://localhost:3000',
+
+  // Spec patterns are relative to the current working directory when
   // protractor is called.
   specs: [paths.e2e + '/**/*.js'],
 

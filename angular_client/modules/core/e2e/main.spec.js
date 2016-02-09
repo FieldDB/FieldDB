@@ -4,7 +4,7 @@ describe('The main view', function () {
   var page;
 
   beforeEach(function () {
-    browser.get('http://localhost:3000/index.html');
+    browser.get('/index.html');
     page = require('./main.po');
   });
 
@@ -14,7 +14,7 @@ describe('The main view', function () {
     expect(page.imgEl.getAttribute('alt')).toBe('I\'m Yeoman');
   });
 
-  it('list more than 5 awesome things', function () {
+  it('should list more than 5 awesome things', function () {
     expect(page.thumbnailEls.count()).toBeGreaterThan(5);
   });
 
