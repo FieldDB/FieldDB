@@ -298,7 +298,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       };
 
       this.fetching = this.loading = true;
-      this.corpus.fetchCollection(this.api).then(function(generatedDatalist) {
+      var dataListUrl = "/_design/data/_list/as_data_list/by_type?key=\"" + this.api + "\"";
+      this.corpus.fetchCollection(dataListUrl).then(function(generatedDatalist) {
           self.fetching = self.loading = false;
           self.debug("Downloaded the auto-genrated data list of datum ordered by creation date in this data list", generatedDatalist);
           if (!generatedDatalist) {
