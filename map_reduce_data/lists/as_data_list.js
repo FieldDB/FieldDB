@@ -11,15 +11,17 @@ function(head, req) {
   var buildDatalist = function(groupedByKey, dataListTitle, docIds) {
     var timestamp = Date.now();
     groupedByKey = groupedByKey || "empty";
-    dataListTitle = dataListTitle || "Empty list ";
+    dataListTitle = dataListTitle || "";
     var datalist = {
       title: dataListTitle + " on " + new Date(timestamp),
-      description: "All the data in " + dataListTitle + " (" + groupedByKey + ") as of " + new Date(timestamp),
+      description: "All " + dataListTitle + " data as of " + new Date(timestamp),
       docIds: docIds,
       collection: "datalists",
       username: "datalistbot",
       timestamp: timestamp
     };
+    log('datalist');
+    log(datalist);
     return datalist;
   };
 
@@ -28,14 +30,21 @@ function(head, req) {
   var groupedByKey;
 
   while (row = getRow()) {
+    log('row is');
+    log(row.key);
     groupedByKey = row.key;
     hash[groupedByKey] = hash[groupedByKey] || [];
     hash[groupedByKey].push(row.value);
   }
+
   for (var item in hash) {
+    log("item is ");
+    log(item);
     if (hash.hasOwnProperty(item)) {
-      hash[item] = buildDatalist(item, hash[item][0].dataListTitle, hash[item].map(function(minimalDatum) {
-        return minimalDatum.datumId;
+      hash[item] = buildDatalist(item, item, hash[item].map(function(minimalDatum) {
+        log("minimalDatum");
+        log(minimalDatum);
+        return minimalDatum[1];
       }));
     }
   }
