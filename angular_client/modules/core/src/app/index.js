@@ -108,7 +108,10 @@ angular.module("fielddbAngular", [
   if (window.location.hash.indexOf("#") > -1) {
     fieldDBApp.basePathname = window.location.pathname + "#";
   }
-  $locationProvider.html5Mode(true);
+  if (window.__dirname) {
+    // fieldDBApp.basePathname = window.__dirname + "#";
+  }
+  // $locationProvider.html5Mode(true);
 
 
   var passStateParamsController = function($stateParams) {

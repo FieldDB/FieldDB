@@ -5,7 +5,6 @@
     <title>fielddb-angular</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <base href="/" />
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
@@ -22,7 +21,6 @@
     <!-- css files will be automatically insert here -->
     <!-- endinject -->
     <!-- endbuild -->
-    <base href="http://localhost:3000" />
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -58,12 +56,24 @@
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='//www.google-analytics.com/analytics.js';
+      e.src='https://www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create', 'UA-35422317-1', 'auto');
       ga('set', 'page', 'angular-core' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
       ga('send', 'pageview');
 
+      if (window.require) {
+        window.nodeRequire = window.require;
+        delete window.require;
+      }
+      if (window.exports) {
+        window.exportsRequire = window.exports;
+        delete window.exports;
+      }
+      if (window.module) {
+        window.moduleRequire = window.module;
+        delete window.module;
+      }
     </script>
 
     <!-- build:js(src) scripts/vendor.js -->

@@ -27,6 +27,24 @@ you will need to go to the top level folder (above this folder), do
 
 (you need to do this only once when you first download the codebase, and run build_templates.sh every time you change the handlebars templates)
 
+## Desktop App
+
+You can build this into a Mac, Windows or Linux app using NW.js
+
+```bash
+cd node_modules
+git clone https://github.com/Gisto/nwjs-shell-builder.git
+cd ../
+rm -rf ~/git/nwjs-shell-builder/TMP
+~/git/nwjs-shell-builder/nwjs-build.sh  \
+  --src=/Users/gina/fielddbhome/FieldDB/backbone_client  \
+  --nw=0.13.0-beta5  \
+  --name=LingSync  \
+  --win-icon=/Users/gina/fielddbhome/FieldDB/raw/icon.ico  \
+  --osx-icon=/Users/gina/fielddbhome/FieldDB/raw/icon.icns  \
+  --target="5" \
+  --build
+```
 
 ## CouchApp
 
@@ -35,7 +53,7 @@ You can use the map_reduce_data folder and the build_debug.sh script, or the cou
 
 ## Android App
 
-If you want to run the app as an Native Android app you can use the AndroidFieldDB project, combined with the build_release_android.sh script. 
+If you want to run the app as an Native Android app you can use the AndroidFieldDB project, combined with the build_release_android.sh script.
 
 Running on Android is farely complex as it requires you to set up 5 Android libraries, 3 for TouchDB (a local http server which implements the couchdb API) and 2 for OPrime (an offline Android data management/psycholinguistics experimentation library).
 
@@ -48,7 +66,7 @@ For up-to-date details see the milestones
 * December 2014 work began on [Dative](https://github.com/jrwdunham/dative) which will  replace both the Spreadsheet and the Prototype as the default app
 * December 2013 was replaced with the Spreadhseet app for field methods classes
 * January 2013 became online by default (so that students wouldnt have to learn how to use the sync buttons)
-* August 2012 launched at the CAML workshop [videos](https://www.youtube.com/watch?v=eRTHu-5KvSQ&index=23&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT) 
+* August 2012 launched at the CAML workshop [videos](https://www.youtube.com/watch?v=eRTHu-5KvSQ&index=23&list=PLUrH6CNxFDrMtraL8hTLbLsQwdw1117FT)
 
 
 ## Related apps
