@@ -201,6 +201,7 @@
       brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
       try {
         window[brandname] = FieldDB;
+        window.FieldDB = FieldDB;
 
         // Inject browser URL as the URL parser.
         Connection.URLParser = URL;
