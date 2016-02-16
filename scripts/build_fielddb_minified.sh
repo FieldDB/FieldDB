@@ -21,7 +21,7 @@ cd ../
 
 echo "Linking a local copy of the fielddb commonjs"
 rm backbone_client/bower_components/fielddb/fielddb.js
-ln -s $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
+cp $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
 
 sed 's/\/\/# sourceMappingURL=jquery.min.map//' backbone_client/bower_components/jquery/dist/jquery.min.js  > output
@@ -91,7 +91,7 @@ cp -R map_reduce_data/lists couchapp_minified/lists
 rm -rf couchapp_minified/views
 cp -R map_reduce_data/views couchapp_minified/views
 
-rm -rf release
+# rm -rf release
 
 
 # echo " If you cant build because core.js is missing, comment out atob and crypto in api/Confidential.js "
