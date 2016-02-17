@@ -20,8 +20,8 @@ function(head, req) {
       username: "datalistbot",
       timestamp: timestamp
     };
-    log('datalist');
-    log(datalist);
+    // log('datalist');
+    // log(datalist);
     return datalist;
   };
 
@@ -30,20 +30,20 @@ function(head, req) {
   var groupedByKey;
 
   while (row = getRow()) {
-    log('row is');
-    log(row.key);
+    // log('row is');
+    // log(row.key);
     groupedByKey = row.key;
     hash[groupedByKey] = hash[groupedByKey] || [];
     hash[groupedByKey].push(row.value);
   }
 
   for (var item in hash) {
-    log("item is ");
-    log(item);
+    // log("item is ");
+    // log(item);
     if (hash.hasOwnProperty(item)) {
       hash[item] = buildDatalist(item, item, hash[item].map(function(minimalDatum) {
-        log("minimalDatum");
-        log(minimalDatum);
+        // log("minimalDatum");
+        // log(minimalDatum);
         return minimalDatum[1];
       }));
     }
