@@ -1,0 +1,25 @@
+{
+  "name": "fielddb-activity-feed",
+  "version": "3.42.8",
+  "description": "Activity Feed",
+  "main": "index.html",
+  "window": {
+    "show": false,
+    "position": "right",
+    "width": 300,
+    "height": 600
+  },
+  "scripts": {
+    "start": "nw ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FieldDB/FieldDB"
+  },
+  "keywords": [
+    "fielddb",
+    "activity"
+  ],
+  "author": "info@fielddb.org",
+  "license": "Apache-2.0"
+}
