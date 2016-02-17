@@ -8,7 +8,13 @@
 </div>
 <div class="activity_feed_body zebra">
     <ul>
-        <li ng-show="mustLogIn"><button ng-click="login()">Login</button></li>
+        <li ng-show="mustLogIn">
+          <form ng-submit="login(loginUser)">
+            <input type="text" ng-model="loginUser.name"/>
+            <input type="password" ng-model="loginUser.password"/>
+          <button type="submit">Login</button>
+          </form>
+        </li>
         <li ng-repeat="activity in activities"><a
             href="http://lingsync.org/{{activity.user.username}}" target="_blank">
                 <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{activity.user.gravatar | gravatar}}?d=identicon"

@@ -18,6 +18,23 @@ define(
     var ActivityFeedController = function ActivityFeedController($scope,
       $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
       console.log("Loading ActivityFeedController");
+
+      $scope.loginUser = {
+        name: "lingllama",
+        password: "phoneme"
+      };
+
+      $scope.login = function(user) {
+        GetSessionToken(user)
+          .then(function(result) {
+            console.log('Got a login response ', result);
+            if (result.error) {
+              return alert("Sorry" + result.error.data);
+            }
+            load();
+          });
+      };
+
       /*
        * TODO get a corpus item out of the non-activity feed, or out of the
        * activity feed to display this information.
@@ -31,53 +48,56 @@ define(
         }
       };
 
-      /*
-       * TODO add the corpus connection here so that it can be declared in the
-       * route parameters, and passed to the service
-       */
-      var feedParams = {};
-      feedParams.username = $routeParams.username || "lingllama";
-      feedParams.corpusid = $routeParams.corpusid;
-      if (feedParams.corpusid) {
-        /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
-        if (feedParams.corpusid.indexOf(feedParams.username) > -1) {
-          feedParams.corpusid = feedParams.corpusid.replace($routeParams.username, "");
-        } else {
-          feedParams.username = "";
-        }
-        $scope.corpus.title = "What's happening in this corpus";
-        CorpusDetails.async({
-          username: $routeParams.corpusid.split("-")[0],
-          corpusid: $routeParams.corpusid
-        }).then(function(details) {
-          $scope.corpus.gravatar = details.gravatar;
-          $scope.corpus.description = details.description;
-        });
-      } else {
-        feedParams.corpusid = "";
-        $scope.corpus.title = "What was I working on last time...";
-        UserDetails.async(feedParams).then(function(details) {
-          $scope.corpus.gravatar = details.gravatar;
-          $scope.corpus.description = details.description;
-        });
-      }
+      var load = function() {
 
-
-      //        GetSessionToken.run({
-      //          "name" : "public",
-      //          "password" : "none"
-      //        }).then(function() {
-      MostRecentActivities.async(feedParams).then(function(activities) {
-        if (activities.error) {
-          if (activities.error.status === 401) {
-            $scope.mustLogIn = true;
+        /*
+         * TODO add the corpus connection here so that it can be declared in the
+         * route parameters, and passed to the service
+         */
+        var feedParams = {};
+        feedParams.username = $routeParams.username || "lingllama";
+        feedParams.corpusid = $routeParams.corpusid;
+        if (feedParams.corpusid) {
+          /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
+          if (feedParams.corpusid.indexOf(feedParams.username) > -1) {
+            feedParams.corpusid = feedParams.corpusid.replace($routeParams.username, "");
+          } else {
+            feedParams.username = "";
           }
-          return;
+          $scope.corpus.title = "What's happening in this corpus";
+          CorpusDetails.async({
+            username: $routeParams.corpusid.split("-")[0],
+            corpusid: $routeParams.corpusid
+          }).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
+        } else {
+          feedParams.corpusid = "";
+          $scope.corpus.title = "What was I working on last time...";
+          UserDetails.async(feedParams).then(function(details) {
+            $scope.corpus.gravatar = details.gravatar;
+            $scope.corpus.description = details.description;
+          });
         }
-        $scope.activities = activities;
-      });
-      //        });
 
+
+        //        GetSessionToken.run({
+        //          "name" : "public",
+        //          "password" : "none"
+        //        }).then(function() {
+        MostRecentActivities.async(feedParams).then(function(activities) {
+          if (activities.error) {
+            if (activities.error.status === 401) {
+              $scope.mustLogIn = true;
+            }
+            return;
+          }
+          $scope.activities = activities;
+        });
+        //        });
+      }
+      load();
     };
 
     ActivityFeedController.$inject = ['$scope', '$routeParams', '$resource',
