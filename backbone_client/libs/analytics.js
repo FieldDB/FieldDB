@@ -9,15 +9,15 @@
  */
 
 if (window.require) {
-  window.nodeRequire = window.require;
+  window.nodeWebkitRequire = window.require;
   delete window.require;
 }
 if (window.exports) {
-  window.exportsRequire = window.exports;
+  window.nodeWebkitExports = window.exports;
   delete window.exports;
 }
 if (window.module) {
-  window.moduleRequire = window.module;
+  window.nodeWebkitModule = window.module;
   delete window.module;
 }
 
