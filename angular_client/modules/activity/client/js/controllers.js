@@ -16,7 +16,7 @@ define(
      * @returns
      */
     var ActivityFeedController = function ActivityFeedController($scope,
-      $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken) {
+      $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken, Login) {
       console.log("Loading ActivityFeedController");
 
       $scope.loginUser = {
@@ -25,13 +25,15 @@ define(
       };
 
       $scope.login = function(user) {
-        GetSessionToken(user)
+        Login.run(user)
           .then(function(result) {
             console.log('Got a login response ', result);
             if (result.error) {
               return alert("Sorry" + result.error.data);
             }
             load();
+            $scope.mustLogIn = false;
+            $scope.$digest();
           });
       };
 
@@ -101,7 +103,7 @@ define(
     };
 
     ActivityFeedController.$inject = ['$scope', '$routeParams', '$resource',
-      'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken'
+      'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken', 'Login'
     ];
 
     OPrime.debug("Defining ActivityFeedController.");

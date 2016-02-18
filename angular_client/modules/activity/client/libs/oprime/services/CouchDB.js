@@ -49,7 +49,7 @@ define(
                 var couchInfo = OPrime.couchURL();
                 var promise = $http.get(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
-                  function(response, data, status, headers, config) {
+                  function(response) {
                     OPrime.debug("Session token set, probably",
                       response);
                     return response;
@@ -70,7 +70,47 @@ define(
                 var couchInfo = OPrime.couchURL();
                 var promise = $http.get(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '', dataToPost).then(
-                  function(response, data, status, headers, config) {
+                  function(response) {
+                    OPrime.debug("Faking Session token set");
+                    return response;
+                  });
+                return promise;
+              }
+            };
+          }
+        }).factory(
+        'Login',
+        function($http) {
+          OPrime.debug("Contacting the DB to log user in.");
+          if (!OPrime.useUnsecureCouchDB()) {
+            return {
+              'run': function(dataToPost) {
+                OPrime.debug("Getting session token.");
+                var couchInfo = OPrime.couchURL();
+                var promise = $http.post(
+                  couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
+                  function(response) {
+                    OPrime.debug("Session token set, probably",
+                      response);
+                    return response;
+                  },
+                  function(error) {
+                    return {
+                      error: error
+                    };
+                  });
+                return promise;
+              }
+            };
+          } else {
+            OPrime
+              .debug("Not getting session token, instead using an unsecure TouchDB.");
+            return {
+              'run': function(dataToPost) {
+                var couchInfo = OPrime.couchURL();
+                var promise = $http.get(
+                  couchInfo.protocol + couchInfo.domain + couchInfo.port + '', dataToPost).then(
+                  function(response) {
                     OPrime.debug("Faking Session token set");
                     return response;
                   });
