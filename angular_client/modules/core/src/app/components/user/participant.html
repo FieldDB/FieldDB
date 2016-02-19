@@ -1,4 +1,4 @@
-<i class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()" title="Toggle display of participant's confidential details"></i>
+<i ng-show="user.encrypted" class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()" title="Toggle display of participant's confidential details"></i>
 <h3>
  <i class="fa fa-child"></i>  Élève
 </h3>

@@ -1,6 +1,6 @@
 {
-  "name": "fielddb",
-  "version": "2.24.0",
+  "name": "LingSync",
+  "version": "3.42.08",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/milestones?state=closed",
   "repository": {
@@ -40,7 +40,15 @@
     "handlebars": "^4.0.4",
     "requirejs": "^2.1.20"
   },
+  "main": "corpus.html",
+  "window": {
+    "toolbar": true,
+    "resizable": true,
+    "width": 1024,
+    "height": 740
+  },
   "scripts": {
+    "build": "cd ../ && ./scripts/build_fielddb_minified.sh",
     "test": "grunt",
     "postinstall": "bower install"
   },

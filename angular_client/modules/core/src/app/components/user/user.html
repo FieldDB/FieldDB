@@ -1,4 +1,4 @@
-<i class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()"></i>
+<i ng-show="user.encrypted" class="fa pull-right" ng-class="{'fa-eye': !user.decryptedMode, 'fa-eye-slash': user.decryptedMode}" ng-click="toggleViewDecryptedDetails()"></i>
 <p class="text-center">
 	<img ng-src="https://secure.gravatar.com/avatar/{{user.gravatar}}?d=identicon" alt="{{user.name}}" class="img-polaroid">
 </p>

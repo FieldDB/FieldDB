@@ -310,7 +310,7 @@ CORS.makeCORSRequest = function(options) {
   this.preprocess(options, deferred);
 
   //forcing production server
-  // options.url = options.url.replace("corpusdev", "corpus");
+  options.url = options.url.replace("corpusdev", "corpus");
 
   xhr = this.buildXhr(options);
   if (!xhr) {

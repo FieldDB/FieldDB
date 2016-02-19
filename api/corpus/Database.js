@@ -21,7 +21,7 @@ var Database = function Database(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-var DEFAULT_COLLECTION_MAPREDUCE = "_design/data/_view/by_type?key=COLLECTION&descending=true&limit=LIMIT";
+var DEFAULT_COLLECTION_MAPREDUCE = "/_design/data/_view/by_type?key=\"COLLECTION\"&descending=true&limit=LIMIT";
 var DEFAULT_BASE_AUTH_URL = "https://localhost:3183";
 var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
@@ -355,9 +355,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       } else {
 
         if (collectionUrl.indexOf("/") === -1) {
-          collectionUrl = self.url + "/" + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", limit) + key;
+          collectionUrl = self.url + self.DEFAULT_COLLECTION_MAPREDUCE.replace("COLLECTION", collectionUrl).replace("LIMIT", limit) + key;
         } else if (collectionUrl.indexOf("://") === -1) {
-          collectionUrl = self.url + "/" + collectionUrl;
+          collectionUrl = self.url + collectionUrl;
         } else {
           this.warn("Fetching data from a user supplied url", collectionUrl);
         }

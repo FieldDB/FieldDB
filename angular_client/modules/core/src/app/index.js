@@ -108,7 +108,10 @@ angular.module("fielddbAngular", [
   if (window.location.hash.indexOf("#") > -1) {
     fieldDBApp.basePathname = window.location.pathname + "#";
   }
-  $locationProvider.html5Mode(true);
+  if (window.__dirname) {
+    // fieldDBApp.basePathname = window.__dirname + "#";
+  }
+  // $locationProvider.html5Mode(true);
 
 
   var passStateParamsController = function($stateParams) {
@@ -162,6 +165,12 @@ angular.module("fielddbAngular", [
     .state('faq', {
       url: '^/faq',
       templateUrl: 'app/components/help/faq.html'
+    });
+  $stateProvider
+    .state('user', {
+      url: '^/:username/',
+      templateUrl: 'app/components/user/user-page.html',
+      controller: passStateParamsController
     });
   $stateProvider
     .state('home', {

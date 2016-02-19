@@ -8,6 +8,18 @@
  Refused to load the image 'http://www.google-analytics.com/__utm.gif?utmwv=5.6.3&utms=12&utmn=17408427…ccn%3D(direct)%7Cutmcmd%3D(none)%3B&utmjid=&utmu=qAAAAAAAAAAAAAAAAAAAAAAE~' because it violates the following Content Security Policy directive: "default-src 'self' https://*.lingsync.org https://secure.gravatar.com https://soundcloud.com https://ssl.google-analytics.com https://*.mcgill.ca https://*.concordia.ca https://docs.google.com https://support.apple.com https://themes.googleusercontent.com https://localhost:* https://ssl.google-analytics.com". Note that 'img-src' was not explicitly set, so 'default-src' is used as a fallback.
  */
 
+if (window.require) {
+  window.nodeWebkitRequire = window.require;
+  delete window.require;
+}
+if (window.exports) {
+  window.nodeWebkitExports = window.exports;
+  delete window.exports;
+}
+if (window.module) {
+  window.nodeWebkitModule = window.module;
+  delete window.module;
+}
 
 /**
  * Moved analytics out of in-line code to respect new Content Security Policy of extension manifest  version 2
@@ -65,7 +77,7 @@ ga('create', 'UA-35422317-1', {
   'cookieDomain': 'none'
 });
 ga('set', 'checkProtocolTask', function() { /* nothing */ });
-ga('set', 'page', 'protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+ga('set', 'page', 'protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//, ""));
 // ga('set', 'page', 'chrome-protoype');
 ga('send', 'pageview');
 
