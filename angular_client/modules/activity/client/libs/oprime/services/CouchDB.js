@@ -51,8 +51,11 @@ define(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
                   function(response) {
                     OPrime.debug("Session token set, probably", response);
+                    if (localStorage.getItem(response.data.userCtx.name)) {
+                      return JSON.parse(localStorage.getItem(response.data.userCtx.name));
+                    }
                     if (response.data.userCtx.name) {
-                      localStorage.setItem(response.data.name, JSON.stringify(response.data));
+                      localStorage.setItem(response.data.userCtx.name, JSON.stringify(response.data.userCtx));
                     }
                     return response.data.userCtx;
                   },
@@ -93,8 +96,10 @@ define(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
                   function(response) {
                     OPrime.debug("Session token set, probably", response);
-                    localStorage.setItem(response.data.name, JSON.stringify(response.data));
-                    return response;
+                    if (response.data.name) {
+                      localStorage.setItem(response.data.name, JSON.stringify(response.data));
+                    }
+                    return response.data;
                   },
                   function(error) {
                     return {

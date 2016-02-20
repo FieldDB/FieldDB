@@ -30,12 +30,12 @@ define(
         Login.run(user)
           .then(function(result) {
             console.log('Got a login response ', result);
-            if (result.error) {
-              return alert("Sorry" + result.error.data);
+            if (result.error && result.error.data) {
+              return alert("Sorry" + result.error.data.reason);
             }
-            load(result.data.userCtx);
+            load(result);
             $scope.mustLogIn = false;
-            $scope.$digest();
+            // $scope.$digest();
           });
       };
 
@@ -43,11 +43,11 @@ define(
         Logout.run()
           .then(function(result) {
             console.log('Got a logout response ', result);
-            if (result.error) {
-              return alert("Sorry" + result.error.data);
+            if (result.error && result.error.data) {
+              return alert("Sorry" + result.error.data.reason);
             }
-            $scope.mustLogIn = false;
-            $scope.$digest();
+            $scope.mustLogIn = true;
+            // $scope.$digest();
           });
       };
 
@@ -90,13 +90,32 @@ define(
         if (data) {
           if (data.name) {
             $scope.user.username = data.name;
-            $scope.user.corpora = data.roles.map(function(role) {
-              return {
-                dbname: role,
-                title: role,
-                titleAsUrl: role
-              };
-            });
+            if (!data.corpora && data.roles) {
+              data.corpora = [];
+              var corpora = {};
+              data.roles.map(function(role) {
+                if (role.indexOf("_") === -1) {
+                  return;
+                }
+                var dbname = role.substring(0, role.lastIndexOf("_"));
+                if (corpora[dbname]) {
+                  return;
+                }
+                corpora[dbname] = {
+                  dbname: dbname,
+                  title: dbname,
+                  titleAsUrl: dbname
+                };
+              });
+              delete data.roles;
+              for (var corpus in corpora) {
+                if (corpora.hasOwnProperty(corpus)) {
+                  data.corpora.push(corpora[corpus]);
+                }
+              }
+              localStorage.setItem(data.name, JSON.stringify(data));
+            }
+            $scope.user.corpora = data.corpora;
           } else {
             $scope.user.username = data.username;
             $scope.user.corpora = data.corpora;
