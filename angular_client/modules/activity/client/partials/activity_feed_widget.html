@@ -1,10 +1,10 @@
 <div class="activity_feed_widget_header">{{username}} - {{corpusid}}
-    <a href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}"
-        target="_blank"><img class="gravatar-small"
-        ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar | gravatar}}?d=identicon" /></a><span class="team_name"
-        title="{{corpus.description}}"><a
-        href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}"
-        target="_blank">{{corpus.title}}</a></span>
+    <span target="_blank" ng-click="toggleChooseCorpus()">
+      <img class="gravatar-small" ng-src="https://secure.gravatar.com/avatar/{{corpus.gravatar | gravatar}}?d=identicon" />
+    </span>
+    <span class="team_name" title="{{corpus.description}}">
+      <a href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}" target="_blank">{{corpus.title}}</a>
+    </span>
 </div>
 <div class="activity_feed_body zebra">
     <ul>
@@ -12,8 +12,16 @@
           <form ng-submit="login(loginUser)">
             <input type="text" ng-model="loginUser.name"/>
             <input type="password" ng-model="loginUser.password"/>
-          <button type="submit">Login</button>
+            <button type="submit">Login</button>
           </form>
+        </li>
+        <li ng-show="showChooseCorpus">
+          <form ng-submit="logout()">
+            <button type="submit">Logout</button>
+          </form>
+        </li>
+        <li ng-show="showChooseCorpus" ng-repeat="corpus in user.corpora">
+          {{corpus.title}}
         </li>
         <li ng-repeat="activity in activities"><a
             href="http://lingsync.org/{{activity.user.username}}" target="_blank">
@@ -36,7 +44,8 @@
     </ul>
 </div>
 <div class="activity_feed_widget_footer">
-    <a href="http://lingsync.org" target="_blank"> <img class="gravatar-small"
+    <a href="http://lingsync.org/{{corpus.team.username}}/{{corpus.dbname}}"
+        target="_blank"> <img class="gravatar-small"
         src="img/icon.png" border="0"><span class='brand'>Powered
             by LingSync.org!</span>
     </a>
