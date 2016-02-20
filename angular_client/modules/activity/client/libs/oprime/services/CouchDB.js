@@ -51,10 +51,10 @@ define(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
                   function(response) {
                     OPrime.debug("Session token set, probably", response);
-                    if (response.data.name) {
+                    if (response.data.userCtx.name) {
                       localStorage.setItem(response.data.name, JSON.stringify(response.data));
                     }
-                    return response;
+                    return response.data.userCtx;
                   },
                   function(error) {
                     return {
