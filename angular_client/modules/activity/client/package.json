@@ -4,8 +4,10 @@
   "description": "Activity Feed",
   "main": "index.html",
   "window": {
-    "show": false,
     "position": "right",
+    "show": false,
+    "toolbar": false,
+    "resizable": true,
     "width": 300,
     "height": 600
   },
