@@ -12,8 +12,19 @@
     "height": 600
   },
   "scripts": {
-    "start": "nw ."
+    "start": "nw .",
+    "clean": "rm -rf build",
+    "dist": "npm run clean && nwbuild  -p osx64 .",
+    "dist-shell": "~/git/nwjs-shell-builder/nwjs-build.sh --name=ActivityFeed --osx-icon=../../../../raw/icon/icon.icns --target='5' --build"
   },
+  "appName": "ActivityFeed",
+  "platforms": ["osx64", "linux64", "win64"],
+  "iconPath": "../../../../raw/icon/icon_512.png",
+  "winIco": "../../../../raw/icon/icon.ico",
+  "macIcns": "../../../../raw/icon/icon.icns",
+  "CFBundleIdentifier": "org.fielddb.activity.feed",
+  "license": "LICENSE",
+  "macCredits": "CREDITS",
   "repository": {
     "type": "git",
     "url": "https://github.com/FieldDB/FieldDB"
