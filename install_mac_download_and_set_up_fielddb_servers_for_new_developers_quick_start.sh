@@ -481,15 +481,13 @@ read -p "Do you want to use this as a production server?" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
   then {
 
-    which pm2 || {
-      echo "Installing pm2 globally (required to keep web services on if they fail) "
-      npm install -g pm2
-      
-      echo "Making pm2 log directory point to the logs directory"
+    which forever || {
+      echo "Installing forever globally (required to keep web services on if they fail) "
+      npm install -g forever
+
+      echo "Making forever log directory point to the logs directory"
       # mkdir /usr/local/var/log/fielddb
       # ln -s /usr/local/var/log/fielddb /Users/fielddb/fielddbhome/logs
-      ln -s $FIELDDB_HOME/logs ~/.pm2/logs
-
     }
 
     echo "Setting up fielddb logs to be in /usr/local/var "
@@ -531,7 +529,7 @@ fi
 ## Making sure the user has local databases for developing offline ###################################################
 curl http://localhost:5984/new_corpus || {
   echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
-  
+
   cd $FIELDDB_HOME/AuthenticationWebService
   git fetch https://github.com/cesine/AuthenticationWebService.git installable
   git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
@@ -553,14 +551,14 @@ npm test
 
 echo "Testing if FieldDB AuthenticationWebService will run "
 cd $FIELDDB_HOME/AuthenticationWebService
-node auth_service.js & 
+node auth_service.js &
 echo "Will run AuthenticationWebService tests in a moment... "
 sleep 10
 npm test
 
 echo "Testing if FieldDB AudioWebService will run, it should say 'Listening on 3184' "
 cd $FIELDDB_HOME/AudioWebService
-node audio-service.js & 
+node audio-service.js &
 echo "Will run AuthenticationWebService tests in a moment... "
 sleep 10
 npm test
