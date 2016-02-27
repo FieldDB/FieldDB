@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Dependancies:
-# sudo apt-get build-dep nodejs
-# sudo apt-get install git
-# sudo apt-get build-dep couchdb
-# sudo apt-get install libcurl4-gnutls-dev libtool (ubuntu)
-# sudo apt-get install erlang-base erlang-dev erlang-eunit erlang-nox (ubuntu)
-
-
 # This script should run as an unpriviledged user. when it needs su privileges for dependancies that you
 # dont yet have installed, it uses sudo for that line only.
 if [ "$(whoami)" == "root" ]
@@ -27,39 +19,45 @@ if [ "$(whoami)" == "root" ]
   }
 fi
 
+# Dependancies:
+# sudo apt-get update
+# sudo apt-get build-dep nodejs
+# sudo apt-get install git
+# sudo apt-get install nginx
+# sudo apt-get install htop
+# sudo apt-get install mutt
+# sudo apt-get install praat
+# http://askubuntu.com/questions/432542/is-ffmpeg-missing-from-the-official-repositories-in-14-04
+# sudo apt-get install libav-tools
 
+# sudo apt-get install libcurl4-gnutls-dev libtool (ubuntu)
+# sudo apt-get install erlang-base erlang-dev erlang-eunit erlang-nox (ubuntu)
+
+# Mounting another disk as /data instructions
+# https://wiki.ubuntu.com/LTS
+# http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
+lsblk
+sudo file -s /dev/xvdf
+sudo mkfs -t ext4 device_name
+sudo mkdir mount_point
+sudo mount device_name mount_point
+sudo cp /etc/fstab /etc/fstab.orig
+echo "edit the fstab file"
+echo "/dev/xvdf /data ext4 defaults,nofail,nobootwait  0 2" >> /etc/fstab && cat /etc/fstab
+sudo mount -a
+
+sudo chmod 1777 /data/tmp
+sudo ls -al /data
+# drwxrwxrwt
 
 #IF you want to customize the home's location, change this variable
-FIELDDB_HOME=$HOME/fielddbhome
-
-# For wget on mac using:  "curl -O --retry 999 --retry-max-time 0 -C -"
+FIELDDB_HOME=/data/fielddbhome
 
 # We need git to do anything, anyone who is running this script should have git installed
 git --version || {
   echo 'You dont have Git installed. We use Git to version the source code, and make it possible for many people to work on the code at the same time. ' ;
   sudo apt-get install git
 }
-
-which SmartGit || {
-  echo 'You dont have SmartGitHg installed. We use SmartGitHg to see the branches in the source code, and make easy to see and understand commits and changes to the source code. If you want to understand more about why we use SmartGit, you can view the discussion in https://github.com/FieldDB/FieldDB/issues/1788' ;
-  echo 'Opening so you can install it if you choose... http://www.syntevo.com/smartgithg/';
-  echo ''
-  echo ''
-  sleep 3
-  firefox http://www.syntevo.com/smartgithg/;
-  #exit 1;
-}
-
-subl -v || {
-  echo 'You dont have Sublime installed. We use Sublime to keep the code conventions uniform (spacing, formatting) between developers, and make easy to see json, rename variables, and run jshintto make sure your javascript is well formed. ' ;
-  echo 'Please install it, Opening... http://www.sublimetext.com/2';
-  echo ''
-  echo ''
-  sleep 3
-  firefox http://www.sublimetext.com/2;
-  exit 1;
-}
-echo 'alias sublime="subl ."'  >> $HOME/.bashrc
 
 # We need node to be able to modify the code, anyone who is running this script should have that too.
 node --version || {
@@ -70,8 +68,9 @@ node --version || {
   sleep 3
   firefox http://nodejs.org;
   exit 1;
+  # curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+  # sudo apt-get install -y nodejs
 }
-
 
 echo " Installing grunt, browserify, jasmine-node, jshint, bower and other development dependancies"
 which grunt || {
@@ -118,26 +117,16 @@ cat $HOME/.ssh/id_rsa.pub  ||  {
   echo "Continuing with the rest of the downloads while you paste your key on github ... "
   cat ~/.gitconfig  || {
     git config --global user.email '"'$email'"';
+    # git config --global core.editor "vim"
   }
 }
 
 echo "Making fielddb directory which will house the fielddb code, in case you need it"
 echo "export FIELDDB_HOME=$FIELDDB_HOME" >> $HOME/.bashrc
 
-echo "Making pm2 log directory point to the logs directory"
-# mkdir /usr/local/var/log/fielddb
-# ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
-mkdir ~/.pm2/
-ln -s /home/fielddb/fielddbhome/logs ~/.pm2/logs
-
 mkdir $FIELDDB_HOME
 mkdir $FIELDDB_HOME/logs
 cd $FIELDDB_HOME
-
-echo "Making pm2 log directory point to the logs directory"
-# mkdir /usr/local/var/log/fielddb
-# ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
-ln -s $FIELDDB_HOME/logs ~/.pm2/logs
 
 echo -en '\E[47;32m'"\033[1mS"   # Green
 echo ''
@@ -359,12 +348,11 @@ npm install
 praat -v || {
   echo "Please install Praat (used for automatically detecting utterances)"
    sudo apt-get install praat;
-   sudo apt-get install ffmpeg;
 }
 
-ffmpeg -v || {
-  echo "Please install FFMPEG (used for converting any audio or video file into an audio track for the audio service) "
-   sudo apt-get install ffmpeg;
+avconv -v || {
+  echo "Please install avconv (used for converting any audio or video file into an audio track for the audio service) "
+   sudo apt-get install avconv;
 }
 
 echo -en '\E[47;35m'"\033[1mJ"   # Magenta
@@ -410,11 +398,28 @@ curl http://localhost:5984 || {
     read -p "Do you want me to automatically download and attempt to set up CouchDB (with CORS and HTTPS) for you?" -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]
     then {
-      mkdir -p $FIELDDB_HOME/data/logs/corpus/couchdb
-      # set up couchdb if ubuntu is >13 then couch is v 1.4 and acceptable to use!
-      sudo apt-get install couchdb
+      # # Use Couchdb package
+      # https://launchpad.net/~couchdb/+archive/ubuntu/stable
+      sudo apt-get install software-properties-common
+      sudo add-apt-repository ppa:couchdb/stable
+
+      # sudo apt-get remove couchdb couchdb-bin couchdb-common -yf
+      sudo apt-get install -V couchdb
+      sudo stop couchdb
+      sudo cp /etc/couchdb/*.ini ~/FieldDBServerConfig/etc/couchdb
+      echo "edit /etc/couchdb/default.ini to use the /data/couchdb instead of /var/lib/couchdb"
+      sudo ls -al /var/lib/couchdb
+      sudo mv /var/lib/couchdb /data
+      sudo ls -al /data/couchdb
+      # sudo start couchdb
+      # sudo tail /var/log/couchdb/couchdb.log
+      # sudo service couchdb status
+
+      # above didnt work with the data dir as where the couchs were, manual:
+      # sudo /usr/bin/couchdb &
+      # pid 16454
+
       echo "You must set up CouchDB with CORS support and HTTPS manually by pasting this into your /etc/couchdb/local.ini"
-      which couchdb &&  cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  |  sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> config.local.ini &&  cat config.local.ini &
       }
     fi
   }
@@ -476,24 +481,6 @@ read -p "Do you want to use this as a production server?" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
   then {
 
-    which pm2 || {
-      echo "Installing pm2 globally (required to keep web services on if they fail) "
-      sudo npm install -g pm2
-      sudo chown -R `whoami` ~/.npm
-    }
-
-    echo "Setting up fielddb logs to be in /usr/local/var "
-    sudo mkdir -p /usr/local/var/log/fielddb
-    sudo ln -s /usr/local/var/log/fielddb /home/fielddb/fielddbhome/logs
-    sudo chown -R fielddb /usr/local/var/log/fielddb
-
-    echo "Setting up fielddb audio/video/image user uploads to be in /usr/local/var/lib "
-    sudo mkdir -p /usr/local/var/lib/fielddb/rawdata
-    sudo mkdir -p /usr/local/var/lib/fielddb/bycorpus
-    sudo ln -s /usr/local/var/lib/fielddb/rawdata /home/fielddb/fielddbhome/AudioWebService/rawdata
-    sudo ln -s /usr/local/var/lib/fielddb/bycorpus /home/fielddb/fielddbhome/AudioWebService/bycorpus
-    sudo chown -R fielddb /usr/local/var/lib/fielddb
-
     echo "Setting up  NODE_DEPLOY_TARGET='production'"
     echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
 
@@ -504,8 +491,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 
     echo "Setting up nginx"
     sudo apt-get install nginx
-    sudo cp -R /usr/local/etc/nginx /usr/local/etc/nginxbackup
-    sudo cp -R FieldDBServerConfig/etc/nginx /usr/local/etc/
+    sudo cp -R /etc/nginx /etc/nginxbackup
+    sudo cp -R FieldDBServerConfig/etc/nginx /etc/
 
     echo "TODO up daemons"
 
@@ -514,6 +501,8 @@ else {
   echo " Not setting up this server as a production server, see script source for commands as instructions."
 }
 fi
+
+exit;
 
 ## Running tests to see if everything downloaded and works ###################################################
 echo "Installing the databases you need to develop offline (or to create a new FieldDB node in the FieldDB web)"
