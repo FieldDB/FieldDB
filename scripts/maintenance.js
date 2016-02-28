@@ -1092,28 +1092,29 @@ var MAINTAINENCE = {
 
   },
 
+  /*
+  Replicate all databases to a new server
+   */
   replicateAllDbs: function(source, target) {
     if (!source || !target) {
       throw "You have to tell me the source and target";
     }
 
-    var throttleReplications = 10000;
-    var confirmContinueEveryXDbs = 30;
     var self = this;
     var turnOnReplicationAndLoop;
     var replicatePermissions;
     var turnOnReplication;
-    /*
-    Replicate all databases
-     */
+    self.throttleReplications = 10000;
+    self.confirmContinueEveryXDbs = 30;
     self.replicationCount = 0;
-    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = "";
+    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed  || "";
 
     replicatePermissions = function(dbname) {
       FieldDB.CORS.makeCORSRequest({
         method: "GET",
         url: source + "/" + dbname + "/_security"
       }).then(function(securitydoc) {
+        securitydoc._id = "_security";
 
         FieldDB.CORS.makeCORSRequest({
           method: "PUT",
@@ -1132,11 +1133,42 @@ var MAINTAINENCE = {
       });
     };
 
+    turnOnReplication = function(dbnameToReplicate, dbnames) {
+      var replicationOptions = {
+        source: source + "/" + dbnameToReplicate,
+        target: target + "/" + dbnameToReplicate,
+        // create_target: true,
+        // continuous: true
+      };
+      replicatePermissions(dbnameToReplicate);
+
+      FieldDB.CORS.makeCORSRequest({
+        method: "POST",
+        data: replicationOptions,
+        url: target + "/_replicate"
+      }).then(function(result) {
+        console.log("Successfully started replication for " + dbnameToReplicate, result);
+        console.log("waiting " + self.throttleReplications);
+        window.setTimeout(function() {
+          return turnOnReplicationAndLoop(dbnames);
+        }, self.throttleReplications);
+      }, function(error) {
+        console.log("Error replicating to db " + dbnameToReplicate, error);
+        self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
+        // alert("There was a problem turing on replication to the new database. pausing...");
+        console.log("waiting " + self.throttleReplications);
+        window.setTimeout(function() {
+          return turnOnReplicationAndLoop(dbnames);
+        }, self.throttleReplications);
+      });
+    };
+
     turnOnReplicationAndLoop = function(dbnames) {
       if (!dbnames || dbnames.length === 0) {
         console.log("finished replicating", dbnames);
         return;
       }
+
       var dbname = dbnames.pop();
       console.log("looking at " + dbname);
 
@@ -1150,37 +1182,34 @@ var MAINTAINENCE = {
         console.log("turning on continuous replication for a phophlo user");
       } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
         return turnOnReplicationAndLoop(dbnames);
-        // dont bother to replicate any anonymous speech recognition or learn x users
         console.log("turning on continuous replication for a learn x user");
-      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-        return turnOnReplicationAndLoop(dbnames);
-        if (dbname.indexOf("devgina") !== 0) {
-          return turnOnReplicationAndLoop(dbnames);
-          console.log("turning on continuous replication for a beta tester");
-        }
+      } else if (dbname.indexOf("nemo") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
         console.log("turning on continuous replication for a dev");
+        return turnOnReplicationAndLoop(dbnames);
+      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0) {
+        return turnOnReplicationAndLoop(dbnames);
+        console.log("turning on continuous replication for a beta tester");
       } else {
-
         if (dbname.indexOf("zfielddbuserscouchcorpus") > -1 || dbname.indexOf("backup") > -1 || dbname.indexOf("users") === 0 || dbname.indexOf("undefined") > -1 || dbname.indexOf("null") > -1 || dbname.indexOf("inspection") > -1 || dbname === "todos" || dbname === "firstcorpus" || dbname === "episode" || dbname === "myaamiatest3") {
           console.log("  skipping unnecesary db " + dbname);
           return turnOnReplicationAndLoop(dbnames);
+          throw "Should always skip";
         } else if (dbname.indexOf("-") === -1) {
           return turnOnReplicationAndLoop(dbnames);
           if (!confirm('Are you sure you really wan to run this!')) {
-            // throw "stopped";
             return turnOnReplicationAndLoop(dbnames);
           }
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
-          // return turnOnReplicationAndLoop(dbnames); // uncomment to have continuous replication for only beta testers and/or phophlo users
+          return turnOnReplicationAndLoop(dbnames); // uncomment to have continuous replication for only beta testers and/or phophlo users
         }
       }
 
-      // if (!confirm('Are you sure you really wan to run this!')) {
-      //   throw "stopped";
-      // }
+      if (!confirm('Are you sure you really wan to run this!')) {
+        throw "stopped";
+      }
 
-      if (self.replicationCount > 0 && self.replicationCount % confirmContinueEveryXDbs === 0) {
+      if (self.replicationCount > 0 && self.replicationCount % self.confirmContinueEveryXDbs === 0) {
         var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: " + dbnames.length);
         if (!keepGoing) {
           window.dbnames = dbnames;
@@ -1190,7 +1219,6 @@ var MAINTAINENCE = {
       }
 
       self.replicationCount += 1;
-
       FieldDB.CORS.makeCORSRequest({
         method: "PUT",
         url: target + "/" + dbname,
@@ -1198,62 +1226,21 @@ var MAINTAINENCE = {
         console.log("db " + dbname + " created", result);
         turnOnReplication(dbname, dbnames);
       }, function(reason) {
-        if (reason && reason.error && reason.error === "file_exists") {
+        if (reason && reason.status === 412) {
           turnOnReplication(dbname, dbnames);
         } else {
           console.log("Error creating " + dbname, reason);
           // alert("There was a problem creating the new data base. pausing...");
-
-          self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewjed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+          self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
           turnOnReplication(dbname, dbnames);
-
         }
       });
-
     };
-
-    turnOnReplication = function(dbnameToReplicate, dbnames) {
-      var replicationOptions = {
-        source: source + "/" + dbnameToReplicate,
-        target: "http://admin:none@localhost/" + dbnameToReplicate,
-        // create_target: true,
-        // continuous: true
-      };
-
-      // replicatePermissions(dbnameToReplicate);
-
-      FieldDB.CORS.makeCORSRequest({
-        method: "POST",
-        data: replicationOptions,
-        url: target + "/_replicate"
-      }).then(function(result) {
-
-        console.log("Successfully started replication for " + dbnameToReplicate, result);
-        console.log("waiting " + throttleReplications);
-        window.setTimeout(function() {
-          return turnOnReplicationAndLoop(dbnames);
-        }, throttleReplications);
-
-      }, function(error) {
-        console.log("Error replicating to db " + dbnameToReplicate, error);
-        self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
-        alert("There was a problem turing on replication to the new database. pausing...");
-
-        console.log("waiting " + throttleReplications);
-        window.setTimeout(function() {
-          return turnOnReplicationAndLoop(dbnames);
-        }, throttleReplications);
-
-      });
-
-    };
-
 
     FieldDB.CORS.makeCORSRequest({
       method: "GET",
       url: source + "/_all_dbs"
     }).then(function(results) {
-      // results = ["_users", "zfielddbuserscouch"];
       console.log(results);
       self.dbs = results;
       turnOnReplicationAndLoop(results);
