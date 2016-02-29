@@ -11,7 +11,7 @@
         <input type="text" ng-model='newCorpusInfo.newCorpusTitle'
             placeholder="New corpus name">
         &nbsp;
-      <button class="btn btn-primary disabled"
+      <button class="btn btn-primary"
             ng-disabled="corpus.saving==true">{{contextualize('locale_create_button')}}</button>&nbsp;
         <img src="images/spinner-small-mainbg.gif" ng-show="loading==true"/>
     </div>
@@ -84,7 +84,7 @@
       <p class="">
           {{contextualize('locale_add_existing_user_message')}} <b>{{corpus.title}}</b>
       </p>
-
+        
       <br />
       <img src="images/spinner-small-mainbg.gif" ng-show="loading==true"> <input id="userToModifyInput" list="users" ng-model="newUserRoleInfo.usernameToModify">
         <datalist id="users">
@@ -96,7 +96,7 @@
         <font size="3">
           <input type="radio" name="userroles" value="admin" ng-model="newUserRoleInfo.role">{{contextualize('locale_admin_radio')}}&nbsp;&nbsp;&nbsp;
           <input type="radio" name="userroles" value="read_write"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_write_radio')}}&nbsp;&nbsp;&nbsp;
-          <input type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_comment_only_radio')}}&nbsp;&nbsp;&nbsp;
+          <input type="radio" name="userroles" value="read_comment_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_comment_only_radio')}}&nbsp;&nbsp;&nbsp; 
           <input type="radio" name="userroles" value="read_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_read_only_radio')}}&nbsp;&nbsp;&nbsp;
           <input type="radio" name="userroles" value="write_only"  ng-model="newUserRoleInfo.role">{{contextualize('locale_write_only_radio')}}
 
@@ -222,7 +222,7 @@
       <span ng-show="!showLinguistMode">Easy mode</span>
       <span ng-show="showLinguistMode">Advanced mode</span>
     </button> -->
-
+    
     <img src="images/spinner-small-mainbg.gif" ng-show="corpus.saving==true"/>
     <div data-fielddb-collection json='corpus.datumFields'></div>
     <button class="btn btn-info"
