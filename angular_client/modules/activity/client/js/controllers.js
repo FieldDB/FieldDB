@@ -16,7 +16,7 @@ define(
      * @returns
      */
     var ActivityFeedController = function ActivityFeedController($scope,
-      $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken, Login) {
+      $routeParams, $resource, MostRecentActivities, UserDetails, CorpusDetails, GetSessionToken, Login, Logout) {
       console.log("Loading ActivityFeedController");
 
       $scope.loginUser = {
@@ -24,19 +24,37 @@ define(
         password: "phoneme"
       };
 
+      $scope.user = {};
+
       $scope.login = function(user) {
         Login.run(user)
           .then(function(result) {
             console.log('Got a login response ', result);
-            if (result.error) {
-              return alert("Sorry" + result.error.data);
+            if (result.error && result.error.data) {
+              return alert("Sorry" + result.error.data.reason);
             }
-            load();
+            load(result);
             $scope.mustLogIn = false;
-            $scope.$digest();
+            // $scope.$digest();
           });
       };
 
+      $scope.logout = function(user) {
+        Logout.run()
+          .then(function(result) {
+            console.log('Got a logout response ', result);
+            if (result.error && result.error.data) {
+              return alert("Sorry" + result.error.data.reason);
+            }
+            $scope.mustLogIn = true;
+            // $scope.$digest();
+          });
+      };
+
+      $scope.showChooseCorpus = false;
+      $scope.toggleChooseCorpus = function() {
+        $scope.showChooseCorpus = !$scope.showChooseCorpus;
+      };
       /*
        * TODO get a corpus item out of the non-activity feed, or out of the
        * activity feed to display this information.
@@ -50,15 +68,63 @@ define(
         }
       };
 
-      var load = function() {
-
-        /*
-         * TODO add the corpus connection here so that it can be declared in the
-         * route parameters, and passed to the service
-         */
+      var load = function(data) {
         var feedParams = {};
-        feedParams.username = $routeParams.username || "lingllama";
+        var username = data.name || data.username;
+
+        if (username) {
+          if (!$routeParams.username || $routeParams.username === username) {
+            $routeParams.username = username;
+            // TODO redirect to that user's space
+          }
+        } else {
+          if ($routeParams.username) {
+            data = localStorage.getItem($routeParams.username);
+            try {
+              data = JSON.parse(data);
+            } catch (e) {
+              console.log('no current user is saved');
+            }
+          }
+        }
+        if (data) {
+          if (data.name) {
+            $scope.user.username = data.name;
+            if (!data.corpora && data.roles) {
+              data.corpora = [];
+              var corpora = {};
+              data.roles.map(function(role) {
+                if (role.indexOf("_") === -1) {
+                  return;
+                }
+                var dbname = role.substring(0, role.lastIndexOf("_"));
+                if (corpora[dbname]) {
+                  return;
+                }
+                corpora[dbname] = {
+                  dbname: dbname,
+                  title: dbname,
+                  titleAsUrl: dbname
+                };
+              });
+              delete data.roles;
+              for (var corpus in corpora) {
+                if (corpora.hasOwnProperty(corpus)) {
+                  data.corpora.push(corpora[corpus]);
+                }
+              }
+              localStorage.setItem(data.name, JSON.stringify(data));
+            }
+            $scope.user.corpora = data.corpora;
+          } else {
+            $scope.user.username = data.username;
+            $scope.user.corpora = data.corpora;
+          }
+        }
+
+        feedParams.username = $routeParams.username;
         feedParams.corpusid = $routeParams.corpusid;
+
         if (feedParams.corpusid) {
           /* if the corpus is of this user, then use the user as a component of the corpus, otherwise just use the corpusid  and make the username empty.*/
           if (feedParams.corpusid.indexOf(feedParams.username) > -1) {
@@ -83,11 +149,6 @@ define(
           });
         }
 
-
-        //        GetSessionToken.run({
-        //          "name" : "public",
-        //          "password" : "none"
-        //        }).then(function() {
         MostRecentActivities.async(feedParams).then(function(activities) {
           if (activities.error) {
             if (activities.error.status === 401) {
@@ -97,13 +158,33 @@ define(
           }
           $scope.activities = activities;
         });
-        //        });
       }
-      load();
+
+      GetSessionToken.run({
+        "name": "public",
+        "password": "none"
+      }).then(function(result) {
+        if (result.error) {
+          if (result.error.status === 401) {
+            $scope.mustLogIn = true;
+          } else {
+            alert("Unable to contact the server, please try again. " + result.error.status);
+          }
+          return;
+        } else {
+          if (!result.name) {
+            $scope.mustLogIn = true;
+            return;
+          }
+        }
+
+        load(result);
+      });
+
     };
 
     ActivityFeedController.$inject = ['$scope', '$routeParams', '$resource',
-      'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken', 'Login'
+      'MostRecentActivities', 'UserDetails', 'CorpusDetails', 'GetSessionToken', 'Login', 'Logout'
     ];
 
     OPrime.debug("Defining ActivityFeedController.");

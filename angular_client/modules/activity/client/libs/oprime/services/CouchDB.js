@@ -50,9 +50,14 @@ define(
                 var promise = $http.get(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
                   function(response) {
-                    OPrime.debug("Session token set, probably",
-                      response);
-                    return response;
+                    OPrime.debug("Session token set, probably", response);
+                    if (localStorage.getItem(response.data.userCtx.name)) {
+                      return JSON.parse(localStorage.getItem(response.data.userCtx.name));
+                    }
+                    if (response.data.userCtx.name) {
+                      localStorage.setItem(response.data.userCtx.name, JSON.stringify(response.data.userCtx));
+                    }
+                    return response.data.userCtx;
                   },
                   function(error) {
                     return {
@@ -90,9 +95,11 @@ define(
                 var promise = $http.post(
                   couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session', dataToPost).then(
                   function(response) {
-                    OPrime.debug("Session token set, probably",
-                      response);
-                    return response;
+                    OPrime.debug("Session token set, probably", response);
+                    if (response.data.name) {
+                      localStorage.setItem(response.data.name, JSON.stringify(response.data));
+                    }
+                    return response.data;
                   },
                   function(error) {
                     return {
@@ -118,6 +125,29 @@ define(
               }
             };
           }
+        }).factory(
+        'Logout',
+        function($http) {
+          OPrime.debug("Contacting the DB to log user in.");
+          return {
+            'run': function() {
+              OPrime.debug("Getting session token.");
+              var couchInfo = OPrime.couchURL();
+              var promise = $http.delete(
+                couchInfo.protocol + couchInfo.domain + couchInfo.port + '/_session').then(
+                function(response) {
+                  OPrime.debug("Session token set, probably",
+                    response);
+                  return response;
+                },
+                function(error) {
+                  return {
+                    error: error
+                  };
+                });
+              return promise;
+            }
+          };
         });
 
     return CouchDBServices;
