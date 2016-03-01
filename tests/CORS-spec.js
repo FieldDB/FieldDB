@@ -60,7 +60,7 @@ describe("CORS", function() {
       CORS.makeCORSRequest(options).then(function(results) {
         expect(results.couchdb).toEqual("Welcome");
         expect(results.version).toEqual("1.6.1");
-        expect(results.vendor.name).toEqual("Homebrew");
+        expect(results.vendor.name).toEqual("Ubuntu");
       }, function(error) {
         expect(error.details.url).toEqual(options.url);
         if (expectedErrors(error)) {
@@ -270,7 +270,7 @@ describe("CORS", function() {
       CORS.makeCORSRequest(options).then(function(results) {
         expect(listenedToProgress).toEqual(true);
 
-        expect(results.length).toEqual(142838);
+        expect(results.length).toEqual(142839);
         expect(options.complete).toEqual(true);
         expect(options.percentComplete).toEqual(100);
       }, function(error) {
