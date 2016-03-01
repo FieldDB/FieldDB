@@ -1092,93 +1092,85 @@ var MAINTAINENCE = {
 
   },
 
+  /*
+  Replicate all databases to a new server
+   */
   replicateAllDbs: function(source, target) {
     if (!source || !target) {
       throw "You have to tell me the source and target";
     }
 
-    var throttleReplications = 10000;
-    var confirmContinueEveryXDbs = 30;
     var self = this;
-    /*
-    Replicate all databases
-     */
-    $.couch.urlPrefix = source;
+    var turnOnReplicationAndLoop;
+    var replicatePermissions;
+    var turnOnReplication;
+    self.throttleReplications = 10000;
+    self.confirmContinueEveryXDbs = 30;
     self.replicationCount = 0;
+    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed  || "";
 
-    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = "";
-    var replicatePermissions = function(dbname) {
-      $.couch.urlPrefix = source;
-      var sourcedatabase = $.couch.db(dbname);
-      sourcedatabase.openDoc("_security", {
-        success: function(securitydoc) {
-          securitydoc._id = "_security";
+    replicatePermissions = function(dbname) {
+      FieldDB.CORS.makeCORSRequest({
+        method: "GET",
+        url: source + "/" + dbname + "/_security"
+      }).then(function(securitydoc) {
+        securitydoc._id = "_security";
 
-          $.couch.urlPrefix = target;
-          targetdatabase = $.couch.db(dbname);
-          targetdatabase.saveDoc(securitydoc, {
-            success: function(serverResults) {
-              console.log("replicated _security for " + dbname, serverResults);
-            },
-            error: function(serverResults) {
-              console.log("There was a problem saving the _security doc for " + dbname + " " + JSON.stringify(securitydoc), serverResults);
-              self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
-              // alert("There was a problem writing to the new data base. pausing...");
-
-            }
-          });
-
-        },
-        error: function(error) {
-          console.log(" there was a problem opening the permissions of " + dbname, error);
-          // alert("There was a problem opening the securty doc on the old corps. pausing...");
-
-        }
+        FieldDB.CORS.makeCORSRequest({
+          method: "PUT",
+          data: securitydoc,
+          url: target + "/" + dbname + "/_security"
+        }).then(function(serverResults) {
+          console.log("replicated _security for " + dbname, serverResults);
+        }, function(error) {
+          console.log("There was a problem saving the _security doc for " + dbname + " " + JSON.stringify(securitydoc), error);
+          self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
+          // alert("There was a problem writing to the new data base. pausing...");
+        });
+      }, function(error) {
+        console.log(" there was a problem opening the permissions of " + dbname, error);
+        // alert("There was a problem opening the securty doc on the old corps. pausing...");
       });
     };
 
-    var turnOnReplication = function(dbnameToReplicate, dbnames) {
+    turnOnReplication = function(dbnameToReplicate, dbnames) {
       var replicationOptions = {
+        source: source + "/" + dbnameToReplicate,
+        target: target + "/" + dbnameToReplicate,
         // create_target: true,
         // continuous: true
       };
-
       replicatePermissions(dbnameToReplicate);
 
-      $.couch.urlPrefix = source;
-      $.couch.replicate(dbnameToReplicate,
-        target + "/" + dbnameToReplicate, {
-          success: function(result) {
-            console.log("Successfully started replication for " + dbnameToReplicate, result);
-
-            console.log("waiting " + throttleReplications);
-            window.setTimeout(function() {
-              return turnOnReplicationAndLoop(dbnames);
-            }, throttleReplications);
-
-          },
-          error: function(error) {
-            console.log("Error replicating to db " + dbnameToReplicate, error);
-            self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
-            alert("There was a problem turing on replication to the new database. pausing...");
-
-            console.log("waiting " + throttleReplications);
-            window.setTimeout(function() {
-              return turnOnReplicationAndLoop(dbnames);
-            }, throttleReplications);
-
-          }
-        },
-        replicationOptions);
+      FieldDB.CORS.makeCORSRequest({
+        method: "POST",
+        data: replicationOptions,
+        url: target + "/_replicate"
+      }).then(function(result) {
+        console.log("Successfully started replication for " + dbnameToReplicate, result);
+        console.log("waiting " + self.throttleReplications);
+        window.setTimeout(function() {
+          return turnOnReplicationAndLoop(dbnames);
+        }, self.throttleReplications);
+      }, function(error) {
+        console.log("Error replicating to db " + dbnameToReplicate, error);
+        self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbnameToReplicate;
+        // alert("There was a problem turing on replication to the new database. pausing...");
+        console.log("waiting " + self.throttleReplications);
+        window.setTimeout(function() {
+          return turnOnReplicationAndLoop(dbnames);
+        }, self.throttleReplications);
+      });
     };
 
-    var turnOnReplicationAndLoop = function(dbnames) {
+    turnOnReplicationAndLoop = function(dbnames) {
       if (!dbnames || dbnames.length === 0) {
         console.log("finished replicating", dbnames);
         return;
       }
+
       var dbname = dbnames.pop();
-      console.log("looking at "+ dbname);
+      console.log("looking at " + dbname);
 
       if (!dbname || dbname === "_replicator") {
         console.log(dbname + "  is couchdb internal db ");
@@ -1186,70 +1178,75 @@ var MAINTAINENCE = {
       }
 
       if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-       return  turnOnReplicationAndLoop(dbnames);
+        return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a phophlo user");
       } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
         return turnOnReplicationAndLoop(dbnames);
-        // dont bother to replicate any anonymous speech recognition or learn x users
         console.log("turning on continuous replication for a learn x user");
-      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("nemo") === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0 || dbname.indexOf("devgina") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
-        // return turnOnReplicationAndLoop(dbnames);
+      } else if (dbname.indexOf("nemo") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
+        console.log("turning on continuous replication for a dev");
+        return turnOnReplicationAndLoop(dbnames);
+      } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0) {
+        return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a beta tester");
       } else {
-
-        if (dbname.indexOf("-") === -1) {
+        if (dbname.indexOf("zfielddbuserscouchcorpus") > -1 || dbname.indexOf("backup") > -1 || dbname.indexOf("users") === 0 || dbname.indexOf("undefined") > -1 || dbname.indexOf("null") > -1 || dbname.indexOf("inspection") > -1 || dbname === "todos" || dbname === "firstcorpus" || dbname === "episode" || dbname === "myaamiatest3") {
+          console.log("  skipping unnecesary db " + dbname);
           return turnOnReplicationAndLoop(dbnames);
+          throw "Should always skip";
+        } else if (dbname.indexOf("-") === -1) {
+          return turnOnReplicationAndLoop(dbnames);
+          if (!confirm('Are you sure you really wan to run this!')) {
+            return turnOnReplicationAndLoop(dbnames);
+          }
           console.log(dbname + "  is not a corpus or activity feed, replicating it anyway.");
         } else {
-          return turnOnReplicationAndLoop(dbnames); //turn on continuous replication for only beta testers and/or phophlo users
+          return turnOnReplicationAndLoop(dbnames); // uncomment to have continuous replication for only beta testers and/or phophlo users
         }
       }
 
-      if (self.replicationCount > 0 && self.replicationCount % confirmContinueEveryXDbs === 0) {
+      if (!confirm('Are you sure you really wan to run this!')) {
+        throw "stopped";
+      }
+
+      if (self.replicationCount > 0 && self.replicationCount % self.confirmContinueEveryXDbs === 0) {
         var keepGoing = confirm(" Do you want to continue the replication? you are currently at db: " + self.replicationCount + " left: " + dbnames.length);
         if (!keepGoing) {
-          window.dbnames = dbnames
+          window.dbnames = dbnames;
           console.log("left " + dbnames.length);
           return;
         }
       }
 
-
       self.replicationCount += 1;
-
       FieldDB.CORS.makeCORSRequest({
         method: "PUT",
         url: target + "/" + dbname,
-        withCredentials: true
       }).then(function(result) {
         console.log("db " + dbname + " created", result);
         turnOnReplication(dbname, dbnames);
       }, function(reason) {
-        if (reason && reason.error && reason.error === "file_exists") {
+        if (reason && reason.status === 412) {
           turnOnReplication(dbname, dbnames);
         } else {
           console.log("Error creating " + dbname, reason);
-          alert("There was a problem creating the new data base. pausing...");
-
+          // alert("There was a problem creating the new data base. pausing...");
           self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed + " " + dbname;
           turnOnReplication(dbname, dbnames);
-
         }
       });
-
     };
 
-    $.couch.allDbs({
-      success: function(results) {
-        console.log(results);
-        turnOnReplicationAndLoop(results);
-      },
-      error: function(error) {
-        console.log("Error getting db list", error);
-      }
+    FieldDB.CORS.makeCORSRequest({
+      method: "GET",
+      url: source + "/_all_dbs"
+    }).then(function(results) {
+      console.log(results);
+      self.dbs = results;
+      turnOnReplicationAndLoop(results);
+    }, function(error) {
+      console.log("Error getting db list", error);
     });
-
-
   },
 
   removeBlockNonContribAdminWritesFromActivityFeeds: function() {
