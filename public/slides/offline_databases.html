@@ -21,7 +21,7 @@
 <section class="bamboo">
 	<h2>Taking Javascript into the field:</h2>
 	<h4>
-		<a href="https://github.com/OpenSourceFieldlinguistics">a case
+		<a href="https://github.com/FieldDB">a case
 			study</a>
 	</h4>
 	<footer>
@@ -456,7 +456,7 @@
 		data...
 		<pre>
 var datums = appView.currentPaginatedDataListDatumsView.collection.models
-		
+
 for(var d in datums){
   console.log(datums[d].get("datumFields").where({label:"utterance"})[0].get("mask"));
 }
@@ -479,7 +479,7 @@ for(var d in datums){
 		and what the code looks like in android for package size, and using
 		JSI?
 		<pre>
-		
+
 		</pre>
 	</div>
 </section>-->
@@ -550,7 +550,7 @@ for(var d in datums){
 	<div role="note">Thanks, the client codebase and webservices are
 		all on github, we also have a dev blog where our interns created
 		screencasts and board casts of what they learned while developing the
-		app.</div>  
+		app.</div>
 </section>
 
 
@@ -748,8 +748,8 @@ section[aria-selected] {
 	left: 0;
 }
 /* After */
-section[aria-selected]                                                 
-	                                                                      
+section[aria-selected]
+
 	            ~ section {
 	left: +150%;
 }
@@ -767,8 +767,8 @@ section[aria-selected]
 }
 
 /* The items to-be-selected */
-.incremental>*[aria-selected]                                          
-	                                                                      
+.incremental>*[aria-selected]
+
 	                   ~ * {
 	opacity: 0;
 }
@@ -1231,7 +1231,7 @@ body.loaded {
       requestFullscreen.apply(html);
     }
   }
-  
+
   Dz.setProgress = function(aIdx, aStep) {
     var slide = $("section:nth-of-type("+ aIdx +")");
     if (!slide)
@@ -1241,14 +1241,14 @@ body.loaded {
         stepSize = slideSize / steps;
     this.progressBar.style.width = ((aIdx - 1) * slideSize + aStep * stepSize) + '%';
   }
-  
+
   Dz.postMsg = function(aWin, aMsg) { // [arg0, [arg1...]]
     aMsg = [aMsg];
     for (var i = 2; i < arguments.length; i++)
       aMsg.push(encodeURIComponent(arguments[i]));
     aWin.postMessage(aMsg.join(" "), "*");
   }
-  
+
   function init() {
     Dz.init();
     window.onkeydown = Dz.onkeydown.bind(Dz);
@@ -1264,7 +1264,7 @@ body.loaded {
     Function.prototype.bind = function (oThis) {
 
       // closest thing possible to the ECMAScript 5 internal IsCallable
-      // function 
+      // function
       if (typeof this !== "function")
       throw new TypeError(
         "Function.prototype.bind - what is trying to be fBound is not callable"
