@@ -844,7 +844,7 @@ define([
          "dbname": connection.dbname
        });
        s.set(
-         "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+         "fields", window.app.get("corpus").get("sessionFields").clone()
        );
        s.id = s.id + "sessionDetailsWereMissing";
        fetchSessionSucess(s);

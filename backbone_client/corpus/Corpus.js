@@ -394,7 +394,7 @@ define([
             userchooseable: "disabled"
           }),
           new DatumField({
-            label : "dateSEntered",
+            label : "DateSessionEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This field is deprecated, it was replaced by DateSessionEntered."
@@ -744,7 +744,7 @@ define([
         window.appView.sessionNewModalView.model = new Session({
           comments : new Comments(),
           dbname : self.get("dbname"),
-          fields : window.app.get("currentSession").get("sessionFields").clone()
+          fields : window.app.get("currentSession").get("fields").clone()
         });
         window.appView.sessionNewModalView.model.fillWithDefaults();
         window.appView.sessionNewModalView.render();

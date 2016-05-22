@@ -144,7 +144,7 @@ define([
                                                      userchooseable: "disabled"
                                                    }),
                                                    new DatumField({
-                                                     label : "dateSEntered",
+                                                     label : "DateSessionEntered",
                                                      shouldBeEncrypted: "",
                                                      userchooseable: "disabled",
                                                      help: "This is the date in which the session was entered."
