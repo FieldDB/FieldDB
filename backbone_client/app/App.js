@@ -193,6 +193,7 @@ define([
         return;
       } else {
         console.log("App.changePouch setting connection: ", connection);
+        connection.dbname = connection.dbname || connection.pouchname;
         this.set("connection", connection);
       }
 //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
@@ -481,6 +482,7 @@ define([
         connection = this.get("connection");
         if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
       }else{
+        connection.dbname = connection.dbname || connection.pouchname;
         if (OPrime.debugMode) OPrime.debug("Using the connection passed in,",connection,this.get("connection"));
       }
       if(!connection){
@@ -664,10 +666,10 @@ define([
            }
          }
          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-         window.location.replace(optionalCouchAppPath + "user.html#login/" + corpusdbname);
+         OPrime.redirect(optionalCouchAppPath + "user.html#login/" + corpusdbname);
 
          //        window.app.get("authentication").syncUserWithServer(function(){
-         //        window.location.replace(optionalCouchAppPath+"corpus.html");
+         //        OPrime.redirect(optionalCouchAppPath+"corpus.html");
          //        });
          return;
        }
@@ -730,7 +732,7 @@ define([
 
        if (error.status === 404) {
          alert("Unable to open your corpus. Please try again.");
-         window.location.replace("user.html#login/" + connection.dbname);
+         OPrime.redirect("user.html#login/" + connection.dbname);
          return;
        }
 
@@ -747,7 +749,7 @@ define([
            self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
          }, connection.dbname);
          //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-         //            window.location.replace(optionalCouchAppPath+"corpus.html#login");
+         //            OPrime.redirect(optionalCouchAppPath+"corpus.html#login");
          return;
        }
 
@@ -803,7 +805,7 @@ define([
      };
      var fetchSessionSucess = function(loadedSession) {
        $(".spinner-status").html("Opened Elicitation Session...");
-       if (OPrime.debugMode) OPrime.debug("Session fetched successfully", sessionModel);
+       if (OPrime.debugMode) OPrime.debug("Session fetched successfully", loadedSession);
        loadedSession.setAsCurrentSession(function() {
          $(".spinner-status").html("Loading Elicitation Session...");
          if (OPrime.debugMode) OPrime.debug("Entire dashboard fetched and loaded and linked up with views correctly.");
@@ -842,7 +844,7 @@ define([
          "dbname": connection.dbname
        });
        s.set(
-         "sessionFields", window.app.get("corpus").get("sessionFields").clone()
+         "fields", window.app.get("corpus").get("sessionFields").clone()
        );
        s.id = s.id + "sessionDetailsWereMissing";
        fetchSessionSucess(s);

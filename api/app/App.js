@@ -520,10 +520,10 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
         if (this.currentDoc && this.currentDoc.save) {
           this.currentDoc.bug("Switching to another document without saving...");
         }
-        var tempdoc = new FieldDBObject({
+        new FieldDBObject({
           id: routeParams.docid
         }).fetch().then(function(result) {
-          console.log(tempdoc);
+          // console.log(tempdoc);
           self.currentDoc = FieldDBObject.convertDocIntoItsType(result);
           self.render();
         }, function(error) {

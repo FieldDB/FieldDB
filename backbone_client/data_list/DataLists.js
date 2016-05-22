@@ -2,7 +2,7 @@ define([
     "backbone",
     "data_list/DataList"
 ], function(
-    Backbone, 
+    Backbone,
     DataList
 ) {
     var DataLists = Backbone.Collection.extend(
@@ -32,10 +32,10 @@ define([
        comparator : function(doc){
          return doc.get("timestamp");
        },
-       
+
        internalModels : DataList,
        model : DataList,
-       
+
        fetchDatalists : function(suces, fail){
          this.fetch({
            error : function(model, xhr, options) {
@@ -51,7 +51,7 @@ define([
              if (response.length == 0) {
                OPrime.debug("You have no datalists, TODO creating a new one...");
                if(window.location.href.indexOf("corpus.html") > -1){
-                 window.location.replace("user.html");
+                 OPrime.redirect("user.html");
                }
              }
              if(typeof suces == "function"){
@@ -59,10 +59,10 @@ define([
              }
            }
          });
-         
+
        }
-       
+
     });
-    
+
     return DataLists;
 });

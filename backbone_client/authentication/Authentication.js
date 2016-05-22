@@ -269,7 +269,8 @@ define([
       /* Switch user to the new prod servers if they have the old ones */
       userString = userString.replace(/authdev.fieldlinguist.com:3183/g,"authdev.lingsync.org");
       userString = userString.replace(/ifielddevs.iriscouch.com/g,"corpus.lingsync.org");
-      // userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
+      userString = userString.replace('pouchname', 'dbname');
+      userString = userString.replace(/corpusdev.lingsync.org/g,"corpus.lingsync.org");
 
       /*
        * For debugging cors #838: Switch to use the corsproxy
@@ -293,14 +294,14 @@ define([
           console.log("No longer kicking the user out of the app, some users have to use the Prototype because it can handle more data than the Spreadsheet app.");
           // localStorage.setItem("username_to_update",data.user.username);
           // alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
-          // window.location.replace("backup_pouches.html");
+          // OPrime.redirect("backup_pouches.html");
           // return;
         }
       }
       /* As of version v1.90 take all stable and mcgill users to the online app */
       if (window.location.hostname === "ocmdknddgpmjngkhcbcofoogkommjfoj" || window.location.hostname === "jlbnogfhkigoniojfngfcglhphldldgi") {
         console.log("This is a prototype stable user, or a mcgill user, who has been backed up. Taking them directly to the spreadsheet app.");
-        window.location.replace("http://app.lingsync.org");
+        OPrime.redirect("http://app.lingsync.org");
       }
 
       this.saveServerResponseToUser(data, callbackload);
@@ -308,11 +309,12 @@ define([
 
     loadPublicUser : function(callbackload){
       var mostRecentPublicUser =  OPrime.publicUserStaleDetails();
+      mostRecentPublicUser = mostRecentPublicUser.replace('pouchname', 'dbname');
       mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
       for(var x in mostRecentPublicUser){
         localStorage.setItem(x, mostRecentPublicUser[x]);
       }
-      window.location.replace("corpus.html");
+      // OPrime.redirect("corpus.html");
     },
 
     savePublicUserForOfflineUse: function(){
@@ -370,25 +372,28 @@ define([
      *          end up geting kicked out of the corpus page
      */
     syncUserWithServer : function(callback, corpusdbname){
-      if(!corpusdbname){
+      if (!corpusdbname) {
         corpusdbname = "";
       }
-      if(!window.appView){
-        if(OPrime.isChromeApp()){
+
+      if (!window.appView) {
+        if (OPrime.isChromeApp()) {
           /* take them to the user page, they can log in there */
-          window.location.replace("user.html#login/"+corpusdbname);
-        }else{
-          /* take them to the public user page, they can log in there */
-          if(OPrime.isCouchApp()){
-            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-            window.location.replace(optionalCouchAppPath+"user.html#login/"+corpusdbname);
-          }
+          return OPrime.redirect("user.html#login/" + corpusdbname);
         }
+
+          /* take them to the public user page, they can log in there */
+        if (OPrime.isCouchApp()) {
+          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
+          return OPrime.redirect(optionalCouchAppPath + "user.html#login/" + corpusdbname);
+        }
+
         return;
       }
-      window.appView.authView.showQuickAuthenticateView(null, null, function(){
+
+      window.appView.authView.showQuickAuthenticateView(null, null, function() {
         //This happens after the user has been authenticated.
-        if(typeof callback == "function"){
+        if (typeof callback == "function") {
           callback();
         }
       });

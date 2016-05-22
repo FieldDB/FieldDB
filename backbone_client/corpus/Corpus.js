@@ -129,7 +129,7 @@ define([
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-        window.location.replace(optionalCouchAppPath + "user.html");
+        OPrime.redirect(optionalCouchAppPath + "user.html");
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -394,7 +394,7 @@ define([
             userchooseable: "disabled"
           }),
           new DatumField({
-            label : "dateSEntered",
+            label : "DateSessionEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This field is deprecated, it was replaced by DateSessionEntered."
@@ -744,7 +744,7 @@ define([
         window.appView.sessionNewModalView.model = new Session({
           comments : new Comments(),
           dbname : self.get("dbname"),
-          fields : window.app.get("currentSession").get("sessionFields").clone()
+          fields : window.app.get("currentSession").get("fields").clone()
         });
         window.appView.sessionNewModalView.model.fillWithDefaults();
         window.appView.sessionNewModalView.render();
@@ -917,7 +917,7 @@ define([
 
               window.setTimeout(function() {
                 var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
-                window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname );
+                OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname );
               }, 1000);
 
             });

@@ -552,7 +552,7 @@ define([
                     var sucessorfailcallbackforcorpusmask = function() {
                       $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                       window.setTimeout(function() {
-                        window.location.replace(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
+                        OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
                       }, 1000);
                     };
                     model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
@@ -660,7 +660,7 @@ define([
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
           window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.connection, dataToPost.username, dataToPost.password, function() {
-            window.location.replace(optionalCouchAppPath + "corpus.html");
+            OPrime.redirect(optionalCouchAppPath + "corpus.html");
           });
         }
       }, function(reason) {

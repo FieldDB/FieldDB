@@ -212,6 +212,16 @@ module.exports = function(grunt) {
           return "bash scripts/build_spreadsheet_angular.sh";
         }
       },
+      buildChromeApp: {
+        cmd: function() {
+          return "bash scripts/build_fielddb_minified.sh";
+        }
+      },
+      copyDistToBackbone: {
+        cmd: function() {
+          return "cp fielddb.js backbone_client/bower_components/fielddb/fielddb.js";
+        }
+      },
       updateFieldDBVersion: {
         cmd: function() {
           return "echo n | bash scripts/set_fielddb_version.sh";
@@ -242,6 +252,8 @@ module.exports = function(grunt) {
   grunt.registerTask("build", ["jshint", "browserify:src"]);
   grunt.registerTask("dist", ["jshint", "jasmine_node:dev", "exec:updateFieldDBVersion", "browserify:src", "uglify"]);
   grunt.registerTask("default", ["dist"]);
+  grunt.registerTask("backbone", ["browserify:src", "exec:copyDistToBackbone"]);
+  grunt.registerTask("chromeapp", ["browserify:src", "exec:buildChromeApp"]);
   grunt.registerTask("fielddb-angular", ["exec:buildFieldDBAngularCore"]);
   grunt.registerTask("corpuspages-angular", ["exec:buildCorpusPagesApp"]);
   grunt.registerTask("spreadsheet-angular", ["exec:buildSpreadsheetApp"]);

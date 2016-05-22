@@ -70,7 +70,7 @@ define([
             help: "This is the date in which the session took place."
           }),
           new DatumField({
-            label : "dateSEntered",
+            label : "DateSessionEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This is the date in which the session was entered."
@@ -115,10 +115,10 @@ define([
           if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
         }
       }
-      this.get("fields").where({label: "user"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
+      this.get("fields").where({label: "participants"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
       this.get("fields").where({label: "source"})[0].set("mask", "XY");
       this.get("fields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
-      this.get("fields").where({label: "dateSEntered"})[0].set("mask", new Date());
+      this.get("fields").where({label: "DateSessionEntered"})[0].set("mask", new Date());
       this.get("fields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
 
     },
@@ -182,6 +182,19 @@ define([
           }
         }
       }
+
+      // using source instead of consultants
+      originalModel.fields.map(function(field) {
+        if (field.id === "consultants" || field.label === "consultants") {
+          field.id = field.label = "source";
+        }
+        if (field.id === "dateSEntered" || field.label === "dateSEntered") {
+          field.id = field.label = "DateSessionEntered";
+        }
+        if (field.id === "user" || field.label === "user" || field.id === "users" || field.label === "users") {
+          field.id = field.label = "participants";
+        }
+      });
 
       return this.originalParse.apply(this, [originalModel]);
     },

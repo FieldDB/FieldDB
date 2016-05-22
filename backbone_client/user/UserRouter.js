@@ -53,7 +53,7 @@ define([
       window.app.set("corpus", new Corpus());
       window.app.get("authentication").syncUserWithServer(function(){
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(dbname);
-        window.location.replace(optionalCouchAppPath+"corpus.html");
+        OPrime.redirect(optionalCouchAppPath+"corpus.html");
       });
     },
     guessCorpusIdAndShowDashboard : function(dbname){
@@ -106,7 +106,7 @@ define([
               if (OPrime.isChromeApp()) {
                 OPrime.bug("There was a problem loading this corpus, maybe it is not backed up?\n\n Attempting to back it up now...");
                 /* TODO get the id of the only corpus in the database */
-                window.location.replace("backup_pouches.html");
+                OPrime.redirect("backup_pouches.html");
               }
             };
             var corpusself = this;
@@ -227,7 +227,7 @@ define([
           if(c.get("connection").dbname){
              optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("connection").dbname);
           }
-          window.location.replace(optionalCouchAppPath+"corpus.html");
+          OPrime.redirect(optionalCouchAppPath+"corpus.html");
           return;
         });
     },
@@ -265,7 +265,7 @@ define([
             }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusdbname);
-          window.location.replace(optionalCouchAppPath + "user.html#/corpus/"+dbname);
+          OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/"+dbname);
           return;
         }
       }
