@@ -368,6 +368,8 @@ define([
       var allomorphs = "";
       var morphemesIndex = -1;
     	var morphemes = "";
+      var syntaxIndex = -1;
+      var syntax = "";
     	var glossIndex = -1;
     	var gloss = "";
     	var translationIndex = -1;
@@ -406,6 +408,12 @@ define([
               fieldLabels.splice(morphemesIndex,1);
               fields.splice(morphemesIndex,1);
           }
+          syntaxIndex = fieldLabels.indexOf("syntacticCategory");
+          if(syntaxIndex >= 0){
+              syntax = highlightMatches(fields[syntaxIndex], 'syntacticCategory', true);
+              fieldLabels.splice(syntaxIndex,1);
+              fields.splice(syntaxIndex,1);
+          }
           glossIndex = fieldLabels.indexOf("gloss");
           if (glossIndex >= 0){
               gloss = highlightMatches(fields[glossIndex], 'gloss', true);
@@ -440,7 +448,7 @@ define([
               return this;
             }
 
-            var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, gloss]);
+            var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, syntax, gloss]);
             // if there are only 3 or less words, they probably dont need the alignment visual that much
             if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
               return this;
