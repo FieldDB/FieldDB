@@ -69,7 +69,7 @@ define([
       var username = OPrime.getCookie("username");
       if (username == null && username == "") {
         // new user, take them to the index which can handle new users.
-        window.location.replace('corpus.html');
+        OPrime.redirect('corpus.html');
       }
       window.Locale = {};
       window.Locale.get = function(message) {
@@ -89,7 +89,7 @@ define([
       if (OPrime.debugMode) OPrime.debug("Loading user");
       var u = localStorage.getItem("encryptedUser");
       if(!u){
-        window.location.replace("corpus.html");
+        OPrime.redirect("corpus.html");
         return;
       }
       appself.get("authentication").loadEncryptedUser(u, function(success, errors){
@@ -98,7 +98,7 @@ define([
 //        OPrime.setCookie("username","");
 //        OPrime.setCookie("token","");
 //        localStorage.removeItem("encryptedUser");
-//        window.location.replace('corpus.html');
+//        OPrime.redirect('corpus.html');
           return;
         }else{
           window.appView = new UserAppView({model: appself});

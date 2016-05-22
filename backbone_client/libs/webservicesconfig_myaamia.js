@@ -182,7 +182,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
         OPrime
             .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
         connection = OPrime.servers[appropriateserver];
-        window.location.replace(OPrime.getCouchUrl(connection, "")
+        OPrime.redirect(OPrime.getCouchUrl(connection, "")
             + "/public-firstcorpus/_design/data/corpus.html");
       }
     } else {

@@ -817,7 +817,7 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback,
 
 OPrime.redirect = function(url) {
   alert('redirecting to ' + url);
-  window.location.redirect(url);
+  window.location.replace(url);
 }
 
 OPrime.sum = function(list) {

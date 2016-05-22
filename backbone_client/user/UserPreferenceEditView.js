@@ -353,7 +353,7 @@ define([
       this.model.set("preferredDashboardLayout", preferredTemplate);
       if (confirm("Would you like to load this new dashboard layout now?")) {
         window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
-          window.location.replace("corpus.html");
+          OPrime.redirect("corpus.html");
         });
       }
     },
@@ -361,7 +361,7 @@ define([
       this.model.set("showNewDatumAtTopOrBottomOfDataEntryArea", preferredLocation);
       if (confirm("Would you like to load this new dashboard layout now?")) {
         window.app.get("authentication").saveAndEncryptUserToLocalStorage(function(){
-          window.location.replace("corpus.html");
+          OPrime.redirect("corpus.html");
         });
       }
     },
