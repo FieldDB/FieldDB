@@ -189,7 +189,7 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
   audioTimeUpdateFunction: {
     configurable: true,
     value: function() {
-      console.log(this.currentTime);
+      console.log("Audio position: " + this.currentTime);
       if (!this.audioEvents) {
         return;
       }

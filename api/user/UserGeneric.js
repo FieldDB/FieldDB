@@ -213,8 +213,8 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
     this.corpora.unshift(corpus);
   };
 
-  this.save = function(user) {
-    console.log(JSON.stringify(user, null, 2));
+  this.save = function() {
+    // console.log(JSON.stringify(user, null, 2));
   };
 
   this.getGravatar = function(optionalEmail) {
