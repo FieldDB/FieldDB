@@ -17,7 +17,7 @@ var CORS = {
   },
   CLIENT_TIMEOUT: {
     CODE: 500,
-    MESSAGE: "The request to URL timed out, please try again."
+    MESSAGE: "The request to URL timed out, please try again. If this happens again, please report this."
   },
   CONNECTION_ABORTED: {
     CODE: 500,
