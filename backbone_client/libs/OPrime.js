@@ -1,5 +1,7 @@
 if ('undefined' === typeof navigator) {
-  var navigator = {"userAgent" : "Node.js"};
+  var navigator = {
+    "userAgent": "Node.js"
+  };
 }
 
 var OPrime = OPrime || {};
@@ -28,18 +30,18 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
   if (!connection) {
     connection = FieldDB.Connection(FieldDB.Connection.defaultConnection());
     connection.debug("Using the default connection", connection);
-  } else if (! (connection instanceof FieldDB.Connection)) {
+  } else if (!(connection instanceof FieldDB.Connection)) {
     connection = new FieldDB.Connection(connection);
   }
 
   var url = connection.corpusUrl;
-  if (couchdbcommand !== null && couchdbcommand !== undefined){
+  if (couchdbcommand !== null && couchdbcommand !== undefined) {
     url = url.replace("/" + connection.dbname, couchdbcommand);
   }
 
 
   //forcing production server
-  url = url.replace("corpusdev","corpus");
+  url = url.replace("corpusdev", "corpus");
 
   return url;
 };
@@ -77,10 +79,10 @@ OPrime.warn = function(message) {
  * Declare functions for PubSub
  */
 OPrime.publisher = {
-  subscribers : {
-    any : []
+  subscribers: {
+    any: []
   },
-  subscribe : function(type, fn, context) {
+  subscribe: function(type, fn, context) {
     type = type || 'any';
     fn = typeof fn === "function" ? fn : context[fn];
 
@@ -88,17 +90,17 @@ OPrime.publisher = {
       this.subscribers[type] = [];
     }
     this.subscribers[type].push({
-      fn : fn,
-      context : context || this
+      fn: fn,
+      context: context || this
     });
   },
-  unsubscribe : function(type, fn, context) {
+  unsubscribe: function(type, fn, context) {
     this.visitSubscribers('unsubscribe', type, fn, context);
   },
-  publish : function(type, publication) {
+  publish: function(type, publication) {
     this.visitSubscribers('publish', type, publication);
   },
-  visitSubscribers : function(action, type, arg, context) {
+  visitSubscribers: function(action, type, arg, context) {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
@@ -131,15 +133,14 @@ OPrime.publisher = {
         try {
           if (!subscribers[i].context) {
             OPrime
-                .debug("This subscriber has no context. should we remove it? "
-                    + i);
+              .debug("This subscriber has no context. should we remove it? " + i);
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
             if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
             if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
-                subscribers[i].context);
+              subscribers[i].context);
           }
         } catch (e) {
           if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
@@ -151,13 +152,12 @@ OPrime.publisher = {
 OPrime.makePublisher = function(o) {
   var i;
   for (i in OPrime.publisher) {
-    if (OPrime.publisher.hasOwnProperty(i)
-        && typeof OPrime.publisher[i] === "function") {
+    if (OPrime.publisher.hasOwnProperty(i) && typeof OPrime.publisher[i] === "function") {
       o[i] = OPrime.publisher[i];
     }
   }
   o.subscribers = {
-    any : []
+    any: []
   };
 };
 
@@ -224,7 +224,7 @@ OPrime.isTouchDBApp = function() {
   return window.location.href.indexOf("localhost:8128") > -1;
 };
 
-OPrime.isBackboneCouchDBApp = function(){
+OPrime.isBackboneCouchDBApp = function() {
   return true;
 };
 /**
@@ -291,91 +291,91 @@ OPrime.escapeLatexChars = function(input) {
 // were created using
 // JSON.stringify(new Date())
 OPrime.prettyDate = function(input) {
-    if (!input) {
-      return '--';
-    }
-    if (input.replace) {
-      input = input.replace(/\"/g, '');
-    }
-    if (input.trim) {
-      input = input.trim();
-    }
-    if (!input) {
-      return '--';
-    }
-    // For unknown historical reasons in the spreadsheet app
-    // there were some dates that were unknown and were set
-    // to a random? date like this:
-    if (input === '2000-09-06T16:31:30.988Z' || (input >= new Date('2000-09-06T16:31:30.000Z') && input <= new Date('2000-09-06T16:31:31.000Z'))) {
-      return 'N/A';
-    }
-    if (!input.toLocaleDateString) {
-      input = new Date(input);
-    }
+  if (!input) {
+    return '--';
+  }
+  if (input.replace) {
+    input = input.replace(/\"/g, '');
+  }
+  if (input.trim) {
+    input = input.trim();
+  }
+  if (!input) {
+    return '--';
+  }
+  // For unknown historical reasons in the spreadsheet app
+  // there were some dates that were unknown and were set
+  // to a random? date like this:
+  if (input === '2000-09-06T16:31:30.988Z' || (input >= new Date('2000-09-06T16:31:30.000Z') && input <= new Date('2000-09-06T16:31:31.000Z'))) {
+    return 'N/A';
+  }
+  if (!input.toLocaleDateString) {
+    input = new Date(input);
+  }
 
-    var greenwichdate = new Date();
-    var minuteDiff = ((greenwichdate.getTime() - input.getTime()) / 1000);
-    var dayDiff = Math.floor(minuteDiff / 86400);
+  var greenwichdate = new Date();
+  var minuteDiff = ((greenwichdate.getTime() - input.getTime()) / 1000);
+  var dayDiff = Math.floor(minuteDiff / 86400);
 
-    if (isNaN(dayDiff) || dayDiff < 0) {
-      return '--';
-    }
-    if (dayDiff >= 1430) {
-      return (Math.round(dayDiff / 365) + ' years ago');
-    }
-    if (dayDiff >= 1278) {
-      return '3.5 years ago';
-    }
-    if (dayDiff >= 1065) {
-      return '3 years ago';
-    }
-    if (dayDiff >= 913) {
-      return '2.5 years ago';
-    }
-    if (dayDiff >= 730) {
-      return '2 years ago';
-    }
-    if (dayDiff >= 540) {
-      return '1.5 years ago';
-    }
-    if (dayDiff >= 50) {
-      return (Math.round(dayDiff / 31) + ' months ago');
-    }
-    if (dayDiff >= 48) {
-      return '1.5 months ago';
-    }
-    if (dayDiff >= 40) {
-      return '1 month ago';
-    }
-    if (dayDiff >= 16) {
-      return (Math.round(dayDiff / 7) + ' weeks ago').replace('1 weeks', '1 week');
-    }
-    if (dayDiff >= 2) {
-      return (Math.round(dayDiff / 1) + ' days ago').replace('1 days', '1 day');
-    }
-    if (dayDiff >= 1) {
-      return 'Yesterday';
-    }
+  if (isNaN(dayDiff) || dayDiff < 0) {
+    return '--';
+  }
+  if (dayDiff >= 1430) {
+    return (Math.round(dayDiff / 365) + ' years ago');
+  }
+  if (dayDiff >= 1278) {
+    return '3.5 years ago';
+  }
+  if (dayDiff >= 1065) {
+    return '3 years ago';
+  }
+  if (dayDiff >= 913) {
+    return '2.5 years ago';
+  }
+  if (dayDiff >= 730) {
+    return '2 years ago';
+  }
+  if (dayDiff >= 540) {
+    return '1.5 years ago';
+  }
+  if (dayDiff >= 50) {
+    return (Math.round(dayDiff / 31) + ' months ago');
+  }
+  if (dayDiff >= 48) {
+    return '1.5 months ago';
+  }
+  if (dayDiff >= 40) {
+    return '1 month ago';
+  }
+  if (dayDiff >= 16) {
+    return (Math.round(dayDiff / 7) + ' weeks ago').replace('1 weeks', '1 week');
+  }
+  if (dayDiff >= 2) {
+    return (Math.round(dayDiff / 1) + ' days ago').replace('1 days', '1 day');
+  }
+  if (dayDiff >= 1) {
+    return 'Yesterday';
+  }
 
-    if (minuteDiff >= 5000) {
-      return (Math.floor(minuteDiff / 3600) + ' hours ago').replace('1 hours', '1.5 hours');
-    }
+  if (minuteDiff >= 5000) {
+    return (Math.floor(minuteDiff / 3600) + ' hours ago').replace('1 hours', '1.5 hours');
+  }
 
-    if (minuteDiff >= 4000) {
-      return '1 hour ago';
-    }
-    //  if(minuteDiff >= 7200 ){
-    //    Math.floor(minuteDiff / 3600) + ' 1 hour ago';
-    //  }
-    if (minuteDiff >= 70) {
-      return Math.floor(minuteDiff / 60) + ' minutes ago';
-    }
-    if (minuteDiff >= 120) {
-      return '1 minute ago';
-    }
-    return 'just now';
+  if (minuteDiff >= 4000) {
+    return '1 hour ago';
+  }
+  //  if(minuteDiff >= 7200 ){
+  //    Math.floor(minuteDiff / 3600) + ' 1 hour ago';
+  //  }
+  if (minuteDiff >= 70) {
+    return Math.floor(minuteDiff / 60) + ' minutes ago';
+  }
+  if (minuteDiff >= 120) {
+    return '1 minute ago';
+  }
+  return 'just now';
 
-  };
+};
 OPrime.prettyTimestamp = OPrime.prettyDate;
 /*
  * Audio functions
@@ -395,7 +395,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   }
   this.hub.unsubscribe("playbackCompleted", null, callingcontextself);
   this.hub.subscribe("playbackCompleted", audioOffsetCallback,
-      callingcontextself);
+    callingcontextself);
 
   if (this.isAndroidApp()) {
     this.debug("Playing Audio via Android:" + audiourl + ":");
@@ -403,10 +403,10 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   } else {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
-        OPrime.audioEndListener);
+      OPrime.audioEndListener);
     if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
-        OPrime.audioEndListener);
+      OPrime.audioEndListener);
     document.getElementById(divid).play();
   }
 }
@@ -430,7 +430,7 @@ OPrime.pauseAudioFile = function(divid, callingcontext) {
     document.getElementById(divid).pause();
     if (document.getElementById(divid).currentTime > 0.05) {
       document.getElementById(divid).currentTime = document
-          .getElementById(divid).currentTime - 0.05;
+        .getElementById(divid).currentTime - 0.05;
     }
 
   }
@@ -468,7 +468,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
 
     var audioElement = document.getElementById(divid);
-    if(!audioElement){
+    if (!audioElement) {
       console.log("Audio element does not exist.");
       return;
     }
@@ -489,18 +489,18 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
       }
     });
 
-    window.actuallyPlayAudio = function(){
+    window.actuallyPlayAudio = function() {
       audioElementToPlaySelf.removeEventListener('canplaythrough', window.actuallyPlayAudio);
       OPrime.playingInterval = true;
       audioElementToPlaySelf.currentTime = startTimeSelf;
-      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime +", supposed to be "+startTimeSelf);
+      console.log("Cueing audio to " + audioElementToPlaySelf.currentTime + ", supposed to be " + startTimeSelf);
       // audioElementToPlaySelf.load();
       audioElementToPlaySelf.play();
     };
     // if(window.audioEndListener){
     //   window.audioEndListener();
     // }
-    window.audioEndListener = function(){
+    window.audioEndListener = function() {
       OPrime.playingInterval = false;
       audioElementToPlaySelf.removeEventListener('ended', window.audioEndListener);
       audioElementToPlaySelf.removeEventListener('timeupdate', window.audioTimeUpdateListener);
@@ -528,13 +528,13 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     }
     audioElement.addEventListener('ended', window.audioEndListener);
     audioElement.addEventListener('canplaythrough', window.actuallyPlayAudio);
-    try{
+    try {
       // audioElement.currentTime = startime;
       // console.log("Cueing audio to " + audioElement.currentTime);
       audioElement.load();
       // audioElement.currentTime = startime;
       // console.log("Cueing audio again to " + audioElement.currentTime);
-    } catch(e){
+    } catch (e) {
       console.log(e);
     }
 
@@ -542,7 +542,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
 
 }
 OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
-    callbackRecordingCompleted, callingcontext) {
+  callbackRecordingCompleted, callingcontext) {
   if (!callingcontext) {
     callingcontext = window;
   }
@@ -554,12 +554,12 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingCompleted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingCompleted", null, callingcontextself);
   this.hub.subscribe("audioRecordingCompleted", callbackRecordingCompleted,
-      callingcontextself);
+    callingcontextself);
 
   /*
    * verify started callback and subscribe it to
@@ -569,13 +569,13 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingStarted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.subscribe("audioRecordingSucessfullyStarted",
-      callbackRecordingStarted, callingcontextself);
+    callbackRecordingStarted, callingcontextself);
 
   /* start the recording */
   if (this.isAndroidApp()) {
@@ -586,13 +586,13 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   } else {
     this.debug("Recording Audio via HTML5: " + resultfilename);
     OPrime.bug("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that it was sucessful")
-    // fake publish it was sucessfully started
+      // fake publish it was sucessfully started
     this.hub.publish('audioRecordingSucessfullyStarted', resultfilename);
   }
 
 };
 OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
-    callingcontext) {
+  callingcontext) {
 
   /*
    * verify started callback and subscribe it to
@@ -603,13 +603,13 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
     callbackRecordingStopped = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.subscribe("audioRecordingSucessfullyStopped",
-      callbackRecordingStopped, callingcontextself);
+    callbackRecordingStopped, callingcontextself);
 
   /* start the recording */
   if (this.isAndroidApp()) {
@@ -631,7 +631,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
  * Camera functions
  */
 OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
-    callbackPictureCaptureCompleted, callingcontext) {
+  callbackPictureCaptureCompleted, callingcontext) {
   if (!callingcontext) {
     callingcontext = window;
   }
@@ -643,14 +643,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
     callbackPictureCaptureStarted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   /*
@@ -658,14 +658,14 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
    * times on teh same item, only fire the last event
    */
   this.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
-      callingcontextself);
+    callingcontextself);
   /* subscribe the caller's functions to the channels */
   this.hub.subscribe("pictureCaptureSucessfullyStarted",
-      callbackPictureCaptureStarted, callingcontextself);
+    callbackPictureCaptureStarted, callingcontextself);
   this.hub.subscribe("pictureCaptureSucessfullyCompleted",
-      callbackPictureCaptureCompleted, callingcontextself);
+    callbackPictureCaptureCompleted, callingcontextself);
 
   /* start the picture taking */
   if (this.isAndroidApp()) {
@@ -685,14 +685,12 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted,
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
-    + navigator.userAgent);
+if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is " + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
   if (!Android.isD()) {
     this.debugMode = false;
-    this.debug = function() {
-    };
+    this.debug = function() {};
   } else {
     this.debugMode = true;
   }
@@ -727,9 +725,9 @@ OPrime.getHardwareInfo = function(callingcontextself, callback) {
     Android.getHardwareDetails();
   } else {
     OPrime.hub.publish('hardwareDetails', {
-      name : 'Browser',
-      model : navigator.userAgent,
-      identifier : 'TODOgetMACAddress'
+      name: 'Browser',
+      model: navigator.userAgent,
+      identifier: 'TODOgetMACAddress'
     });
   }
 };
@@ -741,8 +739,7 @@ OPrime.useUnsecureCouchDB = function() {
      */
     return true;
   }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork()
-      && window.location.origin.indexOf("chrome-extension") != 0) {
+  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork() && window.location.origin.indexOf("chrome-extension") != 0) {
     return true;
   }
   return false;
@@ -752,8 +749,8 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback,
   if (readycallback) {
     OPrime.checkToSeeIfCouchAppIsReadyreadycallback = readycallback;
   }
-  if(!failcallback){
-    failcallback = function(){
+  if (!failcallback) {
+    failcallback = function() {
       OPrime.checkToSeeIfCouchAppIsReady(urlIsCouchAppReady, readycallback, failcallback);
     }
   }
@@ -818,6 +815,11 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback,
   });
 };
 
+OPrime.redirect = function(url) {
+  alert('redirecting to ' + url);
+  window.location.redirect(url);
+}
+
 OPrime.sum = function(list) {
   var result = 0;
   for (value in list) {
@@ -833,7 +835,7 @@ OPrime.mean = function(list) {
 OPrime.standardDeviation = function(list) {
   var totalVariance = 0;
   var mean = OPrime.mean(list);
-  for ( var i in list) {
+  for (var i in list) {
     totalVariance += Math.pow(list[i] - mean, 2);
   }
   return Math.sqrt(totalVariance / list.length);
