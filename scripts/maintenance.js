@@ -1136,7 +1136,8 @@ var MAINTAINENCE = {
     turnOnReplication = function(dbnameToReplicate, dbnames) {
       var replicationOptions = {
         source: source + "/" + dbnameToReplicate,
-        target: target + "/" + dbnameToReplicate,
+        // target: target + "/" + dbnameToReplicate,
+        target: "http://admin:none@localhost/" + dbnameToReplicate,
         // create_target: true,
         // continuous: true
       };
@@ -1178,14 +1179,14 @@ var MAINTAINENCE = {
       }
 
       if (dbname.indexOf("phophlo") > -1 || dbname.indexOf("fr-ca") > -1) {
-        return turnOnReplicationAndLoop(dbnames);
+        // return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a phophlo user");
       } else if (dbname.indexOf("anonymouskartuli") > -1 || dbname.indexOf("anonymous1") > -1) {
         return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a learn x user");
       } else if (dbname.indexOf("nemo") === 0 || dbname.indexOf("gretchen") === 0 || dbname.indexOf("marquisalx") === 0) {
         console.log("turning on continuous replication for a dev");
-        return turnOnReplicationAndLoop(dbnames);
+        // return turnOnReplicationAndLoop(dbnames);
       } else if (dbname.search(/elise[0-9]+/) === 0 || dbname.indexOf("test") === 0 || dbname.indexOf("tobin") === 0) {
         return turnOnReplicationAndLoop(dbnames);
         console.log("turning on continuous replication for a beta tester");
@@ -1195,7 +1196,7 @@ var MAINTAINENCE = {
           return turnOnReplicationAndLoop(dbnames);
           throw "Should always skip";
         } else if (dbname.indexOf("-") === -1) {
-          return turnOnReplicationAndLoop(dbnames);
+          // return turnOnReplicationAndLoop(dbnames);
           if (!confirm('Are you sure you really wan to run this!')) {
             return turnOnReplicationAndLoop(dbnames);
           }
@@ -1205,7 +1206,7 @@ var MAINTAINENCE = {
         }
       }
 
-      if (!confirm('Are you sure you really wan to run this!')) {
+      if (!confirm('Are you sure you really want to run this!')) {
         throw "stopped";
       }
 
