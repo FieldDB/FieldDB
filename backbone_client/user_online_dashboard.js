@@ -114,8 +114,12 @@ require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
     // Handle McGill server which runs out of a virtual directory
     if (dbname == "corpus") {
       dbname = pieces[1];
+    } else if (dbname.indexOf("html") > -1) {
+      dbname = "";
     }
-    Backbone.couch_connector.config.db_name = dbname;
+    if (dbname) {
+      Backbone.couch_connector.config.db_name = dbname;
+    }
   } catch (e) {
     if (OPrime.debugMode)
       OPrime.debug("Couldn't set the databse name off of the url.");
