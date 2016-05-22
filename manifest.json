@@ -1,6 +1,6 @@
 {
   "name": "FieldDB Tests or Slides",
-  "version": "3.42.08",
+  "version": "4.4.22",
   "description": "A way for the developers to test the FieldDB Clients",
   "app": {
     "launch": {
