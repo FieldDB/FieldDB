@@ -83,6 +83,13 @@ define([
      */
     saveAndInterConnectInApp : function(successcallback, failurecallback){
       if (OPrime.debugMode) OPrime.debug("Saving the UserMask");
+
+      // turning off save of usermasks
+      if(!this.get("dbname")){
+        console.warn('Not saving usermaks, db is not set yet');
+        return;
+      }
+
       var self = this;
 
         if(OPrime.isBackboneCouchDBApp()){
