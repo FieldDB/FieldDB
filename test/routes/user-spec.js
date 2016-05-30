@@ -2,7 +2,7 @@ var getUserMask = require("./../../routes/user").getUserMask;
 var specIsRunningTooLong = 5000;
 
 
-var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
+var deploy_target = process.env.NODE_ENV || "local";
 var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
 var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
 

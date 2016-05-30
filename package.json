@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "body-parser": "^1.13.3",
+    "config": "^1.25.1",
     "consolidate": "^0.13.1",
     "errorhandler": "^1.4.2",
     "express": "^4.13.3",

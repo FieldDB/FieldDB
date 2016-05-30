@@ -11,7 +11,7 @@ var consolidate = require("consolidate");
 var path = require("path");
 var fs = require("fs");
 
-var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
+var deploy_target = process.env.NODE_ENV || "local";
 // deploy_target = "devserver";
 var node_config = require("./lib/nodeconfig_" + deploy_target);
 var couch_keys = require("./lib/couchkeys_" + deploy_target);
@@ -205,8 +205,8 @@ if ("production" !== app.get("env")) {
 }
 
 
-console.log("process.env.NODE_DEPLOY_TARGET " + process.env.NODE_DEPLOY_TARGET);
-if (process.env.NODE_DEPLOY_TARGET === "production") {
+console.log("process.env.NODE_ENV " + process.env.NODE_ENV);
+if (process.env.NODE_ENV === "production") {
   app.listen(node_config.port);
   console.log("Running in production mode behind an Nginx proxy, Listening on http port %d", node_config.port);
 } else {

@@ -3,7 +3,7 @@ var specIsRunningTooLong = 5000;
 var LINGLLAMA_ACTIVITY_SIZE = 41;
 var CORS = require("fielddb/api/CORSNode").CORS;
 
-var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
+var deploy_target = process.env.NODE_ENV || "local";
 var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
 var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
 
@@ -27,7 +27,7 @@ var nano = require("nano")({
 });
 
 var SERVICE_URL = "https://localhost:";
-if (process.env.NODE_DEPLOY_TARGET === "production") {
+if (process.env.NODE_ENV === "production") {
   SERVICE_URL = "http://localhost:";
 }
 SERVICE_URL = SERVICE_URL + node_config.port;

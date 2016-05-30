@@ -79,7 +79,7 @@ Production mode is controlled by an environment variable. Here is how you would 
 
 ```bash
 $ echo FIELDDB_HOME=/home/fielddb/fielddbhome >> ~/.bashrc
-$ echo NODE_DEPLOY_TARGET=production >> ~/.bashrc
+$ echo NODE_ENV=production >> ~/.bashrc
 ```
 
 Finally turn on the service in a way that it will restart even in the case of errors:
