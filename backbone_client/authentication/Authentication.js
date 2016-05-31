@@ -1,16 +1,16 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "confidentiality_encryption/Confidential",
   "user/User",
   "user/UserMask",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Confidential,
   User,
   UserMask
 ) {
-  var Authentication = Backbone.Model.extend( /** @lends Authentication.prototype */ {
+  var Authentication = FieldDBBackboneModel.extend( /** @lends Authentication.prototype */ {
     /**
      * @class The Authentication Model handles login and logout and
      *        authentication locally or remotely. *

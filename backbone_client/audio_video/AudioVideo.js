@@ -1,9 +1,9 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var AudioVideo = Backbone.Model.extend( /** @lends AudioVideo.prototype */ {
+  var AudioVideo = FieldDBBackboneModel.extend( /** @lends AudioVideo.prototype */ {
     /**
      * @class AudioVideo models allows a user to add audio and video files.
      *

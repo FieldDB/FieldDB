@@ -1,10 +1,10 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "CryptoJS"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var Confidential = Backbone.Model.extend( /** @lends Confidential.prototype */ {
+  var Confidential = FieldDBBackboneModel.extend( /** @lends Confidential.prototype */ {
     /**
      * @class Confidential makes it possible to generate pass phrases (one per
      *        corpus) to encrypt and decrypt confidential data points. The

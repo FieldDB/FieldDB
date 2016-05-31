@@ -1,17 +1,17 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "audio_video/AudioVideos",
   "datum/Datum",
   "comment/Comment",
   "comment/Comments"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   AudioVideos,
   Datum,
   Comment,
   Comments
 ) {
-  var DataList = Backbone.Model.extend( /** @lends DataList.prototype */ {
+  var DataList = FieldDBBackboneModel.extend( /** @lends DataList.prototype */ {
     /**
      * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
      *

@@ -1,6 +1,6 @@
 define([
   "underscore",
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "bootstrap",
   "libs/backbone_couchdb/backbone-couchdb",
   "libs/compiled_handlebars",
@@ -15,7 +15,7 @@ define([
   "OPrime"
 ], function(
   _,
-  Backbone,
+  FieldDBBackboneModel,
   bootstrap,
   backbonecouch,
   Handlebars,
@@ -29,7 +29,7 @@ define([
   LocaleData
 
 ) {
-  var UserApp = Backbone.Model.extend( /** @lends UserApp.prototype */ {
+  var UserApp = FieldDBBackboneModel.extend( /** @lends UserApp.prototype */ {
     /**
      * @class The UserApp handles the loading of the user page (login, welcome etc).
      *

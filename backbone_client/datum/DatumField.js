@@ -1,9 +1,9 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var DatumField = Backbone.Model.extend( /** @lends DatumField.prototype */ {
+  var DatumField = FieldDBBackboneModel.extend( /** @lends DatumField.prototype */ {
     /**
      * @class The datum fields are the fields in the datum and session models.
      *        They can be freely added and should show up in the datum view

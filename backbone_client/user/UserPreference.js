@@ -1,13 +1,13 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "insert_unicode/InsertUnicode",
   "insert_unicode/InsertUnicodes"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   InsertUnicode,
   InsertUnicodes
 ) {
-  var UserPreference = Backbone.Model.extend( /** @lends UserPreference.prototype */ {
+  var UserPreference = FieldDBBackboneModel.extend( /** @lends UserPreference.prototype */ {
     /**
      * @class Hold preferences for users like the skin of the app
      *

@@ -1,9 +1,9 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var HotKey = Backbone.Model.extend( /** @lends HotKey.prototype */ {
+  var HotKey = FieldDBBackboneModel.extend( /** @lends HotKey.prototype */ {
     /**
      * @class A HotKey is a keyboard shortcut that uses one key (or a
      *        combination thereof) which allows users to execute a command

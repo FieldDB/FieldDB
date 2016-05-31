@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "hotkey/HotKey",
   "permission/Permission",
   "user/UserPreference",
@@ -7,13 +7,13 @@ define([
   "CryptoJS",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   HotKey,
   Permission,
   UserPreference,
   UserMask
 ) {
-  var UserGeneric = Backbone.Model.extend( /** @lends UserGeneric.prototype */ {
+  var UserGeneric = FieldDBBackboneModel.extend( /** @lends UserGeneric.prototype */ {
     /**
      * @class A generic user has a repository and permission groups
      *        (read, write, admin). It can not login.

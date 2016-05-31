@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "user/UserMask"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   UserMask
 ) {
-  var DatumState = Backbone.Model.extend( /** @lends DatumState.prototype */ {
+  var DatumState = FieldDBBackboneModel.extend( /** @lends DatumState.prototype */ {
     /**
      * @class The datum state lets the fieldlinguists assign their own state
      *        categories to data (ie check with consultant, check with x,

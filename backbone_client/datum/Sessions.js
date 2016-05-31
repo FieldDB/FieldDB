@@ -1,12 +1,12 @@
 /* globals OPrime, window, define */
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "datum/Session"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   Session
 ) {
-  var Sessions = Backbone.Collection.extend( /** @lends Sessions.prototype */ {
+  var Sessions = FieldDBBackboneCollection.extend( /** @lends Sessions.prototype */ {
     /**
      * @class A collection of Sessions Probably will be used in the fullscreen corpus view.
      *

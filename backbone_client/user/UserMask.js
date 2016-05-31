@@ -1,9 +1,9 @@
 define([
-  "backbone", "CryptoJS"
+  "libs/FieldDBBackboneModel", "CryptoJS"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var UserMask = Backbone.Model.extend( /** @lends UserMask.prototype */ {
+  var UserMask = FieldDBBackboneModel.extend( /** @lends UserMask.prototype */ {
     /**
      * @class A mask of a user which can be saved along with the corpus. It is
      *        generally just a username and gravatar but could be more depending

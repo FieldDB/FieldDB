@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "audio_video/AudioVideos",
   "comment/Comment",
   "comment/Comments",
@@ -13,7 +13,7 @@ define([
   "xml2json",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   AudioVideos,
   Comment,
   Comments,
@@ -26,7 +26,7 @@ define([
   Session,
   X2JS
 ) {
-  var Datum = Backbone.Model.extend( /** @lends Datum.prototype */ {
+  var Datum = FieldDBBackboneModel.extend( /** @lends Datum.prototype */ {
     /**
      * @class The Datum widget is the place where all linguistic data is
      *        entered; one at a time.

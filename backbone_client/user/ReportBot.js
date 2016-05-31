@@ -1,5 +1,5 @@
-define(["backbone"], function(Backbone) {
-  var ReportBot = Backbone.Model.extend( /** @lends ReportBot.prototype */ {
+define(["libs/FieldDBBackboneModel"], function(FieldDBBackboneModel) {
+  var ReportBot = FieldDBBackboneModel.extend( /** @lends ReportBot.prototype */ {
     /**
      * TODO redo description
      * @class A bot is a type of user. It has the same information as a user, except it isnt a human, its a "bot."
