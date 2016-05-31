@@ -41,6 +41,5 @@ Comments.prototype = Object.create(Collection.prototype, /** @lends Comments.pro
     }
   }
 
-
 });
 exports.Comments = Comments;

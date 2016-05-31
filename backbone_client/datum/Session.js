@@ -1,25 +1,23 @@
 define([
-    "backbone",
-    "comment/Comment",
-    "comment/Comments",
-    "datum/DatumField",
-    "datum/DatumFields",
-    "user/Consultant",
-    "user/Team",
-    "user/User",
+  "backbone",
+  "comment/Comment",
+  "comment/Comments",
+  "datum/DatumField",
+  "datum/DatumFields",
+  "user/Consultant",
+  "user/Team",
+  "user/User",
 ], function(
-    Backbone,
-    Comment,
-    Comments,
-    DatumField,
-    DatumFields,
-    Consultant,
-    Team,
-    User
+  Backbone,
+  Comment,
+  Comments,
+  DatumField,
+  DatumFields,
+  Consultant,
+  Team,
+  User
 ) {
-  var Session = Backbone.Model.extend(
-  /** @lends Session.prototype */
-  {
+  var Session = Backbone.Model.extend( /** @lends Session.prototype */ {
     /**
      * @class The Session widget is the place where information which is generally
      * shared by many datum (due to being part of an elicitiation session)
@@ -98,41 +96,53 @@ define([
         this.set("comments", new Comments());
       }
 
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       // If there are no comments, give it a new one
       if (!this.get("comments")) {
         this.set("comments", new Comments());
       }
-      if(!this.get("fields") || this.get("fields").length == 0){
-        if(window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
+      if (!this.get("fields") || this.get("fields").length == 0) {
+        if (window.app && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")) {
           this.set("fields", window.app.get("corpus").get("sessionFields").clone());
-        }else{
+        } else {
           if (OPrime.debugMode) OPrime.debug("Not creating sessions fields");
         }
       }
-      this.get("fields").where({label: "participants"})[0].set("mask", app.get("authentication").get("userPrivate").get("username") );
-      this.get("fields").where({label: "source"})[0].set("mask", "XY");
-      this.get("fields").where({label: "goal"})[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
-      this.get("fields").where({label: "DateSessionEntered"})[0].set("mask", new Date());
-      this.get("fields").where({label: "dateElicited"})[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
+      this.get("fields").where({
+        label: "participants"
+      })[0].set("mask", app.get("authentication").get("userPrivate").get("username"));
+      this.get("fields").where({
+        label: "source"
+      })[0].set("mask", "XY");
+      this.get("fields").where({
+        label: "goal"
+      })[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
+      this.get("fields").where({
+        label: "DateSessionEntered"
+      })[0].set("mask", new Date());
+      this.get("fields").where({
+        label: "dateElicited"
+      })[0].set("mask", "Change this to a time period or date for example: Spring 2013 or Day 2 Ling 489 or Nov 23 2012.");
 
     },
-    setSource: function(source){
-      if(source == undefined || source == null){
+    setSource: function(source) {
+      if (source == undefined || source == null) {
         return;
       }
-      this.get("fields").where({label: "source"})[0].set("mask", source.trim());
+      this.get("fields").where({
+        label: "source"
+      })[0].set("mask", source.trim());
     },
-    getGoal : function(){
+    getGoal: function() {
       var goal = "";
       try {
         goal = this.get("fields").where({
-          label : "goal"
+          label: "goal"
         })[0].get("mask");
       } catch (e) {
         OPrime.debug("This session doesnt seem to have a goal.");
@@ -146,15 +156,15 @@ define([
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/sessions",
+    url: "/sessions",
 
     // Internal models: used by the parse function
-    internalModels : {
-      fields : DatumFields,
-      comments : Comments
+    internalModels: {
+      fields: DatumFields,
+      comments: Comments
     },
-    originalParse : Backbone.Model.prototype.parse,
-    parse: function(originalModel){
+    originalParse: Backbone.Model.prototype.parse,
+    parse: function(originalModel) {
       /* if this is just a couchdb save result, dont process it */
       if (originalModel.ok) {
         return this.originalParse.apply(this, [originalModel]);
@@ -164,14 +174,14 @@ define([
 
       OPrime.debug("Edit this function to update session to the latest schema.");
 
-      if(window.app.get("corpus") && window.app.get("corpus").get("sessionFields")){
+      if (window.app.get("corpus") && window.app.get("corpus").get("sessionFields")) {
         /* Add any new corpus fields to this session so they can be edited */
         var originalFieldLabels = _.pluck(originalModel.fields, "label");
         window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
         var corpusFields = window.corpusfieldsforSessionParse;
-        if(corpusFields.length > originalFieldLabels.length){
-          for(var field in corpusFields){
-            if(originalFieldLabels.indexOf(corpusFields[field].label) === -1){
+        if (corpusFields.length > originalFieldLabels.length) {
+          for (var field in corpusFields) {
+            if (originalFieldLabels.indexOf(corpusFields[field].label) === -1) {
               var corpusFieldClone = JSON.parse(JSON.stringify(corpusFields[field]));
               OPrime.debug("Adding field to this session: " + corpusFieldClone.label);
               corpusFieldClone.mask = "";
@@ -199,39 +209,38 @@ define([
       return this.originalParse.apply(this, [originalModel]);
     },
 
-
-  //This the function called by the add button, it adds a new comment state both to the collection and the model
-    insertNewComment : function(commentstring) {
+    //This the function called by the add button, it adds a new comment state both to the collection and the model
+    insertNewComment: function(commentstring) {
       var m = new Comment({
-        "text" : commentstring,
-     });
+        "text": commentstring,
+      });
 
       this.get("comments").add(m);
       window.appView.addUnsavedDoc(this.id);
 
-      var goal = this.get("fields").where({label: "goal"})[0].get("mask");
+      var goal = this.get("fields").where({
+        label: "goal"
+      })[0].get("mask");
 
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
+      window.app.addActivity({
+        verb: "commented",
+        verbicon: "icon-comment",
+        directobjecticon: "",
+        directobject: "'" + commentstring + "'",
+        indirectobject: "on <a href='#data/" + this.id + "'><i class='icon-calendar'></i> " + goal + "</a>",
+        teamOrPersonal: "team",
+        context: " via Offline App."
+      });
 
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <a href='#data/"+this.id+"'><i class='icon-calendar'></i> "+goal+"</a>",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
+      window.app.addActivity({
+        verb: "commented",
+        verbicon: "icon-comment",
+        directobjecticon: "",
+        directobject: "'" + commentstring + "'",
+        indirectobject: "on <a href='#data/" + this.id + "'><i class='icon-calendar'></i> " + goal + "</a>",
+        teamOrPersonal: "personal",
+        context: " via Offline App."
+      });
     },
 
     /**
@@ -243,14 +252,14 @@ define([
      * Also remove it from the view so the user cant see it.
      *
      */
-    putInTrash : function() {
+    putInTrash: function() {
       this.set("trashed", "deleted" + Date.now());
       var whichSessionToUse = 0;
       if (window.app.get("corpus").sessions.models[whichSessionToUse].id == this.id) {
         whichSessionToUse = 1;
       }
       var self = this;
-      this.saveAndInterConnectInApp(function(){
+      this.saveAndInterConnectInApp(function() {
         window.app.addActivity({
           verb: "deleted",
           verbicon: "icon-trash",
@@ -271,24 +280,25 @@ define([
           context: " via Offline App."
         });
 
-
         window.app.get("corpus").sessions.models[whichSessionToUse]
-        .setAsCurrentSession(function() {
-          if (window.appView) {
-            /* TODO test this */
-            window.app.get("corpus").sessions = null;
-            window.appView.currentCorpusReadView.model
-            .makeSureCorpusHasASession(function() {
-              window.appView.currentCorpusEditView
-              .changeViewsOfInternalModels();
-//              window.appView.currentCorpusReadView.render();
-              window.appView.currentCorpusReadView
-              .changeViewsOfInternalModels();
-//              window.appView.currentCorpusReadView.render();
-              window.app.router.navigate("render/true", {trigger: true});
-            });
-          }
-        });
+          .setAsCurrentSession(function() {
+            if (window.appView) {
+              /* TODO test this */
+              window.app.get("corpus").sessions = null;
+              window.appView.currentCorpusReadView.model
+                .makeSureCorpusHasASession(function() {
+                  window.appView.currentCorpusEditView
+                    .changeViewsOfInternalModels();
+                  //              window.appView.currentCorpusReadView.render();
+                  window.appView.currentCorpusReadView
+                    .changeViewsOfInternalModels();
+                  //              window.appView.currentCorpusReadView.render();
+                  window.app.router.navigate("render/true", {
+                    trigger: true
+                  });
+                });
+            }
+          });
       });
     },
     /**
@@ -303,100 +313,100 @@ define([
      * @param successcallback
      * @param failurecallback
      */
-    saveAndInterConnectInApp : function(successcallback, failurecallback){
+    saveAndInterConnectInApp: function(successcallback, failurecallback) {
       if (OPrime.debugMode) OPrime.debug("Saving the Session");
       var self = this;
       var newModel = true;
-      if(this.id){
+      if (this.id) {
         newModel = false;
-      }else{
-        this.set("dateCreated",JSON.stringify(new Date()));
+      } else {
+        this.set("dateCreated", JSON.stringify(new Date()));
       }
       //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if(window.app.get("corpus").get("dbname") != this.get("dbname")){
-        if(typeof failurecallback == "function"){
+      if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
+        if (typeof failurecallback == "function") {
           failurecallback();
-        }else{
-          alert('Session save error. I cant save this session in this corpus, it belongs to another corpus. ' );
+        } else {
+          alert('Session save error. I cant save this session in this corpus, it belongs to another corpus. ');
         }
         return;
       }
       var oldrev = this.get("_rev");
       this.set("dateModified", JSON.stringify(new Date()));
       this.set("timestamp", Date.now());
-        self.save(null, {
-          success : function(model, response) {
-            if (OPrime.debugMode) OPrime.debug('Session save success');
-            var goal = model.get("fields").where({label: "goal"})[0].get("mask");
-            var differences = "#diff/oldrev/"+oldrev+"/newrev/"+response._rev;
-            //TODO add privacy for session goals in corpus
-//            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
-//              goal = "";
-//              differences = "";
-//            }
-            if(window.appView){
-              window.appView.toastUser("Sucessfully saved session: "+ goal,"alert-success","Saved!");
-              window.appView.addSavedDoc(model.id);
-            }
-            var verb = "modified";
-            verbicon = "icon-pencil";
-            if(newModel){
-              verb = "added";
-              verbicon = "icon-plus";
-            }
-            window.app.addActivity(
-                {
-                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                  verbicon : verbicon,
-                  directobjecticon : "icon-calendar",
-                  directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
-                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
-                  teamOrPersonal : "team",
-                  context : " via Offline App."
-                });
-
-            window.app.addActivity(
-                {
-                  verb : "<a href='"+differences+"'>"+verb+"</a> ",
-                  verbicon : verbicon,
-                  directobjecticon : "icon-calendar",
-                  directobject : "<a href='#session/"+model.id+"'>"+goal+"</a> ",
-                  indirectobject : "in <a href='#corpus/"+window.app.get("corpus").id+"'>"+window.app.get("corpus").get('title')+"</a>",
-                  teamOrPersonal : "personal",
-                  context : " via Offline App."
-                });
-
-            /*
-             * make sure the session is visible in this corpus
-             */
-            var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
-            if( previousversionincorpus == undefined ){
-              window.app.get("corpus").sessions.unshift(model);
-            }else{
-                window.app.get("corpus").sessions.remove(previousversionincorpus);
-                window.app.get("corpus").sessions.unshift(model);
-            }
-              window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-            //make sure the session is in the history of the user
-            if(window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1){
-              window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-            }
-//            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
-            window.app.get("authentication").saveAndInterConnectInApp();
-
-            if(typeof successcallback == "function"){
-              successcallback();
-            }
-          },
-          error : function(e, f, g) {
-            if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
-            if(typeof failurecallback == "function"){
-              failurecallback();
-            }else{
-              alert('Session save error: ' + f.reason);
-            }
+      self.save(null, {
+        success: function(model, response) {
+          if (OPrime.debugMode) OPrime.debug('Session save success');
+          var goal = model.get("fields").where({
+            label: "goal"
+          })[0].get("mask");
+          var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
+          //TODO add privacy for session goals in corpus
+          //            if(window.app.get("corpus").get("keepSessionDetailsPrivate")){
+          //              goal = "";
+          //              differences = "";
+          //            }
+          if (window.appView) {
+            window.appView.toastUser("Sucessfully saved session: " + goal, "alert-success", "Saved!");
+            window.appView.addSavedDoc(model.id);
           }
-        });
+          var verb = "modified";
+          verbicon = "icon-pencil";
+          if (newModel) {
+            verb = "added";
+            verbicon = "icon-plus";
+          }
+          window.app.addActivity({
+            verb: "<a href='" + differences + "'>" + verb + "</a> ",
+            verbicon: verbicon,
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            teamOrPersonal: "team",
+            context: " via Offline App."
+          });
+
+          window.app.addActivity({
+            verb: "<a href='" + differences + "'>" + verb + "</a> ",
+            verbicon: verbicon,
+            directobjecticon: "icon-calendar",
+            directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
+            indirectobject: "in <a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+            teamOrPersonal: "personal",
+            context: " via Offline App."
+          });
+
+          /*
+           * make sure the session is visible in this corpus
+           */
+          var previousversionincorpus = window.app.get("corpus").sessions.get(model.id);
+          if (previousversionincorpus == undefined) {
+            window.app.get("corpus").sessions.unshift(model);
+          } else {
+            window.app.get("corpus").sessions.remove(previousversionincorpus);
+            window.app.get("corpus").sessions.unshift(model);
+          }
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
+          //make sure the session is in the history of the user
+          if (window.app.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) == -1) {
+            window.app.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
+          }
+          //            window.appView.addUnsavedDoc(window.app.get("authentication").get("userPrivate").id);
+          window.app.get("authentication").saveAndInterConnectInApp();
+
+          if (typeof successcallback == "function") {
+            successcallback();
+          }
+        },
+        error: function(e, f, g) {
+          if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
+          if (typeof failurecallback == "function") {
+            failurecallback();
+          } else {
+            alert('Session save error: ' + f.reason);
+          }
+        }
+      });
     },
     /**
      * Accepts two functions success will be called if sucessfull,
@@ -408,36 +418,36 @@ define([
      * @param successcallback
      * @param failurecallback
      */
-    setAsCurrentSession : function(successcallback, failurecallback){
-      if( window.app.get("corpus").get("dbname") != this.get("dbname") ){
+    setAsCurrentSession: function(successcallback, failurecallback) {
+      if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
-        }else{
+        } else {
           alert("This is a bug, cannot load the session you asked for, it is not in this corpus.");
         }
         return;
       }
 
-      if (window.app.get("currentSession").id != this.id ) {
+      if (window.app.get("currentSession").id != this.id) {
         window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
-//      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
+        //      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
       }
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = this.id;
       window.app.get("authentication").saveAndInterConnectInApp(); //saving users is cheep
 
-      if(window.appView) {
+      if (window.appView) {
         window.appView.setUpAndAssociateViewsAndModelsWithCurrentSession(function() {
           if (typeof successcallback == "function") {
             successcallback();
-          }else{
+          } else {
             window.appView.currentSessionReadView.format = "leftSide";
             window.appView.currentSessionReadView.render();
-            window.appView.toastUser("Sucessfully connected all views up to session: "+ this.id, "alert-success", "Connected!");
-//          window.appView.renderEditableSessionViews("leftSide");
-//          window.appView.renderReadonlySessionViews("leftSide");
+            window.appView.toastUser("Sucessfully connected all views up to session: " + this.id, "alert-success", "Connected!");
+            //          window.appView.renderEditableSessionViews("leftSide");
+            //          window.appView.renderReadonlySessionViews("leftSide");
           }
         });
-      }else{
+      } else {
         if (typeof successcallback == "function") {
           successcallback();
         }
@@ -458,13 +468,13 @@ define([
       // TODO Validation on the attributes. Returning a String counts as an error.
       // We do need to validate some of these attributes, but not sure how they would work. I think they need for loops.
 
-        //for (user not in users) {
+      //for (user not in users) {
       //    return "user must be in the system.";
       // }
-       //for (team not in teams) {
+      //for (team not in teams) {
       //    return "team must be in the system.";
       // }
-       //if (consultant not in source ) {
+      //if (consultant not in source ) {
       //    return "consultant must be in the system.";
       // }
     }

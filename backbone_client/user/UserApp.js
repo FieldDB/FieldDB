@@ -1,37 +1,35 @@
 define([
-    "underscore",
-    "backbone",
-    "bootstrap",
-    "libs/backbone_couchdb/backbone-couchdb",
-    "libs/compiled_handlebars",
-    "authentication/Authentication",
-    "corpus/Corpus",
-    "user/UserAppView",
-    "user/UserRouter",
-    "confidentiality_encryption/Confidential",
-    "user/User",
-    "user/UserMask",
-    "text!locales/en/messages.json",
-    "OPrime"
+  "underscore",
+  "backbone",
+  "bootstrap",
+  "libs/backbone_couchdb/backbone-couchdb",
+  "libs/compiled_handlebars",
+  "authentication/Authentication",
+  "corpus/Corpus",
+  "user/UserAppView",
+  "user/UserRouter",
+  "confidentiality_encryption/Confidential",
+  "user/User",
+  "user/UserMask",
+  "text!locales/en/messages.json",
+  "OPrime"
 ], function(
-    _,
-    Backbone,
-    bootstrap,
-    backbonecouch,
-    Handlebars,
-    Authentication,
-    Corpus,
-    UserAppView,
-    UserRouter,
-    Confidential,
-    User,
-    UserMask,
-    LocaleData
+  _,
+  Backbone,
+  bootstrap,
+  backbonecouch,
+  Handlebars,
+  Authentication,
+  Corpus,
+  UserAppView,
+  UserRouter,
+  Confidential,
+  User,
+  UserMask,
+  LocaleData
 
 ) {
-  var UserApp = Backbone.Model.extend(
-  /** @lends UserApp.prototype */
-  {
+  var UserApp = Backbone.Model.extend( /** @lends UserApp.prototype */ {
     /**
      * @class The UserApp handles the loading of the user page (login, welcome etc).
      *
@@ -43,18 +41,20 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("USERAPP INIT");
 
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
-        this.set("authentication", new Authentication({filledWithDefaults: true}));
+        this.set("authentication", new Authentication({
+          filledWithDefaults: true
+        }));
       }
 
       /*
@@ -88,49 +88,51 @@ define([
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
       var u = localStorage.getItem("encryptedUser");
-      if(!u){
+      if (!u) {
         OPrime.redirect("corpus.html");
         return;
       }
-      appself.get("authentication").loadEncryptedUser(u, function(success, errors){
-        if(success == null){
-//        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
-//        OPrime.setCookie("username","");
-//        OPrime.setCookie("token","");
-//        localStorage.removeItem("encryptedUser");
-//        OPrime.redirect('corpus.html');
+      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        if (success == null) {
+          //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
+          //        OPrime.setCookie("username","");
+          //        OPrime.setCookie("token","");
+          //        localStorage.removeItem("encryptedUser");
+          //        OPrime.redirect('corpus.html');
           return;
-        }else{
-          window.appView = new UserAppView({model: appself});
+        } else {
+          window.appView = new UserAppView({
+            model: appself
+          });
           window.appView.render();
           appself.router = new UserRouter();
           Backbone.history.start();
         }
       });
     },
-    showSpinner : function(){
-        $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
-        $('.spinner-image').css({
-          'width' : function() {
-            return ($(document).width() * .1 ) + 'px';
-          },
-          'height' : function() {
-            return ($(document).width() * .1 ) + 'px';
-          },
-          'padding-top': '10em'
-        });
+    showSpinner: function() {
+      $('#dashboard_loading_spinner').html("<img class='spinner-image' src='images/loader.gif'/><p class='spinner-status'>Loading dashboard...</p>");
+      $('.spinner-image').css({
+        'width': function() {
+          return ($(document).width() * .1) + 'px';
+        },
+        'height': function() {
+          return ($(document).width() * .1) + 'px';
+        },
+        'padding-top': '10em'
+      });
     },
-    stopSpinner : function(){
+    stopSpinner: function() {
       $('#dashboard_loading_spinner').html("");
     },
-    getCouchUrl : function(connection, couchdbcommand) {
-      if(!connection){
+    getCouchUrl: function(connection, couchdbcommand) {
+      if (!connection) {
         connection = this.get("connection");
         if (OPrime.debugMode) OPrime.debug("Using the apps cconnection", connection);
-      }else{
-        if (OPrime.debugMode) OPrime.debug("Using the connection passed in,",connection,this.get("connection"));
+      } else {
+        if (OPrime.debugMode) OPrime.debug("Using the connection passed in,", connection, this.get("connection"));
       }
-      if(!connection){
+      if (!connection) {
         OPrime.bug("The couch url cannot be guessed. It must be provided by the App. Please report this bug.");
       }
       return OPrime.getCouchUrl(connection, couchdbcommand);
@@ -138,7 +140,7 @@ define([
     /*
      * This will be the only time the app should open the pouch.
      */
-    changePouch : function(connection, callback) {
+    changePouch: function(connection, callback) {
       if (!connection || connection == undefined) {
         console.log("App.changePouch connection must be supplied.");
         return;
@@ -146,28 +148,28 @@ define([
         console.log("App.changePouch setting connection: ", connection);
         this.set("connection", connection);
       }
-//      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"),"");
+      //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
+      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"), "");
 
-      if(OPrime.isChromeApp()){
-        Backbone.couch_connector.config.base_url = this.getCouchUrl(connection,"");
+      if (OPrime.isChromeApp()) {
+        Backbone.couch_connector.config.base_url = this.getCouchUrl(connection, "");
         Backbone.couch_connector.config.db_name = connection.dbname;
-      }else{
+      } else {
         /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
-        try{
-          var pieces = window.location.pathname.replace(/^\//,"").split("/");
+        try {
+          var pieces = window.location.pathname.replace(/^\//, "").split("/");
           var dbname = pieces[0];
           //Handle McGill server which runs out of a virtual directory
-          if(dbname == "corpus"){
+          if (dbname == "corpus") {
             dbname = pieces[1];
           }
           Backbone.couch_connector.config.db_name = dbname;
-        }catch(e){
+        } catch (e) {
           OPrime.bug("Couldn't set the databse name off of the url, please report this.");
         }
       }
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
       return;
@@ -177,9 +179,7 @@ define([
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
         // + connection.dbname);
         this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + connection.dbname : OPrime.pouchUrl
-            + connection.dbname);
+          .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + connection.dbname : OPrime.pouchUrl + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
@@ -188,7 +188,7 @@ define([
     /*
      * This will be the only time the app should open the pouch.
      */
-    changePouchDeprecated : function(connection, callback) {
+    changePouchDeprecated: function(connection, callback) {
       if (!connection || connection == undefined) {
         console.log("App.changePouch connection must be supplied.");
         return;
@@ -197,8 +197,8 @@ define([
         this.set("connection", connection);
       }
 
-      if(OPrime.isBackboneCouchDBApp()){
-        if(typeof callback == "function"){
+      if (OPrime.isBackboneCouchDBApp()) {
+        if (typeof callback == "function") {
           callback();
         }
         return;
@@ -208,33 +208,31 @@ define([
         // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
         // + connection.dbname);
         this.pouch = Backbone.sync
-        .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-            + connection.dbname : OPrime.pouchUrl
-            + connection.dbname);
+          .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + connection.dbname : OPrime.pouchUrl + connection.dbname);
       }
       if (typeof callback == "function") {
         callback();
       }
     },
-    addActivity : function(jsonActivity) {
+    addActivity: function(jsonActivity) {
       if (OPrime.debugMode) OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
-//    if (backBoneActivity.get("teamOrPersonal") == "team") {
-//    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-//    } else {
-//    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
-//    }
+      //    if (backBoneActivity.get("teamOrPersonal") == "team") {
+      //    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+      //    } else {
+      //    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+      //    }
     },
-    backUpUser : function(callback){
+    backUpUser: function(callback) {
       var self = this;
       /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
-      if(self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama"){
-        if(typeof callback == "function"){
+      if (self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama") {
+        if (typeof callback == "function") {
           callback();
         }
       }
       //syncUserWithServer will prompt for password, then run the corpus replication.
-      self.get("authentication").syncUserWithServer(function(){
-        if(typeof callback == "function"){
+      self.get("authentication").syncUserWithServer(function() {
+        if (typeof callback == "function") {
           callback();
         }
       });
@@ -250,8 +248,8 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServer : function(connection, username,
-        password, succescallback, failurecallback) {
+    logUserIntoTheirCorpusServer: function(connection, username,
+      password, succescallback, failurecallback) {
       if (connection == null || connection == undefined) {
         connection = this.get("connection");
       }
@@ -260,12 +258,12 @@ define([
       }
 
       /* if on android, turn on replication and don't get a session token */
-      if(OPrime.isTouchDBApp()){
+      if (OPrime.isTouchDBApp()) {
         Android.setCredentialsAndReplicate(connection.dbname,
-            username, password, connection.domain);
+          username, password, connection.domain);
         OPrime
-        .debug("Not getting a session token from the users corpus server " +
-        "since this is touchdb on android which has no idea of tokens.");
+          .debug("Not getting a session token from the users corpus server " +
+            "since this is touchdb on android which has no idea of tokens.");
         if (typeof succescallback == "function") {
           succescallback();
         }
@@ -280,54 +278,49 @@ define([
       $.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
 
       FieldDB.CORS.makeCORSRequest({
-          type: "POST",
-          url: couchSessionUrl,
-          data: {
-            name: username,
-            password: password
-          }
-        }).then(function(serverResults){
+        type: "POST",
+        url: couchSessionUrl,
+        data: {
+          name: username,
+          password: password
+        }
+      }).then(function(serverResults) {
 
-          if (window.appView) {
-            window.appView
+        if (window.appView) {
+          window.appView
             .toastUser(
-                "I logged you into your team server automatically, your syncs will be successful.",
-                "alert-info", "Online Mode:");
-          }
-          // appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
+              "I logged you into your team server automatically, your syncs will be successful.",
+              "alert-info", "Online Mode:");
+        }
+        // appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
 
+        /* if in chrome extension, or offline, turn on replication */
+        if (OPrime.isChromeApp()) {
+          //TODO turn on pouch and start replicating and then redirect user to their user page(?)
+          //            appself.replicateContinuouslyWithCouch();
+        }
 
-          /* if in chrome extension, or offline, turn on replication */
-          if(OPrime.isChromeApp()){
-            //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-//            appself.replicateContinuouslyWithCouch();
-          }
+        if (typeof succescallback == "function") {
+          succescallback(serverResults);
+        }
+      }, function(reason) {
 
-          if (typeof succescallback == "function") {
-            succescallback(serverResults);
-          }
-        }, function(reason){
-
-          if (window.appView) {
-            window.appView
+        if (window.appView) {
+          window.appView
             .toastUser(
-                "I couldn't log you into your corpus. What does this mean? "
-                + "This means you can't upload data to train an auto-glosser or visualize your morphemes. "
-                + "You also can't share your data with team members. If your computer is online and you are"
-                + " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) "
-                + OPrime.contactUs
-                + " If you're offline you can ignore this warning, and sync later when you're online. ",
-                "alert-danger",
-            "Offline Mode:");
-          }
-          if (typeof failurecallback == "function") {
-            failurecallback("I couldn't log you into your corpus.");
-          }
-          if (OPrime.debugMode) OPrime.debug(reason);
-          window.app.get("authentication").set(
-              "staleAuthentication", true);
+              "I couldn't log you into your corpus. What does this mean? " + "This means you can't upload data to train an auto-glosser or visualize your morphemes. " + "You also can't share your data with team members. If your computer is online and you are" +
+              " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " + OPrime.contactUs + " If you're offline you can ignore this warning, and sync later when you're online. ",
+              "alert-danger",
+              "Offline Mode:");
+        }
+        if (typeof failurecallback == "function") {
+          failurecallback("I couldn't log you into your corpus.");
+        }
+        if (OPrime.debugMode) OPrime.debug(reason);
+        window.app.get("authentication").set(
+          "staleAuthentication", true);
 
-      }).fail(function(exception){
+      }).fail(function(exception) {
 
         console.warn(exception.stack);
         OPrime.bug("There was a problem logging you into your database, please report this.");
@@ -342,12 +335,12 @@ define([
     /**
      * Pull down corpus to offline pouch, if its there.
      */
-    replicateOnlyFromCorpus : function(connection, successcallback, failurecallback) {
+    replicateOnlyFromCorpus: function(connection, successcallback, failurecallback) {
       var self = this;
 
-      if(!self.pouch){
+      if (!self.pouch) {
         if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
-        if(typeof successcallback == "function"){
+        if (typeof successcallback == "function") {
           successcallback();
         }
         return;
@@ -361,22 +354,23 @@ define([
             failurecallback();
           } else {
             alert('Opening DB error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Opening DB error'
-                + JSON.stringify(err));
+            if (OPrime.debugMode) OPrime.debug('Opening DB error' + JSON.stringify(err));
           }
         } else {
-          db.replicate.from(couchurl, { continuous: false }, function(err, response) {
-            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl,response, err);
-            if(err){
-              if(typeof failurecallback == "function"){
+          db.replicate.from(couchurl, {
+            continuous: false
+          }, function(err, response) {
+            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl, response, err);
+            if (err) {
+              if (typeof failurecallback == "function") {
                 failurecallback();
-              }else{
+              } else {
                 alert('Corpus replicate from error' + JSON.stringify(err));
                 if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
               }
-            }else{
+            } else {
               if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
-              if(typeof successcallback == "function"){
+              if (typeof successcallback == "function") {
                 successcallback();
               }
             }
@@ -395,17 +389,17 @@ define([
      * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
      * @param callback A function to call upon success, it receives the data back from the post request.
      */
-    logUserIntoTheirCorpusServerDeprecated : function(connection, username, password, succescallback, failurecallback) {
-      if(connection == null || connection == undefined){
+    logUserIntoTheirCorpusServerDeprecated: function(connection, username, password, succescallback, failurecallback) {
+      if (connection == null || connection == undefined) {
         connection = this.get("connection");
       }
 
       /* if on android, turn on replication and dont get a session token */
-      if(OPrime.isTouchDBApp()){
+      if (OPrime.isTouchDBApp()) {
         Android.setCredentialsAndReplicate(connection.dbname,
-            username, password, connection.domain);
+          username, password, connection.domain);
         OPrime
-        .debug("Not getting a session token from the users corpus server " +
+          .debug("Not getting a session token from the users corpus server " +
             "since this is touchdb on android which has no rights on iriscouch, and also has no tokens.");
         if (typeof succescallback == "function") {
           succescallback();
@@ -422,13 +416,13 @@ define([
       $.couch.login({
         name: username,
         password: password,
-        success : function(serverResults) {
-          if(window.appView){
-            window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+        success: function(serverResults) {
+          if (window.appView) {
+            window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info", "Online Mode:");
           }
 
           /* if in chrome extension, or offline, turn on replication */
-          if(OPrime.isChromeApp()){
+          if (OPrime.isChromeApp()) {
             //TODO turn on pouch and start replicating and then redirect user to their user page(?)
           }
 
@@ -436,27 +430,27 @@ define([
             succescallback(serverResults);
           }
         },
-        error : function(serverResults){
-          window.setTimeout(function(){
+        error: function(serverResults) {
+          window.setTimeout(function() {
             //try one more time 5 seconds later
             $.couch.login({
               name: username,
               password: password,
-              success : function(serverResults) {
-                if(window.appView){
-                  window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info","Online Mode:");
+              success: function(serverResults) {
+                if (window.appView) {
+                  window.appView.toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info", "Online Mode:");
                 }
                 if (typeof succescallback == "function") {
                   succescallback(serverResults);
                 }
               },
-              error : function(serverResults){
-                if(window.appView){
+              error: function(serverResults) {
+                if (window.appView) {
                   window.appView.toastUser("I couldn't log you into your corpus. What does this mean? " +
-                      "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
-                      "You also can't share your data with team members. If your computer is online and you are" +
-                      " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " +OPrime.contactUs+
-                      " If you're offline you can ignore this warning, and sync later when you're online. ","alert-danger","Offline Mode:");
+                    "This means you can't upload data to train an auto-glosser or visualize your morphemes. " +
+                    "You also can't share your data with team members. If your computer is online and you are" +
+                    " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " + OPrime.contactUs +
+                    " If you're offline you can ignore this warning, and sync later when you're online. ", "alert-danger", "Offline Mode:");
                 }
                 if (typeof failurecallback == "function") {
                   failurecallback("I couldn't log you into your corpus.");
@@ -469,17 +463,17 @@ define([
         }
       });
     },
-    saveAndInterConnectInApp : function(callback){
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp: function(callback) {
+      if (typeof callback == "function") {
         callback();
       }
     },
 
-    render: function(){
+    render: function() {
       $("#user-fullscreen").html("list of corpora goes here");
       return this;
     },
-    router : UserRouter,
+    router: UserRouter,
   });
   return UserApp;
 });

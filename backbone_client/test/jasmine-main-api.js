@@ -65,39 +65,36 @@
 //  */
 //           "SpecHelper", 
 //           // "OPrime",
-          
+
 //     /* FieldDB tests */
 //     // "../tests/activity/ActivityTest",
 //     "../../backbone_client/libs/OPrime",
 //     "../tests/app/AppTest",
 
-
 //     /* Test dependancies, only run these once in a while */
 
 //     "JUnitReporter" , "ConsoleReporter", "TerminalReporter"], function() {
-  
 
+var jasmineEnv = jasmine.getEnv();
+jasmineEnv.updateInterval = 1000;
 
-  var jasmineEnv = jasmine.getEnv();
-  jasmineEnv.updateInterval = 1000;
+if (/PhantomJS/.test(navigator.userAgent)) {
+  jasmineEnv.addReporter(new jasmine.TrivialReporter());
+  jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
+} else {
+  var htmlReporter = new jasmine.HtmlReporter();
 
-  if (/PhantomJS/.test(navigator.userAgent)) {
-    jasmineEnv.addReporter(new jasmine.TrivialReporter());
-    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
-  } else {
-    var htmlReporter = new jasmine.HtmlReporter();
+  jasmineEnv.addReporter(htmlReporter);
 
-    jasmineEnv.addReporter(htmlReporter);
+  jasmineEnv.specFilter = function(spec) {
+    return htmlReporter.specFilter(spec);
+  };
+  jasmineEnv.addReporter(new jasmine.TrivialReporter());
+  // jasmineEnv.addReporter(new jasmine.ConsoleReporter());
+  // jasmineEnv.addReporter(new jasmine.TerminalReporter());
+  // jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
+}
 
-    jasmineEnv.specFilter = function(spec) {
-      return htmlReporter.specFilter(spec);
-    };
-   jasmineEnv.addReporter(new jasmine.TrivialReporter());
-   // jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-   // jasmineEnv.addReporter(new jasmine.TerminalReporter());
-   // jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
-  }
-
-  jasmineEnv.execute();
+jasmineEnv.execute();
 
 // });

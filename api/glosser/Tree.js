@@ -64,7 +64,6 @@ var bracketIt = function(morphemesLine) {
   return trees;
 };
 
-
 var Tree = {
   "mixedBranching": mixedBranchingBracketIt,
   "rightBranching": rightBranchingBracketIt,

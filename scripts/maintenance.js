@@ -1,6 +1,5 @@
 /* globals $, window */
 
-
 var MAINTAINENCE = {
 
   /*
@@ -90,7 +89,6 @@ var MAINTAINENCE = {
             }
           });
 
-
         }
       },
       error: function(error) {
@@ -98,9 +96,7 @@ var MAINTAINENCE = {
       }
     });
 
-
   },
-
 
   /*
   Merge sessions into another
@@ -276,7 +272,6 @@ var MAINTAINENCE = {
       }
     });
 
-
   },
 
   estimateAcademicUsers: function() {
@@ -364,7 +359,6 @@ var MAINTAINENCE = {
           return b[1] - a[1]
         }).slice(0, maxEduToShow);
 
-
         allAffiliations.topNonEduAffiliations = allAffiliations.topNonEduAffiliations.sort(function(a, b) {
           return b[1] - a[1]
         }).slice(0, maxNonEduToShow);
@@ -385,8 +379,6 @@ var MAINTAINENCE = {
       };
 
     };
-
-
 
     $.couch.allDbs({
       success: function(results) {
@@ -423,7 +415,6 @@ var MAINTAINENCE = {
         console.log("Error getting db list", error);
       }
     });
-
 
   },
 
@@ -661,8 +652,6 @@ var MAINTAINENCE = {
               }
             });
 
-
-
           })(results[db]);
 
         }
@@ -672,11 +661,9 @@ var MAINTAINENCE = {
       }
     });
 
-
   },
 
   verifyCorpusDoc: function() {
-
 
     /*
     Verify corpus doc
@@ -710,12 +697,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   addTeamDocIfMissing: function() {
-
 
     /*
     Add the team doc to all databases
@@ -832,11 +816,9 @@ var MAINTAINENCE = {
       }
     });
 
-
   },
 
   deployToAllUsers: function() {
-
 
     /*
     Deploy to all users
@@ -923,11 +905,9 @@ var MAINTAINENCE = {
       }
     });
 
-
   },
 
   countCorpora: function() {
-
 
     /*
     Count corpora
@@ -947,7 +927,6 @@ var MAINTAINENCE = {
       devteam: [],
       errored: []
     };
-
 
     // databasesByType.devteam.map(function(database) {
     //   allDatabases[database.db_name] = database.doc_count;
@@ -1041,7 +1020,6 @@ var MAINTAINENCE = {
         }
       }
 
-
       // console.log(dbname + " is a " + sourceDB);
       $.ajax({
         "method": "GET",
@@ -1070,7 +1048,6 @@ var MAINTAINENCE = {
         }
       });
 
-
     };
 
     $.couch.allDbs({
@@ -1087,8 +1064,6 @@ var MAINTAINENCE = {
     //   console.log(databaseDetails.realOrNot + "," + databaseDetails.type + "," + databaseDetails.db_name + "," + databaseDetails.doc_count + "," + databaseDetails.disk_size + "," + databaseDetails.data_size + "," + databaseDetails.committed_update_seq);
     //   return databaseDetails;
     // })
-
-
 
   },
 
@@ -1107,7 +1082,7 @@ var MAINTAINENCE = {
     self.throttleReplications = 10000;
     self.confirmContinueEveryXDbs = 30;
     self.replicationCount = 0;
-    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed  || "";
+    self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed = self.dbsWhichReplicationDidntGoWellAndNeedToBeManuallyReviewed || "";
 
     replicatePermissions = function(dbname) {
       FieldDB.CORS.makeCORSRequest({
@@ -1252,7 +1227,6 @@ var MAINTAINENCE = {
 
   removeBlockNonContribAdminWritesFromActivityFeeds: function() {
 
-
     /*
     Remove block non admin writes from all users activity feeds:
      */
@@ -1299,8 +1273,6 @@ var MAINTAINENCE = {
               }
             });
 
-
-
           })(results[db]);
 
         }
@@ -1309,7 +1281,6 @@ var MAINTAINENCE = {
         console.log("Error getting db list", error);
       }
     });
-
 
     var blockNonContribAdminWritesNewCorpus = function(new_doc, old_doc, userCtx) {
 
@@ -1370,7 +1341,6 @@ var MAINTAINENCE = {
       }
     };
 
-
     var blockNonContribAdminWritesNewCorpusActivityFeed = function(new_doc, old_doc, userCtx) {
       var corpusdb = userCtx.db.replace("-activity_feed", "");
 
@@ -1404,7 +1374,6 @@ var MAINTAINENCE = {
       }
     };
 
-
     var blockNonContribAdminWritesNewUserActivityFeed = function(new_doc, old_doc, userCtx) {
       var reconstructedUser = userCtx.db.replace("-activity_feed", "");
 
@@ -1429,12 +1398,9 @@ var MAINTAINENCE = {
       }
     };
 
-
-
   },
 
   removeExtraQuotesInSecurityDoc: function() {
-
 
     /*
     Remove extra quotes in security docs
@@ -1508,12 +1474,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   mergeCorpora: function() {
-
 
     /*
     Merge a corpus to another
@@ -1592,12 +1555,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   removeQuotesInPermissions: function() {
-
 
     /*
     Remove extra quotes in permissions
@@ -1636,7 +1596,6 @@ var MAINTAINENCE = {
         console.log("Error opening the database ", error);
       }
     });
-
 
     /*
     Add lingllama-communitycorpus to all users who have access to lingllama and prevent anyone from editing the user study data
@@ -1687,7 +1646,6 @@ var MAINTAINENCE = {
                 temp = temp.replace(/lingllama-communitycorpus_commenter/g, "");
                 temp = temp.replace(/,+/g, ",").replace(/,$/g, "");
 
-
                 if (originalDoc.name.search(/elise[0-9]+/) > -1 || originalDoc.name.indexOf("nemo") > -1 || originalDoc.name.indexOf("test") > -1 || originalDoc.name.indexOf("tobin") > -1 || temp.indexOf("-") === -1) {
                   originalDoc.roles = temp.replace(/"/g, "").split(",");
                   originalDoc.roles = originalDoc.roles.getUnique().sort().join(",").split(",");
@@ -1725,8 +1683,6 @@ var MAINTAINENCE = {
         console.log("Error opening the database ", error);
       }
     });
-
-
 
   },
 
@@ -1818,8 +1774,6 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   mergeUserDocsFromTwoServers: function() {
@@ -1896,12 +1850,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   getUsersRevisionNumber: function() {
-
 
     /*
     Get users revision number
@@ -1930,7 +1881,6 @@ var MAINTAINENCE = {
     });
     console.log(users.join("\n"));
 
-
     // writers only previledges
     var writersOnlyPriv = function(new_doc, old_doc, userCtx) {
       var userCanWrite = false;
@@ -1952,8 +1902,6 @@ var MAINTAINENCE = {
         });
       }
     }
-
-
 
   },
 
@@ -2070,12 +2018,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   verifyAllDbsHaveFieldDBAdminRole: function() {
-
 
     /*
     verify all databases have role of fielddbadmin
@@ -2131,18 +2076,22 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   convertACRAintoActivites: function() {
-
 
     /*
     Convert ACRA activities into fielddb activies
      */
     // var lastPosition = 1403805265615; // 1403792172786 // 1402818525880 // 1403792172786
-    var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950", "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104", "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048", "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518", "anonymous1409178041951", "anonymous1409083978482", "anonymous1409076300415", "anonymous1409059894468", "anonymous1408790883646", "anonymous1408786327026", "anonymous1408521814189", "anonymous1408491280401", "anonymous1407738363221", "anonymous1408093521792", "anonymous1407980250076", "anonymous1405161268203", "anonymous1403293874554", "anonymous1406620532197", "anonymous1415137904589", "anonymous1415130236236", "anonymous1414869108810", "anonymous1414520985437", "anonymous1414359340237", "anonymous1414608957461", "anonymous1413891761722", "anonymous1412105474663", "anonymous1413623812125", "anonymous1413543115674", "anonymous1413307565297", "anonymous1411160635506", "anonymous1412956621924", "anonymous1412674529466", "anonymous1402993216329", "anonymous1412160235747", "anonymous1411977674968", "anonymous1409316294803", "anonymous1410577417533", "anonymous1411779581625", "anonymous1411722112693", "anonymous1409660863084", "anonymous1410865935416", "anonymous1409632984145", "anonymous1409337615049", "anonymous1399557384107", "anonymous1402269371238"];
+    var userswhoarentregisteredyet = ["anonymous1402818226441", "anonymous1400736954477", "anonymous1399110330026", "anonymous1398813694591", "anonymous1398684166784", "anonymous1398352584238", "testinganonymous1397397203061", "anonymous1398067003561", "anonymous1397669513717", "anonymous1397933228605", "anonymous1397900222994", "anonymous1397886261314", "anonymous1397770209950",
+      "testinganonymous1396545191821", "anonymous1397380321265", "anonymous1397330457860", "anonymous1397063619189", "anonymous1397038853807", "anonymous1397045636195", "anonymous1396806997435", "anonymous1401873037326", "anonymous1406914718135", "anonymous1406763577954", "anonymous1406297431603", "anonymous1406234565430", "anonymous1402474075836", "anonymous1405713207104",
+      "anonymous1405713402347", "anonymous1404380629344", "anonymous1404965136766", "anonymous1404797396604", "anonymous1404357779017", "anonymous1407418050247", "anonymouskartulispeechrecognition1407415600066", "anonymouskartulispeechrecognition1407340889235", "anonymous1406189989271", "anonymous1406137962123", "anonymous1402771637598", "anonymous1404546617895", "anonymous1404543172048",
+      "anonymous1404510294987", "anonymous1404477292397", "anonymous1404379286889", "anonymouskartulispeechrecognition1404251000382", "anonymous1403954098791", "anonymous1403820277996", "anonymous1403770114403", "anonymous1403695449072", "anonymous1403614517620", "anonymous1403215176702", "anonymous1401396176832", "anonymous1397372490908", "anonymous1396791663422", "anonymous1396717008518",
+      "anonymous1409178041951", "anonymous1409083978482", "anonymous1409076300415", "anonymous1409059894468", "anonymous1408790883646", "anonymous1408786327026", "anonymous1408521814189", "anonymous1408491280401", "anonymous1407738363221", "anonymous1408093521792", "anonymous1407980250076", "anonymous1405161268203", "anonymous1403293874554", "anonymous1406620532197",
+      "anonymous1415137904589", "anonymous1415130236236", "anonymous1414869108810", "anonymous1414520985437", "anonymous1414359340237", "anonymous1414608957461", "anonymous1413891761722", "anonymous1412105474663", "anonymous1413623812125", "anonymous1413543115674", "anonymous1413307565297", "anonymous1411160635506", "anonymous1412956621924", "anonymous1412674529466",
+      "anonymous1402993216329", "anonymous1412160235747", "anonymous1411977674968", "anonymous1409316294803", "anonymous1410577417533", "anonymous1411779581625", "anonymous1411722112693", "anonymous1409660863084", "anonymous1410865935416", "anonymous1409632984145", "anonymous1409337615049", "anonymous1399557384107", "anonymous1402269371238"
+    ];
     var database = $.couch.db("acra-learnx");
     var limit = 4000;
     var saved = 0;
@@ -2236,8 +2185,6 @@ var MAINTAINENCE = {
         console.log("Couldnt open the activities view ", +JSON.stringify(error));
       }
     });
-
-
 
   },
 
@@ -2424,12 +2371,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   makeingSureSpeechRecognitionActivtiesAreInTheCentralActivites: function() {
-
 
     /*
     Make sure all speech rec activities are in the central activities too
@@ -2490,7 +2434,6 @@ var MAINTAINENCE = {
             }
           });
 
-
         });
       },
       error: function(error) {
@@ -2498,12 +2441,9 @@ var MAINTAINENCE = {
       }
     });
 
-
-
   },
 
   importGeorgianPhrases: function() {
-
 
     /*
     Import ilanguages.org georgian phrase data

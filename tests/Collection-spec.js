@@ -193,7 +193,6 @@ describe("lib/Collection", function() {
       expect(newcollection.length).toEqual(3);
     });
 
-
     it("should sanitize primary keys", function() {
       var newcollection = new Collection();
       newcollection.add({
@@ -386,7 +385,6 @@ describe("lib/Collection", function() {
       expect(shouldbethesamecollection._collection[2]).toBe(corpora._collection[2]);
     });
 
-
     it("should not effect clone if original object is changed", function() {
       var adatum = new FieldDBObject({
         "tags": "apositive"
@@ -518,7 +516,6 @@ describe("lib/Collection", function() {
       var duck = collection._collection[3];
       expect(duck).toBeDefined();
       expect(collection.duck).toEqual(duck);
-
 
       collection.set("duck", duck);
       expect(collection.duck).toEqual(duck);
@@ -758,7 +755,6 @@ describe("lib/Collection", function() {
       expect(collection.collection[2].name).toEqual("turkey");
     });
 
-
     it("should be possible to remove a primary key", function() {
       expect(collection.remove).toBeDefined();
 
@@ -801,7 +797,6 @@ describe("lib/Collection", function() {
     });
   });
 
-
   describe("non-lossy persistance", function() {
     var collection,
       collectionToLoad = [{
@@ -826,7 +821,6 @@ describe("lib/Collection", function() {
         this.debug("called");
       };
     });
-
 
     it("should have a type of Collection", function() {
       expect(collection.fieldDBtype).toEqual("Collection");
@@ -909,7 +903,6 @@ describe("lib/Collection", function() {
         id: "hie"
       }]).equals(new Collection())).toBeFalsy();
     });
-
 
     it("should consider not collections with different lengths as equal", function() {
       var aCollectionWithOneItem = new Collection([{
@@ -1092,7 +1085,6 @@ describe("lib/Collection", function() {
       var aThirdCollection = aBaseCollection.merge(aBaseCollection, atriviallyDifferentCollection, "overwrite");
       expect(aThirdCollection._collection.length).toEqual(8);
       expect(atriviallyDifferentCollection._collection.length).toEqual(7);
-
 
       // expect(aBaseCollection._collection.length).toEqual(7);
       // TODO revisit why the third merge is no longer working.

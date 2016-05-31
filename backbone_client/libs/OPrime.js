@@ -39,7 +39,6 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
     url = url.replace("/" + connection.dbname, couchdbcommand);
   }
 
-
   //forcing production server
   url = url.replace("corpusdev", "corpus");
 
@@ -788,7 +787,6 @@ OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback,
 
     console.log("error response." + JSON.stringify(response));
     // alert("error response." + JSON.stringify(response));
-
 
     if (response.responseJSON) {
       if (response.responseJSON.error) {

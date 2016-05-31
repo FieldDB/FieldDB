@@ -235,7 +235,6 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
     return existingGravatar;
   };
 
-
   this.setMostRecentIds = function(user, mostRecentIds) {
     user.mostRecentIds = mostRecentIds;
   };
@@ -437,13 +436,14 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
       },
       "activityConnection": {
         "type": "Connection",
-        "description": "This is where the user's activities can be saved and retrieved. In general, if your client side app let\"s the user do something you should save activites in the user's couch and if its something that has to do with a corpus, and the other team members might want to be in the loop, also save a similar activity in the corpus activity feed (composed of corpusname-activity_feed). Here is an example of the user's feed: <pre>" + JSON.stringify({
-          "protocol": "https://",
-          "domain": "ifielddevs.iriscouch.com",
-          "port": "443",
-          "dbname": "lingllama-activity_feed",
-          "path": ""
-        }, null, 2) + "</pre>"
+        "description": "This is where the user's activities can be saved and retrieved. In general, if your client side app let\"s the user do something you should save activites in the user's couch and if its something that has to do with a corpus, and the other team members might want to be in the loop, also save a similar activity in the corpus activity feed (composed of corpusname-activity_feed). Here is an example of the user's feed: <pre>" +
+          JSON.stringify({
+            "protocol": "https://",
+            "domain": "ifielddevs.iriscouch.com",
+            "port": "443",
+            "dbname": "lingllama-activity_feed",
+            "path": ""
+          }, null, 2) + "</pre>"
       },
       "appVersionWhenCreated": {
         "type": "string",
@@ -554,11 +554,12 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
       "serverlogs": {
         "type": "Object",
         "required": true,
-        "description": "This is a server side field which is used to make sure that the user is okay, their account is not being attacked/hacked etc. Their logins contain the timestamp of login, the refering url where they logged in and what ip address they used to detect odd movement. However, field workers often use multiple computers in multiple countries so this is taken with a grain of salt. <br/>Client side apps do not have access to this information, if they attempt to add the information it will be discarded. Example:<pre>" + JSON.stringify({
-          "successfulLogins": [],
-          "incorrectPasswordAttempts": [],
-          "incorrectPasswordEmailSentCount": 0,
-        }, null, 2) + "</pre>"
+        "description": "This is a server side field which is used to make sure that the user is okay, their account is not being attacked/hacked etc. Their logins contain the timestamp of login, the refering url where they logged in and what ip address they used to detect odd movement. However, field workers often use multiple computers in multiple countries so this is taken with a grain of salt. <br/>Client side apps do not have access to this information, if they attempt to add the information it will be discarded. Example:<pre>" +
+          JSON.stringify({
+            "successfulLogins": [],
+            "incorrectPasswordAttempts": [],
+            "incorrectPasswordEmailSentCount": 0,
+          }, null, 2) + "</pre>"
       },
       "any_number_of_additional_fields": {
         "type": "ANY",
@@ -576,7 +577,6 @@ var UserGenericFactory = function(appVersion, defaultConnection, Diacritics, Hot
     }
     return user;
   };
-
 
 };
 

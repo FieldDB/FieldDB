@@ -9,8 +9,6 @@ try {
   FieldDB = require("../api/fielddb.js").FieldDB;
 }
 
-
-
 /**
  <pre>
   ======== A Handy Little Jasmine Reference ========
@@ -80,4 +78,3 @@ describe("api/FieldDB.js", function() {
 });
 
 /* jshint ignore:end  */
-

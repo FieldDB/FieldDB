@@ -89,10 +89,10 @@ DatumFields.prototype = Object.create(Collection.prototype, /** @lends DatumFiel
         this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
       }
       var json = Collection.prototype.toJSON.apply(this, arguments);
-      json.map = json.map(function(field){
+      json.map = json.map(function(field) {
         field.value = "";
         field.mask = "";
-        field.encryptedValue= "";
+        field.encryptedValue = "";
         return field;
       });
       return json;

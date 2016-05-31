@@ -9,9 +9,9 @@ var App = require("./App").App;
  * @constructs
  */
 var PsycholinguisticsApp = function PsycholinguisticsApp(options) {
-  if(!this._fieldDBtype){
-		this._fieldDBtype = "PsycholinguisticsApp";
-	}
+  if (!this._fieldDBtype) {
+    this._fieldDBtype = "PsycholinguisticsApp";
+  }
   this.debug("Constructing PsycholinguisticsApp ", options);
   App.apply(this, arguments);
 };
@@ -21,7 +21,7 @@ PsycholinguisticsApp.prototype = Object.create(App.prototype, /** @lends Psychol
     value: PsycholinguisticsApp
   },
 
-  hasParticipants:{
+  hasParticipants: {
     get: function() {
       if (!this.participantsList || !this.participantsList.docs || !this.participantsList.docs.length) {
         return false;

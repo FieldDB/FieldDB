@@ -1,44 +1,42 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "audio_video/AudioVideoReadView",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentReadView",
-    "comment/CommentEditView",
-    "confidentiality_encryption/Confidential",
-    "datum/Datum",
-    "datum/DatumFieldEditView",
-    "datum/DatumReadView",
-    "datum/DatumTag",
-    "datum/DatumTagEditView",
-    "datum/DatumTagReadView",
-    "image/ImagesView",
-    "datum/SessionReadView",
-    "app/UpdatingCollectionView",
-    "OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "audio_video/AudioVideoReadView",
+  "comment/Comment",
+  "comment/Comments",
+  "comment/CommentReadView",
+  "comment/CommentEditView",
+  "confidentiality_encryption/Confidential",
+  "datum/Datum",
+  "datum/DatumFieldEditView",
+  "datum/DatumReadView",
+  "datum/DatumTag",
+  "datum/DatumTagEditView",
+  "datum/DatumTagReadView",
+  "image/ImagesView",
+  "datum/SessionReadView",
+  "app/UpdatingCollectionView",
+  "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    AudioVideoReadView,
-    Comment,
-    Comments,
-    CommentReadView,
-    CommentEditView,
-    Confidential,
-    Datum,
-    DatumFieldEditView,
-    DatumReadView,
-    DatumTag,
-    DatumTagEditView,
-    DatumTagReadView,
-    ImagesView,
-    SessionReadView,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  AudioVideoReadView,
+  Comment,
+  Comments,
+  CommentReadView,
+  CommentEditView,
+  Confidential,
+  Datum,
+  DatumFieldEditView,
+  DatumReadView,
+  DatumTag,
+  DatumTagEditView,
+  DatumTagReadView,
+  ImagesView,
+  SessionReadView,
+  UpdatingCollectionView
 ) {
-  var DatumEditView = Backbone.View.extend(
-  /** @lends DatumEditView.prototype */
-  {
+  var DatumEditView = Backbone.View.extend( /** @lends DatumEditView.prototype */ {
     /**
      * @class The layout of a single editable Datum. It contains a datum
      *        state, fields, datumTags and a datum menu. This is where
@@ -49,51 +47,51 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       // Create a AudioVideoReadView
       this.audioVideoView = new UpdatingCollectionView({
-        collection           : this.model.get("audioVideo"),
-        childViewConstructor : AudioVideoReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("audioVideo"),
+        childViewConstructor: AudioVideoReadView,
+        childViewTagName: 'li'
       });
 
       this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("comments"),
+        childViewConstructor: CommentReadView,
+        childViewTagName: 'li'
       });
 
       this.imagesEditView = new ImagesView({
-        model : this.model.get("images"),
+        model: this.model.get("images"),
       });
 
       this.commentEditView = new CommentEditView({
-        model : new Comment(),
+        model: new Comment(),
       });
 
       this.datumEasierToReadIGTAlignedView = new DatumReadView({
-        model : this.model
+        model: this.model
       });
 
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumTags"),
-        childViewConstructor : DatumTagReadView,
-        childViewTagName     : "li",
+        collection: this.model.get("datumTags"),
+        childViewConstructor: DatumTagReadView,
+        childViewTagName: "li",
       });
 
       // Create the DatumFieldsValueEditView
       this.fieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("fields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "tr",
-        childViewClass   : "datum-field",
-        childViewFormat      : "datum"
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldEditView,
+        childViewTagName: "tr",
+        childViewClass: "datum-field",
+        childViewFormat: "datum"
       });
 
       this.sessionView = new SessionReadView({
-        model : this.model.get("session"),
-        });
+        model: this.model.get("session"),
+      });
       this.sessionView.format = "link";
 
       this.model.bind("change:audioVideo", this.playAudio, this);
@@ -106,64 +104,64 @@ define([
     /**
      * The underlying model of the DatumEditView is a Datum.
      */
-    model : Datum,
+    model: Datum,
 
     /**
      * Events that the DatumEditView is listening to and their handlers.
      */
-    events : {
+    events: {
       /* Menu */
-      "click .LaTeX" : function(){
+      "click .LaTeX": function() {
         this.model.latexitDatum(true);
         $("#export-modal").show();
       },
-      "click .icon-paste" : function(){
+      "click .icon-paste": function() {
         this.model.exportAsPlainText(true);
         $("#export-modal").show();
       },
-      "click .CSV" : function(){
+      "click .CSV": function() {
         this.model.exportAsCSV(true, null);
         $("#export-modal").show();
       },
-      "click .WordPress" : function(){
+      "click .WordPress": function() {
         this.model.exportAsWordPress(true, null);
         $("#export-modal").show();
       },
-      "click .XML" : function(){
+      "click .XML": function() {
         this.model.exportAsIGTXML(true, null);
         $("#export-modal").show();
       },
-      "click .JSON" : function(){
+      "click .JSON": function() {
         this.model.exportAsIGTJSON(true, null);
         $("#export-modal").show();
       },
-      "click .icon-th-list" : "hideRareFields",
-      "click .icon-list-alt" : "showRareFields",
-      "click .play-audio": function(e){
-        if(e){
+      "click .icon-th-list": "hideRareFields",
+      "click .icon-list-alt": "showRareFields",
+      "click .play-audio": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         this.playAudio(e);
       },
       /* Edit Only Menu */
-      "click .icon-unlock" : "encryptDatum",
-      "click .icon-lock" : "decryptDatum",
-      "click .icon-eye-open" : function(e){
+      "click .icon-unlock": "encryptDatum",
+      "click .icon-lock": "decryptDatum",
+      "click .icon-eye-open": function(e) {
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.");
         }
         var self = this;
-        confidential.turnOnDecryptedMode(function(){
+        confidential.turnOnDecryptedMode(function() {
           self.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
         });
 
         return false;
       },
-      "click .icon-eye-close" : function(e){
+      "click .icon-eye-close": function(e) {
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.");
         }
         confidential.turnOffDecryptedMode();
@@ -171,10 +169,10 @@ define([
 
         return false;
       },
-      "click .icon-copy" : "duplicateDatum",
-      "click .icon-plus" : "newDatum",
-      "click .add_datum_tag" : "insertNewDatumTag",
-      "keyup .add_tag" : function(e) {
+      "click .icon-copy": "duplicateDatum",
+      "click .icon-plus": "newDatum",
+      "click .add_datum_tag": "insertNewDatumTag",
+      "keyup .add_tag": function(e) {
         var code = e.keyCode || e.which;
 
         // code == 13 is the enter key
@@ -182,20 +180,20 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "blur .validationStatus" : "updateDatumStateColor",
+      "blur .validationStatus": "updateDatumStateColor",
 
-      "blur .utterance .datum_field_input" : "utteranceBlur",
-      "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "focus .morphemes .datum_field_input" : function(e){
-        if( this.lastMorphemsFocus && Date.now() - this.lastMorphemsFocus < 1000 ){
+      "blur .utterance .datum_field_input": "utteranceBlur",
+      "blur .morphemes .datum_field_input": "morphemesBlur",
+      "focus .morphemes .datum_field_input": function(e) {
+        if (this.lastMorphemsFocus && Date.now() - this.lastMorphemsFocus < 1000) {
           return;
         }
         this.lastMorphemsFocus = Date.now();
         this.guessMorphemes(this.$el.find(".utterance .datum_field_input").val());
         this.guessUtterance($(e.target).val());
       },
-      "focus .gloss .datum_field_input" : function(){
-        if( this.lastGlossFocus && Date.now() - this.lastGlossFocus < 1000 ){
+      "focus .gloss .datum_field_input": function() {
+        if (this.lastGlossFocus && Date.now() - this.lastGlossFocus < 1000) {
           return;
         }
         this.lastGlossFocus = Date.now();
@@ -203,14 +201,14 @@ define([
         this.guessUtterance(this.$el.find(".morphemes .datum_field_input").val());
 
       },
-      "click .save-datum" : "saveButton",
+      "click .save-datum": "saveButton",
 
       // Issue #797
-       "click .trash-button" : "putInTrash",
+      "click .trash-button": "putInTrash",
 
       //Add button inserts new Comment
-      "click .add-comment-button" : function(e) {
-        if(e){
+      "click .add-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -225,8 +223,8 @@ define([
         this.commentReadView.render();
       },
       //Delete button remove a comment
-      "click .remove-comment-button" : function(e) {
-        if(e){
+      "click .remove-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -238,31 +236,31 @@ define([
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.templates.datum_edit_embedded,
+    template: Handlebars.templates.datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
      */
-    render : function() {
+    render: function() {
       this.model.startReadTimeIfNotAlreadyStarted();
-      if (OPrime.debugMode) OPrime.debug("DATUM render: " );
+      if (OPrime.debugMode) OPrime.debug("DATUM render: ");
 
-      if(this.collection){
+      if (this.collection) {
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
-//        delete this.collection;
+        //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
       jsonToRender.utterance = jsonToRender.fields.toJSON()[1].mask;
       jsonToRender.translation = jsonToRender.fields.toJSON()[6].mask;
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
       jsonToRender.datumstate = this.model.getValidationStatus();
-      if(jsonToRender.datumstate.length > 30){
-         jsonToRender.datumstate =  jsonToRender.datumstate.substring(0,12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length-12, jsonToRender.datumstate.length);
+      if (jsonToRender.datumstate.length > 30) {
+        jsonToRender.datumstate = jsonToRender.datumstate.substring(0, 12) + "..." + jsonToRender.datumstate.substring(jsonToRender.datumstate.length - 12, jsonToRender.datumstate.length);
       }
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
 
-//    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
+      //    jsonToRender.locale_Add_Tags_Tooltip = Locale.get(locale_Add_Tags_Tooltip);
       jsonToRender.locale_CSV_Tooltip = Locale.get("locale_CSV_Tooltip");
       jsonToRender.locale_WordPress_Tooltip = Locale.get("locale_WordPress_Tooltip");
       jsonToRender.locale_XML_Tooltip = Locale.get("locale_XML_Tooltip");
@@ -275,21 +273,19 @@ define([
       jsonToRender.locale_Plain_Text_Export_Tooltip = Locale.get("locale_Plain_Text_Export_Tooltip");
       jsonToRender.locale_Save = Locale.get("locale_Save");
       jsonToRender.locale_See_Fields = Locale.get("locale_See_Fields");
-      if(jsonToRender.confidential){
+      if (jsonToRender.confidential) {
         jsonToRender.locale_Encrypt = Locale.get("locale_Decrypt");
-      }else{
+      } else {
         jsonToRender.locale_Encrypt = Locale.get("locale_Encrypt");
       }
-      if(jsonToRender.decryptedMode){
+      if (jsonToRender.decryptedMode) {
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
-      }else{
+      } else {
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       }
       if (!this.model.id) {
         jsonToRender.buttonColor = "primary";
       }
-
-
 
       if (this.format == "well") {
         // Display the DatumEditView
@@ -328,9 +324,8 @@ define([
         this.fieldsView.el = this.$(".datum_fields_ul");
         this.fieldsView.render();
 
-
         var self = this;
-        this.getFrequentFields(function(){
+        this.getFrequentFields(function() {
           self.hideRareFields();
         });
 
@@ -339,38 +334,38 @@ define([
       return this;
     },
 
-    rareFields : [],
+    rareFields: [],
     frequentFields: null,
-    getFrequentFields : function(whenfieldsareknown){
+    getFrequentFields: function(whenfieldsareknown) {
       var self = this;
-      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels) {
         // this is one way of hiding the usernames regardles of if they are informative
         // fieldLabels.push("enteredByUser");
         // fieldLabels.push("modifiedByUser");
         self.frequentFields = fieldLabels;
         window.app.get("corpus").frequentFields = fieldLabels;
-        if(typeof whenfieldsareknown == "function"){
+        if (typeof whenfieldsareknown == "function") {
           whenfieldsareknown();
         }
       });
     },
-    hideRareFields : function(e){
-      if(e){
+    hideRareFields: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       $(this.el).find(".extra-datum-info-which-can-be-hidden").hide();
       this.rareFields = [];
-      if(!this.frequentFields || this.frequentFields.length === 0){
+      if (!this.frequentFields || this.frequentFields.length === 0) {
         return;
       }
-      for(var f = 0; f < this.model.get("fields").length; f++ ){
+      for (var f = 0; f < this.model.get("fields").length; f++) {
         //hide entered by user or modified by user if they match the person logged in (ie are not informative because only one person is working on this corpus.)
-        var fieldValue  = this.model.get("fields").models[f].get("mask");
+        var fieldValue = this.model.get("fields").models[f].get("mask");
         var currentUsername = window.app.get("authentication").get("userPrivate").get("username");
-        var fieldsLabel = this.model.get("fields").models[f].get("label") ;
-        if( (fieldsLabel.indexOf("ByUser") > -1 && !fieldValue ) || fieldValue == currentUsername || this.frequentFields.indexOf( fieldsLabel ) == -1 ){
-          $(this.el).find("."+this.model.get("fields").models[f].get("label")).hide();
+        var fieldsLabel = this.model.get("fields").models[f].get("label");
+        if ((fieldsLabel.indexOf("ByUser") > -1 && !fieldValue) || fieldValue == currentUsername || this.frequentFields.indexOf(fieldsLabel) == -1) {
+          $(this.el).find("." + this.model.get("fields").models[f].get("label")).hide();
           this.rareFields.push(this.model.get("fields").models[f].get("label"));
         }
       }
@@ -386,15 +381,15 @@ define([
 
     },
 
-    showRareFields : function(e){
-      if(e){
+    showRareFields: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       $(this.el).find(".extra-datum-info-which-can-be-hidden").show();
 
-      for(var f = 0; f < this.model.get("fields").length; f++ ){
-        $(this.el).find("."+this.model.get("fields").models[f].get("label")).show();
+      for (var f = 0; f < this.model.get("fields").length; f++) {
+        $(this.el).find("." + this.model.get("fields").models[f].get("label")).show();
       }
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
@@ -402,12 +397,11 @@ define([
 
     },
 
-
     /**
      * Encrypts the datum if it is confidential
      */
-    encryptDatum : function(e) {
-      if(e){
+    encryptDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -419,8 +413,8 @@ define([
     /**
      * Decrypts the datum if it was encrypted
      */
-    decryptDatum : function(e) {
-      if(e){
+    decryptDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -429,10 +423,10 @@ define([
       $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
 
-    needsSave : false,
+    needsSave: false,
 
-    saveButton : function(e){
-      if(e){
+    saveButton: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -442,29 +436,29 @@ define([
     /**
      * If the model needs to be saved, saves it.
      */
-    saveScreen : function() {
+    saveScreen: function() {
       if (this.needsSave) {
         // Change the needsSave flag before saving just in case another change
         // happens
         // before the saving is done
         this.needsSave = false;
         var self = this;
-        this.model.saveAndInterConnectInApp(function(){
-          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+self.model.id,"alert-success","Saved!");
-        },function(){
-          window.appView.toastUser("Unable to save datum: "+self.model.id,"alert-danger","Not saved!");
+        this.model.saveAndInterConnectInApp(function() {
+          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: " + self.model.id, "alert-success", "Saved!");
+        }, function() {
+          window.appView.toastUser("Unable to save datum: " + self.model.id, "alert-danger", "Not saved!");
         });
       }
     },
 
-    insertNewDatumTag : function(e) {
-      if(e){
+    insertNewDatumTag: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
-        "tag" : this.$el.find(".add_tag").val()
+        "tag": this.$el.find(".add_tag").val()
       });
 
       // Add the new DatumTag to the Datum's list for datumTags
@@ -476,13 +470,13 @@ define([
       return false;
     },
 
-    updateDatumStateColor : function() {
+    updateDatumStateColor: function() {
       var jsonToRender = {};
       jsonToRender.datumstate = this.model.getValidationStatus();
       jsonToRender.datumstatecolor = this.model.getValidationStatusColor(jsonToRender.datumstate);
 
-      if(!jsonToRender.datumstatecolor){
-        jsonToRender.datumstatecolor= "";
+      if (!jsonToRender.datumstatecolor) {
+        jsonToRender.datumstatecolor = "";
       }
       $(this.el).find(".datum_fields_ul textarea ").removeClass("datum-primary-validation-status-outline-color-warning");
       $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-important");
@@ -490,7 +484,7 @@ define([
       $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-success");
       $(this.el).find(".datum_fields_ul textarea").removeClass("datum-primary-validation-status-outline-color-inverse");
 
-      $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-"+jsonToRender.datumstatecolor);
+      $(this.el).find(".datum_fields_ul textarea").addClass("datum-primary-validation-status-outline-color-" + jsonToRender.datumstatecolor);
 
     },
 
@@ -499,8 +493,8 @@ define([
      * placed at the top of the datumsView, pushing off the bottom Datum, if
      * necessary.
      */
-    newDatum : function(e) {
-      if(e){
+    newDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -512,8 +506,8 @@ define([
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function(e) {
-      if(e){
+    duplicateDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -529,8 +523,8 @@ define([
      * See definition in the model
      *
      */
-    putInTrash : function(e){
-      if(e){
+    putInTrash: function(e) {
+      if (e) {
         e.preventDefault();
       }
       var r = confirm("Are you sure you want to put this datum in the trash?");
@@ -542,11 +536,11 @@ define([
     /*
      * this function can be used to play datum automatically
      */
-    playAudio : function(e){
+    playAudio: function(e) {
       var audioFileName = this.model.getAudioFileName();
       if (audioFileName) {
         this.model.playAudio("audiovideo_" + audioFileName, e.target);
-      }else{
+      } else {
         e.target.disabled = true;
         $(e.target).addClass("disabled");
       }
@@ -556,11 +550,11 @@ define([
      * This function helps the user know that the app is saving his/her data often,
      * it updates the time, without re-rendering the datum
      */
-    updateLastModifiedUI : function(){
-      $(this.el).find(".last-modified").html(OPrime.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
+    updateLastModifiedUI: function() {
+      $(this.el).find(".last-modified").html(OPrime.prettyDate(this.model.get("dateModified"))); //("0 seconds ago");
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
-    utteranceBlur : function(e){
+    utteranceBlur: function(e) {
       var utteranceLine = $(e.currentTarget).val();
       // var utteranceField =  this.model.get("fields").where({label: "utterance"})[0];
       // if (utteranceField.get("mask").trim() == utteranceLine.trim()) {
@@ -570,7 +564,7 @@ define([
       this.guessMorphemes(utteranceLine);
       this.reloadIGTPreview();
     },
-    morphemesBlur : function(e){
+    morphemesBlur: function(e) {
       var morphemesLine = $(e.currentTarget).val();
       // var morphemesField =  this.model.get("fields").where({label: "morphemes"})[0];
       // if (morphemesField.get("mask").trim() == morphemesLine.trim()) {
@@ -583,9 +577,9 @@ define([
       this.reloadIGTPreview();
 
     },
-    previousUtterance : null,
-    previousMorphemes : null,
-    previousGloss : null,
+    previousUtterance: null,
+    previousMorphemes: null,
+    previousGloss: null,
     guessMorphemes: function(utteranceLine) {
       if (utteranceLine && (!this.previousUtterance || (this.previousUtterance != utteranceLine))) {
         this.previousUtterance = utteranceLine;
@@ -664,13 +658,15 @@ define([
     */
     guessTree: function(morphemesLine) {
       if (morphemesLine) {
-        var syntacticTreeLatex  = this.model.guessTree(morphemesLine);
+        var syntacticTreeLatex = this.model.guessTree(morphemesLine);
         OPrime.debug(syntacticTreeLatex);
         /* These put the syntacticTree into the actual datum fields on the screen so the user can see them */
-        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "" ) {
+        if (this.$el.find(".syntacticTreeLatex .datum_field_input").val() == "") {
           this.$el.find(".syntacticTreeLatex .datum_field_input").val(syntacticTreeLatex);
         }
-        var treeField = this.model.get("fields").where({label: "syntacticTreeLatex"})[0];
+        var treeField = this.model.get("fields").where({
+          label: "syntacticTreeLatex"
+        })[0];
         if (treeField) {
           treeField.set("mask", syntacticTreeLatex);
           this.needsSave = true;
@@ -678,7 +674,7 @@ define([
       }
     },
 
-    guessUtterance : function(morphemesLine) {
+    guessUtterance: function(morphemesLine) {
       if (morphemesLine) {
         // If the utterance line is empty, make it a copy of the morphemes, with out the -
         if (this.$el.find(".utterance").find(".datum_field_input").val() == "") {
@@ -692,19 +688,23 @@ define([
         }
       }
     },
-    prepareDatumFieldAlternatesTypeAhead : function(){
-      var validationStatusField =  this.model.get("fields").where({label: "validationStatus"})[0];
-      window.app.get("corpus").getFrequentDatumValidationStates(null, null, function(results){
+    prepareDatumFieldAlternatesTypeAhead: function() {
+      var validationStatusField = this.model.get("fields").where({
+        label: "validationStatus"
+      })[0];
+      window.app.get("corpus").getFrequentDatumValidationStates(null, null, function(results) {
         validationStatusField.set("alternates", results);
       });
 
-      var tagField =  this.model.get("fields").where({label: "tags"})[0];
-      window.app.get("corpus").getFrequentDatumTags(null, null, function(results){
+      var tagField = this.model.get("fields").where({
+        label: "tags"
+      })[0];
+      window.app.get("corpus").getFrequentDatumTags(null, null, function(results) {
         tagField.set("alternates", results);
       });
 
     },
-    reloadIGTPreview: function(){
+    reloadIGTPreview: function() {
       // Display the DatumReadView
       this.datumEasierToReadIGTAlignedView.model = this.model;
       this.datumEasierToReadIGTAlignedView.render();

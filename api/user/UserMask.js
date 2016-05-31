@@ -347,7 +347,6 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
     }
   }
 
-
 });
 
 exports.UserMask = UserMask;

@@ -3,7 +3,7 @@
  */
 if (!OPrime.isAndroidApp()) {
   document.getElementById("audio_stimuli_file").setAttribute("controls",
-      "controls");
+    "controls");
 }
 /*
  * Handle the play/pause stimuli button
@@ -27,9 +27,9 @@ document.getElementById("play_stimulus_button").onclick = function(e) {
 document.getElementById("stop_stimulus_button").onclick = function(e) {
   OPrime.stopAudioFile('audio_stimuli_file');
   if (document.getElementById("play_stimulus_button").classList.toString()
-      .indexOf("icon-play") == -1) {
+    .indexOf("icon-play") == -1) {
     $(document.getElementById("play_stimulus_button")).toggleClass(
-        "icon-play icon-pause");
+      "icon-play icon-pause");
   }
 };
 
@@ -46,15 +46,14 @@ if (userHistory) {
   userHistory.id = Date.now();
 }
 OPrime.hub
-    .subscribe(
-        "playbackCompleted",
-        function(filename) {
-          window.userHistory[filename] = window.userHistory[filename]
-              || [];
-          window.userHistory[filename].push(JSON
-              .stringify(new Date()));
-          window.saveUser();
-        }, userHistory);
+  .subscribe(
+    "playbackCompleted",
+    function(filename) {
+      window.userHistory[filename] = window.userHistory[filename] || [];
+      window.userHistory[filename].push(JSON
+        .stringify(new Date()));
+      window.saveUser();
+    }, userHistory);
 
 window.saveUser = function() {
   localStorage.setItem("userHistory", JSON.stringify(window.userHistory));

@@ -8,7 +8,7 @@ var MapReduceFactory = function(options) {
   };
   options.rows = options.rows || [];
 
-  var debug = function(){
+  var debug = function() {
     // console.log(arguments);
   };
 

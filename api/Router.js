@@ -18,7 +18,7 @@ Router.routes.push({
 Router.routes.push({
   path: "/:team/:corpusidentifier/import",
   angularRoute: {
-     redirectTo: "/:team/:corpusidentifier/import/data"
+    redirectTo: "/:team/:corpusidentifier/import/data"
   }
 });
 Router.routes.push({

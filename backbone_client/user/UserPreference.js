@@ -1,15 +1,13 @@
 define([
-    "backbone",
-    "insert_unicode/InsertUnicode",
-    "insert_unicode/InsertUnicodes"
+  "backbone",
+  "insert_unicode/InsertUnicode",
+  "insert_unicode/InsertUnicodes"
 ], function(
-    Backbone,
-    InsertUnicode,
-    InsertUnicodes
+  Backbone,
+  InsertUnicode,
+  InsertUnicodes
 ) {
-  var UserPreference = Backbone.Model.extend(
-  /** @lends UserPreference.prototype */
-  {
+  var UserPreference = Backbone.Model.extend( /** @lends UserPreference.prototype */ {
     /**
      * @class Hold preferences for users like the skin of the app
      *
@@ -20,43 +18,42 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("USER PREFERENCE init");
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
-      if(OPrime.apptype == "myaamia")
-      {// do some prefs for myaamia users}
-    	  /*
+      if (OPrime.apptype == "myaamia") { // do some prefs for myaamia users}
+        /*
     	   if(OPrime.apptype == "myaamia" && app.get("authentication").get("userPrivate").get("username") == "public"){
        this.set("transparentDashboard", "true");
      }
     	   */
       }
     },
-    fillWithDefaults : function(){
-      if(this.get("unicodes") == undefined){
+    fillWithDefaults: function() {
+      if (this.get("unicodes") == undefined) {
         this.set("unicodes", new InsertUnicodes());
-      }//end if to set unicode
-      if(this.get("unicodes").models.length == 0){
+      } //end if to set unicode
+      if (this.get("unicodes").models.length == 0) {
         this.get("unicodes").fill();
       }
     },
-    defaults : {
-      skin : "",
-      numVisibleDatum : 2, //Use two as default so users can see minimal pairs
+    defaults: {
+      skin: "",
+      numVisibleDatum: 2, //Use two as default so users can see minimal pairs
       transparentDashboard: "false",
-      alwaysRandomizeSkin : "true",
-      numberOfItemsInPaginatedViews : 10
+      alwaysRandomizeSkin: "true",
+      numberOfItemsInPaginatedViews: 10
     },
 
     // Internal models: used by the parse function
-    internalModels : {
-      unicodes : InsertUnicodes
+    internalModels: {
+      unicodes: InsertUnicodes
     },
 
-    originalParse : Backbone.Model.prototype.parse,
+    originalParse: Backbone.Model.prototype.parse,
     parse: function(originalModel) {
       if (originalModel) {
         if (!originalModel.preferredDashboardLayout && originalModel.preferedDashboardLayout) {
@@ -67,8 +64,8 @@ define([
       return this.originalParse(originalModel);
     },
 
-    saveAndInterConnectInApp : function(callback){
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp: function(callback) {
+      if (typeof callback == "function") {
         callback();
       }
     }

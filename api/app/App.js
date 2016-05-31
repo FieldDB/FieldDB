@@ -196,7 +196,6 @@ var App = function App(options) {
   this.thisyear = (new Date()).getFullYear();
   this.whiteListCORS = this.whiteListCORS || ["self"];
 
-
   var self = this;
   Q.nextTick(function() {
     self.warn("An app of type " + self.fieldDBtype + " has become automagically available to all fielddb objects");
@@ -409,7 +408,6 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       this._decryptedMode = value;
     }
   },
-
 
   fetch: {
     value: function() {
@@ -940,7 +938,6 @@ App.prototype = Object.create(FieldDBObject.prototype, /** @lends App.prototype 
       return json;
     }
   }
-
 
 });
 exports.App = App;

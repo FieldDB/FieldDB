@@ -1,24 +1,23 @@
 /* If they have an old link, redirect them */
 if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
   var newTestingServerWithCORS = window.location.href.replace(
-      "ifielddevs.iriscouch.com", "corpus.lingsync.org");
+    "ifielddevs.iriscouch.com", "corpus.lingsync.org");
   if (window.location.protocol == "http:") {
     newTestingServerWithCORS = newTestingServerWithCORS
-        .replace("http", "https");
+      .replace("http", "https");
   }
   window.location.replace(newTestingServerWithCORS);
 }
 /* If they have an old link, redirect them */
 if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
   var newTestingServerWithCORS = window.location.href.replace(
-      "corpusdev.lingsync.org", "corpus.lingsync.org");
+    "corpusdev.lingsync.org", "corpus.lingsync.org");
   if (window.location.protocol == "http:") {
     newTestingServerWithCORS = newTestingServerWithCORS
-        .replace("http", "https");
+      .replace("http", "https");
   }
   window.location.replace(newTestingServerWithCORS);
 }
-
 
 /* Make sure they use the https versions, if they are on a couchapp */
 if (window.location.origin.indexOf("localhost") == -1) {
@@ -126,7 +125,7 @@ require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
   }
 
   window.app = new App({
-    filledWithDefaults : true
+    filledWithDefaults: true
   });
 });
 

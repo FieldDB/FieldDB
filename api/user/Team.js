@@ -87,7 +87,6 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
   //   }
   // }
 
-
 });
 
 exports.Team = Team;

@@ -305,7 +305,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         return;
       }
 
-
       try {
         self.pouch(function(err, db) {
           db.query("pages/datums", {
@@ -405,8 +404,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         return;
       }
 
-
-
       try {
         var self = this;
         self.pouch(function(err, db) {
@@ -458,7 +455,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       var fieldlabel,
         highlightedmatch;
 
-
       this.debug("Highlighting matches for ", simpleObject, queryString, doGrossKeywordMatch, queryTokens);
       var highlightedMatches = [];
       // If the query string is null, include all datumIds
@@ -479,7 +475,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         }
         return highlightedMatches;
       } else {
-
 
         var conditionalHighlightedMatches = [];
         this.debug(" Searching through ", queryTokens);
@@ -559,7 +554,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
 
       var searchResult = objectToSearchThrough[label];
       searchResult = this.highlight(searchResult, value);
-
 
       if (negate) {
         if (searchResult.indexOf("<span") > -1) {
@@ -724,7 +718,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
-
   /**
    * This function is used to set the primary status of the datum,
    * eg. put Deleted as the first item in the validation status.
@@ -779,7 +772,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       validationStatus = selectedValue + " " + validationStatus;
       var uniqueStati = _.unique(validationStatus.trim().split(" "));
       n.set("mask", uniqueStati.join(" "));
-
 
       //      this.save();
       //TODO save it
@@ -1252,7 +1244,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
               window.appView.searchEditView.searchDataListView.model.get("datumIds").unshift(model.id);
             }
           } //end of if search is open and running for Alan
-
 
           //dont need to save the user every time when we change a datum.
           //            window.app.get("authentication").saveAndInterConnectInApp();

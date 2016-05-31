@@ -127,6 +127,5 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
     }
   }
 
-
 });
 exports.AudioVideo = AudioVideo;

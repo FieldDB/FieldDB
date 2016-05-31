@@ -202,7 +202,6 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
             };
             optionalElements.video.addEventListener("click", takeSnapshot, false);
 
-
             // Note: onloadedmetadata doesn't fire in Chrome when using it with getUserMedia.
             // See crbug.com/110938.
             var onmedialoaded = function(e) {
@@ -397,7 +396,6 @@ AudioVideoRecorder.prototype = Object.create(Object.prototype, /** @lends AudioV
   }
 
 });
-
 
 RecordMP3.workerPath = "bower_components/recordmp3js/";
 RecordMP3.showFile = AudioVideoRecorder.prototype.showFile;

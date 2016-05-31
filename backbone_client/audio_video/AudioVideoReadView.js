@@ -1,43 +1,40 @@
-define([ 
-    "backbone",
-    "libs/compiled_handlebars", 
-    "audio_video/AudioVideo"
+define([
+  "backbone",
+  "libs/compiled_handlebars",
+  "audio_video/AudioVideo"
 ], function(
-    Backbone, 
-    Handlebars,
-    AudioVideo
+  Backbone,
+  Handlebars,
+  AudioVideo
 ) {
-  var AudioVideoReadView = Backbone.View.extend(
-  /** @lends AudioVideoReadView.prototype */
-  {
+  var AudioVideoReadView = Backbone.View.extend( /** @lends AudioVideoReadView.prototype */ {
     /**
      * @class This is the view of the Audio Video Model.
      *
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
-    },
-    
-    model : AudioVideo,
+    initialize: function() {},
 
-    template : Handlebars.templates.audio_video_read_embedded,
+    model: AudioVideo,
 
-    render : function() {
-      if(this.model.get("URL")){
+    template: Handlebars.templates.audio_video_read_embedded,
+
+    render: function() {
+      if (this.model.get("URL")) {
         var jsonToRender = this.model.toJSON();
-        jsonToRender.audioType = "audio/"+this.model.get("filename").split('.').pop() ;
+        jsonToRender.audioType = "audio/" + this.model.get("filename").split('.').pop();
 
         //If this audio file was already loaded in the document, dont load it again.
-        if(document.getElementById("audiovideo_"+jsonToRender.filename)){
+        if (document.getElementById("audiovideo_" + jsonToRender.filename)) {
           return this;
         }
         console.log("rendering Audio Video ", jsonToRender);
         $(this.el).html(this.template(jsonToRender));
-      }else{
+      } else {
         $(this.el).html(""); //render no audio player
       }
-      
+
       return this;
     }
   });

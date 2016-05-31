@@ -1,33 +1,31 @@
-define( [
-    "backbone",
-    "libs/compiled_handlebars",
-    "audio_video/AudioVideoReadView",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentReadView",
-    "comment/CommentEditView",
-	  "data_list/DataList",
-	  "datum/Datum",
-  	"datum/DatumReadView",
-	  "datum/Datums",
-  	"app/UpdatingCollectionView"
+define([
+  "backbone",
+  "libs/compiled_handlebars",
+  "audio_video/AudioVideoReadView",
+  "comment/Comment",
+  "comment/Comments",
+  "comment/CommentReadView",
+  "comment/CommentEditView",
+  "data_list/DataList",
+  "datum/Datum",
+  "datum/DatumReadView",
+  "datum/Datums",
+  "app/UpdatingCollectionView"
 ], function(
-    Backbone,
-    Handlebars,
-    AudioVideoReadView,
-    Comment,
-    Comments,
-    CommentReadView,
-    CommentEditView,
-    DataList,
-    Datum,
-    DatumReadView,
-    Datums,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  AudioVideoReadView,
+  Comment,
+  Comments,
+  CommentReadView,
+  CommentEditView,
+  DataList,
+  Datum,
+  DatumReadView,
+  Datums,
+  UpdatingCollectionView
 ) {
-  var DataListReadView = Backbone.View.extend(
-  /** @lends DataListReadView.prototype */
-  {
+  var DataListReadView = Backbone.View.extend( /** @lends DataListReadView.prototype */ {
     /**
      * @class A list of datum that are returned as a search result. It will have
      *        check-boxes on the side and a datum menu on the bottom.
@@ -40,16 +38,16 @@ define( [
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function(options) {
+    initialize: function(options) {
       if (OPrime.debugMode) OPrime.debug("DATALIST READ VIEW init: ");
 
       this.changeViewsOfInternalModels();
-      this.model.bind('change:dateCreated', function(){
+      this.model.bind('change:dateCreated', function() {
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
 
-      this.model.bind('change:datumIds', function(){
+      this.model.bind('change:datumIds', function() {
         this.render();
       }, this);
     },
@@ -57,15 +55,15 @@ define( [
     /**
      * The underlying model of the DataListReadView is a DataList.
      */
-    model : DataList,
+    model: DataList,
 
     /**
      * Events that the DataListReadView is listening to and their handlers.
      */
-    events : {
+    events: {
       //Add button inserts new Comment
-      "click .add-comment-button" : function(e) {
-        if(e){
+      "click .add-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -78,33 +76,33 @@ define( [
         this.updatePouch();
         this.commentReadView.render();
 
-//        this.model.get("comments").unshift(this.commentEditView.model);
-//        this.commentEditView.model = new Comment();
+        //        this.model.get("comments").unshift(this.commentEditView.model);
+        //        this.commentEditView.model = new Comment();
       },
       //Delete button remove a comment
-      "click .remove-comment-button" : function(e) {
-        if(e){
+      "click .remove-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
       },
 
-      "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeFullscreen",
-      "click .icon-edit" : "showEditable",
-      "click .icon-minus-sign" : function(e) {
+      "click .icon-resize-small": 'resizeSmall',
+      "click .icon-resize-full": "resizeFullscreen",
+      "click .icon-edit": "showEditable",
+      "click .icon-minus-sign": function(e) {
         e.preventDefault();
         this.format = "minimized";
         this.render();
       },
-      "click .icon-plus-sign" : function(e) {
+      "click .icon-plus-sign": function(e) {
         e.preventDefault();
         this.format = "leftSide";
         this.render();
       },
-      "click .latex-export-datalist": function(e){
-        if(e){
+      "click .latex-export-datalist": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -113,8 +111,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "latexitDataList", true);
         return false;
       },
-      "click .icon-paste": function(e){
-        if(e){
+      "click .icon-paste": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -123,8 +121,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsPlainText", true);
         return false;
       },
-      "click .CSV": function(e){
-        if(e){
+      "click .CSV": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -133,8 +131,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsCSV", true);
         return false;
       },
-      "click .WordPress": function(e){
-        if(e){
+      "click .WordPress": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -143,8 +141,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsWordPress", true);
         return false;
       },
-      "click .XML": function(e){
-        if(e){
+      "click .XML": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -153,8 +151,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTXML", true);
         return false;
       },
-      "click .JSON": function(e){
-        if(e){
+      "click .JSON": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -163,8 +161,8 @@ define( [
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "exportAsIGTJSON", true);
         return false;
       },
-      "click .icon-bullhorn": function(e){
-        if(e){
+      "click .icon-bullhorn": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -172,77 +170,77 @@ define( [
         this.createPlaylistAndPlayAudioVideo(this.getAllCheckedDatums());
         return false;
       },
-      "click .icon-remove-sign": function(e){
-        if(e){
+      "click .icon-remove-sign": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
-        var r=window.confirm("Are you sure you want to remove these items from the datalist?");
-        if (r==true) {
-        	this.removeDatumFromThisList(this.getAllCheckedDatums());
-        	return false;
-        }else {
-        	return false;
+        var r = window.confirm("Are you sure you want to remove these items from the datalist?");
+        if (r == true) {
+          this.removeDatumFromThisList(this.getAllCheckedDatums());
+          return false;
+        } else {
+          return false;
         }
       },
-      "click .icon-trash": function(e){
-        if(e){
+      "click .icon-trash": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "putInTrash", "batchmode");
-//        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
-//        this.render();
+        //        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
+        //        this.render();
 
         return false;
       },
-      "click .icon-lock": function(e){
-        if(e){
+      "click .icon-lock": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
 
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "encrypt");
-//        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
-//        this.render();
+        //        this.$el.find(".icon-unlock").toggleClass("icon-unlock icon-lock");
+        //        this.render();
 
         return false;
       },
-      "click .icon-unlock": function(e){
-        if(e){
+      "click .icon-unlock": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
 
         this.model.applyFunctionToAllIds(this.getAllCheckedDatums(), "decrypt");
-//        this.$el.find(".icon-lock").toggleClass("icon-unlock icon-lock");
-//        this.render();
+        //        this.$el.find(".icon-lock").toggleClass("icon-unlock icon-lock");
+        //        this.render();
 
         return false;
       },
-      "click .icon-eye-open" : function(e){
-        if(e){
+      "click .icon-eye-open": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.")
         }
         var self = this;
-        confidential.turnOnDecryptedMode(function(){
+        confidential.turnOnDecryptedMode(function() {
           self.$el.find(".icon-eye-close").toggleClass("icon-eye-close icon-eye-open");
         });
 
         return false;
       },
-      "click .icon-eye-close" : function(e){
-        if(e){
+      "click .icon-eye-close": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.")
         }
         confidential.turnOffDecryptedMode();
@@ -255,32 +253,32 @@ define( [
     /**
      * The Handlebars template rendered as the DataListFullscreenReadView.
      */
-    templateFullscreen : Handlebars.templates.data_list_read_embedded,
+    templateFullscreen: Handlebars.templates.data_list_read_embedded,
 
     /**
      * The Handlebars template rendered as the DataListEmbeddedReadView.
      */
-    templateEmbedded : Handlebars.templates.data_list_read_embedded,
+    templateEmbedded: Handlebars.templates.data_list_read_embedded,
 
     /**
      * The Handlebars template rendered as Summary.
      */
-    templateSummary : Handlebars.templates.data_list_summary_read_embedded,
+    templateSummary: Handlebars.templates.data_list_summary_read_embedded,
 
     /**
      * The Handlebars template rendered as the DataListLinkReadView.
      */
-    templateLink : Handlebars.templates.data_list_read_link,
+    templateLink: Handlebars.templates.data_list_read_link,
 
     /**
      * The Handlebars template of the minimized version
      */
-    templateMinimized : Handlebars.templates.data_list_summary_read_minimized,
+    templateMinimized: Handlebars.templates.data_list_summary_read_minimized,
 
-    render : function() {
-      if(this.format != "link"){
+    render: function() {
+      if (this.format != "link") {
         window.appView.currentReadDataListView.destroy_view();
-        if(window.appView.currentEditDataListView){
+        if (window.appView.currentEditDataListView) {
           window.appView.currentEditDataListView.destroy_view();
         }
       }
@@ -312,12 +310,11 @@ define( [
       jsonToRender.locale_Show_Fullscreen = Locale.get("locale_Show_Fullscreen");
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
 
-      if(jsonToRender.decryptedMode){
+      if (jsonToRender.decryptedMode) {
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Hide_confidential_items_Tooltip");
-      }else{
+      } else {
         jsonToRender.locale_Show_confidential_items_Tooltip = Locale.get("locale_Show_confidential_items_Tooltip");
       }
-
 
       if (this.format == "link") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ LINK render: ");
@@ -332,8 +329,7 @@ define( [
         $(this.el).html(this.templateSummary(jsonToRender));
 
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
-            $("#data-list-quickview").find(".current-data-list-paginated-view") );
-
+          $("#data-list-quickview").find(".current-data-list-paginated-view"));
 
       } else if (this.format == "fullscreen") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ FULLSCREEN render: ");
@@ -343,16 +339,16 @@ define( [
         $(this.el).html(this.templateFullscreen(jsonToRender));
 
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
-            $("#data-list-fullscreen").find(".current-data-list-paginated-view") );
+          $("#data-list-fullscreen").find(".current-data-list-paginated-view"));
 
-      } else if(this.format == "centerWell") {
+      } else if (this.format == "centerWell") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ CENTER render: ");
 
         this.setElement($("#data-list-embedded-header"));
         $(this.el).html(this.templateEmbedded(jsonToRender));
 
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
-            $("#data-list-embedded").find(".current-data-list-paginated-view") );
+          $("#data-list-embedded").find(".current-data-list-paginated-view"));
 
       } else if (this.format == "minimized") {
         if (OPrime.debugMode) OPrime.debug("DATALIST READ MINIMIZED render: ");
@@ -361,7 +357,7 @@ define( [
         $(this.el).html(this.templateMinimized(jsonToRender));
 
         window.appView.currentPaginatedDataListDatumsView.renderInElement(
-            $("#data-list-quickview").find(".current-data-list-paginated-view") );
+          $("#data-list-quickview").find(".current-data-list-paginated-view"));
 
       }
       if (this.format !== "link") {
@@ -373,8 +369,8 @@ define( [
         this.audioVideoView.render();
       }
 
-      try{
-        if (this.format && this.format.indexOf("minimized") == -1){
+      try {
+        if (this.format && this.format.indexOf("minimized") == -1) {
           // Display the commentReadView
           this.commentReadView.el = $(this.el).find('.comments');
           this.commentReadView.render();
@@ -384,79 +380,78 @@ define( [
           this.commentEditView.render();
 
         }
-      }catch(e){
-        alert("Bug, there was a problem rendering the contents of the data list format: "+this.format);
+      } catch (e) {
+        alert("Bug, there was a problem rendering the contents of the data list format: " + this.format);
       }
-
 
       return this;
     },
 
-    changeViewsOfInternalModels : function() {
+    changeViewsOfInternalModels: function() {
       // Create a CommentReadView
       this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("comments"),
+        childViewConstructor: CommentReadView,
+        childViewTagName: 'li'
       });
 
       this.commentEditView = new CommentEditView({
-        model : new Comment(),
+        model: new Comment(),
       });
 
       this.audioVideoView = new UpdatingCollectionView({
-        collection           : this.model.get("audioVideo"),
-        childViewConstructor : AudioVideoReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("audioVideo"),
+        childViewConstructor: AudioVideoReadView,
+        childViewTagName: 'li'
       });
     },
     /**
      * Loops through all (visible) checkboxes in the currentPaginatedDataListDatumsView, and returns an array of checked items.
      * @returns {Array}
      */
-    getAllCheckedDatums : function(){
+    getAllCheckedDatums: function() {
       var datumIdsChecked = [];
 
-      for(var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews){
-        if(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true){
+      for (var datumViewIndex in window.appView.currentPaginatedDataListDatumsView._childViews) {
+        if (window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].checked == true) {
           datumIdsChecked.push(window.appView.currentPaginatedDataListDatumsView._childViews[datumViewIndex].model.id);
         }
       }
-//      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
+      //      alert("DATA LIST READ VIEW datumIdsChecked "+ JSON.stringify(datumIdsChecked));
 
       return datumIdsChecked;
     },
-    createPlaylistAndPlayAudioVideo : function(datumIds){
-      this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths){
+    createPlaylistAndPlayAudioVideo: function(datumIds) {
+      this.model.getAllAudioAndVideoFiles(datumIds, function(audioAndVideoFilePaths) {
         // alert("TODO show playlist and audio player for all audio/video in datums "+JSON.stringify(audioAndVideoFilePaths));
       });
     },
-    removeDatumFromThisList : function(datumIds){
-      if(datumIds == this.model.get("datumIds")){
+    removeDatumFromThisList: function(datumIds) {
+      if (datumIds == this.model.get("datumIds")) {
         return; //return quietly, refuse to remove all datum in a data list.
       }
-      try{
-        this.model.set("datumIds", _.difference(this.model.get("datumIds"), datumIds) );
+      try {
+        this.model.set("datumIds", _.difference(this.model.get("datumIds"), datumIds));
         var self = this;
-        this.model.saveAndInterConnectInApp(function(){
+        this.model.saveAndInterConnectInApp(function() {
           appView.currentPaginatedDataListDatumsView.removeIds(datumIds);
         });
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.",e);
+      } catch (e) {
+        if (OPrime.debugMode) OPrime.debug("Attemptign to remove datum(s) from the current datalist, there was something that went wrong.", e);
       }
     },
-    resizeSmall : function(e){
-      if(e){
+    resizeSmall: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-//      this.format = "leftSide";
-//      this.render();
+      //      this.format = "leftSide";
+      //      this.render();
       window.location.href = "#render/true";
     },
 
-    resizeFullscreen : function(e){
-      if(e){
+    resizeFullscreen: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -466,12 +461,12 @@ define( [
     },
 
     //bound to pencil button
-    showEditable :function(e){
-      if(e){
+    showEditable: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-      if(window.appView.currentEditDataListView){
+      if (window.appView.currentEditDataListView) {
         window.appView.currentEditDataListView.format = this.format;
         window.appView.currentEditDataListView.render();
       }
@@ -482,7 +477,7 @@ define( [
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING DATALIST READ VIEW " + this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -490,30 +485,29 @@ define( [
       $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//      this.remove();
-//      Backbone.View.prototype.remove.call(this);
-      },
+      //      this.remove();
+      //      Backbone.View.prototype.remove.call(this);
+    },
 
-      /* ReadView is supposed to save no change but we want the comments to
-       * be saved. This function saves the change/addition/deletion of the comments.
-       * Changes in other parts of Datalist is taken care of the server according to
-       * users' permissions. */
-      updatePouch : function(e) {
-        if(e){
-          e.stopPropagation();
-          e.preventDefault();
-        }
-        var self = this;
-        if(this.format == "modal"){
-          $("#new-corpus-modal").hide();
-        }
-        this.model.saveAndInterConnectInApp(function(){
-          self.render();
-        },function(){
-          self.render();
-        });
+    /* ReadView is supposed to save no change but we want the comments to
+     * be saved. This function saves the change/addition/deletion of the comments.
+     * Changes in other parts of Datalist is taken care of the server according to
+     * users' permissions. */
+    updatePouch: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
       }
-
+      var self = this;
+      if (this.format == "modal") {
+        $("#new-corpus-modal").hide();
+      }
+      this.model.saveAndInterConnectInApp(function() {
+        self.render();
+      }, function() {
+        self.render();
+      });
+    }
 
   });
 

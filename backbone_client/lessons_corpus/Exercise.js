@@ -1,18 +1,17 @@
-define( [ 
-    "backbone", 
-    "../datum/Datum", 
-    "recording/Recording",
-    "recordings/Recordings"
-//    "../user/User"
+define([
+  "backbone",
+  "../datum/Datum",
+  "recording/Recording",
+  "recordings/Recordings"
+  //    "../user/User"
 ], function(
-    Backbone,
-    Datum, 
-    Recording, 
-    Recordings
-//    User
-    ) {
-  var Exercise = Datum.extend(
-   {
+  Backbone,
+  Datum,
+  Recording,
+  Recordings
+  //    User
+) {
+  var Exercise = Datum.extend({
     /**
      * @class An Exercise is a type of Datum. It has the same information as a Datum plus extra,
      * but we want some info (e.g. recordings) to be kept confidential.
@@ -29,38 +28,35 @@ define( [
      * the RecordArray will tell us how many recordings it has in it.
      * 
      * @property {User} To be replaced by either student or teacher, but for the moment we just use User to get its ID.
-	 * maybe we don't need User because it'd be in Session, which is in Datum.
-	 * ? @property {String} student This is the ID of the student whose progress we're tracking
+     * maybe we don't need User because it'd be in Session, which is in Datum.
+     * ? @property {String} student This is the ID of the student whose progress we're tracking
      * 
      * @extends Backbone.Model
      * 
      * @constructs
      * 
      */
-    initialize : function() {
-//      Exercise.__super__.initialize.call(this,);
+    initialize: function() {
+      //      Exercise.__super__.initialize.call(this,);
 
-//      this.set("user", "");
+      //      this.set("user", "");
       this.set("lastListened", new Date(JSON.parse(t)));
       this.set("timesListened", "");
       //make the array of recordings
-      
+
     },
-    
-    internalModels : {
+
+    internalModels: {
       // recordAudio  :  RecordAudio
       // compareAudio  :  CompareAudio
     },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp: function(callback) {
+
+      if (typeof callback == "function") {
         callback();
       }
     }
   });
 
   return Exercise;
-}); 
-
-
-
+});

@@ -1,105 +1,106 @@
 // Set the RequireJS configuration
 require.config({
-  paths : {
+  paths: {
     /* Bootstrap user interface javascript files */
-    "bootstrap" : "libs/bootstrap/js/bootstrap.min",
+    "bootstrap": "libs/bootstrap/js/bootstrap.min",
 
-    "CryptoJS" : "libs/Crypto_AES",
+    "CryptoJS": "libs/Crypto_AES",
 
     /* jQuery and jQuery plugins */
-    "jquery" : "bower_components/jquery/dist/jquery",
+    "jquery": "bower_components/jquery/dist/jquery",
 
     /* Handlebars html templating libraries and compiled templates */
-    "compiledTemplates" : "libs/compiled_handlebars",
-    "handlebars" : "libs/handlebars.runtime",
+    "compiledTemplates": "libs/compiled_handlebars",
+    "handlebars": "libs/handlebars.runtime",
 
     /* Backbone Model View Controller framework and its plugins and dependencies */
-    "backbone" : "libs/backbone",
-    "backbone_pouchdb" : "libs/backbone-pouchdb",
-    "backbone_couchdb" : "libs/backbone-couchdb",
-    "pouch" : "libs/pouch.alpha",
-    "underscore" : "libs/underscore",
+    "backbone": "libs/backbone",
+    "backbone_pouchdb": "libs/backbone-pouchdb",
+    "backbone_couchdb": "libs/backbone-couchdb",
+    "pouch": "libs/pouch.alpha",
+    "underscore": "libs/underscore",
 
-    "terminal" : "libs/terminal/terminal",
+    "terminal": "libs/terminal/terminal",
 
-    "text" : "libs/text",
+    "text": "libs/text",
 
-    "xml2json" : "libs/xml2json",
+    "xml2json": "libs/xml2json",
 
-    "oprime" : "libs/OPrime",
-    "OPrime" : "libs/webservicesconfig_devserver"
+    "oprime": "libs/OPrime",
+    "OPrime": "libs/webservicesconfig_devserver"
   },
-  shim : {
-    "underscore" : {
-      exports : "_"
+  shim: {
+    "underscore": {
+      exports: "_"
     },
 
-    "jquery" : {
-      exports : "$"
+    "jquery": {
+      exports: "$"
     },
 
-    "xml2json" : {
-      deps : [ "jquery" ],
-      exports : "X2JS"
+    "xml2json": {
+      deps: ["jquery"],
+      exports: "X2JS"
     },
 
-    "oprime" : {
-      exports : "OPrime"
+    "oprime": {
+      exports: "OPrime"
     },
-    "webservicesconfig" : {
-      deps : [ "oprime" ],
-      exports : "OPrime"
-    },
-
-    "bootstrap" : {
-      deps : [ "jquery" ],
-      exports : "bootstrap"
+    "webservicesconfig": {
+      deps: ["oprime"],
+      exports: "OPrime"
     },
 
-    "pouch" : {
-      exports : "Pouch"
-    },
-    "backbone" : {
-      deps : [ "underscore", "bootstrap", "compiledTemplates" ],
-      exports : "Backbone"
-    },
-    "backbone_pouchdb" : {
-      deps : [ "backbone", "pouch", "backbone_couchdb" ],
-      exports : "Backbone"
-    },
-    "backbone_couchdb" : {
-      deps : [ "backbone", "pouch" ],
-      exports : "Backbone"
+    "bootstrap": {
+      deps: ["jquery"],
+      exports: "bootstrap"
     },
 
-    "handlebars" : {
-      deps : [ "bootstrap", "jquery" ],
-      exports : "Handlebars"
+    "pouch": {
+      exports: "Pouch"
+    },
+    "backbone": {
+      deps: ["underscore", "bootstrap", "compiledTemplates"],
+      exports: "Backbone"
+    },
+    "backbone_pouchdb": {
+      deps: ["backbone", "pouch", "backbone_couchdb"],
+      exports: "Backbone"
+    },
+    "backbone_couchdb": {
+      deps: ["backbone", "pouch"],
+      exports: "Backbone"
     },
 
-    "compiledTemplates" : {
-      deps : [ "handlebars" ],
-      exports : "Handlebars"
+    "handlebars": {
+      deps: ["bootstrap", "jquery"],
+      exports: "Handlebars"
     },
-    "terminal" : {
-      deps : [ "bootstrap", "jquery" ],
-      exports : "Terminal"
+
+    "compiledTemplates": {
+      deps: ["handlebars"],
+      exports: "Handlebars"
+    },
+    "terminal": {
+      deps: ["bootstrap", "jquery"],
+      exports: "Terminal"
     }
-
 
   }
 });
 
 //Initialization
 require([
-      "app/App",
-      "backbone_pouchdb",
-      "OPrime"
-      ], function(
-          App,
-          forcingpouchtoloadearly
-      ) {
-window.app = new App({filledWithDefaults: true});
+  "app/App",
+  "backbone_pouchdb",
+  "OPrime"
+], function(
+  App,
+  forcingpouchtoloadearly
+) {
+  window.app = new App({
+    filledWithDefaults: true
+  });
 });
 
 //// Initialization

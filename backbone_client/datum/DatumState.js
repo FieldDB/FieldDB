@@ -1,13 +1,11 @@
 define([
-    "backbone",
-    "user/UserMask"
+  "backbone",
+  "user/UserMask"
 ], function(
-    Backbone,
-    UserMask
+  Backbone,
+  UserMask
 ) {
-  var DatumState = Backbone.Model.extend(
-  /** @lends DatumState.prototype */
-  {
+  var DatumState = Backbone.Model.extend( /** @lends DatumState.prototype */ {
     /**
      * @class The datum state lets the fieldlinguists assign their own state
      *        categories to data (ie check with consultant, check with x,
@@ -28,24 +26,23 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
-    defaults : {
-//      state : "Checked",
-      color : "",
-//      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
-      showInSearchResults : "checked",
-      selected : ""
+    defaults: {
+      //      state : "Checked",
+      color: "",
+      //      consultant : UserMask,//TODO comment out htis line when we confirm that state is working
+      showInSearchResults: "checked",
+      selected: ""
     },
 
     // Internal models: used by the parse function
-    internalModels : {
-      consultant : UserMask
+    internalModels: {
+      consultant: UserMask
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     }

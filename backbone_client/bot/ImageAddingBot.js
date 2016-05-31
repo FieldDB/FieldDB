@@ -22,7 +22,6 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
   }
   var stopAt = 100;
 
-
   var activities = $.couch.db(dbname + "-activity_feed");
   var database = $.couch.db(dbname);
 
@@ -70,7 +69,6 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
       }
     }
 
-
     if (changes.length === 0) {
       console.log("No changes on " + datum._id);
       return;
@@ -88,7 +86,6 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
     // 	"timestampModified": timestamp
     // });
     window.comments = datum.comments;
-
 
     if (typeof saveFunction === "function") {
       saveFunction(datum, changeDescription);
@@ -222,7 +219,6 @@ var Bot = function(dbname, corpusid, corpustitle, optionalDataListForReviewBefor
           }
         });
       }
-
 
     })(cleanedDoc, cleanedDoc._rev, directobjectMessage);
   };

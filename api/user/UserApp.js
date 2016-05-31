@@ -1,29 +1,27 @@
 define([
-    "backbone",
-    "authentication/Authentication",
-    "corpus/Corpus",
-    "user/UserAppView",
-    "user/UserRouter",
-    "confidentiality_encryption/Confidential",
-    "user/User",
-    "user/UserMask",
-    "text!locales/en/messages.json",
-    "OPrime"
+  "backbone",
+  "authentication/Authentication",
+  "corpus/Corpus",
+  "user/UserAppView",
+  "user/UserRouter",
+  "confidentiality_encryption/Confidential",
+  "user/User",
+  "user/UserMask",
+  "text!locales/en/messages.json",
+  "OPrime"
 ], function(
-    Backbone,
-    Authentication,
-    Corpus,
-    UserAppView,
-    UserRouter,
-    Confidential,
-    User,
-    UserMask,
-    LocaleData
+  Backbone,
+  Authentication,
+  Corpus,
+  UserAppView,
+  UserRouter,
+  Confidential,
+  User,
+  UserMask,
+  LocaleData
 
 ) {
-  var UserApp = Backbone.Model.extend(
-  /** @lends UserApp.prototype */
-  {
+  var UserApp = Backbone.Model.extend( /** @lends UserApp.prototype */ {
     /**
      * @class The UserApp handles the loading of the user page (login, welcome etc).
      *
@@ -35,18 +33,20 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("USERAPP INIT");
 
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
-        this.set("authentication", new Authentication({filledWithDefaults: true}));
+        this.set("authentication", new Authentication({
+          filledWithDefaults: true
+        }));
       }
 
       /*
@@ -80,20 +80,22 @@ define([
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
       var u = localStorage.getItem("encryptedUser");
-      if(!u){
+      if (!u) {
         window.location.replace("index.html");
         return;
       }
-      appself.get("authentication").loadEncryptedUser(u, function(success, errors){
-        if(success == null){
-//        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
-//        OPrime.setCookie("username","");
-//        OPrime.setCookie("token","");
-//        localStorage.removeItem("encryptedUser");
-//        window.location.replace('index.html');
+      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        if (success == null) {
+          //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
+          //        OPrime.setCookie("username","");
+          //        OPrime.setCookie("token","");
+          //        localStorage.removeItem("encryptedUser");
+          //        window.location.replace('index.html');
           return;
-        }else{
-          window.appView = new UserAppView({model: appself});
+        } else {
+          window.appView = new UserAppView({
+            model: appself
+          });
           window.appView.render();
           appself.router = new UserRouter();
           Backbone.history.start();
@@ -101,26 +103,26 @@ define([
       });
     },
 
-    addActivity : function(jsonActivity) {
+    addActivity: function(jsonActivity) {
       if (OPrime.debugMode) OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
-//    if (backBoneActivity.get("teamOrPersonal") == "team") {
-//    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
-//    } else {
-//    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
-//    }
+      //    if (backBoneActivity.get("teamOrPersonal") == "team") {
+      //    window.app.get("currentCorpusTeamActivityFeed").addActivity(backBoneActivity);
+      //    } else {
+      //    window.app.get("currentUserActivityFeed").addActivity(backBoneActivity);
+      //    }
     },
 
-    save : function(callback){
-      if(typeof callback == "function"){
+    save: function(callback) {
+      if (typeof callback == "function") {
         callback();
       }
     },
 
-    render: function(){
+    render: function() {
       $("#user-fullscreen").html("list of corpora goes here");
       return this;
     },
-    router : UserRouter,
+    router: UserRouter,
   });
   return UserApp;
 });

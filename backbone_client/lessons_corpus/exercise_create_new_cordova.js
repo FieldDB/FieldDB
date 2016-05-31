@@ -2,22 +2,22 @@ document.addEventListener("deviceready", onDeviceReady, true);
 // PhoneGap is now ready
 
 function onDeviceReady() {
-// Write your code here
+  // Write your code here
   console.log("The device is ready.");
 }
 
-var pictureSource;   // picture source
+var pictureSource; // picture source
 var destinationType; // sets the format of returned value 
 
 // Wait for PhoneGap to connect with the device
 //
-document.addEventListener("deviceready",onDeviceReady,false);
+document.addEventListener("deviceready", onDeviceReady, false);
 
 // PhoneGap is ready to be used!
 //
 function onDeviceReady() {
-    pictureSource=navigator.camera.PictureSourceType;
-    destinationType=navigator.camera.DestinationType;
+  pictureSource = navigator.camera.PictureSourceType;
+  destinationType = navigator.camera.DestinationType;
 }
 
 // Called when a photo is successfully retrieved
@@ -64,23 +64,30 @@ function onPhotoURISuccess(imageURI) {
 //
 function capturePhoto() {
   // Take picture using device camera and retrieve image as base64-encoded string
-  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+  navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+    quality: 50
+  });
 }
 
 // A button will call this function
 //
 function capturePhotoEdit() {
   // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
-  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true }); 
+  navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+    quality: 20,
+    allowEdit: true
+  });
 }
 
 // A button will call this function
 //
 function getPhoto(source) {
   // Retrieve image file location from specified source
-  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+  navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+    quality: 50,
     destinationType: destinationType.FILE_URI,
-    sourceType: source });
+    sourceType: source
+  });
 }
 
 // Called if something bad happens.
@@ -111,19 +118,19 @@ function captureAudio() {
   // Launch device audio recording application,
   // allowing user to capture up to 2 audio clips
   navigator.device.capture.captureAudio(captureSuccess, captureError, {
-    limit : 2
+    limit: 2
   });
 }
 // Upload files to server
 function uploadFile(mediaFile) {
-//  var ft = new FileTransfer(), path = mediaFile.fullPath, name = mediaFile.name;
-//
-//  ft.upload(path, "http://my.domain.com/upload.php", function(result) {
-//    console.log('Upload success: ' + result.responseCode);
-//    console.log(result.bytesSent + ' bytes sent');
-//  }, function(error) {
-//    console.log('Error uploading file ' + path + ': ' + error.code);
-//  }, {
-//    fileName : name
-//  });
+  //  var ft = new FileTransfer(), path = mediaFile.fullPath, name = mediaFile.name;
+  //
+  //  ft.upload(path, "http://my.domain.com/upload.php", function(result) {
+  //    console.log('Upload success: ' + result.responseCode);
+  //    console.log(result.bytesSent + ' bytes sent');
+  //  }, function(error) {
+  //    console.log('Error uploading file ' + path + ': ' + error.code);
+  //  }, {
+  //    fileName : name
+  //  });
 }

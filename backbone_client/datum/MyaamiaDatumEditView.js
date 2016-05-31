@@ -1,38 +1,36 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "audio_video/AudioVideoEditView",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentReadView",
-    "confidentiality_encryption/Confidential",
-    "datum/Datum",
-    "datum/DatumFieldEditView",
-    "datum/DatumTag",
-    "datum/DatumTagEditView",
-    "datum/DatumTagReadView",
-    "datum/SessionReadView",
-    "app/UpdatingCollectionView",
-    "libs/OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "audio_video/AudioVideoEditView",
+  "comment/Comment",
+  "comment/Comments",
+  "comment/CommentReadView",
+  "confidentiality_encryption/Confidential",
+  "datum/Datum",
+  "datum/DatumFieldEditView",
+  "datum/DatumTag",
+  "datum/DatumTagEditView",
+  "datum/DatumTagReadView",
+  "datum/SessionReadView",
+  "app/UpdatingCollectionView",
+  "libs/OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    AudioVideoEditView,
-    Comment,
-    Comments,
-    CommentReadView,
-    Confidential,
-    Datum,
-    DatumFieldEditView,
-    DatumTag,
-    DatumTagEditView,
-    DatumTagReadView,
-    SessionReadView,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  AudioVideoEditView,
+  Comment,
+  Comments,
+  CommentReadView,
+  Confidential,
+  Datum,
+  DatumFieldEditView,
+  DatumTag,
+  DatumTagEditView,
+  DatumTagReadView,
+  SessionReadView,
+  UpdatingCollectionView
 ) {
-  var DatumEditView = Backbone.View.extend(
-  /** @lends DatumEditView.prototype */
-  {
+  var DatumEditView = Backbone.View.extend( /** @lends DatumEditView.prototype */ {
     /**
      * @class The layout of a single editable Datum. It contains a datum
      *        state, fields, datumTags and a datum menu. This is where
@@ -43,37 +41,37 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       // Create a AudioVideoEditView
       this.audioVideoView = new AudioVideoEditView({
-        model : this.model.get("audioVideo")
+        model: this.model.get("audioVideo")
       });
 
       this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("comments"),
+        childViewConstructor: CommentReadView,
+        childViewTagName: 'li'
       });
 
       // Create a DatumTagView
       this.datumTagsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumTags"),
-        childViewConstructor : DatumTagReadView,
-        childViewTagName     : "li",
+        collection: this.model.get("datumTags"),
+        childViewConstructor: DatumTagReadView,
+        childViewTagName: "li",
       });
 
       // Create the DatumFieldsValueEditView
       this.fieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("fields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "li",
-        childViewClass   : "datum-field",
-        childViewFormat      : "datum"
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldEditView,
+        childViewTagName: "li",
+        childViewClass: "datum-field",
+        childViewFormat: "datum"
       });
 
       this.sessionView = new SessionReadView({
-        model : this.model.get("session"),
-        });
+        model: this.model.get("session"),
+      });
       this.sessionView.format = "link";
 
       this.model.bind("change:audioVideo", this.playAudio, this);
@@ -83,52 +81,52 @@ define([
     /**
      * The underlying model of the DatumEditView is a Datum.
      */
-    model : Datum,
+    model: Datum,
 
     /**
      * Events that the DatumEditView is listening to and their handlers.
      */
-    events : {
+    events: {
       /* Prevent clicking on the help conventions from reloading the page to # */
-      "click .help-conventions" :function(e){
-        if(e){
+      "click .help-conventions": function(e) {
+        if (e) {
           e.preventDefault();
         }
       },
       /* Menu */
-      "click .LaTeX" : function(){
+      "click .LaTeX": function() {
         this.model.latexitDatum(true);
         $("#export-modal").show();
       },
-      "click .icon-paste" : function(){
+      "click .icon-paste": function() {
         this.model.exportAsPlainText(true);
         $("#export-modal").show();
       },
-      "click .CSV" : function(){
+      "click .CSV": function() {
         this.model.exportAsCSV(true, null, true);
         $("#export-modal").show();
       },
-      "click .icon-th-list" : "hideRareFields",
-      "click .icon-list-alt" : "showRareFields",
+      "click .icon-th-list": "hideRareFields",
+      "click .icon-list-alt": "showRareFields",
 
       /* Edit Only Menu */
-      "click .icon-unlock" : "encryptDatum",
-      "click .icon-lock" : "decryptDatum",
-      "click .icon-eye-open" : function(e){
+      "click .icon-unlock": "encryptDatum",
+      "click .icon-lock": "decryptDatum",
+      "click .icon-eye-open": function(e) {
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.");
         }
         var self = this;
-        confidential.turnOnDecryptedMode(function(){
+        confidential.turnOnDecryptedMode(function() {
           self.$el.find(".icon-eye-open").toggleClass("icon-eye-close icon-eye-open");
         });
 
         return false;
       },
-      "click .icon-eye-close" : function(e){
+      "click .icon-eye-close": function(e) {
         var confidential = app.get("corpus").get("confidential");
-        if(!confidential){
+        if (!confidential) {
           alert("This is a bug: cannot find decryption module for your corpus.");
         }
         confidential.turnOffDecryptedMode();
@@ -136,10 +134,10 @@ define([
 
         return false;
       },
-      "click .icon-copy" : "duplicateDatum",
-      "click .icon-plus" : "newDatum",
-      "click .add_datum_tag" : "insertNewDatumTag",
-      "keyup .add_tag" : function(e) {
+      "click .icon-copy": "duplicateDatum",
+      "click .icon-plus": "newDatum",
+      "click .add_datum_tag": "insertNewDatumTag",
+      "keyup .add_tag": function(e) {
         var code = e.keyCode || e.which;
 
         // code == 13 is the enter key
@@ -147,73 +145,71 @@ define([
           this.insertNewDatumTag();
         }
       },
-      "change .datum_state_select" : "updateDatumStates",
-      "click .add-comment-datum" : 'insertNewComment',
+      "change .datum_state_select": "updateDatumStates",
+      "click .add-comment-datum": 'insertNewComment',
 
-      "blur .utterance .datum_field_input" : "utteranceBlur",
-      "blur .morphemes .datum_field_input" : "morphemesBlur",
-      "click .save-datum" : "saveButton",
-    	  "click .show_original_details" : function(e){
-              $(this.el).find(".original_french_details").removeAttr("hidden");
-              e.preventDefault();
-            },
-      "click .hide_original_details" : function(e){
-              $(this.el).find(".original_french_details").attr("hidden","hidden");
-              e.preventDefault();
-            },
-            "click .show_cognates_details" : function(e){
-                $(this.el).find(".cognates_details").removeAttr("hidden");
-                e.preventDefault();
-              },
-        "click .hide_cognates_details" : function(e){
-                $(this.el).find(".cognates_details").attr("hidden","hidden");
-                e.preventDefault();
-              },
-              "click .show_miami_details" : function(e){
-                  $(this.el).find(".miami_details").removeAttr("hidden");
-                  e.preventDefault();
-                },
-          "click .hide_miami_details" : function(e){
-                  $(this.el).find(".miami_details").attr("hidden","hidden");
-                  e.preventDefault();
-                },
+      "blur .utterance .datum_field_input": "utteranceBlur",
+      "blur .morphemes .datum_field_input": "morphemesBlur",
+      "click .save-datum": "saveButton",
+      "click .show_original_details": function(e) {
+        $(this.el).find(".original_french_details").removeAttr("hidden");
+        e.preventDefault();
+      },
+      "click .hide_original_details": function(e) {
+        $(this.el).find(".original_french_details").attr("hidden", "hidden");
+        e.preventDefault();
+      },
+      "click .show_cognates_details": function(e) {
+        $(this.el).find(".cognates_details").removeAttr("hidden");
+        e.preventDefault();
+      },
+      "click .hide_cognates_details": function(e) {
+        $(this.el).find(".cognates_details").attr("hidden", "hidden");
+        e.preventDefault();
+      },
+      "click .show_miami_details": function(e) {
+        $(this.el).find(".miami_details").removeAttr("hidden");
+        e.preventDefault();
+      },
+      "click .hide_miami_details": function(e) {
+        $(this.el).find(".miami_details").attr("hidden", "hidden");
+        e.preventDefault();
+      },
 
-                "click .show_myaamia_details" : function(e){
-                    $(this.el).find(".myaamia_details").removeAttr("hidden");
-                    e.preventDefault();
-                  },
-            "click .hide_myaamia_details" : function(e){
-                    $(this.el).find(".myaamia_details").attr("hidden","hidden");
-                    e.preventDefault();
-                  },
+      "click .show_myaamia_details": function(e) {
+        $(this.el).find(".myaamia_details").removeAttr("hidden");
+        e.preventDefault();
+      },
+      "click .hide_myaamia_details": function(e) {
+        $(this.el).find(".myaamia_details").attr("hidden", "hidden");
+        e.preventDefault();
+      },
 
-                  "click .show_related_miami_details" : function(e){
-                      $(this.el).find(".related_miami_details").removeAttr("hidden");
-                      e.preventDefault();
-                    },
-              "click .hide_related_miami_details" : function(e){
-                      $(this.el).find(".related_miami_details").attr("hidden","hidden");
-                      e.preventDefault();
-                    },
+      "click .show_related_miami_details": function(e) {
+        $(this.el).find(".related_miami_details").removeAttr("hidden");
+        e.preventDefault();
+      },
+      "click .hide_related_miami_details": function(e) {
+        $(this.el).find(".related_miami_details").attr("hidden", "hidden");
+        e.preventDefault();
+      },
 
     },
 
     /**
      * The Handlebars template rendered as the DatumEditView.
      */
-    template : Handlebars.templates.myaamia_datum_edit_embedded,
+    template: Handlebars.templates.myaamia_datum_edit_embedded,
 
     /**
      * Renders the DatumEditView and all of its partials.
      */
-    render : function() {
-      if (OPrime.debugMode) OPrime.debug("DATUM render: " );
+    render: function() {
+      if (OPrime.debugMode) OPrime.debug("DATUM render: ");
 
-
-
-      if(this.collection){
+      if (this.collection) {
         if (OPrime.debugMode) OPrime.debug("This datum has a link to a collection. Removing the link.");
-//        delete this.collection;
+        //        delete this.collection;
       }
       var jsonToRender = this.model.toJSON();
       jsonToRender.french_keyword = "bouger";
@@ -224,10 +220,14 @@ define([
       jsonToRender.cognates = "some cognates.";
       jsonToRender.datumStates = this.model.get("datumStates").toJSON();
       jsonToRender.decryptedMode = window.app.get("corpus").get("confidential").decryptedMode;
-      try{
-        jsonToRender.statecolor = this.model.get("datumStates").where({selected : "selected"})[0].get("color");
-        jsonToRender.datumstate = this.model.get("datumStates").where({selected : "selected"})[0].get("state");
-      }catch(e){
+      try {
+        jsonToRender.statecolor = this.model.get("datumStates").where({
+          selected: "selected"
+        })[0].get("color");
+        jsonToRender.datumstate = this.model.get("datumStates").where({
+          selected: "selected"
+        })[0].get("state");
+      } catch (e) {
         if (OPrime.debugMode) OPrime.debug("There was a problem fishing out which datum state was selected.");
       }
       jsonToRender.dateModified = OPrime.prettyDate(jsonToRender.dateModified);
@@ -256,28 +256,27 @@ define([
         this.fieldsView.el = this.$(".datum_fields_ul");
         this.fieldsView.render();
 
-
         var self = this;
-        this.getFrequentFields(function(){
+        this.getFrequentFields(function() {
           self.hideRareFields();
         });
 
         //localization for edit well view
         $(this.el).find(".locale_See_Fields").attr("title", Locale.get("locale_See_Fields"));
-//      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
+        //      $(this.el).find(".locale_Add_Tags_Tooltip").attr("title", Locale.get("locale_Add_Tags_Tooltip"));
         $(this.el).find(".locale_Add").html(Locale.get("locale_Add"));
         $(this.el).find(".locale_Save").html(Locale.get("locale_Save"));
         $(this.el).find(".locale_Insert_New_Datum").attr("title", Locale.get("locale_Insert_New_Datum"));
         $(this.el).find(".locale_Plain_Text_Export_Tooltip").attr("title", Locale.get("locale_Plain_Text_Export_Tooltip"));
         $(this.el).find(".locale_Duplicate").attr("title", Locale.get("locale_Duplicate"));
-        if(jsonToRender.confidential){
+        if (jsonToRender.confidential) {
           $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Decrypt"));
-        }else{
+        } else {
           $(this.el).find(".locale_Encrypt").attr("title", Locale.get("locale_Encrypt"));
         }
-        if(jsonToRender.decryptedMode){
+        if (jsonToRender.decryptedMode) {
           $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Hide_confidential_items_Tooltip"));
-        }else{
+        } else {
           $(this.el).find(".locale_Show_confidential_items_Tooltip").attr("title", Locale.get("locale_Show_confidential_items_Tooltip"));
         }
         $(this.el).find(".locale_LaTeX").attr("title", Locale.get("locale_LaTeX"));
@@ -289,30 +288,30 @@ define([
       return this;
     },
 
-    rareFields : [],
+    rareFields: [],
     frequentFields: null,
-    getFrequentFields : function(whenfieldsareknown){
+    getFrequentFields: function(whenfieldsareknown) {
       var self = this;
-      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels){
+      window.app.get("corpus").getFrequentDatumFields(null, null, function(fieldLabels) {
         self.frequentFields = fieldLabels;
         window.app.get("corpus").frequentFields = fieldLabels;
-        if(typeof whenfieldsareknown == "function"){
+        if (typeof whenfieldsareknown == "function") {
           whenfieldsareknown();
         }
       });
     },
-    hideRareFields : function(e){
-      if(e){
+    hideRareFields: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       this.rareFields = [];
-      if(!this.frequentFields){
+      if (!this.frequentFields) {
         return;
       }
-      for(var f = 0; f < this.model.get("fields").length; f++ ){
-        if( this.frequentFields.indexOf( this.model.get("fields").models[f].get("label") ) == -1 ){
-          $(this.el).find("."+this.model.get("fields").models[f].get("label")).hide();
+      for (var f = 0; f < this.model.get("fields").length; f++) {
+        if (this.frequentFields.indexOf(this.model.get("fields").models[f].get("label")) == -1) {
+          $(this.el).find("." + this.model.get("fields").models[f].get("label")).hide();
           this.rareFields.push(this.model.get("fields").models[f].get("label"));
         }
       }
@@ -322,13 +321,13 @@ define([
 
     },
 
-    showRareFields : function(e){
-      if(e){
+    showRareFields: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-      for(var f = 0; f < this.model.get("fields").length; f++ ){
-        $(this.el).find("."+this.model.get("fields").models[f].get("label")).show();
+      for (var f = 0; f < this.model.get("fields").length; f++) {
+        $(this.el).find("." + this.model.get("fields").models[f].get("label")).show();
       }
       rareFields = [];
       $(this.el).find(".icon-list-alt").addClass("icon-th-list");
@@ -337,12 +336,11 @@ define([
 
     },
 
-
     /**
      * Encrypts the datum if it is confidential
      */
-    encryptDatum : function(e) {
-      if(e){
+    encryptDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -354,8 +352,8 @@ define([
     /**
      * Decrypts the datum if it was encrypted
      */
-    decryptDatum : function(e) {
-      if(e){
+    decryptDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -364,10 +362,10 @@ define([
       $(".icon-lock").toggleClass("icon-unlock icon-lock");
     },
 
-    needsSave : false,
+    needsSave: false,
 
-    saveButton : function(e){
-      if(e){
+    saveButton: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -377,29 +375,29 @@ define([
     /**
      * If the model needs to be saved, saves it.
      */
-    saveScreen : function() {
+    saveScreen: function() {
       if (this.needsSave) {
         // Change the needsSave flag before saving just in case another change
         // happens
         // before the saving is done
         this.needsSave = false;
         var self = this;
-        this.model.saveAndInterConnectInApp(function(){
-          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: "+self.model.id,"alert-success","Saved!");
-        },function(){
-          window.appView.toastUser("Unable to save datum: "+self.model.id,"alert-danger","Not saved!");
+        this.model.saveAndInterConnectInApp(function() {
+          window.appView.toastUser("Automatically saving visible datum entries every 10 seconds. Datum: " + self.model.id, "alert-success", "Saved!");
+        }, function() {
+          window.appView.toastUser("Unable to save datum: " + self.model.id, "alert-danger", "Not saved!");
         });
       }
     },
 
-    insertNewDatumTag : function(e) {
-      if(e){
+    insertNewDatumTag: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       // Create the new DatumTag based on what the user entered
       var t = new DatumTag({
-        "tag" : this.$el.find(".add_tag").val()
+        "tag": this.$el.find(".add_tag").val()
       });
 
       // Add the new DatumTag to the Datum's list for datumTags
@@ -411,57 +409,63 @@ define([
       return false;
     },
 
-    insertNewComment : function(e) {
-      if(e){
+    insertNewComment: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       var commentstring = this.$el.find(".comment-new-text").val();
       var m = new Comment({
-        "text" : commentstring,
+        "text": commentstring,
       });
       this.model.get("comments").add(m);
       this.$el.find(".comment-new-text").val("");
 
-      var utterance = this.model.get("fields").where({label: "utterance"})[0].get("mask");
+      var utterance = this.model.get("fields").where({
+        label: "utterance"
+      })[0].get("mask");
 
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("dbname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "team",
-            context : " via Offline App."
-          });
+      window.app.addActivity({
+        verb: "commented",
+        verbicon: "icon-comment",
+        directobjecticon: "",
+        directobject: "'" + commentstring + "'",
+        indirectobject: "on <i class='icon-list'></i><a href='#corpus/" + this.model.get("dbname") + "/datum/" + this.model.id + "'>" + utterance + "</a> ",
+        teamOrPersonal: "team",
+        context: " via Offline App."
+      });
 
-      window.app.addActivity(
-          {
-            verb : "commented",
-            verbicon: "icon-comment",
-            directobjecticon : "",
-            directobject : "'"+commentstring+"'",
-            indirectobject : "on <i class='icon-list'></i><a href='#corpus/"+this.model.get("dbname")+"/datum/"+this.model.id+"'>"+utterance+"</a> ",
-            teamOrPersonal : "personal",
-            context : " via Offline App."
-          });
+      window.app.addActivity({
+        verb: "commented",
+        verbicon: "icon-comment",
+        directobjecticon: "",
+        directobject: "'" + commentstring + "'",
+        indirectobject: "on <i class='icon-list'></i><a href='#corpus/" + this.model.get("dbname") + "/datum/" + this.model.id + "'>" + utterance + "</a> ",
+        teamOrPersonal: "personal",
+        context: " via Offline App."
+      });
 
     },
 
-    updateDatumStates : function() {
+    updateDatumStates: function() {
       var selectedValue = this.$el.find(".datum_state_select").val();
-      try{
-        this.model.get("datumStates").where({selected : "selected"})[0].set("selected", "");
-        this.model.get("datumStates").where({state : selectedValue})[0].set("selected", "selected");
-      }catch(e){
-        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.",e);
+      try {
+        this.model.get("datumStates").where({
+          selected: "selected"
+        })[0].set("selected", "");
+        this.model.get("datumStates").where({
+          state: selectedValue
+        })[0].set("selected", "selected");
+      } catch (e) {
+        if (OPrime.debugMode) OPrime.debug("problem getting color of datum state, probaly none are selected.", e);
       }
 
       //update the view of the datum state to the new color and text without rendering the entire datum
-      var statecolor = this.model.get("datumStates").where({state : selectedValue})[0].get("color");
+      var statecolor = this.model.get("datumStates").where({
+        state: selectedValue
+      })[0].get("color");
       $(this.el).find(".datum-state-color").removeClass("label-important label-success label-info label-warning label-inverse");
-      $(this.el).find(".datum-state-color").addClass("label-"+statecolor);
+      $(this.el).find(".datum-state-color").addClass("label-" + statecolor);
       $(this.el).find(".datum-state-value").html(selectedValue);
 
       this.needsSave = true;
@@ -472,8 +476,8 @@ define([
      * placed at the top of the datumsView, pushing off the bottom Datum, if
      * necessary.
      */
-    newDatum : function(e) {
-      if(e){
+    newDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -485,8 +489,8 @@ define([
      * Adds a new Datum to the current Corpus in the current Session with the same
      * values as the Datum where the Copy button was clicked.
      */
-    duplicateDatum : function(e) {
-      if(e){
+    duplicateDatum: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -500,26 +504,23 @@ define([
     /*
      * this function can be used to play datum automatically
      */
-    playAudio : function(){
-      if(this.model.get("audioVideo")){
-          this.$el.find(".datum-audio-player")[0].play();
-          this.needsSave = true;
+    playAudio: function() {
+      if (this.model.get("audioVideo")) {
+        this.$el.find(".datum-audio-player")[0].play();
+        this.needsSave = true;
       }
     },
     /*
      * This function helps the user know that the app is saving his/her data often,
      * it updates the time, without re-rendering the datum
      */
-    updateLastModifiedUI : function(){
-      $(this.el).find(".last-modified").html(OPrime.prettyDate(this.model.get("dateModified")));//("0 seconds ago");
+    updateLastModifiedUI: function() {
+      $(this.el).find(".last-modified").html(OPrime.prettyDate(this.model.get("dateModified"))); //("0 seconds ago");
       $(this.el).find(".date-created").html(this.model.get("dateEntered"));
     },
-    utteranceBlur : function(e){
-    },
-    morphemesBlur : function(e){
-    },
-    guessGlosses : function(morphemesLine) {
-    }
+    utteranceBlur: function(e) {},
+    morphemesBlur: function(e) {},
+    guessGlosses: function(morphemesLine) {}
   });
 
   return DatumEditView;

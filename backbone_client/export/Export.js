@@ -1,7 +1,5 @@
-define([ "backbone" ], function(Backbone) {
-  var Export = Backbone.Model.extend(
-  /** @lends Export.prototype */
-  {
+define(["backbone"], function(Backbone) {
+  var Export = Backbone.Model.extend( /** @lends Export.prototype */ {
     /**
      * @class The export class helps export a set of selected data into csv, xml
      *        and LaTex file.
@@ -18,20 +16,19 @@ define([ "backbone" ], function(Backbone) {
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
     // This is an list of attributes and their default values
-    defaults : {
-      fields : [],
-      dataList : null,
-      dataListName : "",
-      event : null
+    defaults: {
+      fields: [],
+      dataList: null,
+      dataListName: "",
+      event: null
     },
 
     // Internal models: used by the parse function
-    internalModels : {
-    // There are no nested models
+    internalModels: {
+      // There are no nested models
     },
 
     /**
@@ -43,36 +40,32 @@ define([ "backbone" ], function(Backbone) {
      * @returns {String} The validation error, if there is one. Otherwise,
      *          doesn't return anything.
      */
-    validate : function(attributes) {
+    validate: function(attributes) {},
+
+    exportCSV: function() {},
+
+    exportXML: function() {},
+
+    exportLaTex: function() {},
+
+    exportLaTexPreamble: function() {
+      return "\\documentclass[12pt,xelatex]{article} \n" +
+        "\\usepackage{fullpage} \n" +
+        "\\usepackage{tipa} \n" +
+        "%\\usepackage{ucharclasses}                                          % Uncomment this line to use unicode characters\n" +
+        "%\\usepackage{fontspec}                                                 % Uncomment this line to use unicode characters\n" +
+        "%\\setsansfont{Arial Unicode MS}                                    % Uncomment this line to use unicode characters\n" +
+        "%\\setDefaultTransitions{\\fontspec{Arial Unicode MS}}{} % Uncomment this line to use unicode characters\n" +
+        "\\usepackage{qtree} \n" +
+        "\\usepackage{gb4e} \n" +
+        "\\begin{document} \n";
     },
 
-    exportCSV : function() {
+    exportLaTexPostamble: function() {
+      return "\\end{document}";
     },
 
-    exportXML : function() {
-    },
-
-    exportLaTex : function() {
-    },
-
-    exportLaTexPreamble : function() {
-        return "\\documentclass[12pt,xelatex]{article} \n"+
-            "\\usepackage{fullpage} \n"+
-            "\\usepackage{tipa} \n"+
-            "%\\usepackage{ucharclasses}                                          % Uncomment this line to use unicode characters\n"+
-            "%\\usepackage{fontspec}                                                 % Uncomment this line to use unicode characters\n"+
-            "%\\setsansfont{Arial Unicode MS}                                    % Uncomment this line to use unicode characters\n"+
-            "%\\setDefaultTransitions{\\fontspec{Arial Unicode MS}}{} % Uncomment this line to use unicode characters\n"+
-            "\\usepackage{qtree} \n"+
-            "\\usepackage{gb4e} \n"+
-            "\\begin{document} \n" ;
-    },
-
-    exportLaTexPostamble : function() {
-        return "\\end{document}";
-    },
-
-    saveAndInterConnectInApp : function(callback) {
+    saveAndInterConnectInApp: function(callback) {
 
       if (typeof callback == "function") {
         callback();

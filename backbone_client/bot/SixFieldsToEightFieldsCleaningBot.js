@@ -99,7 +99,7 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
         datum.fields.push(notesField);
       }
     } else if (newIPA) {
-      changes.push(" copied '" + newIPA +"' from " + source + " ->  phonetic IPA ");
+      changes.push(" copied '" + newIPA + "' from " + source + " ->  phonetic IPA ");
       var phoneticField = {
         "label": "phonetic",
         "shouldBeEncrypted": "",
@@ -132,7 +132,6 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
       "timestampModified": timestamp
     });
     window.comments = datum.comments;
-
 
     if (typeof saveFunction === "function") {
       saveFunction(datum, changeDescription);
@@ -221,7 +220,7 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
                 "lastname": "Bot",
                 "email": ""
               },
-              "appVersion":"1.24.1bot",
+              "appVersion": "1.24.1bot",
               "timestamp": Date.now(),
               "dateModified": JSON.parse(JSON.stringify(new Date()))
             };
@@ -291,7 +290,7 @@ var Bot = function(dbname, corpusid, corpustitle, datalistWhichShouldBeCleaned) 
               "lastname": "Bot",
               "email": ""
             },
-            "appVersion":"1.24.1bot",
+            "appVersion": "1.24.1bot",
             "timestamp": Date.now(),
             "dateModified": JSON.parse(JSON.stringify(new Date()))
           };

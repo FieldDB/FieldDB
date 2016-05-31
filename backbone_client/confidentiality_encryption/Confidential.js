@@ -1,12 +1,10 @@
-define( [
-    "backbone",
-    "CryptoJS"
-],function(
-    Backbone
+define([
+  "backbone",
+  "CryptoJS"
+], function(
+  Backbone
 ) {
-  var Confidential = Backbone.Model.extend(
-  /** @lends Confidential.prototype */
-  {
+  var Confidential = Backbone.Model.extend( /** @lends Confidential.prototype */ {
     /**
      * @class Confidential makes it possible to generate pass phrases (one per
      *        corpus) to encrypt and decrypt confidential data points. The
@@ -31,43 +29,43 @@ define( [
      * @constructs
      *
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("Initializing confidentiality module");
 
-//      var encryptedMessage = this.encrypt("hi this is a longer message.");
-//      console.log("encrypted" + encryptedMessage);
-//
-//      var decryptedMessage = this.decrypt(encryptedMessage);
-////      console.log("decrypted:" + decryptedMessage);
-      if(this.get("filledWithDefaults")){
+      //      var encryptedMessage = this.encrypt("hi this is a longer message.");
+      //      console.log("encrypted" + encryptedMessage);
+      //
+      //      var decryptedMessage = this.decrypt(encryptedMessage);
+      ////      console.log("decrypted:" + decryptedMessage);
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
 
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       if (this.get("secretkey") == "This should be a top secret pass phrase.") {
         this.set("secretkey", this.secretKeyGenerator());
       }
     },
-    defaults : {
-      secretkey : "This should be a top secret pass phrase."
+    defaults: {
+      secretkey: "This should be a top secret pass phrase."
     },
-    decryptedMode : false,
-    turnOnDecryptedMode : function(callback){
+    decryptedMode: false,
+    turnOnDecryptedMode: function(callback) {
       this.decryptedMode = false;
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
-    turnOnDecryptedMode : function(callback){
+    turnOnDecryptedMode: function(callback) {
       var self = this;
-      if(!this.decryptedMode){
-        if(window.appView){
-          window.appView.authView.showQuickAuthenticateView( function(){
+      if (!this.decryptedMode) {
+        if (window.appView) {
+          window.appView.authView.showQuickAuthenticateView(function() {
             //This happens after the user has been authenticated.
             self.decryptedMode = true;
-            if(typeof callback == "function"){
+            if (typeof callback == "function") {
               callback();
             }
           });
@@ -75,12 +73,12 @@ define( [
       }
     },
     // Internal models: used by the parse function
-    internalModels : {
+    internalModels: {
       // There are no nested models
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
@@ -94,7 +92,7 @@ define( [
      * @returns Returns a base64 string prefixed with "confidential" so that the
      *          views can choose to not display the entire string for the user.
      */
-    encrypt : function(message) {
+    encrypt: function(message) {
       var result = CryptoJS.AES.encrypt(message, this.get("secretkey"));
       // return the base64 version to save it as a string in the corpus
       return "confidential:" + btoa(result);
@@ -109,11 +107,11 @@ define( [
      *          A base64 string prefixed (or not) with the word "confidential"
      * @returns Returns the encrypted result as a UTF8 string.
      */
-    decrypt : function(encrypted) {
+    decrypt: function(encrypted) {
       var resultpromise = encrypted;
-      if(!this.decryptedMode){
+      if (!this.decryptedMode) {
         var confid = this;
-        this.turnOnDecryptedMode(function(){
+        this.turnOnDecryptedMode(function() {
           encrypted = encrypted.replace("confidential:", "");
           // decode base64
           encrypted = atob(encrypted);
@@ -124,7 +122,7 @@ define( [
           }
           return resultpromise;
         });
-      }else{
+      } else {
         encrypted = encrypted.replace("confidential:", "");
         // decode base64
         encrypted = atob(encrypted);
@@ -144,12 +142,11 @@ define( [
      * @returns {String} a string which is likely unique, in the format of a
      *          Globally Unique ID (GUID)
      */
-    secretKeyGenerator : function() {
+    secretKeyGenerator: function() {
       var S4 = function() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
       };
-      return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4()
-          + S4() + S4());
+      return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
   });
 

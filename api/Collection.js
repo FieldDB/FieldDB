@@ -3,7 +3,6 @@
 var FieldDBObject = require("./FieldDBObject").FieldDBObject;
 var Q = require("q");
 
-
 /**
  * @class An array backed collection that can look up elements loosely based on id or label.
  *
@@ -795,7 +794,6 @@ Collection.prototype = Object.create(Object.prototype, {
       //   console.error(error.stack, self);
       //   deferred.reject(error);
       // });
-
 
       return deferred.promise;
     }

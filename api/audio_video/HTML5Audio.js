@@ -24,7 +24,6 @@ HTML5Audio.prototype = Object.create(Object.prototype, /** @lends HTML5Audio.pro
     value: HTML5Audio
   },
 
-
   /**
    * @type {string}
    * @default null

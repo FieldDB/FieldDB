@@ -1,22 +1,20 @@
 define([
-    "backbone",
-    "corpus/CorpusMask",
-    "corpus/Corpuses",
-    "hotkey/HotKey",
-    "user/UserGeneric",
-    "user/UserPreference",
-    "OPrime"
+  "backbone",
+  "corpus/CorpusMask",
+  "corpus/Corpuses",
+  "hotkey/HotKey",
+  "user/UserGeneric",
+  "user/UserPreference",
+  "OPrime"
 ], function(
-    Backbone,
-    CorpusMask,
-    Corpuses,
-    HotKey,
-    UserGeneric,
-    UserPreference
+  Backbone,
+  CorpusMask,
+  Corpuses,
+  HotKey,
+  UserGeneric,
+  UserPreference
 ) {
-  var User = UserGeneric.extend(
-  /** @lends User.prototype */
-  {
+  var User = UserGeneric.extend( /** @lends User.prototype */ {
     /**
      * @class User extends from UserGeneric. It inherits the same attributes as UserGeneric but can
      * login.
@@ -36,27 +34,31 @@ define([
       if (OPrime.debugMode) OPrime.debug("USER init");
       User.__super__.initialize.call(this, attributes);
 
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
       this.bind("change", this.checkPrefsChanged, this);
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
-        this.set("prefs", new UserPreference({filledWithDefaults : true }));
+        this.set("prefs", new UserPreference({
+          filledWithDefaults: true
+        }));
       }
 
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey({filledWithDefaults : true }));//TODO this needs to become plural when hotkeys get implemented
+        this.set("hotkeys", new HotKey({
+          filledWithDefaults: true
+        })); //TODO this needs to become plural when hotkeys get implemented
       }
     },
-    originalParse : Backbone.Model.prototype.parse,
+    originalParse: Backbone.Model.prototype.parse,
     parse: function(originalModel) {
       var tmp,
-      normalizedConnection;
+        normalizedConnection;
 
       /* upgrade to 2.40+ data structures */
       originalModel.corpora = originalModel.corpora || originalModel.corpuses;
@@ -109,61 +111,61 @@ define([
 
       return this.originalParse(originalModel);
     },
-    defaults : {
+    defaults: {
       // Defaults from UserGeneric
-      username : "",
-      password : "",
-      email : "",
-      gravatar : "0df69960706112e38332395a4f2e7542",
-      researchInterest : "",
-      affiliation : "",
-      description : "",
-      subtitle : "",
-      corpora : [],
-      dataLists : [],
-      mostRecentIds : {},
+      username: "",
+      password: "",
+      email: "",
+      gravatar: "0df69960706112e38332395a4f2e7542",
+      researchInterest: "",
+      affiliation: "",
+      description: "",
+      subtitle: "",
+      corpora: [],
+      dataLists: [],
+      mostRecentIds: {},
       // Defaults from User
-      firstname : "",
-      lastname : "",
-      teams : [],
-      sessionHistory : []
+      firstname: "",
+      lastname: "",
+      teams: [],
+      sessionHistory: []
     },
 
     /**
      * The subtitle function returns user's first and last names.
      */
-    subtitle: function () {
-    	if (this.get("firstname") == undefined) {
-        this.set("firstname","");
+    subtitle: function() {
+      if (this.get("firstname") == undefined) {
+        this.set("firstname", "");
       }
 
       if (this.get("lastname") == undefined) {
-        this.set("lastname","");
+        this.set("lastname", "");
       }
 
       return this.get("firstname") + " " + this.get("lastname");
     },
-    checkPrefsChanged : function(){
-      try{
+    checkPrefsChanged: function() {
+      try {
         window.appView.userPreferenceView.model = this.get("prefs");
         window.appView.userPreferenceView.render();
-      }catch(e){
+      } catch (e) {
 
       }
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
 
-    updateListOfCorpora: function(roles, connectionInscope){
+    updateListOfCorpora: function(roles, connectionInscope) {
       var username = this.get("username");
       if (username == "public") {
         return;
       }
-      if(this.currentlyCalculatingRoles && this.currentlyCalculatingRoles.length === roles.length){
+      if (this.currentlyCalculatingRoles && this.currentlyCalculatingRoles.length === roles.length) {
         return;
       }
       this.currentlyCalculatingRoles = roles;
@@ -179,7 +181,7 @@ define([
       }
 
       for (var role in roles) {
-        if (!roles[role] || roles[role].indexOf("-") === -1){
+        if (!roles[role] || roles[role].indexOf("-") === -1) {
           continue;
         }
         var dbname = roles[role].replace(/_admin|_writer|_reader|_commenter/g, "");

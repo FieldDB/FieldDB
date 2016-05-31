@@ -1,21 +1,19 @@
 define([
-    "backbone",
-    "hotkey/HotKey",
-    "permission/Permission",
-    "user/UserPreference",
-    "user/UserMask",
-    "CryptoJS",
-    "OPrime"
+  "backbone",
+  "hotkey/HotKey",
+  "permission/Permission",
+  "user/UserPreference",
+  "user/UserMask",
+  "CryptoJS",
+  "OPrime"
 ], function(
-    Backbone,
-    HotKey,
-    Permission,
-    UserPreference,
-    UserMask
+  Backbone,
+  HotKey,
+  Permission,
+  UserPreference,
+  UserMask
 ) {
-  var UserGeneric = Backbone.Model.extend(
-  /** @lends UserGeneric.prototype */
-  {
+  var UserGeneric = Backbone.Model.extend( /** @lends UserGeneric.prototype */ {
     /**
      * @class A generic user has a repository and permission groups
      *        (read, write, admin). It can not login.
@@ -46,48 +44,48 @@ define([
 
     // This is the constructor. It is called whenever you make a new
     // User.
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("USERGENERIC init");
 
     },
 
     // Internal models: used by the parse function
-    internalModels : {
-      prefs : UserPreference,
-      permissions : Permission, //TODO this needs to become plural
-      hotkeys : HotKey, //TODO this needs to become plural
-      userMask : UserMask
+    internalModels: {
+      prefs: UserPreference,
+      permissions: Permission, //TODO this needs to become plural
+      hotkeys: HotKey, //TODO this needs to become plural
+      userMask: UserMask
     },
 
-    addCurrentCorpusToUser : function(){
+    addCurrentCorpusToUser: function() {
       var cc = window.app.get("corpus").get("connection");
-      if(window.app.get("corpus").id != undefined){
-        cc.corpusid =  window.app.get("corpus").id;
+      if (window.app.get("corpus").id != undefined) {
+        cc.corpusid = window.app.get("corpus").id;
         this.get("corpora").push(cc);
-      }else{
-        window.appView.toastUser("The corpus has no id, cant add it to the user.","alert-danger","Bug!");
+      } else {
+        window.appView.toastUser("The corpus has no id, cant add it to the user.", "alert-danger", "Bug!");
       }
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
       //TODO override in derived classes?
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
-     getGravatar : function(email){
+    getGravatar: function(email) {
       var existingGravatar = this.get("gravatar");
-      if(existingGravatar.indexOf("gravatar.com") > -1){
-        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/","");
+      if (existingGravatar.indexOf("gravatar.com") > -1) {
+        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/", "");
         this.set("gravatar", existingGravatar);
         return existingGravatar;
       }
-      if(email){
+      if (email) {
         var hash = CryptoJS.MD5(email).toString();
         this.set("gravatar", hash);
         return hash;
       }
-      if(existingGravatar.indexOf("/") > -1){
-        existingGravatar = existingGravatar.replace(/\//g,"").replace("userpublic_gravatar.png","968b8e7fb72b5ffe2915256c28a9414c");
+      if (existingGravatar.indexOf("/") > -1) {
+        existingGravatar = existingGravatar.replace(/\//g, "").replace("userpublic_gravatar.png", "968b8e7fb72b5ffe2915256c28a9414c");
       }
       return existingGravatar;
     }

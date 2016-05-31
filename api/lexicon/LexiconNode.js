@@ -539,5 +539,4 @@ LexiconNode.mergeContextsIntoContexts = function(value) {
   return value.contexts;
 };
 
-
 exports.LexiconNode = LexiconNode;

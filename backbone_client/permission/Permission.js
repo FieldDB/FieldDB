@@ -1,13 +1,11 @@
 define([
-    "backbone",
-    "user/Users"
+  "backbone",
+  "user/Users"
 ], function(
-    Backbone,
-    Users
+  Backbone,
+  Users
 ) {
-  var Permission = Backbone.Model.extend(
-  /** @lends Permission.prototype 	*/
-  {
+  var Permission = Backbone.Model.extend( /** @lends Permission.prototype 	*/ {
     /**
      * @class The permission class specifies which user (User, Consultant or Bot)
      *        can do what action to what component in a given corpus.
@@ -32,21 +30,20 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    intialize : function() {
-    },
+    intialize: function() {},
 
-    defaults : {
-//      users: Users,
-//      role: "", //admin, writer, reader
-//      dbname: "",
+    defaults: {
+      //      users: Users,
+      //      role: "", //admin, writer, reader
+      //      dbname: "",
     },
 
     // Internal models: used by the parse function
-    internalModels : {
+    internalModels: {
       users: Users
     },
-    saveAndInterConnectInApp : function(callback){
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp: function(callback) {
+      if (typeof callback == "function") {
         callback();
       }
     }

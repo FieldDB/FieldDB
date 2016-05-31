@@ -1,7 +1,6 @@
 var Collection = require("./../Collection").Collection;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 
-
 var Context = function Context(options) {
   if (!this.fieldDBtype) {
     this.fieldDBtype = "Context";
@@ -106,7 +105,7 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
       FieldDBObject.prototype.debug.apply(this, arguments);
     }
   },
-  
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       attributesToIgnore = attributesToIgnore || [];
@@ -122,7 +121,6 @@ Context.prototype = Object.create(Object.prototype, /** @lends Context.prototype
     }
   }
 });
-
 
 /**
  * @class The Contexts is a type of Collection with any additional fields or
@@ -158,7 +156,6 @@ Contexts.prototype = Object.create(Collection.prototype, /** @lends Contexts.pro
       item: Context
     }
   },
-
 
   /**
    *  Cleans a value to become a primary key on an object (replaces punctuation with underscore)

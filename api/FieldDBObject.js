@@ -567,7 +567,6 @@ FieldDBObject.convertDocIntoItsType = function(doc, clone) {
   return doc;
 };
 
-
 /** @lends FieldDBObject.prototype */
 FieldDBObject.prototype = Object.create(Object.prototype, {
   constructor: {
@@ -1557,7 +1556,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       var deferred = Q.defer(),
         self = this;
 
-
       if (this.fetching && this.whenReady) {
         self.warn("Fetching is in process, don't need to fetch right now...");
         return this.whenReady;
@@ -2033,7 +2031,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
     }
   },
-
 
   addRelatedData: {
     value: function(json) {

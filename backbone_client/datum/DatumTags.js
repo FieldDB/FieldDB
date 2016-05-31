@@ -1,25 +1,22 @@
 define([
-    "backbone",
-    "datum/DatumTag"
+  "backbone",
+  "datum/DatumTag"
 ], function(
-    Backbone, 
-    DatumTag
+  Backbone,
+  DatumTag
 ) {
-  var DatumTags = Backbone.Collection.extend(
-  /** @lends Datums.prototype */
-  {
+  var DatumTags = Backbone.Collection.extend( /** @lends Datums.prototype */ {
     /**
      * @class A collection of Datum tags
      *
      * @extends Backbone.Collection
      * @constructs
      */
-    initialize: function() {
-    },
-    internalModels : DatumTag,
+    initialize: function() {},
+    internalModels: DatumTag,
 
     model: DatumTag
   });
-  
+
   return DatumTags;
 });

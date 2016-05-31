@@ -72,7 +72,6 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
   /*** Syntactic sugar for research teams how have been collaborating via email
   sharing (To, BCC, CC) and/or Dropbox and/or github ***/
 
-
   /**
    * Syntactic sugar for users who have reader+commenter+writer permissions.
    *
@@ -147,7 +146,6 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
     }
   },
 
-
   /*** Gropued permissions (useful to show permissions in an app) ***/
 
   giveMeUsersWithTheseRolesAndNotTheseRoles: {
@@ -200,7 +198,6 @@ Permissions.prototype = Object.create(Collection.prototype, /** @lends Permissio
       for (permissionTypeIndex = wantTheseRoles.length - 1; permissionTypeIndex >= 0; permissionTypeIndex--) {
         permissionType = wantTheseRoles[permissionTypeIndex];
         self.debug("Making sure " + usersWhoAreOnlyInThisPermissionType.map(showUsernames) + " are " + permissionType);
-
 
         if (!self[permissionType]) {
           continue;

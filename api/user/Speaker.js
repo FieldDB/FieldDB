@@ -498,6 +498,5 @@ Speaker.prototype = Object.create(UserMask.prototype, /** @lends Speaker.prototy
     }
   }
 
-
 });
 exports.Speaker = Speaker;

@@ -3,10 +3,10 @@ var OPrime = {};
  * Declare functions for PubSub
  */
 OPrime.publisher = {
-  subscribers : {
-    any : []
+  subscribers: {
+    any: []
   },
-  subscribe : function(type, fn, context) {
+  subscribe: function(type, fn, context) {
     type = type || 'any';
     fn = typeof fn === "function" ? fn : context[fn];
 
@@ -14,21 +14,21 @@ OPrime.publisher = {
       this.subscribers[type] = [];
     }
     this.subscribers[type].push({
-      fn : fn,
-      context : context || this
+      fn: fn,
+      context: context || this
     });
   },
-  unsubscribe : function(type, fn, context) {
+  unsubscribe: function(type, fn, context) {
     this.visitSubscribers('unsubscribe', type, fn, context);
   },
-  publish : function(type, publication) {
+  publish: function(type, publication) {
     this.visitSubscribers('publish', type, publication);
   },
-  visitSubscribers : function(action, type, arg, context) {
+  visitSubscribers: function(action, type, arg, context) {
     var pubtype = type || 'any';
     var subscribers = this.subscribers[pubtype];
     if (!subscribers || subscribers.length == 0) {
-      if (OPrime.debugMode) OPrime.debug(pubtype+": There were no subscribers.");
+      if (OPrime.debugMode) OPrime.debug(pubtype + ": There were no subscribers.");
       return;
     }
     var i;
@@ -57,15 +57,14 @@ OPrime.publisher = {
         try {
           if (!subscribers[i].context) {
             OPrime
-                .debug("This subscriber has no context. should we remove it? "
-                    + i);
+              .debug("This subscriber has no context. should we remove it? " + i);
           }
           if (subscribers[i].context === context) {
             var removed = subscribers.splice(i, 1);
             if (OPrime.debugMode) OPrime.debug("Removed subscriber " + i + " from " + type, removed);
           } else {
             if (OPrime.debugMode) OPrime.debug(type + " keeping subscriber " + i,
-                subscribers[i].context);
+              subscribers[i].context);
           }
         } catch (e) {
           if (OPrime.debugMode) OPrime.debug("problem visiting Subscriber " + i, subscribers)
@@ -77,13 +76,12 @@ OPrime.publisher = {
 OPrime.makePublisher = function(o) {
   var i;
   for (i in OPrime.publisher) {
-    if (OPrime.publisher.hasOwnProperty(i)
-        && typeof OPrime.publisher[i] === "function") {
+    if (OPrime.publisher.hasOwnProperty(i) && typeof OPrime.publisher[i] === "function") {
       o[i] = OPrime.publisher[i];
     }
   }
   o.subscribers = {
-    any : []
+    any: []
   };
 };
 
@@ -102,7 +100,6 @@ OPrime.bug = function(message) {
   alert(message);
 };
 
-
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
@@ -114,8 +111,7 @@ OPrime.bug = function(message) {
 OPrime.setCookie = function(c_name, value, exdays) {
   var exdate = new Date();
   exdate.setDate(exdate.getDate() + exdays);
-  var c_value = escape(value)
-      + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+  var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
   document.cookie = c_name + "=" + c_value;
 };
 OPrime.getCookie = function(c_name) {
@@ -138,9 +134,9 @@ OPrime.isAndroidApp = function() {
   return navigator.userAgent.indexOf("OfflineAndroidApp") > -1;
 };
 
-if(OPrime.isAndroidApp()){
+if (OPrime.isAndroidApp()) {
   var debugOrNot = Android.isD();
-  console.log("Setting debug mode to the Android's mode: "+ debugOrNot);
+  console.log("Setting debug mode to the Android's mode: " + debugOrNot);
   OPrime.debugMode = debugOrNot;
 };
 
@@ -170,7 +166,7 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   }
   this.hub.unsubscribe("playbackCompleted", null, callingcontextself);
   this.hub.subscribe("playbackCompleted", audioOffsetCallback,
-      callingcontextself);
+    callingcontextself);
 
   if (this.isAndroidApp()) {
     this.debug("Playing Audio via Android:" + audiourl + ":");
@@ -178,10 +174,10 @@ OPrime.playAudioFile = function(divid, audioOffsetCallback, callingcontext) {
   } else {
     this.debug("Playing Audio via HTML5:" + audiourl + ":");
     document.getElementById(divid).removeEventListener('ended',
-        OPrime.audioEndListener);
+      OPrime.audioEndListener);
     if (OPrime.debugMode) OPrime.debug("\tRemoved previous endaudio event listeners for " + audiourl);
     document.getElementById(divid).addEventListener('ended',
-        OPrime.audioEndListener);
+      OPrime.audioEndListener);
     document.getElementById(divid).play();
   }
 }
@@ -205,7 +201,7 @@ OPrime.pauseAudioFile = function(divid, callingcontext) {
     document.getElementById(divid).pause();
     if (document.getElementById(divid).currentTime > 0.05) {
       document.getElementById(divid).currentTime = document
-          .getElementById(divid).currentTime - 0.05;
+        .getElementById(divid).currentTime - 0.05;
     }
 
   }
@@ -243,18 +239,18 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
     this.debug("Playing Audio via HTML5 from " + startime + " to " + endtime);
     document.getElementById(divid).pause();
     document.getElementById(divid).currentTime = startime;
-    if (OPrime.debugMode) OPrime.debug("Cueing audio to "
-        + document.getElementById(divid).currentTime);
+    if (OPrime.debugMode) OPrime.debug("Cueing audio to " + document.getElementById(divid).currentTime);
     document.getElementById(divid).play();
     OPrime.playingInterval = true;
     document.getElementById(divid).addEventListener("timeupdate", function() {
       if (this.currentTime >= endtime && OPrime.playingInterval) {
         if (OPrime.debugMode) OPrime.debug("CurrentTime: " + this.currentTime);
         this.pause();
-        OPrime.playingInterval = false; /*
-                                         * workaround for not being able to
-                                         * remove events
-                                         */
+        OPrime.playingInterval = false;
+        /*
+         * workaround for not being able to
+         * remove events
+         */
       }
     });
   }
@@ -263,7 +259,7 @@ OPrime.playIntervalAudioFile = function(divid, startime, endtime, callback) {
   }
 }
 OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
-    callbackRecordingCompleted, callingcontext) {
+  callbackRecordingCompleted, callingcontext) {
   if (!callingcontext) {
     callingcontext = window;
   }
@@ -275,12 +271,12 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingCompleted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingCompleted: " + message);
       OPrime.hub.unsubscribe("audioRecordingCompleted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingCompleted", null, callingcontextself);
   this.hub.subscribe("audioRecordingCompleted", callbackRecordingCompleted,
-      callingcontextself);
+    callingcontextself);
 
   /*
    * verify started callback and subscribe it to
@@ -290,13 +286,13 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
     callbackRecordingStarted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingStarted: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingSucessfullyStarted", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.subscribe("audioRecordingSucessfullyStarted",
-      callbackRecordingStarted, callingcontextself);
+    callbackRecordingStarted, callingcontextself);
 
   /* start the recording */
   if (this.isAndroidApp()) {
@@ -307,13 +303,13 @@ OPrime.captureAudio = function(resultfilename, callbackRecordingStarted,
   } else {
     this.debug("Recording Audio via HTML5: " + resultfilename);
     alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that it was sucessful")
-    // fake publish it was sucessfully started
+      // fake publish it was sucessfully started
     this.hub.publish('audioRecordingSucessfullyStarted', resultfilename);
   }
 
 };
 OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
-    callingcontext) {
+  callingcontext) {
 
   /*
    * verify started callback and subscribe it to
@@ -324,13 +320,13 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
     callbackRecordingStopped = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackRecordingStopped: " + message);
       OPrime.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   this.hub.unsubscribe("audioRecordingSucessfullyStopped", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.subscribe("audioRecordingSucessfullyStopped",
-      callbackRecordingStopped, callingcontextself);
+    callbackRecordingStopped, callingcontextself);
 
   /* start the recording */
   if (this.isAndroidApp()) {
@@ -340,7 +336,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
   } else {
     this.debug("Stopping Recording Audio via HTML5: " + resultfilename);
     alert("Recording audio only works on Android, because it has a microphone, and your computer might not.\n\n Faking that stopped and saved sucessfully")
-    // fake publish it was sucessfully started
+      // fake publish it was sucessfully started
     resultfilename = "chime.mp3"
     this.hub.publish('audioRecordingSucessfullyStopped', resultfilename);
     // fake publish it finished
@@ -352,7 +348,7 @@ OPrime.stopAndSaveAudio = function(resultfilename, callbackRecordingStopped,
  * Camera functions
  */
 OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted, callbackPictureCaptureCompleted,
-    callingcontext) {
+  callingcontext) {
   if (!callingcontext) {
     callingcontext = window;
   }
@@ -364,26 +360,26 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted, ca
     callbackPictureCaptureStarted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureStarted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   if (!callbackPictureCaptureCompleted) {
     callbackPictureCaptureCompleted = function(message) {
       if (OPrime.debugMode) OPrime.debug("In callbackPictureCaptureCompleted: " + message);
       OPrime.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
-          callingcontextself);
+        callingcontextself);
     };
   }
   /* unsubscribe this context from the chanel incase the user calls it many times on teh same item, only fire the last event */
   this.hub.unsubscribe("pictureCaptureSucessfullyStarted", null,
-      callingcontextself);
+    callingcontextself);
   this.hub.unsubscribe("pictureCaptureSucessfullyCompleted", null,
-      callingcontextself);
+    callingcontextself);
   /* subscribe the caller's functions to the channels */
   this.hub.subscribe("pictureCaptureSucessfullyStarted",
-      callbackPictureCaptureStarted, callingcontextself);
+    callbackPictureCaptureStarted, callingcontextself);
   this.hub.subscribe("pictureCaptureSucessfullyCompleted",
-      callbackPictureCaptureCompleted, callingcontextself);
+    callbackPictureCaptureCompleted, callingcontextself);
 
   /* start the picture taking */
   if (this.isAndroidApp()) {
@@ -403,14 +399,12 @@ OPrime.capturePhoto = function(resultfilename, callbackPictureCaptureStarted, ca
 /*
  * Initialize the debugging output, taking control from the Android side.
  */
-if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is "
-    + navigator.userAgent);
+if (OPrime.debugMode) OPrime.debug("Intializing OPrime Javascript library. \n" + "The user agent is " + navigator.userAgent);
 
 if (OPrime.isAndroidApp()) {
   if (!Android.isD()) {
     this.debugMode = false;
-    this.debug = function() {
-    };
+    this.debug = function() {};
   } else {
     this.debugMode = true;
   }

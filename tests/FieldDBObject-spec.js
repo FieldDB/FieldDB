@@ -215,7 +215,6 @@ describe("FieldDBObject", function() {
       expect(penguin.toJSON()).toEqual(resultingJSON);
     });
 
-
     it("should be possible to request a smaller object with empty attributes removed if caller requests", function() {
       var resultingJSON = new FieldDBObject({
         body: [],
@@ -281,7 +280,6 @@ describe("FieldDBObject", function() {
       expect(penguin.body.beak).toEqual("yellow");
       expect(babypenguin.body.beak).toBeUndefined();
     });
-
 
     it("should clone objects recursively", function() {
       var datumTypeThing = new FieldDBObject({
@@ -418,9 +416,7 @@ describe("FieldDBObject", function() {
       expect(object.fetching).toEqual(true);
       expect(object.loading).toEqual(true);
 
-
     }, specIsRunningTooLong);
-
 
     it("should refuse to save an item which belongs in another database", function(done) {
       var object = new FieldDBObject({
@@ -443,7 +439,6 @@ describe("FieldDBObject", function() {
         expect(error.userFriendlyErrors).toEqual(["This item belongs in the lingallama-communitycorpusdatabase, not in the jenkins-doesntmatchdb database."]);
       }).done(done);
     }, specIsRunningTooLong);
-
 
     it("should refuse to fetch an item which has no id", function(done) {
       // FieldDBObject.application = null;
@@ -524,7 +519,6 @@ describe("FieldDBObject", function() {
       //   }
       // }
 
-
       expect(snapshot.enteredByUser.value).toEqual("unknown");
       expect(snapshot.enteredByUser.json.user.name).toEqual("");
       expect(snapshot.enteredByUser.json.user.username).toEqual("unknown");
@@ -537,7 +531,6 @@ describe("FieldDBObject", function() {
         expect(snapshot.enteredByUser.json.software.appVersion).toContain("Safari");
         expect(snapshot.enteredByUser.json.hardware.cpus).toBeUndefined();
       }
-
 
       expect(object.fieldDBtype).toEqual("FieldDBObject");
       expect((object.dateCreated + "").length).toEqual(13);
@@ -703,7 +696,6 @@ describe("FieldDBObject", function() {
         object.debug("hardware", object.modifiedByUser.json.hardware);
         expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
-
       }, function(userFriendlyErrors) {
         expect(userFriendlyErrors[0]).toContain(CORS_ERROR);
       }).done(done);
@@ -719,7 +711,6 @@ describe("FieldDBObject", function() {
       expect(object.modifiedByUser.json.users[1].hardware).toBeDefined();
 
     }, specIsRunningTooLong);
-
 
     it("should avoid unnecesary saving", function(done) {
       var object = new FieldDBObject({
@@ -783,7 +774,6 @@ describe("FieldDBObject", function() {
       }).done(done);
 
     }, specIsRunningTooLong);
-
 
     it("should detect if item was actually changed", function(done) {
       var object = new FieldDBObject({
@@ -853,7 +843,6 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
 
-
     it("should be able set entered by user using database connection info", function(done) {
       var object = new FieldDBObject({
         dbname: "lingallama-communitycorpus",
@@ -868,7 +857,10 @@ describe("FieldDBObject", function() {
         "ok": true,
         "userCtx": {
           "name": "teammatetiger",
-          "roles": ["computationalfieldworkshop-group_data_entry_tutorial_reader", "fielddbuser", "jessepollak-spring_2013_field_methods_reader", "lingllama-cherokee_admin", "lingllama-cherokee_commenter", "lingllama-cherokee_reader", "lingllama-cherokee_writer", "lingllama-communitycorpus_admin", "lingllama-firstcorpus_admin", "lingllama-firstcorpus_commenter", "lingllama-firstcorpus_reader", "lingllama-firstcorpus_writer", "lingllama-test_corpus_admin", "lingllama-test_corpus_commenter", "lingllama-test_corpus_reader", "lingllama-test_corpus_writer", "teammatetiger-firstcorpus_commenter", "teammatetiger-firstcorpus_reader", "teammatetiger-firstcorpus_writer", "lingllama-communitycorpus_commenter", "lingllama-communitycorpus_reader", "lingllama-communitycorpus_writer"]
+          "roles": ["computationalfieldworkshop-group_data_entry_tutorial_reader", "fielddbuser", "jessepollak-spring_2013_field_methods_reader", "lingllama-cherokee_admin", "lingllama-cherokee_commenter", "lingllama-cherokee_reader", "lingllama-cherokee_writer", "lingllama-communitycorpus_admin", "lingllama-firstcorpus_admin", "lingllama-firstcorpus_commenter",
+            "lingllama-firstcorpus_reader", "lingllama-firstcorpus_writer", "lingllama-test_corpus_admin", "lingllama-test_corpus_commenter", "lingllama-test_corpus_reader", "lingllama-test_corpus_writer", "teammatetiger-firstcorpus_commenter", "teammatetiger-firstcorpus_reader", "teammatetiger-firstcorpus_writer", "lingllama-communitycorpus_commenter",
+            "lingllama-communitycorpus_reader", "lingllama-communitycorpus_writer"
+          ]
         },
         "info": {
           "authentication_db": "_users",
@@ -894,7 +886,6 @@ describe("FieldDBObject", function() {
       }).done(done);
 
     }, specIsRunningTooLong);
-
 
     it("should be able set location of the data", function(done) {
       FieldDBObject.software = {
@@ -1051,7 +1042,6 @@ describe("FieldDBObject", function() {
 
       }, specIsRunningTooLong);
 
-
       it("should get previous revisions if it has been saved.", function(done) {
         var object = new FieldDBObject({
           dbname: "lingallama-communitycorpus",
@@ -1176,7 +1166,6 @@ describe("FieldDBObject", function() {
       expect(quietDebugging.debugMessages).toEqual("looking at value of mystuff: this is me");
     });
 
-
     it("should be possible for client apps to override the todo function", function() {
       FieldDBObject.internalAttributesToAutoMerge.push("todoMessages");
       FieldDBObject.todo = function(message) {
@@ -1188,7 +1177,6 @@ describe("FieldDBObject", function() {
       quietedTodos.todo("should we override mystuff?");
       expect(quietedTodos.todoMessages).toEqual("should we override mystuff?");
     });
-
 
   });
 
@@ -1273,7 +1261,6 @@ describe("FieldDBObject", function() {
 
     }, specIsRunningTooLong);
   });
-
 
   describe("merging", function() {
     var aBaseObject;
@@ -1421,15 +1408,14 @@ describe("FieldDBObject", function() {
 
         expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
         expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
-      }, function(reason){
+      }, function(reason) {
         expect(reason).toEqual("");
-      }).fail(function(reason){
+      }).fail(function(reason) {
         expect(reason).toEqual("");
       }).done(done);
       expect(aBaseObject.promptMessage).toContain("I found a conflict for externalString, Do you want to overwrite it from \"easy model\" -> trivial model");
       expect(aBaseObject.externalObject.promptMessage).toContain("I found a conflict for internalString, Do you want to overwrite it from \"internal\" -> internal overwrite");
     }, specIsRunningTooLong);
-
 
     it("should be able to ask the user asynchronously what to do if overwrite is not specified  true case", function(done) {
       aBaseObject.alwaysReplyToPrompt = true;
@@ -1442,9 +1428,9 @@ describe("FieldDBObject", function() {
 
         expect(atriviallyDifferentObject.externalString).toEqual("trivial model");
         expect(atriviallyDifferentObject.externalObject.internalString).toEqual("internal overwrite");
-      }, function(reason){
+      }, function(reason) {
         expect(reason).toEqual("");
-      }).fail(function(reason){
+      }).fail(function(reason) {
         expect(reason).toEqual("");
       }).done(done);
 
@@ -1505,8 +1491,6 @@ describe("FieldDBObject", function() {
         done();
       }, 10);
     });
-
-
 
     it("should be merge arrays correctly", function(done) {
       var subsetObject = new FieldDBObject({

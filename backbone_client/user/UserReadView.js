@@ -1,24 +1,22 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "corpus/Corpus",
-    "corpus/Corpuses",
-    "corpus/CorpusLinkView",
-    "user/User",
-    "app/UpdatingCollectionView",
-    "OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "corpus/Corpus",
+  "corpus/Corpuses",
+  "corpus/CorpusLinkView",
+  "user/User",
+  "app/UpdatingCollectionView",
+  "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    Corpus,
-    Corpuses,
-    CorpusLinkView,
-    User,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  Corpus,
+  Corpuses,
+  CorpusLinkView,
+  User,
+  UpdatingCollectionView
 ) {
-  var UserReadView = Backbone.View.extend(
-  /** @lends UserReadView.prototype */
-  {
+  var UserReadView = Backbone.View.extend( /** @lends UserReadView.prototype */ {
     /**
      * @class The layout of a single User. This view is used in the comments
      *        , it is also embedable in the UserEditView.
@@ -31,64 +29,64 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("USER READ VIEW init: ");
-//      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
+      //      this.model.bind('change:gravatar', this.render, this); //moved back to init moved from initialze to here, ther is a point in app loading when userpublic is an object not a backbone object
       this.changeViewsOfInternalModels();
 
     },
 
-    events : {
-      "click .edit-user-profile" : function(e){
-        if(e){
+    events: {
+      "click .edit-user-profile": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
-        if(this.format == "modal"){
+        if (this.format == "modal") {
           window.appView.modalEditUserView.render();
-        }else if(this.format == "public"){
-          if(window.appView.publicEditUserView.model.get("username") == window.app.get("authentication").get("userPrivate").get("username") ){
+        } else if (this.format == "public") {
+          if (window.appView.publicEditUserView.model.get("username") == window.app.get("authentication").get("userPrivate").get("username")) {
             window.appView.publicEditUserView.render();
           }
-        }else{
+        } else {
           $(this.el).find(".icon-edit").hide();
         }
       },
-      "click .view-public-profile" : function(e){
-        if(e){
+      "click .view-public-profile": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         $("#user-modal").hide();
         window.app.router.showFullscreenUser(this.model.id);
       }
-     },
+    },
     /**
      * The underlying model of the UserReadView is a User.
      */
-    model : User,
+    model: User,
 
-    classname : "user",
+    classname: "user",
 
     /**
      * The Handlebars template rendered as the UserReadLinkView.
      */
-    linkTemplate : Handlebars.templates.user_read_link,
+    linkTemplate: Handlebars.templates.user_read_link,
 
     /**
      * The Handlebars template rendered as the UserReadModalView.
      */
-    modalTemplate : Handlebars.templates.user_read_modal,
+    modalTemplate: Handlebars.templates.user_read_modal,
 
     /**
      * The Handlebars template rendered as the UserReadFullscreenView.
      */
-    fullscreenTemplate : Handlebars.templates.user_read_fullscreen,
+    fullscreenTemplate: Handlebars.templates.user_read_fullscreen,
 
     /**
      * Renders the UserReadView.
      */
-    render : function() {
+    render: function() {
 
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("\User model was undefined");
@@ -123,8 +121,8 @@ define([
       } else if (this.format == "public") {
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(jsonToRender));
-      }else{
-        throw("The UserReadView doesn't know what format to display, you need to tell it a format");
+      } else {
+        throw ("The UserReadView doesn't know what format to display, you need to tell it a format");
       }
 
       if (this.format !== "link") {
@@ -158,12 +156,9 @@ define([
             // self.application.router.navigate("/login/", {
             //   trigger: true
             // });
-            window.appView.authView.showQuickAuthenticateView(function(){
-            }, function(){
-            }, function(){
+            window.appView.authView.showQuickAuthenticateView(function() {}, function() {}, function() {
               console.log("Corpus is loged in yay.");
-            }, function(){
-            })
+            }, function() {})
           }
         });
       }
@@ -171,14 +166,14 @@ define([
       return this;
     },
 
-    changeViewsOfInternalModels : function(){
+    changeViewsOfInternalModels: function() {
       //Create a CommentReadView      TODO add comments to users
-//      this.commentReadView = new UpdatingCollectionView({
-//        collection           : this.model.get("comments"),
-//        childViewConstructor : CommentReadView,
-//        childViewTagName     : 'li'
-//      });
-    //Create a CommentReadView
+      //      this.commentReadView = new UpdatingCollectionView({
+      //        collection           : this.model.get("comments"),
+      //        childViewConstructor : CommentReadView,
+      //        childViewTagName     : 'li'
+      //      });
+      //Create a CommentReadView
       var corpora = new Corpuses();
       try {
         corpora = new Backbone.Collection(JSON.parse(localStorage.getItem(
@@ -187,9 +182,9 @@ define([
         console.log("Couldn't load the list of corpora which the user has access to.");
       }
       this.corporaReadView = new UpdatingCollectionView({
-        collection : corpora,
-        childViewConstructor : CorpusLinkView,
-        childViewTagName : 'li'
+        collection: corpora,
+        childViewConstructor: CorpusLinkView,
+        childViewTagName: 'li'
       });
 
     }

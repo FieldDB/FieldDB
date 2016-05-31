@@ -9,7 +9,6 @@ var Speaker = require("./../user/Speaker").Speaker;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Q = require("q");
 
-
 var DEFAULT_CORPUS_MODEL = require("./corpus.json");
 var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus.json");
 
@@ -56,7 +55,6 @@ var DEFAULT_PSYCHOLINGUISTICS_CORPUS_MODEL = require("./psycholinguistics-corpus
  * @extends CorpusMask
  * @tutorial tests/corpus/CorpusTest.js
  */
-
 
 var Corpus = function Corpus(options) {
   if (!this._fieldDBtype) {
@@ -337,7 +335,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
   api: {
     value: "private_corpora"
   },
-
 
   defaults: {
     get: function() {
@@ -1267,7 +1264,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return json;
     }
   }
-
 
 });
 

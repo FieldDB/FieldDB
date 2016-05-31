@@ -1,26 +1,24 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "authentication/Authentication",
-    "corpus/Corpus",
-    "confidentiality_encryption/Confidential",
-    "user/User",
-    "user/UserMask",
-    "user/UserReadView",
-    "OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "authentication/Authentication",
+  "corpus/Corpus",
+  "confidentiality_encryption/Confidential",
+  "user/User",
+  "user/UserMask",
+  "user/UserReadView",
+  "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    Authentication,
-    Corpus,
-    Confidential,
-    User,
-    UserMask,
-    UserReadView
+  Backbone,
+  Handlebars,
+  Authentication,
+  Corpus,
+  Confidential,
+  User,
+  UserMask,
+  UserReadView
 ) {
-  var AuthenticationEditView = Backbone.View.extend(
-  /** @lends AuthenticationEditView.prototype */
-  {
+  var AuthenticationEditView = Backbone.View.extend( /** @lends AuthenticationEditView.prototype */ {
     /**
      * @class This is the login logout surface.
      *
@@ -30,12 +28,12 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("AUTH EDIT init: " + this.el);
 
-    //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
+      //   Create a Small  UserReadView of the user's public info which will appear on the user drop down.
       this.userView = new UserReadView({
-         model: this.model.get("userPublic")
+        model: this.model.get("userPublic")
       });
       this.userView.format = "link";
       this.userView.setElement($("#user-quickview"));
@@ -46,9 +44,9 @@ define([
 
       //save the version of the app into this view so we can use it when we create a user.
       var self = this;
-      OPrime.getVersion(function (ver) {
+      OPrime.getVersion(function(ver) {
         self.appVersion = ver;
-        self.model.get("userPrivate").set("currentAppVersion",ver);
+        self.model.get("userPrivate").set("currentAppVersion", ver);
       });
 
     },
@@ -56,27 +54,27 @@ define([
     /**
      * The underlying model of the AuthenticationEditView is an Authentication
      */
-    model : Authentication,
+    model: Authentication,
 
     /**
      * The userView is a child of the AuthenticationEditView.
      */
-    userView : UserReadView,
+    userView: UserReadView,
 
     /**
      * Events that the AuthenticationEditView is listening to and their handlers.
      */
-    events : {
-      "click .logout" : "logout",
-      "click .show-login-modal": function(e){
-//        if(e){
-//          e.stopPropagation();
-//          e.preventDefault();
-//        }
+    events: {
+      "click .logout": "logout",
+      "click .show-login-modal": function(e) {
+        //        if(e){
+        //          e.stopPropagation();
+        //          e.preventDefault();
+        //        }
         $("#login_modal").show("modal");
       },
 
-      "keyup .registerusername" : function(e) {
+      "keyup .registerusername": function(e) {
         var code = e.keyCode || e.which;
         // code == 13 is the enter key
         if ((code === 13 || code === 9) && (this.$el.find(".registerusername").val().trim() != "YourNewUserNameGoesHere")) {
@@ -86,53 +84,53 @@ define([
           $(".register-new-user").removeAttr("disabled");
         }
       },
-      "click .new-user-button" : function(e) {
-        if(e){
+      "click .new-user-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         if (this.$el.find(".registerusername").val().trim() != "YourNewUserNameGoesHere") {
-          this.$el.find(".potentialUsername").html( $(".registerusername").val().trim());
+          this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
           this.$el.find(".confirm-password").show();
           this.$el.find(".registerpassword").focus();
         }
       },
-      "click .register-new-user" : "registerNewUser",
-      "click .register-twitter" : function() {
-        window.location.href = OPrime.authUrl+"/auth/twitter";
+      "click .register-new-user": "registerNewUser",
+      "click .register-twitter": function() {
+        window.location.href = OPrime.authUrl + "/auth/twitter";
       },
-      "click .register-facebook" : function() {
-        window.location.href = OPrime.authUrl+"/auth/facebook";
+      "click .register-facebook": function() {
+        window.location.href = OPrime.authUrl + "/auth/facebook";
       },
-      "click .sync-lingllama-data" : function(e) {
-        if(e){
+      "click .sync-lingllama-data": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         console.log("hiding user welcome, syncing lingllama");
-        this.syncUser("lingllama","phoneme", OPrime.authUrl);
+        this.syncUser("lingllama", "phoneme", OPrime.authUrl);
       },
     },
 
     /**
      * The Handlebars template rendered as the AuthenticationEditView.
      */
-    template : Handlebars.templates.authentication_edit_embedded,
-    userTemplate : Handlebars.templates.user_read_link,
+    template: Handlebars.templates.authentication_edit_embedded,
+    userTemplate: Handlebars.templates.user_read_link,
 
     /**
      * Renders the AuthenticationEditView and all of its child Views.
      */
-    render : function() {
+    render: function() {
       if (OPrime.debugMode) OPrime.debug("AUTH EDIT render: " + this.el);
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
       }
 
-      if(this.model.get("userPublic") != undefined){
-        this.model.set( "gravatar", this.model.get("userPublic").getGravatar() );
-        this.model.set( "username", this.model.get("userPublic").get("username") );
+      if (this.model.get("userPublic") != undefined) {
+        this.model.set("gravatar", this.model.get("userPublic").getGravatar());
+        this.model.set("username", this.model.get("userPublic").get("username"));
       }
 
       var jsonToRender = this.model.toJSON();
@@ -153,7 +151,6 @@ define([
       jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
       jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
 
-
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
       $(this.el).html(this.template(jsonToRender));
@@ -163,11 +160,11 @@ define([
         $("#login_form").hide();
         $("#login_register_button").hide();
 
-        if(this.model.get("userPublic") != undefined){
+        if (this.model.get("userPublic") != undefined) {
           if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
-        }else{
+        } else {
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
 
@@ -177,11 +174,11 @@ define([
         $("#login_register_button").show();
         $("#loggedin_customize_on_auth_dropdown").hide();
 
-        if(this.model.get("userPublic") != undefined){
+        if (this.model.get("userPublic") != undefined) {
           if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
-        }else{
+        } else {
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
 
@@ -193,16 +190,15 @@ define([
       return this;
     },
 
-
     /**
      * Logout backs up the user to the central server and then
      * removes the stringified user and the username from local
      * storage, and then authenticates public into the app.
      */
-    logout : function() {
+    logout: function() {
       var authself = this.model;
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
-      window.app.backUpUser(function(){
+      window.app.backUpUser(function() {
         authself.logout();
       });
     },
@@ -211,11 +207,11 @@ define([
      * Login tries to get the username and password from the user interface, and
      * calls the view's authenticate function.
      */
-    login : function() {
+    login: function() {
       if (OPrime.debugMode) OPrime.debug("LOGIN");
       this.authenticate(document.getElementById("username").value,
-          document.getElementById("password").value,
-          document.getElementById("authUrl").value
+        document.getElementById("password").value,
+        document.getElementById("authUrl").value
       );
     },
 
@@ -226,8 +222,8 @@ define([
      * Blamey and Tucker the Technician at blamestella.com
      * https://twitter.com/#!/tucker1927
      */
-    loadSample : function(appidsIn) {
-    //  alert("loading sample");
+    loadSample: function(appidsIn) {
+      //  alert("loading sample");
 
     },
 
@@ -242,33 +238,33 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate : function(username, password, authUrl, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+    authenticate: function(username, password, authUrl, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
 
       // Temporarily keep the given's credentials
       var tempuser = new User({
-        username : username,
-        password : password,
-        authUrl : OPrime.getAuthUrl(authUrl)
+        username: username,
+        password: password,
+        authUrl: OPrime.getAuthUrl(authUrl)
       });
 
-      var whattodoifcouchloginerrors = function(){
-      //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
-        if(app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0){
-          if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+      var whattodoifcouchloginerrors = function() {
+        //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
+        if (app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0) {
+          if (self.model.get("userPrivate").get("mostRecentIds") == undefined) {
             //do nothing because they have no recent ids
             alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
             window.location.href = "#render/true";
-          }else{
+          } else {
             /*
              *  Load their last corpus, session, datalist etc
              */
-//            var appids = self.model.get("userPrivate").get("mostRecentIds");
-//            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
+            //            var appids = self.model.get("userPrivate").get("mostRecentIds");
+            //            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
           }
         }
-        if(typeof corpusloginfailcallback == "function"){
+        if (typeof corpusloginfailcallback == "function") {
           corpusloginfailcallback();
-        }else{
+        } else {
           if (OPrime.debugMode) OPrime.debug('no corpusloginfailcallback was defined');
 
         }
@@ -277,66 +273,66 @@ define([
       var self = this;
       this.model.authenticate(tempuser, function(success) {
         if (success == null) {
-//          alert("Authentication failed. Authenticating as public."); //TODO cant use this anymore as a hook
-//          self.authenticateAsPublic();
+          //          alert("Authentication failed. Authenticating as public."); //TODO cant use this anymore as a hook
+          //          self.authenticateAsPublic();
           return;
         }
-        if(username == "public"){
+        if (username == "public") {
           self.model.savePublicUserForOfflineUse();
         }
         var connection;
-        if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection){
+        if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
           connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         }
-        if (!connection){
+        if (!connection) {
           connection = self.model.get("userPrivate").get("corpora")[0];
         }
-        if(!connection){
-         connection = FieldDB.Connection.defaultConnection()
+        if (!connection) {
+          connection = FieldDB.Connection.defaultConnection()
         }
         // Dont set to most recent, it might not be the most recent.
         // if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
         //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         // }
 
-        window.app.logUserIntoTheirCorpusServer(connection, username, password, function(){
-          if(typeof corpusloginsuccesscallback == "function"){
+        window.app.logUserIntoTheirCorpusServer(connection, username, password, function() {
+          if (typeof corpusloginsuccesscallback == "function") {
             if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
             corpusloginsuccesscallback();
-          }else{
+          } else {
             if (OPrime.debugMode) OPrime.debug('no corpusloginsuccesscallback was defined');
           }
           //Replicate user's corpus down to pouch
-          window.app.replicateOnlyFromCorpus(connection, function(){
-            if(self.model.get("userPrivate").get("mostRecentIds") == undefined){
+          window.app.replicateOnlyFromCorpus(connection, function() {
+            if (self.model.get("userPrivate").get("mostRecentIds") == undefined) {
               //do nothing because they have no recent ids
               alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
               window.location.href = "#render/true";
-            }else{
+            } else {
               /*
                *  Load their last corpus, session, datalist etc,
                *  only if it is not the ones already most recently loaded.
                */
               var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
               var visibleids = {};
-              if(app.get("corpus")){
+              if (app.get("corpus")) {
                 visibleids.corpusid = app.get("corpus").id;
-              }else{
+              } else {
                 visibleids.corpusid = "";
               }
-              if(app.get("currentSession"))  {
+              if (app.get("currentSession")) {
                 visibleids.sessionid = app.get("currentSession").id;
-              }else{
+              } else {
                 visibleids.sessionid = "";
               }
-              if(app.get("currentDataList")){
+              if (app.get("currentDataList")) {
                 visibleids.datalistid = app.get("currentDataList").id;
-              }else{
+              } else {
                 visibleids.datalistid = "";
               }
-              if( ( appids.sessionid != visibleids.sessionid ||  appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid) ){
+              if ((appids.sessionid != visibleids.sessionid || appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid)) {
                 if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-                if(window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard){
+                if (window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard) {
                   window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
                 } else {
                   console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
@@ -347,18 +343,17 @@ define([
           });
         }, whattodoifcouchloginerrors);
 
-
         var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
-        if(self.model.get("userPrivate").get("username") == "public"){
+        if (self.model.get("userPrivate").get("username") == "public") {
           renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
         }
         // Save the authenticated user in our Models
         self.model.set({
-          gravatar : self.model.get("userPrivate").get("gravatar"),
-          username : self.model.get("userPrivate").get("username"),
-          state : renderLoggedInStateDependingOnPublicUserOrNot
+          gravatar: self.model.get("userPrivate").get("gravatar"),
+          username: self.model.get("userPrivate").get("username"),
+          state: renderLoggedInStateDependingOnPublicUserOrNot
         });
-        if(typeof sucescallback == "function"){
+        if (typeof sucescallback == "function") {
           sucescallback();
         }
       }, failcallback);
@@ -596,11 +591,14 @@ define([
      * @param username
      * @param password
      */
-    syncUser : function(username, password, authUrl){
+    syncUser: function(username, password, authUrl) {
       console.log("hiding user login, syncing users data");
-      var dataToPost = {username: username, password: password};
+      var dataToPost = {
+        username: username,
+        password: password
+      };
 
-      $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>" );
+      $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>");
       $(".welcome-screen-alerts").addClass("alert-success");
       $(".welcome-screen-alerts").removeClass("alert-error");
       $(".welcome-screen-alerts").show();

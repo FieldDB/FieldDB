@@ -1,20 +1,18 @@
 define([
-    "backbone",
-    "hotkey/HotKey",
-    "user/UserGeneric",
-    "permission/Permission",
-    "user/UserPreference",
-    "OPrime"
+  "backbone",
+  "hotkey/HotKey",
+  "user/UserGeneric",
+  "permission/Permission",
+  "user/UserPreference",
+  "OPrime"
 ], function(
-    Backbone,
-    HotKey,
-    UserGeneric,
-    Permission,
-    UserPreference
+  Backbone,
+  HotKey,
+  UserGeneric,
+  Permission,
+  UserPreference
 ) {
-  var Team = UserGeneric.extend(
-  /** @lends Team.prototype */
-  {
+  var Team = UserGeneric.extend( /** @lends Team.prototype */ {
     /**
      * @class Team extends from UserGeneric. It inherits the same attributes as UserGeneric but can
      * login.
@@ -27,14 +25,13 @@ define([
     initialize: function(attributes) {
       UserGeneric.__super__.initialize.call(this, attributes);
 
-
-      if(this.get("filledWithDefaults")){
+      if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
       this.bind("change", this.checkPrefsChanged, this);
     },
-    fillWithDefaults : function(){
+    fillWithDefaults: function() {
       // If there is no prefs, create a new one
       if (!this.get("prefs")) {
         this.set("prefs", new UserPreference());
@@ -47,54 +44,54 @@ define([
 
       // If there is no hotkeys, create a new one
       if (!this.get("hotkeys")) {
-        this.set("hotkeys", new HotKey());//TODO this needs to become plural
+        this.set("hotkeys", new HotKey()); //TODO this needs to become plural
       }
     },
-    defaults : {
+    defaults: {
       // Defaults from UserGeneric
-      username : "",
-      password : "",
-      email : "",
-      gravatar : "0df69960706112e38332395a4f2e7542",
-      researchInterest : "",
-      affiliation : "",
-      description : "",
-      subtitle : "",
-      corpora : [],
-      dataLists : [],
-      mostRecentIds : {},
+      username: "",
+      password: "",
+      email: "",
+      gravatar: "0df69960706112e38332395a4f2e7542",
+      researchInterest: "",
+      affiliation: "",
+      description: "",
+      subtitle: "",
+      corpora: [],
+      dataLists: [],
+      mostRecentIds: {},
       // Defaults from User
-      firstname : "",
-      lastname : "",
-      teams : [],
-      sessionHistory : []
+      firstname: "",
+      lastname: "",
+      teams: [],
+      sessionHistory: []
     },
 
     /**
      * The subtitle function returns user's first and last names.
      */
-    subtitle: function () {
+    subtitle: function() {
       if (this.get("firstname") == undefined) {
-        this.set("firstname","");
+        this.set("firstname", "");
       }
 
       if (this.get("lastname") == undefined) {
-        this.set("lastname","");
+        this.set("lastname", "");
       }
 
       return this.get("firstname") + " " + this.get("lastname");
     },
-    checkPrefsChanged : function(){
-      try{
+    checkPrefsChanged: function() {
+      try {
         window.appView.userPreferenceView.model = this.get("prefs");
         window.appView.userPreferenceView.render();
-      }catch(e){
+      } catch (e) {
 
       }
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     }

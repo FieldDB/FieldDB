@@ -1,8 +1,8 @@
 define([
-    "backbone",
+  "backbone",
 ], function(Backbone) {
-var UpdatingCollectionView = Backbone.View.extend({
-    initialize : function(options) {
+  var UpdatingCollectionView = Backbone.View.extend({
+    initialize: function(options) {
       _(this).bindAll('add', 'remove');
 
       if (!options.childViewConstructor)
@@ -17,11 +17,11 @@ var UpdatingCollectionView = Backbone.View.extend({
 
       this._childViews = [];
 
-      if(this.collection && this.collection.each){
+      if (this.collection && this.collection.each) {
         this.collection.each(this.add);
         this.collection.bind('add', this.add);
         this.collection.bind('remove', this.remove);
-      }else{
+      } else {
         if (OPrime.debugMode) OPrime.debug("The collection was not a backbone collection...");
       }
 
@@ -29,18 +29,18 @@ var UpdatingCollectionView = Backbone.View.extend({
 
     tagName: "ul",
 
-    add : function(model, collection, options) {
+    add: function(model, collection, options) {
       var childView = new this._childViewConstructor({
-        tagName : this._childViewTagName,
-        className : this._childViewClass,
-        model : model
+        tagName: this._childViewTagName,
+        className: this._childViewClass,
+        model: model
       });
 
       if (this._childViewFormat) {
         childView.format = this._childViewFormat;
       }
 
-      if(options == undefined || options == null){
+      if (options == undefined || options == null) {
         options = {};
         options.index = 1;
       }
@@ -51,7 +51,7 @@ var UpdatingCollectionView = Backbone.View.extend({
         if (this._rendered) {
           $(this.el).prepend(childView.render().el);
         }
-      // Add to the bottom of the list
+        // Add to the bottom of the list
       } else {
         this._childViews.push(childView);
 
@@ -61,7 +61,7 @@ var UpdatingCollectionView = Backbone.View.extend({
       }
     },
 
-    remove : function(model) {
+    remove: function(model) {
       var viewToRemove = _(this._childViews).select(function(cv) {
         return cv.model === model;
       })[0];
@@ -71,7 +71,7 @@ var UpdatingCollectionView = Backbone.View.extend({
         $(viewToRemove.el).remove();
     },
 
-    render : function() {
+    render: function() {
       var that = this;
       this._rendered = true;
 

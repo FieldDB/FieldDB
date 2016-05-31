@@ -512,7 +512,6 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
     }
   },
 
-
   encryptedValue: {
     get: function() {
       return this._encryptedValue || FieldDBObject.DEFAULT_STRING;
@@ -736,7 +735,6 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         } else if (attributes.encrypted !== "checked") {
           //Don't do anything special, this datum isn't confidential
           attributes.value = attributes.mask;
-
 
           /*
            * A, B, C, D: If we are supposed to be encrypted, and we are encrypted, but we want to let the user see the data to change it.

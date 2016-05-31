@@ -193,7 +193,7 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       this.debug("data", this.data);
     }
   },
-  
+
   isEmpty: {
     value: function() {
       return FieldDBObject.prototype.isEmpty.apply(this, arguments);
@@ -247,7 +247,6 @@ ContextualizableObject.prototype = Object.create(Object.prototype, /** @lends Co
       return json;
     }
   }
-
 
 });
 exports.ContextualizableObject = ContextualizableObject;

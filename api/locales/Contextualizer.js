@@ -352,7 +352,6 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
         return deferred.promise;
       }
 
-
       self.debug("     Running asynchonosuly. ", key, value);
       this.confirm("Do you also want to " + verb + key + " for other users? \n" + previousMessage + " -> " + value)
         .then(function(response) {
@@ -461,7 +460,6 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       var deferred = Q.defer(),
         self = this;
 
-
       if (!localeData) {
         Q.nextTick(function() {
           deferred.reject("The locales data was empty!");
@@ -532,7 +530,6 @@ Contextualizer.prototype = Object.create(FieldDBObject.prototype, /** @lends Con
       return Q.allSettled(promises);
     }
   }
-
 
 });
 

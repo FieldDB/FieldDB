@@ -1,7 +1,6 @@
 /* Depends on jquery couch  */
 var $ = require("jquery.couch.js");
 
-
 var Bot = function(dbname, corpusid, corpustitle) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Bot";
@@ -60,7 +59,6 @@ var Bot = function(dbname, corpusid, corpustitle) {
       "gravatar": gravatar,
       "timestampModified": timestamp
     });
-
 
     if (typeof saveFunction === "function") {
       saveFunction(datum, changeDescription);

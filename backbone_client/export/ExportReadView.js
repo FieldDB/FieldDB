@@ -1,27 +1,24 @@
 define([
-    "backbone", 
-    "libs/compiled_handlebars", 
-    "export/Export",
+  "backbone",
+  "libs/compiled_handlebars",
+  "export/Export",
 ], function(
-    Backbone, 
-    Handlebars, 
-    Export
+  Backbone,
+  Handlebars,
+  Export
 ) {
-  var ExportView = Backbone.View.extend(
-  /** @lends ExportView.prototype */
-  {
+  var ExportView = Backbone.View.extend( /** @lends ExportView.prototype */ {
     /**
      * @class ExportView
      *
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
-    model : Export,
+    model: Export,
 
-    classname : "export",
+    classname: "export",
 
     template: Handlebars.templates.export_read_modal,
 
@@ -38,6 +35,6 @@ define([
       return this;
     }
   });
-  
+
   return ExportView;
-}); 
+});

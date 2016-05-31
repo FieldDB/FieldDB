@@ -5,9 +5,7 @@ define([
     Backbone,
     UserMask
 ) {
-  var Activity = Backbone.Model.extend(
-  /** @lends Activity.prototype */
-  {
+  var Activity = Backbone.Model.extend( /** @lends Activity.prototype */ {
     /**
      * @class The Activity is a record of the user's activity during one
      *        session, i.e. it might say "Edward LingLlama added 30 datums in Na

@@ -1,41 +1,40 @@
-define( [
-    "backbone", 
-    "libs/compiled_handlebars", 
-    "permission/Permission",
-    "permission/Permissions",
+define([
+  "backbone",
+  "libs/compiled_handlebars",
+  "permission/Permission",
+  "permission/Permissions",
 ], function(Backbone,
-            Handlebars, 
-            Permission,
-            Permissions) {
-    var PermissionsView = Backbone.View.extend(
-  /** @lends PermissionsView.prototype */
-  {
+  Handlebars,
+  Permission,
+  Permissions) {
+  var PermissionsView = Backbone.View.extend( /** @lends PermissionsView.prototype */ {
     /**
      * @class PermissionsView
-     * 
+     *
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
-    model : Permission,
+    model: Permission,
 
-    classname : "permissions",
+    classname: "permissions",
 
-    templateread : Handlebars.templates.permissions_read_embedded,
-    templateedit : Handlebars.templates.permissions_edit_embedded,
+    templateread: Handlebars.templates.permissions_read_embedded,
+    templateedit: Handlebars.templates.permissions_edit_embedded,
 
-    render : function() {
-      
+    render: function() {
+
       this._rendered = true;
       if (OPrime.debugMode) OPrime.debug("Permissions render: ");
-      
+
       this.setElement(".permissions_settings");
-      var jsonToRender = {title: "Permission Settings"};
-      $(this.el).html(this.templateedit(jsonToRender));    
+      var jsonToRender = {
+        title: "Permission Settings"
+      };
+      $(this.el).html(this.templateedit(jsonToRender));
       return this;
-   
+
     }
   });
 

@@ -312,7 +312,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         // });
       };
 
-
       // Database.CORS.makeCORSRequest({
       //   type: "POST",
       //   dataType: "json",

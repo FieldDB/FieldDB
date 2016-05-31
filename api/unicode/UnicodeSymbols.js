@@ -182,8 +182,6 @@ UnicodeSymbols.prototype = Object.create(Collection.prototype, /** @lends Unicod
         symbol: "°"
       }));
 
-
-
       //
       //        this.add(new UnicodeSymbol({tipa: "", symbol:  "γ "}));
       //        this.add(new UnicodeSymbol({tipa: "", symbol:  "δ "}));
@@ -193,8 +191,6 @@ UnicodeSymbols.prototype = Object.create(Collection.prototype, /** @lends Unicod
       //        this.add(new UnicodeSymbol({tipa: "", symbol:  "θ "}));
       //        this.add(new UnicodeSymbol({tipa: "", symbol:  "ι "}));
       //        this.add(new UnicodeSymbol({tipa: "", symbol:  "κ "}));
-
-
 
       this.add(new UnicodeSymbol({
         tipa: "",

@@ -65,8 +65,6 @@ var dataURItoBlob = function(dataURI) {
   });
 };
 
-
-
 var getUnique = function(arrayObj) {
   var u = {},
     a = [];
@@ -81,7 +79,6 @@ var getUnique = function(arrayObj) {
   }
   return a;
 };
-
 
 var Import = function Import(options) {
   if (!this._fieldDBtype) {
@@ -304,7 +301,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         return deferred.promise;
       }
 
-
       Q.nextTick(function() {
         deferred.resolve(self.datalist);
       });
@@ -360,7 +356,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             return deferred.promise;
           }
         }
-
 
         var fieldLabelFromExtractedHeader,
           correspondingDatumField,
@@ -450,7 +445,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           docToSave.confidential = self.corpus.confidential;
           // docToSave.decryptedMode = true;
 
-
           // return;
           testForEmptyness = "";
           for (cellIndex = 0; cellIndex < row.length; cellIndex++) {
@@ -497,7 +491,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self.showImportThirdStep = true;
         self.render();
         self.progress.total = self.progress.completed = self.datalist.length;
-
 
         //   /*
         //    * after building an array of datumobjects, turn them into backbone objects
@@ -620,7 +613,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //         //                }
         //         //              });
 
-
         //       }
         //     } else if (index === "validationStatus") {
         //       var eachValidationStatus = fields.where({
@@ -707,7 +699,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         //   $(".approve-save").removeAttr("disabled");
         //   $(".approve-save").removeClass("disabled");
 
-
       } catch (e) {
         self.warn("There was a problem while converting the matrix into a data list.", e);
         self.warn(e.stack);
@@ -771,7 +762,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           } else {
             successFunction(options);
           }
-
 
         } catch (e) {
           deferred.reject(e);
@@ -1195,7 +1185,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
-
   /**
    * http://purbayubudi.wordpress.com/2008/11/09/csv-parser-using-javascript/
    * -- CSV PARSER --
@@ -1301,7 +1290,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       //TODO turn these into session fields
       this.status = this.status + "\n" + annotationDetails;
 
-
       var header = [];
       var tierinfo = [];
       //    TIER has tiers of each, create datum  it says who the informant is and who the data entry person is. can turn the objects in the tier into a datum
@@ -1355,7 +1343,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         "elanREF_ANNOTATION": "_ANNOTATION_REF"
       });
 
-
       header.push("_ANNOTATOR");
       header.push("_DEFAULT_LOCALE");
       header.push("_LINGUISTIC_TYPE_REF");
@@ -1372,7 +1359,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       header.push("ANNOTATION.REF_ANNOTATION.ANNOTATION_VALUE");
       header.push("ANNOTATION.REF_ANNOTATION._ANNOTATION_ID");
       header.push("ANNOTATION.REF_ANNOTATION._ANNOTATION_REF");
-
 
       //similar to toolbox
       var matrix = [];
@@ -1654,7 +1640,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         // http://stackoverflow.com/questions/24626177/how-to-create-an-image-file-from-a-dataurl
         if (files.indexOf("data") === 0) {
           // data.append("data", files); //test new split
-
 
           // var base64 = files.split("base64,")[1];
           var blob = dataURItoBlob(files);

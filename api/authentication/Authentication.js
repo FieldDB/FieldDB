@@ -170,7 +170,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
       var handleFailedLogin = function(error) {
         self.loading = false;
-        if (self.user){
+        if (self.user) {
           self.user.authenticated = false;
         }
         if (!error || !error.userFriendlyErrors) {
@@ -659,8 +659,6 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
     }
   }
 
-
 });
-
 
 exports.Authentication = Authentication;

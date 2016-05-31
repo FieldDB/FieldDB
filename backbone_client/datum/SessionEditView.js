@@ -1,28 +1,26 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentReadView",
-    "comment/CommentEditView",
-    "datum/DatumFieldEditView",
-    "datum/Session",
-    "app/UpdatingCollectionView",
-    "OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "comment/Comment",
+  "comment/Comments",
+  "comment/CommentReadView",
+  "comment/CommentEditView",
+  "datum/DatumFieldEditView",
+  "datum/Session",
+  "app/UpdatingCollectionView",
+  "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    Comment,
-    Comments,
-    CommentReadView,
-    CommentEditView,
-    DatumFieldEditView,
-    Session,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  Comment,
+  Comments,
+  CommentReadView,
+  CommentEditView,
+  DatumFieldEditView,
+  Session,
+  UpdatingCollectionView
 ) {
-  var SessionEditView = Backbone.View.extend(
-  /** @lends SessionEditView.prototype */
-  {
+  var SessionEditView = Backbone.View.extend( /** @lends SessionEditView.prototype */ {
     /**
      * @class Session Edit View is where the user provides new session details.
      *
@@ -33,38 +31,38 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
-      if (OPrime.debugMode) OPrime.debug("SESSION EDIT VIEW init: " );
+    initialize: function() {
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT VIEW init: ");
 
       this.changeViewsOfInternalModels();
 
       var self = this;
-      this.model.bind('change:fields', function(){
+      this.model.bind('change:fields', function() {
         self.changeViewsOfInternalModels();
         self.render();
-        }, this);
+      }, this);
 
-//      this.model.bind('change', this.showEditable, this);
+      //      this.model.bind('change', this.showEditable, this);
     },
 
     /**
      * The underlying model of the SessionEditView is a Session.
      */
-    model : Session,
+    model: Session,
 
     /**
      * Events that the SessionEditView is listening to and their handlers.
      */
-    events : {
-      "click .btn-save-session" : "updatePouch",
+    events: {
+      "click .btn-save-session": "updatePouch",
 
-//      Issue#797
-      "click .trash-button" : "putInTrash",
+      //      Issue#797
+      "click .trash-button": "putInTrash",
 
       //Add button inserts new Comment
 
-      "click .add-comment-button" : function(e) {
-        if(e){
+      "click .add-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -78,103 +76,108 @@ define([
         this.updatePouch();
         this.commentReadView.render();
 
-
-//        this.model.get("comments").unshift(this.commentEditView.model);
-//        this.commentEditView.model = new Comment();
-        },
+        //        this.model.get("comments").unshift(this.commentEditView.model);
+        //        this.commentEditView.model = new Comment();
+      },
       //Delete button remove a comment
-      "click .remove-comment-button" : function(e) {
-        if(e){
+      "click .remove-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
       },
 
-      "click .icon-resize-small" : 'resizeSmall',
-      "click .icon-resize-full" : "resizeLarge",
+      "click .icon-resize-small": 'resizeSmall',
+      "click .icon-resize-full": "resizeLarge",
       "click .icon-book": "showReadonly",
-      "blur .session-consultant-input" : "updateSource",
-      "blur .session-elicitation-date-input" : "updateElicitedDate",
-      "blur .session-goal-input" : "updateGoal"
+      "blur .session-consultant-input": "updateSource",
+      "blur .session-elicitation-date-input": "updateElicitedDate",
+      "blur .session-goal-input": "updateGoal"
     },
 
-    updateSource : function(){
+    updateSource: function() {
       var source = this.model.get("fields").where({
-        label : "source"
+        label: "source"
       });
       if (!source || !source[0] || typeof source[0].set !== "function") {
         return;
       }
       source = source[0];
-      source.set("mask", this.$el.find(".session-consultant-input") .val());
+      source.set("mask", this.$el.find(".session-consultant-input").val());
 
-      if(this.format != "import"){
+      if (this.format != "import") {
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
 
-    updateElicitedDate : function(){
+    updateElicitedDate: function() {
       var dateElicited = this.model.get("fields").where({
-        label : "dateElicited"
+        label: "dateElicited"
       });
       if (!dateElicited || !dateElicited[0] || typeof dateElicited[0].set !== "function") {
         return;
       }
       dateElicited = dateElicited[0];
-      dateElicited.set("mask", this.$el.find(".session-elicitation-date-input") .val());
+      dateElicited.set("mask", this.$el.find(".session-elicitation-date-input").val());
 
-      if(this.format != "import"){
+      if (this.format != "import") {
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
 
-    updateGoal : function(){
+    updateGoal: function() {
       var goal = this.model.get("fields").where({
-        label : "goal"
+        label: "goal"
       });
       if (!goal || !goal[0] || typeof goal[0].set !== "function") {
         return;
       }
       goal = goal[0];
-      goal.set("mask", this.$el.find(".session-goal-input") .val());
+      goal.set("mask", this.$el.find(".session-goal-input").val());
 
-      if(this.format != "import"){
+      if (this.format != "import") {
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
 
-
-
-    templateSummary : Handlebars.templates.session_summary_edit_embedded,
+    templateSummary: Handlebars.templates.session_summary_edit_embedded,
 
     templateEmbedded: Handlebars.templates.session_edit_embedded,
 
-    templateFullscreen : Handlebars.templates.session_edit_embedded,
+    templateFullscreen: Handlebars.templates.session_edit_embedded,
 
-    templateModal : Handlebars.templates.session_edit_modal,
+    templateModal: Handlebars.templates.session_edit_modal,
 
-    templateImport : Handlebars.templates.session_edit_import,
+    templateImport: Handlebars.templates.session_edit_import,
 
     /**
      * Renders the SessionEditView.
      */
-    render : function() {
-      if (OPrime.debugMode) OPrime.debug("SESSION EDIT render: " );
+    render: function() {
+      if (OPrime.debugMode) OPrime.debug("SESSION EDIT render: ");
       if (this.model == undefined) {
         if (OPrime.debugMode) OPrime.debug("SESSION is undefined, come back later.");
         return this;
       }
 
-      try{
-        if (this.model.get("fields").where({label: "goal"})[0] == undefined) {
+      try {
+        if (this.model.get("fields").where({
+            label: "goal"
+          })[0] == undefined) {
           if (OPrime.debugMode) OPrime.debug("SESSION fields are undefined, come back later.");
           return this;
         }
         var jsonToRender = this.model.toJSON();
-        jsonToRender.goal = this.model.get("fields").where({label: "goal"})[0].get("mask");
-        jsonToRender.source = this.model.get("fields").where({label: "source"})[0].get("mask");
-        jsonToRender.dateElicited = this.model.get("fields").where({label: "dateElicited"})[0].get("mask");
+        jsonToRender.goal = this.model.get("fields").where({
+          label: "goal"
+        })[0].get("mask");
+        jsonToRender.source = this.model.get("fields").where({
+          label: "source"
+        })[0].get("mask");
+        jsonToRender.dateElicited = this.model.get("fields").where({
+          label: "dateElicited"
+        })[0].get("mask");
 
         jsonToRender.locale_Cancel = Locale.get("locale_Cancel");
         jsonToRender.locale_Source = Locale.get("locale_Source");
@@ -188,26 +191,25 @@ define([
         jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
         jsonToRender.locale_When = Locale.get("locale_When");
 
-
-        if(this.format != "modal"){
+        if (this.format != "modal") {
           appView.currentSessionEditView.destroy_view();
           appView.currentSessionReadView.destroy_view();
         }
         if (this.format == "leftSide") {
-          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  LEFTSIDE render: ");
 
           this.setElement("#session-quickview");
           $(this.el).html(this.templateSummary(jsonToRender));
 
-        }if (this.format == "import") {
-          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: " );
+        }
+        if (this.format == "import") {
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT  IMPORT render: ");
 
           this.setElement("#import-session");
           $(this.el).html(this.templateImport(jsonToRender));
 
-
         } else if (this.format == "centerWell") {
-          if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT CENTERWELL render: ");
 
           this.setElement("#session-embedded");
           $(this.el).html(this.templateEmbedded(jsonToRender));
@@ -216,7 +218,7 @@ define([
           this.fieldsView.render();
 
         } else if (this.format == "fullscreen") {
-          if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT FULLSCREEN render: ");
 
           this.setElement("#session-fullscreen");
           this.$el.html(this.templateFullscreen(jsonToRender));
@@ -233,7 +235,7 @@ define([
           this.commentEditView.render();
 
         } else if (this.format == "modal") {
-          if (OPrime.debugMode) OPrime.debug("SESSION EDIT MODAL render: " );
+          if (OPrime.debugMode) OPrime.debug("SESSION EDIT MODAL render: ");
 
           this.setElement("#new-session-modal");
           this.changeViewsOfInternalModels();
@@ -251,7 +253,7 @@ define([
           this.commentEditView.render();
 
         }
-      } catch(e) {
+      } catch (e) {
         if (OPrime.debugMode) OPrime.debug("There was a problem rendering the session, probably the datumfields are still arrays and havent been restructured yet.");
       }
 
@@ -262,8 +264,8 @@ define([
      * See definition in the model
      *
      */
-    putInTrash : function(e){
-      if(e){
+    putInTrash: function(e) {
+      if (e) {
         e.preventDefault();
       }
       var r = confirm("Are you sure you want to put this session in the trash?");
@@ -272,58 +274,58 @@ define([
       }
     },
 
-    changeViewsOfInternalModels : function(){
+    changeViewsOfInternalModels: function() {
       this.fieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("fields"),
-        childViewConstructor : DatumFieldEditView,
-        childViewTagName     : "tr",
-        childViewFormat      : "session"
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldEditView,
+        childViewTagName: "tr",
+        childViewFormat: "session"
       });
 
       this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("comments"),
+        childViewConstructor: CommentReadView,
+        childViewTagName: 'li'
       });
 
       this.commentEditView = new CommentEditView({
-        model : new Comment(),
+        model: new Comment(),
       });
     },
     /**
      * creates a new session if the app's session id doesnt match this session's id after saving.
      */
-    updatePouch : function(e) {
-      if(e){
+    updatePouch: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       var self = this;
-      this.model.saveAndInterConnectInApp(function(){
+      this.model.saveAndInterConnectInApp(function() {
         /* If it is in the modal, then it is a new session */
-        if (OPrime.debugMode) OPrime.debug("Session format is "+self.format);
-        if(self.format == "modal"){
-          self.model.setAsCurrentSession(function(){
+        if (OPrime.debugMode) OPrime.debug("Session format is " + self.format);
+        if (self.format == "modal") {
+          self.model.setAsCurrentSession(function() {
             $("#new-session-modal").hide();
             window.appView.currentSessionReadView.render();
           });
-        }else{
+        } else {
           window.appView.currentSessionReadView.format = self.format;
           window.appView.currentSessionReadView.render();
         }
       });
     },
     //functions associated with icons
-    resizeSmall : function(e) {
-      if(e){
+    resizeSmall: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       window.location.href = "#render/true";
     },
 
-    resizeLarge : function(e) {
-      if(e){
+    resizeLarge: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -333,8 +335,8 @@ define([
     },
 
     //bound to changes
-    showEditable :function(e) {
-      if(e){
+    showEditable: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -343,8 +345,8 @@ define([
     },
 
     //bound to book
-    showReadonly : function(e) {
-      if(e){
+    showReadonly: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -357,16 +359,16 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      if (OPrime.debugMode) OPrime.debug("DESTROYING SESSION EDIT VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING SESSION EDIT VIEW " + this.format);
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
 
       $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//      this.remove();
-//      Backbone.View.prototype.remove.call(this);
-      }
+      //      this.remove();
+      //      Backbone.View.prototype.remove.call(this);
+    }
   });
 
   return SessionEditView;

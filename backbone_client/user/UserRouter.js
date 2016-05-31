@@ -1,18 +1,16 @@
 define([
-    "backbone",
-    "corpus/Corpus",
-    "corpus/CorpusMask",
-    "user/User",
-    "OPrime"
+  "backbone",
+  "corpus/Corpus",
+  "corpus/CorpusMask",
+  "user/User",
+  "OPrime"
 ], function(
-    Backbone,
-    Corpus,
-    CorpusMask,
-    User
+  Backbone,
+  Corpus,
+  CorpusMask,
+  User
 ) {
-  var UserRouter = Backbone.Router.extend(
-  /** @lends UserRouter.prototype */
-  {
+  var UserRouter = Backbone.Router.extend( /** @lends UserRouter.prototype */ {
     /**
      * @class Routes URLs to handle the user dashboard. Mostly just
      *        shows the user a list of their corpora so they can switch
@@ -21,48 +19,49 @@ define([
      * @extends Backbone.Router
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
-    routes : {
-      "corpus/:dbname/:id"           : "showCorpusDashboard",
-      "corpus/:dbname/"              : "guessCorpusIdAndShowDashboard",
-      "corpus/:dbname"               : "guessCorpusIdAndShowDashboard",
-      "login/:dbname"                : "showQuickAuthenticateAndRedirectToDatabase",
-      "render/:render"                  : "showDashboard",
-      ""                                : "showDashboard"
+    routes: {
+      "corpus/:dbname/:id": "showCorpusDashboard",
+      "corpus/:dbname/": "guessCorpusIdAndShowDashboard",
+      "corpus/:dbname": "guessCorpusIdAndShowDashboard",
+      "login/:dbname": "showQuickAuthenticateAndRedirectToDatabase",
+      "render/:render": "showDashboard",
+      "": "showDashboard"
     },
 
     /**
      * Displays the dashboard view of the user loaded in authentication
      *
      */
-    showDashboard : function(renderOrNot) {
-      if (OPrime.debugMode) OPrime.debug("In showDashboard: " );
-//      $("#user-modal").show();
+    showDashboard: function(renderOrNot) {
+      if (OPrime.debugMode) OPrime.debug("In showDashboard: ");
+      //      $("#user-modal").show();
 
     },
     /**
      * Displays the dashboard view of the user loaded in authentication
      *
      */
-    showFullscreenUser : function() {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: " );
+    showFullscreenUser: function() {
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenUser: ");
     },
-    showQuickAuthenticateAndRedirectToDatabase : function(dbname){
+    showQuickAuthenticateAndRedirectToDatabase: function(dbname) {
       window.app.set("corpus", new Corpus());
-      window.app.get("authentication").syncUserWithServer(function(){
+      window.app.get("authentication").syncUserWithServer(function() {
         var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(dbname);
-        OPrime.redirect(optionalCouchAppPath+"corpus.html");
+        OPrime.redirect(optionalCouchAppPath + "corpus.html");
       });
     },
-    guessCorpusIdAndShowDashboard : function(dbname){
-      if(!dbname || dbname == undefined || dbname == "undefined"){
+    guessCorpusIdAndShowDashboard: function(dbname) {
+      if (!dbname || dbname == undefined || dbname == "undefined") {
         return;
       }
 
-      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {"dbname" : dbname});
-      if(!connection || !connection.length){
+      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {
+        "dbname": dbname
+      });
+      if (!connection || !connection.length) {
         return;
       }
       connection = connection[0];
@@ -75,19 +74,19 @@ define([
       this.veryifyWeAreInTheRightDB(dbname);
 
       /* this assumes that the user's corpus connection for this pouch is not on a different server */
-      window.app.changePouch(connection, function(){
+      window.app.changePouch(connection, function() {
         var c = new CorpusMask();
         c.set({
-          "dbname" : dbname
+          "dbname": dbname
         });
         c.id = "corpus";
         c.fetch({
-          success : function(model) {
+          success: function(model) {
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
             var corpusidfromCorpusMask = model.get("corpusid");
 
             /* Upgrade to version 1.38 */
-            if(!corpusidfromCorpusMask){
+            if (!corpusidfromCorpusMask) {
               corpusidfromCorpusMask = model.get("corpusId");
             }
 
@@ -121,10 +120,10 @@ define([
               window.app.router.showCorpusDashboard(dbname, corpusidfromCorpusMask);
             }, errorfunction);
           },
-          error : function(e, x, y ) {
+          error: function(e, x, y) {
             if (OPrime.debugMode) OPrime.debug("Problem opening the dashboard ", e, x, y);
             var reason = "";
-            if(x){
+            if (x) {
               reason = x.reason;
             }
             if (OPrime.debugMode) OPrime.debug("There was a potential problem opening your dashboard." + reason);
@@ -139,72 +138,76 @@ define([
      * @param {String}
      *          dbname The name of the corpus this datum is from.
      */
-    showCorpusDashboard : function(dbname, corpusid) {
-      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: " );
+    showCorpusDashboard: function(dbname, corpusid) {
+      if (OPrime.debugMode) OPrime.debug("In showFullscreenCorpus: ");
 
       /*
        * If the corpusid is not specified, then try to guess it by re-routing us to the guess function
        */
-      if(!corpusid){
-        window.app.router.navigate("corpus/"+dbname, {trigger: true});
+      if (!corpusid) {
+        window.app.router.navigate("corpus/" + dbname, {
+          trigger: true
+        });
 
         return;
       }
-      if(!dbname){
+      if (!dbname) {
         if (OPrime.debugMode) OPrime.debug("the dbname is missing, this should never happen");
         return;
       }
 
       this.veryifyWeAreInTheRightDB(dbname);
 
-      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {"dbname" : dbname});
-      if(!connection || !connection.length){
+      var connection = _.where(window.app.get("authentication").get("userPrivate").get("corpora"), {
+        "dbname": dbname
+      });
+      if (!connection || !connection.length) {
         return;
       }
       connection = connection[0];
 
       var self = this;
-      window.app.changePouch(connection, function(){
+      window.app.changePouch(connection, function() {
 
         var c = new Corpus();
         c.set({
-          "dbname" : dbname
+          "dbname": dbname
         });
         c.id = corpusid;
         c.fetch({
-          success : function(model) {
+          success: function(model) {
             if (OPrime.debugMode) OPrime.debug("Corpus fetched successfully", model);
 
-            c.makeSureCorpusHasADataList(function(){
-              c.makeSureCorpusHasASession(function(){
+            c.makeSureCorpusHasADataList(function() {
+              c.makeSureCorpusHasASession(function() {
                 self.loadCorpusDashboard(model);
                 //end success to create new data list
-              },function(){
+              }, function() {
                 alert("Failed to create a session. ");
-              });//end failure to create new data list
+              }); //end failure to create new data list
               //end success to create new data list
-            },function(){
+            }, function() {
               alert("Failed to create a datalist. ");
-            });//end failure to create new data list
+            }); //end failure to create new data list
 
           },
-          error : function(e, x, y ) {
+          error: function(e, x, y) {
             console.log(e);
             console.log(x);
             console.log(y);
-            if(self.islooping){
+            if (self.islooping) {
               return;
             }
 
-            self.bringCorpusToThisDevice(c, function(){
-              if(OPrime.isChromeApp()){
+            self.bringCorpusToThisDevice(c, function() {
+              if (OPrime.isChromeApp()) {
                 alert("Downloaded this corpus to this device. Attempting to load the corpus dashboard.");
               }
               self.showCorpusDashboard(dbname, corpusid);
               self.islooping = true;
 
-            }, function(e){
-              alert("Couldn't download this corpus to this device. There was an error replicating corpus..."+e);
+            }, function(e) {
+              alert("Couldn't download this corpus to this device. There was an error replicating corpus..." + e);
             });
 
           }
@@ -213,38 +216,38 @@ define([
       });
 
     },
-    loadCorpusDashboard: function(c){
+    loadCorpusDashboard: function(c) {
       var mostRecentIds = {
-          corpusid : c.id,
-          datalistid : c.datalists.models[0].id,
-          sessionid : c.sessions.models[0].id,
-          connection : c.get("connection")
-        };
-        console.log("mostRecentIds", mostRecentIds);
-        window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
-        window.app.get("authentication").saveAndInterConnectInApp(function(){
-          var optionalCouchAppPath= "";
-          if(c.get("connection").dbname){
-             optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("connection").dbname);
-          }
-          OPrime.redirect(optionalCouchAppPath+"corpus.html");
-          return;
-        });
+        corpusid: c.id,
+        datalistid: c.datalists.models[0].id,
+        sessionid: c.sessions.models[0].id,
+        connection: c.get("connection")
+      };
+      console.log("mostRecentIds", mostRecentIds);
+      window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
+      window.app.get("authentication").saveAndInterConnectInApp(function() {
+        var optionalCouchAppPath = "";
+        if (c.get("connection").dbname) {
+          optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(c.get("connection").dbname);
+        }
+        OPrime.redirect(optionalCouchAppPath + "corpus.html");
+        return;
+      });
     },
-    bringCorpusToThisDevice : function(corpus, callback) {
-      for (var x in window.app.get("authentication").get("userPrivate").get("corpora")){
-        if(window.app.get("authentication").get("userPrivate").get("corpora")[x].dbname == corpus.get("dbname")){
+    bringCorpusToThisDevice: function(corpus, callback) {
+      for (var x in window.app.get("authentication").get("userPrivate").get("corpora")) {
+        if (window.app.get("authentication").get("userPrivate").get("corpora")[x].dbname == corpus.get("dbname")) {
           corpus.set("connection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
-          window.app.set("corpus",corpus);
+          window.app.set("corpus", corpus);
           window.app.get("authentication").staleAuthentication = true;
-          window.app.get("authentication").syncUserWithServer(function(){
+          window.app.get("authentication").syncUserWithServer(function() {
             window.app.replicateOnlyFromCorpus(null, callback);
           });
           break;
         }
       }
     },
-    veryifyWeAreInTheRightDB : function(dbname){
+    veryifyWeAreInTheRightDB: function(dbname) {
       /*
        * Verify that the user is in their database, and that the
        * backbone couch adaptor is saving to the corpus' database,
@@ -265,7 +268,7 @@ define([
             }
           }
           var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(corpusdbname);
-          OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/"+dbname);
+          OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + dbname);
           return;
         }
       }

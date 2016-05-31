@@ -1,39 +1,34 @@
-define( [ 
-    "backbone", 
-    "corpus/Corpus" 
+define([
+  "backbone",
+  "corpus/Corpus"
 ], function(
-    Backbone,
-    Corpus
+  Backbone,
+  Corpus
 ) {
-  var LessonCorpus = Corpus.extend(
-  /** @lends LessonCorpus.prototype */
-  {
+  var LessonCorpus = Corpus.extend( /** @lends LessonCorpus.prototype */ {
     /**
-     * @class A lesson corpus is a type of corpus. 
-     * 
+     * @class A lesson corpus is a type of corpus.
+     *
      * @extends Backbone.Model
-     * 
+     *
      * @constructs
-     * 
+     *
      */
-    initialize : function(attributes) {
+    initialize: function(attributes) {
       Corpus.__super__.initialize.call(this, attributes);
 
     },
-    
-    internalModels : {
+
+    internalModels: {
       // There are all the models of a corpus, plus some more
     },
-    saveAndInterConnectInApp : function(callback){
-      
-      if(typeof callback == "function"){
+    saveAndInterConnectInApp: function(callback) {
+
+      if (typeof callback == "function") {
         callback();
       }
     }
   });
 
   return LessonCorpus;
-}); 
-
-
-
+});

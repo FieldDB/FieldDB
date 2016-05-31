@@ -123,5 +123,4 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     //    document.getElementById("uploadAudioForTextGridform").submit();
   };
 
-
 });

@@ -1,48 +1,46 @@
 define([
-    "backbone",
-    "libs/compiled_handlebars",
-    "corpus/Corpus",
-    "comment/Comment",
-    "comment/Comments",
-    "comment/CommentReadView",
-    "comment/CommentEditView",
-    "data_list/DataList",
-    "data_list/DataLists",
-    "data_list/DataListReadView",
-    "datum/DatumFieldReadView",
-    "datum/DatumStateReadView",
-    "permission/Permission",
-    "permission/Permissions",
-    "permission/PermissionReadView",
-    "datum/Session",
-    "datum/Sessions",
-    "datum/SessionReadView",
-    "app/UpdatingCollectionView",
-    "OPrime"
+  "backbone",
+  "libs/compiled_handlebars",
+  "corpus/Corpus",
+  "comment/Comment",
+  "comment/Comments",
+  "comment/CommentReadView",
+  "comment/CommentEditView",
+  "data_list/DataList",
+  "data_list/DataLists",
+  "data_list/DataListReadView",
+  "datum/DatumFieldReadView",
+  "datum/DatumStateReadView",
+  "permission/Permission",
+  "permission/Permissions",
+  "permission/PermissionReadView",
+  "datum/Session",
+  "datum/Sessions",
+  "datum/SessionReadView",
+  "app/UpdatingCollectionView",
+  "OPrime"
 ], function(
-    Backbone,
-    Handlebars,
-    Corpus,
-    Comment,
-    Comments,
-    CommentReadView,
-    CommentEditView,
-    DataList,
-    DataLists,
-    DataListReadView,
-    DatumFieldReadView,
-    DatumStateReadView,
-    Permission,
-    Permissions,
-    PermissionReadView,
-    Session,
-    Sessions,
-    SessionReadView,
-    UpdatingCollectionView
+  Backbone,
+  Handlebars,
+  Corpus,
+  Comment,
+  Comments,
+  CommentReadView,
+  CommentEditView,
+  DataList,
+  DataLists,
+  DataListReadView,
+  DatumFieldReadView,
+  DatumStateReadView,
+  Permission,
+  Permissions,
+  PermissionReadView,
+  Session,
+  Sessions,
+  SessionReadView,
+  UpdatingCollectionView
 ) {
-  var CorpusReadView = Backbone.View.extend(
-  /** @lends CorpusReadView.prototype */
-  {
+  var CorpusReadView = Backbone.View.extend( /** @lends CorpusReadView.prototype */ {
     /**
      * @class This is the corpus view. To the user it looks like a
      *        Navigation panel on the main dashboard screen, which
@@ -57,34 +55,34 @@ define([
      * @extends Backbone.View
      * @constructs
      */
-    initialize : function() {
-      if (OPrime.debugMode) OPrime.debug("CORPUS READ init: " );
+    initialize: function() {
+      if (OPrime.debugMode) OPrime.debug("CORPUS READ init: ");
       this.changeViewsOfInternalModels();
 
-   // If the model's dbname changes, chances are its a new corpus, re-render its internal models.
-      this.model.bind('change:dbname', function(){
+      // If the model's dbname changes, chances are its a new corpus, re-render its internal models.
+      this.model.bind('change:dbname', function() {
         this.changeViewsOfInternalModels();
         this.render();
       }, this);
 
       //TOOD if the sessions and data lists arent up-to-date, turn these on
-//      this.model.bind('change:sessions', function(){
-//        if (OPrime.debugMode) OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
-//        this.changeViewsOfInternalModels();
-//        this.render();
-//      }, this);
-//      this.model.bind('change:dataLists', function(){
-//            this.changeViewsOfInternalModels();
-//      this.render();
-//      }, this);
+      //      this.model.bind('change:sessions', function(){
+      //        if (OPrime.debugMode) OPrime.debug("Corpus read view sessions changed. changeViewsOfInternalModels and rendering...");
+      //        this.changeViewsOfInternalModels();
+      //        this.render();
+      //      }, this);
+      //      this.model.bind('change:dataLists', function(){
+      //            this.changeViewsOfInternalModels();
+      //      this.render();
+      //      }, this);
     },
-    events : {
-      "click .icon-resize-small" : 'resizeSmall',
-      "click .resize-full" : "resizeFullscreen",
+    events: {
+      "click .icon-resize-small": 'resizeSmall',
+      "click .resize-full": "resizeFullscreen",
 
       //Add button inserts new Comment
-      "click .add-comment-button" : function(e) {
-        if(e){
+      "click .add-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
@@ -99,25 +97,25 @@ define([
         this.commentReadView.render();
       },
       //Delete button remove a comment
-      "click .remove-comment-button" : function(e) {
-        if(e){
+      "click .remove-comment-button": function(e) {
+        if (e) {
           e.stopPropagation();
           e.preventDefault();
         }
         this.model.get("comments").remove(this.commentEditView.model);
       },
 
-      "click .reload-corpus-team-permissions" :function(e){
-        if(e){
+      "click .reload-corpus-team-permissions": function(e) {
+        if (e) {
           e.preventDefault();
         }
         var corpusviewself = this;
-        this.model.loadPermissions(function(){
+        this.model.loadPermissions(function() {
           corpusviewself.permissionsView = new UpdatingCollectionView({
-            collection : corpusviewself.model.permissions,
-            childViewConstructor : PermissionReadView,
-            childViewTagName     : 'li',
-            childViewClass       : "breadcrumb row span12"
+            collection: corpusviewself.model.permissions,
+            childViewConstructor: PermissionReadView,
+            childViewTagName: 'li',
+            childViewClass: "breadcrumb row span12"
           });
 
           corpusviewself.permissionsView.el = corpusviewself.$('.permissions-updating-collection');
@@ -127,38 +125,38 @@ define([
       },
 
       //help text around text areas
-      "click .explain_terms_of_use" : "toggleExplainTermsOfUse",
-      "click .explain_license" : "toggleExplainLicense",
+      "click .explain_terms_of_use": "toggleExplainTermsOfUse",
+      "click .explain_license": "toggleExplainLicense",
 
       "click .icon-edit": "showEditable",
 
       //corpus menu buttons
-      "click .new-datum" : "newDatum",
-      "click .new-data-list" : "newDataList",
-      "click .new-session" : "newSession",
-      "click .new-corpus" : "newCorpus",
+      "click .new-datum": "newDatum",
+      "click .new-data-list": "newDataList",
+      "click .new-session": "newSession",
+      "click .new-corpus": "newCorpus",
 
     },
 
     /**
      * The underlying model of the CorpusReadView is a Corpus.
      */
-    model : Corpus,
+    model: Corpus,
 
     /**
      * The Handlebars template rendered as the CorpusFullscreenView.
      */
-    templateFullscreen : Handlebars.templates.corpus_read_embedded,
+    templateFullscreen: Handlebars.templates.corpus_read_embedded,
 
     /**
      * The Handlebars template rendered as the CorpusWellView.
      */
-    templateCentreWell : Handlebars.templates.corpus_read_embedded,
+    templateCentreWell: Handlebars.templates.corpus_read_embedded,
 
     /**
      * The Handlebars template rendered as the Summary
      */
-    templateSummary : Handlebars.templates.corpus_summary_read_embedded,
+    templateSummary: Handlebars.templates.corpus_summary_read_embedded,
 
     /**
      * The Handlebars template rendered as the CorpusReadLinkView.
@@ -168,11 +166,11 @@ define([
     /**
      * Renders the CorpusReadView and all of its child Views.
      */
-    render : function() {
+    render: function() {
       var self = this;
 
       if (OPrime.debugMode) OPrime.debug("CORPUS READ render: ");
-      if(window.appView.currentCorpusEditView){
+      if (window.appView.currentCorpusEditView) {
         window.appView.currentCorpusEditView.destroy_view();
       }
       window.appView.currentCorpusReadView.destroy_view();
@@ -207,7 +205,7 @@ define([
       jsonToRender.locale_Export_Data = Locale.get("locale_Export_Data");
       jsonToRender.locale_Import_Data = Locale.get("locale_Import_Data");
       jsonToRender.locale_License = Locale.get("locale_License");
-      jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> "+Locale.get("locale_New_Corpus") ;
+      jsonToRender.locale_New_Corpus = "<i class='icon-cloud'></i> " + Locale.get("locale_New_Corpus");
       jsonToRender.locale_New_Corpus = Locale.get("locale_New_Corpus");
       jsonToRender.locale_New_Data_List = Locale.get("locale_New_Data_List");
       jsonToRender.locale_New_Datum = Locale.get("locale_New_Datum");
@@ -225,34 +223,34 @@ define([
       jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
       jsonToRender.locale_permissions_explanation = Locale.get("locale_permissions_explanation");
 
-      try{
+      try {
         jsonToRender.username = this.model.get("team").get("username");
-      }catch(e){
+      } catch (e) {
         if (OPrime.debugMode) OPrime.debug("Problem getting the usrname of the corpus' team");
       }
 
       if (this.format == "leftSide") {
-        if (OPrime.debugMode) OPrime.debug("CORPUS READ LEFTSIDE render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ LEFTSIDE render: ");
 
-          this.setElement($("#corpus-quickview"));
-          if(jsonToRender.description && jsonToRender.description.length > 200){
-            jsonToRender.description = jsonToRender.description.substring(0,150)+"...";
-          }
-          $(this.el).html(this.templateSummary(jsonToRender));
+        this.setElement($("#corpus-quickview"));
+        if (jsonToRender.description && jsonToRender.description.length > 200) {
+          jsonToRender.description = jsonToRender.description.substring(0, 150) + "...";
+        }
+        $(this.el).html(this.templateSummary(jsonToRender));
 
       } else if (this.format == "link") {
-        if (OPrime.debugMode) OPrime.debug("CORPUS READ LINK render: " );
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ LINK render: ");
 
         // Display the CorpusGlimpseView, dont set the element
         $(this.el).html(this.templateLink(jsonToRender));
 
-      } else if (this.format == "fullscreen" || this.format == "centreWell"){
-        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN/EMBEDDED render: " );
+      } else if (this.format == "fullscreen" || this.format == "centreWell") {
+        if (OPrime.debugMode) OPrime.debug("CORPUS READ FULLSCREEN/EMBEDDED render: ");
 
-        if(this.format == "fullscreen"){
+        if (this.format == "fullscreen") {
           this.setElement($("#corpus-fullscreen"));
           $(this.el).html(this.templateFullscreen(jsonToRender));
-        }else{
+        } else {
           this.setElement($("#corpus-embedded"));
           $(this.el).html(this.templateCentreWell(jsonToRender));
         }
@@ -285,9 +283,9 @@ define([
         this.sessionsView.el = this.$('.sessions-updating-collection');
         this.sessionsView.render();
 
-//        // Display the PermissionsView
-//        this.permissionsView.el = this.$('.permissions-updating-collection');
-//        this.permissionsView.render();
+        //        // Display the PermissionsView
+        //        this.permissionsView.el = this.$('.permissions-updating-collection');
+        //        this.permissionsView.render();
 
         try {
           window.setTimeout(function() {
@@ -296,15 +294,15 @@ define([
               height: 400
             });
           }, 500);
-        }catch(e){
+        } catch (e) {
           window.appView.toastUser("There was a problem loading your corpus visualization.");
         }
 
-        try{
+        try {
           $(this.el).find(".corpus-description-wiki").html($.wikiText(jsonToRender.description));
           $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
           $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
-        } catch(e){
+        } catch (e) {
           OPrime.debug("Formatting as wiki text didnt work");
         }
 
@@ -317,7 +315,7 @@ define([
      * http://stackoverflow.com/questions/6569704/destroy-or-remove-a-view-in-backbone-js
      */
     destroy_view: function() {
-      if (OPrime.debugMode) OPrime.debug("DESTROYING CORPUS READ VIEW "+ this.format);
+      if (OPrime.debugMode) OPrime.debug("DESTROYING CORPUS READ VIEW " + this.format);
 
       //COMPLETELY UNBIND THE VIEW
       this.undelegateEvents();
@@ -325,77 +323,77 @@ define([
       $(this.el).removeData().unbind();
 
       //Remove view from DOM
-//    this.remove();
-//    Backbone.View.prototype.remove.call(this);
+      //    this.remove();
+      //    Backbone.View.prototype.remove.call(this);
     },
-    changeViewsOfInternalModels : function(){
+    changeViewsOfInternalModels: function() {
       //Create a CommentReadView
       this.commentReadView = new UpdatingCollectionView({
-        collection           : this.model.get("comments"),
-        childViewConstructor : CommentReadView,
-        childViewTagName     : 'li'
+        collection: this.model.get("comments"),
+        childViewConstructor: CommentReadView,
+        childViewTagName: 'li'
       });
 
       this.commentEditView = new CommentEditView({
-        model : new Comment(),
+        model: new Comment(),
       });
 
       // Create a list of DataLists
       this.dataListsView = new UpdatingCollectionView({
-        collection : this.model.datalists,
-        childViewConstructor : DataListReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "link"
+        collection: this.model.datalists,
+        childViewConstructor: DataListReadView,
+        childViewTagName: 'li',
+        childViewFormat: "link"
       });
 
       //Create a list of DatumFields
       this.datumFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("datumFields"),
-        childViewConstructor : DatumFieldReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "corpus",
-        childViewClass       : "breadcrumb"
+        collection: this.model.get("datumFields"),
+        childViewConstructor: DatumFieldReadView,
+        childViewTagName: 'li',
+        childViewFormat: "corpus",
+        childViewClass: "breadcrumb"
       });
 
       //Create a list of DatumFields
       this.sessionFieldsView = new UpdatingCollectionView({
-        collection           : this.model.get("sessionFields"),
-        childViewConstructor : DatumFieldReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "corpus",
-        childViewClass       : "breadcrumb"
+        collection: this.model.get("sessionFields"),
+        childViewConstructor: DatumFieldReadView,
+        childViewTagName: 'li',
+        childViewFormat: "corpus",
+        childViewClass: "breadcrumb"
       });
 
       // Create a list of DatumStates
       this.datumStatesView = new UpdatingCollectionView({
-        collection           : this.model.get("datumStates"),
-        childViewConstructor : DatumStateReadView,
-        childViewTagName     : 'li',
-        childViewFormat      : "corpus"
+        collection: this.model.get("datumStates"),
+        childViewConstructor: DatumStateReadView,
+        childViewTagName: 'li',
+        childViewFormat: "corpus"
       });
 
-//      this.model.loadPermissions(); //Dont load automatically, its a server call
+      //      this.model.loadPermissions(); //Dont load automatically, its a server call
       //Create a Permissions View
-//      this.permissionsView = new UpdatingCollectionView({
-//        collection : this.model.permissions,
-//        childViewConstructor : PermissionReadView,
-//        childViewTagName     : 'li',
-//        childViewClass       : "breadcrumb"
-//      });
+      //      this.permissionsView = new UpdatingCollectionView({
+      //        collection : this.model.permissions,
+      //        childViewConstructor : PermissionReadView,
+      //        childViewTagName     : 'li',
+      //        childViewClass       : "breadcrumb"
+      //      });
 
       //Create a Sessions List
-       this.sessionsView = new UpdatingCollectionView({
-         collection : this.model.sessions,
-         childViewConstructor : SessionReadView,
-         childViewTagName     : 'li',
-         childViewFormat      : "link"
-       });
+      this.sessionsView = new UpdatingCollectionView({
+        collection: this.model.sessions,
+        childViewConstructor: SessionReadView,
+        childViewTagName: 'li',
+        childViewFormat: "link"
+      });
 
     },
 
     //toggle Terms of Use explanation in popover
-    toggleExplainTermsOfUse : function(e) {
-      if(e){
+    toggleExplainTermsOfUse: function(e) {
+      if (e) {
         // e.preventDefault();
         e.stopPropagation();
       }
@@ -410,8 +408,8 @@ define([
     },
 
     //toggle License explanation in popover
-    toggleExplainLicense : function(e) {
-      if(e){
+    toggleExplainLicense: function(e) {
+      if (e) {
         // e.preventDefault();
         e.stopPropagation();
       }
@@ -425,70 +423,70 @@ define([
       return false;
     },
 
-  //Functions assoicate with the corpus menu
-    newDatum : function(e) {
-      if(e){
-//        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
+    //Functions assoicate with the corpus menu
+    newDatum: function(e) {
+      if (e) {
+        //        e.stopPropagation(); //cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
         /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+        if ($(e.target).parent().parent().hasClass("dropdown-menu")) {
           $(e.target).parent().parent().hide();
         }
       }
-//      app.router.showEmbeddedDatum(this.get("dbname"), "new");
+      //      app.router.showEmbeddedDatum(this.get("dbname"), "new");
       appView.datumsEditView.newDatum();
       if (OPrime.debugMode) OPrime.debug("CLICK NEW DATUM READ CORPUS VIEW.");
     },
 
-    newDataList : function(e) {
-      if(e){
-//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+    newDataList: function(e) {
+      if (e) {
+        //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
         /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+        if ($(e.target).parent().parent().hasClass("dropdown-menu")) {
           $(e.target).parent().parent().hide();
         }
       }
       //take the user to the search so they can create a data list using the search feature.
-      window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.","alert-info","How to make a new Data List:");
+      window.appView.toastUser("Below is the Advanced Search, this is the easiest way to make a new Data List.", "alert-info", "How to make a new Data List:");
       app.router.showEmbeddedSearch();
     },
 
-    newSession : function(e) {
-      if(e){
-//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+    newSession: function(e) {
+      if (e) {
+        //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
         /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+        if ($(e.target).parent().parent().hasClass("dropdown-menu")) {
           $(e.target).parent().parent().hide();
         }
       }
       this.model.newSession();
     },
 
-    newCorpus : function(e){
-      if(e){
-//      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
+    newCorpus: function(e) {
+      if (e) {
+        //      e.stopPropagation();// cant use stopPropagation, it leaves the dropdown menu open.
         e.preventDefault(); //this stops the link from moving the page to the top
         /* This permits this button to be inside a dropdown in the navbar... yet adds complexity the app*/
-        if($(e.target).parent().parent().hasClass("dropdown-menu")){
+        if ($(e.target).parent().parent().hasClass("dropdown-menu")) {
           $(e.target).parent().parent().hide();
         }
       }
       this.model.newCorpus();
     },
 
-     resizeSmall : function(e){
-       if(e){
-         e.stopPropagation();
-         e.preventDefault();
-       }
-       window.location.href = "#render/true";
+    resizeSmall: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      window.location.href = "#render/true";
     },
 
-    resizeFullscreen : function(e){
-      if (OPrime.debugMode) OPrime.debug("CORPUS READ starts to render fullscreen. " );
-      if(e){
+    resizeFullscreen: function(e) {
+      if (OPrime.debugMode) OPrime.debug("CORPUS READ starts to render fullscreen. ");
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -498,12 +496,12 @@ define([
     },
 
     //This is bound to the little pencil function
-    showEditable :function(e){
-      if(e){
+    showEditable: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-      if(window.appView.currentCorpusEditView){
+      if (window.appView.currentCorpusEditView) {
         window.appView.currentCorpusEditView.format = this.format;
         window.appView.currentCorpusEditView.render();
       }
@@ -513,22 +511,21 @@ define([
      * be saved. This function saves the change/addition/deletion of the comments.
      * Changes in other parts of Corpus is taken care of the server according to
      * users' permissions. */
-    updatePouch : function(e) {
-      if(e){
+    updatePouch: function(e) {
+      if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
       var self = this;
-      if(this.format == "modal"){
+      if (this.format == "modal") {
         $("#new-corpus-modal").hide();
       }
-      this.model.saveAndInterConnectInApp(function(){
+      this.model.saveAndInterConnectInApp(function() {
         self.render();
-      },function(){
+      }, function() {
         self.render();
       });
     }
-
 
   });
 

@@ -67,8 +67,6 @@ var Connection = function Connection(options) {
   FieldDBObject.apply(this, arguments);
 };
 
-
-
 Connection.DEFAULT_LOCALHOST_CONNECTION = function(options) {
   return {
     "corpusid": "TBA",
@@ -583,7 +581,6 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
 });
 
-
 /*
  * This function is the same in all webservicesconfig, now any couchapp can
  * login to any server, and register on the corpus server which matches its
@@ -943,6 +940,5 @@ Connection.baseSchema = {
     }
   }
 };
-
 
 exports.Connection = Connection;

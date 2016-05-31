@@ -3,11 +3,11 @@
  */
 if (!OPrime.isAndroidApp()) {
   document.getElementById("audio_stimuli_file").setAttribute("controls",
-      "controls");
+    "controls");
   document.getElementById("audio_response_file").setAttribute("controls",
-      "controls");
+    "controls");
   document.getElementById("audio_sample_response_file").setAttribute("controls",
-  "controls");
+    "controls");
 }
 /*
  * Handle the play/pause stimuli button
@@ -31,9 +31,9 @@ document.getElementById("play_stimulus_button").onclick = function(e) {
 document.getElementById("stop_stimulus_button").onclick = function(e) {
   OPrime.stopAudioFile('audio_stimuli_file');
   if (document.getElementById("play_stimulus_button").classList.toString()
-      .indexOf("icon-play") == -1) {
+    .indexOf("icon-play") == -1) {
     $(document.getElementById("play_stimulus_button")).toggleClass(
-        "icon-play icon-pause");
+      "icon-play icon-pause");
   }
 };
 
@@ -59,9 +59,9 @@ document.getElementById("play_sample_response_button").onclick = function(e) {
 document.getElementById("stop_sample_response_button").onclick = function(e) {
   OPrime.stopAudioFile('audio_sample_response_file');
   if (document.getElementById("play_sample_response_button").classList.toString()
-      .indexOf("icon-play") == -1) {
+    .indexOf("icon-play") == -1) {
     $(document.getElementById("play_sample_response_button")).toggleClass(
-        "icon-play icon-pause");
+      "icon-play icon-pause");
   }
 };
 
@@ -71,41 +71,39 @@ document.getElementById("stop_sample_response_button").onclick = function(e) {
 document.getElementById("record_vocab_response_button").onclick = function(e) {
   e.stopPropagation();
   var responsefilename = document.getElementById("audio_stimuli_file").src
-      .replace(".wav", "").replace(/\/.*\//, "").replace("ogg", "").replace(
-          ".mp3", "")
-      + "_response_" + Date.now() + ".mp3";
+    .replace(".wav", "").replace(/\/.*\//, "").replace("ogg", "").replace(
+      ".mp3", "") + "_response_" + Date.now() + ".mp3";
   if (document.getElementById("record_vocab_response_button").classList
-      .toString().indexOf("icon-stop") == -1) {
-    OPrime.captureAudio(responsefilename, /* started */function(audioUrl) {
+    .toString().indexOf("icon-stop") == -1) {
+    OPrime.captureAudio(responsefilename, /* started */ function(audioUrl) {
       if (OPrime.debugMode) OPrime.debug("\nRecording successfully started " + audioUrl);
 
       // Only change the icons once.
       if (document.getElementById("record_vocab_response_button").classList
-          .toString().indexOf("icon-record") > -1) {
+        .toString().indexOf("icon-record") > -1) {
         $(document.getElementById("record_vocab_response_button")).toggleClass(
-            "icon-record icon-stop");// set class to stop
+          "icon-record icon-stop"); // set class to stop
         $(document.getElementById("record_vocab_response_button")).html("");
       }
 
-    }, /* Recording complete */function(audioUrl) {
-      if (OPrime.debugMode) OPrime.debug("Attaching sucessful recording to the result audio div "
-          + audioUrl);
+    }, /* Recording complete */ function(audioUrl) {
+      if (OPrime.debugMode) OPrime.debug("Attaching sucessful recording to the result audio div " + audioUrl);
       document.getElementById("audio_response_file").src = audioUrl;
       document.getElementById("record_vocab_response_button").removeAttribute(
-          "disabled", "disabled");
+        "disabled", "disabled");
       // Play recorded audio
       OPrime.playAudioFile('audio_response_file');
     });
   } else {
     document.getElementById("record_vocab_response_button").setAttribute(
-        "disabled", "disabled");
-    OPrime.stopAndSaveAudio(responsefilename, /* stopped */function(audioUrl) {
+      "disabled", "disabled");
+    OPrime.stopAndSaveAudio(responsefilename, /* stopped */ function(audioUrl) {
       if (document.getElementById("record_vocab_response_button").classList
-          .toString().indexOf("icon-stop") > -1) {
+        .toString().indexOf("icon-stop") > -1) {
         $(document.getElementById("record_vocab_response_button")).toggleClass(
-            "icon-stop icon-record");// set class to record
+          "icon-stop icon-record"); // set class to record
         $(document.getElementById("record_vocab_response_button")).html(
-            '<img src="mic_white.png" />');
+          '<img src="mic_white.png" />');
       }
 
       if (OPrime.debugMode) OPrime.debug("\nRecording successfully stopped " + audioUrl);
@@ -124,12 +122,11 @@ document.getElementById("play_response_button").onclick = function(e) {
  * Handle the cue/play syllables
  */
 var syllables = document.getElementsByClassName("playable_syllable");
-for ( var s in syllables) {
+for (var s in syllables) {
   syllables[s].onclick = function(e) {
     OPrime.playIntervalAudioFile('audio_stimuli_file', e.target.min,
-        e.target.max);
-    window.userHistory[e.target.value] = window.userHistory[e.target.value]
-        || [];
+      e.target.max);
+    window.userHistory[e.target.value] = window.userHistory[e.target.value] || [];
     window.userHistory[e.target.value].push(JSON.stringify(new Date()));
     window.saveUser();
   };

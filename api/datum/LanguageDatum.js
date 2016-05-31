@@ -277,7 +277,6 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
 
       this.debug("IGT+ tuples", tuples);
 
-
       return {
         tuples: tuples,
         parallelText: parallelText

@@ -1,7 +1,5 @@
 define(["backbone"], function(Backbone) {
-  var ReportBot = Backbone.Model.extend(
-  /** @lends ReportBot.prototype */
-  {
+  var ReportBot = Backbone.Model.extend( /** @lends ReportBot.prototype */ {
     /**
      * TODO redo description
      * @class A bot is a type of user. It has the same information as a user, except it isnt a human, its a "bot."
@@ -20,14 +18,12 @@ define(["backbone"], function(Backbone) {
      * @extends User.Model
      * @constructs
      */
-    initialize : function() {
-    },
+    initialize: function() {},
 
     // Internal models: used by the parse function
-    internalModels : {
-    },
+    internalModels: {},
 
-    changePouch : function(dbname, callback) {
+    changePouch: function(dbname, callback) {
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
       }
@@ -35,9 +31,9 @@ define(["backbone"], function(Backbone) {
         callback();
       }
     },
-    saveAndInterConnectInApp : function(callback){
+    saveAndInterConnectInApp: function(callback) {
 
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
@@ -46,7 +42,7 @@ define(["backbone"], function(Backbone) {
      * Schedule the bot to run the given MapReduce functions at the
      * given location on the given crontab schedule.
      */
-    schedule : function() {
+    schedule: function() {
       // Store map function in globally
       window.validCouchViews = window.validCouchViews || [];
       window.validCouchViews.push(this.get("map"));
@@ -56,13 +52,13 @@ define(["backbone"], function(Backbone) {
 
       // Create my view document
       var view = {
-         "_id" : "_design/something2",
-         "language": "javascript",
-         "views": {
-             "play": {
-                 "map": this.get("map").toString()
-             }
-         }
+        "_id": "_design/something2",
+        "language": "javascript",
+        "views": {
+          "play": {
+            "map": this.get("map").toString()
+          }
+        }
       };
       if (this.get("reduce")) {
         view.views.play.reduce = this.get("reduce").toString();
@@ -74,7 +70,9 @@ define(["backbone"], function(Backbone) {
         self.pouch(function(err, db) {
           db.post(view, function(error, response) {
             if (!error) {
-              db.query("something/play", {reduce: false}, function(err, resp) {
+              db.query("something/play", {
+                reduce: false
+              }, function(err, resp) {
                 console.log("err: ", err, "resp: ", resp);
               });
             }

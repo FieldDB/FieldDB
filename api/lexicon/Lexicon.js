@@ -25,7 +25,6 @@ var LexiconNode = require("./LexiconNode").LexiconNode;
 var Contexts = require("./Contexts").Contexts;
 var mapReduceFactory = require("./../map_reduce/MapReduce").MapReduceFactory;
 
-
 // Load n grams map reduce which is used in both couchdb and in the codebase
 var lexiconNodesMapReduceString = require("../../map_reduce_lexicon/views/lexiconNodes/map").lexiconNodes;
 var LEXICON_NODES_MAP_REDUCE = mapReduceFactory({
@@ -570,7 +569,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       var relation;
       var count;
       var context;
-
 
       this.glossMightBeMissingFromMorphemesNGram = false;
       var shouldSkipWordBounariesUnlessSpecified = !this.corpus || !this.corpus.prefs || !this.corpus.prefs.showGlosserAsMorphemicTemplate;
@@ -1139,7 +1137,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
             return;
           }
 
-
           // If the utterance contains the whole word, ie the context, not just the utterance of this morpheme we dont really want it
           // delete source.utterance;
           // delete target.utterance;
@@ -1211,7 +1208,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           // Use the language of connected graphs
           connectionEdge.source = source;
           connectionEdge.target = target;
-
 
           // Dont keep other names for the two nodes
           delete connectionEdge.previous;
@@ -1469,7 +1465,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       }
       this.debug("Using divElement", divElement);
 
-
       var width = options.width || divElement.clientWidth || 200,
         height = options.height || 350;
 
@@ -1502,7 +1497,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .style("visibility", "hidden")
         .html("");
 
-
       var linkArc = function(d) {
         var dx = d.source.x - d.target.x,
           dy = d.source.y - d.target.y,
@@ -1523,7 +1517,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         return "translate(" + d.x + "," + d.y + ")";
       };
 
-
       /*
        Short morphemes will be blue, long will be red
        */
@@ -1541,7 +1534,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       // var y = this.d3.scale.linear()
       //   .range([0, height - 40]);
 
-
       var colorByMorphemeLength = function(lexicalEntry) {
         if (lexicalEntry.morphemes === "#_") {
           return "#00000";
@@ -1557,7 +1549,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         // return color(d.confidence * 10);
       };
 
-
       var force = this.d3.layout.force()
         .nodes(this.d3.values(self.connectedGraph.nodes)) // can be an object
         .links(self.connectedGraph.links)
@@ -1566,7 +1557,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .linkDistance(30)
         .friction(0.5)
         .charge(-120);
-
 
       // force.nodes().map(function(node){
       //   node.x = width/2;
@@ -1612,7 +1602,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .append("path")
         .attr("d", "M0,-5L10,0L0,5");
 
-
       // var titletext = "Click to search morphemes in your corpus";
 
       // //A label for the current year.
@@ -1624,9 +1613,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   //    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
       //   .text(titletext);
 
-
       //this.d3.json("./libs/rules.json", function(json) {
-
 
       // var path = self.connectedGraph.svg.append("g").selectAll("path")
       //   .data(force.links())
@@ -1709,7 +1696,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //   })
       //   .call(force.drag);
 
-
       var circle = self.connectedGraph.svg.append("g").selectAll("circle")
         .data(force.nodes())
         .enter().append("circle")
@@ -1770,7 +1756,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
       //     return d.morphemes;
       //   });
 
-
       var text = self.connectedGraph.svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
@@ -1784,7 +1769,6 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
         .text(function(d) {
           return d.morphemes;
         });
-
 
       // force.on("tick", function() {
       //   link.attr("x1", function(d) {

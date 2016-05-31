@@ -14,7 +14,6 @@ var Team = require("./../user/Team").Team;
 var Permissions = require("./../permission/Permissions").Permissions;
 var Q = require("q");
 
-
 var DEFAULT_CORPUS_MODEL = require("./corpus_mask.json");
 /**
  * @class The CorpusMask is saved as corpus in the Couch repository,
@@ -623,7 +622,6 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       this.preferredDatumTemplate = value;
     }
   }
-
 
 });
 exports.CorpusMask = CorpusMask;

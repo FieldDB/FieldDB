@@ -886,7 +886,7 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
         return this;
       }
 
-      if (!this.lexicon.connectedGraph && !this.lexicon.entryRelations && this.morphemeSegmentationKnowledgeBase){
+      if (!this.lexicon.connectedGraph && !this.lexicon.entryRelations && this.morphemeSegmentationKnowledgeBase) {
         this.lexicon.entryRelations = this.morphemeSegmentationKnowledgeBase;
       }
 
@@ -912,6 +912,5 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
   }
 
 });
-
 
 exports.Glosser = Glosser;
