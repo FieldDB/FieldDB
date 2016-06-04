@@ -114,6 +114,7 @@ require([
   /* Tests to ensure jasmine is running */
   "test/libs/require/RequireTest",
   "test/libs/jasmine/spec/PlayerSpec",
+  "test/libs/backbone/BackboneModelTest",
   // "test/libs/backbone/JQueryTest",
 
   /* FieldDB tests */
@@ -149,7 +150,8 @@ require([
 ], function(
   causing_jasmine_boot_to_load,
   PlayerSpec,
-  RequireTest
+  RequireTest,
+  BackboneModelTest
 ) {
 
   OPrime.debugMode = true;
@@ -157,6 +159,7 @@ require([
   // Run the Describe functions
   RequireTest.describe();
   PlayerSpec.describe();
+  BackboneModelTest.describe();
 
   // Trigger Jasmine (provided by jasmine-boot)
   window.onload();
