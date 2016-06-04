@@ -1,9 +1,26 @@
-beforeEach(function() {
-  this.addMatchers({
-    toBePlaying: function(expectedSong) {
-      var player = this.actual;
-      return player.currentlyPlayingSong === expectedSong && 
-             player.isPlaying;
-    }
-  });
+"use strict";
+
+define([], function() {
+
+  function specHelper() {
+    beforeEach(function() {
+      jasmine.addMatchers({
+        toBePlaying: function() {
+          return {
+            compare: function(actual, expected) {
+              var player = actual;
+
+              return {
+                pass: player.currentlyPlayingSong === expected && player.isPlaying
+              };
+            }
+          };
+        }
+      });
+    });
+  }
+
+  return {
+    beforeEach: specHelper
+  }
 });

@@ -2,12 +2,16 @@
 
 define([
   "../src/Player",
-  "../src/Player"
+  "../src/Song",
+  "./SpecHelper"
 ], function(
   Player,
-  Song
+  Song,
+  SpecHelper
 ) {
   function registerTests() {
+    SpecHelper.beforeEach();
+
     describe("Jasmine basic tests", function() {
       var player;
       var song;
@@ -62,7 +66,7 @@ define([
 
           expect(function() {
             player.resume();
-          }).toThrow("song is already playing");
+          }).toThrowError("song is already playing");
         });
       });
     });
