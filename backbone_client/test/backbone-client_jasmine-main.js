@@ -1,190 +1,163 @@
-//Set the RequireJS configuration
+"use strict";
 
+//Set the RequireJS configuration
 require.config({
-  baseUrl: "../backbone_client/",
+  baseUrl: "",
 
   paths: {
-    // "jasmine" : "../tests/libs/jasmine/jasmine",
-    // "jasmine-html" : "../tests/libs/jasmine/jasmine-html",
-    /* Tests to ensure jasmine is running */
-    "Player": "../tests/libs/jasmine/src/Player",
-    "Song": "../tests/libs/jasmine/src/Song",
-    "PlayerSpec": "../tests/libs/jasmine/spec/PlayerSpec",
-    "SpecHelper": "../tests/libs/jasmine/spec/SpecHelper",
+    'jasmine': ['test/bower_components/jasmine/lib/jasmine-core/jasmine'],
+    'jasmine-html': ['test/bower_components/jasmine/lib/jasmine-core/jasmine-html'],
+    'jasmine-boot': ['test/bower_components/jasmine/lib/jasmine-core/boot'],
 
-    "sinon": "../tests/libs/sinon/sinon",
+    "sinon": "test/libs/sinon/sinon",
 
     /* Additional Jasmine runner files for XML and console output */
-    "JUnitReporter": "../tests/libs/jasmine-reporters/src/jasmine.junit_reporter",
-    "ConsoleReporter": "../tests/libs/jasmine-reporters/src/jasmine.console_reporter",
-    "TerminalReporter": "../tests/libs/jasmine-reporters/src/jasmine.terminal_reporter",
+    "JUnitReporter": "test/libs/jasmine-reporters/src/jasmine.junit_reporter",
+    "ConsoleReporter": "test/libs/jasmine-reporters/src/jasmine.console_reporter",
+    "TerminalReporter": "test/libs/jasmine-reporters/src/jasmine.terminal_reporter",
 
-    /* load Backbone dependencies */
-    "handlebarsjs": "libs/handlebars.runtime",
-    "handlebars": "libs/compiled_handlebars",
-    "$": "libs/jquery",
-    "_": "libs/underscore",
-    "backbonejs": "libs/backbone",
-    "jquery-couch": "libs/backbone_couchdb/jquery.couch",
-    "backbone": "libs/backbone_couchdb/backbone-couchdb",
 
-    /* load FieldDB dependencies */
-    "text": "libs/text",
+    /*  Bootstrap kills click events in jquery, so dont include in tests */
+    // "bootstrap": "libs/bootstrap/js/bootstrap.min",
+
     "CryptoJS": "libs/Crypto_AES",
+
+    /* jQuery and jQuery plugins */
+    "jquery": "bower_components/jquery/dist/jquery",
+    "wikitext": "libs/jquery-wikitext",
+
+    /* Handlebars html templating libraries and compiled templates */
+    "handlebars.runtime": "bower_components/handlebars/handlebars.runtime.amd",
+
+    /* Backbone Model View Controller framework and its plugins and dependencies */
+    "_": "bower_components/underscore/underscore",
+    "underscore": "bower_components/underscore/underscore",
+    "backbone": "bower_components/backbone/backbone",
+    "jquerycouch": "libs/backbone_couchdb/jquery.couch",
+
     "terminal": "libs/terminal/terminal",
+
+    "text": "libs/text",
+
     "xml2json": "libs/xml2json",
+
+    "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
-    "OPrime": "libs/webservicesconfig_devserver",
-    // Bootstrap kills click events in jquery, so dont include in tests
-    // "bootstrap" : "libs/bootstrap/js/bootstrap.min",
+    "OPrime": "libs/webservicesconfig_devserver"
 
     /* load tests for dependencies */
-    "jasmine-jquery": "../tests/libs/backbone/jasmine-jquery",
-    "jasmine-ajax": "../tests/libs/backbone/mock-ajax",
-    "jasmine-jquery-spec": "../tests/libs/backbone/jasmine-jquery-spec",
-
+    // "jasmine-jquery": "test/libs/backbone/jasmine-jquery",
+    // "jasmine-ajax": "test/libs/backbone/mock-ajax",
+    // "jasmine-jquery-spec": "test/libs/backbone/jasmine-jquery-spec",
   },
   shim: {
-    // "jasmine-html" : {
-    // deps : [ "jasmine" ],
-    // exports : "jasmine"
-    // },
-    // "SpecHelper" : {
-    // deps : [ "jasmine-html" ],
-    // exports : "jasmine"
-    // },
-
-    "PlayerSpec": {
-      deps: ["SpecHelper", "Player", "Song"],
-      exports: "PlayerSpec"
-    },
-    //     "JUnitReporter" : {
-    //     deps : [ "jasmine-html" ],
-    //     exports : "jasmine"
-    //     },
-    // "sinon" : {
-    // deps : [ "jasmine-html" ],
-    // exports : "sinon"
-    // },
-
-    /* Shim Backbone dependencies for use in require statements */
-    "jquery-couch": {
-      deps: ["$"],
-      exports: "$"
-    },
-    "backbonejs": {
-      deps: ["_", "$", "OPrime"],
-      exports: "Backbone"
-    },
-    "handlebarsjs": {
-      deps: ["backbonejs", "$"],
-      exports: "Handlebars"
-    },
-    "handlebars": {
-      deps: ["handlebarsjs"],
-      exports: "Handlebars"
-    },
-    "backbone": {
-      deps: ["backbonejs", "jquery-couch"],
-      exports: "Backbone"
+    'jasmine-html': {
+      deps: ['jasmine']
     },
 
-    /* Shim FieldDB dependencies for use in require statements */
+    'jasmine-boot': {
+      deps: ['jasmine', 'jasmine-html']
+    },
+
+    "JUnitReporter": {
+      deps: ["jasmine-html"],
+      exports: "jasmine"
+    },
+
+    "sinon": {
+      deps: ["jasmine-html"],
+      exports: "sinon"
+    },
+
     "xml2json": {
-      deps: ["$"],
+      deps: ["jquery"],
       exports: "X2JS"
     },
+
+    "wikitext": {
+      deps: ["jquery"],
+      exports: "jquery"
+    },
+
     "OPrime": {
       deps: ["oprime"],
       exports: "OPrime"
     },
+
+    "jquerycouch": {
+      deps: ["wikitext"],
+      exports: "jquery"
+    },
+
+    "bootstrap": {
+      deps: ["jquerycouch"],
+      exports: "bootstrap"
+    },
+
+    "handlebars.runtime": {
+      deps: ["backbone", "jquery"],
+      exports: "Handlebars"
+    },
+
     "terminal": {
-      deps: ["$"],
+      deps: ["bootstrap", "jquery"],
       exports: "Terminal"
-    },
-
-    /* Shim jquery test dependencies to get them to load in the right order */
-    "jasmine-jquery": {
-      deps: ["$"],
-      exports: "jasmine"
-    },
-    "jasmine-ajax": {
-      deps: ["jasmine-jquery", "$"],
-      exports: "jasmine"
-    },
-    "jasmine-jquery-spec": {
-      deps: ["jasmine-ajax"],
-      exports: "jasmine"
-    },
+    }
   }
-
 });
+
 /*
- * Initialize Jasmine, and run the tests
+ * Run the tests
  */
-require([ //"handlebars",
-  "OPrime",
-  /*
-   * For some mysterious reason as yet unknown to us, these tests need to run
-   * (first), or no FieldDB tests will run
-   */
-  "PlayerSpec",
-  "../tests/libs/jasmine/spec/AsyncSpec",
-  //    "../tests/libs/backbone/JQueryTest",
+require([
+  'jasmine-boot',
+
+  /* Tests to ensure jasmine is running */
+  "test/libs/jasmine/spec/PlayerSpec",
+  // "test/libs/jasmine/spec/AsyncSpec",
+  //    "test/libs/backbone/JQueryTest",
 
   /* FieldDB tests */
   //          "../tests/audioVideo/AudioWebServiceTest",
 
-  "../tests/app/AppTest",
-  "../tests/activity/ActivityTest",
-  "../tests/authentication/AuthenticationTest",
-  "../tests/comment/CommentTest",
-  "../tests/confidentiality_encryption/ConfidentialTest",
-  "../tests/corpus/CorpusTest",
-  //    "../tests/corpus/CorpusWebServiceTest",
-  "../tests/export/ExportTest",
-  "../tests/glosser/GlosserTest",
-  "../tests/hotkey/HotKeyTest",
-  "../tests/import/ImportTest",
-  "../tests/insert_unicode/InsertUnicodeTest",
-  "../tests/permission/PermissionTest",
-  "../tests/search/SearchTest",
-  "../tests/datum/SessionTest",
-  "../tests/user/UserTest",
+  // "app/AppTest",
+  // "activity/ActivityTest",
+  // "authentication/AuthenticationTest",
+  // "comment/CommentTest",
+  // "confidentiality_encryption/ConfidentialTest",
+  // "corpus/CorpusTest",
+  // //    "corpus/CorpusWebServiceTest",
+  // "export/ExportTest",
+  // "glosser/GlosserTest",
+  // "hotkey/HotKeyTest",
+  // "import/ImportTest",
+  // "insert_unicode/InsertUnicodeTest",
+  // "permission/PermissionTest",
+  // "search/SearchTest",
+  // "datum/SessionTest",
+  // "user/UserTest",
 
   /* Test dependancies, only run these once in a while */
-  //    "../tests/libs/backbone/BackboneModelTest",
-  //    "../tests/libs/backbone/BackboneCouchdbTest",
+  //    "test/libs/backbone/BackboneModelTest",
+  //    "test/libs/backbone/BackboneCouchdbTest",
 
   /* Test DOM manipulation, only run these (199 tests) once in a while */
   //    "jasmine-jquery-spec",
-  "JUnitReporter", "ConsoleReporter", "TerminalReporter"
-], function() {
+  // "JUnitReporter",
+  // "ConsoleReporter",
+  // "TerminalReporter",
+  "OPrime"
+], function(
+  causing_jasmine_boot_to_load,
+  PlayerSpec
+) {
 
-  OPrime.debugMode = false;
+  OPrime.debugMode = true;
 
-  var jasmineEnv = jasmine.getEnv();
-  jasmineEnv.updateInterval = 1000;
 
-  if (/PhantomJS/.test(navigator.userAgent)) {
-    jasmineEnv.addReporter(new jasmine.TrivialReporter());
-    //    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-    //    jasmineEnv.addReporter(new jasmine.TerminalReporter());
-    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
-  } else {
-    var htmlReporter = new jasmine.HtmlReporter();
+  // Run the Describe functions
+  PlayerSpec.describe();
 
-    jasmineEnv.addReporter(htmlReporter);
-
-    jasmineEnv.specFilter = function(spec) {
-      return htmlReporter.specFilter(spec);
-    };
-    //    jasmineEnv.addReporter(new jasmine.TrivialReporter());
-    ////    jasmineEnv.addReporter(new jasmine.ConsoleReporter());
-    ////    jasmineEnv.addReporter(new jasmine.TerminalReporter());
-    //    jasmineEnv.addReporter(new jasmine.JUnitXmlReporter());
-  }
-
-  jasmineEnv.execute();
-
+  // Trigger Jasmine (provided by jasmine-boot)
+  window.onload();
 });
