@@ -1,7 +1,13 @@
-function Song() {
-}
+"use strict";
 
-Song.prototype.persistFavoriteStatus = function(value) {
-  // something complicated
-  throw new Error("not yet implemented");
-};
+define([], function() {
+
+  function Song() {}
+
+  Song.prototype.persistFavoriteStatus = function() {
+    // something complicated
+    throw new Error("not yet implemented");
+  };
+
+  return Song;
+});
