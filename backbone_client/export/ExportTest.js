@@ -1,4 +1,4 @@
-require([ "export/Export" ], function(Export) {
+require(["export/Export"], function(Export) {
 
   describe("Export: as a user I want to export to various formats", function() {
     it("should be able to export into Latex format", function() {

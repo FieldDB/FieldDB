@@ -1,4 +1,4 @@
-require([ "import/Import" ], function(Import, ImportEditView) {
+require(["import/Import"], function(Import, ImportEditView) {
 
   describe("Import CSV", function() {
     it("should detect drag and drop", function() {

@@ -1,5 +1,5 @@
 require([
-    "user/User"
+  "user/User"
 ], function(User) {
 
   describe("Test User", function() {
@@ -9,19 +9,19 @@ require([
       expect("Bill" == u.get("firstname")).toBeTruthy();
     });
   });
-	describe("Test User", function() {
-		it("should set user's first name", function() {
-			var u = new User();
-			u.set("firstname", "Bill");
-			expect("Bill" == u.get("firstname")).toBeTruthy();
-		});
-		it("should have a subtitle constisting of firstname lastname ", function() {
-			var u = new User();
-			u.set("firstname", "Ed");
-			u.set("lastname", "LingLlama");
-			expect("LingLlama" == u.subtitle()).toBeTruthy();
-		});
-		
-	});
+  describe("Test User", function() {
+    it("should set user's first name", function() {
+      var u = new User();
+      u.set("firstname", "Bill");
+      expect("Bill" == u.get("firstname")).toBeTruthy();
+    });
+    it("should have a subtitle constisting of firstname lastname ", function() {
+      var u = new User();
+      u.set("firstname", "Ed");
+      u.set("lastname", "LingLlama");
+      expect("LingLlama" == u.subtitle()).toBeTruthy();
+    });
+
+  });
 
 });

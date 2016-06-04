@@ -16,7 +16,6 @@ require.config({
     "ConsoleReporter": "test/libs/jasmine-reporters/src/jasmine.console_reporter",
     "TerminalReporter": "test/libs/jasmine-reporters/src/jasmine.terminal_reporter",
 
-
     /*  Bootstrap kills click events in jquery, so dont include in tests */
     // "bootstrap": "libs/bootstrap/js/bootstrap.min",
 
@@ -152,7 +151,6 @@ require([
 ) {
 
   OPrime.debugMode = true;
-
 
   // Run the Describe functions
   PlayerSpec.describe();
