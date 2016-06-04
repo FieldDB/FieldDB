@@ -12,7 +12,7 @@ define([
   function registerTests() {
     SpecHelper.beforeEach();
 
-    describe("Jasmine basic tests", function() {
+    describe("Jasmine", function() {
       var player;
       var song;
 

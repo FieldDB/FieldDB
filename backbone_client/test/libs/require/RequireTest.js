@@ -6,7 +6,7 @@ define([
   HelloWorld
 ) {
   function registerTests() {
-    describe("HelloWorldTest", function() {
+    describe("Require.js", function() {
       it("should return hello world!", function() {
         expect(HelloWorld()).toEqual("hello world!");
       });
