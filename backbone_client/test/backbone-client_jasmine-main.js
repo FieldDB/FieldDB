@@ -9,7 +9,7 @@ require.config({
     'jasmine-html': ['test/bower_components/jasmine/lib/jasmine-core/jasmine-html'],
     'jasmine-boot': ['test/bower_components/jasmine/lib/jasmine-core/boot'],
 
-    "sinon": "test/libs/sinon/sinon",
+    "sinon": "test/bower_components/sinon-1.17.2/index",
 
     /* Additional Jasmine runner files for XML and console output */
     "JUnitReporter": "test/libs/jasmine-reporters/src/jasmine.junit_reporter",
