@@ -114,7 +114,6 @@ require([
 
   /* Tests to ensure jasmine is running */
   "test/libs/jasmine/spec/PlayerSpec",
-  // "test/libs/jasmine/spec/AsyncSpec",
   //    "test/libs/backbone/JQueryTest",
 
   /* FieldDB tests */
