@@ -1,8 +1,7 @@
-define("require/HelloWorld", [
-], function () {
+"use strict";
 
-  return function () {
+define([], function() {
+  return function() {
     return "hello world!";
   };
-
 });
