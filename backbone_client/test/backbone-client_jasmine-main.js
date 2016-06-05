@@ -11,6 +11,9 @@ require.config({
 
     "sinon": "test/bower_components/sinon-1.17.2/index",
 
+    /* Additional matchers for testing jquery */
+    "jasmine-jquery": "test/bower_components/jasmine-jquery/lib/jasmine-jquery",
+
     /* Additional Jasmine runner files for XML and console output */
     "JUnitReporter": "test/libs/jasmine-reporters/src/jasmine.junit_reporter",
     "ConsoleReporter": "test/libs/jasmine-reporters/src/jasmine.console_reporter",
@@ -68,6 +71,10 @@ require.config({
       exports: "sinon"
     },
 
+    "jasmine-jquery": {
+      deps: ["jquery","jasmine-html"]
+    },
+
     "xml2json": {
       deps: ["jquery"],
       exports: "X2JS"
@@ -117,6 +124,7 @@ require([
   "test/libs/backbone/BackboneModelTest",
   "test/libs/backbone/BackboneCouchdbTest",
   "test/libs/backbone/JQueryTest",
+  "test/libs/backbone/jasmine-jquery-spec",
 
   /* FieldDB tests */
   //          "../tests/audioVideo/AudioWebServiceTest",
@@ -154,7 +162,8 @@ require([
   RequireTest,
   BackboneModelTest,
   BackboneCouchdbTest,
-  JQueryTest
+  JQueryTest,
+  JasmineJqueryTest
 ) {
   OPrime.debugMode = true;
 
@@ -164,6 +173,7 @@ require([
   BackboneModelTest.describe();
   BackboneCouchdbTest.describe();
   JQueryTest.describe();
+  JasmineJqueryTest.describe();
 
   // Trigger Jasmine (provided by jasmine-boot)
   window.onload();
