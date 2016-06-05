@@ -1,10 +1,15 @@
-"use strict";
-
 define([
-  "backbone"
+  "backbone",
+  "jquerycouch",
+  "libs/backbone_couchdb/backbone-couchdb",
+  "OPrime"
 ], function(
-  Backbone
+  Backbone,
+  jquerycouch,
+  backbonecouch,
+  OPrime
 ) {
+  "use strict";
 
   var FieldDBBackboneCollection = Backbone.Collection.extend( /** @lends FieldDBBackboneCollection.prototype */ {
     /**
