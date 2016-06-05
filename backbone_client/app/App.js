@@ -77,11 +77,31 @@ define([
     initialize: function() {
       if (OPrime.debugMode) OPrime.debug("APP INIT");
 
+      for (event in this.globalEvents){
+        if (!this.globalEvents.hasOwnProperty(event)){
+          continue;
+        }
+
+        this.listenTo(Backbone, event, this.globalEvents[event]);
+      }
+
       if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
     },
+
+    globalEvents: {
+      'dashboard:load:success': function(){
+        if (OPrime.debugMode) OPrime.debug(arguments);
+        this.set("loaded", true);
+      },
+      'dashboard:load:fail': function(){
+        if (OPrime.debugMode) OPrime.debug(arguments);
+        this.set("loaded", false);
+      }
+    },
+
     fillWithDefaults: function() {
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {
@@ -154,6 +174,7 @@ define([
                     window.app.showHelpOrNot();
                     appself.stopSpinner();
                     window.app.router.renderDashboardOrNot(true);
+                    Backbone.trigger('dashboard:load:success');
 
                   });
                 });
