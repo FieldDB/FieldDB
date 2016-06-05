@@ -1,9 +1,13 @@
 "use strict";
 
 define([
-  "backbone"
+  "backbone",
+  "jquerycouch",
+  "libs/backbone_couchdb/backbone-couchdb"
 ], function(
-  Backbone
+  Backbone,
+  jquerycouch,
+  backbonecouch
 ) {
 
   var FieldDBBackboneModel = Backbone.Model.extend( /** @lends FieldDBBackboneModel.prototype */ {

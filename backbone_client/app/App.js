@@ -1,8 +1,7 @@
 define([
   "underscore",
   "backbone",
-  "jquerycouch",
-  "libs/backbone_couchdb/backbone-couchdb",
+  "libs/FieldDBBackboneModel",
   "libs/compiled_handlebars",
   "app/AppView",
   "activity/Activity",
@@ -24,8 +23,7 @@ define([
 ], function(
   _,
   Backbone,
-  jquerycouch,
-  backbonecouch,
+  FieldDBBackboneModel,
   Handlebars,
   AppView,
   Activity,
@@ -44,7 +42,7 @@ define([
   UserMask,
   LocaleData
 ) {
-  var App = Backbone.Model.extend( /** @lends App.prototype */ {
+  var App = FieldDBBackboneModel.extend( /** @lends App.prototype */ {
     /**
      * @class The App handles the reinitialization and loading of the app
      *        depending on which platform (Android, Chrome, web) the app is
