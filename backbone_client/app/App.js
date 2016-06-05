@@ -73,15 +73,9 @@ define([
      * @constructs
      */
     initialize: function() {
+      FieldDBBackboneModel.prototype.initialize.apply(this, arguments);
+
       if (OPrime.debugMode) OPrime.debug("APP INIT");
-
-      for (event in this.globalEvents){
-        if (!this.globalEvents.hasOwnProperty(event)){
-          continue;
-        }
-
-        this.listenTo(Backbone, event, this.globalEvents[event]);
-      }
 
       if (this.get("filledWithDefaults")) {
         this.fillWithDefaults();

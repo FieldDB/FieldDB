@@ -18,8 +18,16 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
+    initialize: function() {
+      for (event in this.globalEvents) {
+        if (!this.globalEvents.hasOwnProperty(event)) {
+          continue;
+        }
+
+        this.listenTo(Backbone, event, this.globalEvents[event]);
+      }
+    }
   });
 
   return FieldDBBackboneModel;
 });
-
