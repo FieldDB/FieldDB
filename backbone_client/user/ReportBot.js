@@ -24,25 +24,6 @@ define([
      * @extends UserGeneric.Model
      * @constructs
      */
-    initialize: function() {},
-
-    // Internal models: used by the parse function
-    internalModels: {},
-
-    changePouch: function(dbname, callback) {
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
-    saveAndInterConnectInApp: function(callback) {
-
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
 
     /**
      * Schedule the bot to run the given MapReduce functions at the

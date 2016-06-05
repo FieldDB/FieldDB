@@ -36,6 +36,38 @@ define([
         this.fillWithDefaults();
         this.unset("filledWithDefaults");
       }
+    },
+
+    /**
+     * Deprecated method which was used to change between pouchdbs
+     * @param  {String}   dbname   the databsename
+     * @param  {Function} callback Function to call after the database has been changed
+     * @return {String}            [description]
+     */
+    changePouch: function(dbname, callback) {
+      if (this.pouch == undefined) {
+        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
+      }
+      if (typeof callback == "function") {
+        callback();
+      }
+    },
+
+    /**
+     * Used to deeply parse models
+     * @type {Object}
+     */
+    internalModels: {},
+
+    /**
+     * Deprecated save function
+     *
+     * @param  {Function} callback Function to call after the save has happened
+     */
+    saveAndInterConnectInApp: function(callback) {
+      if (typeof callback == "function") {
+        callback();
+      }
     }
   });
 
