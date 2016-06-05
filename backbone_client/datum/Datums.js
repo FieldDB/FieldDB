@@ -13,7 +13,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      this.model = Datum;
+      // this.model = Datum;
     },
     /**
      * backbone-couchdb adaptor set up
