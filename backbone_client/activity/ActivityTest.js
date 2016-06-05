@@ -14,31 +14,24 @@ require(
     describe(
       "Activities: As a user, I want to be updated on team news.",
       function() {
-        it("should show my most recent team's activities by default.",
-          function() {
-            expect(true).toBeTruthy();
-          });
-        it(
-          "should display a drop down box of my teams and members of my teams.",
-          function() {
-            expect(true).toBeTruthy();
-          });
-        it(
-          "should let me enter anyone's user name to see their activity feed if its public.",
-          function() {
-            expect(true).toBeTruthy();
-          });
+        it("should show my most recent team's activities by default.", function() {
+          expect(true).toBeTruthy();
+        });
+        it("should display a drop down box of my teams and members of my teams.", function() {
+          expect(true).toBeTruthy();
+        });
+        it("should let me enter anyone's user name to see their activity feed if its public.", function() {
+          expect(true).toBeTruthy();
+        });
 
       });
 
     describe(
       "Activities: As a user, I want to make my activity private.",
       function() {
-        it(
-          "should display a settings that allows a logged in user to make their activities private.",
-          function() {
-            expect(true).toBeTruthy();
-          });
+        it("should display a settings that allows a logged in user to make their activities private.", function() {
+          expect(true).toBeTruthy();
+        });
       });
 
     describe(
@@ -52,15 +45,13 @@ require(
     describe(
       "Activities: As a user, I want to  be about see my activity even when I'm offline.",
       function() {
-        it("should display a user's up to date activity when offline.",
-          function() {
-            expect(true).toBeTruthy();
-          });
+        it("should display a user's up to date activity when offline.", function() {
+          expect(true).toBeTruthy();
+        });
 
-        it("should notify user when team data is out of date/stale.",
-          function() {
-            expect(true).toBeTruthy();
-          });
+        it("should notify user when team data is out of date/stale.", function() {
+          expect(true).toBeTruthy();
+        });
       });
 
     describe(
@@ -69,11 +60,9 @@ require(
         it("should have colorful icons to display verbs.", function() {
           expect(true).toBeTruthy();
         });
-        it(
-          "should have clickable activity feed items, which show the changed set.",
-          function() {
-            expect(true).toBeTruthy();
-          });
+        it("should have clickable activity feed items, which show the changed set.", function() {
+          expect(true).toBeTruthy();
+        });
       });
 
   });

@@ -18,9 +18,8 @@
        expect(true).toBeTruthy();
 
      });
-     it("should appear on datum, sessions, corpora, and dataLists",
-       function() {
-         expect(true).toBeTruthy();
-       });
+     it("should appear on datum, sessions, corpora, and dataLists", function() {
+       expect(true).toBeTruthy();
+     });
    });
  });
