@@ -95,7 +95,7 @@ define([
         clock.tick(510);
 
         expect(window.requestAnimationFrame.notCalled).toBeTruthy();
-        expect(el.css("height").replace('px',"")).toBeLessThan(1);
+        expect(el.css("height").replace('px',"")).toBeLessThan(3);
       });
     });
   }
