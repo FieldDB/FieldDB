@@ -5,9 +5,9 @@ require.config({
   baseUrl: "",
 
   paths: {
-    'jasmine': ['test/bower_components/jasmine/lib/jasmine-core/jasmine'],
-    'jasmine-html': ['test/bower_components/jasmine/lib/jasmine-core/jasmine-html'],
-    'jasmine-boot': ['test/bower_components/jasmine/lib/jasmine-core/boot'],
+    "jasmine": ["test/bower_components/jasmine/lib/jasmine-core/jasmine"],
+    "jasmine-html": ["test/bower_components/jasmine/lib/jasmine-core/jasmine-html"],
+    "jasmine-boot": ["test/bower_components/jasmine/lib/jasmine-core/boot"],
 
     "sinon": "test/bower_components/sinon-1.17.2/index",
 
@@ -20,7 +20,7 @@ require.config({
     "TerminalReporter": "test/libs/jasmine-reporters/src/jasmine.terminal_reporter",
 
     /*  Bootstrap kills click events in jquery, so dont include in tests */
-    // "bootstrap": "libs/bootstrap/js/bootstrap.min",
+    "bootstrap": "libs/bootstrap/js/bootstrap.min",
 
     "CryptoJS": "libs/Crypto_AES",
 
@@ -80,6 +80,10 @@ require.config({
       exports: "jquery"
     },
 
+    "FieldDB": {
+      exports: "FieldDB"
+    },
+
     "OPrime": {
       deps: ["oprime"],
       exports: "OPrime"
@@ -116,37 +120,42 @@ require([
   /* Tests to ensure jasmine is running */
   "test/libs/require/RequireTest",
   "test/libs/jasmine/spec/PlayerSpec",
+
+  /* Test dependancies, only run these once in a while */
   "test/libs/backbone/BackboneModelTest",
   "test/libs/backbone/BackboneCouchdbTest",
   "test/libs/backbone/JQueryTest",
-  "test/libs/backbone/jasmine-jquery-spec",
-
-  /* FieldDB tests */
-  //          "../tests/audioVideo/AudioWebServiceTest",
-
-  // "app/AppTest",
-  // "activity/ActivityTest",
-  // "authentication/AuthenticationTest",
-  // "comment/CommentTest",
-  // "confidentiality_encryption/ConfidentialTest",
-  // "corpus/CorpusTest",
-  // //    "corpus/CorpusWebServiceTest",
-  // "export/ExportTest",
-  // "glosser/GlosserTest",
-  // "hotkey/HotKeyTest",
-  // "import/ImportTest",
-  // "insert_unicode/InsertUnicodeTest",
-  // "permission/PermissionTest",
-  // "search/SearchTest",
-  // "datum/SessionTest",
-  // "user/UserTest",
-
-  /* Test dependancies, only run these once in a while */
-  //    "test/libs/backbone/BackboneModelTest",
-  //    "test/libs/backbone/BackboneCouchdbTest",
 
   /* Test DOM manipulation, only run these (199 tests) once in a while */
-  //    "jasmine-jquery-spec",
+  "test/libs/backbone/jasmine-jquery-spec",
+
+  "app/AppTest",
+  "activity/ActivityTest",
+  "authentication/AuthenticationTest",
+  "comment/CommentTest",
+  "confidentiality_encryption/ConfidentialTest",
+  "corpus/CorpusTest",
+  "datum/DatumTest",
+  "datum/DatumTagTest",
+  "datum/DatumStatusTest",
+  "datum/DatumsTest",
+  "data_list/DataListTest",
+  "export/ExportTest",
+  "glosser/GlosserTest",
+  "glosser/LexiconTest",
+  "hotkey/HotKeyTest",
+  "import/ImportTest",
+  "insert_unicode/InsertUnicodeTest",
+  "permission/PermissionTest",
+  "search/SearchTest",
+  "datum/SessionTest",
+  "user/UserGenericTest",
+  "user/UserTest",
+  "user/TeamTest",
+  "user/SpeakerTest",
+  "user/BotTest",
+  "user/UserPreferenceTest",
+
   // "JUnitReporter",
   // "ConsoleReporter",
   // "TerminalReporter",
@@ -158,7 +167,33 @@ require([
   BackboneModelTest,
   BackboneCouchdbTest,
   JQueryTest,
-  JasmineJqueryTest
+  JasmineJqueryTest,
+  AppTest,
+  ActivityTest,
+  AuthenticationTest,
+  CommentTest,
+  ConfidentialTest,
+  CorpusTest,
+  DatumTest,
+  DatumTagTest,
+  DatumStatusTest,
+  DatumsTest,
+  DataListTest,
+  ExportTest,
+  GlosserTest,
+  LexiconTest,
+  HotKeyTest,
+  ImportTest,
+  InsertUnicodeTest,
+  PermissionTest,
+  SearchTest,
+  SessionTest,
+  UserGenericTest,
+  UserTest,
+  TeamTest,
+  SpeakerTest,
+  BotTest,
+  UserPreferenceTest
 ) {
   OPrime.debugMode = true;
 
@@ -168,7 +203,35 @@ require([
   BackboneModelTest.describe();
   BackboneCouchdbTest.describe();
   JQueryTest.describe();
-  JasmineJqueryTest.describe();
+  // JasmineJqueryTest.describe();
+
+  AppTest.describe();
+  ActivityTest.describe();
+  AuthenticationTest.describe();
+  CommentTest.describe();
+  ConfidentialTest.describe();
+  CorpusTest.describe();
+  DatumTest.describe();
+  DatumTagTest.describe();
+  DatumStatusTest.describe();
+  DatumsTest.describe();
+  DataListTest.describe();
+  ExportTest.describe();
+  GlosserTest.describe();
+  LexiconTest.describe();
+  HotKeyTest.describe();
+  ImportTest.describe();
+  InsertUnicodeTest.describe();
+  PermissionTest.describe();
+  SearchTest.describe();
+  SessionTest.describe();
+
+  UserGenericTest.describe();
+  UserTest.describe();
+  TeamTest.describe();
+  SpeakerTest.describe();
+  BotTest.describe();
+  UserPreferenceTest.describe();
 
   // Trigger Jasmine (provided by jasmine-boot)
   window.onload();
