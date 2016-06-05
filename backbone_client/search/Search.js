@@ -1,10 +1,10 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "OPrime"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var Search = Backbone.Model.extend( /** @lends Search.prototype  */ {
+  var Search = FieldDBBackboneModel.extend( /** @lends Search.prototype  */ {
     /**
      * @class Search progressively searches a corpus and updates a
      *        search/data list view as a user types keywords in the

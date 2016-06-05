@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "user/Users"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Users
 ) {
-  var Permission = Backbone.Model.extend( /** @lends Permission.prototype 	*/ {
+  var Permission = FieldDBBackboneModel.extend( /** @lends Permission.prototype 	*/ {
     /**
      * @class The permission class specifies which user (User, Consultant or Bot)
      *        can do what action to what component in a given corpus.

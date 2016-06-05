@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "permission/Permission"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   Permission
 ) {
-  var Permissions = Backbone.Collection.extend( /** @lends Permissions.prototype */ {
+  var Permissions = FieldDBBackboneCollection.extend( /** @lends Permissions.prototype */ {
     /**
      * @class A collection of Permissions
      *

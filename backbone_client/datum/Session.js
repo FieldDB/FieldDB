@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "comment/Comment",
   "comment/Comments",
   "datum/DatumField",
@@ -8,7 +8,7 @@ define([
   "user/Team",
   "user/User",
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Comment,
   Comments,
   DatumField,
@@ -17,7 +17,7 @@ define([
   Team,
   User
 ) {
-  var Session = Backbone.Model.extend( /** @lends Session.prototype */ {
+  var Session = FieldDBBackboneModel.extend( /** @lends Session.prototype */ {
     /**
      * @class The Session widget is the place where information which is generally
      * shared by many datum (due to being part of an elicitiation session)

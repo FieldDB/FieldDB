@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "user/UserMask"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   UserMask
 ) {
-  var Comment = Backbone.Model.extend( /** @lends Comment.prototype */ {
+  var Comment = FieldDBBackboneModel.extend( /** @lends Comment.prototype */ {
     /**
      * @class Comments allow users to collaborate between each other and take
      *        note of important things, issues to be fixed, etc. These can

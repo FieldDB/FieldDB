@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "corpus/CorpusMask",
   "corpus/Corpuses",
   "hotkey/HotKey",
@@ -7,7 +7,7 @@ define([
   "user/UserPreference",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   CorpusMask,
   Corpuses,
   HotKey,
@@ -55,7 +55,7 @@ define([
         })); //TODO this needs to become plural when hotkeys get implemented
       }
     },
-    originalParse: Backbone.Model.prototype.parse,
+    originalParse: FieldDBBackboneModel.prototype.parse,
     parse: function(originalModel) {
       var tmp,
         normalizedConnection;

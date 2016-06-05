@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "datum/DatumState"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   DatumState
 ) {
-  var DatumStates = Backbone.Collection.extend( /** @lends DatumStates.prototype */ {
+  var DatumStates = FieldDBBackboneCollection.extend( /** @lends DatumStates.prototype */ {
     /**
      * @class Collection of Datum State
      *

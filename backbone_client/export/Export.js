@@ -1,5 +1,5 @@
-define(["backbone"], function(Backbone) {
-  var Export = Backbone.Model.extend( /** @lends Export.prototype */ {
+define(["libs/FieldDBBackboneModel"], function(FieldDBBackboneModel) {
+  var Export = FieldDBBackboneModel.extend( /** @lends Export.prototype */ {
     /**
      * @class The export class helps export a set of selected data into csv, xml
      *        and LaTex file.

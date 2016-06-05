@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "libs/compiled_handlebars",
   "audio_video/AudioVideo",
   "audio_video/AudioVideos",
@@ -14,7 +14,7 @@ define([
   "bower_components/textgrid/dist/textgrid",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Handlebars,
   AudioVideo,
   AudioVideos,
@@ -27,7 +27,7 @@ define([
   PaginatedUpdatingCollectionView,
   X2JS
 ) {
-  var Import = Backbone.Model.extend(
+  var Import = FieldDBBackboneModel.extend(
 
     /** @lends Import.prototype */
     {

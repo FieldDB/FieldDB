@@ -1,12 +1,10 @@
 define([
-  "backbone",
   "hotkey/HotKey",
   "user/UserGeneric",
   "permission/Permission",
   "user/UserPreference",
   "OPrime"
 ], function(
-  Backbone,
   HotKey,
   UserGeneric,
   Permission,

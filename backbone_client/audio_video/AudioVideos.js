@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "audio_video/AudioVideo"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   AudioVideo
 ) {
-  var AudioVideos = Backbone.Collection.extend( /** @lends AudioVideos.prototype */ {
+  var AudioVideos = FieldDBBackboneCollection.extend( /** @lends AudioVideos.prototype */ {
     /**
      * @class A collection of AudioVideos Probably will be used in the fullscreen corpus view.
      *

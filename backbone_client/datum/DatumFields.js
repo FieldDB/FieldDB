@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "datum/DatumField",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   DatumField) {
-  var DatumFields = Backbone.Collection.extend( /** @lends DatumFields.prototype */ {
+  var DatumFields = FieldDBBackboneCollection.extend( /** @lends DatumFields.prototype */ {
     /**
      * @class Collection of Datum Field
      *

@@ -1,8 +1,8 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "user/UserMask"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   UserMask
 ) {
   var Consultant = UserMask.extend( /** @lends Consultant.prototype */ {
