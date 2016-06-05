@@ -13,13 +13,13 @@ define([
     // installed in chrome or if it is a web widget.
     describe("App", function() {
       describe("As a user I want to see my most recent dashboard", function() {
-        it("should support filledWithDefaults", function() {
+        it("should support filledWithDefaults", function(done) {
           var app = new App({
             filledWithDefaults: true
           });
 
           expect(app).toBeDefined();
-          app.on('change', function(model){
+          app.on("change", function(model){
             expect(model.get("corpus")).toBeDefined();
 
             done();
@@ -31,7 +31,7 @@ define([
         it("should listen for dashboard:load:success", function(done) {
           var app = new App();
 
-          app.on('change', function(model){
+          app.on("change", function(model){
             expect(model.get("loaded")).toBeDefined();
             expect(model.get("loaded")).toBeTruthy();
 

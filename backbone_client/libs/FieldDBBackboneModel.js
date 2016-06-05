@@ -1,14 +1,15 @@
-"use strict";
-
 define([
   "backbone",
   "jquerycouch",
-  "libs/backbone_couchdb/backbone-couchdb"
+  "libs/backbone_couchdb/backbone-couchdb",
+  "OPrime"
 ], function(
   Backbone,
   jquerycouch,
-  backbonecouch
+  backbonecouch,
+  OPrime
 ) {
+  "use strict";
 
   var FieldDBBackboneModel = Backbone.Model.extend( /** @lends FieldDBBackboneModel.prototype */ {
     /**
@@ -19,12 +20,21 @@ define([
      * @constructs
      */
     initialize: function() {
-      for (event in this.globalEvents) {
+      if (OPrime.debugMode) {
+        OPrime.debug("INIT");
+      }
+
+      for (var event in this.globalEvents) {
         if (!this.globalEvents.hasOwnProperty(event)) {
           continue;
         }
 
         this.listenTo(Backbone, event, this.globalEvents[event]);
+      }
+
+      if (this.get("filledWithDefaults")) {
+        this.fillWithDefaults();
+        this.unset("filledWithDefaults");
       }
     }
   });
