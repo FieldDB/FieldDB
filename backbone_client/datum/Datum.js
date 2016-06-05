@@ -357,7 +357,7 @@ define([
 
       /* enforce validation status to be comma seperated */
       var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
-      if (indexOfValidationSatus > -1){
+      if (indexOfValidationSatus > -1) {
         var validationFieldToclean = originalModel.fields[indexOfValidationSatus];
         var validationStatus = validationFieldToclean.mask || "";
         if (oldvalidationStatus) {
@@ -376,7 +376,7 @@ define([
 
       /* enforce tags to be comma seperated */
       var indexOfTags = fieldLabels.indexOf("tags");
-      if (indexOfTags > -1){
+      if (indexOfTags > -1) {
         var tagFieldToClean = originalModel.fields[indexOfTags];
         var tagValue = tagFieldToClean.mask || "";
         var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
@@ -1006,7 +1006,7 @@ define([
     laTeXiT: function(showInExportModal) {
       //corpus's most frequent fields
       var frequentFields = [];
-      if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").frequentFields){
+      if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").frequentFields) {
         frequentFields = window.app.get("corpus").frequentFields;
       }
       //this datum/datalist's datumfields and their names

@@ -1,9 +1,9 @@
 define([
-    "libs/FieldDBBackboneModel",
-    "user/UserMask"
+  "libs/FieldDBBackboneModel",
+  "user/UserMask"
 ], function(
-    FieldDBBackboneModel,
-    UserMask
+  FieldDBBackboneModel,
+  UserMask
 ) {
   var Activity = FieldDBBackboneModel.extend( /** @lends Activity.prototype */ {
     /**
@@ -15,10 +15,10 @@ define([
      * @extends Backbone.Model
      * @constructs
      */
-    initialize : function() {
+    initialize: function() {
       if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
-      if(!this.get("user")) {
+      if (!this.get("user")) {
         var user = window.app.get("authentication").get("userPublic").toJSON();
         this.set("user", {
           username: user.username,
@@ -26,23 +26,23 @@ define([
           authUrl: user.authUrl
         });
         //        if(!this.get("dbname")) {
-//          this.set("dbname", window.app.get("authentication").get("userPrivate").get("activityConnection").dbname);
-//        }
+        //          this.set("dbname", window.app.get("authentication").get("userPrivate").get("activityConnection").dbname);
+        //        }
       }
-      if(!this.get("timestamp")){
-        this.set("timestamp", Date.now() );
-        this.set("dateModified", JSON.stringify(new Date()) );
+      if (!this.get("timestamp")) {
+        this.set("timestamp", Date.now());
+        this.set("dateModified", JSON.stringify(new Date()));
       }
-      if( !this.get("teamOrPersonal")){
-         this.set("teamOrPersonal", "personal");
+      if (!this.get("teamOrPersonal")) {
+        this.set("teamOrPersonal", "personal");
       }
       if (!this.get("appVersion")) {
         this.set("appVersion", OPrime.getMostLikelyPrototypeVersionFromUrl(window.app.get("version")));
       }
 
-//      if(this.isNew()){
-//        this.saveAndInterConnectInApp();
-//      }
+      //      if(this.isNew()){
+      //        this.saveAndInterConnectInApp();
+      //      }
     },
     /**
      * backbone-couchdb adaptor set up
@@ -51,37 +51,37 @@ define([
     // The couchdb-connector is capable of mapping the url scheme
     // proposed by the authors of Backbone to documents in your database,
     // so that you don't have to change existing apps when you switch the sync-strategy
-    url : "/activities",
+    url: "/activities",
 
-    defaults : {
-//      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
-//      verb : "added",
-//      directobject : "an entry",
-//      indirectobject : "with Consultant-SJ",
-//      context : "via Android/ Offline Chrome App" ,
-//      link: "https:/www.fieldlinguist.com"
-//      timestamp: timestamp
+    defaults: {
+      //      verbs : [ "added", "modified", "commented", "checked", "tagged", "uploaded" ],
+      //      verb : "added",
+      //      directobject : "an entry",
+      //      indirectobject : "with Consultant-SJ",
+      //      context : "via Android/ Offline Chrome App" ,
+      //      link: "https:/www.fieldlinguist.com"
+      //      timestamp: timestamp
     },
 
     // Internal models: used by the parse function
-    model : {
-      user : UserMask
+    model: {
+      user: UserMask
     },
-    changePouch : function(dbname, callback) {
-      if(!dbname){
-        if( this.get("teamOrPersonal") == "personal"){
-          if(this.get("user").get("username") ==  window.app.get("authentication").get("userPublic").get("username")){
+    changePouch: function(dbname, callback) {
+      if (!dbname) {
+        if (this.get("teamOrPersonal") == "personal") {
+          if (this.get("user").get("username") == window.app.get("authentication").get("userPublic").get("username")) {
             dbname = window.app.get("authentication").get("userPrivate").get("activityConnection").dbname;
             this.set("dbname", dbname);
-          }else{
+          } else {
             alert("Bug in setting the pouch for this activity, i can only save activities from the current logged in user, not other users");
             return;
           }
-        }else{
-          try{
+        } else {
+          try {
             dbname = window.app.get("currentCorpusTeamActivityFeed").get("connection").dbname;
             this.set("dbname", dbname);
-          }catch(e){
+          } catch (e) {
             alert("Bug in setting the pouch for this activity, i can only save activities for the current corpus team.");
             return;
           }
@@ -90,17 +90,17 @@ define([
       }
 
 
-      if(OPrime.isBackboneCouchDBApp()){
-        if(typeof callback == "function"){
+      if (OPrime.isBackboneCouchDBApp()) {
+        if (typeof callback == "function") {
           callback();
         }
         return;
       }
 
-      if(this.pouch == undefined){
+      if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
       }
-      if(typeof callback == "function"){
+      if (typeof callback == "function") {
         callback();
       }
     },
@@ -116,30 +116,30 @@ define([
      * @param successcallback
      * @param failurecallback
      */
-    saveAndInterConnectInApp : function(activsuccesscallback, activfailurecallback){
+    saveAndInterConnectInApp: function(activsuccesscallback, activfailurecallback) {
       if (OPrime.debugMode) OPrime.debug("Saving the Activity");
       var self = this;
-      if(! this.isNew()){
+      if (!this.isNew()) {
         if (OPrime.debugMode) OPrime.debug('Activity doesnt need to be saved.');
-        if(typeof activsuccesscallback == "function"){
+        if (typeof activsuccesscallback == "function") {
           activsuccesscallback();
         }
         return;
       }
       //save via pouch
-      this.changePouch(null, function(){
+      this.changePouch(null, function() {
         self.save(null, {
-          success : function(model, response) {
+          success: function(model, response) {
             if (OPrime.debugMode) OPrime.debug('Activity save success');
 
-            if(typeof activsuccesscallback == "function"){
+            if (typeof activsuccesscallback == "function") {
               activsuccesscallback();
             }
           },
-          error : function(e) {
-            if(typeof activfailurecallback == "function"){
+          error: function(e) {
+            if (typeof activfailurecallback == "function") {
               activfailurecallback();
-            }else{
+            } else {
               alert('Activity save error' + e);
             }
           }

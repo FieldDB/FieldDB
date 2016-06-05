@@ -39,7 +39,6 @@ if (window.module) {
   _gaq.push(['_trackPageview']);
  */
 
-
 /**
  * dont need this if we are loading it in the .html This is another version of the code from chrome extension tutorial
   (function() {
@@ -51,7 +50,6 @@ if (window.module) {
     s.parentNode.insertBefore(ga, s);
   })();
  */
-
 
 /*
 this is the current code from google
@@ -80,7 +78,6 @@ ga('set', 'checkProtocolTask', function() { /* nothing */ });
 ga('set', 'page', 'protoype' + window.location.href.replace(window.location.protocol, "").replace(/^\//, ""));
 // ga('set', 'page', 'chrome-protoype');
 ga('send', 'pageview');
-
 
 /*
 this is an attept to use a local version loaded asycnronously in the html
@@ -115,7 +112,6 @@ this is an attept to use a local version loaded asycnronously in the html
 
 */
 
-
 /**
  * Track a click on a button using the asynchronous tracking API.
  *
@@ -143,7 +139,6 @@ this is an attept to use a local version loaded asycnronously in the html
 //  var pageTracker = _gat._getTracker(_AnalyticsCode);
 //  pageTracker._initData();
 //  pageTracker._trackPageview('/search_results.php?q=searchterm');
-
 
 //  var gaJsHost =  "https://ssl." ;
 //  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));

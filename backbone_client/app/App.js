@@ -73,11 +73,11 @@ define([
      * @constructs
      */
     globalEvents: {
-      'dashboard:load:success': function(){
+      'dashboard:load:success': function() {
         if (OPrime.debugMode) OPrime.debug(arguments);
         this.set("loaded", true);
       },
-      'dashboard:load:fail': function(){
+      'dashboard:load:fail': function() {
         if (OPrime.debugMode) OPrime.debug(arguments);
         this.set("loaded", false);
       }

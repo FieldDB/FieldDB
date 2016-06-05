@@ -19,7 +19,7 @@ define([
           });
 
           expect(app).toBeDefined();
-          app.on("change", function(model){
+          app.on("change", function(model) {
             expect(model.get("corpus")).toBeDefined();
 
             done();
@@ -31,7 +31,7 @@ define([
         it("should listen for dashboard:load:success", function(done) {
           var app = new App();
 
-          app.on("change", function(model){
+          app.on("change", function(model) {
             expect(model.get("loaded")).toBeDefined();
             expect(model.get("loaded")).toBeTruthy();
 
