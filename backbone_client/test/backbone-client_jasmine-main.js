@@ -115,6 +115,7 @@ require([
   "test/libs/require/RequireTest",
   "test/libs/jasmine/spec/PlayerSpec",
   "test/libs/backbone/BackboneModelTest",
+  "test/libs/backbone/BackboneCouchdbTest",
   "test/libs/backbone/JQueryTest",
 
   /* FieldDB tests */
@@ -152,15 +153,16 @@ require([
   PlayerSpec,
   RequireTest,
   BackboneModelTest,
+  BackboneCouchdbTest,
   JQueryTest
 ) {
-
   OPrime.debugMode = true;
 
   // Run the Describe functions
   RequireTest.describe();
   PlayerSpec.describe();
   BackboneModelTest.describe();
+  BackboneCouchdbTest.describe();
   JQueryTest.describe();
 
   // Trigger Jasmine (provided by jasmine-boot)
