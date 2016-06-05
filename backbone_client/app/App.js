@@ -110,8 +110,10 @@ define([
       /*
        * Start the pub sub hub
        */
-      window.hub = {};
-      OPrime.makePublisher(window.hub);
+      if (!window.hub || typeof window.hub.subscribe !== "function") {
+        window.hub = {};
+        OPrime.makePublisher(window.hub);
+      }
 
       /*
        * Load the user
