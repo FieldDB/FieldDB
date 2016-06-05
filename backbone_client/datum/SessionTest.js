@@ -1,14 +1,17 @@
-require([
-  "datum/Session"
-], function(Session) {
+define(["datum/Session"], function(Session) {
+  "use strict";
 
-  // No longer needed since session ID will be in the PouchDB
-  // describe("Test SessionGeneric", function() {
-  // it("should assign a sessionID", function() {
-  // var d = new Session();
-  // d.set("SessionID", 0);
-  // expect(0 == d.get("SessionID")).toBeTruthy();
-  // });
+  function registerTests() {
+    describe("Session", function() {
+      it("should assign a sessionID", function() {
+        var d = new Session();
+        d.set("id", 0);
+        expect(d.get("id")).toEqual(0);
+      });
+    });
+  }
 
-  // });
+  return {
+    describe: registerTests
+  };
 });

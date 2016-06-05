@@ -1,17 +1,19 @@
-require(
-  ["search/Search",
-    "corpus/Corpus"
+define([
+  "search/Search",
+  "corpus/Corpus"
+], function(Search, Corpus) {
+  "use strict";
 
-  ],
-  function(Search) {
-
+  function registerTests() {
     describe("Search", function() {
       it("should be able search", function() {
-
-        expect(true).toBeTruthy();
-
+        expect(Search).toBeDefined();
+        expect(Corpus).toBeDefined();
       });
-
     });
+  }
 
-  });
+  return {
+    describe: registerTests
+  };
+});

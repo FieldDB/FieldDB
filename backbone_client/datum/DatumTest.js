@@ -1,28 +1,31 @@
-require([
-  "datum/Datum"
-], function(Datum) {
+define(["datum/Datum"], function(Datum) {
+  "use strict";
 
-  describe("Test Datum", function() {
-    it("should set the utterance", function() {
-      var d = new Datum();
-      expect("" == d.get("utterance")).toBeTruthy();
+  function registerTests() {
+    describe("Datum", function() {
+      it("should set the utterance", function() {
+        var datum = new Datum();
+        expect(datum.get("utterance")).toEqual(undefined);
+      });
+
+      it("should have a gloss line ", function() {
+        var datum = new Datum();
+        expect(datum.get("gloss")).toEqual(undefined);
+      });
+
+      it("should have a translation line ", function() {
+        var datum = new Datum();
+        expect(datum.get("translation")).toEqual(undefined);
+      });
+
+      it("should have grammatical tags", function() {
+        var datum = new Datum();
+        expect(datum.get("grammaticalTags")).toEqual(undefined);
+      });
     });
+  }
 
-    it("should have a gloss line ", function() {
-      var d = new Datum();
-      expect("" == d.get("gloss")).toBeTruthy();
-
-    });
-
-    it("should have a translation line ", function() {
-      var d = new Datum();
-      expect("" == d.get("translation")).toBeTruthy();
-
-    });
-    it("should have grammatical tags", function() {
-      var d = new Datum();
-      expect("" == d.get("grammaticalTags")).toBeTruthy();
-    });
-
-  });
+  return {
+    describe: registerTests
+  };
 });

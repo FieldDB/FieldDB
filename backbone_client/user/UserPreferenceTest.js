@@ -1,28 +1,34 @@
-require([
-  "user/UserPreference"
-], function(UserPreference) {
+define(["user/UserPreference"], function(UserPreference) {
+  "use strict";
 
-  describe("Test UserPreference", function() {
-    it("should initialize the UserPreference menu", function() {
-      var p = new UserPreference();
-      expect(p).not.toBeNull();
+  function registerTests() {
+    describe("UserPreference", function() {
+      describe("As a user I dont want to configure my preferences", function() {
+        it("should initialize the UserPreference menu", function() {
+          var p = new UserPreference();
+          expect(p).not.toBeNull();
+        });
+
+        xit("should contain hotKey preference ", function() {
+          var p = new UserPreference();
+          expect(p.get("hotKey")).toBeDefined();
+        });
+      });
+
+      describe("As a user I want to be able to reduce eyestrain by customizing the colors/contrast/brightness of my dashboard", function() {
+        it("should allow users to change their preferences", function() {
+          expect(true).toBeTruthy();
+        });
+
+        it("should contain skin preference ", function() {
+          var p = new UserPreference();
+          expect(p.get("skin")).toBeDefined();
+        });
+      });
     });
+  }
 
-    it("should allow users to change their preferences", function() {
-      expect(true).toBeTruthy();
-    });
-
-    it("should contain skin preference ", function() {
-      var p = new UserPreference();
-      //				expect("skin" == p.get("skin")).toBeTruthy();
-
-    });
-
-    it("should contain hotKey preference ", function() {
-      var p = new UserPreference();
-      //			expect("hotKey" == p.get("hotKey")).toBeTruthy();
-
-    });
-
-  });
+  return {
+    describe: registerTests
+  };
 });
