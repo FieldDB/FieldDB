@@ -12,5 +12,6 @@
   "boss": true,
   "eqnull": true,
   "node": true,
-  "predef": ["describe", "xdescribe", "it", "xit", "expect", "beforeEach", "afterEach"]
+  "strict": true,
+  "predef": ["define"]
 }
