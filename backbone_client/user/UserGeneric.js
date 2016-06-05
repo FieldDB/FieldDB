@@ -72,6 +72,22 @@ define([
         callback();
       }
     },
+
+    /**
+     * The subtitle function returns user's first and last names.
+     */
+    subtitle: function() {
+      if (this.get("title")) {
+        return this.get("title");
+      }
+
+      if (this.get("firstname") && this.get("lastname")) {
+        return this.get("firstname") + " " + this.get("lastname");
+      }
+
+      return this.get("username");
+    },
+
     getGravatar: function(email) {
       var existingGravatar = this.get("gravatar");
       if (existingGravatar.indexOf("gravatar.com") > -1) {
