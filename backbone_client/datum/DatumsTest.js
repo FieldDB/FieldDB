@@ -205,6 +205,7 @@ define(["datum/Datums"], function(Datums) {
       });
 
       it("should fetch the data in the collection", function(done) {
+        window.corpusfieldsforDatumParse = [];
         var data = new Datums();
         data.add([{
           _id: 99,
@@ -216,14 +217,17 @@ define(["datum/Datums"], function(Datums) {
           utterance: "allillanchu"
         }]);
 
-        var datum = data.create({
-          _id: "abc"
+        var datum = new data.model({
+          _id: "test"
         });
         expect(datum.fetch({
-          success: function() {
+          success: function(model) {
+            // console.log(model);
+            expect(model).toBeDefined();
+            expect(model.get("id")).toEqual("test");
             done();
           },
-          error: function(err) {
+          error: function(model, err) {
             // console.log(err);
             expect(err).toBeDefined();
             done();
