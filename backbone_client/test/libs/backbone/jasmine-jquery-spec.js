@@ -6,7 +6,7 @@ define([
   "jasmine-jquery"
 ], function($) {
   function registerTests() {
-    describe("jasmine.Fixtures", function() {
+    describe("Jasmine-jquery matchers", function() {
       var ajaxData = 'some ajax data'
       var fixtureUrl = 'some_url'
       var anotherFixtureUrl = 'another_url'
@@ -131,9 +131,11 @@ define([
             ajaxData = "<div><a id=\"anchor_01\"></a><script>$(function (){ $('#anchor_01').addClass('foo')});</script></div>"
           })
 
-          it("should execute the inline javascript after the fixture has been inserted into the body", function() {
-            jasmine.getFixtures().load(fixtureUrl)
-            expect($("#anchor_01")).toHaveClass('foo')
+          it("should not execute the inline javascript after the fixture has been inserted into the body", function() {
+            expect(function() {
+              jasmine.getFixtures().load(fixtureUrl)
+              expect($("#anchor_01")).not.toHaveClass('foo')
+            }).toThrowError(/^Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive.*/);
           })
         })
       })
@@ -190,8 +192,10 @@ define([
           })
 
           it("should execute the inline javascript after the fixture has been inserted into the body", function() {
-            jasmine.getFixtures().appendLoad(fixtureUrl)
-            expect($("#anchor_01")).toHaveClass('foo')
+            expect(function() {
+              jasmine.getFixtures().appendLoad(fixtureUrl)
+              expect($("#anchor_01")).not.toHaveClass('foo')
+            }).toThrowError(/^Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive.*/);
           })
         })
       })
@@ -383,7 +387,7 @@ define([
 
       beforeEach(function() {
         defaultFixturesPath = jasmine.getFixtures().fixturesPath
-        jasmine.getFixtures().fixturesPath = 'spec/fixtures'
+        jasmine.getFixtures().fixturesPath = 'test/bower_components/jasmine-jquery/spec/fixtures'
       })
 
       afterEach(function() {
@@ -404,26 +408,33 @@ define([
 
         it("should throw an exception", function() {
           expect(function() {
-            jasmine.getFixtures().read(fixtureUrl)
-          }).toThrow()
+            jasmine.getFixtures().read(fixtureUrl);
+          }).toThrowError(/^Fixture could not be loaded:.*Failed to execute 'send' on 'XMLHttpRequest': Failed to load/);
         })
       })
 
       describe("when fixture contains an <script src='to/your/source'> tag", function() {
         var fixtureUrl = "fixture_with_javascript.html"
 
-        it("should load content of fixture file and javascript and bind events", function() {
-          jasmine.getFixtures().load(fixtureUrl)
-          $('#anchor_01').click()
-          expect($("#anchor_01")).toHaveClass('foo')
+        beforeEach(function() {
+          defaultFixturesPath = jasmine.getFixtures().fixturesPath
+          jasmine.getFixtures().fixturesPath = 'test/libs/backbone/fixtures'
         })
 
-        it("should load multiple javascripts and bind events in fixture", function() {
+        it("should not eval content of fixture file and javascript and bind events", function() {
+          // expect(function() {
+          jasmine.getFixtures().load(fixtureUrl)
+            // }).toThrowError(/^Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive:.*/);
+          $('#anchor_01').click()
+          expect($("#anchor_01")).not.toHaveClass('foo')
+        })
+
+        it("should not eval multiple javascripts and bind events in fixture", function() {
           jasmine.getFixtures().load(fixtureUrl)
           $('#anchor_01').click()
           $('#anchor_01').trigger('hover')
-          expect($("#anchor_01")).toHaveClass('foo')
-          expect($("#anchor_01")).toHaveClass('bar')
+          expect($("#anchor_01")).not.toHaveClass('foo')
+          expect($("#anchor_01")).not.toHaveClass('bar')
         })
       })
 
@@ -601,11 +612,11 @@ define([
           });
         })
 
-        it("should pass for string properties with quote characters (double quotes)", function() {
+        it("should fix string properties with quote characters (double quotes)", function() {
           var fontFace = '"Courier New", monospace';
           $("#sandbox").css("font-family", fontFace);
           expect($("#sandbox")).toHaveCss({
-            'font-family': fontFace
+            'font-family': '\'Courier New\', monospace'
           });
         })
 
@@ -617,19 +628,19 @@ define([
           });
         })
 
-        it("should pass for string and color properties (no quotes)", function() {
+        it("should fix string and color properties (no quotes)", function() {
           var fontFace = "Courier New, monospace";
           $("#sandbox").css("font-family", fontFace);
           expect($("#sandbox")).toHaveCss({
-            'font-family': fontFace
+            'font-family': '\'Courier New\', monospace'
           });
         });
 
-        it("should pass for string properties with no space", function() {
+        it("should fix for string properties with no space", function() {
           var fontFace = '"Courier New",monospace';
           $("#sandbox").css("font-family", fontFace);
           expect($("#sandbox")).toHaveCss({
-            'font-family': fontFace
+            'font-family': '\'Courier New\', monospace'
           });
         })
       })
@@ -1774,7 +1785,7 @@ define([
 
       beforeEach(function() {
         defaultFixturesPath = jasmine.getStyleFixtures().fixturesPath
-        jasmine.getStyleFixtures().fixturesPath = 'spec/fixtures'
+        jasmine.getStyleFixtures().fixturesPath = 'test/bower_components/jasmine-jquery/spec/fixtures'
       })
 
       afterEach(function() {
@@ -1813,7 +1824,7 @@ define([
       beforeEach(function() {
         jasmine.getJSONFixtures().clearCache()
         spyOn(jasmine.JSONFixtures.prototype, 'loadFixtureIntoCache_').and.callFake(function(relativeUrl) {
-          fakeData = {}
+          var fakeData = {}
             // we put the data directly here, instead of using the variables to simulate rereading the file
           fakeData[fixtureUrl] = {
             a: 1,
@@ -1837,25 +1848,25 @@ define([
 
       describe("load", function() {
         it("should load the JSON data under the key 'fixture_url'", function() {
-          data = jasmine.getJSONFixtures().load(fixtureUrl)
+          var data = jasmine.getJSONFixtures().load(fixtureUrl)
           expect(_sortedKeys(data)).toEqual([fixtureUrl])
           expect(data[fixtureUrl]).toEqual(ajaxData)
         })
 
         it("should load the JSON data under the key 'fixture_url', even if it's loaded twice in one call", function() {
-          data = jasmine.getJSONFixtures().load(fixtureUrl, fixtureUrl)
+          var data = jasmine.getJSONFixtures().load(fixtureUrl, fixtureUrl)
           expect(_sortedKeys(data)).toEqual([fixtureUrl])
         })
 
         it("should load the JSON data under 2 keys given two files in a single call", function() {
-          data = jasmine.getJSONFixtures().load(anotherFixtureUrl, fixtureUrl)
+          var data = jasmine.getJSONFixtures().load(anotherFixtureUrl, fixtureUrl)
           expect(_sortedKeys(data)).toEqual([anotherFixtureUrl, fixtureUrl])
           expect(data[anotherFixtureUrl]).toEqual(moreAjaxData)
           expect(data[fixtureUrl]).toEqual(ajaxData)
         })
 
         it("should have shortcut global method loadJSONFixtures", function() {
-          data = loadJSONFixtures(fixtureUrl, anotherFixtureUrl)
+          var data = loadJSONFixtures(fixtureUrl, anotherFixtureUrl)
           expect(_sortedKeys(data)).toEqual([anotherFixtureUrl, fixtureUrl])
           expect(data[anotherFixtureUrl]).toEqual(moreAjaxData)
           expect(data[fixtureUrl]).toEqual(ajaxData)
@@ -1901,7 +1912,7 @@ define([
 
       beforeEach(function() {
         defaultFixturesPath = jasmine.getJSONFixtures().fixturesPath
-        jasmine.getJSONFixtures().fixturesPath = 'spec/fixtures/json'
+        jasmine.getJSONFixtures().fixturesPath = 'test/bower_components/jasmine-jquery/spec/fixtures/json'
       })
 
       afterEach(function() {
@@ -1912,7 +1923,7 @@ define([
         var fixtureUrl = "jasmine_json_test.json"
 
         it("should load content of fixture file", function() {
-          data = jasmine.getJSONFixtures().load(fixtureUrl)
+          var data = jasmine.getJSONFixtures().load(fixtureUrl)
           expect(data[fixtureUrl]).toEqual([1, 2, 3])
         })
       })

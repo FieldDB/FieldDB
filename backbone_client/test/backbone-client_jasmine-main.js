@@ -46,11 +46,6 @@ require.config({
     "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
     "OPrime": "libs/webservicesconfig_devserver"
-
-    /* load tests for dependencies */
-    // "jasmine-jquery": "test/libs/backbone/jasmine-jquery",
-    // "jasmine-ajax": "test/libs/backbone/mock-ajax",
-    // "jasmine-jquery-spec": "test/libs/backbone/jasmine-jquery-spec",
   },
   shim: {
     'jasmine-html': {
