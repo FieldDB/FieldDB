@@ -69,6 +69,10 @@ require.config({
       exports: "jquery"
     },
 
+    "FieldDB": {
+      exports: "FieldDB"
+    },
+
     "OPrime": {
       deps: ["oprime"],
       exports: "OPrime"
