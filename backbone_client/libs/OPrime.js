@@ -264,7 +264,13 @@ OPrime.escapeLatexChars = function(input) {
   result = result.replace(/</g, "\\textless");
   result = result.replace(/>/g, "\\textgreater");
 
-  var tipas = app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
+  var tipas = [];
+  try {
+    tipas = window.app.get("authentication").get("userPrivate").get("prefs").get("unicodes").toJSON();
+  } catch (err) {
+    this.debug("the app wasn\'t defined not sure which are ipa characters to escape.");
+  }
+
   for (var t = 0; t < tipas.length; t++) {
     if (tipas[t].tipa) {
       var symbolAsRegularExpession = new RegExp(tipas[t].symbol, "g");
