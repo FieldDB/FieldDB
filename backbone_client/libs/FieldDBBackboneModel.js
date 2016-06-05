@@ -45,6 +45,13 @@ define([
      * @return {String}            [description]
      */
     changePouch: function(dbname, callback) {
+      if (OPrime.isBackboneCouchDBApp()) {
+        if (typeof callback == "function") {
+          callback();
+        }
+        return;
+      }
+
       if (this.pouch == undefined) {
         this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
       }

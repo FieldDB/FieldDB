@@ -1,8 +1,16 @@
-define(["activity/Activity"], function(Activity) {
+define([
+  "backbone",
+  "libs/FieldDBBackboneModel",
+  "activity/Activity"
+], function(
+  Backbone,
+  FieldDBBackboneModel,
+  Activity
+) {
   "use strict";
 
   function registerTests() {
-    describe("Activities: Test Activity Feed replication.", function() {
+    describe("Activities", function() {
       xit("should have an id if it gets inserted into pouch.", function(done) {
         var activity = new Activity();
         activity.save({
@@ -59,8 +67,65 @@ define(["activity/Activity"], function(Activity) {
         it("should have colorful icons to display verbs.", function() {
           expect(Activity).toBeDefined();
         });
+
         it("should have clickable activity feed items, which show the changed set.", function() {
           expect(Activity).toBeDefined();
+        });
+      });
+
+      describe("deprecated", function() {
+        it("should get dbname from the user if a personal actiivty.", function(done) {
+          window.app = new FieldDBBackboneModel({
+            authentication: new FieldDBBackboneModel({
+              userPublic: new FieldDBBackboneModel({
+                username: "tester",
+                gravatar: "1234567ghjkwert"
+              }),
+              userPrivate: new FieldDBBackboneModel({
+                username: "tester",
+                gravatar: "1234567ghjkwert",
+                activityConnection: {
+                  dbname: "tester-special_activity_dbname"
+                }
+              })
+            })
+          });
+
+          var activity = new Activity({
+            teamOrPersonal: "personal",
+            user: window.app.get("authentication").get("userPublic")
+          });
+
+          expect(Backbone.sync.pouch).toEqual(undefined);
+
+          activity.changePouch(null, function() {
+            expect(Backbone.sync.pouch).toEqual(undefined);
+            expect(activity.get("dbname")).toEqual("tester-special_activity_dbname");
+            done();
+          });
+        });
+
+        it("should get dbname from the corpus if a team activity.", function(done) {
+          window.app = new FieldDBBackboneModel({
+            currentCorpusTeamActivityFeed: new FieldDBBackboneModel({
+              connection: {
+                dbname: "tester-kartuli"
+              }
+            })
+          });
+
+          var activity = new Activity({
+            teamOrPersonal: "team"
+          });
+
+          expect(Backbone.sync.pouch).toEqual(undefined);
+
+          activity.changePouch(null, function() {
+            expect(Backbone.sync.pouch).toEqual(undefined);
+            expect(activity.get("dbname")).toEqual("tester-kartuli");
+
+            done();
+          });
         });
       });
     });
