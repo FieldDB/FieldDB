@@ -11,6 +11,18 @@ define([
 
   function registerTests() {
     describe("Authentication ", function() {
+      describe("initialization", function() {
+        it("should load the decrypter for the most recent user", function() {
+          var authentication = new Authentication({
+            filledWithDefaults: true
+          });
+
+          expect(authentication).toBeDefined();
+          expect(authentication.get("confidential")).toBeDefined();
+          expect(authentication.get("confidential").get("secretkey")).toBeDefined();
+        });
+      });
+
       it("should look up the user on the server if the app is online", function() {
         expect(Authentication).toBeDefined();
       });
