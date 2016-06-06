@@ -1,5 +1,11 @@
-define(["backbone"], function(Backbone) {
-  var ReportBot = Backbone.Model.extend( /** @lends ReportBot.prototype */ {
+define([
+  "backbone",
+  "user/UserGeneric"
+], function(
+  Backbone,
+  UserGeneric
+) {
+  var ReportBot = UserGeneric.extend( /** @lends ReportBot.prototype */ {
     /**
      * TODO redo description
      * @class A bot is a type of user. It has the same information as a user, except it isnt a human, its a "bot."
@@ -15,28 +21,9 @@ define(["backbone"], function(Backbone) {
      * @param {String} crontab When the Bot is to run, in cron format.
      * If undefined, runs immediately.
      *
-     * @extends User.Model
+     * @extends UserGeneric.Model
      * @constructs
      */
-    initialize: function() {},
-
-    // Internal models: used by the parse function
-    internalModels: {},
-
-    changePouch: function(dbname, callback) {
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
-    saveAndInterConnectInApp: function(callback) {
-
-      if (typeof callback == "function") {
-        callback();
-      }
-    },
 
     /**
      * Schedule the bot to run the given MapReduce functions at the

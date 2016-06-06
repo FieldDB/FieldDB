@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "comment/Comment",
   "comment/Comments",
   "corpus/CorpusMask",
@@ -24,7 +24,7 @@ define([
   "user/UserMask",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Comment,
   Comments,
   CorpusMask,
@@ -48,7 +48,7 @@ define([
   Users,
   UserMask
 ) {
-  var Corpus = Backbone.Model.extend( /** @lends Corpus.prototype */ {
+  var Corpus = FieldDBBackboneModel.extend( /** @lends Corpus.prototype */ {
     /**
      * @class A corpus is like a git repository, it has a remote, a title
      *        a description and perhaps a readme When the user hits sync

@@ -1,14 +1,14 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "corpus/CorpusMask"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   CorpusMask) {
-  var Corpuses = Backbone.Collection.extend( /** @lends Corpuses.prototype */ {
+  var Corpuses = FieldDBBackboneCollection.extend( /** @lends Corpuses.prototype */ {
     /**
      * @class Collection of Corpuses in the form of CorpusMasks (normally
      *        referred to as Corpora, but using Backbone conventions a regular
-     *        plural means a collection.)
+     *        plural means a Collectionction.)
      *
      * @description Nothing happens in the initialization.
      *

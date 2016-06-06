@@ -1,6 +1,6 @@
 {
   "name": "LingSync",
-  "version": "3.42.08",
+  "version": "4.6.5",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/milestones?state=closed",
   "repository": {
@@ -49,7 +49,8 @@
   },
   "scripts": {
     "build": "cd ../ && ./scripts/build_fielddb_minified.sh",
-    "test": "grunt",
+    "lint:test": "jshint **/*Test.js",
+    "test": "open SpecRunner.html",
     "postinstall": "bower install"
   },
   "license": "Apache-2.0"

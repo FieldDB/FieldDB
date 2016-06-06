@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "datum/Datum"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   Datum
 ) {
-  var Datums = Backbone.Collection.extend( /** @lends Datums.prototype */ {
+  var Datums = FieldDBBackboneCollection.extend( /** @lends Datums.prototype */ {
     /**
      * @class A collection of Datums.
      *
@@ -13,7 +13,7 @@ define([
      * @constructs
      */
     initialize: function() {
-      this.model = Datum;
+      // this.model = Datum;
     },
     /**
      * backbone-couchdb adaptor set up

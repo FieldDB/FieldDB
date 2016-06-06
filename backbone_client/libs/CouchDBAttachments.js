@@ -3,7 +3,7 @@ define([
 ], function(
   Backbone
 ) {
-  var CouchDBAttachment = Backbone.Model.extend(
+  var CouchDBAttachment = FieldDBBackboneModel.extend(
     /** @lends CouchDBAttachment.prototype */
     {
       /**
@@ -22,10 +22,10 @@ define([
          *
          * @constructs
          */
-      
+
     });
 
-  var CouchDBAttachments = Backbone.Model.extend(
+  var CouchDBAttachments = FieldDBBackboneModel.extend(
     /** @lends CouchDBAttachments.prototype */
     {
       /**
@@ -51,7 +51,7 @@ define([
 
       originalParse: Backbone.Model.prototype.parse,
       parse: function(originalModel) {
-        
+
         for (var attachment in originalModel) {
           if (originalModel.hasOwnProperty(attachment)) {
             console.log("Here is an attachment", attachment);

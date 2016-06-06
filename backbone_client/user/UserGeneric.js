@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "hotkey/HotKey",
   "permission/Permission",
   "user/UserPreference",
@@ -7,13 +7,13 @@ define([
   "CryptoJS",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   HotKey,
   Permission,
   UserPreference,
   UserMask
 ) {
-  var UserGeneric = Backbone.Model.extend( /** @lends UserGeneric.prototype */ {
+  var UserGeneric = FieldDBBackboneModel.extend( /** @lends UserGeneric.prototype */ {
     /**
      * @class A generic user has a repository and permission groups
      *        (read, write, admin). It can not login.
@@ -72,6 +72,22 @@ define([
         callback();
       }
     },
+
+    /**
+     * The subtitle function returns user's first and last names.
+     */
+    subtitle: function() {
+      if (this.get("title")) {
+        return this.get("title");
+      }
+
+      if (this.get("firstname") && this.get("lastname")) {
+        return this.get("firstname") + " " + this.get("lastname");
+      }
+
+      return this.get("username");
+    },
+
     getGravatar: function(email) {
       var existingGravatar = this.get("gravatar");
       if (existingGravatar.indexOf("gravatar.com") > -1) {

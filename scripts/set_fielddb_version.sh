@@ -103,9 +103,9 @@ mv output backbone_client/manifest_miami.json
 echo "... setting version on fielddb-prototype bower"
 sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/bower.json  > output
 mv output backbone_client/bower.json
-# echo "... setting version on fielddb-prototype npm"
-# sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/package.json  > output
-# mv output backbone_client/package.json
+echo "... setting version on fielddb-prototype npm"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' backbone_client/package.json  > output
+mv output backbone_client/package.json
 #
 #
 echo ""

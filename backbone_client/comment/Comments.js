@@ -8,11 +8,11 @@ define(["backbone",
 
     {
       /**
-       * @class Comments is a collection of the model Comment. 
-       * 
+       * @class Comments is a collection of the model Comment.
+       *
        * @extends Comment.Collection
        * @constructs
-       * 
+       *
        */
       initialize: function() {},
 
@@ -21,11 +21,11 @@ define(["backbone",
 
       //    clone : function() {
       //        var newCollection = new Comments();
-      //        
+      //
       //        for (var i = 0; i < this.length; i++) {
-      //          newCollection.push(new Comment(this.models[i].toJSON())); 
+      //          newCollection.push(new Comment(this.models[i].toJSON()));
       //        }
-      //        
+      //
       //        return newCollection;
       //      }
 

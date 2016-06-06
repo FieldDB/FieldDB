@@ -1,17 +1,17 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "audio_video/AudioVideos",
   "datum/Datum",
   "comment/Comment",
   "comment/Comments"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   AudioVideos,
   Datum,
   Comment,
   Comments
 ) {
-  var DataList = Backbone.Model.extend( /** @lends DataList.prototype */ {
+  var DataList = FieldDBBackboneModel.extend( /** @lends DataList.prototype */ {
     /**
      * @class The Data List widget is used for import search, to prepare handouts and to share data on the web.
      *
@@ -205,25 +205,47 @@ define([
       if (!functionArguments) {
         //        functionArguments = true; //leave it null so that the defualts will apply in the Datum call
       }
+      var results = "";
+
       if (OPrime.debugMode) OPrime.debug("DATA LIST datumIdsToApplyFunction " + JSON.stringify(datumIdsToApplyFunction));
       if (functionToApply === "latexitDataList") {
-        $("#export-text-area").val(window.appView.exportView.model.exportLaTexPreamble());
-        $("#export-text-area").val($("#export-text-area").val() + "\n\\section{" + OPrime.escapeLatexChars(app.get("corpus").get("title")) + "}\n\n");
-        if (this.get("title")) {
-          $("#export-text-area").val($("#export-text-area").val() + "\n\\subsection{" + OPrime.escapeLatexChars(this.get("title")) + "}\n\n");
+        var preamble = "";
+        if (window.appView && window.appView.exportView && window.appView.exportView.model && typeof window.appView.exportView.model.exportLaTexPostamble === "function") {
+          preamble = window.appView.exportView.model.exportLaTexPreamble();
         }
-        $("#export-text-area").val($("#export-text-area").val() + "\n" + OPrime.escapeLatexChars(this.get("description")) + "\n\n");
+        var title = "";
+        if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && typeof window.app.get("corpus").get === "function" && window.app.get("corpus").get("title")) {
+          title = window.app.get("corpus").get("title");
+        }
+
+        results = preamble + "\n\\section{" + OPrime.escapeLatexChars(title) + "}\n\n";
+        if (this.get("title")) {
+          results = results + "\n\\subsection{" + OPrime.escapeLatexChars(this.get("title")) + "}\n\n";
+        }
+        results = results + "\n" + OPrime.escapeLatexChars(this.get("description")) + "\n\n";
       }
 
-      var datumCollection = this.view.collection.models;
+      var datumCollection = [];
+      if (this.view && this.view.collection && this.view.collection.models) {
+        datumCollection = this.view.collection.models;
+      }
+
       for (var datum in datumCollection) {
-        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1)) {
-          datumCollection[datum][functionToApply](functionArguments);
+        if (datumIdsToApplyFunction.indexOf(datumCollection[datum].id > -1) && typeof datumCollection[datum][functionToApply] === "function") {
+          results = results + datumCollection[datum][functionToApply](functionArguments);
         }
       }
       if (functionToApply === "latexitDataList") {
-        $("#export-text-area").val($("#export-text-area").val() + window.appView.exportView.model.exportLaTexPostamble());
+        if (window.appView && window.appView.exportView && window.appView.exportView.model && typeof window.appView.exportView.model.exportLaTexPostamble === "function") {
+          results = results + window.appView.exportView.model.exportLaTexPostamble();
+        }
       }
+
+      if ($("#export-text-area")) {
+        $("#export-text-area").val(results);
+      }
+
+      return results;
     },
 
     /**

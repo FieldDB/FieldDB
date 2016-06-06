@@ -1,0 +1,8 @@
+{
+  "extends": "../.jshintrc",
+  "browser": true,
+  "jasmine": true,
+  "noarg": true,
+  "node": false,
+  "predef": ["define"]
+}

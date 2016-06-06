@@ -12,6 +12,7 @@
   ],
   "devDependencies": {
     "jasmine": "~2.3.4",
-    "sinon-1.17.2": "http://sinonjs.org/releases/sinon-1.17.2.js"
+    "sinon-1.17.2": "http://sinonjs.org/releases/sinon-1.17.2.js",
+    "jasmine-jquery": "^2.1.1"
   }
 }

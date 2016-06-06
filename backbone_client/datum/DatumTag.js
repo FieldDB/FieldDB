@@ -1,9 +1,9 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var DatumTag = Backbone.Model.extend( /** @lends DatumTag.prototype */ {
+  var DatumTag = FieldDBBackboneModel.extend( /** @lends DatumTag.prototype */ {
     /**
      * @class The DatumTag allows the user to label data with grammatical tags
      *        i.e. passive, causative. This is useful for searches.

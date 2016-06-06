@@ -1,16 +1,16 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "confidentiality_encryption/Confidential",
   "user/User",
   "user/UserMask",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Confidential,
   User,
   UserMask
 ) {
-  var Authentication = Backbone.Model.extend( /** @lends Authentication.prototype */ {
+  var Authentication = FieldDBBackboneModel.extend( /** @lends Authentication.prototype */ {
     /**
      * @class The Authentication Model handles login and logout and
      *        authentication locally or remotely. *
@@ -81,10 +81,10 @@ define([
       dataToPost.username = user.get("username");
       dataToPost.password = user.get("password");
       /* if the user is currently in a chrome app, save which chrome app they used last into their user, so that we can redirect them to it if we ever need to redirect them from the website. */
-      if (OPrime.isChromeApp()) {
-        this.get("userPrivate").set("preferredChromeExtension", window.location.origin);
-      }
       if (this.get("userPrivate") != undefined) {
+        if (OPrime.isChromeApp()) {
+          this.get("userPrivate").set("preferredChromeExtension", window.location.origin);
+        }
         //if the same user is re-authenticating, include their details to sync to the server.
         if (user.get("username") == this.get("userPrivate").get("username") && user.get("username") != "public") {
           dataToPost.syncDetails = "true";
@@ -139,7 +139,7 @@ define([
         }
 
         if (typeof failcallback == "function") {
-          failcallback("There was an error in contacting the authentication server to confirm your identity. Maybe you're offline?");
+          failcallback(message);
         }
       });
     },
@@ -234,7 +234,7 @@ define([
       this.get("confidential").set("secretkey", serverResults.user.hash);
       this.saveAndEncryptUserToLocalStorage();
       if (typeof callbacksave == "function") {
-        callbacksave("true"); //tell caller that the user succeeded to authenticate
+        callbacksave(true); //tell caller that the user succeeded to authenticate
       }
       //    if(window.appView){
       //        if(! this.get("userPublic").id){

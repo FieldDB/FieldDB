@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "activity/Activity",
   "comment/Comment",
   "comment/Comments",
@@ -12,7 +12,7 @@ define([
   "permission/Permissions",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Activity,
   Comment,
   Comments,
@@ -24,7 +24,7 @@ define([
   Permission,
   Permissions
 ) {
-  var CorpusMask = Backbone.Model.extend( /** @lends CorpusMask.prototype */ {
+  var CorpusMask = FieldDBBackboneModel.extend( /** @lends CorpusMask.prototype */ {
     /**
      * @class The CorpusMask is saved as corpusmask in the Couch repository, it is the publicly visible version of a corpus. By default it just says private but lets users see the data lists and sessions.
      *

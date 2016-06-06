@@ -1,20 +1,20 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var InsertUnicode = Backbone.Model.extend(
+  var InsertUnicode = FieldDBBackboneModel.extend(
     /** @lends InsertUnicode.prototype */
     {
       /**
-       * @class InsertUnicode allows a user to use IPA symbols, characters other than Roman alphabets, etc.. 
-       * 		Users can add new symbols. Added symbols are saved and stored, and will show up next time the user 
-       * 		opens InsertUnicode box. 
-       * 
-       * @description Initialize function 
-       * 
+       * @class InsertUnicode allows a user to use IPA symbols, characters other than Roman alphabets, etc..
+       * 		Users can add new symbols. Added symbols are saved and stored, and will show up next time the user
+       * 		opens InsertUnicode box.
+       *
+       * @description Initialize function
+       *
        * @extends Backbone.Model
-       * 
+       *
        * @constructs
        */
       initialize: function() {},

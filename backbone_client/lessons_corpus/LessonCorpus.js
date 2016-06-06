@@ -1,8 +1,8 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "corpus/Corpus"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Corpus
 ) {
   var LessonCorpus = Corpus.extend( /** @lends LessonCorpus.prototype */ {

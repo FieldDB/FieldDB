@@ -1,9 +1,8 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "audio_video/AudioVideos",
   "comment/Comment",
   "comment/Comments",
-  "datum/Datums",
   "datum/DatumField",
   "datum/DatumFields",
   "datum/DatumTag",
@@ -13,11 +12,10 @@ define([
   "xml2json",
   "OPrime"
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   AudioVideos,
   Comment,
   Comments,
-  Datums,
   DatumField,
   DatumFields,
   DatumTag,
@@ -26,7 +24,7 @@ define([
   Session,
   X2JS
 ) {
-  var Datum = Backbone.Model.extend( /** @lends Datum.prototype */ {
+  var Datum = FieldDBBackboneModel.extend( /** @lends Datum.prototype */ {
     /**
      * @class The Datum widget is the place where all linguistic data is
      *        entered; one at a time.
@@ -164,8 +162,9 @@ define([
       if (OPrime.isBackboneCouchDBApp()) {
         //        alert("TODO check  getMostRecentIdsByDate");
         //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
-        var tempDatums = new Datums();
-        tempDatums.model = Datum;
+        var tempDatums = new Backbone.Collection({
+          url: "/datums"
+        });
         tempDatums.fetch({
           descending: true,
           limit: howmany,
@@ -354,36 +353,41 @@ define([
         delete originalModel.datumStates;
       }
 
-      /* enforce validation status to be comma seperated */
       var fieldLabels = _.pluck(originalModel.fields, "label");
+
+      /* enforce validation status to be comma seperated */
       var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
-      var validationFieldToclean = originalModel.fields[indexOfValidationSatus];
-      var validationStatus = validationFieldToclean.mask || "";
-      if (oldvalidationStatus) {
-        // if the old status is not already subsumbed by a curretn status, do add it to the validation status
-        if (validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1) {
-          validationStatus = oldvalidationStatus + ", " + validationStatus;
+      if (indexOfValidationSatus > -1) {
+        var validationFieldToclean = originalModel.fields[indexOfValidationSatus];
+        var validationStatus = validationFieldToclean.mask || "";
+        if (oldvalidationStatus) {
+          // if the old status is not already subsumbed by a curretn status, do add it to the validation status
+          if (validationStatus.toLowerCase().indexOf(oldvalidationStatus.toLowerCase()) === -1) {
+            validationStatus = oldvalidationStatus + ", " + validationStatus;
+          }
         }
+        validationStatus = validationStatus.replace(" be", "Be").replace(" to", "To").replace(" checked", "Checked");
+        var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
+          return nonemptyvalue;
+        });
+        validationFieldToclean.mask = uniqueStati.join(", ");
+        validationFieldToclean.value = validationFieldToclean.mask;
       }
-      validationStatus = validationStatus.replace(" be", "Be").replace(" to", "To").replace(" checked", "Checked");
-      var uniqueStati = _.unique(validationStatus.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
-        return nonemptyvalue;
-      });
-      validationFieldToclean.mask = uniqueStati.join(", ");
-      validationFieldToclean.value = validationFieldToclean.mask;
 
       /* enforce tags to be comma seperated */
       var indexOfTags = fieldLabels.indexOf("tags");
-      var tagFieldToClean = originalModel.fields[indexOfTags];
-      var tagValue = tagFieldToClean.mask || "";
-      var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
-        return nonemptyvalue;
-      });
-      tagFieldToClean.mask = uniqueTags.join(", ");
-      tagFieldToClean.value = tagFieldToClean.mask;
+      if (indexOfTags > -1) {
+        var tagFieldToClean = originalModel.fields[indexOfTags];
+        var tagValue = tagFieldToClean.mask || "";
+        var uniqueTags = _.unique(tagValue.trim().split(/[, ]/)).filter(function(nonemptyvalue) {
+          return nonemptyvalue;
+        });
+        tagFieldToClean.mask = uniqueTags.join(", ");
+        tagFieldToClean.value = tagFieldToClean.mask;
+      }
 
       /* upgrade to collection of audio video */
-      if (!Array.isArray(originalModel.audioVideo)) {
+      if (originalModel.audioVideo && !Array.isArray(originalModel.audioVideo) && originalModel.audioVideo.length) {
         // console.log("Upgrading audioVideo to a collection", originalModel.audioVideo);
         var audioVideoArray = [];
         if (originalModel.audioVideo.URL) {
@@ -1001,7 +1005,10 @@ define([
      */
     laTeXiT: function(showInExportModal) {
       //corpus's most frequent fields
-      var frequentFields = window.app.get("corpus").frequentFields;
+      var frequentFields = [];
+      if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").frequentFields) {
+        frequentFields = window.app.get("corpus").frequentFields;
+      }
       //this datum/datalist's datumfields and their names
       var fieldsToExport = this.get("fields").toJSON().map(function(field) {
         //Dont export the user fields
@@ -1025,6 +1032,8 @@ define([
       var fields = _.pluck(fieldsToExport, "mask");
       var fieldLabels = _.pluck(fieldsToExport, "label");
       //setting up for IGT case...
+      var judgementIndex = -1;
+      var judgement = "";
       var orthographyIndex = -1;
       var orthography = "";
       var utteranceIndex = -1;
@@ -1317,10 +1326,9 @@ define([
       if (printheader || !$("#export-text-area").val()) {
         result = header.join(",").replace(/,,/g, ",") + "\n" + result;
       }
-      if (showInExportModal != null) {
+      if (showInExportModal != null && $("#export-type-description")) {
         $("#export-type-description").html(" as CSV (Excel, Filemaker Pro)");
-        $("#export-text-area").val(
-          $("#export-text-area").val() + result);
+        $("#export-text-area").val($("#export-text-area").val() + result);
       }
       return result;
     },

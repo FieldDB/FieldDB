@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "data_list/DataList"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   DataList
 ) {
-  var DataLists = Backbone.Collection.extend( /** @lends DataLists.prototype */ {
+  var DataLists = FieldDBBackboneCollection.extend( /** @lends DataLists.prototype */ {
     /**
      * @class A collection of DataLists
      *

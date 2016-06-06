@@ -1,11 +1,11 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneCollection",
   "datum/DatumTag"
 ], function(
-  Backbone,
+  FieldDBBackboneCollection,
   DatumTag
 ) {
-  var DatumTags = Backbone.Collection.extend( /** @lends Datums.prototype */ {
+  var DatumTags = FieldDBBackboneCollection.extend( /** @lends Datums.prototype */ {
     /**
      * @class A collection of Datum tags
      *

@@ -1,20 +1,20 @@
 define([
-  "backbone"
+  "libs/FieldDBBackboneModel"
 ], function(
-  Backbone
+  FieldDBBackboneModel
 ) {
-  var Image = Backbone.Model.extend(
+  var Image = FieldDBBackboneModel.extend(
     /** @lends Image.prototype */
     {
       /**
-       * @class Image allows a user to use IPA symbols, characters other than Roman alphabets, etc.. 
-       * 		Users can add new symbols. Added symbols are saved and stored, and will show up next time the user 
-       * 		opens Image box. 
-       * 
-       * @description Initialize function 
-       * 
+       * @class Image allows a user to use IPA symbols, characters other than Roman alphabets, etc..
+       * 		Users can add new symbols. Added symbols are saved and stored, and will show up next time the user
+       * 		opens Image box.
+       *
+       * @description Initialize function
+       *
        * @extends Backbone.Model
-       * 
+       *
        * @constructs
        */
       initialize: function() {},

@@ -1,5 +1,5 @@
 define([
-  "backbone",
+  "libs/FieldDBBackboneModel",
   "comment/Comment",
   "comment/Comments",
   "datum/DatumField",
@@ -8,7 +8,7 @@ define([
   "user/Team",
   "user/User",
 ], function(
-  Backbone,
+  FieldDBBackboneModel,
   Comment,
   Comments,
   DatumField,
@@ -17,7 +17,7 @@ define([
   Team,
   User
 ) {
-  var Session = Backbone.Model.extend( /** @lends Session.prototype */ {
+  var Session = FieldDBBackboneModel.extend( /** @lends Session.prototype */ {
     /**
      * @class The Session widget is the place where information which is generally
      * shared by many datum (due to being part of an elicitiation session)
@@ -174,7 +174,7 @@ define([
 
       OPrime.debug("Edit this function to update session to the latest schema.");
 
-      if (window.app.get("corpus") && window.app.get("corpus").get("sessionFields")) {
+      if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").get("sessionFields")) {
         /* Add any new corpus fields to this session so they can be edited */
         var originalFieldLabels = _.pluck(originalModel.fields, "label");
         window.corpusfieldsforSessionParse = window.corpusfieldsforSessionParse || window.app.get("corpus").get("sessionFields").toJSON()
