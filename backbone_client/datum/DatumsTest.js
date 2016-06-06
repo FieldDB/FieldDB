@@ -233,7 +233,7 @@ define(["datum/Datums"], function(Datums) {
             done();
           }
         }));
-      });
+      }, 10 * 1000);
     });
   }
 

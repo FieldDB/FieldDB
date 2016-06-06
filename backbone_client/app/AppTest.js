@@ -64,6 +64,17 @@ define([
       });
 
       describe("As a user I want to work offine", function() {
+        afterEach(function(){
+          Backbone.couch_connector.config = {
+            ddoc_name: 'deprecated',
+            view_name: 'byCollection',
+            list_name: null,
+            global_changes: false,
+            single_feed: false,
+          };
+          jQuery.couch.urlPrefix = "";
+        });
+
         it("should require a couch connection", function() {
           var app = new App();
           var callback = sinon.spy();
@@ -79,13 +90,11 @@ define([
           var app = new App();
           expect(Backbone.sync.pouch).toEqual(undefined);
           expect(Backbone.couch_connector.config).toEqual({
-            db_name: 'default',
             ddoc_name: 'deprecated',
             view_name: 'byCollection',
             list_name: null,
             global_changes: false,
-            single_feed: false,
-            base_url: null
+            single_feed: false
           });
 
           app.changePouch({
