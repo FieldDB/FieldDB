@@ -103,36 +103,6 @@ define([
       }
     },
 
-    loadUser: function(AppView, AppRouter, successcallback, failurecallback) {
-      var appself = this;
-      if (OPrime.debugMode) OPrime.debug("Loading user");
-      var u = localStorage.getItem("encryptedUser");
-      if (!u) {
-        OPrime.redirect("corpus.html");
-        return;
-      }
-      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
-        if (success == null) {
-          //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
-          //        OPrime.setCookie("username","");
-          //        OPrime.setCookie("token","");
-          //        localStorage.removeItem("encryptedUser");
-          //        OPrime.redirect('corpus.html');
-          return;
-        } else {
-          window.appView = new AppView({
-            model: appself
-          });
-          window.appView.render();
-          appself.router = new AppRouter();
-          Backbone.history.start();
-          if (typeof successcallback === "function") {
-            successcallback();
-          }
-        }
-      });
-    },
-
     fillWithDefaults: function() {
       // If there's no authentication, create a new one
       if (!this.get("authentication")) {

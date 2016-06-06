@@ -34,8 +34,10 @@ define([
       /*
        * Start the pub sub hub
        */
-      window.hub = {};
-      OPrime.makePublisher(window.hub);
+      if (!window.hub || typeof window.hub.subscribe !== "function") {
+        window.hub = {};
+        OPrime.makePublisher(window.hub);
+      }
 
       /*
        * Check for user's cookie and the dashboard so we can load it
@@ -50,7 +52,30 @@ define([
 
       window.app = this;
 
-      this.loadUser(UserAppView, UserRouter);
+      var appself = this;
+      if (OPrime.debugMode) OPrime.debug("Loading user");
+      var u = localStorage.getItem("encryptedUser");
+      if (!u) {
+        OPrime.redirect("corpus.html");
+        return;
+      }
+      appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        if (success == null) {
+          //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
+          //        OPrime.setCookie("username","");
+          //        OPrime.setCookie("token","");
+          //        localStorage.removeItem("encryptedUser");
+          //        OPrime.redirect('corpus.html');
+          return;
+        } else {
+          window.appView = new UserAppView({
+            model: appself
+          });
+          window.appView.render();
+          appself.router = new UserRouter();
+          Backbone.history.start();
+        }
+      });
     },
 
     /**
