@@ -1388,7 +1388,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentCorpus: function(successcallback, failurecallback) {
-      if (window.app.get("corpus").id != this.id) {
+      if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").id != this.id) {
         window.app.set("corpus", this);
       }
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
