@@ -149,6 +149,15 @@ define(
           $("#quick-authenticate-password").val("");
           $("#quick-authenticate-modal").hide();
         },
+        "click #quick-authentication-cancel-btn": function(e) {
+          if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+          window.hub.publish("quickAuthenticationClose", "cancel");
+          $("#quick-authenticate-password").val("");
+          $("#quick-authenticate-modal").hide();
+        },
         "click .icon-home": function(e) {
           if (e) {
             e.stopPropagation();
@@ -249,19 +258,18 @@ define(
             // corpus replication.
             self.model
               .get("authentication")
-              .syncUserWithServer(
-                function() {
-                  var corpusConnection = self.model.get("corpus")
-                    .get("connection");
-                  if (self.model.get("authentication").get(
-                      "userPrivate").get("corpora").dbname != "default" && app.get("corpus").get("connection").dbname == "default") {
-                    corpusConnection = self.model.get(
-                      "authentication").get("userPrivate").get(
-                      "corpora")[0];
-                  }
-                  self.model.replicateCorpus(
-                    corpusConnection, callback);
-                });
+              .syncUserWithServer(function() {
+                var corpusConnection = self.model.get("corpus")
+                  .get("connection");
+                if (self.model.get("authentication").get(
+                    "userPrivate").get("corpora").dbname != "default" && app.get("corpus").get("connection").dbname == "default") {
+                  corpusConnection = self.model.get(
+                    "authentication").get("userPrivate").get(
+                    "corpora")[0];
+                }
+                self.model.replicateCorpus(
+                  corpusConnection, callback);
+              });
           });
       }, // Display User Views
       renderEditableUserViews: function(userid) {

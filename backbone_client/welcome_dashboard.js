@@ -168,7 +168,7 @@ require([
         document.location.href = 'user.html';
         return;
       } else {
-        if (!localStorage.getItem("encryptedUser")) {
+        if (!localStorage.getItem(username)) {
           alert("Your corpus is here, but your user details are missing. Please login and it should fix this problem.");
           OPrime.setCookie("username", "");
           document.location.href = 'corpus.html';
@@ -179,7 +179,7 @@ require([
           });
           window.app = a;
           var auth = a.get("authentication");
-          var u = localStorage.getItem("encryptedUser");
+          var u = localStorage.getItem(username);
           auth.loadEncryptedUser(u, function(success, errors) {
             if (success == null) {
               alert("We couldn't load your user." + errors.join("<br/>") + " " + OPrime.contactUs);

@@ -54,7 +54,11 @@ define([
 
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
-      var u = localStorage.getItem("encryptedUser");
+      var u = localStorage.getItem(username);
+      // Support version > 4.6.5
+      if (!u) {
+        u = localStorage.getItem("encryptedUser");
+      }
       if (!u) {
         OPrime.redirect("corpus.html");
         return;
@@ -88,20 +92,24 @@ define([
     /**
      * Smaller than the App version
      */
-    backUpUser: function(callback) {
+    backUpUser: function(callback, cancelcallback) {
       var self = this;
       /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
       if (self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama") {
         if (typeof callback == "function") {
           callback();
         }
+        return;
       }
       //syncUserWithServer will prompt for password, then run the corpus replication.
       self.get("authentication").syncUserWithServer(function() {
+        if (window.appView) {
+          window.appView.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.", "alert-info", "Backed-up:");
+        }
         if (typeof callback == "function") {
           callback();
         }
-      });
+      }, null, cancelcallback);
     },
 
     router: UserRouter,

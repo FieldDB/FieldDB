@@ -200,6 +200,8 @@ define([
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
       window.app.backUpUser(function() {
         authself.logout();
+      }, function() {
+        authself.logout();
       });
     },
 
@@ -375,6 +377,12 @@ define([
       var authUrl = window.app.get("authentication").get("userPrivate").get("authUrl")
       var username = window.app.get("authentication").get("userPrivate").get("username")
       var subscription = function(password) {
+        if (password === "cancel"){
+          if (typeof authfailurecallback === "function") {
+            authfailurecallback();
+          }
+          return;
+        }
         window.appView.authView.authenticate(username, password, OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
         window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
         setTimeout(function() {
@@ -493,7 +501,8 @@ define([
         OPrime.setCookie("username", serverResults.user.username, 365);
         OPrime.setCookie("token", serverResults.user.hash, 365);
         var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-        localStorage.setItem("encryptedUser", u);
+        var username = dataToPost.username;
+        localStorage.setItem(username, u);
         $(".spinner-status").html("Building your database for you...");
 
         /*
@@ -542,7 +551,7 @@ define([
                     auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
                     auth.get("userPrivate").get("corpora")[0] = model.get("connection"); // TODO should be an unshift no?
                     var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-                    localStorage.setItem("encryptedUser", u);
+                    localStorage.setItem(username, u);
 
                     var sucessorfailcallbackforcorpusmask = function() {
                       $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
@@ -642,7 +651,7 @@ define([
           OPrime.setCookie("token", serverResults.user.hash, 365);
           auth.get("confidential").set("secretkey", serverResults.user.hash);
           var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-          localStorage.setItem("encryptedUser", u);
+          localStorage.setItem(username, u);
 
           /*
            * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)

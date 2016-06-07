@@ -428,6 +428,15 @@ define([
         $("#quick-authenticate-password").val("");
         $("#quick-authenticate-modal").hide();
       },
+      "click #quick-authentication-cancel-btn": function(e) {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        window.hub.publish("quickAuthenticationClose", "cancel");
+        $("#quick-authenticate-password").val("");
+        $("#quick-authenticate-modal").hide();
+      },
       "click .icon-home": function(e) {
         if (e) {
           e.stopPropagation();
@@ -781,8 +790,8 @@ define([
      *
      * If the corpus connection is currently the default, it attempts to replicate from  to the users' last corpus instead.
      */
-    backUpUser: function(callback) {
-      this.model.backUpUser(callback);
+    backUpUser: function(callback, cancelcallback) {
+      this.model.backUpUser(callback, cancelcallback);
     },
 
     saveScreen: function() {
