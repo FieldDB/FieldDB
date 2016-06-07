@@ -1,5 +1,6 @@
 define([
   "underscore",
+  "jquery",
   "backbone",
   "libs/FieldDBBackboneModel",
   "libs/compiled_handlebars",
@@ -22,6 +23,7 @@ define([
   "OPrime"
 ], function(
   _,
+  jQuery,
   Backbone,
   FieldDBBackboneModel,
   Handlebars,
@@ -83,15 +85,7 @@ define([
       }
     },
 
-    fillWithDefaults: function() {
-      // If there's no authentication, create a new one
-      if (!this.get("authentication")) {
-        this.set("authentication", new Authentication({
-          filledWithDefaults: true
-        }));
-      }
-      this.showSpinner();
-
+    prepLocales: function() {
       window.Locale = {};
       window.Locale.get = function(message) {
         if (!window.Locale.data[message]) {
@@ -107,6 +101,18 @@ define([
           return "";
         };
       }
+    },
+
+    fillWithDefaults: function() {
+      // If there's no authentication, create a new one
+      if (!this.get("authentication")) {
+        this.set("authentication", new Authentication({
+          filledWithDefaults: true
+        }));
+      }
+      this.showSpinner();
+
+      this.prepLocales();
 
       /*
        * Start the pub sub hub
@@ -121,6 +127,7 @@ define([
        */
       if (!this.get("loadTheAppForTheFirstTime")) {
         window.app = this;
+
         var appself = this;
         if (OPrime.debugMode) OPrime.debug("Loading user");
         $(".spinner-status").html("Loading user...");
@@ -194,49 +201,30 @@ define([
      */
     changePouch: function(connection, callback) {
       if (!connection || connection == undefined) {
-        console.log("App.changePouch connection must be supplied.");
-        return;
-      } else {
-        console.log("App.changePouch setting connection: ", connection);
-        connection.dbname = connection.dbname || connection.pouchname;
-        this.set("connection", connection);
+        throw new Error("The app cannot function without knowing which database is in use.");
       }
-      //      alert("TODO set/validate that the the backone couchdb connection is the same as what user is asking for here");
-      $.couch.urlPrefix = OPrime.getCouchUrl(window.app.get("connection"), "");
 
-      if (OPrime.isChromeApp()) {
-        Backbone.couch_connector.config.base_url = $.couch.urlPrefix;
-        Backbone.couch_connector.config.db_name = connection.dbname;
-      } else {
-        /* If the user is not in a chrome extension, the user MUST be on a url that corresponds with their corpus */
-        try {
-          var pieces = window.location.pathname.replace(/^\//, "").split("/");
-          var dbname = pieces[0];
-          //Handle McGill server which runs out of a virtual directory
-          if (dbname == "corpus") {
-            dbname = pieces[1];
-          }
-          Backbone.couch_connector.config.db_name = dbname;
-        } catch (e) {
-          OPrime.bug("Couldn't set the databse name off of the url, please report this.");
+      OPrime.debug("App.changePouch setting connection: ", connection);
+
+      connection.dbname = connection.dbname || connection.pouchname;
+      this.set("connection", connection);
+      var urlPrefix = OPrime.getCouchUrl(this.get("connection"), "");
+
+      try {
+        var pieces = window.location.pathname.replace(/^\//, "").split("/");
+        //Handle McGill server which runs out of a virtual directory
+        if (pieces[0] == "corpus") {
+          urlPrefix = window.location.hostname + "/corpus";
         }
+      } catch (e) {
+        console.log(e);
+        OPrime.bug("Couldn't set the databse name off of the url, please report this.");
       }
 
-      if (typeof callback == "function") {
-        callback();
-      }
-      return;
+      Backbone.couch_connector.config.base_url = jQuery.couch.urlPrefix = urlPrefix;
+      Backbone.couch_connector.config.db_name = connection.dbname;
 
-      alert("TODO set/validate that the the pouch connection");
-      if (this.pouch == undefined) {
-        // this.pouch = Backbone.sync.pouch("https://localhost:6984/"
-        // + connection.dbname);
-        this.pouch = Backbone.sync
-          .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + connection.dbname : OPrime.pouchUrl + connection.dbname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
+      FieldDBBackboneModel.prototype.changePouch.apply(this, arguments);
     },
     /**
      * This function creates the backbone objects, and links them up so that
@@ -249,7 +237,6 @@ define([
      * @param callback
      */
     createAppBackboneObjects: function(optionaldbname, callback) {
-
       console.log("TOOD Use the fielddb app to load the dashboard");
       var fieldDBApp = {
         connection: this.get("connection")
@@ -391,7 +378,7 @@ define([
 
       var appself = this;
       var connectionInscope = connection;
-      $.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
+      jQuery.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
 
       FieldDB.CORS.makeCORSRequest({
         type: "POST",

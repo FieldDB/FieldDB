@@ -16,11 +16,11 @@ define([
 
         var element = jQuery("#test-jquery-dom-manipulation");
         element.animate({
-          height: "50px"
+          height: "49px"
         }, 50);
 
         setTimeout(function() {
-          expect(element.css("height")).toEqual("50px");
+          expect(element.css("height")).toEqual("49px");
 
           done();
         }, 50)

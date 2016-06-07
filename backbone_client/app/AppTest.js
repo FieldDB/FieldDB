@@ -1,11 +1,18 @@
 define([
   "backbone",
+  "libs/FieldDBBackboneModel",
+  "jquery",
   "app/App",
-  "OPrime"
+  "OPrime",
+  "sinon"
 ], function(
   Backbone,
+  FieldDBBackboneModel,
+  jQuery,
   App,
-  OPrime) {
+  OPrime,
+  sinon
+) {
   "use strict";
 
   function registerTests() {
@@ -53,6 +60,64 @@ define([
 
         it("should not be an CouchApp", function() {
           expect(!OPrime.isCouchApp()).toBeTruthy();
+        });
+      });
+
+      describe("As a user I want to work offine", function() {
+        afterEach(function(){
+          Backbone.couch_connector.config = {
+            ddoc_name: 'deprecated',
+            view_name: 'byCollection',
+            list_name: null,
+            global_changes: false,
+            single_feed: false,
+          };
+          jQuery.couch.urlPrefix = "";
+        });
+
+        it("should require a couch connection", function() {
+          var app = new App();
+          var callback = sinon.spy();
+
+          expect(function() {
+            app.changePouch(null, callback);
+          }).toThrowError("The app cannot function without knowing which database is in use.");
+
+          expect(callback.called).toBeFalsy();
+        });
+
+        it("should set the couch url", function(done) {
+          var app = new App();
+          expect(Backbone.sync.pouch).toEqual(undefined);
+          expect(Backbone.couch_connector.config).toEqual({
+            ddoc_name: 'deprecated',
+            view_name: 'byCollection',
+            list_name: null,
+            global_changes: false,
+            single_feed: false
+          });
+
+          app.changePouch({
+            dbname: "tester-set-couch-url",
+            corpusUrl: "https://db.somewhere.ca"
+              // corpusUrl: "https://localhost:6984"
+          }, function() {
+            expect(Backbone.sync.pouch).toEqual(undefined);
+            expect(Backbone.couch_connector.config).toEqual({
+              db_name: 'tester-set-couch-url',
+              ddoc_name: 'deprecated',
+              view_name: 'byCollection',
+              list_name: null,
+              global_changes: false,
+              single_feed: false,
+              base_url: 'https://db.somewhere.ca'
+            });
+
+            expect(jQuery.couch.urlPrefix).toEqual('https://db.somewhere.ca');
+            expect(app.get("connection").dbname).toEqual("tester-set-couch-url");
+
+            done();
+          });
         });
       });
     });

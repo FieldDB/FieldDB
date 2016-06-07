@@ -19,7 +19,15 @@ define([
       if (OPrime.debugMode) OPrime.debug("ACTIVITY init: ");
 
       if (!this.get("user")) {
-        var user = window.app.get("authentication").get("userPublic").toJSON();
+        var user = {
+          username: "anonymous",
+          gravatar: ""
+        };
+
+        if (window.app && typeof window.app.get === "function" && window.app.get("authentication") && window.app.get("authentication").get("userPublic")) {
+          user = window.app.get("authentication").get("userPublic").toJSON();
+        }
+
         this.set("user", {
           username: user.username,
           gravatar: user.gravatar,
@@ -85,24 +93,10 @@ define([
             alert("Bug in setting the pouch for this activity, i can only save activities for the current corpus team.");
             return;
           }
-
         }
       }
 
-
-      if (OPrime.isBackboneCouchDBApp()) {
-        if (typeof callback == "function") {
-          callback();
-        }
-        return;
-      }
-
-      if (this.pouch == undefined) {
-        this.pouch = Backbone.sync.pouch(OPrime.isAndroidApp() ? OPrime.touchUrl + dbname : OPrime.pouchUrl + dbname);
-      }
-      if (typeof callback == "function") {
-        callback();
-      }
+      FieldDBBackboneModel.prototype.changePouch.apply(this, arguments);
     },
     /**
      * Accepts two functions to call back when save is successful or
