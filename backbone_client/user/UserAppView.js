@@ -174,7 +174,7 @@ define(
             e.preventDefault();
           }
           var authUrl = $(".welcomeauthurl").val().trim();
-          authUrl = OPrime.getAuthUrl(authUrl);
+          authUrl = FieldDB.Connection.defaultConnection(authUrl).authUrl;
           this.authView.syncUser($(".welcomeusername").val().trim(), $(".welcomepassword").val().trim(), authUrl);
         },
         "click .sync-everything": "replicateDatabases",

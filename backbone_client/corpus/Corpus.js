@@ -864,7 +864,7 @@ define([
       }
     },
     'createCorpus': function(dataToPost) {
-      dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
+      dataToPost.serverCode = FieldDB.Connection.defaultConnection().brandLowerCase;
       dataToPost.authUrl = new FieldDB.Connection(FieldDB.Connection.defaultConnection()).authUrl;
       dataToPost.newCorpusTitle = this.get("title");
 

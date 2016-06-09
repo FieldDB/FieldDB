@@ -74,7 +74,7 @@ define([
         originalModel.corpora = corporaUserHasAccessTo.toJSON();
       }
 
-      originalModel.authUrl = OPrime.getAuthUrl(originalModel.authUrl);
+      originalModel.authUrl = FieldDB.Connection.defaultConnection(originalModel.authUrl).authUrl
       originalModel.activityConnection = originalModel.activityConnection || originalModel.activityCouchConnection;
       delete originalModel.activityCouchConnection;
       if (originalModel.activityConnection) {

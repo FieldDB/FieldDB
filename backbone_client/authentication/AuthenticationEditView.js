@@ -182,7 +182,7 @@ define([
           $("#user-quickview").html('<i class="icons icon-user icon-white">');
         }
 
-        var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
+        var mostLikelyAuthUrl = FieldDB.Connection.defaultConnection().userFriendlyServerName;
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
 
       }
@@ -246,7 +246,7 @@ define([
       var tempuser = new User({
         username: username,
         password: password,
-        authUrl: OPrime.getAuthUrl(authUrl)
+        authUrl: FieldDB.Connection.defaultConnection(authUrl).authUrl
       });
 
       var whattodoifcouchloginerrors = function() {
@@ -383,7 +383,7 @@ define([
           }
           return;
         }
-        window.appView.authView.authenticate(username, password, OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        window.appView.authView.authenticate(username, password, FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
         window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;
@@ -392,7 +392,7 @@ define([
 
       if (username == "public") {
         / * Dont show the quick auth, just authenticate */
-        window.appView.authView.authenticate("public", "none", OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        window.appView.authView.authenticate("public", "none", FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;
         }, 2000);
@@ -429,8 +429,8 @@ define([
 
       dataToPost.email = $(".registeruseremail").val().trim();
       dataToPost.password = $(".registerpassword").val().trim();
-      dataToPost.authUrl = OPrime.getAuthUrl();
-      dataToPost.appbrand = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
+      dataToPost.authUrl = FieldDB.Connection.defaultConnection().authUrl;
+      dataToPost.appbrand = FieldDB.Connection.defaultConnection().brandLowerCase;
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a dbname to create
       // var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
@@ -612,7 +612,7 @@ define([
       $(".welcome-screen-alerts").removeClass("alert-error");
       $(".welcome-screen-alerts").show();
 
-      authUrl = OPrime.getAuthUrl(authUrl);
+      authUrl = FieldDB.Connection.defaultConnection(authUrl).authUrl;
       /*
        * Contact the server and register the new user
        */

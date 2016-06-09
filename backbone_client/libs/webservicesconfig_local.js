@@ -12,16 +12,6 @@ OPrime.corpusUrl = "https://localhost:3186";
 OPrime.activityUrl = "https://localhost:3187";
 OPrime.widgetUrl = "https://localhost:3188";
 
-OPrime.getAuthUrl = function(userFriendlyServerName) {
-  var authUrl = "https://localhost:3183";
-  return authUrl;
-};
-
-OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
-  mostLikelyAuthUrl = "Localhost";
-  return mostLikelyAuthUrl;
-};
-
 OPrime.getMostLikelyPrototypeVersionFromUrl = function(versionCode) {
   if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
     versionCode = versionCode + "pmo";
