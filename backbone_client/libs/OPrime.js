@@ -47,6 +47,54 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
 
 OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";
 
+OPrime.getMostLikelyPrototypeVersionFromUrl = function(versionCode) {
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    versionCode = versionCode + "pmo";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    versionCode = versionCode + "pmc";
+  } else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    versionCode = versionCode + "pso";
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    versionCode = versionCode + "pbo";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    versionCode = versionCode + "pbc";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    versionCode = versionCode + "psc";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    versionCode = versionCode + "pba";
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    versionCode = versionCode + "plo";
+  } else if (OPrime.isChromeApp()) {
+    versionCode = versionCode + "pdc";
+  }
+
+  return versionCode;
+};
+
+OPrime.guessRedirectUrlBasedOnWindowOrigin = function(dbname) {
+  var optionalRedirectDomain = "";
+  var redirectUrl = window.location.origin;
+
+  if (redirectUrl.indexOf("dev.lingsync.org") >= 0) {
+    redirectUrl = "https://" + redirectUrl.replace("dev.", ".") + "/";
+  } else if (redirectUrl.indexOf("prosody.linguistics.mcgill") >= 0) {
+    redirectUrl = "https://corpus.lingsync.org/";
+  }
+
+  // If its probably a couch app add the design doc and redirect db
+  if (redirectUrl.indexOf("corpus") === 0 || redirectUrl.indexOf("894") > -1 || window.location.pathname.indexOf("/_design/") > -1) {
+    redirectUrl = redirectUrl + dbname + "/_design/data/";
+  }
+
+  // If the redirectUrl isn't the same as the origin, use the redirectUrl
+  if (redirectUrl !== window.location.origin) {
+    optionalRedirectDomain = redirectUrl;
+  } else {
+    optionalRedirectDomain = "";
+  }
+  return optionalRedirectDomain;
+};
+
 OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
     return;

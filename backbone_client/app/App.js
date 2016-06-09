@@ -648,11 +648,11 @@ define([
               OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-          OPrime.redirect(optionalCouchAppPath + "user.html#login/" + corpusdbname);
+          var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin("public-firstcorpus");
+          OPrime.redirect(optionalRedirectDomain + "user.html#login/" + corpusdbname);
 
           //        window.app.get("authentication").syncUserWithServer(function(){
-          //        OPrime.redirect(optionalCouchAppPath+"corpus.html");
+          //        OPrime.redirect(optionalRedirectDomain+"corpus.html");
           //        });
           return;
         }
@@ -731,8 +731,8 @@ define([
             if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
             self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
           }, connection.dbname);
-          //            var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-          //            OPrime.redirect(optionalCouchAppPath+"corpus.html#login");
+          //            var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin("public-firstcorpus");
+          //            OPrime.redirect(optionalRedirectDomain+"corpus.html#login");
           return;
         }
 

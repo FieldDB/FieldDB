@@ -125,8 +125,8 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
-        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-        OPrime.redirect(optionalCouchAppPath + "user.html");
+        var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin("public-firstcorpus");
+        OPrime.redirect(optionalRedirectDomain + "user.html");
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -915,8 +915,8 @@ define([
               }
 
               window.setTimeout(function() {
-                var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
-                OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname);
+                var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(potentialdbname);
+                OPrime.redirect(optionalRedirectDomain + "user.html#/corpus/" + potentialdbname);
               }, 1000);
 
             });

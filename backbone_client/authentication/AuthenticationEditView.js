@@ -509,7 +509,7 @@ define([
          * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
          */
         var potentialdbname = serverResults.user.corpora[0].dbname;
-        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
+        var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(potentialdbname);
 
         var connection = serverResults.user.corpora[0];
         var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
@@ -556,7 +556,7 @@ define([
                     var sucessorfailcallbackforcorpusmask = function() {
                       $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
                       window.setTimeout(function() {
-                        OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
+                        OPrime.redirect(optionalRedirectDomain + "user.html#/corpus/" + potentialdbname + "/" + model.id);
                       }, 1000);
                     };
                     model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
@@ -665,9 +665,9 @@ define([
               connection: serverResults.user.corpora[0]
             };
           }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
+          var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(potentialpouch);
           window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.connection, dataToPost.username, dataToPost.password, function() {
-            OPrime.redirect(optionalCouchAppPath + "corpus.html");
+            OPrime.redirect(optionalRedirectDomain + "corpus.html");
           });
         }
       }, function(reason) {
