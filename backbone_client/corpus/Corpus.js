@@ -464,7 +464,7 @@ define([
         originalModel.connection = originalModel.connection.toJSON();
       } else {
         // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = new FieldDB.Connection(OPrime.defaultConnection()).toJSON();
+        originalModel.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection()).toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }
@@ -898,7 +898,7 @@ define([
              * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
              */
             var potentialdbname = response.corpus.dbname;
-            var connection = OPrime.defaultConnection();
+            var connection = FieldDB.Connection.defaultConnection();
             connection.dbname = potentialdbname;
             var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
 

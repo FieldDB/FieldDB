@@ -11,29 +11,7 @@ OPrime.lexiconUrl = "https://localhost:3185";
 OPrime.corpusUrl = "https://localhost:3186";
 OPrime.activityUrl = "https://localhost:3187";
 OPrime.widgetUrl = "https://localhost:3188";
-OPrime.chromeClientUrl = function() {
-  return window.location.origin;
-};
 
-/*
- * This function is the same in all webservicesconfig, now any couchapp can
- * login to any server, and register on the corpus server which matches its
- * origin.
- */
-OPrime.defaultConnection = function() {
-  var localhost = {
-    protocol: "https://",
-    domain: "localhost",
-    port: "6984",
-    dbname: "default",
-    path: "",
-    authUrl: "https://localhost:3183",
-    userFriendlyServerName: "Localhost"
-  };
-  connection = localhost;
-  OPrime.authUrl = "https://localhost:3183";
-  return connection;
-};
 OPrime.getAuthUrl = function(userFriendlyServerName) {
   var authUrl = "https://localhost:3183";
   return authUrl;

@@ -122,10 +122,10 @@ require(
       try {
         dbnameid = dbname + "_id";
         Pouch.replicate('idb://' + dbnameid,
-          'https://corpusdev.lingsync.org/' + dbname, {
+          'https://corpus.lingsync.org/' + dbname, {
             complete: function() {
               $("#dashboard_loading_spinner").append(
-                "<h2>Finished backing up " + dbname + " to " + "https://corpusdev.lingsync.org/" + dbname + "</h2>");
+                "<h2>Finished backing up " + dbname + " to " + "https://corpus.lingsync.org/" + dbname + "</h2>");
               /* Go to the next pouch */
               window.currentPouch++;
               if (window.currentPouch < window.pouches.length) {
@@ -136,7 +136,7 @@ require(
             },
             onChange: function(change) {
               $("#dashboard_loading_spinner").append(
-                "<div>Backing up " + dbname + " to " + "https://corpusdev.lingsync.org/" + dbname + " Change:  " + JSON.stringify(change) + '</div>');
+                "<div>Backing up " + dbname + " to " + "https://corpus.lingsync.org/" + dbname + " Change:  " + JSON.stringify(change) + '</div>');
             },
             onSuccess: function(info) {
               console.log("onsuccess");
@@ -144,12 +144,12 @@ require(
 
           },
           function(err, changes) {
-            console.log("Backing up " + dbname + " to " + 'https://corpusdev.lingsync.org/' + dbname, err,
+            console.log("Backing up " + dbname + " to " + 'https://corpus.lingsync.org/' + dbname, err,
               changes);
             if (!err) {
               window.actuallyReplicatedPouches.push(dbname);
               $("#dashboard_loading_spinner").append(
-                "<h2>Finished backing up " + dbname + " to " + "https://corpusdev.lingsync.org/" + dbname + "</h2>");
+                "<h2>Finished backing up " + dbname + " to " + "https://corpus.lingsync.org/" + dbname + "</h2>");
               $("#dashboard_loading_spinner").append(
                 "<small>Changes " + JSON.stringify(changes) + "</small>");
             }
@@ -199,7 +199,7 @@ require(
     FieldDB.CORS.makeCORSRequest({
       type: 'POST',
       withCredentials: true,
-      url: "https://corpusdev.lingsync.org/_session",
+      url: "https://corpus.lingsync.org/_session",
       data: corpusloginparams
     }).then(function(serverResults) {
       console.log("success", serverResults);

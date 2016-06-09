@@ -12,122 +12,8 @@ OPrime.corpusUrl = "https://corpusdev.lingsync.org";
 OPrime.activityUrl = "https://activitydev.lingsync.org";
 OPrime.widgetUrl = "https://widgetdev.lingsync.org";
 
-/*
- * Use the current app's chrome url, assuming if its a dev, they will have their
- * own url that is not from the market, and if its a bleeding edge user, they
- * will have the market one. In both cases it is save to return the
- * window.location.href but this code is added to be clear that there is also a
- * bleeding edge url for users.
- */
-OPrime.chromeClientUrl = function() {
-  if (window.location.origin != "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa") {
-    return window.location.origin;
-  } else {
-    return "chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa";
-  }
-};
-
-/*
- * This function is the same in all webservicesconfig, now any couchapp can
- * login to any server, and register on the corpus server which matches its
- * origin.
- */
-OPrime.defaultConnection = function() {
-  var localhost = {
-    protocol: "https://",
-    domain: "localhost",
-    port: "6984",
-    dbname: "default",
-    path: "",
-    authUrl: "https://localhost:3183",
-    userFriendlyServerName: "Localhost"
-  };
-  var testing = {
-    protocol: "https://",
-    domain: "corpusdev.lingsync.org",
-    port: "443",
-    dbname: "default",
-    path: "",
-    authUrl: "https://authdev.lingsync.org",
-    userFriendlyServerName: "LingSync Beta"
-  };
-  var production = {
-    protocol: "https://",
-    domain: "corpus.lingsync.org",
-    port: "443",
-    dbname: "default",
-    path: "",
-    authUrl: "https://auth.lingsync.org",
-    userFriendlyServerName: "LingSync.org"
-  };
-  var mcgill = {
-    protocol: "https://",
-    domain: "prosody.linguistics.mcgill.ca",
-    port: "443",
-    dbname: "default",
-    path: "/corpus",
-    authUrl: "https://prosody.linguistics.mcgill.ca/auth",
-    userFriendlyServerName: "McGill ProsodyLab"
-  };
-  var myaammia = {
-    protocol: "https://",
-    domain: "corpusdev.lingsync.org",
-    port: "443",
-    dbname: "default",
-    path: "",
-    authUrl: "https://authdev.lingsync.org",
-    userFriendlyServerName: "LingSync Myaamia"
-  };
-  OPrime.servers = [localhost, testing, production, mcgill, myaamia];
-  /*
-   * If its a couch app, it can only contact databases on its same origin, so
-   * modify the domain to be that origin. the chrome extension can contact any
-   * authorized server that is authorized in the chrome app's manifest
-   */
-  var connection = testing;
-  if (OPrime.isCouchApp()) {
-    if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    } else if (window.location.origin.indexOf("lingsync.org") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
-      connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
-    } else if (window.location.origin.indexOf("localhost") >= 0) {
-      connection = localhost;
-      OPrime.authUrl = "https://localhost:3183";
-    }
-  } else if (OPrime.isChromeApp()) {
-    if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
-      connection = mcgill;
-      OPrime.authUrl = "https://prosody.linguistics.mcgill.ca/auth";
-    } else if (window.location.origin
-      .indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    } else if (window.location.origin
-      .indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
-      connection = production;
-      OPrime.authUrl = "https://auth.lingsync.org";
-    } else if (window.location.origin
-      .indexOf("docjbffdphmligpdknoebnljjgmfamfd") >= 0) {
-      connection = myaamia;
-      OPrime.authUrl = myaammia.authUrl;
-    } else {
-      /*
-       * its probably a dev's chrome extension, use the corresponding connection
-       * for this build
-       */
-      connection = testing;
-      OPrime.authUrl = "https://authdev.lingsync.org";
-    }
-  }
-  return connection;
-};
 OPrime.getAuthUrl = function(userFriendlyServerName) {
-  var makingSureDefaultAuthIsSet = OPrime.defaultConnection();
+  var makingSureDefaultAuthIsSet = FieldDB.Connection.defaultConnection();
   var authUrl = userFriendlyServerName;
   if (authUrl.indexOf("LingSync.org") >= 0) {
     alert("This version of the app is only availible on Testing servers. It will be availible on the stable app sometime in February.");
@@ -175,7 +61,7 @@ OPrime.getAuthUrl = function(userFriendlyServerName) {
         OPrime
           .bug("We don't know which corpus server to use, so we will just let the user do what they are trying to do.");
       } else {
-        var connection = OPrime.defaultConnection();
+        var connection = FieldDB.Connection.defaultConnection();
         OPrime
           .bug("We know which corpus server to use, so we will just let the user do what they are trying to do but only in the couchapp.");
         connection = OPrime.servers[appropriateserver];
@@ -193,7 +79,7 @@ OPrime.getMostLikelyUserFriendlyAuthServerName = function(mostLikelyAuthUrl) {
   if (!mostLikelyAuthUrl) {
     mostLikelyAuthUrl = "LingSync.org";
   }
-  var makingSureDefaultAuthIsSet = OPrime.defaultConnection();
+  var makingSureDefaultAuthIsSet = FieldDB.Connection.defaultConnection();
   var authUrl = OPrime.authUrl;
   if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
     mostLikelyAuthUrl = "McGill ProsodyLab";

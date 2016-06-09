@@ -178,7 +178,7 @@ define([
       //      datumFields : DatumFields,
       //      sessionFields : DatumFields,
       //      searchFields : DatumFields,
-      //      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || OPrime.defaultConnection()
+      //      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || FieldDB.Connection.defaultConnection()
     },
     loadPermissions: function() {
       //TODO decide if we need this method in a corpus mask

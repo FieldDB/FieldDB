@@ -8,13 +8,12 @@ if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
   }
   window.location.replace(newTestingServerWithCORS);
 }
-/* If they have an old link, redirect them */
-if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-  var newTestingServerWithCORS = window.location.href.replace(
-    "corpusdev.lingsync.org", "corpus.lingsync.org");
+
+/* If they have an site link, redirect them to https */
+if (window.location.origin.indexOf(".lingsync.org") >= 0) {
+  var newTestingServerWithCORS = window.location.href.replace("dev.lingsync.org", ".lingsync.org");
   if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS
-      .replace("http", "https");
+    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
   }
   window.location.replace(newTestingServerWithCORS);
 }
