@@ -377,7 +377,7 @@ define([
       var authUrl = window.app.get("authentication").get("userPrivate").get("authUrl")
       var username = window.app.get("authentication").get("userPrivate").get("username")
       var subscription = function(password) {
-        if (password === "cancel"){
+        if (password === "cancel") {
           if (typeof authfailurecallback === "function") {
             authfailurecallback();
           }
@@ -513,33 +513,30 @@ define([
 
         var connection = serverResults.user.corpora[0];
         var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
-        window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
+        window.app.logUserIntoTheirCorpusServer(connection, dataToPost.username, dataToPost.password, function() {
+
+          var newCorpusToBeSaved = new FieldDB.Corpus({
+            connection: connection,
+            "title": serverResults.user.username + "'s Corpus",
+          });
+
+          newCorpusToBeSaved.whenDatabaseIsReady.then(function() {
+            if (Backbone.couch_connector && Backbone.couch_connector.config) {
+              Backbone.couch_connector.config.db_name = potentialdbname;
+            }
+            $(".spinner-status").html("Saving a corpus in your new database ...");
+
+          }, function() {
+            $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
+
+          });
+
           OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
 
-            if (OPrime.isBackboneCouchDBApp()) {
-              try {
-                Backbone.couch_connector.config.db_name = potentialdbname;
-              } catch (e) {
-                OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
-              }
-            } else {
-              alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
-            }
-            var newCorpusToBeSaved = new Corpus({
-              "filledWithDefaults": true,
-              "title": serverResults.user.username + "'s Corpus",
-              "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
-              "team": new UserMask({
-                username: dataToPost.username
-              }),
-              "connection": connection,
-              "dbname": connection.dbname,
-              "dateOfLastDatumModifiedToCheckForOldSession": JSON.stringify(new Date())
-            });
+
 
             newCorpusToBeSaved.prepareANewPouch(connection, function() {
               //                    alert("Saving new corpus in register.");
-              $(".spinner-status").html("Saving a corpus in your new database ...");
 
               window.functionToSaveNewCorpus = function() {
                 newCorpusToBeSaved.save(null, {
@@ -564,7 +561,6 @@ define([
                   },
                   error: function(e, f, g) {
                     //                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
-                    $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
                     window.corpusToBeSaved = newCorpusToBeSaved;
                     window.setTimeout(window.functionToSaveNewCorpus, 10000);
                   }

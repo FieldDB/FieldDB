@@ -1,4 +1,4 @@
-/* globals localStorage */
+/* globals localStorage, setTimeout */
 "use strict";
 
 var Q = require("q");
@@ -975,6 +975,42 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             }
           }
         });
+    }
+  },
+
+  whenDatabaseIsReady: {
+    get: function() {
+      var deferred = Q.defer();
+      var self = this;
+      var exponentialBackoffTimer = 2 * 1000;
+
+      if (this._whenDatabaseIsReady) {
+        return this._whenDatabaseIsReady;
+      }
+
+      var contactServer = function() {
+        CORS.makeCORSRequest({
+          type: "GET",
+          url: self.url,
+          data: {}
+        }).then(function(serverResults) {
+          self.warn(serverResults);
+          deferred.resolve(self);
+        }, function(reason) {
+          self.warn(reason);
+          if (exponentialBackoffTimer > 2 * 60 * 1000) {
+            return deferred.reject(reason);
+          }
+
+          setTimeout(contactServer, exponentialBackoffTimer);
+          exponentialBackoffTimer = exponentialBackoffTimer * exponentialBackoffTimer;
+        });
+      };
+
+      contactServer();
+    },
+    set: function(value) {
+      this._whenDatabaseIsReady = value;
     }
   },
 
