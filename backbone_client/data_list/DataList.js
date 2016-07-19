@@ -435,6 +435,13 @@ define([
      * @param failurecallback
      */
     setAsCurrentDataList: function(successcallback, failurecallback) {
+      if (!window.app || window.app.get !== "function") {
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        return;
+      }
+
       if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();

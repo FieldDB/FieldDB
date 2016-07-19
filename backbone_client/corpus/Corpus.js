@@ -1388,9 +1388,19 @@ define([
      * @param failurecallback
      */
     setAsCurrentCorpus: function(successcallback, failurecallback) {
+      if (!window.app || window.app.get !== "function") {
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        return;
+      }
+
       if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").id != this.id) {
         window.app.set("corpus", this);
       }
+
+      window.app.changePouch(this.get("connection"));
+
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").connection = this.get("connection");
       window.app.get("authentication").saveAndInterConnectInApp();
