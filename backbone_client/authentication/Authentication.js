@@ -94,7 +94,7 @@ define([
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server, the server will overwrite their details. should we automatically check here, or should we make htem a button when they are authetnticated to test if they ahve lost their prefs etc?
       }
       var self = this;
-      var authUrl = FieldDB.Connection.defaultConnection(user.get("authUrl")).authUrl;
+      var authUrl = new FieldDB.Connection(FieldDB.Connection.defaultConnection(user.get("authUrl"))).authUrl;
       FieldDB.CORS.makeCORSRequest({
         type: 'POST',
         withCredentials: true,
@@ -310,11 +310,6 @@ define([
           // OPrime.redirect("backup_pouches.html");
           // return;
         }
-      }
-      /* As of version v1.90 take all stable and mcgill users to the online app */
-      if (window.location.hostname === "ocmdknddgpmjngkhcbcofoogkommjfoj" || window.location.hostname === "jlbnogfhkigoniojfngfcglhphldldgi") {
-        console.log("This is a prototype stable user, or a mcgill user, who has been backed up. Taking them directly to the spreadsheet app.");
-        OPrime.redirect("http://app.lingsync.org");
       }
 
       this.saveServerResponseToUser(data, callbackload);
