@@ -735,7 +735,9 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     } else if (optionalHREF.indexOf("localhost") >= 0) {
       connection = Connection.knownConnections[otherwise];
     } else if (optionalHREF.indexOf("chrome-extension") === 0) {
-      connection = Connection.knownConnections.beta;
+      connection = Connection.knownConnections[otherwise];
+    } else if (optionalHREF.indexOf("file") === 0) {
+      connection = Connection.knownConnections[otherwise];
     }
   }
 
