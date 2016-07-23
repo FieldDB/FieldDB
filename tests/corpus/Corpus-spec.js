@@ -70,6 +70,7 @@ describe("Corpus", function() {
   });
 
   describe("prefs", function() {
+
     it("should have prefs but not serialize if not customized", function() {
       var corpus = new Corpus(JSON.parse(JSON.stringify(SAMPLE_v1_CORPUS_MODELS[0])));
       expect(corpus.prefs).toBeDefined();
@@ -177,7 +178,6 @@ describe("Corpus", function() {
       expect(corpus.preferredDatumTemplateAtVersion).toEqual(corpus.version);
     });
 
-
   });
 
   describe("datum creation", function() {
@@ -259,7 +259,7 @@ describe("Corpus", function() {
       expect(corpus.dbname).toEqual("testingnewdatum-kartuli");
 
       var newcorpus = corpus.newCorpus();
-      expect(newcorpus.dbname).toEqual("testingnewdatum-kartulicopy");
+      expect(newcorpus.dbname).toEqual("testingnewdatum-kartuli_copy");
 
       corpus.debug(newcorpus.toJSON());
       expect(newcorpus.title).toEqual("ქართული copy");
@@ -597,7 +597,7 @@ describe("Corpus", function() {
 
     });
 
-    xit("should change the dbname of the datum to the target corpus dbname", function() {
+    it("should change the dbname of the datum to the target corpus dbname", function() {
       expect(true).toBeTruthy();
     });
 
