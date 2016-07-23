@@ -404,17 +404,27 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
 
   corpusUrl: {
     get: function() {
+      var corpusurl;
+
       this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
 
       if (this.corpusUrls && this.corpusUrls[0]) {
-        return this.corpusUrls[0];
+        corpusurl = this.corpusUrls[0];
+
+        if (this.dbname && corpusurl.indexOf(this.dbname) === -1) {
+          // if its a couchdb, use the dbname in the url
+          if (corpusurl.indexOf("984") > -1 || corpusurl.indexOf("https://corpusdev.") > -1 || corpusurl.indexOf("https://corpus.") > -1) {
+            corpusurl = corpusurl + "/" + this.dbname;
+          }
+        }
+        return corpusurl;
       }
 
       if (!this.domain || !this.dbname) {
         return "";
       }
 
-      var corpusurl = this.protocol + this.domain;
+      corpusurl = this.protocol + this.domain;
       if (this.port && this.port !== "443" && this.port !== "80") {
         corpusurl = corpusurl + ":" + this.port;
       }
@@ -587,7 +597,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
  * origin.
  */
 Connection.knownConnections = {
-  localhost: {
+  localhost: new Connection({
     protocol: "https://",
     domain: "localhost",
     port: "6984",
@@ -598,8 +608,8 @@ Connection.knownConnections = {
     websiteUrls: ["https://localhost:3182"],
     corpusUrls: ["https://localhost:6984"],
     userFriendlyServerName: "Localhost"
-  },
-  beta: {
+  }),
+  beta: new Connection({
     protocol: "https://",
     domain: "corpusdev.lingsync.org",
     port: "443",
@@ -611,8 +621,8 @@ Connection.knownConnections = {
     websiteUrls: ["http://lingsync.org"],
     corpusUrls: ["https://corpusdev.lingsync.org"],
     userFriendlyServerName: "LingSync Beta"
-  },
-  lingsync: {
+  }),
+  lingsync: new Connection({
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
@@ -624,8 +634,8 @@ Connection.knownConnections = {
     websiteUrls: ["http://lingsync.org"],
     corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "LingSync.org"
-  },
-  mcgill: {
+  }),
+  mcgill: new Connection({
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
@@ -636,8 +646,8 @@ Connection.knownConnections = {
     websiteUrls: ["http://lingsync.org"],
     corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "McGill ProsodyLab"
-  },
-  concordia: {
+  }),
+  concordia: new Connection({
     protocol: "https://",
     domain: "corpus.lingsync.org",
     port: "443",
@@ -648,9 +658,18 @@ Connection.knownConnections = {
     websiteUrls: ["http://lingsync.org"],
     corpusUrls: ["https://corpus.lingsync.org"],
     userFriendlyServerName: "Concordia Linguistics"
-  }
+  })
 };
 Connection.knownConnections.production = Connection.knownConnections.lingsync;
+Connection.knownConnections.development = Connection.knownConnections.beta;
+
+/**
+ * Set otherwise to be the default connection of this app.
+ *
+ * By Default, apps will try to contact NODE_ENV,
+ * if in a browser they will try to contact beta unless you specify Connection.otherwise
+ */
+Connection.otherwise = null;
 
 Connection.defaultConnection = function(optionalHREF, passAsReference) {
   /*
@@ -659,19 +678,21 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
    * authorized server that is authorized in the chrome app's manifest
    */
   var connection;
-  var otherwise = "production";
+  var otherwise;
   try {
-    otherwise = process.env.NODE_DEPLOY_TARGET || "localhost";
+    otherwise = process.env.NODE_ENV;
   } catch (e) {
     // not running in node environment.
   }
+
+  otherwise = otherwise || Connection.otherwise || "beta";
 
   /* Ensuring at least the localhost connection is known */
   if (!Connection.knownConnections) {
     Connection.knownConnections = {};
   }
   if (!Connection.knownConnections.localhost) {
-    Connection.knownConnections.localhost = {
+    Connection.knownConnections.localhost = new Connection({
       protocol: "https://",
       domain: "localhost",
       port: "6984",
@@ -680,9 +701,9 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       serverLabel: "localhost",
       brandLowerCase: "localhost",
       authUrls: ["https://localhost:3183"],
-      // corpusUrls: ["https://localhost:6984"],
+      corpusUrls: ["https://localhost:6984"],
       userFriendlyServerName: "Localhost"
-    };
+    });
   }
   if (!optionalHREF && FieldDBObject.application && FieldDBObject.application.connection) {
     connection = FieldDBObject.application.connection;
@@ -718,6 +739,18 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   } else {
     if (optionalHREF.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
       connection = Connection.knownConnections.mcgill;
+    } else if (optionalHREF === "LingSync Beta") {
+      connection = Connection.knownConnections.beta;
+    } else if (optionalHREF === "LingSync Testing") {
+      connection = Connection.knownConnections.beta;
+    } else if (optionalHREF === "LingSync") {
+      connection = Connection.knownConnections.production;
+    } else if (optionalHREF === "Localhost") {
+      connection = Connection.knownConnections.localhost;
+    } else if (optionalHREF === "McGill ProsodyLab") {
+      connection = Connection.knownConnections.mcgill;
+    } else if (optionalHREF === "Concordia") {
+      connection = Connection.knownConnections.concordia;
     } else if (optionalHREF.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
       connection = Connection.knownConnections.beta;
     } else if (optionalHREF.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
@@ -760,7 +793,9 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     try {
       connectionUrlObject = new Connection.URLParser(optionalHREF);
     } catch (e) {
-      connectionUrlObject = Connection.URLParser.parse(optionalHREF);
+      if (e.message.indexOf("Invalid URL") === -1) {
+        connectionUrlObject = Connection.URLParser.parse(optionalHREF);
+      }
       // console.log("Cant use new Connection.URLParser() in this environment.", connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
@@ -772,7 +807,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
         domainName.shift();
       }
       domainName = domainName.join(".");
-      connection = {
+      connection = new Connection({
         protocol: connectionUrlObject.protocol + "//",
         domain: connectionUrlObject.hostname,
         port: connectionUrlObject.port,
@@ -782,15 +817,12 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
         brandLowerCase: domainName.substring(0, domainName.lastIndexOf(".")),
         authUrls: [optionalHREF],
         userFriendlyServerName: domainName
-      };
+      });
       Connection.knownConnections[connection.serverLabel] = connection;
     }
   }
   if (!passAsReference) {
-    connection = JSON.parse(JSON.stringify(connection));
-    // delete connection.fieldDBtype;
-    // connection = new Connection(connection);
-    connection = new Connection(connection).clone(); /* causes corpus urls to be shared accross connections */
+    return connection.clone();
   }
   return connection;
 };
