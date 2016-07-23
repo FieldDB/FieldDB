@@ -685,6 +685,10 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     // not running in node environment.
   }
 
+  if (FieldDBObject.application && FieldDBObject.application.brandLowerCase) {
+    otherwise = FieldDBObject.application.brandLowerCase;
+  }
+
   otherwise = otherwise || Connection.otherwise || "beta";
 
   /* Ensuring at least the localhost connection is known */
@@ -720,6 +724,19 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       }
     } catch (e) {
       connection = Connection.knownConnections[otherwise];
+      // if they specified an otherwise that doesnt exist correct it
+      // to use beta
+      if (!connection) {
+        if (Connection.otherwise === otherwise) {
+          Connection.otherwise = "beta";
+        }
+        if (FieldDBObject.application.brandLowerCase === otherwise) {
+          Connection.prototype.warn("Overwriting FieldDBObject.application.brandLowerCase " + FieldDBObject.application.brandLowerCase + " to use the beta project.");
+          FieldDBObject.application.brandLowerCase = "lingsync_beta";
+        }
+        otherwise = "beta";
+        connection = Connection.knownConnections[otherwise];
+      }
       optionalHREF = connection.authUrls[0];
     }
   }

@@ -1,14 +1,19 @@
 "use strict";
 var Connection;
+var FieldDBObject;
 try {
   /* globals FieldDB */
   if (FieldDB) {
     Connection = FieldDB.Connection;
+    FieldDBObject = FieldDB.FieldDBObject;
   }
 } catch (e) {
   Connection = require("./../../api/corpus/Connection").Connection;
   Connection.URLParser = require("url");
 }
+
+Connection = Connection || require("./../../api/corpus/Connection").Connection;
+FieldDBObject = FieldDBObject || require("./../../api/FieldDBObject").FieldDBObject;
 
 describe("Connection ", function() {
 
@@ -36,7 +41,7 @@ describe("Connection ", function() {
 
   });
 
-  xdescribe("knownConnections", function() {
+  describe("knownConnections", function() {
 
     it("should have some known connections", function() {
       expect(Connection.knownConnections.localhost).toBeDefined();
@@ -49,7 +54,7 @@ describe("Connection ", function() {
 
     it("should be able to add known connections", function() {
       Connection.knownConnections.myproject = new Connection({
-        serverLabel: myproject
+        // serverLabel: "myproject"
       });
 
       expect(Connection.knownConnections.myproject).toEqual({
@@ -60,7 +65,7 @@ describe("Connection ", function() {
 
   });
 
-  xdescribe("defaultConnection", function() {
+  describe("defaultConnection", function() {
     beforeEach(function() {
       process.env.NODE_ENV = "";
       Connection.otherwise = null;
@@ -148,9 +153,60 @@ describe("Connection ", function() {
       var connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("production");
     });
+
+    it("should use application.brandLowerCase if specified", function() {
+      var connection = Connection.defaultConnection();
+      expect(connection.serverLabel).toEqual("beta");
+
+      FieldDBObject.application = {
+        brandLowerCase: "lingsync"
+      };
+      var connection = Connection.defaultConnection();
+      expect(connection.serverLabel).toEqual("production");
+    });
+
+    it("should correct application.brandLowerCase if it doesnt exist in known connections", function() {
+      FieldDBObject.application = {
+        brandLowerCase: "someghingthatdoesntexistinknownconnections"
+      };
+      var connection = Connection.defaultConnection();
+      expect(connection.serverLabel).toEqual("beta");
+      expect(FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
+    });
+
+    xit("should be able to get a default connection", function() {
+      var connection = Connection.defaultConnection("Localhost");
+      expect(connection).toEqual({
+        _fieldDBtype: 'Connection',
+        protocol: 'https://',
+        _domain: 'localhost',
+        port: '6984',
+        path: '',
+        serverLabel: 'localhost',
+        authUrls: ['https://localhost:3183'],
+        websiteUrls: ['https://localhost:3182'],
+        corpusUrls: [],
+        userFriendlyServerName: 'Localhost',
+        _brandLowerCase: 'localhost',
+        _version: 'v4.6.5',
+        clientUrls: [],
+        lexiconUrls: [],
+        searchUrls: [],
+        audioUrls: [],
+        activityUrls: [],
+        _dateCreated: connection._dateCreated
+      });
+    });
   });
 
   describe("urls", function() {
+    beforeEach(function() {
+      process.env.NODE_ENV = "";
+      Connection.otherwise = null;
+      if (FieldDBObject.application && FieldDBObject.application.brandLowerCase) {
+        FieldDBObject.application.brandLowerCase = "";
+      }
+    });
 
     it("should be able to set an auth url", function() {
       var connection = Connection.defaultConnection("Localhost");
@@ -245,30 +301,6 @@ describe("Connection ", function() {
       connection = Connection.defaultConnection("Localhost");
       connection.dbname = "jenkins-firstcorpus";
       expect(connection.corpusUrl).toEqual("https://localhost:6984/jenkins-firstcorpus");
-    });
-
-    it("should be able to get a default connection", function() {
-      var connection = Connection.defaultConnection("Localhost");
-      expect(connection).toEqual({
-        _fieldDBtype: "Connection",
-        protocol: "https://",
-        _domain: "localhost",
-        port: "6984",
-        path: "",
-        serverLabel: "localhost",
-        authUrls: ["https://localhost:3183"],
-        websiteUrls: ["https://localhost:3182"],
-        corpusUrls: [],
-        userFriendlyServerName: "Localhost",
-        _brandLowerCase: "localhost",
-        _version: connection.version,
-        clientUrls: [],
-        lexiconUrls: [],
-        searchUrls: [],
-        audioUrls: [],
-        activityUrls: [],
-        _dateCreated: connection.dateCreated
-      });
     });
 
     it("should be able to get a couch url from a deprecated connection", function() {
