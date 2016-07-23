@@ -2106,7 +2106,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       delete json.dbname;
       delete json.pouchname;
 
-      return json;
+      return new this.constructor(json);
     }
   },
 

@@ -265,8 +265,10 @@ describe("FieldDBObject", function() {
     it("should not clone id and rev", function() {
       expect(penguin.rev).toEqual("2-123");
       var babypenguin = penguin.clone();
+
+      expect(babypenguin instanceof FieldDBObject).toBeTruthy();
       expect(penguin.rev).toEqual("2-123");
-      expect(babypenguin.rev).toBeUndefined();
+      expect(babypenguin.rev).toEqual("");
     });
 
     it("should clone objects deeply", function() {
@@ -287,14 +289,19 @@ describe("FieldDBObject", function() {
         _rev: "8-ojqa3ja0eios09k3aw",
         utterance: "noqata tusunaywanmi",
         translation: "I feel like dancing",
+        dateCreated: 1469294300622,
+        version: "0.2.28ss",
         sessionTypeThing: new FieldDBObject({
           _id: "9a0j0ejoi32jo",
           _rev: "29-903jaoijoiw3ajow",
           page: "34",
           publisher: "MITWPL",
+          dateCreated: 1469294600622,
+          version: "0.1.1",
           speakerTypeThing: new FieldDBObject({
             _id: "yuioiuni98y932",
             _rev: "3-i3orj0jw203j",
+            version: "3.110.1",
             fields: []
           })
         })
@@ -302,29 +309,31 @@ describe("FieldDBObject", function() {
 
       var clonedParentForMinimalPairs = datumTypeThing.clone();
       expect(clonedParentForMinimalPairs).toEqual({
-        fieldDBtype: "FieldDBObject",
         utterance: "noqata tusunaywanmi",
         translation: "I feel like dancing",
+        _dateCreated: 1469294300622,
+        _version: "0.2.28ss",
         sessionTypeThing: {
           fieldDBtype: "FieldDBObject",
           page: "34",
           publisher: "MITWPL",
+          dateCreated: 1469294600622,
+          version: "0.1.1",
           speakerTypeThing: {
             fieldDBtype: "FieldDBObject",
             fields: [],
-            version: datumTypeThing.version,
+            dateCreated: clonedParentForMinimalPairs.sessionTypeThing.speakerTypeThing.dateCreated,
+            version: "3.110.1",
             relatedData: [{
               URI: "yuioiuni98y932?rev=3-i3orj0jw203j",
               relation: "clonedFrom"
             }]
           },
-          version: datumTypeThing.version,
           relatedData: [{
             URI: "9a0j0ejoi32jo?rev=29-903jaoijoiw3ajow",
             relation: "clonedFrom"
           }]
         },
-        version: datumTypeThing.version,
         relatedData: [{
           URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
           relation: "clonedFrom"
@@ -365,6 +374,38 @@ describe("FieldDBObject", function() {
         URI: "firstPenguin?rev=2-123",
         relation: "clonedFrom"
       }]);
+    });
+
+    it("should be an instanceof the same type", function() {
+
+      var Child = function Child(options) {
+        this.debug("In Child ", options);
+        FieldDBObject.apply(this, arguments);
+        this._fieldDBtype = "Child";
+      };
+
+      Child.prototype = Object.create(FieldDBObject.prototype, /** @lends Child.prototype */ {
+        constructor: {
+          value: Child
+        }
+      });
+
+      var one = new Child({
+        aproperty: "adifferentvalue"
+      });
+
+      var two = one.clone();
+
+      expect(two).toEqual({
+        aproperty: 'adifferentvalue',
+        _dateCreated: two.dateCreated,
+        _version: two.version,
+        _fieldDBtype: 'Child'
+      });
+
+      expect(two instanceof Child).toBeTruthy();
+      expect(two instanceof FieldDBObject).toBeTruthy();
+
     });
 
   });
