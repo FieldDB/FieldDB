@@ -247,6 +247,8 @@ describe("CorpusMask ", function() {
         "titleAsUrl": "computatio____entry_tutoria"
       };
 
+      expect(corpus.connection instanceof Connection).toBeTruthy();
+
       expect(corpus.connection.pouchname).toEqual("computationalfieldworkshop-group_data_entry_tutorial");
       expect(corpus.connection.title).toEqual(corpus.title);
       expect(corpus.connection.pouchname).toEqual(corpus.connection.pouchname);
@@ -260,12 +262,10 @@ describe("CorpusMask ", function() {
 
       //if the parent dbname changes, so should the corpus connection
       var duplicatedCorpus = corpus.clone();
-      duplicatedCorpus = new CorpusMask(duplicatedCorpus);
       duplicatedCorpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
       expect(duplicatedCorpus.connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
       // connections.push(connection.toJSON("complete"));
-
     });
   });
 });
