@@ -691,9 +691,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             username: self.dbname.split("-")[0],
             password: "testtest",
             confirmPassword: "testtest",
-            connection: new Connection(Connection.knownConnections.production)
+            connection: Connection.defaultConnection()
           };
-          options.authUrl = options.connection.authUrl;
         }
 
         if (!options) {
@@ -704,8 +703,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           });
           return;
         }
-
-        options.authUrl = self.deduceAuthUrl(options.authUrl);
 
         if (!options.username) {
           deferred.reject({
@@ -775,6 +772,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           options.appbrand = self.application.brandLowerCase;
         }
         options.appVersionWhenCreated = self.version;
+
+        options.authUrl = options.connection.authUrl;
+        options.authUrl = self.deduceAuthUrl(options.authUrl);
 
         Database.CORS.makeCORSRequest({
           type: "POST",
