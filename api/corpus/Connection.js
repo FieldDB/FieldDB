@@ -727,15 +727,8 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       // if they specified an otherwise that doesnt exist correct it
       // to use beta
       if (!connection) {
-        if (Connection.otherwise === otherwise) {
-          Connection.otherwise = "beta";
-        }
-        if (FieldDBObject.application.brandLowerCase === otherwise) {
-          Connection.prototype.warn("Overwriting FieldDBObject.application.brandLowerCase " + FieldDBObject.application.brandLowerCase + " to use the beta project.");
-          FieldDBObject.application.brandLowerCase = "lingsync_beta";
-        }
-        otherwise = "beta";
-        connection = Connection.knownConnections[otherwise];
+        FieldDBObject.bug('I dont know how to connect to ' + otherwise + ' please report this.');
+        throw new Error('I dont know how to connect to ' + otherwise + ' please report this.');
       }
       optionalHREF = connection.authUrls[0];
     }

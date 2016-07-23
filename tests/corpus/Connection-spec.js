@@ -169,12 +169,16 @@ describe("Connection ", function() {
       FieldDBObject.application = {
         brandLowerCase: "someghingthatdoesntexistinknownconnections"
       };
-      var connection = Connection.defaultConnection();
-      expect(connection.serverLabel).toEqual("beta");
-      expect(FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
+      try {
+        var connection = Connection.defaultConnection();
+        expect(connection.serverLabel).toEqual("beta");
+        expect(FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
+      } catch (err) {
+        expect(err.message).toEqual("I dont know how to connect to someghingthatdoesntexistinknownconnections please report this.");
+      }
     });
 
-    xit("should be able to get a default connection", function() {
+    it("should be able to get a default connection", function() {
       var connection = Connection.defaultConnection("Localhost");
       expect(connection).toEqual({
         _fieldDBtype: 'Connection',
