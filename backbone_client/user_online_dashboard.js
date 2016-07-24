@@ -1,28 +1,6 @@
-/* If they have an old link, redirect them */
-if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
-  var newTestingServerWithCORS = window.location.href.replace(
-    "ifielddevs.iriscouch.com", "corpus.lingsync.org");
-  if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS
-      .replace("http", "https");
-  }
-  window.location.replace(newTestingServerWithCORS);
-}
-
-/* If they have an site link, redirect them to https */
-if (window.location.origin.indexOf(".lingsync.org") >= 0) {
-  var newTestingServerWithCORS = window.location.href.replace("dev.lingsync.org", ".lingsync.org");
-  if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
-  }
-  window.location.replace(newTestingServerWithCORS);
-}
-
-/* Make sure they use the https versions, if they are on a couchapp */
-if (window.location.origin.indexOf("localhost") == -1) {
-  if (window.location.protocol == "http:") {
-    window.location.replace(window.location.href.replace("http", "https"));
-  }
+/* Make sure they use the https versions, if they are not on localhost */
+if (window.location.protocol === "http:" && window.location.origin.indexOf("localhost") === -1) {
+  window.location.replace(window.location.href.replace("http", "https"));
 }
 
 // Set the RequireJS configuration
