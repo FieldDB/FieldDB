@@ -187,11 +187,13 @@ define([
         return this.originalParse(originalModel);
       }
 
+      if (!originalModel.connection) {
+        originalModel.connection = FieldDB.Connection.defaultConnection();
+      }
+
       if (!originalModel.brandLowerCase) {
-        var connection = FieldDB.Connection.defaultConnection();
-        originalModel = {
-          brandLowerCase: connection.brandLowerCase
-        };
+        originalModel.brandLowerCase = originalModel.connection.brandLowerCase;
+        originalModel.brand = originalModel.connection.userFriendlyServerName;
       }
 
       // originalModel.authentication = originalModel.authentication || {};
