@@ -26,11 +26,16 @@ define([
           });
 
           expect(app).toBeDefined();
-          app.on("change", function(model) {
-            expect(model.get("corpus")).toBeDefined();
+
+          setTimeout(function(){
+            expect(app.get("corpus")).toBeDefined();
+            expect(app.get("authentication")).toBeDefined();
+            expect(app.get("currentSession")).toBeDefined();
+            expect(app.get("currentDataList")).toBeDefined();
+            expect(FieldDB.FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
 
             done();
-          });
+          },500);
         });
       });
 
