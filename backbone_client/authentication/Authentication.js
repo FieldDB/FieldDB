@@ -101,48 +101,44 @@ define([
         url: authUrl + "/login",
         data: dataToPost
       }).then(function(serverResults) {
-        if (serverResults.userFriendlyErrors) {
-          window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger", "Login errors:");
-          if (typeof failcallback == "function") {
-            failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+        if (!dataToPost.syncDetails) {
+          var encryptedUserString = localStorage.getItem(dataToPost.username);
+          var localUser = self.get("confidential").decrypt(encryptedUserString);
+          if (localUser.indexOf("confidential:") !== 0) {
+            localUser = new FieldDB.User(JSON.parse(localUser));
+            console.log("todo merge the user's local prefs", localUser);
+            serverResults.user = (new FieldDB.User(serverResults.user).merge("self", localUser, "overwrite")).toJSON();
+            // TODO merge with user's local prefs
           }
-          if (typeof successcallback == "function") {
-            successcallback(null, serverResults.userFriendlyErrors); // tell caller that the user failed to
-            // authenticate
-          }
-        } else if (serverResults.user != null) {
-
-          if (!dataToPost.syncDetails) {
-            var encryptedUserString = localStorage.getItem(dataToPost.username);
-            var localUser = self.get("confidential").decrypt(encryptedUserString);
-            if (localUser.indexOf("confidential:") !== 0) {
-              localUser = new FieldDB.User(JSON.parse(localUser));
-              console.log("todo merge the user's local prefs", localUser);
-              serverResults.user = (new FieldDB.User(serverResults.user).merge("self", localUser,  "overwrite")).toJSON();
-              // TODO merge with user's local prefs
-            }
-          }
-
-          self.staleAuthentication = false;
-          serverResults.user.corpora = serverResults.user.corpora || serverResults.user.corpuses;
-          if (OPrime.isTouchDBApp()) {
-            /* if on android, turn on replication. */
-            var db = dataToPost.username + "-firstcorpus";
-            var dbServer = serverResults.user.corpora[0].domain;
-            if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.connection && serverResults.user.mostRecentIds.connection.dbname) {
-              db = serverResults.user.mostRecentIds.connection.dbname;
-              dbServer = serverResults.user.mostRecentIds.connection.domain;
-            }
-            Android.setCredentialsAndReplicate(db, username, password, dbServer);
-          }
-
-          self.saveServerResponseToUser(serverResults, successcallback);
         }
+
+        self.staleAuthentication = false;
+        serverResults.user.corpora = serverResults.user.corpora || serverResults.user.corpuses;
+        if (OPrime.isTouchDBApp()) {
+          /* if on android, turn on replication. */
+          var db = dataToPost.username + "-firstcorpus";
+          var dbServer = serverResults.user.corpora[0].domain;
+          if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.connection && serverResults.user.mostRecentIds.connection.dbname) {
+            db = serverResults.user.mostRecentIds.connection.dbname;
+            dbServer = serverResults.user.mostRecentIds.connection.domain;
+          }
+          Android.setCredentialsAndReplicate(db, username, password, dbServer);
+        }
+
+        self.saveServerResponseToUser(serverResults, successcallback);
       }, function(e) {
         var message = "There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs;
         if (e && e.userFriendlyErrors && typeof e.userFriendlyErrors.join === "function") {
           message = e.userFriendlyErrors.join(" ");
         }
+        // window.appView.toastUser(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs, "alert-danger", "Login errors:");
+        // if (typeof failcallback == "function") {
+        //   failcallback(serverResults.userFriendlyErrors.join("<br/>"));
+        // }
+        // if (typeof successcallback == "function") {
+        //   successcallback(null, serverResults.userFriendlyErrors); // tell caller that the user failed to
+        //   // authenticate
+        // }
 
         if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
         if (window.appView) {
@@ -283,8 +279,8 @@ define([
       userString = userString.replace(/authdev\.fieldlinguist\.com:3183/g, "authdev\.lingsync\.org");
       userString = userString.replace(/iriscouch\.com/g, "lingsync\.org");
       userString = userString.replace(/pouchname/g, 'dbname');
-      userString = userString.replace(/activitydev\./g, "activity\.");
-      userString = userString.replace(/corpusdev\./g, "corpus\.");
+      // userString = userString.replace(/activitydev\./g, "activity\.");
+      // userString = userString.replace(/corpusdev\./g, "corpus\.");
 
       /*
        * For debugging cors #838: Switch to use the corsproxy
@@ -322,7 +318,7 @@ define([
       for (var x in mostRecentPublicUser) {
         localStorage.setItem(x, mostRecentPublicUser[x]);
       }
-      OPrime.redirect("corpus.html");
+      // OPrime.redirect("corpus.html");
     },
 
     savePublicUserForOfflineUse: function() {
@@ -386,6 +382,10 @@ define([
       }
 
       if (!window.appView) {
+        return;
+      }
+
+      if (window.location.href.indexOf("corpus.html") > -1) {
         if (OPrime.isChromeApp()) {
           /* take them to the user page, they can log in there */
           return OPrime.redirect("user.html#login/" + corpusdbname);
