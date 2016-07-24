@@ -69,11 +69,11 @@ var App = function App(options) {
 
   if (!this.connection) {
     if (Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
-      this.connection = new Connection(Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference"));
+      this.connection = Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference");
     } else {
       try {
         if (window && window.location && window.location.href) {
-          this.connection = new Connection(Connection.defaultConnection(window.location.href, "passByReference"));
+          this.connection = Connection.defaultConnection(window.location.href, "passByReference");
         }
       } catch (e) {}
     }

@@ -94,7 +94,7 @@ define([
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server, the server will overwrite their details. should we automatically check here, or should we make htem a button when they are authetnticated to test if they ahve lost their prefs etc?
       }
       var self = this;
-      var authUrl = new FieldDB.Connection(FieldDB.Connection.defaultConnection(user.get("authUrl"))).authUrl;
+      var authUrl = FieldDB.Connection.defaultConnection(user.get("authUrl")).authUrl;
       FieldDB.CORS.makeCORSRequest({
         type: 'POST',
         withCredentials: true,

@@ -433,13 +433,13 @@ define([
       dataToPost.appbrand = FieldDB.Connection.defaultConnection().brandLowerCase;
       dataToPost.appVersionWhenCreated = this.appVersion;
       //Send a dbname to create
-      // var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+      // var corpusConnection = FieldDB.Connection.defaultConnection();
       // corpusConnection.dbname = "firstcorpus";
       // dataToPost.corpora = [corpusConnection];
       // dataToPost.mostRecentIds = {};
       // dataToPost.mostRecentIds.connection = JSON.parse(JSON.stringify(corpusConnection));
       // dataToPost.mostRecentIds.connection.dbname = dataToPost.username + "-" + dataToPost.mostRecentIds.connection.dbname;
-      // var activityConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+      // var activityConnection = FieldDB.Connection.defaultConnection();
       // activityConnection.dbname = dataToPost.username + "-activity_feed";
       // dataToPost.activityConnection = activityConnection;
       // var u = new UserMask();

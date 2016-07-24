@@ -458,13 +458,13 @@ define([
       /* Use the couch connection defined by this app. */
       if (originalModel.connection) {
         originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+        var normalizedConnection = FieldDB.Connection.defaultConnection();
         normalizedConnection.dbname = originalModel.connection.dbname;
         originalModel.connection.merge("self", normalizedConnection, "overwrite");
         originalModel.connection = originalModel.connection.toJSON();
       } else {
         // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection()).toJSON();
+        originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }
@@ -865,7 +865,7 @@ define([
     },
     'createCorpus': function(dataToPost) {
       dataToPost.serverCode = FieldDB.Connection.defaultConnection().brandLowerCase;
-      dataToPost.authUrl = new FieldDB.Connection(FieldDB.Connection.defaultConnection()).authUrl;
+      dataToPost.authUrl = FieldDB.Connection.defaultConnection().authUrl;
       dataToPost.newCorpusTitle = this.get("title");
 
       var functionForError = function(err) {

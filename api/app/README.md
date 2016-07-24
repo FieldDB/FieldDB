@@ -1,8 +1,8 @@
 # App
 
-Apps are very complex objects which can keep track of state you would want in an app. It can be serialized to a database or localstoraage so the user can pick up where they left off (to keep the serialized app lightweight when an app is serialized it keeps track of the id of its internal data, not the full data itself). 
+Apps are very complex objects which can keep track of state you would want in an app. It can be serialized to a database or localstoraage so the user can pick up where they left off (to keep the serialized app lightweight when an app is serialized it keeps track of the id of its internal data, not the full data itself).
 
-PsycholinguisticsApps can have more than one corpus, where the main corpus is where data is saved and there is a `stimuliCorpus` which contains the stimuli. 
+PsycholinguisticsApps can have more than one corpus, where the main corpus is where data is saved and there is a `stimuliCorpus` which contains the stimuli.
 
 The AppRouter knows how to take in a url and/or route params and load a specific corpus, datum, session, datalist, search result, import dashboard, user profile etc.
 
@@ -105,9 +105,9 @@ app.whiteListCORS = app.whiteListCORS.concat([
 app.knownConnections = new FieldDB.Corpora(FieldDB.Connection.knownConnections);
 app.knownConnections.primaryKey = "userFriendlyServerName";
 if (FieldDB.Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
-  app.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL, "passByReference"));
+  app.connection = FieldDB.Connection.defaultConnection(FieldDB.Database.prototype.BASE_AUTH_URL, "passByReference");
 } else {
-  app.connection = new FieldDB.Connection(FieldDB.Connection.defaultConnection(window.location.href, "passByReference"));
+  app.connection = FieldDB.Connection.defaultConnection(window.location.href, "passByReference");
 }
 app.knownConnections.unshift(app.connection);
 if (FieldDB.Database.prototype.BASE_DB_URL !== app.connection.corpusUrl) {
@@ -128,7 +128,7 @@ console.log("The other data knows how to access the application to see who is lo
 
 Use the user:
 
-Once you initialze an app, it will try to see if anyone is logged in and load that user for you. If no one is logged in, it does nothing. If no route params are passed and no prior state is found, it does nothing. You can wait for `authentication.resumingSessionPromise` or listen to the authentication events 
+Once you initialze an app, it will try to see if anyone is logged in and load that user for you. If no one is logged in, it does nothing. If no route params are passed and no prior state is found, it does nothing. You can wait for `authentication.resumingSessionPromise` or listen to the authentication events
 
 ```javascript
 app.authentication.resumingSessionPromise
@@ -148,7 +148,7 @@ console.log("This will show in the browser's language (or the user's prefered la
 
 Use the decryption:
 
-An app also knows how to ask the user to confirm their identity inorder to decrypt information client side if they have access to it. 
+An app also knows how to ask the user to confirm their identity inorder to decrypt information client side if they have access to it.
 
 ```javascript
 app
@@ -199,7 +199,7 @@ More examples of what the app can do, or how/why to use it are show in the ["it 
 
 You can find more sample ways to use Activies, and what Activies are supposed to know how to do in the ["it should do x" App specifications](../../tests/app/App-spec.js).
 
-To run the App test suite: 
+To run the App test suite:
 
 ```bash
 $ jasmine-node tests/app
@@ -213,7 +213,7 @@ The serialization of the App is not being used (only the serialization of the us
 
 ## JsDOCS
 
-There is also some auto generated documenation which was written when the project first began. It has some stuff but it's not particularly informative: 
+There is also some auto generated documenation which was written when the project first began. It has some stuff but it's not particularly informative:
 
 http://fielddb.github.io/docs/javascript/App.html
 
@@ -225,7 +225,7 @@ There are quite a few issues in the issue tracker which talk about apps, how the
 https://github.com/fielddb/fielddb/issues?utf8=✓&q=app
 
 
-## Known UI 
+## Known UI
 
 * [Backbone.js MVC](../../backbone_client/app/)
 * [Angular.js Directive](../../angular_client/modules/core/src/app/components/navbar)
