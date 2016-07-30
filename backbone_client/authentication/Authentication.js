@@ -193,12 +193,12 @@ define([
           "confidential": new Confidential({
             secretkey: user.hash
           }),
-          "userPrivate": new User(user)
+          "userPrivate": new User(user.toJSON())
         });
 
         OPrime.setCookie("username", user.username, 365);
         OPrime.setCookie("token", user.hash, 365);
-        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+        var u = auth.get("confidential").encrypt(JSON.stringify(user.toJSON()));
         localStorage.setItem(user.username, u);
         renderStatus("Building your database for you...");
 
