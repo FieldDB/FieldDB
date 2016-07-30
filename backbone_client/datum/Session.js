@@ -419,7 +419,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentSession: function(successcallback, failurecallback) {
-      if (!window.app || window.app.get !== "function"){
+      if (!window.app || typeof window.app.get !== "function"){
         if (typeof successcallback == "function") {
           successcallback();
         }
@@ -435,7 +435,7 @@ define([
         return;
       }
 
-      if (window.app.get("currentSession").id != this.id) {
+      if (!window.app.get("currentSession") || window.app.get("currentSession").id != this.id) {
         window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
         //      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
       }

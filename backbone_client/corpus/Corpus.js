@@ -1365,7 +1365,7 @@ define([
      * @param failurecallback
      */
     setAsCurrentCorpus: function(successcallback, failurecallback) {
-      if (!window.app || window.app.get !== "function") {
+      if (!window.app || typeof window.app.get !== "function") {
         if (typeof successcallback == "function") {
           successcallback();
         }
