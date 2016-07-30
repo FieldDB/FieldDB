@@ -228,7 +228,7 @@ require([
 //  /*
 //   * Check for user's cookie and the dashboard so we can load it
 //   */
-//  var username = OPrime.getCookie("username");
+//  var username = localStorage.getItem("username");
 //  //if(username == "lingllama"){
 //  //  loadFreshApp();
 //  //  return;

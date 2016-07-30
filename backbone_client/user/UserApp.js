@@ -42,10 +42,11 @@ define([
       /*
        * Check for user's cookie and the dashboard so we can load it
        */
-      var username = OPrime.getCookie("username");
+      var username = localStorage.getItem("username");
       if (username == null && username == "") {
         // new user, take them to the index which can handle new users.
-        OPrime.redirect('corpus.html');
+        OPrime.redirect("corpus.html");
+        return;
       }
 
       this.prepLocales();
@@ -54,22 +55,26 @@ define([
 
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
+      // Support version > 4.6.5
       var u = localStorage.getItem(username);
+
       // Support version > 4.6.5
       if (!u) {
         u = localStorage.getItem("encryptedUser");
       }
+
       if (!u) {
         OPrime.redirect("corpus.html");
         return;
       }
       appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        localStorage.removeItem("encryptedUser");
         if (success == null) {
           //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
-          //        OPrime.setCookie("username","");
-          //        OPrime.setCookie("token","");
-          //        localStorage.removeItem("encryptedUser");
-          //        OPrime.redirect('corpus.html');
+          //        localStorage.removeItem("username");
+          //        localStorage.removeItem("token");
+          //        localStorage.removeItem(username);
+          //        window.location.replace('index.html');
           return;
         } else {
           window.appView = new UserAppView({

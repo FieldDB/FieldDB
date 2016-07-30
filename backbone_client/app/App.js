@@ -140,6 +140,7 @@ define([
       window.onbeforeunload = this.warnUserAboutSavedSyncedStateBeforeUserLeaves;
 
       appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        localStorage.removeItem("encryptedUser");
 
         $(".spinner-status").html("Turning on continuous sync with your team server...");
         appself.replicateContinuouslyWithCouch(function() {
@@ -983,7 +984,6 @@ define([
             appSelf.get("authentication").saveAndInterConnectInApp(function() {
 
               appSelf.get("authentication").staleAuthentication = true;
-              //              localStorage.setItem("mostRecentDashboard", JSON.stringify(window.app.get("authentication").get("userPrivate").get("mostRecentIds")));
               if (window.appView) {
                 window.appView.toastUser("Your dashboard has been saved, you can exit the app at anytime and return to this state.", "alert-success", "Exit at anytime:");
               }

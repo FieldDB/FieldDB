@@ -103,20 +103,6 @@ define([
         this.unset("filledWithDefaults");
       }
       this.bind("change:publicCorpus", this.changeCorpusPublicPrivate, this);
-
-      //      var connection = this.get("connection");
-      //      if(!connection){
-      //        connection = JSON.parse(localStorage.getItem("mostRecentConnection"));
-      //        if(!localStorage.getItem("mostRecentConnection")){
-      //          alert("Bug, need to take you back to the users page.");
-      //        }
-      //        this.set("connection", connection);
-      //      }
-      //      this.pouch = Backbone.sync
-      //      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-      //        + connection.dbname : OPrime.pouchUrl
-      //        + connection.dbname);
-
     },
     loadOrCreateCorpusBydbname: function(connection, sucessloadingorCreatingcallback) {
       var couchurl = OPrime.getCouchUrl(connection);
@@ -663,14 +649,6 @@ define([
       title: "Untitled Corpus",
       titleAsUrl: "UntitledCorpus",
       description: "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
-      //      confidential :  Confidential,
-      //      source : Consultants,
-      //      datumStates : DatumStates,
-      //      datumFields : DatumFields,
-      //      conversationFields : DatumFields,
-      //      sessionFields : DatumFields,
-      //      searchFields : DatumFields,
-      //      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) ||new FieldDB.Connection(FieldDB.Connection.defaultConnection())
     },
 
     // Internal models: used by the parse function
