@@ -464,7 +464,7 @@ define([
       window.app.showSpinner();
       window.app.router.hideEverything();
       $(".spinner-status").html("Contacting the server...");
-      console.log("sending ", dataToPost);
+      if (OPrime.debugMode) console.log("sending ", dataToPost);
 
       /*
        * Contact the server and register the new user
@@ -475,12 +475,6 @@ define([
         url: dataToPost.authUrl + "/register",
         data: dataToPost
       }).then(function(serverResults) {
-        if (serverResults.userFriendlyErrors || !serverResults.user) {
-          $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs);
-          $(".welcome-screen-alerts").show();
-          return;
-        }
-
         localStorage.removeItem("username");
         localStorage.removeItem("mostRecentDashboard");
         localStorage.removeItem("mostRecentConnection");
