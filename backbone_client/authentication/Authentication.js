@@ -393,8 +393,7 @@ define([
 
         /* take them to the public user page, they can log in there */
         if (OPrime.isCouchApp()) {
-          var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin("public-firstcorpus");
-          return OPrime.redirect(optionalRedirectDomain + "user.html#login/" + corpusdbname);
+          return OPrime.redirect("user.html#login/" + corpusdbname);
         }
 
         return;

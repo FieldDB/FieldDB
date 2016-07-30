@@ -49,8 +49,7 @@ define([
     showQuickAuthenticateAndRedirectToDatabase: function(dbname) {
       window.app.set("corpus", new Corpus());
       window.app.get("authentication").syncUserWithServer(function() {
-        var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(dbname);
-        OPrime.redirect(optionalRedirectDomain + "corpus.html");
+        OPrime.redirect("corpus.html");
       });
     },
     guessCorpusIdAndShowDashboard: function(dbname) {
@@ -226,11 +225,7 @@ define([
       console.log("mostRecentIds", mostRecentIds);
       window.app.get("authentication").get("userPrivate").set("mostRecentIds", mostRecentIds);
       window.app.get("authentication").saveAndInterConnectInApp(function() {
-        var optionalRedirectDomain = "";
-        if (c.get("connection").dbname) {
-          optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(c.get("connection").dbname);
-        }
-        OPrime.redirect(optionalRedirectDomain + "corpus.html");
+        OPrime.redirect("corpus.html");
         return;
       });
     },
@@ -267,8 +262,7 @@ define([
               // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
-          var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(corpusdbname);
-          OPrime.redirect(optionalRedirectDomain + "user.html#/corpus/" + dbname);
+          OPrime.redirect("user.html#/corpus/" + dbname);
           return;
         }
       }

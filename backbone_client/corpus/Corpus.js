@@ -125,8 +125,7 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
-        var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin("public-firstcorpus");
-        OPrime.redirect(optionalRedirectDomain + "user.html");
+        OPrime.redirect("user.html");
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -915,8 +914,7 @@ define([
               }
 
               window.setTimeout(function() {
-                var optionalRedirectDomain = OPrime.guessRedirectUrlBasedOnWindowOrigin(potentialdbname);
-                OPrime.redirect(optionalRedirectDomain + "user.html#/corpus/" + potentialdbname);
+                OPrime.redirect("user.html#/corpus/" + potentialdbname);
               }, 1000);
 
             });
