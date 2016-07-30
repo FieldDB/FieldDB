@@ -194,7 +194,18 @@ sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../Praat-Scripts/packa
 mv output ../Praat-Scripts/package.json
 
 
+echo ""
+echo "Other client sides: "
+echo "... setting version on spreadsheet bower"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../spreadsheet/bower.json  > output
+mv output ../spreadsheet/bower.json
+echo "... setting version on spreadsheet npm"
+sed 's/"version": "[^,]*"/"version": "'$SHORT_VERSION'"/' ../spreadsheet/package.json  > output
+mv output ../spreadsheet/package.json
 
+echo "... setting version on spreadsheet controller"
+sed 's/appVersion = "[^,]*ss"/appVersion = "'$version'ss"/' ../spreadsheet/app/scripts/controllers/SpreadsheetController.js  > output
+mv output ../spreadsheet/app/scripts/controllers/SpreadsheetController.js
 
 
 echo "..... Done."
