@@ -682,11 +682,18 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   try {
     otherwise = process.env.NODE_ENV;
   } catch (e) {
-    // not running in node environment.
+
+  }
+  if (!otherwise) {
+    try {
+      otherwise = localStorage.getItem('brand');
+    } catch (e) {
+      // not running in node nor normal browser environment.
+    }
   }
 
-  if (FieldDBObject.application && FieldDBObject.application.brandLowerCase) {
-    otherwise = FieldDBObject.application.brandLowerCase;
+  if (FieldDBObject.application && FieldDBObject.application.serverLabel) {
+    otherwise = FieldDBObject.application.serverLabel;
   }
 
   otherwise = otherwise || Connection.otherwise || "beta";
@@ -832,6 +839,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     }
   }
   if (!passAsReference) {
+    console.log('connection is', connection);
     return connection.clone();
   }
   return connection;

@@ -191,8 +191,12 @@ define([
         originalModel.connection = FieldDB.Connection.defaultConnection();
       }
 
-      if (!originalModel.brandLowerCase) {
-        originalModel.brandLowerCase = originalModel.connection.brandLowerCase;
+      if (!(originalModel.connection instanceof FieldDB.Connection)) {
+        originalModel.connection = new FieldDB.Connection(originalModel.connection);
+      }
+
+      if (!originalModel.serverLabel) {
+        originalModel.serverLabel = originalModel.connection.serverLabel;
         originalModel.brand = originalModel.connection.userFriendlyServerName;
       }
 

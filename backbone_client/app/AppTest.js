@@ -32,7 +32,7 @@ define([
             expect(app.get("authentication")).toBeDefined();
             expect(app.get("currentSession")).toBeDefined();
             expect(app.get("currentDataList")).toBeDefined();
-            expect(FieldDB.FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
+            expect(FieldDB.FieldDBObject.application.serverLabel).toEqual("beta");
 
             done();
           },500);

@@ -154,25 +154,25 @@ describe("Connection ", function() {
       expect(connection.serverLabel).toEqual("production");
     });
 
-    it("should use application.brandLowerCase if specified", function() {
+    it("should use application.serverLabel if specified", function() {
       var connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("beta");
 
       FieldDBObject.application = {
-        brandLowerCase: "lingsync"
+        serverLabel: "lingsync"
       };
       var connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("production");
     });
 
-    it("should correct application.brandLowerCase if it doesnt exist in known connections", function() {
+    it("should correct application.serverLabel if it doesnt exist in known connections", function() {
       FieldDBObject.application = {
-        brandLowerCase: "someghingthatdoesntexistinknownconnections"
+        serverLabel: "someghingthatdoesntexistinknownconnections"
       };
       try {
         var connection = Connection.defaultConnection();
         expect(connection.serverLabel).toEqual("beta");
-        expect(FieldDBObject.application.brandLowerCase).toEqual("lingsync_beta");
+        expect(FieldDBObject.application.serverLabel).toEqual("lingsync_beta");
       } catch (err) {
         expect(err.message).toEqual("I dont know how to connect to someghingthatdoesntexistinknownconnections please report this.");
       }
@@ -207,8 +207,8 @@ describe("Connection ", function() {
     beforeEach(function() {
       process.env.NODE_ENV = "";
       Connection.otherwise = null;
-      if (FieldDBObject.application && FieldDBObject.application.brandLowerCase) {
-        FieldDBObject.application.brandLowerCase = "";
+      if (FieldDBObject.application && FieldDBObject.application.serverLabel) {
+        FieldDBObject.application.serverLabel = "";
       }
     });
 
