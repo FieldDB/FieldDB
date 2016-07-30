@@ -162,6 +162,63 @@ define([
 
       this.loadPublicUser();
     },
+
+    register: function(dataToPost, successCallback, errorCallback, renderProgress, renderStatus) {
+      if (this.registering) {
+        return;
+      }
+
+      this.registering = true;
+      errorCallback = errorCallback || function(err) {
+        console.warn('problem registering user', err);
+        throw err;
+      };
+
+      renderStatus = renderStatus || function(status) {
+        console.log(status);
+      };
+
+      if (typeof renderProgress === "function") {
+        renderProgress();
+      }
+
+      this.fielddbModel = this.fielddbModel || new FieldDB.Authentication();
+      this.fielddbModel.register(dataToPost).then(function(user) {
+        //Destropy cookies, and load the new user
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+
+        // var auth  = new Authentication({filledWithDefaults: true});
+        var auth = new Authentication({
+          "confidential": new Confidential({
+            secretkey: user.hash
+          }),
+          "userPrivate": new User(user)
+        });
+
+        OPrime.setCookie("username", user.username, 365);
+        OPrime.setCookie("token", user.hash, 365);
+        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+        localStorage.setItem(user.username, u);
+        renderStatus("Building your database for you...");
+
+        var corpus = new FieldDB.Corpus({
+          connection: user.corpora._collection[0]
+        });
+
+        return corpus.whenDatabaseIsReady;
+      }).then(function(corpus) {
+        /*
+         * Redirect the user to their user page which will ensure their corpus is valid
+         */
+        renderStatus("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
+
+        if (typeof successCallback === "function") {
+          successCallback(corpus);
+        }
+      }).catch(errorCallback);
+    },
+
     /**
      * This function parses the server response and injects it into the authentication's user public and user private
      *

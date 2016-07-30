@@ -31,6 +31,27 @@ define([
         expect(Authentication).toBeDefined();
       });
 
+      it("should register new users", function(done) {
+        var auth = new Authentication();
+
+        auth.register({
+          username: "test6",
+          password: "test",
+          confirmPassword: "test",
+          authUrl: "https://localhost:3183"
+        }, function(corpus) {
+          expect(corpus).toBeDefined();
+          expect(corpus.dbname).toBeDefined();
+
+          done();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.userFriendlyErrors).toBeDefined();
+
+          done();
+        }, null, null);
+      });
+
       it("should not log the user in if the server replies not-authenticated", function() {
         expect(Authentication).toBeDefined();
       });

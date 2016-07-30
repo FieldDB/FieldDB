@@ -987,6 +987,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (this._whenDatabaseIsReady) {
         return this._whenDatabaseIsReady;
       }
+      this._whenDatabaseIsReady = deferred.promise;
 
       var contactServer = function() {
         CORS.makeCORSRequest({
@@ -994,9 +995,16 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           url: self.url,
           data: {}
         }).then(function(serverResults) {
-          self.warn(serverResults);
-          deferred.resolve(self);
-        }, function(reason) {
+          self.debug(serverResults);
+
+          // Should have 11 docs in it
+          if (serverResults.doc_count > 2) {
+            return deferred.resolve(self);
+          }
+
+          setTimeout(contactServer, exponentialBackoffTimer);
+          exponentialBackoffTimer = exponentialBackoffTimer * exponentialBackoffTimer;
+        }).catch(function(reason) {
           self.warn(reason);
           if (exponentialBackoffTimer > 2 * 60 * 1000) {
             return deferred.reject(reason);
@@ -1008,6 +1016,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       };
 
       contactServer();
+
+      return this._whenDatabaseIsReady;
     },
     set: function(value) {
       this._whenDatabaseIsReady = value;
