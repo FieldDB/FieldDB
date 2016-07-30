@@ -174,7 +174,7 @@ define([
         if (!this.get("corpusMask")) {
           this.set("corpusMask", new CorpusMask());
         }
-        this.get("corpusMask").id = "corpus";
+        this.get("corpusMask").set("id", "corpus");
         this.get("corpusMask").fetch({
           sucess: function(model, response, options) {
             if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
@@ -417,6 +417,7 @@ define([
       originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       originalModel.connection = originalModel.connection || originalModel.couchConnection;
       originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
+      originalModel.corpusMask.corpusid = originalModel.corpusMask.corpusid || originalModel._id;
 
       /* clean the datum fields for search */
       for (x in originalModel.datumFields) {

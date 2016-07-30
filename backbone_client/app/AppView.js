@@ -215,10 +215,11 @@ define([
       }
     },
     setUpAndAssociatePublicViewsAndModelsWithCurrentCorpusMask: function(model, callback) {
-      this.publicCorpusReadEmbeddedView = new CorpusReadView({
-        model: model
-      });
-      this.publicCorpusReadEmbeddedView.format = "public";
+      // these dont seem to be used
+      // this.publicCorpusReadEmbeddedView = new CorpusReadView({
+      //   model: model
+      // });
+      // this.publicCorpusReadEmbeddedView.format = "public";
     },
     setUpAndAssociateViewsAndModelsWithCurrentSession: function(callback) {
       /*

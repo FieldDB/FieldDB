@@ -692,6 +692,7 @@ define([
         if (oldConnection) {
           corpusModel.set("connection", new FieldDB.Connection(oldConnection).toJSON());
         }
+        c.fetchPublicSelf();
 
         $(".spinner-status").html("Opened Corpus...");
         c.setAsCurrentCorpus(function() {
@@ -702,7 +703,6 @@ define([
            */
           c.datalists.fetchDatalists();
           c.sessions.fetchSessions();
-          c.fetchPublicSelf();
 
           var dl = new DataList({
             "dbname": connection.dbname
