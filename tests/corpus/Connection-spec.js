@@ -28,14 +28,14 @@ describe("Connection ", function() {
     it("should serialize", function() {
       var connection = new Connection().toJSON();
       expect(connection).toEqual({
-        fieldDBtype: 'Connection',
+        fieldDBtype: "Connection",
         corpusUrls: undefined,
-        brandLowerCase: '',
+        brandLowerCase: "",
         version: connection.version,
-        dbname: '',
-        pouchname: '',
-        title: '',
-        titleAsUrl: ''
+        dbname: "",
+        pouchname: "",
+        title: "",
+        titleAsUrl: ""
       });
     });
 
@@ -58,7 +58,7 @@ describe("Connection ", function() {
       });
 
       expect(Connection.knownConnections.myproject).toEqual({
-        _fieldDBtype: 'Connection',
+        _fieldDBtype: "Connection",
         _dateCreated: Connection.knownConnections.myproject._dateCreated
       });
     });
@@ -86,7 +86,7 @@ describe("Connection ", function() {
       expect(connection.serverLabel).toEqual("production");
 
       process.env.NODE_ENV = "development";
-      var connection = Connection.defaultConnection();
+      connection = Connection.defaultConnection();
 
       expect(connection.serverLabel).toEqual("beta");
     });
@@ -94,7 +94,7 @@ describe("Connection ", function() {
     it("should be able to add known connections", function() {
       Connection.knownConnections.myproject = new Connection();
       expect(Connection.knownConnections.myproject).toEqual({
-        _fieldDBtype: 'Connection',
+        _fieldDBtype: "Connection",
         _dateCreated: Connection.knownConnections.myproject._dateCreated
       });
     });
@@ -146,11 +146,11 @@ describe("Connection ", function() {
     });
 
     it("should use otherwise if specified", function() {
-      connection = Connection.defaultConnection();
+      var connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("beta");
 
-      Connection.otherwise = "production"
-      var connection = Connection.defaultConnection();
+      Connection.otherwise = "production";
+      connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("production");
     });
 
@@ -161,7 +161,7 @@ describe("Connection ", function() {
       FieldDBObject.application = {
         serverLabel: "lingsync"
       };
-      var connection = Connection.defaultConnection();
+      connection = Connection.defaultConnection();
       expect(connection.serverLabel).toEqual("production");
     });
 
@@ -181,18 +181,18 @@ describe("Connection ", function() {
     it("should be able to get a default connection", function() {
       var connection = Connection.defaultConnection("Localhost");
       expect(connection).toEqual({
-        _fieldDBtype: 'Connection',
-        protocol: 'https://',
-        _domain: 'localhost',
-        port: '6984',
-        path: '',
-        serverLabel: 'localhost',
-        authUrls: ['https://localhost:3183'],
-        websiteUrls: ['https://localhost:3182'],
+        _fieldDBtype: "Connection",
+        protocol: "https://",
+        _domain: "localhost",
+        port: "6984",
+        path: "",
+        serverLabel: "localhost",
+        authUrls: ["https://localhost:3183"],
+        websiteUrls: ["https://localhost:3182"],
         corpusUrls: [],
-        userFriendlyServerName: 'Localhost',
-        _brandLowerCase: 'localhost',
-        _version: 'v4.6.5',
+        userFriendlyServerName: "Localhost",
+        _brandLowerCase: "localhost",
+        _version: "v4.6.5",
         clientUrls: [],
         lexiconUrls: [],
         searchUrls: [],
@@ -239,7 +239,7 @@ describe("Connection ", function() {
         "https://auth.anotherserver.ca"
       ]);
 
-      expect(Connection.knownConnections.localhost.authUrls).toEqual(['https://localhost:3183']);
+      expect(Connection.knownConnections.localhost.authUrls).toEqual(["https://localhost:3183"]);
     });
 
 

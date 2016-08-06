@@ -1,4 +1,4 @@
-/* globals window, URL */
+/* globals window, URL, localStorage */
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var Diacritics = require("diacritics");
@@ -686,7 +686,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   }
   if (!otherwise) {
     try {
-      otherwise = localStorage.getItem('brand');
+      otherwise = localStorage.getItem("brand");
     } catch (e) {
       // not running in node nor normal browser environment.
     }
@@ -734,8 +734,8 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       // if they specified an otherwise that doesnt exist correct it
       // to use beta
       if (!connection) {
-        FieldDBObject.bug('I dont know how to connect to ' + otherwise + ' please report this.');
-        throw new Error('I dont know how to connect to ' + otherwise + ' please report this.');
+        FieldDBObject.bug("I dont know how to connect to " + otherwise + " please report this.");
+        throw new Error("I dont know how to connect to " + otherwise + " please report this.");
       }
       optionalHREF = connection.authUrls[0];
     }
@@ -839,7 +839,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     }
   }
   if (!passAsReference) {
-    console.log('connection is', connection);
+    // console.log("connection is", connection);
     return connection.clone();
   }
   return connection;

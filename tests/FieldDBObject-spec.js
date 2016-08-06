@@ -397,10 +397,10 @@ describe("FieldDBObject", function() {
       var two = one.clone();
 
       expect(two).toEqual({
-        aproperty: 'adifferentvalue',
+        aproperty: "adifferentvalue",
         _dateCreated: two.dateCreated,
         _version: two.version,
-        _fieldDBtype: 'Child'
+        _fieldDBtype: "Child"
       });
 
       expect(two instanceof Child).toBeTruthy();
