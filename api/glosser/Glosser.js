@@ -856,7 +856,6 @@ Glosser.prototype = Object.create(FieldDBObject.prototype, /** @lends Glosser.pr
 
   saveAndInterConnectInApp: {
     value: function(callback) {
-
       if (typeof callback === "function") {
         callback();
       }
