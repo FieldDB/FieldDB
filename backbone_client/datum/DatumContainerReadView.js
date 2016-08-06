@@ -103,8 +103,8 @@ define([
 
       // Get the current Corpus' Datum based on their date entered
       var self = this;
-      (new Datum({
-        "dbname": app.get("corpus").get("dbname")
+      (new Datums({
+        // "dbname": app.get("corpus").get("dbname")
       })).getMostRecentIdsByDate(nextNumberOfDatum, function(rows) {
         // If there are no Datum in the current Corpus
         if ((rows == null) || (rows.length <= 0)) {
