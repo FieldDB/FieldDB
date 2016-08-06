@@ -177,7 +177,7 @@ var SpreadsheetStyleDataEntryController = function($scope, $rootScope, $resource
     };
   }
 
-  $rootScope.appVersion = "3.42.08.00.40ss";
+  $rootScope.appVersion = "4.15.06.13.24ss";
 
   // Functions to open/close generic notification modal
   $rootScope.openNotification = function(size, showForgotPasswordInstructions) {
