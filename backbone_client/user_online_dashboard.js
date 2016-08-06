@@ -87,27 +87,26 @@ require.config({
 });
 
 // Initialization
-require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
-  try {
-    var pieces = window.location.pathname.replace(/^\//, "").split("/");
-    var dbname = pieces[0];
-    // Handle McGill server which runs out of a virtual directory
-    if (dbname == "corpus") {
-      dbname = pieces[1];
-    } else if (dbname.indexOf("html") > -1) {
-      dbname = "";
-    }
-    if (dbname) {
-      Backbone.couch_connector.config.db_name = dbname;
-    }
-  } catch (e) {
-    if (OPrime.debugMode)
-      OPrime.debug("Couldn't set the databse name off of the url.");
-  }
+require(["user/UserApp", "OPrime", "FieldDB"], function(UserApp) {
+  // try {
+  //   var pieces = window.location.pathname.replace(/^\//, "").split("/");
+  //   var dbname = pieces[0];
+  //   // Handle McGill server which runs out of a virtual directory
+  //   if (dbname == "corpus") {
+  //     dbname = pieces[1];
+  //   } else if (dbname.indexOf("html") > -1) {
+  //     dbname = "";
+  //   }
+  //   if (dbname) {
+  //     Backbone.couch_connector.config.db_name = dbname;
+  //   }
+  // } catch (e) {
+  //   if (OPrime.debugMode)
+  //     OPrime.debug("Couldn't set the databse name off of the url.");
+  // }
 
-  window.app = new App({
-    filledWithDefaults: true
-  });
+  window.app = new UserApp();
+  window.app.fillWithDefaults();
 });
 
 // // Initialization

@@ -51,8 +51,6 @@ define([
 
       this.prepLocales();
 
-      window.app = this;
-
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
       // Support version > 4.6.5
@@ -93,6 +91,8 @@ define([
     addActivity: function(jsonActivity) {
       if (OPrime.debugMode) OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
     },
+
+    loadBackboneObjectsByIdAndSetAsCurrentDashboard: null,
 
     /**
      * Smaller than the App version
