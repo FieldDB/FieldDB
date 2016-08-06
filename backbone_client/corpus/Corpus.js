@@ -1069,8 +1069,8 @@ define([
 
                     });
                   },
-                  error: function(e, f, g) {
-                    alert('New Corpus save error' + f.reason);
+                  error: function(model, error, options) {
+                    alert('New Corpus save error' + error.reason);
                   }
                 });
 

@@ -99,13 +99,13 @@ define([
               successcallback();
             }
           },
-          error: function(e, f, g) {
-            if (OPrime.debugMode) OPrime.debug('UserMask save error ' + f.reason);
+          error: function(mod, err, options) {
+            if (OPrime.debugMode) OPrime.debug('UserMask save error ' + err.reason);
             self.fetch({
-              error: function(model, xhr, options) {
+              error: function(model, error, options) {
                 if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
-                if (typeof successcallback == "function") {
-                  successcallback();
+                if (typeof failurecallback == "function") {
+                  failurecallback(error);
                 }
               },
               success: function(model, response, options) {

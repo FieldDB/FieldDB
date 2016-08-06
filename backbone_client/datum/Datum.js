@@ -1703,12 +1703,12 @@ define([
             successcallback();
           }
         },
-        error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("Datum save error", e, f, g)
+        error: function(model, err, options) {
+          if (OPrime.debugMode) OPrime.debug("Datum save error", model, err, options)
           if (typeof failurecallback == "function") {
-            failurecallback();
+            failurecallback(err);
           } else {
-            alert('Datum save error: ' + f.reason);
+            alert('Datum save error: ' + err.reason);
           }
         }
       });

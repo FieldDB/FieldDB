@@ -414,12 +414,12 @@ define([
             successcallback();
           }
         },
-        error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
+        error: function(model, err, options) {
+          if (OPrime.debugMode) OPrime.debug("DataList save error", model, err, options)
           if (typeof failurecallback == "function") {
-            failurecallback();
+            failurecallback(err);
           } else {
-            alert('DataList save error: ' + f.reason);
+            alert('DataList save error: ' + err.reason);
           }
         }
       });
