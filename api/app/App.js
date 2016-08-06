@@ -61,26 +61,44 @@ var App = function App(options) {
   FieldDBObject.apply(this, arguments);
 
   if (!this.knownConnections || !this.knownConnections.length) {
-    // Let client apps override current app connection by setting the auth and/or db url.
-    // TODO for each connection, add to a Corpora and use that as the known conenctions, or alwasy descide to use a Corpora?
-    this.knownConnections = new Corpora(Connection.knownConnections);
-    this.knownConnections.primaryKey = "userFriendlyServerName";
+    // Let client apps show a list of conenctions, and create custom connections if the BASE_DB_URL isnt default
+    this.knownConnections = new Corpora({
+      primaryKey: "userFriendlyServerName"
+    });
+
+    for (var connection in Connection.knownConnections) {
+      if (connection && !Connection.knownConnections.hasOwnProperty(connection)) {
+        continue;
+      }
+      this.debug("  Adding connection ", connection);
+      this.knownConnections.add(Connection.knownConnections[connection]);
+    }
+    this.debug("Set up knownConnections" + this.knownConnections.length);
   }
 
-  if (!this.connection) {
-    if (Database.prototype.BASE_AUTH_URL !== "https://localhost:3183") {
-      this.connection = Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference");
+  if (!this.selectedConnection) {
+    this.debug("Setting up the app's selectedConnection");
+
+    if (Database.prototype.BASE_AUTH_URL) {
+      this.debug("Looking for a selectedConnection for " + Database.prototype.BASE_AUTH_URL);
+      this.selectedConnection = Connection.defaultConnection(Database.prototype.BASE_AUTH_URL, "passByReference");
     } else {
-      try {
-        if (window && window.location && window.location.href) {
-          this.connection = Connection.defaultConnection(window.location.href, "passByReference");
-        }
-      } catch (e) {}
+      this.debug("Looking for a selectedConnection based on where this is running ");
+      this.selectedConnection = Connection.defaultConnection(null, "passByReference");
     }
-    this.knownConnections.unshift(this.connection);
-    if (this.connection && Database.prototype.BASE_DB_URL !== this.connection.corpusUrl) {
-      this.connection.corpusUrl = Database.prototype.BASE_DB_URL;
-      this.connection.userFriendlyServerName = "Custom";
+    this.debug("Found a selectedConnection ", this.selectedConnection.corpusUrls);
+
+    if (Database.prototype.BASE_DB_URL && this.selectedConnection.corpusUrls.indexOf(Database.prototype.BASE_DB_URL) === -1) {
+      this.warn("Making a custom selectedConnection because the selectedConnection " , this.selectedConnection.corpusUrls , " doesnt fit with the database url " + Database.prototype.BASE_DB_URL);
+
+      this.selectedConnection = this.selectedConnection.clone();
+      this.selectedConnection.corpusUrl = Database.prototype.BASE_DB_URL;
+      this.selectedConnection.userFriendlyServerName = "Custom";
+    }
+    if (!this.knownConnections.find(this.selectedConnection).length) {
+      this.warn("Adding the selectedConnection to the list of knownConnections ", this.selectedConnection);
+
+      this.knownConnections.unshift(this.selectedConnection);
     }
   }
 
