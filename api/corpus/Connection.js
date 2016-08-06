@@ -697,6 +697,10 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   }
 
   otherwise = otherwise || Connection.otherwise || "beta";
+  if (!Connection.knownConnections[otherwise]){
+    FieldDBObject.bug("I dont know how to connect to " + otherwise + " please report this.");
+    throw new Error("I dont know how to connect to " + otherwise + " please report this.");
+  }
 
   /* Ensuring at least the localhost connection is known */
   if (!Connection.knownConnections) {
@@ -783,7 +787,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
     } else if (optionalHREF.indexOf("lingsync") >= 0) {
       connection = Connection.knownConnections.production;
     } else if (optionalHREF.indexOf("localhost") >= 0) {
-      connection = Connection.knownConnections[otherwise];
+      connection = Connection.knownConnections.localhost;
     } else if (optionalHREF.indexOf("chrome-extension") === 0) {
       connection = Connection.knownConnections[otherwise];
     } else if (optionalHREF.indexOf("file") === 0) {
@@ -816,7 +820,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       // console.log("Cant use new Connection.URLParser() in this environment.", connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
-      console.warn("There was no way to deduce the HREF, probably we are in Node. Using " + otherwise + " instead. ", optionalHREF);
+      console.warn("There was no way to deduce the HREF, probably we are in Node or loading from a file://. Using " + otherwise + " instead. ", optionalHREF);
       connection = Connection.knownConnections[otherwise];
     } else {
       var domainName = connectionUrlObject.hostname.split(".");
