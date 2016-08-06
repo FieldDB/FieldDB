@@ -27,7 +27,7 @@ var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
 Database.defaultConnection = Connection.defaultConnection;
 Database.CORS = CORS;
-
+Database.Connection = Connection;
 /**
  * This limit is set to protect apps from requesting huge amounts of data without pagination.
  * @type {Number}

@@ -57,10 +57,10 @@ describe("Connection ", function() {
         // serverLabel: "myproject"
       });
 
-      expect(Connection.knownConnections.myproject).toEqual({
+      expect(Connection.knownConnections.myproject).toEqual(new Connection({
         _fieldDBtype: "Connection",
         _dateCreated: Connection.knownConnections.myproject._dateCreated
-      });
+      }));
     });
 
   });
@@ -69,6 +69,9 @@ describe("Connection ", function() {
     beforeEach(function() {
       process.env.NODE_ENV = "";
       Connection.otherwise = null;
+      FieldDBObject.application = {
+        serverLabel: ""
+      };
     });
 
     it("should use beta as a defaultConnection", function() {
@@ -93,10 +96,10 @@ describe("Connection ", function() {
 
     it("should be able to add known connections", function() {
       Connection.knownConnections.myproject = new Connection();
-      expect(Connection.knownConnections.myproject).toEqual({
+      expect(Connection.knownConnections.myproject).toEqual(new Connection({
         _fieldDBtype: "Connection",
         _dateCreated: Connection.knownConnections.myproject._dateCreated
-      });
+      }));
     });
 
     it("should guess default for a server label", function() {
@@ -180,7 +183,7 @@ describe("Connection ", function() {
 
     it("should be able to get a default connection", function() {
       var connection = Connection.defaultConnection("Localhost");
-      expect(connection).toEqual({
+      expect(connection).toEqual(new Connection({
         _fieldDBtype: "Connection",
         protocol: "https://",
         _domain: "localhost",
@@ -192,14 +195,14 @@ describe("Connection ", function() {
         corpusUrls: [],
         userFriendlyServerName: "Localhost",
         _brandLowerCase: "localhost",
-        _version: "v4.6.5",
+        _version: connection.version,
         clientUrls: [],
         lexiconUrls: [],
         searchUrls: [],
         audioUrls: [],
         activityUrls: [],
         _dateCreated: connection._dateCreated
-      });
+      }));
     });
   });
 

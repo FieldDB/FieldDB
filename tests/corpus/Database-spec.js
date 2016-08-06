@@ -202,7 +202,7 @@ describe("Database", function() {
 
     it("should be able to get a default connection", function() {
       var connection = Database.defaultConnection("Localhost");
-      expect(connection).toEqual({
+      expect(connection).toEqual(new Database.Connection({
         _fieldDBtype: "Connection",
         protocol: "https://",
         _domain: "localhost",
@@ -221,7 +221,7 @@ describe("Database", function() {
         audioUrls: [],
         activityUrls: [],
         _dateCreated: connection.dateCreated
-      });
+      }));
     });
 
     it("should be able to extrapolate a connection", function() {
@@ -343,7 +343,19 @@ describe("Database", function() {
         username: "jenkins",
         password: "phoneme"
       }).then(function(resultingFielddbUser) {
-        expect(db.connectionInfo).toBeUndefined();
+        if (db.connectionInfo) {
+          expect(db.connectionInfo).toEqual({
+            ok: true,
+            userCtx: {
+              name: null,
+              roles: db.connectionInfo.userCtx.roles
+            },
+            info: {
+              authentication_db: "_users",
+              authentication_handlers: ["oauth", "cookie", "default"]
+            }
+          });
+        }
         expect(resultingFielddbUser).toBeDefined();
         expect(resultingFielddbUser.username).toEqual("jenkins");
         expect(resultingFielddbUser.username).toEqual(resultingFielddbUser._id);
@@ -440,7 +452,19 @@ describe("Database", function() {
     it("should be able to logout", function(done) {
       db.logout()
         .then(function() {
-          expect(db.connectionInfo).toBeUndefined();
+          if (db.connectionInfo) {
+            expect(db.connectionInfo).toEqual({
+              ok: true,
+              userCtx: {
+                name: null,
+                roles: db.connectionInfo.userCtx.roles
+              },
+              info: {
+                authentication_db: "_users",
+                authentication_handlers: ["oauth", "cookie", "default"]
+              }
+            });
+          }
 
           db.get("team").then(function(doc) {
             expect(doc).toEqual("shouldnt not be possible to get data after logout");
@@ -502,7 +526,7 @@ describe("Database", function() {
   });
 
   describe("register", function() {
-    beforeEach(function(){
+    beforeEach(function() {
       process.env.NODE_ENV = "";
     });
 
@@ -520,7 +544,7 @@ describe("Database", function() {
         expect(result.corpora).toBeDefined();
         expect(result.corpora.length).toEqual(0);
       }, function(error) {
-        console.log(error.details.connection.authUrls);
+        // console.log(error.details.connection.authUrls);
         expect(error.details.authUrl).toEqual("https://authdev.lingsync.org");
         expect(error.details.connection).toBeDefined();
         expect(error.details.connection.userFriendlyServerName).toEqual("LingSync Beta");
@@ -548,7 +572,7 @@ describe("Database", function() {
       }, function(error) {
         expect(error.details.authUrl).toEqual("https://auth.linguistics.miauniversity.edu:3222/some/virtual/host");
         if (error.details.connection && error.details.connection.serverLabel !== "localhost") {
-          expect(error.details.connection).toEqual({
+          expect(error.details.connection).toEqual(new Database.Connection({
             _fieldDBtype: "Connection",
             protocol: "https://",
             _domain: "auth.linguistics.miauniversity.edu",
@@ -567,7 +591,7 @@ describe("Database", function() {
             websiteUrls: [],
             activityUrls: [],
             _dateCreated: error.details.connection.dateCreated
-          });
+          }));
         }
         if (expectedErrors(error)) {
           // errors were expected

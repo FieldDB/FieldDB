@@ -308,7 +308,7 @@ describe("FieldDBObject", function() {
       });
 
       var clonedParentForMinimalPairs = datumTypeThing.clone();
-      expect(clonedParentForMinimalPairs).toEqual({
+      expect(clonedParentForMinimalPairs).toEqual(new FieldDBObject({
         utterance: "noqata tusunaywanmi",
         translation: "I feel like dancing",
         _dateCreated: 1469294300622,
@@ -338,7 +338,7 @@ describe("FieldDBObject", function() {
           URI: "82u398jaeoiajwo3a?rev=8-ojqa3ja0eios09k3aw",
           relation: "clonedFrom"
         }]
-      });
+      }));
 
     });
 
@@ -396,12 +396,12 @@ describe("FieldDBObject", function() {
 
       var two = one.clone();
 
-      expect(two).toEqual({
+      expect(two).toEqual(new Child({
         aproperty: "adifferentvalue",
         _dateCreated: two.dateCreated,
         _version: two.version,
         _fieldDBtype: "Child"
-      });
+      }));
 
       expect(two instanceof Child).toBeTruthy();
       expect(two instanceof FieldDBObject).toBeTruthy();
