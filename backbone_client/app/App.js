@@ -125,8 +125,6 @@ define([
       /*
        * Load the user
        */
-      window.app = this;
-
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
 
@@ -142,8 +140,13 @@ define([
       appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
         localStorage.removeItem("encryptedUser");
 
+        var connection = appself.get("authentication").get("userPrivate").get("mostRecentIds").connection;
+        if (!connection) {
+          alert("Unable to load your app, please report this.");
+          return;
+        }
         $(".spinner-status").html("Turning on continuous sync with your team server...");
-        appself.replicateContinuouslyWithCouch(function() {
+        appself.changePouch(connection, function() {
           /*
            * Load the backbone objects
            */
@@ -214,6 +217,34 @@ define([
         throw new Error("The app cannot function without knowing which database is in use.");
       }
 
+      /*
+       * Verify that the user is in their database, and that the
+       * backbone couch adaptor is saving to the corpus' database,
+       * not where the user currently is.
+       */
+      // if (OPrime.isCouchApp()) {
+      //   var corpusdbname = appids.connection.dbname;
+      //   if (window.location.href.indexOf(corpusdbname) == -1) {
+      //     if (corpusdbname != "public-firstcorpus") {
+      //       var username = "";
+      //       try {
+      //         username = window.app.get("authentication").get("userPrivate").get("username") || "";
+      //       } catch (e) {
+      //         //do nothing
+      //       }
+      //       if (username != "public") {
+      //         OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
+      //       }
+      //     }
+      //     OPrime.redirect("user.html#login/" + corpusdbname);
+
+      //     //        window.app.get("authentication").syncUserWithServer(function(){
+      //     //        OPrime.redirect(optionalRedirectDomain+"corpus.html");
+      //     //        });
+      //     return;
+      //   }
+      // }
+
       OPrime.debug("App.changePouch setting connection: ", connection);
 
       connection.dbname = connection.dbname || connection.pouchname;
@@ -234,7 +265,7 @@ define([
       Backbone.couch_connector.config.base_url = jQuery.couch.urlPrefix = urlPrefix;
       Backbone.couch_connector.config.db_name = connection.dbname;
 
-      FieldDBBackboneModel.prototype.changePouch.apply(this, arguments);
+      FieldDBBackboneModel.prototype.changePouch.apply(this, [connection.dbname, callback]);
     },
     /**
      * This function creates the backbone objects, and links them up so that
@@ -630,36 +661,8 @@ define([
     loadBackboneObjectsByIdAndSetAsCurrentDashboard: function(appids, callback) {
       if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
 
-      if (appids && appids.connection) {
+      if (appids && appids.connection && ~(appids.connection instanceof FieldDB.Connection)) {
         appids.connection = new FieldDB.Connection(appids.connection);
-      }
-
-      /*
-       * Verify that the user is in their database, and that the
-       * backbone couch adaptor is saving to the corpus' database,
-       * not where the user currently is.
-       */
-      if (OPrime.isCouchApp()) {
-        var corpusdbname = appids.connection.dbname;
-        if (window.location.href.indexOf(corpusdbname) == -1) {
-          if (corpusdbname != "public-firstcorpus") {
-            var username = "";
-            try {
-              username = window.app.get("authentication").get("userPrivate").get("username") || "";
-            } catch (e) {
-              //do nothing
-            }
-            if (username != "public") {
-              OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
-            }
-          }
-          OPrime.redirect("user.html#login/" + corpusdbname);
-
-          //        window.app.get("authentication").syncUserWithServer(function(){
-          //        OPrime.redirect(optionalRedirectDomain+"corpus.html");
-          //        });
-          return;
-        }
       }
 
       var connection = appids.connection;
@@ -731,11 +734,11 @@ define([
         var originalCallbackFromLoadBackboneApp = callback;
         if (reason.indexOf("not authorized") >= 0 || reason.indexOf("nauthorized") >= 0) {
           //Show quick authentication so the user can get their corpus token and get access to the data
-          window.app.get("authentication").syncUserWithServer(function() {
-            if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
-            self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
-          }, connection.dbname);
-          //            OPrime.redirect("corpus.html#login");
+          // window.app.get("authentication").syncUserWithServer(function() {
+          //   if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
+          //   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
+          // }, connection.dbname);
+          OPrime.redirect("user.html#login");
           return;
         }
 

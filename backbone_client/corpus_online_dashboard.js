@@ -98,9 +98,8 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     }
   }
 
-  window.app = new App({
-    filledWithDefaults: true
-  });
+  window.app = new App();
+  window.app.fillWithDefaults();
 
   window.uploadAndGenerateTextGrid = function(files) {
     //    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
