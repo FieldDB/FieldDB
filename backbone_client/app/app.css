@@ -4,9 +4,6 @@
 
 @import url("../libs/font_awesome/font-awesome.css");
 
-@import url("../libs/terminal/terminal.css");
-
-
 body { /* background-image: url('../user/skins/bamboo_garden.jpg'); */
 	background-color: #000;
 	background-repeat: no-repeat;

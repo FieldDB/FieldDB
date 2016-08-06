@@ -20,8 +20,6 @@ require.config({
     "pouch": "libs/pouch.alpha",
     "underscore": "libs/underscore",
 
-    "terminal": "libs/terminal/terminal",
-
     "text": "libs/text",
 
     "xml2json": "libs/xml2json",
@@ -80,10 +78,6 @@ require.config({
     "compiledTemplates": {
       deps: ["handlebars"],
       exports: "Handlebars"
-    },
-    "terminal": {
-      deps: ["bootstrap", "jquery"],
-      exports: "Terminal"
     }
 
   }

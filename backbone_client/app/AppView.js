@@ -41,7 +41,6 @@ define([
   "user/UserEditView",
   "user/UserReadView",
   "app/UpdatingCollectionView",
-  "terminal",
   "OPrime"
 ], function(
   Backbone,
@@ -85,8 +84,7 @@ define([
   User,
   UserEditView,
   UserReadView,
-  UpdatingCollectionView,
-  Terminal
+  UpdatingCollectionView
 ) {
   var AppView = Backbone.View.extend( /** @lends AppView.prototype */ {
     /**
@@ -132,10 +130,10 @@ define([
       this.setUpAndAssociateViewsAndModelsWithCurrentCorpus();
 
       // Create and initialize a Terminal
-      this.term = new Terminal('terminal');
+      // this.term = new Terminal('terminal');
 
       // Initialize the file system of the terminal
-      this.term.initFS(false, 1024 * 1024);
+      // this.term.initFS(false, 1024 * 1024);
 
       window.saveApp = this.backUpUser;
       // Set up a timeout event every 10sec

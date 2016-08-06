@@ -111,10 +111,10 @@ define([
       //      }
       audio.classList.remove('halfopacity');
       //Use the terminal to put the file into the file system
-      window.appView.term.addDroppedFiles(e.dataTransfer.files);
+      // window.appView.term.addDroppedFiles(e.dataTransfer.files);
       window.filesToUpload = e.dataTransfer.files;
       window.uploadAndGenerateTextGrid(e.dataTransfer.files);
-      window.appView.term.output('<div>File(s) added!</div>');
+      // window.appView.term.output('<div>File(s) added!</div>');
       var audiojs = $(audio);
       audiojs.empty();
       //http://stackoverflow.com/questions/7953593/change-source-to-audio-html5-element
