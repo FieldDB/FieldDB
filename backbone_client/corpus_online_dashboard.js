@@ -7,7 +7,7 @@ if (window.location.protocol === "http:" && window.location.origin.indexOf("loca
 require.config({
   paths: {
     /* Bootstrap user interface javascript files */
-    "bootstrap": "libs/bootstrap/js/bootstrap.min",
+    "bootstrap": "libs/bootstrap/js/bootstrap",
 
     "CryptoJS": "libs/Crypto_AES",
 

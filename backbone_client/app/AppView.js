@@ -1,5 +1,6 @@
 define([
   "backbone",
+  "bootstrap",
   "libs/compiled_handlebars",
   "app/App",
   "app/AppRouter",
@@ -44,6 +45,7 @@ define([
   "OPrime"
 ], function(
   Backbone,
+  bootstrap,
   Handlebars,
   App,
   AppRouter,
