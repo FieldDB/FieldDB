@@ -556,7 +556,7 @@ define([
         }
         var authUrl = $(".welcomeauthurl").val().trim();
         authUrl = FieldDB.Connection.defaultConnection(authUrl).authUrl;
-        this.authView.syncUser($(".welcomeusername").val().trim(), $(".welcomepassword").val().trim(), authUrl);
+        this.authView.loginUserAndRedirectToCorpusDashboard($(".welcomeusername").val().trim(), $(".welcomepassword").val().trim(), authUrl);
       },
       "keyup .welcomepassword": function(e) {
         var code = e.keyCode || e.which;
