@@ -145,23 +145,26 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       var deferred = Q.defer(),
         self = this;
 
-      var tempUser = new User(loginDetails);
       var dataToPost = {};
       dataToPost.username = loginDetails.username;
       dataToPost.password = loginDetails.password;
       dataToPost.authUrl = loginDetails.authUrl;
       dataToPost.connection = loginDetails.connection;
+
+      if (!loginDetails.syncUserDetails) {
       //if the same user is re-authenticating, include their details to sync to the server.
-      tempUser.fetch();
-      if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
-        dataToPost.syncDetails = "true";
-        dataToPost.syncUserDetails = tempUser.toJSON();
-        tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
-        delete dataToPost.syncUserDetails._rev;
-        //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server,
-        //the server will overwrite their details.
-        //should we automatically check here, or should we make htem a button
-        //when they are authetnticated to test if they ahve lost their prefs etc?
+        var tempUser = new User(loginDetails);
+        tempUser.fetch();
+        if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
+          dataToPost.syncDetails = "true";
+          dataToPost.syncUserDetails = tempUser.toJSON();
+          tempUser.warn("Backing up tempUser details", dataToPost.syncUserDetails);
+          delete dataToPost.syncUserDetails._rev;
+          //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server,
+          //the server will overwrite their details.
+          //should we automatically check here, or should we make htem a button
+          //when they are authetnticated to test if they ahve lost their prefs etc?
+        }
       }
 
       this.error = "";
