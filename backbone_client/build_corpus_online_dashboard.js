@@ -2,6 +2,11 @@
   baseUrl: "./",
   dir: "../release/",
   optimize: 'none',
+  // removeCombined: true,
+  // fileExclusionRegExp: /^\./,
+  // keepBuildDir: false,
+  // generateSourceMaps: false,
+  logLevel: 2,
   //  optimize : 'uglify',
   //  uglify : {
   //    toplevel : true,

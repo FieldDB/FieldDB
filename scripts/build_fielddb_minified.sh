@@ -36,6 +36,7 @@ mkdir -p couchapp_minified/_attachments/user
 mkdir -p couchapp_minified/_attachments/user
 mkdir -p couchapp_minified/_attachments/images
 mkdir -p couchapp_minified/_attachments/bower_components/requirejs
+mkdir -p couchapp_minified/_attachments/bower_components/fielddb
 # mkdir -p couchapp_minified/_attachments/bower_components/d3
 mkdir -p couchapp_minified/_attachments/app
 mkdir -p couchapp_minified/_attachments/libs/bootstrap/css
@@ -43,7 +44,7 @@ mkdir -p couchapp_minified/_attachments/libs/bootstrap/css
 
 # backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_backup_pouches_dashboard.js
 # cp release/backup_pouches_dashboard.js couchapp_minified/_attachments/
-echo "Building user_online_dashboard require.js "
+echo "Building user_online_dashboard using require.js "
 backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_user_online_dashboard.js
 cp release/user_online_dashboard.js couchapp_minified/_attachments/
 echo "Building corpus_online_dashboard using require.js "
@@ -75,6 +76,8 @@ cp backbone_client/libs/bootstrap/css/*.css couchapp_minified/_attachments/libs/
 cp -R backbone_client/libs/font_awesome couchapp_minified/_attachments/libs/font_awesome
 cp backbone_client/bower_components/requirejs/require.js couchapp_minified/_attachments/bower_components/requirejs/require.js
 cp backbone_client/libs/analytics.js couchapp_minified/_attachments/libs/analytics.js
+
+cp backbone_client/bower_components/fielddb/fielddb.js couchapp_minified/_attachments/bower_components/fielddb/fielddb.js
 
 cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
 

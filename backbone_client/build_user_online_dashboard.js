@@ -9,6 +9,7 @@
   //    beautify : true,
   //    max_line_length : 1000
   //  },
+  logLevel: 2,
   // inlineText: true,
   // namespace: 'fielddb',
   skipModuleInsertion: false,

@@ -38,7 +38,6 @@
     "d3": "~3.5.8"
   },
   "resolutions": {
-    "underscore": ">=1.8.3",
-    "d3": "~3.5.8"
+    "underscore": ">=1.8.3"
   }
 }

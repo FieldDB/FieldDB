@@ -80,81 +80,15 @@ require.config({
 });
 
 // Initialization
-require(["user/UserApp", "OPrime", "FieldDB"], function(UserApp) {
-  // try {
-  //   var pieces = window.location.pathname.replace(/^\//, "").split("/");
-  //   var dbname = pieces[0];
-  //   // Handle McGill server which runs out of a virtual directory
-  //   if (dbname == "corpus") {
-  //     dbname = pieces[1];
-  //   } else if (dbname.indexOf("html") > -1) {
-  //     dbname = "";
-  //   }
-  //   if (dbname) {
-  //     Backbone.couch_connector.config.db_name = dbname;
-  //   }
-  // } catch (e) {
-  //   if (OPrime.debugMode)
-  //     OPrime.debug("Couldn't set the databse name off of the url.");
-  // }
+require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
 
-  window.app = new UserApp();
+  window.app = new App();
   window.app.fillWithDefaults();
-});
 
-// // Initialization
-// require([
-// "user/UserApp",
-// "user/UserAppView",
-// "user/UserRouter",
-// "compiledTemplates",
-// "backbone",
-// "backbone_pouchdb",
-// "libs/webservicesconfig_devserver",
-// "libs/OPrime"
-// ], function(
-// UserApp,
-// UserAppView,
-// UserRouter,
-// compiledTemplates,
-// Backbone,
-// forcingpouchtoloadonbackboneearly
-// ) {
-//
-// /*
-// * Start the pub sub hub
-// */
-// window.hub = {};
-// OPrime.makePublisher(window.hub);
-//
-// /*
-// * Check for user's cookie and the dashboard so we can load it
-// */
-// var username = localStorage.getItem("username");
-// if (username != null && username != "") {
-//
-// window.app = new UserApp();
-// var auth = window.app.get("authentication");
-// var u = localStorage.getItem("encryptedUser");
-// auth.loadEncryptedUser(u, function(success, errors){
-// if(success == null){
-// alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " +
-// OPrime.contactUs);
-// OPrime.setCookie("username","");
-// document.location.href='corpus.html';
-// return;
-// }else{
-// // alert("We logged you in." + OPrime.contactUs);
-// window.appView = new UserAppView({model: window.app});
-// window.appView.render();
-// app.router = new UserRouter();
-// Backbone.history.start();
-// }
-// });
-//
-// } else {
-// // new user, let them register or login as themselves or lingllama
-// document.location.href='corpus.html';
-// }
-//
-// });
+  window.uploadAndGenerateTextGrid = function(files) {
+    //    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
+    //    alert("I'm going to submit the upload form.");
+    //    document.getElementById("uploadAudioForTextGridform").submit();
+  };
+
+});
