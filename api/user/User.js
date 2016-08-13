@@ -127,7 +127,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
-  datalists: {
+  dataLists: {
     get: function() {
       return this.datalistHistory;
     },
@@ -266,6 +266,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         value.researchInterest = value.researchInterest || "No public information available";
         value.description = value.description || "No public information available";
         value.affiliation = value.affiliation || "No public information available";
+        value.id = value.username;
       }
       this.ensureSetViaAppropriateType("userMask", value);
     }
@@ -331,7 +332,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       delete json.authentication;
 
       // TODO deprecated
-      json.datalists = this.datalists;
+      json.dataLists = this.dataLists;
 
       if (json.mostRecentIds) {
         delete json.mostRecentIds.fieldDBtype;
