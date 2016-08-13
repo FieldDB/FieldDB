@@ -422,20 +422,7 @@ define([
       }
 
       if (!window.appView) {
-        return;
-      }
-
-      if (window.location.href.indexOf("corpus.html") > -1) {
-        if (OPrime.isChromeApp()) {
-          /* take them to the user page, they can log in there */
-          return OPrime.redirect("user.html#login/" + corpusdbname);
-        }
-
-        /* take them to the public user page, they can log in there */
-        if (OPrime.isCouchApp()) {
-          return OPrime.redirect("user.html#login/" + corpusdbname);
-        }
-
+        console.log(" Cant syncUserWithServer, there is no appView to ask them to confirm their identity");
         return;
       }
 
