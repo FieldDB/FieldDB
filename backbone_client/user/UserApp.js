@@ -94,6 +94,9 @@ define([
 
     loadBackboneObjectsByIdAndSetAsCurrentDashboard: null,
 
+    changePouch: function() {
+      console.log('no need to change pouch.', arguments);
+    },
     /**
      * Smaller than the App version
      */
