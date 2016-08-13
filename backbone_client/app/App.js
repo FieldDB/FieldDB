@@ -744,6 +744,7 @@ define([
 
         if (!window.navigator.onLine) {
           OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only.");
+          OPrime.redirect("user.html#login");
           return;
         }
 
