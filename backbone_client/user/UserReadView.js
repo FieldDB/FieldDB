@@ -138,8 +138,8 @@ define([
         this.corporaReadView.render();
 
         var connection = window.app.get("connection");
-        if (this.model && this.model.get("corpora") && this.model.get("corpora")[0]) {
-          connection = this.model.get("corpora")[0];
+        if (this.model && this.model.get("mostRecentIds") && this.model.get("mostRecentIds").connection) {
+          connection = this.model.get("mostRecentIds").connection;
         }
         var self = this;
         FieldDB.CORS.makeCORSRequest({
