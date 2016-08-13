@@ -468,7 +468,8 @@ define([
         username: username,
         password: password
       };
-      dataToPost.authUrl = FieldDB.Connection.defaultConnection(authUrl).authUrl;
+      var appConnection = FieldDB.Connection.defaultConnection(authUrl);
+      dataToPost.authUrl = appConnection.authUrl;
 
       $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>");
       $(".welcome-screen-alerts").addClass("alert-success");
@@ -480,6 +481,9 @@ define([
        */
       this.model.fielddbModel = this.model.fielddbModel || new FieldDB.Authentication();
       this.model.fielddbModel.login(dataToPost).then(function(fielddbUser) {
+        // Set the app serverLabel to the server the user logged into
+        localStorage.setItem("serverLabel", appConnection.serverLabel);
+
         $(".welcome-screen-alerts").html("Attempting to sync your data to this device...</p> <progress max='100'> <strong>Progress: working...</strong>");
         $(".welcome-screen-alerts").show();
 

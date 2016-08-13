@@ -686,7 +686,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   }
   if (!otherwise) {
     try {
-      otherwise = localStorage.getItem("brand");
+      otherwise = localStorage.getItem("serverLabel");
     } catch (e) {
       // not running in node nor normal browser environment.
     }
