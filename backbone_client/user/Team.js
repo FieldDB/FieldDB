@@ -56,7 +56,7 @@ define([
       description: "",
       subtitle: "",
       corpora: [],
-      dataLists: [],
+      datalists: [],
       mostRecentIds: {},
       // Defaults from User
       firstname: "",

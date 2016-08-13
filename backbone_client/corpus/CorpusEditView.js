@@ -85,7 +85,7 @@ define([
       //        this.changeViewsOfInternalModels();
       //        this.render();
       //      }, this);
-      //      this.model.bind('change:dataLists', function(){
+      //      this.model.bind('change:datalists', function(){
       //        this.render();
       //      }, this);
     },
@@ -330,8 +330,8 @@ define([
         this.commentEditView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection');
-        this.dataListsView.render();
+        this.datalistsView.el = this.$('.datalists-updating-collection');
+        this.datalistsView.render();
 
         // Display the SessionsView
         this.sessionsView.el = this.$('.sessions-updating-collection');
@@ -427,7 +427,7 @@ define([
         this.model.datalists = new DataLists();
       }
       // Create a DataList List
-      this.dataListsView = new UpdatingCollectionView({
+      this.datalistsView = new UpdatingCollectionView({
         collection: this.model.datalists,
         childViewConstructor: DataListReadView,
         childViewTagName: 'li',

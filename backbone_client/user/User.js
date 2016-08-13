@@ -61,6 +61,8 @@ define([
         normalizedConnection;
 
       /* upgrade to 2.40+ data structures */
+      originalModel.sessions = originalModel.sessiontHistory || originalModel.sessionts;
+      originalModel.datalists = originalModel.datalistHistory || originalModel.datalists || originalModel.dataLists;
       originalModel.corpora = originalModel.corpora || originalModel.corpuses;
       originalModel.userMask = originalModel.userMask || originalModel.publicSelf;
       delete originalModel.corpuses;
@@ -123,7 +125,7 @@ define([
       description: "",
       subtitle: "",
       corpora: [],
-      dataLists: [],
+      datalists: [],
       mostRecentIds: {},
       // Defaults from User
       firstname: "",

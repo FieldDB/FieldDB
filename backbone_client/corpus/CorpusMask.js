@@ -213,7 +213,7 @@ define([
       sessionFields: DatumFields,
       searchFields: DatumFields,
       //      sessions : Sessions,
-      //      dataLists : DataLists,
+      //      datalists : DataLists,
       permissions: Permissions,
       comments: Comments
     },

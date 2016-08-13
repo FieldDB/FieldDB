@@ -662,7 +662,7 @@ define([
       sessionFields: DatumFields,
       searchFields: DatumFields,
       //      sessions : Sessions,
-      //      dataLists : DataLists,
+      //      datalists : DataLists,
       corpusMask: CorpusMask,
       comments: Comments,
       team: UserMask
@@ -755,7 +755,7 @@ define([
       //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.dbname = this.get("dbname") + "copy";
       attributes.connection.dbname = this.get("dbname") + "copy";
-      attributes.dataLists = [];
+      attributes.datalists = [];
       attributes.sessions = [];
       attributes.comments = [];
       attributes.corpusMask = {
@@ -1154,7 +1154,7 @@ define([
             }
             dl.save(null, {
               success: function(model, response) {
-                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+                window.app.get("authentication").get("userPrivate").get("datalists").unshift(model.id);
                 self.datalists.unshift(model);
 
                 if (typeof sucess == "function") {

@@ -337,7 +337,7 @@ define([
         this.set("dateCreated", JSON.stringify(new Date()));
       }
 
-      //protect against users moving dataLists from one corpus to another on purpose or accidentially
+      //protect against users moving datalists from one corpus to another on purpose or accidentially
       if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
@@ -405,8 +405,8 @@ define([
           }
 
           //make sure the dataList is in the history of the user
-          if (window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1) {
-            window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+          if (window.app.get("authentication").get("userPrivate").get("datalists").indexOf(model.id) == -1) {
+            window.app.get("authentication").get("userPrivate").get("datalists").unshift(model.id);
             //              window.app.get("authentication").saveAndInterConnectInApp();
           }
 

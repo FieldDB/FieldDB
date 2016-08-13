@@ -127,6 +127,23 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  /*
+   * Deprecated
+   */
+  datalists: {
+    get: function() {
+      return this.datalistHistory;
+    },
+    set: function(value) {
+      if (value && !this._datalistHistory) {
+        this.datalistHistory = value;
+      }
+    }
+  },
+
+  /*
+   * Deprecated
+   */
   dataLists: {
     get: function() {
       return this.datalistHistory;
@@ -144,6 +161,20 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     },
     set: function(value) {
       this._datalistHistory = value;
+    }
+  },
+
+  /*
+   * Deprecated
+   */
+  sessions: {
+    get: function() {
+      return this.sessionHistory;
+    },
+    set: function(value) {
+      if (value && !this._sessionHistory) {
+        this.sessionHistory = value;
+      }
     }
   },
 
@@ -332,7 +363,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       delete json.authentication;
 
       // TODO deprecated
-      json.dataLists = this.dataLists;
+      json.datalists = this.datalists;
 
       if (json.mostRecentIds) {
         delete json.mostRecentIds.fieldDBtype;
