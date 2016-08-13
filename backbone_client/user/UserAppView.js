@@ -1,6 +1,8 @@
+/* globals FieldDB, OPrime, window, console */
 define(
   ["backbone",
     "libs/compiled_handlebars",
+    "app/AppView",
     "user/UserApp",
     "user/UserRouter",
     "authentication/Authentication",
@@ -19,6 +21,7 @@ define(
   function(
     Backbone,
     Handlebars,
+    AppView,
     UserApp,
     UserRouter,
     Authentication,
@@ -31,8 +34,9 @@ define(
     UserPreferenceEditView,
     User,
     UserEditView,
-    UserReadView) {
-    var UserAppView = Backbone.View.extend( /** @lends UserAppView.prototype */ {
+    UserReadView
+  ) {
+    var UserAppView = AppView.extend( /** @lends UserAppView.prototype */ {
       /**
        * @class The main layout of the users dashboard, it shows the nav
        *        bar, authentication menu and the user's profile where they
@@ -41,7 +45,7 @@ define(
        * @description Starts the application and initializes all its
        *              children.
        *
-       * @extends Backbone.View
+       * @extends AppView
        * @constructs
        */
       initialize: function() {
@@ -71,8 +75,7 @@ define(
        * authenticates so that if they were logged into another computer
        * the can get their updated preferences.
        */
-      associateCurrentUsersInternalModelsWithTheirViews: function(
-        callback) {
+      associateCurrentUsersInternalModelsWithTheirViews: function(callback) {
         this.userPreferenceView.model = this.authView.model.get(
           "userPrivate").get("prefs");
         this.userPreferenceView.model.bind("change:skin",
@@ -83,7 +86,7 @@ define(
         // TODO the hotkeys are probably not associate dbut because they
         // are not finished, they cant be checked yet
 
-        if (typeof callback == "function") {
+        if (typeof callback === "function") {
           callback();
         }
       },
@@ -126,7 +129,7 @@ define(
           model: this.authView.model.get("userPrivate").get("hotkeys")
         });
 
-        if (typeof callback == "function") {
+        if (typeof callback === "function") {
           callback();
         }
       },
@@ -137,58 +140,6 @@ define(
       model: UserApp,
 
       /**
-       * Events that the UserAppView is listening to and their handlers.
-       */
-      events: {
-        "submit #quick-authentication-form": function(e) {
-          if (e) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          window.hub.publish("quickAuthenticationClose", $("#quick-authenticate-password").val());
-          $("#quick-authenticate-password").val("");
-          $("#quick-authenticate-modal").hide();
-        },
-        "click #quick-authentication-cancel-btn": function(e) {
-          if (e) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          window.hub.publish("quickAuthenticationClose", "cancel");
-          $("#quick-authenticate-password").val("");
-          $("#quick-authenticate-modal").hide();
-        },
-        "click .icon-home": function(e) {
-          if (e) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          window.location.href = "#render/true";
-        },
-        "click .save-dashboard": function() {
-          window.app.saveAndInterConnectInApp();
-        },
-        "click .sync-my-data": function(e) {
-          if (e) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-          var authUrl = $(".welcomeauthurl").val().trim();
-          authUrl = FieldDB.Connection.defaultConnection(authUrl).authUrl;
-          this.authView.syncUser($(".welcomeusername").val().trim(), $(".welcomepassword").val().trim(), authUrl);
-        },
-        "click .sync-everything": "replicateDatabases",
-        /*
-         * These functions come from the top search template, it is renderd
-         * by seacheditview whenever a search is renderd, but its events
-         * cannot be handled there but are easily global events that can be
-         * controlled by teh appview. which is also responsible for many
-         * functions on the navbar
-         */
-
-      },
-
-      /**
        * The Handlebars template rendered as the UserAppView.
        */
       template: Handlebars.templates.user_app,
@@ -196,87 +147,19 @@ define(
       /**
        * Renders the UserAppView and all of its child Views.
        */
-      render: function() {
-        if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.el);
-        if (this.model != undefined) {
+      renderPostHoook: function() {
+        $(".corpus-settings").addClass("hidden");
+        $(".power-users-link").addClass("hidden");
 
-          // Display the UserAppView
-          this.setElement($("#app_view"));
-
-          var jsonToRender = this.model.toJSON();
-
-          jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
-          jsonToRender.locale_Password = Locale.get("locale_Password");
-          jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
-          jsonToRender.locale_Corpora = Locale.get("locale_Corpora");
-          jsonToRender.locale_Differences_with_the_central_server = Locale.get("locale_Differences_with_the_central_server");
-          jsonToRender.locale_Instructions_to_show_on_dashboard = Locale.get("locale_Instructions_to_show_on_dashboard"); // Do we still use this instruction?
-          jsonToRender.locale_Log_In = Locale.get("locale_Log_In");
-          jsonToRender.locale_Need_save = Locale.get("locale_Need_save");
-          jsonToRender.locale_Need_sync = Locale.get("locale_Need_sync");
-          jsonToRender.locale_Password = Locale.get("locale_Password");
-          jsonToRender.locale_Recent_Changes = Locale.get("locale_Recent_Changes");
-          jsonToRender.locale_Save_on_this_Computer = Locale.get("locale_Save_on_this_Computer");
-          jsonToRender.locale_Show_Dashboard = Locale.get("locale_Show_Dashboard");
-          jsonToRender.locale_Sync_and_Share = Locale.get("locale_Sync_and_Share");
-          jsonToRender.locale_Username = Locale.get("locale_Username");
-          jsonToRender.locale_View_Public_Profile_Tooltip = Locale.get("locale_View_Public_Profile_Tooltip");
-          jsonToRender.locale_We_need_to_make_sure_its_you = Locale.get("locale_We_need_to_make_sure_its_you");
-          jsonToRender.locale_Yep_its_me = Locale.get("locale_Yep_its_me");
-          jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this?
-
-          $(this.el).html(this.template(jsonToRender));
-
-          //The authView is the dropdown in the top right corner which holds all the user menus
-          this.authView.render();
-          this.userPreferenceView.render();
-          this.hotkeyEditView.render(); //.showModal();
-          this.renderReadonlyUserViews();
-
-          //put the version into the terminal, and into the user menu
-          OPrime.getVersion(function(ver) {
-            $(".fielddb-version").html(ver);
-          });
-          $(".corpus-settings").addClass("hidden");
-          $(".power-users-link").addClass("hidden");
-
-        }
         return this;
       },
 
-      /**
-       * Save current state, synchronize the server and local databases.
-       *
-       * If the corpus connection is currently the default, it attempts to
-       * replicate from to the users' last corpus instead.
-       */
-      replicateDatabases: function(callback) {
-        var self = this;
-        this.model
-          .saveAndInterConnectInApp(function() {
-            // syncUserWithServer will prompt for password, then run the
-            // corpus replication.
-            self.model
-              .get("authentication")
-              .syncUserWithServer(function() {
-                var corpusConnection = self.model.get("corpus")
-                  .get("connection");
-                if (self.model.get("authentication").get(
-                    "userPrivate").get("corpora").dbname != "default" && app.get("corpus").get("connection").dbname == "default") {
-                  corpusConnection = self.model.get(
-                    "authentication").get("userPrivate").get(
-                    "corpora")[0];
-                }
-                self.model.replicateCorpus(
-                  corpusConnection, callback);
-              });
-          });
-      }, // Display User Views
-      renderEditableUserViews: function(userid) {
+      // Display User Views
+      renderEditableUserViews: function() {
         this.fullScreenEditUserView.render();
         this.modalEditUserView.render();
       },
-      renderReadonlyUserViews: function(userid) {
+      renderReadonlyUserViews: function() {
         this.fullScreenReadUserView.render();
         this.modalReadUserView.render();
       },

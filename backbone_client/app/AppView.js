@@ -429,7 +429,7 @@ define([
         }
         window.hub.publish("quickAuthenticationClose", $("#quick-authenticate-password").val());
         $("#quick-authenticate-password").val("");
-        $("#quick-authenticate-modal").hide();
+        $("#quick-authenticate-modal").modal("hide");
       },
       "click #quick-authentication-cancel-btn": function(e) {
         if (e) {
@@ -438,7 +438,7 @@ define([
         }
         window.hub.publish("quickAuthenticationClose", "cancel");
         $("#quick-authenticate-password").val("");
-        $("#quick-authenticate-modal").hide();
+        $("#quick-authenticate-modal").modal("hide");
       },
       "click .icon-home": function(e) {
         if (e) {
@@ -609,18 +609,18 @@ define([
       jsonToRender.locale_to_beta_testers = Locale.get("locale_to_beta_testers"); // Do we still use this?
 
       if (OPrime.debugMode) OPrime.debug("Destroying the appview, so we dont get double events. This is risky...");
-      this.currentCorpusEditView.destroy_view();
-      this.currentCorpusReadView.destroy_view();
-      this.currentSessionEditView.destroy_view();
-      this.currentSessionReadView.destroy_view();
+      if (this.currentCorpusEditView) this.currentCorpusEditView.destroy_view();
+      if (this.currentCorpusReadView) this.currentCorpusReadView.destroy_view();
+      if (this.currentSessionEditView) this.currentSessionEditView.destroy_view();
+      if (this.currentSessionReadView) this.currentSessionReadView.destroy_view();
       //        this.datumsEditView.destroy_view();
       //        this.datumsReadView.destroy_view();//TODO add all the other child views eventually once they know how to destroy_view
-      this.currentEditDataListView.destroy_view();
-      this.currentReadDataListView.destroy_view();
-      this.currentPaginatedDataListDatumsView.destroy_view();
+      if (this.currentEditDataListView) this.currentEditDataListView.destroy_view();
+      if (this.currentReadDataListView) this.currentReadDataListView.destroy_view();
+      if (this.currentPaginatedDataListDatumsView) this.currentPaginatedDataListDatumsView.destroy_view();
 
-      this.importView.destroy_view();
-      this.searchEditView.destroy_view();
+      if (this.importView) this.importView.destroy_view();
+      if (this.searchEditView) this.searchEditView.destroy_view();
 
       this.destroy_view();
       if (OPrime.debugMode) OPrime.debug("Done Destroying the appview, so we dont get double events.");
@@ -638,13 +638,17 @@ define([
        * user knows which corpus and elicitation they are entering
        * data in
        */
-      jsonToRender.corpustitle = this.model.get("corpus").get("title");
-      if (jsonToRender.corpustitle.length > 20) {
-        jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0, 19) + "...";
+      if (this.model && this.model.get("corpus")){
+        jsonToRender.corpustitle = this.model.get("corpus").get("title");
+        if (jsonToRender.corpustitle.length > 20) {
+          jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0, 19) + "...";
+        }
       }
-      jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
-      if (jsonToRender.elicitationgoal.length > 20) {
-        jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0, 19) + "...";
+      if (this.model && this.model.get("currentSession")){
+        jsonToRender.elicitationgoal = this.model.get("currentSession").getGoal();
+        if (jsonToRender.elicitationgoal.length > 20) {
+          jsonToRender.elicitationgoal = jsonToRender.elicitationgoal.substr(0, 19) + "...";
+        }
       }
       try {
         jsonToRender.username = this.model.get("authentication").get("userPrivate").get("username");
@@ -680,11 +684,15 @@ define([
       if (OPrime.debugMode) OPrime.debug("APPVIEW render: " + this.format);
 
       //The authView is the dropdown in the top right corner which holds all the user menus
-      this.authView.render();
-      this.userPreferenceView.render();
-      this.hotkeyEditView.render(); //.showModal();
-      this.renderReadonlyUserViews();
+      if (this.authView) this.authView.render();
+      if (this.userPreferenceView) this.userPreferenceView.render();
+      if (this.hotkeyEditView) this.hotkeyEditView.render(); //.showModal();
+      if (this.modalReadUserView) this.renderReadonlyUserViews();
 
+      this.renderPostHoook();
+      return this;
+    },
+    renderPostHoook: function() {
       this.renderReadonlyDashboardViews();
       this.insertUnicodesView.render();
 
@@ -701,10 +709,9 @@ define([
       //put the version into the terminal, and into the user menu
       OPrime.getVersion(function(ver) {
         app.set("version", ver);
-        window.appView.term.VERSION_ = ver;
         $(".fielddb-version").html(ver);
       });
-      this.exportView.render();
+      if (this.exportView) this.exportView.render();
 
       this.setTotalPouchDocs();
       this.setTotalBackboneDocs();
