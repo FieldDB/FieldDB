@@ -145,6 +145,11 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       var deferred = Q.defer(),
         self = this;
 
+      if (this.whenLoggedIn){
+        return this.whenLoggedIn;
+      }
+      this.whenLoggedIn = deferred.promise;
+
       var dataToPost = {};
       dataToPost.username = loginDetails.username;
       dataToPost.password = loginDetails.password;
@@ -186,6 +191,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
         self.warn("Logging in failed: " + error.status, error.userFriendlyErrors);
         self.error = error.userFriendlyErrors.join(" ");
         deferred.reject(error);
+
+        delete self.whenLoggedIn;
         delete self.loggingIn;
       };
 
@@ -233,7 +240,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
           handleFailedLogin(error);
         });
 
-      return deferred.promise;
+      return this.whenLoggedIn;
     }
   },
 
