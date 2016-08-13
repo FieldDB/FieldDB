@@ -380,7 +380,7 @@ define([
             userchooseable: "disabled"
           }),
           new DatumField({
-            label: "DateSessionEntered",
+            label: "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This field is deprecated, it was replaced by DateSessionEntered."
@@ -474,13 +474,23 @@ define([
       var tempCorpus = new Corpus();
       tempCorpus.fillWithDefaults();
 
-      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var datumFields = tempCorpus.get("datumFields").toJSON();
       var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
 
-      for (var field in corpusFields) {
-        if (originalFieldLabels.indexOf(corpusFields[field].label) === -1) {
-          OPrime.debug("Adding field to this corpus: " + corpusFields[field].label);
-          originalModel.datumFields.push(corpusFields[field]);
+      for (var field in datumFields) {
+        if (originalFieldLabels.indexOf(datumFields[field].label) === -1) {
+          OPrime.debug("Adding datum field to this corpus: " + datumFields[field].label);
+          originalModel.datumFields.push(datumFields[field]);
+        }
+      }
+
+      var sessionFields = tempCorpus.get("sessionFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
+
+      for (var field in sessionFields) {
+        if (originalFieldLabels.indexOf(sessionFields[field].label) === -1) {
+          OPrime.debug("Adding session field to this corpus: " + sessionFields[field].label);
+          originalModel.sessionFields.push(sessionFields[field]);
         }
       }
 
