@@ -103,12 +103,14 @@ define([
       }).then(function(serverResults) {
         if (!dataToPost.syncDetails) {
           var encryptedUserString = localStorage.getItem(dataToPost.username);
-          var localUser = self.get("confidential").decrypt(encryptedUserString);
-          if (localUser.indexOf("confidential:") !== 0) {
-            localUser = new FieldDB.User(JSON.parse(localUser));
-            console.log("todo merge the user's local prefs", localUser);
-            serverResults.user = (new FieldDB.User(serverResults.user).merge("self", localUser, "overwrite")).toJSON();
-            // TODO merge with user's local prefs
+          if (encryptedUserString){
+            var localUser = self.get("confidential").decrypt(encryptedUserString);
+            if (localUser && localUser.indexOf("confidential:") !== 0) {
+              localUser = new FieldDB.User(JSON.parse(localUser));
+              console.log(" merge the user's local prefs", localUser);
+              serverResults.user = (new FieldDB.User(serverResults.user).merge("self", localUser, "overwrite")).toJSON();
+              // TODO merge with user's local prefs
+            }
           }
         }
 
@@ -148,7 +150,7 @@ define([
         if (typeof failcallback == "function") {
           failcallback(message);
         }
-      });
+      }).fail(failcallback);
     },
 
     logout: function() {
@@ -283,7 +285,9 @@ define([
       }
 
       /* Set up the pouch with the user's most recent connection if it has not already been set up */
-      window.app.changePouch(serverResults.user.mostRecentIds.connection);
+      if (window.app){
+        window.app.changePouch(serverResults.user.mostRecentIds.connection);
+      }
 
       this.get("userPublic").saveAndInterConnectInApp();
 

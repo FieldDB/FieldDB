@@ -102,7 +102,7 @@ define([
 
         it("should authenticate if login good username good password", function(done) {
           authentication.authenticate(new Backbone.Model({
-            username: "lingllama",
+            username: "jenkins",
             password: "phoneme"
           }), function(sucessful) {
             expect(sucessful).toEqual(true);
@@ -114,7 +114,7 @@ define([
 
             done();
           });
-        }, 10 * 1000);
+        }, 30 * 1000);
       });
     });
   }

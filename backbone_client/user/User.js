@@ -94,6 +94,7 @@ define([
         originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection.toJSON();
         delete originalModel.mostRecentIds.couchConnection;
       }
+      originalModel.mostRecentIds = originalModel.mostRecentIds || {};
       var connection = originalModel.mostRecentIds.connection;
       if (!connection) {
         connection = originalModel.corpora[0];
