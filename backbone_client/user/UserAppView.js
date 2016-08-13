@@ -65,6 +65,8 @@ define(
           return deferred.promise;
         };
 
+        this.userAppView = true;
+
         this.setUpAndAssociateViewsAndModelsWithCurrentUser();
       },
 

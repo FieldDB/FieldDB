@@ -668,7 +668,7 @@ define([
       if (username == "public") {
         this.format = "layoutEverythingAtOnce"
       }
-      if (this.format == "default") {
+      if (this.userAppView || this.format == "default") {
         $(this.el).html(this.template(jsonToRender));
       } else if (this.format == "layoutJustEntering") {
         $(this.el).html(this.layoutJustEntering(jsonToRender));
