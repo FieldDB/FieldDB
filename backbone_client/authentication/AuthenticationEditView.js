@@ -477,9 +477,11 @@ define([
       $(".welcome-screen-alerts").show();
 
       /*
-       * Contact the server and register the new user
+       * Login as a different user
        */
       this.model.fielddbModel = this.model.fielddbModel || new FieldDB.Authentication();
+      delete this.model.fielddbModel.user;
+
       this.model.fielddbModel.login(dataToPost).then(function(fielddbUser) {
         // Set the app serverLabel to the server the user logged into
         localStorage.setItem("serverLabel", appConnection.serverLabel);

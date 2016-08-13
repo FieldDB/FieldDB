@@ -1068,6 +1068,9 @@ define([
           }
           window.app.get("authentication").get("userPrivate").get("corpora").unshift(model.get("connection"));
 
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").connection = model.get("connection");
+
           if (newModel) {
 
             self.makeSureCorpusHasADataList(function() {
