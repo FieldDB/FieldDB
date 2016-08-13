@@ -94,13 +94,10 @@ define([
         //TODO what if they log out, when they have change to their private data that hasnt been pushed to the server, the server will overwrite their details. should we automatically check here, or should we make htem a button when they are authetnticated to test if they ahve lost their prefs etc?
       }
       var self = this;
-      var authUrl = FieldDB.Connection.defaultConnection(user.get("authUrl")).authUrl;
-      FieldDB.CORS.makeCORSRequest({
-        type: 'POST',
-        withCredentials: true,
-        url: authUrl + "/login",
-        data: dataToPost
-      }).then(function(serverResults) {
+      dataToPost.authUrl = FieldDB.Connection.defaultConnection(user.get("authUrl")).authUrl;
+
+      this.fielddbModel = this.fielddbModel || new FieldDB.Authentication();
+      this.fielddbModel.login(dataToPost).then(function(fielddbUser) {
         if (!dataToPost.syncDetails) {
           var encryptedUserString = localStorage.getItem(dataToPost.username);
           if (encryptedUserString){
@@ -108,26 +105,25 @@ define([
             if (localUser && localUser.indexOf("confidential:") !== 0) {
               localUser = new FieldDB.User(JSON.parse(localUser));
               console.log(" merge the user's local prefs", localUser);
-              serverResults.user = (new FieldDB.User(serverResults.user).merge("self", localUser, "overwrite")).toJSON();
+              fielddbUser = fielddbUser.merge("self", localUser, "overwrite").toJSON();
               // TODO merge with user's local prefs
             }
           }
         }
 
         self.staleAuthentication = false;
-        serverResults.user.corpora = serverResults.user.corpora || serverResults.user.corpuses;
-        if (OPrime.isTouchDBApp()) {
-          /* if on android, turn on replication. */
-          var db = dataToPost.username + "-firstcorpus";
-          var dbServer = serverResults.user.corpora[0].domain;
-          if (serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.connection && serverResults.user.mostRecentIds.connection.dbname) {
-            db = serverResults.user.mostRecentIds.connection.dbname;
-            dbServer = serverResults.user.mostRecentIds.connection.domain;
-          }
-          Android.setCredentialsAndReplicate(db, username, password, dbServer);
-        }
+        // if (OPrime.isTouchDBApp()) {
+        //   /* if on android, turn on replication. */
+        //   var db = dataToPost.username + "-firstcorpus";
+        //   var dbServer = fielddbUser.corpora[0].domain;
+        //   if (fielddbUser.mostRecentIds && fielddbUser.mostRecentIds.connection && fielddbUser.mostRecentIds.connection.dbname) {
+        //     db = fielddbUser.mostRecentIds.connection.dbname;
+        //     dbServer = fielddbUser.mostRecentIds.connection.domain;
+        //   }
+        //   Android.setCredentialsAndReplicate(db, username, password, dbServer);
+        // }
 
-        self.saveServerResponseToUser(serverResults, successcallback);
+        self.saveFielDBUserToUser(fielddbUser, successcallback);
       }, function(e) {
         var message = "There was an error in contacting the authentication server to confirm your identity. " + OPrime.contactUs;
         if (e && e.userFriendlyErrors && typeof e.userFriendlyErrors.join === "function") {
@@ -225,29 +221,25 @@ define([
      * This function parses the server response and injects it into the authentication's user public and user private
      *
      */
-    saveServerResponseToUser: function(serverResults, callbacksave) {
-      if (OPrime.debugMode) OPrime.debug("saveServerResponseToUser");
+    saveFielDBUserToUser: function(fielddbUser, callbacksave) {
+      if (OPrime.debugMode) OPrime.debug("saveFielDBUserToUser");
 
       var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
-      if (serverResults.user.username == "public") {
+      if (fielddbUser.username == "public") {
         renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
       }
       this.set("state", renderLoggedInStateDependingOnPublicUserOrNot);
 
-      // Over write the public copy with any (new) username/gravatar
-      // info
-      if (serverResults.user.userMask == null) {
+      // Over write the public copy with any (new) username/gravatar info
+      if (fielddbUser.userMask == null) {
         // if the user hasnt already specified their public self, then
         // put in a username and gravatar,however they can add more
-        // details like their affiliation, name, research interests
-        // etc.
-        serverResults.user.userMask = {};
-        serverResults.user.userMask.username = serverResults.user.username;
-        serverResults.user.userMask.gravatar = serverResults.user.gravatar;
-        serverResults.user.userMask.authUrl = serverResults.user.authUrl;
-        serverResults.user.userMask.id = serverResults.user._id; //this will end up as an attribute
-        serverResults.user.userMask._id = serverResults.user._id; //this will end up as an attribute
-        //        serverResults.user.userMask.dbname = serverResults.user.corpora[0].dbname;
+        // details like their affiliation, name, research interests etc.
+        fielddbUser.userMask = {};
+        // fielddbUser.userMask.authUrl = fielddbUser.authUrl;
+        // fielddbUser.userMask.id = fielddbUser.id; //this will end up as an attribute
+        // fielddbUser.userMask._id = fielddbUser._id; //this will end up as an attribute
+        //        fielddbUser.userMask.dbname = fielddbUser.corpora[0].dbname;
       }
 
       if (this.get("userPrivate") == undefined) {
@@ -256,29 +248,25 @@ define([
         }));
       }
       var u = this.get("userPrivate");
-      u.id = serverResults.user._id; //set the backbone id to be the same as the auth id
+      u.id = fielddbUser.id; //set the backbone id to be the same as the auth id
       //set the user AFTER setting his/her publicself if it wasn't there already
       /*
        * Handle if the user got access to new corpora
        */
-      if (serverResults.user.newCorpusConnections) {
+      if (fielddbUser.newCorpora && fielddbUser.newCorpora.length) {
         if (window.appView) {
-          window.appView.toastUser("You have have been added to a new corpus team by someone! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.", "alert-success", "Added to corpus!");
+          window.appView.toastUser("You have have been added to a new corpus team! Click on <a data-toggle='modal' href='#user-modal'> here </a> to see the list of corpora to which you have access.", "alert-success", "Added to corpus!");
         }
-        for (var x in serverResults.user.newCorpusConnections) {
-          if (_.pluck(serverResults.user.corpora, "dbname").indexOf(serverResults.user.newCorpusConnections[x].dbname) == -1) {
-            serverResults.user.corpora.push(serverResults.user.newCorpusConnections[x]);
-          }
-        }
-        delete serverResults.user.newCorpusConnections;
+        fielddbUser.corpora = fielddbUser.corpora.merge("self", fielddbUser.newCorpora, "overwrite");
+        delete fielddbUser.newCorpora;
       }
 
-      u.set(u.parse(serverResults.user)); //might take internal elements that are supposed to be a backbone model, and override them
+      u.set(u.parse(fielddbUser.toJSON())); //might take internal elements that are supposed to be a backbone model, and override them
 
       this.set("userPublic", this.get("userPrivate").get("userMask"));
-      this.get("userPublic")._id = serverResults.user._id;
-      this.get("userPublic").id = serverResults.user.id;
-      this.get("userPublic").set("_id", serverResults.user._id);
+      this.get("userPublic")._id = fielddbUser.id;
+      this.get("userPublic").id = fielddbUser.id;
+      this.get("userPublic").set("_id", fielddbUser.id);
 
       if (window.appView) {
         window.appView.associateCurrentUsersInternalModelsWithTheirViews();
@@ -286,14 +274,14 @@ define([
 
       /* Set up the pouch with the user's most recent connection if it has not already been set up */
       if (window.app){
-        window.app.changePouch(serverResults.user.mostRecentIds.connection);
+        window.app.changePouch(fielddbUser.mostRecentIds.connection);
       }
 
       this.get("userPublic").saveAndInterConnectInApp();
 
-      OPrime.setCookie("username", serverResults.user.username, 365);
-      OPrime.setCookie("token", serverResults.user.hash, 365);
-      this.get("confidential").set("secretkey", serverResults.user.hash);
+      OPrime.setCookie("username", fielddbUser.username, 365);
+      OPrime.setCookie("token", fielddbUser.hash, 365);
+      this.get("confidential").set("secretkey", fielddbUser.hash);
       this.saveAndEncryptUserToLocalStorage();
       if (typeof callbacksave == "function") {
         callbacksave(true); //tell caller that the user succeeded to authenticate
@@ -343,27 +331,24 @@ define([
        */
       //      userString = userString.replace(/https/g,"http").replace(/6984/g,"3186");
 
-      var u = JSON.parse(userString);
-      var data = {};
-      data.user = u;
-
       /* Upgrade chrome app user's to v1.38+ */
-      data.user.appVersionWhenCreated = data.user.appVersionWhenCreated || "";
-      if (data.user.appVersionWhenCreated && OPrime.isChromeApp() && !localStorage.getItem(data.user.username + "lastUpdatedAtVersion") && data.user.username != "public" && data.user.username != "lingllama") {
-        var birthday = data.user.appVersionWhenCreated.replace("v", "").split(".");
+      var user = JSON.parse(userString);
+      user.appVersionWhenCreated = user.appVersionWhenCreated || "";
+      if (user.appVersionWhenCreated && OPrime.isChromeApp() && !localStorage.getItem(user.username + "lastUpdatedAtVersion") && user.username != "public" && user.username != "lingllama") {
+        var birthday = user.appVersionWhenCreated.replace("v", "").split(".");
         var year = birthday[0];
         var week = birthday[1];
         console.log("The app's week this user was created: ", birthday);
         if (year <= 1 && week <= 38) {
-          console.log("No longer kicking the user out of the app, some users have to use the Prototype because it can handle more data than the Spreadsheet app.");
-          // localStorage.setItem("username_to_update",data.user.username);
-          // alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline data you have currently is upgraded to v1.38 and up.");
+          console.log("No longer kicking the user out of the app, some users have to use the Prototype because it can handle more user than the Spreadsheet app.");
+          // localStorage.setItem("username_to_update",user.user.username);
+          // alert("Hi! Your account was created before version 1.38, taking you to the backup page to ensure that any offline user you have currently is upgraded to v1.38 and up.");
           // OPrime.redirect("backup_pouches.html");
           // return;
         }
       }
 
-      this.saveServerResponseToUser(data, callbackload);
+      this.saveFielDBUserToUser(new FieldDB.User(user), callbackload);
     },
 
     loadPublicUser: function(callbackload) {
@@ -373,7 +358,7 @@ define([
       for (var x in mostRecentPublicUser) {
         localStorage.setItem(x, mostRecentPublicUser[x]);
       }
-      // OPrime.redirect("corpus.html");
+      OPrime.redirect("corpus.html");
     },
 
     savePublicUserForOfflineUse: function() {
