@@ -17,7 +17,7 @@ cp angular_client/modules/activity/release/js/main.js angular_client/modules/act
 cp angular_client/modules/activity/release/js/main.js backbone_client/activity/libs/fielddb_activity_feed_widget.js
 
 #putting the activity feed widgets into the minified map_reduce
-cp angular_client/modules/activity/release/js/main.js couchapp_minified/_attachments/activity/libs/fielddb_activity_feed_widget.js
+cp angular_client/modules/activity/release/js/main.js couchapp_prototype/_attachments/activity/libs/fielddb_activity_feed_widget.js
 
 # Putting activity feed files into the map_reduce_activities which can host the activity feeds
 rm -rf map_reduce_activities/_attachments

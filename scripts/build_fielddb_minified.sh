@@ -30,86 +30,59 @@ mv output backbone_client/bower_components/jquery/dist/jquery.min.js
 
 
 #welcome is just a redirect to either user or corpus
-rm -rf couchapp_minified/_attachments
+rm -rf couchapp_prototype/_attachments
 
-mkdir -p couchapp_minified/_attachments/user
-mkdir -p couchapp_minified/_attachments/user
-mkdir -p couchapp_minified/_attachments/images
-mkdir -p couchapp_minified/_attachments/bower_components/requirejs
-mkdir -p couchapp_minified/_attachments/bower_components/fielddb
-# mkdir -p couchapp_minified/_attachments/bower_components/d3
-mkdir -p couchapp_minified/_attachments/app
-mkdir -p couchapp_minified/_attachments/libs/bootstrap/css
+mkdir -p couchapp_prototype/_attachments/user
+mkdir -p couchapp_prototype/_attachments/user
+mkdir -p couchapp_prototype/_attachments/images
+mkdir -p couchapp_prototype/_attachments/bower_components/requirejs
+mkdir -p couchapp_prototype/_attachments/bower_components/fielddb
+# mkdir -p couchapp_prototype/_attachments/bower_components/d3
+mkdir -p couchapp_prototype/_attachments/app
+mkdir -p couchapp_prototype/_attachments/libs/bootstrap/css
 
 
 # backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_backup_pouches_dashboard.js
-# cp release/backup_pouches_dashboard.js couchapp_minified/_attachments/
+# cp release/backup_pouches_dashboard.js couchapp_prototype/_attachments/
 echo "Building user_online_dashboard using require.js "
 backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_user_online_dashboard.js
-cp release/user_online_dashboard.js couchapp_minified/_attachments/
+cp release/user_online_dashboard.js couchapp_prototype/_attachments/
 echo "Building corpus_online_dashboard using require.js "
 backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_corpus_online_dashboard.js
-cp release/corpus_online_dashboard.js couchapp_minified/_attachments/
+cp release/corpus_online_dashboard.js couchapp_prototype/_attachments/
 
 
 
 
-cp -R backbone_client/activity couchapp_minified/_attachments/activity
+cp -R backbone_client/activity couchapp_prototype/_attachments/activity
 
-cp backbone_client/app/*.css couchapp_minified/_attachments/app/
+cp backbone_client/app/*.css couchapp_prototype/_attachments/app/
 
-cp backbone_client/corpus.html couchapp_minified/_attachments/corpus.html
-cp backbone_client/user.html couchapp_minified/_attachments/user.html
+cp backbone_client/corpus.html couchapp_prototype/_attachments/corpus.html
+cp backbone_client/user.html couchapp_prototype/_attachments/user.html
 
-cp backbone_client/images/and_venn_diagram.png couchapp_minified/_attachments/images/and_venn_diagram.png
+cp backbone_client/images/and_venn_diagram.png couchapp_prototype/_attachments/images/and_venn_diagram.png
 
-cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
-cp backbone_client/images/icon.png couchapp_minified/_attachments/images/icon.png
-cp backbone_client/favicon.ico couchapp_minified/_attachments/favicon.ico
-cp backbone_client/images/*dev.png couchapp_minified/_attachments/images/
-cp backbone_client/images/loader.gif couchapp_minified/_attachments/images/loader.gif
-cp backbone_client/images/spinner.gif couchapp_minified/_attachments/images/spinner.gif
-cp backbone_client/images/or_venn_diagram.png couchapp_minified/_attachments/images/or_venn_diagram.png
+cp backbone_client/manifest.json couchapp_prototype/_attachments/manifest.json
+cp backbone_client/images/icon.png couchapp_prototype/_attachments/images/icon.png
+cp backbone_client/favicon.ico couchapp_prototype/_attachments/favicon.ico
+cp backbone_client/images/*dev.png couchapp_prototype/_attachments/images/
+cp backbone_client/images/loader.gif couchapp_prototype/_attachments/images/loader.gif
+cp backbone_client/images/spinner.gif couchapp_prototype/_attachments/images/spinner.gif
+cp backbone_client/images/or_venn_diagram.png couchapp_prototype/_attachments/images/or_venn_diagram.png
 
-cp backbone_client/libs/bootstrap/css/*.css couchapp_minified/_attachments/libs/bootstrap/css/
-# cp backbone_client/bower_components/d3/d3.js couchapp_minified/_attachments/bower_components/d3/d3.js
-cp -R backbone_client/libs/font_awesome couchapp_minified/_attachments/libs/font_awesome
-cp backbone_client/bower_components/requirejs/require.js couchapp_minified/_attachments/bower_components/requirejs/require.js
-cp backbone_client/libs/analytics.js couchapp_minified/_attachments/libs/analytics.js
+cp backbone_client/libs/bootstrap/css/*.css couchapp_prototype/_attachments/libs/bootstrap/css/
+# cp backbone_client/bower_components/d3/d3.js couchapp_prototype/_attachments/bower_components/d3/d3.js
+cp -R backbone_client/libs/font_awesome couchapp_prototype/_attachments/libs/font_awesome
+cp backbone_client/bower_components/requirejs/require.js couchapp_prototype/_attachments/bower_components/requirejs/require.js
+cp backbone_client/libs/analytics.js couchapp_prototype/_attachments/libs/analytics.js
 
-cp backbone_client/bower_components/fielddb/fielddb.js couchapp_minified/_attachments/bower_components/fielddb/fielddb.js
+cp backbone_client/bower_components/fielddb/fielddb.js couchapp_prototype/_attachments/bower_components/fielddb/fielddb.js
 
-cp backbone_client/manifest.json couchapp_minified/_attachments/manifest.json
+cp backbone_client/manifest.json couchapp_prototype/_attachments/manifest.json
 
-cp -R backbone_client/user/layouts couchapp_minified/_attachments/user/layouts
+cp -R backbone_client/user/layouts couchapp_prototype/_attachments/user/layouts
 
-cp -R backbone_client/user/skins couchapp_minified/_attachments/user/skins
+cp -R backbone_client/user/skins couchapp_prototype/_attachments/user/skins
 
-
-
-rm -rf couchapp_minified/lists
-cp -R map_reduce_data/lists couchapp_minified/lists
-
-rm -rf couchapp_minified/views
-cp -R map_reduce_data/views couchapp_minified/views
-
-# rm -rf release
-
-
-# echo " If you cant build because core.js is missing, comment out atob and crypto in api/Confidential.js "
-# echo '   /* globals window */'
-# echo '   var AES = {}; //require("crypto-js/aes");'
-# echo '   var CryptoEncoding = {};// require("crypto-js/enc-utf8");'
-# echo '   var FieldDBObject = require("./../FieldDBObject").FieldDBObject;'
-# echo '   '
-# echo '   try {'
-# echo '     if (!window.atob) {'
-# echo '       console.log("ATOB is not defined, loading from npm");'
-# echo '     }'
-# echo '   } catch (e) {'
-# echo '     console.log(e);'
-# echo '     /*jshint -W020 */'
-# echo '     window = {};'
-# echo '     // window.atob = require("atob");'
-# echo '     // window.btoa = require("btoa");'
-# echo '   }'
+rm -rf release

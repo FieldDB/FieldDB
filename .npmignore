@@ -17,6 +17,7 @@ map_reduce_export
 map_reduce_learnx
 map_reduce_lexicon
 couchapp_minified
+couchapp_prototype
 
 
 Gruntfile.js

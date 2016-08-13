@@ -47,6 +47,7 @@
     "map_reduce_learnx",
     "map_reduce_lexicon",
     "couchapp_minified",
+    "couchapp_prototype",
     "docs",
     "install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
     "install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
