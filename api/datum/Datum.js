@@ -1,11 +1,10 @@
-/* globals window, $, _ , OPrime*/
+/* globals window, $, _ */
 "use strict";
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Comments = require("./../comment/Comments").Comments;
-var Datums = require("./../Collection").Collection;
 var DatumField = require("./DatumField").DatumField;
 var DatumFields = require("./DatumFields").DatumFields;
 // var DatumState = require("./../FieldDBObject").FieldDBObject;
@@ -1000,7 +999,7 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    * @param failurecallback
    */
   saveAndInterConnectInApp: {
-    value: function(successcallback, failurecallback) {
+    value: function(successcallback) {
       if (typeof successcallback === "function") {
         successcallback();
       }
