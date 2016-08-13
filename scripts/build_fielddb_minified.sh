@@ -19,7 +19,7 @@ echo "Compiling templates (so that the app doesnt need to use eval() )"
 cd ../
 ./scripts/build_templates.sh
 
-echo "Linking a local copy of the fielddb commonjs"
+echo "Copying a local copy of the fielddb commonjs"
 rm backbone_client/bower_components/fielddb/fielddb.js
 cp $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
@@ -43,10 +43,10 @@ mkdir -p couchapp_minified/_attachments/libs/bootstrap/css
 
 # backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_backup_pouches_dashboard.js
 # cp release/backup_pouches_dashboard.js couchapp_minified/_attachments/
-
+echo "Building user_online_dashboard require.js "
 backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_user_online_dashboard.js
 cp release/user_online_dashboard.js couchapp_minified/_attachments/
-
+echo "Building corpus_online_dashboard using require.js "
 backbone_client/node_modules/requirejs/bin/r.js -o  backbone_client/build_corpus_online_dashboard.js
 cp release/corpus_online_dashboard.js couchapp_minified/_attachments/
 
