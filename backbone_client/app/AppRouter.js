@@ -142,7 +142,7 @@ define([
     },
 
     renderlogin: function() {
-      $("#login_modal").show("modal");
+      $("#login_modal").modal("show");
       window.local.href = "#";
       //window.local.replace("#login_modal");
     },
@@ -547,7 +547,7 @@ define([
       if ($("#export-modal").html() == "") {
         window.appView.exportView.render();
       }
-      $('#export-modal').show();
+      $('#export-modal').modal("show");
     },
 
     // Functions that toggle between editable and readonly datums view

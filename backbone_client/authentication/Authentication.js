@@ -497,7 +497,7 @@ define([
     },
     addCorpusRoleToUser: function(role, userToAddToCorpus, successcallback, failcallback) {
       var self = this;
-      $("#quick-authenticate-modal").show();
+      $("#quick-authenticate-modal").modal("show");
       if (this.get("userPrivate").get("username") == "lingllama") {
         $("#quick-authenticate-password").val("phoneme");
       }
@@ -550,7 +550,7 @@ define([
         //end send call
 
         //Close the modal
-        $("#quick-authenticate-modal").hide();
+        $("#quick-authenticate-modal").modal("hide");
         $("#quick-authenticate-password").val("");
         window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
       };

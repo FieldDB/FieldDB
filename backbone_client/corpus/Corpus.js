@@ -717,7 +717,7 @@ define([
       });
     },
     newSession: function() {
-      $("#new-session-modal").show();
+      $("#new-session-modal").modal("show");
       //Save the current session just in case
       var self = this;
       window.app.get("currentSession").saveAndInterConnectInApp(function() {
@@ -734,7 +734,7 @@ define([
     /*
      */
     newCorpus: function() {
-      $("#new-corpus-modal").show();
+      $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       this.saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
@@ -790,7 +790,7 @@ define([
       window.appView.corpusNewModalView.render();
     },
     newCorpusSimple: function() {
-      $("#new-corpus-modal").show();
+      $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       this.saveAndInterConnectInApp();
       var attributes = {};
@@ -856,7 +856,7 @@ define([
         window.appView.toastUser(message, "alert-danger", "New Corpus:");
         $("#new-corpus-modal").find(".alert-danger").removeClass("hide");
         $("#new-corpus-modal").find(".alert-danger").html(message);
-        $("#new-corpus-modal").show();
+        $("#new-corpus-modal").modal("show");
         window.location.href = "#render/true";
       };
       var config = {

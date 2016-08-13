@@ -65,7 +65,7 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#user-modal").hide();
+        $("#user-modal").modal("hide");
         window.app.router.showFullscreenUser();
         window.appView.publicEditUserView.render();
       }
@@ -194,7 +194,7 @@ define([
     showReadVersion: function() {
       if (this.format == "modal") {
         window.appView.modalReadUserView.render();
-        //        $("#user-modal").hide();
+        //        $("#user-modal").modal("hide");
       } else {
         window.appView.publicReadUserView.render();
       }

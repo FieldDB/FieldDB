@@ -57,7 +57,7 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        $("#user-modal").hide();
+        $("#user-modal").modal("hide");
         window.app.router.showFullscreenUser(this.model.id);
       }
     },

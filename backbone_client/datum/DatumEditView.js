@@ -113,27 +113,27 @@ define([
       /* Menu */
       "click .LaTeX": function() {
         this.model.latexitDatum(true);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .icon-paste": function() {
         this.model.exportAsPlainText(true);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .CSV": function() {
         this.model.exportAsCSV(true, null);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .WordPress": function() {
         this.model.exportAsWordPress(true, null);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .XML": function() {
         this.model.exportAsIGTXML(true, null);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .JSON": function() {
         this.model.exportAsIGTJSON(true, null);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .icon-th-list": "hideRareFields",
       "click .icon-list-alt": "showRareFields",

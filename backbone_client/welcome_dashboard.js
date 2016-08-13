@@ -132,7 +132,7 @@
 //         return -($(this).height() * .5);
 //       }
 //     });
-//     $('#user-welcome-modal').show();
+//     $('#user-welcome-modal').modal("show");
 //   };
 //   /*
 //    * End functions

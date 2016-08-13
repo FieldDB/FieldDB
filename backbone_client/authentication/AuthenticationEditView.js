@@ -71,7 +71,7 @@ define([
         //          e.stopPropagation();
         //          e.preventDefault();
         //        }
-        $("#login_modal").show("modal");
+        $("#login_modal").modal("show");
       },
 
       "keyup .registerusername": function(e) {
@@ -410,12 +410,12 @@ define([
       if (username == "lingllama") {
         / * Show the quick auth but fill in the password, to simulate a user */
         $("#quick-authenticate-password").val("phoneme");
-        $("#quick-authenticate-modal").show();
+        $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose", subscription, self);
         return;
       }
 
-      $("#quick-authenticate-modal").show();
+      $("#quick-authenticate-modal").modal("show");
       window.hub.subscribe("quickAuthenticationClose", subscription, self);
     },
 
