@@ -126,7 +126,7 @@ describe("Authentication ", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else {
-          expect(error.userFriendlyErrors).toEqual("untested error response");
+          expect(error.userFriendlyErrors[0]).toEqual("Your corpus jenkins-long_distance_anaphors_in_quechua already exists, no need to create it.");
         }
       }).fail(function(exception) {
         console.log(exception.stack);
