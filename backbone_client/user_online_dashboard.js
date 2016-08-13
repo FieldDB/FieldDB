@@ -24,8 +24,6 @@ require.config({
     "backbone": "bower_components/backbone/backbone",
     "jquerycouch": "libs/backbone_couchdb/jquery.couch",
 
-    "terminal": "libs/terminal/terminal",
-
     "text": "libs/text",
 
     "xml2json": "libs/xml2json",
@@ -77,11 +75,6 @@ require.config({
     //   deps: ["_", "jquerycouch", "handlebars"],
     //   exports: "Backbone"
     // },
-
-    "terminal": {
-      deps: ["bootstrap", "jquery"],
-      exports: "Terminal"
-    }
 
   }
 });
