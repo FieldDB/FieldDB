@@ -103,20 +103,8 @@ define([
       "click .add-comment-datum": 'insertNewComment',
 
       /* Read Only Menu */
-      "dblclick": function(e) {
-        if (e) {
-          e.stopPropagation();
-          e.preventDefault();
-        }
-        // Prepend Datum to the top of the DatumContainer stack
-        var d = this.model.clone();
-        d.id = this.model.id;
-        d.set("_id", this.model.get("_id"));
-        d.set("_rev", this.model.get("_rev"));
-        if (window.appView.datumsEditView) {
-          window.appView.datumsEditView.prependDatum(d);
-        }
-      },
+      "dblclick": "openDatum",
+      "taphold": "openDatum",
       "click .play-audio": function(e) {
         if (e) {
           e.stopPropagation();
@@ -132,6 +120,23 @@ define([
         //        alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
       }
+    },
+
+    openDatum: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      // Prepend Datum to the top of the DatumContainer stack
+      var d = this.model.clone();
+      d.id = this.model.id;
+      d.set("_id", this.model.get("_id"));
+      d.set("_rev", this.model.get("_rev"));
+      if (window.appView.datumsEditView) {
+        window.appView.datumsEditView.prependDatum(d);
+      }
+
+      return this;
     },
 
     /**
