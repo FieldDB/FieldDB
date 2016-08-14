@@ -1293,3 +1293,7 @@ ul
 .language-learning-lesson .endTime{
 	display: none !important;
 }
+
+.loading-item {
+  height: 1em;
+}
