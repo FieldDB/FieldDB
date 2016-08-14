@@ -211,6 +211,9 @@ define([
     },
 
     changeViewsOfInternalModels: function() {
+      if (!this.model) {
+        return;
+      }
       this.fieldsView = new UpdatingCollectionView({
         collection: this.model.get("fields"),
         childViewConstructor: DatumFieldReadView,
