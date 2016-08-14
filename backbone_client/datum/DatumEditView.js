@@ -48,6 +48,10 @@ define([
      * @constructs
      */
     initialize: function() {
+      if (!this.model || !this.model.get("fields")) {
+        return;
+      }
+
       // Create a AudioVideoReadView
       this.audioVideoView = new UpdatingCollectionView({
         collection: this.model.get("audioVideo"),
@@ -144,6 +148,7 @@ define([
         }
         this.playAudio(e);
       },
+      "click .loading-item": "render",
       /* Edit Only Menu */
       "click .icon-unlock": "encryptDatum",
       "click .icon-lock": "decryptDatum",
@@ -241,7 +246,26 @@ define([
     /**
      * Renders the DatumEditView and all of its partials.
      */
-    render: function() {
+    render: function(e) {
+      if (e && typeof e.stopPropagation === "function") {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      if (!this.model) {
+        return this;
+      }
+
+      if (!this.model || !this.model.get("fields")) {
+        $(this.el).html("<img class='loading-item' src='images/loader.gif'/>");
+        this.model.bind("change:_rev", this.render, this);
+        return this;
+      }
+
+      if (!this.audioVideoView){
+        this.initialize();
+      }
+      this.model.unbind("change:_rev", this.render, this);
+
       this.model.startReadTimeIfNotAlreadyStarted();
       if (OPrime.debugMode) OPrime.debug("DATUM render: ");
 
