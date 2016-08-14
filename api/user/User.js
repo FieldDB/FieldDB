@@ -127,7 +127,24 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     }
   },
 
+  /*
+   * Deprecated
+   */
   datalists: {
+    get: function() {
+      return this.datalistHistory;
+    },
+    set: function(value) {
+      if (value && !this._datalistHistory) {
+        this.datalistHistory = value;
+      }
+    }
+  },
+
+  /*
+   * Deprecated
+   */
+  dataLists: {
     get: function() {
       return this.datalistHistory;
     },
@@ -144,6 +161,20 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     },
     set: function(value) {
       this._datalistHistory = value;
+    }
+  },
+
+  /*
+   * Deprecated
+   */
+  sessions: {
+    get: function() {
+      return this.sessionHistory;
+    },
+    set: function(value) {
+      if (value && !this._sessionHistory) {
+        this.sessionHistory = value;
+      }
     }
   },
 
@@ -266,6 +297,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
         value.researchInterest = value.researchInterest || "No public information available";
         value.description = value.description || "No public information available";
         value.affiliation = value.affiliation || "No public information available";
+        value.id = value.username;
       }
       this.ensureSetViaAppropriateType("userMask", value);
     }

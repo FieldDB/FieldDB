@@ -1,32 +1,13 @@
-/* If they have an old link, redirect them */
-if (window.location.origin.indexOf("ifielddevs.iriscouch.com") >= 0) {
-  var newTestingServerWithCORS = window.location.href.replace("ifielddevs.iriscouch.com", "corpus.lingsync.org");
-  if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
-  }
-  window.location.replace(newTestingServerWithCORS);
-}
-/* If they have an old link, redirect them */
-if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
-  var newTestingServerWithCORS = window.location.href.replace("corpusdev.lingsync.org", "corpus.lingsync.org");
-  if (window.location.protocol == "http:") {
-    newTestingServerWithCORS = newTestingServerWithCORS.replace("http", "https");
-  }
-  window.location.replace(newTestingServerWithCORS);
-}
-
-/* Make sure they use the https versions, if they are on a couchapp */
-if (window.location.origin.indexOf("localhost") == -1) {
-  if (window.location.protocol == "http:") {
-    window.location.replace(window.location.href.replace("http", "https"));
-  }
+/* Make sure they use the https versions, if they are not on localhost */
+if (window.location.protocol === "http:" && window.location.origin.indexOf("localhost") === -1) {
+  window.location.replace(window.location.href.replace("http", "https"));
 }
 
 // Set the RequireJS configuration
 require.config({
   paths: {
     /* Bootstrap user interface javascript files */
-    "bootstrap": "libs/bootstrap/js/bootstrap.min",
+    "bootstrap": "libs/bootstrap/js/bootstrap",
 
     "CryptoJS": "libs/Crypto_AES",
 
@@ -42,8 +23,6 @@ require.config({
     "underscore": "bower_components/underscore/underscore",
     "backbone": "bower_components/backbone/backbone",
     "jquerycouch": "libs/backbone_couchdb/jquery.couch",
-
-    "terminal": "libs/terminal/terminal",
 
     "text": "libs/text",
 
@@ -97,11 +76,6 @@ require.config({
     //   exports: "Backbone"
     // },
 
-    "terminal": {
-      deps: ["bootstrap", "jquery"],
-      exports: "Terminal"
-    }
-
   }
 });
 
@@ -117,9 +91,8 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     }
   }
 
-  window.app = new App({
-    filledWithDefaults: true
-  });
+  window.app = new App();
+  window.app.fillWithDefaults();
 
   window.uploadAndGenerateTextGrid = function(files) {
     //    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;

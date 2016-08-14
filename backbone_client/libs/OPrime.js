@@ -47,6 +47,30 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
 
 OPrime.contactUs = "<a href='https://docs.google.com/forms/d/18KcT_SO8YxG8QNlHValEztGmFpEc4-ZrjWO76lm0mUQ/viewform' target='_blank'>Contact Us</a>";
 
+OPrime.getMostLikelyPrototypeVersionFromUrl = function(versionCode) {
+  if (window.location.origin.indexOf("prosody.linguistics.mcgill") >= 0) {
+    versionCode = versionCode + "pmo";
+  } else if (window.location.origin.indexOf("jlbnogfhkigoniojfngfcglhphldldgi") >= 0) {
+    versionCode = versionCode + "pmc";
+  } else if (window.location.origin.indexOf("corpus.lingsync.org") >= 0) {
+    versionCode = versionCode + "pso";
+  } else if (window.location.origin.indexOf("corpusdev.lingsync.org") >= 0) {
+    versionCode = versionCode + "pbo";
+  } else if (window.location.origin.indexOf("eeipnabdeimobhlkfaiohienhibfcfpa") >= 0) {
+    versionCode = versionCode + "pbc";
+  } else if (window.location.origin.indexOf("ocmdknddgpmjngkhcbcofoogkommjfoj") >= 0) {
+    versionCode = versionCode + "psc";
+  } else if (window.location.origin.indexOf("localhost:8128") >= 0) {
+    versionCode = versionCode + "pba";
+  } else if (window.location.origin.indexOf("localhost") >= 0) {
+    versionCode = versionCode + "plo";
+  } else if (OPrime.isChromeApp()) {
+    versionCode = versionCode + "pdc";
+  }
+
+  return versionCode;
+};
+
 OPrime.debug = function(message, message2, message3, message4) {
   if (navigator.appName == 'Microsoft Internet Explorer') {
     return;
@@ -700,55 +724,6 @@ if (OPrime.isAndroidApp()) {
     this.debugMode = true;
   }
 }
-
-OPrime.userEncryptionToken = function() {
-  return "topsecretuserencryptiontokenfortestingTODOchangethis";
-};
-
-OPrime.getConnectivityType = function(callingcontextself, callback) {
-  this.hub.unsubscribe("connectivityType", null, callingcontextself);
-  /* subscribe the caller's functions to the channels */
-  this.hub.subscribe("connectivityType", callback, callingcontextself);
-
-  /* Fire command which will publish the connectivity */
-  if (OPrime.isAndroidApp()) {
-    if (OPrime.debugMode) OPrime.debug("This is an Android.");
-    Android.getConectivityType();
-  } else {
-    OPrime.hub.publish('connectivityType', 'Probably Online');
-  }
-};
-
-OPrime.getHardwareInfo = function(callingcontextself, callback) {
-  this.hub.unsubscribe("hardwareDetails", null, callingcontextself);
-  /* subscribe the caller's functions to the channels */
-  this.hub.subscribe("hardwareDetails", callback, callingcontextself);
-
-  /* Fire command which will publish the connectivity */
-  if (OPrime.isAndroidApp()) {
-    if (OPrime.debugMode) OPrime.debug("This is an Android.");
-    Android.getHardwareDetails();
-  } else {
-    OPrime.hub.publish('hardwareDetails', {
-      name: 'Browser',
-      model: navigator.userAgent,
-      identifier: 'TODOgetMACAddress'
-    });
-  }
-};
-OPrime.useUnsecureCouchDB = function() {
-  if (OPrime.isAndroidApp()) {
-    /*
-     * TODO if later when TouchDB has secure databases, we can use a secure
-     * TouchDB, return false
-     */
-    return true;
-  }
-  if (OPrime.runFromTouchDBOnAndroidInLocalNetwork() && window.location.origin.indexOf("chrome-extension") != 0) {
-    return true;
-  }
-  return false;
-};
 
 OPrime.checkToSeeIfCouchAppIsReady = function(urlIsCouchAppReady, readycallback, failcallback) {
   if (readycallback) {

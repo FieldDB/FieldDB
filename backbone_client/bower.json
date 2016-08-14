@@ -1,6 +1,6 @@
 {
   "name": "fielddb-prototype",
-  "version": "4.6.5",
+  "version": "4.16.14",
   "homepage": "https://github.com/FieldDB/FieldDB",
   "authors": [
     "cesine <cesine@yahoo.com>",
@@ -38,7 +38,6 @@
     "d3": "~3.5.8"
   },
   "resolutions": {
-    "underscore": ">=1.8.3",
-    "d3": "~3.5.8"
+    "underscore": ">=1.8.3"
   }
 }

@@ -42,30 +42,37 @@ define([
       /*
        * Check for user's cookie and the dashboard so we can load it
        */
-      var username = OPrime.getCookie("username");
+      var username = localStorage.getItem("username");
       if (username == null && username == "") {
         // new user, take them to the index which can handle new users.
-        OPrime.redirect('corpus.html');
+        OPrime.redirect("corpus.html");
+        return;
       }
 
       this.prepLocales();
 
-      window.app = this;
-
       var appself = this;
       if (OPrime.debugMode) OPrime.debug("Loading user");
-      var u = localStorage.getItem("encryptedUser");
+      // Support version > 4.6.5
+      var u = localStorage.getItem(username);
+
+      // Support version > 4.6.5
+      if (!u) {
+        u = localStorage.getItem("encryptedUser");
+      }
+
       if (!u) {
         OPrime.redirect("corpus.html");
         return;
       }
       appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
+        localStorage.removeItem("encryptedUser");
         if (success == null) {
           //        alert("Bug: We couldn't log you in."+errors.join("\n") + " " + OPrime.contactUs);
-          //        OPrime.setCookie("username","");
-          //        OPrime.setCookie("token","");
-          //        localStorage.removeItem("encryptedUser");
-          //        OPrime.redirect('corpus.html');
+          //        localStorage.removeItem("username");
+          //        localStorage.removeItem("token");
+          //        localStorage.removeItem(username);
+          //        window.location.replace('index.html');
           return;
         } else {
           window.appView = new UserAppView({
@@ -85,23 +92,29 @@ define([
       if (OPrime.debugMode) OPrime.debug("There is no activity feed in the user app, not saving this activity.", jsonActivity);
     },
 
+    loadBackboneObjectsByIdAndSetAsCurrentDashboard: null,
+
     /**
      * Smaller than the App version
      */
-    backUpUser: function(callback) {
+    backUpUser: function(callback, cancelcallback) {
       var self = this;
       /* don't back up the public user, its not necessary the server doesn't modifications anyway. */
       if (self.get("authentication").get("userPrivate").get("username") == "public" || self.get("authentication").get("userPrivate").get("username") == "lingllama") {
         if (typeof callback == "function") {
           callback();
         }
+        return;
       }
       //syncUserWithServer will prompt for password, then run the corpus replication.
       self.get("authentication").syncUserWithServer(function() {
+        if (window.appView) {
+          window.appView.toastUser("Backed up your user preferences with your authentication server, if you log into another device, your preferences will load.", "alert-info", "Backed-up:");
+        }
         if (typeof callback == "function") {
           callback();
         }
-      });
+      }, null, cancelcallback);
     },
 
     router: UserRouter,

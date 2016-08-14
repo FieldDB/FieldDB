@@ -10,6 +10,9 @@ map_reduce_data/_attachments
 couchapp_minified/views
 couchapp_minified/lists
 couchapp_minified/_attachments
+couchapp_prototype/views
+couchapp_prototype/lists
+couchapp_prototype/_attachments
 dist/
 coverage/
 

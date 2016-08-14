@@ -103,20 +103,6 @@ define([
         this.unset("filledWithDefaults");
       }
       this.bind("change:publicCorpus", this.changeCorpusPublicPrivate, this);
-
-      //      var connection = this.get("connection");
-      //      if(!connection){
-      //        connection = JSON.parse(localStorage.getItem("mostRecentConnection"));
-      //        if(!localStorage.getItem("mostRecentConnection")){
-      //          alert("Bug, need to take you back to the users page.");
-      //        }
-      //        this.set("connection", connection);
-      //      }
-      //      this.pouch = Backbone.sync
-      //      .pouch(OPrime.isAndroidApp() ? OPrime.touchUrl
-      //        + connection.dbname : OPrime.pouchUrl
-      //        + connection.dbname);
-
     },
     loadOrCreateCorpusBydbname: function(connection, sucessloadingorCreatingcallback) {
       var couchurl = OPrime.getCouchUrl(connection);
@@ -125,8 +111,7 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
-        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin("public-firstcorpus");
-        OPrime.redirect(optionalCouchAppPath + "user.html");
+        OPrime.redirect("user.html");
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -189,7 +174,7 @@ define([
         if (!this.get("corpusMask")) {
           this.set("corpusMask", new CorpusMask());
         }
-        this.get("corpusMask").id = "corpus";
+        this.get("corpusMask").set("id", "corpus");
         this.get("corpusMask").fetch({
           sucess: function(model, response, options) {
             if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
@@ -395,7 +380,7 @@ define([
             userchooseable: "disabled"
           }),
           new DatumField({
-            label: "DateSessionEntered",
+            label: "dateSEntered",
             shouldBeEncrypted: "",
             userchooseable: "disabled",
             help: "This field is deprecated, it was replaced by DateSessionEntered."
@@ -432,6 +417,7 @@ define([
       originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       originalModel.connection = originalModel.connection || originalModel.couchConnection;
       originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
+      originalModel.corpusMask.corpusid = originalModel.corpusMask.corpusid || originalModel._id;
 
       /* clean the datum fields for search */
       for (x in originalModel.datumFields) {
@@ -458,13 +444,13 @@ define([
       /* Use the couch connection defined by this app. */
       if (originalModel.connection) {
         originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
+        var normalizedConnection = FieldDB.Connection.defaultConnection();
         normalizedConnection.dbname = originalModel.connection.dbname;
         originalModel.connection.merge("self", normalizedConnection, "overwrite");
         originalModel.connection = originalModel.connection.toJSON();
       } else {
         // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = new FieldDB.Connection(OPrime.defaultConnection()).toJSON();
+        originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
         originalModel.connection.corpusid = originalModel._id;
         originalModel.connection.dbname = originalModel.dbname;
       }
@@ -488,13 +474,23 @@ define([
       var tempCorpus = new Corpus();
       tempCorpus.fillWithDefaults();
 
-      var corpusFields = tempCorpus.get("datumFields").toJSON();
+      var datumFields = tempCorpus.get("datumFields").toJSON();
       var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
 
-      for (var field in corpusFields) {
-        if (originalFieldLabels.indexOf(corpusFields[field].label) === -1) {
-          OPrime.debug("Adding field to this corpus: " + corpusFields[field].label);
-          originalModel.datumFields.push(corpusFields[field]);
+      for (var field in datumFields) {
+        if (originalFieldLabels.indexOf(datumFields[field].label) === -1) {
+          OPrime.debug("Adding datum field to this corpus: " + datumFields[field].label);
+          originalModel.datumFields.push(datumFields[field]);
+        }
+      }
+
+      var sessionFields = tempCorpus.get("sessionFields").toJSON();
+      var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
+
+      for (var field in sessionFields) {
+        if (originalFieldLabels.indexOf(sessionFields[field].label) === -1) {
+          OPrime.debug("Adding session field to this corpus: " + sessionFields[field].label);
+          originalModel.sessionFields.push(sessionFields[field]);
         }
       }
 
@@ -664,14 +660,6 @@ define([
       title: "Untitled Corpus",
       titleAsUrl: "UntitledCorpus",
       description: "This is an untitled corpus, created by default. Change its title and description by clicking on the pencil icon ('edit corpus').",
-      //      confidential :  Confidential,
-      //      source : Consultants,
-      //      datumStates : DatumStates,
-      //      datumFields : DatumFields,
-      //      conversationFields : DatumFields,
-      //      sessionFields : DatumFields,
-      //      searchFields : DatumFields,
-      //      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) ||new FieldDB.Connection(FieldDB.Connection.defaultConnection())
     },
 
     // Internal models: used by the parse function
@@ -684,7 +672,7 @@ define([
       sessionFields: DatumFields,
       searchFields: DatumFields,
       //      sessions : Sessions,
-      //      dataLists : DataLists,
+      //      datalists : DataLists,
       corpusMask: CorpusMask,
       comments: Comments,
       team: UserMask
@@ -739,7 +727,7 @@ define([
       });
     },
     newSession: function() {
-      $("#new-session-modal").show();
+      $("#new-session-modal").modal("show");
       //Save the current session just in case
       var self = this;
       window.app.get("currentSession").saveAndInterConnectInApp(function() {
@@ -756,7 +744,7 @@ define([
     /*
      */
     newCorpus: function() {
-      $("#new-corpus-modal").show();
+      $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       this.saveAndInterConnectInApp();
       //Clone it and send its clone to the session modal so that the users can modify the fields and then change their mind, wthout affecting the current session.
@@ -777,7 +765,7 @@ define([
       //      attributes.sessionFields = new DatumFields(attributes.sessionFields);
       attributes.dbname = this.get("dbname") + "copy";
       attributes.connection.dbname = this.get("dbname") + "copy";
-      attributes.dataLists = [];
+      attributes.datalists = [];
       attributes.sessions = [];
       attributes.comments = [];
       attributes.corpusMask = {
@@ -812,7 +800,7 @@ define([
       window.appView.corpusNewModalView.render();
     },
     newCorpusSimple: function() {
-      $("#new-corpus-modal").show();
+      $("#new-corpus-modal").modal("show");
       //Save the current session just in case
       this.saveAndInterConnectInApp();
       var attributes = {};
@@ -864,8 +852,8 @@ define([
       }
     },
     'createCorpus': function(dataToPost) {
-      dataToPost.serverCode = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
-      dataToPost.authUrl = new FieldDB.Connection(FieldDB.Connection.defaultConnection()).authUrl;
+      dataToPost.serverCode = FieldDB.Connection.defaultConnection().brandLowerCase;
+      dataToPost.authUrl = FieldDB.Connection.defaultConnection().authUrl;
       dataToPost.newCorpusTitle = this.get("title");
 
       var functionForError = function(err) {
@@ -878,7 +866,7 @@ define([
         window.appView.toastUser(message, "alert-danger", "New Corpus:");
         $("#new-corpus-modal").find(".alert-danger").removeClass("hide");
         $("#new-corpus-modal").find(".alert-danger").html(message);
-        $("#new-corpus-modal").show();
+        $("#new-corpus-modal").modal("show");
         window.location.href = "#render/true";
       };
       var config = {
@@ -898,7 +886,7 @@ define([
              * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
              */
             var potentialdbname = response.corpus.dbname;
-            var connection = OPrime.defaultConnection();
+            var connection = FieldDB.Connection.defaultConnection();
             connection.dbname = potentialdbname;
             var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
 
@@ -915,8 +903,7 @@ define([
               }
 
               window.setTimeout(function() {
-                var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
-                OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname);
+                OPrime.redirect("user.html#/corpus/" + potentialdbname);
               }, 1000);
 
             });
@@ -1081,6 +1068,9 @@ define([
           }
           window.app.get("authentication").get("userPrivate").get("corpora").unshift(model.get("connection"));
 
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = model.id;
+          window.app.get("authentication").get("userPrivate").get("mostRecentIds").connection = model.get("connection");
+
           if (newModel) {
 
             self.makeSureCorpusHasADataList(function() {
@@ -1092,8 +1082,8 @@ define([
 
                     });
                   },
-                  error: function(e, f, g) {
-                    alert('New Corpus save error' + f.reason);
+                  error: function(model, error, options) {
+                    alert('New Corpus save error' + error.reason);
                   }
                 });
 
@@ -1177,7 +1167,7 @@ define([
             }
             dl.save(null, {
               success: function(model, response) {
-                window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+                window.app.get("authentication").get("userPrivate").get("datalists").unshift(model.id);
                 self.datalists.unshift(model);
 
                 if (typeof sucess == "function") {
@@ -1388,9 +1378,19 @@ define([
      * @param failurecallback
      */
     setAsCurrentCorpus: function(successcallback, failurecallback) {
+      if (!window.app || typeof window.app.get !== "function") {
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        return;
+      }
+
       if (window.app && typeof window.app.get === "function" && window.app.get("corpus") && window.app.get("corpus").id != this.id) {
         window.app.set("corpus", this);
       }
+
+      window.app.changePouch(this.get("connection"));
+
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").corpusid = this.id;
       window.app.get("authentication").get("userPrivate").get("mostRecentIds").connection = this.get("connection");
       window.app.get("authentication").saveAndInterConnectInApp();

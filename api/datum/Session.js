@@ -734,100 +734,10 @@ Session.prototype = Object.create(FieldDBObject.prototype, /** @lends Session.pr
    * @param failurecallback
    */
   saveAndInterConnectInApp: {
-    value: function(successcallback, failurecallback) {
-      var self = this;
-      var newModel = true;
-      if (this.id) {
-        newModel = false;
-      } else {
-        this.set("dateCreated", JSON.stringify(new Date()));
+    value: function(successcallback) {
+      if (typeof successcallback === "function") {
+        successcallback();
       }
-      this.debug("Saving the Session");
-      //protect against users moving sessions from one corpus to another on purpose or accidentially
-      if (self.application.corpus.dbname !== this.dbname) {
-        if (typeof failurecallback === "function") {
-          failurecallback();
-        } else {
-          this.bug("Session save error. I cant save this session in this corpus, it belongs to another corpus. ");
-        }
-        return;
-      }
-      var oldrev = this.get("_rev");
-      this.set("dateModified", JSON.stringify(new Date()));
-      this.set("timestamp", Date.now());
-      self.save(null, {
-        success: function(model, response) {
-          self.debug("Session save success");
-          var goal = model.get("sessionFields").where({
-            label: "goal"
-          })[0].get("mask");
-          var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
-          //TODO add privacy for session goals in corpus
-          //            if(self.application.corpus.get("keepSessionDetailsPrivate")){
-          //              goal = "";
-          //              differences = "";
-          //            }
-          if (self.application) {
-            self.application.toastUser("Sucessfully saved session: " + goal, "alert-success", "Saved!");
-            self.application.addSavedDoc(model.id);
-          }
-          var verb = "modified";
-          var verbicon = "icon-pencil";
-          if (newModel) {
-            verb = "added";
-            verbicon = "icon-plus";
-          }
-          self.application.addActivity({
-            verb: "<a href='" + differences + "'>" + verb + "</a> ",
-            verbicon: verbicon,
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
-            teamOrPersonal: "team",
-            context: " via Offline App."
-          });
-
-          self.application.addActivity({
-            verb: "<a href='" + differences + "'>" + verb + "</a> ",
-            verbicon: verbicon,
-            directobjecticon: "icon-calendar",
-            directobject: "<a href='#session/" + model.id + "'>" + goal + "</a> ",
-            indirectobject: "in <a href='#corpus/" + self.application.corpus.id + "'>" + self.application.corpus.get("title") + "</a>",
-            teamOrPersonal: "personal",
-            context: " via Offline App."
-          });
-
-          /*
-           * make sure the session is visible in this corpus
-           */
-          var previousversionincorpus = self.application.corpus.sessions.get(model.id);
-          if (previousversionincorpus === undefined) {
-            self.application.corpus.sessions.unshift(model);
-          } else {
-            self.application.corpus.sessions.remove(previousversionincorpus);
-            self.application.corpus.sessions.unshift(model);
-          }
-          self.application.get("authentication").get("userPrivate").get("mostRecentIds").sessionid = model.id;
-          //make sure the session is in the history of the user
-          if (self.application.get("authentication").get("userPrivate").get("sessionHistory").indexOf(model.id) === -1) {
-            self.application.get("authentication").get("userPrivate").get("sessionHistory").unshift(model.id);
-          }
-          //            self.application.addUnsavedDoc(self.application.get("authentication").get("userPrivate").id);
-          self.application.get("authentication").saveAndInterConnectInApp();
-
-          if (typeof successcallback === "function") {
-            successcallback();
-          }
-        },
-        error: function(e, f, g) {
-          self.debug("Session save error", e, f, g);
-          if (typeof failurecallback === "function") {
-            failurecallback();
-          } else {
-            self.bug("Session save error: " + f.reason);
-          }
-        }
-      });
     }
   },
   /**

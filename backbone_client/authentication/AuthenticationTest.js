@@ -31,6 +31,27 @@ define([
         expect(Authentication).toBeDefined();
       });
 
+      it("should register new users", function(done) {
+        var auth = new Authentication();
+
+        auth.register({
+          username: "test6",
+          password: "test",
+          confirmPassword: "test",
+          authUrl: "https://localhost:3183"
+        }, function(corpus) {
+          expect(corpus).toBeDefined();
+          expect(corpus.dbname).toBeDefined();
+
+          done();
+        }, function(reason) {
+          expect(reason).toBeDefined();
+          expect(reason.userFriendlyErrors).toBeDefined();
+
+          done();
+        }, null, null);
+      });
+
       it("should not log the user in if the server replies not-authenticated", function() {
         expect(Authentication).toBeDefined();
       });
@@ -81,7 +102,7 @@ define([
 
         it("should authenticate if login good username good password", function(done) {
           authentication.authenticate(new Backbone.Model({
-            username: "lingllama",
+            username: "jenkins",
             password: "phoneme"
           }), function(sucessful) {
             expect(sucessful).toEqual(true);
@@ -93,7 +114,7 @@ define([
 
             done();
           });
-        }, 10 * 1000);
+        }, 30 * 1000);
       });
     });
   }

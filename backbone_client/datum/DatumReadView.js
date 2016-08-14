@@ -89,34 +89,22 @@ define([
       /* Menu */
       "click .LaTeX": function() {
         this.model.latexitDatum(true);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .icon-paste": function() {
         this.model.exportAsPlainText(true);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
       "click .CSV": function() {
         this.model.exportAsCSV(true, null);
-        $("#export-modal").show();
+        $("#export-modal").modal("show");
       },
 
       "click .add-comment-datum": 'insertNewComment',
 
       /* Read Only Menu */
-      "dblclick": function(e) {
-        if (e) {
-          e.stopPropagation();
-          e.preventDefault();
-        }
-        // Prepend Datum to the top of the DatumContainer stack
-        var d = this.model.clone();
-        d.id = this.model.id;
-        d.set("_id", this.model.get("_id"));
-        d.set("_rev", this.model.get("_rev"));
-        if (window.appView.datumsEditView) {
-          window.appView.datumsEditView.prependDatum(d);
-        }
-      },
+      "dblclick": "openDatum",
+      "taphold": "openDatum",
       "click .play-audio": function(e) {
         if (e) {
           e.stopPropagation();
@@ -132,6 +120,23 @@ define([
         //        alert("Checked box " + this.model.id);
         this.checked = e.target.checked;
       }
+    },
+
+    openDatum: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      // Prepend Datum to the top of the DatumContainer stack
+      var d = this.model.clone();
+      d.id = this.model.id;
+      d.set("_id", this.model.get("_id"));
+      d.set("_rev", this.model.get("_rev"));
+      if (window.appView.datumsEditView) {
+        window.appView.datumsEditView.prependDatum(d);
+      }
+
+      return this;
     },
 
     /**
@@ -238,7 +243,7 @@ define([
         var queryTokens = this.model.processQueryString(searchParams);
 
         var doGrossKeywordMatch = false;
-        if (searchParams.indexOf(":") == -1) {
+        if (searchParams && searchParams.indexOf(":") == -1) {
           doGrossKeywordMatch = true;
         }
 
@@ -455,8 +460,8 @@ define([
             }
 
             var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, syntax, gloss]);
-            // if there are only 3 or less words, they probably dont need the alignment visual that much
-            if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
+            // if there are only 2 or less words, they probably dont need the alignment visual that much
+            if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 3) {
               return this;
             } else if (this.format === "latexPreviewIGTonly" && tuple && tuple.length > 40) {
               jsonToRender.scrollable = "scrollable";

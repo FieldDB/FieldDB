@@ -1,4 +1,4 @@
-/* globals localStorage */
+/* globals localStorage, setTimeout */
 "use strict";
 
 var Q = require("q");
@@ -27,7 +27,7 @@ var DEFAULT_BASE_DB_URL = "https://localhost:6984";
 
 Database.defaultConnection = Connection.defaultConnection;
 Database.CORS = CORS;
-
+Database.Connection = Connection;
 /**
  * This limit is set to protect apps from requesting huge amounts of data without pagination.
  * @type {Number}
@@ -691,9 +691,8 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             username: self.dbname.split("-")[0],
             password: "testtest",
             confirmPassword: "testtest",
-            connection: new Connection(Connection.knownConnections.production)
+            connection: Connection.defaultConnection()
           };
-          options.authUrl = options.connection.authUrl;
         }
 
         if (!options) {
@@ -704,8 +703,6 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           });
           return;
         }
-
-        options.authUrl = self.deduceAuthUrl(options.authUrl);
 
         if (!options.username) {
           deferred.reject({
@@ -775,6 +772,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           options.appbrand = self.application.brandLowerCase;
         }
         options.appVersionWhenCreated = self.version;
+
+        options.authUrl = options.connection.authUrl;
+        options.authUrl = self.deduceAuthUrl(options.authUrl);
 
         Database.CORS.makeCORSRequest({
           type: "POST",
@@ -975,6 +975,52 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             }
           }
         });
+    }
+  },
+
+  whenDatabaseIsReady: {
+    get: function() {
+      var deferred = Q.defer();
+      var self = this;
+      var exponentialBackoffTimer = 2 * 1000;
+
+      if (this._whenDatabaseIsReady) {
+        return this._whenDatabaseIsReady;
+      }
+      this._whenDatabaseIsReady = deferred.promise;
+
+      var contactServer = function() {
+        CORS.makeCORSRequest({
+          type: "GET",
+          url: self.url,
+          data: {}
+        }).then(function(serverResults) {
+          self.debug(serverResults);
+
+          // Should have 11 docs in it
+          if (serverResults.doc_count > 2) {
+            return deferred.resolve(self);
+          }
+
+          setTimeout(contactServer, exponentialBackoffTimer);
+          exponentialBackoffTimer = exponentialBackoffTimer * exponentialBackoffTimer;
+        }).catch(function(reason) {
+          self.warn(reason);
+          if (exponentialBackoffTimer > 2 * 60 * 1000) {
+            return deferred.reject(reason);
+          }
+
+          setTimeout(contactServer, exponentialBackoffTimer);
+          exponentialBackoffTimer = exponentialBackoffTimer * exponentialBackoffTimer;
+        });
+      };
+
+      contactServer();
+
+      return this._whenDatabaseIsReady;
+    },
+    set: function(value) {
+      this._whenDatabaseIsReady = value;
     }
   },
 

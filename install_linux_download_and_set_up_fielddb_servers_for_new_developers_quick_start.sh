@@ -481,8 +481,8 @@ read -p "Do you want to use this as a production server?" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
   then {
 
-    echo "Setting up  NODE_DEPLOY_TARGET='production'"
-    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
+    echo "Setting up  NODE_ENV='production'"
+    echo "export NODE_ENV='production'" >> $HOME/.bash_profile
 
     echo "Downloading server configs from a private repo"
     git clone username@git.example.ca:/example/FieldDBServerConfig

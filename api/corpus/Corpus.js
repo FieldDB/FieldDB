@@ -623,16 +623,16 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
    */
   newCorpus: {
     value: function(options) {
-      var newCorpusJson,
+      var corpus,
         self = this;
 
       if (this.dbname && this.dbname.indexOf("firstcorpus") > -1) {
-        newCorpusJson = new Corpus(Corpus.prototype.defaults);
+        corpus = new Corpus(Corpus.prototype.defaults);
       } else {
-        newCorpusJson = this.clone();
+        corpus = this.clone();
 
-        newCorpusJson.comments = [];
-        newCorpusJson.confidential = new Confidential().fillWithDefaults().toJSON();
+        corpus.comments = [];
+        corpus.confidential = new Confidential().fillWithDefaults();
 
         var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields", "fields"];
         //clear out search terms from the new corpus's datum fields
@@ -640,29 +640,28 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         fieldsToClear.map(function(fieldsType) {
           if (self[fieldsType]) {
             self.debug("Cloning structure only of fieldsType: ", fieldsType);
-            newCorpusJson[fieldsType] = self[fieldsType].cloneStructure();
+            corpus[fieldsType] = self[fieldsType].cloneStructure();
           } else {
             self.debug("fieldsType " + fieldsType + " was missing on this corpus, it's copy will have the fields. ", self);
-            newCorpusJson[fieldsType] = defaults[fieldsType];
+            corpus[fieldsType] = defaults[fieldsType];
           }
         });
 
-        newCorpusJson = new Corpus(newCorpusJson);
         if (this.dbname) {
-          newCorpusJson.dbname = this.dbname + "copy";
+          corpus.dbname = this.dbname + "_copy";
         }
-        newCorpusJson.title = newCorpusJson.title + " copy";
-        newCorpusJson.titleAsUrl = newCorpusJson.titleAsUrl + "Copy";
-        newCorpusJson.description = "Copy of: " + newCorpusJson.description;
+        corpus.title = corpus.title + " copy";
+        corpus.titleAsUrl = corpus.titleAsUrl + "Copy";
+        corpus.description = "Copy of: " + corpus.description;
       }
 
       for (var aproperty in options) {
         if (options.hasOwnProperty(aproperty)) {
-          newCorpusJson[aproperty] = options[aproperty];
+          corpus[aproperty] = options[aproperty];
         }
       }
 
-      return newCorpusJson;
+      return corpus;
     }
   },
 

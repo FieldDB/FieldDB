@@ -1,11 +1,10 @@
-/* globals window, $, _ , OPrime*/
+/* globals window, $, _ */
 "use strict";
 
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var AudioVideo = require("./../audio_video/AudioVideo").AudioVideo;
 var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Comments = require("./../comment/Comments").Comments;
-var Datums = require("./../Collection").Collection;
 var DatumField = require("./DatumField").DatumField;
 var DatumFields = require("./DatumFields").DatumFields;
 // var DatumState = require("./../FieldDBObject").FieldDBObject;
@@ -267,81 +266,6 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
     }
   },
 
-  /**
-   * Gets all the DatumIds in the current Corpus sorted by their date.
-   *
-   * @param {Function} callback A function that expects a single parameter. That
-   * parameter is the result of calling "pages/datums". So it is an array
-   * of objects. Each object has a 'key' and a 'value' attribute. The 'key'
-   * attribute contains the Datum's dateModified and the 'value' attribute contains
-   * the Datum itself.
-   */
-  getMostRecentIdsByDate: {
-    value: function(howmany, callback) {
-      var self = this;
-
-      if (OPrime.isBackboneCouchDBApp()) {
-        //        self.bug("TODO check  getMostRecentIdsByDate");
-        //TODO this might be producing the error on line  815 in backbone.js       model = new this.model(attrs, options);
-        var tempDatums = new Datums();
-        tempDatums.model = Datum;
-        tempDatums.fetch({
-          descending: true,
-          limit: howmany,
-          error: function(model, xhr, options) {
-            OPrime.bug("There was an error loading your datums.", xhr, options);
-            if (typeof callback === "function") {
-              callback([]);
-            }
-          },
-          success: function(model, response) {
-            self.debug(model);
-            //            if (response.length >= 1) {
-            //              callback([response[0]._id], [response[1]._id]);
-            callback(response);
-            //            }
-          }
-        });
-        return;
-      }
-
-      try {
-        self.pouch(function(err, db) {
-          db.query("pages/datums", {
-            reduce: false
-          }, function(err, response) {
-
-            if (err) {
-              if (window.toldSearchtomakebydateviews) {
-                self.debug("Told pouch to make by date views once, apparently it didnt work. Stopping it from looping.");
-                return;
-              }
-              /*
-               * Its possible that the pouch has no by date views, create them and then try searching again.
-               */
-              window.toldSearchtomakebydateviews = true;
-              window.app.corpus.createPouchView("pages/datums", function() {
-                window.appView.toastUser("Initializing your corpus' sort items by date functions for the first time.", "alert-success", "Sort:");
-                self.getMostRecentIdsByDate(howmany, callback);
-              });
-              return;
-            }
-
-            if ((!err) && (typeof callback === "function")) {
-              self.debug("Callback with: ", response.rows);
-              callback(response.rows);
-            }
-          });
-        });
-
-      } catch (e) {
-        //        appView.datumsEditView.newDatum();
-        window.appView.datumsEditView.render();
-        self.bug("Couldnt show the most recent datums " + JSON.stringify(e));
-
-      }
-    }
-  },
   fillWithCorpusFieldsIfMissing: {
     value: function() {
       if (!this.fields) {
@@ -404,8 +328,8 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
         return;
       }
 
+      var self = this;
       try {
-        var self = this;
         self.pouch(function(err, db) {
           db.query("pages/get_datum_fields", {
             reduce: false
@@ -1075,192 +999,10 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
    * @param failurecallback
    */
   saveAndInterConnectInApp: {
-    value: function(successcallback, failurecallback) {
-      this.debug("Saving a Datum");
-      var self = this;
-      var newModel = true;
-      if (this.id) {
-        newModel = false;
-      } else {
-        this.set("dateEntered", JSON.stringify(new Date()));
+    value: function(successcallback) {
+      if (typeof successcallback === "function") {
+        successcallback();
       }
-      //protect against users moving datums from one corpus to another on purpose or accidentially
-      if (window.app.corpus.dbname !== this.dbname) {
-        if (typeof failurecallback === "function") {
-          failurecallback();
-        } else {
-          self.bug("Datum save error. I cant save this datum in this corpus, it belongs to another corpus. ");
-        }
-        return;
-      }
-      //If it was decrypted, this will save the changes before we go into encryptedMode
-
-      this.fields.each(function(dIndex) {
-        //Anything can be done here, it is the set function which does all the work.
-        dIndex.set("value", dIndex.get("mask"));
-      });
-
-      // Store the current Session, the current corpus, and the current date
-      // in the Datum
-      this.set({
-        "dbname": window.app.corpus.dbname,
-        "dateModified": JSON.stringify(new Date()),
-        "timestamp": Date.now(),
-        "jsonType": "Datum"
-      });
-      if (!this.get("session")) {
-        this.set("session", window.app.get("currentSession"));
-        self.debug("Setting the session on this datum to the current one.");
-      } else {
-        self.debug("Not setting the session on this datum.");
-      }
-      window.app.corpus.set("dateOfLastDatumModifiedToCheckForOldSession", JSON.stringify(new Date()));
-
-      var oldrev = this.get("_rev");
-      /*
-       * For some reason the corpus is getting an extra state that no one defined in it.
-       * this gets rid of it when we save. (if it gets in to a datum)
-       */
-      try {
-        var ds = this.get("datumStates").models;
-        for (var s in ds) {
-          if (ds[s].get("state") === undefined) {
-            this.get("datumStates").remove(ds[s]);
-          }
-        }
-      } catch (e) {
-        self.debug("Removing empty states work around failed some thing was wrong.", e);
-      }
-
-      self.save(null, {
-        success: function(model, response) {
-          self.debug("Datum save success");
-          var utterance = model.fields.where({
-            label: "utterance"
-          })[0].get("mask");
-          var differences = "#diff/oldrev/" + oldrev + "/newrev/" + response._rev;
-          //TODO add privacy for datum goals in corpus
-          //            if(window.app.corpus.get("keepDatumDetailsPrivate")){
-          //              utterance = "";
-          //              differences = "";
-          //            }
-          if (window.appView) {
-            window.appView.toastUser("Sucessfully saved datum: " + utterance, "alert-success", "Saved!");
-            window.appView.addSavedDoc(model.id);
-          }
-          var verb = "modified";
-          var verbicon = "icon-pencil";
-          if (newModel) {
-            verb = "added";
-            verbicon = "icon-plus";
-          }
-          window.app.addActivity({
-            verb: "<a href='" + differences + "'>" + verb + "</a> ",
-            verbicon: verbicon,
-            directobject: "<a href='#corpus/" + model.dbname + "/datum/" + model.id + "'>" + utterance + "</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.corpus.id + "'>" + window.app.corpus.get("title") + "</a>",
-            teamOrPersonal: "team",
-            context: " via Offline App."
-          });
-
-          window.app.addActivity({
-            verb: "<a href='" + differences + "'>" + verb + "</a> ",
-            verbicon: verbicon,
-            directobject: "<a href='#corpus/" + model.dbname + "/datum/" + model.id + "'>" + utterance + "</a> ",
-            directobjecticon: "icon-list",
-            indirectobject: "in <a href='#corpus/" + window.app.corpus.id + "'>" + window.app.corpus.get("title") + "</a>",
-            teamOrPersonal: "personal",
-            context: " via Offline App."
-          });
-          //            /*
-          //             * If the current data list is the default
-          //             * list, render the datum there since is the "Active" copy
-          //             * that will eventually overwrite the default in the
-          //             * corpus if the user saves the current data list
-          //             */
-          //            var defaultIndex = window.app.corpus.datalists.length - 1;
-          //            if(window.appView.currentEditDataListView.model.id === window.app.corpus.datalists.models[defaultIndex].id){
-          //              //Put it into the current data list views
-          //              window.appView.currentPaginatedDataListDatumsView.collection.remove(model);//take it out of where it was,
-          //              window.appView.currentPaginatedDataListDatumsView.collection.unshift(model); //and put it on the top. this is only in the default data list
-          //              //Put it into the ids of the current data list
-          //              var positionInCurrentDataList = window.app.get("currentDataList").get("datumIds").indexOf(model.id);
-          //              if(positionInCurrentDataList !== -1){
-          //                window.app.get("currentDataList").get("datumIds").splice(positionInCurrentDataList, 1);
-          //              }
-          //              window.app.get("currentDataList").get("datumIds").unshift(model.id);
-          //              window.appView.addUnsavedDoc(window.app.get("currentDataList").id);
-          //            }else{
-          //              /*
-          //               * Make sure the datum is at the top of the default data list which is in the corpus,
-          //               * this is in case the default data list is not being displayed
-          //               */
-          //              var positionInDefaultDataList = window.app.corpus.datalists.models[defaultIndex].get("datumIds").indexOf(model.id);
-          //              if(positionInDefaultDataList !== -1 ){
-          //                //We only reorder the default data list datum to be in the order of the most recent modified, other data lists can stay in the order teh usr designed them.
-          //                window.app.corpus.datalists.models[defaultIndex].get("datumIds").splice(positionInDefaultDataList, 1);
-          //              }
-          //              window.app.corpus.datalists.models[defaultIndex].get("datumIds").unshift(model.id);
-          //              window.app.corpus.datalists.models[defaultIndex].needsSave  = true;
-          //              window.appView.addUnsavedDoc(window.app.corpus.id);
-          //            }
-          /*
-           * Also, see if this datum matches the search datalist, and add it to the top of the search list
-           */
-          if ($("#search_box").val() !== "") {
-            //TODO check this
-            var datumJson = model.fields.toJSON();
-            var datumAsDBResponseRow = {};
-            for (var x in datumJson) {
-              datumAsDBResponseRow[datumJson[x].label] = datumJson[x].mask;
-            }
-            var queryTokens = self.processQueryString($("#search_box").val());
-            var thisDatumIsIn = self.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[0]);
-
-            for (var j = 1; j < queryTokens.length; j += 2) {
-              if (queryTokens[j] === "AND") {
-                // Short circuit: if it's already false then it continues to be false
-                if (!thisDatumIsIn) {
-                  break;
-                }
-
-                // Do an intersection
-                thisDatumIsIn = thisDatumIsIn && model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j + 1]);
-              } else {
-                // Do a union
-                thisDatumIsIn = thisDatumIsIn || model.matchesSingleCriteria(datumAsDBResponseRow, queryTokens[j + 1]);
-              }
-            }
-            if (thisDatumIsIn) {
-              // Insert the datum at the top of the search datums collection view
-              window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.remove(model); //take it out of where it was,
-              window.appView.searchEditView.searchPaginatedDataListDatumsView.collection.unshift(model);
-              //Do the same to the datumids in the search data list itself
-              var positioninsearchresults = window.appView.searchEditView.searchDataListView.model.get("datumIds").indexOf(model.id);
-              if (positioninsearchresults !== -1) {
-                window.appView.searchEditView.searchDataListView.model.get("datumIds").splice(positioninsearchresults, 1);
-              }
-              window.appView.searchEditView.searchDataListView.model.get("datumIds").unshift(model.id);
-            }
-          } //end of if search is open and running for Alan
-
-          //dont need to save the user every time when we change a datum.
-          //            window.app.get("authentication").saveAndInterConnectInApp();
-
-          if (typeof successcallback === "function") {
-            successcallback();
-          }
-        },
-        error: function(e, f, g) {
-          self.debug("Datum save error", e, f, g);
-          if (typeof failurecallback === "function") {
-            failurecallback();
-          } else {
-            self.bug("Datum save error: " + f.reason);
-          }
-        }
-      });
     }
   },
   /**

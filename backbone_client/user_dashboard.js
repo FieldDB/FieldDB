@@ -20,8 +20,6 @@ require.config({
     "pouch": "libs/pouch.alpha",
     "underscore": "libs/underscore",
 
-    "terminal": "libs/terminal/terminal",
-
     "text": "libs/text",
 
     "xml2json": "libs/xml2json",
@@ -80,10 +78,6 @@ require.config({
     "compiledTemplates": {
       deps: ["handlebars"],
       exports: "Handlebars"
-    },
-    "terminal": {
-      deps: ["bootstrap", "jquery"],
-      exports: "Terminal"
     }
 
   }
@@ -121,17 +115,17 @@ require([
 //    Backbone,
 //    forcingpouchtoloadonbackboneearly
 //) {
-//  
+//
 //  /*
 //   * Start the pub sub hub
 //   */
 //  window.hub = {};
 //  OPrime.makePublisher(window.hub);
-// 
+//
 //  /*
 //   * Check for user's cookie and the dashboard so we can load it
 //   */
-//  var username = OPrime.getCookie("username");
+//  var username = localStorage.getItem("username");
 //  if (username != null && username != "") {
 //
 //    window.app = new UserApp();
@@ -139,22 +133,22 @@ require([
 //    var u = localStorage.getItem("encryptedUser");
 //    auth.loadEncryptedUser(u, function(success, errors){
 //      if(success == null){
-//        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);  
+//        alert("Bug: We couldnt log you in."+errors.join("<br/>") + " " + OPrime.contactUs);
 //        OPrime.setCookie("username","");
 //        document.location.href='corpus.html';
 //        return;
 //      }else{
-////        alert("We logged you in." + OPrime.contactUs);  
-//        window.appView = new UserAppView({model: window.app}); 
+////        alert("We logged you in." + OPrime.contactUs);
+//        window.appView = new UserAppView({model: window.app});
 //        window.appView.render();
 //        app.router = new UserRouter();
 //        Backbone.history.start();
 //      }
 //    });
-//    
+//
 //  } else {
 //    // new user, let them register or login as themselves or lingllama
 //    document.location.href='corpus.html';
 //  }
-//  
+//
 //});

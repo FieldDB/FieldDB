@@ -173,12 +173,6 @@ define([
       title: "Private Corpus",
       titleAsUrl: "PrivateCorpus",
       description: "The details of this corpus are not public.",
-      //      source : Consultants,
-      //      datumStates : DatumStates,
-      //      datumFields : DatumFields,
-      //      sessionFields : DatumFields,
-      //      searchFields : DatumFields,
-      //      connection : JSON.parse(localStorage.getItem("mostRecentConnection")) || OPrime.defaultConnection()
     },
     loadPermissions: function() {
       //TODO decide if we need this method in a corpus mask
@@ -219,7 +213,7 @@ define([
       sessionFields: DatumFields,
       searchFields: DatumFields,
       //      sessions : Sessions,
-      //      dataLists : DataLists,
+      //      datalists : DataLists,
       permissions: Permissions,
       comments: Comments
     },

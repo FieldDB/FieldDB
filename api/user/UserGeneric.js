@@ -23,7 +23,7 @@
  * @property {String} subtitle This user's subtitle
  * @property {Array} corpora The corpus connections of the corpora owned by
  *           this user
- * @property {Array} dataLists The datalist IDs of the datalists owned
+ * @property {Array} datalists The datalist IDs of the datalists owned
  *           by this user.
  * @property {UserPreference} prefs This is where we"ll have things like
  *           background/skin.

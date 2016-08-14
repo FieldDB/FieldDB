@@ -398,12 +398,12 @@ define([
             successcallback();
           }
         },
-        error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("Session save error", e, f, g);
+        error: function(model, err, options) {
+          if (OPrime.debugMode) OPrime.debug("Session save error", model, err, options)
           if (typeof failurecallback == "function") {
-            failurecallback();
+            failurecallback(err);
           } else {
-            alert('Session save error: ' + f.reason);
+            alert('Session save error: ' + err.reason);
           }
         }
       });
@@ -419,6 +419,13 @@ define([
      * @param failurecallback
      */
     setAsCurrentSession: function(successcallback, failurecallback) {
+      if (!window.app || typeof window.app.get !== "function"){
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        return;
+      }
+
       if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
@@ -428,7 +435,7 @@ define([
         return;
       }
 
-      if (window.app.get("currentSession").id != this.id) {
+      if (!window.app.get("currentSession") || window.app.get("currentSession").id != this.id) {
         window.app.set("currentSession", this); //This results in a non-identical session in the currentsession with the one live in the corpus sessions collection.
         //      window.app.set("currentSession", app.get("corpus").sessions.get(this.id)); //this is a bad idea too, use above instead
       }

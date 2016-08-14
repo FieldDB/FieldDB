@@ -337,7 +337,7 @@ define([
         this.set("dateCreated", JSON.stringify(new Date()));
       }
 
-      //protect against users moving dataLists from one corpus to another on purpose or accidentially
+      //protect against users moving datalists from one corpus to another on purpose or accidentially
       if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
@@ -405,8 +405,8 @@ define([
           }
 
           //make sure the dataList is in the history of the user
-          if (window.app.get("authentication").get("userPrivate").get("dataLists").indexOf(model.id) == -1) {
-            window.app.get("authentication").get("userPrivate").get("dataLists").unshift(model.id);
+          if (window.app.get("authentication").get("userPrivate").get("datalists").indexOf(model.id) == -1) {
+            window.app.get("authentication").get("userPrivate").get("datalists").unshift(model.id);
             //              window.app.get("authentication").saveAndInterConnectInApp();
           }
 
@@ -414,12 +414,12 @@ define([
             successcallback();
           }
         },
-        error: function(e, f, g) {
-          if (OPrime.debugMode) OPrime.debug("DataList save error", e, f, g);
+        error: function(model, err, options) {
+          if (OPrime.debugMode) OPrime.debug("DataList save error", model, err, options)
           if (typeof failurecallback == "function") {
-            failurecallback();
+            failurecallback(err);
           } else {
-            alert('DataList save error: ' + f.reason);
+            alert('DataList save error: ' + err.reason);
           }
         }
       });
@@ -435,6 +435,13 @@ define([
      * @param failurecallback
      */
     setAsCurrentDataList: function(successcallback, failurecallback) {
+      if (!window.app || typeof window.app.get !== "function") {
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
+        return;
+      }
+
       if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();

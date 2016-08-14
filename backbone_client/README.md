@@ -9,7 +9,7 @@ You can see the Prototype in action by installing it from the [Chrome Store](htt
 
 You can run this code in 3 ways:
 
-## Chrome Extension  
+## Chrome Extension
 
 If you want to debug the app, this is the best way to go. You can modify the source, refresh the browser and you have the new code. To install this app go to chrome://chrome/extensions, check
 'developer mode', then click on 'Load unpacked extensions...' and
@@ -49,7 +49,7 @@ rm -rf ~/git/nwjs-shell-builder/TMP
 ## CouchApp
 
 If you want to deploy the app so that it can run online on URL, the fastest way is to push it to a couchdb.
-You can use the map_reduce_data folder and the build_debug.sh script, or the couchapp_minified folder, and the build_fielddb_minified.sh script.
+You can use the couchapp_prototype folder, and the build_fielddb_minified.sh script.
 
 ## Android App
 

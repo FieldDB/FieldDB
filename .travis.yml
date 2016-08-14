@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 4.2.4
+  - 4.4.3
 
 # Travis supports running a real browser (Firefox) with a virtual screen. Just update your .travis.yml to set up the virtual screen like this:
 # before_script:
@@ -35,8 +35,8 @@ before_install:
   - npm install -g bower
   - npm install -g jasmine-node
   # - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
-  - npm install d3
-  - npm install jsdom
+  - npm install d3@3.5.8
+  - npm install jsdom@7.0.2
   - npm install memory
 
 before_script:

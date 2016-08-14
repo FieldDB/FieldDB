@@ -196,18 +196,18 @@
   global.FieldDB = FieldDB;
 
   setTimeout(function() {
-    var brandname = "FieldDB";
+    var brand = "FieldDB";
     if (FieldDB && FieldDB["FieldDBObject"] && FieldDB["FieldDBObject"].application && FieldDB["FieldDBObject"].application.brand) {
-      brandname = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
+      brand = FieldDB["FieldDBObject"].application.brand.replace(/\W/g, "_");
       try {
-        window[brandname] = FieldDB;
+        window[brand] = FieldDB;
         window.FieldDB = FieldDB;
 
         // Inject browser URL as the URL parser.
         Connection.URLParser = URL;
 
       } catch (e) {
-        console.warn("Couldnt attach the FieldDB library as " + brandname, e);
+        console.warn("Couldnt attach the FieldDB library as " + brand, e);
 
         // Inject nodejs URL as the URL parser.
         Connection.URLParser = require("url");
@@ -234,7 +234,7 @@
       new FieldDB["FieldDBObject"]().version);
     console.log("-----------------------------------------------------");
     console.log("-----for available models/functionality, type--------");
-    console.log("                            " + brandname + ".");
+    console.log("                            " + brand + ".");
     console.log("-----------------------------------------------------");
     console.log("-----------------------------------------------------");
     console.log("-----------------------------------------------------");

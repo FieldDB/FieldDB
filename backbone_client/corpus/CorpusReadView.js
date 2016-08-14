@@ -71,7 +71,7 @@ define([
       //        this.changeViewsOfInternalModels();
       //        this.render();
       //      }, this);
-      //      this.model.bind('change:dataLists', function(){
+      //      this.model.bind('change:datalists', function(){
       //            this.changeViewsOfInternalModels();
       //      this.render();
       //      }, this);
@@ -276,8 +276,8 @@ define([
         this.datumStatesView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection');
-        this.dataListsView.render();
+        this.datalistsView.el = this.$('.datalists-updating-collection');
+        this.datalistsView.render();
 
         // Display the SessionsView
         this.sessionsView.el = this.$('.sessions-updating-collection');
@@ -339,7 +339,7 @@ define([
       });
 
       // Create a list of DataLists
-      this.dataListsView = new UpdatingCollectionView({
+      this.datalistsView = new UpdatingCollectionView({
         collection: this.model.datalists,
         childViewConstructor: DataListReadView,
         childViewTagName: 'li',
@@ -518,7 +518,7 @@ define([
       }
       var self = this;
       if (this.format == "modal") {
-        $("#new-corpus-modal").hide();
+        $("#new-corpus-modal").modal("hide");
       }
       this.model.saveAndInterConnectInApp(function() {
         self.render();

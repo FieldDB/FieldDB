@@ -211,6 +211,9 @@ define([
     },
 
     changeViewsOfInternalModels: function() {
+      if (!this.model) {
+        return;
+      }
       this.fieldsView = new UpdatingCollectionView({
         collection: this.model.get("fields"),
         childViewConstructor: DatumFieldReadView,
@@ -286,7 +289,7 @@ define([
       }
       var self = this;
       if (this.format == "modal") {
-        $("#new-corpus-modal").hide();
+        $("#new-corpus-modal").modal("hide");
       }
       this.model.saveAndInterConnectInApp(function() {
         self.render();

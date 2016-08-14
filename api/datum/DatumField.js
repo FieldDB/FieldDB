@@ -841,7 +841,6 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
   saveAndInterConnectInApp: {
     value: function(callback) {
-
       if (typeof callback === "function") {
         callback();
       }

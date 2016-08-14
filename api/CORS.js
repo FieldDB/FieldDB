@@ -163,9 +163,9 @@ var CORS = {
     };
 
     if (response.userFriendlyErrors[0] === "missing") {
-      response.userFriendlyErrors = ["The server replied that " + options.url + " is missing, please report this."];
+      response.userFriendlyErrors.unshift("The server replied that " + options.url + " is missing, please report this.");
     } else if (response.userFriendlyErrors[0] === "no_db_file") {
-      response.userFriendlyErrors = ["That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url];
+      response.userFriendlyErrors.unshift("That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url);
     }
 
     if (response.status === 401) {
@@ -174,17 +174,20 @@ var CORS = {
       }
     }
 
-    try {
-      if (window && window.navigator && !window.navigator.onLine) {
-        response.userFriendlyErrors = [CORS.OFFLINE.MESSAGE];
-        response.status = CORS.OFFLINE.CODE;
-      } else if (err && err.srcElement && err.srcElement.status !== undefined) {
-        response.status = err.srcElement.status;
-      }
-    } catch (e) {}
+    // Tell the user if they are offline
+    if (response.status >= 500) {
+      try {
+        if (window && window.navigator && !window.navigator.onLine) {
+          response.userFriendlyErrors.unshift(CORS.OFFLINE.MESSAGE);
+          response.status = CORS.OFFLINE.CODE;
+        } else if (err && err.srcElement && err.srcElement.status !== undefined) {
+          response.status = err.srcElement.status;
+        }
+      } catch (e) {}
+    }
 
     response.userFriendlyErrors[0] = response.userFriendlyErrors[0].replace("URL", options.url);
-    this.bug(response.userFriendlyErrors.join(" "));
+    this.bug(response.userFriendlyErrors[0]);
 
     response.details = options;
     if (response.details && response.details.xhr) {

@@ -929,7 +929,7 @@ define([
           d: datumsLeftToSave,
           message: " datum " + thatdatum.id
         });
-      }, function() {
+      }, function(e) {
         //The e error should be from the error callback
         if (!e) {
           e = {};

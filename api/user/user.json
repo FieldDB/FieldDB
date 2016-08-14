@@ -36,7 +36,6 @@
   "affiliation": "",
   "description": "",
   "subtitle": "",
-  "dataLists": [],
   "prefs": {
     "skin": "",
     "numVisibleDatum": 10,
@@ -153,6 +152,7 @@
   },
   "firstname": "",
   "lastname": "",
+  "datalistHistory": [],
   "sessionHistory": [],
   "hotkeys": [],
   "newCorpora": [],

@@ -19,7 +19,7 @@
          expect(Comment).toBeDefined();
        });
 
-       it("should appear on datum, sessions, corpora, and dataLists", function() {
+       it("should appear on datum, sessions, corpora, and datalists", function() {
          expect(Comment).toBeDefined();
        });
      });

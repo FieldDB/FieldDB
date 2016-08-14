@@ -502,8 +502,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]
     sudo ln -s /usr/local/var/lib/fielddb/bycorpus /Users/fielddb/fielddbhome/AudioWebService/bycorpus
     sudo chown -R fielddb /usr/local/var/lib/fielddb
 
-    echo "Setting up  NODE_DEPLOY_TARGET='production'"
-    echo "export NODE_DEPLOY_TARGET='production'" >> $HOME/.bash_profile
+    echo "Setting up  NODE_ENV='production'"
+    echo "export NODE_ENV='production'" >> $HOME/.bash_profile
 
     echo "Downloading server configs from a private repo"
     cd $FIELDDB_HOME

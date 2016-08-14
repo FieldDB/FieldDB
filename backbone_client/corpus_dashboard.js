@@ -20,8 +20,6 @@ require.config({
     "pouch": "libs/pouch.alpha",
     "underscore": "libs/underscore",
 
-    "terminal": "libs/terminal/terminal",
-
     "text": "libs/text",
 
     "xml2json": "libs/xml2json",
@@ -80,10 +78,6 @@ require.config({
     "compiledTemplates": {
       deps: ["handlebars"],
       exports: "Handlebars"
-    },
-    "terminal": {
-      deps: ["bootstrap", "jquery"],
-      exports: "Terminal"
     }
 
   }
@@ -228,7 +222,7 @@ require([
 //  /*
 //   * Check for user's cookie and the dashboard so we can load it
 //   */
-//  var username = OPrime.getCookie("username");
+//  var username = localStorage.getItem("username");
 //  //if(username == "lingllama"){
 //  //  loadFreshApp();
 //  //  return;

@@ -3,7 +3,7 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 /**
  * @class Comments allow users to collaborate between each other and take
  *        note of important things, issues to be fixed, etc. These can
- *        appear on datum, sessions corpora, and dataLists. Comments can
+ *        appear on datum, sessions corpora, and datalists. Comments can
  *        also be edited and removed.
  *
  * @property {String} text Describe text here.

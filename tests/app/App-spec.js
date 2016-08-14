@@ -198,6 +198,20 @@ describe("App", function() {
 
   });
 
+  describe("let users contact any server", function(){
+    it("should not create a custom connection by default", function(){
+      var app = new App({
+        // debugMode: true
+      });
+      expect(app.knownConnections).toBeDefined();
+      expect(app.knownConnections["LingSync Beta"]).toBeDefined();
+      expect(app.knownConnections["LingSync.org"]).toBeDefined();
+      expect(app.knownConnections["Localhost"]).toBeDefined();
+      expect(app.knownConnections.custom).toBeUndefined();
+      expect(app.knownConnections.length).toEqual(5);
+    });
+  });
+
   describe("Demonstrating encrypted data", function() {
     var app;
     beforeEach(function() {

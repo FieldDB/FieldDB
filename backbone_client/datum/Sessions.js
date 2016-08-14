@@ -55,6 +55,7 @@ define([
               OPrime.debug("You have no sessions, TODO creating a new one...");
               if (window.location.href.indexOf("corpus.html") > -1) {
                 OPrime.redirect("user.html");
+                return;
               }
             }
             if (typeof suces === "function") {

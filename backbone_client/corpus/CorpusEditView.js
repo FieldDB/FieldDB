@@ -85,7 +85,7 @@ define([
       //        this.changeViewsOfInternalModels();
       //        this.render();
       //      }, this);
-      //      this.model.bind('change:dataLists', function(){
+      //      this.model.bind('change:datalists', function(){
       //        this.render();
       //      }, this);
     },
@@ -197,7 +197,7 @@ define([
         } else {
           $(this.el).find(".new-corpus-password").val("")
           this.model.createCorpus(userinfo);
-          $("#new-corpus-modal").hide();
+          $("#new-corpus-modal").modal("hide");
 
         }
 
@@ -330,8 +330,8 @@ define([
         this.commentEditView.render();
 
         // Display the DataListsView
-        this.dataListsView.el = this.$('.datalists-updating-collection');
-        this.dataListsView.render();
+        this.datalistsView.el = this.$('.datalists-updating-collection');
+        this.datalistsView.render();
 
         // Display the SessionsView
         this.sessionsView.el = this.$('.sessions-updating-collection');
@@ -427,7 +427,7 @@ define([
         this.model.datalists = new DataLists();
       }
       // Create a DataList List
-      this.dataListsView = new UpdatingCollectionView({
+      this.datalistsView = new UpdatingCollectionView({
         collection: this.model.datalists,
         childViewConstructor: DataListReadView,
         childViewTagName: 'li',
@@ -825,11 +825,11 @@ define([
       }
       var self = this;
       if (this.format == "modal") {
-        $("#new-corpus-modal").hide();
+        $("#new-corpus-modal").modal("hide");
       }
       this.model.saveAndInterConnectInApp(function() {
         if (this.format == "modal") {
-          //          $("#new-corpus-modal").hide();
+          //          $("#new-corpus-modal").modal("hide");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
           alert("TODO check if new corpus succeeds, will set as current also.");
         }
@@ -838,7 +838,7 @@ define([
 
       }, function() {
         if (this.format == "modal") {
-          //          $("#new-corpus-modal").hide();
+          //          $("#new-corpus-modal").modal("hide");
           alert("There was a problem somewhere loading and saving the new corpus.");
           window.appView.toastUser("The permissions and fields of datum, session, and conversation were copied from the previous corpus, please check your corpus settings to be sure they are what you want for this corpus.");
         }

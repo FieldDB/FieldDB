@@ -127,8 +127,11 @@ describe("Glosser", function() {
 				corpus: tinyCorpus
 			});
 			CORS.makeCORSRequest({
-				name: "jenkins",
-				password: "phoneme",
+				data: {
+					name: "jenkins",
+					password: "phoneme"
+				},
+				method: "POST",
 				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
 			}).finally(done);
 		});
@@ -440,8 +443,11 @@ describe("Glosser", function() {
 			expect(glosser.corpus.dbname).toEqual("jenkins-firstcorpus");
 
 			CORS.makeCORSRequest({
-				name: "jenkins",
-				password: "phoneme",
+				data: {
+					name: "jenkins",
+					password: "phoneme"
+				},
+				method: "POST",
 				url: tinyCorpus.url.replace("jenkins-firstcorpus", "_session")
 			}).finally(function() {
 

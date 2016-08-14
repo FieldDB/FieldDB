@@ -1,3 +1,4 @@
+/* globals OPrime, window, FieldDB, $, Locale */
 define([
   "backbone",
   "libs/compiled_handlebars",
@@ -39,8 +40,8 @@ define([
       this.userView.setElement($("#user-quickview"));
 
       // Any time the Authentication model changes, re-render
-      this.model.bind('change:state', this.render, this);
-      this.model.get("userPublic").bind('change', this.render, this);
+      this.model.bind("change:state", this.render, this);
+      this.model.get("userPublic").bind("change", this.render, this);
 
       //save the version of the app into this view so we can use it when we create a user.
       var self = this;
@@ -67,17 +68,17 @@ define([
     events: {
       "click .logout": "logout",
       "click .show-login-modal": function(e) {
-        //        if(e){
-        //          e.stopPropagation();
-        //          e.preventDefault();
-        //        }
-        $("#login_modal").show("modal");
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        $("#login_modal").modal("show");
       },
 
       "keyup .registerusername": function(e) {
         var code = e.keyCode || e.which;
-        // code == 13 is the enter key
-        if ((code === 13 || code === 9) && (this.$el.find(".registerusername").val().trim() != "YourNewUserNameGoesHere")) {
+        // code === 13 is the enter key
+        if ((code === 13 || code === 9) && (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere")) {
           this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
           this.$el.find(".confirm-password").show();
           this.$el.find(".registerpassword").focus();
@@ -89,7 +90,7 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        if (this.$el.find(".registerusername").val().trim() != "YourNewUserNameGoesHere") {
+        if (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere") {
           this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
           this.$el.find(".confirm-password").show();
           this.$el.find(".registerpassword").focus();
@@ -107,8 +108,8 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        console.log("hiding user welcome, syncing lingllama");
-        this.syncUser("lingllama", "phoneme", OPrime.authUrl);
+        if (OPrime.debugMode) OPrime.debug("hiding user welcome, syncing lingllama");
+        this.loginUserAndRedirectToCorpusDashboard("lingllama", "phoneme", OPrime.authUrl);
       },
     },
 
@@ -123,12 +124,12 @@ define([
      */
     render: function() {
       if (OPrime.debugMode) OPrime.debug("AUTH EDIT render: " + this.el);
-      if (this.model == undefined) {
+      if (this.model === undefined) {
         if (OPrime.debugMode) OPrime.debug("Auth model was undefined, come back later.");
         return this;
       }
 
-      if (this.model.get("userPublic") != undefined) {
+      if (this.model.get("userPublic") !== undefined) {
         this.model.set("gravatar", this.model.get("userPublic").getGravatar());
         this.model.set("username", this.model.get("userPublic").get("username"));
       }
@@ -155,17 +156,17 @@ define([
       this.setElement($("#authentication-embedded"));
       $(this.el).html(this.template(jsonToRender));
 
-      if (this.model.get("state") == "renderLoggedIn") {
+      if (this.model.get("state") === "renderLoggedIn") {
         $("#logout").show();
         $("#login_form").hide();
         $("#login_register_button").hide();
 
-        if (this.model.get("userPublic") != undefined) {
+        if (this.model.get("userPublic") !== undefined) {
           if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         } else {
-          $("#user-quickview").html('<i class="icons icon-user icon-white">');
+          $("#user-quickview").html("<i class=\"icons icon-user icon-white\">");
         }
 
       } else {
@@ -174,15 +175,15 @@ define([
         $("#login_register_button").show();
         $("#loggedin_customize_on_auth_dropdown").hide();
 
-        if (this.model.get("userPublic") != undefined) {
+        if (this.model.get("userPublic") !== undefined) {
           if (OPrime.debugMode) OPrime.debug("\t rendering AuthenticationEditView's UserView");
           this.userView.setElement($("#user-quickview"));
           this.userView.render();
         } else {
-          $("#user-quickview").html('<i class="icons icon-user icon-white">');
+          $("#user-quickview").html("<i class=\"icons icon-user icon-white\">");
         }
 
-        var mostLikelyAuthUrl = OPrime.getMostLikelyUserFriendlyAuthServerName();
+        var mostLikelyAuthUrl = FieldDB.Connection.defaultConnection().userFriendlyServerName;
         $(".welcomeauthurl").val(mostLikelyAuthUrl);
 
       }
@@ -195,24 +196,19 @@ define([
      * removes the stringified user and the username from local
      * storage, and then authenticates public into the app.
      */
-    logout: function() {
+    logout: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
       var authself = this.model;
       $(".reason_why_we_need_to_make_sure_its_you").html("You should back up your preferences before you log out. ");
+      this.loggingOut = true;
       window.app.backUpUser(function() {
         authself.logout();
+      }, function() {
+        authself.logout();
       });
-    },
-
-    /**
-     * Login tries to get the username and password from the user interface, and
-     * calls the view's authenticate function.
-     */
-    login: function() {
-      if (OPrime.debugMode) OPrime.debug("LOGIN");
-      this.authenticate(document.getElementById("username").value,
-        document.getElementById("password").value,
-        document.getElementById("authUrl").value
-      );
     },
 
     /**
@@ -222,7 +218,7 @@ define([
      * Blamey and Tucker the Technician at blamestella.com
      * https://twitter.com/#!/tucker1927
      */
-    loadSample: function(appidsIn) {
+    loadSample: function() {
       //  alert("loading sample");
 
     },
@@ -238,46 +234,37 @@ define([
      * @param username {String} The username to authenticate.
      * @param password {String} The password to authenticate.
      */
-    authenticate: function(username, password, authUrl, sucescallback, failcallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+    authenticate: function(username, password, authUrl, successCallback, failCallback, corpusLoginSuccessCallback, corpusloginfailCallback) {
+      if (!successCallback && corpusLoginSuccessCallback) {
+        successCallback = corpusLoginSuccessCallback;
+      }
+      if (!failCallback && corpusloginfailCallback) {
+        failCallback = corpusloginfailCallback;
+      }
 
       // Temporarily keep the given's credentials
       var tempuser = new User({
         username: username,
         password: password,
-        authUrl: OPrime.getAuthUrl(authUrl)
+        authUrl: FieldDB.Connection.defaultConnection(authUrl).authUrl
       });
-
-      var whattodoifcouchloginerrors = function() {
-        //If the user has an untitled corpus, there is a high chance that their dashboard didn't load because they cant sync with couch but they do have their first local ones, attempt to look it up in their user, and laod it.
-        if (app.get("corpus").get("title").indexOf("Untitled Corpus") >= 0) {
-          if (self.model.get("userPrivate").get("mostRecentIds") == undefined) {
-            //do nothing because they have no recent ids
-            alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.location.href = "#render/true";
-          } else {
-            /*
-             *  Load their last corpus, session, datalist etc
-             */
-            //            var appids = self.model.get("userPrivate").get("mostRecentIds");
-            //            window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
-          }
-        }
-        if (typeof corpusloginfailcallback == "function") {
-          corpusloginfailcallback();
-        } else {
-          if (OPrime.debugMode) OPrime.debug('no corpusloginfailcallback was defined');
-
-        }
-      };
-
       var self = this;
+
       this.model.authenticate(tempuser, function(success) {
-        if (success == null) {
+        if (success === null) {
           //          alert("Authentication failed. Authenticating as public."); //TODO cant use this anymore as a hook
           //          self.authenticateAsPublic();
           return;
         }
-        if (username == "public") {
+
+        if (self.loggingOut) {
+          if (typeof successCallback === "function") {
+            successCallback();
+          }
+          return;
+        }
+
+        if (username === "public") {
           self.model.savePublicUserForOfflineUse();
         }
         var connection;
@@ -288,63 +275,56 @@ define([
           connection = self.model.get("userPrivate").get("corpora")[0];
         }
         if (!connection) {
-          connection = FieldDB.Connection.defaultConnection()
+          connection = FieldDB.Connection.defaultConnection();
         }
         // Dont set to most recent, it might not be the most recent.
         // if (self.model.get("userPrivate").get("mostRecentIds") && self.model.get("userPrivate").get("mostRecentIds").connection) {
         //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         // }
 
-        window.app.logUserIntoTheirCorpusServer(connection, username, password, function() {
-          if (typeof corpusloginsuccesscallback == "function") {
-            if (OPrime.debugMode) OPrime.debug('Calling corpusloginsuccesscallback');
-            corpusloginsuccesscallback();
-          } else {
-            if (OPrime.debugMode) OPrime.debug('no corpusloginsuccesscallback was defined');
+        //Replicate user's corpus down to pouch
+        window.app.replicateOnlyFromCorpus(connection, function() {
+          if (self.model.get("userPrivate").get("mostRecentIds") === undefined) {
+            //do nothing because they have no recent ids
+            alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
+            window.location.href = "#render/true";
+            return;
           }
-          //Replicate user's corpus down to pouch
-          window.app.replicateOnlyFromCorpus(connection, function() {
-            if (self.model.get("userPrivate").get("mostRecentIds") == undefined) {
-              //do nothing because they have no recent ids
-              alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-              window.location.href = "#render/true";
+
+          /*
+           *  Load their last corpus, session, datalist etc,
+           *  only if it is not the ones already most recently loaded.
+           */
+          var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
+          var visibleids = {};
+          if (window.app.get("corpus")) {
+            visibleids.corpusid = window.app.get("corpus").id;
+          } else {
+            visibleids.corpusid = "";
+          }
+          if (window.app.get("currentSession")) {
+            visibleids.sessionid = window.app.get("currentSession").id;
+          } else {
+            visibleids.sessionid = "";
+          }
+          if (window.app.get("currentDataList")) {
+            visibleids.datalistid = window.app.get("currentDataList").id;
+          } else {
+            visibleids.datalistid = "";
+          }
+          if ((appids.sessionid !== visibleids.sessionid || appids.corpusid !== visibleids.corpusid || appids.datalistid !== visibleids.datalistid)) {
+            if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
+            if (window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard) {
+              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
             } else {
-              /*
-               *  Load their last corpus, session, datalist etc,
-               *  only if it is not the ones already most recently loaded.
-               */
-              var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
-              var visibleids = {};
-              if (app.get("corpus")) {
-                visibleids.corpusid = app.get("corpus").id;
-              } else {
-                visibleids.corpusid = "";
-              }
-              if (app.get("currentSession")) {
-                visibleids.sessionid = app.get("currentSession").id;
-              } else {
-                visibleids.sessionid = "";
-              }
-              if (app.get("currentDataList")) {
-                visibleids.datalistid = app.get("currentDataList").id;
-              } else {
-                visibleids.datalistid = "";
-              }
-              if ((appids.sessionid != visibleids.sessionid || appids.corpusid != visibleids.corpusid || appids.datalistid != visibleids.datalistid)) {
-                if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-                if (window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard) {
-                  window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
-                } else {
-                  console.log("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-                  window.app.router.showCorpusDashboard(connection.dbname, appids.corpusid);
-                }
-              }
+              if (OPrime.debugMode) OPrime.debug("Trying to fetch the corpus and redirect you to the corpus dashboard.");
+              window.app.router.showCorpusDashboard(connection.dbname, appids.corpusid);
             }
-          });
-        }, whattodoifcouchloginerrors);
+          }
+        });
 
         var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
-        if (self.model.get("userPrivate").get("username") == "public") {
+        if (self.model.get("userPrivate").get("username") === "public") {
           renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
         }
         // Save the authenticated user in our Models
@@ -353,10 +333,10 @@ define([
           username: self.model.get("userPrivate").get("username"),
           state: renderLoggedInStateDependingOnPublicUserOrNot
         });
-        if (typeof sucescallback == "function") {
-          sucescallback();
+        if (typeof successCallback === "function") {
+          successCallback();
         }
-      }, failcallback);
+      }, failCallback);
     },
 
     /**
@@ -365,213 +345,90 @@ define([
      * like removing a corpus. It is also used if the user hasn't confirmed their
      * identity in a while.
      */
-    showQuickAuthenticateView: function(authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback) {
+    showQuickAuthenticateView: function(authsuccesscallback, authFailureCallback, corpusLoginSuccessCallback, corpusloginfailCallback) {
       if (window.askingUserToConfirmIdentity) {
         return;
       }
       window.askingUserToConfirmIdentity = true;
 
       var self = this;
-      var authUrl = window.app.get("authentication").get("userPrivate").get("authUrl")
-      var username = window.app.get("authentication").get("userPrivate").get("username")
+      var authUrl = window.app.get("authentication").get("userPrivate").get("authUrl");
+      var username = window.app.get("authentication").get("userPrivate").get("username");
       var subscription = function(password) {
-        window.appView.authView.authenticate(username, password, OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        if (password === "cancel") {
+          if (typeof authFailureCallback === "function") {
+            authFailureCallback();
+          }
+          return;
+        }
+        window.appView.authView.authenticate(username, password, FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authFailureCallback, corpusLoginSuccessCallback, corpusloginfailCallback);
         window.hub.unsubscribe("quickAuthenticationClose", subscription, self);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;
         }, 2000);
       };
 
-      if (username == "public") {
+      if (username === "public") {
         / * Dont show the quick auth, just authenticate */
-        window.appView.authView.authenticate("public", "none", OPrime.getAuthUrl(authUrl), authsuccesscallback, authfailurecallback, corpusloginsuccesscallback, corpusloginfailcallback);
+        window.appView.authView.authenticate("public", "none", FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authFailureCallback, corpusLoginSuccessCallback, corpusloginfailCallback);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;
         }, 2000);
         return;
       }
 
-      if (username == "lingllama") {
-        / * Show the quick auth but fill in the password, to simulate a user */
+      if (username === "lingllama") {
+        /* Show the quick auth but fill in the password, to simulate a user */
         $("#quick-authenticate-password").val("phoneme");
-        $("#quick-authenticate-modal").show();
+        $("#quick-authenticate-modal").modal("show");
         window.hub.subscribe("quickAuthenticationClose", subscription, self);
         return;
       }
 
-      $("#quick-authenticate-modal").show();
+      $("#quick-authenticate-modal").modal("show");
       window.hub.subscribe("quickAuthenticationClose", subscription, self);
     },
 
     registerNewUser: function(e) {
-      $(".register-new-user").attr("disabled", "disabled");
-      if (this.registering) {
-        return;
-      }
-      this.registering = true;
       if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
+
+      $(".register-new-user").attr("disabled", "disabled");
+
       var authedself = this;
-      if (OPrime.debugMode) OPrime.debug("Attempting to register a new user: ");
-      var dataToPost = {};
-      dataToPost.username = $(".registerusername").val().trim().toLowerCase().replace(/[^0-9a-z]/g, "");
-      $(".registerusername").val(dataToPost.username);
+      var dataToPost = {
+        username: $(".registerusername").val().trim(),
+        password: $(".registerpassword").val().trim(),
+        confirmPassword: $(".to-confirm-password").val().trim(),
+        email: $(".registeruseremail").val().trim()
+      };
 
-      dataToPost.email = $(".registeruseremail").val().trim();
-      dataToPost.password = $(".registerpassword").val().trim();
-      dataToPost.authUrl = OPrime.getAuthUrl();
-      dataToPost.appbrand = OPrime.getMostLikelyUserFriendlyAuthServerName().toLowerCase();
-      dataToPost.appVersionWhenCreated = this.appVersion;
-      //Send a dbname to create
-      // var corpusConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
-      // corpusConnection.dbname = "firstcorpus";
-      // dataToPost.corpora = [corpusConnection];
-      // dataToPost.mostRecentIds = {};
-      // dataToPost.mostRecentIds.connection = JSON.parse(JSON.stringify(corpusConnection));
-      // dataToPost.mostRecentIds.connection.dbname = dataToPost.username + "-" + dataToPost.mostRecentIds.connection.dbname;
-      // var activityConnection = new FieldDB.Connection(FieldDB.Connection.defaultConnection());
-      // activityConnection.dbname = dataToPost.username + "-activity_feed";
-      // dataToPost.activityConnection = activityConnection;
-      // var u = new UserMask();
-      // dataToPost.gravatar = u.getGravatar(dataToPost.email || dataToPost.username);
-
-      if (dataToPost.password !== $(".to-confirm-password").val().trim()) {
-        if (OPrime.debugMode) OPrime.debug("User has not entered correct info. ");
-        $(".welcome-screen-alerts").html("Your passwords don't seem to match. " + OPrime.contactUs);
+      var renderProgress = function() {
+        $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>");
+        $(".welcome-screen-alerts").addClass("alert-success");
         $(".welcome-screen-alerts").show();
-        $(".register-new-user").removeClass("disabled");
-        $(".register-new-user").removeAttr("disabled");
-        return;
-      }
-      if (OPrime.debugMode) OPrime.debug("User has entered passwords which match. ");
+        $(".welcome-screen-alerts").removeClass("alert-error");
+        $(".register-new-user").addClass("disabled");
+        $(".register-new-user").attr("disabed", "disabled");
+        window.app.showSpinner();
+        window.app.router.hideEverything();
+        $(".spinner-status").html("Contacting the server...");
+      };
 
-      $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>");
-      $(".welcome-screen-alerts").addClass("alert-success");
-      $(".welcome-screen-alerts").show();
-      $(".welcome-screen-alerts").removeClass("alert-error");
-      $(".register-new-user").addClass("disabled");
-      $(".register-new-user").attr("disabed", "disabled");
-      window.app.showSpinner();
-      window.app.router.hideEverything();
-      $(".spinner-status").html("Contacting the server...");
-      console.log("sending ", dataToPost);
-
-      /*
-       * Contact the server and register the new user
-       */
-      FieldDB.CORS.makeCORSRequest({
-        type: 'POST',
-        // withCredentials: true,
-        url: dataToPost.authUrl + "/register",
-        data: dataToPost
-      }).then(function(serverResults) {
-        if (serverResults.userFriendlyErrors || !serverResults.user) {
-          $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs);
-          $(".welcome-screen-alerts").show();
-          return;
-        }
-
-        localStorage.removeItem("username");
-        localStorage.removeItem("mostRecentDashboard");
-        localStorage.removeItem("mostRecentConnection");
-        localStorage.removeItem("encryptedUser");
-
-        //Destropy cookies, and load the public user
-        OPrime.setCookie("username", undefined, -365);
-        OPrime.setCookie("token", undefined, -365);
-
-        //              var auth  = new Authentication({filledWithDefaults: true});
-        var auth = new Authentication({
-          "confidential": new Confidential({
-            secretkey: serverResults.user.hash
-          }),
-          "userPrivate": new User(serverResults.user)
-        });
-
-        OPrime.setCookie("username", serverResults.user.username, 365);
-        OPrime.setCookie("token", serverResults.user.hash, 365);
-        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-        localStorage.setItem("encryptedUser", u);
-        $(".spinner-status").html("Building your database for you...");
-
-        /*
-         * Redirect the user to their user page, being careful to use their (new) database if they are in a couchapp (not the database they used to register/create this corpus)
-         */
-        var potentialdbname = serverResults.user.corpora[0].dbname;
-        var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialdbname);
-
-        var connection = serverResults.user.corpora[0];
-        var nextCorpusUrl = OPrime.getCouchUrl(connection) + "/_design/deprecated/_view/private_corpora";
-        window.app.logUserIntoTheirCorpusServer(serverResults.user.corpora[0], dataToPost.username, dataToPost.password, function() {
-          OPrime.checkToSeeIfCouchAppIsReady(nextCorpusUrl, function() {
-
-            if (OPrime.isBackboneCouchDBApp()) {
-              try {
-                Backbone.couch_connector.config.db_name = potentialdbname;
-              } catch (e) {
-                OPrime.bug("Couldn't set the database name off of the pouchame when creating a new corpus for you, please report this.");
-              }
-            } else {
-              alert("TODO test what happens when not in a backbone couchdb app and registering a new user.");
-            }
-            var newCorpusToBeSaved = new Corpus({
-              "filledWithDefaults": true,
-              "title": serverResults.user.username + "'s Corpus",
-              "description": "This is your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
-              "team": new UserMask({
-                username: dataToPost.username
-              }),
-              "connection": connection,
-              "dbname": connection.dbname,
-              "dateOfLastDatumModifiedToCheckForOldSession": JSON.stringify(new Date())
-            });
-
-            newCorpusToBeSaved.prepareANewPouch(connection, function() {
-              //                    alert("Saving new corpus in register.");
-              $(".spinner-status").html("Saving a corpus in your new database ...");
-
-              window.functionToSaveNewCorpus = function() {
-                newCorpusToBeSaved.save(null, {
-                  success: function(model, response) {
-                    model.get("corpusMask").set("corpusid", model.id);
-                    auth.get("userPrivate").set("mostRecentIds", {});
-                    auth.get("userPrivate").get("mostRecentIds").corpusid = model.id;
-                    model.get("connection").corpusid = model.id;
-                    auth.get("userPrivate").get("mostRecentIds").connection = model.get("connection");
-                    auth.get("userPrivate").get("corpora")[0] = model.get("connection"); // TODO should be an unshift no?
-                    var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-                    localStorage.setItem("encryptedUser", u);
-
-                    var sucessorfailcallbackforcorpusmask = function() {
-                      $(".spinner-status").html("New Corpus saved in your user profile. Taking you to your new corpus when it is ready...");
-                      window.setTimeout(function() {
-                        OPrime.redirect(optionalCouchAppPath + "user.html#/corpus/" + potentialdbname + "/" + model.id);
-                      }, 1000);
-                    };
-                    model.get("corpusMask").saveAndInterConnectInApp(sucessorfailcallbackforcorpusmask, sucessorfailcallbackforcorpusmask);
-
-                  },
-                  error: function(e, f, g) {
-                    //                          alert('New Corpus save error ' + f.reason +". Click OK to re-attempt to save your new corpus in 10 seconds...");
-                    $(".spinner-status").html("New Corpus save error " + f.reason + ". The app will re-attempt to save your new corpus in 10 seconds...");
-                    window.corpusToBeSaved = newCorpusToBeSaved;
-                    window.setTimeout(window.functionToSaveNewCorpus, 10000);
-                  }
-                });
-              };
-              window.functionToSaveNewCorpus();
-            });
-          });
-        });
-
-      }, function(reason) {
+      var renderError = function(reason) {
         var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
         if (reason.userFriendlyErrors) {
           message = reason.userFriendlyErrors.join("<br/>");
         }
         if (OPrime.debugMode) OPrime.debug("Error registering user", reason);
+
+        // put validated username in the form
+        if (reason.details && reason.detailsreason.details.username) {
+          $(".registerusername").val(reason.details.username);
+        }
+
         $(".welcome-screen-alerts").html(message);
         $(".welcome-screen-alerts").addClass("alert-error");
         $(".welcome-screen-alerts").removeClass("alert-success");
@@ -581,8 +438,22 @@ define([
         authedself.registering = false;
         window.app.stopSpinner();
         $(".spinner-status").html("");
-      });
+      };
+
+      var renderStatus = function(status) {
+        $(".spinner-status").html(status);
+      };
+
+      var successCallback = function(corpus) {
+        window.setTimeout(function() {
+          OPrime.redirect("user.html#/corpus/" + corpus.dbname + "/" + corpus.id);
+        }, 1000);
+      };
+
+      if (OPrime.debugMode) OPrime.debug("sending ", dataToPost);
+      this.model.register(dataToPost, successCallback, renderError, renderProgress, renderStatus);
     },
+
     /**
      * This function manages all the data flow from the auth server and
      * corpus server to get the app to load in the right order so that
@@ -591,76 +462,56 @@ define([
      * @param username
      * @param password
      */
-    syncUser: function(username, password, authUrl) {
-      console.log("hiding user login, syncing users data");
+    loginUserAndRedirectToCorpusDashboard: function(username, password, authUrl) {
+      if (OPrime.debugMode) OPrime.debug("hiding user login, syncing users data");
       var dataToPost = {
         username: username,
         password: password
       };
+      var appConnection = FieldDB.Connection.defaultConnection(authUrl);
+      dataToPost.authUrl = appConnection.authUrl;
 
       $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server...</p> <progress max='100'> <strong>Progress: working...</strong>");
       $(".welcome-screen-alerts").addClass("alert-success");
       $(".welcome-screen-alerts").removeClass("alert-error");
       $(".welcome-screen-alerts").show();
 
-      authUrl = OPrime.getAuthUrl(authUrl);
       /*
-       * Contact the server and register the new user
+       * Login as a different user
        */
-      FieldDB.CORS.makeCORSRequest({
-        type: 'POST',
-        withCredentials: true,
-        url: authUrl + "/login",
-        data: dataToPost
-      }).then(function(serverResults) {
-        if (serverResults.userFriendlyErrors != null) {
-          $(".welcome-screen-alerts").html(serverResults.userFriendlyErrors.join("<br/>") + " " + OPrime.contactUs);
-          $(".welcome-screen-alerts").removeClass("alert-success");
-          $(".welcome-screen-alerts").addClass("alert-error");
-          $(".welcome-screen-alerts").show();
+      this.model.fielddbModel = this.model.fielddbModel || new FieldDB.Authentication();
+      delete this.model.fielddbModel.user;
 
-        } else if (serverResults.user) {
-          $(".welcome-screen-alerts").html("Attempting to sync your data to this device...</p> <progress max='100'> <strong>Progress: working...</strong>");
-          $(".welcome-screen-alerts").show();
+      this.model.fielddbModel.login(dataToPost).then(function(fielddbUser) {
+        // Set the app serverLabel to the server the user logged into
+        localStorage.setItem("serverLabel", appConnection.serverLabel);
 
-          localStorage.removeItem("username");
-          localStorage.removeItem("mostRecentDashboard");
-          localStorage.removeItem("mostRecentConnection");
-          localStorage.removeItem("encryptedUser");
-          localStorage.removeItem("helpShownCount");
-          localStorage.removeItem("helpShownTimestamp");
+        $(".welcome-screen-alerts").html("Attempting to sync your data to this device...</p> <progress max='100'> <strong>Progress: working...</strong>");
+        $(".welcome-screen-alerts").show();
 
-          //Destroy cookies, and load the public user
-          OPrime.setCookie("username", undefined, -365);
-          OPrime.setCookie("token", undefined, -365);
-
-          var auth = new Authentication({
-            filledWithDefaults: true
-          });
-          auth.set("userPrivate", new User(serverResults.user));
-          OPrime.setCookie("username", serverResults.user.username, 365);
-          OPrime.setCookie("token", serverResults.user.hash, 365);
-          auth.get("confidential").set("secretkey", serverResults.user.hash);
-          var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
-          localStorage.setItem("encryptedUser", u);
-
-          /*
-           * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
-           */
-          var potentialpouch = serverResults.user.username + "-firstcorpus";
-          if (serverResults.user && serverResults.user.mostRecentIds && serverResults.user.mostRecentIds.connection) {
-            potentialpouch = serverResults.user.mostRecentIds.connection.dbname;
-          }
-          if (!serverResults.user.mostRecentIds || !serverResults.user.mostRecentIds.connection) {
-            serverResults.user.mostRecentIds = {
-              connection: serverResults.user.corpora[0]
-            };
-          }
-          var optionalCouchAppPath = OPrime.guessCorpusUrlBasedOnWindowOrigin(potentialpouch);
-          window.app.logUserIntoTheirCorpusServer(serverResults.user.mostRecentIds.connection, dataToPost.username, dataToPost.password, function() {
-            OPrime.redirect(optionalCouchAppPath + "corpus.html");
-          });
+        var auth = new Authentication({
+          filledWithDefaults: true
+        });
+        /*
+         * Redirect the user to their user page, being careful to use their most recent database if they are in a couchapp (not the database they used to login to this corpus)
+         */
+        if (!fielddbUser.mostRecentIds || !fielddbUser.mostRecentIds.connection && fielddbUser.corpora && fielddbUser.corpora.length) {
+          fielddbUser.mostRecentIds = {
+            connection: fielddbUser.corpora._collection[0]
+          };
         }
+        if (!fielddbUser.mostRecentIds || !fielddbUser.mostRecentIds.connection) {
+          alert("I don't know which corpus to log you into. You could try reloading this page or contacting us");
+          return OPrime.redirect("user.html");
+        }
+        auth.set("userPrivate", new User(fielddbUser.toJSON()));
+        OPrime.setCookie("username", fielddbUser.username, 365);
+        OPrime.setCookie("token", fielddbUser.hash, 365);
+        auth.get("confidential").set("secretkey", fielddbUser.hash);
+        var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
+        localStorage.setItem(username, u);
+
+        OPrime.redirect("corpus.html");
       }, function(reason) {
         var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
         if (reason.userFriendlyErrors) {

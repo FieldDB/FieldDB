@@ -56,7 +56,7 @@ describe("Comment: as a team we want to leave comments to eachother, on everthin
     expect(true).toBeTruthy();
   });
 
-  it("should appear on datum, sessions, corpora, and dataLists", function() {
+  it("should appear on datum, sessions, corpora, and datalists", function() {
     expect(true).toBeTruthy();
   });
 });

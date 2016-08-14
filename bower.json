@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "4.6.5",
+  "version": "4.16.14",
   "homepage": "http://fielddb.github.io/FieldDB/",
   "bugs": {
     "url": "https://github.com/FieldDB/FieldDB/issues"
@@ -47,6 +47,7 @@
     "map_reduce_learnx",
     "map_reduce_lexicon",
     "couchapp_minified",
+    "couchapp_prototype",
     "docs",
     "install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
     "install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
