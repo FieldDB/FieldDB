@@ -3,10 +3,8 @@
   <div class="navbar-inner">
     <div class="container ">
 
-
-
       <!-- Home button -->
-      <a tabindex="-1" href="#" class=" brand" title="{{locale_Show_Dashboard}}"
+      <a tabindex="-1" href="#" class="brand" title="{{locale_Show_Dashboard}}"
         rel="tooltip"> <i class="icons icon-home icon-white"></i></a>
 
       <!-- Top Search Area -->
@@ -132,25 +130,26 @@
 
 <!-- The rest of the page -->
 <div class="container-fluid main">
-  <div id="dashboard-view"  >
+  <div id="dashboard-view">
     <!--Elements in the middle (things that get hidden)  -->
-
-    <div id="search-data-list-quickview" class="well hide span12 ">
+    <div id="search-data-list-quickview" class="well hide">
       <div id="search-data-list-quickview-header"  ></div>
-      <div class=" container  ">
+      <div class="">
         <ul
           class="unstyled  datalist_hover_datum_views_so_they_look_clickable  search-data-list-paginated-view "></ul>
         <div class="pagination-control"></div>
       </div>
     </div>
-    <div class="clear-spacing"></div>
-
-    <div id="insert-unicode" class="well"></div>
-
-    <div id="datums-embedded" class="middle well"></div>
-    <div id="session-embedded" class="middle well"></div>
-    <div id="corpus-embedded" class="middle well"></div>
     <div id="search-embedded" class="middle well"></div>
+
+    <div id="data-list-quickview" class="well">
+      <div id="data-list-quickview-header"  ></div>
+      <div class="  ">
+        <ul
+          class="unstyled   datalist_hover_datum_views_so_they_look_clickable current-data-list-paginated-view "></ul>
+        <div class="pagination-control "></div>
+      </div>
+    </div>
 
     <div id="data-list-embedded" class="well">
       <div id="data-list-embedded-header" class="middle "></div>
@@ -160,7 +159,14 @@
         <div class="pagination-control"></div>
       </div>
     </div>
+
+    <div id="session-embedded" class="middle well"></div>
+    <div id="corpus-embedded" class="middle well"></div>
+
+    <div id="datums-embedded" class="middle hide"></div>
+
   </div>
+  <!--/row-->
 
   <!-- FullScreen Views -->
   <div id="user-fullscreen" class="well "></div>

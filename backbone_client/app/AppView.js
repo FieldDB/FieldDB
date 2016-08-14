@@ -19,6 +19,7 @@ define([
   "datum/Datums",
   "datum/DatumContainerEditView",
   "datum/DatumContainerReadView",
+  "datum/DatumEditView",
   "datum/DatumReadView",
   "datum/DatumFields",
   "export/Export",
@@ -64,6 +65,7 @@ define([
   Datums,
   DatumContainerEditView,
   DatumContainerReadView,
+  DatumEditView,
   DatumReadView,
   DatumFields,
   Export,
@@ -350,7 +352,7 @@ define([
     /*
      * Set up the six data list views, kills all collection in the currentPaginatedDataListDatumsView
      */
-    setUpAndAssociateViewsAndModelsWithCurrentDataList: function(callback) {
+    setUpAndAssociateViewsAndModelsWithCurrentDataList: function(callback, editView) {
 
       if (this.currentPaginatedDataListDatumsView) {
         //        if( this.currentPaginatedDataListDatumsView.filledBasedOnModels ){
@@ -374,13 +376,24 @@ define([
        * This holds the ordered datums of the current data list, and is the important place to keep the
        * datum, it's ids will be saved into the currentdatalist when the currentdatalist is saved
        */
-      this.currentPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
-        collection: new Datums(),
-        childViewConstructor: DatumReadView,
-        childViewTagName: "li",
-        childViewFormat: "latex",
-        childViewClass: "row span12"
-      });
+
+      if (editView){
+        this.currentPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+          collection: new Datums(),
+          childViewConstructor: DatumEditView,
+          childViewTagName: "li",
+          childViewFormat: "well",
+          childViewClass: "well"
+        });
+      } else {
+        this.currentPaginatedDataListDatumsView = new PaginatedUpdatingCollectionView({
+          collection: new Datums(),
+          childViewConstructor: DatumReadView,
+          childViewTagName: "li",
+          childViewFormat: "latex",
+          childViewClass: "row span12"
+        });
+      }
 
       this.corporaReadView = new UpdatingCollectionView({
         collection: this.model.get("corporaUserHasAccessTo"),
@@ -672,6 +685,12 @@ define([
         $(this.el).html(this.template(jsonToRender));
       } else if (this.format == "layoutJustEntering") {
         $(this.el).html(this.layoutJustEntering(jsonToRender));
+        if (this.currentPaginatedDataListDatumsView.childViewConstructor !== DatumEditView) {
+          this.setUpAndAssociateViewsAndModelsWithCurrentDataList(null, "edit");
+          $(this.el).find("#datums-embedded").hide();
+        } else if (this.currentPaginatedDataListDatumsView.childViewConstructor !== DatumReadView) {
+          this.setUpAndAssociateViewsAndModelsWithCurrentDataList(null);
+        }
       } else if (this.format == "layoutAllTheData") {
         $(this.el).html(this.layoutAllTheData(jsonToRender));
       } else if (this.format == "layoutWhatsHappening") {
