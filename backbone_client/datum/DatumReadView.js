@@ -243,7 +243,7 @@ define([
         var queryTokens = this.model.processQueryString(searchParams);
 
         var doGrossKeywordMatch = false;
-        if (searchParams.indexOf(":") == -1) {
+        if (searchParams && searchParams.indexOf(":") == -1) {
           doGrossKeywordMatch = true;
         }
 
@@ -460,8 +460,8 @@ define([
             }
 
             var tuple = getIGTList([orthography, utterance, allomorphs, morphemes, syntax, gloss]);
-            // if there are only 3 or less words, they probably dont need the alignment visual that much
-            if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 4) {
+            // if there are only 2 or less words, they probably dont need the alignment visual that much
+            if (this.format === "latexPreviewIGTonly" && tuple && tuple.length < 3) {
               return this;
             } else if (this.format === "latexPreviewIGTonly" && tuple && tuple.length > 40) {
               jsonToRender.scrollable = "scrollable";
