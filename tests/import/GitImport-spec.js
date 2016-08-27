@@ -39,15 +39,14 @@ describe("api/import/GitImport", function() {
       importer
 
     var defaultOptions = {
-      localUri: "./sample_data/orthography.txt",
       remoteUri: "https://github.com/expressjs/express.git",
       readOptions: {
         readFileFunction: function(options, callback) {
-          importer.debug("calling fs.readFile");
-          fs.readFile(options.localUri, "utf8", callback);
+          importer.debug("calling fs.readFile", options.uri);
+          fs.readFile(options.uri, "utf8", callback);
         }
       },
-      fileExtensions: ['.js'],
+      fileExtensions: ['.js', '.json'],
       preprocessOptions: {
         writePreprocessedFileFunction: function(options, callback) {
           fs.writeFile(options.filename, options.body, "utf8", callback);
@@ -58,12 +57,6 @@ describe("api/import/GitImport", function() {
       importOptions: {
         dryRun: true,
         fromPreprocessedFile: true
-      },
-      next: function(options, callback) {
-        importer.debug("Next middleware placeholder");
-        if (typeof callback === "function") {
-          callback(options);
-        }
       }
     };
 
@@ -90,20 +83,30 @@ describe("api/import/GitImport", function() {
       importer.debugMode = true;
       importer.clone(defaultOptions)
         .then(function(result) {
-          importer.debug("result of clone", result);
+          importer.debug("result of clone", result.cloneMessage);
           expect(result.dbname).toEqual("express");
           return importer.findFiles(defaultOptions);
         })
         .then(function(result) {
           importer.debug("result of find files", result.fileTree);
           expect(result.findFilesMessage).toBeDefined();
+          expect(result.fileList.length).toEqual(153);
+          expect(result.fileTree).toBeDefined();
+          expect(result.fileTree.path).toEqual("imported_corpora/express");
+          expect(result.fileTree.children.length).toEqual(6);
+          expect(result.fileTree.children[0].path).toEqual("imported_corpora/express/benchmarks");
+
+          defaultOptions.uri = [GitImport.IMPORT_DIR, defaultOptions.dbname, defaultOptions.fileList[0]].join("/");
+          expect(result.findFilesMessage).toBeDefined();
           return importer.addFileUri(defaultOptions);
         })
         .then(function(result) {
-          importer.debug("after add file", result);
-          expect(result.fileTree).toBeDefined();
+          importer.debug("after add file", result.rawText);
           expect(result).toBeDefined();
           expect(result.rawText).toBeDefined();
+          expect(result.datum).toBeDefined();
+          expect(result.datum.length).toEqual(result.rawText.trim().length);
+          expect(importer.files.length).toEqual(1);
 
           done();
         }, done)
