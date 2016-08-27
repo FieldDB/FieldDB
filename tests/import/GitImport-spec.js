@@ -3,6 +3,7 @@
 var GitImport;
 var Participant;
 var Corpus;
+var fs;
 try {
   if (FieldDB) {
     GitImport = FieldDB.GitImport;
@@ -14,9 +15,9 @@ try {
 GitImport = GitImport || require("./../../api/import/GitImport").GitImport;
 Participant = Participant || require("./../../api/user/Participant").Participant;
 Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+fs = fs || require("fs");
 
-
-var specIsRunningTooLong = 5000;
+var specIsRunningTooLong = 10 * 1000;
 describe("api/import/GitImport", function() {
 
   describe("construction", function() {
@@ -33,7 +34,7 @@ describe("api/import/GitImport", function() {
     });
   });
 
-  describe("Git GitImport: as a computational linugist I want to import git repositories containing of text files for machine learning", function() {
+  describe("GitImport: as a computational linugist I want to import git repositories containing of text files for machine learning", function() {
     var corpus,
       importer,
       localUri = "./sample_data/orthography.txt",
@@ -42,13 +43,14 @@ describe("api/import/GitImport", function() {
     var defaultOptions = {
       uri: localUri,
       readOptions: {
-        readFileFunction: function(callback) {
+        readFileFunction: function(options, callback) {
+          console.log('calling fs.readFile');
           fs.readFile(localUri, "utf8", callback);
         }
       },
       preprocessOptions: {
-        writePreprocessedFileFunction: function(filename, body, callback) {
-          fs.writeFile(filename, body, "utf8", callback);
+        writePreprocessedFileFunction: function(options, callback) {
+          fs.writeFile(options.filename, options.body, "utf8", callback);
         },
         transliterate: true,
         joinLines: true,
@@ -56,6 +58,12 @@ describe("api/import/GitImport", function() {
       importOptions: {
         dryRun: true,
         fromPreprocessedFile: true
+      },
+      next: function(options, callback) {
+        importer.debug("Next middleware placeholder");
+        if (typeof callback === "function") {
+          callback(options);
+        }
       }
     };
 
@@ -80,35 +88,15 @@ describe("api/import/GitImport", function() {
 
     it("should be able to import from a uri", function(done) {
       importer.debugMode = true;
-      importer.addFileUri({
-        uri: localUri,
-        readOptions: {
-          readFileFunction: function(callback) {
-            fs.readFile(localUri, "utf8", callback);
-          }
-        },
-        preprocessOptions: {
-          writePreprocessedFileFunction: function(filename, body, callback) {
-            fs.writeFile(filename, body, "utf8", callback);
-          },
-          transliterate: true,
-          joinLines: true,
-        },
-        importOptions: {
-          dryRun: true,
-          fromPreprocessedFile: true
-        },
-        next: function() {
-          importer.debug("Next middleware placeholder");
-        }
-      })
-      .then(function(result) {
-        importer.debug("after add file", result);
-        expect(result).toBeDefined();
-        expect(result.rawText).toBeDefined();
-      })
-      .then(done, done)
-      .fail(done);
+      importer.addFileUri(defaultOptions)
+        .then(function(result) {
+          importer.debug("after add file", result.rawText);
+          expect(result).toBeDefined();
+          expect(result.rawText).toBeDefined();
+
+          done();
+        })
+        .fail(done);
 
     }, specIsRunningTooLong);
 
