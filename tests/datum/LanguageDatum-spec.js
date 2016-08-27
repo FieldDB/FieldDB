@@ -121,8 +121,8 @@ describe("Test LanguageDatum", function() {
 
 
   });
-  describe("lexical nodes should have some count or context", function() {
 
+  describe("lexical nodes should have some count or context", function() {
 
     it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
       var lexiconEdge = {

@@ -809,7 +809,7 @@ Collection.prototype = Object.create(Object.prototype, {
       var json = this._collection.map(function(item) {
         if (typeof item.toJSON === "function") {
           self.debug("This item has a toJSON, which we will call instead");
-          return item.toJSON();
+          return item.toJSON(includeEvenEmptyAttributes, removeEmptyAttributes);
         } else {
           return item;
         }

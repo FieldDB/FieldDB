@@ -21,6 +21,62 @@ describe("Test Datum", function() {
     expect(datum.fields).toBeUndefined();
   });
 
+  describe("serialization", function() {
+
+    it("should serialize mask for backward compatability", function() {
+      var datum = new Datum({
+        datumFields: [{
+          id: "something",
+          value: "else"
+        }]
+      });
+
+      var serialized = datum.toJSON();
+      expect(serialized).toEqual({
+        fieldDBtype: "Datum",
+        dateCreated: datum.dateCreated,
+        version: datum.version,
+        api: "datums",
+        datumFields: [{
+          fieldDBtype: "DatumField",
+          id: "something",
+          version: datum.version,
+          label: "something",
+          hint: "",
+          value: "else",
+          mask: "else"
+        }]
+      });
+    });
+
+    it("should not serialize mask if removeEmptyAttributes", function() {
+      var datum = new Datum({
+        datumFields: [{
+          // debugMode: true,
+          id: "something",
+          value: "else"
+        }]
+      });
+
+      var serialized = datum.toJSON(false, "removeemptyplease");
+      expect(serialized).toEqual({
+        fieldDBtype: "Datum",
+        dateCreated: datum.dateCreated,
+        version: datum.version,
+        api: "datums",
+        datumFields: [{
+          fieldDBtype: "DatumField",
+          id: "something",
+          version: datum.version,
+          label: "something",
+          hint: "",
+          value: "else"
+        }]
+      });
+    });
+
+  });
+
   describe("Primary data support", function() {
 
     it("should support any sort of file", function() {
