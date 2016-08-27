@@ -15,6 +15,7 @@ couchapp_prototype/lists
 couchapp_prototype/_attachments
 dist/
 coverage/
+imported_corpora
 
 spreadsheet_build_dev
 

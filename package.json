@@ -44,6 +44,7 @@
     "browserify-mime": "^1.2.9",
     "btoa": "^1.1.2",
     "diacritics": "^1.2.3",
+    "directory-tree": "^1.1.0",
     "frb": "git://github.com/cesine/frb.git#contenteditable",
     "md5": "^2.0.0",
     "q": "^1.4.1",

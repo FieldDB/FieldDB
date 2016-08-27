@@ -3,6 +3,7 @@
 var Import = require("./import").Import;
 var shellPromise = require("./../shellPromise");
 var Q = require("q");
+var directoryTree = require('directory-tree');
 
 /**
  * @class The git import class helps import data from a git repository into a corpus, or create a new corpus.
@@ -26,7 +27,7 @@ var GitImport = function GitImport(options) {
   Import.apply(this, arguments);
 };
 
-GitImport.DATA_DIR = "data";
+GitImport.DATA_DIR = "imported_corpora";
 
 GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.prototype */ {
   constructor: {
@@ -34,21 +35,59 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
   },
 
   clone: {
-    value: function(url) {
+    value: function(options) {
       var deferred = Q.defer();
+      var self = this;
+      var cdCommand = "mkdir -p " + GitImport.DATA_DIR + "; cd " + GitImport.DATA_DIR + "; ";
+      var cloneCommand = "git clone " + options.remoteUri;
 
-      var cdCommand = "mkdir -p " + GitImport.DATA_DIR + "/" + this.dbname + "; cd " + GitImport.DATA_DIR + "; ";
-      var cloneCommand = "git clone " + url;
+      self.debug("executing " + cdCommand + cloneCommand);
+      shellPromise.execute(cdCommand + cloneCommand)
+        .then(function(result) {
+          self.debug("result", result);
 
-      shellPromise(cdCommand + cloneCommand).then(function(result) {
-        this.debug('result', result);
-        deferred.resolve(result);
-      }).fail(function(err) {
-        this.debug('err', err);
+          // TODO add a .fielddb.json file with metadata
+          options.dbname = options.remoteUri.substring(options.remoteUri.lastIndexOf("/") + 1).replace(".git", "");
+          options.cloneMessage = result;
+          deferred.resolve(options);
+        }, function(err) {
+          if (err.indexOf("already exists and is not an empty directory") > -1) {
+            options.cloneMessage = err;
+            options.dbname = options.remoteUri.substring(options.remoteUri.lastIndexOf("/") + 1).replace(".git", "");
+            return deferred.resolve(options);
+          }
+          deferred.reject(err);
+        })
+        .fail(function(err) {
+          self.debug("Error cloning", err);
+          deferred.reject(err);
+        });
 
-        deferred.reject(err);
-      });
+      return deferred.promise;
+    }
+  },
 
+  findFiles: {
+    value: function(options) {
+      var deferred = Q.defer();
+      var self = this;
+      var treeCommand = "tree " + GitImport.DATA_DIR + "/" + options.dbname +" | egrep " + options.fileExtensions.join("|");
+
+      self.debug("executing " + treeCommand);
+      shellPromise.execute(treeCommand)
+        .then(function(result) {
+          self.debug("result", result);
+          options.findFilesMessage = result;
+          options.fileTree = directoryTree(GitImport.DATA_DIR + "/" + options.dbname, options.fileExtensions);
+          deferred.resolve(options);
+        }, function(err) {
+          options.findFilesMessage = err;
+          deferred.reject(err);
+        })
+        .fail(function(err) {
+          self.debug("Error cloning", err);
+          deferred.reject(err);
+        });
       return deferred.promise;
     }
   }
