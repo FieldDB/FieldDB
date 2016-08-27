@@ -27,7 +27,7 @@ var GitImport = function GitImport(options) {
   Import.apply(this, arguments);
 };
 
-GitImport.DATA_DIR = "imported_corpora";
+GitImport.IMPORT_DIR = "imported_corpora";
 
 GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.prototype */ {
   constructor: {
@@ -38,7 +38,7 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
     value: function(options) {
       var deferred = Q.defer();
       var self = this;
-      var cdCommand = "mkdir -p " + GitImport.DATA_DIR + "; cd " + GitImport.DATA_DIR + "; ";
+      var cdCommand = "mkdir -p " + GitImport.IMPORT_DIR + "; cd " + GitImport.IMPORT_DIR + "; ";
       var cloneCommand = "git clone " + options.remoteUri;
 
       self.debug("executing " + cdCommand + cloneCommand);
@@ -71,14 +71,17 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
     value: function(options) {
       var deferred = Q.defer();
       var self = this;
-      var treeCommand = "tree " + GitImport.DATA_DIR + "/" + options.dbname +" | egrep " + options.fileExtensions.join("|");
+      var treeCommand = "tree -f " + GitImport.IMPORT_DIR + "/" + options.dbname + " | egrep \"(" + options.fileExtensions.join("$|").replace(/\./,"\\.") + "$)\"";
 
       self.debug("executing " + treeCommand);
       shellPromise.execute(treeCommand)
         .then(function(result) {
           self.debug("result", result);
           options.findFilesMessage = result;
-          options.fileTree = directoryTree(GitImport.DATA_DIR + "/" + options.dbname, options.fileExtensions);
+          options.fileList = result.trim().split("\n").map(function(filePath) {
+            return filePath.replace(new RegExp(".*" + options.dbname + "/"), "");
+          });
+          options.fileTree = directoryTree(GitImport.IMPORT_DIR + "/" + options.dbname, options.fileExtensions);
           deferred.resolve(options);
         }, function(err) {
           options.findFilesMessage = err;
