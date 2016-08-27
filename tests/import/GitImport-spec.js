@@ -2,19 +2,19 @@
 
 var GitImport;
 var Participant;
-var Corpus;
+var ComputationalLinguisticsCorpus;
 var fs;
 try {
   if (FieldDB) {
     GitImport = FieldDB.GitImport;
     Participant = FieldDB.Participant;
-    Corpus = FieldDB.Corpus;
+    ComputationalLinguisticsCorpus = FieldDB.ComputationalLinguisticsCorpus;
   }
 } catch (e) {}
 
 GitImport = GitImport || require("./../../api/import/GitImport").GitImport;
 Participant = Participant || require("./../../api/user/Participant").Participant;
-Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+ComputationalLinguisticsCorpus = ComputationalLinguisticsCorpus || require("./../../api/corpus/ComputationalLinguisticsCorpus").ComputationalLinguisticsCorpus;
 fs = fs || require("fs");
 var mkdirp = require("mkdirp");
 
@@ -73,7 +73,7 @@ describe("api/import/GitImport", function() {
 
     beforeEach(function() {
       // var dbname = "testingbatchimport-git";
-      corpus = new Corpus({
+      corpus = new ComputationalLinguisticsCorpus({
         datumFields: [{
           type: "DatumField",
           id: "orthography"
