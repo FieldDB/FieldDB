@@ -67,6 +67,20 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
     value: LanguageDatum
   },
 
+  length: {
+    get: function() {
+      if (this.utterance) {
+        return this.utterance.length;
+      }
+      if (this.orthography) {
+        return this.orthography.length;
+      }
+      if (this.morphemes) {
+        return this.morphemes.length;
+      }
+    }
+  },
+
   orthography: {
     configurable: true,
     get: function() {
@@ -106,7 +120,7 @@ LanguageDatum.prototype = Object.create(Datum.prototype, /** @lends LanguageDatu
   /**
    * Morphemes of the datum, if morphemes is empty it will provide the utterance
    * or the orthography as a last resort copy
-   * 
+   *
    * @return {String} morphemes, or utterance or orthography
    */
   morphemes: {
