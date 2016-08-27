@@ -189,7 +189,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // })
           .then(function(result) {
             self.debug("Import is finished");
-            self.debug("result.datum", result.datum);
+            result.datum.fileName = result.datum.fileName || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+            self.debug("result.datum.length" + result.datum.length);
+
             self.files.add(result.datum);
             deferred.resolve(result);
           })
