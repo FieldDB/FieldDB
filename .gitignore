@@ -125,4 +125,4 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.swp
-sample_data/orthography_preprocessed.json
+sample_data/orthography.txt.fielddb

@@ -166,6 +166,30 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     set: function() {}
   },
 
+  addFileUris: {
+    value: function(options) {
+      var deferred = Q.defer();
+      var self = this;
+
+      var promises = options.fileList.map(function(file) {
+        return self.addFileUri({
+          uri: file,
+          readOptions: options.readOptions,
+          preprocessOptions: options.preprocessOptions,
+          importOptions: options.importOptions,
+          dbname: options.dbname
+        });
+      });
+
+      Q.allSettled(promises).then(function(results) {
+        self.debug("done with promises", results);
+        deferred.resolve(options);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   addFileUri: {
     value: function(options) {
       var deferred = Q.defer(),
@@ -189,10 +213,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           // })
           .then(function(result) {
             self.debug("Import is finished");
-            result.datum.fileName = result.datum.fileName || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
-            self.debug("result.datum.length" + result.datum.length);
+            self.debug("result.datum.length: " + result.datum.length);
+            self.datalist.add(result.datum);
 
-            self.files.add(result.datum);
+            result.fileName = result.fileName || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+            self.files.add(result);
+
             deferred.resolve(result);
           })
           .fail(function(reason) {
@@ -228,7 +254,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                   if (err) {
                     deferred.reject(err);
                   } else {
-                    self.debug('rawText', data);
+                    self.debug("rawText", data);
                     optionsWithADatum.rawText = data;
                     deferred.resolve(optionsWithADatum);
                   }
@@ -742,26 +768,36 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       Q.nextTick(function() {
         self.debug("Preprocessing  ");
 
+        // self.debug('options.datum', options.datum);
         options.datum.fields.orthography.value = options.rawText;
-        options.datum.fields.utterance.value = options.rawText;
-        options.datum.id = options.uri;
+        if (options.datum.fields.utterance) {
+          options.datum.fields.utterance.value = options.rawText;
+        }
+
+        options.datum.id = options.datum.tempId = options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
 
         self.debug("running write for preprocessed");
         if (!options.preprocessOptions || !options.preprocessOptions.writePreprocessedFileFunction) {
-          return deferred.resolve(optionsWithResults);
+          return deferred.resolve(options);
         }
-        options.preprocessedUrl = options.uri.substring(0, options.uri.lastIndexOf(".")) + "_preprocessed.json";
+        var extension = ".fielddb";
+        if (self.application && self.application.brandLowerCase) {
+          extension = "." + self.application.brandLowerCase;
+        }
+        options.preprocessedUri = options.uri + extension;
+        // options.preprocessedUri = "." + options.uri.substring(0, options.uri.lastIndexOf(".")) + ".preprocessed";
         var preprocessResult = JSON.stringify(options.datum.toJSON(), null, 2);
         try {
           options.preprocessOptions.writePreprocessedFileFunction({
-              filename: options.preprocessedUrl,
+              preprocessedUri: options.preprocessedUri,
               body: preprocessResult
             },
             function(err, data) {
-              self.debug("Wrote " + options.preprocessedUrl, data);
               if (err) {
-                return deferred.reject(reason);
+                self.debug("Couldnt write " + options.preprocessedUri, err);
+                return deferred.reject(err);
               }
+              self.debug("Wrote " + options.preprocessedUri, data);
               self.debug("Preprocesing success");
               deferred.resolve(options);
             });
@@ -938,7 +974,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         this.debug("There's no session!");
         return;
       }
-      this.debug("getting the _session", this._session);
+      this.debug("getting the _session " + this._session.fields.length);
       return this._session;
     },
     set: function(value) {
@@ -998,7 +1034,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @type {Object}
    */
   pause: {
-    value: function(options) {
+    value: function() {
       return this;
     }
   },
@@ -1009,7 +1045,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @type {Object}
    */
   resume: {
-    value: function(options) {
+    value: function() {
       return this;
     }
   },

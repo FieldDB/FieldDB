@@ -3,7 +3,8 @@
 var Import = require("./import").Import;
 var shellPromise = require("./../shellPromise");
 var Q = require("q");
-var directoryTree = require('directory-tree');
+var directoryTree = require("directory-tree");
+var fs = require("fs");
 
 /**
  * @class The git import class helps import data from a git repository into a corpus, or create a new corpus.
@@ -71,7 +72,7 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
     value: function(options) {
       var deferred = Q.defer();
       var self = this;
-      var treeCommand = "tree -f " + GitImport.IMPORT_DIR + "/" + options.dbname + " | egrep \"(" + options.fileExtensions.join("$|").replace(/\./,"\\.") + "$)\"";
+      var treeCommand = "tree -f " + GitImport.IMPORT_DIR + "/" + options.dbname + " | egrep \"(" + options.fileExtensions.join("$|").replace(/\./, "\\.") + "$)\"";
 
       self.debug("executing " + treeCommand);
       shellPromise.execute(treeCommand)
@@ -79,7 +80,8 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
           self.debug("result", result);
           options.findFilesMessage = result;
           options.fileList = result.trim().split("\n").map(function(filePath) {
-            return filePath.replace(new RegExp(".*" + options.dbname + "/"), "");
+            return filePath.replace(new RegExp(".*" + GitImport.IMPORT_DIR), GitImport.IMPORT_DIR);
+            // return filePath.replace(new RegExp(".*" + options.dbname + "/"), "");
           });
           options.fileTree = directoryTree(GitImport.IMPORT_DIR + "/" + options.dbname, options.fileExtensions);
           deferred.resolve(options);
