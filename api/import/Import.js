@@ -786,7 +786,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
         options.preprocessedUri = options.uri + extension;
         // options.preprocessedUri = "." + options.uri.substring(0, options.uri.lastIndexOf(".")) + ".preprocessed";
-        var preprocessResult = JSON.stringify(options.datum.toJSON(), null, 2);
+        var preprocessResult = JSON.stringify(options.datum.toJSON(false, "removeempty"), null, 2);
         try {
           options.preprocessOptions.writePreprocessedFileFunction({
               preprocessedUri: options.preprocessedUri,
