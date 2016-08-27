@@ -49,6 +49,13 @@ describe("api/import/GitImport", function() {
       },
       fileExtensions: [".js", ".json"],
       preprocessOptions: {
+        preprocessFunction: function(datum) {
+          importer.debug('preprocessing datum');
+          // datum.debugMode = true;
+          return corpus.extractStats({
+            docs: [datum]
+          });
+        },
         writePreprocessedFileFunction: function(options, callback) {
           options.preprocessedUri = "." + options.preprocessedUri;
           var path = options.preprocessedUri.substring(0, options.preprocessedUri.lastIndexOf("/"));
@@ -107,7 +114,7 @@ describe("api/import/GitImport", function() {
           expect(result.dbname).toEqual("express");
 
           // run a subset
-          result.dbname = "express/lib";
+          result.dbname = "express/lib/middleware";
 
           return importer.findFiles(defaultOptions);
         })

@@ -13,6 +13,22 @@ var ComputationalLinguisticsCorpus = function ComputationalLinguisticsCorpus(opt
 ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @lends ComputationalLinguisticsCorpus.prototype */ {
   constructor: {
     value: ComputationalLinguisticsCorpus
+  },
+
+  extractStats: {
+    value: function(datalist) {
+      if (!datalist || !datalist.docs) {
+        this.warn("datalist was empty", datalist);
+        return datalist;
+      }
+
+      return datalist.docs.map(function(doc) {
+        if (typeof doc.extractStats === "function") {
+          return doc.extractStats.apply(doc);
+        }
+        return doc;
+      });
+    }
   }
 });
 

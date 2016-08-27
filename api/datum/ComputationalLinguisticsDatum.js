@@ -22,8 +22,23 @@ ComputationalLinguisticsDatum.prototype = Object.create(LanguageDatum.prototype,
     value: ComputationalLinguisticsDatum
   },
 
+  extractStats: {
+    value: function(options) {
+      if (options) {
+        this.warn("Options aren't used", options);
+      }
+      this.stats = {
+        unigrams: {},
+        bigrams: {}
+      };
+      return this;
+    }
+  },
+
   stats: {
     get: function() {
+      this.warn("get stats", this._stats);
+
       return this._stats;
     },
     set: function(value) {

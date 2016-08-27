@@ -182,7 +182,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       });
 
       Q.allSettled(promises).then(function(results) {
-        self.debug("done with promises", results);
+        self.debug("done with promises " + results.length);
         deferred.resolve(options);
       });
 
@@ -249,12 +249,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             try {
               return optionsWithADatum.readOptions
                 .readFileFunction(optionsWithADatum, function(err, data) {
-                  self.debug("read file", err, data);
 
                   if (err) {
+                    self.debug("read file", err);
                     deferred.reject(err);
                   } else {
-                    self.debug("rawText", data);
+                    // self.debug("rawText", data);
                     optionsWithADatum.rawText = data;
                     deferred.resolve(optionsWithADatum);
                   }
@@ -775,6 +775,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
 
         options.datum.id = options.datum.tempId = options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+
+        // let the application customize the preprocess function
+        if (typeof options.preprocessOptions.preprocessFunction === "function") {
+          options.preprocessOptions.preprocessFunction(options.datum);
+        }
 
         self.debug("running write for preprocessed");
         if (!options.preprocessOptions || !options.preprocessOptions.writePreprocessedFileFunction) {
