@@ -68,7 +68,8 @@
     "grunt-exec": "^0.4.6",
     "grunt-jasmine-node-coverage": "^0.4.1",
     "grunt-jsdoc": "^1.0.0",
-    "grunt-newer": "^1.1.1"
+    "grunt-newer": "^1.1.1",
+    "mkdirp": "^0.5.1"
   },
   "main": "api/fielddb.js",
   "scripts": {
