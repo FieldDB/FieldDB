@@ -15,6 +15,8 @@ couchapp_prototype/lists
 couchapp_prototype/_attachments
 dist/
 coverage/
+.imported_corpora
+imported_corpora
 
 spreadsheet_build_dev
 
@@ -123,4 +125,4 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.swp
-sample_data/orthography_preprocessed.json
+sample_data/orthography.txt.fielddb

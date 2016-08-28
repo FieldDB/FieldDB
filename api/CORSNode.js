@@ -134,6 +134,7 @@ CORS.makeCORSRequest = function(options) {
 
   xhr.on("timeout", function(err) {
     self.ontimeout.apply(self, [options, err, deferred]);
+    xhr.abort();
   });
 
   options.xhr = xhr;

@@ -349,19 +349,19 @@ describe("api/import/Import", function() {
     describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
       var corpus,
         importer,
-        localUri = "./sample_data/orthography.txt",
+        localUri = "sample_data/orthography.txt",
         remoteUri = "https://raw.githubusercontent.com/FieldDB/FieldDB/master/sample_data/orthography.txt";
 
       var defaultOptions = {
         uri: localUri,
         readOptions: {
-          readFileFunction: function(callback) {
+          readFileFunction: function(options, callback) {
             fs.readFile(localUri, "utf8", callback);
           }
         },
         preprocessOptions: {
-          writePreprocessedFileFunction: function(filename, body, callback) {
-            fs.writeFile(filename, body, "utf8", callback);
+          writePreprocessedFileFunction: function(options, callback) {
+            fs.writeFile(options.preprocessedUri, options.body, "utf8", callback);
           },
           transliterate: true,
           joinLines: true,
@@ -423,7 +423,7 @@ describe("api/import/Import", function() {
           .then(function(result) {
             importer.debug("after preprocess file");
             expect(result.datum.datumFields.utterance).toBeDefined();
-            expect(result.preprocessedUrl).toEqual("./sample_data/orthography_preprocessed.json");
+            expect(result.preprocessedUri).toEqual("sample_data/orthography.txt.fielddb");
 
             if (result.datum.datumFields.orthography.value !== result.rawText.trim()) {
               expect(result.datum.datumFields.originalText.value)
@@ -447,13 +447,13 @@ describe("api/import/Import", function() {
         importer.addFileUri({
           uri: localUri,
           readOptions: {
-            readFileFunction: function(callback) {
+            readFileFunction: function(options, callback) {
               fs.readFile(localUri, "utf8", callback);
             }
           },
           preprocessOptions: {
-            writePreprocessedFileFunction: function(filename, body, callback) {
-              fs.writeFile(filename, body, "utf8", callback);
+            writePreprocessedFileFunction: function(options, callback) {
+              fs.writeFile(options.filename, options.body, "utf8", callback);
             },
             transliterate: true,
             joinLines: true,

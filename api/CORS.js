@@ -39,7 +39,7 @@ var CORS = {
   debug: function(a, b, c) {
     if (this.debugMode) {
       if (a) {
-        console.log(a);
+        console.log("CORS-DEBUG: " + a);
       }
       if (b) {
         console.log(b);
@@ -192,6 +192,7 @@ var CORS = {
     response.details = options;
     if (response.details && response.details.xhr) {
       this.debug(options.url + " " + options.complete + ":  cleaning up ", options.url);
+      options.status = options.status || options.xhr.status;
       delete options.xhr;
     }
     this.debug(options.url + " " + options.complete + ": done " + options.url + "\n\n\n");
@@ -219,7 +220,14 @@ var CORS = {
     var err = new Error(this.CONNECTION_ERRORED.MESSAGE);
     this.debug(options.url + " " + options.complete + ": errored.");
 
-    err.status = options.xhr.status || this.CONNECTION_ERRORED.CODE;
+    if (options.xhr && options.xhr.status) {
+      err.status = options.xhr.status;
+    } else if (options.status) {
+      err.status = options.status;
+    } else {
+      err.status = this.CONNECTION_ERRORED.CODE;
+    }
+
     this.handleError(options, err, deferred);
   },
   onload: function(options, evt, deferred) {
@@ -285,7 +293,9 @@ CORS.buildXhr = function(options) {
     }
   }
 
-  xhr.timeout = options.timeout || this.timeout;
+  if (options.timeout || this.timeout) {
+    xhr.timeout = options.timeout || this.timeout;
+  }
 
   return xhr;
 };

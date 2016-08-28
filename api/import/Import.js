@@ -26,20 +26,6 @@ try {
 } catch (e) {
   ATOB = require("atob");
 }
-/**
- * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
- *
- * @property {FileList} files These are the file(s) that were dragged in.
- * @property {String} dbname This is the corpusid wherej the data should be imported
- * @property {DatumFields} fields The fields array contains titles of the data columns.
- * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
- * @property {Event} event The drag/drop event.
- *
- * @description The initialize serves to bind import to all drag and drop events.
- *
- * @extends FieldDBObject
- * @tutorial tests/CorpusTest.js
- */
 
 //http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
 var dataURItoBlob = function(dataURI) {
@@ -80,6 +66,20 @@ var getUnique = function(arrayObj) {
   return a;
 };
 
+/**
+ * @class The import class helps import csv, xml and raw text data into a corpus, or create a new corpus.
+ *
+ * @property {FileList} files These are the file(s) that were dragged in.
+ * @property {String} dbname This is the corpusid wherej the data should be imported
+ * @property {DatumFields} fields The fields array contains titles of the data columns.
+ * @property {DataList} datalist The datalist imported, to hold the data before it is saved.
+ * @property {Event} event The drag/drop event.
+ *
+ * @description The initialize serves to bind import to all drag and drop events.
+ *
+ * @extends FieldDBObject
+ * @tutorial tests/CorpusTest.js
+ */
 var Import = function Import(options) {
   if (!this._fieldDBtype) {
     this._fieldDBtype = "Import";
@@ -166,6 +166,30 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     set: function() {}
   },
 
+  addFileUris: {
+    value: function(options) {
+      var deferred = Q.defer();
+      var self = this;
+
+      var promises = options.fileList.map(function(file) {
+        return self.addFileUri({
+          uri: file,
+          readOptions: options.readOptions,
+          preprocessOptions: options.preprocessOptions,
+          importOptions: options.importOptions,
+          dbname: options.dbname
+        });
+      });
+
+      Q.allSettled(promises).then(function(results) {
+        self.debug("done with promises " + results.length);
+        deferred.resolve(options);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   addFileUri: {
     value: function(options) {
       var deferred = Q.defer(),
@@ -179,27 +203,28 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       }
 
       Q.nextTick(function() {
+        self.debug("addFileUri", options);
         self.readUri(options)
           .then(function() {
             return self.preprocess.apply(self, arguments);
           })
-          .then(function() {
-            return self.import.apply(self, arguments);
-          })
+          // .then(function() {
+          //   return self.import.apply(self, arguments);
+          // })
           .then(function(result) {
             self.debug("Import is finished");
-            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
-              options.next();
-            }
-            self.debug("result.datum", result.datum);
-            self.files.add(result.datum);
+            self.debug("result.datum.length: " + result.datum.length);
+            self.datalist.add(result.datum);
+
+            result.fileName = result.fileName || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+            self.files.add(result);
+
             deferred.resolve(result);
           })
           .fail(function(reason) {
             console.error(reason.stack);
             deferred.reject(reason);
           });
-
       });
 
       return deferred.promise;
@@ -216,52 +241,72 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           throw new Error("Options must be specified {}");
         }
 
+        self.debug("readUri");
         var pipeline = function(optionsWithADatum) {
+          self.debug("pipeline", optionsWithADatum.uri);
+
           if (optionsWithADatum.readOptions) {
-            optionsWithADatum.readOptions.readFileFunction(function(err, data) {
-              if (err) {
-                deferred.reject(err);
-              } else {
-                optionsWithADatum.rawText = data;
-                deferred.resolve(optionsWithADatum);
-              }
-            });
-          } else {
-            self.debug("TODO reading url in browser");
-            CORS.makeCORSRequest({
-              type: "GET",
-              dataType: "json",
-              uri: optionsWithADatum.uri
-            }).then(function(data) {
-                self.debug(data);
-                optionsWithADatum.rawText = data;
-                deferred.resolve(optionsWithADatum);
-              },
-              function(reason) {
-                self.debug(reason);
-                deferred.reject(reason);
-              }).fail(
-              function(error) {
-                console.error(error.stack, self);
-                deferred.reject(error);
-              });
+            try {
+              return optionsWithADatum.readOptions
+                .readFileFunction(optionsWithADatum, function(err, data) {
+
+                  if (err) {
+                    self.debug("read file", err);
+                    deferred.reject(err);
+                  } else {
+                    // self.debug("rawText", data);
+                    optionsWithADatum.rawText = data;
+                    deferred.resolve(optionsWithADatum);
+                  }
+                });
+            } catch (err) {
+              deferred.reject(err);
+            }
           }
+
+          self.warn("TODO reading url in browser");
+          CORS.makeCORSRequest({
+            type: "GET",
+            dataType: "json",
+            uri: optionsWithADatum.uri
+          }).then(function(data) {
+            self.debug(data);
+            optionsWithADatum.rawText = data;
+            deferred.resolve(optionsWithADatum);
+          }, function(reason) {
+            self.debug(reason);
+            deferred.reject(reason);
+          }).fail(function(error) {
+            console.error(error.stack, self);
+            deferred.reject(error);
+          });
         };
 
+        self.debug("find" + options.uri);
         self.corpus.find(options.uri)
           .then(function(similarData) {
+            self.debug("similarData", similarData);
             if (similarData.length === 1) {
               options.datum = similarData[0];
-              pipeline(options);
-            } else {
-              // self.debug("readUri corpus", self);
-              self.corpus.newDatumAsync().then(function(datum) {
+              // try {
+              //   pipeline(options);
+              // } catch (e) {
+              //   console.log('caught an err', e);
+              // }
+              return pipeline(options);
+            }
+
+            self.debug("readUri newDatumAsync");
+            self.corpus.newDatumAsync()
+              .then(function(datum) {
+                // self.debug("datum", datum);
                 options.datum = datum;
                 pipeline(options);
               });
-            }
           })
           .fail(function(reason) {
+            self.debug("corpus.find fail", reason);
+
             deferred.reject(reason);
           });
 
@@ -722,51 +767,50 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       this.verbose("In the preprocess", this);
       Q.nextTick(function() {
         self.debug("Preprocessing  ");
-        try {
 
-          var failFunction = function(reason) {
-            if (options && typeof options.next === "function" /* enable use as middleware */ ) {
-              options.next();
-            }
-            deferred.reject(reason);
-          };
-
-          var successFunction = function(optionsWithResults) {
-            self.debug("Preprocesing success");
-            if (optionsWithResults && typeof optionsWithResults.next === "function" /* enable use as middleware */ ) {
-              optionsWithResults.next();
-            }
-            deferred.resolve(optionsWithResults);
-          };
-
-          options.datum.fields.orthography.value = options.rawText;
+        // self.debug('options.datum', options.datum);
+        options.datum.fields.orthography.value = options.rawText;
+        if (options.datum.fields.utterance) {
           options.datum.fields.utterance.value = options.rawText;
-          options.datum.id = options.uri;
+        }
 
-          self.debug("running write for preprocessed");
-          if (options.preprocessOptions && options.preprocessOptions.writePreprocessedFileFunction) {
-            options.preprocessedUrl = options.uri.substring(0, options.uri.lastIndexOf(".")) + "_preprocessed.json";
-            var preprocessResult = JSON.stringify(options.datum.toJSON(), null, 2);
-            deferred.resolve(options);
+        options.datum.id = options.datum.tempId = options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
 
-            options.preprocessOptions.writePreprocessedFileFunction(options.preprocessedUrl,
-              preprocessResult,
-              function(err, data) {
-                self.debug("Wrote " + options.preprocessedUrl, data);
-                if (err) {
-                  failFunction(err);
-                } else {
-                  successFunction(options);
-                }
-              });
-          } else {
-            successFunction(options);
-          }
+        // let the application customize the preprocess function
+        if (typeof options.preprocessOptions.preprocessFunction === "function") {
+          options.preprocessOptions.preprocessFunction(options.datum);
+        }
 
-        } catch (e) {
-          deferred.reject(e);
+        self.debug("running write for preprocessed");
+        if (!options.preprocessOptions || !options.preprocessOptions.writePreprocessedFileFunction) {
+          return deferred.resolve(options);
+        }
+        var extension = ".fielddb";
+        if (self.application && self.application.brandLowerCase) {
+          extension = "." + self.application.brandLowerCase;
+        }
+        options.preprocessedUri = options.uri + extension;
+        // options.preprocessedUri = "." + options.uri.substring(0, options.uri.lastIndexOf(".")) + ".preprocessed";
+        var preprocessResult = JSON.stringify(options.datum.toJSON(false, "removeempty"), null, 2);
+        try {
+          options.preprocessOptions.writePreprocessedFileFunction({
+              preprocessedUri: options.preprocessedUri,
+              body: preprocessResult
+            },
+            function(err, data) {
+              if (err) {
+                self.debug("Couldnt write " + options.preprocessedUri, err);
+                return deferred.reject(err);
+              }
+              self.debug("Wrote " + options.preprocessedUri, data);
+              self.debug("Preprocesing success");
+              deferred.resolve(options);
+            });
+        } catch (err) {
+          deferred.reject(err);
         }
       });
+
       return deferred.promise;
     }
   },
@@ -831,10 +875,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         self = this;
       this.todo("TODO test the import");
 
-      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
-        options.next();
-      }
-
       var savePromises = [];
       var docsToSave = [];
       if (this.datalist.docs && this.datalist.docs._collection) {
@@ -842,6 +882,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       } else {
         this.warn("There were no docs prepared for import, this is odd.");
       }
+      self.progress = self.progress || {};
       docsToSave.map(function(builtDoc) {
         if (self.importType === "audioVideo") {
           self.debug("not doing any save for an audio video import");
@@ -938,7 +979,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         this.debug("There's no session!");
         return;
       }
-      this.debug("getting the _session", this._session);
+      this.debug("getting the _session " + this._session.fields.length);
       return this._session;
     },
     set: function(value) {
@@ -998,11 +1039,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @type {Object}
    */
   pause: {
-    value: function(options) {
-
-      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
-        options.next();
-      }
+    value: function() {
       return this;
     }
   },
@@ -1013,11 +1050,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
    * @type {Object}
    */
   resume: {
-    value: function(options) {
-
-      if (options && typeof options.next === "function" /* enable use as middleware */ ) {
-        options.next();
-      }
+    value: function() {
       return this;
     }
   },

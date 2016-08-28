@@ -879,13 +879,23 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       json.value = this.value || "";
       json.mask = this.mask || "";
 
+      if (removeEmptyAttributes) {
+        if (json.mask === json.value) {
+          delete json.mask;
+        }
+        if (json.encryptedValue === json.value) {
+          delete json.encryptedValue;
+        }
+        this.debug("removeEmptyAttributes", json);
+      }
+
       json.id = this.id;
       delete json._id;
 
       json.fieldDBtype = this.fieldDBtype;
       delete json._type;
 
-      this.debug(json);
+      this.debug("json", json);
       return json;
     }
   }

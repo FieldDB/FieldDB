@@ -514,7 +514,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       Q.nextTick(function() {
         var datum = self.newDatum(options);
         deferred.resolve(datum);
-        return datum;
       });
       return deferred.promise;
     }

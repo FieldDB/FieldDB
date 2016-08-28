@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "4.16.14",
+  "version": "4.18.27",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -44,6 +44,7 @@
     "browserify-mime": "^1.2.9",
     "btoa": "^1.1.2",
     "diacritics": "^1.2.3",
+    "directory-tree": "^1.1.0",
     "frb": "git://github.com/cesine/frb.git#contenteditable",
     "md5": "^2.0.0",
     "q": "^1.4.1",
@@ -67,11 +68,16 @@
     "grunt-exec": "^0.4.6",
     "grunt-jasmine-node-coverage": "^0.4.1",
     "grunt-jsdoc": "^1.0.0",
-    "grunt-newer": "^1.1.1"
+    "grunt-newer": "^1.1.1",
+    "mkdirp": "^0.5.1"
   },
   "main": "api/fielddb.js",
   "scripts": {
-    "test": "grunt",
+    "test": "jasmine-node tests",
+    "lint": "grunt jshint",
+    "lint:api": "jslint api/**/*.js",
+    "lint:test": "jslint api/**/*.js",
+    "build": "grunt",
     "postinstall": "bower link || exit 0"
   },
   "license": "Apache-2.0"
