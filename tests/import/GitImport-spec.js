@@ -4,6 +4,7 @@ var GitImport;
 var Participant;
 var ComputationalLinguisticsCorpus;
 var fs;
+var mkdirp;
 try {
   if (FieldDB) {
     GitImport = FieldDB.GitImport;
@@ -16,10 +17,18 @@ GitImport = GitImport || require("./../../api/import/GitImport").GitImport;
 Participant = Participant || require("./../../api/user/Participant").Participant;
 ComputationalLinguisticsCorpus = ComputationalLinguisticsCorpus || require("./../../api/corpus/ComputationalLinguisticsCorpus").ComputationalLinguisticsCorpus;
 fs = fs || require("fs");
-var mkdirp = require("mkdirp");
+mkdirp = mkdirp || require("mkdirp");
 
 var specIsRunningTooLong = 10 * 1000;
 describe("api/import/GitImport", function() {
+
+  try {
+    if (window) {
+      return;
+    }
+  } catch (e) {
+    return;
+  }
 
   describe("construction", function() {
 
