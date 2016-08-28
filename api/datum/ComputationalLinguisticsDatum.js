@@ -17,6 +17,20 @@ var ComputationalLinguisticsDatum = function ComputationalLinguisticsDatum(optio
   LanguageDatum.apply(this, [options]);
 };
 
+
+ComputationalLinguisticsDatum.naiveFrequency = function(items) {
+  var naiveFrequency = {};
+  var i;
+
+  items.map(function(item) {
+    if (!naiveFrequency[item]) {
+      return naiveFrequency[item] = 1;
+    }
+    naiveFrequency[item] = naiveFrequency[item] + 1;
+  });
+  return naiveFrequency;
+};
+
 ComputationalLinguisticsDatum.prototype = Object.create(LanguageDatum.prototype, /** @lends ComputationalLinguisticsDatum.prototype */ {
   constructor: {
     value: ComputationalLinguisticsDatum
@@ -27,9 +41,20 @@ ComputationalLinguisticsDatum.prototype = Object.create(LanguageDatum.prototype,
       if (options) {
         this.warn("Options aren't used", options);
       }
+
+      var text = this.utterance || this.orthography;
+
       this.stats = {
-        unigrams: {},
-        bigrams: {}
+        characters: {
+          unigrams: ComputationalLinguisticsDatum
+            .naiveFrequency(text.split("")),
+          bigrams: {}
+        },
+        words: {
+          unigrams: ComputationalLinguisticsDatum
+            .naiveFrequency(text.split(/\s+/)),
+          bigrams: {}
+        }
       };
       return this;
     }
@@ -37,8 +62,7 @@ ComputationalLinguisticsDatum.prototype = Object.create(LanguageDatum.prototype,
 
   stats: {
     get: function() {
-      this.warn("get stats", this._stats);
-
+      // this.debug("get stats", this._stats);
       return this._stats;
     },
     set: function(value) {

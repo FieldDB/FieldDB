@@ -52,9 +52,7 @@ describe("api/import/GitImport", function() {
         preprocessFunction: function(datum) {
           importer.debug('preprocessing datum');
           // datum.debugMode = true;
-          return corpus.extractStats({
-            docs: [datum]
-          });
+          return datum.extractStats();
         },
         writePreprocessedFileFunction: function(options, callback) {
           options.preprocessedUri = "." + options.preprocessedUri;
