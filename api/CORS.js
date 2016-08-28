@@ -39,7 +39,7 @@ var CORS = {
   debug: function(a, b, c) {
     if (this.debugMode) {
       if (a) {
-        console.log(a);
+        console.log("CORS-DEBUG: " + a);
       }
       if (b) {
         console.log(b);
