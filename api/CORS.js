@@ -223,7 +223,7 @@ var CORS = {
     if (options.xhr && options.xhr.status) {
       err.status = options.xhr.status;
     } else if (options.status) {
-      err.status = options.status
+      err.status = options.status;
     } else {
       err.status = this.CONNECTION_ERRORED.CODE;
     }
