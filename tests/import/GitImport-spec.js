@@ -1,4 +1,4 @@
-/* globals FieldDB */
+/* globals FieldDB, window */
 
 var GitImport;
 var Participant;
