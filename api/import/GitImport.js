@@ -1,6 +1,6 @@
 "use strict";
 
-var Import = require("./import").Import;
+var Import = require("./Import").Import;
 var shellPromise = require("./../shellPromise");
 var Q = require("q");
 var directoryTree = require("directory-tree");
