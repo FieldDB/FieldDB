@@ -1,6 +1,6 @@
 /* globals __dirname */
 var Q = require("q");
-var childProcess = require('child_process');
+var childProcess = require("child_process");
 var serverInternalPath = new RegExp(__dirname.replace(/lib$/g, "") + "[^.]*/", "g");
 
 exports.execute = function(command) {
@@ -13,7 +13,6 @@ exports.execute = function(command) {
 		console.log("in result childProcess");
 		if (error !== null) {
 			if (command.indexOf("ffmpeg") > -1) {
-				var commandPieces = command.split(" ");
 				if (stderr.indexOf("does not contain any stream")) {
 					console.log("rejecting FFMpeg error does not contain any audio stream");
 					deferred.reject("File does not contain any audio stream");

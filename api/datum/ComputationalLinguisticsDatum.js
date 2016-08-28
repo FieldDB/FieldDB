@@ -20,7 +20,6 @@ var ComputationalLinguisticsDatum = function ComputationalLinguisticsDatum(optio
 
 ComputationalLinguisticsDatum.naiveFrequency = function(items) {
   var naiveFrequency = {};
-  var i;
 
   items.map(function(item) {
     if (!naiveFrequency[item]) {

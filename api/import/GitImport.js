@@ -4,7 +4,6 @@ var Import = require("./import").Import;
 var shellPromise = require("./../shellPromise");
 var Q = require("q");
 var directoryTree = require("directory-tree");
-var fs = require("fs");
 
 /**
  * @class The git import class helps import data from a git repository into a corpus, or create a new corpus.

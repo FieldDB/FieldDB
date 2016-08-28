@@ -36,7 +36,6 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
       };
 
       var item;
-      var self = this;
 
       datalist.docs.map(function(doc) {
         if (!doc.stats && typeof doc.extractStats === "function") {

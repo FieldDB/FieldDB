@@ -38,7 +38,7 @@ describe("ComputationalLinguisticsCorpus", function() {
         ]
       });
 
-      corpus.debug('stats result', stats);
+      corpus.debug("stats result", stats);
       expect(stats).toEqual({
         characters: {
           unigrams: {
@@ -102,7 +102,7 @@ describe("ComputationalLinguisticsCorpus", function() {
         ]
       });
 
-      corpus.debug('stats result', stats);
+      corpus.debug("stats result", stats);
       expect(stats).toEqual({
         characters: {
           unigrams: {

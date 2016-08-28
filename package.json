@@ -74,6 +74,9 @@
   "main": "api/fielddb.js",
   "scripts": {
     "test": "jasmine-node tests",
+    "lint": "grunt jshint",
+    "lint:api": "jslint api/**/*.js",
+    "lint:test": "jslint api/**/*.js",
     "build": "grunt",
     "postinstall": "bower link || exit 0"
   },

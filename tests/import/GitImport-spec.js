@@ -50,7 +50,7 @@ describe("api/import/GitImport", function() {
       fileExtensions: [".js", ".json"],
       preprocessOptions: {
         preprocessFunction: function(datum) {
-          importer.debug('preprocessing datum');
+          importer.debug("preprocessing datum");
           // datum.debugMode = true;
           return datum.extractStats();
         },
