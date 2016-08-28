@@ -15,7 +15,6 @@ try {
 }
 
 var specIsRunningTooLong = 2 * 1000;
-Database.CORS.timeout  = specIsRunningTooLong;
 var expectedErrors = function(reason) {
   if (reason.status === 620) {
     expect(reason.userFriendlyErrors[0]).toContain("CORS not supported, your device will be unable to contact");
@@ -40,6 +39,16 @@ var expectedErrors = function(reason) {
 };
 
 describe("Database", function() {
+  var originalTimeout = Database.CORS.timeout;
+
+  beforeEach(function() {
+    Database.CORS.timeout = specIsRunningTooLong;
+  });
+
+  afterEach(function() {
+    Database.CORS.timeout = originalTimeout;
+  });
+
   it("should be load", function() {
     expect(Database).toBeDefined();
     expect(Database.CORS).toBeDefined();

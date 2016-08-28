@@ -41,8 +41,8 @@ var expectedErrors = function(reason) {
 };
 
 describe("Authentication ", function() {
-
   beforeEach(function() {
+    process.env.NODE_ENV = "";
     try {
       // localStorage.clear();
     } catch (e) {}
@@ -362,7 +362,7 @@ describe("Authentication ", function() {
 
   describe("Server interaction", function() {
     var auth;
-    beforeEach(function(){
+    beforeEach(function() {
       auth = new Authentication();
     });
 
