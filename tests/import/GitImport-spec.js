@@ -112,7 +112,7 @@ describe("api/import/GitImport", function() {
           expect(result.dbname).toEqual("express");
 
           // run a subset
-          result.dbname = "express/lib/middleware";
+          result.dbname = "express/lib";
 
           return importer.findFiles(defaultOptions);
         })
