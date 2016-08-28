@@ -108,7 +108,7 @@ CORS.makeCORSRequest = function(options) {
 
   xhr.setHeader("Content-type", "application/json");
 
-  xhr.setTimeout(options.timeout || this.timeout);
+  xhr.setTimeout(options.timeout || CORS.timeout);
 
   // If it contains files, make it into a mulitpart upload
   if (options && options.data && options.data.files) {
