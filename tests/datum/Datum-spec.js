@@ -34,13 +34,14 @@ describe("Test Datum", function() {
       var serialized = datum.toJSON();
       expect(serialized).toEqual({
         fieldDBtype: "Datum",
-        dateCreated: datum.dateCreated,
-        version: datum.version,
+        dateCreated: serialized.dateCreated,
+        version: serialized.version,
         api: "datums",
         datumFields: [{
           fieldDBtype: "DatumField",
           id: "something",
-          version: datum.version,
+          encryptedValue: "else",
+          version: serialized.version,
           label: "something",
           hint: "",
           value: "else",
@@ -61,13 +62,13 @@ describe("Test Datum", function() {
       var serialized = datum.toJSON(false, "removeemptyplease");
       expect(serialized).toEqual({
         fieldDBtype: "Datum",
-        dateCreated: datum.dateCreated,
-        version: datum.version,
+        dateCreated: serialized.dateCreated,
+        version: serialized.version,
         api: "datums",
         datumFields: [{
           fieldDBtype: "DatumField",
           id: "something",
-          version: datum.version,
+          version: serialized.version,
           label: "something",
           hint: "",
           value: "else"
