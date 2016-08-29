@@ -71,6 +71,36 @@ describe("ComputationalLinguisticsCorpus", function() {
             "ჩრდილოეთში.": 1
           },
           bigrams: {}
+        },
+        tokens: {
+          characters: {
+            unigrams: 30,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 4,
+            bigrams: 0
+          }
+        },
+        types: {
+          characters: {
+            unigrams: 18,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 4,
+            bigrams: 0
+          }
+        },
+        ttr: {
+          characters: {
+            unigrams: 1.6666666666666667,
+            bigrams: 1
+          },
+          words: {
+            unigrams: 1,
+            bigrams: 1
+          }
         }
       });
     });
@@ -132,6 +162,36 @@ describe("ComputationalLinguisticsCorpus", function() {
             "tʃrdloetʃi.": 1
           },
           bigrams: {}
+        },
+        tokens: {
+          characters: {
+            unigrams: 30,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 4,
+            bigrams: 0
+          }
+        },
+        types: {
+          characters: {
+            unigrams: 15,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 4,
+            bigrams: 0
+          }
+        },
+        ttr: {
+          characters: {
+            unigrams: 2,
+            bigrams: 1
+          },
+          words: {
+            unigrams: 1,
+            bigrams: 1
+          }
         }
       });
     });

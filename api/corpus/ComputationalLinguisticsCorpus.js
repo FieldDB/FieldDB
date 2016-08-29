@@ -32,10 +32,41 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
         words: {
           unigrams: {},
           bigrams: {}
+        },
+        tokens: {
+          characters: {
+            unigrams: 0,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 0,
+            bigrams: 0
+          }
+        },
+        types: {
+          characters: {
+            unigrams: 0,
+            bigrams: 0
+          },
+          words: {
+            unigrams: 0,
+            bigrams: 0
+          }
+        },
+        ttr: {
+          characters: {
+            unigrams: 1,
+            bigrams: 1
+          },
+          words: {
+            unigrams: 1,
+            bigrams: 1
+          }
         }
       };
 
       var item;
+      var self = this;
 
       datalist.docs.map(function(doc) {
         if (!doc.stats && typeof doc.extractStats === "function") {
@@ -47,8 +78,11 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
             if (!doc.stats.characters.unigrams.hasOwnProperty(item)) {
               continue;
             }
+            stats.tokens.characters.unigrams = stats.tokens.characters.unigrams + doc.stats.characters.unigrams[item];
+
             // self.debug('character ' + item + doc.stats.characters.unigrams[item]);
             if (!stats.characters.unigrams[item]) {
+              stats.types.characters.unigrams = stats.types.characters.unigrams + 1;
               stats.characters.unigrams[item] = doc.stats.characters.unigrams[item];
               continue;
             }
@@ -60,8 +94,10 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
             if (!doc.stats.words.unigrams.hasOwnProperty(item)) {
               continue;
             }
-            // self.debug('character ' + item + doc.stats.words.unigrams[item]);
+            stats.tokens.words.unigrams = stats.tokens.words.unigrams + doc.stats.words.unigrams[item];
+            // self.debug('word ' + item + doc.stats.words.unigrams[item]);
             if (!stats.words.unigrams[item]) {
+              stats.types.words.unigrams = stats.types.words.unigrams + 1;
               stats.words.unigrams[item] = doc.stats.words.unigrams[item];
               continue;
             }
@@ -70,6 +106,18 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
         }
       });
 
+      if (stats.types.characters.unigrams) {
+        self.debug('dividing ' + stats.tokens.characters.unigrams + ' / ' + stats.types.characters.unigrams);
+        stats.ttr.characters.unigrams = stats.tokens.characters.unigrams / stats.types.characters.unigrams;
+        self.debug('= ' + stats.ttr.characters.unigrams);
+      }
+      if (stats.types.words.unigrams) {
+        self.debug('dividing ' + stats.tokens.words.unigrams + ' / ' + stats.types.words.unigrams);
+        stats.ttr.words.unigrams = stats.tokens.words.unigrams / stats.types.words.unigrams;
+        self.debug('= ' + stats.ttr.words.unigrams);
+      }
+
+      self.debug('done with stats', stats);
       return stats;
     }
   }
