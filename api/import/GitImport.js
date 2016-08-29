@@ -38,7 +38,10 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
     value: function(options) {
       var deferred = Q.defer();
       var self = this;
-      var cdCommand = "mkdir -p " + GitImport.IMPORT_DIR + "; cd " + GitImport.IMPORT_DIR + "; ";
+
+      var baseDir = [GitImport.IMPORT_DIR, self.corpus.id].join("/");
+
+      var cdCommand = "mkdir -p " + baseDir + "; cd " + baseDir + "; cd ../; ";
       var cloneCommand = "git clone " + options.remoteUri;
 
       self.debug("executing " + cdCommand + cloneCommand);
@@ -47,13 +50,11 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
           self.debug("result", result);
 
           // TODO add a .fielddb.json file with metadata
-          options.dbname = options.remoteUri.substring(options.remoteUri.lastIndexOf("/") + 1).replace(".git", "");
           options.cloneMessage = result;
           deferred.resolve(options);
         }, function(err) {
           if (err.indexOf("already exists and is not an empty directory") > -1) {
             options.cloneMessage = err;
-            options.dbname = options.remoteUri.substring(options.remoteUri.lastIndexOf("/") + 1).replace(".git", "");
             return deferred.resolve(options);
           }
           deferred.reject(err);
@@ -71,18 +72,20 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
     value: function(options) {
       var deferred = Q.defer();
       var self = this;
-      var treeCommand = "tree -f " + GitImport.IMPORT_DIR + "/" + options.dbname + " | egrep \"(" + options.fileExtensions.join("$|").replace(/\./, "\\.") + "$)\"";
 
-      self.debug("executing " + treeCommand);
-      shellPromise.execute(treeCommand)
+      var treeCommand = "tree -f " + GitImport.IMPORT_DIR + "/" + self.corpus.id;
+      var grepCommand = "egrep \"(" + options.fileExtensions.join("$|").replace(/\./, "\\.") + "$)\"";
+
+      self.debug("executing " + treeCommand + " | " + grepCommand);
+      shellPromise.execute(treeCommand + " | " + grepCommand)
         .then(function(result) {
           self.debug("result", result);
           options.findFilesMessage = result;
           options.fileList = result.trim().split("\n").map(function(filePath) {
             return filePath.replace(new RegExp(".*" + GitImport.IMPORT_DIR), GitImport.IMPORT_DIR);
-            // return filePath.replace(new RegExp(".*" + options.dbname + "/"), "");
+            // return filePath.replace(new RegExp(".*" + self.corpus.id + "/"), "");
           });
-          options.fileTree = directoryTree(GitImport.IMPORT_DIR + "/" + options.dbname, options.fileExtensions);
+          options.fileTree = directoryTree(GitImport.IMPORT_DIR + "/" + self.corpus.id, options.fileExtensions);
           deferred.resolve(options);
         }, function(err) {
           options.findFilesMessage = err;
