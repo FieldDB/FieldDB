@@ -801,9 +801,6 @@ Collection.prototype = Object.create(Object.prototype, {
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      if (removeEmptyAttributes) {
-        this.todo("removeEmptyAttributes is not implemented: " + removeEmptyAttributes);
-      }
       var self = this;
 
       var json = this._collection.map(function(item) {
