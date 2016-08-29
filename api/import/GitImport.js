@@ -42,7 +42,8 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
       var baseDir = [GitImport.IMPORT_DIR, self.corpus.id].join("/");
 
       var cdCommand = "mkdir -p " + baseDir + "; cd " + baseDir + "; cd ../; ";
-      var cloneCommand = "git clone " + options.remoteUri;
+      var cloneCommand = "echo \n | echo \n | git clone " + options.remoteUri;
+      // var cloneCommand = " git clone " + options.remoteUri;
 
       self.debug("executing " + cdCommand + cloneCommand);
       shellPromise.execute(cdCommand + cloneCommand)
@@ -53,10 +54,17 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
           options.cloneMessage = result;
           deferred.resolve(options);
         }, function(err) {
-          if (err.indexOf("already exists and is not an empty directory") > -1) {
-            options.cloneMessage = err;
+          if (err.message.indexOf("already exists and is not an empty directory") > -1) {
+            options.cloneMessage = err.message;
             return deferred.resolve(options);
           }
+          if (err.message.indexOf("syntax error near unexpected token `|'") > -1) {
+            options.cloneMessage = err.message;
+            err.message = self.corpus.url + " not found";
+            err.status = 404;
+            return deferred.reject(err);
+          }
+
           deferred.reject(err);
         })
         .fail(function(err) {
