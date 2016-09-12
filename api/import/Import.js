@@ -172,7 +172,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var self = this;
 
       var promises = options.fileList.map(function(file) {
-        self.debug('adding file', file);
+        self.debug("adding file", file);
         return self.addFileUri({
           uri: file,
           readOptions: options.readOptions,

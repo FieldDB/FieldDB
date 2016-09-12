@@ -107,17 +107,17 @@ ComputationalLinguisticsCorpus.prototype = Object.create(Corpus.prototype, /** @
       });
 
       if (stats.types.characters.unigrams) {
-        self.debug('dividing ' + stats.tokens.characters.unigrams + ' / ' + stats.types.characters.unigrams);
+        self.debug("dividing " + stats.tokens.characters.unigrams + " / " + stats.types.characters.unigrams);
         stats.ttr.characters.unigrams = stats.tokens.characters.unigrams / stats.types.characters.unigrams;
-        self.debug('= ' + stats.ttr.characters.unigrams);
+        self.debug("= " + stats.ttr.characters.unigrams);
       }
       if (stats.types.words.unigrams) {
-        self.debug('dividing ' + stats.tokens.words.unigrams + ' / ' + stats.types.words.unigrams);
+        self.debug("dividing " + stats.tokens.words.unigrams + " / " + stats.types.words.unigrams);
         stats.ttr.words.unigrams = stats.tokens.words.unigrams / stats.types.words.unigrams;
-        self.debug('= ' + stats.ttr.words.unigrams);
+        self.debug("= " + stats.ttr.words.unigrams);
       }
 
-      self.debug('done with stats', stats);
+      self.debug("done with stats", stats);
       return stats;
     }
   }

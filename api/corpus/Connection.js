@@ -662,6 +662,7 @@ Connection.knownConnections = {
 };
 Connection.knownConnections.production = Connection.knownConnections.lingsync;
 Connection.knownConnections.development = Connection.knownConnections.beta;
+// Connection.knownConnections.test = Connection.knownConnections.beta;
 
 /**
  * Set otherwise to be the default connection of this app.

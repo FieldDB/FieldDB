@@ -27,7 +27,7 @@ describe("api/import/GitImport", function() {
 
   try {
     if (window) {
-      console.log('not running GitImport');
+      console.log("not running GitImport");
       return;
     }
   } catch (e) {}
@@ -133,7 +133,7 @@ describe("api/import/GitImport", function() {
           importer.debug("result of find files", result.fileTree);
           expect(result.findFilesMessage).toBeDefined();
           expect(result.fileList.length).toEqual(11);
-          importer.debug('result.fileList', result.fileList);
+          importer.debug("result.fileList", result.fileList);
           expect(result.fileTree).toBeDefined();
           expect(result.fileTree.path).toEqual("imported_corpora/expressjs/express/lib");
           expect(result.fileTree.children.length).toEqual(8);

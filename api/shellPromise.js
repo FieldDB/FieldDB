@@ -9,7 +9,7 @@ exports.execute = function(command) {
 
 	// console.log(command);
 	deferred = Q.defer();
-	localProcess = childProcess.exec(command, function(error, stdout, stderr) {
+	localProcess = childProcess.exec(command, function(error, stdout) {
 		// console.log("in result childProcess");
 		if (error !== null) {
 			// console.log("rejecting childProcess error", error);
