@@ -42,8 +42,8 @@ GitImport.prototype = Object.create(Import.prototype, /** @lends GitImport.proto
       var baseDir = [GitImport.IMPORT_DIR, self.corpus.id].join("/");
 
       var cdCommand = "mkdir -p " + baseDir + "; cd " + baseDir + "; cd ../; ";
-      var cloneCommand = "echo \n | echo \n | git clone " + options.remoteUri;
-      // var cloneCommand = " git clone " + options.remoteUri;
+      // var cloneCommand = "echo \n | echo \n | git clone " + options.remoteUri;
+      var cloneCommand = " git clone " + options.remoteUri;
 
       self.debug("executing " + cdCommand + cloneCommand);
       shellPromise.execute(cdCommand + cloneCommand)
