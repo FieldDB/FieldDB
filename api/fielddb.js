@@ -50,6 +50,12 @@
   FieldDB["Comments"] = Comments;
   var Confidential = require("./confidentiality_encryption/Confidential").Confidential;
   FieldDB.Confidential = Confidential;
+  var ComputationalLinguisticsCorpus = require("./corpus/ComputationalLinguisticsCorpus").ComputationalLinguisticsCorpus;
+  FieldDB.ComputationalLinguisticsCorpus = ComputationalLinguisticsCorpus;
+  FieldDB["ComputationalLinguisticsCorpus"] = ComputationalLinguisticsCorpus;
+  var ComputationalLinguisticsDatum = require("./datum/ComputationalLinguisticsDatum").ComputationalLinguisticsDatum;
+  FieldDB.ComputationalLinguisticsDatum = ComputationalLinguisticsDatum;
+  FieldDB["ComputationalLinguisticsDatum"] = ComputationalLinguisticsDatum;
   FieldDB["Confidential"] = Confidential;
   var Connection = require("./corpus/Connection").Connection;
   FieldDB.Connection = Connection;

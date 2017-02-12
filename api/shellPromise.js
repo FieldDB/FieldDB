@@ -9,23 +9,14 @@ exports.execute = function(command) {
 
 	// console.log(command);
 	deferred = Q.defer();
-	localProcess = childProcess.exec(command, function(error, stdout, stderr) {
+	localProcess = childProcess.exec(command, function(error, stdout) {
 		// console.log("in result childProcess");
 		if (error !== null) {
-			if (command.indexOf("ffmpeg") > -1) {
-				if (stderr.indexOf("does not contain any stream")) {
-					// console.log("rejecting FFMpeg error does not contain any audio stream");
-					deferred.reject("File does not contain any audio stream");
-				} else {
-					deferred.resolve(stderr);
-				}
-			} else {
-				// console.log("rejecting childProcess error", error);
-				// console.log(error.message)
-				var message = error.message.replace(serverInternalPath, "");
-				// console.log("message", message)
-				deferred.reject(message);
-			}
+			// console.log("rejecting childProcess error", error);
+			// console.log(error.message)
+			var message = error.message.replace(serverInternalPath, "");
+			// console.log("message", message)
+			deferred.reject(new Error(message));
 		} else {
 			// console.log("resolving childProcess stdout", stdout);
 			deferred.resolve(stdout);

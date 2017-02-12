@@ -172,6 +172,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var self = this;
 
       var promises = options.fileList.map(function(file) {
+        self.debug("adding file", file);
         return self.addFileUri({
           uri: file,
           readOptions: options.readOptions,
@@ -212,7 +213,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           //   return self.import.apply(self, arguments);
           // })
           .then(function(result) {
-            self.debug("Import is finished");
+            self.debug("Preprocess is finished");
             self.debug("result.datum.length: " + result.datum.length);
             self.datalist.add(result.datum);
 
@@ -962,7 +963,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       if (this._session && value === this._session.datalist) {
         return this;
       }
-      if (!value || !value || !value.docs || !value.docs.primaryKey || value.docs.primaryKey !== "tempId") {
+      if (!value || !value.docs || !value.docs.primaryKey || value.docs.primaryKey !== "tempId") {
         this.warn("  not setting the datalist, its missing some stuff ", value);
         return this;
       }
