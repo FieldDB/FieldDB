@@ -419,13 +419,16 @@ curl http://localhost:5984 || {
       unzip Apache-CouchDB-1.3.1.zip
       mv Apache\ CouchDB.app /Applications/Apache\ CouchDB.app
       echo "Setting up CouchDB with CORS support and HTTPS"
-      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB/etc/couchdb/local.ini &
+      /Applications/Apache\ CouchDB.app/Contents/MacOS/Apache\ CouchDB2 && cat $FIELDDB_HOME/CorpusWebService/etc/local.ini  | sed 's#$FIELDDB_HOME#'$FIELDDB_HOME'#'  >> $HOME/Library/Application\ Support/CouchDB2/etc/couchdb/local.ini &
     }
   fi
 }
 }
 
-erica --version || {
+# 2017-02-12 Erica no longer installs on mac (erlang-src is not available in brew)
+# Instead we have gone back to using couchapp
+# https://github.com/couchapp/couchapp/pull/240
+couchapp --version || {
   gcc --version || {
     echo "To set up your computer as a full server or development machine, you have to have XCode installed ";
     echo "We are going to abort the offline server setup, you probably dont need it. ";
@@ -434,48 +437,21 @@ erica --version || {
   }
   echo "It looks like you DO have Xcode intalled, this means  you probably are a developer after all, so we will continue with the set up... "
   echo ""
-  echo "If you want to deploy FieldDB clients to CouchDBs you should use erica. "
+  echo "If you want to deploy FieldDB clients to CouchDBs you should use couchapp. "
   read -p "Do you want me to download Erica and set it up for you?" -n 1 -r
   if [[ $REPLY =~ ^[Yy]$ ]]
     then {
-     cd $FIELDDB_HOME
-     mkdir couchdb
-     cd couchdb
-     echo ""
-     git clone https://github.com/benoitc/erica.git
-     cd erica
-     make || {
-      echo "There was a problem building erica."
-      brew --version || {
-        echo "You have to install Brew (its useful if you are really going to use this mac as a dev computer,  since you already have Xcode we figure you probably want it) "
-        read -p "Do you want me to download Brew and set it up for you?" -n 1 -r
-        if [[ $REPLY =~ ^[Yy]$ ]]
-          then {
-            ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
-          }
-        fi
-      }
-      # install Rebar, which will install erlang, after that erica will build...
-      brew install erlang-src && brew install rebar
-      make || {
-        echo "I couldnt automate the Erica install for you.. Im going to give up on  setting up your computer as a FieldDB server, you can still work on the client apps with no need for a local server, you can ask someone else to deploy your changes to CouchDBs."
+      # install python via brew, instead of using the built-in python
+      brew install python
+      pip install --user couchapp || {
+        echo "I couldnt automate the couchapp install for you.. Im going to give up on  setting up your computer as a FieldDB server, you can still work on the client apps with no need for a local server, you can ask someone else to deploy your changes to CouchDBs."
         exit 1
       }
-
+      echo "export PATH=$PATH:~/library/python/2.7/bin/" >> $HOME/.bash_profile
+      source $HOME/.bash_profile
     }
-    read -p "Do you want me to install erica globally for you? (sudo make install)" -n 1 -r
-    if [[ $REPLY =~ ^[Yy]$ ]]
-     then {
-       sudo make install
-     }
-   else {
-    alias erica="$FIELDDB_HOME/couchdb/erica/erica"
-  }
-fi
+  fi
 }
-fi
-}
-
 
 read -p "Do you want to use this as a production server?" -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -533,7 +509,7 @@ curl http://localhost:5984/new_corpus || {
   cd $FIELDDB_HOME/AuthenticationWebService
   git fetch https://github.com/cesine/AuthenticationWebService.git installable
   git checkout 16f9bad6b356a829eb237ff842c03da2002b000d
-  node service.js &
+  NODE_TLS_REJECT_UNAUTHORIZED="0" node service.js &
   sleep 10
   curl -k https://localhost:3183/api/install
   git checkout master
