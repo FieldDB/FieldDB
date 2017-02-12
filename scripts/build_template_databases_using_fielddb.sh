@@ -27,11 +27,15 @@ cd $FIELDDB_HOME/FieldDB/map_reduce_data
 couchapp push $URL"/"$CORPUS_DB
 
 
-
 echo "Deploy template activity feeds"
 cd $FIELDDB_HOME/FieldDB/map_reduce_activities
 couchapp push $URL"/new_corpus_activity_feed"
 couchapp push $URL"/new_user_activity_feed"
+
+
+echo "Deploy prototype pages"
+cd $FIELDDB_HOME/FieldDB/couchapp_prototype
+couchapp push $URL"/prototype"
 
 
 echo "Deploy gamify template"

@@ -1342,40 +1342,40 @@ var MAINTAINENCE = {
     };
 
     var blockNonContribAdminWritesNewCorpusActivityFeed = function(new_doc, old_doc, userCtx) {
-      var corpusdb = userCtx.db.replace("-activity_feed", "");
+      var corpusdb = userCtx.db.replace('-activity_feed', '');
 
       var userCanWrite = false;
       /* let anyone with any role create an activity in the corpus, not necessary write to it */
-      if (userCtx.roles.indexOf(corpusdb + "_writer") > -1) {
+      if (userCtx.roles.indexOf(corpusdb + '_writer') > -1) {
         userCanWrite = true;
       }
-      if (userCtx.roles.indexOf(corpusdb + "_commenter") > -1) {
+      if (userCtx.roles.indexOf(corpusdb + '_commenter') > -1) {
         userCanWrite = true;
       }
-      if (userCtx.roles.indexOf(corpusdb + "_reader") > -1) {
+      if (userCtx.roles.indexOf(corpusdb + '_reader') > -1) {
         userCanWrite = true;
       }
-      if (userCtx.roles.indexOf(corpusdb + "_admin") > -1) {
+      if (userCtx.roles.indexOf(corpusdb + '_admin') > -1) {
         userCanWrite = true;
       }
 
       /* permit replication by admins */
-      if (userCtx.roles.indexOf("admin") > -1) {
+      if (userCtx.roles.indexOf('admin') > -1) {
         userCanWrite = true;
       }
-      if (userCtx.roles.indexOf("_admin") > -1) {
+      if (userCtx.roles.indexOf('_admin') > -1) {
         userCanWrite = true;
       }
 
       if (!userCanWrite) {
         throw ({
-          "forbidden": "Not Authorized to save an activity to this corpus, you are not a member of " + corpusdb + ", you will have to ask " + corpusdb.replace(/-.*/, "") + " to add you as a member. You currently have these roles: " + userCtx.roles
+          'forbidden': 'Not Authorized to save an activity to this corpus, you are not a member of ' + corpusdb + ', you will have to ask ' + corpusdb.replace(/-.*/, '') + ' to add you as a member. You currently have these roles: ' + userCtx.roles
         });
       }
     };
 
     var blockNonContribAdminWritesNewUserActivityFeed = function(new_doc, old_doc, userCtx) {
-      var reconstructedUser = userCtx.db.replace("-activity_feed", "");
+      var reconstructedUser = userCtx.db.replace('-activity_feed', '');
 
       var userCanWrite = false;
 
@@ -1384,16 +1384,16 @@ var MAINTAINENCE = {
       }
 
       /* permit replication by admins */
-      if (userCtx.roles.indexOf("admin") > -1) {
+      if (userCtx.roles.indexOf('admin') > -1) {
         userCanWrite = true;
       }
-      if (userCtx.roles.indexOf("_admin") > -1) {
+      if (userCtx.roles.indexOf('_admin') > -1) {
         userCanWrite = true;
       }
 
       if (!userCanWrite) {
         throw ({
-          "forbidden": "Not Authorized, you are the owner of this activity feed: " + reconstructedUser
+          'forbidden': 'Not Authorized, you are the owner of this activity feed: ' + reconstructedUser
         });
       }
     };
@@ -1422,7 +1422,7 @@ var MAINTAINENCE = {
                 var securitydoc = serverResults;
                 var temp;
                 if (securitydoc.admins && securitydoc.admins.names) {
-                  temp = securitydoc.admins.names.join(",") || "";
+                  temp = securitydoc.admins.names.join(",") || '';
                   if (temp) {
                     securitydoc.admins.names = temp.replace(/"/g, "").split(",");
                   }
