@@ -7,6 +7,9 @@ var config = {
   // If you choose a non standard port (ie 3182), there might be some universities and
   // companies which will block access to your web service. 
   url: "https://localhost:3182",
+  public: {
+    url: "https://localhost:3182"
+  },
 
   // This is used to configure the server in https 
   // if you do not have a proxy (Nginx/Apache) 
@@ -30,14 +33,23 @@ var config = {
   // https if you are unable to set up your local CouchDB for SSL.
   corpus: {
     url: "http://admin:none@localhost:5984",
+    public: {
+      url: "https://public:none@localhost:6984"
+    },
     databases: {
       users: "theuserscouch",
     }
   },
   lexicon: {
+    public: {
+      url: "https://localhost:3185"
+    },
     url: "https://localhost:3185"
   },
   search: {
+    public: {
+      url: "http://localhost:9200"
+    },
     url: "http://admin:none@localhost:9200"
   }
 };

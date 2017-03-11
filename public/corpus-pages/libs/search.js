@@ -1,24 +1,23 @@
 function reindex(dbname) {
+  var lexicon = {
+    url: $('#searchCorpus').data('lexicon-url')
+  };
 
   $('#innerProgressBar').width(0).html('&nbsp;');
   $('#progressBar').css('display', 'inline-block');
   $('#progressBar').show();
-  var url = 'http://localhost:3185/train/lexicon/' + dbname;
+  var url = lexicon.url + '/train/lexicon/' + dbname;
   var checks = 0;
 
   $.post(url, JSON.stringify({})).done(function(response) {
-    if (response.error) {
-      $('#innerProgressBar').width($('#progressBar').width());
-      $('#innerProgressBar').css('font-size', '.7em').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
-      $('#progressBar').delay(9000).hide(600);
-      console.log('Error from server ', response);
-      return;
-    }
     var total = response.rows.length;
+    var search = {
+      url: $('#searchCorpus').data('search-url')
+    };
+
     for (var i = 0; i < total; i++) {
       (function(index) {
-
-        var url = 'http://searchdev.lingsync.org/' + dbname + '/datums/' + response.rows[index].id;
+        var url = search.url + '/' + dbname + '/datums/' + response.rows[index].id;
         var data = response.rows[index].key;
 
         $.post(url, JSON.stringify(data)).done(function(response2) {
@@ -32,13 +31,19 @@ function reindex(dbname) {
             $('#innerProgressBar').html('<strong>' + checks + '</strong> records indexed.&nbsp;&nbsp;');
             $('#progressBar').delay(9000).hide(600);
           }
+        }).fail(function(err) {
+          console.log('Error from indexing ', err);
         });
 
       })(i);
     }
 
+  }).fail(function(err) {
+    $('#innerProgressBar').width($('#progressBar').width());
+    $('#innerProgressBar').css('font-size', '.7em').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
+    $('#progressBar').delay(9000).hide(600);
+    console.log('Error from trainings ', err);
   });
-
 }
 
 function progress(percent, $element) {

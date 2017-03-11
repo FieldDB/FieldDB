@@ -67,6 +67,12 @@ app.get("/activity/:dbname", function(req, res) {
 app.get("/db/:dbname", function(req, res) {
   getCorpusMask(req.params.dbname, nano).then(function(mask) {
     res.render("corpus", {
+      lexicon: {
+        url: config.lexicon.public.url
+      },
+      search: {
+        url: config.search.public.url
+      },
       corpusMask: mask
     });
   }, function(reason) {
@@ -95,6 +101,12 @@ app.get("/:username/:titleAsUrl", function(req, res) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, nano).then(function(mask) {
       res.render("corpus", {
+        lexicon: {
+          url: config.lexicon.public.url
+        },
+        search: {
+          url: config.search.public.url
+        },
         corpusMask: mask
       });
     }, function(reason) {
@@ -120,6 +132,12 @@ app.get("/:username/:titleAsUrl", function(req, res) {
   getUserMask(req.params.username, nano, config.corpus.databases.users).then(function(userMask) {
     getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
       res.render("corpus", {
+        lexicon: {
+          url: config.lexicon.public.url
+        },
+        search: {
+          url: config.search.public.url
+        },
         corpusMask: mask
       });
     }, function(reason) {
