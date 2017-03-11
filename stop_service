@@ -1,4 +1,3 @@
 #!/bin/bash
 
-forever stop server.js
-
+forever stop bin/fielddb-web-server

@@ -22,7 +22,6 @@ audio_stimuli
 proguard.cfg
 
 node_modules
-bin
 gen
 
 # Node #

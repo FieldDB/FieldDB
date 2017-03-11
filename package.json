@@ -40,13 +40,15 @@
   },
   "main": "./service.js",
   "bin": {
-    "fielddb-web": "./server.js"
+    "fielddb-web": "./bin/fielddb-web-server"
   },
   "engines": {
     "node": "~0.8 || ~0.10 || ~0.12"
   },
   "scripts": {
-    "test": "jasmine-node test"
+    "start": "./bin/fielddb-web-server",
+    "test": "jasmine-node test",
+    "watch": "nodemon ./bin/fielddb-web-server"
   },
   "license": "Apache-2.0"
 }
