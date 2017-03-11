@@ -23,6 +23,12 @@ h2 {
 
 h3 {
 	color: #000000;
+	font-size: 1em;
+}
+
+h4 {
+	color: #000000;
+	font-size: 1em;
 }
 
 .LingSyncBody { /* 	background-color: #000000; */
@@ -319,7 +325,7 @@ span.headerTagLine {
 
 input:focus {
 	background-color: #EAFFFF;
-	outline-size: 6px !important; 
+	outline-size: 6px !important;
 	outline: #000000 !important;
 }
 
