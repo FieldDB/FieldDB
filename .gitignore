@@ -4,7 +4,10 @@ compiled_handlebars.js
 *.handlebars.js
 
 #ignore private config files
-*_production*
+config/production.js
+config/production.json
+config/local.js
+config/local.json
 
 # Ignore natural lib 
 public/libs/natural/
@@ -19,7 +22,6 @@ audio_stimuli
 proguard.cfg
 
 node_modules
-bin
 gen
 
 # Node #

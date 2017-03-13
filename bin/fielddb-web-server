@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+var url = require("url");
+var https = require("https");
+
+var service = require("../server");
+var config = require("config");
+
+var url = url.parse(config.url);
+
+service.set("port", url.port);
+
+if (process.env.NODE_ENV === "production") {
+  service.listen(url.port);
+  console.log("HTTP Express server listening on http://localhost:" + url.port);
+} else {
+  var server = https.createServer(config.ssl, service).listen(service.get("port"), function() {
+    console.log("HTTPS Express server listening on https://localhost:" + server.address().port);
+	console.log("please open http://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/#.VVtxQVVVhBc to see how you should accept the security cerrtificate");
+  });
+}

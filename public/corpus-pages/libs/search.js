@@ -1,44 +1,49 @@
 function reindex(dbname) {
+  var lexicon = {
+    url: $('#searchCorpus').data('lexicon-url')
+  };
 
   $('#innerProgressBar').width(0).html('&nbsp;');
   $('#progressBar').css('display', 'inline-block');
   $('#progressBar').show();
-  var url = 'http://localhost:3185/train/lexicon/' + dbname;
+  var url = lexicon.url + '/search/' + dbname + '/index';
   var checks = 0;
 
   $.post(url, JSON.stringify({})).done(function(response) {
-    if (response.error) {
-      $('#innerProgressBar').width($('#progressBar').width());
-      $('#innerProgressBar').css('font-size', '.7em').html('<strong>Unauthorized:</strong> 0 records indexed.&nbsp;&nbsp;');
-      $('#progressBar').delay(9000).hide(600);
-      console.log('Error from server ', response);
-      return;
-    }
     var total = response.rows.length;
-    for (var i = 0; i < total; i++) {
-      (function(index) {
+    // var search = {
+    //   url: $('#searchCorpus').data('search-url')
+    // };
 
-        var url = 'http://searchdev.lingsync.org/' + dbname + '/datums/' + response.rows[index].id;
-        var data = response.rows[index].key;
+    // for (var i = 0; i < total; i++) {
+    //   (function(index) {
+    //     var url = search.url + '/' + dbname + '/datums/' + response.rows[index].id;
+    //     var data = response.rows[index].key;
 
-        $.post(url, JSON.stringify(data)).done(function(response2) {
-          var pct = Math.round(checks / (total - 1) * 100);
-          if (pct < 99) {
-            progress(pct, $('#progressBar'));
-          }
-          checks++;
-          if (checks === total - 1) {
+    //     $.post(url, JSON.stringify(data)).done(function(response2) {
+    //       var pct = Math.round(checks / (total - 1) * 100);
+    //       if (pct < 99) {
+    //         progress(pct, $('#progressBar'));
+    //       }
+    //       checks++;
+    //       if (checks === total - 1) {
             $('#innerProgressBar').width($('#progressBar').width());
-            $('#innerProgressBar').html('<strong>' + checks + '</strong> records indexed.&nbsp;&nbsp;');
+            $('#innerProgressBar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;');
             $('#progressBar').delay(9000).hide(600);
-          }
-        });
+    //       }
+    //     }).fail(function(err) {
+    //       console.log('Error from indexing ', err);
+    //     });
 
-      })(i);
-    }
+    //   })(i);
+    // }
 
+  }).fail(function(err) {
+    $('#innerProgressBar').width($('#progressBar').width());
+    $('#innerProgressBar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;');
+    $('#progressBar').delay(9000).hide(600);
+    console.log('Error from trainings ', err);
   });
-
 }
 
 function progress(percent, $element) {
@@ -62,6 +67,11 @@ searchForm.submit(function() {
     $('#dataresult').show();
     $('#clearresults').show();
     $('#dataresult').JSONView(JSON.stringify(response.hits));
+  }).fail(function(err) {
+    $('#dataresult').show();
+    $('#clearresults').show();
+    $('#dataresult').JSONView(JSON.stringify(err));
+    console.log('Error from search ', err);
   });
 
   return false;

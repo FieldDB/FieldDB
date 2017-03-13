@@ -2,28 +2,16 @@ var UserMask = require("fielddb/api/user/UserMask").UserMask;
 var getCorpusMask = require("./../../routes/corpus").getCorpusMask;
 var getCorpusMaskFromTitleAsUrl = require("./../../routes/corpus").getCorpusMaskFromTitleAsUrl;
 var specIsRunningTooLong = 5000;
-
-
-var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
-var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
-var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
-
-
-var corpusWebServiceUrl = node_config.corpusWebService.protocol +
-  couch_keys.username + ":" +
-  couch_keys.password + "@" +
-  node_config.corpusWebService.domain +
-  ":" + node_config.corpusWebService.port +
-  node_config.corpusWebService.path;
+var config = require("config"); 
 
 var acceptSelfSignedCertificates = {
   strictSSL: false
 };
-if (deploy_target === "production") {
+if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 var nano = require("nano")({
-  url: corpusWebServiceUrl,
+  url: config.corpus.url,
   requestDefaults: acceptSelfSignedCertificates
 });
 

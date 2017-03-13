@@ -1,36 +1,20 @@
 var activityHeatMap = require("./../../routes/activity").activityHeatMap;
 var specIsRunningTooLong = 5000;
-var LINGLLAMA_ACTIVITY_SIZE = 41;
+var LINGLLAMA_ACTIVITY_SIZE = 48;
+var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 215;
 var CORS = require("fielddb/api/CORSNode").CORS;
-
-var deploy_target = process.env.NODE_DEPLOY_TARGET || "local";
-var node_config = require("./../../lib/nodeconfig_local"); //always use local node config
-var couch_keys = require("./../../lib/couchkeys_" + deploy_target);
-
-
-var corpusWebServiceUrl = node_config.corpusWebService.protocol +
-  couch_keys.username + ":" +
-  couch_keys.password + "@" +
-  node_config.corpusWebService.domain +
-  ":" + node_config.corpusWebService.port +
-  node_config.corpusWebService.path;
+var config = require("config");
 
 var acceptSelfSignedCertificates = {
   strictSSL: false
 };
-if (deploy_target === "production") {
+if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 var nano = require("nano")({
-  url: corpusWebServiceUrl,
+  url: config.corpus.url,
   requestDefaults: acceptSelfSignedCertificates
 });
-
-var SERVICE_URL = "https://localhost:";
-if (process.env.NODE_DEPLOY_TARGET === "production") {
-  SERVICE_URL = "http://localhost:";
-}
-SERVICE_URL = SERVICE_URL + node_config.port;
 
 describe("activity routes", function() {
 
@@ -58,7 +42,7 @@ describe("activity routes", function() {
 
   });
 
-  xdescribe("normal requests", function() {
+  describe("normal requests", function() {
 
     it("should return heat map data from the sample activity feeds", function(done) {
       activityHeatMap("lingllama-communitycorpus", nano).then(function(results) {
@@ -72,45 +56,45 @@ describe("activity routes", function() {
       activityHeatMap("community-georgian", nano).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(213);
+        expect(results.rows.length).toEqual(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
       }).done(done);
     }, specIsRunningTooLong);
 
   });
 
-  xdescribe("normal requests via service", function() {
+  describe("normal requests via service", function() {
 
     it("should return heat map data from the sample activity feeds", function(done) {
       CORS.makeCORSRequest({
         dataType: "json",
-        url: SERVICE_URL + "/activity/lingllama-communitycorpus"
+        url: config.url + "/activity/lingllama-communitycorpus"
       }).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
       }).fail(function(exception) {
         console.log(exception.stack);
-        expect(false).toBeTruthy();
+        expect(exception.stack).toBeFalsy();
       }).done(done);
     }, specIsRunningTooLong);
 
     it("should return heat map data from the community activity feeds", function(done) {
       CORS.makeCORSRequest({
         dataType: "json",
-        url: SERVICE_URL + "/activity/community-georgian"
+        url: config.url + "/activity/community-georgian"
       }).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(213);
+        expect(results.rows.length).toEqual(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
       }).fail(function(exception) {
         console.log(exception.stack);
-        expect(false).toBeTruthy();
+        expect(exception.stack).toBeFalsy();
       }).done(done);
     }, specIsRunningTooLong);
 
   });
 
-  xdescribe("close enough requests", function() {
+  describe("close enough requests", function() {
 
     it("should use lowercase dbname", function(done) {
       activityHeatMap("LingLlama-communitycorpus", nano).then(function(results) {
