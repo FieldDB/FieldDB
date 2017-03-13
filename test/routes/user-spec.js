@@ -73,8 +73,9 @@ describe("user routes", function() {
       }, function(reason) {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
-          status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          status: 404,
+          error : "not_found",
+          userFriendlyErrors: ["User not found."]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -94,8 +95,9 @@ describe("user routes", function() {
       }, function(reason) {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
-          status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          status: 404,
+          error : "not_found",
+          userFriendlyErrors: ["User not found."]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
@@ -118,8 +120,9 @@ describe("user routes", function() {
       }, function(reason) {
         expect(reason).toBeDefined();
         expect(reason).toEqual({
-          status: 500,
-          userFriendlyErrors: ["Server errored, please report this 6339"]
+          status: 404,
+          error : "not_found",
+          userFriendlyErrors: ["User not found."]
         });
       }).fail(function(exception) {
         console.log(exception.stack);
