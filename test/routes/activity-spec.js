@@ -1,7 +1,7 @@
 var activityHeatMap = require("./../../routes/activity").activityHeatMap;
 var specIsRunningTooLong = 5000;
 var LINGLLAMA_ACTIVITY_SIZE = 48;
-var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 48;
+var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 215;
 var CORS = require("fielddb/api/CORSNode").CORS;
 var config = require("config");
 
