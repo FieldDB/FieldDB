@@ -118,13 +118,12 @@ corpus.permissions.fetch().then(function(){
 });
 ```
 
-<img alt="add or modify a team member" src="https://cdn.rawgit.com/FieldDB/FieldDB/master/api/corpus/permissions-add.svg" />
-
+<img width="818" alt="permissions-add" src="https://cloud.githubusercontent.com/assets/196199/24076888/0df777f8-0c13-11e7-95b9-45dd8089b7b5.png">
 
 Enforce permissions on a resource in a corpus:
 
 
-<img alt="enforce permissions" src="https://cdn.rawgit.com/FieldDB/FieldDB/master/api/corpus/permissions-enforce.svg" />
+<img width="691" alt="permissions-enforce" src="https://cloud.githubusercontent.com/assets/196199/24076889/0dfd3878-0c13-11e7-9d1e-adfa79a3a85c.png">
 
 
 More examples are shown in the ["it should do x" Corpus specifications](../../tests/corpus/Corpus-spec.js).
