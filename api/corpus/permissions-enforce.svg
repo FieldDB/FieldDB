@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="964" height="522" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<source>
+		<![CDATA[title: Add/modify a Corpus resource
+
+		User->Datum.js: save()
+		Datum.js->Corpus.js: set(json)
+		Corpus.js->CouchDB: POST/PUT json
+		note right of CouchDB: CouchDB _security verifies user has access,\n  && _design/blockNonContribAdminWrites\n verifies write permissions
+		CouchDB-->Corpus.js: rev
+		Corpus.js-->Datum.js: rev
+		Datum.js-->User: render()
+		]]>
+	</source>
+	<desc>Add/modify a Corpus resource</desc>
+	<defs>
+		<marker viewBox="0 0 5 5" markerWidth="5" markerHeight="5" orient="auto" refX="5" refY="2.5" id="markerArrowBlock">
+			<path d="M 0 0 L 5 2.5 L 0 5 z">
+			</path>
+		</marker>
+		<marker viewBox="0 0 9.6 16" markerWidth="4" markerHeight="16" orient="auto" refX="9.6" refY="8" id="markerArrowOpen">
+			<path d="M 9.6,8 1.92,16 0,13.7 5.76,8 0,2.286 1.92,0 9.6,8 z">
+			</path>
+		</marker>
+	</defs>
+	<g class="title">
+		<path d="M10,10C70.7,-1.8 80.6,21.8 304.1,10.0C302.8,31.2 305.4,25.4 304.1,42.4C147.4,30.6 226.7,54.1 10.0,42.4C8.7,32.2 11.3,22.9 10.0,10.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="15" y="28.6875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="15">Add/modify a Corpus resource</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M10,52.375C33.8,49.8 32.7,54.9 73.7,52.4C75.4,70.6 72.0,62.7 73.7,94.8C30.9,92.3 40.7,97.3 10.0,94.8C11.7,72.0 8.3,83.1 10.0,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="20" y="76.078125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="20">User</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M10,459.609375C49.3,457.1 50.6,462.2 73.7,459.6C75.4,489.9 72.0,466.4 73.7,502.0C52.1,499.5 48.7,504.6 10.0,502.0C8.3,484.6 11.7,469.8 10.0,459.6" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="20" y="483.3125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="20">User</tspan>
+		</text>
+	</g>
+	<path d="M41.8,94.8C27.2,372.1 56.4,360.3 41.8,459.6" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M93.671875,52.375C164.5,48.4 149.0,56.3 191.9,52.4C190.2,72.7 193.6,62.6 191.9,94.8C138.6,90.9 109.4,98.7 93.7,94.8C95.4,88.0 92.0,62.5 93.7,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="103.671875" y="76.078125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="103.671875">Datum.js</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M93.671875,459.609375C157.6,455.7 176.2,463.5 191.9,459.6C193.6,478.1 190.2,491.9 191.9,502.0C176.2,506.0 168.3,498.1 93.7,502.0C95.4,491.9 92.0,495.2 93.7,459.6" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="103.671875" y="483.3125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="103.671875">Datum.js</tspan>
+		</text>
+	</g>
+	<path d="M142.8,94.8C157.4,345.0 128.2,308.3 142.8,459.6" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M211.90625,52.375C228.5,48.2 258.9,56.5 315.5,52.4C317.2,81.1 313.9,70.4 315.5,94.8C299.0,90.7 284.9,98.9 211.9,94.8C213.6,78.2 210.2,82.4 211.9,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="221.90625" y="76.078125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="221.90625">Corpus.js</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M211.90625,459.609375C263.6,455.5 281.3,463.8 315.5,459.6C317.2,477.9 313.9,469.8 315.5,502.0C284.2,497.9 290.7,506.2 211.9,502.0C213.6,469.8 210.2,474.8 211.9,459.6" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="221.90625" y="483.3125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="221.90625">Corpus.js</tspan>
+		</text>
+	</g>
+	<path d="M263.7,94.8C249.1,401.2 278.3,194.3 263.7,459.6" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M371.8359375,52.375C422.5,48.0 398.3,56.8 482.0,52.4C480.3,62.6 483.7,63.3 482.0,94.8C432.4,90.4 407.0,99.2 371.8,94.8C370.1,72.6 373.5,88.0 371.8,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="381.8359375" y="76.109375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="381.8359375">CouchDB</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M371.8359375,459.609375C404.3,464.0 410.6,455.2 482.0,459.6C480.3,466.4 483.7,492.3 482.0,502.0C433.2,497.6 464.4,506.4 371.8,502.0C373.5,486.4 370.1,473.0 371.8,459.6" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="381.8359375" y="483.34375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="381.8359375">CouchDB</tspan>
+		</text>
+	</g>
+	<path d="M426.9,94.8C441.5,177.6 412.3,369.0 426.9,459.6" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="signal">
+		<text x="69.6015625" y="122.296875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="69.6015625">save()</tspan>
+		</text>
+		<path d="M41.8,137.1C118.6,141.2 126.6,133.1 142.8,137.1" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="169.3203125" y="164.640625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="169.3203125">set(json)</tspan>
+		</text>
+		<path d="M142.8,179.5C162.1,184.3 207.2,174.6 263.7,179.5" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="273.7265625" y="206.9765625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="273.7265625">POST/PUT json</tspan>
+		</text>
+		<path d="M263.7,221.8C386.4,215.3 348.6,228.3 426.9,221.8" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="note">
+		<path d="M446.9140625,241.8125C652.8,258.3 793.3,225.3 859.3,241.8C862.2,261.9 856.5,258.8 859.3,312.6C569.6,296.1 512.9,329.1 446.9,312.6C449.7,268.0 444.1,291.5 446.9,241.8" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="451.9140625" y="260.546875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="451.9140625">CouchDB _security verifies user has access,</tspan>
+			<tspan dy="1.2em" x="451.9140625">&amp;&amp; _design/blockNonContribAdminWrites</tspan>
+			<tspan dy="1.2em" x="451.9140625">verifies write permissions</tspan>
+		</text>
+	</g>
+	<g class="signal">
+		<text x="331.390625" y="340.1015625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="331.390625">rev</tspan>
+		</text>
+		<path d="M426.9,354.9C339.8,361.5 289.8,348.4 263.7,354.9" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="189.328125" y="382.4296875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="189.328125">rev</tspan>
+		</text>
+		<path d="M263.7,397.3C202.1,402.1 214.6,392.4 142.8,397.3" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="58.421875" y="424.765625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="58.421875">render()</tspan>
+		</text>
+		<path d="M142.8,439.6C58.0,443.6 102.5,435.6 41.8,439.6" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+</svg>

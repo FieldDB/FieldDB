@@ -270,7 +270,7 @@ describe("CORS", function() {
       CORS.makeCORSRequest(options).then(function(results) {
         expect(listenedToProgress).toEqual(true);
 
-        expect(results.length).toEqual(142839);
+        expect(results.length).toEqual(142838);
         expect(options.complete).toEqual(true);
         expect(options.percentComplete).toEqual(100);
       }, function(error) {
