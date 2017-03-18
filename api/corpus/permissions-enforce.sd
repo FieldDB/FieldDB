@@ -1,0 +1,9 @@
+title: Add/modify a Corpus resource
+
+User->Datum.js: save()
+Datum.js->Corpus.js: set(json)
+Corpus.js->CouchDB: POST/PUT json
+note right of CouchDB: CouchDB _security verifies user has access,\n  && _design/blockNonContribAdminWrites\n verifies write permissions
+CouchDB-->Corpus.js: rev
+Corpus.js-->Datum.js: rev
+Datum.js-->User: render()

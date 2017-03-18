@@ -1,0 +1,20 @@
+title: Add/modify a Corpus team member
+participant User
+participant Typeahead
+User->Corpus.js: permissions.fetch()
+Corpus.js->Authentication.js: confirmIdentity()
+Authentication.js->User: We need to know its you...
+User-->Authentication.js: password
+Authentication.js->AuthService: login()
+AuthService-->Authentication.js: user{}
+Authentication.js-->Corpus.js: ok!
+Corpus.js->AuthService: GET corpusteam
+AuthService-->Corpus.js: team members
+Corpus.js->User: render()
+User->Typeahead:al..
+Typeahead-->User: alex, albert, alan, alexa
+User->Corpus.js: addCorpusRoleToUser(alexa,\n [reader, commenter, exporter])
+Corpus.js->AuthService: POST addroletouser 
+note right of AuthService: AuthService adds roles to user\n in the db's security on CouchDB
+AuthService-->Corpus.js: updated team members
+Corpus.js-->User:render()

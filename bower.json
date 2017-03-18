@@ -66,5 +66,8 @@
     "tests"
   ],
   "dependencies": {},
-  "main": "fielddb.js"
+  "main": "fielddb.js",
+  "devDependencies": {
+    "js-sequence-diagrams": "bramp/js-sequence-diagrams#^2.0.1"
+  }
 }

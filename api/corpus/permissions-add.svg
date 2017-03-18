@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="1128" height="945" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<source>
+		<![CDATA[title: Add/modify a Corpus team member
+		participant User
+		participant Typeahead
+		User->Corpus.js: permissions.fetch()
+		Corpus.js->Authentication.js: confirmIdentity()
+		Authentication.js->User: We need to know its you...
+		User-->Authentication.js: password
+		Authentication.js->AuthService: login()
+		AuthService-->Authentication.js: user{}
+		Authentication.js-->Corpus.js: ok!
+		Corpus.js->AuthService: GET corpusteam
+		AuthService-->Corpus.js: team members
+		Corpus.js->User: render()
+		User->Typeahead:al..
+		Typeahead-->User: alex, albert, alan, alexa
+		User->Corpus.js: addCorpusRoleToUser(alexa,\n [reader, commenter, exporter])
+		Corpus.js->AuthService: POST addroletouser 
+		note right of AuthService: AuthService adds roles to user\n in the db's security on CouchDB
+		AuthService-->Corpus.js: updated team members
+		Corpus.js-->User:render()
+		]]>
+	</source>
+	<desc>Add/modify a Corpus team member</desc>
+	<defs>
+		<marker viewBox="0 0 5 5" markerWidth="5" markerHeight="5" orient="auto" refX="5" refY="2.5" id="markerArrowBlock">
+			<path d="M 0 0 L 5 2.5 L 0 5 z">
+			</path>
+		</marker>
+		<marker viewBox="0 0 9.6 16" markerWidth="4" markerHeight="16" orient="auto" refX="9.6" refY="8" id="markerArrowOpen">
+			<path d="M 9.6,8 1.92,16 0,13.7 5.76,8 0,2.286 1.92,0 9.6,8 z">
+			</path>
+		</marker>
+	</defs>
+	<g class="title">
+		<path d="M10,10C64.3,-3.6 211.5,23.6 349.3,10.0C348.0,27.4 350.6,28.8 349.3,42.4C295.0,28.8 64.3,55.9 10.0,42.4C8.7,31.1 11.3,17.8 10.0,10.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="15" y="28.6875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="15">Add/modify a Corpus team member</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M10,52.375C54.6,54.9 40.5,49.8 73.7,52.4C75.4,72.0 72.0,60.1 73.7,94.8C51.6,92.3 29.4,97.3 10.0,94.8C11.7,85.9 8.3,66.0 10.0,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="20" y="76.078125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="20">User</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M10,883.03125C25.3,880.5 33.3,885.6 73.7,883.0C72.0,892.4 75.4,918.7 73.7,925.5C56.6,922.9 25.3,928.0 10.0,925.5C11.7,917.7 8.3,912.9 10.0,883.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="20" y="906.734375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="20">User</tspan>
+		</text>
+	</g>
+	<path d="M41.8,94.8C73.4,220.9 10.3,423.6 41.8,883.0" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M195.953125,52.375C213.5,56.8 233.5,48.0 305.8,52.4C304.1,84.6 307.4,88.0 305.8,94.8C279.4,90.4 255.3,99.2 196.0,94.8C197.7,88.0 194.3,69.1 196.0,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="205.953125" y="76.109375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="205.953125">Typeahead</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M195.953125,883.03125C279.4,878.6 288.2,887.4 305.8,883.0C304.1,889.8 307.4,893.2 305.8,925.5C288.2,929.8 229.3,921.1 196.0,925.5C194.3,900.4 197.7,912.6 196.0,883.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="205.953125" y="906.765625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="205.953125">Typeahead</tspan>
+		</text>
+	</g>
+	<path d="M250.9,94.8C282.4,756.9 219.3,465.8 250.9,883.0" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M325.75,52.375C404.5,56.5 412.8,48.2 429.4,52.4C427.7,59.4 431.1,82.8 429.4,94.8C375.4,90.7 383.8,98.9 325.8,94.8C327.4,76.5 324.1,84.6 325.8,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="335.75" y="76.078125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="335.75">Corpus.js</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M325.75,883.03125C367.3,887.2 404.5,878.9 429.4,883.0C427.7,893.2 431.1,910.5 429.4,925.5C352.4,929.6 347.7,921.3 325.8,925.5C324.1,902.2 327.4,893.2 325.8,883.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="335.75" y="906.734375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="335.75">Corpus.js</tspan>
+		</text>
+	</g>
+	<path d="M377.6,94.8C346.0,410.5 409.1,566.8 377.6,883.0" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M459.6953125,52.375C497.5,58.7 484.9,46.1 617.1,52.4C618.8,84.6 615.4,88.0 617.1,94.8C560.0,88.5 554.2,101.1 459.7,94.8C458.0,81.5 461.4,71.4 459.7,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="469.6953125" y="76.109375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="469.6953125">Authentication.js</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M459.6953125,883.03125C497.5,876.7 484.9,889.3 617.1,883.0C615.4,902.4 618.8,918.7 617.1,925.5C550.9,931.7 577.9,919.2 459.7,925.5C458.0,901.9 461.4,893.2 459.7,883.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="469.6953125" y="906.765625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="469.6953125">Authentication.js</tspan>
+		</text>
+	</g>
+	<path d="M538.4,94.8C569.9,337.2 506.9,756.9 538.4,883.0" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="actor">
+		<path d="M637.0703125,52.375C656.6,47.5 739.8,57.3 759.4,52.4C761.0,84.6 757.7,71.9 759.4,94.8C728.2,89.9 663.5,99.7 637.1,94.8C635.4,61.9 638.8,82.8 637.1,52.4" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="647.0703125" y="76.109375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="647.0703125">AuthService</tspan>
+		</text>
+	</g>
+	<g class="actor">
+		<path d="M637.0703125,883.03125C682.0,887.9 703.2,878.1 759.4,883.0C761.0,918.4 757.7,899.9 759.4,925.5C723.3,920.6 686.0,930.3 637.1,925.5C638.8,889.8 635.4,918.6 637.1,883.0" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="647.0703125" y="906.765625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="647.0703125">AuthService</tspan>
+		</text>
+	</g>
+	<path d="M698.2,94.8C729.7,592.0 666.7,756.9 698.2,883.0" stroke="#000000" fill="none" style="stroke-width: 2;">
+	</path>
+	<g class="signal">
+		<text x="131.15625" y="122.3203125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="131.15625">permissions.fetch()</tspan>
+		</text>
+		<path d="M41.8,137.2C177.7,150.6 95.6,123.8 377.6,137.2" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="387.5703125" y="164.71875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="387.5703125">confirmIdentity()</tspan>
+		</text>
+		<path d="M377.6,179.6C408.8,186.0 482.7,173.1 538.4,179.6" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="179.6875" y="207.0546875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="179.6875">We need to know its you...</tspan>
+		</text>
+		<path d="M538.4,221.9C305.3,241.8 344.6,202.0 41.8,221.9" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="248.734375" y="249.3828125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="248.734375">password</tspan>
+		</text>
+		<path d="M41.8,264.2C226.1,244.4 121.3,284.1 538.4,264.2" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="595.53125" y="291.71875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="595.53125">login()</tspan>
+		</text>
+		<path d="M538.4,306.6C629.5,313.0 661.2,300.2 698.2,306.6" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="592.0234375" y="334.0625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="592.0234375">user{}</tspan>
+		</text>
+		<path d="M698.2,348.9C644.6,342.5 662.7,355.3 538.4,348.9" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="445.3125" y="376.4296875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="445.3125">ok!</tspan>
+		</text>
+		<path d="M538.4,391.3C499.8,384.8 449.3,397.7 377.6,391.3" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="460.8203125" y="418.7578125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="460.8203125">GET corpusteam</tspan>
+		</text>
+		<path d="M377.6,433.6C544.3,446.4 621.3,420.8 698.2,433.6" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="474.484375" y="461.0859375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="474.203125">team members</tspan>
+		</text>
+		<path d="M698.2,475.9C541.0,488.7 621.3,463.1 377.6,475.9" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="175.8125" y="503.421875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="175.8125">render()</tspan>
+		</text>
+		<path d="M377.6,518.3C286.5,504.8 289.9,531.7 41.8,518.3" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="136.6796875" y="545.7578125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="136.6796875">al..</tspan>
+		</text>
+		<path d="M41.8,560.6C200.7,569.0 169.0,552.2 250.9,560.6" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="51.8359375" y="588.0859375" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="51.8359375">alex, albert, alan, alexa</tspan>
+		</text>
+		<path d="M250.9,602.9C202.6,611.3 183.0,594.6 41.8,602.9" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="73.5" y="620.8203125" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="73.5">addCorpusRoleToUser(alexa,</tspan>
+			<tspan dy="1.2em" x="73.5">[reader, commenter, exporter])</tspan>
+		</text>
+		<path d="M41.8,664.4C238.7,651.0 208.3,677.9 377.6,664.4" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="447.75" y="691.9296875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="447.75">POST addroletouser</tspan>
+		</text>
+		<path d="M377.6,706.8C576.2,719.6 509.1,693.9 698.2,706.8" stroke="#000000" fill="none" style="stroke-width: 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="note">
+		<path d="M718.2109375,726.765625C768.0,738.7 865.4,714.8 1017.4,726.8C1015.3,765.1 1019.4,735.0 1017.4,778.4C960.0,766.4 945.6,790.3 718.2,778.4C720.3,750.5 716.1,769.3 718.2,726.8" stroke="#000000" fill="#ffffff" style="stroke-width: 2;">
+		</path>
+		<text x="723.2109375" y="745.5" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="723.2109375">AuthService adds roles to user</tspan>
+			<tspan dy="1.2em" x="723.2109375">in the db's security on CouchDB</tspan>
+		</text>
+	</g>
+	<g class="signal">
+		<text x="434.828125" y="805.8515625" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="434.828125">updated team members</tspan>
+		</text>
+		<path d="M698.2,820.7C539.7,833.5 520.7,807.9 377.6,820.7" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+	<g class="signal">
+		<text x="175.8125" y="848.1875" style="font-size: 16px; font-family: danielbd;">
+			<tspan x="175.8125">render()</tspan>
+		</text>
+		<path d="M377.6,863.0C178.2,849.6 252.7,876.5 41.8,863.0" stroke="#000000" fill="none" style="stroke-width: 2; stroke-dasharray: 6, 2; marker-end: url(&quot;#markerArrowBlock&quot;);">
+		</path>
+	</g>
+</svg>
