@@ -180,7 +180,32 @@ module.exports = function(grunt) {
         src: ["api/**/*.js"],
         // src: ["api/**/*.js", "!tests/libs/**/*.js", "tests/**/*.js"],
         options: {
-          destination: "docs/javascript"
+          destination: "docs/javascript",
+          template: "node_modules/docdash",
+          recurse: true,
+          docdash: {
+              static: true,  // Display the static members inside the navbar
+              sort: true     // Sort the methods in the navbar
+          },
+          encoding: "utf8",
+          plugins: ["node_modules/jsdoc-inheritance-diagram"],
+          opts: {
+            "inheritance-diagram": {
+              externalLinks: {
+                ExtClass: "http://link.to/external/class/documentation.html"
+              },
+              css: ".parent rect {fill: lightgray;}",
+              node: {
+                dimensions: {
+                  width: 40
+                }
+              }
+            }
+          },
+          templates: {
+              cleverLinks: false,
+              monospaceLinks: false
+          }
         }
       }
     },
