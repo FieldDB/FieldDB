@@ -76,7 +76,8 @@ function(doc) {
         var small = {
           filename: media.filename,
           timestamp: media.timestamp,
-          type: media.type
+          type: media.type,
+          description: media.caption || media.description
         };
 
         if (media.details && media.details.syllablesAndUtterances) {
