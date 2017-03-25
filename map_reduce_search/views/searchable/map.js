@@ -64,23 +64,34 @@ function(doc) {
       }
 
       // Index limited info about the media
+      var media = [];
       if (doc.audioVideo && doc.audioVideo.length && typeof doc.audioVideo.map === "function") {
-        datum.media = doc.audioVideo.map(function(media) {
-          var small = {
-            filename: media.filename,
-            timestamp: media.timestamp
-          };
+        media = doc.audioVideo;
+      }
+      if (doc.images) {
+        media = media.concat(doc.images);
+      }
 
-          if (media.details.syllablesAndUtterances) {
-            small.syllableCount = media.details.syllablesAndUtterances.syllableCount || 0;
-            small.pauseCount = media.details.syllablesAndUtterances.pauseCount || 0;
-            small.speakingTotalDuration = media.details.syllablesAndUtterances.speakingTotalDuration || 0;
-            small.speakingRate = media.details.syllablesAndUtterances.speakingRate || 0;
-            small.articulationRate = media.details.syllablesAndUtterances.articulationRate || 0;
-          }
+      media = media.map(function(media) {
+        var small = {
+          filename: media.filename,
+          timestamp: media.timestamp,
+          type: media.type
+        };
 
-          return small;
-        });
+        if (media.details && media.details.syllablesAndUtterances) {
+          small.syllableCount = media.details.syllablesAndUtterances.syllableCount || 0;
+          small.pauseCount = media.details.syllablesAndUtterances.pauseCount || 0;
+          small.speakingTotalDuration = media.details.syllablesAndUtterances.speakingTotalDuration || 0;
+          small.speakingRate = media.details.syllablesAndUtterances.speakingRate || 0;
+          small.articulationRate = media.details.syllablesAndUtterances.articulationRate || 0;
+        }
+
+        return small;
+      });
+
+      if (media && media.length) {
+        datum.media = media;
       } else if (includeEmpty) {
         datum.media = [];
       }
