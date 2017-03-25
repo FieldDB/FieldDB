@@ -39,7 +39,7 @@ function renderMedia(opts) {
   return mediaView = opts.media.map(function(media) {
     var fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'));
     return '<audio controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>'
-  });
+  }).join(' ');
 }
 
 function isEmpty(value) {
@@ -128,7 +128,7 @@ function renderSearchResult(options) {
     '    <div class="accordion-heading">' +
     '      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-' +
     options.result._id +
-    '-embedded" href="#collapse-' + options.result._id + '"> ' + scoreView + '<br/> ' +
+    '-embedded" href="#collapse-' + options.result._id + '" name="' + options.result._id + '"> ' + scoreView + '<br/> ' +
     summary +
     '      </a>' +
     '      ' +
