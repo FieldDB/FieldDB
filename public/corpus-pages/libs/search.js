@@ -55,6 +55,7 @@ function renderSearchResult(options) {
   var igtView;
   var mediaView = '';
   var parallelTextView = '';
+  var scoreView = '';
   var original;
 
   datum = new FieldDB.LanguageDatum({
@@ -92,6 +93,7 @@ function renderSearchResult(options) {
       // }
     }
   }
+
   igt = datum.igt;
   console.log(igt);
 
@@ -105,19 +107,29 @@ function renderSearchResult(options) {
   }).join(' ');
 
   parallelTextView = datum.translation;
-
   if (igt.parallelText) {
     parallelTextView = Object.keys(igt.parallelText).map(function(key) {
       return igt.parallelText[key];
     }).filter(isEmpty).join('<br/>');
   }
 
+  // Show parallel text if user searched with out a highlight
+  if (!options.result.highlight || options.result.highlight.length) {
+    summary = parallelTextView;
+  } else {
+    summary = summary.join('<br/>')
+  }
+
+  if (options.maxScore !== 1) {
+    scoreView = '<input type="range" value="' + options.result._score * 10 + '" min="0" max="' + options.maxScore * 10 + '" disabled=""/>';
+  }
+
   view = '<div class="accordion-group">' +
     '    <div class="accordion-heading">' +
     '      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-' +
     options.result._id +
-    '-embedded" href="#collapse-' + options.result._id + '"> <input type="range" value="' + options.result._score * 10 + '" min="0" max="' + options.maxScore * 10 + '" disabled=""/><br/> ' +
-    summary.join('<br/>') +
+    '-embedded" href="#collapse-' + options.result._id + '"> ' + scoreView + '<br/> ' +
+    summary +
     '      </a>' +
     '      ' +
     mediaView + '    </div>' +
@@ -177,6 +189,8 @@ function search(corpus) {
         maxScore: response.hits.max_score
       })
     });
+
+    $('#search-result-highlight').append('<p>Showing ' + window.searchList.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search</p>');
   }).fail(function(err) {
     $('#search-result-area').show();
     $('#clearresults').show();
