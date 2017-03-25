@@ -37,8 +37,8 @@ function renderMedia(opts) {
     return '';
   }
   return mediaView = opts.media.map(function(media) {
-    var fileIdentifier = media.filename.substring(media.filename.lastIndexOf('.'));
-    return '<audio src="' + opts.speech + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>'
+    var fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'));
+    return '<audio controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>'
   });
 }
 
@@ -54,6 +54,7 @@ function renderSearchResult(options) {
   var view;
   var igtView;
   var mediaView = '';
+  var parallelTextView = '';
   var original;
 
   datum = new FieldDB.LanguageDatum({
@@ -61,6 +62,13 @@ function renderSearchResult(options) {
     corpus: options.corpus,
     fields: options.corpus.datumFields.clone()
   });
+
+  mediaView = renderMedia({
+    corpus: options.corpus,
+    speech: options.speech,
+    media: options.result._source.media
+  });
+
   // datum.debugMode = true;
   for (attribute in options.result._source) {
     if (!options.result._source.hasOwnProperty(attribute)) {
@@ -68,6 +76,7 @@ function renderSearchResult(options) {
     }
     datum[attribute] = options.result._source[attribute];
   }
+
   // igt = datum.igt;
   for (field in options.result.highlight) {
     if (!options.result.highlight.hasOwnProperty(field)) {
@@ -95,12 +104,13 @@ function renderSearchResult(options) {
       '        </span>';
   }).join(' ');
 
+  parallelTextView = datum.translation;
 
-  mediaView = renderMedia({
-    corpus: options.corpus,
-    speech: options.speech,
-    media: options.result._source.media
-  });
+  if (igt.parallelText) {
+    parallelTextView = Object.keys(igt.parallelText).map(function(key) {
+      return igt.parallelText[key];
+    }).filter(isEmpty).join('<br/>');
+  }
 
   view = '<div class="accordion-group">' +
     '    <div class="accordion-heading">' +
@@ -112,11 +122,11 @@ function renderSearchResult(options) {
     '      ' +
     mediaView + '    </div>' +
     '    <div class="accordion-body collapse" id="collapse-' + options.result._id + '">' +
-    '      <div class="accordion-inner igt-area">' +
+    '      <div class="accordion-inner igt-area"><p class="igt"><label>Interlinear Glossed Text: </label>' +
     igtView +
-    '        <br/><i>' +
-    datum.translation +
-    '        </i>' +
+    '        </p><p class="parallel-text"><label>Parallel Text: </label><i>' +
+    parallelTextView +
+    '        </i></p>' +
     '      </div>' +
     '    </div>' +
     '  </div>';
@@ -128,7 +138,7 @@ function renderSearchResult(options) {
 var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
 
 function updateCorpusField(field) {
-  if (!field.type) {
+  if (!field.type && defaultCorpus.datumFields[field.id]) {
     field.type = defaultCorpus.datumFields[field.id].type;
   }
   return field;
@@ -154,6 +164,11 @@ function search(corpus) {
       corpus: corpus,
       title: 'Search for ' + data.value
     });
+
+    if (!response.hits.hits.length) {
+      $('#search-result-highlight').html('No results.');
+      return;
+    }
     response.hits.hits.forEach(function(result) {
       renderSearchResult({
         result: result,
