@@ -96,7 +96,8 @@ function renderMedia(opts) {
     if ((media.type && media.type.includes('audio')) || audioExtensions.indexOf(extension) > -1) {
       return '<audio title="' + media.description + '" controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>';
     } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
-      return '<image title="' + media.description + '" src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"/>';
+      var url = opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename;
+      return '<br/><a target="_blank" href="' + url + '"><image title="' + media.description + '" src="' + url + '"/></a>';
     } else {
       console.log('unsupported media', media);
     }
