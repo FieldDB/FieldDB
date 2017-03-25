@@ -1,0 +1,27 @@
+{
+  "name": "fielddb-webserver",
+  "description": "Web site for FieldDB corpora pages.",
+  "authors": [
+    "cesine <cesine@yahoo.com>",
+    "Tobin Skinner <tobin.skinner@gmail.com>",
+    "Josh <josh.horner@gmail.com>",
+    "hisakonog <hisakonog@gmail.com>",
+    "Fieldlinguist <info@fieldlinguist.com>"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "fielddb",
+    "website"
+  ],
+  "homepage": "https://github.com/FieldDB/FieldDBWebServer",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fielddb": "^4.4.22"
+  }
+}

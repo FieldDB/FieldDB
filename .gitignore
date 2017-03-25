@@ -21,6 +21,7 @@ audio_stimuli
 .classpath
 proguard.cfg
 
+public/components
 node_modules
 gen
 
