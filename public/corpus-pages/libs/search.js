@@ -28,7 +28,7 @@ function progress(percent, $element) {
 }
 
 function clearresults() {
-  $('#dataresult').hide();
+  $('#search-result-area').hide();
   $('#clearresults').hide();
 }
 
@@ -40,13 +40,87 @@ searchForm.submit(function() {
   console.log(data);
   $.post(url, data).done(function(response) {
     console.log(response);
-    $('#dataresult').show();
+    $('#search-result-area').show();
     $('#clearresults').show();
-    $('#dataresult').JSONView(JSON.stringify(response.hits));
+    $('#search-result-json').JSONView(JSON.stringify(response.hits));
+    $('#search-result-highlight').html("");
+
+    var field;
+    var summary;
+    var datum;
+    var corpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+    var igt;
+    var view;
+    var igtView;
+    var original;
+    var isEmpty = function(value) {
+      return value;
+    };
+    response.hits.hits.forEach(function(result) {
+      summary = [];
+      datum = new FieldDB.LanguageDatum({
+        _id: result._id,
+        corpus: corpus,
+        fields: corpus.datumFields.clone()
+      });
+      // datum.debugMode = true;
+      for (attribute in result._source) {
+        if (!result._source.hasOwnProperty(attribute)) {
+          continue;
+        }
+        datum[attribute] = result._source[attribute];
+      }
+      // igt = datum.igt;
+      for (field in result.highlight) {
+        if (!result.highlight.hasOwnProperty(field)) {
+          continue;
+        }
+        summary.push(result.highlight[field]);
+
+        if (result.highlight[field]) {
+          original = datum[field];
+          datum[field] = result.highlight[field].join(' ');
+          // if (corpus.datumFields[field].type.indexOf('IGT') > -1) {
+          //   datum[field] = original;
+          // }
+        }
+      }
+      igt = datum.igt;
+      console.log(igt);
+
+      igtView = igt.tuples.map(function(tuple) {
+        return '        <span class="glossCouplet">' +
+          corpus.datumFields.map(function(corpusField) {
+            return tuple[corpusField.id];
+            // return result.highlight[corpusField.id] ? result.highlight[corpusField.id] : tuple[corpusField.id];
+          }).filter(isEmpty).join(' <br/>') +
+          '        </span>';
+      }).join(' ');
+
+      view = '<div class="accordion-group">' +
+        '    <div class="accordion-heading">' +
+        '      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-' +
+        result._id +
+        '-embedded" href="#collapse-' + result._id + '"> <input type="range" value="' + result._score * 10 + '" min="0" max="' + response.hits.max_score * 10 + '" disabled=""/><br/> ' +
+        summary.join('<br/>') +
+        '      </a>' +
+        '    </div>' +
+        '    <div class="accordion-body collapse" id="collapse-' + result._id + '">' +
+        '      <div class="accordion-inner igt-area">' +
+        igtView +
+        '        <br/><i>' +
+        datum.translation +
+        '        </i>' +
+        '      </div>' +
+        '    </div>' +
+        '  </div>';
+      $('#search-result-highlight').append(view);
+    });
   }).fail(function(err) {
-    $('#dataresult').show();
+    $('#search-result-area').show();
     $('#clearresults').show();
-    $('#dataresult').JSONView(JSON.stringify(err));
+    $('#search-result-highlight').html("Please try again");
+    $('#search-result-json').JSONView(JSON.stringify(err));
     console.log('Error from search ', err);
   });
 
