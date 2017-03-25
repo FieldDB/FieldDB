@@ -32,14 +32,75 @@ function clearresults() {
   $('#clearresults').hide();
 }
 
+
+var audioExtensions = [
+  '.3gp',
+  '.aa',
+  '.aac',
+  '.aax',
+  '.act',
+  '.aiff',
+  '.amr',
+  '.ape',
+  '.au',
+  '.awb',
+  '.dct',
+  '.dss',
+  '.dvf',
+  '.flac',
+  '.gsm',
+  '.iklax',
+  '.ivs',
+  '.m4a',
+  '.m4b',
+  '.m4p',
+  '.mmf',
+  '.mp3',
+  '.mpc',
+  '.msv',
+  '.opus',
+  '.raw',
+  '.sln',
+  '.tta',
+  '.vox',
+  '.wav',
+  '.wma',
+  '.wv',
+  '.ogg',
+  '.oga',
+  '.mogg',
+  '.ra',
+  '.rm',
+  '.webm'
+];
+
+var imageExtensions = [
+  '.jpeg',
+  '.jpg',
+  '.gif',
+  '.png',
+  '.apng',
+  '.svg',
+  '.bmp',
+  '.ico'
+];
+
 function renderMedia(opts) {
   if (!opts.media) {
     return '';
   }
   return mediaView = opts.media.map(function(media) {
     var fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'));
-    return '<audio controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>'
-  });
+    var extension = media.filename.replace(fileIdentifier, '');
+    media.description = media.description || '';
+    if ((media.type && media.type.includes('audio')) || audioExtensions.indexOf(extension) > -1) {
+      return '<audio title="' + media.description + '" controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>';
+    } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
+      return '<image title="' + media.description + '" src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"/>';
+    } else {
+      console.log('unsupported media', media);
+    }
+  }).join(' ');
 }
 
 function isEmpty(value) {
@@ -56,7 +117,7 @@ function renderSearchResult(options) {
   var mediaView = '';
   var parallelTextView = '';
   var scoreView = '';
-  var original;
+  var context;
 
   datum = new FieldDB.LanguageDatum({
     _id: options.result._id,
@@ -86,11 +147,7 @@ function renderSearchResult(options) {
     summary.push(options.result.highlight[field]);
 
     if (options.result.highlight[field]) {
-      original = datum[field];
       datum[field] = options.result.highlight[field].join(' ');
-      // if (options.corpus.datumFields[field].type.indexOf('IGT') > -1) {
-      //   datum[field] = original;
-      // }
     }
   }
 
@@ -124,11 +181,13 @@ function renderSearchResult(options) {
     scoreView = '<input type="range" value="' + options.result._score * 10 + '" min="0" max="' + options.maxScore * 10 + '" disabled=""/>';
   }
 
+  context = datum.context || '';
+
   view = '<div class="accordion-group">' +
     '    <div class="accordion-heading">' +
     '      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-' +
     options.result._id +
-    '-embedded" href="#collapse-' + options.result._id + '"> ' + scoreView + '<br/> ' +
+    '-embedded" href="#collapse-' + options.result._id + '" name="' + options.result._id + '" title="' + context + '"> ' + scoreView + '<br/> ' +
     summary +
     '      </a>' +
     '      ' +
