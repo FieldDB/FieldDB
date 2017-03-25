@@ -65,7 +65,7 @@
           <div class="row-fluid">
             <div class="span11 offset1">
               <form id="search-corpus" action="{{lexicon.url}}/search/{{corpusMask.dbname}}" data-lexicon-url="{{lexicon.url}}" method="POST" enctype="application/json" class="search-form form-inline">
-                <input type="text" id="queryString" name="queryString" placeholder="Enter search terms…">
+                <input type="text" id="query" name="query" placeholder="morphemes:nay OR gloss:des" title="Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results">
                 <button type="submit" id="corpus_search" class="btn btn-small btn-success">
                   <i class="icon-search icon-white"></i>
                   Search…
