@@ -45,6 +45,10 @@ a.accordion-toggle {
 }
 
 
+.search-result-area-content img {
+  width: 400px;
+}
+
 /* range style http://codepen.io/onediv/pen/GBJcl */
 
 input[type=range] {
