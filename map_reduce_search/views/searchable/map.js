@@ -2,19 +2,20 @@ function(doc) {
   var includeEmpty = false;
 
   var convertDatumIntoSimpleObject = function(datum) {
-    var obj = {},
-      fieldKeyName = "label";
+    var obj = {};
+    var fieldKeyName = "label";
+    var fields = datum.fields || datum.datumFields;
 
-    for (var i = 0; i < datum.datumFields.length; i++) {
-      if (datum.datumFields[i].id && datum.datumFields[i].id.length > 0) {
+    for (var i = 0; i < fields.length; i++) {
+      if (fields[i].id && fields[i].id.length > 0) {
         fieldKeyName = "id"; /* update to version 2.35+ */
       } else {
         fieldKeyName = "label";
       }
-      if (datum.datumFields[i].mask) {
-        obj[datum.datumFields[i][fieldKeyName]] = datum.datumFields[i].mask;
+      if (fields[i].mask) {
+        obj[fields[i][fieldKeyName]] = fields[i].mask;
       } else if (includeEmpty) {
-        obj[datum.datumFields[i][fieldKeyName]] = "";
+        obj[fields[i][fieldKeyName]] = "";
       }
     }
     if (datum.session.sessionFields) {
@@ -27,7 +28,7 @@ function(doc) {
         if (datum.session.sessionFields[j].mask) {
           obj[datum.session.sessionFields[j][fieldKeyName]] = datum.session.sessionFields[j].mask;
         } else if (includeEmpty) {
-          obj[datum.datumFields[i][fieldKeyName]] = "";
+          obj[fields[i][fieldKeyName]] = "";
         }
       }
     }
@@ -42,11 +43,13 @@ function(doc) {
   try {
     /* if this document has been deleted, the ignore it and return immediately */
     if (doc.trashed && doc.trashed.indexOf("deleted") > -1) {
+      // emit('deleted', doc._id);
       return;
     }
-    if (doc.datumFields && doc.session) {
+    if ((doc.fields || doc.datumFields) && doc.session) {
       var datum = convertDatumIntoSimpleObject(doc);
       if (!datum) {
+        // emit('convertDatumIntoSimpleObject returned empty object', doc._id);
         return;
       }
 
