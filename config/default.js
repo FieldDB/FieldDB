@@ -51,6 +51,11 @@ var config = {
       url: "http://localhost:9200"
     },
     url: "http://admin:none@localhost:9200"
+  },
+  speech: {
+    public: {
+      url: "http://localhost:3184"
+    }
   }
 };
 
