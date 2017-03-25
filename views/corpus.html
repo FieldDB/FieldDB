@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/corpus-pages/css/jquery.jsonview.css">
     <link rel="stylesheet" type="text/css" href="/corpus-pages/bootstrap/css/bootstrap-responsive.min.css">
     <link rel="stylesheet" type="text/css" href="/corpus-pages/padding.css">
+    <link rel="stylesheet" type="text/css" href="/corpus-pages/search.css">
     <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><script>window.html5 || document.write('<script src="corpus-pages/libs/html5shiv.js"><\\/script>')</script><![endif]-->
   </head>
   <body>
@@ -73,7 +74,27 @@
           </div>
           <div class="row-fluid">
             <div class="span11">
-              <div id="dataresult" class="well well-small hide"></div>
+              <ul id="search-result-area" class="nav nav-tabs hide">
+                <li class="active">
+                  <a href="#highlights" data-toggle="tab">
+                    Highlights
+                  </a>
+                </li>
+                <li>
+                  <a href="#json" data-toggle="tab">
+                    JSON Results
+                  </a>
+                </li>
+              </ul>
+              <div id="search-result-area-content" class="tab-content">
+                <div class="tab-pane fade" id="highlights">
+                  <div id="search-result-highlight" class="accordion">
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="json">
+                  <div id="search-result-json" class="well well-small"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -117,5 +138,6 @@
     <script src="/corpus-pages/js/jquery.jsonview.js"></script>
     <script src="/corpus-pages/libs/search.js"></script>
     <script src="/corpus-pages/libs/analytics.js"></script>
+    <script src="/components/fielddb/fielddb.js"></script>
   </body>
 </html>
