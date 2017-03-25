@@ -161,7 +161,9 @@ function search(corpus) {
     url: $('#search-result-area').data('speech-url')
   };
   var searchForm = $('#search-corpus');
-  var data = searchForm.serializeArray()[0];
+  var data = {
+    query: $(searchForm).find('input[name="query"]').val()
+  };
   var url = searchForm.attr('action');
   console.log(data);
 
