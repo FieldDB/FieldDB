@@ -73,6 +73,9 @@ app.get("/db/:dbname", function(req, res) {
       search: {
         url: config.search.public.url
       },
+      speech: {
+        url: config.speech.public.url
+      },
       corpusMask: mask
     });
   }, function(reason) {
@@ -100,15 +103,23 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 app.get("/:username/:titleAsUrl", function(req, res) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, nano).then(function(mask) {
-      res.render("corpus", {
+      var data = {
         lexicon: {
           url: config.lexicon.public.url
         },
         search: {
           url: config.search.public.url
         },
+        speech: {
+          url: config.speech.public.url
+        },
         corpusMask: mask
-      });
+      };
+
+      if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
+        return res.json(data)
+      }
+      res.render("corpus", data);
     }, function(reason) {
       res.status(reason.status);
       if (reason.status >= 500) {
