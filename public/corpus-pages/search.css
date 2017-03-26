@@ -2,10 +2,32 @@ em {
   background-color: yellow;
 }
 
+.search-form {
+  display: inline-block;
+}
+
+.search-progress-bar {
+  width: 180px; 
+  height: 23px; 
+  border: 1px solid gray; 
+  background-color: #E9E9E9;
+}
+
+.inner-search-progress-bar {
+  font-size: .7em; 
+  height: 100%; 
+  color: white; 
+  text-align: right; 
+  line-height: 23px; 
+  width: 0px; 
+  background-color: #99356B;
+}
+
 a.accordion-toggle {
   color: black;
   text-decoration: none;
 }
+
 .glossCouplet {
   display: inline-block;
   margin-left: 5px;
@@ -22,45 +44,23 @@ a.accordion-toggle {
   margin-bottom: 5px;
 }
 
-range {
-  width: 100%;
-}
 
+.search-result-area-content img {
+  width: 400px;
+}
 
 /* range style http://codepen.io/onediv/pen/GBJcl */
-label[for=range] {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -175px;
-  margin-top: -32px;
-  height: 10px;
-  padding-top: 6px;
-  width: 350px;
-  padding-left: 13px;
-  -webkit-transform: skew(-62deg);
-  overflow: hidden;
-  padding-bottom: 10px;
-}
-label[for=range]:after {
-  content: "";
-  position: absolute;
-  bottom: 11px;
-  left: 69px;
-  height: 9px;
-  width: 278px;
-  box-shadow: 0px 3px 10px -3px rgba(0, 0, 0, 0.51);
-  -webkit-transform: skew(62deg);
-}
+
 input[type=range] {
   -webkit-appearance: none;
-  background-color: transparent;
+  /*background-color: transparent;*/
+  width: 100%;
   /*width: 300px;*/
   /*height: 38px;*/
   /*padding-top:10px;*/
   overflow:hidden;
   margin: 0;
-  margin-left: -20px;
+  /*margin-left: -20px;*/
   /*transform-style: preserve-3d;*/
   /*perspective: 300;*/
   /*transform-origin: 50% 50% 300px;*/
@@ -93,7 +93,7 @@ input[type="range"]::-webkit-slider-thumb:after {
   z-index: 1;
   left: -285px;
   top: -28px;
-  width: 300px;
+  /*width: 300px;*/
   height: 140px;
   background: #9FE472;
   transform: rotateX(90deg);
@@ -156,7 +156,7 @@ input[type=range]:before {
   position: absolute;
   background: rgb(190, 190, 190);
   box-shadow:0 1px 0 rgb(235, 235, 235);
-  width: 283px;
+  /*width: 283px;*/
   left: 0;
   height: 1px;
   top: 29px;
@@ -189,25 +189,4 @@ input[type=range]:after {
   210px 1px 0 rgb(235, 235, 235),
   240px 1px 0 rgb(235, 235, 235),
   270px 1px 0 rgb(235, 235, 235);
-}
-
-.budget {
-  position: absolute;
-  top: 50%;
-  left:0;
-  margin-top: -100px;
-  text-align: center;
-  width: 100%;
-  font-size: 2em;
-  color: rgb(58, 58, 58);
-}
-.output {
-  position: absolute;
-  bottom: 50%;
-  left: 0;
-  margin-bottom: -100px;
-  text-align: center;
-  width: 100%;
-  font-size: 2em;
-  color: rgba(132, 206, 66, 1);
 }
