@@ -1063,6 +1063,9 @@ Datum.prototype = Object.create(FieldDBObject.prototype, /** @lends Datum.protot
       json.datumFields = json.fields;
       delete json.fields;
 
+      json.audioVideo = json.audioVideo || [];
+      json.comments = json.comments || [];
+
       this.debug(json);
       return json;
     }
