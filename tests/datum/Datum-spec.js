@@ -40,7 +40,7 @@ describe("Test Datum", function() {
         datumFields: [{
           fieldDBtype: "DatumField",
           id: "something",
-          encryptedValue: "else",
+          // encryptedValue: "",
           version: serialized.version,
           label: "something",
           hint: "",
