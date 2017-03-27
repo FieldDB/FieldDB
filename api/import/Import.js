@@ -240,7 +240,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   readUri: {
     value: function(options) {
-      console.log('readUri', options);
+      this.debug('readUri', options);
 
       var deferred = Q.defer(),
         self = this;
@@ -263,7 +263,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     self.debug("read file", err);
                     deferred.reject(err);
                   } else {
-                    self.debug("rawText", data);
+                    self.debug("rawText", data.length);
                     self.debug("done rawText");
                     optionsWithADatum.rawText = data;
                     deferred.resolve(optionsWithADatum);
@@ -293,11 +293,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         };
 
         self.debug("find" + options.uri);
-        self.corpus.find(options.uri)
+        self.corpus.find(options.id || options.uri)
           .then(function(similarData) {
-            self.debug("similarData", similarData);
-            if (similarData.length === 1) {
-              options.datum = similarData[0];
+            if (similarData && similarData._id) {
+              self.debug("similarData", similarData._id, similarData._rev);
+              options.datum = self.corpus.newDatum(similarData);
+              return pipeline(options);
+            }
+
+            self.debug("similarData", similarData.length);
+            if (Array.isArray(similarData) && similarData.length === 1) {
+              options.datum = self.corpus.newDatum(similarData[0]);
               // try {
               //   pipeline(options);
               // } catch (e) {
@@ -784,7 +790,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           options.datum.fields.utterance.value = options.rawText;
         }
 
-        options.datum.id = options.datum.tempId = options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+        options.datum.id = options.datum.tempId = options.id || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+        if (options.datum.id.lastIndexOf('/') > -1) {
+          options.datum.id = options.datum.tempId = options.datum.id.substring(options.datum.id.lastIndexOf('/') + 1, options.datum.id.lastIndexOf('.'));
+        }
 
         // let the application customize the preprocess function
         if (typeof options.preprocessOptions.preprocessFunction === "function") {

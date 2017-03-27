@@ -706,6 +706,11 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         throw new Error("Uri must be specified ");
       }
 
+      return this.get(uri).then(function(data) {
+        this.debug('got result back from serer', data);
+        return data;
+      });
+
       Q.nextTick(function() {
         deferred.resolve([]); /* TODO try fetching this uri */
       });
