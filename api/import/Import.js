@@ -191,6 +191,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  addFileUrl: {
+    value: function() {
+      console.warn('addFileUrl is deprecated, use addFileUri');
+    }
+  },
+
   addFileUri: {
     value: function(options) {
       var deferred = Q.defer(),
@@ -234,6 +240,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   readUri: {
     value: function(options) {
+      console.log('readUri', options);
+
       var deferred = Q.defer(),
         self = this;
 
@@ -255,7 +263,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     self.debug("read file", err);
                     deferred.reject(err);
                   } else {
-                    // self.debug("rawText", data);
+                    self.debug("rawText", data);
+                    self.debug("done rawText");
                     optionsWithADatum.rawText = data;
                     deferred.resolve(optionsWithADatum);
                   }
