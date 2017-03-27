@@ -258,7 +258,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             try {
               return optionsWithADatum.readOptions
                 .readFileFunction(optionsWithADatum, function(err, data) {
-
                   if (err) {
                     self.debug("read file", err);
                     deferred.reject(err);
@@ -298,12 +297,15 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             if (similarData && similarData._id) {
               self.debug("similarData", similarData._id, similarData._rev);
               options.datum = self.corpus.newDatum(similarData);
+              options.datum.session = options.datum.session || self.session;
               return pipeline(options);
             }
 
             self.debug("similarData", similarData.length);
             if (Array.isArray(similarData) && similarData.length === 1) {
               options.datum = self.corpus.newDatum(similarData[0]);
+              options.datum.session = options.datum.session || self.session;
+
               // try {
               //   pipeline(options);
               // } catch (e) {
@@ -317,6 +319,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               .then(function(datum) {
                 // self.debug("datum", datum);
                 options.datum = datum;
+                options.datum.session = options.datum.session || self.session;
                 pipeline(options);
               });
           })
