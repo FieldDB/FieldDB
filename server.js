@@ -65,7 +65,7 @@ app.get("/activity/:dbname", function(req, res) {
 });
 
 app.get("/db/:dbname", function(req, res) {
-  getCorpusMask(req.params.dbname, nano).then(function(mask) {
+  getCorpusMask(req.params.dbname).then(function(mask) {
     res.render("corpus", {
       lexicon: {
         url: config.lexicon.public.url
@@ -102,7 +102,7 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 
 app.get("/:username/:titleAsUrl", function(req, res) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
-    getCorpusMask(req.params.titleAsUrl, nano).then(function(mask) {
+    getCorpusMask(req.params.titleAsUrl).then(function(mask) {
       var data = {
         lexicon: {
           url: config.lexicon.public.url
@@ -141,7 +141,7 @@ app.get("/:username/:titleAsUrl", function(req, res) {
     return;
   }
   getUserMask(req.params.username, nano, config.corpus.databases.users).then(function(userMask) {
-    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
+    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl).then(function(mask) {
       res.render("corpus", {
         lexicon: {
           url: config.lexicon.public.url

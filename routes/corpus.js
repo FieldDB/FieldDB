@@ -3,7 +3,7 @@ var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
 
-var getCorpusMask = function(dbname, nano, optionalUserMask) {
+var getCorpusMask = function(dbname) {
   if (!dbname || typeof dbname.trim !== "function") {
     dbname = "";
   } else {
@@ -23,7 +23,7 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
 
   var corpusMask = new CorpusMask({
     dbname: dbname,
-    url: config.corpus.url + '/' + dbname
+    url: config.corpus.url + "/" + dbname
   });
 
   return corpusMask.fetch().then(function() {
@@ -59,16 +59,8 @@ var getCorpusMask = function(dbname, nano, optionalUserMask) {
   });
 };
 
-var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
+var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl) {
   var deferred = Q.defer();
-  if (!nano) {
-    console.log(new Date() + " the server is misconfigured and cannot reply request for corpus mask from titleAsUrl: " + titleAsUrl);
-    deferred.reject({
-      status: 500,
-      userFriendlyErrors: ["Server errored, please report this 3242"]
-    });
-    return deferred.promise;
-  }
   if (!userMask || !userMask.username) {
     deferred.reject({
       status: 500,
@@ -127,7 +119,7 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
     bestMatch = matchingCorpusConnections[0];
   }
   console.log(new Date() + " user's default gravatar " + userMask.gravatar);
-  return getCorpusMask(bestMatch.dbname, nano, userMask);
+  return getCorpusMask(bestMatch.dbname);
 };
 
 exports.getCorpusMask = getCorpusMask;
