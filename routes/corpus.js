@@ -1,88 +1,62 @@
-var nanoErrorHandler = require("./../lib/error-handler").nanoErrorHandler;
+var config = require("config");
 var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
-var getTeamMask = require("./team").getTeamMask;
 var Q = require("q");
 
-var OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS = true;
-
 var getCorpusMask = function(dbname, nano, optionalUserMask) {
-  var deferred = Q.defer();
-
-  Q.nextTick(function() {
-    if (!nano) {
-      console.log(new Date() + " the server is misconfigured and cannot reply request for corpus mask: " + dbname);
-      deferred.reject({
-        status: 500,
-        userFriendlyErrors: ["Server errored, please report this 3242"]
-      });
-      return;
-    }
-
-    if (!dbname || typeof dbname.trim !== "function") {
-      dbname = "";
-    } else {
-      dbname = dbname.trim().toLowerCase();
-    }
-    var validateIdentifier = Connection.validateIdentifier(dbname);
-    if (!dbname || validateIdentifier.identifier.length < 3 || validateIdentifier.identifier !== validateIdentifier.original) {
-      console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
-      deferred.reject({
-        status: 404,
-        userFriendlyErrors: ["This is a strange database identifier, are you sure you didn't mistype it?"],
-        error: validateIdentifier
-      });
-      return;
-    }
-
-    var corpusdb = nano.db.use(dbname);
-    corpusdb.get("corpus", function(error, corpusMask) {
-      if (error || !corpusMask) {
-        console.log(new Date() + " corpusMask was missing " + dbname);
-        var reason = nanoErrorHandler(error, ["Database " + dbname + " details not found."]);
-        deferred.reject(reason);
-        return;
-      }
-
-      if (!corpusMask.dbname) {
-        corpusMask.dbname = dbname;
-        console.log(new Date() + "  the corpus for " + dbname + " was missing a poucname/dbname TODO consider saving it.");
-      }
-      corpusMask = new CorpusMask(corpusMask);
-      if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
-        corpusMask.copyright = corpusMask.team.name;
-      }
-      // console.log("Corpus mask ", corpusMask.team.toJSON());
-      console.log(new Date() + " teams's gravatar in corpus.json " + corpusMask.team.gravatar);
-      getTeamMask(corpusMask.dbname, nano).then(function(teamMask) {
-        console.log(new Date() + " owners's gravatar in this database " + teamMask.gravatar);
-        if (OVERWRITE_TEAM_INFO_FROM_DB_ON_DEFAULTS && optionalUserMask) {
-          corpusMask.team.merge("self", optionalUserMask.toJSON(), "overwrite");
-        }
-        console.log(new Date() + " after merge " + teamMask.gravatar);
-        corpusMask.team.merge("self", teamMask, "overwrite");
-        console.log(new Date() + " final team gravatar in this database " + corpusMask.team.gravatar);
-        console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
-        // console.log("Corpus mask ", corpusMask.team.toJSON());
-      }, function() {
-        if (!corpusMask.team) {
-          corpusMask.team = {};
-        }
-      }).fail(function(exception) {
-        console.log(new Date() + " ", exception.stack);
-        deferred.reject({
-          status: 500,
-          error: exception,
-          userFriendlyErrors: ["Server errored, please report this 78923"]
-        });
-      }).done(function() {
-        deferred.resolve(corpusMask);
-      });
+  if (!dbname || typeof dbname.trim !== "function") {
+    dbname = "";
+  } else {
+    dbname = dbname.trim().toLowerCase();
+  }
+  var validateIdentifier = Connection.validateIdentifier(dbname);
+  if (!dbname || validateIdentifier.identifier.length < 3 || validateIdentifier.identifier !== validateIdentifier.original) {
+    console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
+    var deferred = Q.defer();
+    deferred.reject({
+      status: 404,
+      userFriendlyErrors: ["This is a strange database identifier, are you sure you didn't mistype it?"],
+      error: validateIdentifier
     });
+    return deferred.promise;
+  }
 
+  var corpusMask = new CorpusMask({
+    dbname: dbname,
+    url: config.corpus.url + '/' + dbname
   });
 
-  return deferred.promise;
+  return corpusMask.fetch().then(function() {
+    if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
+      corpusMask.copyright = corpusMask.team.name;
+    }
+    console.log(new Date() + " corpus team ", corpusMask.team.gravatar);
+    // if (optionalUserMask) {
+    //   corpusMask.team = optionalUserMask;
+    //   return corpusMask;
+    // }
+    // return corpusMask;
+
+    // console.log("Corpus mask ", corpusMask.team.toJSON());
+    corpusMask.team.corpus = corpusMask;
+    return corpusMask.team.fetch().then(function(fetched) {
+      console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.description);
+      console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
+      // console.log("Corpus mask ", corpusMask.team.toJSON());
+      return corpusMask;
+    }, function() {
+      return corpusMask;
+    }).fail(function() {
+      return corpusMask;
+    });
+  }).fail(function(exception) {
+    console.log(new Date() + " ", exception.stack);
+    return deferred.reject({
+      status: 500,
+      error: exception,
+      userFriendlyErrors: ["Server errored, please report this 78923"]
+    });
+  });
 };
 
 var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, nano) {
