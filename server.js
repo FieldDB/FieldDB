@@ -21,11 +21,6 @@ var acceptSelfSignedCertificates = {
 if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
-var nano = require("nano")({
-  url: config.corpus.url,
-  requestDefaults: acceptSelfSignedCertificates
-});
-
 
 var app = express();
 
@@ -54,7 +49,7 @@ app.get("/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
     return next();
   }
-  activityHeatMap(req.params.dbname, nano).then(function(heatMapData) {
+  activityHeatMap(req.params.dbname, next).then(function(heatMapData) {
     res.json(heatMapData);
   }, next).fail(next);
 });

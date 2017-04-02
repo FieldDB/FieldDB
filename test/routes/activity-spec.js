@@ -11,10 +11,6 @@ var acceptSelfSignedCertificates = {
 if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
-var nano = require("nano")({
-  url: config.corpus.url,
-  requestDefaults: acceptSelfSignedCertificates
-});
 
 describe("activity routes", function() {
 
@@ -25,15 +21,7 @@ describe("activity routes", function() {
   describe("invalid requests", function() {
 
     it("should return empty data if dbname is not provided", function(done) {
-      activityHeatMap().then(function(results) {
-        expect(results).toBeDefined();
-        expect(results.rows).toBeDefined();
-        expect(results.rows.length).toEqual(0);
-      }).done(done);
-    }, specIsRunningTooLong);
-
-    it("should return empty data if nano is not provided", function(done) {
-      activityHeatMap("lingllama-communitycorpus").then(function(results) {
+      activityHeatMap(null, done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(0);
@@ -45,7 +33,7 @@ describe("activity routes", function() {
   describe("normal requests", function() {
 
     it("should return heat map data from the sample activity feeds", function(done) {
-      activityHeatMap("lingllama-communitycorpus", nano).then(function(results) {
+      activityHeatMap("lingllama-communitycorpus", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
@@ -53,7 +41,7 @@ describe("activity routes", function() {
     }, specIsRunningTooLong);
 
     it("should return heat map data from the community activity feeds", function(done) {
-      activityHeatMap("community-georgian", nano).then(function(results) {
+      activityHeatMap("community-georgian", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
@@ -97,7 +85,7 @@ describe("activity routes", function() {
   describe("close enough requests", function() {
 
     it("should use lowercase dbname", function(done) {
-      activityHeatMap("LingLlama-communitycorpus", nano).then(function(results) {
+      activityHeatMap("LingLlama-communitycorpus", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
@@ -105,7 +93,7 @@ describe("activity routes", function() {
     }, specIsRunningTooLong);
 
     it("should accept activity feed dbname", function(done) {
-      activityHeatMap("lingllama-communitycorpus-activity_feed", nano).then(function(results) {
+      activityHeatMap("lingllama-communitycorpus-activity_feed", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(LINGLLAMA_ACTIVITY_SIZE);
@@ -116,7 +104,7 @@ describe("activity routes", function() {
   describe("sanitize requests", function() {
 
     it("should return empty data if dbname is too short", function(done) {
-      activityHeatMap("aa", nano).then(function(results) {
+      activityHeatMap("aa", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(0);
@@ -126,7 +114,7 @@ describe("activity routes", function() {
     it("should return empty data if dbname is not a string", function(done) {
       activityHeatMap({
         "not": "astring"
-      }, nano).then(function(results) {
+      }, done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(0);
@@ -134,7 +122,7 @@ describe("activity routes", function() {
     }, specIsRunningTooLong);
 
     it("should return empty data if dbname contains invalid characters", function(done) {
-      activityHeatMap("a.*-haaha script injection attack attempt file:///some/try", nano).then(function(results) {
+      activityHeatMap("a.*-haaha script injection attack attempt file:///some/try", done).then(function(results) {
         expect(results).toBeDefined();
         expect(results.rows).toBeDefined();
         expect(results.rows.length).toEqual(0);
