@@ -132,7 +132,7 @@ describe("corpus routes", function() {
       }).done(done);
     }, specIsRunningTooLong);
 
-    xit("should return the corpus mask from the community corpus", function(done) {
+    it("should return the corpus mask from the community corpus", function(done) {
       getCorpusMask("community-georgian").then(function(mask) {
         expect(mask).toBeDefined();
         expect(mask._rev).toEqual("34-07395ad0101afa726429e92813ae0bb0");
@@ -161,7 +161,7 @@ describe("corpus routes", function() {
       }).done(done);
     });
 
-    xit("should return a bleached corpus mask for corpuss by default", function(done) {
+    it("should return a bleached corpus mask for corpuss by default", function(done) {
       getCorpusMask("teammatetiger-firstcorpus").then(function(mask) {
         expect(mask).toBeDefined();
         expect(mask._rev).toEqual("3-184180c75473a60c09dabc2fde9fe37e");
@@ -308,7 +308,7 @@ describe("corpus routes", function() {
 
     describe("normal requests", function() {
 
-      xit("should return the corpus mask from the sample corpus", function(done) {
+      it("should return the corpus mask from the sample corpus", function(done) {
         getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "CommunityCorpus").then(function(mask) {
           expect(mask).toBeDefined();
           expect(mask._rev).toEqual("39-7f5edbe84b9b74288218f4c108ffa5a1");

@@ -66,18 +66,17 @@ app.get("/activity/:dbname", function(req, res) {
 
 app.get("/db/:dbname", function(req, res) {
   getCorpusMask(req.params.dbname).then(function(mask) {
-    res.render("corpus", {
-      lexicon: {
-        url: config.lexicon.public.url
-      },
-      search: {
-        url: config.search.public.url
-      },
-      speech: {
-        url: config.speech.public.url
-      },
-      corpusMask: mask
-    });
+    var corpus = mask.toJSON();
+    corpus.lexicon = {
+      url: config.lexicon.public.url
+    };
+    corpus.search = {
+      url: config.search.public.url
+    };
+    corpus.speech = {
+      url: config.speech.public.url
+    };
+    res.render("corpus", corpus);
   }, function(reason) {
     res.status(reason.status);
     if (reason.status >= 500) {
@@ -103,23 +102,20 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 app.get("/:username/:titleAsUrl", function(req, res) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl).then(function(mask) {
-      var data = {
-        lexicon: {
-          url: config.lexicon.public.url
-        },
-        search: {
-          url: config.search.public.url
-        },
-        speech: {
-          url: config.speech.public.url
-        },
-        corpusMask: mask
+      var corpus = mask.toJSON();
+      corpus.lexicon = {
+        url: config.lexicon.public.url
       };
-
+      corpus.search = {
+        url: config.search.public.url
+      };
+      corpus.speech = {
+        url: config.speech.public.url
+      };
       if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        return res.json(data)
+        return res.json(corpus)
       }
-      res.render("corpus", data);
+      res.render("corpus", corpus);
     }, function(reason) {
       res.status(reason.status);
       if (reason.status >= 500) {
@@ -142,15 +138,17 @@ app.get("/:username/:titleAsUrl", function(req, res) {
   }
   getUserMask(req.params.username, nano, config.corpus.databases.users).then(function(userMask) {
     getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl).then(function(mask) {
-      res.render("corpus", {
-        lexicon: {
-          url: config.lexicon.public.url
-        },
-        search: {
-          url: config.search.public.url
-        },
-        corpusMask: mask
-      });
+      var corpus = mask.toJSON();
+      corpus.lexicon = {
+        url: config.lexicon.public.url
+      };
+      corpus.search = {
+        url: config.search.public.url
+      };
+      corpus.speech = {
+        url: config.speech.public.url
+      };
+      res.render("corpus", corpus);
     }, function(reason) {
       res.status(reason.status);
       if (reason.status >= 500) {
@@ -184,7 +182,6 @@ app.get("/:username/:titleAsUrl", function(req, res) {
 });
 
 app.get("/:username", function(req, res) {
-
   var html5Routes = req.params.username;
   var pageNavs = ["tutorial", "people", "contact", "home"];
   if (pageNavs.indexOf(html5Routes) > -1) {

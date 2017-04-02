@@ -133,7 +133,7 @@ describe("user routes", function() {
 
   });
 
-  xdescribe("close enough requests", function() {
+  describe("close enough requests", function() {
 
     it("should be case insensitive", function(done) {
       getUserMask("LingLlama", nano, config.corpus.databases.users)
@@ -158,7 +158,7 @@ describe("user routes", function() {
     it("should return 404 if username is too short", function(done) {
       getUserMask("aa", nano, config.corpus.databases.users)
         .then(function(results) {
-          console.log(mask);
+          console.log(results);
           expect(true).toBeFalsy();
         }, function(reason) {
           expect(reason).toBeDefined();
@@ -175,7 +175,7 @@ describe("user routes", function() {
           "not": "astring"
         }, nano, config.corpus.databases.users)
         .then(function(results) {
-          console.log(mask);
+          console.log(results);
           expect(true).toBeFalsy();
         }, function(reason) {
           expect(reason).toBeDefined();
@@ -190,7 +190,7 @@ describe("user routes", function() {
     it("should return 404 if username contains invalid characters", function(done) {
       getUserMask("a.*-haaha script injection attack attempt file:///some/try", nano, config.corpus.databases.users)
         .then(function(results) {
-          console.log(mask);
+          console.log(results);
           expect(true).toBeFalsy();
         }, function(reason) {
           expect(reason).toBeDefined();

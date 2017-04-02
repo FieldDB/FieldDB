@@ -64,7 +64,7 @@
           </div>
           <div class="row-fluid">
             <div class="span11 offset1">
-              <form id="search-corpus" action="{{lexicon.url}}/search/{{corpusMask.dbname}}" data-lexicon-url="{{lexicon.url}}" method="POST" enctype="application/json" class="search-form form-inline">
+              <form id="search-corpus" action="{{corpus.lexicon.url}}/search/{{corpusMask.dbname}}" data-lexicon-url="{{corpus.lexicon.url}}" method="POST" enctype="application/json" class="search-form form-inline">
                 <input type="text" id="query" name="query" placeholder="morphemes:nay OR gloss:des" title="Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results">
                 <button type="submit" id="corpus_search" class="btn btn-small btn-success">
                   <i class="icon-search icon-white"></i>
@@ -88,7 +88,7 @@
           </div>
           <div class="row-fluid">
             <div class="span11">
-              <ul id="search-result-area" class="nav nav-tabs hide" data-speech-url="{{speech.url}}">
+              <ul id="search-result-area" class="nav nav-tabs hide" data-speech-url="{{corpus.speech.url}}">
                 <li class="active">
                   <a href="#highlights" data-toggle="tab">
                     Highlights
