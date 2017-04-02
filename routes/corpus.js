@@ -4,13 +4,8 @@ var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
 
 var getCorpusMask = function(dbname) {
-  if (!dbname || typeof dbname.trim !== "function") {
-    dbname = "";
-  } else {
-    dbname = dbname.trim().toLowerCase();
-  }
   var validateIdentifier = Connection.validateIdentifier(dbname);
-  if (!dbname || validateIdentifier.identifier.length < 3 || validateIdentifier.identifier !== validateIdentifier.original) {
+  if (!dbname || validateIdentifier.identifier.length < 3 || !validateIdentifier.equivalent()) {
     console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
     var deferred = Q.defer();
     deferred.reject({
@@ -22,40 +17,34 @@ var getCorpusMask = function(dbname) {
   }
 
   var corpusMask = new CorpusMask({
-    dbname: dbname,
-    url: config.corpus.url + "/" + dbname
+    dbname: validateIdentifier.identifier
   });
+  // corpusMask.debugMode = true;
 
-  return corpusMask.fetch().then(function() {
+  return corpusMask.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
     if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
       corpusMask.copyright = corpusMask.team.name;
     }
-    console.log(new Date() + " corpus team ", corpusMask.team.gravatar);
-    // if (optionalUserMask) {
-    //   corpusMask.team = optionalUserMask;
-    //   return corpusMask;
-    // }
-    // return corpusMask;
 
-    // console.log("Corpus mask ", corpusMask.team.toJSON());
     corpusMask.team.corpus = corpusMask;
-    return corpusMask.team.fetch().then(function(fetched) {
-      console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.description);
+    return corpusMask.team.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
+      console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.gravatar);
       console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
       // console.log("Corpus mask ", corpusMask.team.toJSON());
       return corpusMask;
-    }, function() {
-      return corpusMask;
-    }).fail(function() {
+    }).fail(function(err) {
+      console.log("fail to fetch corpus team", err);
       return corpusMask;
     });
   }).fail(function(exception) {
     console.log(new Date() + " ", exception.stack);
-    return deferred.reject({
+    var deferred = Q.defer();
+    deferred.reject({
       status: 500,
       error: exception,
       userFriendlyErrors: ["Server errored, please report this 78923"]
     });
+    return deferred.promise;
   });
 };
 
@@ -74,10 +63,8 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl) {
       userFriendlyErrors: ["This is a strange title for a database, are you sure you didn't mistype it?"]
     });
     return deferred.promise;
-  } else {
-    titleAsUrl = titleAsUrl + "";
-    titleAsUrl = titleAsUrl.toLowerCase();
   }
+
   if (!userMask.corpora || !userMask.corpora.length) {
     deferred.reject({
       status: 404,
@@ -92,6 +79,9 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl) {
     });
     return deferred.promise;
   }
+
+  titleAsUrl = titleAsUrl + "";
+  titleAsUrl = titleAsUrl.toLowerCase();
 
   var matchingCorpusConnections = userMask.corpora.fuzzyFind("titleAsUrl", titleAsUrl);
   if (!matchingCorpusConnections || !matchingCorpusConnections.length) {
@@ -110,10 +100,16 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl) {
   matchingCorpusConnections.map(function(connection) {
     // handle situation where the user has access to >1 corpora by other users which have the same titleAsUrl
     if (connection.titleAsUrl.toLowerCase().indexOf(titleAsUrl) > -1 && connection.dbname && connection.dbname.indexOf(userMask.username) === 0) {
-      bestMatch = connection;
-    } else {
-      console.log(connection.titleAsUrl + " wasnt the best match for " + titleAsUrl, connection.dbname);
+      if (!bestMatch) {
+        bestMatch = connection;
+        return;
+      }
+      if (bestMatch && connection.titleAsUrl.length < bestMatch.length) {
+        bestMatch = connection;
+        return;
+      }
     }
+    console.log(connection.titleAsUrl + " wasnt the best match for " + titleAsUrl, connection.dbname);
   });
   if (!bestMatch) {
     bestMatch = matchingCorpusConnections[0];
