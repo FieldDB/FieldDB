@@ -3,16 +3,17 @@ var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var Q = require("q");
 
-var getCorpusMask = function(dbname) {
+var getCorpusMask = function(dbname, next) {
   var validateIdentifier = Connection.validateIdentifier(dbname);
   if (!dbname || validateIdentifier.identifier.length < 3 || !validateIdentifier.equivalent()) {
     console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
     var deferred = Q.defer();
-    deferred.reject({
-      status: 404,
-      userFriendlyErrors: ["This is a strange database identifier, are you sure you didn't mistype it?"],
-      error: validateIdentifier
-    });
+    var err = new Error("Not Found.");
+    err.status = 404;
+    err.userFriendlyErrors = ["This is a strange database identifier, are you sure you didn't mistype it?"];
+    err.validateIdentifier = validateIdentifier;
+    deferred.reject(err);
+    next(err);
     return deferred.promise;
   }
 
@@ -32,51 +33,41 @@ var getCorpusMask = function(dbname) {
       console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
       // console.log("Corpus mask ", corpusMask.team.toJSON());
       return corpusMask;
-    }).fail(function(err) {
-      console.log("fail to fetch corpus team", err);
+    }, function() {
+      return corpusMask;
+    }).fail(function() {
       return corpusMask;
     });
-  }).fail(function(exception) {
-    console.log(new Date() + " ", exception.stack);
-    var deferred = Q.defer();
-    deferred.reject({
-      status: 500,
-      error: exception,
-      userFriendlyErrors: ["Server errored, please report this 78923"]
-    });
-    return deferred.promise;
-  });
+  }, next).fail(next);
 };
 
-var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl) {
+var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, next) {
   var deferred = Q.defer();
   if (!userMask || !userMask.username) {
-    deferred.reject({
-      status: 500,
-      userFriendlyErrors: ["Server errored, please report this 8234"]
-    });
+    var err = new Error("Server errored, please report this 8234");
+    deferred.reject(err);
+    next(err);
     return deferred.promise;
   }
   if (!titleAsUrl) {
-    deferred.reject({
-      status: 404,
-      userFriendlyErrors: ["This is a strange title for a database, are you sure you didn't mistype it?"]
-    });
+    var err = new Error("This is a strange title for a database, are you sure you didn't mistype it?");
+    err.status = 404;
+    deferred.reject(err);
+    next(err);
     return deferred.promise;
   }
 
   if (!userMask.corpora || !userMask.corpora.length) {
-    deferred.reject({
-      status: 404,
-      userFriendlyErrors: ["Couldn't find any corpora for " + userMask.username + ", if this is an error please report it to us."]
-    });
+    var err = new Error("Couldn't find any corpora for " + userMask.username + ", if this is an error please report it to us.");
+    err.status = 404;
+    deferred.reject(err);
+    next(err);
     return deferred.promise;
   }
   if (typeof userMask.corpora.find !== "function") {
-    deferred.reject({
-      status: 500,
-      userFriendlyErrors: ["Server errored, please report this 9313"]
-    });
+    var err = new Error("Server errored, please report this 9313");
+    deferred.reject(err);
+    next(err);
     return deferred.promise;
   }
 

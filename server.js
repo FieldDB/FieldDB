@@ -61,7 +61,7 @@ app.get("/activity/:dbname", function(req, res, next) {
 });
 
 app.get("/db/:dbname", function(req, res, next) {
-  getCorpusMask(req.params.dbname).then(function(mask) {
+  getCorpusMask(req.params.dbname, next).then(function(mask) {
     var corpus = mask.toJSON();
     corpus.lexicon = {
       url: config.lexicon.public.url
@@ -72,7 +72,9 @@ app.get("/db/:dbname", function(req, res, next) {
     corpus.speech = {
       url: config.speech.public.url
     };
-    res.render("corpus", corpus);
+    res.render("corpus", {
+      corpusMask: corpus
+    });
   }, next).fail(next);
 });
 
@@ -82,7 +84,8 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 
 app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
-    getCorpusMask(req.params.titleAsUrl).then(function(mask) {
+    getCorpusMask(req.params.titleAsUrl, next).then(function(mask) {
+      console.log('replying with getCorpusMask', mask);
       var corpus = mask.toJSON();
       corpus.lexicon = {
         url: config.lexicon.public.url
@@ -94,14 +97,18 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
         url: config.speech.public.url
       };
       if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        return res.json(corpus)
+        return res.json({
+          corpusMask: corpus
+        });
       }
-      res.render("corpus", corpus);
+      res.render("corpus", {
+        corpusMask: corpus
+      });
     }, next).fail(next);
     return;
   }
   getUserMask(req.params.username, next).then(function(userMask) {
-    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl).then(function(mask) {
+    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, next).then(function(mask) {
       var corpus = mask.toJSON();
       corpus.lexicon = {
         url: config.lexicon.public.url
@@ -112,7 +119,15 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      res.render("corpus", corpus);
+      console.log('replying with getCorpusMaskFromTitleAsUrl ', corpus);
+      if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
+        return res.json({
+          corpusMask: corpus
+        });
+      }
+      res.render("corpus", {
+        corpusMask: corpus
+      });
     }, next).fail(next);
   }, next).fail(next);
 });
