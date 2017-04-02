@@ -12,7 +12,7 @@ var getUserMask = function getUserMask(username, next) {
   var validateIdentifier = Connection.validateIdentifier(username);
   if (!username || validateIdentifier.identifier.length < 3 || !validateIdentifier.equivalent()) {
     console.log(new Date() + " someone requested an invalid username: " + validateIdentifier.identifier);
-    var err = new Error('Not Found.');
+    var err = new Error("Not Found.");
     err.status = 404;
     err.userFriendlyErrors = ["This is a strange username, are you sure you didn't mistype it?"];
     err.validateIdentifier = validateIdentifier;
@@ -22,7 +22,7 @@ var getUserMask = function getUserMask(username, next) {
   }
 
   CORS.makeCORSRequest({
-    url: config.corpus.url + '/' + config.corpus.databases.users + '/' + validateIdentifier.identifier
+    url: config.corpus.url + "/" + config.corpus.databases.users + "/" + validateIdentifier.identifier
   }).then(function(userPrivateDetails) {
     var userPrivate = new User(userPrivateDetails);
     if (!userPrivate.userMask) {
@@ -63,7 +63,6 @@ var getUserMask = function getUserMask(username, next) {
         userPrivate.userMask.corpora.push(corpusConnection);
         return;
       }
-
       console.log(new Date() + " Requesting the corpus mask details", corpusConnection.dbname);
       var corpusMask = new CorpusMask({
         connection: corpusConnection
@@ -73,9 +72,14 @@ var getUserMask = function getUserMask(username, next) {
         console.log(new Date() + " Using connection from the corpus mask details", corpusMask.connection.owner, corpusMask.connection.gravatar);
         corpusMask.connection.title = corpusMask.connection.title;
         corpusMask.connection.description = corpusMask.connection.description;
+        corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
         userPrivateDetails.userMask.corpora.push(corpusMask.connection);
         return corpusMask.connection;
-      }).fail(console.log));
+      }).fail(function(err) {
+        console.log('failed to fetchcorpus mask', err);
+        corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
+        userPrivateDetails.userMask.corpora.push(corpusConnection);
+      }));
     });
 
     console.log(new Date() + " Waiting for " + promises.length + " to download details");
