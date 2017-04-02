@@ -5,7 +5,6 @@ var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
 var User = require("fielddb/api/user/User").User;
 var Q = require("q");
-var url = require("url");
 
 var getUserMask = function getUserMask(username, next) {
   var deferred = Q.defer();
@@ -76,7 +75,7 @@ var getUserMask = function getUserMask(username, next) {
         userPrivate.userMask.corpora.push(corpusMask.connection);
         return corpusMask.connection;
       }).fail(function(err) {
-        console.log('failed to fetchcorpus mask', err);
+        console.log("failed to fetchcorpus mask", err);
         corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
         userPrivate.userMask.corpora.push(corpusConnection);
       }));

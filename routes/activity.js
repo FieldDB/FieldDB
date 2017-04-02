@@ -7,7 +7,7 @@ var SAMPLE_HEAT_MAP = {
   rows: []
 };
 
-var activityHeatMap = function(dbname, next) {
+var activityHeatMap = function(dbname) {
   var deferred = Q.defer();
   var validateIdentifier = Connection.validateIdentifier(dbname);
   if (!dbname || dbname.length < 3 || !validateIdentifier.equivalent()) {
@@ -32,7 +32,7 @@ var activityHeatMap = function(dbname, next) {
       return deferred.resolve(body);
     }
 
-    console.log(new Date() + " there was a problem fetching the activity heatmap for: " + activityDbname, err);
+    console.log(new Date() + " there was a problem fetching the activity heatmap for: " + activityDbname, body);
     deferred.resolve(SAMPLE_HEAT_MAP);
   }, deferred.reject).fail(deferred.reject);
 

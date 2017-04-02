@@ -1,6 +1,5 @@
 var getUserMask = require("./../../routes/user").getUserMask;
 var specIsRunningTooLong = 25000;
-var config = require("config");
 
 var acceptSelfSignedCertificates = {
   strictSSL: false

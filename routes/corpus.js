@@ -44,14 +44,15 @@ var getCorpusMask = function(dbname, next) {
 
 var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, next) {
   var deferred = Q.defer();
+  var err;
   if (!userMask || !userMask.username) {
-    var err = new Error("Server errored, please report this 8234");
+    err = new Error("Server errored, please report this 8234");
     deferred.reject(err);
     next(err);
     return deferred.promise;
   }
   if (!titleAsUrl) {
-    var err = new Error("This is a strange title for a database, are you sure you didn't mistype it?");
+    err = new Error("This is a strange title for a database, are you sure you didn't mistype it?");
     err.status = 404;
     deferred.reject(err);
     next(err);
@@ -59,14 +60,14 @@ var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, next) {
   }
 
   if (!userMask.corpora || !userMask.corpora.length) {
-    var err = new Error("Couldn't find any corpora for " + userMask.username + ", if this is an error please report it to us.");
+    err = new Error("Couldn't find any corpora for " + userMask.username + ", if this is an error please report it to us.");
     err.status = 404;
     deferred.reject(err);
     next(err);
     return deferred.promise;
   }
   if (typeof userMask.corpora.find !== "function") {
-    var err = new Error("Server errored, please report this 9313");
+    err = new Error("Server errored, please report this 9313");
     deferred.reject(err);
     next(err);
     return deferred.promise;

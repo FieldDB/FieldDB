@@ -111,6 +111,7 @@ describe("corpus routes", function() {
           port: "443",
           dbname: "lingllama-communitycorpus",
           path: "",
+          gravatar: "948814f0b1bc8bebd701a9732ab3ebbd",
           corpusid: mask.connection.corpusid,
           corpusUrls: mask.connection.corpusUrls,
           version: mask.connection.version,
