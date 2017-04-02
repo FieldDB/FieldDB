@@ -1,15 +1,14 @@
-var https = require("https");
+var config = require("config");
 var express = require("express");
+var debug = require("debug")("server");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var methodOverride = require("method-override");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var errorHandler = require("errorhandler");
+var errorHandler = require("./lib/error-handler").errorHandler;
 var consolidate = require("consolidate");
-
 var path = require("path");
-var config = require("config");
 
 var activityHeatMap = require("./routes/activity").activityHeatMap;
 var getUserMask = require("./routes/user").getUserMask;
@@ -85,7 +84,7 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(mask) {
-      console.log('replying with getCorpusMask', mask);
+      debug('replying with getCorpusMask', mask);
       var corpus = mask.toJSON();
       corpus.lexicon = {
         url: config.lexicon.public.url
@@ -119,7 +118,7 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      console.log('replying with getCorpusMaskFromTitleAsUrl ', corpus);
+      debug('replying with getCorpusMaskFromTitleAsUrl ', corpus);
       if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
         return res.json({
           corpusMask: corpus

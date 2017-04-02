@@ -30,6 +30,7 @@ var getCorpusMask = function(dbname, next) {
     corpusMask.team.corpus = corpusMask;
     return corpusMask.team.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
       console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.gravatar);
+      console.log(new Date() + " corpus connection's gravatar in this database " + corpusMask.connection.gravatar);
       console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
       // console.log("Corpus mask ", corpusMask.team.toJSON());
       return corpusMask;
