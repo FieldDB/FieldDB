@@ -73,12 +73,12 @@ var getUserMask = function getUserMask(username, next) {
         corpusMask.connection.title = corpusMask.connection.title;
         corpusMask.connection.description = corpusMask.connection.description;
         corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
-        userPrivateDetails.userMask.corpora.push(corpusMask.connection);
+        userPrivate.userMask.corpora.push(corpusMask.connection);
         return corpusMask.connection;
       }).fail(function(err) {
         console.log('failed to fetchcorpus mask', err);
         corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
-        userPrivateDetails.userMask.corpora.push(corpusConnection);
+        userPrivate.userMask.corpora.push(corpusConnection);
       }));
     });
 
