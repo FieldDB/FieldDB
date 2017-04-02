@@ -1,13 +1,16 @@
 var config = require("config");
-var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
 var Connection = require("fielddb/api/corpus/Connection").Connection;
+var CorpusMask = require("fielddb/api/corpus/CorpusMask").CorpusMask;
+var Corpus = require("fielddb/api/corpus/Corpus").Corpus;
 var Q = require("q");
 
+var defaultCorpus = new Corpus(Corpus.prototype.defaults);
+
 var getCorpusMask = function(dbname, next) {
+  var deferred = Q.defer();
   var validateIdentifier = Connection.validateIdentifier(dbname);
   if (!dbname || validateIdentifier.identifier.length < 3 || !validateIdentifier.equivalent()) {
     console.log(new Date() + " someone requested an invalid dbname: " + validateIdentifier.identifier);
-    var deferred = Q.defer();
     var err = new Error("Not Found.");
     err.status = 404;
     err.userFriendlyErrors = ["This is a strange database identifier, are you sure you didn't mistype it?"];
@@ -22,24 +25,34 @@ var getCorpusMask = function(dbname, next) {
   });
   // corpusMask.debugMode = true;
 
-  return corpusMask.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
-    if (corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
+  corpusMask.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
+    if (!corpusMask.copyright || corpusMask.copyright === "Default: Add names of the copyright holders of the corpus.") {
       corpusMask.copyright = corpusMask.team.name;
+    }
+    if (!corpusMask.license || !corpusMask.license.humanReadable) {
+      corpusMask.license = defaultCorpus.license;
+    }
+    if (!corpusMask.termsOfUse || !corpusMask.termsOfUse.humanReadable) {
+      corpusMask.termsOfUse = defaultCorpus.termsOfUse;
     }
 
     corpusMask.team.corpus = corpusMask;
-    return corpusMask.team.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
+    corpusMask.team.fetch(config.corpus.url + "/" + validateIdentifier.identifier).then(function() {
       console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.gravatar);
       console.log(new Date() + " corpus connection's gravatar in this database " + corpusMask.connection.gravatar);
       console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
       // console.log("Corpus mask ", corpusMask.team.toJSON());
-      return corpusMask;
-    }, function() {
-      return corpusMask;
-    }).fail(function() {
-      return corpusMask;
+      deferred.resolve(corpusMask);
+    }, function(err) {
+      console.log("error fetching corpus team", err);
+      deferred.resolve(corpusMask);
+    }).fail(function(err) {
+      console.log("error fetching corpus team", err);
+      deferred.resolve(corpusMask);
     });
   }, next).fail(next);
+
+  return deferred.promise;
 };
 
 var getCorpusMaskFromTitleAsUrl = function(userMask, titleAsUrl, next) {
