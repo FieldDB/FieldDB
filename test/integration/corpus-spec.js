@@ -34,6 +34,6 @@ describe("/v1", function() {
           
           done();
         });
-    });
+    }, specIsRunningTooLong);
   });
 });
