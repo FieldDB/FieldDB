@@ -37,7 +37,7 @@
     "q": "^1.2.0",
     "serve-favicon": "^2.3.0"
   },
-  "main": "./service.js",
+  "main": "service.js",
   "bin": {
     "fielddb-web": "./bin/fielddb-web-server"
   },
@@ -50,5 +50,8 @@
     "test": "NODE_ENV=test jasmine-node test",
     "watch": "nodemon ./bin/fielddb-web-server"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "supertest": "^3.0.0"
+  }
 }

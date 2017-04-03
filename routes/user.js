@@ -83,7 +83,7 @@ var getUserMask = function getUserMask(username, next) {
 
     console.log(new Date() + " Waiting for " + promises.length + " to download details");
     Q.allSettled(promises).done(function(results) {
-      console.log(new Date() + " TODO Consider saving the user to avoid making requests again ", results);
+      console.log(new Date() + " TODO Consider saving the user to avoid making requests again ", results.length);
       console.log(new Date() + " userPrivate.userMask.corpora.titles ", userPrivate.userMask.corpora.map(function(mask) {
         return mask.title;
       }));

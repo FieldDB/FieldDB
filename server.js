@@ -55,8 +55,7 @@ app.get("/activity/:dbname", function(req, res, next) {
 });
 
 app.get("/db/:dbname", function(req, res, next) {
-  getCorpusMask(req.params.dbname, next).then(function(mask) {
-    var corpus = mask.toJSON();
+  getCorpusMask(req.params.dbname, next).then(function(corpus) {
     corpus.lexicon = {
       url: config.lexicon.public.url
     };
@@ -78,9 +77,8 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 
 app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
-    getCorpusMask(req.params.titleAsUrl, next).then(function(mask) {
+    getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
       debug('replying with getCorpusMask', mask);
-      var corpus = mask.toJSON();
       corpus.lexicon = {
         url: config.lexicon.public.url
       };
@@ -102,8 +100,7 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
     return;
   }
   getUserMask(req.params.username, next).then(function(userMask) {
-    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, next).then(function(mask) {
-      var corpus = mask.toJSON();
+    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, next).then(function(corpus) {
       corpus.lexicon = {
         url: config.lexicon.public.url
       };
@@ -134,9 +131,8 @@ app.get("/:username", function(req, res, next) {
     return;
   }
 
-  getUserMask(req.params.username, next).then(function(mask) {
-    var user = mask.toJSON();
-    console.log(user);
+  getUserMask(req.params.username, next).then(function(user) {
+    // var user = mask.toJSON();
     res.render("user", {
       userMask: user
     });
