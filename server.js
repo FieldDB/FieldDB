@@ -78,7 +78,7 @@ app.get("/:username/:anything/:dbname", function(req, res) {
 app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
-      debug('replying with getCorpusMask', mask);
+      debug('replying with getCorpusMask', corpus);
       corpus.lexicon = {
         url: config.lexicon.public.url
       };
