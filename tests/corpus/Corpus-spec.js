@@ -468,7 +468,7 @@ describe("Corpus", function() {
       expect(serialization.team.gravatar).toEqual("888888we8888888888888");
       expect(serialization.team.username).toEqual("lingllama");
 
-      expect(corpus.connection.gravatar).toEqual("888888we8888888888888");
+      expect(corpus.connection.gravatar).toEqual("3961956aeec6aafedec6e3b93f2f6054");
     });
 
     xit("should clean v1.22.1 to a maximal json", function() {
