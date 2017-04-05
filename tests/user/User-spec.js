@@ -71,17 +71,16 @@ describe("User ", function() {
 
     it("should upgrade the old dates from back in the mongoose days", function() {
       var u = new User({
+        // "debugMode": true,
         "created_at": "2012-09-26T12:39:27.795Z",
         "updated_at": "2015-03-04T10:31:52.793Z"
       });
       expect(u.created_at).toEqual("2012-09-26T12:39:27.795Z");
-      expect(u.dateCreated).toBeDefined();
       expect(u.dateCreated).toEqual(1348663167795);
 
       expect(u.updated_at).toEqual("2015-03-04T10:31:52.793Z");
-      expect(u.dateModified).toBeDefined();
       expect(u.dateModified).toEqual(1425465112793);
-      // expect(u.warnMessages).toEqual(" ");
+      expect(u.warnMessages).toEqual(undefined);
     });
 
   });

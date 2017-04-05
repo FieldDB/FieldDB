@@ -1818,8 +1818,20 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       // Use timestamp as date created if there was none, or the timestamp is older.
       if (!this._dateCreated || this._dateCreated > value) {
+        this.debug('Timestmap was older than dateCreated', this._dateCreated);
         this._dateCreated = value;
       }
+    }
+  },
+
+  created_at: {
+    get: function() {
+      this.warn("created_at is deprecated use dateCreated instead");
+      return this._created_at;
+    },
+    set: function(value) {
+      this._created_at = value;
+      this.dateCreated = value;
     }
   },
 
@@ -1838,9 +1850,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         // delete this._dateCreated;
         return;
       }
-      if (this._dateCreated) {
-        return;
-      }
       if (value.replace) {
         try {
           value = value.replace(/["\\]/g, "");
@@ -1850,7 +1859,22 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           this.warn("Upgraded dateCreated" + value);
         }
       }
+      if (this._dateCreated || this._dateCreated < value) {
+        this.warn('not setting _dateCreated, the new value is more recent', this._dateCreated, value)
+        return;
+      }
       this._dateCreated = value;
+    }
+  },
+
+  updated_at: {
+    get: function() {
+      this.warn("updated_at is deprecated use dateModified instead");
+      return this._updated_at;
+    },
+    set: function(value) {
+      this._updated_at = value;
+      this.dateModified = value;
     }
   },
 
