@@ -1,6 +1,6 @@
 {
   "name": "fielddb-webserver",
-  "version": "4.48.25",
+  "version": "4.49.5",
   "description": "Web site for FieldDB corpora pages.",
   "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -47,11 +47,13 @@
   "scripts": {
     "start": "./bin/fielddb-web-server",
     "lint": "jshint lib/*.js routes/*.js test/**/*.js",
-    "test": "NODE_ENV=test jasmine-node test",
+    "test": "NODE_ENV=test mocha test/**/*.js",
     "watch": "nodemon ./bin/fielddb-web-server"
   },
   "license": "Apache-2.0",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
     "supertest": "^3.0.0"
   }
 }

@@ -1,4 +1,6 @@
 {
+  "expr": true,
+  "mocha": true,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
