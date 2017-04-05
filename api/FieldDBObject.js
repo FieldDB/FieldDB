@@ -1837,9 +1837,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateCreated: {
     get: function() {
-      if (this.created_at) {
-        this.dateCreated = this.created_at;
-      }
       return this._dateCreated || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
@@ -1880,9 +1877,6 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
   dateModified: {
     get: function() {
-      if (!this._dateModified && this.updated_at) {
-        this.dateModified = this.updated_at;
-      }
       return this._dateModified || FieldDBObject.DEFAULT_DATE;
     },
     set: function(value) {
