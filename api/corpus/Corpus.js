@@ -703,14 +703,13 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       var deferred = Q.defer();
 
       if (!uri) {
-        throw new Error("Uri must be specified ");
+        deferred.reject(new Error("Uri must be specified "));
+        return deferred.promise;
       }
 
-      Q.nextTick(function() {
-        deferred.resolve([]); /* TODO try fetching this uri */
+      return this.get(uri).catch(function(){
+        return [];
       });
-
-      return deferred.promise;
     }
   },
 

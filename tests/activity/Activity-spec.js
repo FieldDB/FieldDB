@@ -353,6 +353,7 @@ describe("Activities", function() {
           port: "6984",
           dbname: "jenkins-activity_feed",
           path: "",
+          debugMode: true,
           serverLabel: "localhost",
           authUrls: ["https://localhost:3183"],
           // corpusUrls: ["https://localhost:6984"],
@@ -375,13 +376,16 @@ describe("Activities", function() {
         directobject: "noqata tusu",
         indirectobject: "",
         teamOrPersonal: "personal"
+      }, {
+        username: "jenkins",
+        gravatar: "ab63a76362c3972ac83d5cb8830fdb51"
       });
       expect(activity).toBeDefined();
       expect(activity.dbname).toEqual(activityFeed.dbname);
       expect(activity.toJSON().user).toEqual({
-        username: "unknown",
-        gravatar: "",
-        name: "unknown"
+        username: "jenkins",
+        gravatar: "ab63a76362c3972ac83d5cb8830fdb51",
+        name: "jenkins"
       });
       expect(activity.verb).toEqual("logged in");
 

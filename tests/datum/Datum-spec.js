@@ -37,10 +37,12 @@ describe("Test Datum", function() {
         dateCreated: serialized.dateCreated,
         version: serialized.version,
         api: "datums",
+        audioVideo: [],
+        comments: [],
         datumFields: [{
           fieldDBtype: "DatumField",
           id: "something",
-          encryptedValue: "else",
+          // encryptedValue: "",
           version: serialized.version,
           label: "something",
           hint: "",
@@ -64,6 +66,8 @@ describe("Test Datum", function() {
         fieldDBtype: "Datum",
         dateCreated: serialized.dateCreated,
         version: serialized.version,
+        audioVideo: [],
+        comments: [],
         api: "datums",
         datumFields: [{
           fieldDBtype: "DatumField",

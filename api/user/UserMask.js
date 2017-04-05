@@ -46,21 +46,10 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
   buildGravatar: {
     value: function(emailOrOtherString) {
-      var existingGravatar = this._gravatar;
-      if (existingGravatar.indexOf("gravatar.com") > -1) {
-        existingGravatar = existingGravatar.replace("https://secure.gravatar.com/avatar/", "");
-        this._gravatar = existingGravatar;
-      } else if (existingGravatar.indexOf("user_gravatar.png") > -1) {
-        existingGravatar = "";
+      if (!emailOrOtherString) {
+        return "0df69960706112e38332395a4f2e7542";
       }
-      if (!existingGravatar) {
-        if (emailOrOtherString) {
-          this._gravatar = md5(emailOrOtherString);
-        } else {
-          this._gravatar = "0df69960706112e38332395a4f2e7542";
-        }
-      }
-      return this._gravatar;
+      return md5(emailOrOtherString);
     }
   },
 
@@ -166,8 +155,8 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
 
   gravatar: {
     get: function() {
-      if (!this._gravatar) {
-        this._gravatar = "";
+      if (!this._gravatar && this.email) {
+        this._gravatar = md5(this.email);
       }
       return this._gravatar;
     },
@@ -176,6 +165,11 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
         return;
       }
       if (!value) {
+        value = "";
+      }
+      if (value.indexOf("gravatar.com") > -1) {
+        value = value.replace("https://secure.gravatar.com/avatar/", "");
+      } else if (value.indexOf("user_gravatar.png") > -1) {
         value = "";
       }
       this._gravatar = value.trim();

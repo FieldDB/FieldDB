@@ -698,7 +698,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   }
 
   otherwise = otherwise || Connection.otherwise || "beta";
-  if (!Connection.knownConnections[otherwise]){
+  if (!Connection.knownConnections[otherwise]) {
     FieldDBObject.bug("I dont know how to connect to " + otherwise + " please report this.");
     throw new Error("I dont know how to connect to " + otherwise + " please report this.");
   }
@@ -859,7 +859,10 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
 Connection.validateIdentifier = function(originalIdentifier, username) {
   if (!originalIdentifier) {
     return {
-      changes: ["Identifier was empty"]
+      changes: ["Identifier was empty"],
+      equivalent: function() {
+        return false;
+      }
     };
   }
   var identifier = originalIdentifier.toString();
@@ -902,9 +905,14 @@ Connection.validateIdentifier = function(originalIdentifier, username) {
   }
 
   return {
-    "identifier": identifier,
-    "original": originalIdentifier,
-    "changes": changes
+    identifier: identifier,
+    original: originalIdentifier,
+    changes: changes,
+    equivalent: function() {
+      if (this.original && typeof this.original.toLowerCase === "function") {
+        return this.original.toLowerCase() === this.identifier;
+      }
+    }
   };
 };
 

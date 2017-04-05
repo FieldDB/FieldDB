@@ -72,6 +72,16 @@ Team.prototype = Object.create(UserMask.prototype, /** @lends Team.prototype */ 
       this.warn("subtitle is deprecated, use name instead.");
       this.name = value;
     }
+  },
+
+  merge: {
+    value: function(callOnSelf, anotherObject, optionalOverwriteOrAsk) {
+      this.debug("Customizing merge ", callOnSelf);
+      if (anotherObject.id) {
+        anotherObject.id = "";
+      }
+      return UserMask.prototype.merge.apply(this, [callOnSelf, anotherObject, optionalOverwriteOrAsk]);
+    }
   }
 
   // toJSON: {

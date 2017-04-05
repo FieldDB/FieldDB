@@ -191,6 +191,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
     }
   },
 
+  addFileUrl: {
+    value: function() {
+      this.warn("addFileUrl is deprecated, use addFileUri");
+    }
+  },
+
   addFileUri: {
     value: function(options) {
       var deferred = Q.defer(),
@@ -234,6 +240,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   readUri: {
     value: function(options) {
+      this.debug("readUri", options);
+
       var deferred = Q.defer(),
         self = this;
 
@@ -250,12 +258,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             try {
               return optionsWithADatum.readOptions
                 .readFileFunction(optionsWithADatum, function(err, data) {
-
                   if (err) {
                     self.debug("read file", err);
                     deferred.reject(err);
                   } else {
-                    // self.debug("rawText", data);
+                    self.debug("rawText", data.length);
+                    self.debug("done rawText");
                     optionsWithADatum.rawText = data;
                     deferred.resolve(optionsWithADatum);
                   }
@@ -284,11 +292,20 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         };
 
         self.debug("find" + options.uri);
-        self.corpus.find(options.uri)
+        self.corpus.find(options.id || options.uri)
           .then(function(similarData) {
-            self.debug("similarData", similarData);
-            if (similarData.length === 1) {
-              options.datum = similarData[0];
+            if (similarData && similarData._id) {
+              self.debug("similarData", similarData._id, similarData._rev);
+              options.datum = self.corpus.newDatum(similarData);
+              options.datum.session = options.datum.session || self.session;
+              return pipeline(options);
+            }
+
+            self.debug("similarData", similarData.length);
+            if (Array.isArray(similarData) && similarData.length === 1) {
+              options.datum = self.corpus.newDatum(similarData[0]);
+              options.datum.session = options.datum.session || self.session;
+
               // try {
               //   pipeline(options);
               // } catch (e) {
@@ -302,6 +319,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               .then(function(datum) {
                 // self.debug("datum", datum);
                 options.datum = datum;
+                options.datum.session = options.datum.session || self.session;
                 pipeline(options);
               });
           })
@@ -775,7 +793,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           options.datum.fields.utterance.value = options.rawText;
         }
 
-        options.datum.id = options.datum.tempId = options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+        options.datum.id = options.datum.tempId = options.id || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
+        if (options.datum.id.lastIndexOf("/") > -1) {
+          options.datum.id = options.datum.tempId = options.datum.id.substring(options.datum.id.lastIndexOf("/") + 1, options.datum.id.lastIndexOf("."));
+        }
 
         // let the application customize the preprocess function
         if (typeof options.preprocessOptions.preprocessFunction === "function") {

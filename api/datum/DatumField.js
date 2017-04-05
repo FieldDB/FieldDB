@@ -422,73 +422,66 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       }
       var encryptedValue;
       if (!this._shouldBeEncrypted) {
+        // this._encryptedValue = value;
+        this._mask = value;
+        this._value = this._mask;
+        return;
+      }
+      if (!this.encrypted) {
         this._encryptedValue = value;
         this._mask = value;
         this._value = this._mask;
         return;
-      } else {
-        if (!this.encrypted) {
-          this._encryptedValue = value;
-          this._mask = value;
-          this._value = this._mask;
-          return;
-        } else {
-          if (!this._value) {
-            // If there was no value before, set the new value
-
-            if (!this.confidential) {
-              if (typeof value.indexOf === "function" && value.indexOf("confidential:") === 0 && !this._encryptedValue) {
-                this._encryptedValue = value;
-                this._value = this.mask;
-                this.debug("This is probably a new field initialization from old data (the value has \"confidential:\" in it, and yet the encryptedValue isn't set");
-              } else {
-                this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
-              }
-              return;
-            }
-            encryptedValue = this.confidential.encrypt(value);
-            this._encryptedValue = encryptedValue;
-            this._mask = this.createMask(value);
-            this._value = this._mask;
-
-          } else {
-
-            // If there was a value before, there are extra precautions
-            if (!this.decryptedMode) {
-              if (this._encryptedValue) {
-                this.warn("User is not able to change the value " + this.mask + " of " + this.label + ", it is encrypted and the user isn't in decryptedMode.");
-              }
-              return;
-            } else {
-              if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
-                this.warn("The value was changed, and it was supposed to be encrypted but was not encrypted. This should not happen, it might only happen if an app was editing the data and didn't have the encryption implemented.");
-                if (this.repairMissingEncryption && this.confidential) {
-                  encryptedValue = this.confidential.encrypt(value);
-                  this._encryptedValue = encryptedValue;
-                  this._mask = this.createMask(value);
-                  this._value = this._mask;
-                  this.warn(" Overwritting the value.");
-                } else {
-                  this.warn(" Not overwritting the value.");
-                  return;
-                }
-              }
-
-              // All conditions are satisified, accept the new value.
-              if (!this.confidential) {
-                this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
-                return;
-              }
-              encryptedValue = this.confidential.encrypt(value);
-              this._encryptedValue = encryptedValue;
-              this._mask = this.createMask(value);
-              this._value = this._mask;
-
-            }
-          }
-        }
-
       }
+
+      if (!this._value) {
+        // If there was no value before, set the new value
+        if (!this.confidential) {
+          if (typeof value.indexOf === "function" && value.indexOf("confidential:") === 0 && !this._encryptedValue) {
+            this._encryptedValue = value;
+            this._value = this.mask;
+            this.debug("This is probably a new field initialization from old data (the value has \"confidential:\" in it, and yet the encryptedValue isn't set");
+          } else {
+            this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
+          }
+          return;
+        }
+        this._encryptedValue = this.confidential.encrypt(value);
+        this._mask = this.createMask(value);
+        this._value = this._mask;
+        return;
+      }
+
+      // If there was a value before, there are extra precautions
+      if (!this.decryptedMode) {
+        if (this._encryptedValue) {
+          this.warn("User is not able to change the value " + this.mask + " of " + this.label + ", it is encrypted and the user isn't in decryptedMode.");
+        }
+        return;
+      }
+
+      if (!this._encryptedValue || this._encryptedValue.indexOf("confidential:") !== 0) {
+        this.warn("The value was changed, and it was supposed to be encrypted but was not encrypted. This should not happen, it might only happen if an app was editing the data and didn't have the encryption implemented.");
+        if (this.repairMissingEncryption && this.confidential) {
+          encryptedValue = this.confidential.encrypt(value);
+          this._encryptedValue = encryptedValue;
+          this._mask = this.createMask(value);
+          this._value = this._mask;
+          this.warn(" Overwritting the value.");
+        } else {
+          this.warn(" Not overwritting the value.");
+          return;
+        }
+      }
+
+      // All conditions are satisified, accept the new value.
+      if (!this.confidential) {
+        this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
+        return;
+      }
+      this._encryptedValue = this.confidential.encrypt(value);
+      this._mask = this.createMask(value);
+      this._value = this._mask;
     }
   },
 

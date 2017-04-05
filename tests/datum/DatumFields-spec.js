@@ -249,7 +249,7 @@ describe("lib/DatumFields", function() {
       expect(collectionFromToJSON[0]._type).toBeUndefined();
       expect(collectionFromToJSON[0]._id).toBeUndefined();
       expect(collectionFromToJSON[1].mask).toEqual(collectionToLoad[1].value);
-      expect(collectionFromToJSON[1].encryptedValue).toEqual(collectionToLoad[1].value);
+      expect(collectionFromToJSON[1].encryptedValue).toEqual(undefined);
     });
 
     it("should seem to not loose information when toJSONed and reloaded", function() {
@@ -264,7 +264,7 @@ describe("lib/DatumFields", function() {
       expect(collectionReloaded._collection[0].id).toEqual(collectionFromDB[0].id);
       expect(collectionReloaded._collection[0].fieldDBtype).toEqual(collectionFromDB[0].fieldDBtype);
       expect(collectionReloaded._collection[1].mask).toEqual(collectionFromDB[1].value);
-      expect(collectionReloaded._collection[1].encryptedValue).toEqual(collectionFromDB[1].value);
+      expect(collectionReloaded._collection[1].encryptedValue).toEqual("");
     });
 
   });

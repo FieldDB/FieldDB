@@ -263,6 +263,18 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  terms: {
+    get: function() {
+      this.warn("terms is deprecated, use termsOfUse instead.");
+    },
+    set: function(value) {
+      this.warn("terms is deprecated, use termsOfUse instead.");
+      if (!this.termsOfUse) {
+        this.termsOfUse = value;
+      }
+    }
+  },
+
   termsOfUse: {
     get: function() {
       return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
@@ -298,7 +310,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       if (this.dateCreated) {
         var year = new Date(this.dateCreated).getFullYear();
         if (year < new Date().getFullYear()) {
-          this._startYear = " " + year + " - ";
+          this._startYear = year;
         }
       }
       return this._startYear;

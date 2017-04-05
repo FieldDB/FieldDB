@@ -327,4 +327,50 @@ describe("Connection ", function() {
       expect(connection.corpusUrl).toEqual("https://corpus.example.org/lingllama-communitycorpus");
     });
   });
+
+  describe("validateIdentifier", function() {
+    it("should makes identifiers file safe", function() {
+      var validation = Connection.validateIdentifier("a...a");
+      expect(validation.identifier).toEqual("a___a");
+      expect(validation.original).toEqual("a...a");
+      expect(validation.changes[0]).toEqual("You asked to use a...a but we would reccomend using this instead: a___a the following are a list of reason's why.");
+      expect(validation.changes[1]).toEqual("You have some characters which web servers wouldn't trust in your identifier.");
+      expect(validation.equivalent()).toEqual(false);
+    });
+
+    it("should detect unsafe identifiers", function() {
+      var validation = Connection.validateIdentifier("a.*-haaha script injection attack attempt file:///some/try");
+      console.log(validation);
+      expect(validation.identifier).toEqual("a__-haaha_script_injection_attack_attempt_file____some_try");
+      expect(validation.original).toEqual("a.*-haaha script injection attack attempt file:///some/try");
+      expect(validation.equivalent()).toEqual(false);
+    });
+
+    it("should survive undefined", function() {
+      var validation = Connection.validateIdentifier();
+      expect(validation.identifier).toEqual();
+      expect(validation.original).toEqual();
+      expect(validation.equivalent()).toEqual(false);
+    });
+
+    it("should survive arrays", function() {
+      var validation = Connection.validateIdentifier(["some stuff", "also"]);
+      console.log(validation);
+      expect(validation.identifier).toEqual("some_stuff_also");
+      expect(validation.original).toEqual(["some stuff", "also"]);
+      expect(validation.equivalent()).toEqual(undefined);
+    });
+
+    it("should survive objects", function() {
+      var validation = Connection.validateIdentifier({
+        "some stuff": "also"
+      });
+      console.log(validation);
+      expect(validation.identifier).toEqual("_object_object_");
+      expect(validation.original).toEqual({
+        "some stuff": "also"
+      });
+      expect(validation.equivalent()).toEqual(undefined);
+    });
+  });
 });

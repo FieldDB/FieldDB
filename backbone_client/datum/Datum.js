@@ -155,6 +155,11 @@ define([
         return this.originalParse(originalModel);
       }
 
+      originalModel.comments = originalModel.comments || [];
+      originalModel.audioVideo = originalModel.audioVideo || [];
+      originalModel.datumTags = originalModel.datumTags || [];
+
+
       OPrime.debug("Edit this function to update datum to the latest schema.");
       originalModel.fields = originalModel.datumFields || originalModel.fields || [];
       delete originalModel.datumFields;
