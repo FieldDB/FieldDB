@@ -163,9 +163,9 @@ var CORS = {
     };
 
     if (response.userFriendlyErrors[0] === "missing") {
-      response.userFriendlyErrors.unshift("The server replied that " + options.url.replace(/\/[^:]+:.+@/i,'/_:_@') + " is missing, please report this.");
+      response.userFriendlyErrors.unshift("The server replied that " + options.url.replace(/\/[^:]+:.+@/i, "/_:_@") + " is missing, please report this.");
     } else if (response.userFriendlyErrors[0] === "no_db_file") {
-      response.userFriendlyErrors.unshift("That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url.replace(/\/[^:]+:.+@/i,'/_:_@'));
+      response.userFriendlyErrors.unshift("That database doesn't exist. Are you sure this is the database you wanted to open: " + options.url.replace(/\/[^:]+:.+@/i, "/_:_@"));
     }
 
     if (response.status === 401) {
@@ -186,7 +186,7 @@ var CORS = {
       } catch (e) {}
     }
 
-    response.userFriendlyErrors[0] = response.userFriendlyErrors[0].replace("URL", options.url.replace(/\/[^:]+:.+@/i,'/_:_@'));
+    response.userFriendlyErrors[0] = response.userFriendlyErrors[0].replace("URL", options.url.replace(/\/[^:]+:.+@/i, "/_:_@"));
     this.bug(response.userFriendlyErrors[0]);
 
     response.details = options;
@@ -238,7 +238,7 @@ var CORS = {
     if (evt.lengthComputable) {
       var percentComplete = (evt.loaded / evt.total) * 100;
       this.debug(options.url + " " + options.complete + ":  percentComplete " + options.url, percentComplete);
-      console.log("Percent complete " + options.url.replace(/\/[^:]+:.+@/i,'/_:_@') + " : " + percentComplete);
+      console.log("Percent complete " + options.url.replace(/\/[^:]+:.+@/i, "/_:_@") + " : " + percentComplete);
       if (!options.complete) {
         options.percentComplete = percentComplete;
       }
@@ -265,7 +265,7 @@ CORS.buildXhr = function(options) {
     try {
       xhr.open(options.method, options.url, true);
     } catch (exception) {
-      console.log('CORS exception', exception);
+      console.log("CORS exception", exception);
       this.error = exception.message;
       return null;
     }

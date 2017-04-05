@@ -1818,7 +1818,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       // Use timestamp as date created if there was none, or the timestamp is older.
       if (!this._dateCreated || this._dateCreated > value) {
-        this.debug('Timestmap was older than dateCreated', this._dateCreated);
+        this.debug("Timestmap was older than dateCreated", this._dateCreated);
         this._dateCreated = value;
       }
     }
@@ -1860,7 +1860,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
         }
       }
       if (this._dateCreated || this._dateCreated < value) {
-        this.warn('not setting _dateCreated, the new value is more recent', this._dateCreated, value)
+        this.warn("not setting _dateCreated, the new value is more recent", this._dateCreated, value);
         return;
       }
       this._dateCreated = value;

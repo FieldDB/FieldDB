@@ -193,7 +193,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   addFileUrl: {
     value: function() {
-      console.warn('addFileUrl is deprecated, use addFileUri');
+      this.warn("addFileUrl is deprecated, use addFileUri");
     }
   },
 
@@ -240,7 +240,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
   readUri: {
     value: function(options) {
-      this.debug('readUri', options);
+      this.debug("readUri", options);
 
       var deferred = Q.defer(),
         self = this;
@@ -794,8 +794,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
 
         options.datum.id = options.datum.tempId = options.id || options.uri.replace(new RegExp(".*" + options.dbname + "/"), "");
-        if (options.datum.id.lastIndexOf('/') > -1) {
-          options.datum.id = options.datum.tempId = options.datum.id.substring(options.datum.id.lastIndexOf('/') + 1, options.datum.id.lastIndexOf('.'));
+        if (options.datum.id.lastIndexOf("/") > -1) {
+          options.datum.id = options.datum.tempId = options.datum.id.substring(options.datum.id.lastIndexOf("/") + 1, options.datum.id.lastIndexOf("."));
         }
 
         // let the application customize the preprocess function

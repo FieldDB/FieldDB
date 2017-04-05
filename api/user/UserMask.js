@@ -156,7 +156,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   gravatar: {
     get: function() {
       if (!this._gravatar && this.email) {
-        this._gravatar = md5(email);
+        this._gravatar = md5(this.email);
       }
       return this._gravatar;
     },

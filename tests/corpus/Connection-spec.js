@@ -341,7 +341,7 @@ describe("Connection ", function() {
     it("should detect unsafe identifiers", function() {
       var validation = Connection.validateIdentifier("a.*-haaha script injection attack attempt file:///some/try");
       console.log(validation);
-      expect(validation.identifier).toEqual('a__-haaha_script_injection_attack_attempt_file____some_try');
+      expect(validation.identifier).toEqual("a__-haaha_script_injection_attack_attempt_file____some_try");
       expect(validation.original).toEqual("a.*-haaha script injection attack attempt file:///some/try");
       expect(validation.equivalent()).toEqual(false);
     });
@@ -354,21 +354,21 @@ describe("Connection ", function() {
     });
 
     it("should survive arrays", function() {
-      var validation = Connection.validateIdentifier(['some stuff', 'also']);
+      var validation = Connection.validateIdentifier(["some stuff", "also"]);
       console.log(validation);
-      expect(validation.identifier).toEqual('some_stuff_also');
-      expect(validation.original).toEqual(['some stuff', 'also']);
+      expect(validation.identifier).toEqual("some_stuff_also");
+      expect(validation.original).toEqual(["some stuff", "also"]);
       expect(validation.equivalent()).toEqual(undefined);
     });
 
     it("should survive objects", function() {
       var validation = Connection.validateIdentifier({
-        'some stuff': 'also'
+        "some stuff": "also"
       });
       console.log(validation);
-      expect(validation.identifier).toEqual('_object_object_');
+      expect(validation.identifier).toEqual("_object_object_");
       expect(validation.original).toEqual({
-        'some stuff': 'also'
+        "some stuff": "also"
       });
       expect(validation.equivalent()).toEqual(undefined);
     });

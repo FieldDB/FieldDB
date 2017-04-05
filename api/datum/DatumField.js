@@ -479,7 +479,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         this.warn("This field's encrypter hasnt been set. It cannot be edited yet.");
         return;
       }
-      this._encryptedValue = this.confidential.encrypt(value);;
+      this._encryptedValue = this.confidential.encrypt(value);
       this._mask = this.createMask(value);
       this._value = this._mask;
     }
