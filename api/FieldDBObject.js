@@ -75,7 +75,7 @@ try {
  *           a corpus is created. It must be a file save name, and be a permitted
  *           name in CouchDB which means it is [a-z] with no uppercase letters or
  *           symbols, by convention it cannot contain -, but _ is acceptable.
-
+ 
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
@@ -1836,6 +1836,9 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }
       if (!value) {
         // delete this._dateCreated;
+        return;
+      }
+      if (this._dateCreated) {
         return;
       }
       if (value.replace) {
