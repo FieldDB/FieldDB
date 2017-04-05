@@ -28,7 +28,7 @@ var config = {
   // This should be customized in production to another string
   session_key: "uwotm8",
 
-  // This creates a url which is contacted using nano to look up the 
+  // This creates a url to look up the 
   // corpus details for the user's pages. It is possible to use http instead of 
   // https if you are unable to set up your local CouchDB for SSL.
   corpus: {

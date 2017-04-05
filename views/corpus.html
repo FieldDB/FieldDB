@@ -64,7 +64,7 @@
           </div>
           <div class="row-fluid">
             <div class="span11 offset1">
-              <form id="search-corpus" action="{{lexicon.url}}/search/{{corpusMask.dbname}}" data-lexicon-url="{{lexicon.url}}" method="POST" enctype="application/json" class="search-form form-inline">
+              <form id="search-corpus" action="{{corpusMask.lexicon.url}}/search/{{corpusMask.dbname}}" data-lexicon-url="{{corpusMask.lexicon.url}}" method="POST" enctype="application/json" class="search-form form-inline">
                 <input type="text" id="query" name="query" placeholder="morphemes:nay OR gloss:des" title="Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results">
                 <button type="submit" id="corpus_search" class="btn btn-small btn-success">
                   <i class="icon-search icon-white"></i>
@@ -88,7 +88,7 @@
           </div>
           <div class="row-fluid">
             <div class="span11">
-              <ul id="search-result-area" class="nav nav-tabs hide" data-speech-url="{{speech.url}}">
+              <ul id="search-result-area" class="nav nav-tabs hide" data-speech-url="{{corpusMask.speech.url}}">
                 <li class="active">
                   <a href="#highlights" data-toggle="tab">
                     Highlights
@@ -115,7 +115,7 @@
       </div>
       <hr>
       <footer>
-        <p>© {{corpusMask.copyright}} {{corpusMask.startYear}} 2015 </p>
+        <p>© {{corpusMask.copyright}} <!-- {{corpusMask.startYear}} --> - 2017 </p>
         <div class="tabbable">
           <ul class="nav nav-tabs">
             <li class="active"><a href="#terms" data-toggle="tab">Terms of Use for {{corpusMask.title}}</a></li>
@@ -124,6 +124,7 @@
           <div class="tab-content">
             <div id="terms" class="tab-pane active">
               <p{{corpusMask.dbname}}</p>
+              <p>{{corpusMask.termsOfUse.humanReadable}}</p>
               <span>License: </span><a href="{{corpusMask.license.link}}" rel="license" title="{{corpusMask.license.title}}">{{corpusMask.license.title}}</a>
               <p>{{corpusMask.license.humanReadable}}</p>
               <img src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" alt="License">
