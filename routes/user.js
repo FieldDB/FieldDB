@@ -73,7 +73,7 @@ var getUserMask = function getUserMask(username, next) {
         console.log(new Date() + " Using connection from the corpus mask details", corpusMask.connection.owner, corpusMask.connection.gravatar);
         corpusMask.connection.title = corpusMask.connection.title;
         corpusMask.connection.description = corpusMask.connection.description;
-        if (!corpusMask.connection.websiteUrl || corpusMask.connection.websiteUrl === config.url || corpusMask.connection.websiteUrl.indexOf("lingsync.org") === corpusMask.connection.websiteUrl.length - 12) {
+        if (!corpusMask.connection.websiteUrl || corpusMask.connection.websiteUrl === config.public.url || corpusMask.connection.websiteUrl.indexOf("lingsync.org") === corpusMask.connection.websiteUrl.length - 12) {
           corpusMask.connection.websiteUrl = "/" + corpusConnection.dbname.replace("-", "/");
         }
         userPrivate.userMask.corpora.push(corpusMask.connection);
