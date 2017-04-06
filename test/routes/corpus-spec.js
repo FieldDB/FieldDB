@@ -244,8 +244,8 @@ describe("corpus routes", function() {
 
     describe("normal requests", function() {
 
-      it("should return the corpus mask from the sample corpus", function(done) {
-        getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "CommunityCorpus", done).then(function(mask) {
+      it("should return the corpus mask from the sample corpus", function() {
+        getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "CommunityCorpus").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("39-7f5edbe84b9b74288218f4c108ffa5a1");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
@@ -261,11 +261,10 @@ describe("corpus routes", function() {
           expect(mask.team.username).to.deep.equal("lingllama");
           expect(mask.license).to.be.defined;
           expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
-          done();
-        }).fail(done);
+        });
       }, specIsRunningTooLong);
 
-      it("should use fuzzy find to find a matching corpus", function(done) {
+      it("should use fuzzy find to find a matching corpus", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
             username: "community",
             corpora: [{
@@ -282,7 +281,7 @@ describe("corpus routes", function() {
               dbname: "community-migmaq"
             }]
           }),
-          "some_informative_title", done).then(function(mask) {
+          "some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
@@ -290,11 +289,10 @@ describe("corpus routes", function() {
           expect(mask.dbname).to.deep.equal("community-georgian");
           expect(mask.title).to.deep.equal("Georgian Together");
           expect(mask.titleAsUrl).to.deep.equal("georgian_together");
-          done();
-        }).fail(done);
+        });
       });
 
-      it("should use fuzzy find to find a matching corpus too", function(done) {
+      it("should use fuzzy find to find a matching corpus too", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
             username: "community",
             corpora: [{
@@ -311,7 +309,7 @@ describe("corpus routes", function() {
               dbname: "community-migmaq"
             }]
           }),
-          "Some_informative_title", done).then(function(mask) {
+          "Some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
@@ -327,8 +325,27 @@ describe("corpus routes", function() {
           expect(mask.team.username).to.deep.equal("community");
           expect(mask.license).to.be.defined;
           expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
-          done();
-        }).fail(done);
+        });
+      });
+
+      it("should use fuzzy find to find the users matching corpus", function() {
+        return getCorpusMaskFromTitleAsUrl(new UserMask({
+            username: "community",
+            corpora: [{
+              titleAsUrl: "georgian",
+              dbname: "community-georgian"
+            }, {
+              titleAsUrl: "georgian",
+              dbname: "another-georgian"
+            }, {
+              titleAsUrl: "migmaq",
+              dbname: "community-migmaq"
+            }]
+          }),
+          "georgian").then(function(mask) {
+          expect(mask).to.be.defined;
+          expect(mask.titleAsUrl).to.deep.equal("georgian_together");
+        });
       });
 
     });
