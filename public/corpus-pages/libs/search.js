@@ -94,9 +94,9 @@ function renderMedia(opts) {
     var extension = media.filename.replace(fileIdentifier, '');
     media.description = media.description || '';
     if ((media.type && media.type.includes('audio')) || audioExtensions.indexOf(extension) > -1) {
-      return '<audio title="' + media.description + '" controls src="' + opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>';
+      return '<audio title="' + media.description + '" controls src="' + opts.corpus.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>';
     } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
-      var url = opts.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename;
+      var url = opts.corpus.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename;
       return '<br/><a target="_blank" href="' + url + '"><image title="' + media.description + '" src="' + url + '"/></a>';
     } else {
       console.log('unsupported media', media);
@@ -128,7 +128,6 @@ function renderSearchResult(options) {
 
   mediaView = renderMedia({
     corpus: options.corpus,
-    speech: options.speech,
     media: options.result._source.media
   });
 
@@ -207,9 +206,12 @@ function renderSearchResult(options) {
   $('#search-result-highlight').append(view);
 }
 
-var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+var defaultCorpus;
 
 function updateCorpusField(field) {
+  if (!defaultCorpus) {
+    defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+  }
   if (!field.type && defaultCorpus.datumFields[field.id]) {
     field.type = defaultCorpus.datumFields[field.id].type;
   }
@@ -217,9 +219,6 @@ function updateCorpusField(field) {
 }
 
 function search(corpus) {
-  var speech = {
-    url: $('#search-result-area').data('speech-url')
-  };
   var searchForm = $('#search-corpus');
   var data = {
     query: $(searchForm).find('input[name="query"]').val()
@@ -247,7 +246,6 @@ function search(corpus) {
       renderSearchResult({
         result: result,
         corpus: corpus,
-        speech: speech,
         maxScore: response.hits.max_score
       })
     });

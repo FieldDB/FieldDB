@@ -1,15 +1,14 @@
-var https = require("https");
+var config = require("config");
 var express = require("express");
+var debug = require("debug")("server");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var methodOverride = require("method-override");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var errorHandler = require("errorhandler");
+var errorHandler = require("./lib/error-handler").errorHandler;
 var consolidate = require("consolidate");
-
 var path = require("path");
-var config = require("config");
 
 var activityHeatMap = require("./routes/activity").activityHeatMap;
 var getUserMask = require("./routes/user").getUserMask;
@@ -22,11 +21,6 @@ var acceptSelfSignedCertificates = {
 if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
-var nano = require("nano")({
-  url: config.corpus.url,
-  requestDefaults: acceptSelfSignedCertificates
-});
-
 
 var app = express();
 
@@ -51,140 +45,85 @@ app.use(express.static(path.join(__dirname, "public")));
 /*
  * Routes
  */
-app.get("/activity/:dbname", function(req, res) {
-  activityHeatMap(req.params.dbname, nano).then(function(heatMapData) {
-    res.send(heatMapData);
-  }, function(reason) {
-    res.status(reason.status);
-    res.send({});
-  }).fail(function(exception) {
-    console.log(exception.stack);
-    res.status(500);
-    res.render("500");
-  });
+app.get("/activity/:dbname", function(req, res, next) {
+  if (!req.params.dbname) {
+    return next();
+  }
+  activityHeatMap(req.params.dbname, next).then(function(heatMapData) {
+    res.json(heatMapData);
+  }, next).fail(next);
 });
 
-app.get("/db/:dbname", function(req, res) {
-  getCorpusMask(req.params.dbname, nano).then(function(mask) {
+app.get("/db/:dbname", function(req, res, next) {
+  getCorpusMask(req.params.dbname, next).then(function(corpus) {
+    corpus.lexicon = {
+      url: config.lexicon.public.url
+    };
+    corpus.search = {
+      url: config.search.public.url
+    };
+    corpus.speech = {
+      url: config.speech.public.url
+    };
     res.render("corpus", {
-      lexicon: {
-        url: config.lexicon.public.url
-      },
-      search: {
-        url: config.search.public.url
-      },
-      speech: {
-        url: config.speech.public.url
-      },
-      corpusMask: mask
+      corpusMask: corpus
     });
-  }, function(reason) {
-    res.status(reason.status);
-    if (reason.status >= 500) {
-      res.render("500", {
-        userFriendlyErrors: reason.userFriendlyErrors
-      });
-    } else {
-      res.render("404", {
-        userFriendlyErrors: reason.userFriendlyErrors
-      });
-    }
-  }).fail(function(exception) {
-    console.log(exception.stack);
-    res.status(404);
-    res.render("500");
-  });
+  }, next).fail(next);
 });
 
 app.get("/:username/:anything/:dbname", function(req, res) {
   res.redirect("/" + req.params.username + "/" + req.params.dbname);
 });
 
-app.get("/:username/:titleAsUrl", function(req, res) {
+app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
-    getCorpusMask(req.params.titleAsUrl, nano).then(function(mask) {
-      var data = {
-        lexicon: {
-          url: config.lexicon.public.url
-        },
-        search: {
-          url: config.search.public.url
-        },
-        speech: {
-          url: config.speech.public.url
-        },
-        corpusMask: mask
+    getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
+      // debug('replying with getCorpusMask', corpus);
+      corpus.lexicon = {
+        url: config.lexicon.public.url
       };
-
+      corpus.search = {
+        url: config.search.public.url
+      };
+      corpus.speech = {
+        url: config.speech.public.url
+      };
       if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        return res.json(data)
-      }
-      res.render("corpus", data);
-    }, function(reason) {
-      res.status(reason.status);
-      if (reason.status >= 500) {
-        res.render("500", {
-          status: reason.status,
-          userFriendlyErrors: reason.userFriendlyErrors
-        });
-      } else {
-        res.render("404", {
-          status: reason.status,
-          userFriendlyErrors: reason.userFriendlyErrors
+        return res.json({
+          corpusMask: corpus
         });
       }
-    }).fail(function(exception) {
-      console.log(exception.stack);
-      res.status(404);
-      res.render("500");
-    });
+      res.render("corpus", {
+        corpusMask: corpus
+      });
+    }, next).fail(next);
     return;
   }
-  getUserMask(req.params.username, nano, config.corpus.databases.users).then(function(userMask) {
-    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, nano).then(function(mask) {
-      res.render("corpus", {
-        lexicon: {
-          url: config.lexicon.public.url
-        },
-        search: {
-          url: config.search.public.url
-        },
-        corpusMask: mask
-      });
-    }, function(reason) {
-      res.status(reason.status);
-      if (reason.status >= 500) {
-        res.render("500", {
-          status: reason.status,
-          userFriendlyErrors: reason.userFriendlyErrors,
-          tryLookingHere: "/" + req.params.username
-        });
-      } else {
-        res.render("404", {
-          status: reason.status,
-          userFriendlyErrors: reason.userFriendlyErrors,
-          tryLookingHere: "/" + req.params.username
+  getUserMask(req.params.username, next).then(function(userMask) {
+    getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, next).then(function(corpus) {
+      corpus.lexicon = {
+        url: config.lexicon.public.url
+      };
+      corpus.search = {
+        url: config.search.public.url
+      };
+      corpus.speech = {
+        url: config.speech.public.url
+      };
+      debug('replying with getCorpusMaskFromTitleAsUrl ', corpus);
+      if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
+        return res.json({
+          corpusMask: corpus
         });
       }
-    }).fail(function(exception) {
-      console.log(exception.stack);
-      res.status(404);
-      res.render("500");
-    });
-  }, function(reason) {
-    res.status(reason.status);
-    res.render("404", {
-      userFriendlyErrors: reason.userFriendlyErrors
-    });
-  }).fail(function(exception) {
-    console.log(exception.stack);
-    res.status(500);
-    res.render("500");
-  });
+      res.render("corpus", {
+        corpusMask: corpus
+      });
+    }, next).fail(next);
+  }, next).fail(next);
 });
 
-app.get("/:username", function(req, res) {
-
+app.get("/:username", function(req, res, next) {
   var html5Routes = req.params.username;
   var pageNavs = ["tutorial", "people", "contact", "home"];
   if (pageNavs.indexOf(html5Routes) > -1) {
@@ -192,33 +131,15 @@ app.get("/:username", function(req, res) {
     return;
   }
 
-  getUserMask(req.params.username, nano, config.corpus.databases.users).then(function(mask) {
+  getUserMask(req.params.username, next).then(function(user) {
+    // var user = mask.toJSON();
     res.render("user", {
-      userMask: mask
+      userMask: user
     });
-  }, function(reason) {
-    res.status(reason.status);
-    if (reason.status >= 500) {
-      res.render("500", {
-        status: reason.status,
-        userFriendlyErrors: reason.userFriendlyErrors,
-      });
-    } else {
-      res.render("404", {
-        status: reason.status,
-        userFriendlyErrors: reason.userFriendlyErrors,
-      });
-    }
-  }).fail(function(exception) {
-    console.log(exception.stack);
-    res.status(500);
-    res.render("500");
-  });
+  }, next).fail(next);
 });
 
 // error handling middleware should be loaded after the loading the routes
-if ("production" !== app.get("env")) {
-  app.use(errorHandler());
-}
+app.use(errorHandler);
 
 module.exports = app;
