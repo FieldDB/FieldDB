@@ -36,7 +36,7 @@ var getUserMask = function getUserMask(username, next) {
       }
     }
     if (userPrivate.userMask.corpora && userPrivate.userMask.corpora.length) {
-      console.log(new Date() + " getting the user " + username + " their current corpora ", userPrivate.corpora.length);
+      console.log(new Date() + " not getting the user " + username + " their current corpora ", userPrivate.corpora.length);
       return deferred.resolve(userPrivate.userMask);
     }
 
@@ -71,7 +71,9 @@ var getUserMask = function getUserMask(username, next) {
         console.log(new Date() + " Using connection from the corpus mask details", corpusMask.connection.owner, corpusMask.connection.gravatar);
         corpusMask.connection.title = corpusMask.connection.title;
         corpusMask.connection.description = corpusMask.connection.description;
-        corpusMask.connection.websiteUrl = corpusMask.connection.websiteUrl || "/" + corpusConnection.dbname.replace("-", "/");
+        if (!corpusMask.connection.websiteUrl || corpusMask.connection.websiteUrl === config.url || corpusMask.connection.websiteUrl.indexOf("lingsync.org") === corpusMask.connection.websiteUrl.length - 12) {
+          corpusMask.connection.websiteUrl = "/" + corpusConnection.dbname.replace("-", "/");
+        }
         userPrivate.userMask.corpora.push(corpusMask.connection);
         return corpusMask.connection;
       }).fail(function(err) {
