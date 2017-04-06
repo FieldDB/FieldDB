@@ -35,10 +35,12 @@ var getUserMask = function getUserMask(username, next) {
         userPrivate.userMask.startYear = " " + year + " - ";
       }
     }
-    if (userPrivate.userMask.corpora && userPrivate.userMask.corpora.length) {
-      console.log(new Date() + " not getting the user " + username + " their current corpora ", userPrivate.corpora.length);
-      return deferred.resolve(userPrivate.userMask);
-    }
+    // New users will be missing their corpora 
+    // until the apps save them in the public corpora list
+    // if (userPrivate.userMask.corpora && userPrivate.userMask.corpora.length) {
+    //   console.log(new Date() + " not getting the user " + username + " their current corpora ", userPrivate.corpora.length);
+    //   return deferred.resolve(userPrivate.userMask);
+    // }
 
     userPrivate.userMask.corpora = new Corpora();
     var promises = [];
