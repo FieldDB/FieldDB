@@ -2,8 +2,8 @@ var config = require("config");
 var expect = require("chai").expect;
 var url = require("url");
 var UserMask = require("fielddb/api/user/UserMask").UserMask;
-var getCorpusMask = require("./../../routes/corpus").getCorpusMask;
-var getCorpusMaskFromTitleAsUrl = require("./../../routes/corpus").getCorpusMaskFromTitleAsUrl;
+var getCorpusMask = require("./../../lib/corpus").getCorpusMask;
+var getCorpusMaskFromTitleAsUrl = require("./../../lib/corpus").getCorpusMaskFromTitleAsUrl;
 var specIsRunningTooLong = 15000;
 
 var acceptSelfSignedCertificates = {
@@ -74,7 +74,7 @@ var SAMPLE_USER_MASK = new UserMask({
   api: "users"
 });
 
-describe("corpus routes", function() {
+describe("corpus lib", function() {
 
   it("should load", function() {
     expect(getCorpusMask).to.be.defined;

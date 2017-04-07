@@ -6,14 +6,14 @@ var logger = require("morgan");
 var methodOverride = require("method-override");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var errorHandler = require("./lib/error-handler").errorHandler;
+var errorHandler = require("./middleware/error-handler").errorHandler;
 var consolidate = require("consolidate");
 var path = require("path");
 
-var activityHeatMap = require("./routes/activity").activityHeatMap;
-var getUserMask = require("./routes/user").getUserMask;
-var getCorpusMask = require("./routes/corpus").getCorpusMask;
-var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
+var activityHeatMap = require("./lib/activity").activityHeatMap;
+var getUserMask = require("./lib/user").getUserMask;
+var getCorpusMask = require("./lib/corpus").getCorpusMask;
+var getCorpusMaskFromTitleAsUrl = require("./lib/corpus").getCorpusMaskFromTitleAsUrl;
 
 var acceptSelfSignedCertificates = {
   strictSSL: false

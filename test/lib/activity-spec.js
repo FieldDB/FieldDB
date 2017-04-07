@@ -1,7 +1,7 @@
 var config = require("config");
 var expect = require("chai").expect;
 var CORS = require("fielddb/api/CORSNode").CORS;
-var activityHeatMap = require("./../../routes/activity").activityHeatMap;
+var activityHeatMap = require("./../../lib/activity").activityHeatMap;
 var specIsRunningTooLong = 5000;
 var LINGLLAMA_ACTIVITY_SIZE = 48;
 var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 218;
@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 
-describe("activity routes", function() {
+describe("activity lib", function() {
 
   it("should load", function() {
     expect(activityHeatMap).to.be.defined;
