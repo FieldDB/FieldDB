@@ -1,25 +1,43 @@
-var http = require('http'),
-  browserify = require('browserify'),
-  literalify = require('literalify'),
-  React = require('react'),
-  ReactDOMServer = require('react-dom/server'),
-  DOM = React.DOM,
-  body = DOM.body,
-  div = DOM.div,
-  script = DOM.script,
-  // This is our React component, shared by server and browser thanks to browserify
-  App = React.createFactory(require('../src/App'))
+var http = require('http');
+var browserify = require('browserify');
+var literalify = require('literalify');
+var React = require('react');
+var ReactDOMServer = require('react-dom/server');
+var DOM = React.DOM;
+var body = DOM.body;
+var div = DOM.div;
+var script = DOM.script;
+// This is our React component, shared by server and browser thanks to browserify
+var App = React.createFactory(require('../src/App'))
 
 
-// Just create a plain old HTTP server that responds to two endpoints ('/' and
-// '/bundle.js') This would obviously work similarly with any higher level
-// library (Express, etc)
-http.createServer(function(req, res) {
+function reactRender(req, res, next) {
 
-  // If we hit the homepage, then we want to serve up some HTML - including the
-  // server-side rendered React component(s), as well as the script tags
-  // pointing to the client-side code
-  if (req.url == '/') {
+  // This endpoint is hit when the browser is requesting bundle.js from the page above
+  if (req.url === ('/v5/bundle.js')) {
+
+    res.setHeader('Content-Type', 'text/javascript')
+
+    // Here we invoke browserify to package up browser.js and everything it requires.
+    // DON'T do it on the fly like this in production - it's very costly -
+    // either compile the bundle ahead of time, or use some smarter middleware
+    // (eg browserify-middleware).
+    // We also use literalify to transform our `require` statements for React
+    // so that it uses the global variable (from the CDN JS file) instead of
+    // bundling it up with everything else
+    browserify()
+      .add('src/browser.js')
+      .transform(literalify.configure({
+        'react': 'window.React',
+        'react-dom': 'window.ReactDOM',
+      }))
+      .bundle()
+      .pipe(res)
+
+  } else {
+    // If we hit the homepage, then we want to serve up some HTML - including the
+    // server-side rendered React component(s), as well as the script tags
+    // pointing to the client-side code
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
 
@@ -65,56 +83,35 @@ http.createServer(function(req, res) {
       // We'll load React from a CDN - you don't have to do this,
       // you can bundle it up or serve it locally if you like
       script({
-        src: '//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js'
+        src: '/corpus-pages/libs/react.min.js'
       }),
+      // script({
+      //   src: '//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js'
+      // }),
       script({
-        src: '//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js'
+        src: '/corpus-pages/libs/react-dom.min.js'
       }),
+      // script({
+      //   src: '//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js'
+      // }),
 
       // Then the browser will fetch and run the browserified bundle consisting
       // of browser.js and all its dependencies.
       // We serve this from the endpoint a few lines down.
       script({
-        src: '/bundle.js'
+        src: '/v5/bundle.js'
       })
-    ))
+    ));
 
     // Return the page to the browser
-    res.end(html)
-
-  // This endpoint is hit when the browser is requesting bundle.js from the page above
-  } else if (req.url == '/bundle.js') {
-
-    res.setHeader('Content-Type', 'text/javascript')
-
-    // Here we invoke browserify to package up browser.js and everything it requires.
-    // DON'T do it on the fly like this in production - it's very costly -
-    // either compile the bundle ahead of time, or use some smarter middleware
-    // (eg browserify-middleware).
-    // We also use literalify to transform our `require` statements for React
-    // so that it uses the global variable (from the CDN JS file) instead of
-    // bundling it up with everything else
-    browserify()
-      .add('src/browser.js')
-      .transform(literalify.configure({
-        'react': 'window.React',
-        'react-dom': 'window.ReactDOM',
-      }))
-      .bundle()
-      .pipe(res)
+    res.send(html);
 
   // Return 404 for all other requests
-  } else {
-    res.statusCode = 404
-    res.end()
+  // } else {
+  //   res.statusCode = 404
+  //   res.end()
   }
-
-// The http server listens on port 3000
-}).listen(3000, function(err) {
-  if (err)
-    throw err
-  console.log('Listening on 3000...')
-})
+}
 
 
 // A utility function to safely escape JSON for embedding in a <script> tag
@@ -125,3 +122,5 @@ function safeStringify(obj) {
     .replace(/\u2028/g, '\\u2028') // Only necessary if interpreting as JS, which we do
     .replace(/\u2029/g, '\\u2029') // Ditto
 }
+
+exports.reactRender = reactRender;

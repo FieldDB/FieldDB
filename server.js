@@ -14,6 +14,7 @@ var activityHeatMap = require("./routes/activity").activityHeatMap;
 var getUserMask = require("./routes/user").getUserMask;
 var getCorpusMask = require("./routes/corpus").getCorpusMask;
 var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
+var reactRender = require("./routes/react-render").reactRender;
 
 var acceptSelfSignedCertificates = {
   strictSSL: false
@@ -45,7 +46,9 @@ app.use(express.static(path.join(__dirname, "public")));
 /*
  * Routes
  */
-app.get("/activity/:dbname", function(req, res, next) {
+app.get("/v5", reactRender);
+
+app.get("/v1/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
     return next();
   }
@@ -54,7 +57,7 @@ app.get("/activity/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/db/:dbname", function(req, res, next) {
+app.get("/v1/db/:dbname", function(req, res, next) {
   getCorpusMask(req.params.dbname, next).then(function(corpus) {
     corpus.lexicon = {
       url: config.lexicon.public.url
@@ -71,11 +74,11 @@ app.get("/db/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/:username/:anything/:dbname", function(req, res) {
+app.get("/v1/:username/:anything/:dbname", function(req, res) {
   res.redirect("/" + req.params.username + "/" + req.params.dbname);
 });
 
-app.get("/:username/:titleAsUrl", function(req, res, next) {
+app.get("/v1/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
       // debug('replying with getCorpusMask', corpus);
@@ -123,7 +126,7 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/:username", function(req, res, next) {
+app.get("/v1/:username", function(req, res, next) {
   var html5Routes = req.params.username;
   var pageNavs = ["tutorial", "people", "contact", "home"];
   if (pageNavs.indexOf(html5Routes) > -1) {
@@ -138,6 +141,7 @@ app.get("/:username", function(req, res, next) {
     });
   }, next).fail(next);
 });
+
 
 // error handling middleware should be loaded after the loading the routes
 app.use(errorHandler);

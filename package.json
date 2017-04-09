@@ -45,7 +45,7 @@
     "node": "~0.8 || ~0.10 || ~0.12"
   },
   "scripts": {
-    "start": "node routes/react-render.js",
+    "start": "./bin/fielddb-web-server",
     "lint": "jshint lib/*.js routes/*.js test/**/*.js",
     "test": "NODE_ENV=test mocha test/**/*.js",
     "watch": "nodemon ./bin/fielddb-web-server"
