@@ -45,15 +45,19 @@
     "node": "~0.8 || ~0.10 || ~0.12"
   },
   "scripts": {
-    "start": "./bin/fielddb-web-server",
+    "start": "node routes/react-render.js",
     "lint": "jshint lib/*.js routes/*.js test/**/*.js",
     "test": "NODE_ENV=test mocha test/**/*.js",
     "watch": "nodemon ./bin/fielddb-web-server"
   },
   "license": "Apache-2.0",
   "devDependencies": {
+    "browserify": "^14.0.0",
     "chai": "^3.5.0",
+    "literalify": "^0.4.0",
     "mocha": "^3.2.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "supertest": "^3.0.0"
   }
 }

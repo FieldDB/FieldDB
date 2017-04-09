@@ -15,13 +15,13 @@ Mac:
 $ brew install node
 ```
 
-Linux: 
+Linux:
 
 ```bash
 $ sudo apt-get install nodejs
 ```
 
-Windows: 
+Windows:
 
 You can download node from http://nodejs.org
 
@@ -30,7 +30,7 @@ You can download node from http://nodejs.org
 ### Install dependancies
 
 ```
-$ npm install
+$ yarn install
 ```
 
 ## Configure
@@ -43,8 +43,8 @@ You can change values in the `lib/*_local.js` files to point to the corpus servi
 
 To turn on the server:
 
-```bash 
-$ node server.js
+```bash
+$ yarn start --offline
 ```
 
 ------------------
@@ -72,10 +72,10 @@ Suggested changes:
 * change the `port` to the port you want to use
 * change `httpsOptions` to have the path of your ssl certificates and key,
 * change `session_key` to something else
-* change `corpusWebService` to the corpus service you want to contact, and 
+* change `corpusWebService` to the corpus service you want to contact, and
 * change `couchkeys` to the username and password to use to connect to the corpus connection.
 
-Production mode is controlled by an environment variable. Here is how you would set the environment variables if you are running the server via a non-priveleged user `fielddb`. 
+Production mode is controlled by an environment variable. Here is how you would set the environment variables if you are running the server via a non-priveleged user `fielddb`.
 
 ```bash
 $ echo FIELDDB_HOME=/home/fielddb/fielddbhome >> ~/.bashrc
@@ -87,6 +87,17 @@ Finally turn on the service in a way that it will restart even in the case of er
 ```bash
 $ ./start_service
 ```
+
+## Development
+
+This project uses server-side rendering with the
+[React](http://facebook.github.io/react/) library so that component code can be
+shared between server and browser, as well as getting fast initial page loads
+and search-engine-friendly pages.
+
+Try viewing the page source to ensure the HTML being sent from the server is already rendered
+(with checksums to determine whether client-side rendering is necessary).
+
 
 ## Release History
 * v1.62  activity heat map
