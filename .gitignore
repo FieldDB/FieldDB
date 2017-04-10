@@ -3,13 +3,16 @@ release
 compiled_handlebars.js
 *.handlebars.js
 
+
+
+
 #ignore private config files
 config/production.js
 config/production.json
 config/local.js
 config/local.json
 
-# Ignore natural lib 
+# Ignore natural lib
 public/libs/natural/
 
 .wav
@@ -40,8 +43,8 @@ pids
 logs
 results
 
-node_modules
-npm-debug.log
+.tern-port
+v8.log
 
 # LaTeX output #
 ################
@@ -60,6 +63,11 @@ npm-debug.log
 *.ist
 *.ps
 *(busy)
+
+# Testing output #
+##################
+coverage*
+
 
 # Compiled source #
 ###################
