@@ -11,3 +11,4 @@ var App = React.createFactory(require("./App"));
 // it doesn't need to generate any DOM and the page will load faster
 
 ReactDOM.render(new App(window.APP_PROPS), document.getElementById("content"));
+window.APP_PROPS = null;
