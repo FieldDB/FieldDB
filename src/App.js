@@ -1,12 +1,12 @@
-var React = require('react'),
-  DOM = React.DOM,
-  div = DOM.div,
-  button = DOM.button,
-  ul = DOM.ul,
-  li = DOM.li
+var React = require("react");
+var DOM = React.DOM;
+var div = DOM.div;
+var button = DOM.button;
+var ul = DOM.ul;
+var li = DOM.li;
 
 // This is just a simple example of a component that can be rendered on both
-  // the server and browser
+// the server and browser
 
 module.exports = React.createClass({
 
@@ -17,14 +17,14 @@ module.exports = React.createClass({
     return {
       items: this.props.items,
       disabled: true
-    }
+    };
   },
 
   // Once the component has been mounted, we can enable the button
   componentDidMount: function() {
     this.setState({
       disabled: false
-    })
+    });
   },
 
   // Then we just update the state whenever its clicked by adding a new item to
@@ -32,8 +32,8 @@ module.exports = React.createClass({
   // AJAX calls, etc
   handleClick: function() {
     this.setState({
-      items: this.state.items.concat('Item ' + this.state.items.length)
-    })
+      items: this.state.items.concat("Item " + this.state.items.length)
+    });
   },
 
   // For ease of illustration, we just use the React JS methods directly
@@ -47,14 +47,14 @@ module.exports = React.createClass({
       button({
         onClick: this.handleClick,
         disabled: this.state.disabled
-      }, 'Add Item'),
+      }, "Add Item"),
 
       ul({
         children: this.state.items.map(function(item) {
-          return li(null, item)
+          return li(null, item);
         })
       })
 
-    )
+    );
   },
-})
+});
