@@ -4,11 +4,6 @@ var gulp = require("gulp");
 var literalify = require("literalify");
 var React = require("react");
 var ReactDOMServer = require("react-dom/server");
-var DOM = React.DOM;
-var body = DOM.body;
-var div = DOM.div;
-var link = DOM.link;
-var script = DOM.script;
 
 // This is our React component, shared by server and browser thanks to browserify
 var App = React.createFactory(require("../src/App"));
@@ -87,21 +82,27 @@ function reactRender(req, res, next) {
     // Here we're using React to render the outer body, so we just use the
     // simpler renderToStaticMarkup function, but you could use any templating
     // language (or just a string) for the outer page template
-    var html = ReactDOMServer.renderToStaticMarkup(body(null,
+    var head = ReactDOMServer.renderToStaticMarkup(React.DOM.head(null,
+
+      React.DOM.title({}, ["Testing server side render"]),
 
       // Then the browser will fetch and run the browserified bundle consisting
       // of browser.js and all its dependencies.
       // We serve this from the endpoint a few lines down.
-      link({
+      React.DOM.link({
         rel: "stylesheet",
         type: "text/css",
         href: "/bundle.css"
-      }),
+      })
+
+    ));
+
+    var html = ReactDOMServer.renderToStaticMarkup(React.DOM.body(null,
 
       // The actual server-side rendering of our component occurs here, and we
       // pass our data in as `props`. This div is the same one that the client
       // will "render" into on the browser from browser.js
-      div({
+      React.DOM.div({
         id: "content",
         dangerouslySetInnerHTML: {
           __html: ReactDOMServer.renderToString(new App(props))
@@ -111,7 +112,7 @@ function reactRender(req, res, next) {
       // The props should match on the client and server, so we stringify them
       // on the page to be available for access by the code run in browser.js
       // You could use any var name here as long as it's unique
-      script({
+      React.DOM.script({
         dangerouslySetInnerHTML: {
           __html: "var APP_PROPS = " + safeStringify(props) + ";"
         }
@@ -119,29 +120,30 @@ function reactRender(req, res, next) {
 
       // We'll load React from a CDN - you don't have to do this,
       // you can bundle it up or serve it locally if you like
-      script({
+      React.DOM.script({
         src: "/corpus-pages/libs/react.min.js"
       }),
-      // script({
+      // React.DOM.script({
       //   src: "//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"
       // }),
-      script({
+      React.DOM.script({
         src: "/corpus-pages/libs/react-dom.min.js"
       }),
-      // script({
+      // React.DOM.script({
       //   src: "//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"
       // }),
 
       // Then the browser will fetch and run the browserified bundle consisting
       // of browser.js and all its dependencies.
       // We serve this from the endpoint a few lines down.
-      script({
+      React.DOM.script({
         src: "/v5/bundle.js"
       })
     ));
 
+
     // Return the page to the browser
-    res.send(html);
+    res.send(head + html);
 
   // Return 404 for all other requests
   } else {
