@@ -34,7 +34,7 @@ function reactRender(req, res, next) {
       .bundle()
       .pipe(res)
 
-  } else {
+  } else if (req.params.filename === undefined) {
     // If we hit the homepage, then we want to serve up some HTML - including the
     // server-side rendered React component(s), as well as the script tags
     // pointing to the client-side code
@@ -107,9 +107,9 @@ function reactRender(req, res, next) {
     res.send(html);
 
   // Return 404 for all other requests
-  // } else {
-  //   res.statusCode = 404
-  //   res.end()
+  } else {
+    res.statusCode = 404
+    res.end()
   }
 }
 
