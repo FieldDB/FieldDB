@@ -2,9 +2,7 @@
 release
 compiled_handlebars.js
 *.handlebars.js
-
-
-
+public/bundle.css
 
 #ignore private config files
 config/production.js
@@ -43,6 +41,7 @@ pids
 logs
 results
 
+yarn.lock
 .tern-port
 v8.log
 

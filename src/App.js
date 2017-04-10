@@ -45,6 +45,7 @@ module.exports = React.createClass({
     return div(null,
 
       button({
+        className: "btn btn-primary",
         onClick: this.handleClick,
         disabled: this.state.disabled
       }, "Add Item"),
