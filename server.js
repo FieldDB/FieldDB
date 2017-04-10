@@ -47,6 +47,7 @@ app.use(express.static(path.join(__dirname, "public")));
  * Routes
  */
 app.get("/v5", reactRender);
+app.get("/v5/:filename", reactRender);
 
 app.get("/v1/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {

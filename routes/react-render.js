@@ -14,7 +14,7 @@ var App = React.createFactory(require('../src/App'))
 function reactRender(req, res, next) {
 
   // This endpoint is hit when the browser is requesting bundle.js from the page above
-  if (req.url === ('/v5/bundle.js')) {
+  if (req.params.filename === 'bundle.js') {
 
     res.setHeader('Content-Type', 'text/javascript')
 
