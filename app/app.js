@@ -14,7 +14,7 @@ let reduxState = {}
 if (window.__REDUX_STATE__) {
   try {
     let plain = JSON.parse(unescape(__REDUX_STATE__))
-    _.each(plain, (val, key)=> {
+    _.each(plain, (val, key) => {
       reduxState[key] = Immutable.fromJS(val)
     })
   } catch (e) {

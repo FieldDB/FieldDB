@@ -5,11 +5,11 @@ import os from 'os'
 let srcRoot = path.join(__dirname, '..', 'app')
 let { type, componentName, pathPrefix } = extractArgs()
 
-mkdirp({ type, pathPrefix });
-copyFiles({ type, pathPrefix, componentName });
-sed({ type, pathPrefix, componentName });
-console.log(`created file: ${codePath({ type, pathPrefix, componentName })}`);
-console.log(`created file: ${testPath({ type, pathPrefix, componentName })}`);
+mkdirp({ type, pathPrefix })
+copyFiles({ type, pathPrefix, componentName })
+sed({ type, pathPrefix, componentName })
+console.log(`created file: ${codePath({ type, pathPrefix, componentName })}`)
+console.log(`created file: ${testPath({ type, pathPrefix, componentName })}`)
 
 function extractArgs () {
   let type = process.argv[2]
@@ -27,12 +27,12 @@ function templateFilePath ({ type }) {
 }
 
 function mkdirp ({ type, pathPrefix }) {
-  console.log('mkdir...');
+  console.log('mkdir...')
   execSync(`mkdir -p ${codeDir({ type, pathPrefix })}`)
   execSync(`mkdir -p ${testDir({ type, pathPrefix })}`)
 }
 function copyFiles ({ type, pathPrefix, componentName }) {
-  console.log('copy files...');
+  console.log('copy files...')
   execSync(`cp ${codeTemplatePath({type})} ${codePath({ type, pathPrefix, componentName })}`)
   execSync(`cp ${testTemplatePath({type})} ${testPath({ type, pathPrefix, componentName })}`)
 }
@@ -61,7 +61,7 @@ function testFullNamespace ({ pathPrefix, componentName }) {
   return splitted.concat([componentName]).map(capitalize).join('::')
 }
 function capitalize (str) {
-  let lead = str[0] ? str[0].toUpperCase() : '';
+  let lead = str[0] ? str[0].toUpperCase() : ''
   return `${lead}${str.slice(1, str.length)}`
 }
 
@@ -86,7 +86,7 @@ function getSedCommand () {
   if (osType === 'darwin') {
     return "sed -i ''"
   } else if (osType === 'linux') {
-    return "sed -i"
+    return 'sed -i'
   } else {
     throw new Error(`unknown os type ${osType}`)
   }

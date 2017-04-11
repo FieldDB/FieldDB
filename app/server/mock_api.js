@@ -9,7 +9,7 @@ function question (id) {
   }
 }
 
-export const questions = _.range(1, 10).map((i)=> question(i))
+export const questions = _.range(1, 10).map((i) => question(i))
 export function getUser (id) {
   return {
     id,

@@ -4,23 +4,23 @@ import { Link } from 'react-router'
 import Helmet from 'react-helmet'
 
 class Intro extends Component {
-  render() {
+  render () {
     return (
-      <div className="intro">
+      <div className='intro'>
         <Helmet
-          title="Intro"
+          title='Intro'
         />
         <h1>Intro Page</h1>
         <div>
-          <img src="/assets/images/head.png"/>
+          <img src='/assets/images/head.png' />
         </div>
-        <Link to="/questions">to question</Link>
+        <Link to='/questions'>to question</Link>
       </div>
     )
   }
 }
 
-function mapStateToProps() {
+function mapStateToProps () {
   return {}
 }
 

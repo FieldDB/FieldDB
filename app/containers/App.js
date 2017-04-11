@@ -3,16 +3,16 @@ import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 
 class App extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Helmet
-          defaultTitle="Redux real-world example"
-          titleTemplate="%s - Redux real-world example"
+          defaultTitle='Redux real-world example'
+          titleTemplate='%s - Redux real-world example'
           meta={[
-            {"name": "description", "content": "A boilerplate doing universal/isomorphic rendering with Redux + React-router + Express"},
+            {'name': 'description', 'content': 'A boilerplate doing universal/isomorphic rendering with Redux + React-router + Express'}
           ]}
-          htmlAttributes={{"lang": "en"}}
+          htmlAttributes={{'lang': 'en'}}
         />
         {this.props.children}
       </div>
@@ -20,7 +20,7 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {}
 }
 

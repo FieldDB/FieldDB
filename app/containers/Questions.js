@@ -7,22 +7,22 @@ import Questions from 'components/Questions'
 import Helmet from 'react-helmet'
 
 class QuestionContainer extends Component {
-  static fetchData({ store }) {
+  static fetchData ({ store }) {
     return store.dispatch(loadQuestions())
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.loadQuestions()
   }
-  render() {
+  render () {
     return (
       <div>
         <Helmet
-          title="Questions"
+          title='Questions'
         />
         <h2>Question</h2>
         <Questions questions={this.props.questions} />
-        <Link to="/">Back to Home</Link>
+        <Link to='/'>Back to Home</Link>
       </div>
     )
   }

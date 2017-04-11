@@ -3,12 +3,12 @@ import { Link } from 'react-router'
 import { List } from 'immutable'
 
 class Questions extends Component {
-  render() {
+  render () {
     return (
       <div>
         Questions component
         {
-          this.props.questions.map((q)=> {
+          this.props.questions.map((q) => {
             let id = q.get('id')
             return (
               <div key={id}>

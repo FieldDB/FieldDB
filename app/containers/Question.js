@@ -5,15 +5,15 @@ import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 
 class Question extends Component {
-  static fetchData({ store, params, history }) {
+  static fetchData ({ store, params, history }) {
     let { id } = params
     return store.dispatch(loadQuestionDetail({ id, history }))
   }
-  componentDidMount() {
+  componentDidMount () {
     let { id } = this.props.params
     this.props.loadQuestionDetail({ id, history: browserHistory })
   }
-  render() {
+  render () {
     let { question } = this.props
     return (
       <div>

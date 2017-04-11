@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 class COMPONENT_NAME extends Component {
-  render() {
+  render () {
     return (
       <div>COMPONENT_NAME container</div>
     )

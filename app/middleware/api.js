@@ -11,30 +11,30 @@ export default ({ dispatch, getState }) => next => action => {
   if (action[CALL_API]) {
     return dispatch({
       [CHAIN_API]: [
-        ()=> action
+        () => action
       ]
     })
   }
 
   let deferred = Promise.defer()
 
-  if (! action[CHAIN_API]) {
+  if (!action[CHAIN_API]) {
     return next(action)
   }
 
-  let promiseCreators = action[CHAIN_API].map((apiActionCreator)=> {
+  let promiseCreators = action[CHAIN_API].map((apiActionCreator) => {
     return createRequestPromise(apiActionCreator, next, getState, dispatch)
   })
 
-  let overall = promiseCreators.reduce((promise, creator)=> {
-    return promise.then((body)=> {
+  let overall = promiseCreators.reduce((promise, creator) => {
+    return promise.then((body) => {
       return creator(body)
     })
   }, Promise.resolve())
 
-  overall.finally(()=> {
+  overall.finally(() => {
     deferred.resolve()
-  }).catch(()=> {})
+  }).catch(() => {})
 
   return deferred.promise
 }
@@ -46,7 +46,7 @@ function actionWith (action, toMerge) {
 }
 
 function createRequestPromise (apiActionCreator, next, getState, dispatch) {
-  return (prevBody)=> {
+  return (prevBody) => {
     let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
     let params = extractParams(apiAction[CALL_API])
@@ -54,9 +54,9 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
     superAgent[params.method](params.url)
       .send(params.body)
       .query(params.query)
-      .end((err, res)=> {
+      .end((err, res) => {
         if (err) {
-          if ( params.errorType ) {
+          if (params.errorType) {
             dispatch(actionWith(apiAction, {
               type: params.errorType,
               error: err

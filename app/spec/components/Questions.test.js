@@ -4,9 +4,9 @@ import { Link } from 'react-router'
 import Questions from 'components/Questions'
 import Immutable from 'immutable'
 
-describe('Component::Questions', function(){
+describe('Component::Questions', function () {
   let props
-  beforeEach(function(){
+  beforeEach(function () {
     props = {
       questions: Immutable.fromJS([
         { id: 1, content: 'the-content-1' },
@@ -18,7 +18,7 @@ describe('Component::Questions', function(){
     return shallow(<Questions {...props} />)
   }
 
-  it('renders questions', function(){
+  it('renders questions', function () {
     let doc = renderDoc()
     let questionComps = doc.find(Link)
 

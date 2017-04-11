@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 
 class COMPONENT_NAME extends Component {
-  render() {
+  render () {
     return (
       <div>
         COMPONENT_NAME component
