@@ -13,7 +13,7 @@ import _ from 'lodash'
 let reduxState = {}
 if (window.__REDUX_STATE__) {
   try {
-    let plain = JSON.parse(unescape(__REDUX_STATE__))
+    let plain = JSON.parse(unescape(window.__REDUX_STATE__))
     _.each(plain, (val, key) => {
       reduxState[key] = Immutable.fromJS(val)
     })

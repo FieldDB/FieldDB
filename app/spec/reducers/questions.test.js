@@ -4,7 +4,7 @@ import * as ActionType from 'actions/questions'
 describe('Reducer::Question', function () {
   it('returns an empty array as default state', function () {
     let action = { type: 'unknown' }
-    let newState = questionReducer(undefined, { type: 'unknown' })
+    let newState = questionReducer(undefined, action)
     expect(newState.toJS()).to.deep.equal([])
   })
 

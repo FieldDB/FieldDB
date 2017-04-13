@@ -6,7 +6,6 @@ export default function (state = defaultState, action) {
   switch (action.type) {
     case 'case':
       return 'dummy'
-      break
 
     default:
       return state

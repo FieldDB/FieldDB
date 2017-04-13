@@ -1,7 +1,7 @@
 import { CALL_API, CHAIN_API } from 'middleware/api'
 
 import * as actionCreator from 'actions/questions'
-import * as ActionType from 'actions/questions'
+// import * as ActionType from 'actions/questions'
 
 describe('Action::Question', function () {
   describe('#loadQuestions()', function () {
@@ -10,7 +10,7 @@ describe('Action::Question', function () {
       expect(action[CALL_API]).to.deep.equal({
         method: 'get',
         path: '/api/questions',
-        successType: ActionType.LOADED_QUESTIONS
+        successType: actionCreator.LOADED_QUESTIONS
       })
     })
   })
@@ -23,7 +23,7 @@ describe('Action::Question', function () {
 
       expect(callApi.method).to.equal('get')
       expect(callApi.path).to.equal(`/api/questions/${id}`)
-      expect(callApi.successType).to.equal(ActionType.LOADED_QUESTION_DETAIL)
+      expect(callApi.successType).to.equal(actionCreator.LOADED_QUESTION_DETAIL)
     })
     it('navigates to root when request error', () => {
       let mockHistory = {
@@ -44,7 +44,7 @@ describe('Action::Question', function () {
       expect(action[CHAIN_API][1](questionRes)[CALL_API]).to.deep.equal({
         method: 'get',
         path: `/api/users/${questionRes.userId}`,
-        successType: ActionType.LOADED_QUESTION_USER
+        successType: actionCreator.LOADED_QUESTION_USER
       })
     })
   })

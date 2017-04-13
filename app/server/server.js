@@ -77,6 +77,16 @@ server.get('*', (req, res, next) => {
   let location = history.createLocation(req.url)
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
+    function getReduxPromise () {
+      let { query, params } = renderProps
+      let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
+      let promise = comp.fetchData
+        ? comp.fetchData({ query, params, store, history })
+        : Promise.resolve()
+
+      return promise
+    }
+
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search)
     } else if (error) {
@@ -108,15 +118,6 @@ server.get('*', (req, res, next) => {
         unsubscribe()
         next(err)
       })
-      function getReduxPromise () {
-        let { query, params } = renderProps
-        let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
-        let promise = comp.fetchData
-          ? comp.fetchData({ query, params, store, history })
-          : Promise.resolve()
-
-        return promise
-      }
     }
   })
   function subscribeUrl () {

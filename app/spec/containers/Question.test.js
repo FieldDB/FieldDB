@@ -1,6 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
-import Container, { Question } from 'containers/Question'
+import { Question } from 'containers/Question'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 
@@ -33,5 +33,8 @@ describe('Container::Question', function () {
       id: props.params.id,
       history: browserHistory
     })
+
+    // console.log('doc', doc)
+    expect(doc).to.have.keys(['component', 'root', 'node', 'nodes', 'length', 'options', 'complexSelector'])
   })
 })

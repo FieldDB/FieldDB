@@ -1,5 +1,4 @@
 import * as ActionType from 'actions/questions'
-import _ from 'lodash'
 import Immutable from 'immutable'
 
 let defaultState = Immutable.fromJS({
@@ -12,7 +11,9 @@ export default function (state = defaultState, action) {
       return state.merge(action.response)
 
     case ActionType.LOADED_QUESTION_USER:
-      return state.merge({ user: action.response })
+      return state.merge({
+        user: action.response
+      })
 
     default:
       return state

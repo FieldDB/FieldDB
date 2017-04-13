@@ -10,14 +10,23 @@ class App extends Component {
           defaultTitle='Redux real-world example'
           titleTemplate='%s - Redux real-world example'
           meta={[
-            {'name': 'description', 'content': 'A boilerplate doing universal/isomorphic rendering with Redux + React-router + Express'}
+            {
+              'name': 'description',
+              'content': 'A boilerplate doing universal/isomorphic rendering with Redux + React-router + Express'
+            }
           ]}
-          htmlAttributes={{'lang': 'en'}}
+          htmlAttributes={{
+            'lang': 'en'
+          }}
         />
         {this.props.children}
       </div>
     )
   }
+}
+
+App.propTypes = {
+  children: PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {

@@ -7,11 +7,17 @@ import { browserHistory } from 'react-router'
 class Question extends Component {
   static fetchData ({ store, params, history }) {
     let { id } = params
-    return store.dispatch(loadQuestionDetail({ id, history }))
+    return store.dispatch(loadQuestionDetail({
+      id,
+      history
+    }))
   }
   componentDidMount () {
     let { id } = this.props.params
-    this.props.loadQuestionDetail({ id, history: browserHistory })
+    this.props.loadQuestionDetail({
+      id,
+      history: browserHistory
+    })
   }
   render () {
     let { question } = this.props
@@ -28,12 +34,18 @@ class Question extends Component {
 }
 
 function mapStateToProps (state) {
-  return { question: state.questionDetail }
+  return {
+    question: state.questionDetail
+  }
 }
 
 Question.propTypes = {
+  params: PropTypes.object.isRequired,
+  loadQuestionDetail: PropTypes.object.isRequired, // TODO function?
   question: PropTypes.object.isRequired
 }
 
 export { Question }
-export default connect(mapStateToProps, { loadQuestionDetail })(Question)
+export default connect(mapStateToProps, {
+  loadQuestionDetail
+})(Question)

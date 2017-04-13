@@ -1,5 +1,5 @@
 import superAgent from 'superagent'
-import Promise, { using } from 'bluebird'
+import Promise from 'bluebird'
 import _ from 'lodash'
 import config from 'config'
 import { camelizeKeys } from 'humps'
@@ -64,7 +64,9 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           }
 
           if (_.isFunction(params.afterError)) {
-            params.afterError({ getState })
+            params.afterError({
+              getState
+            })
           }
           deferred.reject()
         } else {
@@ -75,7 +77,9 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           }))
 
           if (_.isFunction(params.afterSuccess)) {
-            params.afterSuccess({ getState })
+            params.afterSuccess({
+              getState
+            })
           }
           deferred.resolve(resBody)
         }
