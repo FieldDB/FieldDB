@@ -1,4 +1,4 @@
-import * as ActionType from 'actions/questions'
+import * as ActionType from 'components/question/actions'
 import Immutable from 'immutable'
 
 let defaultState = Immutable.fromJS({

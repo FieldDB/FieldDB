@@ -1,5 +1,5 @@
-import reducer from 'reducers/questionDetail'
-import * as ActionType from 'actions/questions'
+import reducer from 'components/question/detail/reducer'
+import * as ActionType from 'components/question/actions'
 import Immutable from 'immutable'
 
 describe('Reducer::::QuestionDetail', function () {

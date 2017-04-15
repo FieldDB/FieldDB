@@ -1,6 +1,6 @@
 import { CALL_API, CHAIN_API } from 'middleware/api'
 
-import * as actionCreator from 'actions/questions'
+import * as actionCreator from 'components/question/actions'
 // import * as ActionType from 'actions/questions'
 
 describe('Action::Question', function () {

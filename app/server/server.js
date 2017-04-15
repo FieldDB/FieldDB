@@ -9,8 +9,8 @@ import { createMemoryHistory, useQueries } from 'history'
 import compression from 'compression'
 import Promise from 'bluebird'
 
-import configureStore from 'store/configureStore'
-import createRoutes from 'routes/index'
+import configureStore from 'components/app/store'
+import createRoutes from 'components/app/routes'
 
 import { Provider } from 'react-redux'
 

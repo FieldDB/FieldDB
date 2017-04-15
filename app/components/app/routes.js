@@ -3,10 +3,10 @@ import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 // import configureStore from 'store/configureStore'
 
-import App from 'containers/App'
-import Intro from 'containers/Intro'
-import Questions from 'containers/Questions'
-import Question from 'containers/Question'
+import App from 'components/app/AppContainer'
+import Intro from 'components/intro/IntroContainer'
+import Questions from 'components/question/QuestionsContainer'
+import Question from 'components/question/QuestionContainer'
 
 export default function (history) {
   return (
