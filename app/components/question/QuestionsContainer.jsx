@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { loadQuestions } from 'components/question/actions'
 import { Link } from 'react-router'
-import Questions from 'components/question/Questions'
+import Questions from 'components/question/Questions.jsx'
 import Helmet from 'react-helmet'
 
 class QuestionContainer extends Component {
@@ -19,7 +19,7 @@ class QuestionContainer extends Component {
         <Helmet
           title='Questions'
         />
-        <h2>Question</h2>
+        <h2>Questions</h2>
         <Questions questions={this.props.questions} />
         <Link to='/'>Back to Home</Link>
       </div>
@@ -27,7 +27,7 @@ class QuestionContainer extends Component {
   }
 }
 QuestionContainer.propTypes = {
-  loadQuestions: PropTypes.object.isRequired, // TODO function?
+  // loadQuestions: PropTypes.object.isRequired, // TODO function?
   questions: PropTypes.object.isRequired
 }
 

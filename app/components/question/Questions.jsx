@@ -12,7 +12,7 @@ class Questions extends Component {
             let id = q.get('id')
             return (
               <div key={id}>
-                <Link to={`/questions/${id}`}> { q.get('content') }</Link>
+                <Link to={`/questions/${id}`}>{ q.get('content') }</Link>
               </div>
             )
           })

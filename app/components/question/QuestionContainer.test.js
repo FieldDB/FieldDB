@@ -1,6 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
-import { Question } from 'components/question/QuestionContainer'
+import { Question } from 'components/question/QuestionContainer.jsx'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 

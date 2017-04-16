@@ -41,7 +41,7 @@ function mapStateToProps (state) {
 
 Question.propTypes = {
   params: PropTypes.object.isRequired,
-  loadQuestionDetail: PropTypes.object.isRequired, // TODO function?
+  // loadQuestionDetail: PropTypes.object.isRequired, // TODO function?
   question: PropTypes.object.isRequired
 }
 

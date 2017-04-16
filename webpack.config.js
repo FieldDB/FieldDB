@@ -24,6 +24,7 @@ var config = {
     ]
   },
   resolve: {
+    extensions: ['.js', '.jsx'],
     modules: [ path.join(__dirname, 'app'), 'node_modules' ]
   },
   output: {
@@ -36,7 +37,7 @@ var config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         include: __dirname
