@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { loadQuestions } from './actions'
 import { Link } from 'react-router'
 import Questions from './Questions.jsx'
+import QuestionCreate from '../QuestionCreate.jsx'
 import Helmet from 'react-helmet'
 
 class QuestionContainer extends Component {
@@ -20,6 +21,7 @@ class QuestionContainer extends Component {
           title='Questions'
         />
         <h2>Questions</h2>
+        <QuestionCreate />
         <Questions questions={this.props.questions} />
         <Link to='/'>Back to Home</Link>
       </div>
