@@ -1,5 +1,5 @@
-import { QuestionContainer } from 'components/question/QuestionsContainer.jsx'
-import Questions from 'components/question/Questions.jsx'
+import { QuestionContainer } from './index.jsx'
+import Questions from './Questions.jsx'
 import { Link } from 'react-router'
 import React from 'react'
 import { shallow } from 'enzyme'

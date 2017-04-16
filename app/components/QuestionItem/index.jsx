@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { loadQuestionDetail } from 'components/question/actions'
+import { loadQuestionDetail } from './actions'
 import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 

@@ -8,9 +8,9 @@ class Intro extends Component {
     return (
       <div className='intro'>
         <Helmet
-          title='Intro'
+          title='Home'
         />
-        <h1>Intro Page</h1>
+        <h1>Home Page</h1>
         <div>
           <img src='/assets/images/head.png' />
         </div>

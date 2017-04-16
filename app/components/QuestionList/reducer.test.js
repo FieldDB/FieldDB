@@ -1,5 +1,5 @@
-import questionReducer from 'components/question/reducer'
-import * as ActionType from 'components/question/actions'
+import questionReducer from './reducer'
+import * as ActionType from './actions'
 
 describe('Reducer::Question', function () {
   it('returns an empty array as default state', function () {

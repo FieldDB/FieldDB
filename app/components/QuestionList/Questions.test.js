@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Link } from 'react-router'
-import Questions from 'components/question/Questions.jsx'
+import Questions from './Questions.jsx'
 import Immutable from 'immutable'
 
 describe('Component::Questions', function () {

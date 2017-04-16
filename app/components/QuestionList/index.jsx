@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { loadQuestions } from 'components/question/actions'
+import { loadQuestions } from './actions'
 import { Link } from 'react-router'
-import Questions from 'components/question/Questions.jsx'
+import Questions from './Questions.jsx'
 import Helmet from 'react-helmet'
 
 class QuestionContainer extends Component {

@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence')
 
 gulp.task('css', function() {
-  return gulp.src('app/components/app/app.scss')
+  return gulp.src('app/components/App/app.scss')
            .pipe($.sourcemaps.init())
            .pipe($.sass().on('error', $.sass.logError))
            .pipe($.autoprefixer({
