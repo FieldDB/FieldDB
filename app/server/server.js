@@ -28,14 +28,14 @@ if (process.env.NODE_ENV === 'production') {
     `/${refManifest['vendor.js']}`,
     `/${refManifest['app.js']}`
   ]
-  styleSrc = `/${refManifest['main.css']}`
+  styleSrc = `/${refManifest['app.css']}`
 } else {
   scriptSrcs = [
     'http://localhost:3001/static/vendor.js',
     'http://localhost:3001/static/dev.js',
     'http://localhost:3001/static/app.js'
   ]
-  styleSrc = '/main.css'
+  styleSrc = '/app.css'
 }
 
 server.use(compression())

@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence')
 
 gulp.task('css', function() {
-  return gulp.src('app/styles/main.scss')
+  return gulp.src('app/components/app/app.scss')
            .pipe($.sourcemaps.init())
            .pipe($.sass().on('error', $.sass.logError))
            .pipe($.autoprefixer({
@@ -15,7 +15,7 @@ gulp.task('css', function() {
 })
 
 gulp.task('css:watch', ['css'], function() {
-  gulp.watch('app/styles/**/*.scss', ['css'])
+  gulp.watch('app/**/*.scss', ['css'])
 })
 
 gulp.task('moveAssets', function() {
@@ -33,7 +33,7 @@ gulp.task('build:revAssets', ['css', 'moveAssets'], function() {
 })
 
 gulp.task('build:cpServer', function() {
-  return gulp.src('./app/**/*.{js,ejs}')
+  return gulp.src('./app/**/*.{js,jsx,ejs}')
              .pipe(gulp.dest('./dist/server-build'))
 })
 gulp.task('build:revServer', ['build:cpServer'], function() {
