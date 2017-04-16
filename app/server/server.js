@@ -1,5 +1,6 @@
 import Express from 'express'
 import path from 'path'
+import debugFactory from 'debug'
 
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -16,20 +17,23 @@ import { Provider } from 'react-redux'
 
 import Helmet from 'react-helmet'
 
+const debug = debugFactory('server');
 let server = new Express()
 let port = process.env.PORT || 3000
 let scriptSrcs
-process.env.ON_SERVER = true
+process.env.ON_SERVER = true // TODO this is not used
 
 let styleSrc
 if (process.env.NODE_ENV === 'production') {
-  let refManifest = require('../../rev-manifest.json')
+  // build scripts serving from dist
+  let refManifest = require('../../dist/rev-manifest.json')
   scriptSrcs = [
     `/${refManifest['vendor.js']}`,
     `/${refManifest['app.js']}`
   ]
   styleSrc = `/${refManifest['app.css']}`
 } else {
+  // scripts serving from webpack
   scriptSrcs = [
     'http://localhost:3001/static/vendor.js',
     'http://localhost:3001/static/dev.js',
@@ -41,7 +45,7 @@ if (process.env.NODE_ENV === 'production') {
 server.use(compression())
 
 if (process.env.NODE_ENV === 'production') {
-  server.use(Express.static(path.join(__dirname, '../..', 'public')))
+  server.use(Express.static(path.join(__dirname, '../..', 'dist/public')))
 } else {
   server.use('/assets', Express.static(path.join(__dirname, '..', 'assets')))
   server.use(Express.static(path.join(__dirname, '../..', 'dist')))
@@ -77,6 +81,7 @@ server.get('*', (req, res, next) => {
   let location = history.createLocation(req.url)
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
+    debug('req.url ', req.url);
     function getReduxPromise () {
       let { query, params } = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
@@ -88,14 +93,18 @@ server.get('*', (req, res, next) => {
     }
 
     if (redirectLocation) {
+      debug('redirecting to ', redirectLocation);
       res.redirect(301, redirectLocation.pathname + redirectLocation.search)
     } else if (error) {
+      debug('error ', error);
       res.status(500).send(error.message)
     } else if (renderProps == null) {
+      debug('renderProps was null, not found ', renderProps);
       res.status(404).send('Not found')
     } else {
       let [ getCurrentUrl, unsubscribe ] = subscribeUrl()
       let reqUrl = location.pathname + location.search
+      debug('reqUrl ', reqUrl);
 
       getReduxPromise().then(() => {
         let reduxState = escape(JSON.stringify(store.getState()))
@@ -107,6 +116,7 @@ server.get('*', (req, res, next) => {
         let metaHeader = Helmet.rewind()
 
         if (getCurrentUrl() === reqUrl) {
+          debug('rendering ', { metaHeader, html, scriptSrcs, reduxState, styleSrc });
           res.render('index', { metaHeader, html, scriptSrcs, reduxState, styleSrc })
         } else {
           res.redirect(302, getCurrentUrl())
@@ -122,9 +132,11 @@ server.get('*', (req, res, next) => {
   })
   function subscribeUrl () {
     let currentUrl = location.pathname + location.search
+    debug('subscribeUrl currentUrl ', currentUrl);
     let unsubscribe = history.listen((newLoc) => {
       if (newLoc.action === 'PUSH' || newLoc.action === 'REPLACE') {
         currentUrl = newLoc.pathname + newLoc.search
+        debug('unsubscribe currentUrl ', currentUrl);
       }
     })
     return [
