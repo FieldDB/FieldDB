@@ -5,7 +5,7 @@ function question (id) {
   return {
     id,
     content: `mocked-${id}: ${sampleContent}`,
-    user_id: id
+    user_id: Math.random()
   }
 }
 
@@ -13,7 +13,7 @@ export const questions = _.range(1, 10).map((i) => question(i))
 export function getUser (id) {
   return {
     id,
-    name: `user name - ${id}`
+    name: `user name - ${Math.random()}`
   }
 }
 export function getQuestion (id) {

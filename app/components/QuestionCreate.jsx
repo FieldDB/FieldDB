@@ -21,7 +21,9 @@ class QuestionCreate extends Component {
     this.props.addQuestion({
       id,
       content: this.state.content,
-      user_id: id
+      // user_id: 123
+      user_id: this.props.userId,
+      // user_id: this.props.user.user_id
     })
   }
 
@@ -34,11 +36,18 @@ class QuestionCreate extends Component {
   }
 }
 
+QuestionCreate.propTypes = {
+  user: React.PropTypes.object.isRequired,
+  userId: React.PropTypes.string.isRequired
+}
+
 function mapStateToProps (state) {
+  console.log('mapStateToProps QuestionCreate', state)
   return {
-    newQuestion: state.newQuestion
+    user: state.user
   }
 }
+
 function mapDispatchToProps (dispatch) {
   return {
     addQuestion: (question) => {

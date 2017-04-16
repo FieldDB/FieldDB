@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadQuestionDetail } from './actions'
 import Helmet from 'react-helmet'
@@ -40,9 +40,9 @@ function mapStateToProps (state) {
 }
 
 Question.propTypes = {
-  params: PropTypes.object.isRequired,
-  // loadQuestionDetail: PropTypes.object.isRequired, // TODO function?
-  question: PropTypes.object.isRequired
+  params: React.PropTypes.object.isRequired,
+  loadQuestionDetail: React.PropTypes.func.isRequired,
+  question: React.PropTypes.object.isRequired
 }
 
 export { Question }

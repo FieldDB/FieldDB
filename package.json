@@ -62,6 +62,7 @@
     "redux": "^3.0.0",
     "redux-logger": "^1.0.9",
     "redux-thunk": "^0.1.0",
+    "reselect": "^3.0.0",
     "rewire": "^2.3.4",
     "rimraf": "^2.5.2",
     "run-sequence": "^1.2.2",

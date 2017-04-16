@@ -1,11 +1,17 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { List } from 'immutable'
+import QuestionCreate from '../QuestionCreate.jsx'
 
 class Questions extends Component {
   render () {
+    const user = {
+      id: 987
+    }
+
     return (
       <div>
+        <QuestionCreate user={user} userId='1234' />
         Questions component
         {
           this.props.questions.map((q) => {
@@ -24,7 +30,7 @@ class Questions extends Component {
 }
 
 Questions.propTypes = {
-  questions: PropTypes.instanceOf(List).isRequired
+  questions: React.PropTypes.instanceOf(List).isRequired
 }
 
 export default Questions
