@@ -23,9 +23,9 @@ class QuestionContainer extends Component {
   }
 
   render () {
-    const { user } = this.props;
+    const { team } = this.props;
     const questionCreateProps = {
-      user
+      team
     };
 
     return (
@@ -34,7 +34,7 @@ class QuestionContainer extends Component {
           title='Questions page'
         />
         <h2>Questions</h2>
-        <Questions questions={this.props.questions} user={this.props.user} />
+        <Questions questions={this.props.questions} user={this.props.team} />
         <Link to='/'>Back to Home</Link>
       </div>
     )
@@ -49,14 +49,14 @@ QuestionContainer.propTypes = {
 function mapStateToProps (state) {
   console.log('question list map state to props', state);
   return {
-    user: { id: 13 },
+    team: { id: 13 },
     questions: state.questions
   }
 }
 
 // const mapStateToProps = createStructuredSelector({
 //   questions: state.questions,
-//   user: state.user
+//   team: state.team
 // });
 
 export { QuestionContainer }

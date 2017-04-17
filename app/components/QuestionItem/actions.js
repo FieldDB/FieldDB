@@ -17,11 +17,11 @@ export function loadQuestionDetail ({ id, history }) {
           }
         }
       },
-      (question) => {
+      (corpus) => {
         return {
           [CALL_API]: {
             method: 'get',
-            path: `/api/users/${question.userId}`,
+            path: `/api/users/${corpus.team.id}`,
             successType: LOADED_QUESTION_USER
           }
         }

@@ -1,12 +1,9 @@
+var config = require('config')
 var path = require('path')
 var webpack = require('webpack')
 var AssetsPlugin = require('assets-webpack-plugin')
 
 var DEBUG = !(process.env.NODE_ENV === 'production')
-
-if (DEBUG) {
-  require('dotenv').config()
-}
 
 var config = {
   devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
@@ -25,7 +22,7 @@ var config = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: [ path.join(__dirname, 'app'), 'node_modules' ]
+    modules: [path.join(__dirname, 'app'), 'node_modules']
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -49,7 +46,7 @@ var config = {
 
 if (DEBUG) {
   config.entry.dev = [
-    'webpack-dev-server/client?http://localhost:3001',
+    'webpack-dev-server/client?https://localhost:3001',
     'webpack/hot/only-dev-server',
   ]
 
@@ -60,7 +57,7 @@ if (DEBUG) {
       filname: 'vendor.js'
     })
   ])
-  config.output.publicPath = 'http://localhost:3001/static/'
+  config.output.publicPath = 'https://localhost:3001/static/'
   config.module.rules[0].options = {
     "env": {
       "development": {

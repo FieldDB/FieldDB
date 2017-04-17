@@ -11,10 +11,10 @@ class Questions extends Component {
         Questions component
         {
           this.props.questions.map((q) => {
-            let id = q.get('id')
+            let id = q.get('dbname')
             return (
-              <div key={id}>
-                <Link to={`/questions/${id}`}>{ q.get('content') }</Link>
+              <div key={dbname}>
+                <Link to={`/questions/${dbname}`}>{ q.get('title') }</Link>
               </div>
             )
           })

@@ -5,35 +5,35 @@ import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 
 class Question extends Component {
-  static fetchData ({ store, params, history }) {
-    let { id } = params
+  static fetchData({store, params, history}) {
+    let {id} = params
     return store.dispatch(loadQuestionDetail({
       id,
       history
     }))
   }
-  componentDidMount () {
-    let { id } = this.props.params
+  componentDidMount() {
+    let {id} = this.props.params
     this.props.loadQuestionDetail({
       id,
       history: browserHistory
     })
   }
-  render () {
-    let { question } = this.props
+  render() {
+    let {question} = this.props
     return (
       <div>
         <Helmet
-          title={'Question ' + this.props.params.id}
-        />
-        <h2>{ question.get('content') }</h2>
-        <h3> User: {question.getIn(['user', 'name'])} </h3>
+      title={'Corpus ' + this.props.params.id}
+      />
+        <h2>{ question.get('title') }</h2>
+        <h3> Team: {question.getIn(['team', 'name'])} </h3>
       </div>
     )
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   console.log('questiondetail map state to props', state);
   return {
     question: state.questionDetail

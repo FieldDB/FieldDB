@@ -6,7 +6,7 @@ import { camelizeKeys } from 'humps'
 export const CALL_API = Symbol('CALL_API')
 export const CHAIN_API = Symbol('CHAIN_API')
 
-export default ({ dispatch, getState }) => next => action => {
+export default ({dispatch, getState}) => next => action => {
   if (action[CALL_API]) {
     return dispatch({
       [CHAIN_API]: [
@@ -33,18 +33,20 @@ export default ({ dispatch, getState }) => next => action => {
 
   overall.finally(() => {
     deferred.resolve()
-  }).catch(() => {})
+  }).catch((err) => {
+    console.log('something went wrong', err)
+  })
 
   return deferred.promise
 }
 
-function actionWith (action, toMerge) {
+function actionWith(action, toMerge) {
   let ret = Object.assign({}, action, toMerge)
   delete ret[CALL_API]
   return ret
 }
 
-function createRequestPromise (apiActionCreator, next, getState, dispatch) {
+function createRequestPromise(apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
     let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
@@ -56,7 +58,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
       .query(params.query)
       .end((err, res) => {
         if (err) {
-          console.log('recieved', err);
+          console.log('recieved err', err);
           if (params.errorType) {
             dispatch(actionWith(apiAction, {
               type: params.errorType,
@@ -71,7 +73,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           }
           deferred.reject()
         } else {
-          console.log('recieved', res.body);
+          console.log('recieved response', res.body);
           let resBody = camelizeKeys(res.body)
           dispatch(actionWith(apiAction, {
             type: params.successType,
@@ -91,18 +93,10 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
   }
 }
 
-function extractParams (callApi) {
-  let {
-    method,
-    path,
-    query,
-    body,
-    successType,
-    errorType,
-    afterSuccess,
-    afterError
-  } = callApi
+function extractParams(callApi) {
+  let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
+  console.log('process.env.API_BASE_URL', process.env.API_BASE_URL);
   let url = `${process.env.API_BASE_URL}${path}`
 
   return {
