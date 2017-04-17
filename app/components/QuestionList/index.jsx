@@ -14,6 +14,7 @@ class QuestionContainer extends Component {
   }
 
   static fetchData ({ store }) {
+    console.log('fetching data', loadQuestions);
     return store.dispatch(loadQuestions())
   }
 

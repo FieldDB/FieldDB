@@ -50,6 +50,7 @@ function reduxRender(req, res, next) {
     function getReduxPromise () {
       let { query, params } = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
+      console.log('comp.fetchData', comp.fetchData);
       let promise = comp.fetchData
         ? comp.fetchData({ query, params, store, history })
         : Promise.resolve()
@@ -82,7 +83,7 @@ function reduxRender(req, res, next) {
 
         if (getCurrentUrl() === reqUrl) {
           debug('rendering ', { metaHeader, html, scriptSrcs, reduxState, styleSrc });
-          res.render('index', { metaHeader, html, scriptSrcs, reduxState, styleSrc })
+          res.render('corpus', { metaHeader, html, scriptSrcs, reduxState, styleSrc })
         } else {
           res.redirect(302, getCurrentUrl())
         }

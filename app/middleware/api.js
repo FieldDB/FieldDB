@@ -1,7 +1,6 @@
 import superAgent from 'superagent'
 import Promise from 'bluebird'
 import _ from 'lodash'
-import config from 'config'
 import { camelizeKeys } from 'humps'
 
 export const CALL_API = Symbol('CALL_API')
@@ -51,11 +50,13 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
     let deferred = Promise.defer()
     let params = extractParams(apiAction[CALL_API])
 
+    console.log('requesting', params);
     superAgent[params.method](params.url)
       .send(params.body)
       .query(params.query)
       .end((err, res) => {
         if (err) {
+          console.log('recieved', err);
           if (params.errorType) {
             dispatch(actionWith(apiAction, {
               type: params.errorType,
@@ -70,6 +71,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           }
           deferred.reject()
         } else {
+          console.log('recieved', res.body);
           let resBody = camelizeKeys(res.body)
           dispatch(actionWith(apiAction, {
             type: params.successType,
@@ -101,7 +103,7 @@ function extractParams (callApi) {
     afterError
   } = callApi
 
-  let url = `${config.API_BASE_URL}${path}`
+  let url = `${process.env.API_BASE_URL}${path}`
 
   return {
     method,

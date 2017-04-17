@@ -62,6 +62,7 @@ var config = {
     }
   }
 };
+process.env.API_BASE_URL = config.url;
 
 console.log("Loaded default config");
 module.exports = config;

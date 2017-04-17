@@ -58,6 +58,7 @@ if (process.env.NODE_ENV === 'production') {
  */
 
 app.get('/api/questions', (req, res) => {
+  console.log('returning mockAPI questions', mockAPI.questions);
   res.send(mockAPI.questions)
 });
 

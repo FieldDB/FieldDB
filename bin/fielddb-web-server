@@ -15,8 +15,10 @@ if (process.env.NODE_ENV === "production") {
   service.listen(url.port);
   console.log("HTTP Express server listening on http://localhost:" + url.port);
 } else {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
   var server = https.createServer(config.ssl, service).listen(service.get("port"), function() {
     console.log("HTTPS Express server listening on https://localhost:" + server.address().port);
-	console.log("please open http://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/#.VVtxQVVVhBc to see how you should accept the security cerrtificate");
+    console.log("please open http://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/#.VVtxQVVVhBc to see how you should accept the security cerrtificate");
   });
 }
