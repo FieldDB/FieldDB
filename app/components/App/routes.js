@@ -13,7 +13,7 @@ export default function (history) {
     <Router history={history}>
       <Route path='/' component={App}>
         <Route path='corpora' component={Corpora} />
-        <Route path='corpora/:id' component={CorpusMask} />
+        <Route path='corpora/:dbname' component={CorpusMask} />
         <IndexRoute component={Intro} />
       </Route>
     </Router>

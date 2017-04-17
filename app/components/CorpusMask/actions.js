@@ -16,15 +16,6 @@ export function loadCorpusMaskDetail({dbname, history}) {
             }
           }
         }
-      },
-      (corpus) => {
-        return {
-          [CALL_API]: {
-            method: 'get',
-            path: `/api/teams/${corpus.team.id}`,
-            successType: LOADED_CORPUS_MASK_USER
-          }
-        }
       }
     ]
   }

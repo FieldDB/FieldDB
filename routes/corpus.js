@@ -42,7 +42,7 @@ var getCorpusMask = function(dbname, next) {
       console.log(new Date() + " owners's gravatar in this database " + corpusMask.team.gravatar, corpusMask.startYear);
       console.log(new Date() + " corpus connection's gravatar in this database " + corpusMask.connection.gravatar);
       console.log(new Date() + "  TODO consider saving corpus.json with the team inside.");
-      console.log("Corpus mask ", corpusMask.team.toJSON());
+      console.log("Corpus mask team ", corpusMask.team.toJSON());
       deferred.resolve(corpusMask);
     }, function(err) {
       console.log("error fetching corpus team", err);
