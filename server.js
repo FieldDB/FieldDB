@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/v5", reactRender);
 app.get("/v5/:filename", reactRender);
 
-app.get("/v1/activity/:dbname", function(req, res, next) {
+app.get("/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
     return next();
   }
@@ -58,7 +58,7 @@ app.get("/v1/activity/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/v1/db/:dbname", function(req, res, next) {
+app.get("/db/:dbname", function(req, res, next) {
   getCorpusMask(req.params.dbname, next).then(function(corpus) {
     corpus.lexicon = {
       url: config.lexicon.public.url
@@ -75,11 +75,11 @@ app.get("/v1/db/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/v1/:username/:anything/:dbname", function(req, res) {
+app.get("/:username/:anything/:dbname", function(req, res) {
   res.redirect("/" + req.params.username + "/" + req.params.dbname);
 });
 
-app.get("/v1/:username/:titleAsUrl", function(req, res, next) {
+app.get("/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
       // debug('replying with getCorpusMask', corpus);
@@ -127,7 +127,11 @@ app.get("/v1/:username/:titleAsUrl", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/v1/:username", function(req, res, next) {
+app.get("/:username", function(req, res, next) {
+  return res.render("user", {
+    userMask: {}
+  });
+
   var html5Routes = req.params.username;
   var pageNavs = ["tutorial", "people", "contact", "home"];
   if (pageNavs.indexOf(html5Routes) > -1) {
