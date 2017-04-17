@@ -13,8 +13,8 @@ class Corpora extends Component {
         let dbname = connection.get('dbname')
         return (
           <div key={dbname}>
-              <Link to={`/corpora/${dbname}`}>{ connection.get('title') }</Link>
-            </div>
+            <Link to={`/corpora/${dbname}`}>{ connection.get('title') }</Link>
+          </div>
         )
       })
       }

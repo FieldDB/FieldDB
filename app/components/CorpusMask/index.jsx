@@ -21,11 +21,14 @@ class CorpusMask extends Component {
   }
   render() {
     let {corpusMask} = this.props
+    let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
     return (
       <div>
-        <Helmet title={'Corpus ' + this.props.params.dbname} />
+        <Helmet title={title} />
+
+
         <h2>{ corpusMask.get('title') }</h2>
-        <h3> Team: {corpusMask.getIn(['team', 'username'])} </h3>
+        <h3> Team: {corpusMask.getIn(['team', 'name'])} </h3>
       </div>
     )
   }
