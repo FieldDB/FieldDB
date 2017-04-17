@@ -51,7 +51,7 @@
     "lint:es6": "eslint --ext .jsx --ext .js app bin",
     "postinstall": "npm run build",
     "start": "./bin/fielddb-web-server",
-    "start:watch": "cross-env NODE_PATH=./app concurrently --kill-others \"nodemon app/server\" \"node webpack.server.js\" \"gulp css:watch\"",
+    "start:watch": "NODE_PATH=./app concurrently --kill-others \"nodemon ./bin/fielddb-web-server\" \"node webpack.server.js\" \"gulp css:watch\"",
     "start:production": "NODE_ENV=production PORT=8000 API_BASE_URL=http://localhost:8000 NODE_PATH=./app node app/server",
     "test": "NODE_ENV=test mocha test/**/*.js",
     "test:ci": "cross-env NODE_ENV=test cross-env NODE_PATH=./app mocha --compilers js:babel-register -r app/spec/support/setup.mocha.js --recursive 'app/spec/**/*.test.js'",

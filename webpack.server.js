@@ -6,6 +6,7 @@ var port = 3001
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
+  https: true,
   historyApiFallback: true,
   compress: true,
   stats: {

@@ -1,5 +1,5 @@
-let config = {
-  API_BASE_URL: process.env.API_BASE_URL
-}
+import config from 'config'
 
-export default config
+export default {
+  API_BASE_URL: config.url
+}
