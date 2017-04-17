@@ -1,24 +1,24 @@
 import React from 'react'
 import Immutable from 'immutable'
-import { Question } from './index.jsx'
+import { CorpusMask } from './index.jsx'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 
-describe('Container::Question', function () {
+describe('Container::CorpusMask', function () {
   let props
 
   function renderDoc () {
-    return mount(<Question {...props} />)
+    return mount(<CorpusMask {...props} />)
   }
   beforeEach(function () {
     props = {
-      loadQuestionDetail: sinon.stub(),
+      loadCorpusMaskDetail: sinon.stub(),
       params: {
         id: 222
       },
-      question: Immutable.fromJS({
+      corpusMask: Immutable.fromJS({
         id: 222,
-        content: 'the-question-content',
+        content: 'the-corpusMask-content',
         user: {
           id: 1234,
           name: 'jack'
@@ -27,9 +27,9 @@ describe('Container::Question', function () {
     }
   })
 
-  it('fetches question details on mounted', function () {
+  it('fetches corpusMask details on mounted', function () {
     let doc = renderDoc()
-    expect(props.loadQuestionDetail).to.have.been.calledWith({
+    expect(props.loadCorpusMaskDetail).to.have.been.calledWith({
       id: props.params.id,
       history: browserHistory
     })

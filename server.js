@@ -57,21 +57,23 @@ if (process.env.NODE_ENV === 'production') {
  * Routes
  */
 
-app.get('/api/questions', (req, res) => {
-  console.log('returning mockAPI questions', mockAPI.questions);
-  res.send(mockAPI.questions)
+app.get('/api/corpora', (req, res) => {
+  console.log('returning mockAPI corpora', mockAPI.corpora);
+  res.send(mockAPI.corpora)
 });
 
 app.get('/api/users/:id', (req, res) => {
   res.send(mockAPI.getUser(req.params.id))
 });
 
-app.get('/api/questions/:id', (req, res) => {
-  let question = mockAPI.getQuestion(req.params.id)
-  if (question) {
-    res.send(question)
+app.get('/api/corpora/:id', (req, res) => {
+  let corpusMask = mockAPI.getCorpusMask(req.params.id)
+  if (corpusMask) {
+    res.send(corpusMask)
   } else {
-    res.status(404).send({ reason: 'question not found' })
+    res.status(404).send({
+      reason: 'corpusMask not found'
+    })
   }
 });
 

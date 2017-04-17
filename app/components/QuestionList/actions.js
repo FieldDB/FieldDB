@@ -1,14 +1,14 @@
 import { CALL_API, CHAIN_API } from '../../middleware/api'
 
-export const LOADED_QUESTIONS = Symbol('LOADED_QUESTIONS')
-export const ADD_QUESTION = Symbol('ADD_QUESTION')
-export function loadQuestions () {
-  console.log('calling loadQuestions');
+export const LOADED_CORPORA = Symbol('LOADED_CORPORA')
+export const ADD_CORPUS_MASK = Symbol('ADD_CORPUS_MASK')
+export function loadCorpora () {
+  console.log('calling loadCorpora');
   return {
     [CALL_API]: {
       method: 'get',
-      path: '/api/questions',
-      successType: LOADED_QUESTIONS
+      path: '/api/corpora',
+      successType: LOADED_CORPORA
     }
   }
 }

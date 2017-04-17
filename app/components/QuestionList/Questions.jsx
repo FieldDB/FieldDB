@@ -1,32 +1,32 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { List } from 'immutable'
-import QuestionCreate from '../QuestionCreate.jsx'
+import CorpusMaskCreate from '../CorpusMaskCreate.jsx'
 
-class Questions extends Component {
+class Corpora extends Component {
   render () {
     return (
       <div>
-        <QuestionCreate user={this.props.user} />
-        Questions component
+        <CorpusMaskCreate user={this.props.user} />
+        Corpora component
         {
-          this.props.questions.map((q) => {
+          this.props.corpora.map((q) => {
             let id = q.get('dbname')
             return (
               <div key={dbname}>
-                <Link to={`/questions/${dbname}`}>{ q.get('title') }</Link>
+                <Link to={`/corpora/${dbname}`}>{ q.get('title') }</Link>
               </div>
             )
           })
         }
-        <Link to={`/questions/not-found`}> This link would be redirected to Index</Link>
+        <Link to={`/corpora/not-found`}> This link would be redirected to Index</Link>
       </div>
     )
   }
 }
 
-Questions.propTypes = {
-  questions: React.PropTypes.instanceOf(List).isRequired
+Corpora.propTypes = {
+  corpora: React.PropTypes.instanceOf(List).isRequired
 }
 
-export default Questions
+export default Corpora

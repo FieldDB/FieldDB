@@ -1,65 +1,67 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadQuestions } from './actions'
+import { loadCorpora } from './actions'
 import { Link } from 'react-router'
-import Questions from './Questions.jsx'
+import Corpora from './Corpora.jsx'
 import Helmet from 'react-helmet'
 import { createStructuredSelector } from 'reselect';
 
-class QuestionContainer extends Component {
-  constructor (props) {
-    console.log('constructing question container', props)
+class CorpusMaskContainer extends Component {
+  constructor(props) {
+    console.log('constructing corpusMask container', props)
     super(props)
     console.log('constructed ', this.props)
   }
 
-  static fetchData ({ store }) {
-    console.log('fetching data', loadQuestions);
-    return store.dispatch(loadQuestions())
+  static fetchData({store}) {
+    console.log('fetching data', loadCorpora);
+    return store.dispatch(loadCorpora())
   }
 
-  componentDidMount () {
-    this.props.loadQuestions()
+  componentDidMount() {
+    this.props.loadCorpora()
   }
 
-  render () {
-    const { team } = this.props;
-    const questionCreateProps = {
+  render() {
+    const {team} = this.props;
+    const corpusMaskCreateProps = {
       team
     };
 
     return (
       <div>
         <Helmet
-          title='Questions page'
-        />
-        <h2>Questions</h2>
-        <Questions questions={this.props.questions} user={this.props.team} />
+      title='Corpora page'
+      />
+        <h2>Corpora</h2>
+        <Corpora corpora={this.props.corpora} user={this.props.team} />
         <Link to='/'>Back to Home</Link>
       </div>
     )
   }
 }
 
-QuestionContainer.propTypes = {
-  loadQuestions: React.PropTypes.func.isRequired,
-  questions: React.PropTypes.object.isRequired
+CorpusMaskContainer.propTypes = {
+  loadCorpora: React.PropTypes.func.isRequired,
+  corpora: React.PropTypes.object.isRequired
 }
 
-function mapStateToProps (state) {
-  console.log('question list map state to props', state);
+function mapStateToProps(state) {
+  console.log('corpusMask list map state to props', state);
   return {
-    team: { id: 13 },
-    questions: state.questions
+    team: {
+      id: 13
+    },
+    corpora: state.corpora
   }
 }
 
 // const mapStateToProps = createStructuredSelector({
-//   questions: state.questions,
+//   corpora: state.corpora,
 //   team: state.team
 // });
 
-export { QuestionContainer }
+export { CorpusMaskContainer }
 export default connect(mapStateToProps, {
-  loadQuestions
-})(QuestionContainer)
+  loadCorpora
+})(CorpusMaskContainer)

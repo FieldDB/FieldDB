@@ -5,15 +5,15 @@ import { Router, Route, IndexRoute } from 'react-router'
 
 import App from '../App'
 import Intro from '../Intro'
-import Questions from '../QuestionList'
-import Question from '../QuestionItem'
+import Corpora from '../Corpora'
+import CorpusMask from '../CorpusMask'
 
 export default function (history) {
   return (
     <Router history={history}>
       <Route path='/' component={App}>
-        <Route path='questions' component={Questions} />
-        <Route path='questions/:id' component={Question} />
+        <Route path='corpora' component={Corpora} />
+        <Route path='corpora/:id' component={CorpusMask} />
         <IndexRoute component={Intro} />
       </Route>
     </Router>

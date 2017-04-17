@@ -14,7 +14,7 @@ class Intro extends Component {
         <div>
           <img src='/assets/images/head.png' />
         </div>
-        <Link to='/questions'>to questions</Link>
+        <Link to='/corpora'>to corpora</Link>
       </div>
     )
   }

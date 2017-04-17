@@ -1,27 +1,27 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Link } from 'react-router'
-import Questions from './Questions.jsx'
+import Corpora from './Corpora.jsx'
 import Immutable from 'immutable'
 
-describe('Component::Questions', function () {
+describe('Component::Corpora', function () {
   let props
   beforeEach(function () {
     props = {
-      questions: Immutable.fromJS([
+      corpora: Immutable.fromJS([
         { id: 1, content: 'the-content-1' },
         { id: 2, content: 'the-content-2' }
       ])
     }
   })
   function renderDoc () {
-    return shallow(<Questions {...props} />)
+    return shallow(<Corpora {...props} />)
   }
 
-  it('renders questions', function () {
+  it('renders corpora', function () {
     let doc = renderDoc()
-    let questionComps = doc.find(Link)
+    let corpusMaskComps = doc.find(Link)
 
-    expect(questionComps.length).to.equal(props.questions.size + 1)
+    expect(corpusMaskComps.length).to.equal(props.corpora.size + 1)
   })
 })

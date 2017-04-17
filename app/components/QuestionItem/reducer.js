@@ -7,10 +7,10 @@ let defaultState = Immutable.fromJS({
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case ActionType.LOADED_QUESTION_DETAIL:
+    case ActionType.LOADED_CORPUS_MASK_DETAIL:
       return state.merge(action.response)
 
-    case ActionType.LOADED_QUESTION_USER:
+    case ActionType.LOADED_CORPUS_MASK_USER:
       return state.merge({
         user: action.response
       })

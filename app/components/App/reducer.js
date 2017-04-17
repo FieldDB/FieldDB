@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import questions from '../QuestionList/reducer'
-import questionDetail from '../QuestionItem/reducer'
+import corpora from '../Corpora/reducer'
+import corpusMaskDetail from '../CorpusMask/reducer'
 
 const rootReducer = combineReducers({
-  questions,
-  questionDetail
+  corpora,
+  corpusMaskDetail
 })
 
 export default rootReducer

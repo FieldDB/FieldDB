@@ -2,17 +2,17 @@ import user from '../../routes/user'
 import corpus from '../../routes/corpus'
 
 let _ = require('lodash')
-function question(id) {
+function corpusMask(id) {
   return corpus.getCorpusMask('lingllama-communitycorpus')
 }
 
-export const questions = _.range(1, 10).map((i) => question(i))
+export const corpora = _.range(1, 10).map((i) => corpusMask(i))
 export function getUser(id) {
   return user.getUserMask('lingllama', console.log);
 }
-export function getQuestion(id) {
+export function getCorpusMask(id) {
   if (id === 'not-found') {
     return null
   }
-  return question(id)
+  return corpusMask(id)
 }

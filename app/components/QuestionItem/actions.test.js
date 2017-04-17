@@ -1,24 +1,24 @@
 import { CALL_API, CHAIN_API } from 'middleware/api'
 
 import * as actionCreator from './actions'
-// import * as ActionType from 'actions/questions'
+// import * as ActionType from 'actions/corpora'
 
-describe('Action::Question', function () {
-  describe('#loadQuestionDetail({id})', function () {
+describe('Action::CorpusMask', function () {
+  describe('#loadCorpusMaskDetail({id})', function () {
     let id = 'the-id'
-    it('returns a CHAIN_API to fetch question first', function () {
-      let action = actionCreator.loadQuestionDetail({ id })
+    it('returns a CHAIN_API to fetch corpusMask first', function () {
+      let action = actionCreator.loadCorpusMaskDetail({ id })
       let callApi = action[CHAIN_API][0]()[CALL_API]
 
       expect(callApi.method).to.equal('get')
-      expect(callApi.path).to.equal(`/api/questions/${id}`)
-      expect(callApi.successType).to.equal(actionCreator.LOADED_QUESTION_DETAIL)
+      expect(callApi.path).to.equal(`/api/corpora/${id}`)
+      expect(callApi.successType).to.equal(actionCreator.LOADED_CORPUS_MASK_DETAIL)
     })
     it('navigates to root when request error', () => {
       let mockHistory = {
         push: sinon.stub()
       }
-      let action = actionCreator.loadQuestionDetail({ id, history: mockHistory })
+      let action = actionCreator.loadCorpusMaskDetail({ id, history: mockHistory })
       let callApi = action[CHAIN_API][0]()[CALL_API]
 
       expect(callApi.afterError).to.be.an.instanceOf(Function)
@@ -26,14 +26,14 @@ describe('Action::Question', function () {
 
       expect(mockHistory.push).to.have.been.calledWith('/')
     })
-    it('fetches user data after fetching question', function () {
-      let action = actionCreator.loadQuestionDetail({ id })
-      let questionRes = { userId: '1234' }
+    it('fetches user data after fetching corpusMask', function () {
+      let action = actionCreator.loadCorpusMaskDetail({ id })
+      let corpusMaskRes = { userId: '1234' }
 
-      expect(action[CHAIN_API][1](questionRes)[CALL_API]).to.deep.equal({
+      expect(action[CHAIN_API][1](corpusMaskRes)[CALL_API]).to.deep.equal({
         method: 'get',
-        path: `/api/users/${questionRes.userId}`,
-        successType: actionCreator.LOADED_QUESTION_USER
+        path: `/api/users/${corpusMaskRes.userId}`,
+        successType: actionCreator.LOADED_CORPUS_MASK_USER
       })
     })
   })

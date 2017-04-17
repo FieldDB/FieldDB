@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import * as ActionType from './QuestionList/actions'
+import * as ActionType from './Corpora/actions'
 
-class QuestionCreate extends Component {
+class CorpusMaskCreate extends Component {
   constructor (props) {
     super(props)
-    console.log('constructing create question', props, this.state)
+    console.log('constructing create corpusMask', props, this.state)
 
     this.state = { content: '' }
 
@@ -20,7 +20,7 @@ class QuestionCreate extends Component {
   handleSubmit (event) {
     event.preventDefault()
     const id = Date.now()
-    this.props.addQuestion({
+    this.props.addCorpusMask({
       id,
       content: this.state.content,
       userId: this.props.user.id
@@ -36,24 +36,24 @@ class QuestionCreate extends Component {
   }
 }
 
-QuestionCreate.propTypes = {
+CorpusMaskCreate.propTypes = {
   user: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
-  console.log('question create map state to props', state)
+  console.log('corpusMask create map state to props', state)
   return {}
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    addQuestion: (question) => {
+    addCorpusMask: (corpusMask) => {
       return dispatch({
-        type: ActionType.ADD_QUESTION,
-        payload: question
+        type: ActionType.ADD_CORPUS_MASK,
+        payload: corpusMask
       })
     }
   }
 }
-export { QuestionCreate }
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionCreate)
+export { CorpusMaskCreate }
+export default connect(mapStateToProps, mapDispatchToProps)(CorpusMaskCreate)
