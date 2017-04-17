@@ -1,158 +1,156 @@
-var browserify = require("browserify");
-var concat = require("gulp-concat");
-var gulp = require("gulp");
-var literalify = require("literalify");
-var React = require("react");
-var ReactDOMServer = require("react-dom/server");
+import Express from 'express'
+import path from 'path'
+import debugFactory from 'debug'
 
-// This is our React component, shared by server and browser thanks to browserify
-var App = React.createFactory(require("../src/App"));
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+import { useRouterHistory, RouterContext, match } from 'react-router'
 
-// A utility function to safely escape JSON for embedding in a <script> tag
-function safeStringify(obj) {
-  return JSON.stringify(obj)
-    .replace(/<\/(script)/ig, "<\\/$1")
-    .replace(/<!--/g, "<\\!--")
-    .replace(/\u2028/g, "\\u2028") // Only necessary if interpreting as JS, which we do
-    .replace(/\u2029/g, "\\u2029"); // Ditto
+import { createMemoryHistory, useQueries } from 'history'
+import compression from 'compression'
+import Promise from 'bluebird'
+
+import configureStore from 'components/App/store'
+import createRoutes from 'components/App/routes'
+
+import { Provider } from 'react-redux'
+
+import Helmet from 'react-helmet'
+
+const debug = debugFactory('server');
+let server = new Express()
+let port = process.env.PORT || 3000
+let scriptSrcs
+process.env.ON_SERVER = true // TODO this is not used
+
+let styleSrc
+if (process.env.NODE_ENV === 'production') {
+  // build scripts serving from dist
+  let refManifest = require('../../dist/rev-manifest.json')
+  scriptSrcs = [
+    `/${refManifest['vendor.js']}`,
+    `/${refManifest['app.js']}`
+  ]
+  styleSrc = `/${refManifest['app.css']}`
+} else {
+  // scripts serving from webpack
+  scriptSrcs = [
+    'http://localhost:3001/static/vendor.js',
+    'http://localhost:3001/static/dev.js',
+    'http://localhost:3001/static/app.js'
+  ]
+  styleSrc = '/app.css'
 }
 
-function reactRender(req, res, next) {
+server.use(compression())
 
-  // This endpoint is hit when the browser is requesting bundle.js from the page above
-  if (req.params.filename === "bundle.js") {
+if (process.env.NODE_ENV === 'production') {
+  server.use(Express.static(path.join(__dirname, '../..', 'dist/public')))
+} else {
+  server.use('/assets', Express.static(path.join(__dirname, '..', 'assets')))
+  server.use(Express.static(path.join(__dirname, '../..', 'dist')))
+}
 
-    res.setHeader("Content-Type", "text/javascript");
+server.set('views', path.join(__dirname, 'views'))
+server.set('view engine', 'ejs')
 
-    // Here we invoke browserify to package up browser.js and everything it requires.
-    // DON'T do it on the fly like this in production - it's very costly -
-    // either compile the bundle ahead of time, or use some smarter middleware
-    // (eg browserify-middleware).
-    // We also use literalify to transform our `require` statements for React
-    // so that it uses the global variable (from the CDN JS file) instead of
-    // bundling it up with everything else
-    browserify()
-      .add("src/browser.js")
-      .transform(literalify.configure({
-        "react": "window.React",
-        "react-dom": "window.ReactDOM",
-      }))
-      .bundle()
-      .pipe(res);
+// mock apis
+server.get('/api/questions', (req, res) => {
+  let { questions } = require('./mock_api')
+  res.send(questions)
+})
 
-  } else if (req.params.filename === "bundle.css") {
-
-    res.setHeader("Content-Type", "text/css");
-
-    // TEMP bundling css
-    gulp
-      .src([
-        "public/corpus-pages/bootstrap/css/bootstrap.min.css",
-        "public/corpus-pages/css/jquery.jsonview.css",
-        "public/corpus-pages/bootstrap/css/bootstrap-responsive.min.css",
-        "public/corpus-pages/padding.css",
-        "public/corpus-pages/search.css"
-      ])
-      .pipe(concat("bundle.css"))
-      .pipe(gulp.dest("public"));
-
-    res.send();
-  } else if (req.params.filename === undefined) {
-    // If we hit the homepage, then we want to serve up some HTML - including the
-    // server-side rendered React component(s), as well as the script tags
-    // pointing to the client-side code
-
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-
-    // `props` represents the data to be passed in to the React component for
-    // rendering - just as you would pass data, or expose variables in
-    // templates such as Jade or Handlebars.  We just use some dummy data
-    // here (with some potentially dangerous values for testing), but you could
-    // imagine this would be objects typically fetched async from a DB,
-    // filesystem or API, depending on the logged-in user, etc.
-    var props = {
-      items: [
-        "Item 0",
-        "Item 1",
-        "Item </scRIpt>\u2028",
-        "Item <!--inject!-->\u2029",
-      ]
-    };
-
-    // Here we're using React to render the outer body, so we just use the
-    // simpler renderToStaticMarkup function, but you could use any templating
-    // language (or just a string) for the outer page template
-    var head = ReactDOMServer.renderToStaticMarkup(React.DOM.head(null,
-
-      React.DOM.title({}, ["Testing server side render"]),
-
-      // Then the browser will fetch and run the browserified bundle consisting
-      // of browser.js and all its dependencies.
-      // We serve this from the endpoint a few lines down.
-      React.DOM.link({
-        rel: "stylesheet",
-        type: "text/css",
-        href: "/bundle.css"
-      })
-
-    ));
-
-    var html = ReactDOMServer.renderToStaticMarkup(React.DOM.body(null,
-
-      // The actual server-side rendering of our component occurs here, and we
-      // pass our data in as `props`. This div is the same one that the client
-      // will "render" into on the browser from browser.js
-      React.DOM.div({
-        id: "content",
-        dangerouslySetInnerHTML: {
-          __html: ReactDOMServer.renderToString(new App(props))
-        }
-      }),
-
-      // The props should match on the client and server, so we stringify them
-      // on the page to be available for access by the code run in browser.js
-      // You could use any var name here as long as it's unique
-      React.DOM.script({
-        dangerouslySetInnerHTML: {
-          __html: "var APP_PROPS = " + safeStringify(props) + ";"
-        }
-      }),
-
-      // We'll load React from a CDN - you don't have to do this,
-      // you can bundle it up or serve it locally if you like
-      React.DOM.script({
-        src: "/corpus-pages/libs/react.min.js"
-      }),
-      // React.DOM.script({
-      //   src: "//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"
-      // }),
-      React.DOM.script({
-        src: "/corpus-pages/libs/react-dom.min.js"
-      }),
-      // React.DOM.script({
-      //   src: "//cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"
-      // }),
-
-      // Then the browser will fetch and run the browserified bundle consisting
-      // of browser.js and all its dependencies.
-      // We serve this from the endpoint a few lines down.
-      React.DOM.script({
-        src: "/v5/bundle.js"
-      })
-    ));
-
-
-    // Return the page to the browser
-    res.send(head + html);
-
-  // Return 404 for all other requests
+server.get('/api/users/:id', (req, res) => {
+  let { getUser } = require('./mock_api')
+  res.send(getUser(req.params.id))
+})
+server.get('/api/questions/:id', (req, res) => {
+  let { getQuestion } = require('./mock_api')
+  let question = getQuestion(req.params.id)
+  if (question) {
+    res.send(question)
   } else {
-    // res.statusCode = 404;
-    // res.end();
-    next();
+    res.status(404).send({ reason: 'question not found' })
   }
-}
+})
 
+server.get('*', (req, res, next) => {
+  let history = useRouterHistory(useQueries(createMemoryHistory))()
+  let store = configureStore()
+  let routes = createRoutes(history)
+  let location = history.createLocation(req.url)
 
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    debug('req.url ', req.url);
+    function getReduxPromise () {
+      let { query, params } = renderProps
+      let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
+      let promise = comp.fetchData
+        ? comp.fetchData({ query, params, store, history })
+        : Promise.resolve()
 
-exports.reactRender = reactRender;
+      return promise
+    }
+
+    if (redirectLocation) {
+      debug('redirecting to ', redirectLocation);
+      res.redirect(301, redirectLocation.pathname + redirectLocation.search)
+    } else if (error) {
+      debug('error ', error);
+      res.status(500).send(error.message)
+    } else if (renderProps == null) {
+      debug('renderProps was null, not found ', renderProps);
+      res.status(404).send('Not found')
+    } else {
+      let [ getCurrentUrl, unsubscribe ] = subscribeUrl()
+      let reqUrl = location.pathname + location.search
+      debug('reqUrl ', reqUrl);
+
+      getReduxPromise().then(() => {
+        let reduxState = escape(JSON.stringify(store.getState()))
+        let html = ReactDOMServer.renderToString(
+          <Provider store={store}>
+            { <RouterContext {...renderProps} /> }
+          </Provider>
+        )
+        let metaHeader = Helmet.rewind()
+
+        if (getCurrentUrl() === reqUrl) {
+          debug('rendering ', { metaHeader, html, scriptSrcs, reduxState, styleSrc });
+          res.render('index', { metaHeader, html, scriptSrcs, reduxState, styleSrc })
+        } else {
+          res.redirect(302, getCurrentUrl())
+        }
+        unsubscribe()
+      })
+      .catch((err) => {
+        Helmet.rewind()
+        unsubscribe()
+        next(err)
+      })
+    }
+  })
+  function subscribeUrl () {
+    let currentUrl = location.pathname + location.search
+    debug('subscribeUrl currentUrl ', currentUrl);
+    let unsubscribe = history.listen((newLoc) => {
+      if (newLoc.action === 'PUSH' || newLoc.action === 'REPLACE') {
+        currentUrl = newLoc.pathname + newLoc.search
+        debug('unsubscribe currentUrl ', currentUrl);
+      }
+    })
+    return [
+      () => currentUrl,
+      unsubscribe
+    ]
+  }
+})
+
+server.use((err, req, res, next) => {
+  console.log(err.stack)
+  // TODO report error here or do some further handlings
+  res.status(500).send('something went wrong...')
+})
+
+console.log(`Server is listening to port: ${port}`)
+server.listen(port)

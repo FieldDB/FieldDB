@@ -80,7 +80,6 @@
     "concurrently": "^2.0.0",
     "cross-env": "^1.0.7",
     "dotenv": "^4.0.0",
-    "ejs": "^2.3.4",
     "enzyme": "^2.3.0",
     "eslint": "^3.18.0",
     "eslint-config-standard": "^6.0.0",
