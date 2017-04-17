@@ -1,3 +1,4 @@
+var compression = require("compression");
 var config = require("config");
 var express = require("express");
 var debug = require("debug")("server");
@@ -15,7 +16,7 @@ var getUserMask = require("./routes/user").getUserMask;
 var getCorpusMask = require("./routes/corpus").getCorpusMask;
 var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
 var reduxRender = require("./routes/react-render").reduxRender;
-
+var mockAPI = require('./app/server/mock_api');
 var acceptSelfSignedCertificates = {
   strictSSL: false
 };
@@ -43,11 +44,35 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, "public")));
 
+
+app.use(compression())
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'dist', 'public')))
+} else {
+  app.use('/assets', express.static(path.join(__dirname, 'app', 'assets')))
+  app.use(express.static(path.join(__dirname, 'dist')))
+}
 /*
  * Routes
  */
-app.get("/v5", reduxRender);
-app.get("/v5/:filename", reduxRender);
+
+app.get('/api/questions', (req, res) => {
+  res.send(mockAPI.questions)
+});
+
+app.get('/api/users/:id', (req, res) => {
+  res.send(mockAPI.getUser(req.params.id))
+});
+
+app.get('/api/questions/:id', (req, res) => {
+  let question = mockAPI.getQuestion(req.params.id)
+  if (question) {
+    res.send(question)
+  } else {
+    res.status(404).send({ reason: 'question not found' })
+  }
+});
 
 app.get("/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
@@ -127,25 +152,27 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/:username", function(req, res, next) {
-  return res.render("user", {
-    userMask: {}
-  });
+// app.get("/:username", function(req, res, next) {
+//   return res.render("user", {
+//     userMask: {}
+//   });
+//
+//   var html5Routes = req.params.username;
+//   var pageNavs = ["tutorial", "people", "contact", "home"];
+//   if (pageNavs.indexOf(html5Routes) > -1) {
+//     res.redirect("/#/" + html5Routes);
+//     return;
+//   }
+//
+//   getUserMask(req.params.username, next).then(function(user) {
+//     // var user = mask.toJSON();
+//     res.render("user", {
+//       userMask: user
+//     });
+//   }, next).fail(next);
+// });
 
-  var html5Routes = req.params.username;
-  var pageNavs = ["tutorial", "people", "contact", "home"];
-  if (pageNavs.indexOf(html5Routes) > -1) {
-    res.redirect("/#/" + html5Routes);
-    return;
-  }
-
-  getUserMask(req.params.username, next).then(function(user) {
-    // var user = mask.toJSON();
-    res.render("user", {
-      userMask: user
-    });
-  }, next).fail(next);
-});
+app.get("*", reduxRender);
 
 
 // error handling middleware should be loaded after the loading the routes

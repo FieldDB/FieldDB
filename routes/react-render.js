@@ -1,4 +1,4 @@
-import Express from 'express'
+// import { router } from 'express'
 import path from 'path'
 import debugFactory from 'debug'
 
@@ -7,26 +7,23 @@ import ReactDOMServer from 'react-dom/server'
 import { useRouterHistory, RouterContext, match } from 'react-router'
 
 import { createMemoryHistory, useQueries } from 'history'
-import compression from 'compression'
 import Promise from 'bluebird'
 
-import configureStore from 'components/App/store'
-import createRoutes from 'components/App/routes'
+import configureStore from '../app/components/App/store'
+import createRoutes from '../app/components/App/routes'
 
 import { Provider } from 'react-redux'
 
 import Helmet from 'react-helmet'
 
 const debug = debugFactory('server');
-let server = new Express()
-let port = process.env.PORT || 3000
 let scriptSrcs
 process.env.ON_SERVER = true // TODO this is not used
 
 let styleSrc
 if (process.env.NODE_ENV === 'production') {
   // build scripts serving from dist
-  let refManifest = require('../../dist/rev-manifest.json')
+  let refManifest = require('../dist/rev-manifest.json')
   scriptSrcs = [
     `/${refManifest['vendor.js']}`,
     `/${refManifest['app.js']}`
@@ -35,53 +32,21 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   // scripts serving from webpack
   scriptSrcs = [
-    'http://localhost:3001/static/vendor.js',
-    'http://localhost:3001/static/dev.js',
-    'http://localhost:3001/static/app.js'
+    '//localhost:3001/static/vendor.js',
+    '//localhost:3001/static/dev.js',
+    '//localhost:3001/static/app.js'
   ]
   styleSrc = '/app.css'
 }
 
-server.use(compression())
-
-if (process.env.NODE_ENV === 'production') {
-  server.use(Express.static(path.join(__dirname, '../..', 'dist/public')))
-} else {
-  server.use('/assets', Express.static(path.join(__dirname, '..', 'assets')))
-  server.use(Express.static(path.join(__dirname, '../..', 'dist')))
-}
-
-server.set('views', path.join(__dirname, 'views'))
-server.set('view engine', 'ejs')
-
-// mock apis
-server.get('/api/questions', (req, res) => {
-  let { questions } = require('./mock_api')
-  res.send(questions)
-})
-
-server.get('/api/users/:id', (req, res) => {
-  let { getUser } = require('./mock_api')
-  res.send(getUser(req.params.id))
-})
-server.get('/api/questions/:id', (req, res) => {
-  let { getQuestion } = require('./mock_api')
-  let question = getQuestion(req.params.id)
-  if (question) {
-    res.send(question)
-  } else {
-    res.status(404).send({ reason: 'question not found' })
-  }
-})
-
-server.get('*', (req, res, next) => {
+function reduxRender(req, res, next) {
   let history = useRouterHistory(useQueries(createMemoryHistory))()
   let store = configureStore()
   let routes = createRoutes(history)
   let location = history.createLocation(req.url)
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
-    debug('req.url ', req.url);
+    debug('req.url ', req.url, renderProps);
     function getReduxPromise () {
       let { query, params } = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
@@ -144,13 +109,6 @@ server.get('*', (req, res, next) => {
       unsubscribe
     ]
   }
-})
+}
 
-server.use((err, req, res, next) => {
-  console.log(err.stack)
-  // TODO report error here or do some further handlings
-  res.status(500).send('something went wrong...')
-})
-
-console.log(`Server is listening to port: ${port}`)
-server.listen(port)
+exports.reduxRender = reduxRender;

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html {{ metaHeader.htmlAttributes }}>
+<html {{{ metaHeader.htmlAttributes }}}>
   <head>
-    <link rel="stylesheet" href="{{ styleSrc }}" type="text/css" media="screen" charset="utf-8">
-    {{ metaHeader.title }}
-    {{ metaHeader.base }}
-    {{ metaHeader.meta }}
-    {{ metaHeader.link }}
-    {{ metaHeader.script }}
-    {{ metaHeader.style }}
+    <link rel="stylesheet" href="{{{ styleSrc }}}" type="text/css" media="screen" charset="utf-8">
+    {{{ metaHeader.title }}}
+    {{{ metaHeader.base }}}
+    {{{ metaHeader.meta }}}
+    {{{ metaHeader.link }}}
+    {{{ metaHeader.script }}}
+    {{{ metaHeader.style }}}
   </head>
   <body>
-    <div id="root">{{ html }}</div>
+    <div id="root">{{{ html }}}</div>
     <script type="text/javascript" charset="utf-8">
-      window.__REDUX_STATE__ = '{{ reduxState }}';
+      window.__REDUX_STATE__ = '{{{ reduxState }}}';
     </script>
 
     {{#each scriptSrcs }}
