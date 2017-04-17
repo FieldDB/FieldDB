@@ -1,0 +1,45 @@
+{
+    "_id": "lingllama",
+    "_rev": "188-70db23d882e224d262c2de63021f5d4e",
+    "corpora": [{
+            "protocol": "https://",
+            "domain": "corpusdev.example.org",
+            "port": "",
+            "pouchname": "lingllama-communitycorpus",
+            "path": "",
+            "corpusid": "89bc4d7dcc2b1fc9a7bb0f4f4743e705"
+        },
+        {
+            "protocol": "https://",
+            "domain": "corpusdev.example.org",
+            "port": "443",
+            "pouchname": "lingllama-cherokee",
+            "path": "",
+            "corpusid": "958227C0-FF0E-46AC-8F7B-579330A24A95"
+        },
+        {
+            "protocol": "https://",
+            "domain": "corpusdev.example.org",
+            "port": "443",
+            "pouchname": "lingllama-firstcorpus",
+            "path": "",
+            "corpusid": "1B6127DC-F156-4F48-B1D8-6F4EBA5848A5"
+        }
+    ],
+    "userMask": {
+        "fieldDBtype": "UserMask",
+        "id": "lingllama",
+        "username": "lingllama",
+        "gravatar": "54b53868cb4d555b804125f1a3969e87",
+        "authUrl": "https://auth.example.org",
+        "collection": "users",
+        "firstname": "Ling",
+        "lastname": "Llama",
+        "email": "lingllama@example.org",
+        "researchInterest": "Memes",
+        "affiliation": "http://lingllama.tumblr.com",
+        "description": "Hi! I'm a sample user, anyone can log in as me (my password is phoneme).",
+        "version": "v3.2.4",
+        "api": "users"
+    }
+}
