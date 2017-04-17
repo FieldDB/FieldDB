@@ -10,9 +10,6 @@ config/production.json
 config/local.js
 config/local.json
 
-# Ignore natural lib
-public/libs/natural/
-
 .wav
 audio_stimuli
 
@@ -25,6 +22,8 @@ proguard.cfg
 public/components
 node_modules
 gen
+dist
+.tmp
 
 # Node #
 ########
@@ -40,7 +39,7 @@ lib-cov
 pids
 logs
 results
-
+yarn-error.log
 yarn.lock
 .tern-port
 v8.log

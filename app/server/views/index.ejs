@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html <%- metaHeader.htmlAttributes.toString() %>>
+  <head>
+    <link rel="stylesheet" href="<%= styleSrc %>" type="text/css" media="screen" charset="utf-8">
+    <%- metaHeader.title.toString() %>
+    <%- metaHeader.base.toString() %>
+    <%- metaHeader.meta.toString() %>
+    <%- metaHeader.link.toString() %>
+    <%- metaHeader.script.toString() %>
+    <%- metaHeader.style.toString() %>
+  </head>
+  <body>
+    <div id="root"><%- html %></div>
+    <script type="text/javascript" charset="utf-8">
+      window.__REDUX_STATE__ = '<%= reduxState %>';
+    </script>
+
+    <% scriptSrcs.forEach(function(src){ %>
+      <script src="<%= src %>"></script>
+    <% }) %>
+
+  </body>
+</html>
