@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('babel-register')
 
 var url = require("url");
 var https = require("https");

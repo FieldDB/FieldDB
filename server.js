@@ -14,7 +14,7 @@ var activityHeatMap = require("./routes/activity").activityHeatMap;
 var getUserMask = require("./routes/user").getUserMask;
 var getCorpusMask = require("./routes/corpus").getCorpusMask;
 var getCorpusMaskFromTitleAsUrl = require("./routes/corpus").getCorpusMaskFromTitleAsUrl;
-var reactRender = require("./routes/react-render").reactRender;
+var reduxRender = require("./routes/react-render").reduxRender;
 
 var acceptSelfSignedCertificates = {
   strictSSL: false
@@ -46,8 +46,8 @@ app.use(express.static(path.join(__dirname, "public")));
 /*
  * Routes
  */
-app.get("/v5", reactRender);
-app.get("/v5/:filename", reactRender);
+app.get("/v5", reduxRender);
+app.get("/v5/:filename", reduxRender);
 
 app.get("/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
