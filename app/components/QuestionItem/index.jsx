@@ -34,6 +34,7 @@ class Question extends Component {
 }
 
 function mapStateToProps (state) {
+  console.log('questiondetail map state to props', state);
   return {
     question: state.questionDetail
   }

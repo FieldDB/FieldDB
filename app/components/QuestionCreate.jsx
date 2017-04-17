@@ -5,6 +5,8 @@ import * as ActionType from './QuestionList/actions'
 class QuestionCreate extends Component {
   constructor (props) {
     super(props)
+    console.log('constructing create question', props, this.state)
+
     this.state = { content: '' }
 
     this.handleChange = this.handleChange.bind(this)
@@ -21,9 +23,7 @@ class QuestionCreate extends Component {
     this.props.addQuestion({
       id,
       content: this.state.content,
-      // user_id: 123
-      user_id: this.props.userId,
-      // user_id: this.props.user.user_id
+      userId: this.props.user.id
     })
   }
 
@@ -37,15 +37,12 @@ class QuestionCreate extends Component {
 }
 
 QuestionCreate.propTypes = {
-  user: React.PropTypes.object.isRequired,
-  userId: React.PropTypes.string.isRequired
+  user: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
-  console.log('mapStateToProps QuestionCreate', state)
-  return {
-    user: state.user
-  }
+  console.log('question create map state to props', state)
+  return {}
 }
 
 function mapDispatchToProps (dispatch) {

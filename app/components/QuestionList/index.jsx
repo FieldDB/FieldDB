@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { loadQuestions } from './actions'
 import { Link } from 'react-router'
 import Questions from './Questions.jsx'
-import QuestionCreate from '../QuestionCreate.jsx'
 import Helmet from 'react-helmet'
 import { createStructuredSelector } from 'reselect';
 
 class QuestionContainer extends Component {
   constructor (props) {
+    console.log('constructing question container', props)
     super(props)
+    console.log('constructed ', this.props)
   }
 
   static fetchData ({ store }) {
@@ -21,12 +22,6 @@ class QuestionContainer extends Component {
   }
 
   render () {
-    this.state = {
-      user: {
-        id: '123'
-      }
-    }
-
     const { user } = this.props;
     const questionCreateProps = {
       user
@@ -38,8 +33,7 @@ class QuestionContainer extends Component {
           title='Questions page'
         />
         <h2>Questions</h2>
-        <QuestionCreate {...questionCreateProps}  user={this.state.user} userId='1234' />
-        <Questions questions={this.props.questions} />
+        <Questions questions={this.props.questions} user={this.props.user} />
         <Link to='/'>Back to Home</Link>
       </div>
     )
@@ -52,7 +46,9 @@ QuestionContainer.propTypes = {
 }
 
 function mapStateToProps (state) {
+  console.log('question list map state to props', state);
   return {
+    user: { id: 13 },
     questions: state.questions
   }
 }

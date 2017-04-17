@@ -5,7 +5,7 @@ function question (id) {
   return {
     id,
     content: `mocked-${id}: ${sampleContent}`,
-    user_id: Math.random()
+    userId: Math.random()
   }
 }
 

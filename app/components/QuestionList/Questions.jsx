@@ -5,13 +5,9 @@ import QuestionCreate from '../QuestionCreate.jsx'
 
 class Questions extends Component {
   render () {
-    const user = {
-      id: 987
-    }
-
     return (
       <div>
-        <QuestionCreate user={user} userId='1234' />
+        <QuestionCreate user={this.props.user} />
         Questions component
         {
           this.props.questions.map((q) => {
