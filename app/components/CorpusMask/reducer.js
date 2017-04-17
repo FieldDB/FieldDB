@@ -2,7 +2,7 @@ import * as ActionType from './actions'
 import Immutable from 'immutable'
 
 let defaultState = Immutable.fromJS({
-  user: {}
+  team: {}
 })
 
 export default function (state = defaultState, action) {
@@ -12,7 +12,7 @@ export default function (state = defaultState, action) {
 
     case ActionType.LOADED_CORPUS_MASK_USER:
       return state.merge({
-        user: action.response
+        team: action.response
       })
 
     default:

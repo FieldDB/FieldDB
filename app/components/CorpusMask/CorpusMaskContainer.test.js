@@ -4,22 +4,22 @@ import { CorpusMask } from './index.jsx'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 
-describe('Container::CorpusMask', function () {
+describe('Container::CorpusMask', function() {
   let props
 
-  function renderDoc () {
+  function renderDoc() {
     return mount(<CorpusMask {...props} />)
   }
-  beforeEach(function () {
+  beforeEach(function() {
     props = {
       loadCorpusMaskDetail: sinon.stub(),
       params: {
-        id: 222
+        dbname: 222
       },
       corpusMask: Immutable.fromJS({
-        id: 222,
-        content: 'the-corpusMask-content',
-        user: {
+        dbname: 222,
+        title: 'the-corpusMask-title',
+        team: {
           id: 1234,
           name: 'jack'
         }
@@ -27,10 +27,10 @@ describe('Container::CorpusMask', function () {
     }
   })
 
-  it('fetches corpusMask details on mounted', function () {
+  it('fetches corpusMask details on mounted', function() {
     let doc = renderDoc()
     expect(props.loadCorpusMaskDetail).to.have.been.calledWith({
-      id: props.params.id,
+      dbname: props.params.dbname,
       history: browserHistory
     })
 

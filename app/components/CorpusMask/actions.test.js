@@ -5,14 +5,14 @@ import * as actionCreator from './actions'
 
 describe('Action::CorpusMask', function() {
   describe('#loadCorpusMaskDetail({id})', function() {
-    let id = 'the-id'
+    let dbname = 'the-dbname'
     it('returns a CHAIN_API to fetch corpusMask first', function() {
       let action = actionCreator.loadCorpusMaskDetail({
-        id
+        dbname
       })
       let callApi = action[CHAIN_API][0]()[CALL_API]
       expect(callApi.method).to.equal('get')
-      expect(callApi.path).to.equal(`/api/corpora/${id}`)
+      expect(callApi.path).to.equal(`/api/corpora/${dbname}`)
       expect(callApi.successType).to.equal(actionCreator.LOADED_CORPUS_MASK_DETAIL)
     })
     it('navigates to root when request error', () => {
@@ -20,7 +20,7 @@ describe('Action::CorpusMask', function() {
         push: sinon.stub()
       }
       let action = actionCreator.loadCorpusMaskDetail({
-        id,
+        dbname,
         history: mockHistory
       })
       let callApi = action[CHAIN_API][0]()[CALL_API]
@@ -29,9 +29,9 @@ describe('Action::CorpusMask', function() {
 
       expect(mockHistory.push).to.have.been.calledWith('/')
     })
-    it('fetches user data after fetching corpusMask', function() {
+    it('fetches team data after fetching corpusMask', function() {
       let action = actionCreator.loadCorpusMaskDetail({
-        id
+        dbname
       })
       let corpusMaskRes = {
         team: {
@@ -41,7 +41,7 @@ describe('Action::CorpusMask', function() {
 
       expect(action[CHAIN_API][1](corpusMaskRes)[CALL_API]).to.deep.equal({
         method: 'get',
-        path: `/api/users/${corpusMaskRes.team.id}`,
+        path: `/api/teams/${corpusMaskRes.team.id}`,
         successType: actionCreator.LOADED_CORPUS_MASK_USER
       })
     })

@@ -2,14 +2,14 @@ import { CALL_API, CHAIN_API } from '../../middleware/api'
 
 export const LOADED_CORPUS_MASK_DETAIL = Symbol('LOADED_CORPUS_MASK_DETAIL')
 export const LOADED_CORPUS_MASK_USER = Symbol('LOADED_CORPUS_MASK_USER')
-export function loadCorpusMaskDetail ({ id, history }) {
+export function loadCorpusMaskDetail({dbname, history}) {
   return {
     [CHAIN_API]: [
       () => {
         return {
           [CALL_API]: {
             method: 'get',
-            path: `/api/corpora/${id}`,
+            path: `/api/corpora/${dbname}`,
             successType: LOADED_CORPUS_MASK_DETAIL,
             afterError: () => {
               history.push('/')
@@ -21,7 +21,7 @@ export function loadCorpusMaskDetail ({ id, history }) {
         return {
           [CALL_API]: {
             method: 'get',
-            path: `/api/users/${corpus.team.id}`,
+            path: `/api/teams/${corpus.team.id}`,
             successType: LOADED_CORPUS_MASK_USER
           }
         }

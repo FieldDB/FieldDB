@@ -9,11 +9,11 @@ class Corpora extends Component {
       <div>
         <CorpusMaskCreate team={this.props.team} />
         Corpora component {
-      this.props.corpora.map((q) => {
-        let dbname = q.get('dbname')
+      this.props.corpora.map((connection) => {
+        let dbname = connection.get('dbname')
         return (
           <div key={dbname}>
-              <Link to={`/corpora/${dbname}`}>{ q.get('title') }</Link>
+              <Link to={`/corpora/${dbname}`}>{ connection.get('title') }</Link>
             </div>
         )
       })

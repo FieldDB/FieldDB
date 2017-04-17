@@ -15,9 +15,11 @@ if (window.__REDUX_STATE__) {
   try {
     let plain = JSON.parse(unescape(window.__REDUX_STATE__))
     _.each(plain, (val, key) => {
+      console.log('adding keys to redux state ', val, key);
       reduxState[key] = Immutable.fromJS(val)
     })
   } catch (e) {
+    console.error(e)
   }
 }
 
@@ -27,4 +29,4 @@ ReactDOM.render((
   <Provider store={store}>
     { createRoutes(browserHistory) }
   </Provider>
-), document.getElementById('root'))
+  ), document.getElementById('root'))

@@ -6,16 +6,16 @@ import { browserHistory } from 'react-router'
 
 class CorpusMask extends Component {
   static fetchData({store, params, history}) {
-    let {id} = params
+    let {dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
-      id,
+      dbname,
       history
     }))
   }
   componentDidMount() {
-    let {id} = this.props.params
+    let {dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
-      id,
+      dbname,
       history: browserHistory
     })
   }
@@ -23,7 +23,7 @@ class CorpusMask extends Component {
     let {corpusMask} = this.props
     return (
       <div>
-        <Helmet title={'Corpus ' + this.props.params.id} />
+        <Helmet title={'Corpus ' + this.props.params.dbname} />
         <h2>{ corpusMask.get('title') }</h2>
         <h3> Team: {corpusMask.getIn(['team', 'name'])} </h3>
       </div>

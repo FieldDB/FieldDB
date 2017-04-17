@@ -4,21 +4,27 @@ import { Link } from 'react-router'
 import Corpora from './Corpora.jsx'
 import Immutable from 'immutable'
 
-describe('Component::Corpora', function () {
+describe('Component::Corpora', function() {
   let props
-  beforeEach(function () {
+  beforeEach(function() {
     props = {
       corpora: Immutable.fromJS([
-        { id: 1, content: 'the-content-1' },
-        { id: 2, content: 'the-content-2' }
+        {
+          dbname: 1,
+          title: 'the-title-1'
+        },
+        {
+          dbname: 2,
+          title: 'the-title-2'
+        }
       ])
     }
   })
-  function renderDoc () {
+  function renderDoc() {
     return shallow(<Corpora {...props} />)
   }
 
-  it('renders corpora', function () {
+  it('renders corpora', function() {
     let doc = renderDoc()
     let corpusMaskComps = doc.find(Link)
 
