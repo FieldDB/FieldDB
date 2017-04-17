@@ -1,4 +1,29 @@
 var fs = require("fs");
+var Q = require("q");
+var CORS = require("fielddb/api/CORSNode").CORS;
+var fixtures = require("fixturefiles");
+
+CORS.makeCORSRequest = function(options) {
+  console.log('makeCORSRequest', options);
+  var deferred = Q.defer();
+  Q.nextTick(function() {
+    if (options.url.includes('lingllama-communitycorpus/team')) {
+      return deferred.resolve(fixtures.team.lingllama);
+    }
+    if (options.url.includes('lingllama-communitycorpus/corpus')) {
+      return deferred.resolve(fixtures.corpus['lingllama-communitycorpus']);
+    }
+    if (options.url.includes('/lingllama')) {
+      return deferred.resolve(fixtures.user.lingllama);
+    }
+
+    return deferred.reject({
+      message: 'Not found',
+      status: 404
+    });
+  });
+  return deferred.promise;
+}
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
@@ -62,6 +87,7 @@ var config = {
     }
   }
 };
+
 process.env.API_BASE_URL = config.url;
 
 console.log("Loaded default config");
