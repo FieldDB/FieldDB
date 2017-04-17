@@ -7,15 +7,14 @@ class Corpora extends Component {
   render() {
     return (
       <div>
-        <CorpusMaskCreate user={this.props.user} />
-        Corpora component
-        {
+        <CorpusMaskCreate team={this.props.team} />
+        Corpora component {
       this.props.corpora.map((q) => {
         let dbname = q.get('dbname')
         return (
           <div key={dbname}>
-                <Link to={`/corpora/${dbname}`}>{ q.get('title') }</Link>
-              </div>
+              <Link to={`/corpora/${dbname}`}>{ q.get('title') }</Link>
+            </div>
         )
       })
       }
@@ -26,7 +25,8 @@ class Corpora extends Component {
 }
 
 Corpora.propTypes = {
-  corpora: React.PropTypes.instanceOf(List).isRequired
+  corpora: React.PropTypes.instanceOf(List).isRequired,
+  team: React.PropTypes.object.isRequired
 }
 
 export default Corpora

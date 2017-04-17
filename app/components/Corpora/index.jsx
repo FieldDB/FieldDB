@@ -4,7 +4,7 @@ import { loadCorpora } from './actions'
 import { Link } from 'react-router'
 import Corpora from './Corpora.jsx'
 import Helmet from 'react-helmet'
-import { createStructuredSelector } from 'reselect';
+// import { createStructuredSelector } from 'reselect';
 
 class CorpusMaskContainer extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class CorpusMaskContainer extends Component {
   }
 
   static fetchData({store}) {
-    console.log('fetching data', loadCorpora);
+    console.log('fetching data', loadCorpora)
     return store.dispatch(loadCorpora())
   }
 
@@ -23,18 +23,13 @@ class CorpusMaskContainer extends Component {
   }
 
   render() {
-    const {team} = this.props;
-    const corpusMaskCreateProps = {
-      team
-    };
-
     return (
       <div>
         <Helmet
       title='Corpora page'
       />
         <h2>Corpora</h2>
-        <Corpora corpora={this.props.corpora} user={this.props.team} />
+        <Corpora corpora={this.props.corpora} team={this.props.team} />
         <Link to='/'>Back to Home</Link>
       </div>
     )
@@ -43,11 +38,12 @@ class CorpusMaskContainer extends Component {
 
 CorpusMaskContainer.propTypes = {
   loadCorpora: React.PropTypes.func.isRequired,
-  corpora: React.PropTypes.object.isRequired
+  corpora: React.PropTypes.object.isRequired,
+  team: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
-  console.log('corpusMask list map state to props', state);
+  console.log('corpusMask list map state to props', state)
   return {
     team: {
       id: 13

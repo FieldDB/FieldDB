@@ -52,13 +52,13 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
     let deferred = Promise.defer()
     let params = extractParams(apiAction[CALL_API])
 
-    console.log('requesting', params);
+    console.log('requesting', params)
     superAgent[params.method](params.url)
       .send(params.body)
       .query(params.query)
       .end((err, res) => {
         if (err) {
-          console.log('recieved err', err);
+          console.log('recieved err', err)
           if (params.errorType) {
             dispatch(actionWith(apiAction, {
               type: params.errorType,
@@ -73,7 +73,7 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
           }
           deferred.reject()
         } else {
-          console.log('recieved response', res.body);
+          console.log('recieved response', res.body)
           let resBody = camelizeKeys(res.body)
           dispatch(actionWith(apiAction, {
             type: params.successType,
@@ -96,7 +96,7 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
 function extractParams(callApi) {
   let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
-  console.log('process.env.API_BASE_URL', process.env.API_BASE_URL);
+  console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)
   let url = `${process.env.API_BASE_URL}${path}`
 
   return {

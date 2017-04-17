@@ -8,7 +8,7 @@ function corpusMask(id) {
 
 export const corpora = _.range(1, 10).map((i) => corpusMask(i))
 export function getUser(id) {
-  return user.getUserMask('lingllama', console.log);
+  return user.getUserMask('lingllama', console.log)
 }
 export function getCorpusMask(id) {
   if (id === 'not-found') {

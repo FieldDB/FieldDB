@@ -23,9 +23,7 @@ class CorpusMask extends Component {
     let {corpusMask} = this.props
     return (
       <div>
-        <Helmet
-      title={'Corpus ' + this.props.params.id}
-      />
+        <Helmet title={'Corpus ' + this.props.params.id} />
         <h2>{ corpusMask.get('title') }</h2>
         <h3> Team: {corpusMask.getIn(['team', 'name'])} </h3>
       </div>
@@ -34,7 +32,7 @@ class CorpusMask extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('corpusMaskdetail map state to props', state);
+  console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail
   }
