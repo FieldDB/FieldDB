@@ -4,15 +4,15 @@ import fixtures from 'fixturefiles'
 import Corpora from 'fielddb/api/corpus/Corpora'
 
 let _ = require('lodash')
-function corpusMask(dbname) {
+function corpusMask (dbname) {
   return corpus.getCorpusMask(dbname, console.log)
 }
 
-export const corpora = new Corpora.Corpora(fixtures.user.lingllama.corpora).toJSON();
+export const corpora = new Corpora.Corpora(fixtures.user.lingllama.corpora).toJSON()
 
-export function getUser(id) {
+export function getUser (id) {
   return user.getUserMask(id, console.log)
 }
-export function getCorpusMask(dbname) {
+export function getCorpusMask (dbname) {
   return corpusMask(dbname)
 }

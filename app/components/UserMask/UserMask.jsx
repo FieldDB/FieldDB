@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { List } from 'immutable'
 
 class UserMask extends Component {
-  render() {
+  render () {
     return (
       <div>
         {this.props.username}

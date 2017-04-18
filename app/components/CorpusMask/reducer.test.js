@@ -2,10 +2,10 @@ import reducer from './reducer'
 import * as ActionType from './actions'
 import Immutable from 'immutable'
 
-describe('Reducer::::CorpusMaskDetail', function() {
-  describe('on ACTION_TYPE', function() {
-    describe('on LOADED_CORPUS_MASK_DETAIL', function() {
-      it('merges state to response', function() {
+describe('Reducer::::CorpusMaskDetail', function () {
+  describe('on ACTION_TYPE', function () {
+    describe('on LOADED_CORPUS_MASK_DETAIL', function () {
+      it('merges state to response', function () {
         let action = {
           type: ActionType.LOADED_CORPUS_MASK_DETAIL,
           response: {
@@ -22,8 +22,8 @@ describe('Reducer::::CorpusMaskDetail', function() {
       })
     })
 
-    describe('on LOADED_CORPUS_MASK_USER', function() {
-      it('merge `team` to state', function() {
+    describe('on LOADED_CORPUS_MASK_USER', function () {
+      it('merge `team` to state', function () {
         let action = {
           type: ActionType.LOADED_CORPUS_MASK_USER,
           response: {

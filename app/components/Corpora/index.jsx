@@ -7,29 +7,29 @@ import Helmet from 'react-helmet'
 // import { createStructuredSelector } from 'reselect';
 
 class CorpusMaskContainer extends Component {
-  constructor(props) {
+  constructor (props) {
     console.log('constructing corpusMask container', props)
     super(props)
     console.log('constructed ', this.props)
   }
 
-  static fetchData({store}) {
+  static fetchData ({store}) {
     console.log('fetching data', loadCorpora)
     return store.dispatch(loadCorpora())
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.loadCorpora()
   }
 
-  render() {
+  render () {
     return (
       <div>
         <Helmet
-      title='Corpora page'
+          title='Corpora page'
       />
         <h2>Corpora</h2>
-        <Corpora corpora={this.props.corpora}/>
+        <Corpora corpora={this.props.corpora} />
       </div>
     )
   }
@@ -40,7 +40,7 @@ CorpusMaskContainer.propTypes = {
   corpora: React.PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   console.log('corpusMask list map state to props', state)
   return {
     corpora: state.corpora

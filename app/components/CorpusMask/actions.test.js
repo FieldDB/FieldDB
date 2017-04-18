@@ -3,10 +3,10 @@ import { CALL_API, CHAIN_API } from 'middleware/api'
 import * as actionCreator from './actions'
 // import * as ActionType from 'actions/corpora'
 
-describe('Action::CorpusMask', function() {
-  describe('#loadCorpusMaskDetail({id})', function() {
+describe('Action::CorpusMask', function () {
+  describe('#loadCorpusMaskDetail({id})', function () {
     let dbname = 'the-dbname'
-    it('returns a CHAIN_API to fetch corpusMask first', function() {
+    it('returns a CHAIN_API to fetch corpusMask first', function () {
       let action = actionCreator.loadCorpusMaskDetail({
         dbname
       })
@@ -29,7 +29,7 @@ describe('Action::CorpusMask', function() {
 
       expect(mockHistory.push).to.have.been.calledWith('/')
     })
-    it('fetches team data after fetching corpusMask', function() {
+    it('fetches team data after fetching corpusMask', function () {
       let action = actionCreator.loadCorpusMaskDetail({
         dbname
       })

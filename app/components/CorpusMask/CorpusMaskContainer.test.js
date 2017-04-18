@@ -4,13 +4,13 @@ import { CorpusMaskContainer } from './index.jsx'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 
-describe('Container::CorpusMask', function() {
+describe('Container::CorpusMask', function () {
   let props
 
-  function renderDoc() {
+  function renderDoc () {
     return mount(<CorpusMaskContainer {...props} />)
   }
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       loadCorpusMaskDetail: sinon.stub(),
       params: {
@@ -27,7 +27,7 @@ describe('Container::CorpusMask', function() {
     }
   })
 
-  it('fetches corpusMask details on mounted', function() {
+  it('fetches corpusMask details on mounted', function () {
     let doc = renderDoc()
     expect(props.loadCorpusMaskDetail).to.have.been.calledWith({
       teamname: undefined,

@@ -4,9 +4,9 @@ import { Link } from 'react-router'
 import Corpora from './Corpora.jsx'
 import Immutable from 'immutable'
 
-describe('Component::Corpora', function() {
+describe('Component::Corpora', function () {
   let props
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       corpora: Immutable.fromJS([
         {
@@ -24,15 +24,15 @@ describe('Component::Corpora', function() {
       ])
     }
   })
-  function renderDoc() {
+  function renderDoc () {
     return shallow(<Corpora {...props} />)
   }
 
-  it('renders corpora', function() {
+  it('renders corpora', function () {
     let doc = renderDoc()
     let corpusMaskComps = doc.find(Link)
 
-    console.log(corpusMaskComps);
+    console.log(corpusMaskComps)
     expect(corpusMaskComps.length).to.equal(props.corpora.size * 2)
   })
 })

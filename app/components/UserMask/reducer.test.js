@@ -1,8 +1,8 @@
 import userMaskDetail from './reducer'
 import * as ActionType from './actions'
 
-describe('Reducer::Usermask', function() {
-  it('returns an empty array as default state', function() {
+describe('Reducer::Usermask', function () {
+  it('returns an empty array as default state', function () {
     let action = {
       type: 'unknown'
     }
@@ -10,8 +10,8 @@ describe('Reducer::Usermask', function() {
     expect(newState.toJS()).to.deep.equal([])
   })
 
-  describe('on LOADED_USER_MASK', function() {
-    it('returns the `response` in given action', function() {
+  describe('on LOADED_USER_MASK', function () {
+    it('returns the `response` in given action', function () {
       let action = {
         type: ActionType.LOADED_USER_MASK,
         response: {

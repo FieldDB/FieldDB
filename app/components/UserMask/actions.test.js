@@ -3,9 +3,9 @@ import { CALL_API } from 'middleware/api'
 import * as actionCreator from './actions'
 // import * as ActionType from 'actions/userMask'
 
-describe('Action::CorpusMask', function() {
-  describe('#loadUserMask()', function() {
-    it('returns action `CALL_API` info', function() {
+describe('Action::CorpusMask', function () {
+  describe('#loadUserMask()', function () {
+    it('returns action `CALL_API` info', function () {
       let action = actionCreator.loadUserMaskDetail({
         username: 'lingllama'
       })

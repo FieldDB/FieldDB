@@ -4,9 +4,9 @@ import { Link } from 'react-router'
 import UserMask from './UserMask.jsx'
 import Immutable from 'immutable'
 
-describe('Component::UserMask', function() {
+describe('Component::UserMask', function () {
   let props
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       userMask: Immutable.fromJS({
         username: 1,
@@ -14,11 +14,11 @@ describe('Component::UserMask', function() {
       })
     }
   })
-  function renderDoc() {
+  function renderDoc () {
     return shallow(<UserMask {...props} />)
   }
 
-  it('renders userMask', function() {
+  it('renders userMask', function () {
     let doc = renderDoc()
     let links = doc.find(Link)
 

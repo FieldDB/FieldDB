@@ -5,9 +5,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Immutable from 'immutable'
 
-describe('Container::UserMask', function() {
+describe('Container::UserMask', function () {
   let props
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       loadUserMask: sinon.stub(),
       userMask: Immutable.fromJS({
@@ -18,14 +18,14 @@ describe('Container::UserMask', function() {
     }
   })
 
-  it.skip('renders UserMask with userMask in props', function() {
+  it.skip('renders UserMask with userMask in props', function () {
     let doc = shallow(<UserMaskContainer {...props} />)
     let userMaskComp = doc.find(UserMask)
 
     expect(userMaskComp.props().userMask).to.equal(props.userMask)
   })
 
-  it.skip('renders a link back to `/`', function() {
+  it.skip('renders a link back to `/`', function () {
     let doc = shallow(<UserMaskContainer {...props} />)
     let link = doc.find('Link')
 

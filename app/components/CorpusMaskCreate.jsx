@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as ActionType from './Corpora/actions'
 
 class CorpusMaskCreate extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     console.log('constructing create corpusMask', props, this.state)
 
@@ -15,13 +15,13 @@ class CorpusMaskCreate extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     this.setState({
       title: event.target.value
     })
   }
 
-  handleSubmit(event) {
+  handleSubmit (event) {
     event.preventDefault()
     const dbname = Date.now()
     this.props.addCorpusMask({
@@ -31,7 +31,7 @@ class CorpusMaskCreate extends Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.handleSubmit}>
         <input type='text' value={this.state.title} onChange={this.handleChange} />
@@ -44,12 +44,12 @@ CorpusMaskCreate.propTypes = {
   team: React.PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   console.log('corpusMask create map state to props', state)
   return {}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return {
     addCorpusMask: (corpusMask) => {
       return dispatch({

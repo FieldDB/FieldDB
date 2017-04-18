@@ -5,27 +5,26 @@ import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 
 class CorpusMask extends Component {
-  static fetchData({store, params, history}) {
+  static fetchData ({store, params, history}) {
     let {dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
       dbname,
       history
     }))
   }
-  componentDidMount() {
+  componentDidMount () {
     let {dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
       dbname,
       history: browserHistory
     })
   }
-  render() {
+  render () {
     let {corpusMask} = this.props
     let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
     return (
       <div>
         <Helmet title={title} />
-
 
         <h2>{ corpusMask.get('title') }</h2>
         <h3> Team: {corpusMask.getIn(['team', 'name'])} </h3>
@@ -34,7 +33,7 @@ class CorpusMask extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail

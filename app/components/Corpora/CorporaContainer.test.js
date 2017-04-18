@@ -5,9 +5,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Immutable from 'immutable'
 
-describe('Container::Corpora', function() {
+describe('Container::Corpora', function () {
   let props
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       loadCorpora: sinon.stub(),
       corpora: Immutable.fromJS([
@@ -23,7 +23,7 @@ describe('Container::Corpora', function() {
     }
   })
 
-  it('renders Corpora with corpora in props', function() {
+  it('renders Corpora with corpora in props', function () {
     let doc = shallow(<CorpusMaskContainer {...props} />)
     let corporaComp = doc.find(Corpora)
 
