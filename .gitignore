@@ -40,7 +40,6 @@ pids
 logs
 results
 yarn-error.log
-yarn.lock
 .tern-port
 v8.log
 

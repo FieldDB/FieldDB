@@ -1,3 +1,4 @@
+var config = require("config");
 var expect = require("chai").expect;
 var getUserMask = require("./../../routes/user").getUserMask;
 var specIsRunningTooLong = 25000;
@@ -66,6 +67,9 @@ describe("user routes", function() {
     });
 
     it("should return a bleached user mask for users by default", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       getUserMask("teammatetiger", done).then(function(mask) {
         expect(mask).to.be.defined;
         expect(mask.fieldDBtype).to.deep.equal("UserMask");

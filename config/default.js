@@ -6,17 +6,37 @@ var offline = process.env.OFFLINE;
 if (offline) {
   var fixtures = require("fixturefiles");
   CORS.makeCORSRequest = function(options) {
-    console.log('makeCORSRequest', options);
     var deferred = Q.defer();
     Q.nextTick(function() {
       if (options.url.includes('lingllama-communitycorpus/team')) {
         return deferred.resolve(fixtures.team.lingllama);
       }
+      if (options.url.includes('community-georgian/team')) {
+        return deferred.resolve(fixtures.team.community);
+      }
       if (options.url.includes('lingllama-communitycorpus/corpus')) {
         return deferred.resolve(fixtures.corpus['lingllama-communitycorpus']);
       }
+      if (options.url.includes('lingllama-cherokee/corpus')) {
+        return deferred.resolve(fixtures.corpus['lingllama-cherokee']);
+      }
+      if (options.url.includes('lingllama-firstcorpus/corpus')) {
+        return deferred.resolve(fixtures.corpus['lingllama-firstcorpus']);
+      }
+      if (options.url.includes('community-georgian/corpus')) {
+        return deferred.resolve(fixtures.corpus['community-georgian']);
+      }
+      if (options.url.includes('community-migmaq/corpus')) {
+        return deferred.resolve(fixtures.corpus['community-migmaq']);
+      }
+      if (options.url.includes('community-firstcorpus/corpus')) {
+        return deferred.resolve(fixtures.corpus['community-firstcorpus']);
+      }
       if (options.url.includes('/lingllama')) {
         return deferred.resolve(fixtures.user.lingllama);
+      }
+      if (options.url.includes('/community')) {
+        return deferred.resolve(fixtures.user.community);
       }
 
       return deferred.reject({

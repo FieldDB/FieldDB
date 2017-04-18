@@ -36,6 +36,9 @@ describe("activity routes", function() {
   describe("normal requests", function() {
 
     it("should return heat map data from the sample activity feeds", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       activityHeatMap("lingllama-communitycorpus", done).then(function(results) {
         expect(results).to.be.defined;
         expect(results.rows).to.be.defined;
@@ -44,6 +47,9 @@ describe("activity routes", function() {
     });
 
     it("should return heat map data from the community activity feeds", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       activityHeatMap("community-georgian", done).then(function(results) {
         expect(results).to.be.defined;
         expect(results.rows).to.be.defined;
@@ -55,7 +61,11 @@ describe("activity routes", function() {
 
   describe("normal requests via service", function() {
 
+
     it("should return heat map data from the sample activity feeds", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       CORS.makeCORSRequest({
         dataType: "json",
         url: config.url + "/activity/lingllama-communitycorpus"
@@ -70,6 +80,9 @@ describe("activity routes", function() {
     });
 
     it("should return heat map data from the community activity feeds", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       CORS.makeCORSRequest({
         dataType: "json",
         url: config.url + "/activity/community-georgian"
@@ -86,8 +99,11 @@ describe("activity routes", function() {
   });
 
   describe("close enough requests", function() {
-
     it("should use lowercase dbname", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
+
       activityHeatMap("LingLlama-communitycorpus", done).then(function(results) {
         expect(results).to.be.defined;
         expect(results.rows).to.be.defined;
@@ -96,6 +112,10 @@ describe("activity routes", function() {
     });
 
     it("should accept activity feed dbname", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
+
       activityHeatMap("lingllama-communitycorpus-activity_feed", done).then(function(results) {
         expect(results).to.be.defined;
         expect(results.rows).to.be.defined;
