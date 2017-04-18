@@ -121,11 +121,6 @@ app.get("/api/:username/:titleAsUrl", function(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        return res.json({
-          corpusMask: corpus
-        });
-      }
       res.json(corpus);
     }, next).fail(next);
     return;
@@ -141,12 +136,6 @@ app.get("/api/:username/:titleAsUrl", function(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      debug('replying with getCorpusMaskFromTitleAsUrl ', corpus);
-      if (req.session && req.headers['x-requested-with'] === 'XMLHttpRequest') {
-        return res.json({
-          corpusMask: corpus
-        });
-      }
       res.json(corpus);
     }, next).fail(next);
   }, next).fail(next);
