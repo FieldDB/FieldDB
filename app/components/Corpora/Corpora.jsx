@@ -18,7 +18,6 @@ class Corpora extends Component {
         )
       })
       }
-        <Link to={`/corpora/not-found`}> This link would be redirected to Index</Link>
       </div>
     )
   }

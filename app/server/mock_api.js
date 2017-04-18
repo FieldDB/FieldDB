@@ -14,8 +14,5 @@ export function getUser(id) {
   return user.getUserMask(id, console.log)
 }
 export function getCorpusMask(dbname) {
-  if (dbname === 'not-found') {
-    return null
-  }
   return corpusMask(dbname)
 }
