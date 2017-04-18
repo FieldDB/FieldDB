@@ -105,6 +105,9 @@ app.get("/api/users/:username", function(req, res, next) {
     var user = userMask.toJSON();
     user.name = userMask.name;
     user.username = user.username || userMask.id;
+    user.corpora.map(function(connection) {
+      connection.owner = userMask.corpora[connection.dbname].owner;
+    });
     res.json(user);
   }, next).fail(next);
 });

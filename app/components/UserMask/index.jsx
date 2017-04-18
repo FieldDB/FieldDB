@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { loadUserMaskDetail } from './actions'
 import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
+import Corpora from '../Corpora/Corpora.jsx'
 
 class UserMaskContainer extends Component {
   static fetchData({store, params, history}) {
@@ -50,6 +51,7 @@ class UserMaskContainer extends Component {
         <div className="span6 offset1">
           <h1>Corpora</h1>
           <br />
+          <Corpora corpora={userMask.get('corpora')} />
           { /* {#each userMask.get('corpora.collection')}
           <div style="margin-bottom:40px" className="media">
             <a href="{this.website')}" className="pull-left"><img src="https://secure.gravatar.com/avatar/{this.gravatar')}.jpg?s=96&amp;d=retro&amp;r=pg" alt="Corpus image" className="media-object"></a>

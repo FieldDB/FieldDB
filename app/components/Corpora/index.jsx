@@ -29,7 +29,7 @@ class CorpusMaskContainer extends Component {
       title='Corpora page'
       />
         <h2>Corpora</h2>
-        <Corpora corpora={this.props.corpora} team={this.props.team} />
+        <Corpora corpora={this.props.corpora}/>
       </div>
     )
   }
@@ -37,23 +37,18 @@ class CorpusMaskContainer extends Component {
 
 CorpusMaskContainer.propTypes = {
   loadCorpora: React.PropTypes.func.isRequired,
-  corpora: React.PropTypes.object.isRequired,
-  team: React.PropTypes.object.isRequired
+  corpora: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
   console.log('corpusMask list map state to props', state)
   return {
-    team: {
-      id: 13
-    },
     corpora: state.corpora
   }
 }
 
 // const mapStateToProps = createStructuredSelector({
 //   corpora: state.corpora,
-//   team: state.team
 // });
 
 export { CorpusMaskContainer }

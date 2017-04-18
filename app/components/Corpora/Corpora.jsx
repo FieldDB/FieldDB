@@ -6,12 +6,11 @@ class Corpora extends Component {
   render() {
     return (
       <div>
-        Corpora component {
+      {
       this.props.corpora.map((connection) => {
-        let dbname = connection.get('dbname')
         return (
-          <div key={dbname}>
-            <Link to={`/corpora/${dbname}`}>{ connection.get('title') }</Link>
+          <div key={connection.get('dbname')}>
+            <Link to={`/${connection.get('owner')}/${connection.get('titleAsUrl')}`}>{ connection.get('title') }</Link>
           </div>
         )
       })
@@ -22,8 +21,7 @@ class Corpora extends Component {
 }
 
 Corpora.propTypes = {
-  corpora: React.PropTypes.instanceOf(List).isRequired,
-  team: React.PropTypes.object.isRequired
+  corpora: React.PropTypes.instanceOf(List).isRequired
 }
 
 export default Corpora
