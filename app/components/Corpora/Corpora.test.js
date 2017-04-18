@@ -16,6 +16,10 @@ describe('Component::Corpora', function() {
         {
           dbname: 2,
           title: 'the-title-2'
+        },
+        {
+          dbname: 3,
+          title: 'the-title-3'
         }
       ])
     }
@@ -28,6 +32,7 @@ describe('Component::Corpora', function() {
     let doc = renderDoc()
     let corpusMaskComps = doc.find(Link)
 
-    expect(corpusMaskComps.length).to.equal(props.corpora.size)
+    console.log(corpusMaskComps);
+    expect(corpusMaskComps.length).to.equal(props.corpora.size * 2)
   })
 })

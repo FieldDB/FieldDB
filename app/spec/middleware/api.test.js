@@ -88,8 +88,15 @@ describe('Middleware::Api', function() {
         .reply(200, response1)
     }
     function nockRequest2(status = 200) {
+      let data = response2;
+      if (status !== 200) {
+        data = {
+          status: status,
+          message: 'Bad Request'
+        }
+      }
       return nock(config.url).get('/the-url/the-id-1')
-        .reply(status, response2)
+        .reply(status, data)
     }
 
     afterEach(function() {
@@ -186,7 +193,7 @@ describe('Middleware::Api', function() {
         let promise = apiMiddleware(store)(next)(action)
         promise.then(() => {
           expect(dispatchedAction.type).to.equal(errorType2)
-          expect(dispatchedAction.error).to.be.an.instanceOf(Error)
+          expect(dispatchedAction.error.message).to.equal('Bad Request')
           done()
         })
       })
