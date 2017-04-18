@@ -8,6 +8,7 @@ import ReactDOMServer from "react-dom/server"
 import { useRouterHistory, RouterContext, match } from "react-router"
 
 import { createMemoryHistory, useQueries } from "history"
+import Promise from "bluebird"
 
 import configureStore from "../app/components/App/store"
 import createRoutes from "../app/components/App/routes"

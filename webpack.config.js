@@ -14,6 +14,7 @@ var config = {
       'react-router',
       'redux',
       'react-dom',
+      'bluebird',
       'history'
     ]
   },

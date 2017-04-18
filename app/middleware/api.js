@@ -6,35 +6,80 @@ export const CHAIN_API = Symbol('CHAIN_API')
 
 export default ({dispatch, getState}) => next => action => {
   if (action[CALL_API]) {
-    return createRequestPromise(action[CALL_API], next, getState, dispatch)
+    return dispatch({
+      [CHAIN_API]: [
+        () => action
+      ]
+    })
   }
 
-  return next(action)
+  let deferred = Promise.defer()
+
+  if (!action[CHAIN_API]) {
+    return next(action)
+  }
+
+  let promiseCreators = action[CHAIN_API].map((apiActionCreator) => {
+    return createRequestPromise(apiActionCreator, next, getState, dispatch)
+  })
+
+  let overall = promiseCreators.reduce((promise, creator) => {
+    return promise.then((body) => {
+      return creator(body)
+    })
+  }, Promise.resolve())
+
+  overall.finally(() => {
+    deferred.resolve()
+  }).catch((err) => {
+    console.log('something went wrong', err)
+    deferred.reject(err)
+  })
+
+  return deferred.promise
 }
 
 function actionWith(action, toMerge) {
-  console.log('actionWith', action, toMerge)
   let ret = Object.assign({}, action, toMerge)
   delete ret[CALL_API]
   return ret
 }
 
-function createRequestPromise(apiAction, next, getState, dispatch) {
+function createRequestPromise(apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
+    let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
-    let params = extractParams(apiAction)
+    let params = extractParams(apiAction[CALL_API])
 
     console.log('requesting', params)
-    return superAgent[params.method](params.url)
+    superAgent[params.method](params.url)
       .send(params.body)
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/json')
       .query(params.query)
-      .then((body) => {
-        console.log('recieved response', body)
+      .end((err, res, body) => {
+        if (err) {
+          console.log('recieved err', res.body)
+          if (params.errorType) {
+            console.log('dispatching error', params.errorType)
+            dispatch(actionWith(apiAction, {
+              type: params.errorType,
+              error: res.body
+            }))
+          }
+
+          if (typeof params.afterError === 'function') {
+            params.afterError({
+              getState
+            })
+          }
+          return deferred.reject(res.body)
+        }
+
+        console.log('recieved response', res.body)
         dispatch(actionWith(apiAction, {
           type: params.successType,
-          response: body
+          response: res.body
         }))
 
         if (typeof params.afterSuccess === 'function') {
@@ -42,24 +87,7 @@ function createRequestPromise(apiAction, next, getState, dispatch) {
             getState
           })
         }
-        return body
-      })
-      .catch(function(err) {
-        console.log('recieved err', err)
-        if (params.errorType) {
-          console.log('dispatching error', params.errorType)
-          dispatch(actionWith(apiAction, {
-            type: params.errorType,
-            error: err
-          }))
-        }
-
-        if (typeof params.afterError === 'function') {
-          params.afterError({
-            getState
-          })
-        }
-        throw err
+        deferred.resolve(res.body)
       })
 
     return deferred.promise

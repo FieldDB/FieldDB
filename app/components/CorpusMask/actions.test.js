@@ -1,17 +1,17 @@
-import { CALL_API } from 'redux-api-middleware';
+import { CALL_API, CHAIN_API } from 'middleware/api'
 
 import * as actionCreator from './actions'
 
-describe('Action::CorpusMask', function() {
-  describe('#loadCorpusMaskDetail({id})', function() {
+describe('Action::CorpusMask', function () {
+  describe('#loadCorpusMaskDetail({id})', function () {
     let dbname = 'the-dbname'
-    it('returns a CHAIN_API to fetch corpusMask first', function() {
+    it('returns a CHAIN_API to fetch corpusMask first', function () {
       let action = actionCreator.loadCorpusMaskDetail({
         dbname
       })
-      let callApi = action[CALL_API]
+      let callApi = action[CHAIN_API][0]()[CALL_API]
       expect(callApi.method).to.equal('get')
-      expect(callApi.endpoint).to.equal(process.env.API_BASE_URL + `/api/corpora/${dbname}`)
+      expect(callApi.path).to.equal(`/api/corpora/${dbname}`)
       expect(callApi.successType).to.equal(actionCreator.LOADED_CORPUS_MASK_DETAIL)
     })
     it('navigates to root when request error', () => {
@@ -22,13 +22,13 @@ describe('Action::CorpusMask', function() {
         dbname,
         history: mockHistory
       })
-      let callApi = action[CALL_API]
+      let callApi = action[CHAIN_API][0]()[CALL_API]
       expect(callApi.afterError).to.be.an.instanceOf(Function)
       callApi.afterError()
 
       expect(mockHistory.push).to.have.been.calledWith('/')
     })
-    it('fetches team data after fetching corpusMask', function() {
+    it('fetches team data after fetching corpusMask', function () {
       let action = actionCreator.loadCorpusMaskDetail({
         teamname: 'someone',
         dbname: 'somecorpus'

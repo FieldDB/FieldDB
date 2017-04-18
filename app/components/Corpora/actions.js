@@ -1,12 +1,12 @@
-import { CALL_API } from 'redux-api-middleware';
+import { CALL_API } from '../../middleware/api'
 
 export const LOADED_CORPORA = Symbol('LOADED_CORPORA')
 export const ADD_CORPUS_MASK = Symbol('ADD_CORPUS_MASK')
-export function loadCorpora() {
+export function loadCorpora () {
   return {
     [CALL_API]: {
       method: 'get',
-      endpoint: process.env.API_BASE_URL + '/api/corpora',
+      path: '/api/corpora',
       successType: LOADED_CORPORA
     }
   }
