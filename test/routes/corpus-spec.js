@@ -113,6 +113,7 @@ describe("corpus routes", function() {
           dbname: "lingllama-communitycorpus",
           path: "",
           gravatar: "948814f0b1bc8bebd701a9732ab3ebbd",
+          website: "",
           corpusid: mask.connection.corpusid,
           corpusUrls: mask.connection.corpusUrls,
           version: mask.connection.version,
@@ -266,21 +267,21 @@ describe("corpus routes", function() {
 
       it("should use fuzzy find to find a matching corpus", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
@@ -294,21 +295,21 @@ describe("corpus routes", function() {
 
       it("should use fuzzy find to find a matching corpus too", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_other_informative_title",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_other_informative_title",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "Some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
@@ -330,18 +331,18 @@ describe("corpus routes", function() {
 
       it("should use fuzzy find to find the users matching corpus", function() {
         return getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "georgian",
-              dbname: "another-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "georgian",
+            dbname: "another-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "georgian").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask.titleAsUrl).to.deep.equal("georgian_together");
