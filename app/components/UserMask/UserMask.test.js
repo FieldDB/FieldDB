@@ -1,14 +1,15 @@
+import Immutable from 'immutable'
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Link } from 'react-router'
+
+import Gravatar from './Gravatar.jsx'
 import UserMask from './UserMask.jsx'
-import Immutable from 'immutable'
 
 describe('Component::UserMask', function () {
   let props
   beforeEach(function () {
     props = {
-      userMask: Immutable.fromJS({
+      user: Immutable.fromJS({
         username: 1,
         title: 'the-title-1'
       })
@@ -20,8 +21,10 @@ describe('Component::UserMask', function () {
 
   it('renders userMask', function () {
     let doc = renderDoc()
-    let links = doc.find(Link)
+    let image = doc.find(Gravatar)
 
-    expect(links.length).to.equal(1)
+    expect(image).to.exist
+    expect(image).to.not.be.instanceOf(Gravatar)
+    expect(image.length).to.equal(1)
   })
 })

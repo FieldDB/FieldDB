@@ -1,8 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { loadCorpusMaskDetail } from './actions'
-import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import Helmet from 'react-helmet'
+import React, { Component } from 'react'
+
+import { loadCorpusMaskDetail } from './actions'
+import UserMask from './../UserMask/UserMask.jsx'
 
 class CorpusMaskContainer extends Component {
   static fetchData ({store, params, history}) {
@@ -25,8 +27,8 @@ class CorpusMaskContainer extends Component {
     let clearResults = function () {
       return window.clearresults()
     }
-    let reindex = function (dbname) {
-      return window.reindex(this.props.dbname)
+    let reindex = function () {
+      return window.reindex(this.props.params.dbname)
     }
     let handleSearchSubmit = function (e) {
       return window.handleSearchSubmit(e)
@@ -40,27 +42,7 @@ class CorpusMaskContainer extends Component {
           <meta name='description' content={corpusMask.get('description')} />
         </Helmet>
         <div className='row-fluid'>
-          <div className='span3'>
-            <p className='text-center'>
-              <a href={'/' + corpusMask.getIn(['team', 'username'])}>
-                <img src={'https://secure.gravatar.com/avatar/' + corpusMask.getIn(['team', 'gravatar']) + '.jpg?s=200&d=identicon&r=pg'} alt='' className='img-polaroid' />
-              </a>
-            </p>
-            <div>
-              <h1>{corpusMask.getIn(['team', 'name'])}</h1>
-              <p>{corpusMask.getIn(['team', 'username'])}</p>
-            </div>
-            <div className='well well-small'>
-              <dl>
-                <dt><i className='icon-folder-open' />  Interests:</dt>
-                <dd>{corpusMask.getIn(['team', 'researchInterest'])}</dd>
-                <dt><i className='icon-user' />  Affiliation:</dt>
-                <dd>{corpusMask.getIn(['team', 'affiliation'])}</dd>
-                <dt><i className='icon-comment' />  Description:</dt>
-                <dd>{corpusMask.getIn(['team', 'description'])}</dd>
-              </dl>
-            </div>
-          </div>
+          <UserMask className='span3' user={corpusMask.get('team')} link={'/' + corpusMask.getIn(['team', 'username'])} />
           <div className='span9'>
             <div className='row-fluid'>
               <div className='span7 offset1'>
@@ -133,7 +115,7 @@ class CorpusMaskContainer extends Component {
         </div>
         <hr />
         <footer>
-          <p>© {corpusMask.get('copyright')}            {corpusMask.get('startYear')} - 2017 </p>
+          <p>© {corpusMask.get('copyright')} {corpusMask.get('startYear')} - 2017 </p>
           <div className='tabbable'>
             <ul className='nav nav-tabs'>
               <li className='active'><a href='#terms' data-toggle='tab'>Terms of Use for {corpusMask.get('title')}</a></li>

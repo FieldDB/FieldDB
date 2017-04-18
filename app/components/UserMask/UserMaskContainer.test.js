@@ -1,9 +1,10 @@
-import { UserMaskContainer } from './index.jsx'
-import UserMask from './UserMask.jsx'
-import { Link } from 'react-router'
+import Immutable from 'immutable'
 import React from 'react'
 import { shallow } from 'enzyme'
-import Immutable from 'immutable'
+
+import Corpora from '../Corpora/Corpora.jsx'
+import { UserMaskContainer } from './index.jsx'
+import UserMask from './UserMask.jsx'
 
 describe('Container::UserMask', function () {
   let props
@@ -18,19 +19,19 @@ describe('Container::UserMask', function () {
     }
   })
 
-  it.skip('renders UserMask with userMask in props', function () {
+  it('renders UserMask with user in props', function () {
     let doc = shallow(<UserMaskContainer {...props} />)
     let userMaskComp = doc.find(UserMask)
 
-    expect(userMaskComp.props().userMask).to.equal(props.userMask)
+    expect(userMaskComp.props().user).to.equal(props.userMask)
   })
 
-  it.skip('renders a link back to `/`', function () {
+  it('renders the users corpora', function () {
     let doc = shallow(<UserMaskContainer {...props} />)
-    let link = doc.find('Link')
+    let corpora = doc.find(Corpora)
 
-    expect(link).to.exist
-    expect(link).to.not.be.instanceOf(Link)
-    expect(link.props().to).to.equal('/lingllama')
+    expect(corpora).to.exist
+    expect(corpora).to.not.be.instanceOf(Corpora)
+    expect(corpora.props().corpora).to.deep.equal(Immutable.fromJS([]))
   })
 })

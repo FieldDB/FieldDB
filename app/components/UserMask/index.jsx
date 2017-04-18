@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { loadUserMaskDetail } from './actions'
-import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import Helmet from 'react-helmet'
+import React, { Component } from 'react'
+
 import Corpora from '../Corpora/Corpora.jsx'
+import { loadUserMaskDetail } from './actions'
+import UserMask from './UserMask.jsx'
 
 class UserMaskContainer extends Component {
   static fetchData ({store, params, history}) {
@@ -21,8 +23,6 @@ class UserMaskContainer extends Component {
     })
   }
   render () {
-    let clearResults = function () {}
-    let reindex = function () {}
     let {userMask} = this.props
     if (!userMask.get('username')) {
       const err = new Error('Sorry, a user with this username was not found, please try again.')
@@ -36,28 +36,8 @@ class UserMaskContainer extends Component {
           <meta name='description' content={userMask.get('description')} />
         </Helmet>
         <div className='row'>
-          <div className='span3'>
-            <p className='text-center'>
-              <img src={'https://secure.gravatar.com/avatar/' + userMask.get('gravatar') + '.jpg?s=200&d=identicon&r=pg'} alt='Your gravatar.com profile image' className='img-polaroid' />
-            </p>
-            <div>
-              <h1>{userMask.get('name')}</h1>
-              <p>{userMask.get('username')}</p>
-            </div>
-            <div className='well well-small'>
-              <dl>
-                <dt><i className='icon-folder-open' />  Interests:</dt>
-                <dd>{userMask.get('researchInterest')}</dd>
-                <dt><i className='icon-user' />  Affiliation:</dt>
-                <dd>{userMask.get('affiliation')}</dd>
-                <dt><i className='icon-comment' />  Description:</dt>
-                <dd>{userMask.get('description')}</dd>
-              </dl>
-            </div>
-          </div>
-          <div className='span6 offset1'>
-            <Corpora corpora={userMask.get('corpora')} />
-          </div>
+          <UserMask user={userMask} className='span3' />
+          <Corpora corpora={userMask.get('corpora')} className='span6 offset1' />
         </div>
         <div className='row'>
           <div className='span12'>
@@ -67,7 +47,7 @@ class UserMaskContainer extends Component {
         </div>
         <hr />
         <footer>
-          <p>© {userMask.get('username')}            {userMask.get('startYear')}  2017
+          <p>© {userMask.get('username')} {userMask.get('startYear')}  2017
           <a href='http://creativecommons.org/licenses/by/3.0/' rel='license' title='Creative Commons Attribution 3.0 License'>link
             <img src='//i.creativecommons.org/l/by/3.0/88x31.png' alt='License' />
           </a>
