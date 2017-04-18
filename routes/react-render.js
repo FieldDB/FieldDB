@@ -45,14 +45,22 @@ function reduxRender(req, res, next) {
   let routes = createRoutes(history)
   let location = history.createLocation(req.url)
 
-  match({ routes, location }, (error, redirectLocation, renderProps) => {
+  match({
+    routes,
+    location
+  }, (error, redirectLocation, renderProps) => {
     debug('req.url ', req.url, renderProps);
-    function getReduxPromise () {
-      let { query, params } = renderProps
+    function getReduxPromise() {
+      let {query, params} = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
       console.log('comp.fetchData', comp.fetchData);
       let promise = comp.fetchData
-        ? comp.fetchData({ query, params, store, history })
+        ? comp.fetchData({
+          query,
+          params,
+          store,
+          history
+        })
         : Promise.resolve()
 
       return promise
@@ -68,7 +76,7 @@ function reduxRender(req, res, next) {
       debug('renderProps was null, not found ', renderProps);
       res.status(404).send('Not found')
     } else {
-      let [ getCurrentUrl, unsubscribe ] = subscribeUrl()
+      let [getCurrentUrl, unsubscribe] = subscribeUrl()
       let reqUrl = location.pathname + location.search
       debug('reqUrl ', reqUrl);
 
@@ -82,21 +90,33 @@ function reduxRender(req, res, next) {
         let metaHeader = Helmet.rewind()
 
         if (getCurrentUrl() === reqUrl) {
-          debug('rendering ', { metaHeader, html, scriptSrcs, reduxState, styleSrc });
-          res.render('corpus', { metaHeader, html, scriptSrcs, reduxState, styleSrc })
+          debug('rendering ', {
+            metaHeader,
+            html,
+            scriptSrcs,
+            reduxState,
+            styleSrc
+          });
+          res.render('index', {
+            metaHeader,
+            html,
+            scriptSrcs,
+            reduxState,
+            styleSrc
+          })
         } else {
           res.redirect(302, getCurrentUrl())
         }
         unsubscribe()
       })
-      .catch((err) => {
-        Helmet.rewind()
-        unsubscribe()
-        next(err)
-      })
+        .catch((err) => {
+          Helmet.rewind()
+          unsubscribe()
+          next(err)
+        })
     }
   })
-  function subscribeUrl () {
+  function subscribeUrl() {
     let currentUrl = location.pathname + location.search
     debug('subscribeUrl currentUrl ', currentUrl);
     let unsubscribe = history.listen((newLoc) => {
