@@ -29,12 +29,4 @@ describe('Container::Corpora', function() {
 
     expect(corporaComp.props().corpora).to.equal(props.corpora)
   })
-  it('renders a link back to `/`', function() {
-    let doc = shallow(<CorpusMaskContainer {...props} />)
-    let link = doc.find('Link')
-
-    expect(link).to.exist
-    expect(link).to.not.be.instanceOf(Link)
-    expect(link.props().to).to.equal('/')
-  })
 })

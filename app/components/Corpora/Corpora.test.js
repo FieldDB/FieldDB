@@ -28,6 +28,6 @@ describe('Component::Corpora', function() {
     let doc = renderDoc()
     let corpusMaskComps = doc.find(Link)
 
-    expect(corpusMaskComps.length).to.equal(props.corpora.size + 1)
+    expect(corpusMaskComps.length).to.equal(props.corpora.size)
   })
 })

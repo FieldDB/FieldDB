@@ -38,12 +38,6 @@ describe('Action::CorpusMask', function() {
           id: '1234'
         }
       }
-
-      expect(action[CHAIN_API][1](corpusMaskRes)[CALL_API]).to.deep.equal({
-        method: 'get',
-        path: `/api/users/${corpusMaskRes.team.id}`,
-        successType: actionCreator.LOADED_CORPUS_MASK_USER
-      })
     })
   })
 })
