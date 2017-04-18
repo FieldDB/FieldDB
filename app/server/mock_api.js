@@ -1,9 +1,9 @@
+import Corpora from 'fielddb/api/corpus/Corpora'
+import fixtures from 'fixturefiles'
+
 import user from '../../routes/user'
 import corpus from '../../routes/corpus'
-import fixtures from 'fixturefiles'
-import Corpora from 'fielddb/api/corpus/Corpora'
 
-let _ = require('lodash')
 function corpusMask (dbname) {
   return corpus.getCorpusMask(dbname, console.log)
 }

@@ -1,21 +1,19 @@
 import 'babel-polyfill'
-
+import { browserHistory } from 'react-router'
+import Immutable from 'immutable'
+import { Provider } from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { browserHistory } from 'react-router'
 
 import configureStore from './components/App/store'
 import createRoutes from './components/App/routes'
-import { Provider } from 'react-redux'
-import Immutable from 'immutable'
-import _ from 'lodash'
 
 let reduxState = {}
 if (window.__REDUX_STATE__) {
   try {
     let plain = JSON.parse(unescape(window.__REDUX_STATE__))
-    _.each(plain, (val, key) => {
-      console.log('adding keys to redux state ', val, key);
+    Object.keys(plain).forEach((key) => {
+      const val = plain[key]
       reduxState[key] = Immutable.fromJS(val)
     })
   } catch (e) {

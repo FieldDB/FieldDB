@@ -1,6 +1,5 @@
 import superAgent from 'superagent'
 import Promise from 'bluebird'
-import _ from 'lodash'
 import { camelizeKeys } from 'humps'
 
 export const CALL_API = Symbol('CALL_API')
@@ -71,7 +70,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
             }))
           }
 
-          if (_.isFunction(params.afterError)) {
+          if (typeof params.afterError === 'function') {
             params.afterError({
               getState
             })
@@ -86,7 +85,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           response: resBody
         }))
 
-        if (_.isFunction(params.afterSuccess)) {
+        if (typeof params.afterSuccess === 'function') {
           params.afterSuccess({
             getState
           })
