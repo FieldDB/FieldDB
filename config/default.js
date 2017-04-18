@@ -1,10 +1,10 @@
 var fs = require("fs");
 var Q = require("q");
 var CORS = require("fielddb/api/CORSNode").CORS;
-var fixtures = require("fixturefiles");
 var offline = process.env.OFFLINE;
 
 if (offline) {
+  var fixtures = require("fixturefiles");
   CORS.makeCORSRequest = function(options) {
     console.log('makeCORSRequest', options);
     var deferred = Q.defer();
