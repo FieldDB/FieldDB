@@ -8,6 +8,8 @@ var api = require("../../server");
 describe("/v1", function() {
   describe("GET /community/georgian", function() {
     it("should display the users profile and corpus details", function(done) {
+      this.timeout(specIsRunningTooLong);
+
       var testApp = supertest(api).get("/community/georgian");
 
       // The react ap contacts the api durring server side render
@@ -38,6 +40,6 @@ describe("/v1", function() {
 
           done();
         });
-    }, specIsRunningTooLong);
+    });
   });
 });

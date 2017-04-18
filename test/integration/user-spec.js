@@ -8,6 +8,8 @@ var api = require("../../server");
 describe("/v1", function() {
   describe("GET lingllama", function() {
     it("should display the users profile and corpora", function(done) {
+      this.timeout(specIsRunningTooLong);
+
       var testApp = supertest(api).get("/lingllama");
 
       // The react ap contacts the api durring server side render
@@ -42,6 +44,6 @@ describe("/v1", function() {
 
           done();
         });
-    }, specIsRunningTooLong);
+    });
   });
 });

@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 describe("activity routes", function() {
+  this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
     expect(activityHeatMap).to.be.defined;
@@ -28,7 +29,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(0);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -40,7 +41,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(LINGLLAMA_ACTIVITY_SIZE);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return heat map data from the community activity feeds", function(done) {
       activityHeatMap("community-georgian", done).then(function(results) {
@@ -48,7 +49,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -66,7 +67,7 @@ describe("activity routes", function() {
         console.log(exception.stack);
         expect(exception.stack).to.equal(undefined);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return heat map data from the community activity feeds", function(done) {
       CORS.makeCORSRequest({
@@ -80,7 +81,7 @@ describe("activity routes", function() {
         console.log(exception.stack);
         expect(exception.stack).to.equal(undefined);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -92,7 +93,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(LINGLLAMA_ACTIVITY_SIZE);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should accept activity feed dbname", function(done) {
       activityHeatMap("lingllama-communitycorpus-activity_feed", done).then(function(results) {
@@ -100,7 +101,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(LINGLLAMA_ACTIVITY_SIZE);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
   });
 
   describe("sanitize requests", function() {
@@ -111,7 +112,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(0);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return empty data if dbname is not a string", function(done) {
       activityHeatMap({
@@ -121,7 +122,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(0);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return empty data if dbname contains invalid characters", function(done) {
       activityHeatMap("a.*-haaha script injection attack attempt file:///some/try", done).then(function(results) {
@@ -129,7 +130,7 @@ describe("activity routes", function() {
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(0);
       }).done(done);
-    }, specIsRunningTooLong);
+    });
   });
 
 
