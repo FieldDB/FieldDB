@@ -1,6 +1,5 @@
 import superAgent from 'superagent'
 import Promise from 'bluebird'
-import { camelizeKeys } from 'humps'
 
 export const CALL_API = Symbol('CALL_API')
 export const CHAIN_API = Symbol('CHAIN_API')
@@ -35,19 +34,18 @@ export default ({dispatch, getState}) => next => action => {
   }).catch((err) => {
     console.log('something went wrong', err)
     deferred.reject(err)
-  // throw err;
   })
 
   return deferred.promise
 }
 
-function actionWith (action, toMerge) {
+function actionWith(action, toMerge) {
   let ret = Object.assign({}, action, toMerge)
   delete ret[CALL_API]
   return ret
 }
 
-function createRequestPromise (apiActionCreator, next, getState, dispatch) {
+function createRequestPromise(apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
     let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
@@ -79,10 +77,9 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
         }
 
         console.log('recieved response', res.body)
-        let resBody = camelizeKeys(res.body)
         dispatch(actionWith(apiAction, {
           type: params.successType,
-          response: resBody
+          response: res.body
         }))
 
         if (typeof params.afterSuccess === 'function') {
@@ -90,14 +87,14 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
             getState
           })
         }
-        deferred.resolve(resBody)
+        deferred.resolve(res.body)
       })
 
     return deferred.promise
   }
 }
 
-function extractParams (callApi) {
+function extractParams(callApi) {
   let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
   console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)

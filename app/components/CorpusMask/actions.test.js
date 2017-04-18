@@ -1,7 +1,6 @@
 import { CALL_API, CHAIN_API } from 'middleware/api'
 
 import * as actionCreator from './actions'
-// import * as ActionType from 'actions/corpora'
 
 describe('Action::CorpusMask', function () {
   describe('#loadCorpusMaskDetail({id})', function () {

@@ -1,7 +1,6 @@
 import { CALL_API } from 'middleware/api'
 
 import * as actionCreator from './actions'
-// import * as ActionType from 'actions/userMask'
 
 describe('Action::CorpusMask', function () {
   describe('#loadUserMask()', function () {

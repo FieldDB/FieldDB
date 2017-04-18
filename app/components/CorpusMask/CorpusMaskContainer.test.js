@@ -36,7 +36,6 @@ describe('Container::CorpusMask', function () {
       history: browserHistory
     })
 
-    // console.log('doc', doc)
     expect(doc).to.have.keys(['component', 'root', 'node', 'nodes', 'length', 'options', 'complexSelector'])
   })
 })

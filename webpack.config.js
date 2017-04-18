@@ -15,7 +15,6 @@ var config = {
       'redux',
       'react-dom',
       'bluebird',
-      'humps',
       'history'
     ]
   },

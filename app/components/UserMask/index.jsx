@@ -59,7 +59,6 @@ class UserMaskContainer extends Component {
 }
 
 function mapStateToProps (state) {
-  console.log('userMaskdetail map state to props', state)
   return {
     userMask: state.userMaskDetail
   }

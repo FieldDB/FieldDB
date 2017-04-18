@@ -1,19 +1,12 @@
-import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loadCorpora } from './actions'
-import Corpora from './Corpora.jsx'
+import React, { Component } from 'react'
 import Helmet from 'react-helmet'
-// import { createStructuredSelector } from 'reselect';
+
+import Corpora from './Corpora.jsx'
+import { loadCorpora } from './actions'
 
 class CorpusMaskContainer extends Component {
-  constructor (props) {
-    console.log('constructing corpusMask container', props)
-    super(props)
-    console.log('constructed ', this.props)
-  }
-
   static fetchData ({store}) {
-    console.log('fetching data', loadCorpora)
     return store.dispatch(loadCorpora())
   }
 
@@ -40,15 +33,10 @@ CorpusMaskContainer.propTypes = {
 }
 
 function mapStateToProps (state) {
-  console.log('corpusMask list map state to props', state)
   return {
     corpora: state.corpora
   }
 }
-
-// const mapStateToProps = createStructuredSelector({
-//   corpora: state.corpora,
-// });
 
 export { CorpusMaskContainer }
 export default connect(mapStateToProps, {

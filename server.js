@@ -60,7 +60,6 @@ if (process.env.NODE_ENV === 'production') {
  */
 
 app.get('/api/corpora', (req, res) => {
-  console.log('returning mockAPI corpora', mockAPI.corpora);
   res.send(mockAPI.corpora)
 });
 
@@ -101,7 +100,6 @@ app.get("/api/users/:username", function(req, res, next) {
   }
 
   getUserMask(req.params.username, next).then(function(userMask) {
-    console.log(userMask);
     var user = userMask.toJSON();
     user.username = user.username || userMask.id;
     res.json(user);
