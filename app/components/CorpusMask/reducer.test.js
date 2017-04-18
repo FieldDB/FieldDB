@@ -1,6 +1,7 @@
-import reducer from './reducer'
-import * as ActionType from './actions'
 import Immutable from 'immutable'
+
+import * as ActionType from './actions'
+import reducer from './reducer'
 
 describe('Reducer::::CorpusMaskDetail', function () {
   describe('on ACTION_TYPE', function () {

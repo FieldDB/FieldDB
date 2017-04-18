@@ -1,21 +1,15 @@
-// import { router } from "express"
-
-import path from "path"
 import debugFactory from "debug"
-
+import { createMemoryHistory, useQueries } from "history"
+import Helmet from "react-helmet"
+import path from "path"
+import Promise from "bluebird"
+import { Provider } from "react-redux"
 import React from "react"
 import ReactDOMServer from "react-dom/server"
 import { useRouterHistory, RouterContext, match } from "react-router"
 
-import { createMemoryHistory, useQueries } from "history"
-import Promise from "bluebird"
-
 import configureStore from "../app/components/App/store"
 import createRoutes from "../app/components/App/routes"
-
-import { Provider } from "react-redux"
-
-import Helmet from "react-helmet"
 
 const debug = debugFactory("route:react-render");
 let scriptSrcs

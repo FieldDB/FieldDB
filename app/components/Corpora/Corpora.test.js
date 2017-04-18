@@ -1,8 +1,9 @@
+import Immutable from 'immutable'
+import { Link } from 'react-router'
 import React from 'react'
 import { shallow } from 'enzyme'
-import { Link } from 'react-router'
+
 import Corpora from './Corpora.jsx'
-import Immutable from 'immutable'
 
 describe('Component::Corpora', function () {
   let props

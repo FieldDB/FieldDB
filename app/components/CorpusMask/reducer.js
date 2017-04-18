@@ -1,5 +1,6 @@
-import * as ActionType from './actions'
 import Immutable from 'immutable'
+
+import * as ActionType from './actions'
 
 let defaultState = Immutable.fromJS({
   team: {}

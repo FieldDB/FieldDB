@@ -1,4 +1,5 @@
 import * as ActionType from './actions'
+
 import Immutable from 'immutable'
 
 let defaultState = Immutable.fromJS([])

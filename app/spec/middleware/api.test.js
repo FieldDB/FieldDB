@@ -1,6 +1,6 @@
 import config from 'config'
 import nock from 'nock'
-import apiMiddleware, { CALL_API, CHAIN_API } from 'middleware/api'
+import apiMiddleware, { CALL_API, CHAIN_API } from '../../middleware/api'
 
 describe('Middleware::Api', function () {
   let store,

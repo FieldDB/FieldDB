@@ -1,5 +1,5 @@
-import userMaskDetail from './reducer'
 import * as ActionType from './actions'
+import userMaskDetail from './reducer'
 
 describe('Reducer::Usermask', function () {
   it('returns an empty array as default state', function () {

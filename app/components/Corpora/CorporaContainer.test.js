@@ -1,8 +1,9 @@
-import { CorpusMaskContainer } from './index.jsx'
-import Corpora from './Corpora.jsx'
+import Immutable from 'immutable'
 import React from 'react'
 import { shallow } from 'enzyme'
-import Immutable from 'immutable'
+
+import Corpora from './Corpora.jsx'
+import { CorpusMaskContainer } from './index.jsx'
 
 describe('Container::Corpora', function () {
   let props

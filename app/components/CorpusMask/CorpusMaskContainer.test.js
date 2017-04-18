@@ -1,8 +1,9 @@
-import React from 'react'
-import Immutable from 'immutable'
-import { CorpusMaskContainer } from './index.jsx'
-import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
+import Immutable from 'immutable'
+import { mount } from 'enzyme'
+import React from 'react'
+
+import { CorpusMaskContainer } from './index.jsx'
 
 describe('Container::CorpusMask', function () {
   let props
