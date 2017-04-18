@@ -20,8 +20,15 @@ class CorpusMask extends Component {
     })
   }
   render() {
-    let clearResults = function() {}
-    let reindex = function() {}
+    let clearResults = function() {
+      return window.clearresults();
+    }
+    let reindex = function(dbname) {
+      return window.reindex(this.props.dbname);
+    }
+    let handleSearchSubmit = function(e) {
+      return window.handleSearchSubmit(e);
+    }
     let {corpusMask} = this.props
     let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
     return (
@@ -71,7 +78,7 @@ class CorpusMask extends Component {
           </div>
           <div className="row-fluid">
             <div className="span11 offset1">
-              <form id="search-corpus" action={corpusMask.getIn(['lexicon', 'url']) + '/search/' + corpusMask.get('dbname')} data-lexicon-url="{corpusMask.getIn(['lexicon', 'url'])}" method="POST" encType="application/json" className="search-form form-inline">
+              <form id="search-corpus" onSubmit={handleSearchSubmit} action={corpusMask.getIn(['lexicon', 'url']) + '/search/' + corpusMask.get('dbname')} data-lexicon-url="{corpusMask.getIn(['lexicon', 'url'])}" method="POST" encType="application/json" className="search-form form-inline">
                 <input type="text" id="query" name="query" placeholder="morphemes:nay OR gloss:des" title="Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results" />
                 <button type="submit" id="corpus_search" className="btn btn-small btn-success">
                   <i className="icon-search icon-white"></i>

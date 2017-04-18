@@ -29,6 +29,7 @@ function progress(percent, $element) {
 
 function clearresults() {
   $('#search-result-area').hide();
+  $('#search-result-area-content').hide();
   $('#clearresults').hide();
 }
 
@@ -158,7 +159,7 @@ function renderSearchResult(options) {
     return '        <span class="glossCouplet">' +
       options.corpus.datumFields.map(function(corpusField) {
         return tuple[corpusField.id];
-        // return options.result.highlight[corpusField.id] ? options.result.highlight[corpusField.id] : tuple[corpusField.id];
+      // return options.result.highlight[corpusField.id] ? options.result.highlight[corpusField.id] : tuple[corpusField.id];
       }).filter(isEmpty).join(' <br/>') +
       '        </span>';
   }).join(' ');
@@ -261,7 +262,7 @@ function search(corpus) {
   return false;
 }
 
-$('#search-corpus').submit(function(e) {
+function handleSearchSubmit(e) {
   e.preventDefault();
   var corpus = window.corpus;
   if (corpus) {
@@ -269,8 +270,8 @@ $('#search-corpus').submit(function(e) {
     return false;
   }
 
-  $.ajax(window.location.pathname).done(function(json) {
-    corpus = new FieldDB.CorpusMask(json.corpusMask);
+  $.ajax('/api' + window.location.pathname).done(function(json) {
+    corpus = new FieldDB.CorpusMask(json);
     corpus.datumFields.map(updateCorpusField);
     window.corpus = corpus;
 
@@ -283,4 +284,4 @@ $('#search-corpus').submit(function(e) {
     console.log('Error from search ', err);
   });
   return false;
-});
+}
