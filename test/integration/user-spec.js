@@ -7,7 +7,7 @@ var api = require("../../server");
 
 describe("/v1", function() {
   describe("GET lingllama", function() {
-    it("should display the users profile and corpora", function(done) {
+    it.only("should display the users profile and corpora", function(done) {
       this.timeout(specIsRunningTooLong);
 
       var testApp = supertest(api).get("/lingllama");

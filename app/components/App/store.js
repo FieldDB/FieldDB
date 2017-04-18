@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import apiMiddleware from '../../middleware/api'
+import { apiMiddleware } from 'redux-api-middleware';
 import createLogger from 'redux-logger'
 import rootReducer from './reducer'
 
@@ -24,7 +24,7 @@ const createStoreWithMiddleware = applyMiddleware(
   ...middlewares
 )(createStore)
 
-export default function configureStore (initialState) {
+export default function configureStore(initialState) {
   const store = createStoreWithMiddleware(rootReducer, initialState)
 
   if (module.hot) {
