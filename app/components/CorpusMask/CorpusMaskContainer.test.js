@@ -1,6 +1,6 @@
 import React from 'react'
 import Immutable from 'immutable'
-import { CorpusMask } from './index.jsx'
+import { CorpusMaskContainer } from './index.jsx'
 import { mount } from 'enzyme'
 import { browserHistory } from 'react-router'
 
@@ -8,7 +8,7 @@ describe('Container::CorpusMask', function() {
   let props
 
   function renderDoc() {
-    return mount(<CorpusMask {...props} />)
+    return mount(<CorpusMaskContainer {...props} />)
   }
   beforeEach(function() {
     props = {
@@ -30,6 +30,7 @@ describe('Container::CorpusMask', function() {
   it('fetches corpusMask details on mounted', function() {
     let doc = renderDoc()
     expect(props.loadCorpusMaskDetail).to.have.been.calledWith({
+      teamname: undefined,
       dbname: props.params.dbname,
       history: browserHistory
     })

@@ -4,7 +4,7 @@ import { loadCorpusMaskDetail } from './actions'
 import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-class CorpusMask extends Component {
+class CorpusMaskContainer extends Component {
   static fetchData({store, params, history}) {
     let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
@@ -173,13 +173,13 @@ function mapStateToProps(state) {
   }
 }
 
-CorpusMask.propTypes = {
+CorpusMaskContainer.propTypes = {
   params: React.PropTypes.object.isRequired,
   loadCorpusMaskDetail: React.PropTypes.func.isRequired,
   corpusMask: React.PropTypes.object.isRequired
 }
 
-export { CorpusMask }
+export { CorpusMaskContainer }
 export default connect(mapStateToProps, {
   loadCorpusMaskDetail
-})(CorpusMask)
+})(CorpusMaskContainer)
