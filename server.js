@@ -62,22 +62,7 @@ app.get('/api/corpora', (req, res) => {
   res.send(mockAPI.corpora)
 });
 
-app.get('/api/users/:id', (req, res) => {
-  res.send(mockAPI.getUser(req.params.id))
-});
-
-app.get('/api/corpora/:id', (req, res) => {
-  let corpusMask = mockAPI.getCorpusMask(req.params.id)
-  if (corpusMask) {
-    res.send(corpusMask)
-  } else {
-    res.status(404).send({
-      reason: 'corpusMask not found'
-    })
-  }
-});
-
-app.get("/activity/:dbname", function(req, res, next) {
+app.get("/api/activity/:dbname", function(req, res, next) {
   if (!req.params.dbname) {
     return next();
   }
@@ -86,8 +71,9 @@ app.get("/activity/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
-app.get("/db/:dbname", function(req, res, next) {
-  getCorpusMask(req.params.dbname, next).then(function(corpus) {
+app.get("/api/corpora/:dbname", function(req, res, next) {
+  getCorpusMask(req.params.dbname, next).then(function(corpusMask) {
+    var corpus = corpusMask.toJSON();
     corpus.lexicon = {
       url: config.lexicon.public.url
     };
@@ -97,17 +83,16 @@ app.get("/db/:dbname", function(req, res, next) {
     corpus.speech = {
       url: config.speech.public.url
     };
-    res.render("corpus", {
-      corpusMask: corpus
-    });
+    corpus.corpus = {
+      url: config.corpus.public.url
+    };
+    corpus.team.name = corpusMask.team.name;
+    console.log("Corpus mask team ", corpus.team);
+    res.json(corpus);
   }, next).fail(next);
 });
 
-app.get("/:username/:anything/:dbname", function(req, res) {
-  res.redirect("/" + req.params.username + "/" + req.params.dbname);
-});
-
-app.get("/:username/:titleAsUrl", function(req, res, next) {
+app.get("/api/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
       // debug('replying with getCorpusMask', corpus);
@@ -125,9 +110,7 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
           corpusMask: corpus
         });
       }
-      res.render("corpus", {
-        corpusMask: corpus
-      });
+      res.json(corpus);
     }, next).fail(next);
     return;
   }
@@ -148,35 +131,28 @@ app.get("/:username/:titleAsUrl", function(req, res, next) {
           corpusMask: corpus
         });
       }
-      res.render("corpus", {
-        corpusMask: corpus
-      });
+      res(corpus);
     }, next).fail(next);
   }, next).fail(next);
 });
 
-// app.get("/:username", function(req, res, next) {
-//   return res.render("user", {
-//     userMask: {}
-//   });
-//
-//   var html5Routes = req.params.username;
-//   var pageNavs = ["tutorial", "people", "contact", "home"];
-//   if (pageNavs.indexOf(html5Routes) > -1) {
-//     res.redirect("/#/" + html5Routes);
-//     return;
-//   }
-//
-//   getUserMask(req.params.username, next).then(function(user) {
-//     // var user = mask.toJSON();
-//     res.render("user", {
-//       userMask: user
-//     });
-//   }, next).fail(next);
-// });
+app.get("/api/users/:username", function(req, res, next) {
+  // return res.json({});
+
+  var html5Routes = req.params.username;
+  var pageNavs = ["tutorial", "people", "contact", "home"];
+  if (pageNavs.indexOf(html5Routes) > -1) {
+    res.redirect("/#/" + html5Routes);
+    return;
+  }
+
+  getUserMask(req.params.username, next).then(function(user) {
+    // var user = mask.toJSON();
+    res.json(user);
+  }, next).fail(next);
+});
 
 app.get("*", reduxRender);
-
 
 // error handling middleware should be loaded after the loading the routes
 app.use(errorHandler);
