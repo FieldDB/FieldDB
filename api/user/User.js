@@ -224,9 +224,9 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
     },
     set: function(value) {
       this.ensureSetViaAppropriateType("prefs", value);
-      // if(this._prefs){
-      //   this._prefs.parent = this;
-      // }
+    // if(this._prefs){
+    //   this._prefs.parent = this;
+    // }
     }
   },
 
@@ -346,10 +346,10 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
   },
 
   toJSON: {
-    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
-      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore);
       includeEvenEmptyAttributes = true;
-      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
+      var json = UserMask.prototype.toJSON.apply(this, arguments);
 
       // TODO not including the corpuses, instead include corpora
       if (this.corpora && typeof this.corpora.toJSON === "function") {
@@ -482,7 +482,7 @@ User.prototype = Object.create(UserMask.prototype, /** @lends User.prototype */ 
       if (!encryptedUserPreferences) {
         self.warn("This user " + self.username + " hasnt been used this device before, need to request their prefs when they login.");
         return deferred.promise;
-        // return FieldDBObject.prototype.fetch.apply(self, arguments);
+      // return FieldDBObject.prototype.fetch.apply(self, arguments);
       }
       self.debug("userKey is " + userKey);
       self.debug("user encrypted is " + encryptedUserPreferences);

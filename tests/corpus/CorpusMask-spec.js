@@ -86,6 +86,7 @@ describe("CorpusMask ", function() {
         username: "",
         firstname: "",
         lastname: "",
+        name: "",
         gravatar: "",
         researchInterest: "",
         affiliation: "",
@@ -265,7 +266,7 @@ describe("CorpusMask ", function() {
       duplicatedCorpus.dbname = "computationalfieldworkshop-group_data_entry_tutorial_copy";
       expect(duplicatedCorpus.connection.toJSON().dbname).toEqual("computationalfieldworkshop-group_data_entry_tutorial_copy");
 
-      // connections.push(connection.toJSON("complete"));
+    // connections.push(connection.toJSON("complete"));
     });
   });
 });

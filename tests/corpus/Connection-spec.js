@@ -34,6 +34,7 @@ describe("Connection ", function() {
         version: connection.version,
         dbname: "",
         pouchname: "",
+        website: "",
         title: "",
         titleAsUrl: ""
       });

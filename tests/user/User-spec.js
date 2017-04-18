@@ -16,7 +16,7 @@ describe("User ", function() {
 
   describe("basic attributes ", function() {
 
-    it("should should have username, firstname, lastname, gravatar, email and other options", function() {
+    it("should have username, firstname, lastname, gravatar, email and other options", function() {
       var json = {
         username: "bill",
         gravatar: "67890954367898765",
@@ -42,6 +42,7 @@ describe("User ", function() {
         gravatar: "67890954367898765",
         firstname: "",
         lastname: "",
+        name: "bill",
         email: "",
         affiliation: "",
         researchInterest: "",
@@ -102,7 +103,9 @@ describe("User ", function() {
   describe("upgrade data structure", function() {
 
     it("should have a complete serialization if the user requests ", function() {
-      var u = new User();
+      var u = new User({
+        // debugMode: true
+      });
       u.firstname = "Bill";
       u.lastname = "Smith";
 
@@ -121,6 +124,7 @@ describe("User ", function() {
         username: "",
         dateCreated: result.userMask.dateCreated,
         version: result.userMask.version,
+        name: "",
         firstname: "",
         lastname: "",
         gravatar: "",
@@ -152,6 +156,7 @@ describe("User ", function() {
         lexiconUrls: [],
         searchUrls: [],
         audioUrls: [],
+        website: "",
         websiteUrls: [],
         activityUrls: [],
         title: "",
@@ -164,6 +169,7 @@ describe("User ", function() {
         dateCreated: u.dateCreated,
         firstname: "Bill",
         lastname: "Smith",
+        name: "Bill Smith",
         email: "",
         version: u.version,
         gravatar: "",
@@ -227,6 +233,7 @@ describe("User ", function() {
         lexiconUrls: [],
         searchUrls: [],
         audioUrls: [],
+        website: "",
         websiteUrls: [],
         activityUrls: [],
         corpusUrls: ["https://corpus.lingsync.org/sapir-cherokee"],
@@ -250,6 +257,7 @@ describe("User ", function() {
         lexiconUrls: [],
         searchUrls: [],
         audioUrls: [],
+        website: "",
         websiteUrls: [],
         activityUrls: [],
         corpusUrls: ["https://corpus.lingsync.org/sapir-firstcorpus"],

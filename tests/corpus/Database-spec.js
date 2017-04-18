@@ -245,6 +245,7 @@ describe("Database", function() {
         serverLabel: "production",
         brandLowerCase: "lingsync",
         authUrls: ["https://auth.lingsync.org"],
+        website: "http://lingsync.org",
         websiteUrls: ["http://lingsync.org"],
         userFriendlyServerName: "LingSync.org",
         version: db.version,

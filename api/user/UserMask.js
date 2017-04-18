@@ -344,7 +344,7 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
-      var json = FieldDBObject.prototype.toJSON.apply(this, [false, true]);
+      var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       json.name = this.name;
       this.debug(json);
       return json;

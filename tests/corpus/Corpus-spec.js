@@ -429,7 +429,7 @@ describe("Corpus", function() {
         expect(speaker.fields.indexOf("lastname")).toEqual(corpus.speakerFields.indexOf("lastname"));
 
       }).then(done, done);
-      // console.log(speaker.toJSON());
+    // console.log(speaker.toJSON());
     }, specIsRunningTooLong);
   });
 
@@ -449,9 +449,10 @@ describe("Corpus", function() {
       expect(serialization.team).toEqual({
         fieldDBtype: "Team",
         _id: "team",
-        // username: "",
-        // firstname: "",
-        // lastname: "",
+        name: "",
+        username: "",
+        firstname: "",
+        lastname: "",
         // gravatar: "",
         // researchInterest: "",
         // affiliation: "",

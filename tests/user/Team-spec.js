@@ -34,6 +34,7 @@ describe("as a Team I want to set up my team name", function() {
       fieldDBtype: "Team",
       _id: "team",
       username: "elingllama",
+      name: "elingllama",
       version: teamToBeSaved.version,
       api: "users"
     });
