@@ -13,7 +13,7 @@ describe("/v1", function() {
       var testApp = supertest(api).get("/community/georgian");
 
       // The react ap contacts the api durring server side render
-      process.env.API_BASE_URL = 'http://127.0.0.1:' + testApp.app.address().port;
+      process.env.API_BASE_URL = "http://127.0.0.1:" + testApp.app.address().port;
 
       testApp
         .expect("Content-Type", /text\/html; charset=UTF-8/i)

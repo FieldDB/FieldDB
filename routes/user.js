@@ -97,7 +97,7 @@ var getUserMask = function getUserMask(username, next) {
     if (err.userFriendlyErrors) {
       err.userFriendlyErrors = err.userFriendlyErrors.map(function(message) {
         if (message.includes(config.corpus.databases.users)) {
-          return ''
+          return "";
         }
         return message;
       });
