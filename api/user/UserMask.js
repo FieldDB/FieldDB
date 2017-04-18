@@ -339,6 +339,16 @@ UserMask.prototype = Object.create(FieldDBObject.prototype, /** @lends UserMask.
       }
       this._fields = value;
     }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+      var json = FieldDBObject.prototype.toJSON.apply(this, [false, true]);
+      json.name = this.name;
+      this.debug(json);
+      return json;
+    }
   }
 
 });

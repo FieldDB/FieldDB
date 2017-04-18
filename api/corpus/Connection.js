@@ -211,8 +211,8 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     get: function() {
       if (this.parent && this.parent.gravatar) {
         this._gravatar = this.parent.gravatar;
-        // } else if (this.parent.team.gravatar) { // Dont use team gravatars for corpus connection gravatars anymore
-        //   this._gravatar = this.parent.team.gravatar;
+      // } else if (this.parent.team.gravatar) { // Dont use team gravatars for corpus connection gravatars anymore
+      //   this._gravatar = this.parent.team.gravatar;
       } else if (!this._gravatar && this.dbname && this.parent.team && typeof this.parent.team.buildGravatar === "function") {
         this._gravatar = this.parent.team.buildGravatar(this.dbname);
       }
@@ -580,7 +580,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       json.pouchname = json.dbname = this.dbname || "";
       json.title = this.title || json.dbname;
       json.titleAsUrl = this.titleAsUrl || json.dbname;
-
+      json.website = this.website || "";
       json.fieldDBtype = this.fieldDBtype;
       delete json._type;
 
@@ -682,9 +682,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
   var otherwise;
   try {
     otherwise = process.env.NODE_ENV;
-  } catch (e) {
-
-  }
+  } catch (e) {}
   if (!otherwise) {
     try {
       otherwise = localStorage.getItem("serverLabel");
@@ -818,7 +816,7 @@ Connection.defaultConnection = function(optionalHREF, passAsReference) {
       if (e.message.indexOf("Invalid URL") === -1) {
         connectionUrlObject = Connection.URLParser.parse(optionalHREF);
       }
-      // console.log("Cant use new Connection.URLParser() in this environment.", connectionUrlObject);
+    // console.log("Cant use new Connection.URLParser() in this environment.", connectionUrlObject);
     }
     if (!connectionUrlObject || !connectionUrlObject.hostname) {
       console.warn("There was no way to deduce the HREF, probably we are in Node or loading from a file://. Using " + otherwise + " instead. ", optionalHREF);
