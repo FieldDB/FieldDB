@@ -12,7 +12,7 @@ class Corpora extends Component {
         return (
           <div className="media" key={connection.get('dbname')}>
             <Link to={connection.get('website')} className="pull-left">
-              <img src={'https://secure.gravatar.com/avatar/' + connection.get('gravatar') + '.jpg?s=96&amp;d=retro&amp;r=pg'} alt="Corpus image" className="media-object" />
+              <img src={'https://secure.gravatar.com/avatar/' + connection.get('gravatar') + '.jpg?s=96&d=retro&r=pg'} alt="Corpus image" className="media-object" />
             </Link>
             <div className="media-body">
               <h4 className="media-heading">

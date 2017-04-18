@@ -1,3 +1,5 @@
+require('babel-register')
+
 var compression = require("compression");
 var config = require("config");
 var express = require("express");

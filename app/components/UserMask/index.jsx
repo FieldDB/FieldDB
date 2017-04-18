@@ -33,7 +33,7 @@ class UserMaskContainer extends Component {
       <div className="row">
         <div className="span3">
           <p className="text-center">
-            <img src={'https://secure.gravatar.com/avatar/' + userMask.get('gravatar') + '.jpg?s=200&amp;d=identicon&amp;r=pg'} alt="Your gravatar.com profile image" className="img-polaroid" />
+            <img src={'https://secure.gravatar.com/avatar/' + userMask.get('gravatar') + '.jpg?s=200&d=identicon&r=pg'} alt="Your gravatar.com profile image" className="img-polaroid" />
           </p>
           <div>
             <h1>{userMask.get('name')}</h1>
