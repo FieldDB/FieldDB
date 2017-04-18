@@ -2,15 +2,13 @@
 release
 compiled_handlebars.js
 *.handlebars.js
+public/bundle.css
 
 #ignore private config files
 config/production.js
 config/production.json
 config/local.js
 config/local.json
-
-# Ignore natural lib 
-public/libs/natural/
 
 .wav
 audio_stimuli
@@ -24,6 +22,8 @@ proguard.cfg
 public/components
 node_modules
 gen
+dist
+.tmp
 
 # Node #
 ########
@@ -39,9 +39,9 @@ lib-cov
 pids
 logs
 results
-
-node_modules
-npm-debug.log
+yarn-error.log
+.tern-port
+v8.log
 
 # LaTeX output #
 ################
@@ -60,6 +60,11 @@ npm-debug.log
 *.ist
 *.ps
 *(busy)
+
+# Testing output #
+##################
+coverage*
+
 
 # Compiled source #
 ###################

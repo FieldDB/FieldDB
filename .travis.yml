@@ -1,10 +1,9 @@
 language: node_js
 
 node_js:
-  - 0.12
   - 6
-before_install:
-  - npm install jshint -g
-script: 
-  - npm run lint
-  - npm test
+script:
+  - yarn lint
+  - yarn lint:es6
+  - yarn test
+  - yarn test:ci

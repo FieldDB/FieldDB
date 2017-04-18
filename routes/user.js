@@ -35,7 +35,7 @@ var getUserMask = function getUserMask(username, next) {
         userPrivate.userMask.startYear = " " + year + " - ";
       }
     }
-    // New users will be missing their corpora 
+    // New users will be missing their corpora
     // until the apps save them in the public corpora list
     // if (userPrivate.userMask.corpora && userPrivate.userMask.corpora.length) {
     //   console.log(new Date() + " not getting the user " + username + " their current corpora ", userPrivate.corpora.length);
@@ -93,7 +93,17 @@ var getUserMask = function getUserMask(username, next) {
       }));
       deferred.resolve(userPrivate.userMask);
     });
-  }).fail(next);
+  }).fail(function(err) {
+    if (err.userFriendlyErrors) {
+      err.userFriendlyErrors = err.userFriendlyErrors.map(function(message) {
+        if (message.includes(config.corpus.databases.users)) {
+          return "";
+        }
+        return message;
+      });
+    }
+    next(err);
+  });
   return deferred.promise;
 };
 

@@ -1,0 +1,85 @@
+{
+  "_id": "community",
+  "_rev": "42-4cb144d25985f6888b495368ac28baa3",
+  "username": "community",
+  "corpora": [
+    {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "community-georgian",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "LingSync.org",
+      "corpusid": "256eb89b50b2d801d748be4b12566a4d"
+    },
+    {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "community-firstcorpus",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "LingSync.org",
+      "corpusid": "",
+      "title": "community-firstcorpus",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "community-firstcorpus"
+    },
+    {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "lingllama-communitycorpus",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "LingSync.org",
+      "corpusid": "",
+      "title": "lingllama-communitycorpus",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "lingllama-communitycorpus"
+    },
+    {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "public-firstcorpus",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "LingSync.org",
+      "corpusid": "",
+      "title": "public-firstcorpus",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "public-firstcorpus"
+    },
+    {
+      "protocol": "https://",
+      "domain": "corpus.example.org",
+      "port": "443",
+      "pouchname": "community-migmaq",
+      "path": "",
+      "authUrl": "https://auth.example.org",
+      "userFriendlyServerName": "LingSync.org",
+      "corpusid": "",
+      "title": "community-migmaq",
+      "description": "The details of this corpus are not public.",
+      "titleAsUrl": "community-migmaq"
+    }
+  ],
+  "userMask": {
+    "fieldDBtype": "UserMask",
+    "id": "community",
+    "username": "community",
+    "gravatar": "968b8e7fb72b5ffe2915256c28a9414c",
+    "authUrl": "https://auth.example.org",
+    "collection": "users",
+    "firstname": "LingSync",
+    "lastname": "Community",
+    "email": "community@example.org",
+    "researchInterest": "none",
+    "affiliation": "LingSync.org",
+    "description": "This team manages the community corpora, if you want to contact us or help out, you can email us at community@example.org",
+    "version": "v3.2.4",
+    "api": "users"
+  }
+}

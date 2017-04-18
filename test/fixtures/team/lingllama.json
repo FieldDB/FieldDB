@@ -1,0 +1,23 @@
+{
+   "_id": "team",
+   "_rev": "429-7d83b67da658b0c035638aa34522d44f",
+   "gravatar": "54b53868cb4d555b804125f1a3969e87",
+   "username": "lingllama",
+   "authUrl": "https://authdev.example.org",
+   "id": "lingllama",
+   "firstname": "Ling",
+   "lastname": "Llama",
+   "email": "lingllama@example.org",
+   "researchInterest": "Memes",
+   "affiliation": "http://lingllama.tumblr.com \n      ",
+   "description": "Hi! I'm a sample user, anyone can log in as me (my password is phoneme, 'cause I like memes).",
+   "dbname": "lingllama-communitycorpus",
+   "collection": "users",
+   "fieldDBtype": "User",
+   "version": "v3.30.15",
+   "api": "users",
+   "corpora": [
+   ],
+   "datalists": [
+   ]
+}

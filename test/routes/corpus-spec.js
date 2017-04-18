@@ -75,6 +75,7 @@ var SAMPLE_USER_MASK = new UserMask({
 });
 
 describe("corpus routes", function() {
+  this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
     expect(getCorpusMask).to.be.defined;
@@ -83,6 +84,9 @@ describe("corpus routes", function() {
   describe("normal requests", function() {
 
     it("should return the corpus mask from the sample corpus", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       var corpusConfig = url.parse(config.corpus.url);
 
       getCorpusMask("lingllama-communitycorpus", done).then(function(mask) {
@@ -108,11 +112,12 @@ describe("corpus routes", function() {
         expect(mask.connection.toJSON()).to.deep.equal({
           fieldDBtype: "Connection",
           protocol: "https://",
-          domain: "corpusdev.lingsync.org",
+          domain: mask.connection.domain,
           port: "443",
           dbname: "lingllama-communitycorpus",
           path: "",
           gravatar: "948814f0b1bc8bebd701a9732ab3ebbd",
+          website: "",
           corpusid: mask.connection.corpusid,
           corpusUrls: mask.connection.corpusUrls,
           version: mask.connection.version,
@@ -123,7 +128,7 @@ describe("corpus routes", function() {
         });
         done();
       }).fail(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return the corpus mask from the community corpus", function(done) {
       getCorpusMask("community-georgian").then(function(mask) {
@@ -146,7 +151,10 @@ describe("corpus routes", function() {
       }).fail(done);
     });
 
-    it("should return a bleached corpus mask for corpuss by default", function(done) {
+    it("should return a bleached corpus mask for corpus by default", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       getCorpusMask("teammatetiger-firstcorpus").then(function(mask) {
         expect(mask).to.be.defined;
         expect(mask._rev).to.deep.equal("3-184180c75473a60c09dabc2fde9fe37e");
@@ -165,7 +173,7 @@ describe("corpus routes", function() {
         done();
       }).fail(done);
 
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -178,7 +186,7 @@ describe("corpus routes", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return 404 if dbname is not a string", function(done) {
       getCorpusMask({
@@ -189,7 +197,7 @@ describe("corpus routes", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return 404 if dbname contains invalid characters", function(done) {
       getCorpusMask("a.*-haaha script injection attack attempt file:///some/try", function(reason) {
@@ -198,7 +206,7 @@ describe("corpus routes", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should be case insensitive", function(done) {
       getCorpusMask("LingLlama-CommunityCorpus", done)
@@ -208,7 +216,7 @@ describe("corpus routes", function() {
           expect(mask.title).to.deep.equal("CommunityCorpus");
           done();
         }).fail(done);
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -227,7 +235,7 @@ describe("corpus routes", function() {
           expect(err.message).to.deep.equal("Server errored, please report this 8234");
           done();
         }).then(done);
-      }, specIsRunningTooLong);
+      });
 
       it("should return 404 error if usermask has no corpora", function(done) {
         getCorpusMaskFromTitleAsUrl({
@@ -237,7 +245,7 @@ describe("corpus routes", function() {
           expect(err.message).to.deep.equal("Couldn't find any corpora for lingllama, if this is an error please report it to us.");
           done();
         }).then(done);
-      }, specIsRunningTooLong);
+      });
 
     });
 
@@ -262,25 +270,25 @@ describe("corpus routes", function() {
           expect(mask.license).to.be.defined;
           expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
         });
-      }, specIsRunningTooLong);
+      });
 
       it("should use fuzzy find to find a matching corpus", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
@@ -294,21 +302,21 @@ describe("corpus routes", function() {
 
       it("should use fuzzy find to find a matching corpus too", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_other_informative_title",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_other_informative_title",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "Some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
@@ -330,18 +338,18 @@ describe("corpus routes", function() {
 
       it("should use fuzzy find to find the users matching corpus", function() {
         return getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "georgian",
-              dbname: "another-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "georgian",
+            dbname: "another-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "georgian").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask.titleAsUrl).to.deep.equal("georgian_together");
