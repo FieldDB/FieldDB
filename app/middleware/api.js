@@ -39,13 +39,13 @@ export default ({dispatch, getState}) => next => action => {
   return deferred.promise
 }
 
-function actionWith(action, toMerge) {
+function actionWith (action, toMerge) {
   let ret = Object.assign({}, action, toMerge)
   delete ret[CALL_API]
   return ret
 }
 
-function createRequestPromise(apiActionCreator, next, getState, dispatch) {
+function createRequestPromise (apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
     let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
@@ -94,7 +94,7 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
   }
 }
 
-function extractParams(callApi) {
+function extractParams (callApi) {
   let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
   console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)
