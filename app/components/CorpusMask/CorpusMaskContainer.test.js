@@ -14,7 +14,8 @@ describe('Container::CorpusMask', function () {
     props = {
       loadCorpusMaskDetail: sinon.stub(),
       params: {
-        dbname: 222
+        dbname: 'something',
+        teamname: 'someone'
       },
       corpusMask: Immutable.fromJS({
         dbname: 222,
@@ -30,7 +31,7 @@ describe('Container::CorpusMask', function () {
   it('fetches corpusMask details on mounted', function () {
     let doc = renderDoc()
     expect(props.loadCorpusMaskDetail).to.have.been.calledWith({
-      teamname: undefined,
+      teamname: 'someone',
       dbname: props.params.dbname,
       history: browserHistory
     })

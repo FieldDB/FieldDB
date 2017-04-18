@@ -31,13 +31,16 @@ describe('Action::CorpusMask', function () {
     })
     it('fetches team data after fetching corpusMask', function () {
       let action = actionCreator.loadCorpusMaskDetail({
-        dbname
+        teamname: 'someone',
+        dbname: 'somecorpus'
       })
-      let corpusMaskRes = {
-        team: {
-          id: '1234'
-        }
-      }
+
+      expect(action).to.deep.equal({})
+    // expect(action).to.deep.equal({
+    //   method: 'get',
+    //   path: '/api/someone/somecorpus',
+    //   successType: actionCreator.LOADED_CORPUS_MASK_DETAIL
+    // })
     })
   })
 })

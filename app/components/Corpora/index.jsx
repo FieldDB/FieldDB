@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loadCorpora } from './actions'
-import { Link } from 'react-router'
 import Corpora from './Corpora.jsx'
 import Helmet from 'react-helmet'
 // import { createStructuredSelector } from 'reselect';

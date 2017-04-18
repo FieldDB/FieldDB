@@ -5,7 +5,7 @@ import { List } from 'immutable'
 class Corpora extends Component {
   render () {
     return (
-      <div>
+      <div className={this.props.className}>
         <h1>Corpora</h1>
         {
       this.props.corpora.map((connection) => {
@@ -32,7 +32,8 @@ class Corpora extends Component {
 }
 
 Corpora.propTypes = {
-  corpora: React.PropTypes.instanceOf(List).isRequired
+  corpora: React.PropTypes.instanceOf(List).isRequired,
+  className: React.PropTypes.string.isRequired
 }
 
 export default Corpora

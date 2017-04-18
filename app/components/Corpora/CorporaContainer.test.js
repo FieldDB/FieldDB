@@ -1,6 +1,5 @@
 import { CorpusMaskContainer } from './index.jsx'
 import Corpora from './Corpora.jsx'
-import { Link } from 'react-router'
 import React from 'react'
 import { shallow } from 'enzyme'
 import Immutable from 'immutable'
