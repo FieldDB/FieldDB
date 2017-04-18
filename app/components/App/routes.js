@@ -6,14 +6,16 @@ import { Router, Route, IndexRoute } from 'react-router'
 import App from '../App'
 import Intro from '../Intro'
 import Corpora from '../Corpora'
-import CorpusMask from '../CorpusMask'
+import CorpusMaskContainer from '../CorpusMask'
+import UserMaskContainer from '../UserMask'
 
 export default function (history) {
   return (
     <Router history={history}>
       <Route path='/' component={App}>
-        <Route path=':username' component={Corpora} />
-        <Route path=':teamname/:dbname' component={CorpusMask} />
+        <Route path='corpora' component={Corpora} />
+        <Route path=':username' component={UserMaskContainer} />
+        <Route path=':teamname/:dbname' component={CorpusMaskContainer} />
         <IndexRoute component={Intro} />
       </Route>
     </Router>

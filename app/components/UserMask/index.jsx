@@ -4,18 +4,18 @@ import { loadUserMaskDetail } from './actions'
 import Helmet from 'react-helmet'
 import { browserHistory } from 'react-router'
 
-class UserMask extends Component {
+class UserMaskContainer extends Component {
   static fetchData({store, params, history}) {
-    let {dbname} = params
+    let {username} = params
     return store.dispatch(loadUserMaskDetail({
-      dbname,
+      username,
       history
     }))
   }
   componentDidMount() {
-    let {dbname} = this.props.params
+    let {username} = this.props.params
     this.props.loadUserMaskDetail({
-      dbname,
+      username,
       history: browserHistory
     })
   }
@@ -30,7 +30,7 @@ class UserMask extends Component {
       <div className="row">
         <div className="span3">
           <p className="text-center">
-            <img src="https://secure.gravatar.com/avatar/{userMask.get('gravatar')}.jpg?s=200&amp;d=identicon&amp;r=pg" alt="Your gravatar.com profile image" className="img-polaroid" />
+            <img src={'https://secure.gravatar.com/avatar/' + userMask.get('gravatar') + '.jpg?s=200&amp;d=identicon&amp;r=pg'} alt="Your gravatar.com profile image" className="img-polaroid" />
           </p>
           <div>
             <h1>{userMask.get('name')}</h1>
@@ -65,7 +65,7 @@ class UserMask extends Component {
       <div className="row">
         <div className="span12">
           <h2>Activity Feed</h2>
-          <iframe src={'/corpus-pages/libs/activities_visualization/index.html?' + userMask.get('username')} width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
+          <iframe src={'/corpus-pages/libs/activities_visualization/index.html?' + userMask.get('username')} width="100%" height="300" frameBorder="0" allowTransparency="true"></iframe>
         </div>
       </div>
       <hr />
@@ -88,13 +88,13 @@ function mapStateToProps(state) {
   }
 }
 
-UserMask.propTypes = {
+UserMaskContainer.propTypes = {
   params: React.PropTypes.object.isRequired,
   loadUserMaskDetail: React.PropTypes.func.isRequired,
   userMask: React.PropTypes.object.isRequired
 }
 
-export { UserMask }
+export { UserMaskContainer }
 export default connect(mapStateToProps, {
   loadUserMaskDetail
-})(UserMask)
+})(UserMaskContainer)

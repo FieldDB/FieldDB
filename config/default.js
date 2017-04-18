@@ -2,7 +2,7 @@ var fs = require("fs");
 var Q = require("q");
 var CORS = require("fielddb/api/CORSNode").CORS;
 var fixtures = require("fixturefiles");
-var offline = false;
+var offline = true;
 
 if (offline) {
   CORS.makeCORSRequest = function(options) {

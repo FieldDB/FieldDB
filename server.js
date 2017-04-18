@@ -92,6 +92,23 @@ app.get("/api/corpora/:dbname", function(req, res, next) {
   }, next).fail(next);
 });
 
+app.get("/api/users/:username", function(req, res, next) {
+  var html5Routes = req.params.username;
+  var pageNavs = ["tutorial", "people", "contact", "home"];
+  if (pageNavs.indexOf(html5Routes) > -1) {
+    res.redirect("/#/" + html5Routes);
+    return;
+  }
+
+  getUserMask(req.params.username, next).then(function(userMask) {
+    console.log(userMask);
+    var user = userMask.toJSON();
+    user.name = userMask.name;
+    user.username = user.username || userMask.id;
+    res.json(user);
+  }, next).fail(next);
+});
+
 app.get("/api/:username/:titleAsUrl", function(req, res, next) {
   if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
@@ -133,22 +150,6 @@ app.get("/api/:username/:titleAsUrl", function(req, res, next) {
       }
       res.json(corpus);
     }, next).fail(next);
-  }, next).fail(next);
-});
-
-app.get("/api/users/:username", function(req, res, next) {
-  // return res.json({});
-
-  var html5Routes = req.params.username;
-  var pageNavs = ["tutorial", "people", "contact", "home"];
-  if (pageNavs.indexOf(html5Routes) > -1) {
-    res.redirect("/#/" + html5Routes);
-    return;
-  }
-
-  getUserMask(req.params.username, next).then(function(user) {
-    // var user = mask.toJSON();
-    res.json(user);
   }, next).fail(next);
 });
 
