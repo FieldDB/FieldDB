@@ -1,43 +1,43 @@
-// import { router } from 'express'
+// import { router } from "express"
 
-import path from 'path'
-import debugFactory from 'debug'
+import path from "path"
+import debugFactory from "debug"
 
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import { useRouterHistory, RouterContext, match } from 'react-router'
+import React from "react"
+import ReactDOMServer from "react-dom/server"
+import { useRouterHistory, RouterContext, match } from "react-router"
 
-import { createMemoryHistory, useQueries } from 'history'
-import Promise from 'bluebird'
+import { createMemoryHistory, useQueries } from "history"
+import Promise from "bluebird"
 
-import configureStore from '../app/components/App/store'
-import createRoutes from '../app/components/App/routes'
+import configureStore from "../app/components/App/store"
+import createRoutes from "../app/components/App/routes"
 
-import { Provider } from 'react-redux'
+import { Provider } from "react-redux"
 
-import Helmet from 'react-helmet'
+import Helmet from "react-helmet"
 
-const debug = debugFactory('route:react-render');
+const debug = debugFactory("route:react-render");
 let scriptSrcs
 process.env.ON_SERVER = true // TODO this is not used
 
 let styleSrc
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   // build scripts serving from dist
-  let refManifest = require('../dist/rev-manifest.json')
+  let refManifest = require("../dist/rev-manifest.json")
   scriptSrcs = [
-    `/${refManifest['vendor.js']}`,
-    `/${refManifest['app.js']}`
+    `/${refManifest["vendor.js"]}`,
+    `/${refManifest["app.js"]}`
   ]
-  styleSrc = `/${refManifest['app.css']}`
+  styleSrc = `/${refManifest["app.css"]}`
 } else {
   // scripts serving from webpack
   scriptSrcs = [
-    '//localhost:3001/static/vendor.js',
-    '//localhost:3001/static/dev.js',
-    '//localhost:3001/static/app.js'
+    "//localhost:3001/static/vendor.js",
+    "//localhost:3001/static/dev.js",
+    "//localhost:3001/static/app.js"
   ]
-  styleSrc = '/app.css'
+  styleSrc = "/app.css"
 }
 
 function reduxRender(req, res, next) {
@@ -50,7 +50,7 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug('req.url ', req.url, renderProps.params);
+    debug("req.url ", req.url, renderProps.params);
     function getReduxPromise() {
       let {query, params} = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
@@ -67,23 +67,23 @@ function reduxRender(req, res, next) {
     }
 
     if (redirectLocation) {
-      debug('redirecting to ', redirectLocation);
+      debug("redirecting to ", redirectLocation);
       res.redirect(301, redirectLocation.pathname + redirectLocation.search)
     } else if (error) {
-      debug('error ', error);
+      debug("error ", error);
       return next(error);
     }
 
     if (renderProps == null) {
-      debug('renderProps was null, not found ', renderProps);
-      const err = new Error('Not found');
+      debug("renderProps was null, not found ", renderProps);
+      const err = new Error("Not found");
       err.status = 404;
       return next(err);
     }
 
     let [getCurrentUrl, unsubscribe] = subscribeUrl()
     let reqUrl = location.pathname + location.search
-    debug('reqUrl ', reqUrl);
+    debug("reqUrl ", reqUrl);
 
     getReduxPromise().then(() => {
       let reduxState = escape(JSON.stringify(store.getState()))
@@ -95,14 +95,14 @@ function reduxRender(req, res, next) {
       let metaHeader = Helmet.rewind()
 
       if (getCurrentUrl() === reqUrl) {
-        debug('rendering ', {
+        debug("rendering ", {
           metaHeader,
           html,
           scriptSrcs,
           reduxState,
           styleSrc
         });
-        res.render('index', {
+        res.render("index", {
           metaHeader,
           html,
           scriptSrcs,
@@ -110,9 +110,9 @@ function reduxRender(req, res, next) {
           styleSrc
         })
       } else {
-        debug('redirecting 302 ', reqUrl);
-        // const err = new Error('Error please report this ' + reqUrl);
-        const err = new Error('Sorry, the page ' + reqUrl + ' you are looking for was not found.');
+        debug("redirecting 302 ", reqUrl);
+        // const err = new Error("Error please report this " + reqUrl);
+        const err = new Error("Sorry, the page " + reqUrl + " you are looking for was not found.");
         err.status = 404;
         next(err);
       // res.redirect(302, getCurrentUrl())
@@ -127,11 +127,11 @@ function reduxRender(req, res, next) {
   })
   function subscribeUrl() {
     let currentUrl = location.pathname + location.search
-    debug('subscribeUrl currentUrl ', currentUrl);
+    debug("subscribeUrl currentUrl ", currentUrl);
     let unsubscribe = history.listen((newLoc) => {
-      if (newLoc.action === 'PUSH' || newLoc.action === 'REPLACE') {
+      if (newLoc.action === "PUSH" || newLoc.action === "REPLACE") {
         currentUrl = newLoc.pathname + newLoc.search
-        debug('unsubscribe currentUrl ', currentUrl);
+        debug("unsubscribe currentUrl ", currentUrl);
       }
     })
     return [
