@@ -4,7 +4,9 @@ node_js:
   - 0.12
   - 6
 before_install:
-  - npm install jshint -g
-script: 
-  - npm run lint
-  - npm test
+  - yarn install jshint -g
+script:
+  - yarn lint
+  - yarn lint:es6
+  - yarn test
+  - yarn test:ci
