@@ -86,8 +86,6 @@ app.get("/api/corpora/:dbname", function(req, res, next) {
     corpus.corpus = {
       url: config.corpus.public.url
     };
-    corpus.team.name = corpusMask.team.name;
-    console.log("Corpus mask team ", corpus.team);
     res.json(corpus);
   }, next).fail(next);
 });
@@ -103,11 +101,7 @@ app.get("/api/users/:username", function(req, res, next) {
   getUserMask(req.params.username, next).then(function(userMask) {
     console.log(userMask);
     var user = userMask.toJSON();
-    user.name = userMask.name;
     user.username = user.username || userMask.id;
-    user.corpora.map(function(connection) {
-      connection.owner = userMask.corpora[connection.dbname].owner;
-    });
     res.json(user);
   }, next).fail(next);
 });

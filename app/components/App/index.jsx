@@ -3,22 +3,22 @@ import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
 
 class App extends Component {
-  render () {
+  render() {
     return (
       <div>
         <Helmet
-          defaultTitle='Redux real-world example'
-          titleTemplate='%s - Redux real-world example'
-          meta={[
-            {
-              'name': 'description',
-              'content': 'A boilerplate doing universal/isomorphic rendering with Redux + React-router + Express'
-            }
-          ]}
-          htmlAttributes={{
-            'lang': 'en'
-          }}
-        />
+      defaultTitle='LingSync.org'
+      titleTemplate='%s - LingSync.org'
+      meta={[
+        {
+          'name': 'description',
+          'content': 'Public pages for LingSync.org corpora'
+        }
+      ]}
+      htmlAttributes={{
+        'lang': 'en'
+      }}
+      />
         {this.props.children}
       </div>
     )
@@ -29,7 +29,7 @@ App.propTypes = {
   children: React.PropTypes.object.isRequired
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {}
 }
 

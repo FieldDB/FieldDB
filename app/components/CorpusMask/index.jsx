@@ -35,7 +35,10 @@ class CorpusMaskContainer extends Component {
     let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
     return (
       <div>
-      <Helmet title={title} description={corpusMask.get('description')}/>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={corpusMask.get('description')} />
+      </Helmet>
       <div className="row-fluid">
         <div className="span3">
           <p className="text-center">
