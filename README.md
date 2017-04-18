@@ -44,9 +44,14 @@ You can change values in the `lib/*_local.js` files to point to the corpus servi
 To turn on the server:
 
 ```bash
-$ yarn start --offline
+$ yarn start
 ```
 
+To develop offline with fixture data:
+
+```bash
+$ OFFLINE=true yarn start --offline
+```
 ------------------
 
 ## How to set up a production server
