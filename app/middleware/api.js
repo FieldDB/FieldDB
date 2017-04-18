@@ -35,8 +35,8 @@ export default ({dispatch, getState}) => next => action => {
     deferred.resolve()
   }).catch((err) => {
     console.log('something went wrong', err)
-    //TODO this reject doesnt result in an error handling, instead it results in a 302
     deferred.reject(err);
+  // throw err;
   })
 
   return deferred.promise
@@ -57,14 +57,17 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
     console.log('requesting', params)
     superAgent[params.method](params.url)
       .send(params.body)
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
       .query(params.query)
-      .end((err, res) => {
+      .end((err, res, body) => {
         if (err) {
-          console.log('recieved err', err)
+          console.log('recieved err', res.body)
           if (params.errorType) {
+            console.log('dispatching error', params.errorType)
             dispatch(actionWith(apiAction, {
               type: params.errorType,
-              error: err
+              error: res.body
             }))
           }
 
@@ -73,22 +76,22 @@ function createRequestPromise(apiActionCreator, next, getState, dispatch) {
               getState
             })
           }
-          deferred.reject()
-        } else {
-          console.log('recieved response', res.body)
-          let resBody = camelizeKeys(res.body)
-          dispatch(actionWith(apiAction, {
-            type: params.successType,
-            response: resBody
-          }))
-
-          if (_.isFunction(params.afterSuccess)) {
-            params.afterSuccess({
-              getState
-            })
-          }
-          deferred.resolve(resBody)
+          return deferred.reject(res.body)
         }
+
+        console.log('recieved response', res.body)
+        let resBody = camelizeKeys(res.body)
+        dispatch(actionWith(apiAction, {
+          type: params.successType,
+          response: resBody
+        }))
+
+        if (_.isFunction(params.afterSuccess)) {
+          params.afterSuccess({
+            getState
+          })
+        }
+        deferred.resolve(resBody)
       })
 
     return deferred.promise

@@ -1,4 +1,5 @@
 // import { router } from 'express'
+
 import path from 'path'
 import debugFactory from 'debug'
 
@@ -16,7 +17,7 @@ import { Provider } from 'react-redux'
 
 import Helmet from 'react-helmet'
 
-const debug = debugFactory('server');
+const debug = debugFactory('route:react-render');
 let scriptSrcs
 process.env.ON_SERVER = true // TODO this is not used
 
@@ -49,11 +50,10 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug('req.url ', req.url, renderProps);
+    debug('req.url ', req.url, renderProps.params);
     function getReduxPromise() {
       let {query, params} = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
-      console.log('comp.fetchData', comp.fetchData);
       let promise = comp.fetchData
         ? comp.fetchData({
           query,
@@ -110,9 +110,9 @@ function reduxRender(req, res, next) {
           styleSrc
         })
       } else {
-        console.log('redirecting 302 ', reqUrl);
+        debug('redirecting 302 ', reqUrl);
         // const err = new Error('Error please report this ' + reqUrl);
-        const err = new Error('Not found ' + reqUrl);
+        const err = new Error('Sorry, the page ' + reqUrl + ' you are looking for was not found.');
         err.status = 404;
         next(err);
       // res.redirect(302, getCurrentUrl())

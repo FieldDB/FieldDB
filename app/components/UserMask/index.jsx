@@ -24,6 +24,11 @@ class UserMaskContainer extends Component {
     let clearResults = function() {}
     let reindex = function() {}
     let {userMask} = this.props
+    if (!userMask.get('username')) {
+      const err = new Error('Sorry, a user with this username was not found, please try again.');
+      err.status = 404;
+      throw err;
+    }
     return (
       <div>
       <Helmet>
