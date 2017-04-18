@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { List } from 'immutable'
-import CorpusMaskCreate from '../CorpusMaskCreate.jsx'
 
 class Corpora extends Component {
   render() {
     return (
       <div>
-        <CorpusMaskCreate team={this.props.team} />
         Corpora component {
       this.props.corpora.map((connection) => {
         let dbname = connection.get('dbname')
