@@ -131,7 +131,7 @@ app.get("/api/:username/:titleAsUrl", function(req, res, next) {
           corpusMask: corpus
         });
       }
-      res(corpus);
+      res.json(corpus);
     }, next).fail(next);
   }, next).fail(next);
 });

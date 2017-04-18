@@ -12,8 +12,8 @@ export default function (history) {
   return (
     <Router history={history}>
       <Route path='/' component={App}>
-        <Route path='corpora' component={Corpora} />
-        <Route path='corpora/:dbname' component={CorpusMask} />
+        <Route path=':username' component={Corpora} />
+        <Route path=':teamname/:dbname' component={CorpusMask} />
         <IndexRoute component={Intro} />
       </Route>
     </Router>

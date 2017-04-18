@@ -6,15 +6,17 @@ import { browserHistory } from 'react-router'
 
 class CorpusMask extends Component {
   static fetchData({store, params, history}) {
-    let {dbname} = params
+    let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
+      teamname,
       dbname,
       history
     }))
   }
   componentDidMount() {
-    let {dbname} = this.props.params
+    let {teamname, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
+      teamname,
       dbname,
       history: browserHistory
     })

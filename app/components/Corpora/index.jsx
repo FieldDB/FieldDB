@@ -30,7 +30,6 @@ class CorpusMaskContainer extends Component {
       />
         <h2>Corpora</h2>
         <Corpora corpora={this.props.corpora} team={this.props.team} />
-        <Link to='/'>Back to Home</Link>
       </div>
     )
   }

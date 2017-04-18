@@ -35,6 +35,8 @@ export default ({dispatch, getState}) => next => action => {
     deferred.resolve()
   }).catch((err) => {
     console.log('something went wrong', err)
+    //TODO this reject doesnt result in an error handling, instead it results in a 302
+    deferred.reject(err);
   })
 
   return deferred.promise

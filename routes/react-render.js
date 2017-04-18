@@ -71,50 +71,59 @@ function reduxRender(req, res, next) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search)
     } else if (error) {
       debug('error ', error);
-      res.status(500).send(error.message)
-    } else if (renderProps == null) {
-      debug('renderProps was null, not found ', renderProps);
-      res.status(404).send('Not found')
-    } else {
-      let [getCurrentUrl, unsubscribe] = subscribeUrl()
-      let reqUrl = location.pathname + location.search
-      debug('reqUrl ', reqUrl);
+      return next(error);
+    }
 
-      getReduxPromise().then(() => {
-        let reduxState = escape(JSON.stringify(store.getState()))
-        let html = ReactDOMServer.renderToString(
-          <Provider store={store}>
+    if (renderProps == null) {
+      debug('renderProps was null, not found ', renderProps);
+      const err = new Error('Not found');
+      err.status = 404;
+      return next(err);
+    }
+
+    let [getCurrentUrl, unsubscribe] = subscribeUrl()
+    let reqUrl = location.pathname + location.search
+    debug('reqUrl ', reqUrl);
+
+    getReduxPromise().then(() => {
+      let reduxState = escape(JSON.stringify(store.getState()))
+      let html = ReactDOMServer.renderToString(
+        <Provider store={store}>
             { <RouterContext {...renderProps} /> }
           </Provider>
-        )
-        let metaHeader = Helmet.rewind()
+      )
+      let metaHeader = Helmet.rewind()
 
-        if (getCurrentUrl() === reqUrl) {
-          debug('rendering ', {
-            metaHeader,
-            html,
-            scriptSrcs,
-            reduxState,
-            styleSrc
-          });
-          res.render('index', {
-            metaHeader,
-            html,
-            scriptSrcs,
-            reduxState,
-            styleSrc
-          })
-        } else {
-          res.redirect(302, getCurrentUrl())
-        }
-        unsubscribe()
-      })
-        .catch((err) => {
-          Helmet.rewind()
-          unsubscribe()
-          next(err)
+      if (getCurrentUrl() === reqUrl) {
+        debug('rendering ', {
+          metaHeader,
+          html,
+          scriptSrcs,
+          reduxState,
+          styleSrc
+        });
+        res.render('index', {
+          metaHeader,
+          html,
+          scriptSrcs,
+          reduxState,
+          styleSrc
         })
-    }
+      } else {
+        console.log('redirecting 302 ', reqUrl);
+        // const err = new Error('Error please report this ' + reqUrl);
+        const err = new Error('Not found ' + reqUrl);
+        err.status = 404;
+        next(err);
+      // res.redirect(302, getCurrentUrl())
+      }
+      unsubscribe()
+    })
+      .catch((err) => {
+        Helmet.rewind()
+        unsubscribe()
+        next(err)
+      })
   })
   function subscribeUrl() {
     let currentUrl = location.pathname + location.search
