@@ -2,27 +2,30 @@ var fs = require("fs");
 var Q = require("q");
 var CORS = require("fielddb/api/CORSNode").CORS;
 var fixtures = require("fixturefiles");
+var offline = false;
 
-CORS.makeCORSRequest = function(options) {
-  console.log('makeCORSRequest', options);
-  var deferred = Q.defer();
-  Q.nextTick(function() {
-    if (options.url.includes('lingllama-communitycorpus/team')) {
-      return deferred.resolve(fixtures.team.lingllama);
-    }
-    if (options.url.includes('lingllama-communitycorpus/corpus')) {
-      return deferred.resolve(fixtures.corpus['lingllama-communitycorpus']);
-    }
-    if (options.url.includes('/lingllama')) {
-      return deferred.resolve(fixtures.user.lingllama);
-    }
+if (offline) {
+  CORS.makeCORSRequest = function(options) {
+    console.log('makeCORSRequest', options);
+    var deferred = Q.defer();
+    Q.nextTick(function() {
+      if (options.url.includes('lingllama-communitycorpus/team')) {
+        return deferred.resolve(fixtures.team.lingllama);
+      }
+      if (options.url.includes('lingllama-communitycorpus/corpus')) {
+        return deferred.resolve(fixtures.corpus['lingllama-communitycorpus']);
+      }
+      if (options.url.includes('/lingllama')) {
+        return deferred.resolve(fixtures.user.lingllama);
+      }
 
-    return deferred.reject({
-      message: 'Not found',
-      status: 404
+      return deferred.reject({
+        message: 'Not found',
+        status: 404
+      });
     });
-  });
-  return deferred.promise;
+    return deferred.promise;
+  }
 }
 
 if (!process.env.NODE_ENV) {
@@ -30,6 +33,7 @@ if (!process.env.NODE_ENV) {
 }
 
 var config = {
+  offline: offline,
   // You can choose the port you want to server from
   // If you choose 80 or 443 you might be able to access the server
   // from the outside world.

@@ -66,7 +66,7 @@ class CorpusMask extends Component {
           </div>
           <div className="row-fluid">
             <div className="span12">
-              <iframe src="/corpus-pages/libs/activities_visualization/index.html?{corpusMask.get('dbname')}" width="100%" height="200" frameBorder="0" allowTransparency="true"></iframe>
+              <iframe src={'/corpus-pages/libs/activities_visualization/index.html?' + corpusMask.get('dbname')} width="100%" height="200" frameBorder="0" allowTransparency="true"></iframe>
             </div>
           </div>
           <div className="row-fluid">

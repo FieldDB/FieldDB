@@ -65,7 +65,7 @@ class UserMask extends Component {
       <div className="row">
         <div className="span12">
           <h2>Activity Feed</h2>
-          <iframe src="/corpus-pages/libs/activities_visualization/index.html?{userMask.get('username')}" width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
+          <iframe src={'/corpus-pages/libs/activities_visualization/index.html?' + userMask.get('username')} width="100%" height="300" frameborder="0" allowtransparency="true"></iframe>
         </div>
       </div>
       <hr />
