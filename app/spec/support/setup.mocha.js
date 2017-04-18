@@ -3,9 +3,7 @@ import chaiAsPromised from 'chai-as-promised'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import jsdom from 'jsdom'
-import { config as configDotenv } from 'dotenv'
 
-configDotenv()
 chai.use(sinonChai)
 chai.use(chaiAsPromised)
 
