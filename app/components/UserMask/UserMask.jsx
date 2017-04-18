@@ -5,6 +5,13 @@ import Gravatar from './Gravatar.jsx'
 class UserMask extends Component {
   render () {
     const userMask = this.props.user
+
+    if (!userMask.get('gravatar')) {
+      return (
+        <div className={this.props.className} />
+      )
+    }
+
     return (
       <div className={this.props.className}>
         <p className='text-center'>
@@ -31,7 +38,7 @@ class UserMask extends Component {
 
 UserMask.propTypes = {
   className: React.PropTypes.string.isRequired,
-  link: React.PropTypes.string.isRequired,
+  link: React.PropTypes.string,
   user: React.PropTypes.object.isRequired
 }
 

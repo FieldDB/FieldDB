@@ -17,8 +17,8 @@ class Gravatar extends Component {
 }
 
 Gravatar.propTypes = {
-  link: React.PropTypes.string.isRequired,
-  gravatar: React.PropTypes.string.isRequired
+  gravatar: React.PropTypes.string.isRequired,
+  link: React.PropTypes.string
 }
 
 export default Gravatar

@@ -11,6 +11,7 @@ describe('Component::UserMask', function () {
     props = {
       user: Immutable.fromJS({
         username: 1,
+        gravatar: '1234weqwq',
         title: 'the-title-1'
       })
     }

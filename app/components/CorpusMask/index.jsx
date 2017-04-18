@@ -34,6 +34,13 @@ class CorpusMaskContainer extends Component {
       return window.handleSearchSubmit(e)
     }
     let {corpusMask} = this.props
+
+    if (!corpusMask || !corpusMask.get('team')) {
+      return (
+        <div />
+      )
+    }
+
     let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
     return (
       <div>
