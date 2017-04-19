@@ -39,17 +39,30 @@ export default ({dispatch, getState}) => next => action => {
   return deferred.promise
 }
 
-function actionWith (action, toMerge) {
+function actionWith(action, toMerge) {
   let ret = Object.assign({}, action, toMerge)
   delete ret[CALL_API]
   return ret
 }
+const notFound = new Error('Not found');
+notFound.status = 404;
 
-function createRequestPromise (apiActionCreator, next, getState, dispatch) {
+function createRequestPromise(apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
     let apiAction = apiActionCreator(prevBody)
     let deferred = Promise.defer()
     let params = extractParams(apiAction[CALL_API])
+
+    if (params && params.url && params.url.match(/\.(js|css|png)/)) {
+      if (params.errorType) {
+        dispatch(actionWith(apiAction, {
+          type: params.errorType,
+          error: notFound
+        }))
+      }
+      // return deferred.reject(notFound)
+      return;
+    }
 
     console.log('requesting', params)
     superAgent[params.method](params.url)
@@ -94,10 +107,10 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
   }
 }
 
-function extractParams (callApi) {
+function extractParams(callApi) {
   let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
-  console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)
+  // console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)
   let url = `${process.env.API_BASE_URL}${path}`
 
   return {

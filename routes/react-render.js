@@ -45,20 +45,22 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug("req.url ", req.url);
+    debug("req.url ", req.url, renderProps.components);
     function getReduxPromise() {
       let {query, params} = renderProps
-      let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
-      let promise = comp.fetchData
-        ? comp.fetchData({
-          query,
-          params,
-          store,
-          history
-        })
-        : Promise.resolve()
+      let promises = renderProps.components.map(function(comp){
+        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData){
+          return Promise.resolve()
+        }
 
-      return promise
+        return comp.WrappedComponent.fetchData({
+            query,
+            params,
+            store,
+            history
+          })
+      })
+      return Promise.all(promises)
     }
 
     if (redirectLocation) {
@@ -91,11 +93,11 @@ function reduxRender(req, res, next) {
 
       if (getCurrentUrl() === reqUrl) {
         debug("rendering ", {
-          metaHeader,
-          html,
-          scriptSrcs,
+          // metaHeader,
+          // html,
+          // scriptSrcs,
           reduxState,
-          styleSrc
+        // styleSrc
         });
         res.render("index", {
           metaHeader,

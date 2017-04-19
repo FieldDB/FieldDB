@@ -145,7 +145,9 @@ class SearchContainer extends Component {
 
     if (!corpus || !corpus.get('lexicon')) {
       return (
-        <div className={this.props.className} />
+        <div className={this.props.className}>
+          Search bar
+        </div>
       )
     }
 
