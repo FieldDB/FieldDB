@@ -8,6 +8,9 @@ if (offline) {
   CORS.makeCORSRequest = function(options) {
     var deferred = Q.defer();
     Q.nextTick(function() {
+      if (options.url.includes('_design/activities/_view/one-year-weekly')) {
+        return deferred.resolve(fixtures.activity.heatmap.sample);
+      }
       if (options.url.includes('lingllama-communitycorpus/team')) {
         return deferred.resolve(fixtures.team.lingllama);
       }
@@ -39,6 +42,7 @@ if (offline) {
         return deferred.resolve(fixtures.user.community);
       }
 
+      console.log('Not found Offline: ', options.url)
       return deferred.reject({
         message: 'Not found',
         status: 404
