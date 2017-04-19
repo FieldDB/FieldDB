@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 
 import { loadCorpusMaskDetail } from './actions'
 import UserMask from '../UserMask/UserMask.jsx'
-import Search from '../Search'
 
 class CorpusMaskContainer extends Component {
   static fetchData({store, params, history}) {
@@ -63,7 +62,7 @@ class CorpusMaskContainer extends Component {
               </div>
             </div>
             <div className='row-fluid'>
-              <Search corpus={corpusMask} className='span11 offset1'/>
+              {this.props.children}
             </div>
             <div className='row-fluid'>
               <div className='span11'>
@@ -136,6 +135,7 @@ function mapStateToProps(state) {
 }
 
 CorpusMaskContainer.propTypes = {
+  children: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
   loadCorpusMaskDetail: React.PropTypes.func.isRequired,
   corpusMask: React.PropTypes.object.isRequired

@@ -45,7 +45,7 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug("req.url ", req.url, renderProps.params);
+    debug("req.url ", req.url);
     function getReduxPromise() {
       let {query, params} = renderProps
       let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent

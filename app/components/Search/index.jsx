@@ -1,17 +1,33 @@
+import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import * as ActionType from './actions'
+import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
 
-class Search extends Component {
+class SearchContainer extends Component {
   static fetchData({store, params, history}) {
-    let {query, dbname} = params
-    return store.dispatch(loadSearchResults({
-      query,
-      dbname,
-      history
-    }))
+    let {searchKeywords, dbname} = params
+
+    console.log('fetching search data', params)
+    return Promise.resolve({
+      title: 'fake searchresults',
+      docs: []
+    });
+
+    store.dispatch({
+      type: LOADED_SEARCH_RESULTS,
+      payload: {
+        title: 'fake searchresults',
+        docs: []
+      }
+    })
   }
+
+  componentDidMount() {
+    console.log('search container mounted ', this.props)
+  // let {searchKeywords, dbname} = this.props.params
+  }
+
   reindex(dbname) {
     var lexicon = {
       url: $('#search-corpus').data('lexicon-url')
@@ -158,13 +174,18 @@ class Search extends Component {
   }
 }
 
-Search.propTypes = {
+SearchContainer.propTypes = {
   className: React.PropTypes.string.isRequired,
-  corpus: React.PropTypes.object.isRequired
+  corpus: React.PropTypes.object.isRequired,
+  // loadSearchResults: React.PropTypes.func.isRequired,
+  params: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps(state) {
-  return {}
+  console.log('search container map state to props', state)
+  return {
+    datalist: state.searchResults[0]
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -178,6 +199,5 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-Search.propTypes = {}
-
-export default Search
+export { SearchContainer }
+export default connect(mapStateToProps, {})(SearchContainer)

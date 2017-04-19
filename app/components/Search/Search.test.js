@@ -2,9 +2,9 @@ import Immutable from 'immutable'
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import Search from './index.jsx'
+import { SearchContainer } from './index.jsx'
 
-describe.only('Component::Search', function() {
+describe.only('Component::SearchContainer', function() {
   let props
   beforeEach(function() {
     props = {
@@ -19,7 +19,7 @@ describe.only('Component::Search', function() {
   })
 
   function renderDoc() {
-    return shallow(<Search {...props} />)
+    return shallow(<SearchContainer {...props} />)
   }
 
   it('should render', function() {
