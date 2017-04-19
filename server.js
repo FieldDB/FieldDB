@@ -26,6 +26,11 @@ if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 
+if (config.offline) {
+  var nockWithSampleData = require('./config/offline').nockWithSampleData;
+  nockWithSampleData(config);
+}
+
 var app = express();
 
 // configure Express
