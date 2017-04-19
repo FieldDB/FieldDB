@@ -1,4 +1,5 @@
 /* jshint ignore:start */
+import config from "config"
 import debugFactory from "debug"
 import { createMemoryHistory, useQueries } from "history"
 import Helmet from "react-helmet"
@@ -45,22 +46,12 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug("req.url ", req.url, renderProps.components);
-    function getReduxPromise() {
-      let {query, params} = renderProps
-      let promises = renderProps.components.map(function(comp){
-        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData){
-          return Promise.resolve()
-        }
-
-        return comp.WrappedComponent.fetchData({
-            query,
-            params,
-            store,
-            history
-          })
-      })
-      return Promise.all(promises)
+    debug("req.url ", req.url);
+    if (!renderProps) {
+      debug("renderProps was missing calling next with not found ", renderProps);
+      const err = new Error("Not found");
+      err.status = 404;
+      return next(err);
     }
 
     if (redirectLocation) {
@@ -71,16 +62,37 @@ function reduxRender(req, res, next) {
       return next(error);
     }
 
-    if (renderProps == null) {
-      debug("renderProps was null, not found ", renderProps);
-      const err = new Error("Not found");
-      err.status = 404;
-      return next(err);
-    }
-
     let [getCurrentUrl, unsubscribe] = subscribeUrl()
     let reqUrl = location.pathname + location.search
     debug("reqUrl ", reqUrl);
+
+    function getReduxPromise() {
+      let {query, params} = renderProps
+      let fetchComponentDataPromises = renderProps.components.map(function(comp){
+        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData){
+          return Promise.resolve()
+        }
+
+        return comp.WrappedComponent.fetchData({
+            query,
+            params,
+            urls: {
+              corpus: {
+                url: config.corpus.public.url
+              },
+              search: {
+                url: config.search.public.url
+              },
+              lexicon: {
+                url: config.lexicon.public.url
+              }
+            },
+            store,
+            history
+          })
+      })
+      return Promise.all(fetchComponentDataPromises)
+    }
 
     getReduxPromise().then(() => {
       let reduxState = escape(JSON.stringify(store.getState()))

@@ -1,26 +1,33 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import superAgent from 'superagent'
 
 import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
 
 class SearchContainer extends Component {
-  static fetchData({store, params, history}) {
+  static fetchData({store, params, history, urls}) {
     let {searchKeywords, dbname} = params
-
-    console.log('fetching search data', params)
-    return Promise.resolve({
-      title: 'fake searchresults',
-      docs: []
-    });
 
     store.dispatch({
       type: LOADED_SEARCH_RESULTS,
       payload: {
-        title: 'fake searchresults',
-        docs: []
+        datalist: {
+          title: 'fake search results',
+          docs: []
+        }
       }
     })
+
+    return SearchContainer.search({ params, urls });
+
+    console.log('fetching search data', params)
+    return Promise.resolve({
+      datalist: {
+        title: 'resolved fake search results',
+        docs: []
+      }
+    });
   }
 
   componentDidMount() {
@@ -39,12 +46,14 @@ class SearchContainer extends Component {
     var url = lexicon.url + '/search/' + dbname + '/index'
     var checks = 0
 
-    $.post(url, JSON.stringify({})).done(function(response) {
+    return superAgent.post(url)
+    .send({})
+    .then(function(response) {
       var total = response.couchDBResult.rows.length
       $('#inner-search-progress-bar').width($('#search-progress-bar').width())
       $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
       $('#search-progress-bar').delay(9000).hide(600)
-    }).fail(function(err) {
+    }).catch(function(err) {
       $('#inner-search-progress-bar').width($('#search-progress-bar').width())
       $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
       $('#search-progress-bar').delay(9000).hide(600)
@@ -97,47 +106,51 @@ class SearchContainer extends Component {
     return false
   }
 
-  search(corpus) {
-    var searchForm = $('#search-corpus')
-    var data = {
-      query: $(searchForm).find('input[name="query"]').val()
-    }
-    var url = searchForm.attr('action')
-    console.log(data)
+  static search({params, urls}) {
+    var url = urls.lexicon.url + '/search/' + params.dbname
 
-    $.post(url, data).done(function(response) {
-      console.log(response)
-      $('#search-result-area').show()
-      $('#clearresults').show()
-      $('#search-result-json').JSONView(JSON.stringify(response.hits))
-      $('#search-result-highlight').html('')
-
-      window.searchList = new FieldDB.DataList({
-        corpus: corpus,
-        title: 'Search for ' + data.value
+    console.log('requesting search of ', url, params, urls)
+    return superAgent
+      .post(url)
+      .send({
+        query: params.searchKeywords
       })
+      .then(function(response) {
+      console.log('search response', response)
+      return response;
+      // $('#search-result-area').show()
+      // $('#clearresults').show()
+      // $('#search-result-json').JSONView(JSON.stringify(response.hits))
+      // $('#search-result-highlight').html('')
 
-      if (!response.hits.hits.length) {
-        $('#search-result-highlight').html('No results.')
-        return
-      }
-      response.hits.hits.forEach(function(result) {
-        renderSearchResult({
-          result: result,
-          corpus: corpus,
-          maxScore: response.hits.max_score
-        })
-      })
+      // window.searchList = new FieldDB.DataList({
+      //   corpus: corpus,
+      //   title: 'Search for ' + data.value
+      // })
 
-      $('#search-result-highlight').append('<p>Showing ' + window.searchList.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search</p>')
-    }).fail(function(err) {
-      $('#search-result-area').show()
-      $('#clearresults').show()
-      $('#search-result-highlight').html('Please try again')
-      $('#search-result-json').JSONView(JSON.stringify(err))
-      console.log('Error from search ', err)
+      // if (!response.hits.hits.length) {
+      //   $('#search-result-highlight').html('No results.')
+      //   return
+      // }
+      // response.hits.hits.forEach(function(result) {
+      //   renderSearchResult({
+      //     result: result,
+      //     corpus: corpus,
+      //     maxScore: response.hits.max_score
+      //   })
+      // })
+
+      // $('#search-result-highlight').append('<p>Showing ' + window.searchList.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search</p>')
+    }).catch(function(err) {
+      console.log('error in search ', err);
+      return {}
+      // throw err;
+      // $('#search-result-area').show()
+      // $('#clearresults').show()
+      // $('#search-result-highlight').html('Please try again')
+      // $('#search-result-json').JSONView(JSON.stringify(err))
+      // console.log('Error from search ', err)
     })
-    return false
   }
 
   render() {
@@ -153,8 +166,8 @@ class SearchContainer extends Component {
 
     return (
       <div className={this.props.className}>
-        <form id='search-corpus' onSubmit={this.handleSearchSubmit} action={corpus.getIn(['lexicon', 'url']) + '/search/' + corpus.get('dbname')} data-lexicon-url="{corpus.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
-          <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
+        <form id='search-corpus' onSubmit={this.handleSearchSubmit} data-lexicon-url="{corpus.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
+          <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' value={this.props.params.searchKeywords} title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
           <button type='submit' id='corpus_search' className='btn btn-small btn-success'>
             <i className='icon-search icon-white' />
           Search…
@@ -177,7 +190,7 @@ class SearchContainer extends Component {
 }
 
 SearchContainer.propTypes = {
-  className: React.PropTypes.string.isRequired,
+  className: React.PropTypes.string,
   corpus: React.PropTypes.object.isRequired,
   // loadSearchResults: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
@@ -186,14 +199,14 @@ SearchContainer.propTypes = {
 function mapStateToProps(state) {
   console.log('search container map state to props', state)
   return {
-    corpus: state.corpusMaskDetail, 
-    datalist: state.searchResults[0]
+    corpus: state.corpusMaskDetail
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     loadSearchResults: (datalist) => {
+    console.log('calling loadSearchResults', datalist);
       return dispatch({
         type: ActionType.LOADED_SEARCH_RESULTS,
         payload: datalist
