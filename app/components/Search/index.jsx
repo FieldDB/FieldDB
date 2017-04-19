@@ -186,6 +186,7 @@ SearchContainer.propTypes = {
 function mapStateToProps(state) {
   console.log('search container map state to props', state)
   return {
+    corpus: state.corpusMaskDetail, 
     datalist: state.searchResults[0]
   }
 }
