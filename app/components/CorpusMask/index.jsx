@@ -4,10 +4,11 @@ import Helmet from 'react-helmet'
 import React, { Component } from 'react'
 
 import { loadCorpusMaskDetail } from './actions'
-import UserMask from './../UserMask/UserMask.jsx'
+import UserMask from '../UserMask/UserMask.jsx'
+import Search from '../Search'
 
 class CorpusMaskContainer extends Component {
-  static fetchData ({store, params, history}) {
+  static fetchData({store, params, history}) {
     let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
       teamname,
@@ -15,7 +16,7 @@ class CorpusMaskContainer extends Component {
       history
     }))
   }
-  componentDidMount () {
+  componentDidMount() {
     let {teamname, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
       teamname,
@@ -23,16 +24,7 @@ class CorpusMaskContainer extends Component {
       history: browserHistory
     })
   }
-  render () {
-    let clearResults = function () {
-      return window.clearresults()
-    }
-    let reindex = function () {
-      return window.reindex(this.props.params.dbname)
-    }
-    let handleSearchSubmit = function (e) {
-      return window.handleSearchSubmit(e)
-    }
+  render() {
     let {corpusMask} = this.props
 
     if (!corpusMask || !corpusMask.get('team')) {
@@ -71,28 +63,7 @@ class CorpusMaskContainer extends Component {
               </div>
             </div>
             <div className='row-fluid'>
-              <div className='span11 offset1'>
-                <form id='search-corpus' onSubmit={handleSearchSubmit} action={corpusMask.getIn(['lexicon', 'url']) + '/search/' + corpusMask.get('dbname')} data-lexicon-url="{corpusMask.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
-                  <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
-                  <button type='submit' id='corpus_search' className='btn btn-small btn-success'>
-                    <i className='icon-search icon-white' />
-                  Search…
-                </button>
-                </form>
-                <button type='button' id='corpus_build' onClick={reindex} className='btn btn-small btn-info'>
-                  <i className='icon-refresh icon-white' />
-                Rebuild search lexicon
-              </button>
-                <div id='search-progress-bar' className='search-progress-bar hide'>
-                  <div id='inner-search-progress-bar' className='inner-search-progress-bar' />
-                </div>
-                <span id='clearresults' className='hide'>
-                  <button type='button' id='clear_results' onClick={clearResults} className='btn btn-small btn-danger'>
-                    <i className='icon-remove icon-white' />
-                  Clear…
-                </button>
-                </span>
-              </div>
+              <Search corpus={corpusMask} className='span11 offset1'/>
             </div>
             <div className='row-fluid'>
               <div className='span11'>
@@ -157,7 +128,7 @@ class CorpusMaskContainer extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail
