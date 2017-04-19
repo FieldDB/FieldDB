@@ -1,10 +1,12 @@
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
+import Immutable from 'immutable'
 import React, { Component } from 'react'
 
 import { loadCorpusMaskDetail } from './actions'
 import UserMask from '../UserMask/UserMask.jsx'
+import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
   static fetchData({store, params, history}) {
@@ -80,7 +82,13 @@ class CorpusMaskContainer extends Component {
                 </ul>
                 <div id='search-result-area-content' className='tab-content'>
                   <div className='tab-pane active' id='highlights'>
-                    <div id='search-result-highlight' className='accordion' />
+                    {
+                    this.props.searchResults.map((searchResult) => {
+                      return (
+                        <DataList className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')}/>
+                      )
+                    })
+                    }
                   </div>
                   <div className='tab-pane ' id='json'>
                     <div id='search-result-json' className='well well-small' />
@@ -130,7 +138,8 @@ class CorpusMaskContainer extends Component {
 function mapStateToProps(state) {
   console.log('corpusMaskdetail map state to props', state)
   return {
-    corpusMask: state.corpusMaskDetail
+    corpusMask: state.corpusMaskDetail,
+    searchResults: state.searchResults || Immutable.fromJs([])
   }
 }
 
