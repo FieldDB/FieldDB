@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import superAgent from 'superagent'
+import { DataList } from 'fielddb/api/data_list/DataList'
+import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
 
 import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
@@ -9,26 +11,10 @@ class SearchContainer extends Component {
   static fetchData({store, params, history, urls}) {
     let {searchKeywords, dbname} = params
 
-    store.dispatch({
-      type: LOADED_SEARCH_RESULTS,
-      payload: {
-        datalist: {
-          id: 'dispatched',
-          title: 'fake search results',
-          docs: []
-        }
-      }
-    })
-
-    return SearchContainer.search({ params, urls });
-
-    console.log('fetching search data', params)
-    return Promise.resolve({
-      datalist: {
-        id: 'resolved',
-        title: 'resolved fake search results',
-        docs: []
-      }
+    return SearchContainer.search({
+      params,
+      urls,
+      store
     });
   }
 
@@ -49,13 +35,13 @@ class SearchContainer extends Component {
     var checks = 0
 
     return superAgent.post(url)
-    .send({})
-    .then(function(response) {
-      var total = response.couchDBResult.rows.length
-      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-      $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
-      $('#search-progress-bar').delay(9000).hide(600)
-    }).catch(function(err) {
+      .send({})
+      .then(function(response) {
+        var total = response.couchDBResult.rows.length
+        $('#inner-search-progress-bar').width($('#search-progress-bar').width())
+        $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
+        $('#search-progress-bar').delay(9000).hide(600)
+      }).catch(function(err) {
       $('#inner-search-progress-bar').width($('#search-progress-bar').width())
       $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
       $('#search-progress-bar').delay(9000).hide(600)
@@ -108,7 +94,7 @@ class SearchContainer extends Component {
     return false
   }
 
-  static search({params, urls}) {
+  static search({params, urls, store}) {
     var url = urls.lexicon.url + '/search/' + params.dbname
 
     console.log('requesting search of ', url, params, urls)
@@ -118,40 +104,41 @@ class SearchContainer extends Component {
         query: params.searchKeywords
       })
       .then(function(response) {
-      console.log('search response', response)
-      return response;
-      // $('#search-result-area').show()
-      // $('#clearresults').show()
-      // $('#search-result-json').JSONView(JSON.stringify(response.hits))
-      // $('#search-result-highlight').html('')
+        console.log('search response', response.body)
+        const datalist = new DataList({
+          id: params.searchKeywords,
+          // corpus: corpus,
+          title: 'Search for ' + params.searchKeywords
+        })
 
-      // window.searchList = new FieldDB.DataList({
-      //   corpus: corpus,
-      //   title: 'Search for ' + data.value
-      // })
+        response.body.hits.hits.forEach(function(result) {
+          const datum = new LanguageDatum()
+          datum.merge("self", result)
+          // datum.corpus = corpus;
+          datum.maxScore = response.body.hits.max_score
+          datalist.add(datum)
+        })
 
-      // if (!response.hits.hits.length) {
-      //   $('#search-result-highlight').html('No results.')
-      //   return
-      // }
-      // response.hits.hits.forEach(function(result) {
-      //   renderSearchResult({
-      //     result: result,
-      //     corpus: corpus,
-      //     maxScore: response.hits.max_score
-      //   })
-      // })
+        const datalistObject = datalist.toJSON()
+        datalistObject.docs = datalist.docs.toJSON()
+        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.body.hits.total + ' results, you can click on any of the items to see more details to further refine your search'
+        store.dispatch({
+          type: LOADED_SEARCH_RESULTS,
+          payload: {
+            datalist: datalistObject
+          }
+        })
 
-      // $('#search-result-highlight').append('<p>Showing ' + window.searchList.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search</p>')
-    }).catch(function(err) {
+        return datalist
+      }).catch(function(err) {
       console.log('error in search ', err);
       return {}
-      // throw err;
-      // $('#search-result-area').show()
-      // $('#clearresults').show()
-      // $('#search-result-highlight').html('Please try again')
-      // $('#search-result-json').JSONView(JSON.stringify(err))
-      // console.log('Error from search ', err)
+    // throw err;
+    // $('#search-result-area').show()
+    // $('#clearresults').show()
+    // $('#search-result-highlight').html('Please try again')
+    // $('#search-result-json').JSONView(JSON.stringify(err))
+    // console.log('Error from search ', err)
     })
   }
 
@@ -199,7 +186,7 @@ SearchContainer.propTypes = {
 }
 
 function mapStateToProps(state) {
-  console.log('search container map state to props', state)
+  console.log('search container map state to props')
   return {
     corpus: state.corpusMaskDetail
   }
@@ -208,7 +195,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadSearchResults: (datalist) => {
-    console.log('calling loadSearchResults', datalist);
+      console.log('calling loadSearchResults', datalist);
       return dispatch({
         type: ActionType.LOADED_SEARCH_RESULTS,
         payload: datalist
