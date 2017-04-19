@@ -13,6 +13,7 @@ class SearchContainer extends Component {
       type: LOADED_SEARCH_RESULTS,
       payload: {
         datalist: {
+          id: 'dispatched',
           title: 'fake search results',
           docs: []
         }
@@ -24,6 +25,7 @@ class SearchContainer extends Component {
     console.log('fetching search data', params)
     return Promise.resolve({
       datalist: {
+        id: 'resolved',
         title: 'resolved fake search results',
         docs: []
       }

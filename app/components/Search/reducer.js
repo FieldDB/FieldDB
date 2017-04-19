@@ -4,6 +4,7 @@ import * as ActionType from './actions'
 
 let defaultState = Immutable.fromJS([{
   datalist: {
+    id: 'default',
     title: 'Default search datalist',
     docs: []
   }

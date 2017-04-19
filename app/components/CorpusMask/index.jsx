@@ -84,8 +84,9 @@ class CorpusMaskContainer extends Component {
                   <div className='tab-pane active' id='highlights'>
                     {
                     this.props.searchResults.map((searchResult) => {
+                      const id = this.props.searchResults.get('datalist') ? this.props.searchResults.get('datalist').id : Math.random();
                       return (
-                        <DataList className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')}/>
+                        <DataList key={id} className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')}/>
                       )
                     })
                     }
