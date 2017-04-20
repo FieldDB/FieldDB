@@ -11,7 +11,7 @@ let defaultState = Immutable.fromJS([{
 }])
 
 export default function (state = defaultState, action) {
-  console.log('got an event LOADED_SEARCH_RESULTS', state, action.payload)
+  // console.log('got an event LOADED_SEARCH_RESULTS', state, action.payload)
   switch (action.type) {
     case ActionType.LOADED_SEARCH_RESULTS:
       return state.unshift(Immutable.fromJS(action.payload))

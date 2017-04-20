@@ -3,10 +3,10 @@ var path = require('path')
 var webpack = require('webpack')
 // var AssetsPlugin = require('assets-webpack-plugin')
 
-var DEBUG = !(process.env.NODE_ENV === 'production')
+var debugMode = !(process.env.NODE_ENV === 'production')
 
 var config = {
-  devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
+  devtool: debugMode ? 'cheap-module-eval-source-map' : false,
   entry: {
     app: './app/app',
     vendor: [
@@ -42,7 +42,7 @@ var config = {
 }
 
 
-if (DEBUG) {
+if (debugMode) {
   config.entry.dev = [
     'webpack-dev-server/client?https://localhost:3001',
     'webpack/hot/only-dev-server',
