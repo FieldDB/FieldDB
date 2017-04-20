@@ -10,17 +10,17 @@ import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
   static fetchData({store, params, history}) {
-    let {username, dbname} = params
+    let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
-      username,
+      teamname,
       dbname,
       history
     }))
   }
   componentDidMount() {
-    let {username, dbname} = this.props.params
+    let {teamname, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
-      username,
+      teamname,
       dbname,
       history: browserHistory
     })
