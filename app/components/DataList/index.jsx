@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import SearchResult from '../Search/SearchResult.jsx'
 
 class DataList extends Component {
   render () {
@@ -10,9 +11,18 @@ class DataList extends Component {
       )
     }
 
+    const docs = this.props.datalist.get('docs')
     return (
-      <div className='accordion'>
-        DataList {this.props.datalist.get('title')}
+      <div className={this.props.className}>
+        <h3> {this.props.datalist.get('title')}</h3>
+        {
+      docs.map((doc) => {
+        const id = doc.get('id') ? doc.get('id') : Math.random() * 100
+        return (
+          <SearchResult key={id} corpus={this.props.corpus} result={doc} />
+        )
+      })
+      }
       </div>
     )
   }

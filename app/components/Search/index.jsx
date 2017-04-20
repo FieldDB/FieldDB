@@ -181,7 +181,6 @@ class SearchContainer extends Component {
 
 SearchContainer.propTypes = {
   className: React.PropTypes.string,
-  corpus: React.PropTypes.object.isRequired,
   // loadSearchResults: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
 }
