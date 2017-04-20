@@ -95,9 +95,10 @@ class SearchContainer extends Component {
   }
 
   static search({params, urls, store}) {
-    var url = urls.lexicon.url + '/search/' + params.dbname
+    const dbname = store.getState().corpusMaskDetail.get('dbname')
+    var url = urls.lexicon.url + '/search/' + dbname
 
-    console.log('requesting search of ', url, params, urls)
+    console.log('requesting search of ', url, params, urls, store)
     return superAgent
       .post(url)
       .send({
