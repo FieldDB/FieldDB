@@ -128,6 +128,9 @@ class SearchContainer extends Component {
           datum.merge('self', result)
           // datum.corpus = corpus;
           datum.maxScore = response.body.hits.max_score
+          if (datum.maxScore !== 1) {
+            datum.maxScore = datum.maxScore * 10
+          }
 
           for (let attribute in result._source) {
             if (!result._source.hasOwnProperty(attribute)) {

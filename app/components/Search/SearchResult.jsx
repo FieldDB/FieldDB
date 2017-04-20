@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
-
-function isEmpty (value) {
-  return value
-}
+import IGT from '../Datum/IGT.jsx'
+import ParallelText from '../Datum/ParallelText.jsx'
 
 class SearchResult extends Component {
 
@@ -14,6 +12,7 @@ class SearchResult extends Component {
   render () {
     const result = this.props.result.toJS()
     const datum = new LanguageDatum(result)
+    const maxScore = datum.maxScore || 1
     let summary = datum.fields.map(function (field) {
       if (field.highlighted) {
         return field.highlighted.join(', ')
@@ -41,60 +40,44 @@ class SearchResult extends Component {
     console.log('render search datum', igt)
     return (
       <div >
-        {datum.id}
-        <span dangerouslySetInnerHTML={{
-          __html: summary
-        }} />
+        <div className='accordion-group'>
+          <div className='accordion-heading'>
+            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + result._id + '-embedded'}
+              href={'#collapse-' + result._id}
+              name={result._id}
+              title={datum.context}>
+              <input type='range' value={result.score * 10} min='0' max={maxScore} disabled />
+              <br />
+
+              <span dangerouslySetInnerHTML={{
+                __html: summary
+              }} />
+              <span>{datum.translation}</span>
+            </a>
+          </div>
+          <div className='accordion-body collapse' id={'collapse-' + result._id} >
+            <div className='accordion-inner igt-area'>
+              <p className='igt'>
+                <label>Interlinear Glossed Text: </label>
+                {
+      igt.tuples.map((tuple) => {
+        const id = tuple.id ? tuple.id : Math.random() * 100
+        return (
+          <IGT key={id} igt={tuple} fields={datum.fields} />
+        )
+      })
+      }
+              </p>
+              <p className='parallel-text'>
+                <label>Parallel Text: </label>
+                <i>
+                  <ParallelText parallelText={igt.parallelText} />
+                </i></p>
+            </div>
+          </div>
+        </div>
       </div>
     )
-
-    igtView = igt.tuples.map(function (tuple) {
-      return '        <span class="glossCouplet">' +
-        options.corpus.datumFields.map(function (corpusField) {
-          return tuple[corpusField.id]
-        // return result.highlight[corpusField.id] ? result.highlight[corpusField.id] : tuple[corpusField.id];
-        }).filter(isEmpty).join(' <br/>') +
-        '        </span>'
-    }).join(' ')
-
-    parallelTextView = datum.translation
-    if (igt.parallelText) {
-      parallelTextView = Object.keys(igt.parallelText).map(function (key) {
-        return igt.parallelText[key]
-      }).filter(isEmpty).join('<br/>')
-    }
-
-    // Show parallel text if user searched with out a highlight
-    if (!result.highlight || result.highlight.length) {
-      summary = parallelTextView
-    } else {
-      summary = summary.join('<br/>')
-    }
-
-    if (options.maxScore !== 1) {
-      scoreView = '<input type="range" value="' + result._score * 10 + '" min="0" max="' + options.maxScore * 10 + '" disabled=""/>'
-    }
-
-    context = datum.context || ''
-
-    view = '<div class="accordion-group">' +
-      '    <div class="accordion-heading">' +
-      '      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-' +
-      result._id +
-      '-embedded" href="#collapse-' + result._id + '" name="' + result._id + '" title="' + context + '"> ' + scoreView + '<br/> ' +
-      summary +
-      '      </a>' +
-      '      ' +
-      mediaView + '    </div>' +
-      '    <div class="accordion-body collapse" id="collapse-' + result._id + '">' +
-      '      <div class="accordion-inner igt-area"><p class="igt"><label>Interlinear Glossed Text: </label>' +
-      igtView +
-      '        </p><p class="parallel-text"><label>Parallel Text: </label><i>' +
-      parallelTextView +
-      '        </i></p>' +
-      '      </div>' +
-      '    </div>' +
-      '  </div>'
   }
 }
 
