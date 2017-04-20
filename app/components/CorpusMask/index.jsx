@@ -9,7 +9,7 @@ import UserMask from '../UserMask/UserMask.jsx'
 import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
-  static fetchData ({store, params, history}) {
+  static fetchData({store, params, history}) {
     let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
       teamname,
@@ -17,7 +17,7 @@ class CorpusMaskContainer extends Component {
       history
     }))
   }
-  componentDidMount () {
+  componentDidMount() {
     let {teamname, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
       teamname,
@@ -25,7 +25,7 @@ class CorpusMaskContainer extends Component {
       history: browserHistory
     })
   }
-  render () {
+  render() {
     let {corpusMask} = this.props
 
     if (!corpusMask || !corpusMask.get('team')) {
@@ -84,9 +84,9 @@ class CorpusMaskContainer extends Component {
                   <div className='tab-pane active' id='highlights'>
                     {
       this.props.searchResults.map((searchResult) => {
-        const id = this.props.searchResults.get('datalist') ? this.props.searchResults.get('datalist').id : Math.random()
+        const id = searchResult.get('datalist') ? searchResult.get('datalist').id : Math.random()
         return (
-          <DataList key={id} className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')} />
+          <DataList key={id} className='accordian' corpus={corpusMask} datalist={searchResult.get('datalist')} />
         )
       })
       }
@@ -136,7 +136,7 @@ class CorpusMaskContainer extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   // console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail,
@@ -148,7 +148,6 @@ CorpusMaskContainer.propTypes = {
   children: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
   loadCorpusMaskDetail: React.PropTypes.func.isRequired,
-  corpusMask: React.PropTypes.object.isRequired
 }
 
 export { CorpusMaskContainer }
