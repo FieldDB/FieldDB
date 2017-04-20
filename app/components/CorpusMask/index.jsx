@@ -9,7 +9,7 @@ import UserMask from '../UserMask/UserMask.jsx'
 import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
-  static fetchData({store, params, history}) {
+  static fetchData ({store, params, history}) {
     let {teamname, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
       teamname,
@@ -17,7 +17,7 @@ class CorpusMaskContainer extends Component {
       history
     }))
   }
-  componentDidMount() {
+  componentDidMount () {
     let {teamname, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
       teamname,
@@ -25,7 +25,7 @@ class CorpusMaskContainer extends Component {
       history: browserHistory
     })
   }
-  render() {
+  render () {
     let {corpusMask} = this.props
 
     if (!corpusMask || !corpusMask.get('team')) {
@@ -136,7 +136,7 @@ class CorpusMaskContainer extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   // console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail,
@@ -147,7 +147,7 @@ function mapStateToProps(state) {
 CorpusMaskContainer.propTypes = {
   children: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
-  loadCorpusMaskDetail: React.PropTypes.func.isRequired,
+  loadCorpusMaskDetail: React.PropTypes.func.isRequired
 }
 
 export { CorpusMaskContainer }

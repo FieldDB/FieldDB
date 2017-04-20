@@ -117,6 +117,22 @@ class SearchContainer extends Component {
           datum.merge('self', result)
           // datum.corpus = corpus;
           datum.maxScore = response.body.hits.max_score
+
+          for (let attribute in result._source) {
+            if (!result._source.hasOwnProperty(attribute)) {
+              continue
+            }
+            console.log('setting attribute', attribute)
+            datum[attribute] = result._source[attribute]
+          }
+
+          console.log('setting highlights', result.highlight)
+          for (let field in result.highlight) {
+            if (!result.highlight.hasOwnProperty(field) || !result.highlight[field]) {
+              continue
+            }
+            datum.fields[field].highlighted = result.highlight[field]
+          }
           datalist.add(datum)
         })
 
@@ -157,7 +173,7 @@ class SearchContainer extends Component {
     return (
       <div className={this.props.className}>
         <form id='search-corpus' onSubmit={this.handleSearchSubmit} data-lexicon-url="{corpus.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
-          <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' value={this.props.params.searchKeywords} title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
+          <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' defaultValue={this.props.params.searchKeywords} title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
           <button type='submit' id='corpus_search' className='btn btn-small btn-success'>
             <i className='icon-search icon-white' />
           Search…
