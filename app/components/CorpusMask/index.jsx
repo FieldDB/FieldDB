@@ -10,17 +10,17 @@ import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
   static fetchData({store, params, history}) {
-    let {teamname, dbname} = params
+    let {username, dbname} = params
     return store.dispatch(loadCorpusMaskDetail({
-      teamname,
+      username,
       dbname,
       history
     }))
   }
   componentDidMount() {
-    let {teamname, dbname} = this.props.params
+    let {username, dbname} = this.props.params
     this.props.loadCorpusMaskDetail({
-      teamname,
+      username,
       dbname,
       history: browserHistory
     })
@@ -83,13 +83,13 @@ class CorpusMaskContainer extends Component {
                 <div id='search-result-area-content' className='tab-content'>
                   <div className='tab-pane active' id='highlights'>
                     {
-                    this.props.searchResults.map((searchResult) => {
-                      const id = this.props.searchResults.get('datalist') ? this.props.searchResults.get('datalist').id : Math.random();
-                      return (
-                        <DataList key={id} className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')}/>
-                      )
-                    })
-                    }
+      this.props.searchResults.map((searchResult) => {
+        const id = this.props.searchResults.get('datalist') ? this.props.searchResults.get('datalist').id : Math.random();
+        return (
+          <DataList key={id} className='accordian' corpus={corpusMask} datalist={this.props.searchResults.get('datalist')}/>
+        )
+      })
+      }
                   </div>
                   <div className='tab-pane ' id='json'>
                     <div id='search-result-json' className='well well-small' />
@@ -137,7 +137,7 @@ class CorpusMaskContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('corpusMaskdetail map state to props', state)
+  // console.log('corpusMaskdetail map state to props', state)
   return {
     corpusMask: state.corpusMaskDetail,
     searchResults: state.searchResults || Immutable.fromJs([])
