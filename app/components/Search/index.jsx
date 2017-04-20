@@ -2,10 +2,21 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import superAgent from 'superagent'
 import { DataList } from 'fielddb/api/data_list/DataList'
+import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
 
 import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
+
+function updateCorpusField (field) {
+  if (!defaultCorpus) {
+    defaultCorpus = new CorpusMask(CorpusMask.prototype.defaults)
+  }
+  if (!field.type && defaultCorpus.datumFields[field.id]) {
+    field.type = defaultCorpus.datumFields[field.id].type
+  }
+  return field
+}
 
 class SearchContainer extends Component {
   static fetchData ({store, params, history, urls}) {
@@ -20,6 +31,10 @@ class SearchContainer extends Component {
 
   componentDidMount () {
     console.log('search container mounted ', this.props)
+    this.props.loadSearchResults({
+      id: Date.now(),
+      'title': 'trying to force render'
+    })
   // let {searchKeywords, dbname} = this.props.params
   }
 
@@ -68,18 +83,8 @@ class SearchContainer extends Component {
       return false
     }
 
-    function updateCorpusField (field) {
-      if (!defaultCorpus) {
-        defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults)
-      }
-      if (!field.type && defaultCorpus.datumFields[field.id]) {
-        field.type = defaultCorpus.datumFields[field.id].type
-      }
-      return field
-    }
-
     $.ajax('/api' + window.location.pathname).done(function (json) {
-      corpus = new FieldDB.CorpusMask(json)
+      corpus = new CorpusMask(json)
       corpus.datumFields.map(updateCorpusField)
       window.corpus = corpus
 
@@ -95,8 +100,10 @@ class SearchContainer extends Component {
   }
 
   static search ({params, urls, store}) {
-    const dbname = store.getState().corpusMaskDetail.get('dbname')
-    var url = urls.lexicon.url + '/search/' + dbname
+    const corpus = new CorpusMask(store.getState().corpusMaskDetail.toJS())
+    corpus.datumFields.map(updateCorpusField)
+
+    var url = urls.lexicon.url + '/search/' + corpus.dbname
 
     console.log('requesting search of ', url, params, urls, store)
     return superAgent
@@ -105,15 +112,19 @@ class SearchContainer extends Component {
         query: params.searchKeywords
       })
       .then(function (response) {
-        console.log('search response', response.body)
+        // console.log('search response', response.body)
         const datalist = new DataList({
           id: params.searchKeywords,
-          // corpus: corpus,
+          corpus: corpus,
           title: 'Search for ' + params.searchKeywords
         })
 
         response.body.hits.hits.forEach(function (result) {
-          const datum = new LanguageDatum()
+          const datum = new LanguageDatum({
+            id: result._id,
+            corpus: corpus,
+            fields: corpus.datumFields.clone()
+          })
           datum.merge('self', result)
           // datum.corpus = corpus;
           datum.maxScore = response.body.hits.max_score
@@ -133,6 +144,8 @@ class SearchContainer extends Component {
             }
             datum.fields[field].highlighted = result.highlight[field]
           }
+          // datum.debugMode = true;
+          // datum.igtCache = datum.igt;
           datalist.add(datum)
         })
 

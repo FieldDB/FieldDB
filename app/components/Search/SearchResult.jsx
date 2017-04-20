@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
 
 function isEmpty (value) {
@@ -7,8 +6,12 @@ function isEmpty (value) {
 }
 
 class SearchResult extends Component {
+
+  componentDidMount () {
+    this.render()
+  }
+
   render () {
-    const corpus = new CorpusMask(this.props.corpus.toJS())
     const result = this.props.result.toJS()
     const datum = new LanguageDatum(result)
     let summary = datum.fields.map(function (field) {
@@ -34,15 +37,16 @@ class SearchResult extends Component {
 
     // igt = datum.igt;
 
-    console.log('render search datum', datum.fields.morphemes.highlighted)
+    const igt = datum.igt
+    console.log('render search datum', igt)
     return (
-      <div dangerouslySetInnerHTML={{
-        __html: summary
-      }} />
+      <div >
+        {datum.id}
+        <span dangerouslySetInnerHTML={{
+          __html: summary
+        }} />
+      </div>
     )
-
-    igt = datum.igt
-    console.log(igt)
 
     igtView = igt.tuples.map(function (tuple) {
       return '        <span class="glossCouplet">' +
