@@ -68,33 +68,63 @@ function reduxRender(req, res, next) {
 
     function getReduxPromise() {
       let {query, params} = renderProps
-      let fetchComponentDataPromises = renderProps.components.map(function(comp){
-        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData){
-          return Promise.resolve()
+      let promiseCount = 0
+      let fetchComponentDataPromises = renderProps.components.map(function(comp) {
+        promiseCount++
+        const promiseCountString = promiseCount + ''
+        return {
+          promiseCountString: promiseCountString,
+          fetchData: function(opts) {
+            console.log('\ncalling with opts', opts)
+            return new Promise(function(resolve) {
+              setTimeout(function() {
+                resolve(promiseCountString)
+              }, Math.random() * 1000)
+            })
+          }
         }
 
-        return comp.WrappedComponent.fetchData({
-            query,
-            params,
-            urls: {
-              corpus: {
-                url: config.corpus.public.url
-              },
-              search: {
-                url: config.search.public.url
-              },
-              lexicon: {
-                url: config.lexicon.public.url
-              }
-            },
-            store,
-            history
-          })
-      })
-      return Promise.all(fetchComponentDataPromises)
+        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData) {
+          return {
+            fetchData: Promise.resolve
+          }
+        }
+        return comp.WrappedComponent
+
+      }).reduce(function(prev, val) {
+        return prev.then(function(previousresult) {
+          console.log('previousresult', previousresult, val)
+          return val.fetchData.apply(val, [{
+            stuff: 'stuff' + previousresult
+          }])
+        // {
+        //     query,
+        //     params,
+        //     urls: {
+        //       corpus: {
+        //         url: config.corpus.public.url
+        //       },
+        //       search: {
+        //         url: config.search.public.url
+        //       },
+        //       lexicon: {
+        //         url: config.lexicon.public.url
+        //       }
+        //     },
+        //     store,
+        //     history
+        //   }
+        })
+      }, Promise.resolve().then(function(result) {
+        console.log('result', result)
+        return result;
+      }))
+      // console.log('fetchComponentDataPromises', fetchComponentDataPromises);
+      return fetchComponentDataPromises;
     }
 
-    getReduxPromise().then(() => {
+    getReduxPromise().then((results) => {
+      console.log('got back results', results);
       let reduxState = escape(JSON.stringify(store.getState()))
       let html = ReactDOMServer.renderToString(
         <Provider store={store}>
