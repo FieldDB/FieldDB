@@ -4,7 +4,7 @@ class DataList extends Component {
   render () {
     if (!this.props.datalist) {
       return (
-      <div className='accordion'>
+        <div className='accordion'>
         DataList
       </div>
       )

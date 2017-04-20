@@ -14,7 +14,7 @@ export default function (history) {
         <Route path='corpora' component={Corpora} />
         <Route path=':username' component={UserMaskContainer} />
         <Route path=':username/' component={UserMaskContainer} />
-        <Route path=':teamname/:dbname' component={CorpusMaskContainer}/>
+        <Route path=':teamname/:dbname' component={CorpusMaskContainer} />
         <Route path=':teamname/:dbname/' component={CorpusMaskContainer}>
           <Route path='search' component={SearchContainer} />
           <Route path='search/:searchKeywords' component={SearchContainer} />

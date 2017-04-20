@@ -8,22 +8,22 @@ import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
 
 class SearchContainer extends Component {
-  static fetchData({store, params, history, urls}) {
+  static fetchData ({store, params, history, urls}) {
     let {searchKeywords, dbname} = params
 
     return SearchContainer.search({
       params,
       urls,
       store
-    });
+    })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     console.log('search container mounted ', this.props)
   // let {searchKeywords, dbname} = this.props.params
   }
 
-  reindex(dbname) {
+  reindex (dbname) {
     var lexicon = {
       url: $('#search-corpus').data('lexicon-url')
     }
@@ -36,31 +36,31 @@ class SearchContainer extends Component {
 
     return superAgent.post(url)
       .send({})
-      .then(function(response) {
+      .then(function (response) {
         var total = response.couchDBResult.rows.length
         $('#inner-search-progress-bar').width($('#search-progress-bar').width())
         $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
         $('#search-progress-bar').delay(9000).hide(600)
-      }).catch(function(err) {
-      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-      $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
-      $('#search-progress-bar').delay(9000).hide(600)
-      console.log('Error from trainings ', err)
-    })
+      }).catch(function (err) {
+        $('#inner-search-progress-bar').width($('#search-progress-bar').width())
+        $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
+        $('#search-progress-bar').delay(9000).hide(600)
+        console.log('Error from trainings ', err)
+      })
   }
 
-  progress(percent, $element) {
+  progress (percent, $element) {
     var progressBarWidth = percent * $element.width() / 100
     $('#inner-search-progress-bar').width(progressBarWidth).html(percent + '%&nbsp;')
   }
 
-  clearresults() {
+  clearresults () {
     $('#search-result-area').hide()
     $('#search-result-area-content').hide()
     $('#clearresults').hide()
   }
 
-  handleSearchSubmit(e) {
+  handleSearchSubmit (e) {
     e.preventDefault()
     var corpus = window.corpus
     if (corpus) {
@@ -68,7 +68,7 @@ class SearchContainer extends Component {
       return false
     }
 
-    function updateCorpusField(field) {
+    function updateCorpusField (field) {
       if (!defaultCorpus) {
         defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults)
       }
@@ -78,13 +78,13 @@ class SearchContainer extends Component {
       return field
     }
 
-    $.ajax('/api' + window.location.pathname).done(function(json) {
+    $.ajax('/api' + window.location.pathname).done(function (json) {
       corpus = new FieldDB.CorpusMask(json)
       corpus.datumFields.map(updateCorpusField)
       window.corpus = corpus
 
       search(corpus)
-    }).fail(function(err) {
+    }).fail(function (err) {
       $('#search-result-area').show()
       $('#clearresults').show()
       $('#search-result-highlight').html('Please try again')
@@ -94,7 +94,7 @@ class SearchContainer extends Component {
     return false
   }
 
-  static search({params, urls, store}) {
+  static search ({params, urls, store}) {
     const dbname = store.getState().corpusMaskDetail.get('dbname')
     var url = urls.lexicon.url + '/search/' + dbname
 
@@ -104,7 +104,7 @@ class SearchContainer extends Component {
       .send({
         query: params.searchKeywords
       })
-      .then(function(response) {
+      .then(function (response) {
         console.log('search response', response.body)
         const datalist = new DataList({
           id: params.searchKeywords,
@@ -112,9 +112,9 @@ class SearchContainer extends Component {
           title: 'Search for ' + params.searchKeywords
         })
 
-        response.body.hits.hits.forEach(function(result) {
+        response.body.hits.hits.forEach(function (result) {
           const datum = new LanguageDatum()
-          datum.merge("self", result)
+          datum.merge('self', result)
           // datum.corpus = corpus;
           datum.maxScore = response.body.hits.max_score
           datalist.add(datum)
@@ -131,19 +131,19 @@ class SearchContainer extends Component {
         })
 
         return datalist
-      }).catch(function(err) {
-      console.log('error in search ', err);
-      return {}
+      }).catch(function (err) {
+        console.log('error in search ', err)
+        return {}
     // throw err;
     // $('#search-result-area').show()
     // $('#clearresults').show()
     // $('#search-result-highlight').html('Please try again')
     // $('#search-result-json').JSONView(JSON.stringify(err))
     // console.log('Error from search ', err)
-    })
+      })
   }
 
-  render() {
+  render () {
     const {corpus} = this.props
 
     if (!corpus || !corpus.get('lexicon')) {
@@ -167,7 +167,7 @@ class SearchContainer extends Component {
           <i className='icon-refresh icon-white' /> Rebuild search lexicon
         </button>
         <div id='search-progress-bar' className='search-progress-bar hide'>
-          <div id='inner-search-progress-bar' className='inner-search-progress-bar'></div>
+          <div id='inner-search-progress-bar' className='inner-search-progress-bar' />
         </div>
         <span id='clearresults' className='hide'>
           <button type='button' id='clear_results' onClick={this.clearResults} className='btn btn-small btn-danger'>
@@ -186,17 +186,17 @@ SearchContainer.propTypes = {
   params: React.PropTypes.object.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   console.log('search container map state to props')
   return {
     corpus: state.corpusMaskDetail
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return {
     loadSearchResults: (datalist) => {
-      console.log('calling loadSearchResults', datalist);
+      console.log('calling loadSearchResults', datalist)
       return dispatch({
         type: ActionType.LOADED_SEARCH_RESULTS,
         payload: datalist

@@ -4,9 +4,9 @@ import { shallow } from 'enzyme'
 
 import { SearchContainer } from './index.jsx'
 
-describe.only('Component::SearchContainer', function() {
+describe.only('Component::SearchContainer', function () {
   let props
-  beforeEach(function() {
+  beforeEach(function () {
     props = {
       corpus: Immutable.fromJS({
         lexicon: {
@@ -18,11 +18,11 @@ describe.only('Component::SearchContainer', function() {
     }
   })
 
-  function renderDoc() {
+  function renderDoc () {
     return shallow(<SearchContainer {...props} />)
   }
 
-  it('should render', function() {
+  it('should render', function () {
     let doc = renderDoc()
     let element = doc.find('div')
 
