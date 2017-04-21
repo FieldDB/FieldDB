@@ -13,12 +13,13 @@ class SearchResult extends Component {
     const result = this.props.result.toJS()
     const datum = new LanguageDatum(result)
     const maxScore = datum.maxScore || 1
-    let summary = datum.fields.map(function (field) {
+    let summary = []
+
+    datum.fields.map(function (field) {
       if (field.highlighted) {
-        return field.highlighted.join(', ')
+        summary = summary.concat(field.highlighted)
       }
-      return ''
-    }).join(',')
+    })
 
     //   {
     //   _id: datum._id,
@@ -37,6 +38,7 @@ class SearchResult extends Component {
     // igt = datum.igt;
 
     const igt = datum.igtCache || datum.igt
+
     console.log('render search datum', igt)
     return (
       <div >
@@ -48,11 +50,18 @@ class SearchResult extends Component {
               title={datum.context}>
               <input type='range' value={result.score * 10} min='0' max={maxScore} disabled />
               <br />
-
-              <span dangerouslySetInnerHTML={{
-                __html: summary
-              }} />
-              <span>{datum.translation}</span>
+              {
+      summary.length ? summary.map((summaryLine) => {
+        return (
+          <span key={summaryLine}>
+            <span key={summaryLine} dangerouslySetInnerHTML={{
+              __html: summaryLine
+            }} />
+            <br />
+          </span>
+        )
+      }) : <ParallelText parallelText={igt.parallelText} />
+      }
             </a>
           </div>
           <div className='accordion-body collapse' id={'collapse-' + datum._id} >
