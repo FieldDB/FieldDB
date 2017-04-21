@@ -21,7 +21,7 @@ class SearchResult extends Component {
     }).join(',')
 
     //   {
-    //   _id: result._id,
+    //   _id: datum._id,
     //   corpus: corpus,
     //   fields: corpus.datumFields.clone()
     // })
@@ -42,9 +42,9 @@ class SearchResult extends Component {
       <div >
         <div className='accordion-group'>
           <div className='accordion-heading'>
-            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + result._id + '-embedded'}
-              href={'#collapse-' + result._id}
-              name={result._id}
+            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + datum._id + '-embedded'}
+              href={'#collapse-' + datum._id}
+              name={datum._id}
               title={datum.context}>
               <input type='range' value={result.score * 10} min='0' max={maxScore} disabled />
               <br />
@@ -55,7 +55,7 @@ class SearchResult extends Component {
               <span>{datum.translation}</span>
             </a>
           </div>
-          <div className='accordion-body collapse' id={'collapse-' + result._id} >
+          <div className='accordion-body collapse' id={'collapse-' + datum._id} >
             <div className='accordion-inner igt-area'>
               <p className='igt'>
                 <label>Interlinear Glossed Text: </label>
