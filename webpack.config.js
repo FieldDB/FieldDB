@@ -18,6 +18,7 @@ var config = {
       'redux',
       'react-dom',
       'bluebird',
+      'fielddb',
       'history'
     ]
   },
