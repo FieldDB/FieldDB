@@ -2,10 +2,15 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import React, { Component } from 'react'
 import { Route, Redirect } from 'react-router'
-import superAgent from 'superagent'
 import { DataList } from 'fielddb/api/data_list/DataList'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
+import { CORS } from 'fielddb/api/CORS'
+import { requestSampleData } from '../../../config/offline'
+
+requestSampleData({
+  offline: true
+})
 
 import { LOADED_SEARCH_RESULTS } from './actions'
 var defaultCorpus
@@ -61,19 +66,21 @@ class SearchContainer extends Component {
     var url = lexicon.url + '/search/' + dbname + '/index'
     var checks = 0
 
-    return superAgent.post(url)
-      .send({})
-      .then(function (response) {
-        var total = response.couchDBResult.rows.length
-        $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-        $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
-        $('#search-progress-bar').delay(9000).hide(600)
-      }).catch(function (err) {
-        $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-        $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
-        $('#search-progress-bar').delay(9000).hide(600)
-        console.log('Error from trainings ', err)
-      })
+    return CORS.makeCORSRequest({
+      method: post,
+      url: url,
+      data: {}
+    }).then(function (response) {
+      var total = response.couchDBResult.rows.length
+      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
+      $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
+      $('#search-progress-bar').delay(9000).hide(600)
+    }).catch(function (err) {
+      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
+      $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
+      $('#search-progress-bar').delay(9000).hide(600)
+      console.log('Error from trainings ', err)
+    })
   }
 
   progress (percent, $element) {
@@ -92,6 +99,19 @@ class SearchContainer extends Component {
     const location = `/${this.props.params.teamname}/${this.props.params.dbname}/search/${this.state.searchIn}`
     // this.render(location)
     browserHistory.push(location)
+    const corpus = new CorpusMask(this.props.corpus.toJS())
+    const urls = {
+      lexicon: {
+        url: this.props.corpus.getIn(['lexicon', 'url'])
+      }
+    }
+    SearchContainer.search({
+      params: {
+        searchIn: this.state.searchIn
+      },
+      corpus,
+      urls
+    })
   }
 
   handleChange (event) {
@@ -106,20 +126,23 @@ class SearchContainer extends Component {
 
     var url = urls.lexicon.url + '/search/' + corpus.dbname
     console.log('requesting search of ', url, params, urls, store)
-    return superAgent
-      .post(url)
-      .send({
+    return CORS.makeCORSRequest({
+      method: 'post',
+      url: url,
+      query: {
         query: params.searchIn
-      })
+      }
+    })
       .then(function (response) {
-        // console.log('search response', response.body)
+        console.log('search response', response)
+        // console.log('search response', response)
         const datalist = new DataList({
           id: params.searchIn,
           corpus: corpus,
           title: 'Search for ' + params.searchIn
         })
 
-        response.body.hits.hits.forEach(function (result) {
+        response.hits.hits.forEach(function (result) {
           const datum = new LanguageDatum({
             id: result._id,
             corpus: corpus,
@@ -127,7 +150,7 @@ class SearchContainer extends Component {
           })
           datum.merge('self', result)
           // datum.corpus = corpus;
-          datum.maxScore = response.body.hits.max_score
+          datum.maxScore = response.hits.max_score
           if (datum.maxScore !== 1) {
             datum.maxScore = datum.maxScore * 10
           }
@@ -154,7 +177,7 @@ class SearchContainer extends Component {
 
         const datalistObject = datalist.toJSON()
         datalistObject.docs = datalist.docs.toJSON()
-        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.body.hits.total + ' results, you can click on any of the items to see more details to further refine your search'
+        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search'
         store.dispatch({
           type: LOADED_SEARCH_RESULTS,
           payload: {
@@ -165,9 +188,9 @@ class SearchContainer extends Component {
         return datalist
       }).catch(function (err) {
         console.log('error in search ', err)
-        this.setState({
-          err: err
-        })
+      // this.setState({
+      //   err: err
+      // })
         throw err
         return {}
       })

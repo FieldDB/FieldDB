@@ -3,6 +3,9 @@ var path = require('path')
 var webpack = require('webpack')
 // var AssetsPlugin = require('assets-webpack-plugin')
 
+var requestSampleData = require('./config/offline').requestSampleData;
+requestSampleData(config);
+
 var debugMode = !(process.env.NODE_ENV === 'production')
 
 var config = {

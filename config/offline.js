@@ -1,150 +1,57 @@
-var CORS = require("fielddb/api/CORSNode").CORS;
-var fixtures = require("fixturefiles");
-var nock = require("nock");
+var CORS = require("fielddb/api/CORS").CORS;
 var Q = require("q");
 
-function nockWithSampleData(config) {
-  if (!process.env.OFFLINE) {
+function requestSampleData(config) {
+  if (!config.offline) {
     return;
   }
-  nock.disableNetConnect();
-  nock.enableNetConnect("localhost:3182");
+  console.log('mocking requests with sample data')
 
-  nock(config.lexicon.url)
-    .post("/search/lingllama-communitycorpus", {
-      "query": /.*/
-    }).reply(200, fixtures.search["lingllama-communitycorpus"]);
-
-  nock(config.lexicon.url)
-    .post("/search/lingllama-communitycorpus", {
-      "query": "morphemes:nay"
-    }).reply(200, fixtures.search["lingllama-communitycorpus"]);
-
-  nock(config.lexicon.url)
-    .post("/search/lingllama-communitycorpus", {
-      "query": "translation:fixing"
-    }).reply(200, {
-    "took": 2,
-    "timed_out": false,
-    "_shards": {
-      "total": 5,
-      "successful": 5,
-      "failed": 0
-    },
-    "hits": {
-      "total": 1,
-      "max_score": 1,
-      "hits": [fixtures.search["lingllama-communitycorpus"].hits.hits[0]]
-    }
-  });
-
-  nock(config.corpus.url)
-    .get(/^.*_design\/activities\/_view\/one-year-weekly$/)
-    .query(true)
-    .reply(200, fixtures.activity.heatmap.sample);
-
-  nock(config.corpus.url)
-    .get("/lingllama-communitycorpus/team")
-    .query(true)
-    .reply(200, fixtures.team.lingllama);
-
-  nock(config.corpus.url)
-    .get("/community-georgian/team")
-    .query(true)
-    .reply(200, fixtures.team.community);
-
-  nock(config.corpus.url)
-    .get("/lingllama-communitycorpus/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["lingllama-communitycorpus"]);
-
-  nock(config.corpus.url)
-    .get("/lingllama-cherokee/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["lingllama-cherokee"]);
-
-  nock(config.corpus.url)
-    .get("/lingllama-firstcorpus/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["lingllama-firstcorpus"]);
-
-  nock(config.corpus.url)
-    .get("/community-georgian/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["community-georgian"]);
-
-  nock(config.corpus.url)
-    .get("/community-migmaq/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["community-migmaq"]);
-
-  nock(config.corpus.url)
-    .get("/community-firstcorpus/corpus")
-    .query(true)
-    .reply(200, fixtures.corpus["community-firstcorpus"]);
-
-  nock(config.corpus.url)
-    .get("/lingllama")
-    .query(true)
-    .reply(200, fixtures.user.lingllama);
-
-  nock(config.corpus.url)
-    .get("/community")
-    .query(true)
-    .reply(200, fixtures.user.community);
-
-  nock(config.corpus.url)
-    .get(/.*$/)
-    .reply(404, {
-      message: 'Not found',
-      status: 404
-    });
-
-  nock(config.lexicon.url)
-    .get(/.*$/)
-    .reply(404, {
-      message: 'Not found',
-      status: 404
-    });
-
-  /**
-  nock is not working for these
-  */
   CORS.makeCORSRequest = function(options) {
     var deferred = Q.defer();
     Q.nextTick(function() {
+
+      if (options.url.includes('/search/lingllama-communitycorpus')) {
+        return deferred.resolve(require('../test/fixtures/search/lingllama-communitycorpus.json'));
+      }
+      if (options.url.includes('/search/community-georgian')) {
+        return deferred.resolve(require('../test/fixtures/search/community-georgian.json'));
+      }
+
       if (options.url.includes('_design/activities/_view/one-year-weekly')) {
-        return deferred.resolve(fixtures.activity.heatmap.sample);
+        return deferred.resolve(require('../test/fixtures/activity/heatmap/sample.json'));
       }
       if (options.url.includes('lingllama-communitycorpus/team')) {
-        return deferred.resolve(fixtures.team.lingllama);
+        return deferred.resolve(require('../test/fixtures/team/lingllama.json'));
       }
       if (options.url.includes('community-georgian/team')) {
-        return deferred.resolve(fixtures.team.community);
+        return deferred.resolve(require('../test/fixtures/team/community.json'));
       }
+
       if (options.url.includes('lingllama-communitycorpus/corpus')) {
-        return deferred.resolve(fixtures.corpus['lingllama-communitycorpus']);
+        return deferred.resolve(require('../test/fixtures/corpus/lingllama-communitycorpus.json'));
       }
       if (options.url.includes('lingllama-cherokee/corpus')) {
-        return deferred.resolve(fixtures.corpus['lingllama-cherokee']);
+        return deferred.resolve(require('../test/fixtures/corpus/lingllama-cherokee.json'));
       }
       if (options.url.includes('lingllama-firstcorpus/corpus')) {
-        return deferred.resolve(fixtures.corpus['lingllama-firstcorpus']);
+        return deferred.resolve(require('../test/fixtures/corpus/lingllama-firstcorpus.json'));
       }
       if (options.url.includes('community-georgian/corpus')) {
-        return deferred.resolve(fixtures.corpus['community-georgian']);
+        return deferred.resolve(require('../test/fixtures/corpus/community-georgian.json'));
       }
       if (options.url.includes('community-migmaq/corpus')) {
-        return deferred.resolve(fixtures.corpus['community-migmaq']);
+        return deferred.resolve(require('../test/fixtures/corpus/community-migmaq.json'));
       }
       if (options.url.includes('community-firstcorpus/corpus')) {
-        return deferred.resolve(fixtures.corpus['community-firstcorpus']);
+        return deferred.resolve(require('../test/fixtures/corpus/community-firstcorpus.json'));
       }
+
       if (options.url.includes('/lingllama')) {
-        return deferred.resolve(fixtures.user.lingllama);
+        return deferred.resolve(require('../test/fixtures/user/lingllama.json'));
       }
       if (options.url.includes('/community')) {
-        return deferred.resolve(fixtures.user.community);
+        return deferred.resolve(require('../test/fixtures/user/community.json'));
       }
 
       console.log('Not found Offline: ', options.url)
@@ -157,4 +64,4 @@ function nockWithSampleData(config) {
   }
 }
 
-exports.nockWithSampleData = nockWithSampleData;
+exports.requestSampleData = requestSampleData;

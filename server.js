@@ -27,8 +27,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 if (config.offline) {
-  var nockWithSampleData = require('./config/offline').nockWithSampleData;
-  nockWithSampleData(config);
+  var requestSampleData = require('./config/offline').requestSampleData;
+  requestSampleData(config);
 }
 
 var app = express();
