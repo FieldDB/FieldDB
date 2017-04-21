@@ -13,14 +13,30 @@ function nockWithSampleData(config) {
   nock(config.lexicon.url)
     .post("/search/lingllama-communitycorpus", {
       "query": /.*/
-    })
-    .reply(200, fixtures.search["lingllama-communitycorpus"]);
+    }).reply(200, fixtures.search["lingllama-communitycorpus"]);
 
   nock(config.lexicon.url)
     .post("/search/lingllama-communitycorpus", {
       "query": "morphemes:nay"
-    })
-    .reply(200, fixtures.search["lingllama-communitycorpus"]);
+    }).reply(200, fixtures.search["lingllama-communitycorpus"]);
+
+  nock(config.lexicon.url)
+    .post("/search/lingllama-communitycorpus", {
+      "query": "translation:fixing"
+    }).reply(200, {
+    "took": 2,
+    "timed_out": false,
+    "_shards": {
+      "total": 5,
+      "successful": 5,
+      "failed": 0
+    },
+    "hits": {
+      "total": 1,
+      "max_score": 1,
+      "hits": [fixtures.search["lingllama-communitycorpus"].hits.hits[0]]
+    }
+  });
 
   nock(config.corpus.url)
     .get(/^.*_design\/activities\/_view\/one-year-weekly$/)
