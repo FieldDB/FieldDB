@@ -9,7 +9,7 @@ import { CORS } from 'fielddb/api/CORS'
 import { requestSampleData } from '../../../config/offline'
 
 requestSampleData({
-  offline: true
+  // offline: "true in search index"
 })
 
 import { LOADED_SEARCH_RESULTS } from './actions'
@@ -109,6 +109,7 @@ class SearchContainer extends Component {
       params: {
         searchIn: this.state.searchIn
       },
+      loadSearchResults: this.props.loadSearchResults,
       corpus,
       urls
     })
@@ -120,7 +121,7 @@ class SearchContainer extends Component {
     })
   }
 
-  static search ({params, urls, store, corpus}) {
+  static search ({params, urls, store, corpus, loadSearchResults}) {
     corpus = corpus || new CorpusMask(store.getState().corpusMaskDetail.toJS())
     corpus.datumFields.map(updateCorpusField)
 
@@ -129,7 +130,8 @@ class SearchContainer extends Component {
     return CORS.makeCORSRequest({
       method: 'post',
       url: url,
-      query: {
+      withCredentials: false,
+      data: {
         query: params.searchIn
       }
     })
@@ -178,12 +180,16 @@ class SearchContainer extends Component {
         const datalistObject = datalist.toJSON()
         datalistObject.docs = datalist.docs.toJSON()
         datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search'
-        store.dispatch({
-          type: LOADED_SEARCH_RESULTS,
-          payload: {
-            datalist: datalistObject
-          }
-        })
+        if (store) {
+          store.dispatch({
+            type: LOADED_SEARCH_RESULTS,
+            payload: {
+              datalist: datalistObject
+            }
+          })
+        } else {
+          loadSearchResults(datalistObject)
+        }
 
         return datalist
       }).catch(function (err) {

@@ -5,7 +5,7 @@ function requestSampleData(config) {
   if (!config.offline) {
     return;
   }
-  console.log('mocking requests with sample data')
+  console.log('mocking requests with sample data', config.offline, process.env.OFFLINE)
 
   CORS.makeCORSRequest = function(options) {
     var deferred = Q.defer();
