@@ -188,7 +188,9 @@ class SearchContainer extends Component {
             }
           })
         } else {
-          loadSearchResults(datalistObject)
+          loadSearchResults({
+            datalist: datalistObject
+          })
         }
 
         return datalist
