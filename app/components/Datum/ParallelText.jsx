@@ -6,19 +6,15 @@ function isEmpty (value) {
 
 class ParallelText extends Component {
   render () {
+    const text = Object
+      .keys(this.props.parallelText)
+      .map(key => this.props.parallelText[key])
+      .filter(isEmpty)
+      .join(' <br/>')
     return (
-      <div>
-        ParallelText:
-
-        {
-      Object.keys(this.props.parallelText).map((key) => {
-        return (
-        this.props.parallelText[key]
-        )
-      }).filter(isEmpty).join(' <br/>')
-      }
-      </div>
-
+      <span className='glossCouplet' dangerouslySetInnerHTML={{
+        __html: text
+      }} />
     )
   }
 }
