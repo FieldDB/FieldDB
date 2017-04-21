@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import React, { Component } from 'react'
+import { Route, Redirect } from 'react-router'
 import superAgent from 'superagent'
 import { DataList } from 'fielddb/api/data_list/DataList'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
@@ -19,8 +21,18 @@ function updateCorpusField (field) {
 }
 
 class SearchContainer extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      searchIn: this.props.params.searchIn
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
+  }
+
   static fetchData ({store, params, history, urls}) {
-    let {searchKeywords, dbname} = params
+    let {searchIn, dbname} = params
 
     return SearchContainer.search({
       params,
@@ -35,12 +47,12 @@ class SearchContainer extends Component {
       id: Date.now(),
       'title': 'trying to force render'
     })
-  // let {searchKeywords, dbname} = this.props.params
+  // let {searchIn, dbname} = this.props.params
   }
 
   reindex (dbname) {
     var lexicon = {
-      url: $('#search-corpus').data('lexicon-url')
+      url: this.props.corpus.getIn(['lexicon', 'url'])
     }
 
     $('#inner-search-progress-bar').width(0).html('&nbsp;')
@@ -77,46 +89,34 @@ class SearchContainer extends Component {
 
   handleSearchSubmit (e) {
     e.preventDefault()
-    var corpus = window.corpus
-    if (corpus) {
-      search(corpus)
-      return false
-    }
-
-    $.ajax('/api' + window.location.pathname).done(function (json) {
-      corpus = new CorpusMask(json)
-      corpus.datumFields.map(updateCorpusField)
-      window.corpus = corpus
-
-      search(corpus)
-    }).fail(function (err) {
-      $('#search-result-area').show()
-      $('#clearresults').show()
-      $('#search-result-highlight').html('Please try again')
-      $('#search-result-json').JSONView(JSON.stringify(err))
-      console.log('Error from search ', err)
-    })
-    return false
+    const location = `/${this.props.params.teamname}/${this.props.params.dbname}/search/${this.state.searchIn}`
+    // this.render(location)
+    browserHistory.push(location)
   }
 
-  static search ({params, urls, store}) {
-    const corpus = new CorpusMask(store.getState().corpusMaskDetail.toJS())
+  handleChange (event) {
+    this.setState({
+      searchIn: event.target.value
+    })
+  }
+
+  static search ({params, urls, store, corpus}) {
+    corpus = corpus || new CorpusMask(store.getState().corpusMaskDetail.toJS())
     corpus.datumFields.map(updateCorpusField)
 
     var url = urls.lexicon.url + '/search/' + corpus.dbname
-
     console.log('requesting search of ', url, params, urls, store)
     return superAgent
       .post(url)
       .send({
-        query: params.searchKeywords
+        query: params.searchIn
       })
       .then(function (response) {
         // console.log('search response', response.body)
         const datalist = new DataList({
-          id: params.searchKeywords,
+          id: params.searchIn,
           corpus: corpus,
-          title: 'Search for ' + params.searchKeywords
+          title: 'Search for ' + params.searchIn
         })
 
         response.body.hits.hits.forEach(function (result) {
@@ -148,7 +148,7 @@ class SearchContainer extends Component {
             datum.fields[field].highlighted = result.highlight[field]
           }
           // datum.debugMode = true;
-          // datum.igtCache = datum.igt;
+          datum.igtCache = datum.igt
           datalist.add(datum)
         })
 
@@ -165,19 +165,30 @@ class SearchContainer extends Component {
         return datalist
       }).catch(function (err) {
         console.log('error in search ', err)
+        this.setState({
+          err: err
+        })
+        throw err
         return {}
-    // throw err;
-    // $('#search-result-area').show()
-    // $('#clearresults').show()
-    // $('#search-result-highlight').html('Please try again')
-    // $('#search-result-json').JSONView(JSON.stringify(err))
-    // console.log('Error from search ', err)
       })
   }
 
-  render () {
+  render (redirectLocation) {
     const {corpus} = this.props
 
+    if (redirectLocation) {
+      return (
+        <Redirect push to={redirectLocation} />
+      )
+    }
+
+    if (this.state.err) {
+      return (
+        <div className={this.props.className}>
+          Error: {this.state.err.message}
+        </div>
+      )
+    }
     if (!corpus || !corpus.get('lexicon')) {
       return (
         <div className={this.props.className}>
@@ -188,21 +199,38 @@ class SearchContainer extends Component {
 
     return (
       <div className={this.props.className}>
-        <form id='search-corpus' onSubmit={this.handleSearchSubmit} data-lexicon-url="{corpus.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
-          <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' defaultValue={this.props.params.searchKeywords} title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
-          <button type='submit' id='corpus_search' className='btn btn-small btn-success'>
+        <form
+          action={`/${this.props.params.teamname}/${this.props.params.dbname}/search/${this.state.searchIn}`}
+          onSubmit={this.handleSearchSubmit}
+          method='GET' encType='application/json'
+          className='search-form form-inline'>
+          <input type='text'
+            id='searchIn'
+            name='searchIn'
+            onChange={this.handleChange}
+            placeholder='morphemes:nay OR gloss:des'
+            defaultValue={this.props.params.searchIn}
+            title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
+          <button type='submit'
+            id='corpus_search'
+            className='btn btn-small btn-success'>
             <i className='icon-search icon-white' />
           Search…
         </button>
         </form>
-        <button type='button' id='corpus_build' onClick={this.reindex} className='btn btn-small btn-info'>
+        <button type='button'
+          onClick={this.reindex}
+          className='btn btn-small btn-info'>
           <i className='icon-refresh icon-white' /> Rebuild search lexicon
         </button>
         <div id='search-progress-bar' className='search-progress-bar hide'>
           <div id='inner-search-progress-bar' className='inner-search-progress-bar' />
         </div>
         <span id='clearresults' className='hide'>
-          <button type='button' id='clear_results' onClick={this.clearResults} className='btn btn-small btn-danger'>
+          <button type='button'
+            id='clear_results'
+            onClick={this.clearResults}
+            className='btn btn-small btn-danger'>
             <i className='icon-remove icon-white' /> Clear…
           </button>
         </span>
@@ -213,7 +241,7 @@ class SearchContainer extends Component {
 
 SearchContainer.propTypes = {
   className: React.PropTypes.string,
-  // loadSearchResults: React.PropTypes.func.isRequired,
+  loadSearchResults: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
 }
 
@@ -229,7 +257,7 @@ function mapDispatchToProps (dispatch) {
     loadSearchResults: (datalist) => {
       console.log('calling loadSearchResults', datalist)
       return dispatch({
-        type: ActionType.LOADED_SEARCH_RESULTS,
+        type: LOADED_SEARCH_RESULTS,
         payload: datalist
       })
     }
@@ -237,4 +265,4 @@ function mapDispatchToProps (dispatch) {
 }
 
 export { SearchContainer }
-export default connect(mapStateToProps, {})(SearchContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(SearchContainer)
