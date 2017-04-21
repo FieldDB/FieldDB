@@ -1,14 +1,14 @@
 /* jshint ignore:start */
 import config from "config"
 import debugFactory from "debug"
-import { createBrowserHistory } from "history"
+import { createMemoryHistory, useQueries } from "history"
 import Helmet from "react-helmet"
 import path from "path"
 import Promise from "bluebird"
 import { Provider } from "react-redux"
 import React from "react"
 import ReactDOMServer from "react-dom/server"
-import { RouterContext, match } from "react-router"
+import { useRouterHistory, RouterContext, match } from "react-router"
 
 import configureStore from "../app/components/App/store"
 import createRoutes from "../app/components/App/routes"
@@ -37,15 +37,14 @@ if (process.env.NODE_ENV === "production") {
 }
 
 function reduxRender(req, res, next) {
-  let history = createBrowserHistory()
+  let history = useRouterHistory(useQueries(createMemoryHistory))()
   let store = configureStore()
   let routes = createRoutes(history)
   let location = history.createLocation(req.url)
 
   match({
     routes,
-    location,
-    history
+    location
   }, (error, redirectLocation, renderProps) => {
     debug("req.url ", req.url);
     if (!renderProps) {
