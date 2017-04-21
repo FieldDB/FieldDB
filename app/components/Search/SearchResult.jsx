@@ -36,7 +36,7 @@ class SearchResult extends Component {
 
     // igt = datum.igt;
 
-    const igt = datum.igt
+    const igt = datum.igtCache || datum.igt
     console.log('render search datum', igt)
     return (
       <div >
