@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import React, { Component } from 'react'
-import { Route, Redirect } from 'react-router'
+// import { Route, Redirect } from 'react-router'
 import superAgent from 'superagent'
 import { DataList } from 'fielddb/api/data_list/DataList'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
@@ -91,7 +91,10 @@ class SearchContainer extends Component {
     e.preventDefault()
     const location = `/${this.props.params.teamname}/${this.props.params.dbname}/search/${this.state.searchIn}`
     // this.render(location)
-    browserHistory.push(location)
+    // browserHistory.push(location)
+    // this.props.dispatch(browserHistory.push(location));
+
+    this.props.router.push(location)
   }
 
   handleChange (event) {
@@ -242,7 +245,8 @@ class SearchContainer extends Component {
 SearchContainer.propTypes = {
   className: React.PropTypes.string,
   loadSearchResults: React.PropTypes.func.isRequired,
-  params: React.PropTypes.object.isRequired
+  params: React.PropTypes.object.isRequired,
+  router: React.PropTypes.object.isRequired
 }
 
 function mapStateToProps (state) {
