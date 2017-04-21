@@ -17,7 +17,7 @@ export default function (history) {
         <Route path=':teamname/:dbname' component={CorpusMaskContainer} />
         <Route path=':teamname/:dbname/' component={CorpusMaskContainer}>
           <Route path='search' component={SearchContainer} />
-          <Route path='search/:searchKeywords' component={SearchContainer} />
+          <Route path='search/:searchIn' component={SearchContainer} />
         </Route>
       </Route>
     </Router>
