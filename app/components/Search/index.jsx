@@ -143,7 +143,8 @@ class SearchContainer extends Component {
         const datalist = new DataList({
           id: id,
           corpus: corpus,
-          title: 'Search for ' + id
+          title: 'Search for ' + id,
+          description: new Date()
         })
         datalist.id = datalist.id.trim().toLowerCase().replace(/[^a-z]/g, '_')
 
@@ -151,9 +152,14 @@ class SearchContainer extends Component {
           const datum = new LanguageDatum({
             id: result._id,
             corpus: corpus,
-            fields: corpus.datumFields.clone()
+            // this exposes only the public fields
+            fields: corpus.datumFields.clone(),
+            session: {
+              // this exposes only the public fields
+              fields: corpus.sessionFields.clone()
+            }
           })
-          datum.merge('self', result)
+          // datum.merge('self', result)
           // datum.corpus = corpus;
           datum.maxScore = response.hits.max_score
           if (datum.maxScore !== 1) {
@@ -168,8 +174,11 @@ class SearchContainer extends Component {
             // This ensures novel parallelText fields appear in the UI
             if (datum.fields[attribute]) {
               datum.fields[attribute].value = result._source[attribute]
+            } else if (datum.session && datum.session.fields[attribute]) {
+              console.log('setting session field ', attribute)
+              datum.session.fields[attribute].value = result._source[attribute]
             } else {
-              // console.log('setting attribute', attribute)
+              console.log('setting attribute', attribute)
               datum[attribute] = result._source[attribute]
             }
           }
