@@ -9,7 +9,7 @@ import { CORS } from 'fielddb/api/CORS'
 import { requestSampleData } from '../../../config/offline'
 
 requestSampleData({
-  // offline: "true in search index"
+  offline: 'true in search index'
 })
 
 import { LOADED_SEARCH_RESULTS } from './actions'
@@ -161,8 +161,14 @@ class SearchContainer extends Component {
             if (!result._source.hasOwnProperty(attribute)) {
               continue
             }
-            console.log('setting attribute', attribute)
-            datum[attribute] = result._source[attribute]
+            // Prioritze fields before setting attributes on the datum
+            // This ensures novel parallelText fields appear in the UI
+            if (datum.fields[attribute]) {
+              datum.fields[attribute].value = result._source[attribute]
+            } else {
+              console.log('setting attribute', attribute)
+              datum[attribute] = result._source[attribute]
+            }
           }
 
           console.log('setting highlights', result.highlight)
