@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
 import IGT from '../Datum/IGT.jsx'
+import Media from '../Media'
 import ParallelText from '../Datum/ParallelText.jsx'
 
 class SearchResult extends Component {
@@ -61,6 +62,14 @@ class SearchResult extends Component {
           </span>
         )
       }) : <ParallelText parallelText={igt.parallelText} />
+      }
+
+              {
+      datum.media.map((media) => {
+        return (
+          <Media key={media.filename} media={media} corpus={this.props.corpus} />
+        )
+      })
       }
             </a>
           </div>

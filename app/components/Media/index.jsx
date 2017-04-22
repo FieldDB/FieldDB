@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-var audioExtensions = [
+const audioExtensions = [
   '.3gp',
   '.aa',
   '.aac',
@@ -41,7 +41,7 @@ var audioExtensions = [
   '.webm'
 ]
 
-var imageExtensions = [
+const imageExtensions = [
   '.jpeg',
   '.jpg',
   '.gif',
@@ -54,28 +54,33 @@ var imageExtensions = [
 
 class Media extends Component {
   render () {
-    return (
-      <div>
-        Media
-      </div>
-    )
-
-    if (!opts.media) {
-      return ''
+    if (!this.props.media || !this.props.corpus) {
+      console.log('media or corpus was missing', media, this.props.corpus)
+      return (
+        <span />
+      )
     }
-    return mediaView = opts.media.map(function (media) {
-      var fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'))
-      var extension = media.filename.replace(fileIdentifier, '')
-      media.description = media.description || ''
-      if ((media.type && media.type.includes('audio')) || audioExtensions.indexOf(extension) > -1) {
-        return '<audio title="' + media.description + '" controls src="' + opts.corpus.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename + '"></audio>'
-      } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
-        var url = opts.corpus.speech.url + '/' + opts.corpus.dbname + '/' + fileIdentifier + '/' + media.filename
-        return '<br/><a target="_blank" href="' + url + '"><image title="' + media.description + '" src="' + url + '"/></a>'
-      } else {
-        console.log('unsupported media', media)
-      }
-    }).join(' ')
+
+    const media = this.props.media
+    const fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'))
+    const extension = media.filename.replace(fileIdentifier, '')
+    const url = this.props.corpus.getIn(['speech', 'url']) + '/' + this.props.corpus.get('dbname') + '/' + fileIdentifier + '/' + media.filename
+
+    if ((media.type && media.type.includes('audio')) || audioExtensions.indexOf(extension) > -1) {
+      return (
+        <audio title={media.description} controls src={url} />
+      )
+    } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
+      return (
+        <a target='_blank' href={url}>
+          <image title={media.description} src={url} />
+        </a>
+      )
+    } else {
+      return (
+        <span data-title={'Unknown media type ' + extension} data-url={url} />
+      )
+    }
   }
 }
 
