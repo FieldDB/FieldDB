@@ -14,7 +14,8 @@ class DataList extends Component {
     const docs = this.props.datalist.get('docs')
     return (
       <div className={this.props.className}>
-        <h3> {this.props.datalist.get('title')}</h3>
+        <h3>{this.props.datalist.get('title')}</h3>
+        <p>{this.props.datalist.get('description')}</p>
         {
       docs.map((doc) => {
         const id = doc.get('id') ? doc.get('id') : Math.random() * 100
