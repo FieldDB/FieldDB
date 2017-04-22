@@ -22,25 +22,10 @@ class SearchResult extends Component {
       }
     })
 
-    //   {
-    //   _id: datum._id,
-    //   corpus: corpus,
-    //   fields: corpus.datumFields.clone()
-    // })
-
-    //
-    // mediaView = renderMedia({
-    //   corpus: options.corpus,
-    //   media: result._source.media
-    // })
-
     // datum.debugMode = true;
-
-    // igt = datum.igt;
-
     const igt = datum.igtCache || datum.igt
 
-    console.log('render search datum', igt)
+    // console.log('render search datum', igt)
     return (
       <div >
         <div className='accordion-group'>

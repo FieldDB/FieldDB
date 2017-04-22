@@ -7,7 +7,7 @@ function isEmpty (value) {
 class IGT extends Component {
   render () {
     const fields = this.props.fields
-    console.log('igt is ', this.props.igt)
+    // console.log('igt is ', this.props.igt)
     const igt = fields.map((field) => {
       return (
       this.props.igt[field.id]

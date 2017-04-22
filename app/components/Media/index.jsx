@@ -55,7 +55,7 @@ const imageExtensions = [
 class Media extends Component {
   render () {
     if (!this.props.media || !this.props.corpus) {
-      console.log('media or corpus was missing', media, this.props.corpus)
+      // console.log('media or corpus was missing', media, this.props.corpus)
       return (
         <span />
       )

@@ -47,12 +47,15 @@ class SearchContainer extends Component {
   }
 
   componentDidMount () {
-    console.log('search container mounted ', this.props)
-    this.props.loadSearchResults({
-      id: Date.now(),
-      'title': 'trying to force render'
-    })
-  // let {searchIn, dbname} = this.props.params
+    // console.log('search container mounted ', this.props)
+    // this.props.loadSearchResults({
+    //   datalist: {
+    //     id: Date.now(),
+    //     'title': 'trying to force render',
+    //     docs: []
+    //   }
+    // })
+    // let {searchIn, dbname} = this.props.params
   }
 
   reindex (dbname) {
@@ -79,7 +82,7 @@ class SearchContainer extends Component {
       $('#inner-search-progress-bar').width($('#search-progress-bar').width())
       $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
       $('#search-progress-bar').delay(9000).hide(600)
-      console.log('Error from trainings ', err)
+    // console.log('Error from trainings ', err)
     })
   }
 
@@ -126,7 +129,7 @@ class SearchContainer extends Component {
     corpus.datumFields.map(updateCorpusField)
 
     var url = urls.lexicon.url + '/search/' + corpus.dbname
-    console.log('requesting search of ', url, params, urls, store)
+    // console.log('requesting search of ', url, params, urls, store)
     return CORS.makeCORSRequest({
       method: 'post',
       url: url,
@@ -136,12 +139,12 @@ class SearchContainer extends Component {
       }
     })
       .then(function (response) {
-        console.log('search response', response)
+        // console.log('search response', response)
         // console.log('search response', response)
         const datalist = new DataList({
           id: params.searchIn,
           corpus: corpus,
-          title: 'Search for ' + params.searchIn
+          title: 'Search for ' + (params.searchIn ? params.searchIn : 'all data')
         })
 
         response.hits.hits.forEach(function (result) {
@@ -166,12 +169,12 @@ class SearchContainer extends Component {
             if (datum.fields[attribute]) {
               datum.fields[attribute].value = result._source[attribute]
             } else {
-              console.log('setting attribute', attribute)
+              // console.log('setting attribute', attribute)
               datum[attribute] = result._source[attribute]
             }
           }
 
-          console.log('setting highlights', result.highlight)
+          // console.log('setting highlights', result.highlight)
           for (let field in result.highlight) {
             if (!result.highlight.hasOwnProperty(field) || !result.highlight[field]) {
               continue
@@ -185,7 +188,7 @@ class SearchContainer extends Component {
 
         const datalistObject = datalist.toJSON()
         datalistObject.docs = datalist.docs.toJSON()
-        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search'
+        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search.'
         if (store) {
           store.dispatch({
             type: LOADED_SEARCH_RESULTS,
@@ -201,7 +204,7 @@ class SearchContainer extends Component {
 
         return datalist
       }).catch(function (err) {
-        console.log('error in search ', err)
+      // console.log('error in search ', err)
       // this.setState({
       //   err: err
       // })
@@ -283,7 +286,7 @@ SearchContainer.propTypes = {
 }
 
 function mapStateToProps (state) {
-  console.log('search container map state to props')
+  // console.log('search container map state to props')
   return {
     corpus: state.corpusMaskDetail
   }
@@ -292,7 +295,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     loadSearchResults: (datalist) => {
-      console.log('calling loadSearchResults', datalist)
+      // console.log('calling loadSearchResults', datalist)
       return dispatch({
         type: LOADED_SEARCH_RESULTS,
         payload: datalist
