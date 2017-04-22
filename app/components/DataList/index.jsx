@@ -12,6 +12,7 @@ class DataList extends Component {
     }
 
     const docs = this.props.datalist.get('docs')
+    const json = JSON.stringify(this.props.datalist.toJS(), null, 2)
     const datalistId = this.props.datalist.get('id')
     return (
       <div className={this.props.className}>
@@ -44,7 +45,7 @@ class DataList extends Component {
               </div>
             </div>
             <div className='tab-pane ' id={'json-' + datalistId}>
-              <div className='search-result-json well well-small' />
+              <pre className='search-result-json well well-small'>{json}</pre>
             </div>
           </div>
         </div>
