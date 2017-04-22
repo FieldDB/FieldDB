@@ -13,6 +13,7 @@ class SearchResult extends Component {
   render () {
     const result = this.props.result.toJS()
     const datum = new LanguageDatum(result)
+    datum.media = datum.media || []
     const maxScore = datum.maxScore || 1
     let summary = []
 
@@ -24,14 +25,13 @@ class SearchResult extends Component {
 
     // datum.debugMode = true;
     const igt = datum.igtCache || datum.igt
-
     // console.log('render search datum', igt)
     return (
       <div >
         <div className='accordion-group'>
           <div className='accordion-heading'>
-            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + datum._id + '-embedded'}
-              href={'#collapse-' + datum._id}
+            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + this.props.datalistId + '-' + datum._id + '-embedded'}
+              href={'#collapse-' + this.props.datalistId + '-' + datum._id}
               name={datum._id}
               title={datum.context}>
               <input type='range' value={result.score * 10} min='0' max={maxScore} disabled />
@@ -58,7 +58,7 @@ class SearchResult extends Component {
       }
             </a>
           </div>
-          <div className='accordion-body collapse' id={'collapse-' + datum._id} >
+          <div className='accordion-body collapse' id={'collapse-' + this.props.datalistId + '-' + datum._id} >
             <div className='accordion-inner igt-area'>
               <p className='igt'>
                 <label>Interlinear Glossed Text: </label>

@@ -92,8 +92,6 @@ class SearchContainer extends Component {
   }
 
   clearresults () {
-    $('#search-result-area').hide()
-    $('#search-result-area-content').hide()
     $('#clearresults').hide()
   }
 
@@ -141,11 +139,13 @@ class SearchContainer extends Component {
       .then(function (response) {
         // console.log('search response', response)
         // console.log('search response', response)
+        const id = params.searchIn ? params.searchIn : 'all data'
         const datalist = new DataList({
-          id: params.searchIn,
+          id: id,
           corpus: corpus,
-          title: 'Search for ' + (params.searchIn ? params.searchIn : 'all data')
+          title: 'Search for ' + id
         })
+        datalist.id = datalist.id.trim().toLowerCase().replace(/[^a-z]/g, '_')
 
         response.hits.hits.forEach(function (result) {
           const datum = new LanguageDatum({

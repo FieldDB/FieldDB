@@ -66,37 +66,15 @@ class CorpusMaskContainer extends Component {
             <div className='row-fluid'>
               {this.props.children}
             </div>
-            <div className='row-fluid'>
-              <div className='span11'>
-                <ul id='search-result-area' className='nav nav-tabs hide' data-speech-url={corpusMask.getIn(['speech', 'url'])}>
-                  <li className='active'>
-                    <a href='#highlights' data-toggle='tab'>
-                    Highlights
-                  </a>
-                  </li>
-                  <li>
-                    <a href='#json' data-toggle='tab'>
-                    JSON Results
-                  </a>
-                  </li>
-                </ul>
-                <div id='search-result-area-content' className='tab-content'>
-                  <div className='tab-pane active' id='highlights'>
-                    {
+            {
       this.props.searchResults.map((searchResult) => {
-        const id = searchResult.get('datalist') ? searchResult.get('datalist').id : Math.random()
+        const id = searchResult.getIn(['datalist', 'id'])
         return (
-          <DataList key={id} className='accordian' corpus={corpusMask} datalist={searchResult.get('datalist')} />
+          <DataList key={'search-result-' + id} className='row-fluid' corpus={corpusMask} datalist={searchResult.get('datalist')} />
         )
       })
       }
-                  </div>
-                  <div className='tab-pane ' id='json'>
-                    <div id='search-result-json' className='well well-small' />
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
         <hr />
