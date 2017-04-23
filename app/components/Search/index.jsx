@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import React, { Component } from 'react'
-import { Route, Redirect } from 'react-router'
 import { DataList } from 'fielddb/api/data_list/DataList'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
@@ -13,7 +12,7 @@ requestSampleData({
 })
 
 import { LOADED_SEARCH_RESULTS } from './actions'
-var defaultCorpus
+let defaultCorpus
 
 function updateCorpusField (field) {
   if (!defaultCorpus) {
@@ -29,16 +28,18 @@ class SearchContainer extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchIn: this.props.params.searchIn
+      searchIn: this.props.params.searchIn,
+      reindex: {
+        className: 'hide'
+      }
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleReindex = this.handleReindex.bind(this)
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
   }
 
   static fetchData ({store, params, history, urls}) {
-    let {searchIn, dbname} = params
-
     return SearchContainer.search({
       params,
       urls,
@@ -58,37 +59,41 @@ class SearchContainer extends Component {
     // let {searchIn, dbname} = this.props.params
   }
 
-  reindex (dbname) {
-    var lexicon = {
+  handleReindex () {
+    const lexicon = {
       url: this.props.corpus.getIn(['lexicon', 'url'])
     }
+    this.state.reindex = {
+      progress: 0,
+      show: true,
+      progress: 0,
+      total: 100
+    }
 
-    $('#inner-search-progress-bar').width(0).html('&nbsp;')
-    $('#search-progress-bar').css('display', 'inline-block')
-    $('#search-progress-bar').show()
-    var url = lexicon.url + '/search/' + dbname + '/index'
-    var checks = 0
-
+    const url = this.props.corpus.getIn(['lexicon', 'url']) + '/search/' + this.props.corpus.get('dbname') + '/index'
     return CORS.makeCORSRequest({
-      method: post,
+      method: 'post',
       url: url,
-      data: {}
+      withCredentials: false,
+      onprogress: (progress) => {
+        this.state.reindex.total = progress.total
+        this.state.reindex.progress = progress.loaded
+      // this.state.reindex.progress = percent * this.state.reindex.total / 100
+      }
+    // data: {}
     }).then(function (response) {
-      var total = response.couchDBResult.rows.length
-      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-      $('#inner-search-progress-bar').html('<strong>' + total + '</strong> records indexed.&nbsp;&nbsp;')
-      $('#search-progress-bar').delay(9000).hide(600)
+      const total = response.couchDBResult.rows.length
+      this.state.total = total
+      this.state.progress = total
+      setTimeout(() => {
+        this.state.show = false
+      })
     }).catch(function (err) {
       $('#inner-search-progress-bar').width($('#search-progress-bar').width())
       $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
       $('#search-progress-bar').delay(9000).hide(600)
     // console.log('Error from trainings ', err)
     })
-  }
-
-  progress (percent, $element) {
-    var progressBarWidth = percent * $element.width() / 100
-    $('#inner-search-progress-bar').width(progressBarWidth).html(percent + '%&nbsp;')
   }
 
   clearresults () {
@@ -126,7 +131,7 @@ class SearchContainer extends Component {
     corpus = corpus || new CorpusMask(store.getState().corpusMaskDetail.toJS())
     corpus.datumFields.map(updateCorpusField)
 
-    var url = urls.lexicon.url + '/search/' + corpus.dbname
+    const url = urls.lexicon.url + '/search/' + corpus.dbname
     // console.log('requesting search of ', url, params, urls, store)
     return CORS.makeCORSRequest({
       method: 'post',
@@ -175,10 +180,10 @@ class SearchContainer extends Component {
             if (datum.fields[attribute]) {
               datum.fields[attribute].value = result._source[attribute]
             } else if (datum.session && datum.session.fields[attribute]) {
-              console.log('setting session field ', attribute)
+              // console.log('setting session field ', attribute)
               datum.session.fields[attribute].value = result._source[attribute]
             } else {
-              console.log('setting attribute', attribute)
+              // console.log('setting attribute', attribute)
               datum[attribute] = result._source[attribute]
             }
           }
@@ -222,14 +227,8 @@ class SearchContainer extends Component {
       })
   }
 
-  render (redirectLocation) {
+  render () {
     const {corpus} = this.props
-
-    if (redirectLocation) {
-      return (
-        <Redirect push to={redirectLocation} />
-      )
-    }
 
     if (this.state.err) {
       return (
@@ -268,12 +267,18 @@ class SearchContainer extends Component {
         </button>
         </form>
         <button type='button'
-          onClick={this.reindex}
+          onClick={this.handleReindex}
           className='btn btn-small btn-info'>
           <i className='icon-refresh icon-white' /> Rebuild search lexicon
         </button>
-        <div id='search-progress-bar' className='search-progress-bar hide'>
-          <div id='inner-search-progress-bar' className='inner-search-progress-bar' />
+        <div id='search-progress-bar'
+          className={'search-progress-bar' + this.state.reindex.className}
+          min='0'
+          max={this.state.reindex.total}
+          value={this.state.reindex.progress} >
+          <div id='inner-search-progress-bar' className='inner-search-progress-bar'>
+            <strong>{this.state.reindex.total}</strong> records indexed
+        </div>
         </div>
         <span id='clearresults' className='hide'>
           <button type='button'
@@ -290,6 +295,7 @@ class SearchContainer extends Component {
 
 SearchContainer.propTypes = {
   className: React.PropTypes.string,
+  corpus: React.PropTypes.object.isRequired,
   loadSearchResults: React.PropTypes.func.isRequired,
   params: React.PropTypes.object.isRequired
 }
