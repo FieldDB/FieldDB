@@ -25,7 +25,8 @@ describe('Container::CorpusMask', function () {
           id: 1234,
           name: 'jack'
         }
-      })
+      }),
+      searchResults: Immutable.fromJS([])
     }
   })
 

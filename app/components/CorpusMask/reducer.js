@@ -11,11 +11,6 @@ export default function (state = defaultState, action) {
     case ActionType.LOADED_CORPUS_MASK_DETAIL:
       return state.merge(action.response)
 
-    case ActionType.LOADED_CORPUS_MASK_USER:
-      return state.merge({
-        team: action.response
-      })
-
     default:
       return state
   }

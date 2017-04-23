@@ -1,6 +1,8 @@
 import superAgent from 'superagent'
 import Promise from 'bluebird'
+import debugFactory from 'debug'
 
+const debug = debugFactory('redux:middleware:api')
 export const CALL_API = Symbol('CALL_API')
 export const CHAIN_API = Symbol('CHAIN_API')
 
@@ -32,7 +34,7 @@ export default ({dispatch, getState}) => next => action => {
   overall.finally(() => {
     deferred.resolve()
   }).catch((err) => {
-    console.log('something went wrong', err)
+    debug('something went wrong', err)
     deferred.reject(err)
   })
 
@@ -44,6 +46,8 @@ function actionWith (action, toMerge) {
   delete ret[CALL_API]
   return ret
 }
+const notFound = new Error('Not found')
+notFound.status = 404
 
 function createRequestPromise (apiActionCreator, next, getState, dispatch) {
   return (prevBody) => {
@@ -51,7 +55,18 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
     let deferred = Promise.defer()
     let params = extractParams(apiAction[CALL_API])
 
-    console.log('requesting', params)
+    if (params && params.url && params.url.match(/\.(js|css|png)/)) {
+      if (params.errorType) {
+        dispatch(actionWith(apiAction, {
+          type: params.errorType,
+          error: notFound
+        }))
+      }
+      // return deferred.reject(notFound)
+      return
+    }
+
+    debug('requesting', params)
     superAgent[params.method](params.url)
       .send(params.body)
       .set('Accept', 'application/json')
@@ -59,9 +74,9 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
       .query(params.query)
       .end((err, res, body) => {
         if (err) {
-          console.log('recieved err', res.body)
+          debug('recieved err', res.body)
           if (params.errorType) {
-            console.log('dispatching error', params.errorType)
+            debug('dispatching error', params.errorType)
             dispatch(actionWith(apiAction, {
               type: params.errorType,
               error: res.body
@@ -76,7 +91,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           return deferred.reject(res.body)
         }
 
-        console.log('recieved response', res.body)
+        debug('recieved response', res.body)
         dispatch(actionWith(apiAction, {
           type: params.successType,
           response: res.body
@@ -97,7 +112,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
 function extractParams (callApi) {
   let {method, path, query, body, successType, errorType, afterSuccess, afterError} = callApi
 
-  console.log('process.env.API_BASE_URL', process.env.API_BASE_URL)
+  // debug('process.env.API_BASE_URL', process.env.API_BASE_URL)
   let url = `${process.env.API_BASE_URL}${path}`
 
   return {

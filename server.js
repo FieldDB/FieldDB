@@ -26,6 +26,11 @@ if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 
+if (config.offline) {
+  var requestSampleData = require('./config/offline').requestSampleData;
+  requestSampleData(config);
+}
+
 var app = express();
 
 // configure Express

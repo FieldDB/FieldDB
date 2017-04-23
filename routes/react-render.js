@@ -1,4 +1,5 @@
 /* jshint ignore:start */
+import config from "config"
 import debugFactory from "debug"
 import { createMemoryHistory, useQueries } from "history"
 import Helmet from "react-helmet"
@@ -45,20 +46,12 @@ function reduxRender(req, res, next) {
     routes,
     location
   }, (error, redirectLocation, renderProps) => {
-    debug("req.url ", req.url, renderProps.params);
-    function getReduxPromise() {
-      let {query, params} = renderProps
-      let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent
-      let promise = comp.fetchData
-        ? comp.fetchData({
-          query,
-          params,
-          store,
-          history
-        })
-        : Promise.resolve()
-
-      return promise
+    debug("req.url ", req.url);
+    if (!renderProps) {
+      debug("renderProps was missing calling next with not found ", renderProps);
+      const err = new Error("Not found");
+      err.status = 404;
+      return next(err);
     }
 
     if (redirectLocation) {
@@ -69,18 +62,51 @@ function reduxRender(req, res, next) {
       return next(error);
     }
 
-    if (renderProps == null) {
-      debug("renderProps was null, not found ", renderProps);
-      const err = new Error("Not found");
-      err.status = 404;
-      return next(err);
-    }
-
     let [getCurrentUrl, unsubscribe] = subscribeUrl()
     let reqUrl = location.pathname + location.search
     debug("reqUrl ", reqUrl);
 
-    getReduxPromise().then(() => {
+    function getReduxPromise() {
+      let {query, params} = renderProps
+      let fetchComponentDataPromises = renderProps.components.map(function(comp) {
+        if (!comp || !comp.WrappedComponent || !comp.WrappedComponent.fetchData) {
+          return {
+            fetchData: Promise.resolve
+          }
+        }
+        return comp.WrappedComponent
+
+      }).reduce(function(prev, comp) {
+        return prev.then(function(previousresult) {
+          debug('previousresult', previousresult, comp)
+          return comp.fetchData.apply(comp, [{
+            query,
+            params,
+            urls: {
+              corpus: {
+                url: config.corpus.public.url
+              },
+              search: {
+                url: config.search.public.url
+              },
+              lexicon: {
+                url: config.lexicon.public.url
+              }
+            },
+            store,
+            history
+          }])
+
+        })
+      }, Promise.resolve().then(function(result) {
+        debug('result', result)
+        return result;
+      }))
+      return fetchComponentDataPromises;
+    }
+
+    getReduxPromise().then((results) => {
+      debug('got back results', results);
       let reduxState = escape(JSON.stringify(store.getState()))
       let html = ReactDOMServer.renderToString(
         <Provider store={store}>
@@ -91,11 +117,11 @@ function reduxRender(req, res, next) {
 
       if (getCurrentUrl() === reqUrl) {
         debug("rendering ", {
-          metaHeader,
-          html,
-          scriptSrcs,
+          // metaHeader,
+          // html,
+          // scriptSrcs,
           reduxState,
-          styleSrc
+        // styleSrc
         });
         res.render("index", {
           metaHeader,

@@ -22,7 +22,6 @@ function generateFeedTable(user) {
   };
 
   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  // var data = {"rows":[{"key":{"action":"added","week":50},"value":77},{"key":{"action":"added","week":21},"value":1},{"key":{"action":"added","week":22},"value":1},{"key":{"action":"attempted","week":12},"value":1},{"key":{"action":"commented","week":12},"value":21},{"key":{"action":"downloaded","week":4},"value":6},{"key":{"action":"imported","week":12},"value":31},{"key":{"action":"modified","week":26},"value":7},{"key":{"action":"updated","week":4},"value":10},{"key":{"action":"updated","week":12},"value":13},{"key":{"action":"updated","week":21},"value":51},{"key":{"action":"updated","week":22},"value":1},{"key":{"action":"updated","week":26},"value":64},{"key":{"action":"uploaded","week":4},"value":3}]};
 
   $.ajax({
     url: '/api/activity/' + user,

@@ -1,10 +1,12 @@
 import { browserHistory } from 'react-router'
 import { connect } from 'react-redux'
 import Helmet from 'react-helmet'
+import Immutable from 'immutable'
 import React, { Component } from 'react'
 
 import { loadCorpusMaskDetail } from './actions'
-import UserMask from './../UserMask/UserMask.jsx'
+import UserMask from '../UserMask/UserMask.jsx'
+import DataList from '../DataList'
 
 class CorpusMaskContainer extends Component {
   static fetchData ({store, params, history}) {
@@ -24,15 +26,6 @@ class CorpusMaskContainer extends Component {
     })
   }
   render () {
-    let clearResults = function () {
-      return window.clearresults()
-    }
-    let reindex = function () {
-      return window.reindex(this.props.params.dbname)
-    }
-    let handleSearchSubmit = function (e) {
-      return window.handleSearchSubmit(e)
-    }
     let {corpusMask} = this.props
 
     if (!corpusMask || !corpusMask.get('team')) {
@@ -71,53 +64,17 @@ class CorpusMaskContainer extends Component {
               </div>
             </div>
             <div className='row-fluid'>
-              <div className='span11 offset1'>
-                <form id='search-corpus' onSubmit={handleSearchSubmit} action={corpusMask.getIn(['lexicon', 'url']) + '/search/' + corpusMask.get('dbname')} data-lexicon-url="{corpusMask.getIn(['lexicon', 'url'])}" method='POST' encType='application/json' className='search-form form-inline'>
-                  <input type='text' id='query' name='query' placeholder='morphemes:nay OR gloss:des' title='Enter your query using field:value if you know which field you want to search, otherwise you can click Search to see 50 results' />
-                  <button type='submit' id='corpus_search' className='btn btn-small btn-success'>
-                    <i className='icon-search icon-white' />
-                  Search…
-                </button>
-                </form>
-                <button type='button' id='corpus_build' onClick={reindex} className='btn btn-small btn-info'>
-                  <i className='icon-refresh icon-white' />
-                Rebuild search lexicon
-              </button>
-                <div id='search-progress-bar' className='search-progress-bar hide'>
-                  <div id='inner-search-progress-bar' className='inner-search-progress-bar' />
-                </div>
-                <span id='clearresults' className='hide'>
-                  <button type='button' id='clear_results' onClick={clearResults} className='btn btn-small btn-danger'>
-                    <i className='icon-remove icon-white' />
-                  Clear…
-                </button>
-                </span>
-              </div>
+              {this.props.children}
             </div>
-            <div className='row-fluid'>
-              <div className='span11'>
-                <ul id='search-result-area' className='nav nav-tabs hide' data-speech-url={corpusMask.getIn(['speech', 'url'])}>
-                  <li className='active'>
-                    <a href='#highlights' data-toggle='tab'>
-                    Highlights
-                  </a>
-                  </li>
-                  <li>
-                    <a href='#json' data-toggle='tab'>
-                    JSON Results
-                  </a>
-                  </li>
-                </ul>
-                <div id='search-result-area-content' className='tab-content'>
-                  <div className='tab-pane active' id='highlights'>
-                    <div id='search-result-highlight' className='accordion' />
-                  </div>
-                  <div className='tab-pane ' id='json'>
-                    <div id='search-result-json' className='well well-small' />
-                  </div>
-                </div>
-              </div>
-            </div>
+            {
+      this.props.searchResults.map((searchResult) => {
+        const id = searchResult.getIn(['datalist', 'id'])
+        return (
+          <DataList key={'search-result-' + id} className='row-fluid' corpus={corpusMask} datalist={searchResult.get('datalist')} />
+        )
+      })
+      }
+
           </div>
         </div>
         <hr />
@@ -158,16 +115,19 @@ class CorpusMaskContainer extends Component {
 }
 
 function mapStateToProps (state) {
-  console.log('corpusMaskdetail map state to props', state)
+  // console.log('corpusMaskdetail map state to props', state)
   return {
-    corpusMask: state.corpusMaskDetail
+    corpusMask: state.corpusMaskDetail,
+    searchResults: state.searchResults || Immutable.fromJs([])
   }
 }
 
 CorpusMaskContainer.propTypes = {
+  children: React.PropTypes.object.isRequired,
+  corpusMask: React.PropTypes.object.isRequired,
+  searchResults: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
-  loadCorpusMaskDetail: React.PropTypes.func.isRequired,
-  corpusMask: React.PropTypes.object.isRequired
+  loadCorpusMaskDetail: React.PropTypes.func.isRequired
 }
 
 export { CorpusMaskContainer }
