@@ -78,7 +78,7 @@ class Media extends Component {
       )
     } else {
       return (
-        <span data-title={'Unknown media type ' + extension} data-url={url} />
+        <a target='_blank' title={'Open ' + media.filename + ' in a new tab'} href={url}>{media.filename}</a>
       )
     }
   }
