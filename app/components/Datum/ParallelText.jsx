@@ -12,7 +12,7 @@ class ParallelText extends Component {
       .filter(isEmpty)
       .join(' <br/>')
     return (
-      <span className='glossCouplet' dangerouslySetInnerHTML={{
+      <span dangerouslySetInnerHTML={{
         __html: text
       }} />
     )
