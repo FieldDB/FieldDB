@@ -84,6 +84,10 @@ class SearchResult extends Component {
   }
 }
 
-SearchResult.propTypes = {}
+SearchResult.propTypes = {
+  corpus: React.PropTypes.object.isRequired,
+  datalistId: React.PropTypes.string.isRequired,
+  result: React.PropTypes.object.isRequired
+}
 
 export default SearchResult

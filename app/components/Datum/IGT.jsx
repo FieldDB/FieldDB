@@ -21,6 +21,9 @@ class IGT extends Component {
   }
 }
 
-IGT.propTypes = {}
+IGT.propTypes = {
+  fields: React.PropTypes.object.isRequired,
+  igt: React.PropTypes.object.isRequired
+}
 
 export default IGT

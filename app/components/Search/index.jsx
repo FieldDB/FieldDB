@@ -60,13 +60,9 @@ class SearchContainer extends Component {
   }
 
   handleReindex () {
-    const lexicon = {
-      url: this.props.corpus.getIn(['lexicon', 'url'])
-    }
     this.state.reindex = {
       progress: 0,
       show: true,
-      progress: 0,
       total: 100
     }
 
@@ -89,15 +85,17 @@ class SearchContainer extends Component {
         this.state.show = false
       })
     }).catch(function (err) {
-      $('#inner-search-progress-bar').width($('#search-progress-bar').width())
-      $('#inner-search-progress-bar').css('font-size', '.7em').html('<strong>' + err.statusText + ':</strong> 0 records indexed.&nbsp;&nbsp;')
-      $('#search-progress-bar').delay(9000).hide(600)
-    // console.log('Error from trainings ', err)
+      this.state.statusText = err.message
+      this.state.progress = 100
+      this.state.total = 100
+      setTimeout(() => {
+        this.state.show = false
+      })
     })
   }
 
   clearresults () {
-    $('#clearresults').hide()
+    // $('#clearresults').hide()
   }
 
   handleSearchSubmit (e) {
@@ -218,12 +216,8 @@ class SearchContainer extends Component {
 
         return datalist
       }).catch(function (err) {
-      // console.log('error in search ', err)
-      // this.setState({
-      //   err: err
-      // })
+        console.log('error in search ', err)
         throw err
-        return {}
       })
   }
 
@@ -277,7 +271,7 @@ class SearchContainer extends Component {
           max={this.state.reindex.total}
           value={this.state.reindex.progress} >
           <div id='inner-search-progress-bar' className='inner-search-progress-bar'>
-            <strong>{this.state.reindex.total}</strong> records indexed
+            <strong>{this.state.reindex.statusText}</strong> {this.state.reindex.total} records indexed
         </div>
         </div>
         <span id='clearresults' className='hide'>

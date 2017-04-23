@@ -19,6 +19,8 @@ class ParallelText extends Component {
   }
 }
 
-ParallelText.propTypes = {}
+ParallelText.propTypes = {
+  parallelText: React.PropTypes.object.isRequired
+}
 
 export default ParallelText

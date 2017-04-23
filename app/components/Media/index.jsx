@@ -73,7 +73,7 @@ class Media extends Component {
     } else if ((media.type && media.type.includes('image')) || imageExtensions.indexOf(extension) > -1) {
       return (
         <a target='_blank' href={url}>
-          <image title={media.description} src={url} />
+          <img title={media.description} src={url} />
         </a>
       )
     } else {
@@ -84,6 +84,9 @@ class Media extends Component {
   }
 }
 
-Media.propTypes = {}
+Media.propTypes = {
+  corpus: React.PropTypes.object.isRequired,
+  media: React.PropTypes.object.isRequired
+}
 
 export default Media

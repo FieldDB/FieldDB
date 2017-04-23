@@ -124,6 +124,8 @@ function mapStateToProps (state) {
 
 CorpusMaskContainer.propTypes = {
   children: React.PropTypes.object.isRequired,
+  corpusMask: React.PropTypes.object.isRequired,
+  searchResults: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,
   loadCorpusMaskDetail: React.PropTypes.func.isRequired
 }
