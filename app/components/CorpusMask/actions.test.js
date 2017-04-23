@@ -1,4 +1,4 @@
-import { CALL_API, CHAIN_API } from 'middleware/api'
+import { CALL_API } from 'middleware/api'
 
 import * as actionCreator from './actions'
 
@@ -9,7 +9,7 @@ describe('Action::CorpusMask', function () {
       let action = actionCreator.loadCorpusMaskDetail({
         dbname
       })
-      let callApi = action[CHAIN_API][0]()[CALL_API]
+      let callApi = action[CALL_API]
       expect(callApi.method).to.equal('get')
       expect(callApi.path).to.equal(`/api/corpora/${dbname}`)
       expect(callApi.successType).to.equal(actionCreator.LOADED_CORPUS_MASK_DETAIL)
@@ -22,7 +22,7 @@ describe('Action::CorpusMask', function () {
         dbname,
         history: mockHistory
       })
-      let callApi = action[CHAIN_API][0]()[CALL_API]
+      let callApi = action[CALL_API]
       expect(callApi.afterError).to.be.an.instanceOf(Function)
       callApi.afterError()
 

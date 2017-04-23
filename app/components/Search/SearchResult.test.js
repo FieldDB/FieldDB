@@ -8,7 +8,13 @@ describe('Component::SearchResult', function () {
   let props
   beforeEach(function () {
     props = {
-      datalist: Immutable.fromJS({})
+      datalist: Immutable.fromJS({}),
+      result: Immutable.fromJS({
+        fields: [{
+          id: 'morphemes',
+          value: 'ar vitsi'
+        }]
+      })
     }
   })
 
@@ -21,6 +27,6 @@ describe('Component::SearchResult', function () {
     let element = doc.find('div')
 
     expect(element).to.exist
-    expect(element.length).to.equal(1)
+    expect(element.length).to.equal(5)
   })
 })

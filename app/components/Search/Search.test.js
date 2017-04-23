@@ -4,10 +4,13 @@ import { shallow } from 'enzyme'
 
 import { SearchContainer } from './index.jsx'
 
-describe.only('Component::SearchContainer', function () {
+describe('Component::SearchContainer', function () {
   let props
   beforeEach(function () {
     props = {
+      params: {
+        searchIn: ''
+      },
       corpus: Immutable.fromJS({
         lexicon: {
           url: 'http://localhost:3135'
