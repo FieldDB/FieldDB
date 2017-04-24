@@ -159,7 +159,7 @@
     "help": "The present resource may be derived from the Source resource in whole or in part."
   }, {
     "id": "provenance",
-    "help": "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity and interpretation. Example: >Collection of texts recorded by Gardner, transcribed with the assistance of a number of local residents. Body of materials were transferred to custody of SIL Mexico Branch in 1980s, subsequently organized,  collated and annotated by J. L. Anderson, a researcher in a closely related Chinantec language. Annotations particularly relate to changes in orthographic and tone marking conventions over the years of collection and as compared to current practices"
+    "help": "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity and interpretation. Example: Collection of texts recorded by ____, transcribed with the assistance of a number of local residents. Body of materials were transferred to custody of SIL ____ Branch in 1980s, subsequently organized,  collated and annotated by J. L. ____, a researcher in a closely related _____ language. Annotations particularly relate to changes in orthographic and tone marking conventions over the years of collection and as compared to current practices"
   }, {
     "id": "language",
     "help": "A language of the resource. Language is used for a language the resource is in (eg: English), as opposed to the language it describes (eg: Quechua)."

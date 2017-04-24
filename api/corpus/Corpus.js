@@ -142,7 +142,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         this.corpusMask = {
           "id": "corpus"
         };
-        // this.corpusMask.fetch();
+      // this.corpusMask.fetch();
       }
       return this._corpusMask;
     },
@@ -446,7 +446,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         dbname: this.dbname,
         fields: sessionFields,
         confidential: this.confidential,
-        // url: this.url
+      // url: this.url
       });
 
       for (var field in options) {
@@ -633,7 +633,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         corpus.comments = [];
         corpus.confidential = new Confidential().fillWithDefaults();
 
-        var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields", "fields"];
+        var fieldsToClear = ["datumFields", "sessionFields", "conversationFields", "participantFields", "speakerFields"];
         //clear out search terms from the new corpus's datum fields
         var defaults = this.defaults;
         fieldsToClear.map(function(fieldsType) {
@@ -707,7 +707,7 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         return deferred.promise;
       }
 
-      return this.get(uri).catch(function(){
+      return this.get(uri).catch(function() {
         return [];
       });
     }

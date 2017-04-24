@@ -563,7 +563,7 @@ describe("Corpus", function() {
       oneCorpus.merge("self", anotherCorpus, "changeDBname");
       expect(oneCorpus).toBeDefined();
       expect(oneCorpus.promptMessage).toContain("I found a conflict for _dbname, Do you want to overwrite it from \"teammatetiger-quechua\" -> lingllama-quechua");
-      expect(oneCorpus.promptMessage).toContain("I found a conflict for _title, Do you want to overwrite it from \"Quechua Corpus\" -> Quechua");
+      expect(oneCorpus.fields.title.promptMessage).toContain("I found a conflict for _value, Do you want to overwrite it from \"Quechua Corpus\" -> Quechua");
       expect(oneCorpus.promptMessage).toContain("I found a conflict for _titleAsUrl, Do you want to overwrite it from \"quechua_corpus\" -> quechua");
     });
 
