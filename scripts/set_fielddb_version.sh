@@ -17,7 +17,11 @@ echo ""
 
 let WEEK_DIFF=`expr $todayTimestamp - $BIRTHDAY_TIMESTAMP`/60/60/24/7 || exit 4;
 
-if [ "$WEEK_DIFF" -gt 208 ]
+if [ "$WEEK_DIFF" -gt 260 ]
+  then
+  YEAR_DIFF=5
+  WEEK_DIFF=`expr $WEEK_DIFF - 261`
+elif [ "$WEEK_DIFF" -gt 208 ]
   then
   YEAR_DIFF=4
   WEEK_DIFF=`expr $WEEK_DIFF - 209`
