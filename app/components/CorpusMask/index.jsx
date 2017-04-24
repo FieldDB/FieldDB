@@ -88,7 +88,7 @@ class CorpusMaskContainer extends Component {
             <div className='tab-content'>
               <div id='terms' className='tab-pane active'>
                 <p>{corpusMask.get('dbname')}</p>
-                <p>{corpusMask.getIn(['termsOfUse', 'humanReadable'])}</p>
+                <p>{corpusMask.get('termsOfUse')}</p>
                 <span>License: </span><a href={corpusMask.getIn(['license', 'link'])} rel='license' title={corpusMask.getIn(['license', 'title'])}>{corpusMask.getIn(['license', 'title'])}</a>
                 <p>{corpusMask.getIn(['license', 'humanReadable'])}</p>
                 <img src='//i.creativecommons.org/l/by-sa/3.0/88x31.png' alt='License' />
@@ -123,7 +123,7 @@ function mapStateToProps (state) {
 }
 
 CorpusMaskContainer.propTypes = {
-  children: React.PropTypes.object.isRequired,
+  children: React.PropTypes.object,
   corpusMask: React.PropTypes.object.isRequired,
   searchResults: React.PropTypes.object.isRequired,
   params: React.PropTypes.object.isRequired,

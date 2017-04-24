@@ -32,7 +32,7 @@ var getCorpusMask = function(dbname, next) {
     if (!corpusMask.license || !corpusMask.license.humanReadable) {
       corpusMask.license = defaultCorpus.license;
     }
-    if (!corpusMask.termsOfUse || !corpusMask.termsOfUse.humanReadable) {
+    if (!corpusMask.termsOfUse) {
       corpusMask.termsOfUse = defaultCorpus.termsOfUse;
     }
 

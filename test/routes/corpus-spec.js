@@ -99,8 +99,10 @@ describe("corpus routes", function() {
         expect(mask.titleAsUrl).to.deep.equal("communitycorpus");
         expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
         expect(mask.copyright).to.deep.equal("lingllama");
+        expect(mask.fields.length).to.equal(4);
+        console.log(JSON.stringify(mask, null, 2))
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).to.deep.equal("948814f0b1bc8bebd701a9732ab3ebbd");
         expect(mask.team.gravatar).to.deep.equal("54b53868cb4d555b804125f1a3969e87"); // without merge of team.json
         expect(mask.team.username).to.deep.equal("lingllama");
@@ -141,7 +143,7 @@ describe("corpus routes", function() {
         expect(mask.description).to.deep.equal("This is a corpus which Georgian Together users can pull data from, and contribute to. To install the Georgian Together app, or find out more about it, visit the Google Play store: https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian");
         expect(mask.copyright).to.deep.equal("Georgian Together Users");
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).not.to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).not.to.contain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).to.deep.equal("daa4beb95070a68f948c550cee3254bd");
         expect(mask.team.gravatar).to.deep.equal("968b8e7fb72b5ffe2915256c28a9414c"); // without merge of team.json
         expect(mask.team.username).to.deep.equal("community");
@@ -165,7 +167,7 @@ describe("corpus routes", function() {
         expect(mask.description).to.deep.equal("The details of this corpus are not public.");
         expect(mask.copyright).to.deep.equal("teammatetiger");
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
         expect(mask.team.gravatar).to.deep.equal("fa988b6264338e873c2eb43328d41e9d");
         expect(mask.team.username).to.deep.equal("teammatetiger");
         expect(mask.license).to.be.defined;
@@ -263,7 +265,7 @@ describe("corpus routes", function() {
           expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
           expect(mask.copyright).to.deep.equal("lingllama");
           expect(mask.termsOfUse).to.be.defined;
-          expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+          expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
           // expect(mask.team.gravatar).to.deep.equal("948814f0b1bc8bebd701a9732ab3ebbd");
           expect(mask.team.gravatar).to.deep.equal("54b53868cb4d555b804125f1a3969e87"); // without merge of team.json
           expect(mask.team.username).to.deep.equal("lingllama");
@@ -327,7 +329,7 @@ describe("corpus routes", function() {
           expect(mask.description).to.deep.equal("This is a corpus which Georgian Together users can pull data from, and contribute to. To install the Georgian Together app, or find out more about it, visit the Google Play store: https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian");
           expect(mask.copyright).to.deep.equal("Georgian Together Users");
           expect(mask.termsOfUse).to.be.defined;
-          expect(mask.termsOfUse.humanReadable).not.to.contain("Sample: The materials included in this corpus are available");
+          expect(mask.termsOfUse).not.to.contain("Sample: The materials included in this corpus are available");
           // expect(mask.team.gravatar).to.deep.equal("daa4beb95070a68f948c550cee3254bd");
           expect(mask.team.gravatar).to.deep.equal("968b8e7fb72b5ffe2915256c28a9414c"); // without merge of team.json
           expect(mask.team.username).to.deep.equal("community");
