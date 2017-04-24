@@ -13,6 +13,10 @@ class App extends Component {
             {
               'name': 'description',
               'content': 'Public pages for LingSync.org corpora'
+            },
+            {
+              'name': 'keywords',
+              'content': 'Lingusitics, Fieldwork, Corpus, LingSync, Database, OpenSoure, XML, JSON'
             }
           ]}
           htmlAttributes={{
