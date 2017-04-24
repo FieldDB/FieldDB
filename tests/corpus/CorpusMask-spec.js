@@ -151,12 +151,13 @@ describe("CorpusMask ", function() {
     it("should be able to have defaults", function() {
       var corpus = new CorpusMask(CorpusMask.prototype.defaults);
       corpus.dbname = "jenkins-anothercorpus";
-      expect(corpus.fields.length).toEqual(17);
+      expect(corpus.fields.length).toEqual(18);
       expect(corpus.fields.title.value).toEqual("Private Corpus");
       expect(corpus.title).toEqual("Private Corpus");
       expect(corpus.titleAsUrl).toEqual("private_corpus");
       expect(corpus.fields.description.value).toEqual("The details of this corpus are not public.");
       expect(corpus.description).toEqual("The details of this corpus are not public.");
+      expect(corpus.keywords).toEqual("");
 
       expect(corpus.dbname).toEqual("jenkins-anothercorpus");
       expect(corpus.connection.parent).toBeDefined();

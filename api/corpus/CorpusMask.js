@@ -215,6 +215,23 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  keywords: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.keywords) {
+        return this.fields.keywords.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (!this.fields || !this.fields.keywords) {
+        this.addField("keywords");
+      }
+      this.fields.keywords.value = value;
+    }
+  },
+
   /**
    * TODO decide if we want to fetch these from the server, and keep a fossil in the object?
    * @type {Object}
@@ -319,6 +336,9 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     set: function(value) {
       if (!this.fields || !this.fields.rights) {
         this.addField("rights");
+      }
+      if (value.humanReadable) {
+        value = value.humanReadable;
       }
       this.fields.rights.value = value;
     }
