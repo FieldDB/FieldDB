@@ -359,7 +359,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       // throw (new Error('something is setting license'))
       if (!this.fields || !this.fields.rights) {
         this.addField("rights");
-        this.field.rights.json = {};
+        this.fields.rights.json = {};
       }
       if (typeof value === "string") {
         value = {
