@@ -47,8 +47,10 @@ describe("CorpusMask ", function() {
     });
 
     it("should have unknown defaults if not loaded from the server", function() {
-      var corpus = new CorpusMask(CorpusMask.defaults);
+      var corpus = new CorpusMask();
       corpus.dbname = "lingllama-communitycorpus";
+      expect(corpus.fields).toEqual(undefined);
+      expect(corpus.license).toEqual({});
 
       var corpusJson = corpus.toJSON("complete");
       expect(corpusJson.fieldDBtype).toEqual("CorpusMask");
@@ -62,7 +64,7 @@ describe("CorpusMask ", function() {
       expect(corpusJson.title).toEqual("");
       expect(corpusJson.titleAsUrl).toEqual("");
       expect(corpusJson.description).toEqual("");
-      expect(corpusJson.termsOfUse).toEqual({});
+      expect(corpusJson.termsOfUse).toEqual("");
       expect(corpusJson.license).toEqual({});
       expect(corpusJson.copyright).toEqual("");
       // expect(corpusJson.connection).toEqual(corpusJson.connection);
@@ -149,9 +151,13 @@ describe("CorpusMask ", function() {
     it("should be able to have defaults", function() {
       var corpus = new CorpusMask(CorpusMask.prototype.defaults);
       corpus.dbname = "jenkins-anothercorpus";
+      expect(corpus.fields.length).toEqual(18);
+      expect(corpus.fields.title.value).toEqual("Private Corpus");
       expect(corpus.title).toEqual("Private Corpus");
       expect(corpus.titleAsUrl).toEqual("private_corpus");
+      expect(corpus.fields.description.value).toEqual("The details of this corpus are not public.");
       expect(corpus.description).toEqual("The details of this corpus are not public.");
+      expect(corpus.keywords).toEqual("");
 
       expect(corpus.dbname).toEqual("jenkins-anothercorpus");
       expect(corpus.connection.parent).toBeDefined();
@@ -161,9 +167,7 @@ describe("CorpusMask ", function() {
       expect(corpus.connection.description).toEqual(corpus.description);
       expect(corpus.connection.owner).toEqual("jenkins");
 
-      expect(corpus.termsOfUse).toEqual({
-        "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      });
+      expect(corpus.termsOfUse).toEqual("Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus.");
       expect(corpus.license).toEqual({
         "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
         "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",

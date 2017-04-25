@@ -117,12 +117,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       sessions: Sessions,
       datalists: DataLists,
 
-      title: FieldDBObject.DEFAULT_STRING,
       titleAsUrl: FieldDBObject.DEFAULT_STRING,
-      description: FieldDBObject.DEFAULT_STRING,
-      termsOfUse: FieldDBObject.DEFAULT_OBJECT,
-      license: FieldDBObject.DEFAULT_OBJECT,
-      copyright: FieldDBObject.DEFAULT_STRING,
       connection: Connection,
       activityConnection: Activities,
       publicCorpus: FieldDBObject.DEFAULT_STRING,
@@ -144,10 +139,29 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  addField: {
+    value: function(field) {
+      if (!this.fields) {
+        this.fields = [];
+      }
+      if (typeof field === "string") {
+        // this.fields.debugMode = true;
+        if (this.fields[field]) {
+          return this.fields[field];
+        }
+        field = {
+          id: field
+        };
+      }
+      this.debug("adding field", field);
+      return this.fields.add(field);
+    }
+  },
+
   titleAsUrl: {
     get: function() {
       if (!this._titleAsUrl && this.title) {
-        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
+        this._titleAsUrl = this.sanitizeStringForFileSystem(this.title, "_").toLowerCase();
       }
       return this._titleAsUrl;
     },
@@ -163,23 +177,58 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   },
 
   title: {
+    configurable: true,
     get: function() {
-      return this._title || FieldDBObject.DEFAULT_STRING;
+      if (this.fields && this.fields.title) {
+        return this.fields.title.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("title", value);
-      if (this._title) {
-        this._titleAsUrl = this.sanitizeStringForFileSystem(this._title, "_").toLowerCase();
+      if (!this.fields || !this.fields.title) {
+        this.addField("title");
+      }
+      this.fields.title.value = value;
+      if (value) {
+        this._titleAsUrl = this.sanitizeStringForFileSystem(value, "_").toLowerCase();
+      } else {
+        this._titleAsUrl = this.dbname;
       }
     }
   },
 
   description: {
+    configurable: true,
     get: function() {
-      return this._description || FieldDBObject.DEFAULT_STRING;
+      if (this.fields && this.fields.description) {
+        return this.fields.description.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("description", value);
+      if (!this.fields || !this.fields.description) {
+        this.addField("description");
+      }
+      this.fields.description.value = value;
+    }
+  },
+
+  keywords: {
+    configurable: true,
+    get: function() {
+      if (this.fields && this.fields.keywords) {
+        return this.fields.keywords.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
+    },
+    set: function(value) {
+      if (!this.fields || !this.fields.keywords) {
+        this.addField("keywords");
+      }
+      this.fields.keywords.value = value;
     }
   },
 
@@ -276,29 +325,65 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
   },
 
   termsOfUse: {
+    configurable: true,
     get: function() {
-      return this._termsOfUse || FieldDBObject.DEFAULT_OBJECT;
+      if (this.fields && this.fields.rights) {
+        return this.fields.rights.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("termsOfUse", value);
+      if (!this.fields || !this.fields.rights) {
+        this.addField("rights");
+      }
+      if (value.humanReadable) {
+        value = value.humanReadable;
+      }
+      this.fields.rights.value = value;
     }
   },
 
   license: {
+    configurable: true,
     get: function() {
-      return this._license || {};
+      // console.log('get license', this.fields);
+      if (this.fields && this.fields.rights && this.fields.rights.json && this.fields.rights.json.license) {
+        return this.fields.rights.json.license;
+      } else {
+        return FieldDBObject.DEFAULT_OBJECT;
+      }
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("license", value);
+      // console.log('set license', this.fields, value);
+      // throw (new Error('something is setting license'))
+      if (!this.fields || !this.fields.rights) {
+        this.addField("rights");
+        this.field.rights.json = {};
+      }
+      if (typeof value === "string") {
+        value = {
+          humanReadable: value
+        };
+      }
+      this.fields.rights.json.license = value;
     }
   },
 
   copyright: {
+    configurable: true,
     get: function() {
-      return this._copyright || FieldDBObject.DEFAULT_STRING;
+      if (this.fields && this.fields.rightsHolder) {
+        return this.fields.rightsHolder.value;
+      } else {
+        return FieldDBObject.DEFAULT_STRING;
+      }
     },
     set: function(value) {
-      this.ensureSetViaAppropriateType("copyright", value);
+      if (!this.fields || !this.fields.rightsHolder) {
+        this.addField("rightsHolder");
+      }
+      this.fields.rightsHolder.value = value;
     }
   },
 
@@ -632,6 +717,28 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     set: function(value) {
       this.warn("preferredTemplate is deprecated, please use preferredDatumTemplate instead.");
       this.preferredDatumTemplate = value;
+    }
+  },
+
+  toJSON: {
+    value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {
+      this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
+
+      var json = Database.prototype.toJSON.apply(this, arguments);
+      if (!json) {
+        this.warn("Not returning json right now.");
+        return;
+      }
+
+      this.debug("saving description, title, termsOfUse, license  as the deprecated attribute");
+      json.title = this.title;
+      json.description = this.description;
+      json.termsOfUse = this.termsOfUse;
+      json.license = this.license;
+      json.copyright = this.copyright;
+
+      this.debug(json);
+      return json;
     }
   }
 

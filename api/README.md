@@ -1,6 +1,6 @@
 # FieldDB JavaScript API
 
-These are the common js files which you can use to build new FieldDB clients, and to help you test your clients to make sure they are contributing to high quality data using EMELD and DataOne best practices. This code comes from the backbone client, where most of the code base was prototyped. 
+These are the common js files which you can use to build new FieldDB clients, and to help you test your clients to make sure they are contributing to high quality data using EMELD and DataOne best practices. This code comes from the backbone client, where most of the code base was prototyped.
 
 
 # Demos which you can break point
@@ -10,9 +10,9 @@ These are the common js files which you can use to build new FieldDB clients, an
 * [Dative](http://dativebeta.lingsync.org) [code](https://github.com/jrwdunham/dative/tree/master/app/scripts/models) in progress
 
 
-# Videos 
+# Videos
 
-There are many videos showing the functionality of the models in the context of user interfaces. 
+There are many videos showing the functionality of the models in the context of user interfaces.
 
 Search on Youtube
 https://www.youtube.com/results?search_query=lingsync
@@ -60,6 +60,28 @@ To use this library in node, use npm
 $ npm install fielddb
 ```
 
+## Webpack and/or Babel and/or React
+
+FieldDB models work fine in React or es6, but you need to exclude fielddb from the build by putting it in the vendors section of your webpack config ((otherwise the `instanceof` operator will return false)[https://babeljs.io/docs/usage/caveats/#classes] when one item is an instance of the es6 -> es5 transpiled type, and its expected to be of the es5 type). A symptom of this warnings saying item cannot be added to a collection because its id is undefined, for example if your fields in your datum show 0 length.
+
+Sample entry vendor webpack config:
+```javascript
+config = {
+  entry: {
+    app: './app/app',
+    vendor: [
+      'react',
+      'react-router',
+      'redux',
+      'react-dom',
+      'bluebird',
+      'fielddb',
+      'history'
+    ]
+  },
+...
+}
+```
 
 # Base Models
 
@@ -67,41 +89,41 @@ Almost all the models in the system extend either FieldDBObject, or Collection.
 
 FieldDBObjects know how to:
 
-* accept a basic json model, 
-* parse its internal models, 
+* accept a basic json model,
+* parse its internal models,
 * convert itself into json
 * fetch itself from a server (using a declared `.url` or the currently open corpus in the app if one is present)
 * save itself to a server and/or client side
 * merge other objects into itself
 * calculate if its equal-ish to another object
 * assign a date created, date modified and app version to itself
-* and more... 
+* and more...
 
-You can see more concrete examples in the ["it should do x" FieldDBObject specifications](../tests/FieldDBObject-spec.js) 
+You can see more concrete examples in the ["it should do x" FieldDBObject specifications](../tests/FieldDBObject-spec.js)
 
 Colections know how to:
 
-* add, push, unshift models into themselves, 
-* parse new additions into its internal item model, 
+* add, push, unshift models into themselves,
+* parse new additions into its internal item model,
 * convert itself into json
 * save all members of itself to a server and/or client side
 * merge other collections/arrays into itself
 * calculate if its equal-ish to another object
 * find matching items(s)
 * fuzzy find matching items(s)
-* and more... 
+* and more...
 
-You can see more examples in the ["it should do x" Collection specifications](../tests/Collection-spec.js) 
+You can see more examples in the ["it should do x" Collection specifications](../tests/Collection-spec.js)
 
 
-# Related Issues 
+# Related Issues
 
 
 There are quite a few issues in the issue tracker which talk about the data models in the FieldDB Javascript API, how they evolved, and what problems/pitfalls the current code tries to solve.
 
 https://github.com/fielddb/fielddb/issues?utf8=✓&q=docs
 
-[#20](https://github.com/FieldDB/FieldDB/issues/20) [#24](https://github.com/FieldDB/FieldDB/issues/24) [#45](https://github.com/FieldDB/FieldDB/issues/45) [#65](https://github.com/FieldDB/FieldDB/issues/65) [#69](https://github.com/FieldDB/FieldDB/issues/69) [#70](https://github.com/FieldDB/FieldDB/issues/70) [#96](https://github.com/FieldDB/FieldDB/issues/96) [#878](https://github.com/FieldDB/FieldDB/issues/878) [#879](https://github.com/FieldDB/FieldDB/issues/879) [#993](https://github.com/FieldDB/FieldDB/issues/993) [#1083](https://github.com/FieldDB/FieldDB/issues/1083) [#1139](https://github.com/FieldDB/FieldDB/issues/1139) [#1349](https://github.com/FieldDB/FieldDB/issues/1349) [#1398](https://github.com/FieldDB/FieldDB/issues/1398) [#1470](https://github.com/FieldDB/FieldDB/issues/1470) [#2043](https://github.com/FieldDB/FieldDB/issues/2043) [#2069](https://github.com/FieldDB/FieldDB/issues/2069) 
+[#20](https://github.com/FieldDB/FieldDB/issues/20) [#24](https://github.com/FieldDB/FieldDB/issues/24) [#45](https://github.com/FieldDB/FieldDB/issues/45) [#65](https://github.com/FieldDB/FieldDB/issues/65) [#69](https://github.com/FieldDB/FieldDB/issues/69) [#70](https://github.com/FieldDB/FieldDB/issues/70) [#96](https://github.com/FieldDB/FieldDB/issues/96) [#878](https://github.com/FieldDB/FieldDB/issues/878) [#879](https://github.com/FieldDB/FieldDB/issues/879) [#993](https://github.com/FieldDB/FieldDB/issues/993) [#1083](https://github.com/FieldDB/FieldDB/issues/1083) [#1139](https://github.com/FieldDB/FieldDB/issues/1139) [#1349](https://github.com/FieldDB/FieldDB/issues/1349) [#1398](https://github.com/FieldDB/FieldDB/issues/1398) [#1470](https://github.com/FieldDB/FieldDB/issues/1470) [#2043](https://github.com/FieldDB/FieldDB/issues/2043) [#2069](https://github.com/FieldDB/FieldDB/issues/2069)
 
 
 # Examples
