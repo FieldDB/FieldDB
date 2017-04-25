@@ -175,7 +175,6 @@ class CorpusMaskContainer extends Component {
             </ul>
             <div className='tab-content'>
               <div id='terms' className='tab-pane active'>
-                <p>{corpusMask.get('dbname')}</p>
                 <p>{corpusMask.get('termsOfUse')}</p>
                 <span>License: </span><a href={corpusMask.getIn(['license', 'link'])} rel='license' title={corpusMask.getIn(['license', 'title'])}>{corpusMask.getIn(['license', 'title'])}</a>
                 <p>{corpusMask.getIn(['license', 'humanReadable'])}</p>
