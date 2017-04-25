@@ -148,6 +148,7 @@ describe("corpus routes", function() {
         expect(mask.team.gravatar).to.deep.equal("968b8e7fb72b5ffe2915256c28a9414c"); // without merge of team.json
         expect(mask.team.username).to.deep.equal("community");
         expect(mask.license).to.be.defined;
+        expect(mask.license.humanReadable).to.be.defined;
         expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
         done();
       }).fail(done);
