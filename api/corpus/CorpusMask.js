@@ -361,7 +361,7 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
         this.addField("rights");
         this.field.rights.json = {};
       }
-      if (typeof value == "string") {
+      if (typeof value === "string") {
         value = {
           humanReadable: value
         };
