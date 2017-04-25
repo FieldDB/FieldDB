@@ -178,7 +178,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (Object.prototype.toString.call(value) !== "[object Array]") {
         this.bug("Cannot set collection to an object, only an array", value);
         return;
-        // throw new Error("Cannot set collection to an object, only an array");
+      // throw new Error("Cannot set collection to an object, only an array");
       }
       for (var itemIndex = 0; itemIndex < value.length; itemIndex++) {
         var item = value[itemIndex];
@@ -210,7 +210,7 @@ Collection.prototype = Object.create(Object.prototype, {
     },
     set: function(value) {
       this._sorted = value;
-      //TODO if becoming sorted and worth sorting, do sort now
+    //TODO if becoming sorted and worth sorting, do sort now
     }
   },
 
@@ -266,7 +266,7 @@ Collection.prototype = Object.create(Object.prototype, {
         }
         key = searchingFor[this.primaryKey];
         searchingFor = key;
-        // this.debug("find is searchingFor an object whose key is ", searchingFor);
+      // this.debug("find is searchingFor an object whose key is ", searchingFor);
       }
 
       if (this[searchingFor] && typeof this[searchingFor] !== "function") {
@@ -350,17 +350,17 @@ Collection.prototype = Object.create(Object.prototype, {
           this.debug("casting an item to match the internal model which this collection requires ", this.INTERNAL_MODELS.item, value.constructor.toString());
           if (typeof value.toJSON === "function") {
             this.debug(" why defereincing this?");
-            // value = value.toJSON();
+          // value = value.toJSON();
           }
           value = new this.INTERNAL_MODELS.item(value);
-          // } else {
-          //   if (value.constructor === Object) {
-          //     this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
-          //     value = new FieldDBObject(value);
-          //   } else {
-          //     this.warn("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
-          //   }
-          // }
+        // } else {
+        //   if (value.constructor === Object) {
+        //     this.warn("this is going to be a FieldDBObject, even though its supposed to be in a collection of Documents.", value);
+        //     value = new FieldDBObject(value);
+        //   } else {
+        //     this.warn("this is " + value[this.primaryKey] + " already some sort of an object: " + value.fieldDBtype);
+        //   }
+        // }
         } else {
           this.debug("  item to set was already of the right type for " + this.fieldDBtype, value);
         }
@@ -368,7 +368,7 @@ Collection.prototype = Object.create(Object.prototype, {
         if (!searchingFor) {
           this.bug("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! ", value);
           return;
-          // throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
+        // throw new Error("The primary key `" + this.primaryKey + "` is undefined on this object, it cannot be added! Type: " + value.fieldDBtype);
         }
         this.debug("adding " + searchingFor);
 
@@ -428,7 +428,7 @@ Collection.prototype = Object.create(Object.prototype, {
         this.collection.push(value);
       }
       return this[searchingFor];
-      // return value;
+    // return value;
     }
   },
 
@@ -468,7 +468,7 @@ Collection.prototype = Object.create(Object.prototype, {
       if (!this.primaryKey) {
         this.bug("The primary key of this collection " + this.id + " is undefined, nothing can be added!", this);
         return;
-        // throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
+      // throw new Error("The primary key of this collection " + this.id + " is undefined, nothing can be added!").stack;
       }
       var value = member[this.primaryKey];
       if (!value) {
@@ -961,16 +961,16 @@ Collection.prototype = Object.create(Object.prototype, {
         optionalOverwriteOrAsk = "";
       }
 
+      if (!anotherCollection || anotherCollection.length === 0) {
+        this.debug("The new collection was empty, not merging.", anotherCollection);
+        return resultCollection;
+      }
+
       if (!(anotherCollection instanceof aCollection.constructor)) {
         this.debug("The anotherCollection  isnt of the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
         anotherCollection = new aCollection.constructor(anotherCollection);
       } else {
         this.debug("The anotherCollection  is  the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
-      }
-
-      if (!anotherCollection || anotherCollection.length === 0) {
-        this.debug("The new collection was empty, not merging.", anotherCollection);
-        return resultCollection;
       }
 
       aCollection._collection.map(function(anItem) {
@@ -1041,8 +1041,8 @@ Collection.prototype = Object.create(Object.prototype, {
                     self.debug("Not Overwriting  ", anItem, " ->", anotherItem);
                     resultCollection[idToMatch] = anItem;
                   }).fail(function(error) {
-                    console.error(error.stack, self);
-                  });
+                  console.error(error.stack, self);
+                });
               } else {
                 self.debug("Overwriting contents of " + idToMatch + " (this may cause disconnection in listeners)");
                 self.debug("Overwriting  ", anItem, " ->", anotherItem);
