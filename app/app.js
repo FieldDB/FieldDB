@@ -11,7 +11,7 @@ import createRoutes from './components/App/routes'
 let reduxState = {}
 if (window.__REDUX_STATE__) {
   try {
-    let plain = window.window.__REDUX_JSON__ = JSON.parse(unescape(window.__REDUX_STATE__))
+    let plain = window.__REDUX_JSON__ = JSON.parse(unescape(window.__REDUX_STATE__))
     Object.keys(plain).forEach((key) => {
       const val = plain[key]
       reduxState[key] = Immutable.fromJS(val)
