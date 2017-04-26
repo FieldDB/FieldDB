@@ -75,6 +75,7 @@ var SAMPLE_USER_MASK = new UserMask({
 });
 
 describe("corpus lib", function() {
+  this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
     expect(getCorpusMask).to.be.defined;
@@ -83,6 +84,9 @@ describe("corpus lib", function() {
   describe("normal requests", function() {
 
     it("should return the corpus mask from the sample corpus", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       var corpusConfig = url.parse(config.corpus.url);
 
       getCorpusMask("lingllama-communitycorpus", done).then(function(mask) {
@@ -95,8 +99,10 @@ describe("corpus lib", function() {
         expect(mask.titleAsUrl).to.deep.equal("communitycorpus");
         expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
         expect(mask.copyright).to.deep.equal("lingllama");
+        expect(mask.fields.length).to.equal(4);
+        console.log(JSON.stringify(mask, null, 2));
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).to.deep.equal("948814f0b1bc8bebd701a9732ab3ebbd");
         expect(mask.team.gravatar).to.deep.equal("54b53868cb4d555b804125f1a3969e87"); // without merge of team.json
         expect(mask.team.username).to.deep.equal("lingllama");
@@ -108,11 +114,12 @@ describe("corpus lib", function() {
         expect(mask.connection.toJSON()).to.deep.equal({
           fieldDBtype: "Connection",
           protocol: "https://",
-          domain: "corpusdev.lingsync.org",
+          domain: mask.connection.domain,
           port: "443",
           dbname: "lingllama-communitycorpus",
           path: "",
           gravatar: "948814f0b1bc8bebd701a9732ab3ebbd",
+          website: "",
           corpusid: mask.connection.corpusid,
           corpusUrls: mask.connection.corpusUrls,
           version: mask.connection.version,
@@ -123,7 +130,7 @@ describe("corpus lib", function() {
         });
         done();
       }).fail(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return the corpus mask from the community corpus", function(done) {
       getCorpusMask("community-georgian").then(function(mask) {
@@ -136,17 +143,21 @@ describe("corpus lib", function() {
         expect(mask.description).to.deep.equal("This is a corpus which Georgian Together users can pull data from, and contribute to. To install the Georgian Together app, or find out more about it, visit the Google Play store: https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian");
         expect(mask.copyright).to.deep.equal("Georgian Together Users");
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).not.to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).not.to.contain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).to.deep.equal("daa4beb95070a68f948c550cee3254bd");
         expect(mask.team.gravatar).to.deep.equal("968b8e7fb72b5ffe2915256c28a9414c"); // without merge of team.json
         expect(mask.team.username).to.deep.equal("community");
         expect(mask.license).to.be.defined;
+        expect(mask.license.humanReadable).to.be.defined;
         expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
         done();
       }).fail(done);
     });
 
-    it("should return a bleached corpus mask for corpuss by default", function(done) {
+    it("should return a bleached corpus mask for corpus by default", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
       getCorpusMask("teammatetiger-firstcorpus").then(function(mask) {
         expect(mask).to.be.defined;
         expect(mask._rev).to.deep.equal("3-184180c75473a60c09dabc2fde9fe37e");
@@ -157,7 +168,7 @@ describe("corpus lib", function() {
         expect(mask.description).to.deep.equal("The details of this corpus are not public.");
         expect(mask.copyright).to.deep.equal("teammatetiger");
         expect(mask.termsOfUse).to.be.defined;
-        expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+        expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
         expect(mask.team.gravatar).to.deep.equal("fa988b6264338e873c2eb43328d41e9d");
         expect(mask.team.username).to.deep.equal("teammatetiger");
         expect(mask.license).to.be.defined;
@@ -165,7 +176,7 @@ describe("corpus lib", function() {
         done();
       }).fail(done);
 
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -178,7 +189,7 @@ describe("corpus lib", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return 404 if dbname is not a string", function(done) {
       getCorpusMask({
@@ -189,7 +200,7 @@ describe("corpus lib", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should return 404 if dbname contains invalid characters", function(done) {
       getCorpusMask("a.*-haaha script injection attack attempt file:///some/try", function(reason) {
@@ -198,7 +209,7 @@ describe("corpus lib", function() {
         expect(reason.userFriendlyErrors[0]).to.deep.equal("This is a strange database identifier, are you sure you didn't mistype it?");
         done();
       }).then(done);
-    }, specIsRunningTooLong);
+    });
 
     it("should be case insensitive", function(done) {
       getCorpusMask("LingLlama-CommunityCorpus", done)
@@ -208,7 +219,7 @@ describe("corpus lib", function() {
           expect(mask.title).to.deep.equal("CommunityCorpus");
           done();
         }).fail(done);
-    }, specIsRunningTooLong);
+    });
 
   });
 
@@ -227,7 +238,7 @@ describe("corpus lib", function() {
           expect(err.message).to.deep.equal("Server errored, please report this 8234");
           done();
         }).then(done);
-      }, specIsRunningTooLong);
+      });
 
       it("should return 404 error if usermask has no corpora", function(done) {
         getCorpusMaskFromTitleAsUrl({
@@ -237,7 +248,7 @@ describe("corpus lib", function() {
           expect(err.message).to.deep.equal("Couldn't find any corpora for lingllama, if this is an error please report it to us.");
           done();
         }).then(done);
-      }, specIsRunningTooLong);
+      });
 
     });
 
@@ -255,32 +266,32 @@ describe("corpus lib", function() {
           expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
           expect(mask.copyright).to.deep.equal("lingllama");
           expect(mask.termsOfUse).to.be.defined;
-          expect(mask.termsOfUse.humanReadable).to.contain("Sample: The materials included in this corpus are available");
+          expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
           // expect(mask.team.gravatar).to.deep.equal("948814f0b1bc8bebd701a9732ab3ebbd");
           expect(mask.team.gravatar).to.deep.equal("54b53868cb4d555b804125f1a3969e87"); // without merge of team.json
           expect(mask.team.username).to.deep.equal("lingllama");
           expect(mask.license).to.be.defined;
           expect(mask.license.humanReadable).to.contain("This license lets others remix, tweak, and");
         });
-      }, specIsRunningTooLong);
+      });
 
       it("should use fuzzy find to find a matching corpus", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_informative_title_which_is_longer_and_more_recent",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
@@ -294,21 +305,21 @@ describe("corpus lib", function() {
 
       it("should use fuzzy find to find a matching corpus too", function() {
         getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-kartuli"
-            }, {
-              titleAsUrl: "some_other_informative_title",
-              dbname: "community-ting_viet"
-            }, {
-              titleAsUrl: "some_informative_title",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-kartuli"
+          }, {
+            titleAsUrl: "some_other_informative_title",
+            dbname: "community-ting_viet"
+          }, {
+            titleAsUrl: "some_informative_title",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "Some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
@@ -319,7 +330,7 @@ describe("corpus lib", function() {
           expect(mask.description).to.deep.equal("This is a corpus which Georgian Together users can pull data from, and contribute to. To install the Georgian Together app, or find out more about it, visit the Google Play store: https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian");
           expect(mask.copyright).to.deep.equal("Georgian Together Users");
           expect(mask.termsOfUse).to.be.defined;
-          expect(mask.termsOfUse.humanReadable).not.to.contain("Sample: The materials included in this corpus are available");
+          expect(mask.termsOfUse).not.to.contain("Sample: The materials included in this corpus are available");
           // expect(mask.team.gravatar).to.deep.equal("daa4beb95070a68f948c550cee3254bd");
           expect(mask.team.gravatar).to.deep.equal("968b8e7fb72b5ffe2915256c28a9414c"); // without merge of team.json
           expect(mask.team.username).to.deep.equal("community");
@@ -330,18 +341,18 @@ describe("corpus lib", function() {
 
       it("should use fuzzy find to find the users matching corpus", function() {
         return getCorpusMaskFromTitleAsUrl(new UserMask({
-            username: "community",
-            corpora: [{
-              titleAsUrl: "georgian",
-              dbname: "community-georgian"
-            }, {
-              titleAsUrl: "georgian",
-              dbname: "another-georgian"
-            }, {
-              titleAsUrl: "migmaq",
-              dbname: "community-migmaq"
-            }]
-          }),
+          username: "community",
+          corpora: [{
+            titleAsUrl: "georgian",
+            dbname: "community-georgian"
+          }, {
+            titleAsUrl: "georgian",
+            dbname: "another-georgian"
+          }, {
+            titleAsUrl: "migmaq",
+            dbname: "community-migmaq"
+          }]
+        }),
           "georgian").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask.titleAsUrl).to.deep.equal("georgian_together");

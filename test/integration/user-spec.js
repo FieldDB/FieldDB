@@ -8,8 +8,14 @@ var api = require("../../server");
 describe("/v1", function() {
   describe("GET lingllama", function() {
     it("should display the users profile and corpora", function(done) {
-      supertest(api)
-        .get("/lingllama")
+      this.timeout(specIsRunningTooLong);
+
+      var testApp = supertest(api).get("/lingllama");
+
+      // The react ap contacts the api durring server side render
+      process.env.API_BASE_URL = "http://127.0.0.1:" + testApp.app.address().port;
+
+      testApp
         .expect("Content-Type", /text\/html; charset=UTF-8/i)
         .expect(200)
         .end(function(err, res) {
@@ -17,7 +23,7 @@ describe("/v1", function() {
             return done(err);
           }
 
-          expect(res.text).to.contain("<title>Ling Llama</title>");
+          expect(res.text).to.contain("<title data-react-helmet=\"true\">Ling Llama - LingSync.org</title>");
           expect(res.text).to.contain("https://secure.gravatar.com/avatar/54b53868cb4d555b804125f1a3969e87.jpg?s=200&amp;d=identicon&amp;r=pg");
           expect(res.text).to.contain("Ling Llama");
           expect(res.text).to.contain("lingllama");
@@ -34,10 +40,10 @@ describe("/v1", function() {
           expect(res.text).to.contain("CommunityCorpus");
           expect(res.text).to.contain("This is a corpus which is editable by anyone in the ");
           expect(res.text).to.contain("Private Corpus");
-          expect(res.text).to.contain("© lingllama   2012 -   2017");
+          expect(res.text).to.match(/©.*lingllama.*2012.*-.*2017/);
 
           done();
         });
-    }, specIsRunningTooLong);
+    });
   });
 });

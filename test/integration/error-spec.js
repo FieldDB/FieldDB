@@ -6,8 +6,12 @@ var api = require("../../server");
 
 describe("error handling", function() {
   it("should handle route not found", function(done) {
-    supertest(api)
-      .get("/notaroute")
+    var testApp = supertest(api).get("/notauser");
+
+    // The react ap contacts the api durring server side render
+    process.env.API_BASE_URL = "http://127.0.0.1:" + testApp.app.address().port;
+
+    testApp
       .expect("Content-Type", /text\/html; charset=UTF-8/i)
       .end(function(err, res) {
         if (err) {
@@ -15,7 +19,7 @@ describe("error handling", function() {
         }
 
         expect(res.text).to.contain("Not found");
-        expect(res.text).to.contain("Sorry, but the page you are looking for was not found");
+        expect(res.text).to.contain("Sorry, a user with this username was not found, please try again.");
 
         done();
       });
@@ -26,8 +30,12 @@ describe("error handling", function() {
       return this.skip();
     }
 
-    supertest(api)
-      .get("/testing/testing-notacorpus")
+    var testApp = supertest(api).get("/testing/testing-notacorpus");
+
+    // The react ap contacts the api durring server side render
+    process.env.API_BASE_URL = "http://127.0.0.1:" + testApp.app.address().port;
+
+    testApp
       .expect("Content-Type", /text\/html; charset=UTF-8/i)
       .end(function(err, res) {
         if (err) {
@@ -35,7 +43,7 @@ describe("error handling", function() {
         }
 
         expect(res.text).to.contain("Not found");
-        expect(res.text).to.contain("Sorry, but the page you are looking for was not found");
+        expect(res.text).to.contain("Sorry, the page /testing/testing-notacorpus you are looking for was not found.");
 
         done();
       });

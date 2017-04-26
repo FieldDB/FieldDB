@@ -1,3 +1,6 @@
+require('babel-register')
+
+var compression = require("compression");
 var config = require("config");
 var express = require("express");
 var debug = require("debug")("server");
@@ -13,12 +16,18 @@ var path = require("path");
 var activityRoutes = require("./routes/activity").router;
 var corpusRoutes = require("./routes/corpus").router;
 var userRoutes = require("./routes/user").router;
-
+var reduxRender = require("./routes/react-render").reduxRender;
+var mockAPI = require('./app/server/mock_api');
 var acceptSelfSignedCertificates = {
   strictSSL: false
 };
 if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
+}
+
+if (config.offline) {
+  var requestSampleData = require('./config/offline').requestSampleData;
+  requestSampleData(config);
 }
 
 var app = express();
@@ -41,12 +50,28 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static(path.join(__dirname, "public")));
 
+
+app.use(compression())
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'dist', 'public')))
+} else {
+  app.use('/assets', express.static(path.join(__dirname, 'app', 'assets')))
+  app.use(express.static(path.join(__dirname, 'dist')))
+}
+
 /*
  * Routes
  */
-app.use('/activity', activityRoutes);
-app.use('/', corpusRoutes);
-app.use('/', userRoutes);
+
+app.get('/api/corpora', (req, res) => {
+  res.send(mockAPI.corpora)
+});
+app.use('/api/activity', activityRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api', corpusRoutes);
+
+app.get("*", reduxRender);
 
 // error handling middleware should be loaded after the loading the routes
 app.use(errorHandler);

@@ -15,7 +15,8 @@ var router = express.Router();
  * @param  {Response} res
  */
 function getCorpus(req, res, next) {
-  getCorpusMask(req.params.dbname, next).then(function(corpus) {
+  getCorpusMask(req.params.dbname, next).then(function(corpusMask) {
+    var corpus = corpusMask.toJSON();
     corpus.lexicon = {
       url: config.lexicon.public.url
     };
@@ -25,9 +26,10 @@ function getCorpus(req, res, next) {
     corpus.speech = {
       url: config.speech.public.url
     };
-    res.render("corpus", {
-      corpusMask: corpus
-    });
+    corpus.corpus = {
+      url: config.corpus.public.url
+    };
+    res.json(corpus);
   }, next).fail(next);
 }
 
@@ -49,19 +51,13 @@ function getCorpusFromTitleAsUrl(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      if (req.session && req.headers["x-requested-with"] === "XMLHttpRequest") {
-        return res.json({
-          corpusMask: corpus
-        });
-      }
-      res.render("corpus", {
-        corpusMask: corpus
-      });
+      res.json(corpus);
     }, next).fail(next);
     return;
   }
   getUserMask(req.params.username, next).then(function(userMask) {
     getCorpusMaskFromTitleAsUrl(userMask, req.params.titleAsUrl, next).then(function(corpus) {
+      debug("replying with getCorpusMaskFromTitleAsUrl ", corpus);
       corpus.lexicon = {
         url: config.lexicon.public.url
       };
@@ -71,23 +67,12 @@ function getCorpusFromTitleAsUrl(req, res, next) {
       corpus.speech = {
         url: config.speech.public.url
       };
-      debug("replying with getCorpusMaskFromTitleAsUrl ", corpus);
-      if (req.session && req.headers["x-requested-with"] === "XMLHttpRequest") {
-        return res.json({
-          corpusMask: corpus
-        });
-      }
-      res.render("corpus", {
-        corpusMask: corpus
-      });
+      res.json(corpus);
     }, next).fail(next);
   }, next).fail(next);
 }
 
-router.get("/:username/:anything/:dbname", function(req, res) {
-  res.redirect("/" + req.params.username + "/" + req.params.dbname);
-});
-router.get("/db/:dbname", getCorpus);
+router.get("/corpora/:dbname", getCorpus);
 router.get("/:username/:titleAsUrl", getCorpusFromTitleAsUrl);
 
 module.exports.getCorpusFromTitleAsUrl = getCorpusFromTitleAsUrl;

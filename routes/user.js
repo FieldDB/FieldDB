@@ -1,5 +1,5 @@
 "use strict";
-var debug = require("debug")("routes:corpus");
+var debug = require("debug")("routes:user");
 var express = require("express");
 
 var getUserMask = require("../lib/user").getUserMask;
@@ -19,11 +19,11 @@ function getUserPage(req, res, next) {
     return;
   }
 
-  getUserMask(req.params.username, next).then(function(user) {
+  getUserMask(req.params.username, next).then(function(userMask) {
+    var user = userMask.toJSON();
     debug("User response", user);
-    res.render("user", {
-      userMask: user
-    });
+    user.username = user.username || userMask.id;
+    res.json(user);
   }, next).fail(next);
 }
 
