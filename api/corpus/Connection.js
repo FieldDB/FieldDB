@@ -213,7 +213,7 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         this._gravatar = this.parent.gravatar;
       // } else if (this.parent.team.gravatar) { // Dont use team gravatars for corpus connection gravatars anymore
       //   this._gravatar = this.parent.team.gravatar;
-      } else if (!this._gravatar && this.dbname && this.parent.team && typeof this.parent.team.buildGravatar === "function") {
+      } else if (!this._gravatar && this.dbname && this.parent && this.parent.team && typeof this.parent.team.buildGravatar === "function") {
         this._gravatar = this.parent.team.buildGravatar(this.dbname);
       }
       return this._gravatar;
@@ -406,13 +406,18 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
     get: function() {
       var corpusurl;
       if (this.corpusUrls && this.corpusUrls[0]) {
+        this.debug("getting corpusUrl", this.dbname, this.corpusUrls);
         corpusurl = this.corpusUrls[0];
 
         if (this.dbname && corpusurl.indexOf(this.dbname) === -1) {
+          this.debug(" corpusUrl should have had the dbname", corpusurl);
+
           // if its a couchdb, use the dbname in the url
           if (corpusurl.indexOf("984") > -1 || corpusurl.indexOf("https://corpusdev.") > -1 || corpusurl.indexOf("https://corpus.") > -1) {
             corpusurl = corpusurl + "/" + this.dbname;
           }
+          this.debug(" corpusUrl is", corpusurl);
+          this.corpusUrls[0] = corpusurl;
         }
         return corpusurl;
       }
