@@ -126,7 +126,7 @@ class SearchContainer extends Component {
   }
 
   static search ({params, urls, store, corpus, loadSearchResults}) {
-    corpus = corpus || new CorpusMask(store.getState().corpusMaskDetail.toJS())
+    corpus = corpus || new CorpusMask(store.getState().corpusMaskDetails[0].toJS())
     corpus.datumFields.map(updateCorpusField)
 
     const url = urls.lexicon.url + '/search/' + corpus.dbname
@@ -297,7 +297,7 @@ SearchContainer.propTypes = {
 function mapStateToProps (state) {
   // console.log('search container map state to props')
   return {
-    corpus: state.corpusMaskDetail
+    corpus: state.corpusMaskDetails[0]
   }
 }
 
