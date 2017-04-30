@@ -204,7 +204,7 @@ class CorpusMaskContainer extends Component {
 function mapStateToProps (state) {
   // console.log('corpusMaskdetail map state to props', state)
   return {
-    corpusMask: state.corpusMaskDetail[0],
+    corpusMask: state.corpusMaskDetail,
     searchResults: state.searchResults || Immutable.fromJs([])
   }
 }

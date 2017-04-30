@@ -9,19 +9,17 @@ describe('Reducer::::CorpusMaskDetail', function () {
         let action = {
           type: ActionType.LOADED_CORPUS_MASK_DETAIL,
           response: {
-            dbname: 'val'
+            key: 'val'
           }
         }
 
-        let newState = reducer(Immutable.fromJS({}), action)
+        let newState = reducer(Immutable.fromJS({
+          something: 'else',
+        }), action)
 
         expect(newState.toJS()).to.deep.equal({
-          0: {
-            dbname: 'val'
-          },
-          dbname: {
-            dbname: 'val'
-          }
+          key: 'val',
+          something: 'else'
         })
       })
     })
