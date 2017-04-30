@@ -147,6 +147,7 @@ class SearchContainer extends Component {
           id: id,
           corpus: corpus,
           title: 'Search for ' + id,
+          dbname: corpus.dbname,
           description: new Date()
         })
         datalist.id = datalist.id.trim().toLowerCase().replace(/[^a-z]/g, '_')
@@ -249,6 +250,7 @@ class SearchContainer extends Component {
           <input type='text'
             id='searchIn'
             name='searchIn'
+            onBlur={this.handleChange}
             onChange={this.handleChange}
             placeholder='morphemes:nay OR gloss:des'
             defaultValue={this.props.params.searchIn}

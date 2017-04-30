@@ -9,6 +9,7 @@ import { DatumFields } from 'fielddb/api/datum/DatumFields'
 import { loadCorpusMaskDetail } from './actions'
 import UserMask from '../UserMask/UserMask.jsx'
 import DataList from '../DataList'
+import Search from '../Search'
 
 let defaultCorpus
 
@@ -46,6 +47,11 @@ class CorpusMaskContainer extends Component {
     fields.merge('self', defaultCorpus.fields)
 
     let date = new Date(corpusMask.get('dateModified') || corpusMask.get('dateCreated')).toJSON()
+    const searchParams = {
+      dbname: corpusMask.get('dbname'),
+      searchIn: corpusMask.get('searchKeywords'),
+      teamname: corpusMask.getIn(['team', 'username'])
+    }
 
     return (
       <div>
@@ -152,11 +158,15 @@ class CorpusMaskContainer extends Component {
               </div>
             </div>
             <div className='row-fluid'>
-              {this.props.children}
+            {this.props.children ? this.props.children : <Search corpus={corpusMask} params={searchParams}/>}
             </div>
             {
       this.props.searchResults.map((searchResult) => {
         const id = searchResult.getIn(['datalist', 'id'])
+        if (corpusMask.get('dbname') !== searchResult.getIn(['datalist', 'dbname'])) {
+          return
+        }
+
         return (
           <DataList key={'search-result-' + id} className='row-fluid' corpus={corpusMask} datalist={searchResult.get('datalist')} />
         )
