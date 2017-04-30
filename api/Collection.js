@@ -342,6 +342,7 @@ Collection.prototype = Object.create(Object.prototype, {
           this.INTERNAL_MODELS.item &&
           typeof this.INTERNAL_MODELS.item === "function" &&
           !(value instanceof this.INTERNAL_MODELS.item) &&
+           value.constructor.toString() !== this.INTERNAL_MODELS.item.toString() &&
           // value.constructor.toString().substring(9, 22) !== "FieldDBObject" &&
           !(this.INTERNAL_MODELS.item.compatibleWithSimpleStrings && typeof value === "string")) {
 
@@ -822,27 +823,25 @@ Collection.prototype = Object.create(Object.prototype, {
    */
   clone: {
     value: function(includeEvenEmptyAttributes) {
-      if (includeEvenEmptyAttributes) {
-        this.todo("includeEvenEmptyAttributes is not implemented: " + includeEvenEmptyAttributes);
-      }
-      var json,
-        self = this;
-      try {
-        json = JSON.parse(JSON.stringify(this.toJSON()));
-      } catch (e) {
-        console.warn(e.stack);
-        this.bug("There was a problem cloning this collection", e);
-      }
-      json = json.map(function(item) {
+      var self = this;
+      var collection = this._collection.map(function(item) {
         if (typeof item.clone === "function") {
           self.debug("This item has a clone, which we will call instead");
-          return JSON.parse(JSON.stringify(item.clone()));
+          return item.clone(includeEvenEmptyAttributes);
         } else {
-          return item;
+          return JSON.parse(JSON.stringify(item));
         }
       });
 
-      return json;
+      var json = {
+        primaryKey: this.primaryKey,
+        collection: collection,
+        capitalizeFirstCharacterOfPrimaryKeys: this.capitalizeFirstCharacterOfPrimaryKeys
+      };
+
+      var newInstance = new this.constructor(json);
+      newInstance.corpus = this.corpus;
+      return newInstance;
     }
   },
 
@@ -966,7 +965,7 @@ Collection.prototype = Object.create(Object.prototype, {
         return resultCollection;
       }
 
-      if (!(anotherCollection instanceof aCollection.constructor)) {
+      if (!(anotherCollection instanceof aCollection.constructor) || anotherCollection.constructor.toString() !== aCollection.constructor.toString()) {
         this.debug("The anotherCollection  isnt of the same type as aCollection ", aCollection.constructor, anotherCollection.constructor);
         anotherCollection = new aCollection.constructor(anotherCollection);
       } else {

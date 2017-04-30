@@ -346,11 +346,10 @@ describe("lib/Collection", function() {
         collection: useDefaults(),
         capitalizeFirstCharacterOfPrimaryKeys: true
       });
-      var newbarecollection = collection.clone();
-      expect(newbarecollection.map(removeFieldDBFields)).toEqual(useDefaults());
-      var newcollection = new Collection({
-        primaryKey: "validationStatus",
-        collection: newbarecollection
+      var newcollection = collection.clone();
+      expect(newcollection.length).toEqual(collection.length);
+      newcollection.map(function(item){
+        expect(item.toJSON()).toEqual(collection.find([item.validationStatus])[0].toJSON());
       });
       newcollection.checked = {
         validationStatus: "Checked",
