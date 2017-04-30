@@ -40,11 +40,12 @@ class CorpusMaskContainer extends Component {
     }
 
     let title = `${corpusMask.getIn(['team', 'name'])} - ${corpusMask.get('title')}`
-    let fields = new DatumFields(corpusMask.get('fields').toJS())
     if (!defaultCorpus) {
       defaultCorpus = new CorpusMask(CorpusMask.prototype.defaults)
     }
-    fields.merge('self', defaultCorpus.fields)
+    let thisCorpusFields = new DatumFields(corpusMask.get('fields').toJS())
+    let fields = defaultCorpus.fields // new DatumFields(defaultCorpus.fields.clone())
+    fields.merge('self', thisCorpusFields, true)
 
     let date = new Date(corpusMask.get('dateModified') || corpusMask.get('dateCreated')).toJSON()
     const searchParams = {
