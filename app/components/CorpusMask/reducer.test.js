@@ -15,7 +15,6 @@ describe('Reducer::::CorpusMaskDetail', function () {
         let newState = reducer(undefined, action)
 
         expect(newState.toJS()).to.deep.equal({
-          team: {},
           key: 'val'
         })
       })
