@@ -141,6 +141,7 @@ function reduxRender(req, res, next) {
       unsubscribe()
     })
       .catch((err) => {
+        console.log('Error requesting data for redux render', err);
         Helmet.rewind()
         unsubscribe()
         next(err)
