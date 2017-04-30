@@ -10,6 +10,9 @@ function requestSampleData(config) {
   CORS.makeCORSRequest = function(options) {
     var deferred = Q.defer();
     Q.nextTick(function() {
+      if (options.url.includes('/_all_dbs')) {
+        return deferred.resolve(require('../test/fixtures/corpora.json'));
+      }
 
       if (options.url.includes('/search/lingllama-communitycorpus')) {
         return deferred.resolve(require('../test/fixtures/search/lingllama-communitycorpus.json'));

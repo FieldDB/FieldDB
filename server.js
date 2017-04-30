@@ -14,10 +14,10 @@ var consolidate = require("consolidate");
 var path = require("path");
 
 var activityRoutes = require("./routes/activity").router;
+var corpora = require("./lib/corpora");
 var corpusRoutes = require("./routes/corpus").router;
 var userRoutes = require("./routes/user").router;
 var reduxRender = require("./routes/react-render").reduxRender;
-var mockAPI = require('./app/server/mock_api');
 var acceptSelfSignedCertificates = {
   strictSSL: false
 };
@@ -64,8 +64,10 @@ if (process.env.NODE_ENV === 'production') {
  * Routes
  */
 
-app.get('/api/corpora', (req, res) => {
-  res.send(mockAPI.corpora)
+app.get('/api/corpora', function(req, res, next) {
+  corpora.getAllCorpora().then(function(results) {
+    res.json(results);
+  }, next).catch(next)
 });
 app.use('/api/activity', activityRoutes);
 app.use('/api/users', userRoutes);
