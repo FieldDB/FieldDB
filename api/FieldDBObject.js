@@ -75,7 +75,7 @@ try {
  *           a corpus is created. It must be a file save name, and be a permitted
  *           name in CouchDB which means it is [a-z] with no uppercase letters or
  *           symbols, by convention it cannot contain -, but _ is acceptable.
- 
+
  * @extends Object
  * @tutorial tests/FieldDBObjectTest.js
  */
@@ -1282,6 +1282,8 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
 
       if (!optionalOverwriteOrAsk) {
         optionalOverwriteOrAsk = "";
+      } else if (optionalOverwriteOrAsk === true) {
+        optionalOverwriteOrAsk = "overwrite";
       }
 
       if (anObject.id && anotherObject.id && anObject.id !== anotherObject.id) {
@@ -1381,10 +1383,10 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             }
           } else if (anotherObject[aproperty] !== undefined && anotherObject[aproperty] !== null) {
             this.debug("Using a constructor");
-            this.todo(" use clone only if not merging self.");
             if (callOnSelf === "self") {
               resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty]);
             } else {
+              this.debug("use clone only if not merging self.");
               resultObject[aproperty] = FieldDBObject.convertDocIntoItsType(anotherObject[aproperty], "clone");
             }
           }
