@@ -5,7 +5,7 @@ import Q from 'q'
 import React, { Component } from 'react'
 
 FieldDBObject.confirm = function (message, optionalLocale) {
-  var deferred = Q.defer()
+  const deferred = Q.defer()
   console.warn('Not confirming: ', message)
   deferred.reject({
     message: message,
@@ -15,7 +15,7 @@ FieldDBObject.confirm = function (message, optionalLocale) {
   return deferred.promise
 }
 FieldDBObject.prompt = function (message, optionalLocale, providedInput) {
-  var deferred = Q.defer()
+  const deferred = Q.defer()
   console.warn('Not prompting: ', message)
   deferred.reject({
     message: message,
