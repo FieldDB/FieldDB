@@ -159,7 +159,7 @@ class CorpusMaskContainer extends Component {
               </div>
             </div>
             <div className='row-fluid'>
-            {this.props.children ? this.props.children : <Search corpus={corpusMask} params={searchParams}/>}
+              {this.props.children ? this.props.children : <Search corpus={corpusMask} params={searchParams} />}
             </div>
             {
       this.props.searchResults.map((searchResult) => {

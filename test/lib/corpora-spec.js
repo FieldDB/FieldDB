@@ -1,3 +1,4 @@
+var config = require("config");
 var expect = require("chai").expect;
 var getAllCorpora = require("./../../lib/corpora").getAllCorpora;
 var specIsRunningTooLong = 15000;
@@ -21,7 +22,6 @@ describe("corpora lib", function() {
       }
 
       getAllCorpora().then(function(corpora) {
-        console.log('total corpora ', corpora);
         expect(corpora.length).to.not.equal(0);
         expect(corpora.length).to.equal(TOTAL_CORPORA_COUNT);
         corpora.map(function(connection) {
