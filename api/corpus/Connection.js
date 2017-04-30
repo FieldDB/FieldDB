@@ -405,9 +405,6 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
   corpusUrl: {
     get: function() {
       var corpusurl;
-
-      this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
-
       if (this.corpusUrls && this.corpusUrls[0]) {
         corpusurl = this.corpusUrls[0];
 
@@ -567,8 +564,8 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       this.debug("Customizing toJSON ", includeEvenEmptyAttributes, removeEmptyAttributes);
       includeEvenEmptyAttributes = true;
 
-      this.debug(" forcing corpusUrls to be defined ", this.corpusUrl);
-      this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
+      this.debug(" forcing corpusUrls to be defined ", this.corpusUrl, this.corpusUrls);
+      // this.corpusUrls = Connection.cleanCorpusUrls(this.corpusUrls);
       this.brandLowerCase = this.brandLowerCase;
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
 
@@ -919,6 +916,7 @@ Connection.validateUsername = function(originalIdentifier) {
 };
 
 Connection.cleanCorpusUrls = function(corpusUrls) {
+  // console.log("cleaning cleanCorpusUrls of all default urls", corpusUrls);
   if (!corpusUrls || !corpusUrls.length) {
     return corpusUrls;
   }
@@ -928,8 +926,10 @@ Connection.cleanCorpusUrls = function(corpusUrls) {
       continue;
     }
     defaultUrls = defaultUrls.concat(Connection.knownConnections[connection].corpusUrls);
+    // console.log("defaultUrls", defaultUrls);
   }
   while (corpusUrls.length && defaultUrls.indexOf(corpusUrls[0]) > -1) {
+    // console.log("shifting empty", corpusUrls[0]);
     corpusUrls.shift();
   }
   return corpusUrls;

@@ -97,6 +97,9 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       if (this._connection && this._connection.dbname && this._connection.dbname !== "default" && !this.dbname) {
         this.dbname = this._connection.dbname;
       }
+
+      // TODO could clean corpus urls here
+      this.connection.corpusUrls = Connection.cleanCorpusUrls(this.connection.corpusUrls);
     }
   },
 
