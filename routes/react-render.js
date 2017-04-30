@@ -124,6 +124,7 @@ function reduxRender(req, res, next) {
         // styleSrc
         });
         res.render("index", {
+          app: JSON.stringify(config.app.public, null, 2),
           metaHeader,
           html,
           scriptSrcs,
