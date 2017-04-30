@@ -7,8 +7,11 @@ if (!process.env.NODE_ENV) {
 }
 
 Connection.knownConnections.thisserver = Connection.knownConnections[process.env.NODE_ENV];
-Connection.knownConnections.thisserver.debugMode=true;
-console.log("Connection.knownConnections.thisserver.corpusUrls", Connection.knownConnections.thisserver.corpusUrls);
+if (process.env.NODE_ENV === "test" && !Connection.knownConnections.thisserver) {
+  Connection.knownConnections.thisserver = Connection.knownConnections["development"];
+}
+// Connection.knownConnections.thisserver.debugMode=true;
+// console.log("Connection.knownConnections.thisserver.corpusUrls", Connection.knownConnections.thisserver.corpusUrls);
 exports.externalOrigin = Connection.knownConnections.thisserver.authUrls[0];
 
 Connection.knownConnections.testing = Connection.knownConnections.beta;
