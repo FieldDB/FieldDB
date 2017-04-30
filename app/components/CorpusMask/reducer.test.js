@@ -18,8 +18,7 @@ describe('Reducer::::CorpusMaskDetail', function () {
         }), action)
 
         expect(newState.toJS()).to.deep.equal({
-          key: 'val',
-          something: 'else'
+          key: 'val'
         })
       })
     })
