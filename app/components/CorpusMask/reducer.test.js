@@ -1,5 +1,6 @@
 import * as ActionType from './actions'
 import reducer from './reducer'
+import Immutable from 'immutable'
 
 describe('Reducer::::CorpusMaskDetail', function () {
   describe('on ACTION_TYPE', function () {
@@ -12,10 +13,13 @@ describe('Reducer::::CorpusMaskDetail', function () {
           }
         }
 
-        let newState = reducer(undefined, action)
+        let newState = reducer(Immutable.fromJS({
+          something: 'else',
+        }), action)
 
         expect(newState.toJS()).to.deep.equal({
-          key: 'val'
+          key: 'val',
+          something: 'else'
         })
       })
     })
