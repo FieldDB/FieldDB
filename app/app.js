@@ -28,3 +28,27 @@ ReactDOM.render((
     { createRoutes(browserHistory) }
   </Provider>
   ), document.getElementById('root'))
+
+
+if (FieldDB && FieldDB.FieldDBObject) {
+  FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
+    var deferred = FieldDB.Q.defer();
+    console.warn('not confirming', message);
+    deferred.reject({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: null
+      });
+    return deferred.promise;
+  };
+  FieldDB.FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
+    var deferred = FieldDB.Q.defer();
+    console.warn('not prompting', message);
+    deferred.reject({
+        message: message,
+        optionalLocale: optionalLocale,
+        response: null
+      });
+    return deferred.promise;
+  };
+}
