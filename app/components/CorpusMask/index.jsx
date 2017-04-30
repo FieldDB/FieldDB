@@ -44,7 +44,7 @@ class CorpusMaskContainer extends Component {
       defaultCorpus = new CorpusMask(CorpusMask.prototype.defaults)
     }
     let thisCorpusFields = new DatumFields(corpusMask.get('fields').toJS())
-    let fields = defaultCorpus.fields // new DatumFields(defaultCorpus.fields.clone())
+    let fields = defaultCorpus.fields.clone()
     fields.merge('self', thisCorpusFields, true)
 
     let date = new Date(corpusMask.get('dateModified') || corpusMask.get('dateCreated')).toJSON()
