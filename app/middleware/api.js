@@ -109,7 +109,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           return deferred.reject(res.body)
         }
 
-        debug('received response', res.body)
+        debug('received response')
         dispatch(actionWith(apiAction, {
           type: params.successType,
           response: res.body
