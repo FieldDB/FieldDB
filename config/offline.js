@@ -46,12 +46,18 @@ function requestSampleData(config) {
       if (options.url.includes('community-firstcorpus/corpus')) {
         return deferred.resolve(require('../test/fixtures/corpus/community-firstcorpus.json'));
       }
+      if (options.url.includes('teammatetiger-firstcorpus/corpus')) {
+        return deferred.resolve(require('../test/fixtures/corpus/teammatetiger-firstcorpus.json'));
+      }
 
       if (options.url.includes('/lingllama')) {
         return deferred.resolve(require('../test/fixtures/user/lingllama.json'));
       }
       if (options.url.includes('/community')) {
         return deferred.resolve(require('../test/fixtures/user/community.json'));
+      }
+      if (options.url.includes('/teammatetiger')) {
+        return deferred.resolve(require('../test/fixtures/user/teammatetiger.json'));
       }
 
       console.log('Not found Offline: ', options.url)

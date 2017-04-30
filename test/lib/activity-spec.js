@@ -1,7 +1,6 @@
 var config = require("config");
 var expect = require("chai").expect;
-var CORS = require("fielddb/api/CORSNode").CORS;
-var activityHeatMap = require("./../../routes/activity").activityHeatMap;
+var activityHeatMap = require("./../../lib/activity").activityHeatMap;
 var specIsRunningTooLong = 5000;
 var LINGLLAMA_ACTIVITY_SIZE = 48;
 var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 218;
@@ -14,7 +13,13 @@ if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 
-describe("activity routes", function() {
+if (process.env.OFFLINE) {
+  LINGLLAMA_ACTIVITY_SIZE = 14;
+  COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 14;
+  specIsRunningTooLong = 1000;
+}
+
+describe("activity lib", function() {
   this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
@@ -54,45 +59,6 @@ describe("activity routes", function() {
         expect(results).to.be.defined;
         expect(results.rows).to.be.defined;
         expect(results.rows.length).to.deep.equal(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
-      }).done(done);
-    });
-
-  });
-
-  describe("normal requests via service", function() {
-
-
-    it("should return heat map data from the sample activity feeds", function(done) {
-      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
-        return this.skip();
-      }
-      CORS.makeCORSRequest({
-        dataType: "json",
-        url: config.url + "/activity/lingllama-communitycorpus"
-      }).then(function(results) {
-        expect(results).to.be.defined;
-        expect(results.rows).to.be.defined;
-        expect(results.rows.length).to.deep.equal(LINGLLAMA_ACTIVITY_SIZE);
-      }).fail(function(exception) {
-        console.log(exception.stack);
-        expect(exception.stack).to.equal(undefined);
-      }).done(done);
-    });
-
-    it("should return heat map data from the community activity feeds", function(done) {
-      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
-        return this.skip();
-      }
-      CORS.makeCORSRequest({
-        dataType: "json",
-        url: config.url + "/activity/community-georgian"
-      }).then(function(results) {
-        expect(results).to.be.defined;
-        expect(results.rows).to.be.defined;
-        expect(results.rows.length).to.deep.equal(COMMUNITY_GEORGIAN_ACTIVITY_SIZE);
-      }).fail(function(exception) {
-        console.log(exception.stack);
-        expect(exception.stack).to.equal(undefined);
       }).done(done);
     });
 

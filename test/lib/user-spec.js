@@ -1,6 +1,6 @@
 var config = require("config");
 var expect = require("chai").expect;
-var getUserMask = require("./../../routes/user").getUserMask;
+var getUserMask = require("./../../lib/user").getUserMask;
 var specIsRunningTooLong = 25000;
 
 var acceptSelfSignedCertificates = {
@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === "production") {
   acceptSelfSignedCertificates = {};
 }
 
-describe("user routes", function() {
+describe("user lib", function() {
   this.timeout(specIsRunningTooLong);
 
   it("should load", function() {

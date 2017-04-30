@@ -74,7 +74,25 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
       .query(params.query)
       .end((err, res, body) => {
         if (err) {
-          debug('recieved err', res.body)
+          debug('received connection err', err)
+          if (params.errorType) {
+            debug('dispatching error', params.errorType)
+            dispatch(actionWith(apiAction, {
+              type: params.errorType,
+              error: err
+            }))
+          }
+
+          if (typeof params.afterError === 'function') {
+            params.afterError({
+              getState
+            })
+          }
+          return deferred.reject(err)
+        }
+
+        if (res.body && res.body.status && res.body.status >= 400) {
+          debug('received response which was error', res.body)
           if (params.errorType) {
             debug('dispatching error', params.errorType)
             dispatch(actionWith(apiAction, {
@@ -91,7 +109,7 @@ function createRequestPromise (apiActionCreator, next, getState, dispatch) {
           return deferred.reject(res.body)
         }
 
-        debug('recieved response', res.body)
+        debug('received response')
         dispatch(actionWith(apiAction, {
           type: params.successType,
           response: res.body

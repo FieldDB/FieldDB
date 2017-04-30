@@ -1,6 +1,29 @@
-import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { FieldDBObject } from 'fielddb/api/FieldDBObject'
 import Helmet from 'react-helmet'
+import Q from 'q'
+import React, { Component } from 'react'
+
+FieldDBObject.confirm = function (message, optionalLocale) {
+  const deferred = Q.defer()
+  console.warn('Not confirming: ', message)
+  deferred.reject({
+    message: message,
+    optionalLocale: optionalLocale,
+    response: null
+  })
+  return deferred.promise
+}
+FieldDBObject.prompt = function (message, optionalLocale, providedInput) {
+  const deferred = Q.defer()
+  console.warn('Not prompting: ', message)
+  deferred.reject({
+    message: message,
+    optionalLocale: optionalLocale,
+    response: null
+  })
+  return deferred.promise
+}
 
 class App extends Component {
   render () {

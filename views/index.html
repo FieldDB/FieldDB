@@ -30,8 +30,25 @@
     <div id="root" class="container-fluid" >
       {{{ html }}}
     </div>
-
     <script src="/components/fielddb/fielddb.js"></script>
+    <script>
+      window.fieldDBApp = new FieldDB.App({{{ app }}});
+      window.fieldDBApp.authentication = {
+        user: new FieldDB.User({
+          authenticated: false
+        })
+      };
+      window.fieldDBApp.contextualizer = new FieldDB.Contextualizer().loadDefaults();
+        // online: "{{ app.online }}",
+        // offlineCouchURL: "{{ app.offlineCouchURL }}",
+        // brand: "{{ app.brand }}",
+        // brandLowerCase: "{{ app.brandLowerCase }}",
+        // website: "{{ app.website }}",
+        // faq: "{{ app.faq }}",
+        // basePathname: window.location.origin + "/#", //might be necessary for apache
+        // basePathname: "/",
+      // });
+    </script>
     <script async="" src="//www.google-analytics.com/analytics.js"></script>
     <script src="/corpus-pages/js/jquery.js"></script>
     <script src="/corpus-pages/bootstrap/js/bootstrap.min.js"></script>

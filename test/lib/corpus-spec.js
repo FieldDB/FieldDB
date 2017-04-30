@@ -2,8 +2,8 @@ var config = require("config");
 var expect = require("chai").expect;
 var url = require("url");
 var UserMask = require("fielddb/api/user/UserMask").UserMask;
-var getCorpusMask = require("./../../routes/corpus").getCorpusMask;
-var getCorpusMaskFromTitleAsUrl = require("./../../routes/corpus").getCorpusMaskFromTitleAsUrl;
+var getCorpusMask = require("./../../lib/corpus").getCorpusMask;
+var getCorpusMaskFromTitleAsUrl = require("./../../lib/corpus").getCorpusMaskFromTitleAsUrl;
 var specIsRunningTooLong = 15000;
 
 var acceptSelfSignedCertificates = {
@@ -74,7 +74,7 @@ var SAMPLE_USER_MASK = new UserMask({
   api: "users"
 });
 
-describe("corpus routes", function() {
+describe("corpus lib", function() {
   this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
@@ -100,7 +100,7 @@ describe("corpus routes", function() {
         expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
         expect(mask.copyright).to.deep.equal("lingllama");
         expect(mask.fields.length).to.equal(4);
-        console.log(JSON.stringify(mask, null, 2));
+        // console.log(JSON.stringify(mask, null, 2));
         expect(mask.termsOfUse).to.be.defined;
         expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");
         // expect(mask.team.gravatar).to.deep.equal("948814f0b1bc8bebd701a9732ab3ebbd");

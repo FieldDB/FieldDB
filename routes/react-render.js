@@ -124,6 +124,7 @@ function reduxRender(req, res, next) {
         // styleSrc
         });
         res.render("index", {
+          app: JSON.stringify(config.app.public, null, 2),
           metaHeader,
           html,
           scriptSrcs,
@@ -141,6 +142,7 @@ function reduxRender(req, res, next) {
       unsubscribe()
     })
       .catch((err) => {
+        console.log('Error requesting data for redux render', err);
         Helmet.rewind()
         unsubscribe()
         next(err)

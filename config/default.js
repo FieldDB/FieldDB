@@ -1,3 +1,4 @@
+var Connection = require("fielddb/api/corpus/Connection").Connection;
 var fs = require("fs");
 var offline = process.env.OFFLINE;
 
@@ -5,8 +6,43 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
 }
 
+Connection.knownConnections.thisserver = Connection.knownConnections[process.env.NODE_ENV];
+if (process.env.NODE_ENV === "test" && !Connection.knownConnections.thisserver) {
+  Connection.knownConnections.thisserver = Connection.knownConnections["development"];
+}
+// Connection.knownConnections.thisserver.debugMode=true;
+// console.log("Connection.knownConnections.thisserver.corpusUrls", Connection.knownConnections.thisserver.corpusUrls);
+exports.externalOrigin = Connection.knownConnections.thisserver.authUrls[0];
+
+Connection.knownConnections.testing = Connection.knownConnections.beta;
+
+Connection.knownConnections.dyslexdisorth = Connection.knownConnections.thisserver.clone();
+Connection.knownConnections.dyslexdisorth.userFriendlyServerName = "DyslexDisorth";
+Connection.knownConnections.dyslexdisorth.brandLowerCase = "dyslexdisorth";
+Connection.knownConnections.dyslexdisorth.serverLabel = "dyslexdisorth";
+
+Connection.knownConnections.kartulispeechrecognition = Connection.knownConnections.thisserver.clone();
+Connection.knownConnections.kartulispeechrecognition.userFriendlyServerName = "http://batumi.github.io";
+Connection.knownConnections.kartulispeechrecognition.brandLowerCase = "kartulispeechrecognition";
+Connection.knownConnections.kartulispeechrecognition.serverLabel = "kartulispeechrecognition";
+
+Connection.knownConnections.learnx = Connection.knownConnections.thisserver.clone();
+Connection.knownConnections.learnx.userFriendlyServerName = "Learn X";
+Connection.knownConnections.learnx.brandLowerCase = "learnx";
+Connection.knownConnections.learnx.serverLabel = "learnx";
+
+Connection.knownConnections.georgiantogether = Connection.knownConnections.thisserver.clone();
+Connection.knownConnections.georgiantogether.userFriendlyServerName = "Learn X";
+Connection.knownConnections.georgiantogether.brandLowerCase = "georgiantogether";
+Connection.knownConnections.georgiantogether.serverLabel = "georgiantogether";
+
 var config = {
   offline: offline,
+  app: {
+    public: {
+      connection: Connection.knownConnections.thisserver
+    }
+  },
   // You can choose the port you want to server from
   // If you choose 80 or 443 you might be able to access the server
   // from the outside world.
