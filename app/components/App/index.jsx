@@ -4,26 +4,26 @@ import Helmet from 'react-helmet'
 import Q from 'q'
 import React, { Component } from 'react'
 
-FieldDBObject.confirm = function(message, optionalLocale) {
-  var deferred = Q.defer();
-  console.warn('Not confirming: ', message);
+FieldDBObject.confirm = function (message, optionalLocale) {
+  var deferred = Q.defer()
+  console.warn('Not confirming: ', message)
   deferred.reject({
     message: message,
     optionalLocale: optionalLocale,
     response: null
-  });
-  return deferred.promise;
-};
-FieldDBObject.prompt = function(message, optionalLocale, providedInput) {
-  var deferred = Q.defer();
-  console.warn('Not prompting: ', message);
+  })
+  return deferred.promise
+}
+FieldDBObject.prompt = function (message, optionalLocale, providedInput) {
+  var deferred = Q.defer()
+  console.warn('Not prompting: ', message)
   deferred.reject({
     message: message,
     optionalLocale: optionalLocale,
     response: null
-  });
-  return deferred.promise;
-};
+  })
+  return deferred.promise
+}
 
 class App extends Component {
   render () {

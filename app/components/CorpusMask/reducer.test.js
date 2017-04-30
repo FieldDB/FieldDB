@@ -14,7 +14,7 @@ describe('Reducer::::CorpusMaskDetail', function () {
         }
 
         let newState = reducer(Immutable.fromJS({
-          something: 'else',
+          something: 'else'
         }), action)
 
         expect(newState.toJS()).to.deep.equal({
