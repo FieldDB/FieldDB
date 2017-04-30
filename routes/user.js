@@ -7,19 +7,20 @@ var getUserMask = require("../lib/user").getUserMask;
 var router = express.Router();
 
 /**
- * Search a database
+ * Get public mask of a user
  * @param  {Request} req
  * @param  {Response} res
+ * @param  {function} next
  */
 function getUserPage(req, res, next) {
-  var html5Routes = req.params.username;
-  var pageNavs = ["tutorial", "people", "contact", "home"];
-  if (pageNavs.indexOf(html5Routes) > -1) {
-    res.redirect("/#/" + html5Routes);
+  var username = req.params.username;
+  var html5PageNavs = ["tutorial", "people", "contact", "home"];
+  if (html5PageNavs.indexOf(username) > -1) {
+    res.redirect("/#/" + username);
     return;
   }
 
-  getUserMask(req.params.username, next).then(function(userMask) {
+  getUserMask(username, next).then(function(userMask) {
     var user = userMask.toJSON();
     debug("User response", user);
     user.username = user.username || userMask.id;
