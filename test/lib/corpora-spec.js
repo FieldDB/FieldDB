@@ -2,7 +2,7 @@ var config = require("config");
 var expect = require("chai").expect;
 var getAllCorpora = require("./../../lib/corpora").getAllCorpora;
 var specIsRunningTooLong = 15000;
-var TOTAL_CORPORA_COUNT = 247;
+var TOTAL_CORPORA_COUNT = 235;
 
 if (process.env.OFFLINE) {
   TOTAL_CORPORA_COUNT = 2;
