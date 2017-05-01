@@ -19,6 +19,7 @@ describe('Container::CorpusMask', function () {
         dbname: 'something',
         teamname: 'someone'
       },
+      children: [], // To avoid rendering the Search component
       corpusMask: Immutable.fromJS({
         dbname: 222,
         title: 'the-corpusMask-title',

@@ -15,12 +15,18 @@ class CorpusMaskContainer extends Component {
   }
 
   render () {
+    const description = 'Every LingSync corpus can have a Public URL, a place where you can share your data or let visitors search the parts of your corpus which you would like to make public. By default, all corpora are private not searchable unless you are a member of the corpus.'
+
     return (
       <div>
-        <Helmet
-          title='Corpora page'
-      />
-        <h2>Corpora</h2>
+        <Helmet>
+          <title>LingSync.org Public URLs</title>
+          <meta
+            name='description'
+            content={description} />
+        </Helmet>
+        <h2>Public URLs</h2>
+        <p>{description}</p>
         <Corpora corpora={this.props.corpora} />
       </div>
     )

@@ -91,7 +91,7 @@ describe("corpus lib", function() {
 
       getCorpusMask("lingllama-communitycorpus", done).then(function(mask) {
         expect(mask).to.be.defined;
-        expect(mask._rev).to.deep.equal("39-7f5edbe84b9b74288218f4c108ffa5a1");
+        expect(mask._rev).to.deep.equal("40-baab7e31f8d24b12ea0cf2f827587720");
         expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
         expect(mask.dbname).to.deep.equal("lingllama-communitycorpus");
         expect(mask.url).to.not.contain(corpusConfig.auth);

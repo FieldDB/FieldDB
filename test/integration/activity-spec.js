@@ -52,7 +52,7 @@ describe("/v5", function() {
       }
 
       supertest(api)
-        .get("/api/activity/lingllama-communitycorpus")
+        .get("/api/activity/community-georgian")
         .expect("Content-Type", /application\/json; charset=utf-8/i)
         .expect(200)
         .end(function(err, res) {
