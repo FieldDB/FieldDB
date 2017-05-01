@@ -33,6 +33,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-react-hmre": "^1.0.1",
     "babel-register": "^6.5.1",
+    "bluebird": "2.10.0",
     "body-parser": "^1.13.3",
     "config": "^1.25.1",
     "consolidate": "^0.13.1",
