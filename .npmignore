@@ -12,10 +12,10 @@ manifest.json
 map_reduce_activities
 map_reduce_cleaning
 map_reduce_unused
-map_reduce_data
+# map_reduce_data
 map_reduce_export
 map_reduce_learnx
-map_reduce_lexicon
+# map_reduce_lexicon
 couchapp_minified
 couchapp_prototype
 
