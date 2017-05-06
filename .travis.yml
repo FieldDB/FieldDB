@@ -33,7 +33,6 @@ before_install:
   - npm install -g grunt-cli
   - npm install -g gulp
   - npm install -g bower
-  - npm install -g jasmine-node
   # - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
   - npm install d3@3.5.8
   - npm install jsdom@7.0.2

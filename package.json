@@ -70,16 +70,17 @@
     "grunt-jasmine-node-coverage": "^0.4.1",
     "grunt-jsdoc": "^1.0.0",
     "grunt-newer": "^1.1.1",
+    "jasmine": "^2.6.0",
     "mkdirp": "^0.5.1"
   },
   "main": "api/fielddb.js",
   "scripts": {
-    "test": "jasmine-node tests",
+    "test": "jasmine tests/**/**-spec.js",
     "lint": "grunt jshint",
     "lint:api": "jslint api/**/*.js",
     "lint:test": "jslint api/**/*.js",
     "build": "grunt",
-    "postinstall": "bower link || exit 0"
+    "optionalPostinstall": "bower link || exit 0"
   },
   "license": "Apache-2.0"
 }
