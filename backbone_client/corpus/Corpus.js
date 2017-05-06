@@ -18,6 +18,7 @@ define([
   "permission/Permissions",
   "datum/Session",
   "datum/Sessions",
+
   "user/Team",
   "user/User",
   "user/Users",
@@ -412,138 +413,93 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
-      // var defaultFields = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
-      // var fieldDBCorpus = new FieldDB.Corpus(originalModel);
+      var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+      var fieldDBCorpus = new FieldDB.Corpus(originalModel);
+
+      fieldDBCorpus.fields = fieldDBCorpus.fields || [];
+      defaultCorpus.fields.forEach(function(field) {
+        if (!fieldDBCorpus.fields[field.id.toLowerCase()]) {
+          fieldDBCorpus.fields.add(field);
+        }
+      });
+
+      fieldDBCorpus.datumFields = fieldDBCorpus.datumFields || [];
+      defaultCorpus.datumFields.forEach(function(field) {
+        if (!fieldDBCorpus.datumFields[field.id.toLowerCase()]) {
+          fieldDBCorpus.datumFields.add(field);
+        }
+      });
+
+      fieldDBCorpus.sessionFields = fieldDBCorpus.sessionFields || [];
+      defaultCorpus.sessionFields.forEach(function(field) {
+        if (!fieldDBCorpus.sessionFields[field.id.toLowerCase()]) {
+          fieldDBCorpus.sessionFields.add(field);
+        }
+      });
 
       var x;
-      originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
-      originalModel.dbname = originalModel.dbname || originalModel.pouchname;
-      originalModel.connection = originalModel.connection || originalModel.couchConnection;
-      originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
+      // originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
+      // originalModel.dbname = originalModel.dbname || originalModel.pouchname;
+      // originalModel.connection = originalModel.connection || originalModel.couchConnection;
+      // originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
       originalModel.corpusMask.corpusid = originalModel.corpusMask.corpusid || originalModel._id;
 
       /* clean the datum fields for search */
-      for (x in originalModel.datumFields) {
-        originalModel.datumFields[x].mask = "";
-        originalModel.datumFields[x].value = "";
-        originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
+      // for (x in originalModel.datumFields) {
+      //   originalModel.datumFields[x].mask = "";
+      //   originalModel.datumFields[x].value = "";
+      //   originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
 
-        if (originalModel.datumFields[x].users) {
-          delete originalModel.datumFields[x].users;
-        }
-        if (originalModel.datumFields[x].user) {
-          delete originalModel.datumFields[x].user;
-        }
-        if (originalModel.datumFields[x].json) {
-          originalModel.datumFields[x].json = {};
-        }
-      }
-      for (x in originalModel.sessionFields) {
-        originalModel.sessionFields[x].mask = "";
-        originalModel.sessionFields[x].value = "";
-        originalModel.sessionFields[x].label = originalModel.sessionFields[x].label || originalModel.sessionFields[x].id;
-      }
+      //   if (originalModel.datumFields[x].users) {
+      //     delete originalModel.datumFields[x].users;
+      //   }
+      //   if (originalModel.datumFields[x].user) {
+      //     delete originalModel.datumFields[x].user;
+      //   }
+      //   if (originalModel.datumFields[x].json) {
+      //     originalModel.datumFields[x].json = {};
+      //   }
+      // }
+      // for (x in originalModel.sessionFields) {
+      //   originalModel.sessionFields[x].mask = "";
+      //   originalModel.sessionFields[x].value = "";
+      //   originalModel.sessionFields[x].label = originalModel.sessionFields[x].label || originalModel.sessionFields[x].id;
+      // }
 
       /* Use the couch connection defined by this app. */
-      if (originalModel.connection) {
-        originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = FieldDB.Connection.defaultConnection();
-        normalizedConnection.dbname = originalModel.connection.dbname;
-        originalModel.connection.merge("self", normalizedConnection, "overwrite");
-        originalModel.connection = originalModel.connection.toJSON();
-      } else {
-        // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
-        originalModel.connection.corpusid = originalModel._id;
-        originalModel.connection.dbname = originalModel.dbname;
-      }
+      // if (originalModel.connection) {
+      //   originalModel.connection = new FieldDB.Connection(originalModel.connection);
+      //   var normalizedConnection = FieldDB.Connection.defaultConnection();
+      //   normalizedConnection.dbname = originalModel.connection.dbname;
+      //   originalModel.connection.merge("self", normalizedConnection, "overwrite");
+      //   originalModel.connection = originalModel.connection.toJSON();
+      // } else {
+      //   // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
+      //   originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
+      //   originalModel.connection.corpusid = originalModel._id;
+        fieldDBCorpus.connection.dbname = fieldDBCorpus.dbname;
+      // }
 
       // some versions of the FieldDB common js in the spreadsheet removed the confidential?
       if (!originalModel.confidential) {
-        originalModel.confidential = {
+        fieldDBCorpus.confidential = {
           secretkey: new Confidential().secretKeyGenerator(),
           repairedTimestamp: Date.now()
         };
       }
-      originalModel.team = originalModel.team || {};
-      originalModel.team._id = originalModel.team.id = "team";
-      originalModel.team.username = originalModel.dbname.split("-")[0]
-      if (window.app && window.app.get("authentication").get("userPrivate").get("username") === originalModel.team.username) {
-        originalModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
-      }
-
-      /* Update the corpus to show all fields which are defaults on corpora,
-      they are only added permanently if saved. */
-      var tempCorpus = new Corpus();
-      tempCorpus.fillWithDefaults();
-
-      var datumFields = tempCorpus.get("datumFields").toJSON();
-      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
-
-      for (var field in datumFields) {
-        if (originalFieldLabels.indexOf(datumFields[field].label) === -1) {
-          OPrime.debug("Adding datum field to this corpus: " + datumFields[field].label);
-          originalModel.datumFields.push(datumFields[field]);
-        }
-      }
-
-      var sessionFields = tempCorpus.get("sessionFields").toJSON();
-      var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
-
-      for (var field in sessionFields) {
-        if (originalFieldLabels.indexOf(sessionFields[field].label) === -1) {
-          OPrime.debug("Adding session field to this corpus: " + sessionFields[field].label);
-          originalModel.sessionFields.push(sessionFields[field]);
-        }
-      }
-
-      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
-      if (!originalModel.copyright) {
-        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
-      }
-      var defaultLicense = {
-        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-        link: "http://creativecommons.org/licenses/by-sa/3.0/"
-      };
-      if (!originalModel.license) {
-        originalModel.license = defaultLicense;
-      }
-      var licenseUpdated = originalModel.license;
-      if (typeof licenseUpdated == "string") {
-        licenseUpdated = {};
-      }
-      if (!licenseUpdated.title) {
-        licenseUpdated.title = defaultLicense.title;
-        originalModel.license = licenseUpdated;
-      }
-      if (!licenseUpdated.humanReadable) {
-        licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        originalModel.license = licenseUpdated;
-      }
-      if (!licenseUpdated.link) {
-        licenseUpdated.link = defaultLicense.link;
-        originalModel.license = licenseUpdated;
-      }
-      var defaultTerms = {
-        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      };
-      var termsUpdated = originalModel.termsOfUse || originalModel.terms;
-      if (!termsUpdated || typeof termsUpdated == "string") {
-        termsUpdated = defaultTerms;
-        originalModel.termsOfUse = defaultTerms;
-      }
-      /* upgrade to v1.99 using termsOfUse not terms */
-      if (originalModel.terms) {
-        delete originalModel.terms;
-      }
+      // fieldDBCorpus.team = fieldDBCorpus.team || {};
+      // fieldDBCorpus.team._id = fieldDBCorpus.team.id = "team";
+      // fieldDBCorpus.team.username = fieldDBCorpus.dbname.split("-")[0]
+      // if (window.app && window.app.get("authentication").get("userPrivate").get("username") === fieldDBCorpus.team.username) {
+      //   fieldDBCorpus.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
+      // }
 
       // Use a paralel corpus in the FieldDB application
       if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(JSON.parse(JSON.stringify(originalModel)));
+        FieldDB.FieldDBObject.application.corpus = fieldDBCorpus;
       }
 
-      return this.originalParse(originalModel);
+      return this.originalParse(fieldDBCorpus.toJSON());
     },
 
     /**

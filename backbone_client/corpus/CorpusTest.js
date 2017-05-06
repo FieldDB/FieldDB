@@ -11,7 +11,7 @@ define([
     var data = window.sampleData;
 
     describe("Corpus", function() {
-      describe("parsing", function(){
+      describe("parsing", function() {
         it("should not parse backbone couch responses", function() {
           var couchResponse = {
             "_id": "5f36008e38b55e13b28fe2a3caf8ac52",
@@ -35,8 +35,12 @@ define([
           var json = JSON.parse(JSON.stringify(result));
           expected.version = json.version;
           for (var attrib in json) {
-            if (!json.hasOwnProperty(attrib)){
+            if (!json.hasOwnProperty(attrib)) {
               continue;
+            }
+            if (json[attrib].fieldDBtype === "Confidential") {
+              // was missing dateCreated so it will set to today
+              delete json[attrib].dateCreated;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }
@@ -50,8 +54,14 @@ define([
           var json = JSON.parse(JSON.stringify(result));
           expected.version = json.version;
           for (var attrib in json) {
-            if (!json.hasOwnProperty(attrib)){
+            if (!json.hasOwnProperty(attrib)) {
               continue;
+            }
+            if (json[attrib].fieldDBtype === "Confidential") {
+              // was missing dateCreated so it will set to today
+              delete json[attrib].dateCreated;
+              // was missing dateCreated so it will set to this version
+              delete json[attrib].version;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }
@@ -65,9 +75,12 @@ define([
           var json = JSON.parse(JSON.stringify(result));
           expected.version = json.version;
           for (var attrib in json) {
-            if (!json.hasOwnProperty(attrib)){
+            if (!json.hasOwnProperty(attrib)) {
               continue;
             }
+            // if (json[attrib].dateCreated === now) {
+            //   continue;
+            // }
             expect(json[attrib]).toEqual(expected[attrib]);
           }
         });
@@ -80,8 +93,18 @@ define([
           var json = JSON.parse(JSON.stringify(result));
           expected.version = json.version;
           for (var attrib in json) {
-            if (!json.hasOwnProperty(attrib)){
+            if (!json.hasOwnProperty(attrib)) {
               continue;
+            }
+            if (attrib === 'dateCreated') {
+              // was missing dateCreated so it will set to today
+              continue;
+            }
+            if (json[attrib].fieldDBtype === "Confidential") {
+              // was missing dateCreated so it will set to today
+              delete json[attrib].dateCreated;
+              // was missing dateCreated so it will set to this version
+              delete json[attrib].version;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }

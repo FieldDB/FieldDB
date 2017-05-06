@@ -876,8 +876,7 @@
   },
   "confidential": {
     "secretkey": "e1400e66-246a-bf05-077f-0b986b3b14f6"
-  },
-  "sessionFields": []
+  }
 }, {
   "_id": "abc-fc01-4015-a71d-9f47075df364",
   "_rev": "17-cbd9e9ed236b5cad37f85b8c3407060d",
