@@ -57,6 +57,21 @@ define([
           }
         });
 
+        it("should parse version 4 corpora", function() {
+          var version4 = data["corpus_v1.22.1"][3];
+          var expected = data["corpus_v1.22.1_expected"][3]
+          var corpus = new Corpus();
+          var result = corpus.parse(version4);
+          var json = JSON.parse(JSON.stringify(result));
+          expected.version = json.version;
+          for (var attrib in json) {
+            if (!json.hasOwnProperty(attrib)){
+              continue;
+            }
+            expect(json[attrib]).toEqual(expected[attrib]);
+          }
+        });
+
         it("should parse minimal corpora", function() {
           var minimal = data["corpus_v1.22.1"][2];
           var expected = data["corpus_v1.22.1_expected"][2]
