@@ -10,19 +10,25 @@
     "showInSearchResults": "checked",
     "selected": "selected",
     "state": "Checked",
-    "consultant": {}
+    "consultant": {
+      "gravatar": "0df69960706112e38332395a4f2e7542"
+    }
   }, {
     "color": "warning",
     "showInSearchResults": "checked",
     "selected": "",
     "state": "To be checked",
-    "consultant": {}
+    "consultant": {
+      "gravatar": "0df69960706112e38332395a4f2e7542"
+    }
   }, {
     "color": "important",
     "showInSearchResults": "",
     "selected": "",
     "state": "Deleted",
-    "consultant": {}
+    "consultant": {
+      "gravatar": "0df69960706112e38332395a4f2e7542"
+    }
   }],
   "datumFields": [{
     "label": "judgement",
@@ -43,16 +49,16 @@
     "userchooseable": "disabled"
   }, {
     "label": "morphemes",
-    "value": "nay",
-    "mask": "nay",
+    "value": "",
+    "mask": "",
     "encrypted": "",
     "shouldBeEncrypted": "checked",
     "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
     "userchooseable": "disabled"
   }, {
     "label": "gloss",
-    "value": "des",
-    "mask": "des",
+    "value": "",
+    "mask": "",
     "encrypted": "",
     "shouldBeEncrypted": "checked",
     "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
@@ -83,8 +89,8 @@
     "userchooseable": ""
   }, {
     "label": "checkedWithConsultant",
-    "value": "lucia",
-    "mask": "lucia",
+    "value": "",
+    "mask": "",
     "encrypted": "",
     "shouldBeEncrypted": "checked",
     "help": "This field came from file import ",
@@ -97,6 +103,64 @@
     "shouldBeEncrypted": "checked",
     "help": "This field came from file import ",
     "userchooseable": ""
+  }, {
+    "label": "syntacticCategory",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "syntacticTreeLatex",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: Tree [.S NP VP ]",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "tags",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "validationStatus",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "enteredByUser",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "json": {},
+    "userchooseable": "disabled",
+    "help": "The user who originally entered the datum",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "modifiedByUser",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "json": {},
+    "userchooseable": "disabled",
+    "help": "An array of users who modified the datum",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
   }],
   "sessionFields": [{
     "label": "goal",
@@ -108,8 +172,8 @@
     "userchooseable": "disabled"
   }, {
     "label": "consultants",
-    "value": "Ricardo",
-    "mask": "Ricardo",
+    "value": "",
+    "mask": "",
     "encrypted": "",
     "shouldBeEncrypted": "",
     "help": "Example from DataOne: Format conventions: use uppercase ,Codes for missing values: unknown",
@@ -154,40 +218,102 @@
     "shouldBeEncrypted": "",
     "help": "This is the date in which the session was entered.",
     "userchooseable": "disabled"
+  }, {
+    "label": "source",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the speakers who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the source if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "participants",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "DateSessionEntered",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
   }],
   "searchFields": [],
-  "couchConnection": {
-    "protocol": "https://",
-    "domain": "ifielddevs.iriscouch.com",
-    "port": "443",
-    "pouchname": "sapir-firstcorpus",
-    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1"
-  },
-  "pouchname": "sapir-firstcorpus",
   "confidential": {
     "secretkey": "aaa"
   },
-  "publicSelf": {},
+  "publicSelf": {
+    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1"
+  },
   "publicCorpus": "Private",
   "comments": [],
   "dataLists": [],
   "sessions": [],
-  "team": {},
-  "dateOfLastDatumModifiedToCheckForOldSession": "\"2012-09-26T14:20:14.130Z\""
+  "team": {
+    "id": "team",
+    "_id": "team",
+    "username": "sapir",
+    "gravatar": "0df69960706112e38332395a4f2e7542"
+  },
+  "dateOfLastDatumModifiedToCheckForOldSession": "\"2012-09-26T14:20:14.130Z\"",
+  "dbname": "sapir-firstcorpus",
+  "connection": {
+    "fieldDBtype": "Connection",
+    "protocol": "https://",
+    "domain": "corpus.lingsync.org",
+    "port": "443",
+    "dbname": "sapir-firstcorpus",
+    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
+    "path": "",
+    "serverLabel": "production",
+    "brandLowerCase": "lingsync",
+    "authUrls": [
+      "https://auth.lingsync.org"
+    ],
+    "websiteUrls": [
+      "http://lingsync.org"
+    ],
+    "corpusUrls": [
+      "https://corpus.lingsync.org/sapir-firstcorpus"
+    ],
+    "userFriendlyServerName": "LingSync.org",
+    "version": "v5.0.24",
+    "clientUrls": [],
+    "lexiconUrls": [],
+    "searchUrls": [],
+    "audioUrls": [],
+    "activityUrls": [],
+    "title": "firstcorpus",
+    "titleAsUrl": "firstcorpus",
+    "pouchname": "sapir-firstcorpus",
+    "website": "http://lingsync.org"
+  },
+  "corpusMask": {
+    "corpusid": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
+    "title": "Private Corpus",
+    "titleAsUrl": "private_corpus",
+    "description": "The details of this corpus are not public.",
+    "id": "corpus"
+  },
+  "copyright": "Default: Add names of the copyright holders of the corpus.",
+  "license": {
+    "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+    "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+    "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "termsOfUse": {
+    "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+  }
 }, {
   "_id": "723a8b707e579087aa36c2e33865ebef",
   "_rev": "65-683c881ec8e102fb9cd16f58f43372c5",
-  "pouchname": "lingllama-georgian",
-  "couchConnection": {
-    "protocol": "https://",
-    "domain": "corpus.example.org",
-    "port": "443",
-    "pouchname": "lingllama-georgian",
-    "path": "",
-    "authUrl": "https://auth.example.org",
-    "userFriendlyServerName": "Example.org",
-    "corpusid": "723a8b707e579087aa36c2e33865ebef"
-  },
   "title": "Georgian",
   "titleAsUrl": "georgian",
   "description": "Fieldwork in Batumi Georgia 2014\n\nReferences/Tools:\n\n * Georgian transliterator (but just installing the keyboard seems to work well for typing in Georgian) http://ge.translit.cc/\n * Georgian romanization standards (including ipa) http://en.wikipedia.org/wiki/Romanization_of_Georgian\n * Georgian phrases with audio http://ggdavid.tripod.com/georgia/language/gphrases.htm\n * Georgian Phrases http://www.omniglot.com/language/phrases/georgian.php\n * Georgian Phrases http://mylanguages.org/georgian_phrases.php\n * Phrases and some discussion of pronunciation http://wikitravel.org/en/Georgian_phrasebook\n * http://www.inyourpocket.com/Georgia/Batumi\n * https://www.facebook.com/groups/Georgianwanderers/\n * http://omnestour.ge/travel-info/useful-georgian-phrases\n * Phrases with rather natural audio: http://ilanguages.org/georgian_phrases.php\n * Georgian news: http://www.reportiori.ge/?menuid=1&lang=1\n * Georgian OCR site (have to register but it works after that) http://www.targmne.com/OCR\n * Georgian Classifieds http://gancxadebebi.ge/\n * Georgian Alphabet Practice | Alphabet Training http://alphabettraining.com/mkhedruli-practice",
@@ -308,7 +434,6 @@
     "help": "The user who orilingllamally entered the datum",
     "showToUserTypes": "all",
     "readonly": true,
-    "user": {},
     "userchooseable": "disabled"
   }, {
     "label": "modifiedByUser",
@@ -319,7 +444,6 @@
     "help": "An array of users who modified the datum",
     "showToUserTypes": "all",
     "readonly": true,
-    "users": [],
     "userchooseable": "disabled"
   }, {
     "label": "orthography",
@@ -432,6 +556,32 @@
     "shouldBeEncrypted": "",
     "help": "This is the date in which the session was entered.",
     "userchooseable": "disabled"
+  }, {
+    "label": "source",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the speakers who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the source if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "participants",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "DateSessionEntered",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
   }],
   "searchFields": [],
   "confidential": {
@@ -527,7 +677,6 @@
       "userchooseable": "disabled"
     }],
     "comments": [],
-    "pouchname": "lingllama-georgian",
     "_id": "corpus",
     "_rev": "64-c6aefb66c8591a1efeb58e4a442145c7",
     "corpusid": "723a8b707e579087aa36c2e33865ebef",
@@ -541,7 +690,8 @@
       "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
       "link": "http://creativecommons.org/licenses/by-sa/3.0/"
     },
-    "copyright": "Default: Add names of the copyright holders of the corpus."
+    "copyright": "Default: Add names of the copyright holders of the corpus.",
+    "dbname": "lingllama-georgian"
   },
   "publicCorpus": "Private",
   "comments": [],
@@ -842,8 +992,8 @@
     "gravatar": "888888we8888888888888",
     "username": "lingllama",
     "authUrl": "https://auth.example.org",
-    "id": "lingllama",
-    "_id": "lingllama",
+    "id": "team",
+    "_id": "team",
     "_rev": "52-73c4b8f1650221dde94ee7f5e722081f",
     "collection": "users",
     "firstname": "",
@@ -852,7 +1002,7 @@
     "researchInterest": " \n      ",
     "affiliation": " \n      ",
     "description": " \n      ",
-    "pouchname": "lingllama-georgian"
+    "dbname": "lingllama-georgian"
   },
   "dateOfLastDatumModifiedToCheckForOldSession": "\"2014-11-18T01:09:37.793Z\"",
   "copyright": "Default: Add names of the copyright holders of the corpus.",
@@ -866,7 +1016,146 @@
   },
   "timestamp": 1423377513263,
   "collection": "private_corpuses",
-  "searchKeywords": "lingllama"
+  "searchKeywords": "lingllama",
+  "dbname": "lingllama-georgian",
+  "connection": {
+    "fieldDBtype": "Connection",
+    "protocol": "https://",
+    "domain": "corpus.lingsync.org",
+    "port": "443",
+    "dbname": "lingllama-georgian",
+    "path": "",
+    "authUrls": [
+      "https://auth.example.org",
+      "https://auth.lingsync.org"
+    ],
+    "userFriendlyServerName": "LingSync.org",
+    "corpusid": "723a8b707e579087aa36c2e33865ebef",
+    "serverLabel": "production",
+    "brandLowerCase": "lingsync",
+    "websiteUrls": [
+      "http://lingsync.org"
+    ],
+    "corpusUrls": [
+      "https://corpus.lingsync.org/lingllama-georgian"
+    ],
+    "version": "v5.0.24",
+    "clientUrls": [],
+    "lexiconUrls": [],
+    "searchUrls": [],
+    "audioUrls": [],
+    "activityUrls": [],
+    "title": "georgian",
+    "titleAsUrl": "georgian",
+    "pouchname": "lingllama-georgian",
+    "website": "http://lingsync.org"
+  },
+  "corpusMask": {
+    "title": "Private Corpus",
+    "titleAsUrl": "private_corpus",
+    "description": "The details of this corpus are not public.",
+    "id": "corpus",
+    "datumStates": [],
+    "datumFields": [{
+      "label": "judgement",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Use this field to establish your team's gramaticality/acceptablity judgements (*,#,? etc)",
+      "size": "3",
+      "userchooseable": "disabled"
+    }, {
+      "label": "utterance",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "Use this as Line 1 in your examples for handouts (ie, either Orthography, or phonemic/phonetic representation)",
+      "userchooseable": "disabled"
+    }, {
+      "label": "morphemes",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "This line is used to determine the morpheme segmentation to generate glosses, it also optionally can show up in your LaTeXed examples if you choose to show morpheme segmentation in addtion ot line 1, gloss and translation.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "gloss",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "This line appears in the gloss line of your LaTeXed examples, we reccomend Leipzig conventions (. for fusional morphemes, - for morpehem boundaries etc) The system uses this line to partially help you in glossing. ",
+      "userchooseable": "disabled"
+    }, {
+      "label": "translation",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "checked",
+      "help": "Use this as your primary translation. It does not need to be English, simply a language your team is comfortable with. If your consultant often gives you multiple languages for translation you can also add addtional translations in the customized fields. For example, your Quechua informants use Spanish for translations, then you can make all Translations in Spanish, and add an additional field for English if you want to generate a handout containing the datum. ",
+      "userchooseable": "disabled"
+    }],
+    "sessionFields": [{
+      "label": "dialect",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "You can use this field to be as precise as you would like about the dialect of this session.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "language",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the langauge (or language family) if you would like to use it.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateElicited",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session took place.",
+      "userchooseable": "disabled"
+    }, {
+      "label": "user",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "Put your team's data entry conventions here (if any)...",
+      "userchooseable": "disabled"
+    }, {
+      "label": "dateSEntered",
+      "value": "",
+      "mask": "",
+      "encrypted": "",
+      "shouldBeEncrypted": "",
+      "help": "This is the date in which the session was entered.",
+      "userchooseable": "disabled"
+    }],
+    "comments": [],
+    "_id": "corpus",
+    "_rev": "64-c6aefb66c8591a1efeb58e4a442145c7",
+    "corpusid": "723a8b707e579087aa36c2e33865ebef",
+    "timestamp": 1423377014003,
+    "collection": "corpuses",
+    "termsOfUse": {
+      "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+    },
+    "license": {
+      "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+      "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+      "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    "copyright": "Default: Add names of the copyright holders of the corpus.",
+    "dbname": "lingllama-georgian"
+  }
 }, {
   "title": "Minimal",
   "description": "A testing corpus",
@@ -874,8 +1163,238 @@
   "publicSelf": {
     "title": "Private"
   },
+  "sessionFields": [{
+    "label": "goal",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The goals of the elicitation session. Why did you get together today, was it the second day of field methods class, or you wanted to collect some stories from you grandmother, or was it to check on some data you found in the literature...",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "source",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the speakers who were present for this elicitation session. This field also contains a (hidden) array of consultant masks with more details about the source if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "dialect",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The dialect of this session (as precise as you'd like).",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "language",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The language (or language family), if desired.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "dateElicited",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The date when the elicitation session took place.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "user",
+    "shouldBeEncrypted": "",
+    "help": "This is the username of who created this elicitation session. There are other fields contains an array of participants and source. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "participants",
+    "shouldBeEncrypted": "",
+    "userMasks": [],
+    "help": "This is a comma seperated field of all the people who were present for this elicitation session. This field also contains a (hidden) array of user masks with more details about the people present, if they are not anonymous or are actual users of the system. ",
+    "userchooseable": "disabled",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "dateSEntered",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "This field is deprecated, it was replaced by DateSessionEntered.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "DateSessionEntered",
+    "shouldBeEncrypted": "",
+    "userchooseable": "disabled",
+    "help": "The date when the elicitation session data was actually entered in the computer (could be different from the dateElicited, especailly if you usually elicit data with an audio recorder and/or a note book).",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }],
+  "datumFields": [{
+    "label": "judgement",
+    "size": "3",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "Grammaticality/acceptability judgement (*,#,?, etc). Leaving it blank can mean grammatical/acceptable, or you can choose a new symbol for this meaning.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "utterance",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Unparsed utterance in the language, in orthography or transcription. Line 1 in your LaTeXed examples for handouts. Sample entry: amigas",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "morphemes",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "Morpheme-segmented utterance in the language. Used by the system to help generate glosses (below). Can optionally appear below (or instead of) the first line in your LaTeXed examples. Sample entry: amig-a-s",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "gloss",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "Metalanguage glosses of each individual morpheme (above). Used by the system to help gloss, in combination with morphemes (above). It is Line 2 in your LaTeXed examples. We recommend Leipzig conventions (. for fusional morphemes, - for morpheme boundaries etc)  Sample entry: friend-fem-pl",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "syntacticCategory",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "This optional field is used by the machine to help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of syntactic category tagging you wish. It could be very theoretical like Distributed Morphology (Sample entry: √-GEN-NUM), or very a-theroretical like the Penn Tree Bank Tag Set. (Sample entry: NNS) http://www.ims.uni-stuttgart.de/projekte/CorpusWorkbench/CQP-HTMLDemo/PennTreebankTS.html",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "syntacticTreeLatex",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "linguist",
+    "userchooseable": "disabled",
+    "help": "This optional field is used by the machine to make LaTeX trees and help with search and data cleaning, in combination with morphemes and gloss (above). If you want to use it, you can choose to use any sort of LaTeX Tree package (we use QTree by default) Sample entry: Tree [.S NP VP ]",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "translation",
+    "shouldBeEncrypted": "checked",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Free translation into whichever language your team is comfortable with (e.g. English, Spanish, etc). You can also add additional custom fields for one or more additional translation languages and choose which of those you want to export with the data each time. Line 3 in your LaTeXed examples. Sample entry: (female) friends",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "tags",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Tags for constructions or other info that you might want to use to categorize your data.",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "validationStatus",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "userchooseable": "disabled",
+    "help": "Any number of tags of data validity (replaces DatumStates). For example: ToBeCheckedWithSeberina, CheckedWithRicardo, Deleted etc...",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "enteredByUser",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "json": {},
+    "userchooseable": "disabled",
+    "help": "The user who originally entered the datum",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }, {
+    "label": "modifiedByUser",
+    "shouldBeEncrypted": "",
+    "showToUserTypes": "all",
+    "readonly": true,
+    "json": {},
+    "userchooseable": "disabled",
+    "help": "An array of users who modified the datum",
+    "value": "",
+    "mask": "",
+    "encrypted": ""
+  }],
+  "connection": {
+    "fieldDBtype": "Connection",
+    "protocol": "https://",
+    "domain": "corpus.lingsync.org",
+    "port": "443",
+    "path": "",
+    "serverLabel": "production",
+    "brandLowerCase": "lingsync",
+    "authUrls": [
+      "https://auth.lingsync.org"
+    ],
+    "websiteUrls": [
+      "http://lingsync.org"
+    ],
+    "corpusUrls": [
+      "https://corpus.lingsync.org"
+    ],
+    "userFriendlyServerName": "LingSync.org",
+    "version": "v5.0.24",
+    "clientUrls": [],
+    "lexiconUrls": [],
+    "searchUrls": [],
+    "audioUrls": [],
+    "activityUrls": [],
+    "dbname": "lingllama-minimal",
+    "pouchname": "",
+    "title": "",
+    "titleAsUrl": "",
+    "website": "http://lingsync.org"
+  },
+  "corpusMask": {
+    "title": "Private",
+    "titleAsUrl": "private",
+    "description": "The details of this corpus are not public.",
+    "id": "corpus"
+  },
   "confidential": {
     "secretkey": "e1400e66-246a-bf05-077f-0b986b3b14f6"
   },
-  "sessionFields": []
+  "team": {
+    "id": "team",
+    "_id": "team",
+    "username": "lingllama",
+    "gravatar": "0df69960706112e38332395a4f2e7542"
+  },
+  "copyright": "Default: Add names of the copyright holders of the corpus.",
+  "license": {
+    "title": "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
+    "humanReadable": "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
+    "link": "http://creativecommons.org/licenses/by-sa/3.0/"
+  },
+  "termsOfUse": {
+    "humanReadable": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
+  }
 }]

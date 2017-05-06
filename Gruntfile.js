@@ -16,6 +16,14 @@ module.exports = function(grunt) {
 
     // Task configuration.
     browserify: {
+      data: {
+        src: ["sample_data/index.js"],
+        dest: "backbone_client/data.js",
+        options: {
+          // ignore: ["fs"],
+          basedir: "./"
+        }
+      },
       src: {
         src: ["api/fielddb.js"],
         dest: "<%= pkg.name %>.js",

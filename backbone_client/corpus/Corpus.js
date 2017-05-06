@@ -412,6 +412,9 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
+      // var defaultFields = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+      // var fieldDBCorpus = new FieldDB.Corpus(originalModel);
+
       var x;
       originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
       originalModel.dbname = originalModel.dbname || originalModel.pouchname;
@@ -465,7 +468,7 @@ define([
       originalModel.team = originalModel.team || {};
       originalModel.team._id = originalModel.team.id = "team";
       originalModel.team.username = originalModel.dbname.split("-")[0]
-      if (window.app.get("authentication").get("userPrivate").get("username") === originalModel.team.username) {
+      if (window.app && window.app.get("authentication").get("userPrivate").get("username") === originalModel.team.username) {
         originalModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
       }
 
