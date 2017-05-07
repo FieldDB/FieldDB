@@ -244,6 +244,7 @@ define([
 
       var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
       jsonToRender.fields = this.model.get("fields").toJSON();
+      jsonToRender.license = jsonToRender.fields.rights.json.license || {};
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
@@ -567,9 +568,11 @@ define([
     },
     updateLicense: function() {
       var license = {
-        title: this.$el.find(".corpus-license-title-input").val(),
-        link: this.$el.find(".corpus-license-link-input").val(),
-        humanReadable: this.$el.find(".corpus-license-humanreadable-input").val()
+        license: {
+          title: this.$el.find(".corpus-license-title-input").val(),
+          link: this.$el.find(".corpus-license-link-input").val(),
+          humanReadable: this.$el.find(".corpus-license-humanreadable-input").val()
+        }
       };
       this.model.set("license", license);
       if (this.model.id) {
@@ -577,9 +580,7 @@ define([
       }
     },
     updateTermsOfUse: function() {
-      var terms = {
-        humanReadable: this.$el.find(".corpus-terms-input").val()
-      };
+      var terms = this.$el.find(".corpus-terms-input").val();
       this.model.set("termsOfUse", terms);
       if (this.model.id) {
         window.appView.addUnsavedDoc(this.model.id);

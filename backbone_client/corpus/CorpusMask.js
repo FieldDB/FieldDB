@@ -177,6 +177,21 @@ define([
     loadPermissions: function() {
       //TODO decide if we need this method in a corpus mask
     },
+
+    get: function(key) {
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          return field.get("mask");
+        }
+      }
+      return Backbone.Model.prototype.get.apply(this, arguments);
+    },
+    
     /**
      * this resets the titleAsUrl to match the title, this means if the usr changes the title, their corpu has high chances of not being unique.
      *
@@ -187,6 +202,18 @@ define([
      */
     set: function(key, value, options) {
       var attributes;
+
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          delete this.attributes[key];
+          return field.set("mask", value);
+        }
+      }
 
       // Handle both `"key", value` and `{key: value}` -style arguments.
       if (_.isObject(key) || key == null) {

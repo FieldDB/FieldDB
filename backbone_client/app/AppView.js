@@ -652,7 +652,7 @@ define([
        * data in
        */
       if (this.model && this.model.get("corpus") && this.model.get("corpus").get("fields")){
-        jsonToRender.corpustitle = this.model.get("corpus").get("fields").where({id: "title"})[0].get("mask");
+        jsonToRender.corpustitle = this.model.get("corpus").get("title");
         if (jsonToRender.corpustitle.length > 20) {
           jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0, 19) + "...";
         }

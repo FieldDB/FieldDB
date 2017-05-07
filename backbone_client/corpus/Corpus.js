@@ -171,24 +171,26 @@ define([
     },
     fetchPublicSelf: function() {
       try {
-        var corpusself = this;
         if (!this.get("corpusMask")) {
           this.set("corpusMask", new CorpusMask());
         }
-        this.get("corpusMask").set("id", "corpus");
-        this.get("corpusMask").fetch({
+        var corpusMaskSelf = this.get("corpusMask");
+        var self = this;
+
+        corpusMaskSelf.id = "corpus";
+        corpusMaskSelf.fetch({
           sucess: function(model, response, options) {
             if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
           },
           error: function(model, xhr, options) {
             if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            corpusself.get("corpusMask").fillWithDefaults();
-            corpusself.get("corpusMask").set("connection", corpusself.get("connection"));
-            corpusself.get("corpusMask").set("dbname", corpusself.get("dbname"));
+            corpusMaskSelf.fillWithDefaults();
+            corpusMaskSelf.set("connection", self.get("connection"));
+            corpusMaskSelf.set("dbname", self.get("dbname"));
           }
         });
       } catch (e) {
-        OPrime.bug("");
+        console.warn("There was a problem fetching the public corpus mask.", e);
       }
     },
     fillWithDefaults: function(donefillingcallback) {
@@ -935,6 +937,14 @@ define([
 
       this.set("timestamp", Date.now());
 
+      // Save the fields to the public corpus
+      var corpusMaskModel = self.get("corpusMask");
+      corpusMaskModel.set("fields", self.get("fields").clone());
+      if (self.get("publicCorpus") === "Private") {
+        corpusMaskModel.set("title", "Private Corpus");
+        corpusMaskModel.set("description", "The details of this corpus are not public.");
+      }
+
       self.save(null, {
         success: function(model, response) {
           if (OPrime.debugMode) OPrime.debug('Corpus save success');
@@ -946,9 +956,8 @@ define([
           //              differences = "";
           //            }
           //save the corpus mask too
-          var corpusMaskMode = model.get("corpusMask");
-          corpusMaskMode.set("corpusid", model.id);
-          corpusMaskMode.saveAndInterConnectInApp();
+          corpusMaskModel.set("corpusid", model.id);
+          corpusMaskModel.saveAndInterConnectInApp();
 
           if (window.appView) {
             window.appView.toastUser("Sucessfully saved corpus: " + title, "alert-success", "Saved!");
@@ -1386,8 +1395,48 @@ define([
         }
       }
     },
+
+    get: function(key) {
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          return field.get("mask");
+        }
+      }
+      return Backbone.Model.prototype.get.apply(this, arguments);
+    },
+
     set: function(key, value, options) {
       var attributes;
+
+      var json = false;
+      if (key === "termsOfUse"){
+        key = "rights";
+      } else if (key === "license"){
+        key = "rights";
+        json = true;
+      } else if (key === "copyright") {
+        key = "rightsHolder";
+      }
+
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          delete this.attributes[key];
+          if (json) {
+            return field.set("json", value);
+          }
+          return field.set("mask", value);
+        }
+      }
 
       // Handle both `"key", value` and `{key: value}` -style arguments.
       if (_.isObject(key) || key == null) {
@@ -1405,6 +1454,7 @@ define([
       }
       return Backbone.Model.prototype.set.call(this, attributes, options);
     },
+
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus in case there is a master corpus with
