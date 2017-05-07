@@ -70,7 +70,7 @@
 <a class="explain_terms_of_use" data-html="true" rel="popover" data-placement="right" data-content="{{{locale_Terms_explanation}}}"  title="Why have a Terms of Use for your corpus" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a></label>
-<textarea class="corpus-terms-input">{{termsOfUse.humanReadable}}</textarea>
+<textarea class="corpus-terms-input">{{termsOfUse}}</textarea>
 <label>Preview:</label>
 <div class="corpus-terms-wiki-preview wiki-preview"></div>
 <hr/>
@@ -91,6 +91,7 @@
 <label>{{locale_Copyright}}</label>
 
 <textarea class="corpus-copyright-input">{{copyright}}</textarea>
+
 
 <div class="accordion" id="accordion-edit-embedded">
 	<div class="accordion-group">
@@ -122,6 +123,8 @@
 			</div>
 		</div>
 	</div>
+
+	
 	<div class="accordion-group">
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse"

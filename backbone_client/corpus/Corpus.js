@@ -437,12 +437,12 @@ define([
         }
       });
 
-      var x;
+      // var x;
       // originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
       // originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       // originalModel.connection = originalModel.connection || originalModel.couchConnection;
       // originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
-      originalModel.corpusMask.corpusid = originalModel.corpusMask.corpusid || originalModel._id;
+      fieldDBCorpus.corpusMask.corpusid = fieldDBCorpus.corpusMask.corpusid || fieldDBCorpus.id;
 
       /* clean the datum fields for search */
       // for (x in originalModel.datumFields) {
@@ -626,6 +626,7 @@ define([
       confidential: Confidential,
       source: Consultants,
       datumStates: DatumStates,
+      fields: DatumFields,
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,

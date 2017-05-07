@@ -64,6 +64,9 @@
   "locale_permissions_explanation" : {
     "message" : "<p>Permissions are where you give other people access to your corpus.</p><p>To add another LingSync user, you need to know their username. Click the <i class='icons icon-edit'></i> icon at the top right and then come back to Permissions and click the 'See current team members' button. You can then add users by typing in their username by the appropriate group.</p> <ul><li>Admins can add other people to any group but not do anything with the data unless they are also writers/readers.</li> <li>Writers can enter new data, add comments, change Datum State from 'to be checked to 'checked' etc, but not see data that is already entered. </li><li>Readers can see data that is already entered in the app but not edit or comment on it. </li></ul><p>If you want someone to be able to both enter data and see existing data, add them as both a writer and a reader.</p><p>If you want to make your corpus public and findable on Google as recommended by EMLED data management best practices, type 'Public' in the 'Public or Private' field below.</p><p>You can, and should, encrypt any Datum containing sensitive information by clicking the <i class=' icon-unlock'></i> button at the bottom of the Datum. Encrypted Datums are shown as 'xxx xx xx xx' to all users, including on the web. If you want to see the contents of a confidential Datum, click on the <i class='icon-eye-open'></i> and enter your password. This will make the Datum visible for 10 minutes.</p>"
   },
+  "locale_corpus_fields_explanation" : {
+    "message" : "<p>Corpus Fields are fields where you can add information about your Corpus. There fields are automatically created when you create a corpus. By default, the app comes with the <a href='http://www.language-archives.org/OLAC/metadata.html' target='_blank'>OLAC recommended metadata fields</a>. You can add any number of fields (we have tested using over 400 fields). Thes fields can be shown on your corpus page and can help other researchers find your research via Google and cite your dataset and/or related publications.</p>"
+  },
   "locale_datum_fields_explanation" : {
     "message" : "<p>Datum Fields are fields where you can add information about your Datum. There fields are automatically detected when you import data, so if you have data already, you should import it to save you time configuring your corpus. </p> <p>By default, the app comes with 4 fields which it uses to create inter-linearized glosses (the pretty view which you are used to seeing in books and handouts). You can add any number of fields (we have tested using over 400 fields). </p> <p>In the Datum Edit view, the fields that are used most frequently in your corpus will automatically appear when you open a Datum, and you can click on <i class='icon-list-alt'> </i> to see the rare fields. </p><p>The fields in your corpus (shown below) are automatically available in search. You can choose to encrypt particular fields (e.g. utterance). If you mark a Datum as confidential, the encrypted fields will be encrypted in the database and masked from the user as 'xxx xx xxxxx'. For example, you may choose to not encrypt a lambda calculus field or a grammatical notes field, as these are usually purely a linguistic formalism and may not transmit any personal information which speakers would like to keep confidential. </p><p> Each Datum Field has a help convention, which is the text you see below. Use this to help everyone remember what information goes in which field. Anyone who can enter data in your corpus can see these help conventions by clicking the <i class='icon-question-sign'></i> next to the Datum Field label in the Datum Edit view. </p><p>You can edit the help text by clicking <i class='icons icon-edit'></i> icon at the top right. These help conventions are also exported as a README.txt when you export your data, as recommended by EMELD data management best practices. </p>"
   },
@@ -195,6 +198,9 @@
   },
   "locale_Permissions_associated" : {
     "message" : "Permissions associated with this corpus"
+  },
+  "locale_Corpus_field_settings" : {
+    "message" : "Corpus Metadata"
   },
   "locale_Datum_field_settings" : {
     "message" : "Datum Field Settings"
@@ -466,6 +472,9 @@
   },
   "locale_Show_Fullscreen" : {
     "message" : "Show full screen"
+  },
+  "locale_Add_New_Corpus_Field_Tooltip" : {
+    "message" : "Add new metadata field which describes this corpus"
   },
   "locale_Add_New_Datum_Field_Tooltip" : {
     "message" : "Add new datum field"

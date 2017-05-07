@@ -12,7 +12,7 @@ define([
      * @property size The size of the datum field refers to the width of the
      *           text area. Some of them, such as the judgment one will be very
      *           short, while others context can be infinitely long.
-     * @property label The label that is associated with the field, such as
+     * @property id The id that is associated with the field, such as
      *           Utterance, Morphemes, etc.
      * @property value This is what the user will enter when entering data into
      *           the data fields.
@@ -28,7 +28,7 @@ define([
     },
 
     defaults: {
-      label: "",
+      id: "",
       value: "",
       mask: "",
       encrypted: "",
@@ -94,10 +94,11 @@ define([
       }
 
       /* Use a more neutral source field instead of just langauge consultants*/
-      if (originalModel.label === "consultants") {
-        originalModel.label = originalModel.id = originalModel.labelFieldLinguists = originalModel.labelNonLinguists = originalModel.labelTranslators = "source";
-      }
+      // if (originalModel.id === "consultants") {
+      //   originalModel.label = originalModel.id = originalModel.labelFieldLinguists = originalModel.labelNonLinguists = originalModel.labelTranslators = "source";
+      // }
 
+      // originalModel.label = originalModel.label || originalModel.id;
       return this.originalParse(originalModel);
     },
     /**
@@ -255,11 +256,7 @@ define([
         callback();
       }
     },
-    originalParse: Backbone.Model.prototype.parse,
-    parse: function(originalModel) {
-      originalModel.label = originalModel.label || originalModel.id;
-      return this.originalParse(originalModel);
-    }
+    
   });
 
   return DatumField;

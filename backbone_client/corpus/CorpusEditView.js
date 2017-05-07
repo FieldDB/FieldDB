@@ -359,7 +359,7 @@ define([
 
         this.updateDescription();
 
-        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse));
         $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
 
       } else if (this.format == "leftSide") {
