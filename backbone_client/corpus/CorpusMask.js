@@ -209,6 +209,7 @@ define([
       //removed confidential because we dont want the token to end up in a corpusmask, if it does, then the corpusmask wont be able to parse anyway.
       source: Consultants,
       datumStates: DatumStates,
+      fields: DatumFields,
       datumFields: DatumFields,
       sessionFields: DatumFields,
       searchFields: DatumFields,

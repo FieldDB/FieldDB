@@ -194,6 +194,35 @@
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse"
         data-parent="#accordion-edit-embedded"
+        href="#collapseCorpusFieldSettingsEE"> <i class="icon-cloud"></i>
+        <strong>{{locale_Corpus_field_settings}}</strong>
+      </a>
+    </div>
+    <div class="accordion-body collapse" id="collapseCorpusFieldSettingsEE">
+      <div class="accordion-inner">
+        <span>{{{locale_corpus_fields_explanation}}}</span>
+        <table class="corpus_field_settings datum_fields_ul unstyled"></table>
+        <div class="breadcrumb">
+          <span class="pull-right"> <span
+             >{{locale_Encrypt_if_confidential}}</span> <input
+            type="checkbox" class="add_corpus_shouldBeEncrypted"{{shouldBeEncrypted}}></input>
+          </span> <input type="text" class="span3 choose_add_corpus_field"
+            data-provide="typeahead" data-items="4"
+            data-source="[&quot;Phonemic Transcription&quot;,&quot;Phonetic Transcription&quot;,&quot;Semantic Denotation&quot;,&quot;Semantic Context&quot;,&quot;Spanish&quot;,&quot;Notes&quot;]">
+          <label>{{locale_Help_Text}}</label>
+          <textarea class="add_corpus_help" title="{{locale_Help_Text_Placeholder}}"></textarea>
+          <a href="#"
+            class="btn btn-primary add-corpus-field" title="{{locale_Add_New_Corpus_Field_Tooltip}}"
+            rel="tooltip">{{locale_Add}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-edit-embedded"
         href="#collapseSessionFieldSettingsEE"> <i class="icon-calendar"></i>
         <strong>{{locale_Session_field_settings}}</strong>
       </a>

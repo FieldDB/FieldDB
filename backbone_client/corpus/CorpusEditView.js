@@ -149,6 +149,7 @@ define([
       "click .add-datum-state": 'insertNewDatumState',
 
       //Add button inserts new Datum Field
+      "click .add-corpus-field": 'insertNewCorpusField',
       "click .add-datum-field": 'insertNewDatumField',
       "click .add-session-field": 'insertNewSessionField',
       "click .icon-resize-small": 'resizeSmall',
@@ -241,7 +242,8 @@ define([
 
       this.changeViewsOfInternalModels();
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
+      jsonToRender.fields = this.model.get("fields").toJSON();
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
@@ -264,6 +266,7 @@ define([
       jsonToRender.locale_Copyright = Locale.get("locale_Copyright");
       jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
       jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+      jsonToRender.locale_Corpus_field_settings = Locale.get("locale_Corpus_field_settings");
       jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
       jsonToRender.locale_Session_field_settings = Locale.get("locale_Session_field_settings");
       jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
@@ -299,6 +302,7 @@ define([
       jsonToRender.locale_Warning = Locale.get("locale_Warning");
       jsonToRender.locale_conversation_fields_explanation = Locale.get("locale_conversation_fields_explanation");
       jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+      jsonToRender.locale_corpus_fields_explanation = Locale.get("locale_corpus_fields_explanation");
       jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
       jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
       jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
@@ -340,6 +344,10 @@ define([
         // Display the PermissionsView
         //         this.permissionsView.el = this.$('.permissions-updating-collection');
         //         this.permissionsView.render();
+
+        // Display the DatumFieldsView
+        this.corpusFieldsView.el = this.$('.corpus_field_settings');
+        this.corpusFieldsView.render();
 
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
@@ -452,6 +460,15 @@ define([
         childViewConstructor: SessionReadView,
         childViewTagName: 'li',
         childViewFormat: "link"
+      });
+
+      //Create a CorpusFieldsView
+      this.corpusFieldsView = new UpdatingCollectionView({
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldEditView,
+        childViewTagName: 'tr',
+        childViewFormat: "datum", // To be editable
+        childViewClass: ""
       });
 
       //Create a DatumFieldsView
@@ -660,6 +677,39 @@ define([
       this.model.newCorpus();
     },
 
+    // This the function called by the add button, it adds a new datum field both to the
+    // collection and the model
+    insertNewCorpusField: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      //don't add blank fields
+      if (this.$el.find(".choose_add_corpus_field").val().toLowerCase().replace(/ /g, "_") == "") {
+        return;
+      }
+      // Remember if the encryption check box was checked
+      var checked = this.$el.find(".add_corpus_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_corpus_field").val();
+
+      // Create the new DatumField based on what the user entered
+      var m = new DatumField({
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
+        "shouldBeEncrypted": checked,
+        "help": this.$el.find(".add_corpus_help").val()
+      });
+
+      // Add the new DatumField to the Corpus' list for datumFields
+      this.model.get("fields").add(m);
+
+      // Reset the line with the add button
+      this.$el.find(".choose_add_corpus_field").val(""); //.children("option:eq(0)").attr("selected", true);
+      this.$el.find(".add_corpus_help").val("");
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
+
     // This the function called by the add button, it adds a new session field both to the
     // collection and the model
     insertNewSessionField: function(e) {
@@ -673,10 +723,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_session_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_session_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_session_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_session_help").val()
       });
@@ -704,10 +756,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_help").val()
       });
@@ -733,10 +787,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_conversationShouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_conversation_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_conversation_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_conversation_help").val()
       });
