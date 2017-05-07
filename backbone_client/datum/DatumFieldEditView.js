@@ -88,6 +88,12 @@ define([
       jsonToRender.locale_Help_Text = Locale.get("locale_Help_Text");
       jsonToRender.locale_Help_Text_Placeholder = Locale.get("locale_Help_Text_Placeholder");
 
+      if (jsonToRender.shouldBeEncrypted) {
+        jsonToRender.shouldBeEncrypted = "checked";
+      } else {
+        jsonToRender.shouldBeEncrypted = "";
+      }
+
       if (this.format == "corpus") {
         if (this.previousJsonRendered && this.previousJsonRendered.mask == jsonToRender.mask) {
           return this;
@@ -159,9 +165,9 @@ define([
     updateEncrypted: function() {
       var checked = this.$el.find(".shouldBeEncrypted").is(':checked');
       if (checked) {
-        checked = "checked";
+        checked = true;
       } else {
-        checked = "";
+        checked = false;
       }
       if (OPrime.debugMode) OPrime.debug("Updated shouldBeEncrypted to " + checked);
       this.model.set("shouldBeEncrypted", checked);

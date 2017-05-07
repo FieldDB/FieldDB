@@ -51,6 +51,11 @@ define([
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
 
       var jsonToRender = this.model.toJSON();
+      if (jsonToRender.shouldBeEncrypted) {
+        jsonToRender.shouldBeEncrypted = "checked";
+      } else {
+        jsonToRender.shouldBeEncrypted = "";
+      }
       jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
       jsonToRender.labelFieldLinguists = jsonToRender.labelFieldLinguists || jsonToRender.label;
       if (this.format === "corpus") {
