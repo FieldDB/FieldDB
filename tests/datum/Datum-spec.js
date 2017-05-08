@@ -45,7 +45,6 @@ describe("Test Datum", function() {
           // encryptedValue: "",
           version: serialized.version,
           label: "something",
-          hint: "",
           value: "else",
           mask: "else"
         }]
@@ -74,7 +73,6 @@ describe("Test Datum", function() {
           id: "something",
           version: serialized.version,
           label: "something",
-          hint: "",
           value: "else"
         }]
       });

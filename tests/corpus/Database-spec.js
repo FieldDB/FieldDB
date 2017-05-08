@@ -717,7 +717,7 @@ describe("Database", function() {
   });
 
   describe("collaboration", function() {
-    xit("should require a user who owns the corpus", function(done) {
+    it("should require a user who owns the corpus", function(done) {
       var database = new Database({
         dbname: "anothertestinguseronlinux-firstcorpus"
       });
@@ -727,24 +727,24 @@ describe("Database", function() {
           username: "atestingonlinedata",
           add: ["reader"]
         }]
-      }).then(function(result) {
+      }).then(function() {
         throw new Error("should not get here");
       }).catch(function(err) {
         expect(err).toEqual({
           details: {
             users: [{
-              username: 'atestingonlinedata',
-              add: ['reader']
+              username: "atestingonlinedata",
+              add: ["reader"]
             }]
           },
-          userFriendlyErrors: ['Please supply a username.'],
+          userFriendlyErrors: ["Please supply a username."],
           status: 412
         });
         done();
       });
     });
 
-    xit("should require a password", function(done) {
+    it("should require a password", function(done) {
       var database = new Database({
         dbname: "anothertestinguseronlinux-firstcorpus"
       });
@@ -755,18 +755,18 @@ describe("Database", function() {
           username: "atestingonlinedata",
           add: ["reader"]
         }]
-      }).then(function(result) {
+      }).then(function() {
         throw new Error("should not get here");
       }).catch(function(err) {
         expect(err).toEqual({
           details: {
-            username: 'anothertestinguseronlinux',
+            username: "anothertestinguseronlinux",
             users: [{
-              username: 'atestingonlinedata',
-              add: ['reader']
+              username: "atestingonlinedata",
+              add: ["reader"]
             }]
           },
-          userFriendlyErrors: ['Please supply a password.'],
+          userFriendlyErrors: ["Please supply a password."],
           status: 412
         });
         done();

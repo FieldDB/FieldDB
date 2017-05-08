@@ -1080,7 +1080,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         Database.CORS.makeCORSRequest({
           type: "POST",
           dataType: "json",
-          url: self.connection.authUrl + '/addroletouser',
+          url: self.connection.authUrl + "/addroletouser",
           data: options
         }).then(function(authOrCorpusServerResult) {
             deferred.resolve(authOrCorpusServerResult);

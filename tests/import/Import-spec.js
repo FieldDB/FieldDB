@@ -289,8 +289,7 @@ describe("api/import/Import", function() {
             value: "",
             mask: "",
             version: importer.version,
-            label: "columnplaceholder",
-            hint: ""
+            label: "columnplaceholder"
           });
 
           expect(importer.datalist).toBeDefined();

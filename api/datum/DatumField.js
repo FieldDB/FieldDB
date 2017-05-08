@@ -904,7 +904,7 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
       if (json.labelTranslators === json.label || json.labelTranslators === json.labelFieldLinguists) {
         delete json.labelTranslators;
       }
-      if (json.labelExperimenters === json.label || json.labelExperimenters === json.labelFieldLinguists) {
+      if (json.labelExperimenters === json.label) {
         delete json.labelExperimenters;
       }
       if (json.labelNonLinguists === json.label || json.labelNonLinguists === json.labelFieldLinguists) {
