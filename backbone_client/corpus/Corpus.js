@@ -1386,12 +1386,11 @@ define([
         }
       }
     },
+    
     validate: function(attrs) {
       if (attrs.publicCorpus) {
-        if (attrs.publicCorpus != "Public") {
-          if (attrs.publicCorpus != "Private") {
-            return "Corpus must be either Public or Private"; //TODO test this.
-          }
+        if (attrs.publicCorpus !== "Public" && attrs.publicCorpus !== "Private") {
+          return "Corpus must be either Public or Private";
         }
       }
     },
@@ -1782,13 +1781,6 @@ define([
 
         //end error
       });
-    },
-    changeCorpusPublicPrivate: function() {
-      if (this.get("publicCorpus") === "Public") {
-        alert("TODO make the corpus public");
-      } else {
-        alert("TODO revoke public access");
-      }
     }
   });
 

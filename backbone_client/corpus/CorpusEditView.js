@@ -586,11 +586,91 @@ define([
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-    updatePublicOrPrivate: function() {
-      this.model.set("publicCorpus", this.$el.find(".public-or-private").val());
-      if (this.model.id) {
-        window.appView.addUnsavedDoc(this.model.id);
+    updatePublicOrPrivate: function(e) {
+      e.preventDefault();
+      
+      var previousValue = this.model.get("publicCorpus");
+      var self = this;
+      this.model.set("publicCorpus", this.$el.find(".public-or-private").val().trim());
+      if (!this.model.id) {
+        return;
       }
+      window.appView.addUnsavedDoc(this.model.id);
+      if (previousValue === this.model.get("publicCorpus")) {
+        return;
+      }
+
+      self.model.saveAndInterConnectInApp(function() {
+        var data = {
+          users: [{
+            username: "public",
+            remove: ["all"]
+          }],
+        };
+
+        if (self.model.get("publicCorpus") === "Public") {
+          data.users[0].add = ["reader"];
+        }
+        window.app.get("authentication").addCorpusRoleToUser(data,
+          /*success */
+          function(serverResults) {
+            if (self.model.get("publicCorpus") === "Public") {
+              window.appView.toastUser("This corpus is now viewable by the public. You should enable encryption of confidential information and verify which fields of the corpus you wish to be accessible by the public.", "alert-success", "Public:");
+
+              window.app.addActivity({
+                verb: "added",
+                verbicon: "icon-plus",
+                directobjecticon: "",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "as a <i class='icon-group'></i> reader on <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>this corpus</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App."
+              });
+
+              window.app.addActivity({
+                verb: "added",
+                verbicon: "icon-plus",
+                directobjecticon: "icon-group",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "as a <i class='icon-group'></i> reader on <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>" + self.model.get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App."
+              });
+            } else {
+              window.appView.toastUser("This corpus is private.", "alert-success", "Private:");
+
+              window.app.addActivity({
+                verb: "removed",
+                verbicon: "icon-plus",
+                directobjecticon: "",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: " access from <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>this corpus</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App."
+              });
+
+              window.app.addActivity({
+                verb: "removed",
+                verbicon: "icon-plus",
+                directobjecticon: "icon-group",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "access from <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>" + self.model.get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App."
+              });
+            }
+          },
+          /* failure */
+          function(errors) {
+            window.appView.toastUser("Error changing the corpus to " + self.model.attributes.publicCorpus + "  " + errors, "alert-warning", previousValue + ":");
+            self.model.attributes.publicCorpus = previousValue;
+          });
+
+      },
+      function(err) {
+        self.model.attributes.publicCorpus = previousValue;
+        console.log(err);
+      });
     },
 
     //toggle Terms of Use explanation in popover
