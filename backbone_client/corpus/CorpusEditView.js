@@ -588,17 +588,22 @@ define([
     },
     updatePublicOrPrivate: function(e) {
       e.preventDefault();
-      
-      var previousValue = this.model.get("publicCorpus");
-      var self = this;
-      this.model.set("publicCorpus", this.$el.find(".public-or-private").val().trim());
       if (!this.model.id) {
         return;
       }
-      window.appView.addUnsavedDoc(this.model.id);
-      if (previousValue === this.model.get("publicCorpus")) {
+
+      var previousValue = this.model.get("publicCorpus");
+      var newValue = this.$el.find(".public-or-private").val().trim();
+      var self = this;
+      if (previousValue === newValue) {
         return;
       }
+
+      if (newValue !== "Public" && newValue !== "Private") {
+        return "Corpus must be either Public or Private";
+      }
+      this.model.set("publicCorpus", newValue);
+      // window.appView.addUnsavedDoc(this.model.id);
 
       self.model.saveAndInterConnectInApp(function() {
         var data = {
@@ -608,13 +613,13 @@ define([
           }],
         };
 
-        if (self.model.get("publicCorpus") === "Public") {
+        if (newValue === "Public") {
           data.users[0].add = ["reader"];
         }
         window.app.get("authentication").addCorpusRoleToUser(data,
           /*success */
           function(serverResults) {
-            if (self.model.get("publicCorpus") === "Public") {
+            if (newValue === "Public") {
               window.appView.toastUser("This corpus is now viewable by the public. You should enable encryption of confidential information and verify which fields of the corpus you wish to be accessible by the public.", "alert-success", "Public:");
 
               window.app.addActivity({
@@ -665,7 +670,6 @@ define([
             window.appView.toastUser("Error changing the corpus to " + self.model.attributes.publicCorpus + "  " + errors, "alert-warning", previousValue + ":");
             self.model.attributes.publicCorpus = previousValue;
           });
-
       },
       function(err) {
         self.model.attributes.publicCorpus = previousValue;
