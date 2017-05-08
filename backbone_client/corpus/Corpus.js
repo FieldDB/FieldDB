@@ -416,26 +416,26 @@ define([
         return this.originalParse(originalModel);
       }
       var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
-      var fieldDBCorpus = new FieldDB.Corpus(originalModel);
-
-      fieldDBCorpus.fields = fieldDBCorpus.fields || [];
+      var self = this;
+      this.fieldDBModel = new FieldDB.Corpus(originalModel);
+      this.fieldDBModel.fields = this.fieldDBModel.fields || [];
       defaultCorpus.fields.forEach(function(field) {
-        if (!fieldDBCorpus.fields[field.id.toLowerCase()]) {
-          fieldDBCorpus.fields.add(field);
+        if (!self.fieldDBModel.fields[field.id.toLowerCase()]) {
+          self.fieldDBModel.fields.add(field);
         }
       });
 
-      fieldDBCorpus.datumFields = fieldDBCorpus.datumFields || [];
+      this.fieldDBModel.datumFields = this.fieldDBModel.datumFields || [];
       defaultCorpus.datumFields.forEach(function(field) {
-        if (!fieldDBCorpus.datumFields[field.id.toLowerCase()]) {
-          fieldDBCorpus.datumFields.add(field);
+        if (!self.fieldDBModel.datumFields[field.id.toLowerCase()]) {
+          self.fieldDBModel.datumFields.add(field);
         }
       });
 
-      fieldDBCorpus.sessionFields = fieldDBCorpus.sessionFields || [];
+      this.fieldDBModel.sessionFields = this.fieldDBModel.sessionFields || [];
       defaultCorpus.sessionFields.forEach(function(field) {
-        if (!fieldDBCorpus.sessionFields[field.id.toLowerCase()]) {
-          fieldDBCorpus.sessionFields.add(field);
+        if (!self.fieldDBModel.sessionFields[field.id.toLowerCase()]) {
+          self.fieldDBModel.sessionFields.add(field);
         }
       });
 
@@ -444,7 +444,7 @@ define([
       // originalModel.dbname = originalModel.dbname || originalModel.pouchname;
       // originalModel.connection = originalModel.connection || originalModel.couchConnection;
       // originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
-      fieldDBCorpus.corpusMask.corpusid = fieldDBCorpus.corpusMask.corpusid || fieldDBCorpus.id;
+      this.fieldDBModel.corpusMask.corpusid = this.fieldDBModel.corpusMask.corpusid || this.fieldDBModel.id;
 
       /* clean the datum fields for search */
       // for (x in originalModel.datumFields) {
@@ -479,29 +479,29 @@ define([
       //   // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
       //   originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
       //   originalModel.connection.corpusid = originalModel._id;
-        fieldDBCorpus.connection.dbname = fieldDBCorpus.dbname;
+        this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
       // }
 
       // some versions of the FieldDB common js in the spreadsheet removed the confidential?
       if (!originalModel.confidential) {
-        fieldDBCorpus.confidential = {
+        this.fieldDBModel.confidential = {
           secretkey: new Confidential().secretKeyGenerator(),
           repairedTimestamp: Date.now()
         };
       }
-      // fieldDBCorpus.team = fieldDBCorpus.team || {};
-      // fieldDBCorpus.team._id = fieldDBCorpus.team.id = "team";
-      // fieldDBCorpus.team.username = fieldDBCorpus.dbname.split("-")[0]
-      // if (window.app && window.app.get("authentication").get("userPrivate").get("username") === fieldDBCorpus.team.username) {
-      //   fieldDBCorpus.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
+      // this.fieldDBModel.team = this.fieldDBModel.team || {};
+      // this.fieldDBModel.team._id = this.fieldDBModel.team.id = "team";
+      // this.fieldDBModel.team.username = this.fieldDBModel.dbname.split("-")[0]
+      // if (window.app && window.app.get("authentication").get("userPrivate").get("username") === this.fieldDBModel.team.username) {
+      //   this.fieldDBModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
       // }
 
       // Use a paralel corpus in the FieldDB application
       if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        FieldDB.FieldDBObject.application.corpus = fieldDBCorpus;
+        FieldDB.FieldDBObject.application.corpus = this.fieldDBModel;
       }
 
-      return this.originalParse(fieldDBCorpus.toJSON());
+      return this.originalParse(this.fieldDBModel.toJSON());
     },
 
     /**
@@ -1784,7 +1784,11 @@ define([
       });
     },
     changeCorpusPublicPrivate: function() {
-      //      alert("TODO contact server to change the public private of the corpus");
+      if (this.get("publicCorpus") === "Public") {
+        alert("TODO make the corpus public");
+      } else {
+        alert("TODO revoke public access");
+      }
     }
   });
 
