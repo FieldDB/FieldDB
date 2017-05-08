@@ -1042,68 +1042,66 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
     }
   },
 
+  modifyTeam: {
+    value: function(options) {
+      var deferred = Q.defer(),
+        self = this;
+
+      Q.nextTick(function() {
+        if (!options) {
+          deferred.reject({
+            details: options,
+            userFriendlyErrors: ["This application has errored, please contact us."],
+            status: 412
+          });
+          return;
+        }
+
+        if (!options.username /* TODO use application user if present */) {
+          deferred.reject({
+            details: options,
+            userFriendlyErrors: ["Please supply a username."],
+            status: 412
+          });
+          return;
+        }
+
+        if (!options.password) {
+          deferred.reject({
+            details: options,
+            userFriendlyErrors: ["Please supply a password."],
+            status: 412
+          });
+          return;
+        }
+
+        options.connection = self.connection;
+
+        Database.CORS.makeCORSRequest({
+          type: "POST",
+          dataType: "json",
+          url: self.connection.authUrl + '/addroletouser',
+          data: options
+        }).then(function(authOrCorpusServerResult) {
+            deferred.resolve(authOrCorpusServerResult);
+          },
+          function(reason) {
+            reason.details = options;
+            self.debug(reason);
+            deferred.reject(reason);
+          }).fail(
+          function(reason) {
+            self.debug(reason);
+            deferred.reject(reason);
+          });
+      });
+      return deferred.promise;
+    }
+  },
+
   addCorpusRoleToUser: {
     value: function(role, userToAddToCorpus, successcallback, failcallback) {
-      this.debug("deprecated ", role, userToAddToCorpus, successcallback, failcallback);
-      // var self = this;
-      // $("#quick-authenticate-modal").modal("show");
-      // if (this.user.username === "lingllama") {
-      //   $("#quick-authenticate-password").val("phoneme");
-      // }
-      // window.hub.subscribe("quickAuthenticationClose", function() {
-
-      //   //prepare data and send it
-      //   var dataToPost = {};
-      //   var authUrl = "";
-      //   if (this.user !== undefined) {
-      //     //Send username to limit the requests so only valid users can get a user list
-      //     dataToPost.username = this.user.username;
-      //     dataToPost.password = $("#quick-authenticate-password").val();
-      //     dataToPost.connection = window.app.get("corpus").get("connection");
-      //     if (!dataToPost.connection.path) {
-      //       dataToPost.connection.path = "";
-      //       window.app.get("corpus").get("connection").path = "";
-      //     }
-      //     dataToPost.roles = [role];
-      //     dataToPost.userToAddToRole = userToAddToCorpus.username;
-
-      //     authUrl = this.user.authUrl;
-      //   } else {
-      //     return;
-      //   }
-      //   Database.CORS.makeCORSRequest({
-      //     type: "POST",
-      //     url: authUrl + "/addroletouser",
-      //     data: dataToPost,
-      //     success: function(serverResults) {
-      //       if (serverResults.userFriendlyErrors !== null) {
-      //         self.debug("User " + userToAddToCorpus.username + " not added to the corpus as " + role);
-      //         if (typeof failcallback === "function") {
-      //           failcallback(serverResults.userFriendlyErrors.join("<br/>"));
-      //         }
-      //       } else if (serverResults.roleadded !== null) {
-      //         self.debug("User " + userToAddToCorpus.username + " added to the corpus as " + role);
-      //         if (typeof successcallback === "function") {
-      //           successcallback(userToAddToCorpus);
-      //         }
-      //       }
-      //     }, //end successful fetch
-      //     error: function(e) {
-      //       self.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
-
-      //       if (typeof failcallback === "function") {
-      //         failcallback("There was an error in contacting the authentication server to add " + userToAddToCorpus.username + " on your corpus team. Maybe you're offline?");
-      //       }
-      //     },
-      //     dataType: ""
-      //   });
-      //   //end send call
-
-      //   //Close the modal
-      //   $("#quick-authenticate-modal").modal("hide");
-      //   $("#quick-authenticate-password").val("");
-      //   window.hub.unsubscribe("quickAuthenticationClose", null, this);
-      // }, self);
+      this.debug("deprecated use modifyTeam instead", role, userToAddToCorpus, successcallback, failcallback);
     }
   }
 });

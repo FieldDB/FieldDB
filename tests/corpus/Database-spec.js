@@ -716,6 +716,174 @@ describe("Database", function() {
 
   });
 
+  describe("collaboration", function() {
+    xit("should require a user who owns the corpus", function(done) {
+      var database = new Database({
+        dbname: "anothertestinguseronlinux-firstcorpus"
+      });
+
+      database.modifyTeam({
+        users: [{
+          username: "atestingonlinedata",
+          add: ["reader"]
+        }]
+      }).then(function(result) {
+        throw new Error("should not get here");
+      }).catch(function(err) {
+        expect(err).toEqual({
+          details: {
+            users: [{
+              username: 'atestingonlinedata',
+              add: ['reader']
+            }]
+          },
+          userFriendlyErrors: ['Please supply a username.'],
+          status: 412
+        });
+        done();
+      });
+    });
+
+    xit("should require a password", function(done) {
+      var database = new Database({
+        dbname: "anothertestinguseronlinux-firstcorpus"
+      });
+
+      database.modifyTeam({
+        username: "anothertestinguseronlinux",
+        users: [{
+          username: "atestingonlinedata",
+          add: ["reader"]
+        }]
+      }).then(function(result) {
+        throw new Error("should not get here");
+      }).catch(function(err) {
+        expect(err).toEqual({
+          details: {
+            username: 'anothertestinguseronlinux',
+            users: [{
+              username: 'atestingonlinedata',
+              add: ['reader']
+            }]
+          },
+          userFriendlyErrors: ['Please supply a password.'],
+          status: 412
+        });
+        done();
+      });
+    });
+
+    it("should add users", function(done) {
+      var database = new Database({
+        dbname: "anothertestinguseronlinux-firstcorpus",
+        debugMode: true,
+        url: "https://corpusdev.lingsync.org"
+      });
+
+      database.modifyTeam({
+        "username": "anothertestinguseronlinux",
+        "password": "test",
+        "users": [{
+          "username": "atestingonlinedata",
+          "add": ["reader", "commenter"],
+          "remove": ["admin", "writer"]
+        }],
+        "connection": {
+          "dbname": "jenkins-firstcorpus"
+        }
+      }).then(function(result) {
+        expect(result).toEqual({
+          roleadded: true,
+          users: [{
+            username: "atestingonlinedata",
+            add: ["anothertestinguseronlinux-firstcorpus_reader", "anothertestinguseronlinux-firstcorpus_commenter"],
+            remove: ["anothertestinguseronlinux-firstcorpus_admin", "anothertestinguseronlinux-firstcorpus_writer"],
+            before: [],
+            after: ["reader", "commenter"],
+            status: 200,
+            message: "User atestingonlinedata now has reader commenter access to anothertestinguseronlinux-firstcorpus"
+          }],
+          info: ["User atestingonlinedata now has reader commenter access to anothertestinguseronlinux-firstcorpus"]
+        });
+        database.modifyTeam({
+          "username": "anothertestinguseronlinux",
+          "password": "test",
+          "users": [{
+            "username": "atestingonlinedata",
+            "remove": ["all"]
+          }],
+          "connection": {
+            "dbname": "jenkins-firstcorpus"
+          }
+        }).then(function(removeResult) {
+          expect(removeResult).toEqual({
+            roleadded: true,
+            users: [{
+              username: "atestingonlinedata",
+              remove: ["anothertestinguseronlinux-firstcorpus_all"],
+              add: [],
+              before: ["reader", "commenter"],
+              after: [],
+              status: 200,
+              message: "User atestingonlinedata was removed from the anothertestinguseronlinux-firstcorpus team."
+            }],
+            info: ["User atestingonlinedata was removed from the anothertestinguseronlinux-firstcorpus team."]
+          });
+          done();
+        }).catch(done);
+      }).catch(done);
+    });
+
+    it("should remove users", function(done) {
+      var database = new Database({
+        dbname: "anothertestinguseronlinux-firstcorpus",
+        debugMode: true,
+        url: "https://corpusdev.lingsync.org"
+      });
+
+      database.modifyTeam({
+        "username": "anothertestinguseronlinux",
+        "password": "test",
+        "users": [{
+          "username": "atestingonlinedata",
+          "add": ["reader", "commenter"],
+          "remove": ["admin", "writer"]
+        }],
+        "connection": {
+          "dbname": "jenkins-firstcorpus"
+        }
+      }).then(function(result) {
+        expect(result.info).toEqual([ "User atestingonlinedata now has reader commenter access to anothertestinguseronlinux-firstcorpus" ]);
+        database.modifyTeam({
+          "username": "anothertestinguseronlinux",
+          "password": "test",
+          "users": [{
+            "username": "atestingonlinedata",
+            "remove": ["all"]
+          }],
+          "connection": {
+            "dbname": "jenkins-firstcorpus"
+          }
+        }).then(function(removeResult) {
+          expect(removeResult).toEqual({
+            roleadded: true,
+            users: [{
+              username: "atestingonlinedata",
+              remove: ["anothertestinguseronlinux-firstcorpus_all"],
+              add: [],
+              before: ["reader", "commenter"],
+              after: [],
+              status: 200,
+              message: "User atestingonlinedata was removed from the anothertestinguseronlinux-firstcorpus team."
+            }],
+            info: ["User atestingonlinedata was removed from the anothertestinguseronlinux-firstcorpus team."]
+          });
+          done();
+        }).catch(done);
+      }).catch(done);
+    });
+  });
+
   describe("Database: as a team we want to be able to go back in time in the db revisions", function() {
     var db;
 
