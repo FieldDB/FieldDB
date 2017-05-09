@@ -1230,12 +1230,6 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
       return this.getFrequentValues("tags", ["Passive", "WH", "Indefinte", "Generic", "Agent-y", "Causative", "Pro-drop", "Ambigous"]);
     }
   },
-  changeCorpusPublicPrivate: {
-    value: function() {
-      //      alert("TODO contact server to change the public private of the corpus");
-      throw new Error(" I dont know how change this corpus' public/private setting ");
-    }
-  },
 
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes) {

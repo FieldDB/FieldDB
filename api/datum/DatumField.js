@@ -867,7 +867,10 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
 
       // TODO eventually dont include the label and hint but now include it for backward compaitibilty
       json.label = this.id;
-      json.hint = this.hint || "";
+      // json.hint = this.hint || "";
+      if (!json.hint) {
+        delete json.hint;
+      }
 
       json.value = this.value || "";
       json.mask = this.mask || "";
@@ -881,6 +884,42 @@ DatumField.prototype = Object.create(FieldDBObject.prototype, /** @lends DatumFi
         }
         this.debug("removeEmptyAttributes", json);
       }
+
+      if (json.helpNonLinguists === json.help) {
+        delete json.helpNonLinguists;
+      }
+      if (json.helpDevelopers === json.help) {
+        delete json.helpDevelopers;
+      }
+      if (json.helpLinguists === json.help) {
+        delete json.helpLinguists;
+      }
+      if (json.helpComputationalLinguists === json.help) {
+        delete json.helpComputationalLinguists;
+      }
+      if (json.helpTranslators === json.help) {
+        delete json.helpTranslators;
+      }
+
+      if (json.labelTranslators === json.label || json.labelTranslators === json.labelFieldLinguists) {
+        delete json.labelTranslators;
+      }
+      if (json.labelExperimenters === json.label) {
+        delete json.labelExperimenters;
+      }
+      if (json.labelNonLinguists === json.label || json.labelNonLinguists === json.labelFieldLinguists) {
+        delete json.labelNonLinguists;
+      }
+      if (json.labelFieldLinguists === json.label) {
+        delete json.labelFieldLinguists;
+      }
+      if (json.labelPsychoLinguists === json.label || json.labelPsychoLinguists === json.labelFieldLinguists) {
+        delete json.labelPsychoLinguists;
+      }
+      if (json.labelComputationalLinguist === json.label || json.labelComputationalLinguist === json.labelFieldLinguists) {
+        delete json.labelComputationalLinguist;
+      }
+
 
       json.id = this.id;
       delete json._id;

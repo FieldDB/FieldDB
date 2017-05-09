@@ -293,8 +293,11 @@ textarea {
 	-moz-border-radius: 0 !important;
 	border-radius: 0 !important;
 	line-height: 1.2em;
-	  	font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+	font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
 
+.corpus_field_settings textarea.datum_field_input {
+  font-family: 'Gentium Basic', sans-serif;
 }
 
 .datum_fields_ul {

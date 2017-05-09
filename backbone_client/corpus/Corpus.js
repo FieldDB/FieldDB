@@ -18,6 +18,7 @@ define([
   "permission/Permissions",
   "datum/Session",
   "datum/Sessions",
+
   "user/Team",
   "user/User",
   "user/Users",
@@ -170,24 +171,26 @@ define([
     },
     fetchPublicSelf: function() {
       try {
-        var corpusself = this;
         if (!this.get("corpusMask")) {
           this.set("corpusMask", new CorpusMask());
         }
-        this.get("corpusMask").set("id", "corpus");
-        this.get("corpusMask").fetch({
+        var corpusMaskSelf = this.get("corpusMask");
+        var self = this;
+
+        corpusMaskSelf.id = "corpus";
+        corpusMaskSelf.fetch({
           sucess: function(model, response, options) {
             if (OPrime.debugMode) OPrime.debug("Success fetching corpus' public self: ", model, response, options);
           },
           error: function(model, xhr, options) {
             if (OPrime.debugMode) OPrime.debug("Error fetching corpus mask : ", model, xhr, options);
-            corpusself.get("corpusMask").fillWithDefaults();
-            corpusself.get("corpusMask").set("connection", corpusself.get("connection"));
-            corpusself.get("corpusMask").set("dbname", corpusself.get("dbname"));
+            corpusMaskSelf.fillWithDefaults();
+            corpusMaskSelf.set("connection", self.get("connection"));
+            corpusMaskSelf.set("dbname", self.get("dbname"));
           }
         });
       } catch (e) {
-        OPrime.bug("");
+        console.warn("There was a problem fetching the public corpus mask.", e);
       }
     },
     fillWithDefaults: function(donefillingcallback) {
@@ -412,135 +415,93 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
-      var x;
-      originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
-      originalModel.dbname = originalModel.dbname || originalModel.pouchname;
-      originalModel.connection = originalModel.connection || originalModel.couchConnection;
-      originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
-      originalModel.corpusMask.corpusid = originalModel.corpusMask.corpusid || originalModel._id;
+      var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
+      var self = this;
+      this.fieldDBModel = new FieldDB.Corpus(originalModel);
+      this.fieldDBModel.fields = this.fieldDBModel.fields || [];
+      defaultCorpus.fields.forEach(function(field) {
+        if (!self.fieldDBModel.fields[field.id.toLowerCase()]) {
+          self.fieldDBModel.fields.add(field);
+        }
+      });
+
+      this.fieldDBModel.datumFields = this.fieldDBModel.datumFields || [];
+      defaultCorpus.datumFields.forEach(function(field) {
+        if (!self.fieldDBModel.datumFields[field.id.toLowerCase()]) {
+          self.fieldDBModel.datumFields.add(field);
+        }
+      });
+
+      this.fieldDBModel.sessionFields = this.fieldDBModel.sessionFields || [];
+      defaultCorpus.sessionFields.forEach(function(field) {
+        if (!self.fieldDBModel.sessionFields[field.id.toLowerCase()]) {
+          self.fieldDBModel.sessionFields.add(field);
+        }
+      });
+
+      // var x;
+      // originalModel.datumFields = originalModel.fields || originalModel.datumFields || [];
+      // originalModel.dbname = originalModel.dbname || originalModel.pouchname;
+      // originalModel.connection = originalModel.connection || originalModel.couchConnection;
+      // originalModel.corpusMask = originalModel.corpusMask || originalModel.publicSelf;
+      this.fieldDBModel.corpusMask.corpusid = this.fieldDBModel.corpusMask.corpusid || this.fieldDBModel.id;
 
       /* clean the datum fields for search */
-      for (x in originalModel.datumFields) {
-        originalModel.datumFields[x].mask = "";
-        originalModel.datumFields[x].value = "";
-        originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
+      // for (x in originalModel.datumFields) {
+      //   originalModel.datumFields[x].mask = "";
+      //   originalModel.datumFields[x].value = "";
+      //   originalModel.datumFields[x].label = originalModel.datumFields[x].label || originalModel.datumFields[x].id;
 
-        if (originalModel.datumFields[x].users) {
-          delete originalModel.datumFields[x].users;
-        }
-        if (originalModel.datumFields[x].user) {
-          delete originalModel.datumFields[x].user;
-        }
-        if (originalModel.datumFields[x].json) {
-          originalModel.datumFields[x].json = {};
-        }
-      }
-      for (x in originalModel.sessionFields) {
-        originalModel.sessionFields[x].mask = "";
-        originalModel.sessionFields[x].value = "";
-        originalModel.sessionFields[x].label = originalModel.sessionFields[x].label || originalModel.sessionFields[x].id;
-      }
+      //   if (originalModel.datumFields[x].users) {
+      //     delete originalModel.datumFields[x].users;
+      //   }
+      //   if (originalModel.datumFields[x].user) {
+      //     delete originalModel.datumFields[x].user;
+      //   }
+      //   if (originalModel.datumFields[x].json) {
+      //     originalModel.datumFields[x].json = {};
+      //   }
+      // }
+      // for (x in originalModel.sessionFields) {
+      //   originalModel.sessionFields[x].mask = "";
+      //   originalModel.sessionFields[x].value = "";
+      //   originalModel.sessionFields[x].label = originalModel.sessionFields[x].label || originalModel.sessionFields[x].id;
+      // }
 
       /* Use the couch connection defined by this app. */
-      if (originalModel.connection) {
-        originalModel.connection = new FieldDB.Connection(originalModel.connection);
-        var normalizedConnection = FieldDB.Connection.defaultConnection();
-        normalizedConnection.dbname = originalModel.connection.dbname;
-        originalModel.connection.merge("self", normalizedConnection, "overwrite");
-        originalModel.connection = originalModel.connection.toJSON();
-      } else {
-        // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
-        originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
-        originalModel.connection.corpusid = originalModel._id;
-        originalModel.connection.dbname = originalModel.dbname;
-      }
+      // if (originalModel.connection) {
+      //   originalModel.connection = new FieldDB.Connection(originalModel.connection);
+      //   var normalizedConnection = FieldDB.Connection.defaultConnection();
+      //   normalizedConnection.dbname = originalModel.connection.dbname;
+      //   originalModel.connection.merge("self", normalizedConnection, "overwrite");
+      //   originalModel.connection = originalModel.connection.toJSON();
+      // } else {
+      //   // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
+      //   originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
+      //   originalModel.connection.corpusid = originalModel._id;
+        this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
+      // }
 
       // some versions of the FieldDB common js in the spreadsheet removed the confidential?
       if (!originalModel.confidential) {
-        originalModel.confidential = {
+        this.fieldDBModel.confidential = {
           secretkey: new Confidential().secretKeyGenerator(),
           repairedTimestamp: Date.now()
         };
       }
-      originalModel.team = originalModel.team || {};
-      originalModel.team._id = originalModel.team.id = "team";
-      originalModel.team.username = originalModel.dbname.split("-")[0]
-      if (window.app.get("authentication").get("userPrivate").get("username") === originalModel.team.username) {
-        originalModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
-      }
-
-      /* Update the corpus to show all fields which are defaults on corpora,
-      they are only added permanently if saved. */
-      var tempCorpus = new Corpus();
-      tempCorpus.fillWithDefaults();
-
-      var datumFields = tempCorpus.get("datumFields").toJSON();
-      var originalFieldLabels = _.pluck(originalModel.datumFields, "label");
-
-      for (var field in datumFields) {
-        if (originalFieldLabels.indexOf(datumFields[field].label) === -1) {
-          OPrime.debug("Adding datum field to this corpus: " + datumFields[field].label);
-          originalModel.datumFields.push(datumFields[field]);
-        }
-      }
-
-      var sessionFields = tempCorpus.get("sessionFields").toJSON();
-      var originalFieldLabels = _.pluck(originalModel.sessionFields, "label");
-
-      for (var field in sessionFields) {
-        if (originalFieldLabels.indexOf(sessionFields[field].label) === -1) {
-          OPrime.debug("Adding session field to this corpus: " + sessionFields[field].label);
-          originalModel.sessionFields.push(sessionFields[field]);
-        }
-      }
-
-      /* Update corpus to have default licensen and terms of use if the user hasnt defined them yet */
-      if (!originalModel.copyright) {
-        originalModel.copyright = "Default: Add names of the copyright holders of the corpus.";
-      }
-      var defaultLicense = {
-        title: "Default: Creative Commons Attribution-ShareAlike (CC BY-SA).",
-        humanReadable: "This license lets others remix, tweak, and build upon your work even for commercial purposes, as long as they credit you and license their new creations under the identical terms. This license is often compared to “copyleft” free and open source software licenses. All new works based on yours will carry the same license, so any derivatives will also allow commercial use. This is the license used by Wikipedia, and is recommended for materials that would benefit from incorporating content from Wikipedia and similarly licensed projects.",
-        link: "http://creativecommons.org/licenses/by-sa/3.0/"
-      };
-      if (!originalModel.license) {
-        originalModel.license = defaultLicense;
-      }
-      var licenseUpdated = originalModel.license;
-      if (typeof licenseUpdated == "string") {
-        licenseUpdated = {};
-      }
-      if (!licenseUpdated.title) {
-        licenseUpdated.title = defaultLicense.title;
-        originalModel.license = licenseUpdated;
-      }
-      if (!licenseUpdated.humanReadable) {
-        licenseUpdated.humanReadable = defaultLicense.humanReadable;
-        originalModel.license = licenseUpdated;
-      }
-      if (!licenseUpdated.link) {
-        licenseUpdated.link = defaultLicense.link;
-        originalModel.license = licenseUpdated;
-      }
-      var defaultTerms = {
-        humanReadable: "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus."
-      };
-      var termsUpdated = originalModel.termsOfUse || originalModel.terms;
-      if (!termsUpdated || typeof termsUpdated == "string") {
-        termsUpdated = defaultTerms;
-        originalModel.termsOfUse = defaultTerms;
-      }
-      /* upgrade to v1.99 using termsOfUse not terms */
-      if (originalModel.terms) {
-        delete originalModel.terms;
-      }
+      // this.fieldDBModel.team = this.fieldDBModel.team || {};
+      // this.fieldDBModel.team._id = this.fieldDBModel.team.id = "team";
+      // this.fieldDBModel.team.username = this.fieldDBModel.dbname.split("-")[0]
+      // if (window.app && window.app.get("authentication").get("userPrivate").get("username") === this.fieldDBModel.team.username) {
+      //   this.fieldDBModel.team.gravatar = window.app.get("authentication").get("userPrivate").get("gravatar");
+      // }
 
       // Use a paralel corpus in the FieldDB application
       if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
-        FieldDB.FieldDBObject.application.corpus = new FieldDB.Corpus(JSON.parse(JSON.stringify(originalModel)));
+        FieldDB.FieldDBObject.application.corpus = this.fieldDBModel;
       }
 
-      return this.originalParse(originalModel);
+      return this.originalParse(this.fieldDBModel.toJSON());
     },
 
     /**
@@ -667,6 +628,7 @@ define([
       confidential: Confidential,
       source: Consultants,
       datumStates: DatumStates,
+      fields: DatumFields,
       datumFields: DatumFields,
       conversationFields: DatumFields,
       sessionFields: DatumFields,
@@ -975,6 +937,14 @@ define([
 
       this.set("timestamp", Date.now());
 
+      // Save the fields to the public corpus
+      var corpusMaskModel = self.get("corpusMask");
+      corpusMaskModel.set("fields", self.get("fields").clone());
+      if (self.get("publicCorpus") === "Private") {
+        corpusMaskModel.set("title", "Private Corpus");
+        corpusMaskModel.set("description", "The details of this corpus are not public.");
+      }
+
       self.save(null, {
         success: function(model, response) {
           if (OPrime.debugMode) OPrime.debug('Corpus save success');
@@ -986,9 +956,8 @@ define([
           //              differences = "";
           //            }
           //save the corpus mask too
-          var corpusMaskMode = model.get("corpusMask");
-          corpusMaskMode.set("corpusid", model.id);
-          corpusMaskMode.saveAndInterConnectInApp();
+          corpusMaskModel.set("corpusid", model.id);
+          corpusMaskModel.saveAndInterConnectInApp();
 
           if (window.appView) {
             window.appView.toastUser("Sucessfully saved corpus: " + title, "alert-success", "Saved!");
@@ -1417,17 +1386,56 @@ define([
         }
       }
     },
+    
     validate: function(attrs) {
       if (attrs.publicCorpus) {
-        if (attrs.publicCorpus != "Public") {
-          if (attrs.publicCorpus != "Private") {
-            return "Corpus must be either Public or Private"; //TODO test this.
-          }
+        if (attrs.publicCorpus !== "Public" && attrs.publicCorpus !== "Private") {
+          return "Corpus must be either Public or Private";
         }
       }
     },
+
+    get: function(key) {
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          return field.get("mask");
+        }
+      }
+      return Backbone.Model.prototype.get.apply(this, arguments);
+    },
+
     set: function(key, value, options) {
       var attributes;
+
+      var json = false;
+      if (key === "termsOfUse"){
+        key = "rights";
+      } else if (key === "license"){
+        key = "rights";
+        json = true;
+      } else if (key === "copyright") {
+        key = "rightsHolder";
+      }
+
+      var field;
+      if (key && typeof key === "string" && this.attributes.fields && typeof this.attributes.fields.where === "function") {
+        field = this.attributes.fields.where({
+          id: key
+        })[0];
+
+        if (field) {
+          delete this.attributes[key];
+          if (json) {
+            return field.set("json", value);
+          }
+          return field.set("mask", value);
+        }
+      }
 
       // Handle both `"key", value` and `{key: value}` -style arguments.
       if (_.isObject(key) || key == null) {
@@ -1445,6 +1453,7 @@ define([
       }
       return Backbone.Model.prototype.set.call(this, attributes, options);
     },
+
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus in case there is a master corpus with
@@ -1772,9 +1781,6 @@ define([
 
         //end error
       });
-    },
-    changeCorpusPublicPrivate: function() {
-      //      alert("TODO contact server to change the public private of the corpus");
     }
   });
 

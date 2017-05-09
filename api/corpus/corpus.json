@@ -70,12 +70,16 @@
   }],
   "fields": [{
     "id": "title",
+    "label": "Title",
+    "defaultfield": true,
     "help": "A name given to the resource. All other titles (e.g., translations) should be specified as the dcterms:alternative refinement. Example: Na tala 'uria na idulaa diana, Alternative: The road to good reading",
     "json": {
       "alternative": []
     }
   }, {
     "id": "description",
+    "label": "Description",
+    "defaultfield": true,
     "help": "An account of the resource.",
     "value": "This is probably your first Corpus, you can use it to play with the app... When you want to make a real corpus, click New : Corpus",
     "json": {
@@ -85,19 +89,25 @@
   }, {
     "id": "keywords",
     "type": "tags",
-    "help": "Keywords describing for your database.",
+    "label": "Keywords",
+    "defaultfield": true,
+    "help": "Keywords describing for your corpus.",
     "showToUserTypes": "all",
     "json": {
       "keywords": []
     }
   }, {
     "id": "subject",
+    "label": "Subject Language",
+    "defaultfield": true,
     "help": "The topic of the resource. Recommended best practice is to use values from the olac:language scheme using two- and three-letter identifiers from ISO 639.",
     "json": {
       "languages":{}
     }
   }, {
     "id": "coverage",
+    "label": "Location",
+    "defaultfield": true,
     "help": "The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant. For examples see: http://www.language-archives.org/NOTE/usage.html",
     "json": {
       "spatial" : [],
@@ -105,6 +115,8 @@
     }
   }, {
     "id": "date",
+    "label": "Date(s)",
+    "defaultfield": true,
     "help": "Points or periods of time associated with an event in the lifecycle of the resource.",
     "json": {
       "available" : "",
@@ -118,8 +130,9 @@
     }
   }, {
     "id": "rights",
+    "label": "Terms Of Use",
+    "defaultfield": true,
     "help": "Information about rights held in and over the resource. The rights, in most cases, belong to the creator — not the researcher or sponsor - or, in some cases, to the language community (particularly, if it is constituted as a legal entity). Can include: A description of the terms of use, and instructions on how to get access.",
-    "label": "termsOfUse",
     "value": "Sample: The materials included in this corpus are available for research and educational use. If you want to use the materials for commercial purposes, please notify the author(s) of the corpus (myemail@myemail.org) prior to the use of the materials. Users of this corpus can copy and redistribute the materials included in this corpus, under the condition that the materials copied/redistributed are properly attributed.  Modification of the data in any copied/redistributed work is not allowed unless the data source is properly cited and the details of the modification is clearly mentioned in the work. Some of the items included in this corpus may be subject to further access conditions specified by the owners of the data and/or the authors of the corpus.",
     "json": {
       "accessRights": "Contact myemail@myemail.org if you would like to gain (read, write, comment, contributor, export, search) access to the non-public parts of this database",
@@ -132,27 +145,40 @@
     }
   }, {
     "id": "rightsHolder",
-    "label": "copyright",
+    "label": "Copyright",
+    "defaultfield": true,
     "help": "A person or organization owning or managing rights over the resource. Example:  Copyright Regents of the University of California.",
     "value": "Default: Add names of the copyright holders of the corpus."
   }, {
     "id": "contributor",
+    "label": "Contributors",
+    "defaultfield": true,
     "help": "Entity/ies responsible for making contributions to the resource. A Contributor may be a person, an organization, or a service—any entity that has sufficient involvement in the creation or development of the resource to warrant explicit identification. A term from olac:role should be used to specify the role of the Contributor. Contributor is related to Creator since many of the terms in the role vocabulary (like author or photographer) name the role of the primary creator of a resource. The OLAC recommendation is that Contributor (with the appropriate role designation) be used in these cases, and that Creator be used only when there is not an appropriate term in the olac:role vocabulary for the role played by the entity that created the resource. A participating OLAC repository need not be concerned about the fact that other metadata services based on Dublin Core may prefer and even require the use of the Creator element. The OLAC-to-Simple-DC crosswalk built into the OLAC Aggregator automatically maps certain OLAC Contributor roles like author and photographer to the Creator element. See the discussion of Creator for more on its use. Follow the form in which the person's name would normally be listed in an alphabetical index in his or her own language or country of residence, e.g., “FamilyName, GivenName” for an English speaker. For examples see: http://www.language-archives.org/NOTE/usage.html",
     "json": []
   }, {
     "id": "creator",
+    "label": "Creators",
+    "defaultfield": true,
     "help": "An entity primarily responsible for making the resource. It refers to an entity with a primary role in the creation of the intellectual or artistic content of the resource. For examples see: http://www.language-archives.org/NOTE/usage.html"
   }, {
     "id": "publisher",
+    "label": "Publisher",
+    "defaultfield": true,
     "help": "An entity responsible for making the resource available. The Publisher is generally the business, organization, or sometimes individual who takes responsibility (and provides financial and production resources) for putting the resource into a form suitable for making it publicly available, whether in multiple hard copies (printing, pressing of a disc, etc), by broadcasting (radio, television, webcast), or posting to a public website."
   }, {
     "id": "identifier",
+    "label": "Identifier",
+    "defaultfield": true,
+    "labelComputationalLinguists": "URI",
+    "readonly": true,
     "help": "An unambiguous reference to the resource within a given context.",
     "json": {
       "bibliographicCitation": ""
     }
   }, {
     "id": "format",
+    "label": "Format",
+    "defaultfield": true,
     "help": "The file format, physical medium, or dimensions of the resource.",
     "json": {
       "extent" : "",
@@ -160,19 +186,29 @@
     }
   }, {
     "id": "type",
-    "help": "The nature or genre of the resource.",
+    "label": "Resource Type",
+    "defaultfield": true,
+    "help": "The nature or genre of the resource (normally a dataset, but could also be a lexicon and/or a grammar).",
     "value": "Dataset"
   }, {
     "id": "source",
+    "label": "Original Source(s)",
+    "defaultfield": true,
     "help": "The present resource may be derived from the Source resource in whole or in part."
   }, {
     "id": "provenance",
+    "label": "Provenance",
+    "defaultfield": true,
     "help": "A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity and interpretation. Example: Collection of texts recorded by ____, transcribed with the assistance of a number of local residents. Body of materials were transferred to custody of SIL ____ Branch in 1980s, subsequently organized,  collated and annotated by J. L. ____, a researcher in a closely related _____ language. Annotations particularly relate to changes in orthographic and tone marking conventions over the years of collection and as compared to current practices"
   }, {
     "id": "language",
+    "label": "Documentation Language",
+    "defaultfield": true,
     "help": "A language of the resource. Language is used for a language the resource is in (eg: English), as opposed to the language it describes (eg: Quechua)."
   }, {
     "id": "relation",
+    "label": "Related resources",
+    "defaultfield": true,
     "help": "URI to related resource(s).",
     "json": {
       "conformsTo": [],
@@ -378,6 +414,7 @@
     "type": "relatedData",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
+    "readonly": true,
     "defaultfield": true,
     "json": {
       "relatedData": []

@@ -2,6 +2,7 @@
 
 #ignore compiled handlebars
 compiled_handlebars.js
+backbone_client/data.js
 *.handlebars.js
 #ignore generated folders
 release/

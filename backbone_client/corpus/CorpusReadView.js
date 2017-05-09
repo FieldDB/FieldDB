@@ -184,7 +184,10 @@ define([
       }
       this.changeViewsOfInternalModels();
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
+      jsonToRender.fields = this.model.get("fields").toJSON();
+      jsonToRender.title = jsonToRender.title;
+      
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
@@ -198,6 +201,7 @@ define([
       jsonToRender.locale_Copyright = Locale.get("locale_Copyright");
       jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
       jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+      jsonToRender.locale_Corpus_field_settings = Locale.get("locale_Corpus_field_settings");
       jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
       jsonToRender.locale_Session_field_settings = Locale.get("locale_Session_field_settings");
       jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
@@ -217,6 +221,7 @@ define([
       jsonToRender.locale_Show_in_Dashboard = Locale.get("locale_Show_in_Dashboard");
       jsonToRender.locale_Terms_of_use = Locale.get("locale_Terms_of_use");
       jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+      jsonToRender.locale_corpus_fields_explanation = Locale.get("locale_corpus_fields_explanation");
       jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
       jsonToRender.locale_session_fields_explanation = Locale.get("locale_session_fields_explanation");
       jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
@@ -263,6 +268,10 @@ define([
         this.commentEditView.el = $(this.el).find('.new-comment-area');
         this.commentEditView.render();
 
+        // Display the CorpusFieldsView
+        this.corpusFieldsView.el = this.$('.corpus_field_settings');
+        this.corpusFieldsView.render();
+
         // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
@@ -300,7 +309,7 @@ define([
 
         try {
           $(this.el).find(".corpus-description-wiki").html($.wikiText(jsonToRender.description));
-          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+          $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse));
           $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
         } catch (e) {
           OPrime.debug("Formatting as wiki text didnt work");
@@ -346,6 +355,15 @@ define([
         childViewFormat: "link"
       });
 
+      //Create a list of CorpusFields
+      this.corpusFieldsView = new UpdatingCollectionView({
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldReadView,
+        childViewTagName: 'li',
+        childViewFormat: "datum", // Show values not help text
+        childViewClass: "breadcrumb"
+      });
+
       //Create a list of DatumFields
       this.datumFieldsView = new UpdatingCollectionView({
         collection: this.model.get("datumFields"),
@@ -355,7 +373,7 @@ define([
         childViewClass: "breadcrumb"
       });
 
-      //Create a list of DatumFields
+      //Create a list of SessionFields
       this.sessionFieldsView = new UpdatingCollectionView({
         collection: this.model.get("sessionFields"),
         childViewConstructor: DatumFieldReadView,

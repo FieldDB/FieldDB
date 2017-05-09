@@ -104,6 +104,9 @@ var FieldDBObject = function FieldDBObject(json) {
   if (json && json.confidential && this.INTERNAL_MODELS["confidential"]) {
     this.confidential = new this.INTERNAL_MODELS["confidential"](json.confidential);
   }
+  if (json && json.fields && this.INTERNAL_MODELS["fields"]) {
+    this.fields = new this.INTERNAL_MODELS["fields"](json.fields);
+  }
   if (this.INTERNAL_MODELS) {
     this.debug("parsing with ", this.INTERNAL_MODELS);
   }
@@ -1498,6 +1501,29 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
             resultObject[aproperty] = anObject[aproperty];
           }
         }
+
+        // TODO rewrite this function
+        // if (overwrite || FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
+        //   if (aproperty === "_dbname" && optionalOverwriteOrAsk.indexOf("keepDBname") > -1) {
+        //     // resultObject._dbname = this.dbname;
+        //     this.warn(" Keeping _dbname of " + resultObject.dbname);
+        //   } else {
+        //     if (optionalOverwriteOrAsk.indexOf("ignore") > -1  || !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
+        //       this.debug("Overwriting contents of " + aproperty + " (this may cause disconnection in listeners)");
+        //     }
+        //     this.debug("Overwriting  ", anObject[aproperty], " ->", anotherObject[aproperty]);
+
+        //     resultObject[aproperty] = anotherObject[aproperty];
+        //   }
+        // } else if (optionalOverwriteOrAsk.indexOf("ignore") > -1 && !FieldDBObject.ignore(aproperty, FieldDBObject.internalAttributesToAutoMerge)) {
+        //   return resultObject;
+        // } else if (optionalOverwriteOrAsk.indexOf("overwrite") === -1) {
+        //   handleAsyncConfirmMerge(this, aproperty);
+        // } else  {
+        //   // if (resultObject[aproperty] != anObject[aproperty]) {
+        //   //   resultObject[aproperty] = anObject[aproperty];
+        //   // }
+        // }
       }
 
       return resultObject;

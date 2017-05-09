@@ -50,7 +50,7 @@
 <a class="explain_terms_of_use" data-html="true" rel="popover" data-placement="right" data-content="{{{locale_Terms_explanation}}}"  title="Why have a Terms of Use for your corpus" tabindex="-1">
   <i class="icon-question-sign"></i>
 </a></label>
-<div class="terms corpus-terms-wiki-preview">{{termsOfUse.humanReadable}}</div>
+<div class="terms corpus-terms-wiki-preview">{{termsOfUse}}</div>
 
 <label><span>{{locale_License}}</span>
 <a class="explain_license" data-html="true" rel="popover"  data-placement="right" data-content="{{{locale_License_explanation}}}" title="Why have a License for your corpus" tabindex="-1">
@@ -61,7 +61,6 @@
 
 <label><span>{{locale_Copyright}}</span></label>
 <div class="copyright">{{copyright}}</div>
-
 
 
 <!-- Force directed graph of morphemes in the corpus -->
@@ -154,6 +153,22 @@
 			</div>
 		</div>
 	</div>
+
+	 <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse"
+        data-parent="#accordion-read-embedded"
+        href="#collapseCorpusFieldSettingsRE"> <i class="icon-cloud"></i>
+        <strong>{{locale_Corpus_field_settings}}</strong>
+      </a>
+    </div>
+    <div id="collapseCorpusFieldSettingsRE" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <span>{{{locale_corpus_fields_explanation}}}</span>
+        <ul class="corpus_field_settings unstyled"></ul>
+      </div>
+    </div>
+  </div>
 
   <div class="accordion-group">
     <div class="accordion-heading">

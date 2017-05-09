@@ -651,7 +651,7 @@ define([
        * user knows which corpus and elicitation they are entering
        * data in
        */
-      if (this.model && this.model.get("corpus")){
+      if (this.model && this.model.get("corpus") && this.model.get("corpus").get("fields")){
         jsonToRender.corpustitle = this.model.get("corpus").get("title");
         if (jsonToRender.corpustitle.length > 20) {
           jsonToRender.corpustitle = jsonToRender.corpustitle.substr(0, 19) + "...";

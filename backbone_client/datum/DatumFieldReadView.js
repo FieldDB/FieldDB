@@ -50,19 +50,26 @@ define([
     render: function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.DatumField(this.model.toJSON())
+      if (jsonToRender.shouldBeEncrypted) {
+        jsonToRender.shouldBeEncrypted = "checked";
+      } else {
+        jsonToRender.shouldBeEncrypted = "";
+      }
       jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
-
-      if (this.format == "corpus") {
+      jsonToRender.labelFieldLinguists = jsonToRender.labelFieldLinguists || jsonToRender.label;
+      if (this.format === "corpus") {
         $(this.el).html(this.templateSettings(jsonToRender));
 
         // Select the correct values from the model
-        this.$el.children(".choose-field").val(this.model.get("label"));
+        this.$el.children(".choose-field").val(this.model.get("id"));
 
-      } else if (this.format == "datum") {
-        jsonToRender.helpText = true;
-        $(this.el).html(this.templateValue(jsonToRender));
-      } else if (this.format == "session") {
+      // } else if (this.format == "corpusField") {
+      //   $(this.el).html(this.templateValue(jsonToRender) + this.templateSettings(jsonToRender));
+
+      //   // Select the correct values from the model
+      //   this.$el.children(".choose-field").val(this.model.get("id"));
+      } else if (this.format === "datum" || this.format === "session")  {
         jsonToRender.helpText = true;
         $(this.el).html(this.templateValue(jsonToRender));
       }

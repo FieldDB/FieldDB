@@ -43,58 +43,62 @@ define([
           return;
         }
         user.username = usernameToAdd;
-        for (u in this.model.get("potentialusers")) {
-          if (usernameToAdd.indexOf(this.model.get("potentialusers")[u].username) > -1) {
-            var gravatar = this.model.get("potentialusers")[u].gravatar;
-            if (gravatar) {
-              user.gravatar = gravatar;
-            }
-            //            var g = this.model.get("users");
-            //            g.add(user);
-            //            this.model.set("users", g);
-            var userAsMask = new UserMask(user);
-            userAsMask.set("status", "user-permission-pending");
-            this.model.get("users").add(userAsMask);
-            $(this.el).find(".choose-add-permission-username").val("");
-            var permisionviewself = this;
-            window.app.get("authentication").addCorpusRoleToUser(
-              this.model.get("role"), user,
-              /*success */
-              function(returneduser) {
-                //do nothing?
-                userAsMask.set("status", "user-permission-confirmed");
-                permisionviewself.render();
+        user.add = [this.model.get("role")];
 
-                window.app.addActivity({
-                  verb: "added",
-                  verbicon: "icon-plus",
-                  directobjecticon: "",
-                  directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/" + userAsMask.get("gravatar") + "?d=identicon'/> " + user.username,
-                  indirectobject: "as a <i class='icon-group'></i> " + permisionviewself.model.get("role") + " on <i class='icon-cloud'></i><a href='#corpus/" + window.app.get("corpus").id + "'>this corpus</a>",
-                  teamOrPersonal: "team",
-                  context: " via Offline App."
-                });
-
-                window.app.addActivity({
-                  verb: "added",
-                  verbicon: "icon-plus",
-                  directobjecticon: "icon-group",
-                  directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/" + userAsMask.get("gravatar") + "?d=identicon'/> " + user.username,
-                  indirectobject: "as a <i class='icon-group'></i> " + permisionviewself.model.get("role") + " on <i class='icon-cloud'></i><a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
-                  teamOrPersonal: "personal",
-                  context: " via Offline App."
-                });
-              },
-              /* failure */
-              function(errors) {
-                window.appView.toastUser("Error adding user <strong>" + user.username + "</strong> to corpus permissions. " + errors, "alert-warning", "Permissions:");
-                permisionviewself.model.get("users").remove(user);
-                permisionviewself.render();
-              });
-            this.render();
-            return;
+        this.model.get("potentialusers").map(function(potentialUser){
+          if (potentialUser.username === potentialUser){
+            user.gravatar = gravatar;
           }
-        }
+        });
+
+        var userAsMask = new UserMask(user);
+        userAsMask.set("status", "user-permission-pending");
+        this.model.get("users").add(userAsMask);
+        $(this.el).find(".choose-add-permission-username").val("");
+        var permisionviewself = this;
+        window.app.get("authentication").addCorpusRoleToUser({
+            users: [user],
+          },
+          /*success */
+          function(serverResults) {
+            var mmessage = "User was added";
+            if (serverResults.info && serverResults.info[0] && typeof serverResults.info[0].replace === "function") {
+              message = serverResults.info[0].replace(window.app.get("corpus").get("dbname"), window.app.get("corpus").get("title"));
+            }
+            window.appView.toastUser(message, "alert-success");
+
+            //do nothing?
+            userAsMask.set("status", "user-permission-confirmed");
+            permisionviewself.render();
+
+            window.app.addActivity({
+              verb: "added",
+              verbicon: "icon-plus",
+              directobjecticon: "",
+              directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/" + userAsMask.get("gravatar") + "?d=identicon'/> " + user.username,
+              indirectobject: "as a <i class='icon-group'></i> " + permisionviewself.model.get("role") + " on <i class='icon-cloud'></i><a href='#corpus/" + window.app.get("corpus").id + "'>this corpus</a>",
+              teamOrPersonal: "team",
+              context: " via Offline App."
+            });
+
+            window.app.addActivity({
+              verb: "added",
+              verbicon: "icon-plus",
+              directobjecticon: "icon-group",
+              directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/" + userAsMask.get("gravatar") + "?d=identicon'/> " + user.username,
+              indirectobject: "as a <i class='icon-group'></i> " + permisionviewself.model.get("role") + " on <i class='icon-cloud'></i><a href='#corpus/" + window.app.get("corpus").id + "'>" + window.app.get("corpus").get('title') + "</a>",
+              teamOrPersonal: "personal",
+              context: " via Offline App."
+            });
+          },
+          /* failure */
+          function(errors) {
+            window.appView.toastUser("Error adding user <strong>" + user.username + "</strong> to corpus permissions. " + errors, "alert-warning", "Permissions:");
+            permisionviewself.model.get("users").remove(user);
+            permisionviewself.render();
+          });
+
+        this.render();
       }
     },
 

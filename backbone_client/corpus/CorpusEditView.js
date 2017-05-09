@@ -149,6 +149,7 @@ define([
       "click .add-datum-state": 'insertNewDatumState',
 
       //Add button inserts new Datum Field
+      "click .add-corpus-field": 'insertNewCorpusField',
       "click .add-datum-field": 'insertNewDatumField',
       "click .add-session-field": 'insertNewSessionField',
       "click .icon-resize-small": 'resizeSmall',
@@ -241,7 +242,9 @@ define([
 
       this.changeViewsOfInternalModels();
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
+      jsonToRender.fields = this.model.get("fields").toJSON();
+      jsonToRender.license = jsonToRender.fields.rights.json.license || {};
       jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
@@ -264,6 +267,7 @@ define([
       jsonToRender.locale_Copyright = Locale.get("locale_Copyright");
       jsonToRender.locale_Data_menu = Locale.get("locale_Data_menu");
       jsonToRender.locale_Datalists_associated = Locale.get("locale_Datalists_associated");
+      jsonToRender.locale_Corpus_field_settings = Locale.get("locale_Corpus_field_settings");
       jsonToRender.locale_Datum_field_settings = Locale.get("locale_Datum_field_settings");
       jsonToRender.locale_Session_field_settings = Locale.get("locale_Session_field_settings");
       jsonToRender.locale_Datum_state_settings = Locale.get("locale_Datum_state_settings");
@@ -299,6 +303,7 @@ define([
       jsonToRender.locale_Warning = Locale.get("locale_Warning");
       jsonToRender.locale_conversation_fields_explanation = Locale.get("locale_conversation_fields_explanation");
       jsonToRender.locale_datalists_explanation = Locale.get("locale_datalists_explanation");
+      jsonToRender.locale_corpus_fields_explanation = Locale.get("locale_corpus_fields_explanation");
       jsonToRender.locale_datum_fields_explanation = Locale.get("locale_datum_fields_explanation");
       jsonToRender.locale_datum_states_explanation = Locale.get("locale_datum_states_explanation");
       jsonToRender.locale_elicitation_sessions_explanation = Locale.get("locale_elicitation_sessions_explanation");
@@ -342,6 +347,10 @@ define([
         //         this.permissionsView.render();
 
         // Display the DatumFieldsView
+        this.corpusFieldsView.el = this.$('.corpus_field_settings');
+        this.corpusFieldsView.render();
+
+        // Display the DatumFieldsView
         this.datumFieldsView.el = this.$('.datum_field_settings');
         this.datumFieldsView.render();
 
@@ -359,7 +368,7 @@ define([
 
         this.updateDescription();
 
-        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse.humanReadable));
+        $(this.el).find(".corpus-terms-wiki-preview").html($.wikiText(jsonToRender.termsOfUse));
         $(this.el).find(".corpus-license-humanreadable-wiki-preview").html($.wikiText(jsonToRender.license.humanReadable));
 
       } else if (this.format == "leftSide") {
@@ -452,6 +461,15 @@ define([
         childViewConstructor: SessionReadView,
         childViewTagName: 'li',
         childViewFormat: "link"
+      });
+
+      //Create a CorpusFieldsView
+      this.corpusFieldsView = new UpdatingCollectionView({
+        collection: this.model.get("fields"),
+        childViewConstructor: DatumFieldEditView,
+        childViewTagName: 'tr',
+        childViewFormat: "datum", // To be editable
+        childViewClass: ""
       });
 
       //Create a DatumFieldsView
@@ -550,9 +568,11 @@ define([
     },
     updateLicense: function() {
       var license = {
-        title: this.$el.find(".corpus-license-title-input").val(),
-        link: this.$el.find(".corpus-license-link-input").val(),
-        humanReadable: this.$el.find(".corpus-license-humanreadable-input").val()
+        license: {
+          title: this.$el.find(".corpus-license-title-input").val(),
+          link: this.$el.find(".corpus-license-link-input").val(),
+          humanReadable: this.$el.find(".corpus-license-humanreadable-input").val()
+        }
       };
       this.model.set("license", license);
       if (this.model.id) {
@@ -560,19 +580,101 @@ define([
       }
     },
     updateTermsOfUse: function() {
-      var terms = {
-        humanReadable: this.$el.find(".corpus-terms-input").val()
-      };
+      var terms = this.$el.find(".corpus-terms-input").val();
       this.model.set("termsOfUse", terms);
       if (this.model.id) {
         window.appView.addUnsavedDoc(this.model.id);
       }
     },
-    updatePublicOrPrivate: function() {
-      this.model.set("publicCorpus", this.$el.find(".public-or-private").val());
-      if (this.model.id) {
-        window.appView.addUnsavedDoc(this.model.id);
+    updatePublicOrPrivate: function(e) {
+      e.preventDefault();
+      if (!this.model.id) {
+        return;
       }
+
+      var previousValue = this.model.get("publicCorpus");
+      var newValue = this.$el.find(".public-or-private").val().trim();
+      var self = this;
+      if (previousValue === newValue) {
+        return;
+      }
+
+      if (newValue !== "Public" && newValue !== "Private") {
+        return "Corpus must be either Public or Private";
+      }
+      this.model.set("publicCorpus", newValue);
+      // window.appView.addUnsavedDoc(this.model.id);
+
+      self.model.saveAndInterConnectInApp(function() {
+        var data = {
+          users: [{
+            username: "public",
+            remove: ["all"]
+          }],
+        };
+
+        if (newValue === "Public") {
+          data.users[0].add = ["reader"];
+        }
+        window.app.get("authentication").addCorpusRoleToUser(data,
+          /*success */
+          function(serverResults) {
+            if (newValue === "Public") {
+              window.appView.toastUser("This corpus is now viewable by the public. You should enable encryption of confidential information and verify which fields of the corpus you wish to be accessible by the public.", "alert-success", "Public:");
+
+              window.app.addActivity({
+                verb: "added",
+                verbicon: "icon-plus",
+                directobjecticon: "",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "as a <i class='icon-group'></i> reader on <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>this corpus</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App."
+              });
+
+              window.app.addActivity({
+                verb: "added",
+                verbicon: "icon-plus",
+                directobjecticon: "icon-group",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "as a <i class='icon-group'></i> reader on <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>" + self.model.get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App."
+              });
+            } else {
+              window.appView.toastUser("This corpus is private.", "alert-success", "Private:");
+
+              window.app.addActivity({
+                verb: "removed",
+                verbicon: "icon-plus",
+                directobjecticon: "",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: " access from <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>this corpus</a>",
+                teamOrPersonal: "team",
+                context: " via Offline App."
+              });
+
+              window.app.addActivity({
+                verb: "removed",
+                verbicon: "icon-plus",
+                directobjecticon: "icon-group",
+                directobject: "<img class='gravatar-small' src='https://secure.gravatar.com/avatar/968b8e7fb72b5ffe2915256c28a9414c?d=identicon'/> Public",
+                indirectobject: "access from <i class='icon-cloud'></i><a href='#corpus/" + self.model.id + "'>" + self.model.get('title') + "</a>",
+                teamOrPersonal: "personal",
+                context: " via Offline App."
+              });
+            }
+          },
+          /* failure */
+          function(errors) {
+            window.appView.toastUser("Error changing the corpus to " + self.model.attributes.publicCorpus + "  " + errors, "alert-warning", previousValue + ":");
+            self.model.attributes.publicCorpus = previousValue;
+          });
+      },
+      function(err) {
+        self.model.attributes.publicCorpus = previousValue;
+        console.log(err);
+      });
     },
 
     //toggle Terms of Use explanation in popover
@@ -660,6 +762,39 @@ define([
       this.model.newCorpus();
     },
 
+    // This the function called by the add button, it adds a new datum field both to the
+    // collection and the model
+    insertNewCorpusField: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      //don't add blank fields
+      if (this.$el.find(".choose_add_corpus_field").val().toLowerCase().replace(/ /g, "_") == "") {
+        return;
+      }
+      // Remember if the encryption check box was checked
+      var checked = this.$el.find(".add_corpus_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_corpus_field").val();
+
+      // Create the new DatumField based on what the user entered
+      var m = new DatumField({
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
+        "shouldBeEncrypted": checked,
+        "help": this.$el.find(".add_corpus_help").val()
+      });
+
+      // Add the new DatumField to the Corpus' list for datumFields
+      this.model.get("fields").add(m);
+
+      // Reset the line with the add button
+      this.$el.find(".choose_add_corpus_field").val(""); //.children("option:eq(0)").attr("selected", true);
+      this.$el.find(".add_corpus_help").val("");
+      window.appView.addUnsavedDoc(this.model.id);
+
+    },
+
     // This the function called by the add button, it adds a new session field both to the
     // collection and the model
     insertNewSessionField: function(e) {
@@ -673,10 +808,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_session_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_session_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_session_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_session_help").val()
       });
@@ -704,10 +841,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_shouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_help").val()
       });
@@ -733,10 +872,12 @@ define([
       }
       // Remember if the encryption check box was checked
       var checked = this.$el.find(".add_conversationShouldBeEncrypted").is(':checked') ? "checked" : "";
+      var label = this.$el.find(".choose_add_conversation_field").val();
 
       // Create the new DatumField based on what the user entered
       var m = new DatumField({
-        "label": this.$el.find(".choose_add_conversation_field").val().toLowerCase().replace(/ /g, "_"),
+        "id": label.toLowerCase().replace(/ /g, "_"),
+        "label": label,
         "shouldBeEncrypted": checked,
         "help": this.$el.find(".add_conversation_help").val()
       });

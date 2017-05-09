@@ -96,8 +96,8 @@ define([
       var self = this;
       dataToPost.authUrl = FieldDB.Connection.defaultConnection(user.get("authUrl")).authUrl;
 
-      this.fielddbModel = this.fielddbModel || new FieldDB.Authentication();
-      this.fielddbModel.login(dataToPost).then(function(fielddbUser) {
+      this.fieldDBModel = this.fieldDBModel || new FieldDB.Authentication();
+      this.fieldDBModel.login(dataToPost).then(function(fielddbUser) {
         if (!dataToPost.syncDetails) {
           var encryptedUserString = localStorage.getItem(dataToPost.username);
           if (encryptedUserString){
@@ -180,8 +180,8 @@ define([
         renderProgress();
       }
 
-      this.fielddbModel = this.fielddbModel || new FieldDB.Authentication();
-      this.fielddbModel.register(dataToPost).then(function(user) {
+      this.fieldDBModel = this.fieldDBModel || new FieldDB.Authentication();
+      this.fieldDBModel.register(dataToPost).then(function(user) {
         //Destropy cookies, and load the new user
         localStorage.removeItem("username");
         localStorage.removeItem("token");
@@ -471,58 +471,34 @@ define([
         }
       });
     },
-    addCorpusRoleToUser: function(role, userToAddToCorpus, successcallback, failcallback) {
+
+    addCorpusRoleToUser: function(dataToPost, successcallback, failcallback) {
       var self = this;
       $("#quick-authenticate-modal").modal("show");
-      if (this.get("userPrivate").get("username") == "lingllama") {
+      if (this.get("userPrivate").get("username") === "lingllama") {
         $("#quick-authenticate-password").val("phoneme");
       }
 
       var subscription = function() {
-        //prepare data and send it
-        var dataToPost = {};
-        var authUrl = "";
-        if (this.get("userPrivate") != undefined) {
-          //Send username to limit the requests so only valid users can get a user list
-          dataToPost.username = this.get("userPrivate").get("username");
-          dataToPost.password = $("#quick-authenticate-password").val();
-          dataToPost.connection = window.app.get("corpus").get("connection");
-          if (!dataToPost.connection.path) {
-            dataToPost.connection.path = "";
-            window.app.get("corpus").get("connection").path = "";
-          }
-          dataToPost.roles = [role];
-          dataToPost.userToAddToRole = userToAddToCorpus.username;
-
-          authUrl = FieldDB.Connection.defaultConnection(this.get("userPrivate").get("authUrl")).authUrl;
-        } else {
-          // failcallback();
+        if (!self.get("userPrivate")) {
           return;
         }
-        FieldDB.CORS.makeCORSRequest({
-          type: 'POST',
-          withCredentials: true,
-          url: authUrl + "/addroletouser",
-          data: dataToPost
-        }).then(function(serverResults) {
-          if (serverResults.userFriendlyErrors != null) {
-            if (OPrime.debugMode) OPrime.debug("User " + userToAddToCorpus.username + " not added to the corpus as " + role);
-            if (typeof failcallback == "function") {
-              failcallback(serverResults.userFriendlyErrors.join("<br/>"));
-            }
-          } else if (serverResults.roleadded != null) {
-            if (OPrime.debugMode) OPrime.debug("User " + userToAddToCorpus.username + " added to the corpus as " + role);
-            if (typeof successcallback == "function") {
-              successcallback(userToAddToCorpus);
-            }
+        
+        dataToPost.username = self.get("userPrivate").get("username");
+        dataToPost.password = $("#quick-authenticate-password").val();
+        window.app.get("corpus").fieldDBModel.modifyTeam(dataToPost)
+        .then(function(serverResults) {
+          if (OPrime.debugMode) OPrime.debug("User was added", serverResults);
+          if (typeof successcallback == "function") {
+            successcallback(serverResults);
           }
         }, function(e) {
           if (OPrime.debugMode) OPrime.debug("Ajax failed, user might be offline (or server might have crashed before replying).", e);
 
           if (typeof failcallback == "function") {
-            failcallback("There was an error in contacting the authentication server to add " + userToAddToCorpus.username + " on your corpus team. Maybe you're offline?");
+            failcallback(e.userFriendlyErrors.join());
           }
-        });
+        }).catch(failcallback);
         //end send call
 
         //Close the modal

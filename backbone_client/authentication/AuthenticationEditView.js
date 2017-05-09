@@ -479,10 +479,10 @@ define([
       /*
        * Login as a different user
        */
-      this.model.fielddbModel = this.model.fielddbModel || new FieldDB.Authentication();
-      delete this.model.fielddbModel.user;
+      this.model.fieldDBModel = this.model.fieldDBModel || new FieldDB.Authentication();
+      delete this.model.fieldDBModel.user;
 
-      this.model.fielddbModel.login(dataToPost).then(function(fielddbUser) {
+      this.model.fieldDBModel.login(dataToPost).then(function(fielddbUser) {
         // Set the app serverLabel to the server the user logged into
         localStorage.setItem("serverLabel", appConnection.serverLabel);
 

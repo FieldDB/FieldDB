@@ -345,6 +345,7 @@ UserPreference.prototype = Object.create(FieldDBObject.prototype, /** @lends Use
         // }
       }
 
+      // TODO why
       if (JSON.stringify(json) === "{}") {
         return {};
       }

@@ -248,6 +248,12 @@ define([
       OPrime.debug("App.changePouch setting connection: ", connection);
 
       connection.dbname = connection.dbname || connection.pouchname;
+
+      if (!connection.dbname) {
+        console.warn('Could not change to an undefined pouch');
+        return;
+      }
+      
       this.set("connection", connection);
       var urlPrefix = OPrime.getCouchUrl(this.get("connection"), "");
 
