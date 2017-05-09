@@ -41,7 +41,8 @@ define([
      * Events that the DatumFieldEditView is listening to and their handlers.
      */
     events: {
-      "blur .choose-field": "updateFieldLabel",
+      "blur .fieldlinguist-label": "updateFieldLabel",
+      "blur .non-linguist-label": "updateNonLinguistFieldLabel",
       // issue #797
       "click .remove-datum-field": "removeDatumField",
       "click .shouldBeEncrypted": "updateEncrypted",
@@ -82,7 +83,7 @@ define([
     render: function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD EDIT VIEW render");
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.DatumField(this.model.toJSON());
 
       jsonToRender.locale_Encrypt_if_confidential = Locale.get("locale_Encrypt_if_confidential");
       jsonToRender.locale_Help_Text = Locale.get("locale_Help_Text");
@@ -100,7 +101,7 @@ define([
         }
         this.previousJsonRendered = jsonToRender;
         $(this.el).html(this.templateSettings(jsonToRender));
-        $(this.el).find(".choose-field").val(this.model.get("label"));
+        // $(this.el).find(".choose-field").val(this.model.get("label"));
 
       } else if (this.format == "datum" || this.format == "search") {
         if (this.format == "search") {
@@ -114,8 +115,8 @@ define([
         this.previousJsonRendered = jsonToRender;
         $(this.el).html(this.templateValue(jsonToRender));
 
-        //Add the label class to this element so that it can be found for other purposes like hiding rare fields
-        $(this.el).addClass(this.model.get("label"));
+        //Add the id class to this element so that it can be found for other purposes like hiding rare fields
+        $(this.el).addClass(this.model.get("id"));
 
         //Add listener for drag and drop unicode
         $(this.el).find(".datum_field_input").each(function() {
@@ -156,9 +157,16 @@ define([
     /**
      * Change the model's state.
      */
-    updateFieldLabel: function() {
-      if (OPrime.debugMode) OPrime.debug("Updated label to " + this.$el.find(".choose-field").val());
-      this.model.set("label", this.$el.find(".choose-field").val());
+    updateFieldLabel: function(e) {
+      var value = e.target.value;
+      if (OPrime.debugMode) OPrime.debug("Updated labelFieldLinguists to " + value);
+      this.model.set("label", value);
+      this.model.set("labelFieldLinguists", value);
+    },
+    updateNonLinguistFieldLabel: function(e) {
+      var value = e.target.value;
+      if (OPrime.debugMode) OPrime.debug("Updated labelNonLinguists to " + value);
+      this.model.set("labelNonLinguists", value);
     },
 
     // TODO Add description

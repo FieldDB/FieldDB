@@ -50,7 +50,7 @@ define([
     render: function() {
       if (OPrime.debugMode) OPrime.debug("DATUM FIELD READ VIEW render");
 
-      var jsonToRender = this.model.toJSON();
+      var jsonToRender = new FieldDB.DatumField(this.model.toJSON())
       if (jsonToRender.shouldBeEncrypted) {
         jsonToRender.shouldBeEncrypted = "checked";
       } else {

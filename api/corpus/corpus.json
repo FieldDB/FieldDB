@@ -414,6 +414,7 @@
     "type": "relatedData",
     "shouldBeEncrypted": false,
     "showToUserTypes": "all",
+    "readonly": true,
     "defaultfield": true,
     "json": {
       "relatedData": []
