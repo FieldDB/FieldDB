@@ -32,7 +32,7 @@ define([
             expect(app.get("authentication")).toBeDefined();
             expect(app.get("currentSession")).toBeDefined();
             expect(app.get("currentDataList")).toBeDefined();
-            expect(FieldDB.FieldDBObject.application.serverLabel).toEqual("beta");
+            expect(FieldDB.FieldDBObject.application.serverLabel).toEqual("production");
 
             done();
           },500);

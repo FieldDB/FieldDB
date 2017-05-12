@@ -200,7 +200,7 @@ define([
       }
 
       if (!originalModel.serverLabel) {
-        originalModel.serverLabel = originalModel.connection.serverLabel;
+        originalModel.serverLabel = originalModel.connection.serverLabel || originalModel.connection.brandLowerCase;
         originalModel.brand = originalModel.connection.userFriendlyServerName;
       }
 
@@ -732,6 +732,7 @@ define([
           return;
         }
 
+        var self = this;
         var reason = "";
         if (error.reason) {
           reason = error.reason.message || error.reason || "";
@@ -779,9 +780,9 @@ define([
             if (c.sessions.models && c.sessions.models[0] && c.sessions.models[0].id) {
               s.id = c.sessions.models[0].id;
             } else {
-              s.set(
-                "sessionFields", window.app.get("corpus").get("sessionFields").clone()
-              );
+              if (self.get("corpus") && self.get("corpus").get("sessionFields")) {
+                s.set("sessionFields", self.get("corpus").get("sessionFields").clone());
+              }
               fetchSessionSucess(s);
               return;
             }
