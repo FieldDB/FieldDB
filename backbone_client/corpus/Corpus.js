@@ -479,7 +479,7 @@ define([
       //   // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
       //   originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
       //   originalModel.connection.corpusid = originalModel._id;
-        this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
+        // this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
       // }
 
       // some versions of the FieldDB common js in the spreadsheet removed the confidential?
