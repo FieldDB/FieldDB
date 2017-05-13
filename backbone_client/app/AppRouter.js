@@ -417,7 +417,7 @@ define([
           searchterm += " morphemes:" + pieces[0];
         }
         if (pieces[1]) {
-          searchterm += " gloss:" + pieces[1];
+          searchterm += " AND gloss:" + pieces[1];
         }
       }
       if (searchterm) {
