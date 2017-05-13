@@ -1498,7 +1498,6 @@ define([
       var self = this;
       this.glosser.application.basePathname = "";
       this.glosser.application.currentCorpusDashboard = "corpus/" + this.get("dbname");
-      this.glosser.application.router = window.app.router;
       this.glosser.fetch().then(function() {
         console.log("Glosser is ready");
         if (callback && typeof callback === "function") {
@@ -1522,12 +1521,19 @@ define([
      */
     buildLexiconFromTeamServer: function(callback) {
       var self = this;
-
-      if (!self.glosser.lexicon) {
-        self.glosser.lexicon = [];
-        self.lexicon = self.glosser.lexicon;
+      if (!this.glosser) {
+        return;
       }
-      if (!self.glosser.lexicon.length) {
+
+      if (!this.glosser.lexicon) {
+        this.glosser.lexicon = [];
+        this.lexicon = this.glosser.lexicon;
+      }
+      this.glosser.application.router = window.app.router;
+      if (!self.glosser.lexicon.length && !self.glosser.lexicon.whenReady) {
+        if (window.appView) {
+          window.appView.toastUser("Preparing lexicon...", "alert-warning", "Please wait:");
+        }
         // If you dont need to look up the glosses
         // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
         // self.glosser.lexicon.updateConnectedGraph();

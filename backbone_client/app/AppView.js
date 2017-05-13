@@ -716,7 +716,7 @@ define([
       this.insertUnicodesView.render();
 
       //This forces the top search to render.
-      this.searchEditView.format = "centreWell";
+      this.searchEditView.format = "top";
       this.searchEditView.render();
 
       this.corporaReadView.el = $(this.el).find('.corpora');
