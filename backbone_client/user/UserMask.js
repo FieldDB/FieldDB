@@ -19,6 +19,7 @@ define([
       var self = this;
       setTimeout(function() {
         if (self.get("id") && !self.get("rev")) {
+          self.id = self.get("id");
           self.fetch({
             error: function(model, xhr, options) {
               if (OPrime.debugMode) OPrime.debug("There was an error fetching your UserMask in this corpus.");
