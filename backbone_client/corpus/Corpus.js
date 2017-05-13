@@ -1466,6 +1466,9 @@ define([
       if (!dbname) {
         dbname = this.get("dbname");
       }
+      if (this.glosser) {
+        return;
+      }
 
       var url = this.get("glosserURL");
       if (url) {
@@ -1498,18 +1501,6 @@ define([
       this.glosser.application.router = window.app.router;
       this.glosser.fetch().then(function() {
         console.log("Glosser is ready");
-
-        if (!self.glosser.lexicon) {
-          self.glosser.lexicon = [];
-          self.lexicon = self.glosser.lexicon;
-        }
-        if (!self.glosser.lexicon.length) {
-          // If you dont need to look up the glosses
-          // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
-          // self.glosser.lexicon.updateConnectedGraph();
-          self.glosser.lexicon.fetch();
-        }
-
         if (callback && typeof callback === "function") {
           callback();
         }
@@ -1520,6 +1511,7 @@ define([
         console.log("Unable to fetch the glosser.", exception);
       });
     },
+
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
@@ -1528,20 +1520,30 @@ define([
      * @param dbname
      * @param callback
      */
-    buildLexiconFromTeamServer: function(dbname, callback) {
-      if (this.lexicon || !this.lexicon.length && typeof this.lexicon.fetch !== "function") {
-        this.lexicon.fetch().then(function() {
-          console.log("lexicon is ready");
+    buildLexiconFromTeamServer: function(callback) {
+      var self = this;
+
+      if (!self.glosser.lexicon) {
+        self.glosser.lexicon = [];
+        self.lexicon = self.glosser.lexicon;
+      }
+      if (!self.glosser.lexicon.length) {
+        // If you dont need to look up the glosses
+        // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
+        // self.glosser.lexicon.updateConnectedGraph();
+        self.glosser.lexicon.fetch().then(function(result) {
+          if (window.appView) {
+            window.appView.toastUser("There are currently " + result.length + " lexical entries in this corpus.", "alert-success", "Lexicon:");
+          }
+
           if (callback && typeof callback === "function") {
             callback();
           }
-        }, function(reason) {
-          console.log("lexicon is not ready", reason);
-        }).fail(function(exception) {
-          console.log("lexicon is not ready", exception);
         });
       } else {
-        console.log("The lexicon hasn't been attached yet, you should use the glosser to attach it..", this.lexicon);
+        if (callback && typeof callback === "function") {
+          callback();
+        }
       }
     },
     /**

@@ -298,9 +298,11 @@ define([
 
         try {
           window.setTimeout(function() {
-            self.model.glosser.render({
-              element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
-              height: 400
+            self.model.buildLexiconFromTeamServer(function() {
+              self.model.glosser.render({
+                element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+                height: 400
+              });
             });
           }, 500);
         } catch (e) {
