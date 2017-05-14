@@ -510,8 +510,9 @@ define([
         auth.get("confidential").set("secretkey", fielddbUser.hash);
         var u = auth.get("confidential").encrypt(JSON.stringify(auth.get("userPrivate").toJSON()));
         localStorage.setItem(username, u);
-
-        OPrime.redirect("corpus.html");
+        if (window.appView) {
+          OPrime.redirect("corpus.html");
+        }
       }, function(reason) {
         var message = " Something went wrong, that's all we know. Please try again or report this to us if it does it again:  " + OPrime.contactUs;
         if (reason.userFriendlyErrors) {
