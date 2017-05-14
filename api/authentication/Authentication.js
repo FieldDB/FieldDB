@@ -10,7 +10,7 @@ var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
 
 // var md5 = require("md5");
-var bcrypt = require("bcryptjs");
+var bcrypt = require("bcrypt-nodejs");
 // console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
 
 /**
@@ -145,7 +145,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       var deferred = Q.defer(),
         self = this;
 
-      if (this.whenLoggedIn) {
+      if (this.whenLoggedIn){
         return this.whenLoggedIn;
       }
       this.whenLoggedIn = deferred.promise;
@@ -157,7 +157,7 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
       dataToPost.connection = loginDetails.connection;
 
       if (!loginDetails.syncUserDetails) {
-        //if the same user is re-authenticating, include their details to sync to the server.
+      //if the same user is re-authenticating, include their details to sync to the server.
         var tempUser = new User(loginDetails);
         tempUser.fetch();
         if (tempUser._rev && tempUser.username !== "public" && !tempUser.fetching && !tempUser.loading && tempUser.lastSyncWithServer) {
@@ -278,8 +278,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
             loginDetails.info = ["Verified offline."];
             deferred.resolve(loginDetails);
           } else {
+            loginDetails.error = err;
             if (err) {
-              loginDetails.error = err;
               loginDetails.userFriendlyErrors = ["This app has errored while trying to confirm your identity. Please report this 2892346."];
             } else {
               loginDetails.userFriendlyErrors = ["Sorry, this doesn't appear to be you."];
@@ -416,7 +416,8 @@ Authentication.prototype = Object.create(FieldDBObject.prototype, /** @lends Aut
 
         var waitTime = 1000;
         var loopExponentialDecayLogin = function(options) {
-          self.login(options).then(function(results) {
+          self.login(options).
+          then(function(results) {
 
             self.debug("    login after registration is complete " + waitTime, results);
             deferred.resolve(results);

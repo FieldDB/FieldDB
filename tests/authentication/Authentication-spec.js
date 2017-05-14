@@ -350,7 +350,7 @@ describe("Authentication ", function() {
         expect(confirmation).toEqual("shouldnt get here");
       }, function(error) {
         expect(error.userFriendlyErrors).toBeDefined();
-        expect(error.userFriendlyErrors[0]).toEqual("Sorry, this doesn't appear to be you.");
+        expect(error.userFriendlyErrors[0]).toEqual("This app has errored while trying to confirm your identity. Please report this 2892346.");
       }).fail(function(exception) {
         console.log(exception.stack);
         expect(exception).toEqual("unexpected exception");
