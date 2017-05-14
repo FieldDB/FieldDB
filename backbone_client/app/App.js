@@ -678,7 +678,7 @@ define([
         "dbname": connection.dbname,
         "connection": connection.toJSON()
       });
-      var selfapp = this;
+      var self = this;
       if (!corpusid) {
         if (this.get("corpus").id) {
           corpusid = this.get("corpus").id;
@@ -686,7 +686,7 @@ define([
           $(".spinner-status").html("Opening/Creating Corpus...");
           this.get("corpus").loadOrCreateCorpusBydbname(connection, function() {
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
-            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+            self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
             //          window.app.stopSpinner();
           });
           return;
@@ -732,7 +732,6 @@ define([
           return;
         }
 
-        var self = this;
         var reason = "";
         if (error.reason) {
           reason = error.reason.message || error.reason || "";
