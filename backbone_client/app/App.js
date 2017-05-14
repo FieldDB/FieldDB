@@ -745,7 +745,9 @@ define([
           //   if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
           //   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
           // }, connection.dbname);
-          OPrime.redirect("user.html#login");
+          if (window.appView) {
+            OPrime.redirect("user.html#login");
+          }
           return;
         }
 

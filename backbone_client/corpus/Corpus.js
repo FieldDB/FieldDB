@@ -112,7 +112,9 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
-        OPrime.redirect("user.html");
+        if (window.appView) {
+          OPrime.redirect("user.html");
+        }
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -975,6 +977,7 @@ define([
           }
           if (model.get("team").get("username") === window.app.get("authentication").get("userPrivate").get("username")) {
             model.get("team").set("gravatar", window.app.get("authentication").get("userPrivate").get("gravatar"));
+            model.get("team").set("dbname", model.get("dbname"));
             model.get("team").saveAndInterConnectInApp(function(savedTeam) {
               console.log("savedTeam", savedTeam);
             }, function(errorSavingTeam) {

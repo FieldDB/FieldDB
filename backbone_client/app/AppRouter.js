@@ -215,7 +215,7 @@ define([
           cs.id = sessionid;
 
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if (window.app.get("corpus").get("dbname") != dbname) {
+          if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != dbname) {
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?"); //TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
 
@@ -257,7 +257,7 @@ define([
           cs.id = sessionid;
 
           //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-          if (window.app.get("corpus").get("dbname") != dbname) {
+          if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != dbname) {
             alert("You are opening a session which is not in this corpus. Do you want to switch to the other corpus?"); //TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
           }
 
@@ -314,7 +314,7 @@ define([
       });
       dl.id = dataListid;
       //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-      if (window.app.get("corpus").get("dbname") != dbname) {
+      if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != dbname) {
         alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?"); //TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         return;
       }
@@ -357,7 +357,7 @@ define([
         dl.id = dataListid;
 
         //this could move the corpus to the wrong couch if someones tries to see a datalist that is not in the current corpus, the current corpus might try to move to another pouch.
-        if (window.app.get("corpus").get("dbname") != dbname) {
+        if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != dbname) {
           alert("You are opening a data list which is not in this corpus. Do you want to switch to the other corpus?"); //TODO need nodejs to find out where that data list is from, in general we cant do this, nor should we.  we should jsut tell them data list not found in their database. since the only way to get to a data list now is through a corpus details page, this situation should not arrise.
         }
 
