@@ -23,6 +23,7 @@ define([
   "user/User",
   "user/Users",
   "user/UserMask",
+  "user/UserPreference",
   "OPrime"
 ], function(
   FieldDBBackboneModel,
@@ -47,7 +48,8 @@ define([
   Team,
   User,
   Users,
-  UserMask
+  UserMask,
+  UserPreference
 ) {
   var Corpus = FieldDBBackboneModel.extend( /** @lends Corpus.prototype */ {
     /**
@@ -420,6 +422,7 @@ define([
       var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
       var self = this;
       this.fieldDBModel = new FieldDB.Corpus(originalModel);
+      this.fieldDBModel.prefs = this.fieldDBModel.prefs || {};
       this.fieldDBModel.fields = this.fieldDBModel.fields || [];
       defaultCorpus.fields.forEach(function(field) {
         if (!self.fieldDBModel.fields[field.id.toLowerCase()]) {
@@ -638,6 +641,7 @@ define([
       //      sessions : Sessions,
       //      datalists : DataLists,
       corpusMask: CorpusMask,
+      prefs: UserPreference,
       comments: Comments,
       team: UserMask
     },
@@ -1473,13 +1477,6 @@ define([
         return;
       }
 
-      var url = this.get("glosserURL");
-      if (url) {
-        url = url.substring(0, url.lastIndexOf('/_design'));
-      } else {
-        url = OPrime.getCouchUrl(this.get("connection"));
-      }
-
       if (FieldDB.FieldDBObject &&
         FieldDB.FieldDBObject.application &&
         FieldDB.FieldDBObject.application.corpus &&
@@ -1490,13 +1487,9 @@ define([
       }
       this.glosser = this.glosser || new FieldDB.Glosser({
         dbname: dbname,
+        corpus: this.fieldDBModel,
         d3: d3
       });
-
-      // this.glosser.corpus = this.glosser.corpus || {
-      //   dbname: dbname,
-      //   url: url
-      // };
 
       var self = this;
       this.glosser.application.basePathname = "";
