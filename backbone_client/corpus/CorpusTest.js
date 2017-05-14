@@ -74,15 +74,20 @@ define([
           var corpus = new Corpus();
           var result = corpus.parse(version4);
           var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
-          expected.version = json.version;
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
             }
-            // if (json[attrib].dateCreated === now) {
-            //   continue;
-            // }
-            expect(json[attrib]).toEqual(expected[attrib]);
+            if (typeof json[attrib] === "object") {
+              for (var attribEmbedded in json[attrib]) {
+                if (!json[attrib].hasOwnProperty(attribEmbedded)) {
+                  continue;
+                }
+                expect(json[attrib][attribEmbedded]).toEqual(expected[attrib][attribEmbedded]);
+              }
+            } else {
+              expect(json[attrib]).toEqual(expected[attrib]);
+            }
           }
         });
 
