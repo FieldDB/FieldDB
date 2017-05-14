@@ -1,8 +1,3 @@
-/**
-Set default server to be production
-*/
-localStorage.setItem("brand", "production");
-
 if ('undefined' === typeof navigator) {
   var navigator = {
     "userAgent": "Node.js"
