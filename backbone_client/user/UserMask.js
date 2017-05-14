@@ -85,6 +85,9 @@ define([
       // turning off save of usermasks
       if (!this.get("dbname")) {
         console.warn('Not saving usermaks, db is not set yet');
+        if (typeof successcallback == "function") {
+          successcallback();
+        }
         return;
       }
 
