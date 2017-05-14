@@ -106,12 +106,11 @@ define([
     initialize: function() {
       if (OPrime.debugMode) OPrime.debug("APPVIEW init: " + this.el);
 
-      if (window.appView && typeof window.appView.toastUser === "function") {
-        FieldDB.FieldDBObject.bug = function(message) {
+      FieldDB.FieldDBObject.bug = function(message) {
+        if (window.appView && typeof window.appView.toastUser === "function") {
           window.appView.toastUser(message, "alert-danger");
-        };
-      }
-
+        }
+      };
       FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
         var deferred = FieldDB.Q.defer();
         console.warn(message);
