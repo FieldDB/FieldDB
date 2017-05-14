@@ -387,14 +387,14 @@ define([
         //hide entered by user or modified by user if they match the person logged in (ie are not informative because only one person is working on this corpus.)
         var fieldValue = this.model.get("fields").models[f].get("mask");
         var currentUsername = window.app.get("authentication").get("userPrivate").get("username");
-        var fieldsLabel = this.model.get("fields").models[f].get("label");
+        var fieldsLabel = this.model.get("fields").models[f].get("id");
         if ((fieldsLabel.indexOf("ByUser") > -1 && !fieldValue) || fieldValue == currentUsername || this.frequentFields.indexOf(fieldsLabel) == -1) {
-          $(this.el).find("." + this.model.get("fields").models[f].get("label")).hide();
-          this.rareFields.push(this.model.get("fields").models[f].get("label"));
+          $(this.el).find("tr." + this.model.get("fields").models[f].get("id")).hide();
+          this.rareFields.push(this.model.get("fields").models[f].get("id"));
         }
       }
       /* make ungrammatical sentences have a strike through them */
-      var grammaticality = this.$el.find(".judgement .datum_field_input").val();
+      var grammaticality = this.$el.find(".judgement .datum_field_input").val() || "";
       if (grammaticality.indexOf("*") !== -1) {
         this.$el.find(".utterance .datum_field_input").addClass("ungrammatical");
       }

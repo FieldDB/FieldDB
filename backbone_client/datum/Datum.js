@@ -154,6 +154,8 @@ define([
       if (originalModel.ok) {
         return this.originalParse(originalModel);
       }
+      // TODO use this to parse the json
+      // this.fieldDBModel = new FieldDB.LanguageDatum(originalModel);
 
       originalModel.comments = originalModel.comments || [];
       originalModel.audioVideo = originalModel.audioVideo || [];
@@ -167,6 +169,7 @@ define([
       /* make sure the fields have a label */
       for (x in originalModel.fields) {
         originalModel.fields[x].label = originalModel.fields[x].label || originalModel.fields[x].id;
+        originalModel.fields[x].id = originalModel.fields[x].id || originalModel.fields[x].label;
       }
       if (!originalModel.session) {
         originalModel.session = {
@@ -285,7 +288,7 @@ define([
         delete originalModel.datumStates;
       }
 
-      var fieldLabels = _.pluck(originalModel.fields, "label");
+      var fieldLabels = _.pluck(originalModel.fields, "id");
 
       /* enforce validation status to be comma seperated */
       var indexOfValidationSatus = fieldLabels.indexOf("validationStatus");
@@ -406,11 +409,11 @@ define([
                     }
                     if (importDatum.get("fields") && importDatum.get("fields").length > 0) {
                       importDatum.get("fields").models.map(function(field) {
-                        if (!field.get("mask") || !field.get("mask").trim() || field.get("label").toLowerCase().indexOf("user") > -1 || field.get("label").toLowerCase().indexOf("validationstatus") > -1) {
+                        if (!field.get("mask") || !field.get("mask").trim() || field.get("id").toLowerCase().indexOf("user") > -1 || field.get("id").toLowerCase().indexOf("validationstatus") > -1) {
                           return;
                         }
                         var previousField = model.get("fields").where({
-                          "label": field.get("label")
+                          "id": field.get("id")
                         });
                         if (previousField && previousField.length > 0) {
                           console.log(previousField[0].get("mask") + " -> " + field.get("mask"));
@@ -815,7 +818,7 @@ define([
     getValidationStatus: function() {
       var validationStatus = "";
       var stati = this.get("fields").where({
-        "label": "validationStatus"
+        "id": "validationStatus"
       });
       stati = stati[0].get("mask").trim().split(", ");
       validationStatus = stati[0].trim();
@@ -962,7 +965,7 @@ define([
       });
 
       var fields = _.pluck(fieldsToExport, "mask");
-      var fieldLabels = _.pluck(fieldsToExport, "label");
+      var fieldLabels = _.pluck(fieldsToExport, "id");
       //setting up for IGT case...
       var judgementIndex = -1;
       var judgement = "";
@@ -1146,7 +1149,7 @@ define([
 
     datumIsInterlinearGlossText: function(fieldLabels) {
       if (!fieldLabels) {
-        fieldLabels = _.pluck(this.get("fields").toJSON(), "label");
+        fieldLabels = _.pluck(this.get("fields").toJSON(), "id");
       }
       var utteranceOrMorphemes = false;
       var gloss = false;

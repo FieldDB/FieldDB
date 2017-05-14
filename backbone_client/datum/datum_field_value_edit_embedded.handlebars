@@ -19,7 +19,7 @@
 <td class="datum_field_input_cell">
   {{#if size}}
   <input 
-    class="datum_field_input small-field" 
+    class="datum_field_input small-field {{id}}" 
     type="text" 
     value="{{mask}}">
     </input>
@@ -31,7 +31,7 @@
     </span>
     {{else}}
     <textarea 
-      class="datum_field_input" 
+      class="datum_field_input {{id}}" 
       data-provide="typeahead"
       data-items="6" 
       data-minLength="0" 
