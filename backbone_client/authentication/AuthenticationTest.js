@@ -9,6 +9,8 @@ define([
 ) {
   "use strict";
 
+  var specIsRunningTooLong = 5000;
+
   function registerTests() {
     describe("Authentication ", function() {
       describe("initialization", function() {
@@ -50,7 +52,7 @@ define([
 
           done();
         }, null, null);
-      });
+      }, specIsRunningTooLong * 2);
 
       it("should not log the user in if the server replies not-authenticated", function() {
         expect(Authentication).toBeDefined();
@@ -68,7 +70,7 @@ define([
           authentication = new Authentication({
             confidential: new Authentication.prototype.internalModels.confidential({})
           });
-        });
+        }, specIsRunningTooLong);
 
         it("should not authenticate if login good username bad password", function(done) {
           authentication.authenticate(new Backbone.Model({
@@ -83,7 +85,7 @@ define([
 
             done();
           });
-        });
+        }, specIsRunningTooLong);
 
         it("should not authenticate if login bad username any password", function(done) {
           authentication.authenticate(new Backbone.Model({
@@ -98,7 +100,7 @@ define([
 
             done();
           });
-        });
+        }, specIsRunningTooLong);
 
         it("should authenticate if login good username good password", function(done) {
           authentication.authenticate(new Backbone.Model({
@@ -114,7 +116,7 @@ define([
 
             done();
           });
-        }, 30 * 1000);
+        }, specIsRunningTooLong * 2);
       });
     });
   }

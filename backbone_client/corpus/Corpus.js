@@ -23,6 +23,7 @@ define([
   "user/User",
   "user/Users",
   "user/UserMask",
+  "user/UserPreference",
   "OPrime"
 ], function(
   FieldDBBackboneModel,
@@ -47,7 +48,8 @@ define([
   Team,
   User,
   Users,
-  UserMask
+  UserMask,
+  UserPreference
 ) {
   var Corpus = FieldDBBackboneModel.extend( /** @lends Corpus.prototype */ {
     /**
@@ -112,7 +114,9 @@ define([
       var errorfunction = function(response) {
         OPrime.debug("There was a problem getting the corpusid." + JSON.stringify(response));
         OPrime.bug("There was a problem loading your corpus. Please report this error.");
-        OPrime.redirect("user.html");
+        if (window.appView) {
+          OPrime.redirect("user.html");
+        }
       };
 
       // var errorfunction = function(model, xhr, options) {
@@ -418,6 +422,7 @@ define([
       var defaultCorpus = new FieldDB.Corpus(FieldDB.Corpus.prototype.defaults);
       var self = this;
       this.fieldDBModel = new FieldDB.Corpus(originalModel);
+      this.fieldDBModel.prefs = this.fieldDBModel.prefs || {};
       this.fieldDBModel.fields = this.fieldDBModel.fields || [];
       defaultCorpus.fields.forEach(function(field) {
         if (!self.fieldDBModel.fields[field.id.toLowerCase()]) {
@@ -479,7 +484,7 @@ define([
       //   // some versions of the FieldDB common in the spreadsheet js deprecated the couch connection
       //   originalModel.connection = FieldDB.Connection.defaultConnection().toJSON();
       //   originalModel.connection.corpusid = originalModel._id;
-        this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
+        // this.fieldDBModel.connection.dbname = this.fieldDBModel.dbname;
       // }
 
       // some versions of the FieldDB common js in the spreadsheet removed the confidential?
@@ -636,6 +641,7 @@ define([
       //      sessions : Sessions,
       //      datalists : DataLists,
       corpusMask: CorpusMask,
+      prefs: UserPreference,
       comments: Comments,
       team: UserMask
     },
@@ -975,6 +981,7 @@ define([
           }
           if (model.get("team").get("username") === window.app.get("authentication").get("userPrivate").get("username")) {
             model.get("team").set("gravatar", window.app.get("authentication").get("userPrivate").get("gravatar"));
+            model.get("team").set("dbname", model.get("dbname"));
             model.get("team").saveAndInterConnectInApp(function(savedTeam) {
               console.log("savedTeam", savedTeam);
             }, function(errorSavingTeam) {
@@ -1466,12 +1473,8 @@ define([
       if (!dbname) {
         dbname = this.get("dbname");
       }
-
-      var url = this.get("glosserURL");
-      if (url) {
-        url = url.substring(0, url.lastIndexOf('/_design'));
-      } else {
-        url = OPrime.getCouchUrl(this.get("connection"));
+      if (this.glosser) {
+        return;
       }
 
       if (FieldDB.FieldDBObject &&
@@ -1484,32 +1487,15 @@ define([
       }
       this.glosser = this.glosser || new FieldDB.Glosser({
         dbname: dbname,
+        corpus: this.fieldDBModel,
         d3: d3
       });
-
-      // this.glosser.corpus = this.glosser.corpus || {
-      //   dbname: dbname,
-      //   url: url
-      // };
 
       var self = this;
       this.glosser.application.basePathname = "";
       this.glosser.application.currentCorpusDashboard = "corpus/" + this.get("dbname");
-      this.glosser.application.router = window.app.router;
       this.glosser.fetch().then(function() {
         console.log("Glosser is ready");
-
-        if (!self.glosser.lexicon) {
-          self.glosser.lexicon = [];
-          self.lexicon = self.glosser.lexicon;
-        }
-        if (!self.glosser.lexicon.length) {
-          // If you dont need to look up the glosses
-          // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
-          // self.glosser.lexicon.updateConnectedGraph();
-          self.glosser.lexicon.fetch();
-        }
-
         if (callback && typeof callback === "function") {
           callback();
         }
@@ -1520,6 +1506,7 @@ define([
         console.log("Unable to fetch the glosser.", exception);
       });
     },
+
     /**
      * This function takes in a dbname, which could be different
      * from the current corpus incase there is a master corpus wiht
@@ -1528,20 +1515,37 @@ define([
      * @param dbname
      * @param callback
      */
-    buildLexiconFromTeamServer: function(dbname, callback) {
-      if (this.lexicon || !this.lexicon.length && typeof this.lexicon.fetch !== "function") {
-        this.lexicon.fetch().then(function() {
-          console.log("lexicon is ready");
+    buildLexiconFromTeamServer: function(callback) {
+      var self = this;
+      if (!this.glosser) {
+        return;
+      }
+
+      if (!this.glosser.lexicon) {
+        this.glosser.lexicon = [];
+        this.lexicon = this.glosser.lexicon;
+      }
+      this.glosser.application.router = window.app.router;
+      if (!self.glosser.lexicon.length && !self.glosser.lexicon.whenReady) {
+        if (window.appView) {
+          window.appView.toastUser("Preparing lexicon...", "alert-warning", "Please wait:");
+        }
+        // If you dont need to look up the glosses
+        // self.glosser.lexicon.entryRelations = self.glosser.morphemeSegmentationKnowledgeBase;
+        // self.glosser.lexicon.updateConnectedGraph();
+        self.glosser.lexicon.fetch().then(function(result) {
+          if (window.appView) {
+            window.appView.toastUser("There are currently " + result.length + " lexical entries in this corpus.", "alert-success", "Lexicon:");
+          }
+
           if (callback && typeof callback === "function") {
             callback();
           }
-        }, function(reason) {
-          console.log("lexicon is not ready", reason);
-        }).fail(function(exception) {
-          console.log("lexicon is not ready", exception);
         });
       } else {
-        console.log("The lexicon hasn't been attached yet, you should use the glosser to attach it..", this.lexicon);
+        if (callback && typeof callback === "function") {
+          callback();
+        }
       }
     },
     /**

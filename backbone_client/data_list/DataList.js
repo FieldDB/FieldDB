@@ -338,7 +338,7 @@ define([
       }
 
       //protect against users moving datalists from one corpus to another on purpose or accidentially
-      if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
+      if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
         } else {
@@ -442,7 +442,7 @@ define([
         return;
       }
 
-      if (window.app.get("corpus").get("dbname") != this.get("dbname")) {
+      if (!window.app.get("corpus") || window.app.get("corpus").get("dbname") != this.get("dbname")) {
         if (typeof failurecallback == "function") {
           failurecallback();
         } else {

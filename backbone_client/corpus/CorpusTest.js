@@ -29,11 +29,10 @@ define([
 
         it("should parse version 1 corpora", function() {
           var version1 = data["corpus_v1.22.1"][0];
-          var expected = data["corpus_v1.22.1_expected"][0]
+          var expected = data["corpus_v1.22.1_expected"][0];
           var corpus = new Corpus();
           var result = corpus.parse(version1);
-          var json = JSON.parse(JSON.stringify(result));
-          expected.version = json.version;
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
@@ -41,6 +40,7 @@ define([
             if (json[attrib].fieldDBtype === "Confidential") {
               // was missing dateCreated so it will set to today
               delete json[attrib].dateCreated;
+              delete expected[attrib].dateCreated;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }
@@ -51,8 +51,7 @@ define([
           var expected = data["corpus_v1.22.1_expected"][1]
           var corpus = new Corpus();
           var result = corpus.parse(version2);
-          var json = JSON.parse(JSON.stringify(result));
-          expected.version = json.version;
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
@@ -60,8 +59,10 @@ define([
             if (json[attrib].fieldDBtype === "Confidential") {
               // was missing dateCreated so it will set to today
               delete json[attrib].dateCreated;
+              delete expected[attrib].dateCreated;
               // was missing dateCreated so it will set to this version
               delete json[attrib].version;
+              delete expected[attrib].version;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }
@@ -72,16 +73,21 @@ define([
           var expected = data["corpus_v1.22.1_expected"][3]
           var corpus = new Corpus();
           var result = corpus.parse(version4);
-          var json = JSON.parse(JSON.stringify(result));
-          expected.version = json.version;
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
             }
-            // if (json[attrib].dateCreated === now) {
-            //   continue;
-            // }
-            expect(json[attrib]).toEqual(expected[attrib]);
+            if (typeof json[attrib] === "object") {
+              for (var attribEmbedded in json[attrib]) {
+                if (!json[attrib].hasOwnProperty(attribEmbedded)) {
+                  continue;
+                }
+                expect(json[attrib][attribEmbedded]).toEqual(expected[attrib][attribEmbedded]);
+              }
+            } else {
+              expect(json[attrib]).toEqual(expected[attrib]);
+            }
           }
         });
 
@@ -90,7 +96,7 @@ define([
           var expected = data["corpus_v1.22.1_expected"][2]
           var corpus = new Corpus();
           var result = corpus.parse(minimal);
-          var json = JSON.parse(JSON.stringify(result));
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
           expected.version = json.version;
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
@@ -103,8 +109,10 @@ define([
             if (json[attrib].fieldDBtype === "Confidential") {
               // was missing dateCreated so it will set to today
               delete json[attrib].dateCreated;
+              delete expected[attrib].dateCreated;
               // was missing dateCreated so it will set to this version
               delete json[attrib].version;
+              delete expected[attrib].version;
             }
             expect(json[attrib]).toEqual(expected[attrib]);
           }

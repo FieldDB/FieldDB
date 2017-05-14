@@ -115,7 +115,6 @@ define([
       jsonToRender.locale_Save = Locale.get("locale_Save");
       jsonToRender.locale_Show_Readonly = Locale.get("locale_Show_Readonly");
       jsonToRender.locale_User_Profile = Locale.get("locale_Private_Profile");
-      jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");
 
       if (this.format == "fullscreen") {
         this.setElement($("#user-fullscreen"));
@@ -124,6 +123,7 @@ define([
         this.setElement($("#user-modal"));
         $(this.el).html(this.modalTemplate(jsonToRender));
       } else if (this.format == "public") {
+        jsonToRender.locale_User_Profile = Locale.get("locale_Public_Profile");
         this.setElement($("#public-user-page"));
         $(this.el).html(this.fullscreenTemplate(jsonToRender));
       }
@@ -147,33 +147,35 @@ define([
       this.model.set("description", $(this.el).find(".description").val());
       // this.model.set("gravatar", $(this.el).find(".gravatar").val());
 
-      //It is the private self
-      if (this.format == "modal") {
+      //It is the public self
+      var self = this;
+      if (this.format == "public") {
+        if (window.app.get("corpus") && window.app.get("corpus").get("dbname")) {
+          this.model.set("dbname", window.app.get("corpus").get("dbname"));
+        }
+        this.model.saveAndInterConnectInApp(function() {
+          window.app.get("authentication").get("userPrivate").set("userMask", self.model);
+          window.app.get("authentication").saveAndEncryptUserToLocalStorage();
+          window.app.addActivity({
+            verb: "modified",
+            directobject: "<a href='#user/" + self.model._id + "'>your public profile</a>",
+            indirectobject: "",
+            teamOrPersonal: "personal",
+            context: "via Offline App"
+          });
+          window.app.addActivity({
+            verb: "modified",
+            directobject: "<a href='#user/" + self.model._id + "'>their profile</a>",
+            indirectobject: "",
+            teamOrPersonal: "team",
+            context: "via Offline App"
+          });
+        });
+      } else {
         window.app.get("authentication").saveAndEncryptUserToLocalStorage();
         window.app.addActivity({
           verb: "modified",
           directobject: "your private profile",
-          indirectobject: "",
-          teamOrPersonal: "personal",
-          context: "via Offline App"
-        });
-        window.app.addActivity({
-          verb: "modified",
-          directobject: "<a href='#user/" + this.model._id + "'>their profile</a>",
-          indirectobject: "",
-          teamOrPersonal: "team",
-          context: "via Offline App"
-        });
-      } else {
-        //It is the public self
-        window.app.get("authentication").get("userPrivate").set("userMask", this.model);
-        this.model.saveAndInterConnectInApp(function() {
-          window.app.get("authentication").saveAndEncryptUserToLocalStorage();
-        });
-
-        window.app.addActivity({
-          verb: "modified",
-          directobject: "<a href='#user/" + this.model._id + "'>your public profile</a>",
           indirectobject: "",
           teamOrPersonal: "personal",
           context: "via Offline App"

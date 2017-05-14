@@ -187,8 +187,8 @@ define([
       var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
       jsonToRender.fields = this.model.get("fields").toJSON();
       jsonToRender.title = jsonToRender.title;
-      
-      jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
+      jsonToRender.prefs =this.model.get("prefs").toJSON();
+      jsonToRender.prefs.glosserURL = jsonToRender.prefs.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/deprecated/_view/datums";
@@ -298,9 +298,11 @@ define([
 
         try {
           window.setTimeout(function() {
-            self.model.glosser.render({
-              element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
-              height: 400
+            self.model.buildLexiconFromTeamServer(function() {
+              self.model.glosser.render({
+                element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+                height: 400
+              });
             });
           }, 500);
         } catch (e) {

@@ -714,6 +714,10 @@ select,.like-form-inline
 	text-shadow: 1px 1px #000;
 }
 
+.offline-message {
+	color: #94c8e2;
+}
+
 .conversation-text-audio-wrapper {
 	overflow: hidden;
 	top: 18px;

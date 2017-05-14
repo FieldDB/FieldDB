@@ -1473,7 +1473,7 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
           this.connectedGraph.svg[0][0].innerHTML = "";
         }
       } else {
-        if (this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
+        if (divElement.children && divElement.children.length && this.connectedGraph.svg && this.connectedGraph.svg[0] && this.connectedGraph.svg[0][0] && this.connectedGraph.svg[0][0].innerHTML) {
           this.debug("Not re-rendering the lexicon connected graph.");
           return self;
         }

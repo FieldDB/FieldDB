@@ -105,7 +105,9 @@ define([
       if (!connection) {
         if (window.location.pathname.indexOf("user.html") === -1) {
           OPrime.bug("Could not figure out what was your most recent corpus, taking you to your user page where you can choose.");
-          OPrime.redirect("user.html");
+          if (window.appView) {
+            OPrime.redirect("user.html");
+          }
           return;
         } else {
           alert("There was an error loading your user, please report this");

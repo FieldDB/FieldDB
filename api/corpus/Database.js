@@ -402,6 +402,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
   couchSessionUrl: {
     get: function() {
       var couchSessionUrl = this.url;
+      var dbname = this.dbname;
       if (!couchSessionUrl) {
         if (this.application && this.application.connection && this.application.connection.corpusUrl) {
           couchSessionUrl = this.application.connection.corpusUrl;
@@ -412,8 +413,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         }
       }
 
-      if (this.dbname && couchSessionUrl.indexOf(this.dbname) > 0) {
-        couchSessionUrl = couchSessionUrl.replace(this.dbname, "_session");
+      if (!dbname && this.application && this.application.connection && this.application.connection.dbname) {
+        dbname = this.application.connection.dbname;
+      }
+      if (dbname && couchSessionUrl.indexOf(dbname) > 0) {
+        couchSessionUrl = couchSessionUrl.replace(dbname, "_session");
       } else if (this.connection && this.connection.dbname && couchSessionUrl.indexOf(this.connection.dbname) > 0) {
         couchSessionUrl = couchSessionUrl.replace(this.connection.dbname, "_session");
       } else {
@@ -1057,7 +1061,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
-        if (!options.username /* TODO use application user if present */) {
+        if (!options.username /* TODO use application user if present */ ) {
           deferred.reject({
             details: options,
             userFriendlyErrors: ["Please supply a username."],

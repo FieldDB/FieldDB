@@ -136,6 +136,19 @@ define([
         // Display the SearchView
         this.setElement($("#search-embedded"));
         $(this.el).html(this.embeddedTemplate(jsonToRender));
+        
+        try {
+          window.setTimeout(function() {
+            window.app.get("corpus").buildLexiconFromTeamServer(function() {
+              window.app.get("corpus").glosser.render({
+                element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
+                height: 300
+              });
+            });
+          }, 500);
+        } catch (e) {
+          window.appView.toastUser("There was a problem loading your corpus visualization.");
+        }
       }
       $("#search-top").html(this.topTemplate(jsonToRender));
 
@@ -146,16 +159,6 @@ define([
       this.advancedSearchSessionView.el = this.$('.advanced_search_session');
       this.advancedSearchSessionView.render();
 
-      try {
-        window.setTimeout(function() {
-          window.app.get("corpus").glosser.render({
-            element: $(self.el).find(".corpus-precedence-rules-visualization")[0],
-            height: 300
-          });
-        }, 500);
-      } catch (e) {
-        window.appView.toastUser("There was a problem loading your corpus visualization.");
-      }
 
       return this;
     },

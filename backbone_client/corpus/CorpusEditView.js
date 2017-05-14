@@ -175,7 +175,12 @@ define([
           e.stopPropagation();
           e.preventDefault();
         }
-        this.model.set("glosserURL", $(e.target).val());
+        var value = $(e.target).val().trim();
+        if (!value || value === "default") {
+          this.model.get("prefs").unset("glosserURL");
+        } else {
+          this.model.get("prefs").set("glosserURL", value);
+        }
       },
 
       //help text around text areas
@@ -245,7 +250,8 @@ define([
       var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
       jsonToRender.fields = this.model.get("fields").toJSON();
       jsonToRender.license = jsonToRender.fields.rights.json.license || {};
-      jsonToRender.glosserURL = jsonToRender.glosserURL || "default";
+      jsonToRender.prefs =this.model.get("prefs").toJSON();
+      jsonToRender.prefs.glosserURL = jsonToRender.prefs.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));
       jsonToRender.exportAllDatumURL = couchurl + "/_design/deprecated/_view/datums";

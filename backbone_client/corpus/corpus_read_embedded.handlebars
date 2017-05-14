@@ -84,7 +84,7 @@
           you and your collaborators are working on Mi'gmaq, you might have a
           master corpus with the most data that you all can use to gloss your
           corpus. For an example url, see LingLlama's sample Quechua corpus:
-          https://corpus.lingsync.org/lingllama-firstcorpus/_design/deprecated/_view/precedence_rules?group=true</span>
+          https://corpus.lingsync.org/lingllama-communitycorpus/_design/data/_view/morpheme_n_grams?group=true</span>
         <br /> <span>You can also create your own glosser web
           service or use an existing glosser/morpheme segmenter you have
           access too as long as it is available on a URL and uses a similar data schema. <a
@@ -92,7 +92,7 @@
           target="_new">Contact us</a> if you would like more details.
         </span>
         <label>Glosser URL:</label>
-				<p class="glosserURL"><strong>{{glosserURL}}</strong></p>
+				<p class="glosserURL"><strong>{{prefs.glosserURL}}</strong></p>
 			</div>
 		</div>
 	</div>
@@ -221,15 +221,31 @@
 			<a class="accordion-toggle" data-toggle="collapse"
 				data-parent="#accordion-read-embedded"
 				href="#collapseLessonsSettingsRE"> <i class="icon-gift"></i> <strong
-				 >New! Add Language Lessons components to this
+				 >Add Language Lessons components to this
 					corpus</strong>
 			</a>
 		</div>
 		<div id="collapseLessonsSettingsRE" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<a
-					href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons&hl=en"
-					target="_blank">Install prototype</a>
+
+        <p>Here are some language lessons which students created using data from corpora, you can contact their authors for more info on how they used their corpus to collect and/or annotate their lessons.</p>
+        <ul>
+          <li>
+            <a href="http://learn.migmaq.org/" target="_blank">
+              Learn Mi'gmaq Online
+            </a>
+          </li>
+          <li>
+            <a href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.fielddb.lessons.georgian" target="_blank">
+              Georgian Together
+            </a>
+          </li>
+          <li>
+            <a href="https://play.google.com/store/apps/details?id=com.github.opensourcefieldlinguistics.android.lessons&hl=en" target="_blank">
+              Prototype from 2012
+            </a>
+          </li>
+        </ul>
 
 			</div>
 		</div>

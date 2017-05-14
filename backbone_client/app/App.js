@@ -200,7 +200,7 @@ define([
       }
 
       if (!originalModel.serverLabel) {
-        originalModel.serverLabel = originalModel.connection.serverLabel;
+        originalModel.serverLabel = originalModel.connection.serverLabel || originalModel.connection.brandLowerCase;
         originalModel.brand = originalModel.connection.userFriendlyServerName;
       }
 
@@ -678,7 +678,7 @@ define([
         "dbname": connection.dbname,
         "connection": connection.toJSON()
       });
-      var selfapp = this;
+      var self = this;
       if (!corpusid) {
         if (this.get("corpus").id) {
           corpusid = this.get("corpus").id;
@@ -686,7 +686,7 @@ define([
           $(".spinner-status").html("Opening/Creating Corpus...");
           this.get("corpus").loadOrCreateCorpusBydbname(connection, function() {
             /* if the corpusid is missing, make sure there are other objects in the dashboard */
-            selfapp.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
+            self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, callback);
             //          window.app.stopSpinner();
           });
           return;
@@ -744,14 +744,16 @@ define([
           //   if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
           //   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
           // }, connection.dbname);
-          OPrime.redirect("user.html#login");
+          if (window.appView) {
+            OPrime.redirect("user.html#login");
+          }
           return;
         }
 
         if (!window.navigator.onLine) {
           OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only.");
           // OPrime.redirect("user.html#login"); // no need to redirect, they will go online be able to pick up where they left off
-          $(".spinner-status").html("Offline. <small><a href='user.html'>Visit your offline profile page (or access login options).</a></small>");
+          $(".spinner-status").html("Offline. <small><a class='offline-message' href='user.html'>Visit your offline profile page (or access login options).</a></small>");
           $(".spinner-image").hide();
           return;
         }
@@ -779,9 +781,9 @@ define([
             if (c.sessions.models && c.sessions.models[0] && c.sessions.models[0].id) {
               s.id = c.sessions.models[0].id;
             } else {
-              s.set(
-                "sessionFields", window.app.get("corpus").get("sessionFields").clone()
-              );
+              if (self.get("corpus") && self.get("corpus").get("sessionFields")) {
+                s.set("sessionFields", self.get("corpus").get("sessionFields").clone());
+              }
               fetchSessionSucess(s);
               return;
             }

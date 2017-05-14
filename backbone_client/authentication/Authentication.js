@@ -358,7 +358,9 @@ define([
       for (var x in mostRecentPublicUser) {
         localStorage.setItem(x, mostRecentPublicUser[x]);
       }
-      OPrime.redirect("corpus.html");
+      if (window.appView) {
+        OPrime.redirect("corpus.html");
+      }
     },
 
     savePublicUserForOfflineUse: function() {
