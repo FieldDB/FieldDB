@@ -752,7 +752,7 @@ define([
         if (!window.navigator.onLine) {
           OPrime.bug("You appear to be offline. Version 1-40 work offline, versions 41-46 are online only.");
           // OPrime.redirect("user.html#login"); // no need to redirect, they will go online be able to pick up where they left off
-          $(".spinner-status").html("Offline. <small><a href='user.html'>Visit your offline profile page (or access login options).</a></small>");
+          $(".spinner-status").html("Offline. <small><a class='offline-message' href='user.html'>Visit your offline profile page (or access login options).</a></small>");
           $(".spinner-image").hide();
           return;
         }
