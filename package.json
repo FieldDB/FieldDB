@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "atob": "^1.1.2",
-    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "browserify-mime": "^1.2.9",
     "btoa": "^1.1.2",
     "diacritics": "^1.2.3",
