@@ -2,6 +2,13 @@
   "fieldDBtype": "Corpus",
   "_id": "60B9B35A-A6E9-4488-BBF7-CB54B09E87C1",
   "_rev": "19-863850b93c42a90205017215a45b7668",
+  "prefs": {
+    "skin": "",
+    "numVisibleDatum": 2,
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": 10
+  },
   "fields": [{
     "fieldDBtype": "DatumField",
     "id": "title",
@@ -897,6 +904,13 @@
   "_id": "723a8b707e579087aa36c2e33865ebef",
   "_rev": "65-683c881ec8e102fb9cd16f58f43372c5",
   "dbname": "lingllama-georgian",
+  "prefs": {
+    "skin": "",
+    "numVisibleDatum": 2,
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": 10
+  },
   "connection": {
     "fieldDBtype": "Connection",
     "protocol": "https://",
@@ -2031,6 +2045,13 @@
   }
 }, {
   "fieldDBtype": "Corpus",
+  "prefs": {
+    "skin": "",
+    "numVisibleDatum": 2,
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": 10
+  },
   "fields": [{
     "fieldDBtype": "DatumField",
     "id": "title",
@@ -4519,7 +4540,19 @@
   "unserializedSessions": [],
   "unserializedDatalists": [],
   "participantFields": [],
-  "prefs": {},
+  "prefs": {
+    "hotkeys": [],
+    "unicodes": [],
+    "fieldDBtype": "UserPreference",
+    "version": "v3.22.19",
+    "dateCreated": 1490552813908,
+    "glosserURL": "https://corpus.example.org/lingllama-communitycorpus/_design/deprecated/_view/precedence_rules?group=true",
+    "skin": "",
+    "numVisibleDatum": 2,
+    "transparentDashboard": "false",
+    "alwaysRandomizeSkin": "true",
+    "numberOfItemsInPaginatedViews": 10
+  },
   "permissions": [],
   "searchKeywords": "",
   "timestamp": 1494032850078,

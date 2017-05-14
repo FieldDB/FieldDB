@@ -2455,7 +2455,8 @@
     "unicodes": [],
     "fieldDBtype": "UserPreference",
     "version": "v3.22.19",
-    "dateCreated": 1490552813908
+    "dateCreated": 1490552813908,
+    "glosserURL": "https://corpus.example.org/lingllama-communitycorpus/_design/deprecated/_view/precedence_rules?group=true"
   },
   "permissions": [],
   "api": "private_corpora",
