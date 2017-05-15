@@ -621,6 +621,7 @@ define([
 
         if (newValue === "Public") {
           data.users[0].add = ["reader"];
+          delete data.users[0].remove;
         }
         window.app.get("authentication").addCorpusRoleToUser(data,
           /*success */
