@@ -25,6 +25,7 @@ class UserMaskContainer extends Component {
   render () {
     let {userMask} = this.props
     if (!userMask.get('username')) {
+      console.log('userMask', userMask)
       const err = new Error('Sorry, a user with this username was not found, please try again.')
       err.status = 404
       throw err
