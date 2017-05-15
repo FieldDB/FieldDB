@@ -72,7 +72,7 @@
     "build": "rimraf dist/ && npm run webpack && gulp build",
     "build:production": "rimraf dist/ && NODE_ENV=production API_BASE_URL=http://localhost:8000 npm run webpack && API_BASE_URL=http://localhost:8000 NODE_ENV=production gulp build",
     "lint": "jshint lib/*.js routes/*.js test/**/*.js",
-    "lint:es6": "eslint --ext .jsx --ext .js app bin",
+    "lint:es6": "eslint --fix --ext .jsx --ext .js app bin",
     "start": "./bin/fielddb-web-server",
     "start:watch": "NODE_PATH=./app concurrently --kill-others \"nodemon ./bin/fielddb-web-server\" \"node webpack.server.js\" \"gulp css:watch\"",
     "start:production": "NODE_ENV=production PORT=8000 API_BASE_URL=http://localhost:8000 NODE_PATH=./app node app/server",
