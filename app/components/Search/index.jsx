@@ -151,7 +151,8 @@ class SearchContainer extends Component {
           corpus: corpus,
           title: 'Search for ' + id,
           dbname: corpus.dbname,
-          description: new Date()
+          description: new Date(),
+          docs: []
         })
         datalist.id = datalist.id.trim().toLowerCase().replace(/[^a-z]/g, '_')
 
