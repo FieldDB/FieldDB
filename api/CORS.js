@@ -156,8 +156,15 @@ var CORS = {
     // this.warn(options.url  + " " +  options.complete + ": was unsuccesful ");
     this.debug(err.stack);
 
+    var referrer = "node";
+    try {
+      referrer = window.location.href;
+    } catch(err){
+      // not running in a browser
+    }
+
     response = {
-      userFriendlyErrors: err.userFriendlyErrors || [err.message || "There was an error contacting URL from " + window.location.href + " the app will not function normally. Please report this."],
+      userFriendlyErrors: err.userFriendlyErrors || [err.message || "There was an error contacting URL from " + referrer + " the app will not function normally. Please report this."],
       status: err.status || 610,
       error: err
     };
