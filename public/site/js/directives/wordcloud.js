@@ -284,7 +284,8 @@ angular.module('LingSyncWebsite')
               try{
                 return scale(~~(Math.random() * count));
               }catch(e){
-                return scale(~~(Math.random() * count));
+                console.log(e, scale);
+                // return scale(~~(Math.random() * count));
               }
             });
           }
@@ -292,7 +293,7 @@ angular.module('LingSyncWebsite')
           function cross(a, b) { return a[0] * b[1] - a[1] * b[0]; }
           function dot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
 
-          hashchange();
+          // hashchange();
       }
     };
   });
