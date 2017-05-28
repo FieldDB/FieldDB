@@ -53,27 +53,66 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(compression())
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'dist', 'public')))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "dist", "public")))
 } else {
-  app.use('/assets', express.static(path.join(__dirname, 'app', 'assets')))
-  app.use(express.static(path.join(__dirname, 'dist')))
+  app.use("/assets", express.static(path.join(__dirname, "app", "assets")))
+  app.use(express.static(path.join(__dirname, "dist")))
 }
 
-app.get('/', function(req, res, next) {
-  res.render('site');
+app.get("/", function(req, res, next) {
+  res.render("site", {
+    title: "",
+    body: "",
+    partials: {
+      m_scripts: "partials/home"
+    }
+  });
 });
-app.get('/download', function(req, res, next) {
-  res.render('site');
+app.get("/download", function(req, res, next) {
+  res.render("site", {
+      title: "",
+      body: "",
+      partials: {
+        m_scripts: "partials/download"
+      }
+    });
 });
-app.get('/people', function(req, res, next) {
-  res.render('site');
+app.get("/people", function(req, res, next) {
+  res.render("site", {
+    title: "",
+    body: "",
+    partials: {
+      m_scripts: "partials/people"
+    }
+  });
 });
-app.get('/technology', function(req, res, next) {
-  res.render('site');
+app.get("/technology", function(req, res, next) {
+  res.render("site", {
+    title: "",
+    body: "",
+    partials: {
+      m_scripts: "partials/technology"
+    }
+  });
 });
-app.get('/tutorials', function(req, res, next) {
-  res.render('site');
+app.get("/tutorials", function(req, res, next) {
+  res.render("site", {
+    title: "",
+    body: "",
+    partials: {
+      m_scripts: "partials/tutorials"
+    }
+  });
+});
+app.get("/projects", function(req, res, next) {
+  res.render("site", {
+    title: "",
+    body: "",
+    partials: {
+      m_scripts: "partials/projects"
+    }
+  });
 });
 
 /*

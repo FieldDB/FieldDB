@@ -1,87 +1,78 @@
 <!DOCTYPE HTML>
 <html lang="en" ng-app="LingSyncWebsite" ng-csp>
-<head>
-<title>LingSync.org</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Lingusitics, Fieldwork, Corpus, LingSync, Database, OpenSoure, XML, JSON" />
-<meta name="description" content="LingSync is a free, open source data management system built for field linguistics teams. It allows teams to securely enter, store, organize, annotate, and share linguistic data. The application is accessible on any device: not only on laptops (Mac, Linux, Windows, ChromeBooks) but also on touch tablets or mobile devices (Android and iPhone/iPad). It is suitable for both online and offline use, and data is syncable and sharable with other researchers as well as the language community. Team members can use the application not just to view and modify data, but also to analyze and discuss it. The system also has a simple and friendly user interface, %allowing users to drag and drop data (audio, %video, %text), allowing users to record audio/video directly into the database. The application has import and export capabilities for multiple file types. LingSync was designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any application used by data collection projects funded by granting agencies. Finally, the application is designed to be intuitive and theory-free, so it is not necessary to be a field linguist or programmer to figure out how it works. LingSync is hosted on cloud servers so that users can use it without knowing how to set up their own servers, but it also has an installation guide for server administrators so organizations can run their own instance of LingSync. Not only is its source code 100\% open, but LingSync's development is also 100\% open and driven by the research assistants of fieldwork teams who use the application." />
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <head>
+    <title>LingSync.org</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Lingusitics, Fieldwork, Corpus, LingSync, Database, OpenSoure, XML, JSON" />
+    <meta name="description" content="LingSync is a free, open source data management system built for field linguistics teams. It allows teams to securely enter, store, organize, annotate, and share linguistic data. The application is accessible on any device: not only on laptops (Mac, Linux, Windows, ChromeBooks) but also on touch tablets or mobile devices (Android and iPhone/iPad). It is suitable for both online and offline use, and data is syncable and sharable with other researchers as well as the language community. Team members can use the application not just to view and modify data, but also to analyze and discuss it. The system also has a simple and friendly user interface, %allowing users to drag and drop data (audio, %video, %text), allowing users to record audio/video directly into the database. The application has import and export capabilities for multiple file types. LingSync was designed from the ground up to conform to E-MELD and DataOne data management best practices, an important requirement for any application used by data collection projects funded by granting agencies. Finally, the application is designed to be intuitive and theory-free, so it is not necessary to be a field linguist or programmer to figure out how it works. LingSync is hosted on cloud servers so that users can use it without knowing how to set up their own servers, but it also has an installation guide for server administrators so organizations can run their own instance of LingSync. Not only is its source code 100\% open, but LingSync's development is also 100\% open and driven by the research assistants of fieldwork teams who use the application." />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="site/css/style.css">
+    <link rel="chrome-webstore-item"
+      href="https://chrome.google.com/webstore/detail/eeipnabdeimobhlkfaiohienhibfcfpa">
+    <!-- END Stylesheets -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-<!-- Stylesheets -->
-<link rel="stylesheet" type="text/css" href="site/css/style.css">
-<link rel="chrome-webstore-item"
-	href="https://chrome.google.com/webstore/detail/eeipnabdeimobhlkfaiohienhibfcfpa">
-
-<!-- END Stylesheets -->
-
-<script>
-   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-   ga('create','UA-35422317-1','auto');
-   ga('set', 'page', 'www' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
-   ga('send', 'pageview');
-</script>
-
-</head>
-
-<body class="LingSyncBody" ng-controller="LingSyncWebsiteMainController">
-	<div class="mainContainer">
-		<div class="mainHeader">
-			<div class="mainHeaderLogo ">
-				<img src="site/img/lingsync-logo.png"><br> <span
-					class="headerTagLine">An App for Field Linguistics</span>
-			</div>
-			<div class="mainHeaderButton">
-				<a href="#/download" class="btn btn-primary" style="margin-top: -18px">Get LingSync</a>
-			<div style="display: inline-table">
-				<script>
-				  (function() {
-				    var cx = '005285534078825247140:t9u2m-en9y4';
-				    var gcse = document.createElement('script');
-				    gcse.type = 'text/javascript';
-				    gcse.async = true;
-				    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-				        '//www.google.com/cse/cse.js?cx=' + cx;
-				    var s = document.getElementsByTagName('script')[0];
-				    s.parentNode.insertBefore(gcse, s);
-				  })();
-				</script>
-				<gcse:search></gcse:search>
-			</div>
-			</div>
-			<div class="clearBoth"></div>
-		</div>
-
-
-		<div class="menubar">
-			<span><a href="#" ng-click="activePage='home'"
-				ng-class="{'active': activePage=='home'}">Home</a></span> <span><a
-				href="#/technology" ng-click="activePage='technology'"
-				ng-class="{'active': activePage=='technology'}">Technology</a></span> <span><a
-				href="#/people" ng-click="activePage='people'"
-				ng-class="{'active': activePage=='people'}">People</a></span> <span><a
-				href="https://github.com/FieldDB/FieldDB/milestones?state=closed">Dev Site</a></span> <span><a
-				href="#/tutorials" ng-click="activePage='tutorials'"
-				ng-class="{'active': activePage=='tutorials'}">Tutorials</a></span> <span><a
-				href="https://www.facebook.com/LingSyncApp" target="_blank">Facebook</a></span> <span><a
-				href="#/projects" ng-click="activePage='projects'"
-				ng-class="{'active': activePage=='projects'}">Projects</a></span>
-		</div>
-		<div class="mainContentDiv" ng-view></div>
-	</div>
-
-<script src="site/js/jquery.js"></script>
-<script src="site/js/angular.js"></script>
-<script src="site/js/LingSyncModule.js"></script>
-<script src="site/js/LingSyncWebsiteController.js"></script>
-
-<script src="site/js/d3/d3.js"></script>
-<script src="site/js/d3.layout.cloud.js"></script>
-<script src="site/js/directives/wordcloud.js"></script>
-
-
-</body>
+      ga('create','UA-35422317-1','auto');
+      ga('set', 'page', 'www' + window.location.href.replace(window.location.protocol, "").replace(/^\//,""));
+      ga('send', 'pageview');
+    </script>
+  </head>
+  <body class="LingSyncBody" ng-controller="LingSyncWebsiteMainController">
+    <div class="mainContainer">
+      <div class="mainHeader">
+        <div class="mainHeaderLogo ">
+          <img src="site/img/lingsync-logo.png"><br> <span
+            class="headerTagLine">An App for Field Linguistics</span>
+        </div>
+        <div class="mainHeaderButton">
+          <a href="/download" class="btn btn-primary" style="margin-top: -18px">Get LingSync</a>
+          <div style="display: inline-table">
+            <script>
+              (function() {
+                var cx = '005285534078825247140:t9u2m-en9y4';
+                var gcse = document.createElement('script');
+                gcse.type = 'text/javascript';
+                gcse.async = true;
+                gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                    '//www.google.com/cse/cse.js?cx=' + cx;
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(gcse, s);
+              })();
+            </script>
+            <gcse:search></gcse:search>
+          </div>
+        </div>
+        <div class="clearBoth"></div>
+      </div>
+      <div class="menubar">
+        <span><a href="/" ng-click="activePage='home'"
+          ng-class="{'active': activePage=='home'}">Home</a></span> <span><a
+          href="/technology" ng-click="activePage='technology'"
+          ng-class="{'active': activePage=='technology'}">Technology</a></span> <span><a
+          href="/people" ng-click="activePage='people'"
+          ng-class="{'active': activePage=='people'}">People</a></span> <span><a
+          href="https://github.com/FieldDB/FieldDB/milestones?state=closed">Dev Site</a></span> <span><a
+          href="/tutorials" ng-click="activePage='tutorials'"
+          ng-class="{'active': activePage=='tutorials'}">Tutorials</a></span> <span><a
+          href="https://www.facebook.com/LingSyncApp" target="_blank">Facebook</a></span> <span><a
+          href="/projects" ng-click="activePage='projects'"
+          ng-class="{'active': activePage=='projects'}">Projects</a></span>
+      </div>
+      <div class="mainContentDiv">
+        {{>m_scripts}}
+      </div>
+    </div>
+    <script src="site/js/jquery.js"></script>
+    <script src="site/js/angular.js"></script>
+    <script src="site/js/LingSyncModule.js"></script>
+    <script src="site/js/LingSyncWebsiteController.js"></script>
+    <script src="site/js/d3/d3.js"></script>
+    <script src="site/js/d3.layout.cloud.js"></script>
+    <script src="site/js/directives/wordcloud.js"></script>
+  </body>
 </html>
