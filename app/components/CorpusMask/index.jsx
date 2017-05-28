@@ -143,7 +143,7 @@ class CorpusMaskContainer extends Component {
               <div className='span7 offset1'>
                 <h1 className='media-heading'>{corpusMask.get('title')}</h1>
                 <div className='media'>
-                  <a href={corpusMask.getIn(['corpus', 'url']) + '/public-firstcorpus/_design/pages/corpus.html'} className='pull-right'>
+                  <a href={`https://corpus.lingsync.org/prototypedev/_design/prototype/user.html#login/${corpusMask.get('dbname')}`} className='pull-right'>
                     <img src={'https://secure.gravatar.com/avatar/' + corpusMask.getIn(['connection', 'gravatar']) + '.jpg?s=96&d=retro&r=pg'} alt='Corpus image' className='media-object' />
                   </a>
                   <div className='media-body'>
