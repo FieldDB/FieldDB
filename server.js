@@ -60,6 +60,22 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist')))
 }
 
+app.get('/', function(req, res, next) {
+  res.render('site');
+});
+app.get('/download', function(req, res, next) {
+  res.render('site');
+});
+app.get('/people', function(req, res, next) {
+  res.render('site');
+});
+app.get('/technology', function(req, res, next) {
+  res.render('site');
+});
+app.get('/tutorials', function(req, res, next) {
+  res.render('site');
+});
+
 /*
  * Routes
  */
