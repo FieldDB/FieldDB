@@ -89,7 +89,7 @@
     "chai-as-promised": "^5.1.0",
     "compression": "^1.6.0",
     "concurrently": "^2.0.0",
-    "crawler": "^1.0.5",
+    "crawl": "git://github.com/cesine/crawl.git",
     "enzyme": "^2.3.0",
     "eslint": "^3.18.0",
     "eslint-config-standard": "^6.0.0",
