@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import React, { Component } from 'react'
 import { DataList } from 'fielddb/api/data_list/DataList'
+import { Corpus } from 'fielddb/api/corpus/Corpus'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { LanguageDatum } from 'fielddb/api/datum/LanguageDatum'
 import { CORS } from 'fielddb/api/CORS'
@@ -16,7 +17,7 @@ let defaultCorpus
 
 function updateCorpusField (field) {
   if (!defaultCorpus) {
-    defaultCorpus = new CorpusMask(CorpusMask.prototype.defaults)
+    defaultCorpus = new CorpusMask(Corpus.prototype.defaults)
   }
   if (!field.type && defaultCorpus.datumFields[field.id]) {
     field.type = defaultCorpus.datumFields[field.id].type
@@ -27,8 +28,9 @@ function updateCorpusField (field) {
 class SearchContainer extends Component {
   constructor (props) {
     super(props)
+    const searchIn = this.props.params.searchIn || ''
     this.state = {
-      searchIn: this.props.params.searchIn,
+      searchIn: searchIn,
       reindex: {
         className: 'hide'
       }
@@ -66,7 +68,7 @@ class SearchContainer extends Component {
       total: 100
     }
 
-    const url = this.props.corpus.getIn(['lexicon', 'url']) + '/search/' + this.props.corpus.get('dbname') + '/index'
+    const url = this.props.corpus.getIn(['lexicon', 'url']) + '/search/' + this.props.corpus.get('dbname') + '/index?limit=50'
     return CORS.makeCORSRequest({
       method: 'post',
       url: url,
@@ -100,7 +102,8 @@ class SearchContainer extends Component {
 
   handleSearchSubmit (e) {
     e.preventDefault()
-    const location = `/${this.props.params.teamname}/${this.props.params.dbname}/search/${this.state.searchIn}`
+    const searchIn = this.state.searchIn || ''
+    const location = `/${this.props.params.teamname}/${this.props.params.dbname}/search/${searchIn}`
     // this.render(location)
     browserHistory.push(location)
     const corpus = new CorpusMask(this.props.corpus.toJS())
@@ -111,7 +114,7 @@ class SearchContainer extends Component {
     }
     SearchContainer.search({
       params: {
-        searchIn: this.state.searchIn
+        searchIn: searchIn
       },
       loadSearchResults: this.props.loadSearchResults,
       corpus,
@@ -148,7 +151,8 @@ class SearchContainer extends Component {
           corpus: corpus,
           title: 'Search for ' + id,
           dbname: corpus.dbname,
-          description: new Date()
+          description: new Date(),
+          docs: []
         })
         datalist.id = datalist.id.trim().toLowerCase().replace(/[^a-z]/g, '_')
 

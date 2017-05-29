@@ -13,6 +13,7 @@ Mac:
 
 ```bash
 $ brew install node
+$ brew install yarn # optional, you can also use npm
 ```
 
 Linux:
@@ -35,7 +36,7 @@ $ yarn install
 
 ## Configure
 
-You can change values in the `lib/*_local.js` files to point to the corpus service you want to contact. By default it contacts your localhost.
+You can create a `config/local.js` file to point to the corpus service you want to contact. By default it contacts your localhost.
 
 
 
@@ -44,7 +45,7 @@ You can change values in the `lib/*_local.js` files to point to the corpus servi
 To turn on the server:
 
 ```bash
-$ yarn start
+$ yarn watch
 ```
 
 To develop offline with fixture data:
@@ -52,35 +53,38 @@ To develop offline with fixture data:
 ```bash
 $ OFFLINE=true yarn start --offline
 ```
+
+In another tab turn on the webpack server:
+
+```bash
+$ node webpack.server.js
+```
+
 ------------------
 
 ## How to set up a production server
 
 Running in production isn't much different from running while developing, except you will probably want to do some more customization of the configuration.
 
-This webserver doesn't need `sudo` priviledges to run (neither in production nor in development).
-
 However, if you specified a port in the config, you might need someone with `sudo` privilges to open the port to the outside world so it will be accessible to the other machines who want to contact this service. Some universities and companies block non-standard ports so if you might have users who might be affected, you could request that someone with `sudo` priveleges set up a proxy such as Nginx or Apache to serve using a virtual host (eg https://www.example.org) rather than through a port (eg https://example.org:3182);
 
 
 ### Configuration
 
-You should copy the `lib/*_local.js` to `lib/*_production.js`
+You should copy the `config/local.js` to `config/production.js`
 
 ```bash
-$ cp lib/nodeconfig_local.js lib/nodeconfig_production.js
-$ cp lib/couchkeys_local.js lib/couchkeys_production.js
+$ cp config/local.js config/production.js
 ```
 
 Suggested changes:
 
 * change the `port` to the port you want to use
-* change `httpsOptions` to have the path of your ssl certificates and key,
+* change `ssl` to have the path of your ssl certificates and key,
 * change `session_key` to something else
-* change `corpusWebService` to the corpus service you want to contact, and
-* change `couchkeys` to the username and password to use to connect to the corpus connection.
+* change `corpus` to the corpus service you want to contact, and
 
-Production mode is controlled by an environment variable. Here is how you would set the environment variables if you are running the server via a non-priveleged user `fielddb`.
+Production mode is controlled by an environment variable. Here is how you would set the environment variables if you are running the server via a non-privileged user `fielddb`.
 
 ```bash
 $ echo FIELDDB_HOME=/home/fielddb/fielddbhome >> ~/.bashrc
@@ -90,6 +94,7 @@ $ echo NODE_ENV=production >> ~/.bashrc
 Finally turn on the service in a way that it will restart even in the case of errors:
 
 ```bash
+$ gulp build
 $ ./start_service
 ```
 
@@ -139,6 +144,12 @@ Use a gulp task (`gulp build`) to handle it:
 - A static middleware mapping root url to the folder mentioned above is configured in `server.js`
 - A set of `[revReplace](https://github.com/jamesknelson/gulp-rev-replace)-ed` server code would be built into `dist/server-build`, so that the rev-ed assets can be used when doing server rendering
 
+To test your production build:
+
+```bash
+$ gulp build
+$ NODE_ENV=production yarn start
+```
 
 ## Deployment:
 
