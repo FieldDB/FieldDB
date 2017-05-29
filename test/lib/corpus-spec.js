@@ -267,7 +267,7 @@ describe("corpus lib", function() {
           expect(err.status).to.deep.equal(404);
           expect(err.message).to.deep.equal("Couldn't find any corpora for lingllama, also tried by constructing the dbname.");
           done();
-        }).then(done);
+        });
       });
 
     });

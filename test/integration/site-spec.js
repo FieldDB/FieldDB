@@ -119,7 +119,7 @@ describe("Site", function() {
 
           expect(res.text).to.contain("<title>Install - LingSync.org</title>");
           expect(res.text).to.not.contain("spreadsheet.");
-          expect(res.text).to.contain(".org/prototype/_design/prototype/corpus.html");
+          expect(res.text).to.contain("/prototype/_design/prototype/corpus.html");
           expect(res.text).to.contain("/lingllama/lingllama-communitycorpus/search/morphemes:nay%20OR%20gloss:des");
           expect(res.text).to.contain("/community/community-georgian/search/orthography:%E1%83%95%E1%83%98%E1%83%AA%E1%83%98");
           done();
