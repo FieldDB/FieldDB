@@ -40,7 +40,7 @@ function getCorpus(req, res, next) {
  * @param  {Response} res
  */
 function getCorpusFromTitleAsUrl(req, res, next) {
-  if (req.params.titleAsUrl.indexOf(req.params.username) === 0) {
+  if (req.params.titleAsUrl.indexOf(req.params.username + '-') === 0) {
     getCorpusMask(req.params.titleAsUrl, next).then(function(corpus) {
       // debug('replying with getCorpusMask', corpus);
       corpus.lexicon = {
