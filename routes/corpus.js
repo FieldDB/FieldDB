@@ -15,6 +15,7 @@ var router = express.Router();
  * @param  {Response} res
  */
 function getCorpus(req, res, next) {
+  debug('getCorpus', req.params);
   getCorpusMask(req.params.dbname, next).then(function(corpusMask) {
     var corpus = corpusMask.toJSON();
     corpus.lexicon = {
