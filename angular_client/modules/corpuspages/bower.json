@@ -1,6 +1,6 @@
 {
   "name": "fielddb-corpus-pages-app",
-  "version": "5.4.21",
+  "version": "5.5.29",
   "repository": {
     "type": "git",
     "url": "git://github.com/FieldDB/FieldDB.git"
