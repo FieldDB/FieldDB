@@ -197,6 +197,7 @@ var CORS = {
     this.bug(response.userFriendlyErrors[0]);
 
     response.details = options;
+    response.details.url = options.url.replace(/\/[^:]+:.+@/i, "/_:_@");
     if (response.details && response.details.xhr) {
       this.debug(options.url + " " + options.complete + ":  cleaning up ", options.url);
       options.status = options.status || options.xhr.status;
