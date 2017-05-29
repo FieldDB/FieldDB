@@ -412,6 +412,31 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
     }
   },
 
+  fetch: {
+    value: function(optionalUrl) {
+      var self = this;
+      var deferred = Q.defer();
+
+      this.debug("Customizing fetch ", optionalUrl);
+      var fetchPromise = Database.prototype.fetch.apply(this, arguments);
+      fetchPromise.then(deferred.resolve);
+      fetchPromise.fail(function(err) {
+        self.debug("Fetching CorpusMask failed", err);
+        if (err.status === 404 && /deleted|missing/.test(err.userFriendlyErrors[0])) {
+          self.warn("Repairing corpus which is missing its corpus doc: " + err.userFriendlyErrors.join(" "));
+          self.loaded = true;
+          var newCorpusMask = FieldDBObject.convertDocIntoItsType(self.defaults);
+          newCorpusMask.dbname = self.dbname;
+          self.merge("self", newCorpusMask, "overwrite");
+          return deferred.resolve(self);
+        }
+        deferred.reject(err);
+      });
+
+      return deferred.promise;
+    }
+  },
+
   // unserializedSessions: {
   //   value: null
   // },

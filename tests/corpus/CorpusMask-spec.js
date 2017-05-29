@@ -1,4 +1,7 @@
 "use strict";
+var sinon;
+var Q;
+var Database;
 var CorpusMask;
 var Connection;
 var Corpora;
@@ -6,6 +9,8 @@ var FieldDBObject;
 try {
   /* globals FieldDB */
   if (FieldDB) {
+    Q = FieldDB.Q;
+    Database = FieldDB.Database;
     CorpusMask = FieldDB.CorpusMask;
     Connection = FieldDB.Connection;
     Corpora = FieldDB.Corpora;
@@ -15,7 +20,9 @@ try {
   Connection = require("./../../api/corpus/Connection").Connection;
   Connection.URLParser = require("url");
 }
-
+sinon = sinon || require("sinon");
+Q = Q || require("q");
+Database = Database || require("./../../api/corpus/Database").Database;
 CorpusMask = CorpusMask || require("./../../api/corpus/CorpusMask").CorpusMask;
 Connection = Connection || require("./../../api/corpus/Connection").Connection;
 Corpora = Corpora || require("./../../api/corpus/Corpora").Corpora;
@@ -43,7 +50,6 @@ describe("CorpusMask ", function() {
       expect(corpus.titleAsUrl).toEqual("private_corpus1");
       corpus.title = "Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ Of Quechua";
       expect(corpus.titleAsUrl).toEqual("internationalizati0n_of_quechua");
-
     });
 
     it("should have unknown defaults if not loaded from the server", function() {
@@ -224,6 +230,105 @@ describe("CorpusMask ", function() {
 
     });
 
+  });
+
+  describe("fetching", function() {
+    var sandbox = sinon.sandbox.create();
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
+    it("should propagate 5xx errors", function(done) {
+      var corpus = new CorpusMask({
+        dbname: "not-arealcorpus"
+      });
+      corpus.fetch().then(function() {
+        throw new Error("should not succeed");
+      }).fail(function(err) {
+        expect(err.status).toEqual(500);
+        expect(err.userFriendlyErrors[0]).toEqual("Server is not responding for https://localhost:6984/not-arealcorpus/corpus, please report this.");
+        done();
+      });
+    });
+
+    it("should propagate 401 errors", function(done) {
+      sandbox.stub(Database.CORS, "makeCORSRequest").callsFake(function() {
+        var deferred = Q.defer();
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 401,
+            userFriendlyErrors: ["unauthorized"]
+          });
+        });
+        return deferred.promise;
+      });
+
+      var corpus = new CorpusMask({
+        dbname: "someones-othercorpus"
+      });
+      corpus.fetch().then(function() {
+        throw new Error("should not succeed");
+      }).fail(function(err) {
+        expect(err.status).toEqual(401);
+        expect(err.userFriendlyErrors[0]).toEqual("unauthorized");
+        done();
+      });
+    });
+
+    it("should repair deleted corpus masks", function(done) {
+      sandbox.stub(Database.CORS, "makeCORSRequest").callsFake(function() {
+        var deferred = Q.defer();
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 404,
+            userFriendlyErrors: ["deleted"]
+          });
+        });
+        return deferred.promise;
+      });
+
+      var corpus = new CorpusMask({
+        dbname: "not-arealcorpus"
+      });
+      corpus.fetch().then(function(result) {
+        expect(result.id).toEqual("corpus");
+        expect(result.dbname).toEqual("not-arealcorpus");
+        expect(result.fields).toBeDefined();
+        expect(result.warnMessage).toEqual("Repairing corpus which is missing its corpus doc: deleted");
+        done();
+      }).fail(function(err) {
+        console.log("error", err);
+        done(err);
+      });
+    });
+
+    it("should repair missing corpus masks", function(done) {
+      sandbox.stub(Database.CORS, "makeCORSRequest").callsFake(function() {
+        var deferred = Q.defer();
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 404,
+            userFriendlyErrors: ["missing"]
+          });
+        });
+        return deferred.promise;
+      });
+
+      var corpus = new CorpusMask({
+        dbname: "not-arealcorpus"
+      });
+      corpus.fetch().then(function(result) {
+        expect(result.id).toEqual("corpus");
+        expect(result.dbname).toEqual("not-arealcorpus");
+        expect(result.fields).toBeDefined();
+        expect(result.warnMessage).toEqual("Repairing corpus which is missing its corpus doc: missing");
+        done();
+      }).fail(function(err) {
+        console.log("error", err);
+        done(err);
+      });
+    });
   });
 
   describe("corpus collections", function() {

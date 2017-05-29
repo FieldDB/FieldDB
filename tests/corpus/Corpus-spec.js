@@ -1,19 +1,27 @@
 "use strict";
 var Corpus;
+var Database;
 var Datum;
 var DatumFields;
+var sinon;
+var Q;
 try {
   /* globals FieldDB */
   if (FieldDB) {
     Corpus = FieldDB.Corpus;
+    Database = FieldDB.Database;
     Datum = FieldDB.Datum;
     DatumFields = FieldDB.DatumFields;
+    Q = FieldDB.Q;
   }
 } catch (e) {}
 
 Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
+Database = Database || require("./../../api/corpus/Database").Database;
 Datum = Datum || require("./../../api/datum/Datum").Datum;
 DatumFields = DatumFields || require("./../../api/datum/DatumFields").DatumFields;
+sinon = sinon || require("sinon");
+Q = Q || require("q");
 
 var SAMPLE_v1_CORPUS_MODELS = require("../../sample_data/corpus_v1.22.1.json");
 var specIsRunningTooLong = 5000;
@@ -67,6 +75,47 @@ describe("Corpus", function() {
       expect(corpus.confidential.secretkey.length).toBeGreaterThan(10);
     });
 
+  });
+
+  describe("fetching", function() {
+    var sandbox = sinon.sandbox.create();
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
+    it("should repair missing corpus doc", function(done) {
+      sandbox.stub(Database.CORS, "makeCORSRequest").callsFake(function() {
+        var deferred = Q.defer();
+        Q.nextTick(function() {
+          deferred.reject({
+            status: 404,
+            userFriendlyErrors: ["missing"]
+          });
+        });
+        return deferred.promise;
+      });
+
+      var corpus = new Corpus({
+        dbname: "not-arealcorpus",
+        id: "abc",
+        debugMode: true,
+      });
+      corpus.fetch().then(function(result) {
+        expect(result.id).toEqual("abc");
+        expect(result.dbname).toEqual("not-arealcorpus");
+        expect(result.fields).toBeDefined();
+        expect(result.datumFields.utterance).toBeDefined();
+        expect(result.warnMessage).toEqual("Repairing corpus which is missing its corpus doc: missing");
+        done();
+      }, function(err) {
+        console.log("error", err);
+        done(err);
+      }).fail(function(err) {
+        console.log("error", err);
+        done(err);
+      });
+    });
   });
 
   describe("prefs", function() {

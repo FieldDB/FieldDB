@@ -1637,7 +1637,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
       }, function(reason) {
         self.fetching = self.loading = false;
         self.loaded = false;
-        self.debug(reason);
+        self.debug("failed to fetch", reason);
         deferred.reject(reason);
         return self;
       }).fail(function(error) {
