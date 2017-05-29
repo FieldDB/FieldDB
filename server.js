@@ -99,6 +99,9 @@ app.get("/download",
     res.render("site", {
       title: "LingSync.org",
       description: "",
+      corpus: {
+        url: config.corpus.public.url
+      },
       partials: {
         m_scripts: "partials/download"
       }
