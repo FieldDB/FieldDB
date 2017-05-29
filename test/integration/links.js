@@ -2,8 +2,6 @@ var config = require("config");
 var crawl = require("crawl");
 var fs = require("fs");
 
-// var rateLimit = 1000;
-var rateLimit = 500;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 var options = {
   maxConcurrency: 3,
@@ -73,7 +71,7 @@ crawl.crawl(config.public.url, options, function(err, pages) {
     console.log("saved as sitemap.json", data);
   });
 
-  fs.writeFile("site-errors.json", JSON.stringify(errors, null, 2), "utf8", function(err, data) {
+  fs.writeFile("site-errors.json", JSON.stringify(errors, null, 2), "utf8", function(err) {
     if (err) {
       return console.log(JSON.stringify(errors));
     }

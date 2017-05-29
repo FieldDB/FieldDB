@@ -1,11 +1,10 @@
 "use strict";
 var config = require("config");
-var debug = require("debug")("routes:site");
 var express = require("express");
 
 var router = express.Router();
 
-router.get("/", function(req, res, next) {
+router.get("/", function(req, res) {
   res.render("site", {
     title: "LingSync.org",
     description: "LingSync is a free, open" +
@@ -40,7 +39,7 @@ router.get("/", function(req, res, next) {
   });
 });
 
-router.get("/download", function(req, res, next) {
+router.get("/download", function(req, res) {
   res.render("site", {
     title: "Install - LingSync.org",
     description: "Download or open one of the Applications which works with " +
@@ -56,7 +55,7 @@ router.get("/download", function(req, res, next) {
   });
 });
 
-router.get("/people", function(req, res, next) {
+router.get("/people", function(req, res) {
   res.render("site", {
     title: "People - LingSync.org",
     description: "The app was orginally developed in 2012 in collaboration " +
@@ -70,7 +69,7 @@ router.get("/people", function(req, res, next) {
   });
 });
 
-router.get("/technology", function(req, res, next) {
+router.get("/technology", function(req, res) {
   res.render("site", {
     title: "Technology - LingSync.org",
     description: "Lingsync is composed of a number of webservices and application " +
@@ -84,7 +83,7 @@ router.get("/technology", function(req, res, next) {
   });
 });
 
-router.get("/tutorials", function(req, res, next) {
+router.get("/tutorials", function(req, res) {
   res.render("site", {
     title: "Tutorials - LingSync.org",
     description: "Enjoy our how-to videos made by LingSync interns " +
@@ -95,7 +94,7 @@ router.get("/tutorials", function(req, res, next) {
   });
 });
 
-router.get("/projects", function(req, res, next) {
+router.get("/projects", function(req, res) {
   res.render("site", {
     title: "Projects - LingSync.org",
     description: "",
