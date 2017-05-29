@@ -53,6 +53,7 @@ class CorpusMaskContainer extends Component {
       searchIn: corpusMask.get('searchKeywords'),
       teamname: corpusMask.getIn(['team', 'username'])
     }
+    const identifier = corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + (corpusMask.get('_rev') || 'repaired')
 
     return (
       <div>
@@ -110,7 +111,7 @@ class CorpusMaskContainer extends Component {
           <meta
             name='identifier'
             data-help='An unambiguous reference to the resource within a given context.'
-            content={corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + corpusMask.get('_rev')} />
+            content={identifier} />
           <meta
             name='format'
             data-help='The file format, physical medium, or dimensions of the resource.'
