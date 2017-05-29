@@ -260,12 +260,12 @@ describe("corpus lib", function() {
         }).then(done);
       });
 
-      it("should return 404 error if usermask has no corpora", function(done) {
+      it("should return 404 error if usermask has no matching corpora", function(done) {
         getCorpusMaskFromTitleAsUrl({
           username: "lingllama"
-        }, "CommunityCorpus", function(err) {
+        }, "notacorpus", function(err) {
           expect(err.status).to.deep.equal(404);
-          expect(err.message).to.deep.equal("Couldn't find any corpora for lingllama, if this is an error please report it to us.");
+          expect(err.message).to.deep.equal("Couldn't find any corpora for lingllama, also tried by constructing the dbname.");
           done();
         }).then(done);
       });
