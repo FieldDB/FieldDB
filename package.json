@@ -78,6 +78,7 @@
     "start:production": "NODE_ENV=production PORT=8000 API_BASE_URL=http://localhost:8000 NODE_PATH=./app node app/server",
     "test": "NODE_ENV=test mocha test/**/*.js",
     "test:ci": "NODE_ENV=test NODE_PATH=./app mocha --compilers js:babel-register -r app/spec/support/setup.mocha.js --recursive 'app/**/*.test.js'",
+    "test:site": "node test/integration/links.js",
     "test:watch": "NODE_ENV=test NODE_PATH=./app mocha --compilers js:babel-register -r app/spec/support/setup.mocha.js --recursive 'app/**/*.test.js' -w",
     "watch": "nodemon ./bin/fielddb-web-server",
     "webpack": "webpack"
@@ -88,6 +89,7 @@
     "chai-as-promised": "^5.1.0",
     "compression": "^1.6.0",
     "concurrently": "^2.0.0",
+    "crawler": "^1.0.5",
     "enzyme": "^2.3.0",
     "eslint": "^3.18.0",
     "eslint-config-standard": "^6.0.0",
