@@ -27,7 +27,10 @@ describe('Container::CorpusMask', function () {
           id: 1234,
           name: 'jack'
         },
-        fields: []
+        fields: [],
+        prototypeApp: {
+          url: ''
+        }
       }),
       searchResults: Immutable.fromJS([])
     }
@@ -64,7 +67,10 @@ describe('Container::CorpusMask', function () {
         fields: [{
           id: 'subject',
           value: 'Kartuli'
-        }]
+        }],
+        prototypeApp: {
+          url: ''
+        }
       }),
       searchResults: Immutable.fromJS([])
     }

@@ -15,20 +15,20 @@ var router = express.Router();
  * @param  {Response} res
  */
 function getCorpus(req, res, next) {
-  debug('getCorpus', req.params);
+  debug("getCorpus", req.params);
   getCorpusMask(req.params.dbname, next).then(function(corpusMask) {
     var corpus = corpusMask.toJSON();
     corpus.lexicon = {
       url: config.lexicon.public.url
+    };
+    corpus.prototypeApp = {
+      url: config.corpus.public.url
     };
     corpus.search = {
       url: config.search.public.url
     };
     corpus.speech = {
       url: config.speech.public.url
-    };
-    corpus.corpus = {
-      url: config.corpus.public.url
     };
     res.json(corpus);
   }, next).fail(next);
@@ -46,6 +46,9 @@ function getCorpusFromTitleAsUrl(req, res, next) {
       corpus.lexicon = {
         url: config.lexicon.public.url
       };
+      corpus.prototypeApp = {
+        url: config.corpus.public.url
+      };
       corpus.search = {
         url: config.search.public.url
       };
@@ -61,6 +64,9 @@ function getCorpusFromTitleAsUrl(req, res, next) {
       debug("replying with getCorpusMaskFromTitleAsUrl ", corpus);
       corpus.lexicon = {
         url: config.lexicon.public.url
+      };
+      corpus.prototypeApp = {
+        url: config.corpus.public.url
       };
       corpus.search = {
         url: config.search.public.url
