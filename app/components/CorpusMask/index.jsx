@@ -53,6 +53,7 @@ class CorpusMaskContainer extends Component {
       searchIn: corpusMask.get('searchKeywords'),
       teamname: corpusMask.getIn(['team', 'username'])
     }
+    const identifier = corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + (corpusMask.get('_rev') || 'repaired')
 
     return (
       <div>
@@ -110,7 +111,7 @@ class CorpusMaskContainer extends Component {
           <meta
             name='identifier'
             data-help='An unambiguous reference to the resource within a given context.'
-            content={corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + corpusMask.get('_rev')} />
+            content={identifier} />
           <meta
             name='format'
             data-help='The file format, physical medium, or dimensions of the resource.'
@@ -143,7 +144,7 @@ class CorpusMaskContainer extends Component {
               <div className='span7 offset1'>
                 <h1 className='media-heading'>{corpusMask.get('title')}</h1>
                 <div className='media'>
-                  <a href={corpusMask.getIn(['corpus', 'url']) + '/public-firstcorpus/_design/pages/corpus.html'} className='pull-right'>
+                  <a href={`${corpusMask.get('prototypeApp').get('url')}/prototype/_design/prototype/user.html#login/${corpusMask.get('dbname')}`} className='pull-right'>
                     <img src={'https://secure.gravatar.com/avatar/' + corpusMask.getIn(['connection', 'gravatar']) + '.jpg?s=96&d=retro&r=pg'} alt='Corpus image' className='media-object' />
                   </a>
                   <div className='media-body'>

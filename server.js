@@ -17,6 +17,7 @@ var activityRoutes = require("./routes/activity").router;
 var corpora = require("./lib/corpora");
 var corpusRoutes = require("./routes/corpus").router;
 var userRoutes = require("./routes/user").router;
+var siteRoutes = require("./routes/site").router;
 var reduxRender = require("./routes/react-render").reduxRender;
 var acceptSelfSignedCertificates = {
   strictSSL: false
@@ -53,17 +54,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(compression())
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'dist', 'public')))
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "dist", "public")))
 } else {
-  app.use('/assets', express.static(path.join(__dirname, 'app', 'assets')))
-  app.use(express.static(path.join(__dirname, 'dist')))
+  app.use("/assets", express.static(path.join(__dirname, "app", "assets")))
+  app.use(express.static(path.join(__dirname, "dist")))
 }
 
 /*
  * Routes
  */
-
+app.use('/', siteRoutes);
 app.get('/api/corpora', function(req, res, next) {
   corpora.getAllCorpora().then(function(results) {
     res.json(results);

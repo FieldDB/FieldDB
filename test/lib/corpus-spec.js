@@ -154,6 +154,26 @@ describe("corpus lib", function() {
       }).fail(done);
     });
 
+    it("should repair corpora if the corpus mask was deleted", function(done) {
+      if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+        return this.skip();
+      }
+      getCorpusMask("senhorzinho-firstcorpus").then(function(mask) {
+        expect(mask).to.be.defined;
+        expect(mask.id).to.deep.equal("corpus");
+        expect(mask._rev).to.deep.equal(undefined);
+        expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
+        expect(mask.dbname).to.deep.equal("senhorzinho-firstcorpus");
+        expect(mask.title).to.deep.equal("Private Corpus");
+        expect(mask.titleAsUrl).to.deep.equal("private_corpus");
+        expect(mask.description).to.deep.equal("The details of this corpus are not public.");
+        expect(mask.copyright).to.deep.equal("senhorzinho");
+        expect(mask.team.gravatar).to.deep.equal("0088f3f60424a99a8db7f80d9d025405");
+        expect(mask.team.username).to.deep.equal("senhorzinho");
+        done();
+      }).fail(done);
+    });
+
     it("should return a bleached corpus mask for corpus by default", function(done) {
       if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
         return this.skip();
