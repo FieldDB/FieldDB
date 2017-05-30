@@ -53,7 +53,7 @@ function requestSampleData(config) {
         return deferred.resolve(require('../test/fixtures/corpus/teammatetiger-firstcorpus.json'));
       }
 
-      if (options.url.includes('/lingllama')) {
+      if (options.url.includes('/lingllama') && !options.url.includes('notacorpus')) {
         return deferred.resolve(require('../test/fixtures/user/lingllama.json'));
       }
       if (options.url.includes('/community')) {
