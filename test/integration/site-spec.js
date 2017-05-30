@@ -19,7 +19,7 @@ describe("Site", function() {
           }
 
           expect(res.text).to.contain("<title>LingSync.org</title>");
-          expect(res.text).to.contain("A Free Tool for Creating and Maintaining a Shared")
+          expect(res.text).to.contain("A Free Tool for Creating and Maintaining a Shared");
           expect(res.text).to.contain("can contribute remotely to one");
           done();
         });
@@ -40,7 +40,7 @@ describe("Site", function() {
 
           expect(res.text).to.contain("<title>Technology - LingSync.org</title>");
           expect(res.text).to.contain("<meta name=\"description\" content=\"Lingsync is composed of a number of webservices and application clients");
-          expect(res.text).to.contain("linguistics to adapt to your existing organization of the data")
+          expect(res.text).to.contain("linguistics to adapt to your existing organization of the data");
           expect(res.text).to.contain("LaTeX, xml, csv and more, but if you have another format");
           done();
         });
@@ -60,7 +60,7 @@ describe("Site", function() {
           }
 
           expect(res.text).to.contain("<title>People - LingSync.org</title>");
-          expect(res.text).to.contain("Interns &amp; Contributors")
+          expect(res.text).to.contain("Interns &amp; Contributors");
           done();
         });
     });
@@ -79,7 +79,7 @@ describe("Site", function() {
           }
 
           expect(res.text).to.contain("<title>Tutorials - LingSync.org</title>");
-          expect(res.text).to.contain("Dative tutorials")
+          expect(res.text).to.contain("Dative tutorials");
           expect(res.text).to.contain("Spreadsheet tutorial");
           done();
         });
@@ -99,7 +99,7 @@ describe("Site", function() {
           }
 
           expect(res.text).to.contain("<title>Projects - LingSync.org</title>");
-          expect(res.text).to.contain("Revitalization Partnership")
+          expect(res.text).to.contain("Revitalization Partnership");
           done();
         });
     });
@@ -119,7 +119,7 @@ describe("Site", function() {
 
           expect(res.text).to.contain("<title>Install - LingSync.org</title>");
           expect(res.text).to.not.contain("spreadsheet.");
-          expect(res.text).to.contain(".org/prototype/_design/prototype/corpus.html")
+          expect(res.text).to.contain("/prototype/_design/prototype/corpus.html");
           expect(res.text).to.contain("/lingllama/lingllama-communitycorpus/search/morphemes:nay%20OR%20gloss:des");
           expect(res.text).to.contain("/community/community-georgian/search/orthography:%E1%83%95%E1%83%98%E1%83%AA%E1%83%98");
           done();
