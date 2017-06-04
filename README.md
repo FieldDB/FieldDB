@@ -54,11 +54,16 @@ To develop offline with fixture data:
 $ OFFLINE=true yarn start --offline
 ```
 
-In another tab turn on the webpack server:
+Then open https://localhost:3182 and accept the security certificate warning since you are developing locally with a self signed certificate.
+
+
+To debug the client side code as well, in another tab turn on the webpack server:
 
 ```bash
 $ node webpack.server.js
 ```
+
+Then open https://localhost:3001/ and accept the security certificate warning since you are developing locally with a self signed certificate.
 
 ------------------
 
