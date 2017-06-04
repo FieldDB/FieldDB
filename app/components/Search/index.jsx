@@ -133,23 +133,37 @@ class SearchContainer extends Component {
     corpus.datumFields.map(updateCorpusField)
 
     const url = urls.lexicon.url + '/search/' + corpus.dbname
+    let searchIn = params.searchIn
+    let searchWarning = ''
+    // help with copy paste
+    if (searchIn) {
+      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':')
+    }
+    if (searchIn && searchIn.indexOf(':') === -1) {
+      // Default to search in all fields
+      searchIn = corpus.datumFields.map(function (field) {
+        return `${field.id}:${searchIn}`
+      }).join(' OR ')
+      searchWarning = `You searched for ${params.searchIn}, by default this will search in all the fields of this corpus. You might want to search only one field eg: morphemes:${params.searchIn}.
+`
+    }
     // console.log('requesting search of ', url, params, urls, store)
     return CORS.makeCORSRequest({
       method: 'post',
       url: url,
       withCredentials: false,
       data: {
-        query: params.searchIn
+        query: searchIn
       }
     })
       .then(function (response) {
         // console.log('search response', response)
         // console.log('search response', response)
-        const id = params.searchIn ? params.searchIn : 'all data'
+        const id = searchIn || 'all data'
         const datalist = new DataList({
           id: id,
           corpus: corpus,
-          title: 'Search for ' + id,
+          title: 'Search Results: ' + id,
           dbname: corpus.dbname,
           description: new Date(),
           docs: []
@@ -205,7 +219,7 @@ class SearchContainer extends Component {
 
         const datalistObject = datalist.toJSON()
         datalistObject.docs = datalist.docs.toJSON()
-        datalistObject.description = 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search.'
+        datalistObject.description = searchWarning + 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search.'
         if (store) {
           store.dispatch({
             type: LOADED_SEARCH_RESULTS,
