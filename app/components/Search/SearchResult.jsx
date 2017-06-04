@@ -30,7 +30,7 @@ class SearchResult extends Component {
       <div >
         <div className='accordion-group'>
           <div className='accordion-heading'>
-            <a className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + this.props.datalistId + '-' + datum._id + '-embedded'}
+            <span className='accordion-toggle' data-toggle='collapse' data-parent={'#accordion-' + this.props.datalistId + '-' + datum._id + '-embedded'}
               href={'#collapse-' + this.props.datalistId + '-' + datum._id}
               name={datum._id}
               title={datum.context}>
@@ -56,7 +56,7 @@ class SearchResult extends Component {
         )
       })
       }
-            </a>
+            </span>
           </div>
           <div className='accordion-body collapse' id={'collapse-' + this.props.datalistId + '-' + datum._id} >
             <div className='accordion-inner igt-area'>
