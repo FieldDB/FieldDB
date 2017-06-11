@@ -5,8 +5,6 @@ import Immutable from 'immutable'
 import React, { Component } from 'react'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { DatumFields } from 'fielddb/api/datum/DatumFields'
-import wiky from 'wiky.js'
-import InstaView from 'instaview'
 import marked from 'marked'
 
 import { loadCorpusMaskDetail } from './actions'
@@ -68,10 +66,8 @@ class CorpusMaskContainer extends Component {
     }
     const identifier = corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + (corpusMask.get('_rev') || 'repaired')
 
-    const descriptionFormatted = wiky.process(corpusMask.get('description'), {})
-    const descriptionFormatted2 = InstaView.convert(corpusMask.get('description'))
-    const descriptionMarkdownFormatted = marked(corpusMask.get('description'))
-    const termsOfUseFormatted = wiky.process(corpusMask.get('termsOfUse'), {})
+    const descriptionFormatted = marked(corpusMask.get('description'))
+    const termsOfUseFormatted = marked(corpusMask.get('termsOfUse'))
 
     return (
       <div>
@@ -166,12 +162,7 @@ class CorpusMaskContainer extends Component {
                     <img src={'https://secure.gravatar.com/avatar/' + corpusMask.getIn(['connection', 'gravatar']) + '.jpg?s=96&d=retro&r=pg'} alt='Corpus image' className='media-object' />
                   </a>
                   <div className='media-body'>
-                    <pre>{corpusMask.get('description')}</pre>
                     <div className='description' dangerouslySetInnerHTML={{
-                      __html: descriptionMarkdownFormatted
-                    }} /><div className='description' hidden dangerouslySetInnerHTML={{
-                      __html: descriptionFormatted2
-                    }} /><div className='description' hidden dangerouslySetInnerHTML={{
                       __html: descriptionFormatted
                     }} />
                   </div>

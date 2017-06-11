@@ -45,7 +45,6 @@
     "handlebars": "^4.0.2",
     "history": "^1.17.0",
     "immutable": "^3.8.1",
-    "instaview": "^0.6.3",
     "isomorphic-fetch": "^2.1.1",
     "marked": "^0.3.6",
     "method-override": "^2.3.5",
@@ -61,8 +60,7 @@
     "redux-logger": "^1.0.9",
     "redux-thunk": "^0.1.0",
     "serve-favicon": "^2.3.0",
-    "superagent": "^3.5.2",
-    "wiky.js": "^0.0.1"
+    "superagent": "^3.5.2"
   },
   "main": "service.js",
   "bin": {
