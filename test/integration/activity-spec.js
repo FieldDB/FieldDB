@@ -4,7 +4,7 @@ var supertest = require("supertest");
 
 var api = require("../../server");
 var specIsRunningTooLong = 5000;
-var LINGLLAMA_ACTIVITY_SIZE = 48;
+var LINGLLAMA_ACTIVITY_SIZE = 94;
 var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 218;
 
 var acceptSelfSignedCertificates = {
@@ -43,7 +43,7 @@ describe("/v5", function() {
           expect(res.body.rows.length).to.deep.equal(LINGLLAMA_ACTIVITY_SIZE);
 
           done();
-      });
+        });
     });
 
     it("should return heat map data from the community activity feeds", function(done) {

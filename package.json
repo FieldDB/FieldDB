@@ -1,6 +1,6 @@
 {
   "name": "fielddb-webserver",
-  "version": "5.5.29",
+  "version": "5.7.13",
   "description": "Web site for FieldDB corpora pages.",
   "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -46,6 +46,7 @@
     "history": "^1.17.0",
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.1.1",
+    "marked": "^0.3.6",
     "method-override": "^2.3.5",
     "morgan": "^1.6.1",
     "q": "^1.2.0",

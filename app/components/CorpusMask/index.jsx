@@ -5,6 +5,7 @@ import Immutable from 'immutable'
 import React, { Component } from 'react'
 import { CorpusMask } from 'fielddb/api/corpus/CorpusMask'
 import { DatumFields } from 'fielddb/api/datum/DatumFields'
+import marked from 'marked'
 
 import { loadCorpusMaskDetail } from './actions'
 import UserMask from '../UserMask/UserMask.jsx'
@@ -12,6 +13,16 @@ import DataList from '../DataList'
 import Search from '../Search'
 
 let defaultCorpus
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: true,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+})
 
 class CorpusMaskContainer extends Component {
   static fetchData ({store, params, history}) {
@@ -54,6 +65,9 @@ class CorpusMaskContainer extends Component {
       teamname: corpusMask.getIn(['team', 'username'])
     }
     const identifier = corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + (corpusMask.get('_rev') || 'repaired')
+
+    const descriptionFormatted = marked(corpusMask.get('description') || '')
+    const termsOfUseFormatted = marked(corpusMask.get('termsOfUse') || '')
 
     return (
       <div>
@@ -148,7 +162,9 @@ class CorpusMaskContainer extends Component {
                     <img src={'https://secure.gravatar.com/avatar/' + corpusMask.getIn(['connection', 'gravatar']) + '.jpg?s=96&d=retro&r=pg'} alt='Corpus image' className='media-object' />
                   </a>
                   <div className='media-body'>
-                    <div className='description'>{corpusMask.get('description')}</div>
+                    <div className='description' dangerouslySetInnerHTML={{
+                      __html: descriptionFormatted
+                    }} />
                   </div>
                 </div>
               </div>
@@ -187,7 +203,9 @@ class CorpusMaskContainer extends Component {
             </ul>
             <div className='tab-content'>
               <div id='terms' className='tab-pane active'>
-                <p>{corpusMask.get('termsOfUse')}</p>
+                <p dangerouslySetInnerHTML={{
+                  __html: termsOfUseFormatted
+                }} />
                 <span>License: </span><a href={corpusMask.getIn(['license', 'link'])} rel='license' title={corpusMask.getIn(['license', 'title'])}>{corpusMask.getIn(['license', 'title'])}</a>
                 <p>{corpusMask.getIn(['license', 'humanReadable'])}</p>
                 <img src='//i.creativecommons.org/l/by-sa/3.0/88x31.png' alt='License' />

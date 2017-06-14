@@ -2,7 +2,7 @@ var config = require("config");
 var expect = require("chai").expect;
 var activityHeatMap = require("./../../lib/activity").activityHeatMap;
 var specIsRunningTooLong = 5000;
-var LINGLLAMA_ACTIVITY_SIZE = 48;
+var LINGLLAMA_ACTIVITY_SIZE = 94;
 var COMMUNITY_GEORGIAN_ACTIVITY_SIZE = 218;
 
 var acceptSelfSignedCertificates = {

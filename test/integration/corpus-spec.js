@@ -23,7 +23,7 @@ describe("/v1", function() {
             return done(err);
           }
 
-          expect(res.text).to.contain("<title data-react-helmet=\"true\">Georgian Together - Georgian Together - LingSync.org</title>");
+          expect(res.text).to.contain("<title data-react-helmet=\"true\">Community - Georgian Together - LingSync.org</title>");
           expect(res.text).to.match(/<h1[^>]*>Georgian Together<\/h1>/);
           expect(res.text).to.contain("community");
           expect(res.text).to.contain("Interests");

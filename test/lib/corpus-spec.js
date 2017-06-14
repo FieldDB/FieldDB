@@ -135,7 +135,7 @@ describe("corpus lib", function() {
     it("should return the corpus mask from the community corpus", function(done) {
       getCorpusMask("community-georgian").then(function(mask) {
         expect(mask).to.be.defined;
-        expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
+        expect(mask._rev).to.deep.equal("35-5af77273e31f5eafb50335e7c94fde8f");
         expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
         expect(mask.dbname).to.deep.equal("community-georgian");
         expect(mask.title).to.deep.equal("Georgian Together");
@@ -315,7 +315,7 @@ describe("corpus lib", function() {
           "some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
-          expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
+          expect(mask._rev).to.deep.equal("35-5af77273e31f5eafb50335e7c94fde8f");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
           expect(mask.dbname).to.deep.equal("community-georgian");
           expect(mask.title).to.deep.equal("Georgian Together");
@@ -342,7 +342,7 @@ describe("corpus lib", function() {
         }),
           "Some_informative_title").then(function(mask) {
           expect(mask).to.be.defined;
-          expect(mask._rev).to.deep.equal("34-07395ad0101afa726429e92813ae0bb0");
+          expect(mask._rev).to.deep.equal("35-5af77273e31f5eafb50335e7c94fde8f");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
           expect(mask.dbname).to.deep.equal("community-georgian");
           expect(mask.title).to.deep.equal("Georgian Together");
