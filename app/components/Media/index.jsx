@@ -54,14 +54,14 @@ const imageExtensions = [
 
 class Media extends Component {
   render () {
-    if (!this.props.media || !this.props.corpus) {
-      // console.log('media or corpus was missing', media, this.props.corpus)
+    const media = this.props.media
+    if (!media || !media.filename || !this.props.corpus) {
+      console.warn('Unable to render media, filename or corpus was missing', media, this.props.corpus)
       return (
         <span />
       )
     }
 
-    const media = this.props.media
     const fileIdentifier = media.filename.substring(0, media.filename.lastIndexOf('.'))
     const extension = media.filename.replace(fileIdentifier, '')
     const url = this.props.corpus.getIn(['speech', 'url']) + '/' + this.props.corpus.get('dbname') + '/' + fileIdentifier + '/' + media.filename
