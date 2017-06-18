@@ -38,8 +38,8 @@ var SAMPLE_USER_MASK = new UserMask({
     corpusid: "89bc4d7dcc2b1fc9a7bb0f4f4743e705",
     corpusUrls: ["https://corpusdev.lingsync.org/lingllama-communitycorpus"],
     version: "v3.18.25",
-    title: "communitycorpus",
-    titleAsUrl: "communitycorpus",
+    title: "Community Corpus",
+    titleAsUrl: "community_corpus",
     gravatar: "54b53868cb4d555b804125f1a3969e87",
     pouchname: "lingllama-communitycorpus"
   }, {
@@ -87,17 +87,19 @@ describe("corpus lib", function() {
       if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
         return this.skip();
       }
+      this.timeout(specIsRunningTooLong * 2);
+
       var corpusConfig = url.parse(config.corpus.url);
 
       getCorpusMask("lingllama-communitycorpus", done).then(function(mask) {
         expect(mask).to.be.defined;
-        expect(mask._rev).to.deep.equal("40-baab7e31f8d24b12ea0cf2f827587720");
+        expect(mask._rev).to.deep.equal("42-1db8fbef7b9144f7c984786a9a221878");
         expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
         expect(mask.dbname).to.deep.equal("lingllama-communitycorpus");
         expect(mask.url).to.not.contain(corpusConfig.auth);
-        expect(mask.title).to.deep.equal("CommunityCorpus");
-        expect(mask.titleAsUrl).to.deep.equal("communitycorpus");
-        expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
+        expect(mask.title).to.deep.equal("Community Corpus");
+        expect(mask.titleAsUrl).to.deep.equal("community_corpus");
+        expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. Anyone can add comments to data, import data, experiment and help suggestions for other community members.");
         expect(mask.copyright).to.deep.equal("lingllama");
         expect(mask.fields.length).to.equal(4);
         // console.log(JSON.stringify(mask, null, 2));
@@ -123,8 +125,8 @@ describe("corpus lib", function() {
           corpusid: mask.connection.corpusid,
           corpusUrls: mask.connection.corpusUrls,
           version: mask.connection.version,
-          title: "CommunityCorpus",
-          titleAsUrl: "communitycorpus",
+          title: "Community Corpus",
+          titleAsUrl: "community_corpus",
           brandLowerCase: "",
           pouchname: "lingllama-communitycorpus"
         });
@@ -236,7 +238,7 @@ describe("corpus lib", function() {
         .then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask.dbname).to.deep.equal("lingllama-communitycorpus");
-          expect(mask.title).to.deep.equal("CommunityCorpus");
+          expect(mask.title).to.deep.equal("Community Corpus");
           done();
         }).fail(done);
     });
@@ -253,7 +255,7 @@ describe("corpus lib", function() {
     describe("invalid requests", function() {
 
       it("should return 500 error if usermask is not provided", function(done) {
-        getCorpusMaskFromTitleAsUrl(null, "CommunityCorpus", function(err) {
+        getCorpusMaskFromTitleAsUrl(null, "Community Corpus", function(err) {
           expect(err.status).to.deep.equal(undefined);
           expect(err.message).to.deep.equal("Server errored, please report this 8234");
           done();
@@ -275,15 +277,15 @@ describe("corpus lib", function() {
 
     describe("normal requests", function() {
 
-      it("should return the corpus mask from the sample corpus", function() {
-        getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "CommunityCorpus").then(function(mask) {
+      it("should return the corpus mask from the sample corpus", function(done) {
+        getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "Community_Corpus", done).then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("39-7f5edbe84b9b74288218f4c108ffa5a1");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
           expect(mask.dbname).to.deep.equal("lingllama-communitycorpus");
-          expect(mask.title).to.deep.equal("CommunityCorpus");
-          expect(mask.titleAsUrl).to.deep.equal("communitycorpus");
-          expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti");
+          expect(mask.title).to.deep.equal("Community Corpus");
+          expect(mask.titleAsUrl).to.deep.equal("community_corpus");
+          expect(mask.description).to.deep.equal("This is a corpus which is editable by anyone in the LingSync community. Anyone can add comments to data, import data, experiment and help suggestions for other community members.");
           expect(mask.copyright).to.deep.equal("lingllama");
           expect(mask.termsOfUse).to.be.defined;
           expect(mask.termsOfUse).to.contain("Sample: The materials included in this corpus are available");

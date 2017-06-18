@@ -37,7 +37,7 @@ describe("/v1", function() {
           expect(res.text).to.contain("https://secure.gravatar.com/avatar/948814f0b1bc8bebd701a9732ab3ebbd.jpg?s=96&amp;d=retro&amp;r=pg");
           expect(res.text).to.contain("https://secure.gravatar.com/avatar/948814f0b1bc8bebd701a9732ab3ebbd.jpg?s=96&amp;d=retro&amp;r=pg");
 
-          expect(res.text).to.contain("CommunityCorpus");
+          expect(res.text).to.contain("Community Corpus");
           expect(res.text).to.contain("This is a corpus which is editable by anyone in the ");
           expect(res.text).to.contain("Private Corpus");
           expect(res.text).to.match(/©.*lingllama.*2012.*-.*2017/);
