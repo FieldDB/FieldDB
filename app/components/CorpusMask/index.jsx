@@ -67,7 +67,8 @@ class CorpusMaskContainer extends Component {
     const identifier = corpusMask.get('dbname') + '/' + corpusMask.get('_id') + '?rev=' + (corpusMask.get('_rev') || 'repaired')
 
     const descriptionFormatted = marked(corpusMask.get('description') || '')
-    const termsOfUseFormatted = marked(corpusMask.get('termsOfUse') || '')
+    const termsOfUse = corpusMask.get('termsOfUse') || ''
+    const termsOfUseFormatted = marked(termsOfUse.replace === 'function' ? termsOfUse : '')
 
     return (
       <div>

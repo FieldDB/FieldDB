@@ -240,7 +240,7 @@ class SearchContainer extends Component {
             corpus: corpus,
             title: `Unable to search ${corpus.title}: ${id}`,
             dbname: corpus.dbname,
-            description: corpus.description,
+            description: corpus.description || '',
             docs: []
           })
         }
