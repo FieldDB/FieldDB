@@ -137,11 +137,11 @@ class SearchContainer extends Component {
     corpus.datumFields.map(updateCorpusField)
 
     const url = urls.lexicon.url + '/search/' + corpus.dbname
-    let searchIn = params.searchIn
+    let searchIn = decodeURIComponent(params.searchIn || '')
     let searchWarning = ''
     // help with copy paste
     if (searchIn) {
-      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':')
+      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':').replace(' and ', ' AND ').replace(' or ', ' OR ')
     }
     if (searchIn && searchIn.indexOf(':') === -1) {
       // Default to search in all fields
