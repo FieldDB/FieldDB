@@ -12,6 +12,13 @@ requestSampleData({
   // offline: 'true in search index'
 })
 
+function windowOnly (value, size) {
+  if (!value || typeof value.substring !== 'function') {
+    return value
+  }
+  return value.substring(0, size)
+}
+
 import { LOADED_SEARCH_RESULTS } from './actions'
 let defaultCorpus
 
@@ -199,13 +206,13 @@ class SearchContainer extends Component {
             // Prioritze fields before setting attributes on the datum
             // This ensures novel parallelText fields appear in the UI
             if (datum.fields[attribute]) {
-              datum.fields[attribute].value = result._source[attribute]
+              datum.fields[attribute].value = windowOnly(result._source[attribute], 200)
             } else if (datum.session && datum.session.fields[attribute]) {
               // console.log('setting session field ', attribute)
-              datum.session.fields[attribute].value = result._source[attribute]
+              datum.session.fields[attribute].value = windowOnly(result._source[attribute])
             } else {
               // console.log('setting attribute', attribute)
-              datum[attribute] = result._source[attribute]
+              datum[attribute] = windowOnly(result._source[attribute])
             }
           }
 
