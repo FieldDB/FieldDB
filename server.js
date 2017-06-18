@@ -73,6 +73,9 @@ app.get('/api/corpora', function(req, res, next) {
 app.use('/api/activity', activityRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', corpusRoutes);
+app.use('/search', function(req, res, next) {
+  res.redirect('/corpora');
+});
 
 app.get("*", reduxRender);
 
