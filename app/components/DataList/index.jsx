@@ -28,7 +28,7 @@ class DataList extends Component {
     const datalistId = this.props.datalist.get('id')
     let hidden = ''
     if (!docs || !docs.length) {
-      hidden = 'hidden'
+      // hidden = 'hidden'
     }
     return (
       <div className={this.props.className}>
