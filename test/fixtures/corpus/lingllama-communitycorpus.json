@@ -1,9 +1,9 @@
 {
    "_id": "corpus",
-   "_rev": "40-baab7e31f8d24b12ea0cf2f827587720",
-   "title": "CommunityCorpus",
-   "titleAsUrl": "communitycorpus",
-   "description": "This is a corpus which is editable by anyone in the LingSync community. You can add comments to data, import data, leave graffiti and help suggestions for other community members. We think that \"graffiti can give us a unique view into the daily life and customs of a people, for their casual expression encourages the recording of details that more formal writing would tend to ignore\" ref: http://nemingha.hubpages.com/hub/History-of-Graffiti",
+   "_rev": "42-1db8fbef7b9144f7c984786a9a221878",
+   "title": "Community Corpus",
+   "titleAsUrl": "community_corpus",
+   "description": "This is a corpus which is editable by anyone in the LingSync community. Anyone can add comments to data, import data, experiment and help suggestions for other community members.",
    "id": "corpus",
    "searchKeywords": "morphemes:nay OR gloss:des",
    "datumStates": [

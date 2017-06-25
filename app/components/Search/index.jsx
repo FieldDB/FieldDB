@@ -12,6 +12,13 @@ requestSampleData({
   // offline: 'true in search index'
 })
 
+function windowOnly (value, size) {
+  if (!value || typeof value.substring !== 'function') {
+    return value
+  }
+  return value.substring(0, size)
+}
+
 import { LOADED_SEARCH_RESULTS } from './actions'
 let defaultCorpus
 
@@ -130,14 +137,18 @@ class SearchContainer extends Component {
 
   static search ({params, urls, store, corpus, loadSearchResults}) {
     corpus = corpus || new CorpusMask(store.getState().corpusMaskDetail.toJS())
+    if (!corpus.datumFields || !corpus.datumFields.length) {
+      console.warn('Datum fields were not defined on this corpus', corpus)
+      corpus.datumFields = []
+    }
     corpus.datumFields.map(updateCorpusField)
 
     const url = urls.lexicon.url + '/search/' + corpus.dbname
-    let searchIn = params.searchIn
+    let searchIn = decodeURIComponent(params.searchIn || '')
     let searchWarning = ''
     // help with copy paste
     if (searchIn) {
-      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':')
+      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':').replace(' and ', ' AND ').replace(' or ', ' OR ')
     }
     if (searchIn && searchIn.indexOf(':') === -1) {
       // Default to search in all fields
@@ -147,6 +158,7 @@ class SearchContainer extends Component {
       searchWarning = `You searched for ${params.searchIn}, by default this will search in all the fields of this corpus. You might want to search only one field eg: morphemes:${params.searchIn}.
 `
     }
+    const id = searchIn || 'all data'
     // console.log('requesting search of ', url, params, urls, store)
     return CORS.makeCORSRequest({
       method: 'post',
@@ -159,7 +171,6 @@ class SearchContainer extends Component {
       .then(function (response) {
         // console.log('search response', response)
         // console.log('search response', response)
-        const id = searchIn || 'all data'
         const datalist = new DataList({
           id: id,
           corpus: corpus,
@@ -195,13 +206,13 @@ class SearchContainer extends Component {
             // Prioritze fields before setting attributes on the datum
             // This ensures novel parallelText fields appear in the UI
             if (datum.fields[attribute]) {
-              datum.fields[attribute].value = result._source[attribute]
+              datum.fields[attribute].value = windowOnly(result._source[attribute], 200)
             } else if (datum.session && datum.session.fields[attribute]) {
               // console.log('setting session field ', attribute)
-              datum.session.fields[attribute].value = result._source[attribute]
+              datum.session.fields[attribute].value = windowOnly(result._source[attribute])
             } else {
               // console.log('setting attribute', attribute)
-              datum[attribute] = result._source[attribute]
+              datum[attribute] = windowOnly(result._source[attribute])
             }
           }
 
@@ -217,9 +228,33 @@ class SearchContainer extends Component {
           datalist.add(datum)
         })
 
+        datalist.description = searchWarning + 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search.'
+
+        return datalist
+      })
+      .catch(function (err) {
+        if (err.userFriendlyErrors && err.userFriendlyErrors[0] === 'no such index') {
+          console.log('This db has not been indexed, most likely it is private. ', err)
+          return new DataList({
+            id: id,
+            corpus: corpus,
+            title: `Unable to search ${corpus.title}: ${id}`,
+            dbname: corpus.dbname,
+            description: corpus.description || '',
+            docs: []
+          })
+        }
+        console.log('error in search ', err)
+        throw err
+      })
+      .then(function (datalist) {
+        if (!datalist) {
+          return datalist
+        }
+
         const datalistObject = datalist.toJSON()
         datalistObject.docs = datalist.docs.toJSON()
-        datalistObject.description = searchWarning + 'Showing ' + datalist.length + ' of ' + response.hits.total + ' results, you can click on any of the items to see more details to further refine your search.'
+
         if (store) {
           store.dispatch({
             type: LOADED_SEARCH_RESULTS,
@@ -234,9 +269,6 @@ class SearchContainer extends Component {
         }
 
         return datalist
-      }).catch(function (err) {
-        console.log('error in search ', err)
-        throw err
       })
   }
 

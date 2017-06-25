@@ -34,7 +34,7 @@ describe("user lib", function() {
         var titles = mask.corpora.map(function(connection) {
           return connection.title;
         }).sort();
-        expect(titles).to.deep.equal(["CommunityCorpus", "Private Corpus", "Private Corpus"]);
+        expect(titles).to.deep.equal(["Community Corpus", "Private Corpus", "Private Corpus"]);
         var gravatars = mask.corpora.map(function(connection) {
           return connection.gravatar;
         }).sort();

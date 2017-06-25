@@ -11,12 +11,12 @@ class Corpora extends Component {
       this.props.corpora.map((connection) => {
         return (
           <div className='media' key={connection.get('dbname')}>
-            <Link to={connection.get('website')} className='pull-left'>
+            <Link to={connection.get('website') + '/search'} className='pull-left'>
               <img src={'https://secure.gravatar.com/avatar/' + connection.get('gravatar') + '.jpg?s=96&d=retro&r=pg'} alt='Corpus image' className='media-object' />
             </Link>
             <div className='media-body'>
               <h4 className='media-heading'>
-                <Link to={connection.get('website')}>
+                <Link to={`${connection.get('website')}/search/${connection.get('searchKeywords') || ''}`}>
                   {connection.get('title')}
                 </Link>
               </h4>
