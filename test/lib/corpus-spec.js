@@ -74,7 +74,7 @@ var SAMPLE_USER_MASK = new UserMask({
   api: "users"
 });
 
-describe.only("corpus lib", function() {
+describe("corpus lib", function() {
   this.timeout(specIsRunningTooLong);
 
   it("should load", function() {
