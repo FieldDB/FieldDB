@@ -68,7 +68,7 @@ class CorpusMaskContainer extends Component {
 
     const descriptionFormatted = marked(corpusMask.get('description') || '')
     const termsOfUse = corpusMask.get('termsOfUse') || ''
-    const termsOfUseFormatted = marked(termsOfUse.replace === 'function' ? termsOfUse : '')
+    const termsOfUseFormatted = marked(termsOfUse)
 
     return (
       <div>
