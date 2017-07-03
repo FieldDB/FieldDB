@@ -54,12 +54,12 @@ describe('Container::CorpusMask', function () {
       corpusMask: Immutable.fromJS({
         dbname: 222,
         title: 'the-corpusMask-title',
-        description: 'hi',
+        description: 'hi \n* a \n* list',
         dateCreated: 1411424261782,
         dateModified: 1490462360903,
         keywords: 'kartuli, batumi, natural speech',
         copyright: 'Georgian Together Users',
-        termsOfUse: 'any terms',
+        termsOfUse: 'any \nterms',
         team: {
           id: 1234,
           name: 'jack'
@@ -76,48 +76,89 @@ describe('Container::CorpusMask', function () {
     }
     const doc = renderDoc(props)
 
-    let meta = doc.find('meta')
+    const meta = doc.find('meta')
     expect(meta).to.exist
     expect(meta.length).to.equal(20)
 
-    let description = doc.find('meta[name="description"]')
+    const description = doc.find('meta[name="description"]')
     expect(description).to.exist
     expect(description.length).to.equal(1)
-    expect(description.node.props.content).to.equal('hi')
+    expect(description.node.props.content).to.equal('hi \n* a \n* list')
 
-    let keywords = doc.find('meta[name="keywords"]')
+    const keywords = doc.find('meta[name="keywords"]')
     expect(keywords).to.exist
     expect(keywords.length).to.equal(1)
     expect(keywords.node.props.content).to.equal('kartuli, batumi, natural speech')
 
-    let date = doc.find('meta[name="date"]')
+    const date = doc.find('meta[name="date"]')
     expect(date).to.exist
     expect(date.length).to.equal(1)
     expect(date.node.props.content).to.equal('2017-03-25T17:19:20.903Z')
 
-    let dateCreated = doc.find('meta[name="dateCreated"]')
+    const dateCreated = doc.find('meta[name="dateCreated"]')
     expect(dateCreated).to.exist
     expect(dateCreated.length).to.equal(1)
     expect(dateCreated.node.props.content).to.equal('2014-09-22T22:17:41.782Z')
 
-    let subject = doc.find('meta[name="subject"]')
+    const subject = doc.find('meta[name="subject"]')
     expect(subject).to.exist
     expect(subject.length).to.equal(1)
     expect(subject.node.props.content).to.equal('Kartuli')
 
-    let copyright = doc.find('meta[name="copyright"]')
+    const copyright = doc.find('meta[name="copyright"]')
     expect(copyright).to.exist
     expect(copyright.length).to.equal(1)
     expect(copyright.node.props.content).to.equal('Georgian Together Users')
 
-    let terms = doc.find('meta[name="terms"]')
+    const terms = doc.find('meta[name="terms"]')
     expect(terms).to.exist
     expect(terms.length).to.equal(1)
-    expect(terms.node.props.content).to.equal('any terms')
+    expect(terms.node.props.content).to.equal('any \nterms')
 
-    let access = doc.find('meta[name="access"]')
+    const access = doc.find('meta[name="access"]')
     expect(access).to.exist
     expect(access.length).to.equal(1)
     expect(access.node.props.content).to.equal('Contact myemail@myemail.org if you would like to gain (read, write, comment, contributor, export, search) access to the non-public parts of this database')
+  })
+
+  it('should support markdown formatted text', function () {
+    const props = {
+      loadCorpusMaskDetail: sinon.stub(),
+      params: {
+        dbname: 'something',
+        teamname: 'someone'
+      },
+      corpusMask: Immutable.fromJS({
+        dbname: 222,
+        title: 'the-corpusMask-title',
+        description: 'hi \n* a \n* list',
+        termsOfUse: 'some \nterms',
+        team: {
+          id: 1234,
+          name: 'jack'
+        },
+        fields: [],
+        prototypeApp: {
+          url: ''
+        }
+      }),
+      searchResults: Immutable.fromJS([])
+    }
+    const doc = renderDoc(props)
+
+    const description = doc.find('.description')
+    expect(description).to.exist
+    expect(description.length).to.equal(1)
+    expect(description.node.props.dangerouslySetInnerHTML.__html).to.equal('<p>hi </p>\n<ul>\n<li>a </li>\n<li>list</li>\n</ul>\n')
+
+    const termsOfUse = doc.find('.terms')
+    expect(termsOfUse).to.exist
+    expect(termsOfUse.length).to.equal(1)
+    expect(termsOfUse.node.props.dangerouslySetInnerHTML.__html).to.equal('<p>some<br>terms</p>\n')
+
+    // terms should be an anchor which can be linked to
+    const termsAnchor = doc.find('#terms')
+    expect(termsAnchor).to.exist
+    expect(termsAnchor.length).to.equal(1)
   })
 })
