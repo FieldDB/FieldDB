@@ -148,7 +148,7 @@ class SearchContainer extends Component {
     let searchWarning = ''
     // help with copy paste
     if (searchIn) {
-      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':').replace(' and ', ' AND ').replace(' or ', ' OR ')
+      searchIn = searchIn.toLowerCase().replace(/\s*:\s*/, ':').replace(/ and /g, ' AND ').replace(/ or /g, ' OR ')
     }
     if (searchIn && searchIn.indexOf(':') === -1) {
       // Default to search in all fields
