@@ -263,6 +263,10 @@ describe("corpus lib", function() {
       });
 
       it("should return 404 error if usermask has no matching corpora", function(done) {
+        if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+          return this.skip();
+        }
+
         getCorpusMaskFromTitleAsUrl({
           username: "lingllama"
         }, "notacorpus", function(err) {
