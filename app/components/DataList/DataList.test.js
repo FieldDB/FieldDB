@@ -18,7 +18,7 @@ describe('Component::DataList', function () {
         'fieldDBtype': 'DataList',
         'id': 'orthography___',
         'title': 'Search for orthography:არ',
-        'description': 'Showing 4 of 4 results, you can click on any of the items to see more details to further refine your search.',
+        'description': 'something with a \n\n* http://link.to.somwhere in it',
         'version': 'v4.49.5',
         docs: [{
           id: 'd3bf748b16ac4054680f27a6401efdfa'
@@ -43,7 +43,7 @@ describe('Component::DataList', function () {
     let description = doc.find('p')
     expect(description).to.exist
     expect(description.length).to.equal(1)
-    expect(description.node.props.children).to.equal('Showing 4 of 4 results, you can click on any of the items to see more details to further refine your search.')
+    expect(description.node.props.dangerouslySetInnerHTML.__html).to.equal('<p>something with a </p>\n<ul>\n<li><a href="http://link.to.somwhere">http://link.to.somwhere</a> in it</li>\n</ul>\n')
 
     let searchResults = doc.find('SearchResult')
     expect(searchResults).to.exist

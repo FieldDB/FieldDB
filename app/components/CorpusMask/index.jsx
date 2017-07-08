@@ -68,7 +68,7 @@ class CorpusMaskContainer extends Component {
 
     const descriptionFormatted = marked(corpusMask.get('description') || '')
     const termsOfUse = corpusMask.get('termsOfUse') || ''
-    const termsOfUseFormatted = marked(termsOfUse.replace === 'function' ? termsOfUse : '')
+    const termsOfUseFormatted = marked(termsOfUse)
 
     return (
       <div>
@@ -204,7 +204,7 @@ class CorpusMaskContainer extends Component {
             </ul>
             <div className='tab-content'>
               <div id='terms' className='tab-pane active'>
-                <p dangerouslySetInnerHTML={{
+                <p className='terms' dangerouslySetInnerHTML={{
                   __html: termsOfUseFormatted
                 }} />
                 <span>License: </span><a href={corpusMask.getIn(['license', 'link'])} rel='license' title={corpusMask.getIn(['license', 'title'])}>{corpusMask.getIn(['license', 'title'])}</a>

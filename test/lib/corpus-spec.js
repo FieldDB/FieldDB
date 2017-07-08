@@ -263,6 +263,10 @@ describe("corpus lib", function() {
       });
 
       it("should return 404 error if usermask has no matching corpora", function(done) {
+        if (process.env.TRAVIS_PULL_REQUEST && !config.corpus.url) {
+          return this.skip();
+        }
+
         getCorpusMaskFromTitleAsUrl({
           username: "lingllama"
         }, "notacorpus", function(err) {
@@ -277,10 +281,13 @@ describe("corpus lib", function() {
 
     describe("normal requests", function() {
 
-      it("should return the corpus mask from the sample corpus", function(done) {
-        getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "Community_Corpus", done).then(function(mask) {
+      it("should return the corpus mask from the sample corpus", function() {
+        return getCorpusMaskFromTitleAsUrl(SAMPLE_USER_MASK, "Community_Corpus", function(err) {
+          console.log(err);
+          throw err;
+        }).then(function(mask) {
           expect(mask).to.be.defined;
-          expect(mask._rev).to.deep.equal("39-7f5edbe84b9b74288218f4c108ffa5a1");
+          expect(mask._rev).to.deep.equal("42-1db8fbef7b9144f7c984786a9a221878");
           expect(mask.fieldDBtype).to.deep.equal("CorpusMask");
           expect(mask.dbname).to.deep.equal("lingllama-communitycorpus");
           expect(mask.title).to.deep.equal("Community Corpus");
@@ -298,7 +305,7 @@ describe("corpus lib", function() {
       });
 
       it("should use fuzzy find to find a matching corpus", function() {
-        getCorpusMaskFromTitleAsUrl(new UserMask({
+        return getCorpusMaskFromTitleAsUrl(new UserMask({
           username: "community",
           corpora: [{
             titleAsUrl: "georgian",
@@ -314,7 +321,10 @@ describe("corpus lib", function() {
             dbname: "community-migmaq"
           }]
         }),
-          "some_informative_title").then(function(mask) {
+          "some_informative_title", function(err) {
+            console.log(err);
+            throw err;
+          }).then(function(mask) {
           expect(mask).to.be.defined;
           expect(mask).to.be.defined;
           expect(mask._rev).to.deep.equal("35-5af77273e31f5eafb50335e7c94fde8f");
@@ -326,7 +336,7 @@ describe("corpus lib", function() {
       });
 
       it("should use fuzzy find to find a matching corpus too", function() {
-        getCorpusMaskFromTitleAsUrl(new UserMask({
+        return getCorpusMaskFromTitleAsUrl(new UserMask({
           username: "community",
           corpora: [{
             titleAsUrl: "georgian",

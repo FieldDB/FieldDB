@@ -22,6 +22,6 @@
     "tests"
   ],
   "dependencies": {
-    "fielddb": "^5.4.21"
+    "fielddb": "^5.5.29"
   }
 }

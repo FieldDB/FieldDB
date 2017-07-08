@@ -12,15 +12,17 @@ describe('Component::Corpora', function () {
       corpora: Immutable.fromJS([
         {
           dbname: 1,
-          title: 'the-title-1'
+          title: 'the title 1',
+          website: 'https://example.org'
         },
         {
           dbname: 2,
-          title: 'the-title-2'
+          title: 'the title 2',
+          searchKeywords: 'morphemes:nay OR gloss:caus'
         },
         {
           dbname: 3,
-          title: 'the-title-3'
+          title: 'the title 3'
         }
       ])
     }
@@ -34,5 +36,10 @@ describe('Component::Corpora', function () {
     let corpusMaskComps = doc.find(Link)
 
     expect(corpusMaskComps.length).to.equal(props.corpora.size * 2)
+    expect(corpusMaskComps.nodes[0].props.to).to.equal('https://example.org/search')
+    expect(corpusMaskComps.nodes[1].props.children).to.equal('the title 1')
+
+    expect(corpusMaskComps.nodes[2].props.to).to.equal('/search/morphemes:nay OR gloss:caus')
+    expect(corpusMaskComps.nodes[3].props.children).to.equal('the title 2')
   })
 })
