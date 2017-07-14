@@ -13,6 +13,7 @@ There are quite a few client apps which use FieldDB api/corpora. Each project is
 * The [Prototype](https://github.com/FieldDB/FieldDB/tree/master/backbone_client) This app is where we prototyped all the features needed for collaborative data management of evolving data.<br>
 <img src="https://cloud.githubusercontent.com/assets/196199/6283103/08d15ce0-b912-11e4-852c-b4c1d9adb243.png"  height="200" />
 <img src="https://cloud.githubusercontent.com/assets/196199/6283117/301332ce-b912-11e4-8b7d-99ea1fc83ddf.png"  height="200" />
+
 * The [Spreadsheet](https://github.com/FieldDB/FieldDB/tree/master/angular_client/modules/spreadsheet) This is a student project to build an app that can be used with very little training or experience. It is focused on data entry and has only basic search/export/import/customization and can't handle large data sets. It has keybindings like a spreadsheets.
  <br>
  
@@ -29,21 +30,28 @@ There are quite a few client apps which use FieldDB api/corpora. Each project is
 * The [Psycholinguistics MontageJS library](https://github.com/ProjetDeRechercheSurLecriture/oprime-montage) This library has functionality for displaying/running and building experiements in the Montage.js framework.
 
 <img src="https://cloud.githubusercontent.com/assets/196199/4506891/8bad9030-4b07-11e4-9643-7a3e1748e633.png" height="200">
+
 * The [Activity Feed widget](https://github.com/FieldDB/FieldDB/tree/master/angular_client/modules/activity) This app lets you view the activity feed of a corpus.<br>
 
 <img src="https://cloud.githubusercontent.com/assets/196199/6282469/527dc6b2-b908-11e4-8790-4df19acbd163.png"  height="200" />
+
 * The [Learn X app](https://github.com/FieldDB/AndroidLanguageLearningClientForFielddb) This is an Android app which lets you turn your corpus into a collaborative language learning app so that heritage speakers can use field methods to collect stories and analyze them.
 
 <img src="https://f.cloud.github.com/assets/196199/2483261/6c4e6442-b0fe-11e3-93df-e74309100571.png" height="200">
+
 * The Android [Elicitation Session Recorder](https://github.com/FieldDB/AndroidFieldDBElicitationRecorder) This app lets you record video sessions and upload them to the audio server for processing straight from your Android. This was also a student project and has a force closeon Android 4.4.
 * The Android [Speech Recognition Trainer App](https://github.com/batumi/AndroidSpeechRecognitionTrainer) This app uses pocketsphinx on Android. It lets native speakers of low resource languages speak training data to their device which is used to build their voice model. Any corpus can be used as training data and as the data grows the user' language model improves and the app can recognize more words. We tested the app on ქართული (Georgian) we had little expectations for the recognition to work or be useable but we have reasonably okay results for SMS messages. This app can also be used for produciton experiments (it presents a visual and text representation which the user should read).<br>
 <img src="https://cloud.githubusercontent.com/assets/196199/3277961/25a67bb0-f39d-11e3-8ff2-917b06069261.png"  height="200" />
+
 * The [My Dictionary](https://github.com/FieldDB/DictionaryChromeExtension) This is a chrome extension which can be customized for any langauge which has a wiktionary. It is able to look up the word in the wiktionary and display the word's information to you on any website. Useful for browsing Facebook in your heritage language.
 <img src="https://cloud.githubusercontent.com/assets/196199/6282739/1cb609a0-b90c-11e4-99c1-03a5c4c519e7.png" height="200">
+
 * The [Lexicon Browser](https://github.com/FieldDB/FieldDBLexicon) This app displays the lexicon of a corpus as a connected graph of morphemes. You can edit the morphemes, and clean the data where the morphemes are used. You can add discussion and linking between morphemes.
 <img src="https://f.cloud.github.com/assets/196199/2366164/8555cb70-a6f3-11e3-93ec-140fcaad2294.png" height="200">
+
 * The [Word Cloud Visualizer](https://github.com/FieldDB/FieldDBWordCloudChromeApp) This app uses D3 to display the words in a corpus in a word cloud. You can use this interface to lematize morphemes and play with the data in a frequency oriented way where the most frequent words pop out at the user.
 <img src="https://cloud.githubusercontent.com/assets/196199/6282934/6bc5fb10-b90f-11e4-8e4c-8fb9bbf0799f.png" height="200">
+
 * You can [add others](https://github.com/FieldDB/FieldDB/edit/master/README.md) if there any missing in this list...
 
 
