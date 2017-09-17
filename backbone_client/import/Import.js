@@ -53,11 +53,19 @@ define([
           if (this.get("fields") === undefined) {
             this.set("fields", window.app.get("corpus").get("datumFields").clone());
           }
+          this.fieldDBModel = new FieldDB.Import({
+            dbname: window.app.get("corpus").get("dbname"),
+            corpus: window.app.get("corpus").fieldDBModel
+          });
         } else {
           this.set("dbname", "default");
           if (this.get("fields") === undefined) {
             this.set("fields", []);
           }
+          this.fieldDBModel = new FieldDB.Import({
+            dbname: "default",
+            corpus: new FieldDB.Corpus()
+          });
         }
 
         if (this.get("filledWithDefaults")) {

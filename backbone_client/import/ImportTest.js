@@ -20,6 +20,9 @@ define(["import/Import"], function(Import) {
               get: function(key) {
                 return this[key];
               },
+              fieldDBModel: {
+                dbname: "jenkins-firstcorpus",
+              },
               dbname: "jenkins-firstcorpus",
               datumFields: {
                 clone: function(){
@@ -31,7 +34,9 @@ define(["import/Import"], function(Import) {
 
           var importer = new Import();
           expect(importer).toBeDefined();
-          expect(importer.get("dbname")).toEqual("jenkins-firstcorpus");
+          expect(importer.get("dbname")).toEqual(window.app.corpus.dbname);
+          expect(importer.fieldDBModel.dbname).toEqual(window.app.corpus.dbname);
+          expect(importer.fieldDBModel.corpus.dbname).toEqual(window.app.corpus.fieldDBModel.dbname);
         });
       });
 
