@@ -241,16 +241,17 @@ define([
         return CSV;
       },
       importXML: function(text, self, callback) {
-        console.log('text', text);
-        console.log('FieldDB', FieldDB);
-        // alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
-
-        // self.set("extractedHeader", header);
-
-        // self.set("asCSV", rows);
-        if (typeof callback == "function") {
-          callback();
-        }
+        self.fieldDBModel.importXML(text).then(function(rows) {
+          self.set("extractedHeader", self.fieldDBModel.extractedHeaderObjects.map(function(item) {
+            return item.value;
+          }));
+          self.set("asCSV", self.fieldDBModel.asCSV);
+          if (typeof callback == "function") {
+            callback(null, self.fieldDBModel.asCSV);
+          }
+        }).catch(function(err) {
+          callback(err);
+        });
       },
       importElanXML: function(text, self, callback) {
         //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");

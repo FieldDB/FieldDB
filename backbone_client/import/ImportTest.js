@@ -71,9 +71,9 @@ define(["import/Import"], function(Import) {
       describe("As a user I want to import Language Learning XML", function() {
         it("should detect xml", function(done) {
           var importer = new Import();
-          var result = importer.importXML('<xml>', importer, function() {
-
-            expect(importer.rows).toEqual([]);
+          var result = importer.importXML('<xml></xml>', importer, function() {
+            expect(importer.get("extractedHeader")).toEqual([]);
+            expect(importer.get("asCSV")).toEqual([]);
             done();
           });
           expect(result).toEqual();

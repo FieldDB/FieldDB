@@ -1318,11 +1318,24 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       return CSV;
     }
   },
+
   importXML: {
-    value: function() {
-      throw new Error("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+    value: function(text, callback) {
+      var deferred = Q.defer();
+      var self = this;
+
+      Q.nextTick(function() {
+        self.warn("The app thinks this might be a XML file, but we have only implemented import from language learning lessons. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
+
+        console.log('text', text);
+        self.extractedHeaderObjects = [];
+        self.asCSV = [];
+        deferred.resolve(self.datalist);
+      });
+      return deferred.promise;
     }
   },
+
   importElanXML: {
     value: function(text, callback) {
       if (!text) {
