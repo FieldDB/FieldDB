@@ -12,6 +12,7 @@ define([
   "app/PaginatedUpdatingCollectionView",
   "xml2json",
   "bower_components/textgrid/dist/textgrid",
+  // "bower_components/fielddb/fielddb",
   "OPrime"
 ], function(
   FieldDBBackboneModel,
@@ -25,6 +26,7 @@ define([
   DatumFields,
   Session,
   PaginatedUpdatingCollectionView,
+  // FieldDB,
   X2JS
 ) {
   var Import = FieldDBBackboneModel.extend(
@@ -46,10 +48,18 @@ define([
        * @constructs
        */
       initialize: function() {
-        this.set("dbname", window.app.get("corpus").get("dbname"));
-        if (this.get("fields") == undefined) {
-          this.set("fields", window.app.get("corpus").get("datumFields").clone());
+        if (window.app && window.app.get("corpus")) {
+          this.set("dbname", window.app.get("corpus").get("dbname"));
+          if (this.get("fields") === undefined) {
+            this.set("fields", window.app.get("corpus").get("datumFields").clone());
+          }
+        } else {
+          this.set("dbname", "default");
+          if (this.get("fields") === undefined) {
+            this.set("fields", []);
+          }
         }
+
         if (this.get("filledWithDefaults")) {
           this.fillWithDefaults();
           this.unset("filledWithDefaults");
@@ -223,7 +233,16 @@ define([
         return CSV;
       },
       importXML: function(text, self, callback) {
-        alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+        console.log('text', text);
+        console.log('FieldDB', FieldDB);
+        // alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+
+        // self.set("extractedHeader", header);
+
+        // self.set("asCSV", rows);
+        if (typeof callback == "function") {
+          callback();
+        }
       },
       importElanXML: function(text, self, callback) {
         //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");

@@ -4,6 +4,37 @@ define(["import/Import"], function(Import) {
   function registerTests() {
     describe("Import", function() {
 
+      describe("initialize", function() {
+        it("should use default corpus", function() {
+          var importer = new Import();
+          expect(importer).toBeDefined();
+          expect(importer.get("dbname")).toEqual("default");
+        });
+
+        it("should use window corpus if available", function() {
+          window.app = {
+            get: function(key) {
+              return this[key];
+            },
+            corpus: {
+              get: function(key) {
+                return this[key];
+              },
+              dbname: "jenkins-firstcorpus",
+              datumFields: {
+                clone: function(){
+                  return []
+                }
+              }
+            }
+          };
+
+          var importer = new Import();
+          expect(importer).toBeDefined();
+          expect(importer.get("dbname")).toEqual("jenkins-firstcorpus");
+        });
+      });
+
       describe("As a user I want to import csv", function() {
         it("should detect drag and drop", function() {
           expect(Import).toBeDefined();
@@ -19,6 +50,17 @@ define(["import/Import"], function(Import) {
       describe("As a user I want to import ELAN XML", function() {
         it("should detect drag and drop", function() {
           expect(Import).toBeDefined();
+        });
+      });
+
+      describe("As a user I want to import Language Learning XML", function(done) {
+        it("should detect xml", function() {
+          var importer = new Import();
+          var result = importer.importXMl('<xml>', importer, function() {
+
+            expect(importer.rows).toDeepEqual([]);
+            done();
+          });
         });
 
       });
