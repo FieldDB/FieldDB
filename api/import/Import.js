@@ -1326,8 +1326,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       Q.nextTick(function() {
         self.warn("The app thinks this might be a XML file, but we have only implemented import from language learning lessons. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
-
-        console.log('text', text);
+        self.debug('text', text);
         self.extractedHeaderObjects = [];
         self.asCSV = [];
         deferred.resolve(self.datalist);
@@ -2364,6 +2363,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
+      this.debug('importTypeConfidenceMeasures', importTypeConfidenceMeasures);
 
       var mostLikelyImport;
       for (var importType in importTypeConfidenceMeasures) {
@@ -2377,7 +2377,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       this.importTypeConfidenceMeasures.mostLikely = mostLikelyImport;
       this.status = "";
-      mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
+      return mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
     }
   },
   readBlob: {

@@ -940,6 +940,34 @@ describe("api/import/Import", function() {
   });
 
 
+  describe("Import: as a research assistant helping heritage speakers I want to import my data from Can8", function() {
+    var importer;
+    beforeEach(function() {
+      importer = new Import({
+        // debugMode: true
+      });
+    });
+
+    it("should detect xml", function() {
+      importer.rawText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+      importer.guessFormatAndPreviewImport();
+      expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+    });
+
+    it("should detect Can8 style data", function(done) {
+      fs.readFile("../learn.migmaq.org/data/master.xml", "utf8", function(err, data) {
+        if (err) {
+          return done(err);
+        }
+        importer.rawText = data;
+        importer.guessFormatAndPreviewImport().then(function(){
+          expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+          done();
+        });
+      });
+    });
+  });
+
   describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
     var importer;
