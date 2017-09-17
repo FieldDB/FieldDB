@@ -785,7 +785,7 @@ define([
        *
        * @param text
        */
-      importText: function(text, self) {
+      importText: function(text, self, callback) {
         if (!text) {
           return;
         }
@@ -805,6 +805,7 @@ define([
         }
         if (rows && rows.length > 0) {
           self.set("extractedHeader", rows[0]);
+          rows.shift();
         }
         self.set("asCSV", rows);
         if (typeof callback == "function") {

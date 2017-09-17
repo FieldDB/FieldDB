@@ -42,8 +42,18 @@ define(["import/Import"], function(Import) {
       });
 
       describe("As a user I want to import Word/text examples on three lines", function() {
-        it("should detect drag and drop", function() {
-          expect(Import).toBeDefined();
+        it("should import IGT", function(done) {
+          var importer = new Import();
+          var text = "transcription\nmorphemes\ngloss\n\nNoqata qan qaparinaywanki.\nNoqa-ta qan qapari-nay-wanki\nme-ACC you-NOM yell-DES-2SG.1OM\n\nSuwanayki Josefina\nSuwa-nay-ki Josefina\nsteal.1-2 Josefina-NOM";
+          var result = importer.importText(text, importer, function() {
+            expect(importer.get("extractedHeader")).toEqual([ "transcription", "morphemes", "gloss" ]);
+            expect(importer.get("asCSV")).toEqual([
+              ["Noqata qan qaparinaywanki.", "Noqa-ta qan qapari-nay-wanki", "me-ACC you-NOM yell-DES-2SG.1OM"],
+              ["Suwanayki Josefina", "Suwa-nay-ki Josefina", "steal.1-2 Josefina-NOM"]
+            ]);
+            done();
+          });
+          expect(result).toEqual();
         });
       });
 
@@ -53,16 +63,16 @@ define(["import/Import"], function(Import) {
         });
       });
 
-      describe("As a user I want to import Language Learning XML", function(done) {
-        it("should detect xml", function() {
+      describe("As a user I want to import Language Learning XML", function() {
+        it("should detect xml", function(done) {
           var importer = new Import();
-          var result = importer.importXMl('<xml>', importer, function() {
+          var result = importer.importXML('<xml>', importer, function() {
 
-            expect(importer.rows).toDeepEqual([]);
+            expect(importer.rows).toEqual([]);
             done();
           });
+          expect(result).toEqual();
         });
-
       });
 
       describe("Template", function() {
