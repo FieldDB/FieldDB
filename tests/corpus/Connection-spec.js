@@ -29,7 +29,7 @@ describe("Connection ", function() {
       var connection = new Connection().toJSON();
       expect(connection).toEqual({
         fieldDBtype: "Connection",
-        corpusUrls: undefined,
+        // corpusUrls: undefined,
         brandLowerCase: "",
         version: connection.version,
         dbname: "",

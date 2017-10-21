@@ -339,6 +339,8 @@ CorpusMask.prototype = Object.create(Database.prototype, /** @lends CorpusMask.p
       }
       if (value.humanReadable) {
         value = value.humanReadable;
+      } else if (typeof value === "object") {
+        value = "";
       }
       this.fields.rights.value = value;
     }
