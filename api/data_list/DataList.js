@@ -542,6 +542,27 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
     }
   },
 
+  save: {
+    value: function(optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl) {
+      this.debug("Customizing save ", optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl);
+      var saveResult = FieldDBObject.prototype.save.apply(this, [optionalUserWhoSaved, saveEvenIfSeemsUnchanged, optionalUrl]);
+      // Save recursive docs if they are DataLists
+      var promises = this.docs
+        .filter(function(any) {
+          return !!any;
+        })
+        .map(function(doc) {
+          if (doc instanceof DataList) {
+            return doc.save();
+          }
+        });
+      promises.push(saveResult);
+      return Q.allSettled(promises).then(function() {
+        return saveResult;
+      });
+    }
+  },
+
   toJSON: {
     value: function(includeEvenEmptyAttributes, removeEmptyAttributes, attributesToIgnore) {
       // Force docIds to be set to current docs

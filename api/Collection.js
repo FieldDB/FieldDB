@@ -845,6 +845,19 @@ Collection.prototype = Object.create(Object.prototype, {
     }
   },
 
+  filter: {
+    get: function() {
+      if (this._collection && typeof this._collection.filter === "function") {
+        var self = this;
+        return function(callback) {
+          return this._collection.filter.apply(self._collection, [callback]);
+        };
+      } else {
+        return undefined;
+      }
+    }
+  },
+
   forEach: {
     get: function() {
       if (this._collection && typeof this._collection.forEach === "function") {
