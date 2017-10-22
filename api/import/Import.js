@@ -5,6 +5,7 @@ var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
 var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var Image = require("./../image/Image").Image;
 // var DataList = require("./../data_list/DataList").DataList;
 var Participant = require("./../user/Participant").Participant;
 var Datum = require("./../datum/Datum").Datum;
@@ -1425,15 +1426,16 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                               datum.id = datum.tempId;
                               Object.keys(line).forEach(function(key) {
                                 if (key === 'soundfile') {
-                                  datum.audioVideo.push({
+                                  datum.audioVideo.add(new AudioVideo({
                                     filename: line[key] + '.mp3'
-                                  });
+                                  }));
                                   return;
                                 }
                                 if (key === 'img') {
-                                  datum.images.push({
+                                  datum.images.add(new Image({
                                     filename: line[key]
-                                  });
+                                  }));
+                                  console.log('datum', datum.toJSON());
                                   return;
                                 }
                                 datum.fields.add({
@@ -1441,9 +1443,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                                   value: line[key]
                                 });
                               });
-                              // console.log('datum', datum.toJSON());
                               lessonDatalist.docs.add(datum);
                               self.session.datalist.docs.add(datum);
+                              delete datum.tempId;
                             });
                           }
                         });
