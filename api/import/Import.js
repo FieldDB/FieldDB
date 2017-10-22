@@ -1337,165 +1337,182 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           self.asCSV = [];
           var xmlParser = new X2JS();
           var jsonObj = xmlParser.xml_str2json ? xmlParser.xml_str2json(text) : xmlParser.xml2js(text);
-          var detectedDatum = [];
-          var detectedFieldLabels = {};
 
-          var languageLessonsDatalist = new self.session.datalist.constructor({
-            title: jsonObj.lessonset.title,
+          if (jsonObj && jsonObj.lessonset) {
+            return deferred.resolve(self.importLessonset(jsonObj.lessonset));
+          }
+          self.warn("The app thinks this might be a XML file, but its not one we recognize. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
+        } catch (err) {
+        deferred.reject(err);
+      }
+      deferred.resolve(self.datalist);
+    });
+    return deferred.promise;
+    }
+  },
+
+  importLessonset: {
+    value: function(lessonSet) {
+      var self = this;
+      var detectedDatum = [];
+      var detectedFieldLabels = {};
+      var DataList = self.session.datalist.constructor;
+
+      var languageLessonsDatalist = new DataList({
+        title: lessonSet.title,
+        docs: []
+      });
+      self.languageLessonsDatalist = languageLessonsDatalist;
+      self.debug("title: " + languageLessonsDatalist.title);
+
+      if (!lessonSet.section) {
+        return languageLessonsDatalist;
+      }
+      self.debug(" " + lessonSet.section.length + " sections");
+      lessonSet.section.forEach(function(section) {
+        var sectionDatalist = new DataList({
+          id: FieldDBObject.uuidGenerator(),
+          title: section.title,
+          type: "LanguageLearningSection",
+          description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
+          designNote: Array.isArray(section.designnote) ? section.designnote.join(" ") : section.designnote,
+          docs: []
+        });
+        self.debug("section: " + sectionDatalist.title);
+        languageLessonsDatalist.docs.add(sectionDatalist);
+
+        if (!section.unit) {
+          return;
+        }
+        self.debug("   " + section.unit.length + " units");
+        section.unit.forEach(function(unit) {
+          var unitDatalist = new DataList({
+            id: FieldDBObject.uuidGenerator(),
+            title: unit.title,
+            type: "LanguageLearningUnit",
+            description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
+            designNote: Array.isArray(unit.designnote) ? unit.designnote.join(" ") : unit.designnote,
             docs: []
           });
-          self.languageLessonsDatalist = languageLessonsDatalist;
-          self.debug("title: ", languageLessonsDatalist.title);
+          self.debug("  unit: " + unitDatalist.title);
+          sectionDatalist.docs.add(unitDatalist);
 
-          if (jsonObj.lessonset.section) {
-            self.debug(" " + jsonObj.lessonset.section.length + " sections");
-            jsonObj.lessonset.section.forEach(function(section) {
-              var sectionDatalist = new self.session.datalist.constructor({
+          if (!unit.lesson) {
+            return;
+          }
+          var lessons = unit.lesson;
+          if (!Array.isArray(lessons)) {
+            lessons = [unit.lesson];
+          }
+          self.debug("     " + lessons.length + " lessons");
+          lessons.forEach(function(lesson) {
+            var lessonDatalist = new DataList({
+              id: FieldDBObject.uuidGenerator(),
+              title: lesson.title,
+              type: "LanguageLesson",
+              description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
+              designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
+              docs: []
+            });
+            self.debug("    lesson: " + lessonDatalist.title);
+            unitDatalist.docs.add(lessonDatalist);
+
+            if (!lesson.dialog) {
+              return;
+            }
+            var dialogs = lesson.dialog;
+            if (!Array.isArray(dialogs)) {
+              dialogs = [lesson.dialog];
+            }
+            self.debug("       " + dialogs.length + " dialogs ");
+            dialogs.forEach(function(dialog) {
+              var dialogDatalist = new DataList({
                 id: FieldDBObject.uuidGenerator(),
-                title: section.title,
-                type: "LanguageLearningSection",
-                description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
-                designNote: Array.isArray(section.designnote) ? section.designnote.join(" ") : section.designnote,
+                title: dialog.title,
+                type: "Dialog",
+                description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
+                designNote: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
                 docs: []
               });
-              self.debug("section: ", sectionDatalist.title);
-              languageLessonsDatalist.docs.add(sectionDatalist);
+              lessonDatalist.docs.add(dialogDatalist);
 
-              if (section.unit) {
-                self.debug("   ", section.unit.length + " units");
-                section.unit.forEach(function(unit) {
-                  var unitDatalist = new self.session.datalist.constructor({
-                    id: FieldDBObject.uuidGenerator(),
-                    title: unit.title,
-                    type: "LanguageLearningUnit",
-                    description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
-                    designNote: Array.isArray(unit.designnote) ? unit.designnote.join(" ") : unit.designnote,
-                    docs: []
-                  });
-                  self.debug("  unit: ", unitDatalist.title);
-                  sectionDatalist.docs.add(unitDatalist);
-
-                  if (unit.lesson) {
-                    var lessons = unit.lesson;
-                    if (!Array.isArray(lessons)) {
-                      lessons = [unit.lesson];
-                    }
-                    self.debug("     ", lessons.length + " lessons");
-                    lessons.forEach(function(lesson) {
-                      var lessonDatalist = new self.session.datalist.constructor({
-                        id: FieldDBObject.uuidGenerator(),
-                        title: lesson.title,
-                        type: "LanguageLesson",
-                        description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
-                        designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
-                        docs: []
-                      });
-                      self.debug("    lesson: ", lessonDatalist.title);
-                      unitDatalist.docs.add(lessonDatalist);
-
-                      if (lesson.dialog) {
-                        var dialogs = lesson.dialog;
-                        if (!Array.isArray(dialogs)) {
-                          dialogs = [lesson.dialog];
-                        }
-                        self.debug("       ", dialogs.length + " dialogs ");
-                        dialogs.forEach(function(dialog) {
-                          var dialogDatalist = new self.session.datalist.constructor({
-                            id: FieldDBObject.uuidGenerator(),
-                            title: dialog.title,
-                            type: "Dialog",
-                            description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
-                            designNote: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
-                            docs: []
-                          });
-                          lessonDatalist.docs.add(dialogDatalist);
-
-                          var lines = [];
-                          if (Array.isArray(dialog.line)) {
-                            lines = lines.concat(dialog.line);
-                          } else if (dialog.line) {
-                            lines.push(dialog.line);
-                          }
-                          if (Array.isArray(dialog.vocab)) {
-                            lines = lines.concat(dialog.vocab);
-                          } else if (dialog.vocab) {
-                            lines.push(dialog.vocab);
-                          }
-
-                          if (dialog.line || dialog.vocab) {
-                            self.debug("         ", lines.length + " lines ");
-                            // Dont create datum yet, let the user edit the fields
-                            lines.forEach(function(line) {
-                              var datum = self.corpus.newDatum();
-                              if (line.notes) {
-                                datum.comments = Array.isArray(line.notes) ? line.notes : [];
-                              }
-                              datum.tempId = FieldDBObject.uuidGenerator();
-                              datum.id = datum.tempId;
-                              Object.keys(line).forEach(function(key) {
-                                if (["toString"].indexOf(key) > -1) {
-                                  return;
-                                }
-                                if (key && key.indexOf("_asArray") === -1) {
-                                  detectedFieldLabels[key] = key;
-                                }
-
-                                if (key === "soundfile") {
-                                  datum.audioVideo.add(new AudioVideo({
-                                    filename: line[key] + ".mp3"
-                                  }));
-                                  return;
-                                }
-                                if (key === "img") {
-                                  datum.images.add(new Image({
-                                    filename: line[key]
-                                  }));
-                                  self.debug("datum", datum.toJSON());
-                                  return;
-                                }
-                                datum.fields.add({
-                                  id: key,
-                                  value: line[key]
-                                });
-                              });
-                              lessonDatalist.docs.add(datum);
-                              delete datum.tempId;
-                              line.id = datum.id;
-                              line.soundfile = line.soundfile ? line.soundfile + ".mp3" : "";
-                              detectedDatum.push(line);
-                            });
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
+              var lines = [];
+              if (Array.isArray(dialog.line)) {
+                lines = lines.concat(dialog.line);
+              } else if (dialog.line) {
+                lines.push(dialog.line);
               }
-            });
-          }
-          self.warn("The app thinks this might be a XML file, but we have only implemented import from language learning lessons. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
-          var extractedHeaderObjects = Object.keys(detectedFieldLabels).map(function(label) {
-            return {
-              value: label
-            };
-          });
-          self.debug("extractedHeaderObjects", extractedHeaderObjects, detectedFieldLabels);
-          self.extractedHeaderObjects = extractedHeaderObjects;
-          self._asFieldMatrix = detectedDatum.map(function(item) {
-            var onlyFields = {};
-            Object.keys(detectedFieldLabels).forEach(function(label) {
-              onlyFields[label] = item[label];
-            });
-            return onlyFields;
-          });
+              if (Array.isArray(dialog.vocab)) {
+                lines = lines.concat(dialog.vocab);
+              } else if (dialog.vocab) {
+                lines.push(dialog.vocab);
+              }
 
+              if (!lines.length) {
+                return;
+              }
+              self.debug("         " + lines.length + " lines ");
+              // Dont create datum yet, let the user edit the fields
+              lines.forEach(function(line) {
+                var datum = self.corpus.newDatum();
+                if (line.notes) {
+                  datum.comments = Array.isArray(line.notes) ? line.notes : [];
+                }
+                datum.tempId = FieldDBObject.uuidGenerator();
+                datum.id = datum.tempId;
+                Object.keys(line).forEach(function(key) {
+                  if (["toString"].indexOf(key) > -1) {
+                    return;
+                  }
+                  if (key && key.indexOf("_asArray") === -1) {
+                    detectedFieldLabels[key] = key;
+                  }
 
-        } catch (err) {
-          deferred.reject(err);
-        }
-        deferred.resolve(self.datalist);
+                  if (key === "soundfile") {
+                    datum.audioVideo.add(new AudioVideo({
+                      filename: line[key] + ".mp3"
+                    }));
+                    return;
+                  }
+                  if (key === "img") {
+                    datum.images.add(new Image({
+                      filename: line[key]
+                    }));
+                    // self.debug("datum", datum.toJSON());
+                    return;
+                  }
+                  datum.fields.add({
+                    id: key,
+                    value: line[key]
+                  });
+                });
+                lessonDatalist.docs.add(datum);
+                delete datum.tempId;
+                line.id = datum.id;
+                line.soundfile = line.soundfile ? line.soundfile + ".mp3" : "";
+                detectedDatum.push(line);
+              });
+            });
+          });
+        });
       });
-      return deferred.promise;
+
+      var extractedHeaderObjects = Object.keys(detectedFieldLabels).map(function(label) {
+        return {
+          value: label
+        };
+      });
+      self.debug("extractedHeaderObjects", extractedHeaderObjects, detectedFieldLabels);
+      self.extractedHeaderObjects = extractedHeaderObjects;
+      self._asFieldMatrix = detectedDatum.map(function(item) {
+        var onlyFields = {};
+        Object.keys(detectedFieldLabels).forEach(function(label) {
+          onlyFields[label] = item[label];
+        });
+        return onlyFields;
+      });
+
+      return self.languageLessonsDatalist;
     }
   },
 

@@ -1,17 +1,20 @@
 /* globals FieldDB */
 
 var Import;
+var LanguageDatum;
 var Participant;
 var Corpus;
 try {
   if (FieldDB) {
     Import = FieldDB.Import;
+    LanguageDatum = FieldDB.LanguageDatum;
     Participant = FieldDB.Participant;
     Corpus = FieldDB.Corpus;
   }
 } catch (e) {}
 
 Import = Import || require("./../../api/import/Import").Import;
+LanguageDatum = LanguageDatum || require("./../../api/datum/LanguageDatum").LanguageDatum;
 Participant = Participant || require("./../../api/user/Participant").Participant;
 Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
 
@@ -944,19 +947,23 @@ describe("api/import/Import", function() {
     var importer;
     var corpus;
     beforeEach(function() {
+      Corpus.DEFAULT_DATUM = LanguageDatum;
       corpus = new Corpus({
         datumFields: []
       });
       importer = new Import({
         corpus: corpus,
-        // debugMode: true
+        debugMode: true
       });
     });
 
-    xit("should detect xml", function(done) {
+    it("should detect xml", function(done) {
       importer.rawText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
       importer.guessFormatAndPreviewImport().catch(done).finally(function() {
         expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+        expect(importer.warnMessage).toEqual("The app thinks this might be a XML file, but its not one we recognize. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
+        expect(importer.extractedHeaderObjects).toEqual([]);
+        expect(importer.asCSV.length).toEqual(0);
         done();
       });
     });
@@ -969,7 +976,6 @@ describe("api/import/Import", function() {
         importer.rawText = data;
         importer.guessFormatAndPreviewImport().then(function(){
           expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
-
           expect(importer.extractedHeaderObjects).toEqual([{
             value: "migmaq"
           }, {
@@ -984,17 +990,23 @@ describe("api/import/Import", function() {
             value: "designnote"
           }]);
           expect(importer.asCSV.length).toEqual(678);
+          // console.log("importer.asCSV", importer.asCSV[0]);
+          // console.log("importer.asCSV", importer.asCSV[300]);
           expect(importer.asCSV[0]).toEqual({
-            migmaq: "Me'talein?",
+            migmaq: "Me\'talein?",
             english: "How are you?",
-            soundfile: "me'talein.mp3",
-            id: importer.asCSV[0].id
+            soundfile: "me\'talein.mp3",
+            img: undefined,
+            audionote: undefined,
+            designnote: undefined
           });
           expect(importer.asCSV[300]).toEqual({
             migmaq: "Getupjig jijjawignejg?",
             english: "Do you want to eat some raisins?",
             soundfile: "GetupjigJijjawignejg.mp3",
-            id: importer.asCSV[300].id
+            img: undefined,
+            audionote: undefined,
+            designnote: undefined
           });
 
           fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err){
