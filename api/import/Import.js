@@ -1460,6 +1460,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                 }
                 datum.tempId = FieldDBObject.uuidGenerator();
                 datum.id = datum.tempId;
+                detectedFieldLabels.id = "id";
+
                 Object.keys(line).forEach(function(key) {
                   if (["toString"].indexOf(key) > -1) {
                     return;
@@ -1486,6 +1488,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     value: line[key]
                   });
                 });
+                // TODO add audio, video, images to the lesson?
                 lessonDatalist.docs.add(datum);
                 delete datum.tempId;
                 line.id = datum.id;

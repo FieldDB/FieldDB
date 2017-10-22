@@ -246,7 +246,7 @@ define([
         text = text.replace(/<\?xml[^>]*\?>/ig, '');
 
         self.fieldDBModel.importXML(text).then(function(rows) {
-          var extractedHeader = Object.keys(self.fieldDBModel.extractedHeaderObjects);
+          // var extractedHeader = Object.keys(self.fieldDBModel.extractedHeaderObjects);
           // self.fieldDBModel.extractedHeaderObjects.length = extractedHeader.length;
           // var asCSV = self.fieldDBModel.asCSV.map(function(item) {
           //   return extractedHeader.map(function(label) {
@@ -254,7 +254,7 @@ define([
           //   });
           // });
           // self.fieldDBModel.asCSV.shift(self.fieldDBModel.extractedHeaderObjects);
-          self.set("extractedHeader", extractedHeader);
+          self.set("extractedHeader", self.fieldDBModel.extractedHeaderObjects);
           self.set("asCSV", self.fieldDBModel.asCSV);
           if (typeof callback == "function") {
             callback(null, self.fieldDBModel.asCSV);
@@ -681,7 +681,8 @@ define([
         console.log(textgrid);
         // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
         var textgrid = TextGrid.textgridToIGT(text);
-        var audioFileName = self.get("files")[0] ? self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
+        var lastFile = self.get("files")[self.get("files").length -1 ];
+        var audioFileName = lastFile ? lastFile.name : "copypastedtextgrid_unknownaudio";
         audioFileName = audioFileName.replace(/\.textgrid/i, "");
         if (!textgrid || !textgrid.intervalsByXmin) {
           if (typeof callback == "function") {
@@ -841,7 +842,9 @@ define([
           filedetails.push(escape(f.name), ' ', f.type || ' n/a', ' - ', f.size, ' bytes, last modified: ',
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : ' n/a');
 
-          this.readFileIntoRawText(i);
+          if (files[i] instanceof File) {
+            this.readFileIntoRawText(i);
+          }
           //        this.set("asCSV", this.importCSV(f.getBytes()));
           //      this.set("asXML", this.importCSV(f.getBytes()));
 

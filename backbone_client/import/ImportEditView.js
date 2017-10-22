@@ -146,7 +146,7 @@ define([
           success: function(results) {
             if (results && results.status === 200) {
               self.model.set("uploadDetails", results);
-              self.model.set("files", results.files);
+              self.model.set("files", self.model.get("files").concat(results.files));
               self.model.set("status", "File(s) uploaded and utterances were extracted.");
               var messages = [];
               self.model.set("rawText", "");
@@ -285,10 +285,12 @@ define([
 
     drop: function(data, dataTransfer, e) {
       (function() {
-        var self = window.appView.importView.model;
+        var self = window.appView.importView;
         if (OPrime.debugMode) OPrime.debug("Recieved drop of files.");
-        self.set("files", dataTransfer.files);
-        self.readFiles();
+        Object.values(dataTransfer.files).forEach(function(file){
+          self.model.get("files").push(file);
+        });
+        self.model.readFiles();
       })();
       $(".import-progress").val(1);
       $(".import-progress").attr("max", 4);
@@ -649,6 +651,16 @@ define([
         }
       }
 
+      var audioFileDescriptionsKeyedByFilename = {};
+      if (this.model.get("files") && this.model.get("files").map) {
+        this.model.get("files").map(function(fileDetails) {
+          var details = JSON.parse(JSON.stringify(fileDetails));
+          delete details.textgrid;
+          var key = fileDetails.fileBaseName ?  fileDetails.fileBaseName + ".mp3"  : fileDetails.name;
+          audioFileDescriptionsKeyedByFilename[key] = details;
+        });
+      }
+
       /*
        * after building an array of datumobjects, turn them into backbone objects
        */
@@ -684,18 +696,14 @@ define([
         }
         var fields = new DatumFields(datumfields);
         var audioVideo = null;
-        var audioFileDescriptionsKeyedByFilename = {};
-        if (this.model.get("files") && this.model.get("files").map) {
-          this.model.get("files").map(function(fileDetails) {
-            var details = JSON.parse(JSON.stringify(fileDetails));
-            delete details.textgrid;
-            audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
-          });
-        }
+        var image = null;
 
         $.each(array[a], function(index, value) {
           if (index == "" || index == undefined) {
             //do nothing
+          } else if (index === "id") {
+            d.set("_id", value);
+            d.id = value;
           }
           /* TODO removing old tag code for */
           //          else if (index == "datumTags") {
@@ -818,15 +826,26 @@ define([
               var uniqueStati = _.unique(validationStatus.trim().split(" "));
               n.set("mask", uniqueStati.join(" "));
             }
-          } else if (index == "audioFileName") {
+          } else if (/(audio|video|sound)/i.test(index) && /^[a-z0-9_-]*\.(mp3|avi|mov|mp4|mkv|wav|wave|3gp)$/i.test(value)) {
             if (!audioVideo) {
               audioVideo = new AudioVideo();
+              // audioVideo = new FieldDB.AudioVideo();
             }
             audioVideo.set("filename", value);
             audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
             audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("dbname") + "/" + value);
             audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
             audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
+          } else if (/(img|image|photo)/i.test(index) && /^[a-z0-9_-]*\.(gif|png|jpg|jpeg|bmp)$/i.test(value) ) {
+            if (!image) {
+              image = new FieldDB.Image();
+            }
+            image.filename = value;
+          } else if (index == "audioDescription" && value) {
+            if (!audioVideo) {
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("description", value);
           } else if (index == "startTime") {
             if (!audioVideo) {
               audioVideo = new AudioVideo();
@@ -855,6 +874,9 @@ define([
           d.get("audioVideo").add(audioVideo);
           // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
         }
+        if (image) {
+          d.get("images").add(image.toJSON());
+        }
         // var states = window.app.get("corpus").get("datumStates").clone();
         // d.set("datumStates", states);
         d.set("session", this.model.get("session"));
@@ -876,6 +898,10 @@ define([
     savefailedindex: [],
     nextsavedatum: 0,
     saveADatumAndLoop: function(d) {
+      if (this.model.fielddbModel && this.model.fielddbModel.languageLessonsDatalist) {
+        this.model.fielddbModel.languageLessonsDatalist.save();
+      }
+      return;
       var thatdatum = this.model.get("datumArray")[d];
       thatdatum.set({
         "session": this.model.get("session"),
