@@ -977,6 +977,8 @@ describe("api/import/Import", function() {
         importer.guessFormatAndPreviewImport().then(function(){
           expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
           expect(importer.extractedHeaderObjects).toEqual([{
+            value: "id"
+          }, {
             value: "migmaq"
           }, {
             value: "english"
@@ -993,6 +995,7 @@ describe("api/import/Import", function() {
           // console.log("importer.asCSV", importer.asCSV[0]);
           // console.log("importer.asCSV", importer.asCSV[300]);
           expect(importer.asCSV[0]).toEqual({
+            id: importer.asCSV[0].id,
             migmaq: "Me\'talein?",
             english: "How are you?",
             soundfile: "me\'talein.mp3",
@@ -1001,6 +1004,7 @@ describe("api/import/Import", function() {
             designnote: undefined
           });
           expect(importer.asCSV[300]).toEqual({
+            id: importer.asCSV[300].id,
             migmaq: "Getupjig jijjawignejg?",
             english: "Do you want to eat some raisins?",
             soundfile: "GetupjigJijjawignejg.mp3",
@@ -1009,9 +1013,12 @@ describe("api/import/Import", function() {
             designnote: undefined
           });
 
-          fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err){
-            done(err);
-          });
+          importer.languageLessonsDatalist.save().then(function(){
+            fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err){
+              done(err);
+            });
+          }).catch(done);
+
         }).catch(done);
       });
     });

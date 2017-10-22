@@ -1360,6 +1360,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       var languageLessonsDatalist = new DataList({
         title: lessonSet.title,
+        dbname: self.corpus.dbname,
+        unsaved: true,
         docs: []
       });
       self.languageLessonsDatalist = languageLessonsDatalist;
@@ -1372,7 +1374,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       lessonSet.section.forEach(function(section) {
         var sectionDatalist = new DataList({
           id: FieldDBObject.uuidGenerator(),
+          dbname: self.corpus.dbname,
           title: section.title,
+          unsaved: true,
           type: "LanguageLearningSection",
           description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
           designNote: Array.isArray(section.designnote) ? section.designnote.join(" ") : section.designnote,
@@ -1388,7 +1392,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         section.unit.forEach(function(unit) {
           var unitDatalist = new DataList({
             id: FieldDBObject.uuidGenerator(),
+            dbname: self.corpus.dbname,
             title: unit.title,
+            unsaved: true,
             type: "LanguageLearningUnit",
             description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
             designNote: Array.isArray(unit.designnote) ? unit.designnote.join(" ") : unit.designnote,
@@ -1408,7 +1414,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           lessons.forEach(function(lesson) {
             var lessonDatalist = new DataList({
               id: FieldDBObject.uuidGenerator(),
+              dbname: self.corpus.dbname,
               title: lesson.title,
+              unsaved: true,
               type: "LanguageLesson",
               description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
               designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
@@ -1428,7 +1436,9 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             dialogs.forEach(function(dialog) {
               var dialogDatalist = new DataList({
                 id: FieldDBObject.uuidGenerator(),
+                dbname: self.corpus.dbname,
                 title: dialog.title,
+                unsaved: true,
                 type: "Dialog",
                 description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
                 designNote: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,

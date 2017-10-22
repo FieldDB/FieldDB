@@ -897,46 +897,7 @@ define([
     savefailedcount: 0,
     savefailedindex: [],
     nextsavedatum: 0,
-    saveADatumAndLoop: function(d) {
-      if (this.model.fielddbModel && this.model.fielddbModel.languageLessonsDatalist) {
-        this.model.fielddbModel.languageLessonsDatalist.save();
-      }
-      return;
-      var thatdatum = this.model.get("datumArray")[d];
-      thatdatum.set({
-        "session": this.model.get("session"),
-        "dbname": window.app.get("corpus").get("dbname"),
-        "dateEntered": JSON.stringify(new Date()),
-        "dateModified": JSON.stringify(new Date())
-      });
 
-      thatdatum.saveAndInterConnectInApp(function() {
-        hub.publish("savedDatumToPouch", {
-          d: d,
-          message: " datum " + thatdatum.id
-        });
-
-        // Update progress bar
-        $(".import-progress").val($(".import-progress").val() + 1);
-
-        // Add Datum to the new datalist and render it this should work
-        // because the datum is saved in the pouch and can be fetched,
-        // this will also not be the default data list because has been replaced by the data list for this import
-        //TODO This is still necessary, we cannot put the ids direclty into he datalist's model when it is created, they have no id.
-        //        window.appView.currentPaginatedDataListDatumsView.collection.unshift(thatdatum);
-        window.appView.importView.dataListView.model.get("datumIds").unshift(thatdatum.id);
-
-      }, function() {
-        //The e error should be from the error callback
-        if (!e) {
-          e = {};
-        }
-        hub.publish("saveDatumFailedToPouch", {
-          d: d,
-          message: "datum " + JSON.stringify(e)
-        });
-      });
-    },
     popSaveADatumAndLoop: function(datumsLeftToSave) {
       var thatdatum = datumsLeftToSave.shift();
       if (!thatdatum) {
@@ -1030,6 +991,16 @@ define([
       self.createNewSession(function() {
         self.model.get("session").saveAndInterConnectInApp(function() {
           $(".import-progress").val($(".import-progress").val() + 1);
+
+          if (self.model.fieldDBModel && self.model.fieldDBModel.languageLessonsDatalist) {
+            self.model.fieldDBModel.languageLessonsDatalist.save().then(function(result) {
+              console.log("Saved languageLessonsDatalist", result);
+              window.appView.toastUser("Saved your language lessons data lists", "alert-success", "Import successful:");
+            }).catch(function(err){
+              console.log("Failed to save languageLessonsDatalist", err);
+              window.appView.toastUser("Some of your language lessons data lists failed to save, you can try again or contact us to ask for help importing this file.", "alert-danger", "Import failed:");
+            });
+          }
 
           window.hub.unsubscribe("savedDatumToPouch", null, self);
           window.hub.unsubscribe("saveDatumFailedToPouch", null, self);
