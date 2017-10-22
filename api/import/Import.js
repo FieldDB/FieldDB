@@ -15,10 +15,10 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 // var FileReader = {};
 var Session = require("./../datum/Session").Session;
 var TextGrid = require("textgrid").TextGrid;
-var X2JS = require("x2js");
 var Q = require("q");
 
 var ATOB;
+var X2JS;
 try {
   if (!window.atob) {
     console.log("ATOB is not defined, loading from npm");
@@ -26,6 +26,12 @@ try {
   ATOB = window.atob;
 } catch (e) {
   ATOB = require("atob");
+}
+
+if (typeof window === "undefined") {
+  X2JS = require("x2js");
+} else {
+  X2JS = window.X2JS;
 }
 
 //http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
@@ -1321,50 +1327,52 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
   },
 
   importXML: {
-    value: function(text, callback) {
+    value: function(text) {
       var deferred = Q.defer();
       var self = this;
 
       Q.nextTick(function() {
         try {
+          self.extractedHeaderObjects = [];
+          self.asCSV = [];
           var xmlParser = new X2JS();
-          var jsonObj = xmlParser.xml2js(text);
-          console.log("jsonObj", jsonObj.lessonset);
+          var jsonObj = xmlParser.xml_str2json ? xmlParser.xml_str2json(text) : xmlParser.xml2js(text);
+          var detectedDatum = [];
+          var detectedFieldLabels = {};
 
           var languageLessonsDatalist = new self.session.datalist.constructor({
             title: jsonObj.lessonset.title,
             docs: []
           });
           self.languageLessonsDatalist = languageLessonsDatalist;
-          console.log("title: " + languageLessonsDatalist.title);
+          self.debug("title: ", languageLessonsDatalist.title);
 
           if (jsonObj.lessonset.section) {
-            console.log(" " + jsonObj.lessonset.section.length + " sections");
+            self.debug(" " + jsonObj.lessonset.section.length + " sections");
             jsonObj.lessonset.section.forEach(function(section) {
               var sectionDatalist = new self.session.datalist.constructor({
                 id: FieldDBObject.uuidGenerator(),
                 title: section.title,
-                title: 'LanguageLearningSection',
+                type: "LanguageLearningSection",
                 description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
                 designNote: Array.isArray(section.designnote) ? section.designnote.join(" ") : section.designnote,
                 docs: []
               });
-              console.log("section: " + sectionDatalist.title);
+              self.debug("section: ", sectionDatalist.title);
               languageLessonsDatalist.docs.add(sectionDatalist);
 
               if (section.unit) {
-                console.log("   " + section.unit.length + " units");
+                self.debug("   ", section.unit.length + " units");
                 section.unit.forEach(function(unit) {
-                  // console.log('unit', unit);
                   var unitDatalist = new self.session.datalist.constructor({
                     id: FieldDBObject.uuidGenerator(),
                     title: unit.title,
-                    title: 'LanguageLearningUnit',
+                    type: "LanguageLearningUnit",
                     description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
                     designNote: Array.isArray(unit.designnote) ? unit.designnote.join(" ") : unit.designnote,
                     docs: []
                   });
-                  console.log("  unit: " + unitDatalist.title);
+                  self.debug("  unit: ", unitDatalist.title);
                   sectionDatalist.docs.add(unitDatalist);
 
                   if (unit.lesson) {
@@ -1372,18 +1380,17 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     if (!Array.isArray(lessons)) {
                       lessons = [unit.lesson];
                     }
-                    console.log("     " + lessons.length + " lessons");
+                    self.debug("     ", lessons.length + " lessons");
                     lessons.forEach(function(lesson) {
-                      // console.log('lesson', lesson);
                       var lessonDatalist = new self.session.datalist.constructor({
                         id: FieldDBObject.uuidGenerator(),
                         title: lesson.title,
-                        title: 'LanguageLesson',
+                        type: "LanguageLesson",
                         description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
                         designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
                         docs: []
                       });
-                      console.log("    lesson: " + lessonDatalist.title);
+                      self.debug("    lesson: ", lessonDatalist.title);
                       unitDatalist.docs.add(lessonDatalist);
 
                       if (lesson.dialog) {
@@ -1391,13 +1398,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                         if (!Array.isArray(dialogs)) {
                           dialogs = [lesson.dialog];
                         }
-                        console.log("       " + dialogs.length + " dialogs ");
+                        self.debug("       ", dialogs.length + " dialogs ");
                         dialogs.forEach(function(dialog) {
-                          // console.log('dialog', dialog);
                           var dialogDatalist = new self.session.datalist.constructor({
                             id: FieldDBObject.uuidGenerator(),
                             title: dialog.title,
-                            title: 'Dialog',
+                            type: "Dialog",
                             description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
                             designNote: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
                             docs: []
@@ -1415,27 +1421,36 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                           } else if (dialog.vocab) {
                             lines.push(dialog.vocab);
                           }
+
                           if (dialog.line || dialog.vocab) {
-                            console.log("         " + lines.length + " lines ");
+                            self.debug("         ", lines.length + " lines ");
+                            // Dont create datum yet, let the user edit the fields
                             lines.forEach(function(line) {
                               var datum = self.corpus.newDatum();
                               if (line.notes) {
-                                datum.comments = Array.isArray(line.notes) ? line.notes : []
+                                datum.comments = Array.isArray(line.notes) ? line.notes : [];
                               }
                               datum.tempId = FieldDBObject.uuidGenerator();
                               datum.id = datum.tempId;
                               Object.keys(line).forEach(function(key) {
-                                if (key === 'soundfile') {
+                                if (["toString"].indexOf(key) > -1) {
+                                  return;
+                                }
+                                if (key && key.indexOf("_asArray") === -1) {
+                                  detectedFieldLabels[key] = key;
+                                }
+
+                                if (key === "soundfile") {
                                   datum.audioVideo.add(new AudioVideo({
-                                    filename: line[key] + '.mp3'
+                                    filename: line[key] + ".mp3"
                                   }));
                                   return;
                                 }
-                                if (key === 'img') {
+                                if (key === "img") {
                                   datum.images.add(new Image({
                                     filename: line[key]
                                   }));
-                                  console.log('datum', datum.toJSON());
+                                  self.debug("datum", datum.toJSON());
                                   return;
                                 }
                                 datum.fields.add({
@@ -1444,8 +1459,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                                 });
                               });
                               lessonDatalist.docs.add(datum);
-                              self.session.datalist.docs.add(datum);
                               delete datum.tempId;
+                              line.id = datum.id;
+                              line.soundfile = line.soundfile ? line.soundfile + ".mp3" : "";
+                              detectedDatum.push(line);
                             });
                           }
                         });
@@ -1457,9 +1474,21 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             });
           }
           self.warn("The app thinks this might be a XML file, but we have only implemented import from language learning lessons. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
-          // self.debug('text', text);
-          self.extractedHeaderObjects = [];
-          self.asCSV = [];
+          var extractedHeaderObjects = Object.keys(detectedFieldLabels).map(function(label) {
+            return {
+              value: label
+            };
+          });
+          self.debug("extractedHeaderObjects", extractedHeaderObjects, detectedFieldLabels);
+          self.extractedHeaderObjects = extractedHeaderObjects;
+          self._asFieldMatrix = detectedDatum.map(function(item) {
+            var onlyFields = {};
+            Object.keys(detectedFieldLabels).forEach(function(label) {
+              onlyFields[label] = item[label];
+            });
+            return onlyFields;
+          });
+
 
         } catch (err) {
           deferred.reject(err);
@@ -2498,7 +2527,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
-      this.debug('importTypeConfidenceMeasures', importTypeConfidenceMeasures);
+      this.debug("importTypeConfidenceMeasures", importTypeConfidenceMeasures);
 
       var mostLikelyImport;
       for (var importType in importTypeConfidenceMeasures) {

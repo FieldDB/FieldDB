@@ -241,15 +241,27 @@ define([
         return CSV;
       },
       importXML: function(text, self, callback) {
+
+        // Remove headers (X2JS doesnt udnerstand them)
+        text = text.replace(/<\?xml[^>]*\?>/ig, '');
+
         self.fieldDBModel.importXML(text).then(function(rows) {
-          self.set("extractedHeader", self.fieldDBModel.extractedHeaderObjects.map(function(item) {
-            return item.value;
-          }));
+          var extractedHeader = Object.keys(self.fieldDBModel.extractedHeaderObjects);
+          // self.fieldDBModel.extractedHeaderObjects.length = extractedHeader.length;
+          // var asCSV = self.fieldDBModel.asCSV.map(function(item) {
+          //   return extractedHeader.map(function(label) {
+          //     return item[label] || "";
+          //   });
+          // });
+          // self.fieldDBModel.asCSV.shift(self.fieldDBModel.extractedHeaderObjects);
+          self.set("extractedHeader", extractedHeader);
           self.set("asCSV", self.fieldDBModel.asCSV);
           if (typeof callback == "function") {
             callback(null, self.fieldDBModel.asCSV);
           }
         }).catch(function(err) {
+          self.set("status", fileDetails.fileBaseName + "import error: " + err.message);
+          window.appView.toastUser(err.message, "alert-danger", "Import:");
           callback(err);
         });
       },

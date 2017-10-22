@@ -438,12 +438,17 @@ define([
 
       var tablehead = document.createElement("thead");
       var headerRow = document.createElement("tr");
-      var extractedHeader = this.model.get("extractedHeader");
-      for (var i = 0; i < rows[0].length; i++) {
+      var extractedHeader = this.model.get("extractedHeader") || rows[0];
+      for (var i = 0; i < extractedHeader.length; i++) {
         var tableCell = document.createElement("th");
         var headercelltext = "";
-        if (extractedHeader) {
+        if (extractedHeader && extractedHeader[i] && extractedHeader[i].value) {
+          // TODO this isnt used yet, but we would like to be able to edit the fields before saving
+          headercelltext = extractedHeader[i].value;
+        } else if (extractedHeader) {
           headercelltext = extractedHeader[i];
+        } else {
+          headercelltext = rows[0];
         }
         $(tableCell).html('<input type="text" class="drop-label-zone header' + i + '" value="' + headercelltext + '"/>');
         $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
@@ -463,7 +468,7 @@ define([
         for (c in rows[l]) {
           var tableCell = document.createElement("td");
           tableCell.contentEditable = "true";
-          tableCell.innerHTML = rows[l][c];
+          tableCell.innerHTML = rows[l][c] || "";
           tableRow.appendChild(tableCell);
         }
         tablebody.appendChild(tableRow);

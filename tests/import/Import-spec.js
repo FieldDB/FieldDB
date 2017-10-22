@@ -948,15 +948,17 @@ describe("api/import/Import", function() {
         datumFields: []
       });
       importer = new Import({
-        corpus: corpus
+        corpus: corpus,
         // debugMode: true
       });
     });
 
-    xit("should detect xml", function() {
+    xit("should detect xml", function(done) {
       importer.rawText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-      importer.guessFormatAndPreviewImport();
-      expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+      importer.guessFormatAndPreviewImport().catch(done).finally(function() {
+        expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+        done();
+      });
     });
 
     it("should detect Can8 style data", function(done) {
@@ -967,12 +969,37 @@ describe("api/import/Import", function() {
         importer.rawText = data;
         importer.guessFormatAndPreviewImport().then(function(){
           expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
-          expect(importer.session.datalist.docs.length).toEqual(678);
-          console.log(JSON.stringify(importer.languageLessonsDatalist.docs.toJSON()) + '\n\n');
 
-          fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err, data){
+          expect(importer.extractedHeaderObjects).toEqual([{
+            value: "migmaq"
+          }, {
+            value: "english"
+          }, {
+            value: "soundfile"
+          }, {
+            value: "img"
+          }, {
+            value: "audionote"
+          }, {
+            value: "designnote"
+          }]);
+          expect(importer.asCSV.length).toEqual(678);
+          expect(importer.asCSV[0]).toEqual({
+            migmaq: "Me'talein?",
+            english: "How are you?",
+            soundfile: "me'talein.mp3",
+            id: importer.asCSV[0].id
+          });
+          expect(importer.asCSV[300]).toEqual({
+            migmaq: "Getupjig jijjawignejg?",
+            english: "Do you want to eat some raisins?",
+            soundfile: "GetupjigJijjawignejg.mp3",
+            id: importer.asCSV[300].id
+          });
+
+          fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err){
             done(err);
-          })
+          });
         }).catch(done);
       });
     });
