@@ -21,7 +21,7 @@ var fs = require("fs");
 var specIsRunningTooLong = 5000;
 describe("api/import/Import", function() {
 
-  describe("construction", function() {
+  xdescribe("construction", function() {
 
     it("should load", function() {
       expect(Import).toBeDefined();
@@ -195,7 +195,7 @@ describe("api/import/Import", function() {
       expect(datum).toBeDefined();
     });
 
-    describe("data representations", function() {
+    xdescribe("data representations", function() {
       var importer = new Import({
         dbname: "testingimport-datastructures",
         corpus: new Corpus(Corpus.prototype.defaults)
@@ -345,7 +345,7 @@ describe("api/import/Import", function() {
 
   if (fs && typeof fs.readFile === "function") {
 
-    describe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
+    xdescribe("Batch Import: as a morphologist I want to import directories of text files for machine learning", function() {
       var corpus,
         importer,
         localUri = "sample_data/orthography.txt",
@@ -472,7 +472,7 @@ describe("api/import/Import", function() {
 
       }, specIsRunningTooLong);
 
-      describe("lib/Import", function() {
+      xdescribe("lib/Import", function() {
 
         it("should be able to pause an import", function() {
           var importer = new Import();
@@ -490,7 +490,7 @@ describe("api/import/Import", function() {
 
   }
 
-  describe("Build fields using fields in the corpus", function() {
+  xdescribe("Build fields using fields in the corpus", function() {
     var importer;
     beforeEach(function() {
       importer = new Import({
@@ -521,7 +521,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Build fields using fields appropriate to the import type", function() {
+  xdescribe("Build fields using fields appropriate to the import type", function() {
     var importer;
     beforeEach(function() {
       importer = new Import({
@@ -544,7 +544,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Batch Import: as a Field Methods instructor or psycholinguistics experiment administrator I want to import a class list of users/informants/participants", function() {
+  xdescribe("Batch Import: as a Field Methods instructor or psycholinguistics experiment administrator I want to import a class list of users/informants/participants", function() {
     var importer;
     beforeEach(function() {
       importer = new Import({
@@ -610,7 +610,7 @@ describe("api/import/Import", function() {
   });
 
 
-  describe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
+  xdescribe("Import: as a psycholinguist I want to import a list of participants from CSV", function() {
 
     var dbname = "testingcorpusinimport-firstcorpus";
     var corpus = new Corpus(Corpus.prototype.defaults_psycholinguistics);
@@ -851,7 +851,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Import: as a morphologist I want to import my data from CSV", function() {
+  xdescribe("Import: as a morphologist I want to import my data from CSV", function() {
     var importer;
     beforeEach(function() {
       var dbname = "testingcorpusinimport-firstcorpus";
@@ -942,13 +942,18 @@ describe("api/import/Import", function() {
 
   describe("Import: as a research assistant helping heritage speakers I want to import my data from Can8", function() {
     var importer;
+    var corpus;
     beforeEach(function() {
+      corpus = new Corpus({
+        datumFields: []
+      });
       importer = new Import({
+        corpus: corpus
         // debugMode: true
       });
     });
 
-    it("should detect xml", function() {
+    xit("should detect xml", function() {
       importer.rawText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
       importer.guessFormatAndPreviewImport();
       expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
@@ -962,13 +967,18 @@ describe("api/import/Import", function() {
         importer.rawText = data;
         importer.guessFormatAndPreviewImport().then(function(){
           expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
-          done();
-        });
+          expect(importer.session.datalist.docs.length).toEqual(678);
+          console.log(JSON.stringify(importer.languageLessonsDatalist.docs.toJSON()) + '\n\n');
+
+          fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err, data){
+            done(err);
+          })
+        }).catch(done);
       });
     });
   });
 
-  describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
+  xdescribe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
     var importer;
     beforeEach(function() {
@@ -987,7 +997,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
+  xdescribe("Import: as a phonetican/Fieldlinguist/Anthropoligest I want to import my data in ELAN XML", function() {
 
     var importer;
     beforeEach(function() {
@@ -1012,7 +1022,7 @@ describe("api/import/Import", function() {
     });
   });
 
-  describe("Import: as a documentry linguist I want to import my data from SIL Toolbox", function() {
+  xdescribe("Import: as a documentry linguist I want to import my data from SIL Toolbox", function() {
     var importer;
     beforeEach(function() {
       importer = new Import();
@@ -1032,7 +1042,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Import: as a child language investigator I want to import my data from CHILDES chat format", function() {
+  xdescribe("Import: as a child language investigator I want to import my data from CHILDES chat format", function() {
 
     it("should detect chat style data", function() {
       expect(true).toBeTruthy();
@@ -1040,7 +1050,7 @@ describe("api/import/Import", function() {
 
   });
 
-  describe("Import: as a phonetican I want to import my data in Praat TextGrid ", function() {
+  xdescribe("Import: as a phonetican I want to import my data in Praat TextGrid ", function() {
     var importer;
     beforeEach(function() {
       importer = new Import();
@@ -1079,7 +1089,7 @@ describe("api/import/Import", function() {
     });
   });
 
-  describe("Import Template", function() {
+  xdescribe("Import Template", function() {
 
     beforeEach(function() {
       // var d = document.createElement("div");
