@@ -1343,11 +1343,11 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           }
           self.warn("The app thinks this might be a XML file, but its not one we recognize. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
         } catch (err) {
-        deferred.reject(err);
-      }
-      deferred.resolve(self.datalist);
-    });
-    return deferred.promise;
+          deferred.reject(err);
+        }
+        deferred.resolve(self.datalist);
+      });
+      return deferred.promise;
     }
   },
 
@@ -1361,6 +1361,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var languageLessonsDatalist = new DataList({
         title: lessonSet.title,
         dbname: self.corpus.dbname,
+        audioVideo: [],
         unsaved: true,
         docs: []
       });
@@ -1376,6 +1377,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           id: FieldDBObject.uuidGenerator(),
           dbname: self.corpus.dbname,
           title: section.title,
+          audioVideo: [],
           unsaved: true,
           type: "LanguageLearningSection",
           description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
@@ -1394,6 +1396,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             id: FieldDBObject.uuidGenerator(),
             dbname: self.corpus.dbname,
             title: unit.title,
+            audioVideo: [],
             unsaved: true,
             type: "LanguageLearningUnit",
             description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
@@ -1416,10 +1419,12 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
               id: FieldDBObject.uuidGenerator(),
               dbname: self.corpus.dbname,
               title: lesson.title,
+              audioVideo: [],
               unsaved: true,
               type: "LanguageLesson",
               description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
               designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
+              explanation: Array.isArray(lesson.explnote) ? lesson.explnote.join(" ") : lesson.explnote,
               docs: []
             });
             self.debug("    lesson: " + lessonDatalist.title);
@@ -1428,20 +1433,36 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             if (!lesson.dialog) {
               return;
             }
-            var dialogs = lesson.dialog;
-            if (!Array.isArray(dialogs)) {
-              dialogs = [lesson.dialog];
+            var dialogs = [];
+            if (Array.isArray(lesson.dialog)) {
+              dialogs = dialogs.concat(lesson.dialog.map(function(item) {
+                item.type = "Dialog";
+                return item;
+              }));
+            } else if (lesson.dialog) {
+              lesson.dialog.type = "Dialog";
+              dialogs.push(lesson.dialog);
+            }
+            if (Array.isArray(lesson.vocab)) {
+              dialogs = dialogs.concat(lesson.vocab.map(function(item) {
+                item.type = "Vocab";
+                return item;
+              }));
+            } else if (lesson.vocab) {
+              lesson.vocab.type = "Vocab";
+              dialogs.push(lesson.vocab);
             }
             self.debug("       " + dialogs.length + " dialogs ");
             dialogs.forEach(function(dialog) {
               var dialogDatalist = new DataList({
                 id: FieldDBObject.uuidGenerator(),
                 dbname: self.corpus.dbname,
-                title: dialog.title,
+                title: dialog.title || lesson.title + " " + dialog.type + " " + (lessonDatalist.docs.length + 1),
+                audioVideo: [],
                 unsaved: true,
-                type: "Dialog",
+                type: dialog.type,
                 description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
-                designNote: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
+                discussion: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
                 docs: []
               });
               lessonDatalist.docs.add(dialogDatalist);
@@ -1451,11 +1472,6 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                 lines = lines.concat(dialog.line);
               } else if (dialog.line) {
                 lines.push(dialog.line);
-              }
-              if (Array.isArray(dialog.vocab)) {
-                lines = lines.concat(dialog.vocab);
-              } else if (dialog.vocab) {
-                lines.push(dialog.vocab);
               }
 
               if (!lines.length) {
@@ -1498,8 +1514,25 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
                     value: line[key]
                   });
                 });
-                // TODO add audio, video, images to the lesson?
+                dialogDatalist.docs.add(datum);
+
+                // Adding datum to the parent datalists
+                // so that the datum show in the prototype app
                 lessonDatalist.docs.add(datum);
+                unitDatalist.docs.add(datum);
+                sectionDatalist.docs.add(datum);
+                languageLessonsDatalist.docs.add(datum);
+
+                // TODO add audio, video, images to the parent datalists?
+                var audioVideoItem = datum.audioVideo._collection[0];
+                if (audioVideoItem) {
+                  dialogDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  lessonDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  unitDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  sectionDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  languageLessonsDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                }
+
                 delete datum.tempId;
                 line.id = datum.id;
                 line.soundfile = line.soundfile ? line.soundfile + ".mp3" : "";

@@ -122,6 +122,7 @@ AudioVideo.prototype = Object.create(FieldDBObject.prototype, /** @lends AudioVi
       var json = FieldDBObject.prototype.toJSON.apply(this, arguments);
       delete json.audioPlayer;
       json.type = this.type;
+      json.URL = this.URL;
 
       return json;
     }

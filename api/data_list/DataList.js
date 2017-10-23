@@ -1,5 +1,6 @@
 // console.log("Loading DataList.js");
 
+var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 var DocumentCollection = require("./../datum/DocumentCollection").DocumentCollection;
 var Comments = require("./../comment/Comments").Comments;
@@ -72,7 +73,8 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       comments: Comments,
       docs: DocumentCollection,
       title: ContextualizableObject,
-      description: ContextualizableObject
+      description: ContextualizableObject,
+      audioVideo: AudioVideos
         // item: FieldDBObject
     }
   },
@@ -94,6 +96,16 @@ DataList.prototype = Object.create(FieldDBObject.prototype, /** @lends DataList.
       this.ensureSetViaAppropriateType("description", value);
     }
   },
+
+  audioVideo: {
+    get: function() {
+      return this._audioVideo || FieldDBObject.DEFAULT_ARRAY;
+    },
+    set: function(value) {
+      this.ensureSetViaAppropriateType("audioVideo", value);
+    }
+  },
+
 
   docs: {
     get: function() {
