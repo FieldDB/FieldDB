@@ -386,7 +386,7 @@ define([
                 help: "Related datum in the database."
               });
             } else if (similarDatumIds.length === 1) {
-              var mergeThese = window.confirm("I found a datum which already contained " + query + " would you like to update it with this import instead of creating a new datum?");
+              var mergeThese = window.alwaysConfirmSimilar || window.confirm("I found a datum which already contained " + query + " would you like to update it with this import instead of creating a new datum?");
               if (mergeThese) {
                 var importDatum = self.clone();
                 self.id = similarDatumIds[0];
@@ -396,14 +396,14 @@ define([
                     if (importDatum.get("audioVideo") && importDatum.get("audioVideo").length > 0) {
                       model.get("audioVideo").set(importDatum.get("audioVideo").models, {
                         merge: true,
-                        remove: false
+                        remove: true
                       });
                       console.log("merged audio video", model.get("audioVideo"));
                     }
                     if (importDatum.get("images") && importDatum.get("images").length > 0) {
                       model.get("images").set(importDatum.get("images").models, {
                         merge: true,
-                        remove: false
+                        remove: true
                       });
                       console.log("merged images ", model.get("images"));
                     }
