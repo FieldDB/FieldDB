@@ -228,7 +228,7 @@ describe("CORS", function() {
       }).then(function(results) {
         expect(results.ok).toEqual(true);
         expect(results.name).toEqual("jenkins");
-        expect(results.roles.length).toEqual(29);
+        expect(results.roles.length).toEqual(10);
       }, function(error) {
         if (expectedErrors(error)) {
           // errors were expected
