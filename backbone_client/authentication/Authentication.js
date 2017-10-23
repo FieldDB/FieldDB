@@ -242,6 +242,12 @@ define([
         //        fielddbUser.userMask.dbname = fielddbUser.corpora[0].dbname;
       }
 
+      if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+        FieldDB.FieldDBObject.application.user = FieldDB.FieldDBObject.application.user || {};
+        FieldDB.FieldDBObject.application.user.username = fielddbUser.username;
+        FieldDB.FieldDBObject.application.user.gravatar = fielddbUser.gravatar;
+      }
+
       if (this.get("userPrivate") == undefined) {
         this.set("userPrivate", new User({
           filledWithDefaults: true
@@ -333,6 +339,13 @@ define([
 
       /* Upgrade chrome app user's to v1.38+ */
       var user = JSON.parse(userString);
+
+      if (FieldDB.FieldDBObject && FieldDB.FieldDBObject.application) {
+        FieldDB.FieldDBObject.application.user = FieldDB.FieldDBObject.application.user || {};
+        FieldDB.FieldDBObject.application.user.username = user.username;
+        FieldDB.FieldDBObject.application.user.gravatar = user.gravatar;
+      }
+
       user.appVersionWhenCreated = user.appVersionWhenCreated || "";
       if (user.appVersionWhenCreated && OPrime.isChromeApp() && !localStorage.getItem(user.username + "lastUpdatedAtVersion") && user.username != "public" && user.username != "lingllama") {
         var birthday = user.appVersionWhenCreated.replace("v", "").split(".");
@@ -485,7 +498,7 @@ define([
         if (!self.get("userPrivate")) {
           return;
         }
-        
+
         dataToPost.username = self.get("userPrivate").get("username");
         dataToPost.password = $("#quick-authenticate-password").val();
         window.app.get("corpus").fieldDBModel.modifyTeam(dataToPost)

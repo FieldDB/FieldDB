@@ -146,7 +146,7 @@ define([
           success: function(results) {
             if (results && results.status === 200) {
               self.model.set("uploadDetails", results);
-              self.model.set("files", results.files);
+              self.model.set("files", self.model.get("files").concat(results.files));
               self.model.set("status", "File(s) uploaded and utterances were extracted.");
               var messages = [];
               self.model.set("rawText", "");
@@ -285,10 +285,12 @@ define([
 
     drop: function(data, dataTransfer, e) {
       (function() {
-        var self = window.appView.importView.model;
+        var self = window.appView.importView;
         if (OPrime.debugMode) OPrime.debug("Recieved drop of files.");
-        self.set("files", dataTransfer.files);
-        self.readFiles();
+        Object.values(dataTransfer.files).forEach(function(file){
+          self.model.get("files").push(file);
+        });
+        self.model.readFiles();
       })();
       $(".import-progress").val(1);
       $(".import-progress").attr("max", 4);
@@ -438,12 +440,17 @@ define([
 
       var tablehead = document.createElement("thead");
       var headerRow = document.createElement("tr");
-      var extractedHeader = this.model.get("extractedHeader");
-      for (var i = 0; i < rows[0].length; i++) {
+      var extractedHeader = this.model.get("extractedHeader") || rows[0];
+      for (var i = 0; i < extractedHeader.length; i++) {
         var tableCell = document.createElement("th");
         var headercelltext = "";
-        if (extractedHeader) {
+        if (extractedHeader && extractedHeader[i] && extractedHeader[i].value) {
+          // TODO this isnt used yet, but we would like to be able to edit the fields before saving
+          headercelltext = extractedHeader[i].value;
+        } else if (extractedHeader) {
           headercelltext = extractedHeader[i];
+        } else {
+          headercelltext = rows[0];
         }
         $(tableCell).html('<input type="text" class="drop-label-zone header' + i + '" value="' + headercelltext + '"/>');
         $(tableCell).find("input")[0].addEventListener('drop', this.dragLabelToColumn);
@@ -463,7 +470,7 @@ define([
         for (c in rows[l]) {
           var tableCell = document.createElement("td");
           tableCell.contentEditable = "true";
-          tableCell.innerHTML = rows[l][c];
+          tableCell.innerHTML = rows[l][c] || "";
           tableRow.appendChild(tableCell);
         }
         tablebody.appendChild(tableRow);
@@ -644,6 +651,16 @@ define([
         }
       }
 
+      var audioFileDescriptionsKeyedByFilename = {};
+      if (this.model.get("files") && this.model.get("files").map) {
+        this.model.get("files").map(function(fileDetails) {
+          var details = JSON.parse(JSON.stringify(fileDetails));
+          delete details.textgrid;
+          var key = fileDetails.fileBaseName ?  fileDetails.fileBaseName + ".mp3"  : fileDetails.name;
+          audioFileDescriptionsKeyedByFilename[key] = details;
+        });
+      }
+
       /*
        * after building an array of datumobjects, turn them into backbone objects
        */
@@ -679,18 +696,14 @@ define([
         }
         var fields = new DatumFields(datumfields);
         var audioVideo = null;
-        var audioFileDescriptionsKeyedByFilename = {};
-        if (this.model.get("files") && this.model.get("files").map) {
-          this.model.get("files").map(function(fileDetails) {
-            var details = JSON.parse(JSON.stringify(fileDetails));
-            delete details.textgrid;
-            audioFileDescriptionsKeyedByFilename[fileDetails.fileBaseName + ".mp3"] = details;
-          });
-        }
+        var image = null;
 
         $.each(array[a], function(index, value) {
           if (index == "" || index == undefined) {
             //do nothing
+          } else if (index === "id") {
+            d.set("_id", value);
+            d.id = value;
           }
           /* TODO removing old tag code for */
           //          else if (index == "datumTags") {
@@ -813,15 +826,26 @@ define([
               var uniqueStati = _.unique(validationStatus.trim().split(" "));
               n.set("mask", uniqueStati.join(" "));
             }
-          } else if (index == "audioFileName") {
+          } else if (/(audio|video|sound)/i.test(index) && /^[a-z0-9_-]*\.(mp3|avi|mov|mp4|mkv|wav|wave|3gp)$/i.test(value)) {
             if (!audioVideo) {
               audioVideo = new AudioVideo();
+              // audioVideo = new FieldDB.AudioVideo();
             }
             audioVideo.set("filename", value);
             audioVideo.set("orginalFilename", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].name : "");
             audioVideo.set("URL", OPrime.audioUrl + "/" + window.app.get("corpus").get("dbname") + "/" + value);
             audioVideo.set("description", audioFileDescriptionsKeyedByFilename[value] ? audioFileDescriptionsKeyedByFilename[value].description : "");
             audioVideo.set("details", audioFileDescriptionsKeyedByFilename[value]);
+          } else if (/(img|image|photo)/i.test(index) && /^[a-z0-9_-]*\.(gif|png|jpg|jpeg|bmp)$/i.test(value) ) {
+            if (!image) {
+              image = new FieldDB.Image();
+            }
+            image.filename = value;
+          } else if (index == "audioDescription" && value) {
+            if (!audioVideo) {
+              audioVideo = new AudioVideo();
+            }
+            audioVideo.set("description", value);
           } else if (index == "startTime") {
             if (!audioVideo) {
               audioVideo = new AudioVideo();
@@ -850,6 +874,9 @@ define([
           d.get("audioVideo").add(audioVideo);
           // console.log( JSON.stringify(audioVideo.toJSON())+ JSON.stringify(fields.toJSON()));
         }
+        if (image) {
+          d.get("images").add(image.toJSON());
+        }
         // var states = window.app.get("corpus").get("datumStates").clone();
         // d.set("datumStates", states);
         d.set("session", this.model.get("session"));
@@ -870,42 +897,7 @@ define([
     savefailedcount: 0,
     savefailedindex: [],
     nextsavedatum: 0,
-    saveADatumAndLoop: function(d) {
-      var thatdatum = this.model.get("datumArray")[d];
-      thatdatum.set({
-        "session": this.model.get("session"),
-        "dbname": window.app.get("corpus").get("dbname"),
-        "dateEntered": JSON.stringify(new Date()),
-        "dateModified": JSON.stringify(new Date())
-      });
 
-      thatdatum.saveAndInterConnectInApp(function() {
-        hub.publish("savedDatumToPouch", {
-          d: d,
-          message: " datum " + thatdatum.id
-        });
-
-        // Update progress bar
-        $(".import-progress").val($(".import-progress").val() + 1);
-
-        // Add Datum to the new datalist and render it this should work
-        // because the datum is saved in the pouch and can be fetched,
-        // this will also not be the default data list because has been replaced by the data list for this import
-        //TODO This is still necessary, we cannot put the ids direclty into he datalist's model when it is created, they have no id.
-        //        window.appView.currentPaginatedDataListDatumsView.collection.unshift(thatdatum);
-        window.appView.importView.dataListView.model.get("datumIds").unshift(thatdatum.id);
-
-      }, function() {
-        //The e error should be from the error callback
-        if (!e) {
-          e = {};
-        }
-        hub.publish("saveDatumFailedToPouch", {
-          d: d,
-          message: "datum " + JSON.stringify(e)
-        });
-      });
-    },
     popSaveADatumAndLoop: function(datumsLeftToSave) {
       var thatdatum = datumsLeftToSave.shift();
       if (!thatdatum) {
@@ -999,6 +991,16 @@ define([
       self.createNewSession(function() {
         self.model.get("session").saveAndInterConnectInApp(function() {
           $(".import-progress").val($(".import-progress").val() + 1);
+
+          if (self.model.fieldDBModel && self.model.fieldDBModel.languageLessonsDatalist) {
+            self.model.fieldDBModel.languageLessonsDatalist.save().then(function(result) {
+              console.log("Saved languageLessonsDatalist", result);
+              window.appView.toastUser("Saved your language lessons data lists", "alert-success", "Import successful:");
+            }).catch(function(err){
+              console.log("Failed to save languageLessonsDatalist", err);
+              window.appView.toastUser("Some of your language lessons data lists failed to save, you can try again or contact us to ask for help importing this file.", "alert-danger", "Import failed:");
+            });
+          }
 
           window.hub.unsubscribe("savedDatumToPouch", null, self);
           window.hub.unsubscribe("saveDatumFailedToPouch", null, self);

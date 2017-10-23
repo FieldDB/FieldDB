@@ -4,6 +4,42 @@ define(["import/Import"], function(Import) {
   function registerTests() {
     describe("Import", function() {
 
+      describe("initialize", function() {
+        it("should use default corpus", function() {
+          var importer = new Import();
+          expect(importer).toBeDefined();
+          expect(importer.get("dbname")).toEqual("default");
+        });
+
+        it("should use window corpus if available", function() {
+          window.app = {
+            get: function(key) {
+              return this[key];
+            },
+            corpus: {
+              get: function(key) {
+                return this[key];
+              },
+              fieldDBModel: {
+                dbname: "jenkins-firstcorpus",
+              },
+              dbname: "jenkins-firstcorpus",
+              datumFields: {
+                clone: function(){
+                  return []
+                }
+              }
+            }
+          };
+
+          var importer = new Import();
+          expect(importer).toBeDefined();
+          expect(importer.get("dbname")).toEqual(window.app.corpus.dbname);
+          expect(importer.fieldDBModel.dbname).toEqual(window.app.corpus.dbname);
+          expect(importer.fieldDBModel.corpus.dbname).toEqual(window.app.corpus.fieldDBModel.dbname);
+        });
+      });
+
       describe("As a user I want to import csv", function() {
         it("should detect drag and drop", function() {
           expect(Import).toBeDefined();
@@ -11,8 +47,18 @@ define(["import/Import"], function(Import) {
       });
 
       describe("As a user I want to import Word/text examples on three lines", function() {
-        it("should detect drag and drop", function() {
-          expect(Import).toBeDefined();
+        it("should import IGT", function(done) {
+          var importer = new Import();
+          var text = "transcription\nmorphemes\ngloss\n\nNoqata qan qaparinaywanki.\nNoqa-ta qan qapari-nay-wanki\nme-ACC you-NOM yell-DES-2SG.1OM\n\nSuwanayki Josefina\nSuwa-nay-ki Josefina\nsteal.1-2 Josefina-NOM";
+          var result = importer.importText(text, importer, function() {
+            expect(importer.get("extractedHeader")).toEqual([ "transcription", "morphemes", "gloss" ]);
+            expect(importer.get("asCSV")).toEqual([
+              ["Noqata qan qaparinaywanki.", "Noqa-ta qan qapari-nay-wanki", "me-ACC you-NOM yell-DES-2SG.1OM"],
+              ["Suwanayki Josefina", "Suwa-nay-ki Josefina", "steal.1-2 Josefina-NOM"]
+            ]);
+            done();
+          });
+          expect(result).toEqual();
         });
       });
 
@@ -20,7 +66,18 @@ define(["import/Import"], function(Import) {
         it("should detect drag and drop", function() {
           expect(Import).toBeDefined();
         });
+      });
 
+      describe("As a user I want to import Language Learning XML", function() {
+        it("should detect xml", function(done) {
+          var importer = new Import();
+          var result = importer.importXML('<xml></xml>', importer, function() {
+            expect(importer.get("extractedHeader")).toEqual([]);
+            expect(importer.get("asCSV")).toEqual([]);
+            done();
+          });
+          expect(result).toEqual();
+        });
       });
 
       describe("Template", function() {

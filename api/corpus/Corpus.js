@@ -487,7 +487,9 @@ Corpus.prototype = Object.create(CorpusMask.prototype, /** @lends Corpus.prototy
         datum = new Corpus.DEFAULT_DATUM({
           fields: new DatumFields(this.datumFields.cloneStructure()),
           dbname: this.dbname,
-          confidential: this.confidential
+          confidential: this.confidential,
+          audioVideo: [],
+          images: []
         });
       }
       for (var field in options) {

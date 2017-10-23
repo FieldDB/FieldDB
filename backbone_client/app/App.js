@@ -206,6 +206,9 @@ define([
 
       // originalModel.authentication = originalModel.authentication || {};
       FieldDB.FieldDBObject.application = new FieldDB.App(originalModel);
+      if (this.get("authentication") && this.get("authentication").get("userPrivate") && this.get("authentication").get("userPrivate").get("username")) {
+        FieldDB.FieldDBObject.application.user = this.get("authentication").get("userPrivate").toJSON();
+      }
       return this.originalParse(originalModel);
     },
 
@@ -253,7 +256,7 @@ define([
         console.warn('Could not change to an undefined pouch');
         return;
       }
-      
+
       this.set("connection", connection);
       var urlPrefix = OPrime.getCouchUrl(this.get("connection"), "");
 

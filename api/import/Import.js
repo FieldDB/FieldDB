@@ -5,6 +5,7 @@ var AudioVideos = require("./../audio_video/AudioVideos").AudioVideos;
 var Collection = require("./../Collection").Collection;
 var CORS = require("./../CORS").CORS;
 var Corpus = require("./../corpus/Corpus").Corpus;
+var Image = require("./../image/Image").Image;
 // var DataList = require("./../data_list/DataList").DataList;
 var Participant = require("./../user/Participant").Participant;
 var Datum = require("./../datum/Datum").Datum;
@@ -14,10 +15,10 @@ var FieldDBObject = require("./../FieldDBObject").FieldDBObject;
 // var FileReader = {};
 var Session = require("./../datum/Session").Session;
 var TextGrid = require("textgrid").TextGrid;
-var X2JS = {};
 var Q = require("q");
 
 var ATOB;
+var X2JS;
 try {
   if (!window.atob) {
     console.log("ATOB is not defined, loading from npm");
@@ -25,6 +26,12 @@ try {
   ATOB = window.atob;
 } catch (e) {
   ATOB = require("atob");
+}
+
+if (typeof window === "undefined") {
+  X2JS = require("x2js");
+} else {
+  X2JS = window.X2JS;
 }
 
 //http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
@@ -1318,11 +1325,243 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       return CSV;
     }
   },
+
   importXML: {
-    value: function() {
-      throw new Error("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+    value: function(text) {
+      var deferred = Q.defer();
+      var self = this;
+
+      Q.nextTick(function() {
+        try {
+          self.extractedHeaderObjects = [];
+          self.asCSV = [];
+          var xmlParser = new X2JS();
+          var jsonObj = xmlParser.xml_str2json ? xmlParser.xml_str2json(text) : xmlParser.xml2js(text);
+
+          if (jsonObj && jsonObj.lessonset) {
+            return deferred.resolve(self.importLessonset(jsonObj.lessonset));
+          }
+          self.warn("The app thinks this might be a XML file, but its not one we recognize. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
+        } catch (err) {
+          deferred.reject(err);
+        }
+        deferred.resolve(self.datalist);
+      });
+      return deferred.promise;
     }
   },
+
+  importLessonset: {
+    value: function(lessonSet) {
+      var self = this;
+      var detectedDatum = [];
+      var detectedFieldLabels = {};
+      var DataList = self.session.datalist.constructor;
+
+      var languageLessonsDatalist = new DataList({
+        title: lessonSet.title,
+        dbname: self.corpus.dbname,
+        audioVideo: [],
+        unsaved: true,
+        docs: []
+      });
+      self.languageLessonsDatalist = languageLessonsDatalist;
+      self.debug("title: " + languageLessonsDatalist.title);
+
+      if (!lessonSet.section) {
+        return languageLessonsDatalist;
+      }
+      self.debug(" " + lessonSet.section.length + " sections");
+      lessonSet.section.forEach(function(section) {
+        var sectionDatalist = new DataList({
+          id: FieldDBObject.uuidGenerator(),
+          dbname: self.corpus.dbname,
+          title: section.title,
+          audioVideo: [],
+          unsaved: true,
+          type: "LanguageLearningSection",
+          description: Array.isArray(section.note) ? section.note.join(" ") : section.note,
+          designNote: Array.isArray(section.designnote) ? section.designnote.join(" ") : section.designnote,
+          docs: []
+        });
+        self.debug("section: " + sectionDatalist.title);
+        languageLessonsDatalist.docs.add(sectionDatalist);
+
+        if (!section.unit) {
+          return;
+        }
+        self.debug("   " + section.unit.length + " units");
+        section.unit.forEach(function(unit) {
+          var unitDatalist = new DataList({
+            id: FieldDBObject.uuidGenerator(),
+            dbname: self.corpus.dbname,
+            title: unit.title,
+            audioVideo: [],
+            unsaved: true,
+            type: "LanguageLearningUnit",
+            description: Array.isArray(unit.note) ? unit.note.join(" ") : unit.note,
+            designNote: Array.isArray(unit.designnote) ? unit.designnote.join(" ") : unit.designnote,
+            docs: []
+          });
+          self.debug("  unit: " + unitDatalist.title);
+          sectionDatalist.docs.add(unitDatalist);
+
+          if (!unit.lesson) {
+            return;
+          }
+          var lessons = unit.lesson;
+          if (!Array.isArray(lessons)) {
+            lessons = [unit.lesson];
+          }
+          self.debug("     " + lessons.length + " lessons");
+          lessons.forEach(function(lesson) {
+            var lessonDatalist = new DataList({
+              id: FieldDBObject.uuidGenerator(),
+              dbname: self.corpus.dbname,
+              title: lesson.title,
+              audioVideo: [],
+              unsaved: true,
+              type: "LanguageLesson",
+              description: Array.isArray(lesson.note) ? lesson.note.join(" ") : lesson.note,
+              designNote: Array.isArray(lesson.designnote) ? lesson.designnote.join(" ") : lesson.designnote,
+              explanation: Array.isArray(lesson.explnote) ? lesson.explnote.join(" ") : lesson.explnote,
+              docs: []
+            });
+            self.debug("    lesson: " + lessonDatalist.title);
+            unitDatalist.docs.add(lessonDatalist);
+
+            if (!lesson.dialog) {
+              return;
+            }
+            var dialogs = [];
+            if (Array.isArray(lesson.dialog)) {
+              dialogs = dialogs.concat(lesson.dialog.map(function(item) {
+                item.type = "Dialog";
+                return item;
+              }));
+            } else if (lesson.dialog) {
+              lesson.dialog.type = "Dialog";
+              dialogs.push(lesson.dialog);
+            }
+            if (Array.isArray(lesson.vocab)) {
+              dialogs = dialogs.concat(lesson.vocab.map(function(item) {
+                item.type = "Vocab";
+                return item;
+              }));
+            } else if (lesson.vocab) {
+              lesson.vocab.type = "Vocab";
+              dialogs.push(lesson.vocab);
+            }
+            self.debug("       " + dialogs.length + " dialogs ");
+            dialogs.forEach(function(dialog) {
+              var dialogDatalist = new DataList({
+                id: FieldDBObject.uuidGenerator(),
+                dbname: self.corpus.dbname,
+                title: dialog.title || lesson.title + " " + dialog.type + " " + (lessonDatalist.docs.length + 1),
+                audioVideo: [],
+                unsaved: true,
+                type: dialog.type,
+                description: Array.isArray(dialog.note) ? dialog.note.join(" ") : dialog.note,
+                discussion: Array.isArray(dialog.designnote) ? dialog.designnote.join(" ") : dialog.designnote,
+                docs: []
+              });
+              lessonDatalist.docs.add(dialogDatalist);
+
+              var lines = [];
+              if (Array.isArray(dialog.line)) {
+                lines = lines.concat(dialog.line);
+              } else if (dialog.line) {
+                lines.push(dialog.line);
+              }
+
+              if (!lines.length) {
+                return;
+              }
+              self.debug("         " + lines.length + " lines ");
+              // Dont create datum yet, let the user edit the fields
+              lines.forEach(function(line) {
+                var datum = self.corpus.newDatum();
+                if (line.notes) {
+                  datum.comments = Array.isArray(line.notes) ? line.notes : [];
+                }
+                datum.tempId = FieldDBObject.uuidGenerator();
+                datum.id = datum.tempId;
+                detectedFieldLabels.id = "id";
+
+                Object.keys(line).forEach(function(key) {
+                  if (["toString"].indexOf(key) > -1) {
+                    return;
+                  }
+                  if (key && key.indexOf("_asArray") === -1) {
+                    detectedFieldLabels[key] = key;
+                  }
+
+                  if (key === "soundfile") {
+                    datum.audioVideo.add(new AudioVideo({
+                      filename: line[key] + ".mp3"
+                    }));
+                    return;
+                  }
+                  if (key === "img") {
+                    datum.images.add(new Image({
+                      filename: line[key]
+                    }));
+                    // self.debug("datum", datum.toJSON());
+                    return;
+                  }
+                  datum.fields.add({
+                    id: key,
+                    value: line[key]
+                  });
+                });
+                dialogDatalist.docs.add(datum);
+
+                // Adding datum to the parent datalists
+                // so that the datum show in the prototype app
+                lessonDatalist.docs.add(datum);
+                unitDatalist.docs.add(datum);
+                sectionDatalist.docs.add(datum);
+                languageLessonsDatalist.docs.add(datum);
+
+                // TODO add audio, video, images to the parent datalists?
+                var audioVideoItem = datum.audioVideo._collection[0];
+                if (audioVideoItem) {
+                  dialogDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  lessonDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  unitDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  sectionDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                  languageLessonsDatalist.audioVideo.add(datum.audioVideo._collection[0]);
+                }
+
+                delete datum.tempId;
+                line.id = datum.id;
+                line.soundfile = line.soundfile ? line.soundfile + ".mp3" : "";
+                detectedDatum.push(line);
+              });
+            });
+          });
+        });
+      });
+
+      var extractedHeaderObjects = Object.keys(detectedFieldLabels).map(function(label) {
+        return {
+          value: label
+        };
+      });
+      self.debug("extractedHeaderObjects", extractedHeaderObjects, detectedFieldLabels);
+      self.extractedHeaderObjects = extractedHeaderObjects;
+      self._asFieldMatrix = detectedDatum.map(function(item) {
+        var onlyFields = {};
+        Object.keys(detectedFieldLabels).forEach(function(label) {
+          onlyFields[label] = item[label];
+        });
+        return onlyFields;
+      });
+
+      return self.languageLessonsDatalist;
+    }
+  },
+
   importElanXML: {
     value: function(text, callback) {
       if (!text) {
@@ -2351,6 +2590,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
         }
       }
       this.importTypeConfidenceMeasures = importTypeConfidenceMeasures;
+      this.debug("importTypeConfidenceMeasures", importTypeConfidenceMeasures);
 
       var mostLikelyImport;
       for (var importType in importTypeConfidenceMeasures) {
@@ -2364,7 +2604,7 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
 
       this.importTypeConfidenceMeasures.mostLikely = mostLikelyImport;
       this.status = "";
-      mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
+      return mostLikelyImport.importFunction.apply(this, [this.rawText, null]); //no callback
     }
   },
   readBlob: {

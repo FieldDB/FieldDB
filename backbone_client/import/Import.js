@@ -12,6 +12,7 @@ define([
   "app/PaginatedUpdatingCollectionView",
   "xml2json",
   "bower_components/textgrid/dist/textgrid",
+  // "bower_components/fielddb/fielddb",
   "OPrime"
 ], function(
   FieldDBBackboneModel,
@@ -25,6 +26,7 @@ define([
   DatumFields,
   Session,
   PaginatedUpdatingCollectionView,
+  // FieldDB,
   X2JS
 ) {
   var Import = FieldDBBackboneModel.extend(
@@ -46,10 +48,26 @@ define([
        * @constructs
        */
       initialize: function() {
-        this.set("dbname", window.app.get("corpus").get("dbname"));
-        if (this.get("fields") == undefined) {
-          this.set("fields", window.app.get("corpus").get("datumFields").clone());
+        if (window.app && window.app.get("corpus")) {
+          this.set("dbname", window.app.get("corpus").get("dbname"));
+          if (this.get("fields") === undefined) {
+            this.set("fields", window.app.get("corpus").get("datumFields").clone());
+          }
+          this.fieldDBModel = new FieldDB.Import({
+            dbname: window.app.get("corpus").get("dbname"),
+            corpus: window.app.get("corpus").fieldDBModel
+          });
+        } else {
+          this.set("dbname", "default");
+          if (this.get("fields") === undefined) {
+            this.set("fields", []);
+          }
+          this.fieldDBModel = new FieldDB.Import({
+            dbname: "default",
+            corpus: new FieldDB.Corpus()
+          });
         }
+
         if (this.get("filledWithDefaults")) {
           this.fillWithDefaults();
           this.unset("filledWithDefaults");
@@ -223,7 +241,29 @@ define([
         return CSV;
       },
       importXML: function(text, self, callback) {
-        alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
+
+        // Remove headers (X2JS doesnt udnerstand them)
+        text = text.replace(/<\?xml[^>]*\?>/ig, '');
+
+        self.fieldDBModel.importXML(text).then(function(rows) {
+          // var extractedHeader = Object.keys(self.fieldDBModel.extractedHeaderObjects);
+          // self.fieldDBModel.extractedHeaderObjects.length = extractedHeader.length;
+          // var asCSV = self.fieldDBModel.asCSV.map(function(item) {
+          //   return extractedHeader.map(function(label) {
+          //     return item[label] || "";
+          //   });
+          // });
+          // self.fieldDBModel.asCSV.shift(self.fieldDBModel.extractedHeaderObjects);
+          self.set("extractedHeader", self.fieldDBModel.extractedHeaderObjects);
+          self.set("asCSV", self.fieldDBModel.asCSV);
+          if (typeof callback == "function") {
+            callback(null, self.fieldDBModel.asCSV);
+          }
+        }).catch(function(err) {
+          self.set("status", fileDetails.fileBaseName + "import error: " + err.message);
+          window.appView.toastUser(err.message, "alert-danger", "Import:");
+          callback(err);
+        });
       },
       importElanXML: function(text, self, callback) {
         //alert("The app thinks this might be a XML file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
@@ -641,7 +681,8 @@ define([
         console.log(textgrid);
         // alert("The app thinks this might be a Praat TextGrid file, but we haven't implemented this kind of import yet. You can vote for it in our bug tracker.");
         var textgrid = TextGrid.textgridToIGT(text);
-        var audioFileName = self.get("files")[0] ? self.get("files")[0].name : "copypastedtextgrid_unknownaudio";
+        var lastFile = self.get("files")[self.get("files").length -1 ];
+        var audioFileName = lastFile ? lastFile.name : "copypastedtextgrid_unknownaudio";
         audioFileName = audioFileName.replace(/\.textgrid/i, "");
         if (!textgrid || !textgrid.intervalsByXmin) {
           if (typeof callback == "function") {
@@ -766,7 +807,7 @@ define([
        *
        * @param text
        */
-      importText: function(text, self) {
+      importText: function(text, self, callback) {
         if (!text) {
           return;
         }
@@ -786,6 +827,7 @@ define([
         }
         if (rows && rows.length > 0) {
           self.set("extractedHeader", rows[0]);
+          rows.shift();
         }
         self.set("asCSV", rows);
         if (typeof callback == "function") {
@@ -800,7 +842,9 @@ define([
           filedetails.push(escape(f.name), ' ', f.type || ' n/a', ' - ', f.size, ' bytes, last modified: ',
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : ' n/a');
 
-          this.readFileIntoRawText(i);
+          if (files[i] instanceof File) {
+            this.readFileIntoRawText(i);
+          }
           //        this.set("asCSV", this.importCSV(f.getBytes()));
           //      this.set("asXML", this.importCSV(f.getBytes()));
 

@@ -1,17 +1,20 @@
 /* globals FieldDB */
 
 var Import;
+var LanguageDatum;
 var Participant;
 var Corpus;
 try {
   if (FieldDB) {
     Import = FieldDB.Import;
+    LanguageDatum = FieldDB.LanguageDatum;
     Participant = FieldDB.Participant;
     Corpus = FieldDB.Corpus;
   }
 } catch (e) {}
 
 Import = Import || require("./../../api/import/Import").Import;
+LanguageDatum = LanguageDatum || require("./../../api/datum/LanguageDatum").LanguageDatum;
 Participant = Participant || require("./../../api/user/Participant").Participant;
 Corpus = Corpus || require("./../../api/corpus/Corpus").Corpus;
 
@@ -939,6 +942,91 @@ describe("api/import/Import", function() {
     }
   });
 
+
+  describe("Import: as a research assistant helping heritage speakers I want to import my data from Can8", function() {
+    var importer;
+    var corpus;
+    beforeEach(function() {
+      Corpus.DEFAULT_DATUM = LanguageDatum;
+      corpus = new Corpus({
+        datumFields: []
+      });
+      importer = new Import({
+        corpus: corpus,
+        // debugMode: true
+      });
+    });
+
+    it("should detect xml", function(done) {
+      importer.rawText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+      importer.guessFormatAndPreviewImport().catch(done).finally(function() {
+        expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+        expect(importer.warnMessage).toEqual("The app thinks this might be a XML file, but its not one we recognize. You can vote for it in our bug tracker, or add an importer for your kind of XML https://github.com/FieldDB/FieldDB/blob/master/api/import/Import.js");
+        expect(importer.extractedHeaderObjects).toEqual([]);
+        expect(importer.asCSV.length).toEqual(0);
+        done();
+      });
+    });
+
+    it("should detect Can8 style data", function(done) {
+      fs.readFile("../learn.migmaq.org/data/master.xml", "utf8", function(err, data) {
+        if (err) {
+          if (process.env.TRAVIS_BRANCH){
+            return done();
+          }
+          console.log("Download sample data from https://github.com/FieldDB/migmaq-lessons/blob/master/data/master.xml");
+          return done(err);
+        }
+        importer.rawText = data;
+        importer.guessFormatAndPreviewImport().then(function(){
+          expect(importer.importTypeConfidenceMeasures.mostLikely.id).toEqual("xml");
+          expect(importer.extractedHeaderObjects).toEqual([{
+            value: "id"
+          }, {
+            value: "migmaq"
+          }, {
+            value: "english"
+          }, {
+            value: "soundfile"
+          }, {
+            value: "img"
+          }, {
+            value: "audionote"
+          }, {
+            value: "designnote"
+          }]);
+          expect(importer.asCSV.length).toEqual(705);
+          // console.log("importer.asCSV", importer.asCSV[0]);
+          // console.log("importer.asCSV", importer.asCSV[300]);
+          expect(importer.asCSV[0]).toEqual({
+            id: importer.asCSV[0].id,
+            migmaq: "Me\'talein?",
+            english: "How are you?",
+            soundfile: "me\'talein.mp3",
+            img: undefined,
+            audionote: undefined,
+            designnote: undefined
+          });
+          expect(importer.asCSV[310]).toEqual({
+            id: importer.asCSV[310].id,
+            migmaq: "Moqwa', mu wigtmuann.",
+            english: "No, I don't like (the taste of) them.",
+            soundfile: "MoqwaMuWigtmuann.mp3",
+            img: "1F61D.png",
+            audionote: undefined,
+            designnote: undefined
+          });
+
+          // importer.languageLessonsDatalist.save().then(function(){
+            fs.writeFile("../learn.migmaq.org/data/fielddb.json", JSON.stringify(importer.session.datalist.docs.toJSON(), null, 2), "utf8", function(err){
+              done(err);
+            });
+          // }).catch(done);
+
+        }).catch(done);
+      });
+    });
+  });
 
   describe("Import: as a synctactician I want to import my data from Word/text examples on three lines", function() {
 
