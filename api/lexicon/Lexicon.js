@@ -817,6 +817,30 @@ Lexicon.prototype = Object.create(Collection.prototype, /** @lends Lexicon.proto
     }
   },
 
+  normalizeCount: {
+    value: function() {
+      var self = this;
+      var vocabSize = this.length;
+
+      if (this.maxCount) {
+        this.warn("Recalculating max count, old value: " + this.maxCount);
+      }
+      this.maxCount = 0;
+      this.collection.forEach(function(node) {
+        if (node.count > self.maxCount) {
+          self.maxCount = node.count;
+        }
+      });
+
+      this.collection.forEach(function(node) {
+        node.rank = (node.count / vocabSize);
+        node.normalizedCount = (node.count / self.maxCount);
+      });
+
+      return this;
+    }
+  },
+
   maxLexiconSize: {
     get: function() {
       if (this._maxLexiconSize) {
