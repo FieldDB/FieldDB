@@ -953,6 +953,9 @@ describe("Lexicon", function() {
       }]);
       expect(one.contexts.preview).toEqual("one little; another one");
       expect(one.count).toEqual(2);
+
+      lexicon.normalizeCount();
+      expect(one.normalizedCount).toEqual(1);
     });
 
     it("should be able to automerge contexts of equivalent nodes when adding nodes", function() {
@@ -995,6 +998,10 @@ describe("Lexicon", function() {
       }]);
       expect(noqa.count).toEqual(15);
 
+      lexicon.normalizeCount();
+      expect(noqa.normalizedCount).toEqual(1);
+      expect(lexicon["ta|"].normalizedCount).toEqual(0.9333333333333333);
+      expect(lexicon["yku|"].normalizedCount).toEqual(0.06666666666666667);
     });
   });
 

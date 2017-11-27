@@ -51,6 +51,7 @@ angular.module("fielddbAngular", [
     fieldDBApp = FieldDB.FieldDBObject.application;
   } else {
     fieldDBApp = new FieldDB.App({
+      selectedConnection: FieldDB.Connection.knownConnections.beta,
       authentication: {
         user: new FieldDB.User({
           authenticated: false
@@ -59,7 +60,6 @@ angular.module("fielddbAngular", [
       contextualizer: new FieldDB.Contextualizer().loadDefaults(),
       online: true,
       // apiURL: "https://localhost:3183",
-      // offlineCouchURL: "https://localhost:6984",
       // brand: "Example",
       // brandLowerCase: "example",
       // website: "http://example.org",
