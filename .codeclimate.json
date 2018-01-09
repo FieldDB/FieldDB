@@ -19,6 +19,7 @@
     "**/Gruntfile.js",
     "**/node_modules/",
     "**/vendor/",
+    "backbone_client/activity/libs",
     "backbone_client/libs",
     "backbone_client/test/libs",
     "angular_client/modules/activity/client/libs",
