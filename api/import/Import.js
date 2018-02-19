@@ -307,8 +307,8 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
             return [];
           });
         } else {
-          self.debug("find " + uri);
-          whenFound = self.corpus.find(uri);
+          self.debug("find " + options.uri);
+          whenFound = self.corpus.find(options.uri);
         }
 
         whenFound
