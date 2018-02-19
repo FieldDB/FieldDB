@@ -196,6 +196,7 @@ require([
   UserPreferenceTest
 ) {
   OPrime.debugMode = true;
+  FieldDB.Connection.otherwise = 'production';
 
   // Run the Describe functions
   RequireTest.describe();

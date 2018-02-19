@@ -101,6 +101,7 @@ require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
     return deferred.promise;
   };
 
+  FieldDB.Connection.otherwise = 'production';
 
   window.app = new App();
   window.app.fillWithDefaults();
