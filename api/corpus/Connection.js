@@ -543,6 +543,10 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
         var connection = Connection.knownConnections[brand];
         return connection ? connection.serverLabel : brand;
       }
+      if (this.domain) {
+        var connection = Connection.defaultConnection(this.domain);
+        return connection.serverLabel;
+      }
       return "";
     },
     set: function(value) {
