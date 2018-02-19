@@ -48,7 +48,7 @@ define([
        * @constructs
        */
       initialize: function() {
-        if (window.app && window.app.get("corpus")) {
+        if (window.app && window.app.get && window.app.get("corpus")) {
           this.set("dbname", window.app.get("corpus").get("dbname"));
           if (this.get("fields") === undefined) {
             this.set("fields", window.app.get("corpus").get("datumFields").clone());
