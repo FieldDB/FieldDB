@@ -1,4 +1,4 @@
-define(["FieldDB"], function(FieldDB) {
+define(["FieldDB"], function() {
   "use strict";
 
   function registerTests() {
