@@ -826,7 +826,9 @@ define([
            */
           $(".spinner-status").html("Rendering Dashboard...");
 
-          window.app.stopSpinner();
+          if (window.app) {
+            window.app.stopSpinner();
+          }
           if (typeof callback == "function") {
             callback();
           }
