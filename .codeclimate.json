@@ -1,0 +1,62 @@
+{
+  "version": "2",
+  "checks": {
+    "file-lines": {
+      "enabled": false
+    },
+    "method-lines": {
+      "config": {
+        "threshold": 100
+      }
+    },
+    "method-complexity": {
+      "config": {
+        "threshold": 10
+      }
+    }
+  },
+  "exclude_patterns": [
+    "**/Gruntfile.js",
+    "**/node_modules/",
+    "**/vendor/",
+    "backbone_client/activity/libs",
+    "backbone_client/libs",
+    "backbone_client/test/libs",
+    "angular_client/modules/activity/client/libs",
+    "angular_client/modules/activity/test/lib",
+    "#angular_client",
+    "#backbone_client",
+    "backbone_client/lessons_corpus",
+    "bower.json",
+    "couchapp_minified",
+    "couchapp_prototype",
+    "coverage",
+    "docs",
+    "fielddb.js",
+    "fielddb.min.js",
+    "imported_corpora",
+    "install_linux_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
+    "install_mac_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
+    "install_windows_download_and_set_up_fielddb_servers_for_new_developers_quick_start.sh",
+    "manifest.json",
+    "#map_reduce_activities",
+    "#map_reduce_cleaning",
+    "#map_reduce_data",
+    "#map_reduce_export",
+    "#map_reduce_gamify",
+    "#map_reduce_learnx",
+    "#map_reduce_lexicon",
+    "#map_reduce_search",
+    "#map_reduce_unused",
+    "#map_reduce_wordcloud",
+    "raw",
+    "#react_client",
+    "releases",
+    "#sample_data",
+    "scripts",
+    "test-reports",
+    "tests",
+    "**/*spec.js",
+    "**/*Test.js"
+  ]
+}

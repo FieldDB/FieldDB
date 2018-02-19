@@ -64,6 +64,7 @@ var Connection = function Connection(options) {
       }
     });
   }
+
   FieldDBObject.apply(this, arguments);
 };
 

@@ -179,8 +179,10 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
       var self = this;
 
       var promises = options.fileList.map(function(file) {
-        self.debug("adding file", file);
+        // var id = file.replace("imported_corpora/", "");
+        self.debug("adding file ", file);
         return self.addFileUri({
+          // id: id,
           uri: file,
           readOptions: options.readOptions,
           preprocessOptions: options.preprocessOptions,
@@ -298,8 +300,18 @@ Import.prototype = Object.create(FieldDBObject.prototype, /** @lends Import.prot
           });
         };
 
-        self.debug("find" + options.uri);
-        self.corpus.find(options.id || options.uri)
+        var whenFound;
+        if (self.corpus.url && self.corpus.url.indexOf(".git") > -1) {
+          // Dont try a fetch on a .git url
+          whenFound = Q.fcall(function () {
+            return [];
+          });
+        } else {
+          self.debug("find " + options.uri);
+          whenFound = self.corpus.find(options.uri);
+        }
+
+        whenFound
           .then(function(similarData) {
             if (similarData && similarData._id) {
               self.debug("similarData", similarData._id, similarData._rev);
