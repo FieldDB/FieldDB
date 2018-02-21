@@ -538,13 +538,14 @@ Connection.prototype = Object.create(FieldDBObject.prototype, /** @lends Connect
       if (this._serverLabel) {
         return this._serverLabel;
       }
+      var connection;
       if (this.brand) {
         var brand = this.brand.toLowerCase().split(".")[0];
-        var connection = Connection.knownConnections[brand];
+        connection = Connection.knownConnections[brand];
         return connection ? connection.serverLabel : brand;
       }
       if (this.domain) {
-        var connection = Connection.defaultConnection(this.domain);
+        connection = Connection.defaultConnection(this.domain);
         return connection.serverLabel;
       }
       return "";
