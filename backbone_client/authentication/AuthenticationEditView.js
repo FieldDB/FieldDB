@@ -282,47 +282,6 @@ define([
         //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         // }
 
-        //Replicate user's corpus down to pouch
-        window.app.replicateOnlyFromCorpus(connection, function() {
-          if (self.model.get("userPrivate").get("mostRecentIds") === undefined) {
-            //do nothing because they have no recent ids
-            alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.location.href = "#render/true";
-            return;
-          }
-
-          /*
-           *  Load their last corpus, session, datalist etc,
-           *  only if it is not the ones already most recently loaded.
-           */
-          var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
-          var visibleids = {};
-          if (window.app.get("corpus")) {
-            visibleids.corpusid = window.app.get("corpus").id;
-          } else {
-            visibleids.corpusid = "";
-          }
-          if (window.app.get("currentSession")) {
-            visibleids.sessionid = window.app.get("currentSession").id;
-          } else {
-            visibleids.sessionid = "";
-          }
-          if (window.app.get("currentDataList")) {
-            visibleids.datalistid = window.app.get("currentDataList").id;
-          } else {
-            visibleids.datalistid = "";
-          }
-          if ((appids.sessionid !== visibleids.sessionid || appids.corpusid !== visibleids.corpusid || appids.datalistid !== visibleids.datalistid)) {
-            if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-            if (window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard) {
-              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
-            } else {
-              if (OPrime.debugMode) OPrime.debug("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-              window.app.router.showCorpusDashboard(connection.dbname, appids.corpusid);
-            }
-          }
-        });
-
         var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
         if (self.model.get("userPrivate").get("username") === "public") {
           renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
@@ -369,7 +328,7 @@ define([
       };
 
       if (username === "public") {
-        / * Dont show the quick auth, just authenticate */
+        /* Dont show the quick auth, just authenticate */
         window.appView.authView.authenticate("public", "none", FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authFailureCallback, corpusLoginSuccessCallback, corpusloginfailCallback);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;

@@ -391,125 +391,6 @@ define([
       }, cancelcallback);
     },
 
-    /**
-     * Log the user into their corpus server automatically using cookies and post so that they can replicate later.
-     * "http://localhost:5984/_session";
-     *
-     * References:
-     * http://guide.couchdb.org/draft/security.html
-     *
-     * @param username this can come from a username field in a login, or from the User model.
-     * @param password this comes either from the UserWelcomeView when the user logs in, or in the quick authentication view.
-     * @param callback A function to call upon success, it receives the data back from the post request.
-     */
-    logUserIntoTheirCorpusServer: function(connection, username,
-      password, succescallback, failurecallback) {
-      if (connection == null || connection == undefined) {
-        connection = this.get("connection");
-      }
-      if (connection == null || connection == undefined) {
-        alert("Bug: i couldnt log you into your couch database.");
-      }
-
-      /* if on android, turn on replication and don't get a session token */
-      if (OPrime.isTouchDBApp()) {
-        Android.setCredentialsAndReplicate(connection.dbname,
-          username, password, connection.domain);
-        OPrime
-          .debug("Not getting a session token from the users corpus server " +
-            "since this is touchdb on android which has no idea of tokens.");
-        if (typeof succescallback == "function") {
-          succescallback();
-        }
-        return;
-      }
-
-      var couchSessionUrl = this.getCouchUrl(connection, "/_session");
-      if (OPrime.debugMode) OPrime.debug("Contacting your corpus server ", connection, couchSessionUrl);
-
-      var appself = this;
-      var connectionInscope = connection;
-      jQuery.couch.urlPrefix = couchSessionUrl.replace("/_session", "");
-
-      FieldDB.CORS.makeCORSRequest({
-        type: "POST",
-        url: couchSessionUrl,
-        data: {
-          name: username,
-          password: password
-        }
-      }).then(function(serverResults) {
-
-        appself.get("authentication").get("userPrivate").updateListOfCorpora(serverResults.roles);
-        // var corpora =  window.app.get("corporaUserHasAccessTo")  || new Corpuses();
-        // var roles = serverResults.roles;
-        // for (var role in roles) {
-        //   var thisConnection = JSON.parse(JSON.stringify(connectionInscope));
-        //   thisConnection.corpusid = "";
-        //   thisConnection.dbname = roles[role].replace(/_admin|_writer|_reader|_commenter|fielddbuser/g, "");
-        //   thisConnection.title = thisConnection.dbname;
-        //   if (thisConnection.title.length > 30) {
-        //     thisConnection.title = thisConnection.title.replace(username + "-", "");
-        //   }
-        //   if (thisConnection.title.length > 30) {
-        //     thisConnection.title = thisConnection.title.substring(0, 10) + "..." + thisConnection.title.substring(thisConnection.title.length - 15, thisConnection.title.length - 1);
-        //   }
-        //   thisConnection.id = thisConnection.dbname;
-        //   if (thisConnection.dbname.length > 4 && thisConnection.dbname.split("-").length === 2) {
-        //     if (corpora.where({
-        //       "dbname": thisConnection.dbname
-        //     }).length === 0) {
-        //       corpora.push(new CorpusMask(thisConnection));
-        //     } else {
-        //       console.log(thisConnection.dbname + " Already known");
-        //     }
-        //   }
-        // }
-        // window.app.set("corporaUserHasAccessTo", corpora);
-        // localStorage.setItem(username + "corporaUserHasAccessTo", JSON.stringify(corpora.toJSON()));
-
-        if (window.appView) {
-          window.appView
-            .toastUser("I logged you into your team server automatically, your syncs will be successful.", "alert-info", "Online Mode:");
-        }
-
-        /* if in chrome extension, or offline, turn on replication */
-        if (OPrime.isChromeApp()) {
-          //TODO turn on pouch and start replicating and then redirect user to their user page(?)
-          //            appself.replicateContinuouslyWithCouch();
-        }
-
-        if (typeof succescallback == "function") {
-          succescallback(serverResults);
-        }
-
-      }, function(reason) {
-
-        if (window.appView) {
-          window.appView
-            .toastUser(
-              "I couldn't log you into your corpus. What does this mean? " + "This means you can't upload data to train an auto-glosser or visualize your morphemes. " + "You also can't share your data with team members. If your computer is online and you are" +
-              " using the Chrome Store app, then this probably the side effect of a bug that we might not know about... please report it to us :) " + OPrime.contactUs + " If you're offline you can ignore this warning, and sync later when you're online. ",
-              "alert-danger",
-              "Offline Mode:");
-        }
-        if (typeof failurecallback == "function") {
-          failurecallback("I couldn't log you into your corpus.");
-        }
-        if (OPrime.debugMode) OPrime.debug(reason);
-        window.app.get("authentication").set(
-          "staleAuthentication", true);
-
-      }).fail(function(exception) {
-
-        console.warn(exception.stack);
-        OPrime.bug("There was a problem logging you into your database, please report this.");
-        if (typeof failurecallback == "function") {
-          failurecallback("Unexpected error when logging you in to your corpus.");
-        }
-
-      });
-    },
     getCouchUrl: function(connection, couchdbcommand) {
       if (!connection) {
         connection = this.get("connection");
@@ -523,149 +404,7 @@ define([
       }
       return OPrime.getCouchUrl(connection, couchdbcommand);
     },
-    /**
-     * Synchronize to server and from database.
-     */
-    replicateContinuouslyWithCouch: function(successcallback,
-      failurecallback) {
-      var self = this;
-      if (!self.pouch) {
-        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
-        if (typeof successcallback == "function") {
-          successcallback();
-        }
-        return;
-      }
-      self.pouch(function(err, db) {
-        var couchurl = this.getCouchUrl();
-        if (err) {
-          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
-          if (typeof failurecallback == "function") {
-            failurecallback();
-          } else {
-            alert('Opening DB error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Opening DB error' + JSON.stringify(err));
-          }
-        } else {
-          if (OPrime.debugMode) OPrime.debug("Opening db success", db);
-          alert("TODO check to see if  needs a slash if replicating with pouch on " + couchurl);
-          self.replicateFromCorpus(db, couchurl, function() {
-            //turn on to regardless of fail or succeed
-            self.replicateToCorpus(db, couchurl);
-          }, function() {
-            //turn on to regardless of fail or succeed
-            self.replicateToCorpus(db, couchurl);
-          });
 
-          if (typeof successcallback == "function") {
-            successcallback();
-          }
-
-        }
-      });
-
-    },
-    /**
-     * Pull down corpus to offline pouch, if its there.
-     */
-    replicateOnlyFromCorpus: function(connection, successcallback, failurecallback) {
-      var self = this;
-
-      if (!self.pouch) {
-        if (OPrime.debugMode) OPrime.debug("Not replicating, no pouch ready.");
-        if (typeof successcallback == "function") {
-          successcallback();
-        }
-        return;
-      }
-
-      self.pouch(function(err, db) {
-        var couchurl = self.getCouchUrl();
-        if (err) {
-          if (OPrime.debugMode) OPrime.debug("Opening db error", err);
-          if (typeof failurecallback == "function") {
-            failurecallback();
-          } else {
-            alert('Opening DB error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Opening DB error' + JSON.stringify(err));
-          }
-        } else {
-          db.replicate.from(couchurl, {
-            continuous: false
-          }, function(err, response) {
-            if (OPrime.debugMode) OPrime.debug("Replicate from " + couchurl, response, err);
-            if (err) {
-              if (typeof failurecallback == "function") {
-                failurecallback();
-              } else {
-                alert('Corpus replicate from error' + JSON.stringify(err));
-                if (OPrime.debugMode) OPrime.debug('Corpus replicate from error' + JSON.stringify(err));
-              }
-            } else {
-              if (OPrime.debugMode) OPrime.debug("Corpus replicate from success", response);
-              if (typeof successcallback == "function") {
-                successcallback();
-              }
-            }
-          });
-        }
-      });
-    },
-    replicateToCorpus: function(db, couchurl, success, failure) {
-      db.replicate.to(couchurl, {
-        continuous: true
-      }, function(err, response) {
-        if (OPrime.debugMode) OPrime.debug("Replicated to " + couchurl);
-        if (OPrime.debugMode) OPrime.debug(response);
-        if (OPrime.debugMode) OPrime.debug(err);
-        if (err) {
-          if (OPrime.debugMode) OPrime.debug("replicate to db  error", err);
-          if (typeof failure == "function") {
-            failure();
-          } else {
-            alert('Database replicate to error' + JSON.stringify(err));
-            if (OPrime.debugMode) OPrime.debug('Database replicate to error' + JSON.stringify(err));
-          }
-        } else {
-          if (OPrime.debugMode) OPrime.debug("Database replicate to success", response);
-          if (typeof success == "function") {
-            success();
-          } else {
-            if (OPrime.debugMode) OPrime.debug('Database replicating' + JSON.stringify(connection));
-          }
-
-        }
-      });
-    },
-    replicateFromCorpus: function(db, couchurl, succes, fail) {
-      db.replicate
-        .from(couchurl, {
-            continuous: true
-          },
-          function(err, response) {
-            if (OPrime.debugMode) OPrime.debug("Replicated from " + couchurl);
-            if (OPrime.debugMode) OPrime.debug(response);
-            if (OPrime.debugMode) OPrime.debug(err);
-            if (err) {
-              if (OPrime.debugMode) OPrime.debug("replicate from db  error", err);
-              if (typeof fail == "function") {
-                fail();
-              } else {
-                alert('Database replicate from error' + JSON.stringify(err));
-                if (OPrime.debugMode) OPrime.debug('Database replicate from error' + JSON.stringify(err));
-              }
-            } else {
-              if (OPrime.debugMode) OPrime.debug("Database replicate from success",
-                response);
-              if (typeof succes == "function") {
-                succes();
-              } else {
-                if (OPrime.debugMode) OPrime.debug('Database replicating' + JSON.stringify(connection));
-              }
-
-            }
-          });
-    },
 
     loadBackboneObjectsByIdAndSetAsCurrentDashboard: function(appids, callback) {
       if (OPrime.debugMode) OPrime.debug("loadBackboneObjectsByIdAndSetAsCurrentDashboard");
@@ -727,11 +466,14 @@ define([
         });
       };
       var fetchCorpusError = function(model, error, options) {
+        var self = this;
         if (OPrime.debugMode) OPrime.debug("There was an error fetching corpus ", model, error, options);
 
         if (error.status === 404) {
-          alert("Unable to open your corpus. Please try again on the user page.");
-          // OPrime.redirect("user.html#login/" + connection.dbname);
+          alert("Unable to open the " + model.get("dbname") + " corpus. Please try again on the user page.");
+          if (window.location.pathname === "/corpus.html") {
+            OPrime.redirect("user.html");
+          }
           return;
         }
 
@@ -747,8 +489,8 @@ define([
           //   if (OPrime.debugMode) OPrime.debug("Trying to reload the app after a session token has timed out");
           //   self.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids, originalCallbackFromLoadBackboneApp);
           // }, connection.dbname);
-          if (window.appView) {
-            OPrime.redirect("user.html#login");
+          if (window.location.pathname === "/corpus.html") {
+            OPrime.redirect("user.html#login/" + model.get("dbname"));
           }
           return;
         }

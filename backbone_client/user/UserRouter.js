@@ -235,9 +235,7 @@ define([
           corpus.set("connection", window.app.get("authentication").get("userPrivate").get("corpora")[x]);
           window.app.set("corpus", corpus);
           window.app.get("authentication").staleAuthentication = true;
-          window.app.get("authentication").syncUserWithServer(function() {
-            window.app.replicateOnlyFromCorpus(null, callback);
-          });
+          window.app.get("authentication").syncUserWithServer(callback);
           break;
         }
       }
