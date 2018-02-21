@@ -540,13 +540,16 @@ define([
         });
       };
       var fetchDatalistError = function(model, error, options) {
-        delete appids.datalistid;
-        if (c.datalists.models && c.datalists.models[0] && c.datalists.models[0].id) {
-          appids.datalistid = c.datalists.models[0].id;
-          fetchDatalistSucess(c.datalists.models[0]);
-        } else {
-          alert("There was an error fetching the data list. " + error.reason);
+        if (!c.datalists.models || !c.datalists.models.length) {
+          return alert("There was an error fetching the data list. " + error.reason);
         }
+        for (var i in c.datalists.models) {
+          if (c.datalists.models[i] && c.datalists.models[i].id && c.datalists.models[i].id !== appids.datalistid) {
+            appids.datalistid = c.datalists.models[i].id;
+            return fetchDatalistSucess(c.datalists.models[i]);
+          }
+        }
+        return alert("There was an error fetching the data list. " + error.reason);
       };
       var fetchSessionSucess = function(loadedSession) {
         $(".spinner-status").html("Opened Elicitation Session...");
