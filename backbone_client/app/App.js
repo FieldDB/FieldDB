@@ -541,7 +541,13 @@ define([
       };
       var fetchDatalistError = function(model, error, options) {
         if (!c.datalists.models || !c.datalists.models.length) {
-          return alert("There was an error fetching the data list. " + error.reason);
+          if (confirm("There was an error fetching the data list, try again? " + error.reason)) {
+            // get all the data lists and try this function again
+            return c.datalists.fetchDatalists(function() {
+              fetchDatalistError(model, error, options);
+            });
+          }
+          return;
         }
         for (var i in c.datalists.models) {
           if (c.datalists.models[i] && c.datalists.models[i].id && c.datalists.models[i].id !== appids.datalistid) {
