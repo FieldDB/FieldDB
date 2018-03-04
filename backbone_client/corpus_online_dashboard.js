@@ -96,7 +96,7 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
       window.appView.toastUser(message, "alert-danger");
     }
   };
-  FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
+  FieldDB.FieldDBObject.prompt = FieldDB.FieldDBObject.confirm = function(message, optionalLocale) {
     var deferred = FieldDB.Q.defer();
     console.warn(message);
     FieldDB.Q.nextTick(function() {
