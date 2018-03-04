@@ -151,6 +151,7 @@ define([
       jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
       jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
       jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+      jsonToRender.version = new FieldDB.FieldDBObject().version;
 
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
