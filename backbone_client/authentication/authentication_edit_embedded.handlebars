@@ -28,19 +28,19 @@
     <div class="alert alert-error hide welcome-screen-alerts"></div>
 
     <div class="breadcrumb create_new_user_password ">
-      <form>
-        <h3>{{locale_Create_a_new_user}}</h3>
-        <p>
-          http://www.lingsync.org/<span class="potentialUsername">yourusernamegoeshere</span>
-        </p>
-        <!-- <label class = "locale_What_is_your_username_going_to_be">  </label> -->
-        <span class="like-form-inline">
-          <input class="registerusername" value="yourusernamegoeshere" type="text" placeholder="yourusernamegoeshere"/>
-          <a href="#" class="btn btn-primary new-user-button">
-            {{locale_New_User}}
-          </a>
-        </span>
-        <div class="hide confirm-password">
+      <h3>{{locale_Create_a_new_user}}</h3>
+      <p>
+        http://www.lingsync.org/<span class="potentialUsername">yourusernamegoeshere</span>
+      </p>
+      <!-- <label class = "locale_What_is_your_username_going_to_be">  </label> -->
+      <span class="like-form-inline">
+        <input class="registerusername" value="yourusernamegoeshere" type="text" placeholder="yourusernamegoeshere"/>
+        <a href="#" class="btn btn-primary new-user-button">
+          {{locale_New_User}}
+        </a>
+      </span>
+      <div class="hide confirm-password">
+        <form class="register-form">
           <label>{{locale_Password}}</label>
           <input class="registerpassword" type="password" placeholder="{{locale_Password}}"/>
           <label >{{locale_Confirm_Password}}</label>
@@ -51,15 +51,15 @@
           <button class="btn btn-success register-new-user" type="submit">
             {{locale_Sign_in_with_password}}
           </button>
-          <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
-          <i class="i icon-twitter"></i> Sign in with Twitter
-        </button>
-        <button class="btn btn-success register-facebook">
-          <i class="i icon-facebook"></i> Sign in with Facebook
-        </button> -->
-        </div>
+        </form>
+        <!-- Hiding Twitter and facebook because I dont think anyone will use them now. <button class="btn btn-success register-twitter">
+        <i class="i icon-twitter"></i> Sign in with Twitter
+      </button>
+      <button class="btn btn-success register-facebook">
+        <i class="i icon-facebook"></i> Sign in with Facebook
+      </button> -->
       </div>
-    </form>
+    </div>
   </div>
 </li>
 

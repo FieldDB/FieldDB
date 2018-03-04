@@ -74,29 +74,22 @@ define([
         }
         $("#login_modal").modal("show");
       },
+      "click .registerusername": function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      },
 
       "keyup .registerusername": function(e) {
         var code = e.keyCode || e.which;
         // code === 13 is the enter key
-        if ((code === 13 || code === 9) && (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere")) {
-          this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
-          this.$el.find(".confirm-password").show();
-          this.$el.find(".registerpassword").focus();
-          $(".register-new-user").removeAttr("disabled");
-        }
-      },
-      "click .new-user-button": function(e) {
-        if (e) {
+        if (code === 13 || code === 9) {
           e.stopPropagation();
           e.preventDefault();
-        }
-        if (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere") {
-          this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
-          this.$el.find(".confirm-password").show();
-          this.$el.find(".registerpassword").focus();
+          this.showRegisterForm(e);
         }
       },
-      "click .register-new-user": "registerNewUser",
+      "click .new-user-button": "showRegisterForm",
+      "submit .register-form": "registerNewUser",
       "click .register-twitter": function() {
         window.location.href = OPrime.authUrl + "/auth/twitter";
       },
@@ -349,13 +342,27 @@ define([
       window.hub.subscribe("quickAuthenticationClose", subscription, self);
     },
 
+    showRegisterForm: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      if (this.$el.find(".registerusername").val().trim() === "yourusernamegoeshere") {
+        this.$el.find(".registerusername").val("");
+        return;
+      }
+      this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
+      this.$el.find(".confirm-password").show();
+      this.$el.find(".registerpassword").focus();
+      $(".register-new-user").removeClass("disabled");
+      $(".register-new-user").removeAttr("disabled");
+    },
+
     registerNewUser: function(e) {
       if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-
-      $(".register-new-user").attr("disabled", "disabled");
 
       var authedself = this;
       var dataToPost = {
@@ -365,13 +372,21 @@ define([
         email: $(".registeruseremail").val().trim()
       };
 
+      if (!dataToPost.username) {
+        return;
+      }
+      if (!dataToPost.password) {
+        return;
+      }
+
+      $(".register-new-user").attr("disabled", "disabled");
       var renderProgress = function() {
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>");
         $(".welcome-screen-alerts").addClass("alert-success");
         $(".welcome-screen-alerts").show();
         $(".welcome-screen-alerts").removeClass("alert-error");
         $(".register-new-user").addClass("disabled");
-        $(".register-new-user").attr("disabed", "disabled");
+        $(".register-new-user").attr("disabled", "disabled");
         window.app.showSpinner();
         window.app.router.hideEverything();
         $(".spinner-status").html("Contacting the server...");
