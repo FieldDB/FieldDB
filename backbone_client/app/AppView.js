@@ -706,10 +706,10 @@ define([
       }
 
       //put the version into the terminal, and into the user menu
-      OPrime.getVersion(function(ver) {
-        app.set("version", ver);
-        $(".fielddb-version").html(ver);
-      });
+      // OPrime.getVersion(function(ver) {
+      //   app.set("version", ver);
+      //   $(".fielddb-version").html(ver);
+      // });
       if (this.exportView) this.exportView.render();
 
       this.setTotalPouchDocs();

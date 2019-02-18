@@ -196,6 +196,7 @@ require([
   UserPreferenceTest
 ) {
   OPrime.debugMode = true;
+  FieldDB.Connection.otherwise = 'production';
 
   // Run the Describe functions
   RequireTest.describe();
@@ -206,32 +207,32 @@ require([
   // JasmineJqueryTest.describe();
 
   AppTest.describe();
-  // ActivityTest.describe();
-  // AuthenticationTest.describe();
-  // CommentTest.describe();
-  // ConfidentialTest.describe();
-  // CorpusTest.describe();
-  // DatumTest.describe();
-  // DatumTagTest.describe();
-  // DatumStatusTest.describe();
-  // DatumsTest.describe();
-  // DataListTest.describe();
-  // ExportTest.describe();
-  // GlosserTest.describe();
-  // LexiconTest.describe();
-  // HotKeyTest.describe();
+  ActivityTest.describe();
+  AuthenticationTest.describe();
+  CommentTest.describe();
+  ConfidentialTest.describe();
+  CorpusTest.describe();
+  DatumTest.describe();
+  DatumTagTest.describe();
+  DatumStatusTest.describe();
+  DatumsTest.describe();
+  DataListTest.describe();
+  ExportTest.describe();
+  GlosserTest.describe();
+  LexiconTest.describe();
+  HotKeyTest.describe();
   ImportTest.describe();
-  // InsertUnicodeTest.describe();
-  // PermissionTest.describe();
-  // SearchTest.describe();
-  // SessionTest.describe();
+  InsertUnicodeTest.describe();
+  PermissionTest.describe();
+  SearchTest.describe();
+  SessionTest.describe();
 
-  // UserGenericTest.describe();
-  // UserTest.describe();
-  // TeamTest.describe();
-  // SpeakerTest.describe();
-  // BotTest.describe();
-  // UserPreferenceTest.describe();
+  UserGenericTest.describe();
+  UserTest.describe();
+  TeamTest.describe();
+  SpeakerTest.describe();
+  BotTest.describe();
+  UserPreferenceTest.describe();
 
   // Trigger Jasmine (provided by jasmine-boot)
   window.onload();

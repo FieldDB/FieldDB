@@ -248,6 +248,12 @@ define([
       this.changeViewsOfInternalModels();
 
       var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
+      if (jsonToRender.title) {
+        jsonToRender.title = jsonToRender.title;
+      }
+      if (jsonToRender.description) {
+        jsonToRender.description = jsonToRender.description;
+      }
       jsonToRender.fields = this.model.get("fields").toJSON();
       jsonToRender.license = jsonToRender.fields.rights.json.license || {};
       jsonToRender.prefs =this.model.get("prefs").toJSON();
@@ -521,26 +527,25 @@ define([
         alert("Please enter a title for your corpus."); //TODO make this more user friendly later
         return;
       }
-      this.model.set("title", newTitle);
+      this.model.get("fields").where({ "label": "title" })[0].set("mask", newTitle);
       if (this.model.id) {
         window.appView.addUnsavedDoc(this.model.id);
-      } else {
-        var newdbname = this.model.get("team").get("username") + "-" + newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_");
+        return;
+      }
+      var newdbname = this.model.get("team").get("username") + "-" + newTitle.trim().toLowerCase().replace(/[!@#$^&%*()+=-\[\]\/{}|:<>?,."'`; ]/g, "_");
 
-        var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
-        if (pouches.indexOf(newdbname) != -1) {
-          alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
-          this.$el.find(".corpus-title-input").val("");
-          return;
-        }
-
-        this.model.get("connection").dbname = newdbname;
-        this.model.set("dbname", newdbname);
-        this.model.get("corpusMask").set("dbname", newdbname);
-        this.model.get("team").set("dbname", newdbname);
-        this.$el.find(".new-corpus-dbname").html(newdbname);
+      var pouches = _.pluck(window.app.get("authentication").get("userPrivate").get("corpora"), "dbname");
+      if (pouches.indexOf(newdbname) != -1) {
+        alert("You have to choose a new title for your corpus, this one is already taken."); //TODO make this more user friendly later
+        this.$el.find(".corpus-title-input").val("");
+        return;
       }
 
+      this.model.get("connection").dbname = newdbname;
+      this.model.set("dbname", newdbname);
+      this.model.get("corpusMask").set("dbname", newdbname);
+      this.model.get("team").set("dbname", newdbname);
+      this.$el.find(".new-corpus-dbname").html(newdbname);
     },
 
     updateDescription: function(e) {
@@ -558,8 +563,10 @@ define([
       if (sh > 20) {
         inputFieldToResize.style.height = sh + "px";
       }
-      if (this.model.get("description") != newDescription) {
-        this.model.set("description", newDescription);
+      var descriptionField = this.model.get("fields").where({ "label": "description" })[0];
+
+      if (descriptionField.get("mask") != newDescription) {
+        descriptionField.set("mask", newDescription);
         if (this.model.id) {
           window.appView.addUnsavedDoc(this.model.id);
         }

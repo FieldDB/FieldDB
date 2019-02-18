@@ -74,29 +74,22 @@ define([
         }
         $("#login_modal").modal("show");
       },
+      "click .registerusername": function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      },
 
       "keyup .registerusername": function(e) {
         var code = e.keyCode || e.which;
         // code === 13 is the enter key
-        if ((code === 13 || code === 9) && (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere")) {
-          this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
-          this.$el.find(".confirm-password").show();
-          this.$el.find(".registerpassword").focus();
-          $(".register-new-user").removeAttr("disabled");
-        }
-      },
-      "click .new-user-button": function(e) {
-        if (e) {
+        if (code === 13 || code === 9) {
           e.stopPropagation();
           e.preventDefault();
-        }
-        if (this.$el.find(".registerusername").val().trim() !== "YourNewUserNameGoesHere") {
-          this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
-          this.$el.find(".confirm-password").show();
-          this.$el.find(".registerpassword").focus();
+          this.showRegisterForm(e);
         }
       },
-      "click .register-new-user": "registerNewUser",
+      "click .new-user-button": "showRegisterForm",
+      "submit .register-form": "registerNewUser",
       "click .register-twitter": function() {
         window.location.href = OPrime.authUrl + "/auth/twitter";
       },
@@ -151,6 +144,7 @@ define([
       jsonToRender.locale_Sign_in_with_password = Locale.get("locale_Sign_in_with_password");
       jsonToRender.locale_Terminal_Power_Users = Locale.get("locale_Terminal_Power_Users");
       jsonToRender.locale_User_Settings = Locale.get("locale_User_Settings");
+      jsonToRender.version = new FieldDB.FieldDBObject().version;
 
       // Display the AuthenticationEditView
       this.setElement($("#authentication-embedded"));
@@ -282,47 +276,6 @@ define([
         //   connection = self.model.get("userPrivate").get("mostRecentIds").connection;
         // }
 
-        //Replicate user's corpus down to pouch
-        window.app.replicateOnlyFromCorpus(connection, function() {
-          if (self.model.get("userPrivate").get("mostRecentIds") === undefined) {
-            //do nothing because they have no recent ids
-            alert("Bug: User does not have most recent ids, Cant show your most recent dashbaord.");
-            window.location.href = "#render/true";
-            return;
-          }
-
-          /*
-           *  Load their last corpus, session, datalist etc,
-           *  only if it is not the ones already most recently loaded.
-           */
-          var appids = self.model.get("userPrivate").get("mostRecentIds") || {};
-          var visibleids = {};
-          if (window.app.get("corpus")) {
-            visibleids.corpusid = window.app.get("corpus").id;
-          } else {
-            visibleids.corpusid = "";
-          }
-          if (window.app.get("currentSession")) {
-            visibleids.sessionid = window.app.get("currentSession").id;
-          } else {
-            visibleids.sessionid = "";
-          }
-          if (window.app.get("currentDataList")) {
-            visibleids.datalistid = window.app.get("currentDataList").id;
-          } else {
-            visibleids.datalistid = "";
-          }
-          if ((appids.sessionid !== visibleids.sessionid || appids.corpusid !== visibleids.corpusid || appids.datalistid !== visibleids.datalistid)) {
-            if (OPrime.debugMode) OPrime.debug("Calling loadBackboneObjectsByIdAndSetAsCurrentDashboard in AuthenticationEditView");
-            if (window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard) {
-              window.app.loadBackboneObjectsByIdAndSetAsCurrentDashboard(appids);
-            } else {
-              if (OPrime.debugMode) OPrime.debug("Trying to fetch the corpus and redirect you to the corpus dashboard.");
-              window.app.router.showCorpusDashboard(connection.dbname, appids.corpusid);
-            }
-          }
-        });
-
         var renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedIn";
         if (self.model.get("userPrivate").get("username") === "public") {
           renderLoggedInStateDependingOnPublicUserOrNot = "renderLoggedOut";
@@ -369,7 +322,7 @@ define([
       };
 
       if (username === "public") {
-        / * Dont show the quick auth, just authenticate */
+        /* Dont show the quick auth, just authenticate */
         window.appView.authView.authenticate("public", "none", FieldDB.Connection.defaultConnection(authUrl).authUrl, authsuccesscallback, authFailureCallback, corpusLoginSuccessCallback, corpusloginfailCallback);
         setTimeout(function() {
           window.askingUserToConfirmIdentity = false;
@@ -389,13 +342,27 @@ define([
       window.hub.subscribe("quickAuthenticationClose", subscription, self);
     },
 
+    showRegisterForm: function(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      if (this.$el.find(".registerusername").val().trim() === "yourusernamegoeshere") {
+        this.$el.find(".registerusername").val("");
+        return;
+      }
+      this.$el.find(".potentialUsername").html($(".registerusername").val().trim());
+      this.$el.find(".confirm-password").show();
+      this.$el.find(".registerpassword").focus();
+      $(".register-new-user").removeClass("disabled");
+      $(".register-new-user").removeAttr("disabled");
+    },
+
     registerNewUser: function(e) {
       if (e) {
         e.stopPropagation();
         e.preventDefault();
       }
-
-      $(".register-new-user").attr("disabled", "disabled");
 
       var authedself = this;
       var dataToPost = {
@@ -405,13 +372,21 @@ define([
         email: $(".registeruseremail").val().trim()
       };
 
+      if (!dataToPost.username) {
+        return;
+      }
+      if (!dataToPost.password) {
+        return;
+      }
+
+      $(".register-new-user").attr("disabled", "disabled");
       var renderProgress = function() {
         $(".welcome-screen-alerts").html("<p><strong>Please wait:</strong> Contacting the server to prepare your first corpus/database for you...</p> <progress max='100'> <strong>Progress: working...</strong>");
         $(".welcome-screen-alerts").addClass("alert-success");
         $(".welcome-screen-alerts").show();
         $(".welcome-screen-alerts").removeClass("alert-error");
         $(".register-new-user").addClass("disabled");
-        $(".register-new-user").attr("disabed", "disabled");
+        $(".register-new-user").attr("disabled", "disabled");
         window.app.showSpinner();
         window.app.router.hideEverything();
         $(".spinner-status").html("Contacting the server...");

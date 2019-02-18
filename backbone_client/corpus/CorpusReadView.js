@@ -186,8 +186,10 @@ define([
 
       var jsonToRender = new FieldDB.Corpus(this.model.toJSON());
       jsonToRender.fields = this.model.get("fields").toJSON();
-      jsonToRender.title = jsonToRender.title;
-      jsonToRender.prefs =this.model.get("prefs").toJSON();
+      if (jsonToRender.title) {
+        jsonToRender.title = jsonToRender.title;
+      }
+      jsonToRender.prefs = this.model.get("prefs").toJSON();
       jsonToRender.prefs.glosserURL = jsonToRender.prefs.glosserURL || "default";
 
       var couchurl = OPrime.getCouchUrl(this.model.get("connection"));

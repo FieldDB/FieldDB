@@ -766,11 +766,11 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             options.connection = Connection.defaultConnection(options.authUrl);
           }
           self.debug("Setting connection ", options.connection);
-          delete options.connection.dbname;
-          delete options.connection.pouchname;
-          delete options.connection.title;
-          delete options.connection.titleAsUrl;
-          delete options.connection.corpusUrl;
+          options.connection.dbname = "";
+          options.connection.pouchname = "";
+          options.connection.title = "";
+          options.connection.titleAsUrl = "";
+          options.connection.corpusUrls = [];
         } else {
           self.debug("Not setting connection");
         }

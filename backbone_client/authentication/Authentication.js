@@ -105,7 +105,7 @@ define([
             if (localUser && localUser.indexOf("confidential:") !== 0) {
               localUser = new FieldDB.User(JSON.parse(localUser));
               console.log(" merge the user's local prefs", localUser);
-              fielddbUser = fielddbUser.merge("self", localUser, "overwrite").toJSON();
+              fielddbUser.merge("self", localUser, "overwrite").toJSON();
               // TODO merge with user's local prefs
             }
           }
@@ -427,15 +427,8 @@ define([
      *          a success callback which is called once the user has been backed
      *          up to the server, and their couchdb session token is ready to be
      *          used to contact the database.
-     * @param corpusdbname
-     *          an optional corpus pouch name to redirect the user to if they
-     *          end up geting kicked out of the corpus page
      */
     syncUserWithServer: function(callback, corpusdbname, cancelcallback) {
-      if (!corpusdbname) {
-        corpusdbname = "";
-      }
-
       if (!window.appView) {
         console.log(" Cant syncUserWithServer, there is no appView to ask them to confirm their identity");
         return;

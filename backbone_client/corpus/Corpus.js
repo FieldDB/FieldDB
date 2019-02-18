@@ -430,6 +430,14 @@ define([
         }
       });
 
+      // upgrade to use fields
+      if (!this.fieldDBModel.title && originalModel.title) {
+        this.fieldDBModel.title = originalModel.title;
+      }
+      if (!this.fieldDBModel.description && originalModel.description) {
+        this.fieldDBModel.description = originalModel.description;
+      }
+
       this.fieldDBModel.datumFields = this.fieldDBModel.datumFields || [];
       defaultCorpus.datumFields.forEach(function(field) {
         if (!self.fieldDBModel.datumFields[field.id.toLowerCase()]) {
@@ -1393,7 +1401,7 @@ define([
         }
       }
     },
-    
+
     validate: function(attrs) {
       if (attrs.publicCorpus) {
         if (attrs.publicCorpus !== "Public" && attrs.publicCorpus !== "Private") {

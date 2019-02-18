@@ -27,12 +27,17 @@ define([
           });
         });
 
+        /**
+         * Depends on
+         * 1. update expected data to the current version
+         * 2. grunt browserify
+         */
         it("should parse version 1 corpora", function() {
           var version1 = data["corpus_v1.22.1"][0];
           var expected = data["corpus_v1.22.1_expected"][0];
           var corpus = new Corpus();
           var result = corpus.parse(version1);
-          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, "g"), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
@@ -48,10 +53,10 @@ define([
 
         it("should parse version 2 corpora", function() {
           var version2 = data["corpus_v1.22.1"][1];
-          var expected = data["corpus_v1.22.1_expected"][1]
+          var expected = data["corpus_v1.22.1_expected"][1];
           var corpus = new Corpus();
           var result = corpus.parse(version2);
-          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, "g"), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
@@ -70,10 +75,10 @@ define([
 
         it("should parse version 4 corpora", function() {
           var version4 = data["corpus_v1.22.1"][3];
-          var expected = data["corpus_v1.22.1_expected"][3]
+          var expected = data["corpus_v1.22.1_expected"][3];
           var corpus = new Corpus();
           var result = corpus.parse(version4);
-          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, "g"), expected.version));
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
               continue;
@@ -93,10 +98,10 @@ define([
 
         it("should parse minimal corpora", function() {
           var minimal = data["corpus_v1.22.1"][2];
-          var expected = data["corpus_v1.22.1_expected"][2]
+          var expected = data["corpus_v1.22.1_expected"][2];
           var corpus = new Corpus();
           var result = corpus.parse(minimal);
-          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, 'g'), expected.version));
+          var json = JSON.parse(JSON.stringify(result).replace(new RegExp(result.version, "g"), expected.version));
           expected.version = json.version;
           for (var attrib in json) {
             if (!json.hasOwnProperty(attrib)) {
