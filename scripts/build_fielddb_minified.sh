@@ -9,11 +9,12 @@
 # $ npm install requirejs
 #
 # Note: If you have requirejs installed globally, replace the backbone_client/node_modules/requirejs/bin/r.js below with the global executable
-grunt browserify
-
+npm run build
 echo "Installing dependancies"
 cd backbone_client
 npm install
+npm install bower --no-save
+npm run optionalPostinstall
 
 echo "Compiling templates (so that the app doesnt need to use eval() )"
 cd ../

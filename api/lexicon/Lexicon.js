@@ -3,7 +3,7 @@
 
 var Bindings;
 try {
-  // var ObservableDOM = require("frb/dom"); // add support for content editable
+  // var ObservableDOM = require("frb/dom"); // add support for content editable "git://github.com/cesine/frb.git#contenteditable"
   // console.log("content editable is defined", ObservableDOM);
   // var Bindings = require("frb/bindings");
   Bindings = FieldDB.Bindings;

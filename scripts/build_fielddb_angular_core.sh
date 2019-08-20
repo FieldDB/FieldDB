@@ -1,6 +1,7 @@
 #!/bin/bash
 CURRENTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
-bower link
+npm install bower --no-save
+./node_modules/.bin/bower link
 
 cd angular_client/modules/core &&
 # rm -rf node_modules
@@ -9,8 +10,8 @@ cd angular_client/modules/core &&
 npm install || exit 1;
 
 echo "Using local fielddb commonjs";
-bower link fielddb || {
-  bower install fielddb;
+./node_modules/.bin/bower link fielddb || {
+  ./node_modules/.bin/bower install fielddb;
   rm bower_components/fielddb/fielddb.js;
   rm bower_components/fielddb/fielddb.min.js;
   ln -s $CURRENTDIR/fielddb.js $CURRENTDIR/angular_client/modules/core/bower_components/fielddb/fielddb.js;
