@@ -30,16 +30,13 @@ before_install:
   - export TZ=Canada/Eastern # http://stackoverflow.com/questions/23371542/how-do-i-configure-travis-ci-to-use-the-correct-time-zone-for-a-rails-app
   - echo n | bash scripts/set_fielddb_version.sh
   # - sudo apt-get install ncftp
-  - npm install -g grunt-cli
-  - npm install -g gulp
-  - npm install -g bower
   # - sudo apt-get install libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
-  - npm install d3@3.5.8
-  - npm install jsdom@7.0.2
-  - npm install memory
 
 before_script:
   # Make sure the emulator has started before running tests
+  - npm install d3@3.5.8
+  - npm install jsdom@7.0.2
+  - npm install memory
 
 script: npm run build:ci
 
