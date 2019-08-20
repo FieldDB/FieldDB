@@ -147,11 +147,11 @@ describe("MapReduce by_type", function() {
       expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual("LanguageDatum");
 
       expect(SAMPLE_DATA[0].dateModified).toEqual("\"2012-09-26T14:13:03.928Z\"");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toEqual("Wed Sep 26 2012 10:13:03 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toContain("Wed Sep 26 2012 10:13:03");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("D3DE2F48-451F-4E1D-809C-AD5D9D7D8120");
 
       expect(SAMPLE_DATA[0].dateEntered).toEqual("\"2012-09-26T13:51:49.463Z\"");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 09:51:49 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toContain("Wed Sep 26 2012 09:51:49");
 
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("Jaunpa much'asqami kani.");
     });
@@ -170,9 +170,9 @@ describe("MapReduce by_type", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_v1_DATALISTS[0]);
       expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(2);
       expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual("DataList");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toEqual("Wed Sep 26 2012 10:42:56 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toContain("Wed Sep 26 2012 10:42:56");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("81B7D6F7-5ED0-4935-8E90-E9523AA3B391");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 10:37:51 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toContain("Wed Sep 26 2012 10:37:51");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("morphemes:nay AND gl...rch result");
     });
 
@@ -205,9 +205,9 @@ describe("MapReduce by_type", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_v1_DATALISTS[0]);
       expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(2);
       expect(BY_TYPE_MAP_REDUCE.rows[1].key).toEqual("Comment");
-      expect(BY_TYPE_MAP_REDUCE.rows[1].value[0].toString()).toEqual("Wed Sep 26 2012 10:42:05 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[1].value[0].toString()).toContain("Wed Sep 26 2012 10:42:05");
       expect(BY_TYPE_MAP_REDUCE.rows[1].value[1]).toEqual("81B7D6F7-5ED0-4935-8E90-E9523AA3B391/comment/1348670525349");
-      expect(BY_TYPE_MAP_REDUCE.rows[1].value[2].toString()).toEqual("Wed Sep 26 2012 10:42:05 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[1].value[2].toString()).toContain("Wed Sep 26 2012 10:42:05");
       expect(BY_TYPE_MAP_REDUCE.rows[1].value[3]).toEqual("Here is an example of how you can refine...onsultant on a particular morpheme/gloss");
     });
 
@@ -215,9 +215,9 @@ describe("MapReduce by_type", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_SESSIONS[0]);
       expect(BY_TYPE_MAP_REDUCE.rows.length).toEqual(1);
       expect(BY_TYPE_MAP_REDUCE.rows[0].key).toEqual("Session");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toEqual("Wed Sep 26 2012 10:42:56 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[0].toString()).toContain("Wed Sep 26 2012 10:42:56");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[1]).toEqual("763568EE-BB24-48D2-BEAD-D46E22D11418");
-      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toEqual("Wed Sep 26 2012 09:51:49 GMT-0400 (EDT)");
+      expect(BY_TYPE_MAP_REDUCE.rows[0].value[2].toString()).toContain("Wed Sep 26 2012 09:51:49");
       expect(BY_TYPE_MAP_REDUCE.rows[0].value[3]).toEqual("Collecting naya");
     });
   });
@@ -252,9 +252,9 @@ describe("MapReduce by_type", function() {
       expect(SAMPLE_GAMIFY_DATA[1].fields.length).toEqual(5);
 
       expect(gamifyRows[1].key).toEqual("Participant");
-      expect(gamifyRows[1].value[0].toString()).toEqual("Tue Aug 18 2015 15:42:22 GMT-0400 (EDT)");
+      expect(gamifyRows[1].value[0].toString()).toContain("Tue Aug 18 2015 15:42:22");
       expect(gamifyRows[1].value[1]).toEqual("ALXD645210KI");
-      expect(gamifyRows[1].value[2].toString()).toEqual("Tue Aug 18 2015 15:42:22 GMT-0400 (EDT)");
+      expect(gamifyRows[1].value[2].toString()).toContain("Tue Aug 18 2015 15:42:22");
       expect(gamifyRows[1].value[3]).toEqual("alxd645210ki");
     });
 
@@ -266,9 +266,9 @@ describe("MapReduce by_type", function() {
       expect(SAMPLE_GAMIFY_DATA[2].sessionFields.length).toEqual(10);
 
       expect(gamifyRows[2].key).toEqual("Corpus");
-      expect(gamifyRows[2].value[0].toString()).toEqual("Tue Aug 18 2015 15:22:25 GMT-0400 (EDT)");
+      expect(gamifyRows[2].value[0].toString()).toContain("Tue Aug 18 2015 15:22:25");
       expect(gamifyRows[2].value[1]).toEqual("32a4e729a4c1d2278bec26f69b067d4c");
-      expect(gamifyRows[2].value[2].toString()).toEqual("Tue Aug 18 2015 15:22:25 GMT-0400 (EDT)");
+      expect(gamifyRows[2].value[2].toString()).toContain("Tue Aug 18 2015 15:22:25");
       expect(gamifyRows[2].value[3]).toEqual("DyslexDisorth");
     });
 
@@ -302,9 +302,9 @@ describe("MapReduce by_type", function() {
       expect(SAMPLE_GAMIFY_DATA[3].results[1].results[0].datumFields[2].mask).toEqual("Child,&nbsp;NormalProduction");
 
       expect(gamifyRows[3].key).toEqual("Response");
-      expect(gamifyRows[3].value[0].toString()).toEqual("Mon Jul 14 2014 10:39:11 GMT-0400 (EDT)");
+      expect(gamifyRows[3].value[0].toString()).toContain("Mon Jul 14 2014 10:39:11");
       expect(gamifyRows[3].value[1]).toEqual("1440170554221a999eaa0bf68ef3c6870c1f158491ab9");
-      expect(gamifyRows[3].value[2].toString()).toEqual("Fri Aug 21 2015 11:22:34 GMT-0400 (EDT)");
+      expect(gamifyRows[3].value[2].toString()).toContain("Fri Aug 21 2015 11:22:34");
       expect(gamifyRows[3].value[3]).toEqual("dʒəmp (Practice 1, score: 1)");
 
       expect(gamifyRows[4].key).toEqual("Image");
@@ -314,7 +314,7 @@ describe("MapReduce by_type", function() {
       expect(gamifyRows[4].value[3]).toEqual("A depiction of a fro...ker did say 'jump').");
 
       expect(gamifyRows[5].key).toEqual("Audio");
-      expect(gamifyRows[5].value[0].toString()).toEqual("Mon Jul 14 2014 10:04:37 GMT-0400 (EDT)");
+      expect(gamifyRows[5].value[0].toString()).toContain("Mon Jul 14 2014 10:04:37");
       expect(gamifyRows[5].value[1]).toEqual("https://speechdev.example.org/jumprun-fr-ca/GR02A_jump__MOD.mp3");
       expect(gamifyRows[5].value[2]).toEqual(0);
       expect(gamifyRows[5].value[3]).toEqual(" Downloaded Praat Te... for GR02A_jump__MOD");
@@ -331,9 +331,9 @@ describe("MapReduce by_type", function() {
       expect(gamifyRows[30].value[3]).toEqual("dʒəmp (Practice 10, score: 1)");
 
       expect(gamifyRows[33].key).toEqual("SubExperimentDataList");
-      expect(gamifyRows[33].value[0].toString()).toEqual("Thu Sep 04 2014 18:45:13 GMT-0400 (EDT)");
+      expect(gamifyRows[33].value[0].toString()).toContain("Thu Sep 04 2014 18:45:13");
       expect(gamifyRows[33].value[1]).toEqual("4e06b60e129dff5c7bb4bb234990b834");
-      expect(gamifyRows[33].value[2].toString()).toEqual("Mon Jul 14 2014 10:39:11 GMT-0400 (EDT)");
+      expect(gamifyRows[33].value[2].toString()).toContain("Mon Jul 14 2014 10:39:11");
       expect(gamifyRows[33].value[3]).toEqual("locale_practice");
 
       expect(gamifyRows[34].value[3]).toEqual("dʒəmp (Test 11, score: 1)");
@@ -349,9 +349,9 @@ describe("MapReduce by_type", function() {
 
 
       expect(gamifyRows[65].key).toEqual("SubExperimentDataList");
-      expect(gamifyRows[65].value[0].toString()).toEqual("Fri Oct 10 2014 10:41:09 GMT-0400 (EDT)");
+      expect(gamifyRows[65].value[0].toString()).toContain("Fri Oct 10 2014 10:41:09");
       expect(gamifyRows[65].value[1]).toEqual("32a4e729a4c1d2278bec26f69b29b7cd");
-      expect(gamifyRows[65].value[2].toString()).toEqual("Fri Aug 21 2015 11:21:45 GMT-0400 (EDT)");
+      expect(gamifyRows[65].value[2].toString()).toContain("Fri Aug 21 2015 11:21:45");
       expect(gamifyRows[65].value[3]).toEqual("locale_title (participants: LEBB720610PS) (experimenters: juliesmith)");
 
     });
