@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "5.121.19",
+  "version": "5.121.19-rc0",
   "homepage": "http://fielddb.github.io/FieldDB/",
   "bugs": {
     "url": "https://github.com/FieldDB/FieldDB/issues"

@@ -44,8 +44,8 @@ fi
 MINOR_VERSION=`date +%d.%H.%M`
 DAY=`date +%d`
 
-SHORT_VERSION="$YEAR_DIFF.$WEEK_DIFF.$DAY"
-version="$YEAR_DIFF.$WEEK_DIFF.$MINOR_VERSION"
+SHORT_VERSION="$YEAR_DIFF.$WEEK_DIFF.$DAY-rc0"
+version="$YEAR_DIFF.$WEEK_DIFF.$MINOR_VERSION-rc0"
 echo " Birthday: $BIRTHDAY"
 echo " Today: $today"
 echo " Years: $YEAR_DIFF"

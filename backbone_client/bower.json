@@ -1,6 +1,6 @@
 {
   "name": "fielddb-prototype",
-  "version": "5.121.19",
+  "version": "5.121.19-rc0",
   "homepage": "https://github.com/FieldDB/FieldDB",
   "authors": [
     "cesine <cesine@yahoo.com>",
