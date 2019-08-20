@@ -22,7 +22,7 @@ cd ../
 
 echo "Copying a local copy of the fielddb commonjs"
 rm backbone_client/bower_components/fielddb/fielddb.js
-cp $FIELDDB_HOME/FieldDB/fielddb.js backbone_client/bower_components/fielddb/fielddb.js
+cp ./fielddb.js backbone_client/bower_components/fielddb/fielddb.js
 
 
 sed 's/\/\/# sourceMappingURL=jquery.min.map//' backbone_client/bower_components/jquery/dist/jquery.min.js  > output
