@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+var fs = require("fs");
+var https = require("https");
+var url = require("url");
+
+var service = require("./server");
+
+var config = {
+  url: "https://localhost:3182",
+  ssl: {
+    key: fs.readFileSync(__dirname + "/fielddb_debug.key", "utf8"),
+    cert: fs.readFileSync(__dirname + "/fielddb_debug.crt", "utf8")
+  },
+};
+var url = url.parse(config.url);
+service.set("port", url.port);
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var server = https.createServer(config.ssl, service).listen(service.get("port"), function() {
+  console.log("HTTPS Express server listening on https://localhost:" + server.address().port);
+  console.log("please open http://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/#.VVtxQVVVhBc to see how you should accept the security cerrtificate");
+});
