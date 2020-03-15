@@ -1,0 +1,44 @@
+{
+  "name": "fielddb-e2e",
+  "version": "5.121.19-rc0",
+  "description": "End to End Tests An offline/online field database which adapts to its user's terminology and I-Language",
+  "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FieldDB/FieldDB.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FieldDB/FieldDB/issues"
+  },
+  "keywords": [
+    "fielddb",
+    "client"
+  ],
+  "engines": {
+    "node": ">12.0.0"
+  },
+  "dependencies": {},
+  "optionalDependancies": {
+    "d3": "^3.5.8",
+    "jsdom": "^7.0.2",
+    "memory": "0.0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.0",
+    "mocha": "^7.1.0",
+    "puppeteer": "^2.1.1"
+  },
+  "main": "api/fielddb.js",
+  "scripts": {
+    "test": "mocha --timeout 2000 --slow 500 --file test/suite.js test/**/*.spec.js",
+    "lint": "eslint ."
+  },
+  "license": "Apache-2.0"
+}

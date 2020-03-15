@@ -38,7 +38,9 @@ before_script:
   - npm install jsdom@7.0.2
   - npm install memory
 
-script: npm run build:ci
+script:
+  - npm run build:ci
+  - cd test-e2e; npm install && npm run lint && npm test
 
 env:
   global:
