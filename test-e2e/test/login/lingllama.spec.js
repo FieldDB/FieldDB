@@ -45,14 +45,14 @@ describe('Login', () => {
     await browser.close();
   });
 
-  it('should login lingllama sample user', async () => {
+  it.skip('should login lingllama sample user', async () => {
     debug(`URL: ${process.env.URL}/corpus.html`);
     await page.goto(`${process.env.URL}/corpus.html`, {
       waitUntil: 'networkidle0',
     });
-    await page.waitFor(20000);
+    await page.waitFor(5000);
     await page.screenshot({
-      path: path.join(__dirname, '../../screenshots/example.png'),
+      path: path.join(__dirname, '../../screenshots/lingllama.png'),
     });
   });
 });

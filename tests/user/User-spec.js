@@ -9,12 +9,25 @@ try {
 } catch (e) {}
 
 User = User || require("./../../api/user/User").User;
-
+global.localStorage = global.localStorage || {
+  getItem: function(key) {
+    return this.store[key];
+  },
+  setItem: function(key, value) {
+    this.store[key] = value;
+  },
+  store: {},
+};
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 
-describe("User ", function() {
+describe("User", function() {
+  afterEach(function() {
+    if (global.localStorage.store) {
+      global.localStorage.store = {};
+    }
+  });
 
-  describe("basic attributes ", function() {
+  describe("basic attributes", function() {
 
     it("should have username, firstname, lastname, gravatar, email and other options", function() {
       var json = {
@@ -471,5 +484,31 @@ describe("User ", function() {
 
   });
 
+  describe("Load default user into local storage", function() {
+    it("should add the public user to localStorage", function(done) {
+      User.loadPublicUserIfNoUserAlready()
+        .then(function(username) {
+          expect(username).toEqual("public");
+          expect(global.localStorage.store.public).toContain("VTJGc2RHVmtYMT");
+          done();
+        }).fail(function(error) {
+          console.error(error.stack);
+          expect(error).toEqual(" ");
+        }).done(done);
+    });
 
+    it("should not overwrite the current user if there is one", function(done) {
+      global.localStorage.setItem("username", "someonelse");
+
+      User.loadPublicUserIfNoUserAlready()
+        .then(function(username) {
+          expect(username).toEqual("someonelse");
+          expect(global.localStorage.store.public).toEqual(undefined);
+          done();
+        }).fail(function(error) {
+          console.error(error.stack);
+          expect(error).toEqual(" ");
+        }).done(done);
+    });
+  });
 });
