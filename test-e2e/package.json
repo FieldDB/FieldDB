@@ -33,12 +33,16 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "mocha": "^7.1.0",
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^2.1.1",
+    "supertest": "^4.0.2"
   },
   "main": "api/fielddb.js",
   "scripts": {
-    "test": "mocha --timeout 2000 --slow 500 --file test/suite.js test/**/*.spec.js",
-    "lint": "eslint ."
+    "test": "mkdir screenshots; mocha --timeout 35000 --slow 5000 --file test/suite.js test/**/*.spec.js",
+    "test:deployed": "URL=URL=https://public:none@corpus.example.org/prototype/_design/prototype npm test",
+    "test:prototype": "HEADLESS=false URL=chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa npm test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "license": "Apache-2.0"
 }
