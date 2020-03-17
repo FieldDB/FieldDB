@@ -564,6 +564,10 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           return;
         }
 
+        if (options.name === "public" || options.username === "public") {
+          options.password = "none";
+        }
+
         if (!options.password) {
           deferred.reject({
             details: options,

@@ -1,8 +1,10 @@
+const debug = require('debug');
 const { expect } = require('chai');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-const debug = () => {};
+const debugBrowserConsole = debug('browser:console');
+const debugBrowserRequest = debug('browser:request');
 const {
   HEADLESS,
 } = process.env;
@@ -17,6 +19,10 @@ describe('Login', () => {
       slowMo: 50,
       headless: HEADLESS && HEADLESS !== 'false',
       ignoreHTTPSErrors: true,
+      args: [
+        '--window-size=1000,1080',
+        '--auto-open-devtools-for-tabs',
+      ],
     });
     page = await browser.newPage();
     await page.setRequestInterception(true);
@@ -29,25 +35,24 @@ describe('Login', () => {
         console.log(`Aborting ${url}`);
         interceptedRequest.abort();
       } else {
-        debug(`Continuing ${url}`);
+        debugBrowserRequest(`Continuing ${url}`);
         interceptedRequest.continue();
       }
     });
     page
-      .on('console', (message) => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+      .on('console', (message) => debugBrowserConsole(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
       .on('pageerror', ({
         message,
       }) => console.log(message))
-      .on('response', (response) => console.log(`${response.status()} ${response.url()}`))
-      .on('requestfailed', (request) => console.log(`${request.failure().errorText} ${request.url()}`));
+      .on('response', (response) => debugBrowserRequest(`${response.status()} ${response.url()}`))
+      .on('requestfailed', (request) => debugBrowserRequest(`${request.failure().errorText} ${request.url()}`));
   });
 
   after(async () => {
     await browser.close();
   });
 
-  it('should login the public user', async () => {
-    debug(`URL: ${process.env.URL}/corpus.html`);
+  it.only('should login the public user', async () => {
     await page.goto(`${process.env.URL}/corpus.html`, {
       waitUntil: 'networkidle0',
     });
