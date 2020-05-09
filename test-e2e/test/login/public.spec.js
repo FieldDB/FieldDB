@@ -29,9 +29,11 @@ describe('Login', () => {
     page.on('request', (interceptedRequest) => {
       const url = interceptedRequest.url();
       if (url.endsWith('.png') || url.endsWith('.jpg')) {
+        // eslint-disable-next-line no-console
         console.log(`Aborting ${url}`);
         interceptedRequest.abort();
       } else if (url.includes('google-analytics.com')) {
+        // eslint-disable-next-line no-console
         console.log(`Aborting ${url}`);
         interceptedRequest.abort();
       } else {
@@ -43,6 +45,7 @@ describe('Login', () => {
       .on('console', (message) => debugBrowserConsole(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
       .on('pageerror', ({
         message,
+        // eslint-disable-next-line no-console
       }) => console.log(message))
       .on('response', (response) => debugBrowserRequest(`${response.status()} ${response.url()}`))
       .on('requestfailed', (request) => debugBrowserRequest(`${request.failure().errorText} ${request.url()}`));
@@ -52,7 +55,7 @@ describe('Login', () => {
     await browser.close();
   });
 
-  it.only('should login the public user', async () => {
+  it('should login the public user', async () => {
     await page.goto(`${process.env.URL}/corpus.html`, {
       waitUntil: 'networkidle0',
     });
@@ -60,13 +63,13 @@ describe('Login', () => {
     // TODO handle the redirects
     await page.waitFor(3000);
 
-    const searchValue = await page.$eval('#search_box', el => el.value)
+    const searchValue = await page.$eval('#search_box', (el) => el.value);
     expect(searchValue).to.equal('jeju');
 
-    const dataListTitle = await page.$eval('#data-list-quickview-header h4', el => el.innerText)
+    const dataListTitle = await page.$eval('#data-list-quickview-header h4', (el) => el.innerText);
     expect(dataListTitle).to.contain('Data from sample_filemaker.csv');
 
-    const corpusTitle = await page.$eval('#corpus_dropdown_trigger', el => el.innerText)
+    const corpusTitle = await page.$eval('#corpus_dropdown_trigger', (el) => el.innerText);
     expect(corpusTitle).to.contain('Community Corpus');
     expect(corpusTitle).to.contain('Practice Elicitatio...');
 

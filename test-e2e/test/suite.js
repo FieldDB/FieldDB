@@ -25,6 +25,7 @@ before((done) => {
           done(err);
           return;
         }
+        // eslint-disable-next-line
         console.log('Server started', process.env.URL);
         expect(res.text).to.contain('user_online_dashboard');
         done();
@@ -34,5 +35,6 @@ before((done) => {
 
 after(() => {
   service.close();
+  // eslint-disable-next-line
   console.log('Done');
 });
