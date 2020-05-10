@@ -42,11 +42,20 @@ describe('Login', () => {
       }
     });
     page
-      .on('console', (message) => debugBrowserConsole(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
-      .on('pageerror', ({
+      .on('console', (message) => {
+        /* eslint-disable no-underscore-dangle */
+        const level = `${message.type().substr(0, 3).toUpperCase()}`;
+        const location = `${message._location.url}:${message._location.lineNumber}:${message._location.columnNumber}`;
+        const description = message._args && message._args.map((arg, index) => arg._remoteObject.description && `arg ${index} ${arg._remoteObject.description}`).filter((a) => !!a).join('\n');
+        /* eslint-enable no-underscore-dangle */
+        debugBrowserConsole(level, location, description || message.text());
+      })
+      .on('pageerror', (
         message,
+        ...args
         // eslint-disable-next-line no-console
-      }) => console.log(message))
+      ) => console.log(message, args))
+      // .on("error", (err) => { console.log("Error: " , err.toString()) })
       .on('response', (response) => debugBrowserRequest(`${response.status()} ${response.url()}`))
       .on('requestfailed', (request) => debugBrowserRequest(`${request.failure().errorText} ${request.url()}`));
   });
