@@ -157,8 +157,12 @@ define([
       //      localStorage.removeItem("helpShownTimestamp");
 
       //Destropy cookies, and load the public user
-
-      this.loadPublicUser();
+      FieldDB.User.loadPublicUserIfNoUserAlready()
+        .then(function() {
+          if (window.appView) {
+            OPrime.redirect("corpus.html");
+          }
+        });
     },
 
     register: function(dataToPost, successCallback, errorCallback, renderProgress, renderStatus) {
@@ -362,18 +366,6 @@ define([
       }
 
       this.saveFielDBUserToUser(new FieldDB.User(user), callbackload);
-    },
-
-    loadPublicUser: function(callbackload) {
-      var mostRecentPublicUser = OPrime.publicUserStaleDetails();
-      mostRecentPublicUser = mostRecentPublicUser.replace('pouchname', 'dbname');
-      mostRecentPublicUser = JSON.parse(mostRecentPublicUser);
-      for (var x in mostRecentPublicUser) {
-        localStorage.setItem(x, mostRecentPublicUser[x]);
-      }
-      if (window.appView) {
-        OPrime.redirect("corpus.html");
-      }
     },
 
     savePublicUserForOfflineUse: function() {

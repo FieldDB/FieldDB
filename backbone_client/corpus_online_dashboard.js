@@ -110,14 +110,14 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     return deferred.promise;
   };
   FieldDB.Connection.otherwise = 'production';
-
-  window.app = new App();
-  window.app.fillWithDefaults();
-
+  FieldDB.User.loadPublicUserIfNoUserAlready()
+    .then(function() {
+      window.app = new App();
+      window.app.fillWithDefaults();
+    });
   window.uploadAndGenerateTextGrid = function(files) {
     //    document.getElementById("uploadAudioForTextGridform").filesToUpload = files;
     //    alert("I'm going to submit the upload form.");
     //    document.getElementById("uploadAudioForTextGridform").submit();
   };
-
 });

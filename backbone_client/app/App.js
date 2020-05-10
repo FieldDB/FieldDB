@@ -332,7 +332,14 @@ define([
     },
 
     startApp: function(callback) {
+      console.log('window.appView:', window.appView);
+      var err = new Error('can i log this error');
+
+      console.error(err);
+      // throw err;
+
       if (!window.appView) {
+        console.log('AppView:', AppView);
         window.appView = new AppView({
           model: this
         });

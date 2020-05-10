@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 10
+  - 12
 
 # Travis supports running a real browser (Firefox) with a virtual screen. Just update your .travis.yml to set up the virtual screen like this:
 # before_script:
@@ -40,7 +40,7 @@ before_script:
 
 script:
   - npm run build:ci
-  - cd test-e2e; npm install && npm run lint && npm test
+  - cd test-e2e; npm install && npm run lint && DEBUG=browser* npm test
 
 env:
   global:
