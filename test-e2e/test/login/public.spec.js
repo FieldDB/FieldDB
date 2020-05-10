@@ -55,7 +55,7 @@ describe('Login', () => {
     await browser.close();
   });
 
-  it('should login the public user', async () => {
+  it.only('should login the public user', async () => {
     await page.goto(`${process.env.URL}/corpus.html`, {
       waitUntil: 'networkidle0',
     });

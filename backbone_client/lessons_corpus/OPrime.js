@@ -85,7 +85,7 @@ OPrime.makePublisher = function(o) {
   };
 };
 
-OPrime.debugMode = false;
+OPrime.debugMode = true;
 
 OPrime.debug = function(message, message2) {
   if (!message2) {
@@ -103,7 +103,7 @@ OPrime.bug = function(message) {
 /**
  * http://www.w3schools.com/js/js_cookies.asp name of the cookie, the value of
  * the cookie, and the number of days until the cookie expires.
- * 
+ *
  * @param c_name
  * @param value
  * @param exdays

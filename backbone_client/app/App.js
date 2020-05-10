@@ -332,7 +332,10 @@ define([
     },
 
     startApp: function(callback) {
+      console.log('window.appView', window.appView);
+
       if (!window.appView) {
+        console.log('AppView', AppView);
         window.appView = new AppView({
           model: this
         });
