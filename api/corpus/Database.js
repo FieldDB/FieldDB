@@ -195,7 +195,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
           };
         }
         reason.details = value;
-        self.debug(reason);
+        self.debug('reason', reason);
         deferred.reject(reason);
       }).fail(function(error) {
         console.error(error.stack, self);
@@ -240,7 +240,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
             userFriendlyErrors: ["This application has errored. Please notify its developers: Cannot save data. If you keep your browser open, you will not loose your work."]
           };
         }
-        self.debug(reason);
+        self.debug('reason', reason);
         deferred.reject(reason);
       }).fail(function(error) {
         console.error(error.stack, self);
@@ -294,7 +294,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
       limit = limit || 1000;
       var originalCollectionUrl = collectionUrl;
       var cantLogIn = function(reason) {
-        self.debug(reason);
+        self.debug('reason', reason);
         if (reason.status === 404) {
           if (originalCollectionUrl === collectionUrl) {
             reason.userFriendlyErrors = ["The server didn't know about the collection " + collectionUrl + "you requested. Please try another url."];
@@ -336,7 +336,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         });
 
         Q.allSettled(promises).then(function(results) {
-          self.debug(results);
+          self.debug('results', results);
           if (results.length) {
             deferred.resolve(results.map(function(result) {
               if (result.state === "fulfilled") {
@@ -438,7 +438,7 @@ Database.prototype = Object.create(FieldDBObject.prototype, /** @lends Database.
         dataType: "json",
         url: this.couchSessionUrl
       }).then(function(sessionInfo) {
-        self.debug(sessionInfo);
+        self.debug('sessionInfo', sessionInfo);
         self.connectionInfo = sessionInfo;
         if (sessionInfo.userCtx.name) {
           // var user = new User({

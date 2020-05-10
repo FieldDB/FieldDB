@@ -9,22 +9,24 @@ try {
 } catch (e) {}
 
 User = User || require("./../../api/user/User").User;
-global.localStorage = global.localStorage || {
-  getItem: function(key) {
-    return this.store[key];
-  },
-  setItem: function(key, value) {
-    this.store[key] = value;
-  },
-  store: {},
-};
+
 var SAMPLE_USERS = require("./../../sample_data/user_v1.22.1.json");
 
 describe("User", function() {
+  beforeEach(function() {
+    global.localStorage = global.localStorage || {
+      getItem: function(key) {
+        return this.store[key];
+      },
+      setItem: function(key, value) {
+        this.store[key] = value;
+      },
+      store: {},
+    };
+  });
+
   afterEach(function() {
-    if (global.localStorage.store) {
-      global.localStorage.store = {};
-    }
+    delete global.localStorage;
   });
 
   describe("basic attributes", function() {
@@ -480,7 +482,6 @@ describe("User", function() {
       expect(user.userMask.gravatar).not.toEqual(user.gravatar);
       expect(user.userMask.gravatar).toEqual("someothergravatarfortheirpublicpage");
     });
-
 
   });
 

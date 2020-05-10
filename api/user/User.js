@@ -512,7 +512,6 @@ User.publicUserStaleDetails = function() {
 };
 
 User.loadPublicUserIfNoUserAlready = function() {
-  var self = this;
   var deferred = Q.defer();
 
   Q.nextTick(function() {
@@ -536,10 +535,10 @@ User.loadPublicUserIfNoUserAlready = function() {
       name: "public",
     })
     .then(function() {
-      self.debug("user is authenticated")
+      FieldDBObject.debug("user is authenticated")
       deferred.resolve(currentUsername);
     },function() {
-      self.warn("user is not authenticated")
+      FieldDBObject.warn("user is not authenticated")
       deferred.resolve(currentUsername);
     });
   });
