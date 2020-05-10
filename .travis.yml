@@ -40,7 +40,7 @@ before_script:
 
 script:
   - npm run build:ci
-  - cd test-e2e; npm install && npm run lint && npm test
+  - cd test-e2e; npm install && npm run lint && DEBUG=browser* npm test
 
 env:
   global:
