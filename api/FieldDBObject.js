@@ -1130,7 +1130,7 @@ FieldDBObject.prototype = Object.create(Object.prototype, {
           return self;
         },
         function(reason) {
-          self.debug('reason', reason);
+          self.debug("reason", reason);
           self.saving = false;
           deferred.reject(reason);
           return self;
