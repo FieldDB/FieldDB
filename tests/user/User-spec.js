@@ -490,7 +490,7 @@ describe("User", function() {
       User.loadPublicUserIfNoUserAlready()
         .then(function(username) {
           expect(username).toEqual("public");
-          expect(global.localStorage.store.public).toContain("VTJGc2RHVmtYMT");
+          expect(global.localStorage.store.public).toContain("VTJGc2RHVmt");
           done();
         }).fail(function(error) {
           console.error(error.stack);
