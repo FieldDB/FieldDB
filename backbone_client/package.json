@@ -1,6 +1,6 @@
 {
   "name": "LingSync",
-  "version": "5.151.15-rc0",
+  "version": "5.168.13-rc0",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/milestones?state=closed",
   "repository": {
