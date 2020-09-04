@@ -47,7 +47,7 @@
     "require-dir": "~0.1.0",
     "browser-sync": "~2.1.4",
     "browser-sync-spa": "~1.0.1",
-    "http-proxy": "~1.8.0",
+    "http-proxy": "~1.18.1",
     "chalk": "~0.5.1",
     "protractor": "~1.7.0",
     "uglify-save-license": "~0.4.1",
