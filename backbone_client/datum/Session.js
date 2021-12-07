@@ -123,7 +123,7 @@ define([
         label: "goal"
       })[0].set("mask", "Change this session goal to the describe your first elicitiation session.");
       this.get("fields").where({
-        label: "DateSessionEntered"
+        label: "dateSessionEntered"
       })[0].set("mask", new Date());
       this.get("fields").where({
         label: "dateElicited"
@@ -199,7 +199,7 @@ define([
           field.id = field.label = "source";
         }
         if (field.id === "dateSEntered" || field.label === "dateSEntered") {
-          field.id = field.label = "DateSessionEntered";
+          field.id = field.label = "dateSessionEntered";
         }
         if (field.id === "user" || field.label === "user" || field.id === "users" || field.label === "users") {
           field.id = field.label = "participants";

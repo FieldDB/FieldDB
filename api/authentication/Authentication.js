@@ -10,7 +10,8 @@ var Q = require("q");
 var Connection = require("./../corpus/Connection").Connection;
 
 // var md5 = require("md5");
-var bcrypt = require("bcryptjs");
+// bcrypt is unable to load using require.js in the browser
+var bcrypt = typeof window === 'undefined' ? require("bcryptjs") : {};
 // console.log(bcrypt.hashSync("phoneme", "$2a$10$UsUudKMbgfBQzn5SDYWyFe"));
 
 /**

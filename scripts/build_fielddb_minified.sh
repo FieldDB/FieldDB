@@ -87,3 +87,6 @@ cp -R backbone_client/user/layouts couchapp_prototype/_attachments/user/layouts
 cp -R backbone_client/user/skins couchapp_prototype/_attachments/user/skins
 
 rm -rf release
+
+
+echo "Load couchapp_prototype/_attachments as an unpacked chrome extension to verify this build"

@@ -447,8 +447,8 @@ couchapp --version || {
         echo "I couldnt automate the couchapp install for you.. Im going to give up on  setting up your computer as a FieldDB server, you can still work on the client apps with no need for a local server, you can ask someone else to deploy your changes to CouchDBs."
         exit 1
       }
-      echo "export PATH=$PATH:~/library/python/2.7/bin/" >> $HOME/.bash_profile
-      source $HOME/.bash_profile
+      echo "export PATH=$PATH:~/library/python/2.7/bin" >> $HOME/.zshrc
+      source $HOME/.zshrc
     }
   fi
 }

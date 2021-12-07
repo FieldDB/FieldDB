@@ -1,4 +1,7 @@
 echo "Building couchapps"
+echo "It is preferable to replicate these databases from the production server to maintain continuity with the version numbers"
+echo " Implemented in npm run setup in https://github.com/FieldDB/AuthenticationWebService/blob/150c1b5b1945761a3e197de6c65755d4c8d4c746/package.json#L81  "
+echo "If these databases are not availbible from the production server, this file can be used to create new databases using the map reduces "
 cd $FIELDDB_HOME/FieldDB
 ./scripts/build_fielddb_minified.sh
 ./scripts/build_activity_feed.sh
