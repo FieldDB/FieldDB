@@ -14,7 +14,7 @@
   "README.md$",
   "bower.json$",
   "^dist",
-  "^lib",
+  "//^libs",
   "^node_modules",
   "package.json$",
   "^test"
