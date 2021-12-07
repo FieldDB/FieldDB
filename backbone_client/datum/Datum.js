@@ -364,7 +364,7 @@ define([
         }
       });
       query = query.join(" ").trim();
-      if (query && query.length > 10 /*dont bother looking to merge negligable data */ ) {
+      if (query && query.length > 10 /* dont bother looking to merge negligable data */ && query !== 'utterance:utterance') {
         console.log("Would look for this " + query);
         this.searchByQueryString(query, function(similarDatumIds) {
           if (similarDatumIds) {

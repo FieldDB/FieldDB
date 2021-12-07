@@ -246,7 +246,7 @@ var CORS = {
     if (evt.lengthComputable) {
       var percentComplete = (evt.loaded / evt.total) * 100;
       this.debug(options.url + " " + options.complete + ":  percentComplete " + options.url, percentComplete);
-      console.log("Percent complete " + options.url.replace(/\/[^:]+:.+@/i, "/_:_@") + " : " + percentComplete);
+      this.debug("Percent complete " + options.url.replace(/\/[^:]+:.+@/i, "/_:_@") + " : " + percentComplete);
       if (!options.complete) {
         options.percentComplete = percentComplete;
       }

@@ -335,7 +335,7 @@ define([
       console.log('window.appView:', window.appView);
       var err = new Error('can i log this error');
 
-      console.error(err);
+      // console.error(err);
       // throw err;
 
       if (!window.appView) {
