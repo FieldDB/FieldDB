@@ -1,6 +1,6 @@
 {
   "name": "fielddb-prototype",
-  "version": "5.168.13-rc0",
+  "version": "5.241.07-rc0",
   "homepage": "https://github.com/FieldDB/FieldDB",
   "authors": [
     "cesine <cesine@yahoo.com>",
@@ -32,7 +32,7 @@
     "backbone": "1.2.3",
     "underscore": "1.8.3",
     "jquery": "2.1.4",
-    "handlebars": "4.0.4",
+    "handlebars": "4.3.0",
     "fielddb": "git://github.com/FieldDB/bower-fielddb.git",
     "requirejs": "~2.1.20",
     "d3": "~3.5.8"

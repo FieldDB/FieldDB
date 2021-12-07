@@ -29,7 +29,7 @@ define([
         if (document.getElementById("audiovideo_" + jsonToRender.filename)) {
           return this;
         }
-        console.log("rendering Audio Video ", jsonToRender);
+        // console.log("rendering Audio Video ", jsonToRender);
         $(this.el).html(this.template(jsonToRender));
       } else {
         $(this.el).html(""); //render no audio player
