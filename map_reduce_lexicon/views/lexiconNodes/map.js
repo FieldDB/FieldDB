@@ -1,4 +1,4 @@
-function lexiconNodes(doc) {
+function (doc) {
   var conservativeTokenizer = {
     delimiter: " ",
     pattern: /\s+/g,
@@ -299,9 +299,4 @@ function lexiconNodes(doc) {
   };
   processDocument(doc);
 
-}
-try {
-  exports.lexiconNodes = lexiconNodes;
-} catch (e) {
-  // // DEBUG console.log("not in a node context")
 }

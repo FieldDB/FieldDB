@@ -1,4 +1,4 @@
-function frequent(doc) {
+function (doc) {
   var uppercaseFirstLetter = function(txt) {
     if (!txt || !txt.length) {
       return;
@@ -94,10 +94,4 @@ function frequent(doc) {
   }
   processDocument(doc);
 
-}
-
-try {
-  exports.frequent = frequent;
-} catch (e) {
-  //  // DEBUG console.log("not in a node context")
 }
