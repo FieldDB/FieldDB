@@ -1,4 +1,4 @@
-function byType(doc) {
+function (doc) {
 
   var debugMode = true,
     showHumanDates = true,
@@ -333,10 +333,3 @@ function byType(doc) {
   };
   processDocument(doc);
 };
-
-try {
-  exports.byType = byType;
-  exports.by_type = byType;
-} catch (e) {
-  //  // DEBUG console.log("not in a node context")
-}
