@@ -42,8 +42,9 @@ jobs:
           DEBUG: browser*
         run: |
           npm install
+          npx playwright install
           npm run lint
-          npm test
+          DEBUG=server npm test
 
   # Optional: deploy or after-success steps can be added as a separate job
   # deploy_spreadsheet:
