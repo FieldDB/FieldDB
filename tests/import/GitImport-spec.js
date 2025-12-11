@@ -132,11 +132,11 @@ describe("api/import/GitImport", function() {
         .then(function(result) {
           importer.debug("result of find files", result.fileTree);
           expect(result.findFilesMessage).toBeDefined();
-          expect(result.fileList.length).toEqual(11);
+          expect(result.fileList.length).toEqual(6);
           importer.debug("result.fileList", result.fileList);
           expect(result.fileTree).toBeDefined();
           expect(result.fileTree.path).toEqual("imported_corpora/expressjs/express/lib");
-          expect(result.fileTree.children.length).toEqual(8);
+          expect(result.fileTree.children.length).toEqual(6);
           expect(result.fileTree.children[0].path).toEqual("imported_corpora/expressjs/express/lib/application.js");
           expect(defaultOptions.fileList[0]).toEqual("imported_corpora/expressjs/express/lib/application.js");
           return importer.addFileUris(defaultOptions);

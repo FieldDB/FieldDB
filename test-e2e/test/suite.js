@@ -6,6 +6,7 @@ const supertest = require('supertest');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
+// eslint-disable-next-line import/extensions
 const service = require('../../backbone_client/bin/https-server');
 
 const debugBrowserConsole = debug('browser:console');
