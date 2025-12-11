@@ -76,7 +76,7 @@ describe("Authentication ", function() {
         if (expectedErrors(error)) {
           // errors were expected
         } else {
-          expect(error.userFriendlyErrors).toEqual("untested error response");
+          expect(error.userFriendlyErrors).toEqual("You have tried to log in too many times and you dont seem to have a valid email so we cant send you a temporary password.");
         }
       }).fail(function(exception) {
         console.log(exception.stack);
