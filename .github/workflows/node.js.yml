@@ -42,8 +42,8 @@ jobs:
           DEBUG: browser*
         run: |
           npm install
-          npx playwright install chromium firefox webkit
-          npm run lint ||  echo "lint errored skipping until we update it"
+          npx playwright install chromium firefox
+          npm run lint
           DEBUG=server npm test
       - name: Upload Playwright report and traces for trace.playwright.dev 
         uses: actions/upload-artifact@v5

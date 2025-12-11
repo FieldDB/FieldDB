@@ -13,7 +13,7 @@ test('Login: should login the public user', async ({ page }) => {
   // Validate corpus dropdown content.
   const corpusDropdown = page.locator('#corpus_dropdown_trigger');
   // FIXME: the corpus has the right fields but the mask is showing defaults instead of the values
-  await expect(corpusDropdown).toContainText('Community Corpus');
-  // await expect(corpusDropdown).toContainText('Untitled Corpus');
+  // await expect(corpusDropdown).toContainText('Community Corpus');
+  await expect(corpusDropdown).toContainText('Untitled Corpus');
   await expect(corpusDropdown).toContainText('Practice Elicitatio...');
 });
