@@ -24,7 +24,7 @@
     "memory": "0.0.3"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "@playwright/test": "^1.57.0",
     "debug": "^4.1.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
@@ -33,15 +33,13 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
-    "mocha": "^7.1.0",
-    "puppeteer": "^2.1.1",
-    "supertest": "^4.0.2"
+    "playwright": "^1.57.0"
   },
   "main": "api/fielddb.js",
   "scripts": {
-    "test": "mkdir screenshots; mocha --timeout 35000 --slow 5000 --file test/suite.js test/**/*.spec.js",
-    "test:deployed": "URL=URL=https://public:none@corpus.example.org/prototype/_design/prototype npm test",
-    "test:prototype": "HEADLESS=false URL=chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa npm test",
+    "test": "DEBUG=${DEBUG:-server,pw:*} NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test",
+    "test:deployed": "BASE_URL=${BASE_URL:-https://corpusdev.example.org/prototype/_design/prototype} npm test",
+    "test:prototype": "BASE_URL=chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa npm test -- --ui",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

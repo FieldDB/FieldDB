@@ -25,6 +25,8 @@ if (!module.parent) {
     console.log("HTTPS Express server listening on https://localhost:" + server.address().port);
     console.log("please open http://www.robpeck.com/2010/10/google-chrome-mac-os-x-and-self-signed-ssl-certificates/#.VVtxQVVVhBc to see how you should accept the security cerrtificate");
   });
+} else {
+  console.log("HTTPS Express server module loaded.");
 }
 
 module.exports = server;
