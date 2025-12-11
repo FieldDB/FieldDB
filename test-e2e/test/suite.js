@@ -6,7 +6,7 @@ const supertest = require('supertest');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-const service = require('../../backbone_client/bin/https-server');
+const service = require('../../backbone_client/bin/https-server.js');
 
 const debugBrowserConsole = debug('browser:console');
 const debugBrowserRequest = debug('browser:request');
