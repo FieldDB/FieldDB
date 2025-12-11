@@ -11,7 +11,7 @@ module.exports = defineConfig({
   // General
   testDir: './test',
   /* Maximum time one test can run for. */
-  timeout: 35_000,
+  timeout: 35000,
   /* Fail the build on CI if you accidentally left test.only in the source. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -26,7 +26,8 @@ module.exports = defineConfig({
   // Configure slow test reporting
   reportSlowTests: {
     max: 5, // Maximum number of slow test files to report (defaults to 5)
-    threshold: 5_000, // Test file duration in milliseconds that is considered slow (e.g., 30 seconds)
+    // Test file duration in milliseconds that is considered slow
+    threshold: 5000,
   },
 
   // Shared options for all projects
@@ -65,10 +66,10 @@ module.exports = defineConfig({
     // Use port-based readiness check to avoid HTTPS certificate validation during probing.
     port: Number(PORT),
     reuseExistingServer: !process.env.CI,
-    timeout: 10_000,
+    timeout: 10000,
     env: {
       PORT,
-      ...process.env
+      ...process.env,
     }, // Pass all current process.env variables
     // Note: Playwright buffers webServer output; tee ensures logs go to a file.
   } : undefined,

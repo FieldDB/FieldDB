@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 
 test('Register: should register a new user', async ({ page }) => {
   // Navigate to registration/login page.

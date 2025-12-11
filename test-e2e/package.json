@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",
-    "debug": "^4.1.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
@@ -35,7 +34,6 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "playwright": "^1.57.0"
   },
-  "main": "api/fielddb.js",
   "scripts": {
     "test": "DEBUG=${DEBUG:-server,pw:*} NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test",
     "test:deployed": "BASE_URL=${BASE_URL:-https://corpusdev.example.org/prototype/_design/prototype} npm test",
