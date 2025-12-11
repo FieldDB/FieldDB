@@ -15,7 +15,7 @@ module.exports = defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on macOS if flakiness observed */
   workers: process.env.CI ? undefined : undefined,
   /* Reporter */
@@ -43,20 +43,26 @@ module.exports = defineConfig({
   },
 
   // Browser coverage
-  projects: [
+  projects: !process.env.CI ? [
     {
       name: 'Chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // {
-    //   name: 'Firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-    // {
-    //   name: 'WebKit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
-  ],
+  ]
+    : [
+      {
+        name: 'Chromium',
+        use: { ...devices['Desktop Chrome'] },
+      },
+      {
+        name: 'Firefox',
+        use: { ...devices['Desktop Firefox'] },
+      },
+      // {
+      //   name: 'WebKit',
+      //   use: { ...devices['Desktop Safari'] },
+      // },
+    ],
 
   // Optional: start a dev server before running tests
   // Uncomment and adjust to your app if needed.
@@ -72,5 +78,6 @@ module.exports = defineConfig({
       ...process.env,
     }, // Pass all current process.env variables
     // Note: Playwright buffers webServer output; tee ensures logs go to a file.
-  } : undefined,
+  }
+    : undefined,
 });

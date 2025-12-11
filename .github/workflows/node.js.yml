@@ -42,15 +42,15 @@ jobs:
           DEBUG: browser*
         run: |
           npm install
-          npx playwright install
+          npx playwright install chromium firefox webkit
           npm run lint ||  echo "lint errored skipping until we update it"
           DEBUG=server npm test
       - name: Upload Playwright report and traces for trace.playwright.dev 
         uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }} # Upload even if the previous step failed
         with:
-          name: playwright-report # Name of the artifact
-          path: playwright-report/ # Path to the directory containing reports and traces
+          name: test-results # Name of the artifact
+          path: test-e2e/test-results/ # Path to the directory containing reports and traces
           retention-days: 30
   # Optional: deploy or after-success steps can be added as a separate job
   # deploy_spreadsheet:
