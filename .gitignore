@@ -41,7 +41,6 @@ TEST*.xml
 proguard.cfg
 
 node_modules
-package-lock.json
 gen
 docs/javascript
 fielddb.js

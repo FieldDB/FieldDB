@@ -1,0 +1,65 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    env:
+      TZ: Canada/Eastern
+      TIMEOUT: 1000
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Configure FieldDB version
+        run: echo n | bash scripts/set_fielddb_version.sh
+
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+          npm install d3@3.5.8 jsdom@7.0.2 memory
+
+      - name: Build (CI)
+        run: npm run build:ci
+
+      - name: Test e2e
+        working-directory: test-e2e
+        env:
+          DEBUG: browser*
+        run: |
+          npm install
+          npm run lint
+          npm test
+
+  # Optional: deploy or after-success steps can be added as a separate job
+  # deploy_spreadsheet:
+  #   needs: build-and-test
+  #   if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v6
+  #     - name: Upload artifacts to server
+  #       env:
+  #         USERNAME: ${{ secrets.PUBLISH_SPREADSHEET_USERNAME }}
+  #         PASSWORD: ${{ secrets.PUBLISH_SPREADSHEET_PASSWORD }}
+  #         SERVER: ${{ secrets.PUBLISH_SPREADSHEET_SERVER }}
+  #       run: |
+  #         touch "angular_client/modules/spreadsheet/dist/deployed at $(date)"
+  #         NOW=$(date)
+  #         sed "s/(appVersion = \"[^,]*ss\")/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js > output
+  #         mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
+  #         ncftpput -R -v -u "$PUBLISH_SPREADSHEET_USERNAME" -p "$PUBLISH_SPREADSHEET_PASSWORD" "$PUBLISH_SPREADSHEET_SERVER" / angular_client/modules/spreadsheet/dist/*
