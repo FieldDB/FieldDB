@@ -1,3 +1,4 @@
 screenshots
-
 playwright-report
+test-results
+*.log

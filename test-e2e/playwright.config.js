@@ -37,8 +37,8 @@ module.exports = defineConfig({
     viewport: { width: 1920, height: 1080 },
     ignoreHTTPSErrors: true,
     screenshot: 'only-on-failure',
-    video: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
-    trace: 'on-first-retry',
+    // Persist traces for all tests to aid debugging.
+    trace: 'retain-on-failure',
   },
 
   // Browser coverage
@@ -61,16 +61,15 @@ module.exports = defineConfig({
   // Uncomment and adjust to your app if needed.
   webServer: !BASE_URL ? {
     // Pipe server stdout/stderr to a log file you can tail while tests run.
-    command: 'cd ../backbone_client && npm run start 2>&1 | tee -a ../test-e2e/test-reports/webserver.log',
+    command: 'cd ../backbone_client && npm run start 2>&1 | tee -a ../test-e2e/webserver.log',
     // Use port-based readiness check to avoid HTTPS certificate validation during probing.
     port: Number(PORT),
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 10_000,
     env: {
       PORT,
-      DEBUG: process.env.DEBUG || 'server',
-      NODE_TLS_REJECT_UNAUTHORIZED: '0',
-    },
+      ...process.env
+    }, // Pass all current process.env variables
     // Note: Playwright buffers webServer output; tee ensures logs go to a file.
   } : undefined,
 });
