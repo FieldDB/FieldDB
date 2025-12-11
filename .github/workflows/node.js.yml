@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -15,10 +15,6 @@ jobs:
     env:
       TZ: Canada/Eastern
       TIMEOUT: 1000
-      # Add any secrets previously defined as Travis "secure" entries
-      # USERNAME: ${{ secrets.USERNAME }}
-      # PASSWORD: ${{ secrets.PASSWORD }}
-      # SERVER: ${{ secrets.SERVER }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -58,12 +54,12 @@ jobs:
   #     - uses: actions/checkout@v6
   #     - name: Upload artifacts to server
   #       env:
-  #         USERNAME: ${{ secrets.USERNAME }}
-  #         PASSWORD: ${{ secrets.PASSWORD }}
-  #         SERVER: ${{ secrets.SERVER }}
+  #         USERNAME: ${{ secrets.PUBLISH_SPREADSHEET_USERNAME }}
+  #         PASSWORD: ${{ secrets.PUBLISH_SPREADSHEET_PASSWORD }}
+  #         SERVER: ${{ secrets.PUBLISH_SPREADSHEET_SERVER }}
   #       run: |
   #         touch "angular_client/modules/spreadsheet/dist/deployed at $(date)"
   #         NOW=$(date)
   #         sed "s/(appVersion = \"[^,]*ss\")/\1 $NOW\"/" angular_client/modules/spreadsheet/dist/scripts/scripts.js > output
   #         mv output angular_client/modules/spreadsheet/dist/scripts/scripts.js
-  #         ncftpput -R -v -u "$USERNAME" -p "$PASSWORD" "$SERVER" / angular_client/modules/spreadsheet/dist/*
+  #         ncftpput -R -v -u "$PUBLISH_SPREADSHEET_USERNAME" -p "$PUBLISH_SPREADSHEET_PASSWORD" "$PUBLISH_SPREADSHEET_SERVER" / angular_client/modules/spreadsheet/dist/*
