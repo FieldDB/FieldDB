@@ -1,28 +1,16 @@
-const { expect } = require('chai');
+const { test, expect } = require('@playwright/test');
 
-describe('Login', () => {
-  let page;
+test('Login: should login lingllama sample user', async ({ page }) => {
+  // Use baseURL from config; navigate to corpus page.
+  await page.goto('/corpus.html');
 
-  before(async () => {
-    page = global.reusedPage;
-  });
+  const userDropdownLink = page.locator('#user_drop_down_trigger a');
+  await expect(userDropdownLink).toHaveAttribute('href', /#user\/public/);
 
-  it('should login lingllama sample user', async () => {
-    await page.goto(`${process.env.URL}/corpus.html`, {
-      waitUntil: 'networkidle0',
-    });
-    // TODO handle the redirects
-    await page.waitFor(3000);
-    const publicAvatarLink = await page.$eval('#user_drop_down_trigger a', (el) => el.href);
-    expect(publicAvatarLink).to.contain('#user/public');
+  // Trigger login/register flow.
+  await page.locator('#login_register_button').click();
+  await page.locator('.sync-lingllama-data').click();
 
-    await page.click('#login_register_button');
-    await page.waitFor(100);
-    await page.click('.sync-lingllama-data');
-    // TODO handle the redirects
-    await page.waitFor(3000);
-
-    const userAvatarLink = await page.$eval('#user_drop_down_trigger a', (el) => el.href);
-    expect(userAvatarLink).to.contain('#user/lingllama');
-  });
+  // Wait for user to be logged in and avatar to point to lingllama.
+  await expect(userDropdownLink).toHaveAttribute('href', /#user\/lingllama/);
 });
