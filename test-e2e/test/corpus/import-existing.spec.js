@@ -1,8 +1,10 @@
 const { test, expect } = require('@playwright/test');
 
+const { BASE_PATH = '' } = process.env;
+
 test('Corpus: should import an existing data set', async ({ page }) => {
   // Navigate to corpus page.
-  await page.goto('/corpus.html');
+  await page.goto(`${BASE_PATH}/corpus.html`);
 
   // Placeholder: wait for corpus UI to be visible.
   await expect(page.locator('#corpus_dropdown_trigger')).toBeVisible({ timeout: 15000 });

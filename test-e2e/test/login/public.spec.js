@@ -1,8 +1,10 @@
 const { test, expect } = require('@playwright/test');
 
+const { BASE_PATH = '' } = process.env;
+
 test('Login: should login the public user', async ({ page }) => {
   // baseURL is configured in playwright.config.js, so we can use relative paths.
-  await page.goto('/corpus.html');
+  await page.goto(`${BASE_PATH}/corpus.html`);
 
   // Validate the search box default value.
   await expect(page.locator('#search_box')).toHaveValue('jeju');
