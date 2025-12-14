@@ -1,8 +1,10 @@
 const { test, expect } = require('@playwright/test');
 
+const { BASE_PATH = '' } = process.env;
+
 test('Login: should login lingllama sample user', async ({ page }) => {
   // Use baseURL from config; navigate to corpus page.
-  await page.goto('/corpus.html');
+  await page.goto(`${BASE_PATH}/corpus.html`);
 
   const userDropdownLink = page.locator('#user_drop_down_trigger a');
   await expect(userDropdownLink).toHaveAttribute('href', /#user\/public/);
