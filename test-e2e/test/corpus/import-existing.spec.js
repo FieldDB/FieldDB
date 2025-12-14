@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const { BASE_PATH } = process.env;
+const { BASE_PATH = '' } = process.env;
 
 test('Corpus: should import an existing data set', async ({ page }) => {
   // Navigate to corpus page.
