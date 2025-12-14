@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const { BASE_PATH } = process.env;
+const { BASE_PATH = '' } = process.env;
 
 test('Login: should login the public user', async ({ page }) => {
   // baseURL is configured in playwright.config.js, so we can use relative paths.
