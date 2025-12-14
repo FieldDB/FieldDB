@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+
 const { BASE_PATH } = process.env;
 
 test('Login: should login the public user', async ({ page }) => {
