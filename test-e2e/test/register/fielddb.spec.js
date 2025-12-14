@@ -1,6 +1,6 @@
 const { test } = require('@playwright/test');
 
-const { BASE_PATH } = process.env;
+const { BASE_PATH = '' } = process.env;
 
 test('Register: should register a new user', async ({ page }) => {
   // Navigate to registration/login page.
