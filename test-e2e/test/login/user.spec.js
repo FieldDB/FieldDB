@@ -5,7 +5,8 @@ const { BASE_PATH = '' } = process.env;
 test('Login: should login a test user', async ({ page }) => {
   // Use baseURL from config; navigate to corpus page.
   await page.goto(`${BASE_PATH}/corpus.html`);
-  await page.waitForTimeout(1000); // workaround for redirects until we are logged in as the public user
+  // workaround for redirects until we are logged in as the public user
+  await page.waitForTimeout(1000);
   await page.goto(`${BASE_PATH}/user.html#login`);
 
   await page.getByRole('link', { name: 'Click to view user\'s page' }).click();
@@ -21,7 +22,6 @@ test('Login: should login a test user', async ({ page }) => {
   // workaround for requesting http://localhost:5984/default/testingprototype
   await page.goto(`${BASE_PATH}/user.html`);
   // expect the list of corpus to be empty until we find the bug
-  await page.waitForTimeout(1000); // workaround for redirects until we are logged in as the public user
   await page.locator('#user-fullscreen').getByText('Switch to another corpus:');
   const corporaList = page.locator('#user-fullscreen .corpora');
   await expect(corporaList).toHaveText('');
