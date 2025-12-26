@@ -36,7 +36,7 @@
   },
   "scripts": {
     "test": "DEBUG=${DEBUG:-server,pw:*} NODE_TLS_REJECT_UNAUTHORIZED=0 npx playwright test",
-    "test:deployed": "BASE_URL=${BASE_URL:-https://corpusdev.example.org/prototype/_design/prototype} npm test",
+    "test:deployed": "BASE_URL=${BASE_URL:-https://corpusdev.example.org/prototypedev/_design/prototype} npm test",
     "test:prototype": "BASE_URL=chrome-extension://eeipnabdeimobhlkfaiohienhibfcfpa npm test -- --ui",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
