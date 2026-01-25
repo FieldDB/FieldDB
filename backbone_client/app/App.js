@@ -140,7 +140,6 @@ define([
       appself.get("authentication").loadEncryptedUser(u, function(success, errors) {
         localStorage.removeItem("encryptedUser");
 
-        // TODO if on localhost, try localhost first, then try the remote server
         var connection = appself.get("authentication").get("userPrivate").get("mostRecentIds").connection;
         if (!connection) {
           alert("Unable to load your app, please report this.");
