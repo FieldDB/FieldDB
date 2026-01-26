@@ -1,6 +1,6 @@
 {
   "name": "fielddb",
-  "version": "5.457.25-rc0",
+  "version": "5.450.11-rc0",
   "description": "An offline/online field database which adapts to its user's terminology and I-Language",
   "homepage": "https://github.com/FieldDB/FieldDB/issues/milestones?state=closed",
   "repository": {
@@ -63,13 +63,12 @@
     "jsdoc": "^3.6.3",
     "jslint": "^0.12.1",
     "mkdirp": "^0.5.1",
-    "nyc": "^17.1.0",
     "sinon": "^2.3.2"
   },
   "main": "api/fielddb.js",
   "scripts": {
     "docs": "jsdoc api/**/*.js -d docs/javascript --template node_modules/docdash",
-    "test": "nyc jasmine tests/**/**-spec.js",
+    "test": "jasmine tests/**/**-spec.js",
     "test:jasmineAllTestsErrorWorkaround": "echo y | bash scripts/jasmine_all_tests_workaround.sh",
     "lint": "jslint api/**/*.js || echo 'TODO switch to eslint'",
     "lint:api": "jslint api/**/*.js",

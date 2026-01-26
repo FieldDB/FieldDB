@@ -33,32 +33,8 @@ jobs:
           npm ci || npm install
           npm install d3@3.5.8 jsdom@7.0.2 memory
 
-      - run: npm run lint
-      - run: npm run test:jasmineAllTestsErrorWorkaround
-      - run: npm test
-      - name: Upload Coverage Report
-        if: ${{ always() }} # Upload even if the previous step failed
-        uses: actions/upload-artifact@v5
-        with:
-          name: coverage # Name of the artifact
-          path: coverage # Path to the directory containing reports and traces
-          retention-days: 2
-      - run: npm run build
-      - name: Upload Dist
-        uses: actions/upload-artifact@v5
-        with:
-          name: fielddb # Name of the artifact
-          path: fielddb.js # Path to the directory containing reports and traces
-          retention-days: 2
-      - run: npm run build:min
-      - run: npm run docs
-      - name: Upload Docs
-        uses: actions/upload-artifact@v5
-        with:
-          name: docs # Name of the artifact
-          path: docs/javascript/ # Path to the directory containing reports and traces
-          retention-days: 2
-      - run: npm run build:backbone-client
+      - name: Build (CI)
+        run: npm run build:ci
 
       - name: Test e2e
         working-directory: test-e2e
@@ -69,13 +45,13 @@ jobs:
           npx playwright install chromium firefox
           npm run lint
           DEBUG=server npm test
-      - name: Upload Playwright report and traces for trace.playwright.dev
+      - name: Upload Playwright report and traces for trace.playwright.dev 
         uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }} # Upload even if the previous step failed
         with:
           name: test-results # Name of the artifact
           path: test-e2e/test-results/ # Path to the directory containing reports and traces
-          retention-days: 3
+          retention-days: 30
   # Optional: deploy or after-success steps can be added as a separate job
   # deploy_spreadsheet:
   #   needs: build-and-test

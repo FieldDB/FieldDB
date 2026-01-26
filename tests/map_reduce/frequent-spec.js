@@ -36,7 +36,7 @@ describe("MapReduce frequent", function() {
 
   });
 
-  xdescribe("emit", function() {
+  describe("emit", function() {
 
     it("should not emit deleted data", function() {
       FREQUENT_MAP_REDUCE.map({

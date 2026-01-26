@@ -339,9 +339,7 @@ describe("Glosser", function() {
 
 	});
 
-	// FIXME: using coverage with eval causes ReferenceError: cov_3h7cg3999 is not defined
-	// https://github.com/istanbuljs/istanbuljs/issues/499
-	xdescribe("semi-automatic segmentation knowledgebase", function() {
+	describe("semi-automatic segmentation knowledgebase", function() {
 
 		it("should provide the same map reduce as that in couchdb", function() {
 			expect(Glosser.morpheme_n_grams_mapReduce).toBeDefined();

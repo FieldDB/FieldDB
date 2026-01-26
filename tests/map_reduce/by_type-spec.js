@@ -59,7 +59,7 @@ describe("MapReduce by_type", function() {
 
   });
 
-  xdescribe("map on an array", function() {
+  describe("map on an array", function() {
 
     it("should run as map on an array", function() {
       [{
@@ -100,7 +100,7 @@ describe("MapReduce by_type", function() {
     });
   });
 
-  xdescribe("custom emit", function() {
+  describe("custom emit", function() {
 
     it("should accept custom emit function and rows holder", function() {
       var rows = ["some previous stuff"];
@@ -139,7 +139,7 @@ describe("MapReduce by_type", function() {
 
   });
 
-  xdescribe("support data v1.22", function() {
+  describe("support data v1.22", function() {
 
     it("should emit a preview of second field if its a datum", function() {
       BY_TYPE_MAP_REDUCE.map(SAMPLE_DATA[0]);
@@ -222,7 +222,7 @@ describe("MapReduce by_type", function() {
     });
   });
 
-  xdescribe("support gamify data", function() {
+  describe("support gamify data", function() {
     var gamifyRows;
 
     it("should put aside gamifyRows for testing", function() {

@@ -1,9 +1,5 @@
 var debugMode = false;
 /*jslint evil: true */
-// FIXME: refactor to not use emit if possible
-// using coverage with eval causes ReferenceError: cov_3h7cg3999 is not defined
-// https://github.com/istanbuljs/istanbuljs/issues/499
-/* istanbul ignore next */
 var MapReduceFactory = function(options) {
   options = options || {
     filename: "",

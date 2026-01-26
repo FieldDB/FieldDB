@@ -31,7 +31,7 @@ describe("MapReduce by_session_or_user", function() {
 
   });
 
-  xdescribe("emit data by user", function() {
+  describe("emit data by user", function() {
 
     it("should not emit deleted data", function() {
       BY_USER_MAP_REDUCE.map({
@@ -62,7 +62,7 @@ describe("MapReduce by_session_or_user", function() {
 
   });
 
-  xdescribe("support data v1.22", function() {
+  describe("support data v1.22", function() {
 
     it("should have a preview", function() {
       expect(SAMPLE_DATA[0].session._id).toEqual("763568EE-BB24-48D2-BEAD-D46E22D11418");
