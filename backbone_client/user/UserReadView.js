@@ -160,8 +160,6 @@ define([
               console.log("Corpus is loged in yay.");
             }, function() {})
           }
-        }).catch(function(err) {
-          console.error("There was an error getting the session information from the server: ", err);
         });
       }
 

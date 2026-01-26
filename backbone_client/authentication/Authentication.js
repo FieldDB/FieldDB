@@ -283,7 +283,7 @@ define([
       }
 
       /* Set up the pouch with the user's most recent connection if it has not already been set up */
-      if (window.app && fielddbUser.mostRecentIds && fielddbUser.mostRecentIds.connection && fielddbUser.mostRecentIds.connection.dbname){
+      if (window.app && fielddbUser.mostRecentIds && fielddbUser.mostRecentIds.connection){
         window.app.changePouch(fielddbUser.mostRecentIds.connection);
       }
 
