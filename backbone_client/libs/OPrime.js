@@ -41,10 +41,8 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
   }
 
   var url = connection.corpusUrl;
-  if (couchdbcommand !== null && couchdbcommand !== undefined && connection.dbname) {
+  if (couchdbcommand !== null && couchdbcommand !== undefined) {
     url = url.replace("/" + connection.dbname, couchdbcommand);
-  } else if (couchdbcommand === '/_session') {
-    url = url + couchdbcommand;
   }
 
   //forcing production server
