@@ -18,6 +18,7 @@ dist/
 coverage/
 .imported_corpora
 imported_corpora
+.nyc_output
 
 spreadsheet_build_dev
 
