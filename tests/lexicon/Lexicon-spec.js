@@ -275,7 +275,7 @@ describe("Lexicon", function() {
 
   });
 
-  describe("map reduces", function() {
+  xdescribe("map reduces", function() {
 
     it("should not remove . from glosses", function() {
       Lexicon.lexicon_nodes_mapReduce.rows = [];

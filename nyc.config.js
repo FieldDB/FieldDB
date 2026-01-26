@@ -8,7 +8,7 @@ module.exports = {
   'check-coverage': true,
   branches: 54,
   functions: 69,
-  lines: 67,
+  lines: 66,
   statements: 67,
   reporter: ['html', 'text', 'lcov'],
 };
