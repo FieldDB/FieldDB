@@ -9,12 +9,15 @@ test('Login: should login a test user', async ({ page }) => {
   await page.waitForTimeout(1000);
   await page.goto(`${BASE_PATH}/user.html#login`);
 
+  await expect(page.getByRole('heading')).toHaveText('Public Profile public (Public User)');
+
   await page.getByRole('link', { name: 'Click to view user\'s page' }).click();
   await page.getByRole('link', { name: ' Log In' }).click();
   await page.getByRole('textbox').first().click();
   await page.getByRole('textbox').first().fill('testingprototype');
   await page.getByRole('textbox').first().press('Tab');
   await page.locator('#login_modal input[type="password"]').fill('test');
+  await page.getByRole('textbox').nth(2).fill('Localhost');
 
   await page.getByRole('button', { name: 'Log In' }).click();
   await page.waitForURL(`${BASE_PATH}/corpus.html`);
@@ -25,4 +28,10 @@ test('Login: should login a test user', async ({ page }) => {
   await page.locator('#user-fullscreen').getByText('Switch to another corpus:');
   const corporaList = page.locator('#user-fullscreen .corpora');
   await expect(corporaList).toHaveText('');
+
+  await page.goto(`${BASE_PATH}/user.html`);
+  // expect the list of corpus to be empty until we find the bug
+  await page.locator('#user-fullscreen').getByText('Switch to another corpus:');
+  const corporaListAfterRefresh = page.locator('#user-fullscreen .corpora');
+  await expect(corporaListAfterRefresh).toHaveText('firstcorpus');
 });
