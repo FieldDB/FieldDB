@@ -109,7 +109,7 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     });
     return deferred.promise;
   };
-  FieldDB.Connection.otherwise = 'production';
+  FieldDB.Connection.otherwise = window.location.hostname === 'localhost' ? 'localhost' : 'production';
   FieldDB.User.loadPublicUserIfNoUserAlready()
     .then(function() {
       window.app = new App();
