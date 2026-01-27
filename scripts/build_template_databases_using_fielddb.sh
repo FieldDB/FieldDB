@@ -40,6 +40,9 @@ echo "Deploy prototype pages"
 cd $FIELDDB_HOME/FieldDB/couchapp_prototype
 couchapp push $URL"/prototype"
 
+echo "Deploy prototype pages"
+cd $FIELDDB_HOME/FieldDB/couchapp_prototype
+couchapp push $URL"/prototypedev"
 
 echo "Deploy gamify template"
 cd $FIELDDB_HOME/FieldDB/map_reduce_gamify

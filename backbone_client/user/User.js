@@ -87,7 +87,7 @@ define([
         originalModel.activityConnection = originalModel.activityConnection.toJSON()
       }
 
-      if (originalModel.mostRecentIds && originalModel.mostRecentIds.connection && !originalModel.mostRecentIds.connection.version) {
+      if (originalModel.mostRecentIds && originalModel.mostRecentIds.connection && (!originalModel.mostRecentIds.connection.version || !originalModel.mostRecentIds.connection.dbname)) {
         originalModel.mostRecentIds.connection = originalModel.mostRecentIds.connection || originalModel.mostRecentIds.couchConnection;
         originalModel.mostRecentIds.connection = new FieldDB.Connection(originalModel.mostRecentIds.connection);
         normalizedConnection = FieldDB.Connection.defaultConnection();

@@ -333,8 +333,10 @@ CORS.makeCORSRequest = function(options) {
   //forcing production server
   options.url = options.url.replace("corpusdev", "corpus");
   options.url = options.url.replace("authdev", "auth");
-  options.url = options.url.replace("localhost:6984", "corpus.lingsync.org");
-  options.url = options.url.replace("localhost:5984", "corpus.lingsync.org");
+  if (window.location.hostname !== 'localhost') {
+    options.url = options.url.replace("localhost:6984", "corpus.lingsync.org");
+    options.url = options.url.replace("localhost:5984", "corpus.lingsync.org");
+  }
 
   xhr = this.buildXhr(options);
   if (!xhr) {
