@@ -30,7 +30,7 @@ require.config({
 
     "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
-    "OPrime": "libs/webservicesconfig_devserver"
+    "OPrime": "libs/webservicesconfig_local",
   },
   shim: {
 
@@ -109,7 +109,6 @@ require(["app/App", "OPrime", "FieldDB"], function(App) {
     });
     return deferred.promise;
   };
-  FieldDB.Connection.otherwise = window.location.hostname === 'localhost' ? 'localhost' : 'production';
   FieldDB.User.loadPublicUserIfNoUserAlready()
     .then(function() {
       window.app = new App();

@@ -67,48 +67,42 @@ grunt chromeapp           # builds and copies to couchapp_prototype
 
 ## Deploying to CouchDB (CouchApp)
 
-### Prerequisites
+### Quick Deploy (Recommended)
 
-Install CMSCouchapp (Python 3 compatible couchapp):
+Use the deployment script for automated deployment:
 
 ```bash
+cd FieldDB
+
+# Deploy to localhost (default)
+./scripts/deploy_couchapp.sh localhost
+
+# Or deploy to production (when configured)
+./scripts/deploy_couchapp.sh production
+```
+
+The script will:
+1. Check CouchDB connection
+2. Verify/create the database
+3. Build the design document with all attachments
+4. Upload to CouchDB
+
+### Manual Deploy (Alternative)
+
+If you need to deploy manually using CMSCouchapp:
+
+```bash
+# Install CMSCouchapp (first time only)
 cd FieldDB/couchapp_prototype
 python3 -m venv myenv
 source myenv/bin/activate
 pip install CMSCouchapp
+
+# Deploy
+CMSCouchapp push -p $(pwd) -c http://admin:none@localhost:5984/prototypedev
 ```
 
-### Deploy to Local CouchDB
-
-```bash
-# Activate virtual environment
-cd FieldDB/couchapp_prototype
-source myenv/bin/activate
-
-# Deploy to prototypedev database
-CMSCouchapp push -p $(pwd) -c https://admin:none@localhost:6984/prototypedev
-```
-
-### Deploy to Docker CouchDB
-
-When using the AuthenticationWebService Docker setup:
-
-```bash
-# Ensure Docker containers are running
-cd AuthenticationWebService
-docker compose up -d
-
-# Build FieldDB
-cd ../FieldDB
-bash scripts/build_fielddb_minified.sh
-
-# Deploy to CouchDB in Docker
-cd couchapp_prototype
-source myenv/bin/activate
-CMSCouchapp push -p $(pwd) -c https://admin:none@localhost:6984/prototypedev
-```
-
-**Note**: Use `https://localhost:6984` (HTTPS port) for CouchDB access.
+**Note**: The deployment script uses HTTP port 5984 by default for localhost.
 
 ## Running UI Tests
 
@@ -160,9 +154,7 @@ test-e2e/test/
 
 3. **Deploy to CouchDB**:
    ```bash
-   cd couchapp_prototype
-   source myenv/bin/activate
-   CMSCouchapp push -p $(pwd) -c https://admin:none@localhost:6984/prototypedev
+   ./scripts/deploy_couchapp.sh localhost
    ```
 
 4. **Run UI tests**:
@@ -248,6 +240,6 @@ Access the app at: `https://localhost:6984/prototypedev/_design/prototype/corpus
 |------|---------|
 | Build API | `npm run build` |
 | Build full app | `bash scripts/build_fielddb_minified.sh` |
-| Deploy CouchApp | `CMSCouchapp push -p $(pwd) -c URL/prototypedev` |
+| Deploy CouchApp | `./scripts/deploy_couchapp.sh localhost` |
 | Run UI tests | `BASE_URL=https://localhost:6984 BASE_PATH=/prototypedev/_design/prototype npm test` |
 | Start dev server | `cd backbone_client && npm start` |

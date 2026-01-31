@@ -47,13 +47,8 @@ OPrime.getCouchUrl = function(connection, couchdbcommand) {
     url = url + couchdbcommand;
   }
 
-  // forcing production server
+  //forcing production server
   url = url.replace("corpusdev", "corpus");
-
-  // Forcing localhost
-  if (window.location.hostname === "localhost") {
-    url = url.replace("corpus.lingsync.org", "localhost:6984");
-  }
 
   return url;
 };

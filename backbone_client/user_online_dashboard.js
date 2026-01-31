@@ -30,7 +30,7 @@ require.config({
 
     "FieldDB": "bower_components/fielddb/fielddb",
     "oprime": "libs/OPrime",
-    "OPrime": "libs/webservicesconfig_devserver"
+    "OPrime": "libs/webservicesconfig_local",
   },
   shim: {
 
@@ -81,6 +81,7 @@ require.config({
 
 // Initialization
 require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
+  debugger;
 
   FieldDB.FieldDBObject.bug = function(message) {
     if (window.appView && typeof window.appView.toastUser === "function") {
@@ -100,8 +101,6 @@ require(["user/UserApp", "OPrime", "FieldDB"], function(App) {
     });
     return deferred.promise;
   };
-
-  FieldDB.Connection.otherwise = window.location.hostname === 'localhost' ? 'localhost' : 'production';
 
   window.app = new App();
   window.app.fillWithDefaults();
