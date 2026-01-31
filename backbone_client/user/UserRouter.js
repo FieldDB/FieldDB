@@ -260,7 +260,7 @@ define([
               // OPrime.bug("You're not in the database for your most recent corpus. Please authenticate and then we will take you to your database...");
             }
           }
-          OPrime.redirect("user.html#/corpus/" + dbname);
+          // OPrime.redirect("user.html#/corpus/" + dbname);
           return;
         }
       }

@@ -39,6 +39,7 @@ TEST*.xml
 .settings
 .classpath
 proguard.cfg
+myenv
 
 node_modules
 gen

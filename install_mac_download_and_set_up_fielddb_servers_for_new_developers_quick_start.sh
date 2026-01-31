@@ -441,9 +441,11 @@ couchapp --version || {
   read -p "Do you want me to download Erica and set it up for you?" -n 1 -r
   if [[ $REPLY =~ ^[Yy]$ ]]
     then {
-      # install python via brew, instead of using the built-in python
-      brew install python
-      pip install --user couchapp || {
+      # Install CMSCouchapp which works with Python 3 and couchdb 1.6
+      # https://github.com/couchapp/couchapp/compare/master...amaltaro:couchapp:master
+      python3 -m venv myenv
+      source myenv/bin/activate
+      pip install CMSCouchapp || {
         echo "I couldnt automate the couchapp install for you.. Im going to give up on  setting up your computer as a FieldDB server, you can still work on the client apps with no need for a local server, you can ask someone else to deploy your changes to CouchDBs."
         exit 1
       }
