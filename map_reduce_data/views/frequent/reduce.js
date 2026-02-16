@@ -1,4 +1,4 @@
-function groupedCount(keys, values, rereduce) {
+function (keys, values, rereduce) {
   var uniqueHash = {},
     uniqueValues = [];
 
@@ -58,11 +58,4 @@ function groupedCount(keys, values, rereduce) {
    // console.log("reducing in custom reduce: values: ", values)
     return countUniqueValues(values);
   }
-}
-
-
-try {
-  exports.groupedCount = groupedCount;
-} catch (e) {
-  //  // DEBUG console.log("not in a node context")
 }

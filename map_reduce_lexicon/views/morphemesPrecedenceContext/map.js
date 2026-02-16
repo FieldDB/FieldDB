@@ -1,4 +1,4 @@
-function morphemesPrecedenceContext(doc) {
+function (doc) {
   // var conservativeTokenizer = {
   //   delimiter: " ",
   //   pattern: /\s+/g,
@@ -309,10 +309,7 @@ function morphemesPrecedenceContext(doc) {
   //   }
   // };
   // processDocument(doc);
-
-}
-try {
-  exports.morphemesPrecedenceContext = morphemesPrecedenceContext;
-} catch (e) {
-  // // DEBUG console.log("not in a node context")
+  emit({
+    error: "not implemeted"
+  }, doc._id);
 }
